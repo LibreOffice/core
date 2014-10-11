@@ -1468,7 +1468,7 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         }
         else
         {
-            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool() );
+            SfxRequest aReq( SID_OPENDOC, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
             aReq.AppendItem( SfxStringItem( SID_REFERER, OUString() ) );
             aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );

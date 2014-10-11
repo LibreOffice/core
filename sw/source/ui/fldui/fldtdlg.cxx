@@ -108,7 +108,7 @@ bool SwFldDlg::Close()
 {
     m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
-        SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+        SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
     return true;
 }
 
@@ -208,7 +208,7 @@ void SwFldDlg::ReInitDlg()
     if (bNewMode != m_bHtmlMode)
     {
         SfxViewFrame::Current()->GetDispatcher()->
-            Execute(FN_INSERT_FIELD, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+            Execute(FN_INSERT_FIELD, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
         Close();
     }
 

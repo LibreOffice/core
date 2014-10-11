@@ -407,7 +407,7 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                     if( GetViewFrame() )
                     {
                         GetViewFrame()->GetDispatcher()->Execute(
-                            SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
+                            SID_PRESENTATION, SfxCallMode::ASYNCHRON );
                     }
                 }
                 break;
@@ -909,7 +909,7 @@ OUString ViewShellBase::GetInitialViewShellType (void)
 void ViewShellBase::StartPresentation()
 {
     if( GetViewFrame() && GetViewFrame()->GetDispatcher() )
-        GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+        GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 }
 
 ::boost::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer (void)

@@ -85,7 +85,7 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
         SfxBoolItem aItem (SID_SPELL_DIALOG, false);
         GetBindings().GetDispatcher()->Execute(
             SID_SPELL_DIALOG,
-            SFX_CALLMODE_ASYNCHRON,
+            SfxCallMode::ASYNCHRON,
             &aItem,
             0L);
     }

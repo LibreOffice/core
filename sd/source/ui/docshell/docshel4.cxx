@@ -910,7 +910,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
                 GetFrameView()->SetPageKind(eNewPageKind);
                 ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                   mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-                  GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+                  GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
 
                 // The current ViewShell changed
                 pDrViewSh = (DrawViewShell*) mpViewShell;
@@ -1014,7 +1014,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
                 GetFrameView()->SetPageKind(eNewPageKind);
                 ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                   mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->
-                  GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+                  GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
 
                 // The current ViewShell changed
                 pDrViewSh = (DrawViewShell*) mpViewShell;

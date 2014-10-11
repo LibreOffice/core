@@ -1168,7 +1168,7 @@ void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
             pView->UnmarkAll();
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_OBJECT_SELECT,
-                SFX_CALLMODE_ASYNCHRON);
+                SfxCallMode::ASYNCHRON);
         }
     }
 

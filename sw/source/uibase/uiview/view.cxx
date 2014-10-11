@@ -964,7 +964,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // Update all tables if necessary:
     if( m_pWrtShell->GetDoc()->IsUpdateTOX() )
     {
-        SfxRequest aSfxRequest( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
+        SfxRequest aSfxRequest( FN_UPDATE_TOX, SfxCallMode::SLOT, GetPool() );
         Execute( aSfxRequest );
         m_pWrtShell->GetDoc()->SetUpdateTOX( false );     // reset again
         m_pWrtShell->SttEndDoc(true);
@@ -993,7 +993,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         !pVFrame->GetChildWindow( SID_NAVIGATOR ))
     {
         SfxBoolItem aNavi(SID_NAVIGATOR, true);
-        GetDispatcher().Execute(SID_NAVIGATOR, SFX_CALLMODE_ASYNCHRON, &aNavi, 0L);
+        GetDispatcher().Execute(SID_NAVIGATOR, SfxCallMode::ASYNCHRON, &aNavi, 0L);
     }
 
     uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
@@ -1643,7 +1643,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         }
                     }
                     SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadonly);
-                    GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
+                    GetDispatcher().Execute( SID_FM_DESIGN_MODE, SfxCallMode::ASYNCHRON,
                                                 &aItem, 0L );
                 }
                 break;
@@ -1656,7 +1656,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         GetFormShell()->SetView(
                             PTR_CAST(FmFormView, GetWrtShell().GetDrawView()) );
                         SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
-                        GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON,
+                        GetDispatcher().Execute( SID_FM_DESIGN_MODE, SfxCallMode::SYNCHRON,
                                                   &aItem, 0L );
                     }
                 }

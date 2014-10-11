@@ -166,7 +166,7 @@ IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)
 
 IMPL_LINK(PageSizeControl, MoreButtonClickHdl_Impl, void *, EMPTYARG)
 {
-    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SFX_CALLMODE_ASYNCHRON );
+    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_SETTING_DLG, SfxCallMode::ASYNCHRON );
 
     mrPagePropPanel.ClosePageSizePopup();
     return 0;

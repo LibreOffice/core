@@ -304,7 +304,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         case SID_STYLE_APPLY:
             if( !pArgs )
             {
-                GetView()->GetViewFrame()->GetDispatcher()->Execute(SID_STYLE_DESIGNER, sal_False);
+                GetView()->GetViewFrame()->GetDispatcher()->Execute(SID_STYLE_DESIGNER);
                 break;
             }
             else

@@ -718,7 +718,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             uno::Reference<linguistic2::XSearchableDictionaryList> xDictionaryList( SvxGetDictionaryList() );
             SvxDicListChgClamp aClamp( xDictionaryList );
             m_pSh->GetView().GetViewFrame()->GetDispatcher()->
-                Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON );
+                Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON );
         }
     }
     else if (nId == MN_IGNORE_SELECTION)

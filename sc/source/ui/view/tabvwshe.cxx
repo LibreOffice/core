@@ -299,8 +299,8 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
                     GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
-                            rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
-                                            SFX_CALLMODE_STANDARD,
+                            rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
+                                            SfxCallMode::RECORD,
                             &aSearchItem, 0L );
                     const SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
                             SvxSearchDialogWrapper::GetChildWindowId());
@@ -325,7 +325,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 else
                 {
                     GetViewData().GetDispatcher().Execute(
-                            SID_SEARCH_DLG, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD );
+                            SID_SEARCH_DLG, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
                 }
             }
             break;
@@ -336,8 +336,8 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
                 GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
-                        rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
-                                        SFX_CALLMODE_STANDARD,
+                        rReq.IsAPI() ? SfxCallMode::API|SfxCallMode::SYNCHRON :
+                                        SfxCallMode::RECORD,
                         &aSearchItem, 0L );
             }
             break;

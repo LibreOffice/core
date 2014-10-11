@@ -880,7 +880,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case SID_STATUS_DOCPOS:
             // Launch navigator.
             GetViewData()->GetDispatcher().Execute(
-                SID_NAVIGATOR, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
+                SID_NAVIGATOR, SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
             break;
 
         case SID_MARKAREA:

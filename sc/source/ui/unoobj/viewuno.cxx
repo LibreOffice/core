@@ -737,7 +737,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 //  Slot der Zeichenfunktion nochmal ausfuehren -> abschalten
                 SfxDispatcher* pDisp = pViewSh->GetDispatcher();
                 if (pDisp)
-                    pDisp->Execute( pFunc->GetSlotID(), SFX_CALLMODE_SYNCHRON );
+                    pDisp->Execute( pFunc->GetSlotID(), SfxCallMode::SYNCHRON );
             }
             pViewSh->SetDrawShell(false);
             pViewSh->SetDrawSelMode(false); // nach dem Dispatcher-Execute
@@ -1740,7 +1740,7 @@ void ScTabViewObj::SelectionChanged()
     // direct here
     ScFormatShell aShell( &GetViewShell()->GetViewData() );
     SfxAllItemSet reqList( SfxGetpApp()->GetPool() );
-    SfxRequest aReq( SID_STYLE_END_PREVIEW, 0, reqList );
+    SfxRequest aReq( SID_STYLE_END_PREVIEW, SfxCallMode::SLOT, reqList );
     aShell.ExecuteStyle( aReq );
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));

@@ -700,7 +700,7 @@ void SwView::Execute(SfxRequest &rReq)
                 }
             }
             // Go to next change after accepting or rejecting one (fdo#83953)
-            GetViewFrame()->GetDispatcher()->Execute(FN_REDLINE_NEXT_CHANGE, SFX_CALLMODE_ASYNCHRON);
+            GetViewFrame()->GetDispatcher()->Execute(FN_REDLINE_NEXT_CHANGE, SfxCallMode::ASYNCHRON);
         }
         break;
 
@@ -863,7 +863,7 @@ void SwView::Execute(SfxRequest &rReq)
             else
             {
                 SfxBoolItem aItem( SID_WIN_FULLSCREEN, false );
-                GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SFX_CALLMODE_RECORD, &aItem, 0L );
+                GetViewFrame()->GetDispatcher()->Execute( SID_WIN_FULLSCREEN, SfxCallMode::RECORD, &aItem, 0L );
                 bIgnore = true;
             }
         }
@@ -908,7 +908,7 @@ void SwView::Execute(SfxRequest &rReq)
         case  FN_EDIT_CURRENT_TOX:
         {
             GetViewFrame()->GetDispatcher()->Execute(
-                                FN_INSERT_MULTI_TOX, SFX_CALLMODE_ASYNCHRON);
+                                FN_INSERT_MULTI_TOX, SfxCallMode::ASYNCHRON);
         }
         break;
         case FN_UPDATE_CUR_TOX:
@@ -1235,12 +1235,12 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 SfxAllEnumItem aEnumItem(SID_OBJECT_ALIGN, nAlias - SID_OBJECT_ALIGN_LEFT);
                 GetViewFrame()->GetDispatcher()->Execute(
-                                SID_OBJECT_ALIGN, SFX_CALLMODE_ASYNCHRON, &aEnumItem, 0L);
+                                SID_OBJECT_ALIGN, SfxCallMode::ASYNCHRON, &aEnumItem, 0L);
             }
             else if(nAlias)
             //these slots are either re-mapped to text or object alignment
                 GetViewFrame()->GetDispatcher()->Execute(
-                                nAlias, SFX_CALLMODE_ASYNCHRON);
+                                nAlias, SfxCallMode::ASYNCHRON);
         }
         break;
         case SID_RESTORE_EDITING_VIEW:
@@ -1646,14 +1646,14 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case FN_STAT_PAGE:
         {
             GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR,
-                                      SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
+                                      SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
         }
         break;
 
         case FN_STAT_WORDCOUNT:
         {
             GetViewFrame()->GetDispatcher()->Execute(FN_WORDCOUNT_DIALOG,
-                                      SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
+                                      SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
         }
         break;
 
@@ -1680,7 +1680,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case FN_STAT_TEMPLATE:
         {
             GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_PAGE_DLG,
-                                        SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
+                                        SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
         }
         break;
         case SID_ATTR_ZOOM:
@@ -1818,7 +1818,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             }
             if( nId )
                 GetViewFrame()->GetDispatcher()->Execute(nId,
-                    SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+                    SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         }
         break;
 
@@ -2228,7 +2228,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 // update all "table of ..." sections if needed
                 if( m_pWrtShell->IsUpdateTOX() )
                 {
-                    SfxRequest aReq( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
+                    SfxRequest aReq( FN_UPDATE_TOX, SfxCallMode::SLOT, GetPool() );
                     Execute( aReq );
                     m_pWrtShell->SetUpdateTOX( false ); // reset
                 }
@@ -2355,7 +2355,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             if(bCallAddressPilot)
             {
                 GetViewFrame()->GetDispatcher()->Execute(
-                                SID_ADDRESS_DATA_SOURCE, SFX_CALLMODE_SYNCHRON);
+                                SID_ADDRESS_DATA_SOURCE, SfxCallMode::SYNCHRON);
                 if ( lcl_NeedAdditionalDataSource( xDBContext ) )
                     // no additional data source has been created
                     // -> assume that the user has cancelled the pilot
@@ -2372,7 +2372,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             //then show the "Data base only" field dialog
             SfxBoolItem aOn(FN_INSERT_FIELD_DATA_ONLY, true);
             pVFrame->GetDispatcher()->Execute(FN_INSERT_FIELD_DATA_ONLY,
-                                                SFX_CALLMODE_SYNCHRON, &aOn, 0L);
+                                                SfxCallMode::SYNCHRON, &aOn, 0L);
             return;
         }
         else

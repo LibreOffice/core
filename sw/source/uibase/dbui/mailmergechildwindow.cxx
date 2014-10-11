@@ -75,7 +75,7 @@ SwMailMergeChildWin::SwMailMergeChildWin(SfxBindings* _pBindings,
 
 IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)
 {
-    GetBindings().GetDispatcher()->Execute(FN_MAILMERGE_WIZARD, SFX_CALLMODE_ASYNCHRON);
+    GetBindings().GetDispatcher()->Execute(FN_MAILMERGE_WIZARD, SfxCallMode::ASYNCHRON);
     return 0;
 }
 

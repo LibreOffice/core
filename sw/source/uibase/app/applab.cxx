@@ -402,7 +402,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         {
             SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
             assert(pDisp && "No dispatcher in frame?");
-            pDisp->Execute(FN_SYNC_LABELS, SFX_CALLMODE_ASYNCHRON);
+            pDisp->Execute(FN_SYNC_LABELS, SfxCallMode::ASYNCHRON);
         }
         rReq.SetReturnValue(SfxVoidItem(bLabel ? FN_LABEL : FN_BUSINESS_CARD));
     }

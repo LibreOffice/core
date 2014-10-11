@@ -86,7 +86,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
             if (pSh->IsObjSelected())
             {
                 if (pSdrView->HasMarkedPoints())
-                    pSh->GetView().GetViewFrame()->GetDispatcher()->Execute(SID_BEZIER_DELETE, sal_False);
+                    pSh->GetView().GetViewFrame()->GetDispatcher()->Execute(SID_BEZIER_DELETE);
                 else
                 {
                     pSh->DelSelectedObj();

@@ -159,7 +159,7 @@ bool FuConstructCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
 
     if (!bPermanent)
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
     return bReturn;
 }

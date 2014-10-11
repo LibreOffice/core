@@ -389,13 +389,13 @@ void SvxSearchDialog::Construct_Impl()
     // Get attribute sets only once in construtor()
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     const SvxSetItem* pSrchSetItem =
-        (const SvxSetItem*) rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SFX_CALLMODE_SLOT, ppArgs );
+        (const SvxSetItem*) rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs );
 
     if ( pSrchSetItem )
         InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
     const SvxSetItem* pReplSetItem =
-        (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SFX_CALLMODE_SLOT, ppArgs );
+        (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs );
 
     if ( pReplSetItem )
         InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -407,7 +407,7 @@ void SvxSearchDialog::Construct_Impl()
     pOptionsController =
         new SvxSearchController( SID_SEARCH_OPTIONS, rBindings, *this );
     rBindings.LeaveRegistrations();
-    rBindings.GetDispatcher()->Execute( FID_SEARCH_ON, SFX_CALLMODE_SLOT, ppArgs );
+    rBindings.GetDispatcher()->Execute( FID_SEARCH_ON, SfxCallMode::SLOT, ppArgs );
     pImpl->aSelectionTimer.Start();
 
 
@@ -517,7 +517,7 @@ bool SvxSearchDialog::Close()
     aOpt.SetIgnoreKashida_CTL       ( m_pIgnoreKashida->IsChecked() );
 
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
-    rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SFX_CALLMODE_SLOT, ppArgs );
+    rBindings.GetDispatcher()->Execute( FID_SEARCH_OFF, SfxCallMode::SLOT, ppArgs );
     rBindings.Execute( SID_SEARCH_DLG );
 
     return true;
@@ -822,13 +822,13 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
                 // Get attribute sets, if it not has been done already
                 const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
                 const SvxSetItem* pSrchSetItem =
-                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SFX_CALLMODE_SLOT, ppArgs );
+                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs );
 
                 if ( pSrchSetItem )
                     InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
                 const SvxSetItem* pReplSetItem =
-                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SFX_CALLMODE_SLOT, ppArgs );
+                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs );
 
                 if ( pReplSetItem )
                     InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -2191,7 +2191,7 @@ void SvxSearchDialog::SaveToModule_Impl()
     pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
     nModifyFlag = 0;
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
-    rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SFX_CALLMODE_SLOT, ppArgs );
+    rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >

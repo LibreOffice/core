@@ -133,7 +133,7 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
     {
         SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, rNewText, ConvertType( eType ) );
         pDispatcher->Execute( SID_BASICIDE_SBXRENAMED,
-                                SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                                SfxCallMode::SYNCHRON, &aSbxItem, 0L );
     }
 
     // OV-Bug?!
@@ -366,7 +366,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
             {
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rSourceDoc, aSourceLibName, aSourceName, ConvertType( eType ) );
                 pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
-                                      SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                                      SfxCallMode::SYNCHRON, &aSbxItem, 0L );
             }
         }
 
@@ -458,7 +458,7 @@ TriState ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeLi
         {
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDestDoc, aDestLibName, aSourceName, ConvertType( eType ) );
             pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                  SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                                  SfxCallMode::SYNCHRON, &aSbxItem, 0L );
         }
     }
 
@@ -684,7 +684,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
     if (pButton == m_pEditButton)
     {
         SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
-        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+        SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
         SfxGetpApp()->ExecuteSlot( aRequest );
 
         SfxDispatcher* pDispatcher = GetDispatcher();
@@ -704,7 +704,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
                 }
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(),
                                   aModName, m_pBasicBox->ConvertType( aDesc.GetType() ) );
-                pDispatcher->Execute( SID_BASICIDE_SHOWSBX, SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                pDispatcher->Execute( SID_BASICIDE_SHOWSBX, SfxCallMode::SYNCHRON, &aSbxItem, 0L );
             }
         }
         else    // Nur Lib selektiert
@@ -723,7 +723,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
             SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
             if ( pDispatcher )
             {
-                pDispatcher->Execute( SID_BASICIDE_LIBSELECTED, SFX_CALLMODE_ASYNCHRON, &aDocItem, &aLibNameItem, 0L );
+                pDispatcher->Execute( SID_BASICIDE_LIBSELECTED, SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0L );
             }
         }
         EndTabDialog( 1 );
@@ -831,7 +831,7 @@ void ObjectPage::NewDialog()
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aDlgName, TYPE_DIALOG );
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
                     pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                            SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                                            SfxCallMode::SYNCHRON, &aSbxItem, 0L );
                 LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
                 SvTreeListEntry* pRootEntry = m_pBasicBox->FindRootEntry( aDocument, eLocation );
                 if ( pRootEntry )
@@ -886,7 +886,7 @@ void ObjectPage::DeleteCurrent()
         {
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDocument, aLibName, aName, m_pBasicBox->ConvertType( eType ) );
             pDispatcher->Execute( SID_BASICIDE_SBXDELETED,
-                                  SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                                  SfxCallMode::SYNCHRON, &aSbxItem, 0L );
         }
 
         try
@@ -974,7 +974,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                      SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                                      SfxCallMode::SYNCHRON, &aSbxItem, 0L );
             LibraryLocation eLocation = rDocument.getLibraryLocation( aLibName );
             SvTreeListEntry* pRootEntry = rBasicBox.FindRootEntry( rDocument, eLocation );
             if ( pRootEntry )

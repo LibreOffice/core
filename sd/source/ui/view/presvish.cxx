@@ -126,7 +126,7 @@ void PresentationViewShell::Activate( bool bIsMDIActivate )
     {
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
 
-        GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if( xSlideShow.is() )

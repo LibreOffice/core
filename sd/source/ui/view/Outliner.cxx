@@ -318,7 +318,7 @@ void Outliner::EndSpelling (void)
         // Make FuSelection the current function.
         pViewShell->GetDispatcher()->Execute(
             SID_OBJECT_SELECT,
-            SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+            SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
         // Remove and, if previously created by us, delete the outline
         // view.
@@ -1292,8 +1292,8 @@ void Outliner::EnterEditMode (bool bGrabFocus)
         SfxUInt16Item aItem (SID_TEXTEDIT, 1);
         ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
         pViewShell->GetDispatcher()->
-            Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
-                SFX_CALLMODE_RECORD, &aItem, 0L);
+            Execute(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
+                SfxCallMode::RECORD, &aItem, 0L);
 
         // To be consistent with the usual behaviour in the Office the text
         // object that is put into edit mode would have also to be selected.

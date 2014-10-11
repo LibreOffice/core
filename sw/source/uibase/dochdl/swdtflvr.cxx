@@ -2555,7 +2555,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aMediaURLStr );
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON,
+                                SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
                                 &aMediaURLItem, 0L );
             }
 #else
@@ -2697,7 +2697,7 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
 
             SfxStringItem aDataDesc( nWh, sTxt );
             rView.GetViewFrame()->GetDispatcher()->Execute(
-                                nWh, SFX_CALLMODE_ASYNCHRON, &aDataDesc,
+                                nWh, SfxCallMode::ASYNCHRON, &aDataDesc,
                                 pConnectionItem.get(), pColumnItem.get(),
                                 pSourceItem.get(), pCommandItem.get(), pCommandTypeItem.get(),
                                 pColumnNameItem.get(), pSelectionItem.get(), pCursorItem.get(), 0L);

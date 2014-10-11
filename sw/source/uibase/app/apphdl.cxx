@@ -203,7 +203,7 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         SfxBoolItem aHidden( SID_HIDDEN, true );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
-                Execute(SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
+                Execute(SID_OPENDOC, SfxCallMode::SYNCHRON,
                             &aURL, &aHidden, &aReferer, &aTargetFrameName, 0L);
         SfxShell* pShell = pItem ? pItem->GetShell() : 0;
 
@@ -229,7 +229,7 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         SfxStringItem aFactory(SID_NEWDOCDIRECT, SwDocShell::Factory().GetFilterContainer()->GetName());
         const SfxFrameItem* pItem = (SfxFrameItem*)
                             pView->GetViewFrame()->GetDispatcher()->Execute(SID_NEWDOCDIRECT,
-                                SFX_CALLMODE_SYNCHRON, &aFactory, 0L);
+                                SfxCallMode::SYNCHRON, &aFactory, 0L);
         SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
         SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
         pNewView = pFrame ? PTR_CAST(SwView, pFrame->GetViewShell()) : 0;
@@ -468,7 +468,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
             pTempView->SetMailMergeConfigItem(m_pMMConfig, m_pWizard->GetRestartPage(), !bResult);
             SfxViewFrame* pViewFrame = pTempView->GetViewFrame();
             pViewFrame->GetDispatcher()->Execute(
-                FN_MAILMERGE_CHILDWINDOW, SFX_CALLMODE_SYNCHRON);
+                FN_MAILMERGE_CHILDWINDOW, SfxCallMode::SYNCHRON);
             ExecutionFinished( false );
             break;
         }

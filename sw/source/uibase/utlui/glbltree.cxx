@@ -838,7 +838,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             {
                 SfxStringItem aName(FN_EDIT_REGION,
                         pCont->GetSection()->GetSectionName());
-                rDispatch.Execute(FN_EDIT_REGION, SFX_CALLMODE_ASYNCHRON, &aName, 0L);
+                rDispatch.Execute(FN_EDIT_REGION, SfxCallMode::ASYNCHRON, &aName, 0L);
             }
         }
         break;
@@ -922,7 +922,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 
              const SfxFrameItem* pItem = (SfxFrameItem*)
                             rDispatch.Execute(SID_NEWDOCDIRECT,
-                                SFX_CALLMODE_SYNCHRON, &aFactory, 0L);
+                                SfxCallMode::SYNCHRON, &aFactory, 0L);
 
             // save at
             SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
@@ -931,7 +931,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             {
                 const SfxBoolItem* pBool = (const SfxBoolItem*)
                         pFrame->GetDispatcher()->Execute(
-                                SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON );
+                                SID_SAVEASDOC, SfxCallMode::SYNCHRON );
                 SfxObjectShell& rObj = *pFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
                 OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
@@ -961,7 +961,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                     }
                     else
                         pFrame->GetDispatcher()->Execute(SID_CLOSEWIN,
-                                                SFX_CALLMODE_SYNCHRON);
+                                                SfxCallMode::SYNCHRON);
                 }
                 else
                 {
@@ -1184,7 +1184,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
         SfxStringItem aTargetFrameName( SID_TARGETNAME, "_blank" );
         SfxStringItem aReferer(SID_REFERER, pActiveShell->GetView().GetDocShell()->GetTitle());
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->
-                Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON,
+                Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON,
                             &aURL, &aReadOnly, &aReferer, &aTargetFrameName, 0L);
     }
 }

@@ -564,7 +564,7 @@ IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl)
 IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo*, pInfo )
 {
     if( pInfo->nCommand == SPELLCMD_STARTSPELLDLG )
-        pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
+        pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
     return 0;
 }
 
@@ -825,7 +825,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
         pDBData->GetArea(aRange);
         pViewData->GetView()->MarkRange(aRange);
         pViewData->GetView()->SetCursor(rPos.Col(), rPos.Row());
-        pViewData->GetDispatcher().Execute(SID_FILTER, SFX_CALLMODE_SLOT|SFX_CALLMODE_RECORD);
+        pViewData->GetDispatcher().Execute(SID_FILTER, SfxCallMode::SLOT|SfxCallMode::RECORD);
         return;
     }
 
@@ -1400,7 +1400,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
             pDBData->GetArea( nAreaTab, nStartCol,nStartRow,nEndCol,nEndRow );
             pViewData->GetView()->MarkRange( ScRange( nStartCol,nStartRow,nAreaTab,nEndCol,nEndRow,nAreaTab));
             pViewData->GetView()->SetCursor(nCol,nRow);     //! auch ueber Slot ??
-            pViewData->GetDispatcher().Execute( SID_FILTER, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            pViewData->GetDispatcher().Execute( SID_FILTER, SfxCallMode::SLOT | SfxCallMode::RECORD );
         }
         else
         {
@@ -1725,7 +1725,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
             SfxInt16Item aPosXItem( SID_RANGE_COL, nPosX );
             SfxInt32Item aPosYItem( SID_RANGE_ROW, nPosY );
-            pViewData->GetDispatcher().Execute( SID_FILL_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+            pViewData->GetDispatcher().Execute( SID_FILL_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD,
                                         &aPosXItem, &aPosYItem, (void*)0L );
 
         }
@@ -2107,7 +2107,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             }
         }
         else
-            pViewData->GetDispatcher().Execute( FID_FILL_AUTO, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            pViewData->GetDispatcher().Execute( FID_FILL_AUTO, SfxCallMode::SLOT | SfxCallMode::RECORD );
     }
     else if (pViewData->GetFillMode() == SC_FILL_MATRIX)
     {
@@ -2226,7 +2226,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 if ( pView->HasSelectionForDrillDown( nDummy ) )
                 {
                     // execute slot to show dialog
-                    pViewData->GetDispatcher().Execute( SID_OUTLINE_SHOW, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+                    pViewData->GetDispatcher().Execute( SID_OUTLINE_SHOW, SfxCallMode::SLOT | SfxCallMode::RECORD );
                 }
                 else
                 {
@@ -2411,7 +2411,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // cell cursor isn't visible after making selection, it would jump
             // back to the origin of the selection where the cell cursor is.
             SfxBoolItem aAlignCursorItem( FN_PARAM_2, false );
-            pDisp->Execute( SID_CURRENTCELL, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+            pDisp->Execute( SID_CURRENTCELL, SfxCallMode::SLOT | SfxCallMode::RECORD,
                                         &aPosItem, &aAlignCursorItem, (void*)0L );
 
             pViewData->GetView()->InvalidateAttribs();
@@ -4064,7 +4064,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 SfxStringItem aNameItem( SID_CHART_NAME, aChartName );
                 SfxStringItem aRangeItem( SID_CHART_SOURCE, aRangeName );
                 sal_uInt16 nId = bIsMove ? SID_CHART_SOURCE : SID_CHART_ADDSOURCE;
-                pViewData->GetDispatcher().Execute( nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                pViewData->GetDispatcher().Execute( nId, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                             &aRangeItem, &aNameItem, (void*) NULL );
                 bDone = true;
             }

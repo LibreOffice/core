@@ -629,7 +629,7 @@ bool ScFunctionDockWin::Close()
     SfxBoolItem aItem( FID_FUNCTION_BOX, false );
 
     GetBindings().GetDispatcher()->Execute( FID_FUNCTION_BOX,
-                                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                 &aItem, 0L );
 
     SfxDockingWindow::Close();

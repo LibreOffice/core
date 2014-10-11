@@ -466,7 +466,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             }
             else
             {
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             }
 
             rReq.Done();
@@ -612,8 +612,8 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                         // Make FuText the current function.
                         SfxUInt16Item aItem (SID_TEXTEDIT, 1);
                         GetViewFrame()->GetDispatcher()->
-                            Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
-                                SFX_CALLMODE_RECORD, &aItem, 0L);
+                            Execute(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
+                                SfxCallMode::RECORD, &aItem, 0L);
                         // Put text object into edit mode.
                         GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObj), pPageView);
                         break;
@@ -671,7 +671,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             sal_uInt16 nMappedSlot = GetMappedSlot( nSId );
             if( nMappedSlot > 0 )
             {
-                SfxRequest aReq( nMappedSlot, 0, GetDoc()->GetItemPool() );
+                SfxRequest aReq( nMappedSlot, SfxCallMode::SLOT, GetDoc()->GetItemPool() );
                 ExecuteSlot( aReq );
             }
         }
@@ -968,7 +968,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
 
                 if(HasCurrentFunction(SID_BEZIER_EDIT))
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             }
             else
             {
@@ -1028,7 +1028,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             {
                 GetViewFrame()->GetDispatcher()->Execute(
                     SID_OBJECT_SELECT,
-                    SFX_CALLMODE_ASYNCHRON);
+                    SfxCallMode::ASYNCHRON);
             }
 
             rReq.Done();

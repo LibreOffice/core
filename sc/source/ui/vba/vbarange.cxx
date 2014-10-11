@@ -3600,7 +3600,7 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException, std::exc
         }
         if ( pDispatcher )
         {
-            pDispatcher->Execute( nSID, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
+            pDispatcher->Execute( nSID, (SfxCallMode)SfxCallMode::SYNCHRON, aArgs );
         }
     }
 

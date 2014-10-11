@@ -509,7 +509,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     }
 
     // The medium isn't locked after reopening the document.
-    SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, GetAttrPool() );
+    SfxRequest aReq( SID_SAVEASDOC, SfxCallMode::SYNCHRON, GetAttrPool() );
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, rPath ) );
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
     if(pFilter)

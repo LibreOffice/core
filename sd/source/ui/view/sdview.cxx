@@ -1054,8 +1054,8 @@ void View::onAccessibilityOptionsChanged()
                     nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
                 }
 
-                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
-                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
+                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SfxCallMode::ASYNCHRON );
+                mpViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SfxCallMode::ASYNCHRON );
             }
 
             mpViewSh->Invalidate();

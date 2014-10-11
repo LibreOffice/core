@@ -442,7 +442,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
             if(rSh.HasSelection() && !bNext == rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
             m_pSrchItem->SetBackward(!bNext);
-            SfxRequest aReq(FN_REPEAT_SEARCH, SFX_CALLMODE_SLOT, pThis->GetPool());
+            SfxRequest aReq(FN_REPEAT_SEARCH, SfxCallMode::SLOT, pThis->GetPool());
             pThis->ExecSearch(aReq);
             m_pSrchItem->SetBackward(bBackward);
         }
@@ -545,7 +545,7 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler )
 
     SfxStringItem aDefPage(SID_PARA_DLG, sDefPage);
     GetViewFrame()->GetDispatcher()->Execute( SID_PARA_DLG,
-                                SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
+                                SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                                 &aDefPage, 0L );
     return 0;
 }

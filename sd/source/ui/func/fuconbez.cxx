@@ -210,7 +210,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 
     if ((!bPermanent && bCreated) || bDeleted)
     {
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
     }
 
     return(bReturn);

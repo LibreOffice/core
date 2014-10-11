@@ -309,7 +309,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 //  stattdessen Textmodus verlassen
 
                 pViewShell->GetViewData().GetDispatcher().
-                    Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
             }
             else
             {
@@ -332,7 +332,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     pView->UnmarkAllObj();
                     ScViewData& rViewData = pViewShell->GetViewData();
-                    rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
                     pView->MarkObj(pObj,pPV,false,false);
 
                     pHdl=pView->PickHandle(aMDPos);
@@ -356,7 +356,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     {
             pView->UnmarkAll();
             ScViewData& rViewData = pViewShell->GetViewData();
-            rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
     }
 
 //  return (bReturn);
@@ -512,9 +512,9 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
                 SfxDispatcher& rDisp = pViewShell->GetViewData().GetDispatcher();
                 if ( pView->AreObjectsMarked() )
-                    rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
                 else
-                    rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
             }
         }
     }
@@ -532,9 +532,9 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
             SfxDispatcher& rDisp = pViewShell->GetViewData().GetDispatcher();
             if ( pView->AreObjectsMarked() )
-                rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
             else
-                rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
         }
     }
 

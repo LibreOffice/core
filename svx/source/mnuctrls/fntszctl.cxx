@@ -61,7 +61,7 @@ IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
     const SfxMapUnit eUnit = rPool.GetMetric( nWhich );
     long nH = LOGIC( pMen->GetCurHeight(), MAP_POINT, (MapUnit)eUnit ) / 10;
     SvxFontHeightItem aItem( nH, 100, GetId() );
-    GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute( GetId(), SfxCallMode::RECORD, &aItem, 0L );
     return 1;
 }
 

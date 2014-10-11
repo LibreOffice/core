@@ -115,7 +115,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox )
     if( nId != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nId );
-        GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SFX_CALLMODE_RECORD, &aItem, 0L);
+        GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
     }
     return 0L;
 }
@@ -126,7 +126,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
     if( nVal != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );
-        GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SFX_CALLMODE_RECORD, &aItem, 0L);
+        GetBindings()->GetDispatcher()->Execute(SID_NUMBER_TYPE_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
         mnCategorySelected = nVal;
     }
     return 0L;
@@ -162,7 +162,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
     aFormat += sBreak;
 
     SfxStringItem aItem( SID_NUMBER_FORMAT,  aFormat );
-    GetBindings()->GetDispatcher()->Execute(SID_NUMBER_FORMAT, SFX_CALLMODE_RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_NUMBER_FORMAT, SfxCallMode::RECORD, &aItem, 0L);
     return 0L;
 }
 

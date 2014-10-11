@@ -503,7 +503,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                     XFormTextShadowYValItem aYItem( nSaveShadowY );
 
                     GetBindings().GetDispatcher()->Execute(
-                        SID_FORMTEXT_SHDWXVAL, SFX_CALLMODE_RECORD, &aXItem, &aYItem, 0L );
+                        SID_FORMTEXT_SHDWXVAL, SfxCallMode::RECORD, &aXItem, &aYItem, 0L );
                 }
             }
             else
@@ -529,7 +529,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                     XFormTextShadowXValItem aXItem(nSaveShadowAngle);
                     XFormTextShadowYValItem aYItem(nSaveShadowSize);
                     GetBindings().GetDispatcher()->Execute(
-                        SID_FORMTEXT_SHDWXVAL, SFX_CALLMODE_RECORD, &aXItem, &aYItem, 0L );
+                        SID_FORMTEXT_SHDWXVAL, SfxCallMode::RECORD, &aXItem, &aYItem, 0L );
                 }
             }
         }
@@ -633,7 +633,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl)
             case TBI_STYLE_SLANTY   : eStyle = XFT_SLANTY;  break;
         }
         XFormTextStyleItem aItem( eStyle );
-        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_STYLE, SfxCallMode::RECORD, &aItem, 0L );
         SetStyle_Impl( &aItem );
         nLastStyleTbxId = nId;
     }
@@ -647,7 +647,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl)
     if ( nId == TBI_ADJUST_MIRROR )
     {
         XFormTextMirrorItem aItem(aTbxAdjust.IsItemChecked(nId));
-        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_MIRROR, SFX_CALLMODE_SLOT, &aItem, 0L );
+        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_MIRROR, SfxCallMode::SLOT, &aItem, 0L );
     }
     else if ( nId != nLastAdjustTbxId )
     {
@@ -660,7 +660,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl)
             case TBI_ADJUST_RIGHT   : eAdjust = XFT_RIGHT;  break;
         }
         XFormTextAdjustItem aItem(eAdjust);
-        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_ADJUST, SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_ADJUST, SfxCallMode::RECORD, &aItem, 0L );
         SetAdjust_Impl(&aItem);
         nLastAdjustTbxId = nId;
     }
@@ -674,12 +674,12 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
     if ( nId == TBI_SHOWFORM )
     {
         XFormTextHideFormItem aItem(!aTbxShadow.IsItemChecked(nId));
-        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_HIDEFORM, SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_HIDEFORM, SfxCallMode::RECORD, &aItem, 0L );
     }
     else if ( nId == TBI_OUTLINE )
     {
         XFormTextOutlineItem aItem(aTbxShadow.IsItemChecked(nId));
-        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_OUTLINE, SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_OUTLINE, SfxCallMode::RECORD, &aItem, 0L );
     }
     else if ( nId != nLastShadowTbxId )
     {
@@ -701,7 +701,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
         else if ( nId == TBI_SHADOW_SLANT ) eShadow = XFTSHADOW_SLANT;
 
         XFormTextShadowItem aItem(eShadow);
-        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHADOW, SFX_CALLMODE_RECORD, &aItem, 0L );
+        GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHADOW, SfxCallMode::RECORD, &aItem, 0L );
         SetShadow_Impl(&aItem, true);
     }
     return 0;
@@ -763,7 +763,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
     XFormTextShadowYValItem aShadowYItem( nValueY );
 
     // Slot-ID does not matter, the Exec method evaluates the entire item set
-    GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_DISTANCE, SFX_CALLMODE_RECORD, &aDistItem,
+    GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_DISTANCE, SfxCallMode::RECORD, &aDistItem,
                                             &aStartItem, &aShadowXItem, &aShadowYItem, 0L );
     return 0;
 }
@@ -771,7 +771,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
 IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl)
 {
     XFormTextShadowColorItem aItem( "", aShadowColorLB.GetSelectEntryColor() );
-    GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHDWCOLOR, SFX_CALLMODE_RECORD, &aItem, 0L );
+    GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHDWCOLOR, SfxCallMode::RECORD, &aItem, 0L );
     return 0;
 }
 

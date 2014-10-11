@@ -19,6 +19,7 @@
 
 #include "View.hxx"
 #include <unotools/localfilehelper.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -471,7 +472,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                         aLowerAsciiFileName.indexOf(".sti") != -1 )
                     {
                         ::sd::Window* pWin = mpViewSh->GetActiveWindow();
-                        SfxRequest      aReq(SID_INSERTFILE, 0, mrDoc.GetItemPool());
+                        SfxRequest      aReq(SID_INSERTFILE, ::SfxCallMode::SLOT, mrDoc.GetItemPool());
                         SfxStringItem   aItem1( ID_VAL_DUMMY0, aCurrentDropFile ), aItem2( ID_VAL_DUMMY1, pFoundFilter->GetFilterName() );
 
                         aReq.AppendItem( aItem1 );

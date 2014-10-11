@@ -545,7 +545,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
                         pViewShell->GetViewData().GetDispatcher().
-                            Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+                            Execute(nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
                         // jetzt den erzeugten FuText holen und in den EditModus setzen
                         FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
@@ -581,7 +581,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if ( !bReturn && rMEvt.IsLeft() )
         if (pViewShell->IsDrawSelMode())
             pViewShell->GetViewData().GetDispatcher().
-                Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
 
     if ( bCopy && pViewData && pDocument && pPage )
     {

@@ -1162,7 +1162,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
 
 void ScPreviewShell::ExitPreview()
 {
-    GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON);
+    GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SfxCallMode::ASYNCHRON);
 }
 
 void ScPreviewShell::AddAccessibilityObject( SfxListener& rObject )

@@ -281,7 +281,7 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
     bool bEnable = true;
     XFillFloatTransparenceItem aGradientItem(pPool,aTmpGradient, bEnable );
 
-    mpBindings->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SFX_CALLMODE_RECORD, &aGradientItem, 0L );
+    mpBindings->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SfxCallMode::RECORD, &aGradientItem, 0L );
 }
 
 

@@ -703,14 +703,14 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
             // XLINE_NONE
             const XLineStyleItem aItem(XLINE_NONE);
 
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L);
+            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &aItem, 0L);
         }
         else if(1 == nPos)
         {
             // XLINE_SOLID
             const XLineStyleItem aItem(XLINE_SOLID);
 
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L);
+            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &aItem, 0L);
         }
         else if (mxLineStyleList.is() && mxLineStyleList->Count() > (long)(nPos - 2))
         {
@@ -722,8 +722,8 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
                 pDashEntry ? pDashEntry->GetName() : OUString(),
                 pDashEntry ? pDashEntry->GetDash() : XDash());
 
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItemA, 0L);
-            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aItemB, 0L);
+            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &aItemA, 0L);
+            GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_DASH, SfxCallMode::RECORD, &aItemB, 0L);
         }
     }
 
@@ -742,7 +742,7 @@ IMPL_LINK(LinePropertyPanel, ChangeStartHdl, void*, EMPTYARG)
             pItem.reset(new XLineStartItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
             pItem.reset(new XLineStartItem( mpLBStart->GetSelectEntry(),mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem.get(),  0L);
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SfxCallMode::RECORD, pItem.get(),  0L);
     }
     return 0;
 }
@@ -760,7 +760,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEndHdl, void*, EMPTYARG)
             pItem.reset(new XLineEndItem());
         else if( mxLineEndList.is() && mxLineEndList->Count() > (long) ( nPos - 1 ) )
             pItem.reset(new XLineEndItem( mpLBEnd->GetSelectEntry(), mxLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SFX_CALLMODE_RECORD, pItem.get(),  0L);
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINEEND_STYLE, SfxCallMode::RECORD, pItem.get(),  0L);
     }
     return 0;
 }
@@ -800,7 +800,7 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
             }
         }
 
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_JOINT, SFX_CALLMODE_RECORD, pItem.get(),  0L);
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_JOINT, SfxCallMode::RECORD, pItem.get(),  0L);
     }
     return 0;
 }
@@ -835,7 +835,7 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
             }
         }
 
-        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_CAP, SFX_CALLMODE_RECORD, pItem.get(),  0L);
+        GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_CAP, SfxCallMode::RECORD, pItem.get(),  0L);
     }
     return 0;
 }
@@ -861,7 +861,7 @@ IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
     sal_uInt16 nVal = (sal_uInt16)mpMFTransparent->GetValue();
     XLineTransparenceItem aItem( nVal );
 
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &aItem, 0L);
     return( 0L );
 }
 
@@ -957,7 +957,7 @@ void LinePropertyPanel::SetColor (
     const Color aColor)
 {
     XLineColorItem aColorItem(rsColorName, aColor);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_COLOR, SFX_CALLMODE_RECORD, &aColorItem, 0L);
+    mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_COLOR, SfxCallMode::RECORD, &aColorItem, 0L);
     maColor = aColor;
 }
 

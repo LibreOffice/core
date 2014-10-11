@@ -81,7 +81,7 @@ void FuFormatPaintBrush::implcancel()
     {
         SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
         pViewFrame->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
-        pViewFrame->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        pViewFrame->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
     }
 }
 

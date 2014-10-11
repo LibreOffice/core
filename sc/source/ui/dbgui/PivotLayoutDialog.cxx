@@ -469,7 +469,7 @@ bool ScPivotLayoutDialog::ApplyChanges()
     mpViewData->GetViewShell()->SetDialogDPObject(&maPivotTableObject);
 
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
-    SfxCallMode nCallMode = SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD;
+    SfxCallMode nCallMode = SfxCallMode::SLOT | SfxCallMode::RECORD;
     const SfxPoolItem* pResult = pDispatcher->Execute(SID_PIVOT_TABLE, nCallMode, &aPivotItem, NULL, 0);
 
     if (pResult != NULL)

@@ -733,7 +733,7 @@ void SAL_CALL SlideshowImpl::disposing()
         if( mpViewShell->IsStartShowWithDialog() && getDispatcher() )
         {
             mpViewShell->SetStartShowWithDialog( false );
-            getDispatcher()->Execute( SID_CUSTOMSHOW_DLG, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+            getDispatcher()->Execute( SID_CUSTOMSHOW_DLG, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
         }
 
         mpViewShell->GetViewShellBase().UpdateBorder(true);
@@ -1568,7 +1568,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::
             SfxViewFrame* pViewFrm = SfxViewFrame::Current();
             if (pViewFrm)
                 pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                              SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                              SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                             &aUrl,
                                             &aBrowsing,
                                             0L );

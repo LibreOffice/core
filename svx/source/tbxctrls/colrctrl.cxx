@@ -329,7 +329,7 @@ bool SvxColorDockingWindow::Close()
 {
     SfxBoolItem aItem( SID_COLOR_CONTROL, false );
     GetBindings().GetDispatcher()->Execute(
-        SID_COLOR_CONTROL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        SID_COLOR_CONTROL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
     SfxDockingWindow::Close();
     return true;
 }
@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
             if ( nPos == 1 )        // unsichtbar
             {
                 XFillStyleItem aXFillStyleItem( drawing::FillStyle_NONE );
-                pDispatcher->Execute( nLeftSlot, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
+                pDispatcher->Execute( nLeftSlot, SfxCallMode::RECORD, &aXFillStyleItem, 0L );
             }
             else
             {
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
                     {
                         SvxColorItem aTextColorItem( aColor, SID_ATTR_CHAR_COLOR );
                         pDispatcher->Execute(
-                            SID_ATTR_CHAR_COLOR, SFX_CALLMODE_RECORD, &aTextColorItem, 0L );
+                            SID_ATTR_CHAR_COLOR, SfxCallMode::RECORD, &aTextColorItem, 0L );
                         bDone = true;
                     }
                 }
@@ -373,14 +373,14 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
                     XFillStyleItem aXFillStyleItem( drawing::FillStyle_SOLID );
                     XFillColorItem aXFillColorItem( aStr, aColor );
                     pDispatcher->Execute(
-                        nLeftSlot, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );
+                        nLeftSlot, SfxCallMode::RECORD, &aXFillColorItem, &aXFillStyleItem, 0L );
                 }
             }
         }
         else if ( nPos != 1 )       // unsichtbar
         {
             SvxColorItem aLeftColorItem( aColor, nLeftSlot );
-            pDispatcher->Execute( nLeftSlot, SFX_CALLMODE_RECORD, &aLeftColorItem, 0L );
+            pDispatcher->Execute( nLeftSlot, SfxCallMode::RECORD, &aLeftColorItem, 0L );
         }
     }
     else
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
             if( nPos == 1 )     // unsichtbar
             {
                 XLineStyleItem aXLineStyleItem( XLINE_NONE );
-                pDispatcher->Execute( nRightSlot, SFX_CALLMODE_RECORD, &aXLineStyleItem, 0L );
+                pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineStyleItem, 0L );
             }
             else
             {
@@ -410,20 +410,20 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
                             if ( eXLS == XLINE_NONE )
                             {
                                 XLineStyleItem aXLineStyleItem( XLINE_SOLID );
-                                pDispatcher->Execute( nRightSlot, SFX_CALLMODE_RECORD, &aXLineStyleItem, 0L );
+                                pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineStyleItem, 0L );
                             }
                         }
                     }
                 }
 
                 XLineColorItem aXLineColorItem( aStr, aColor );
-                pDispatcher->Execute( nRightSlot, SFX_CALLMODE_RECORD, &aXLineColorItem, 0L );
+                pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineColorItem, 0L );
             }
         }
         else if ( nPos != 1 )       // unsichtbar
         {
             SvxColorItem aRightColorItem( aColor, nRightSlot );
-            pDispatcher->Execute( nRightSlot, SFX_CALLMODE_RECORD, &aRightColorItem, 0L );
+            pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aRightColorItem, 0L );
         }
     }
 

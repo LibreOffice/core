@@ -215,7 +215,7 @@ void ScTabView::MakeDrawView( sal_uInt8 nForceDesignMode )
                 pGridWin[i]->Update();      // wegen Invalidate im DrawView ctor (ShowPage),
                                             // damit gleich gezeichnet werden kann
             }
-        SfxRequest aSfxRequest(SID_OBJECT_SELECT, 0,aViewData.GetViewShell()->GetPool());
+        SfxRequest aSfxRequest(SID_OBJECT_SELECT, SfxCallMode::SLOT, aViewData.GetViewShell()->GetPool());
         SetDrawFuncPtr(new FuSelection( aViewData.GetViewShell(), GetActiveWin(), pDrawView,
                                         pLayer,aSfxRequest));
 
@@ -341,7 +341,7 @@ void ScTabView::DrawDeselectAll()
         {
             // end text edit (as if escape pressed, in FuDraw)
             aViewData.GetDispatcher().Execute( pDrawActual->GetSlotID(),
-                                        SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+                                        SfxCallMode::SLOT | SfxCallMode::RECORD );
         }
 
         pDrawView->ScEndTextEdit();

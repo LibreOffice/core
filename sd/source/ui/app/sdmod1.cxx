@@ -458,7 +458,7 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
         return;
 
     pViewFrame->GetDispatcher()->Execute(SID_SUMMARY_PAGE,
-        SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+        SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 
     OSL_ASSERT (pDocument!=NULL);
 
@@ -601,7 +601,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         }
                         else
                         {
-                            SfxRequest aRequest (SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool());
+                            SfxRequest aRequest (SID_OPENDOC, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool());
                             aRequest.AppendItem (aFile);
                             aRequest.AppendItem (aReferer);
                             // Put the password into the request
@@ -685,7 +685,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, !bIsDocEmpty);
                                 SfxUInt32Item eAutoLayout( ID_VAL_WHATLAYOUT, (sal_uInt32) AUTOLAYOUT_TITLE );
                                 pViewFrame->GetDispatcher()->Execute(SID_MODIFYPAGE,
-                                   SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aIsChangedItem, &eAutoLayout, 0L);
+                                   SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aIsChangedItem, &eAutoLayout, 0L);
                             }
 
                             // clear document info
@@ -895,7 +895,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
 
     if( (eMedium != OUTPUT_ORIGINAL) && pViewFrame && pViewFrame->GetDispatcher())
     {
-        pViewFrame->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+        pViewFrame->GetDispatcher()->Execute(SID_SIZE_PAGE, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
     }
 }
 

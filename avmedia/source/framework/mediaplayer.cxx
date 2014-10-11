@@ -140,7 +140,7 @@ void MediaFloater::dispatchCurrentURL()
             url = mpMediaWindow->getURL();
         }
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, url );
-        pDispatcher->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_RECORD, &aMediaURLItem, 0L );
+        pDispatcher->Execute( SID_INSERT_AVMEDIA, SfxCallMode::RECORD, &aMediaURLItem, 0L );
     }
 }
 

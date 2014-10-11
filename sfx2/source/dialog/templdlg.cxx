@@ -1679,7 +1679,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
     DeletionWatcher aDeleted(*this);
     sal_uInt16 nModi = pModifier ? *pModifier : 0;
     const SfxPoolItem* pItem = rDispatcher.Execute(
-        nId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
+        nId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD | SfxCallMode::MODAL,
         pItems, nModi );
 
     // Dialog can be destroyed while in Execute() because started
@@ -1782,7 +1782,7 @@ void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry)
         nActFamily = nEntry;
         SfxDispatcher* pDispat = pBindings->GetDispatcher_Impl();
         SfxUInt16Item aItem( SID_STYLE_FAMILY, nEntry );
-        pDispat->Execute( SID_STYLE_FAMILY, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+        pDispat->Execute( SID_STYLE_FAMILY, SfxCallMode::SYNCHRON, &aItem, 0L );
         pBindings->Invalidate( SID_STYLE_FAMILY );
         pBindings->Update( SID_STYLE_FAMILY );
         UpdateFamily_Impl();

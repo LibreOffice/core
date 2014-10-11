@@ -74,7 +74,7 @@ void DrawViewShell::ModelHasChanged()
 
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->Execute(
-        SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
 
     // now initialize the TextEditOutliner which was newly created by the draw engine
     ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
@@ -128,7 +128,7 @@ void DrawViewShell::ArrangeGUIElements (void)
     {
         // with split, always resize first window
         //af pWindow = mpContentWindow.get();
-        SfxRequest aReq(SID_SIZE_PAGE, 0, GetDoc()->GetItemPool());
+        SfxRequest aReq(SID_SIZE_PAGE, SfxCallMode::SLOT, GetDoc()->GetItemPool());
         ExecuteSlot( aReq );
     }
 }
@@ -300,7 +300,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if ( mpDrawView->IsDesignMode() != pView->IsDesignMode() )
     {
         SfxBoolItem aDesignModeItem( SID_FM_DESIGN_MODE, pView->IsDesignMode() );
-        GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aDesignModeItem, 0L );
+        GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, &aDesignModeItem, 0L );
     }
 
     // has to be called in the end, because it executes a WriteFrameViewData()

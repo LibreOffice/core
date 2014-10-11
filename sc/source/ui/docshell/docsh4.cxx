@@ -1086,7 +1086,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             SfxStringItem aApp(SID_DOC_SERVICE, OUString("com.sun.star.sheet.SpreadsheetDocument"));
             SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
             GetViewData()->GetDispatcher().Execute(
-                SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aApp, &aTarget, 0L);
+                SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, &aApp, &aTarget, 0L);
         }
         break;
         default:

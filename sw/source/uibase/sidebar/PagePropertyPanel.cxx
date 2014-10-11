@@ -292,7 +292,7 @@ void PagePropertyPanel::ExecuteOrientationChange( const bool bLandscape )
         mpPageSizeItem->SetSize(Size(nRotatedWidth, nRotatedHeight));
 
         // apply changed attributes
-        GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_SIZE, SFX_CALLMODE_RECORD, mpPageSizeItem.get(), mpPageItem.get(), 0L );
+        GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, mpPageSizeItem.get(), mpPageItem.get(), 0L );
     }
 
     // check, if margin values still fit to the changed page size.
@@ -363,7 +363,7 @@ void PagePropertyPanel::ExecuteMarginLRChange(
 {
     mpPageLRMarginItem->SetLeft( nPageLeftMargin );
     mpPageLRMarginItem->SetRight( nPageRightMargin );
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_LRSPACE, SFX_CALLMODE_RECORD, mpPageLRMarginItem.get(),  0L );
+    GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, mpPageLRMarginItem.get(),  0L );
 }
 
 void PagePropertyPanel::ExecuteMarginULChange(
@@ -372,13 +372,13 @@ void PagePropertyPanel::ExecuteMarginULChange(
 {
     mpPageULMarginItem->SetUpper( nPageTopMargin );
     mpPageULMarginItem->SetLower( nPageBottomMargin );
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_ULSPACE, SFX_CALLMODE_RECORD, mpPageULMarginItem.get(),  0L );
+    GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, mpPageULMarginItem.get(),  0L );
 }
 
 void PagePropertyPanel::ExecutePageLayoutChange( const bool bMirrored )
 {
     mpPageItem->SetPageUsage( bMirrored ? SVX_PAGE_MIRROR : SVX_PAGE_ALL );
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE, SFX_CALLMODE_RECORD, mpPageItem.get(),  0L );
+    GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE, SfxCallMode::RECORD, mpPageItem.get(),  0L );
 }
 
 IMPL_LINK( PagePropertyPanel, ClickMarginHdl, ToolBox*, pToolBox )
@@ -412,7 +412,7 @@ void PagePropertyPanel::ExecuteSizeChange( const Paper ePaper )
     }
     mpPageSizeItem->SetSize( aPageSize );
 
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_SIZE, SFX_CALLMODE_RECORD, mpPageSizeItem.get(),  0L );
+    mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, mpPageSizeItem.get(),  0L );
 }
 
 IMPL_LINK( PagePropertyPanel, ClickSizeHdl, ToolBox*, pToolBox )
@@ -439,7 +439,7 @@ void PagePropertyPanel::ClosePageSizePopup()
 void PagePropertyPanel::ExecuteColumnChange( const sal_uInt16 nColumnType )
 {
     mpPageColumnTypeItem->SetValue( nColumnType );
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_COLUMN, SFX_CALLMODE_RECORD, mpPageColumnTypeItem.get(),  0L );
+    mpBindings->GetDispatcher()->Execute(SID_ATTR_PAGE_COLUMN, SfxCallMode::RECORD, mpPageColumnTypeItem.get(),  0L );
 }
 
 IMPL_LINK( PagePropertyPanel, ClickColumnHdl, ToolBox*, pToolBox )

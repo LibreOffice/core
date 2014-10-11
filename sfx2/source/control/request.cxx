@@ -63,7 +63,7 @@ struct SfxRequest_Impl: public SfxListener
     bool            bDone;       // at all executed
     bool            bIgnored;    // Cancelled by the User
     bool            bCancelled;  // no longer notify
-    sal_uInt16      nCallMode;   // Synch/Asynch/API/Record
+    SfxCallMode     nCallMode;   // Synch/Asynch/API/Record
     bool            bAllowRecording;
     SfxAllItemSet*  pInternalArgs;
     SfxViewFrame*   pViewFrame;
@@ -80,7 +80,7 @@ struct SfxRequest_Impl: public SfxListener
                         , bDone(false)
                         , bIgnored(false)
                         , bCancelled(false)
-                        , nCallMode( SFX_CALLMODE_SYNCHRON )
+                        , nCallMode( SfxCallMode::SYNCHRON )
                         , bAllowRecording( false )
                         , pInternalArgs( 0 )
                         , pViewFrame(0)
@@ -191,7 +191,7 @@ SfxRequest::SfxRequest
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->pSlot = 0;
-    pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
+    pImp->nCallMode = SfxCallMode::SYNCHRON;
     pImp->pViewFrame = pViewFrame;
     if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, true, true ) )
     {
@@ -260,8 +260,8 @@ SfxRequest::SfxRequest
 SfxRequest::SfxRequest
 (
     sal_uInt16                  nSlotId,
-    sal_uInt16                  nMode,
-    const SfxAllItemSet&    rSfxArgs
+    SfxCallMode                 nMode,
+    const SfxAllItemSet&        rSfxArgs
 )
 
 // creates a SfxRequest with arguments
@@ -280,7 +280,7 @@ SfxRequest::SfxRequest
 }
 
 
-sal_uInt16 SfxRequest::GetCallMode() const
+SfxCallMode SfxRequest::GetCallMode() const
 {
     return pImp->nCallMode;
 }
@@ -289,7 +289,7 @@ sal_uInt16 SfxRequest::GetCallMode() const
 
 bool SfxRequest::IsSynchronCall() const
 {
-    return SFX_CALLMODE_SYNCHRON == ( SFX_CALLMODE_SYNCHRON & pImp->nCallMode );
+    return SfxCallMode::SYNCHRON == ( SfxCallMode::SYNCHRON & pImp->nCallMode );
 }
 
 
@@ -297,9 +297,9 @@ bool SfxRequest::IsSynchronCall() const
 void SfxRequest::SetSynchronCall( bool bSynchron )
 {
     if ( bSynchron )
-        pImp->nCallMode |= SFX_CALLMODE_SYNCHRON;
+        pImp->nCallMode |= SfxCallMode::SYNCHRON;
     else
-        pImp->nCallMode &= ~(sal_uInt16) SFX_CALLMODE_SYNCHRON;
+        pImp->nCallMode &= ~SfxCallMode::SYNCHRON;
 }
 
 void SfxRequest::SetInternalArgs_Impl( const SfxAllItemSet& rArgs )
@@ -834,7 +834,7 @@ bool SfxRequest::IsAPI() const
 */
 
 {
-    return SFX_CALLMODE_API == ( SFX_CALLMODE_API & pImp->nCallMode );
+    return SfxCallMode::API == ( SfxCallMode::API & pImp->nCallMode );
 }
 
 
@@ -860,8 +860,8 @@ bool SfxRequest::AllowsRecording() const
 {
     bool bAllow = pImp->bAllowRecording;
     if( !bAllow )
-        bAllow = ( SFX_CALLMODE_API != ( SFX_CALLMODE_API & pImp->nCallMode ) ) &&
-                 ( SFX_CALLMODE_RECORD == ( SFX_CALLMODE_RECORD & pImp->nCallMode ) );
+        bAllow = ( SfxCallMode::API != ( SfxCallMode::API & pImp->nCallMode ) ) &&
+                 ( SfxCallMode::RECORD == ( SfxCallMode::RECORD & pImp->nCallMode ) );
     return bAllow;
 }
 

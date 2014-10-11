@@ -669,7 +669,7 @@ IMPL_LINK( SmElementsDockingWindow, SelectClickHdl, SmElement*, pElement)
     if (pViewSh)
     {
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
-            SID_INSERTCOMMANDTEXT, SFX_CALLMODE_STANDARD,
+            SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
             new SfxStringItem(SID_INSERTCOMMANDTEXT, pElement->getText()), 0L);
     }
     return 0;

@@ -318,7 +318,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         //only if there actually are columns!
         if(rColItem.GetNumCols() > 1)
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
-                FN_INSERT_REGION, SFX_CALLMODE_ASYNCHRON, *pSelectionSet );
+                FN_INSERT_REGION, SfxCallMode::ASYNCHRON, *pSelectionSet );
     }
 
     if(pSectionSet && pSectionSet->Count() && bSectionChanged )

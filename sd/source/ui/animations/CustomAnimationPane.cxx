@@ -1834,7 +1834,7 @@ void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTarge
             aTargets.insert( aTargets.end(), rTargets.begin(), rTargets.end() );
             Sequence< Any > aTargetSequence( comphelper::containerToSequence( aTargets ) );
             const SfxUnoAnyItem aItem( SID_ADD_MOTION_PATH, Any( aTargetSequence ) );
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute( nSID, SFX_CALLMODE_ASYNCHRON, &aItem, 0 );
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute( nSID, SfxCallMode::ASYNCHRON, &aItem, 0 );
         }
     }
 }

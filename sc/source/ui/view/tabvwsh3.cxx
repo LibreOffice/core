@@ -487,7 +487,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     // #102785#; finish input
                     pScMod->InputEnterHandler();
 
-                    pThisFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_ASYNCHRON );
+                    pThisFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::ASYNCHRON );
                 }
                 //  else Fehler (z.B. Ole)
             }

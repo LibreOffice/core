@@ -370,7 +370,7 @@ void ScInputWindow::Select()
                 if ( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
                 {
                     pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
-                                              SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+                                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
 
                     // The Toolbox will be disabled anyways, so we don't need to switch here,
                     // regardless whether it succeeded or not!
@@ -2365,7 +2365,7 @@ void ScPosWnd::DoEnter()
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 if ( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) )
                     pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
-                                              SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+                                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
             }
             else
             {
@@ -2434,7 +2434,7 @@ void ScPosWnd::DoEnter()
                     SfxBoolItem aUnmarkItem( FN_PARAM_1, true );        // remove existing selection
 
                     pViewSh->GetViewData().GetDispatcher().Execute( SID_CURRENTCELL,
-                                        SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+                                        SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                                         &aPosItem, &aUnmarkItem, 0L );
                 }
             }

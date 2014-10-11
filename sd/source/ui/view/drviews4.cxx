@@ -180,13 +180,13 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                 GetView()->MarkObj(pCandidate, GetView()->GetSdrPageView());
 
                 GetViewFrame()->GetDispatcher()->Execute(
-                    SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+                    SID_ATTR_CHAR, SfxCallMode::ASYNCHRON);
             }
             else
             {
                 // insert a new page with the same page layout
                 GetViewFrame()->GetDispatcher()->Execute(
-                    SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
+                    SID_INSERTPAGE_QUICK, SfxCallMode::ASYNCHRON);
             }
         }
         else
@@ -922,7 +922,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
             const SfxPoolItem* aArguments[] = {&aHelpLineItem, NULL};
             GetViewFrame()->GetDispatcher()->Execute(
                 SID_SET_SNAPITEM,
-                SFX_CALLMODE_SLOT,
+                SfxCallMode::SLOT,
                 aArguments);
         }
         break;

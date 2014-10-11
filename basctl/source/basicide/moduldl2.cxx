@@ -579,7 +579,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     if (pButton == m_pEditButton)
     {
         SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
-        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+        SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
         SfxGetpApp()->ExecuteSlot( aRequest );
 
         SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( m_aCurDocument.getDocumentOrNull() ) );
@@ -589,7 +589,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
-                                    SFX_CALLMODE_ASYNCHRON, &aDocItem, &aLibNameItem, 0L );
+                                    SfxCallMode::ASYNCHRON, &aDocItem, &aLibNameItem, 0L );
         EndTabDialog( 1 );
         return 0;
     }
@@ -1320,7 +1320,7 @@ void LibPage::DeleteCurrent()
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         if (SfxDispatcher* pDispatcher = GetDispatcher())
             pDispatcher->Execute( SID_BASICIDE_LIBREMOVED,
-                                  SFX_CALLMODE_SYNCHRON, &aDocItem, &aLibNameItem, 0L );
+                                  SfxCallMode::SYNCHRON, &aDocItem, &aLibNameItem, 0L );
 
         // remove library from module and dialog library containers
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
@@ -1501,7 +1501,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, TYPE_MODULE );
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
                     pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
-                                          SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
+                                          SfxCallMode::SYNCHRON, &aSbxItem, 0L );
 
                 if( pBasicBox )
                 {

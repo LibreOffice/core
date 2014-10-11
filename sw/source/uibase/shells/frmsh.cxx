@@ -156,7 +156,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 // Frame already exists, open frame dialog for editing.
                 SfxStringItem aDefPage(FN_FORMAT_FRAME_DLG, "columns");
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_FORMAT_FRAME_DLG,
-                                SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
+                                SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                                 &aDefPage, 0L );
 
             }
@@ -1262,7 +1262,7 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
             case SID_ATTR_FILL_TRANSPARENCE:
             case SID_ATTR_FILL_FLOATTRANSPARENCE:
             {
-                pDis->Execute(SID_ATTRIBUTES_AREA, sal_False);
+                pDis->Execute(SID_ATTRIBUTES_AREA);
                 break;
             }
         }

@@ -675,11 +675,11 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 aInfoItem.SetMethod( m_pMacroBox->GetEntryText( pEntry ) );
             StoreMacroDescription();
             SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
-            SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+            SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
             SfxGetpApp()->ExecuteSlot( aRequest );
 
             if (SfxDispatcher* pDispatcher = GetDispatcher())
-                pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
+                pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SfxCallMode::ASYNCHRON, &aInfoItem, 0L );
             EndDialog(Macro_Edit);
         }
         else
@@ -689,7 +689,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 DeleteMacro();
                 if (SfxDispatcher* pDispatcher = GetDispatcher())
                     pDispatcher->Execute( SID_BASICIDE_UPDATEMODULESOURCE,
-                                          SFX_CALLMODE_SYNCHRON, &aInfoItem, 0L );
+                                          SfxCallMode::SYNCHRON, &aInfoItem, 0L );
                 CheckButtons();
                 UpdateFields();
                 //if ( m_pMacroBox->GetCurEntry() )    // OV-Bug ?
@@ -711,11 +711,11 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     aInfoItem.SetModule( pMethod->GetModule()->GetName() );
                     aInfoItem.SetLib( pMethod->GetModule()->GetParent()->GetName() );
                     SfxAllItemSet aArgs( SfxGetpApp()->GetPool() );
-                    SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
+                    SfxRequest aRequest( SID_BASICIDE_APPEAR, SfxCallMode::SYNCHRON, aArgs );
                     SfxGetpApp()->ExecuteSlot( aRequest );
 
                     if (SfxDispatcher* pDispatcher = GetDispatcher())
-                        pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
+                        pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SfxCallMode::ASYNCHRON, &aInfoItem, 0L );
                     StoreMacroDescription();
                     EndDialog(Macro_New);
                 }
@@ -740,7 +740,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         OUString aComment( GetInfo( pMethod ) );
         SfxMacroInfoItem aItem( SID_MACROINFO, pBasMgr, aLib, aMod, aSub, aComment );
         SfxAllItemSet Args( SfxGetpApp()->GetPool() );
-        SfxRequest aRequest( SID_CONFIG, SFX_CALLMODE_SYNCHRON, Args );
+        SfxRequest aRequest( SID_CONFIG, SfxCallMode::SYNCHRON, Args );
         aRequest.AppendItem( aItem );
         SfxGetpApp()->ExecuteSlot( aRequest );
     }

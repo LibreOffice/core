@@ -344,7 +344,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                     // open url
                     const SfxPoolItem* pReturn = GetDispatcher()->Execute( SID_OPENDOC,
-                                                                           SFX_CALLMODE_SYNCHRON,
+                                                                           SfxCallMode::SYNCHRON,
                                                                            &aName, &aFlags,
                                                                            &aFrame, &aReferer, 0L );
 
@@ -358,7 +358,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                             SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
                             pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
-                                                                  SFX_CALLMODE_SYNCHRON,
+                                                                  SfxCallMode::SYNCHRON,
                                                                   &aNewName, 0L );
 
                         }

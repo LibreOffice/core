@@ -337,7 +337,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             pView->ScEndTextEdit(); // end text edit before switching direction
             ExecuteGlobal( rReq );
             // restore consistent state between shells and functions:
-            pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
             break;
 
         case SID_THES:

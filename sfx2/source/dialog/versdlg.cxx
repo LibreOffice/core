@@ -356,11 +356,11 @@ void SfxVersionDialog::Open_Impl()
         // there is a password, it should be used during the opening
         SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) );
         pViewFrame->GetDispatcher()->Execute(
-            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem, 0L );
+            SID_OPENDOC, SfxCallMode::ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem, 0L );
     }
     else
         pViewFrame->GetDispatcher()->Execute(
-            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, 0L );
+            SID_OPENDOC, SfxCallMode::ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, 0L );
 
     Close();
 }
@@ -450,7 +450,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
         if ( pFilterOptItem )
             aSet.Put( *pFilterOptItem );
 
-        pViewFrame->GetDispatcher()->Execute( SID_DOCUMENT_COMPARE, SFX_CALLMODE_ASYNCHRON, aSet );
+        pViewFrame->GetDispatcher()->Execute( SID_DOCUMENT_COMPARE, SfxCallMode::ASYNCHRON, aSet );
         Close();
     }
     else if (pButton == m_pCmisButton)

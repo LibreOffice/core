@@ -270,7 +270,7 @@ namespace sfx2
             const SfxBoolItem aVisibility( nChildWindowId, false );
             GetBindings().GetDispatcher()->Execute(
                 nChildWindowId,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                 &aVisibility,
                 NULL
             );

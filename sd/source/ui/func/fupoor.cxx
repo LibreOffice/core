@@ -237,13 +237,13 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
 
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+                            SID_ATTR_CHAR, SfxCallMode::ASYNCHRON);
                     }
                     else
                     {
                         // insert a new page with the same page layout
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
+                            SID_INSERTPAGE_QUICK, SfxCallMode::ASYNCHRON);
                     }
 
                     // consumed
@@ -267,11 +267,11 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
                     {
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_GRAPHIC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                     }
                     else
                     {
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                     }
 
                     // consumed
@@ -352,7 +352,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // zoom to page
                 mpViewShell->GetViewFrame()->GetDispatcher()->
-                Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                 bReturn = true;
             }
         }
@@ -364,7 +364,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // zoom to selected objects
                 mpViewShell->GetViewFrame()->GetDispatcher()->
-                Execute(SID_SIZE_OPTIMAL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                Execute(SID_SIZE_OPTIMAL, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                 bReturn = true;
             }
         }
@@ -823,7 +823,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR,
-                            SFX_CALLMODE_ASYNCHRON,
+                            SfxCallMode::ASYNCHRON,
                             &aInputString,
                             0L);
 
@@ -874,7 +874,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR,
-                            SFX_CALLMODE_ASYNCHRON,
+                            SfxCallMode::ASYNCHRON,
                             &aInputString,
                             0L);
 
@@ -1124,7 +1124,7 @@ bool FuPoor::cancel()
 {
     if ( !this->ISA(FuSelection) )
     {
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         return true;
     }
 

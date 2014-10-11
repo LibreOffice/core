@@ -359,7 +359,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
             SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
-                                      SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                                      SfxCallMode::SLOT | SfxCallMode::RECORD,
                                       GetOutputItem( theOutParam, theFilterArea ), 0L, 0L );
             Close();
         }

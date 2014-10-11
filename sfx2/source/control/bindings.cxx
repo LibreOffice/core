@@ -997,7 +997,7 @@ const SfxPoolItem* SfxBindings::ExecuteSynchron( sal_uInt16 nId, const SfxPoolIt
     if( !nId || !pDispatcher )
         return NULL;
 
-    return Execute_Impl( nId, ppItems, nModi, SFX_CALLMODE_SYNCHRON, ppInternalArgs );
+    return Execute_Impl( nId, ppItems, nModi, SfxCallMode::SYNCHRON, ppInternalArgs );
 }
 
 bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,
@@ -1054,7 +1054,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
                 aReq.AppendItem( **ppItems++ );
 
         // cache binds to an external dispatch provider
-        pCache->Dispatch( aReq.GetArgs(), nCallMode == SFX_CALLMODE_SYNCHRON );
+        pCache->Dispatch( aReq.GetArgs(), nCallMode == SfxCallMode::SYNCHRON );
         SfxPoolItem *pVoid = new SfxVoidItem( nId );
         DeleteItemOnIdle( pVoid );
         return pVoid;
@@ -1121,7 +1121,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         const sal_uInt16 nSlotId = pRealSlot->GetSlotId();
         aReq.SetSlot( nSlotId );
         aReq.AppendItem( SfxAllEnumItem( rPool.GetWhich(nSlotId), pSlot->GetValue() ) );
-        pDispatcher->_Execute( *pShell, *pRealSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
+        pDispatcher->_Execute( *pShell, *pRealSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
     }
     else if ( SFX_KIND_ATTR == pSlot->GetKind() )
     {
@@ -1201,10 +1201,10 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             }
         }
 
-        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
+        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
     }
     else
-        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SFX_CALLMODE_RECORD );
+        pDispatcher->_Execute( *pShell, *pSlot, aReq, aReq.GetCallMode() | SfxCallMode::RECORD );
 }
 
 

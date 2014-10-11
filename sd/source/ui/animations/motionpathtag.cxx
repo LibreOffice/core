@@ -465,7 +465,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
     {
         if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
         {
-            mrView.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_BEZIER_EDIT, SFX_CALLMODE_ASYNCHRON);
+            mrView.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_BEZIER_EDIT, SfxCallMode::ASYNCHRON);
             return true;
         }
         else if( rMEvt.IsLeft() )

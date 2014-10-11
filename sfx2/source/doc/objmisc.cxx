@@ -1455,7 +1455,7 @@ void AutoReloadTimer_Impl::Timeout()
             aSet.Put(
                 SfxStringItem(SID_REFERER, pObjSh->GetMedium()->GetName()));
         }
-        SfxRequest aReq( SID_RELOAD, 0, aSet );
+        SfxRequest aReq( SID_RELOAD, SfxCallMode::SLOT, aSet );
         pObjSh->Get_Impl()->pReloadTimer = 0;
         delete this;
         pFrame->ExecReload_Impl( aReq );

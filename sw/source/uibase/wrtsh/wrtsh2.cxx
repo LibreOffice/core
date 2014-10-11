@@ -258,7 +258,7 @@ bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, bool bNextButton, OString* p
     GetWin()->Update();
     if(RET_YES == nRet)
     {
-        GetView().GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FIELD, SFX_CALLMODE_SYNCHRON);
+        GetView().GetViewFrame()->GetDispatcher()->Execute(FN_EDIT_FIELD, SfxCallMode::SYNCHRON);
     }
     return bRet;
 }
@@ -340,7 +340,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
                 //#97295# immediately select the right shell
                 GetView().StopShellTimer();
                 GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId,
-                            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
+                            SfxCallMode::SYNCHRON|SfxCallMode::RECORD );
                 EndUndo( UNDO_END );
             }
         }
@@ -499,8 +499,8 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
                 0L
     };
 
-    pViewFrm->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr,
-            SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD );
+    pViewFrm->GetDispatcher()->GetBindings()->Execute( SID_OPENDOC, aArr, 0,
+            SfxCallMode::ASYNCHRON|SfxCallMode::RECORD );
 }
 
 void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,

@@ -732,7 +732,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             addParametersToArgs( aURL, lNewArgs );
 
         // Try to find call mode and frame name inside given arguments...
-        SfxCallMode nCall = SFX_CALLMODE_STANDARD;
+        SfxCallMode nCall = SfxCallMode::RECORD;
         sal_Int32   nMarkArg = -1;
 
         // Filter arguments which shouldn't be part of the sequence property value
@@ -745,7 +745,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             {
                 bool    bTemp;
                 if( rProp.Value >>= bTemp )
-                    nCall = bTemp ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON;
+                    nCall = bTemp ? SfxCallMode::SYNCHRON : SfxCallMode::ASYNCHRON;
             }
             else if( rProp.Name == "Bookmark" )
             {
@@ -771,7 +771,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
 
         // Overwrite possible detected sychron argument, if real listener exists (currently no other way)
         if ( rListener.is() )
-            nCall = SFX_CALLMODE_SYNCHRON;
+            nCall = SfxCallMode::SYNCHRON;
 
         if( GetId() == SID_JUMPTOMARK && nMarkArg == - 1 )
         {
@@ -813,7 +813,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 {
                     const SfxSlot *pSlot = 0;
                     if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, false,
-                                                            SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), false ) )
+                                                            SfxCallMode::MODAL==(nCall&SfxCallMode::MODAL), false ) )
                     {
                         if ( bMasterSlave )
                         {

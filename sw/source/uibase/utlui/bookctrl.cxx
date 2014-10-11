@@ -117,7 +117,7 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
             {
                 SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookmarkIdx[nCurrId] );
                 SfxViewFrame::Current()->GetDispatcher()->Execute( FN_STAT_BOOKMARK,
-                    SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD,
+                    SfxCallMode::ASYNCHRON|SfxCallMode::RECORD,
                                         &aBookmark, 0L );
             }
         }

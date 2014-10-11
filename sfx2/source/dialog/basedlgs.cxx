@@ -384,7 +384,7 @@ bool SfxModelessDialog::Close()
     SfxBoolItem aValue( pImp->pMgr->GetType(), false);
     pBindings->GetDispatcher_Impl()->Execute(
         pImp->pMgr->GetType(),
-        SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );
+        SfxCallMode::RECORD|SfxCallMode::SYNCHRON, &aValue, 0L );
     return true;
 }
 
@@ -498,7 +498,7 @@ bool SfxFloatingWindow::Close()
     SfxBoolItem aValue( pImp->pMgr->GetType(), false);
     pBindings->GetDispatcher_Impl()->Execute(
             pImp->pMgr->GetType(),
-            SFX_CALLMODE_RECORD|SFX_CALLMODE_SYNCHRON, &aValue, 0L );
+            SfxCallMode::RECORD|SfxCallMode::SYNCHRON, &aValue, 0L );
     return true;
 }
 

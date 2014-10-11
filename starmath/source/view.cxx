@@ -1603,7 +1603,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 if (pWin->IsAllSelected())
                 {
                     GetViewFrame()->GetDispatcher()->Execute(
-                                SID_COPYOBJECT, SFX_CALLMODE_STANDARD,
+                                SID_COPYOBJECT, SfxCallMode::RECORD,
                                 new SfxVoidItem(SID_COPYOBJECT), 0L);
                 }
                 else
@@ -1629,7 +1629,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 if( bCallExec )
                 {
                     GetViewFrame()->GetDispatcher()->Execute(
-                            SID_PASTEOBJECT, SFX_CALLMODE_STANDARD,
+                            SID_PASTEOBJECT, SfxCallMode::RECORD,
                             new SfxVoidItem(SID_PASTEOBJECT), 0L);
                 }
             }

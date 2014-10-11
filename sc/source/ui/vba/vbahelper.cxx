@@ -435,13 +435,13 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
                 if ( !pViewFrame->GetFrame().IsInPlace() )
                 {
                     SC_MOD()->InputEnterHandler();
-                    pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_SYNCHRON );
+                    pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::SYNCHRON );
                     while ( isInPrintPreview( pViewFrame ) )
                         Application::Yield();
                 }
             }
             else
-                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
+                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SfxCallMode::SYNCHRON, aArgs );
         }
 
     }

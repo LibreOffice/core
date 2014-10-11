@@ -386,7 +386,7 @@ void  SwInputWindow::ApplyFormula()
     const SfxPoolItem* aArgs[2];
     aArgs[0] = &aParam;
     aArgs[1] = 0;
-    pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs, 0, SFX_CALLMODE_ASYNCHRON );
+    pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs, 0, SfxCallMode::ASYNCHRON );
 }
 
 void  SwInputWindow::CancelFormula()
@@ -405,7 +405,7 @@ void  SwInputWindow::CancelFormula()
 
         pView->GetEditWin().GrabFocus();
 
-        pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SFX_CALLMODE_ASYNCHRON);
+        pView->GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FORMULA, SfxCallMode::ASYNCHRON);
     }
 }
 

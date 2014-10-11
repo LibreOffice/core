@@ -88,7 +88,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
 
         // finished? - close the spelling dialog
         if( mxEngine->IsFinished() )
-            GetBindings().GetDispatcher()->Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
+            GetBindings().GetDispatcher()->Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
     }
     return aPortions;
 }

@@ -170,7 +170,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);
                 SfxBoolItem aSilent( SID_SILENT, true );
                 GetViewFrame()->GetDispatcher()->Execute( SID_PRINTDOC,
-                            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
+                            SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                             &aPrinterName, &aSilent, 0L );
             }
             else
@@ -181,7 +181,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 aInfoBox.Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);
                 GetViewFrame()->GetDispatcher()->Execute(SID_SW_EDITOPTIONS,
-                            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
+                            SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
                             &aDefPage, 0L );
             }
         }
@@ -208,7 +208,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 {
                     SfxBoolItem aBool(FN_QRY_MERGE, true);
                     GetViewFrame()->GetDispatcher()->Execute(
-                                FN_QRY_MERGE, SFX_CALLMODE_ASYNCHRON, &aBool, 0L);
+                                FN_QRY_MERGE, SfxCallMode::ASYNCHRON, &aBool, 0L);
                     rReq.Ignore();
                     return;
                 }

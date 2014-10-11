@@ -1076,7 +1076,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         case FN_DELETE_ALL_NOTES:
         case FN_HIDE_ALL_NOTES:
             // not possible as slot as this would require that "this" is the active postit
-            mrView.GetViewFrame()->GetBindings().Execute( nSlot, 0, 0, SFX_CALLMODE_ASYNCHRON );
+            mrView.GetViewFrame()->GetBindings().Execute( nSlot, 0, 0, SfxCallMode::ASYNCHRON );
             break;
         case FN_DELETE_NOTE_AUTHOR:
         case FN_HIDE_NOTE_AUTHOR:
@@ -1086,7 +1086,7 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
             const SfxPoolItem* aItems[2];
             aItems[0] = &aItem;
             aItems[1] = 0;
-            mrView.GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SFX_CALLMODE_ASYNCHRON );
+            mrView.GetViewFrame()->GetBindings().Execute( nSlot, aItems, 0, SfxCallMode::ASYNCHRON );
         }
             break;
         default:

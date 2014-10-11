@@ -323,7 +323,7 @@ IMPL_LINK( SidebarTxtControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
 {
     if ( pInfo->nCommand == SPELLCMD_STARTSPELLDLG )
     {
-        mrDocView.GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON);
+        mrDocView.GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
     }
     return 0;
 }

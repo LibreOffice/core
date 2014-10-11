@@ -478,7 +478,7 @@ void SdUnoDrawView::SetZoom( sal_Int16 nZoom )
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
         if( pDispatcher )
         {
-            pDispatcher->Execute(SID_ATTR_ZOOM,SFX_CALLMODE_SYNCHRON,&aZoomItem, 0L);
+            pDispatcher->Execute(SID_ATTR_ZOOM,SfxCallMode::SYNCHRON,&aZoomItem, 0L);
         }
     }
 }
@@ -528,7 +528,7 @@ void SdUnoDrawView::SetZoomType ( sal_Int16 nType )
                     return;
             }
             SvxZoomItem aZoomItem( eZoomType );
-            pDispatcher->Execute(SID_ATTR_ZOOM,SFX_CALLMODE_SYNCHRON,&aZoomItem, 0L);
+            pDispatcher->Execute(SID_ATTR_ZOOM,SfxCallMode::SYNCHRON,&aZoomItem, 0L);
         }
     }
 }

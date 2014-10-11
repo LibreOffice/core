@@ -1126,7 +1126,7 @@ void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
     if ( pViewFrame != NULL && pViewFrame->GetDispatcher() )
         pPtr = (const OfaRefItem<XColorList> *)pViewFrame->
             GetDispatcher()->Execute( SID_GET_COLORLIST,
-                                      SFX_CALLMODE_SYNCHRON );
+                                      SfxCallMode::SYNCHRON );
     pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
 
     SetPageType( &pShadow->nUnknownType );
@@ -1152,7 +1152,7 @@ void SvxColorTabPage::SaveToViewFrame( SfxViewFrame *pViewFrame )
         return;
 
     const OfaRefItem<XColorList> * pPtr;
-    pPtr = (const OfaRefItem<XColorList>*)pViewFrame->GetDispatcher()->Execute( SID_GET_COLORLIST, SFX_CALLMODE_SYNCHRON );
+    pPtr = (const OfaRefItem<XColorList>*)pViewFrame->GetDispatcher()->Execute( SID_GET_COLORLIST, SfxCallMode::SYNCHRON );
     if( pPtr )
     {
         XColorListRef pReference = pPtr->GetValue();

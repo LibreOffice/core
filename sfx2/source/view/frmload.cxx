@@ -343,7 +343,7 @@ namespace
 bool SfxFrameLoader_Impl::impl_createNewDocWithSlotParam( const sal_uInt16 _nSlotID, const Reference< XFrame >& i_rxFrame,
                                                               const bool i_bHidden )
 {
-    SfxRequest aRequest( _nSlotID, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool() );
+    SfxRequest aRequest( _nSlotID, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
     aRequest.AppendItem( SfxUnoFrameItem( SID_FILLFRAME, i_rxFrame ) );
     if ( i_bHidden )
         aRequest.AppendItem( SfxBoolItem( SID_HIDDEN, true ) );

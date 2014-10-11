@@ -333,7 +333,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 aArgs[0].Value = a;
 
                 execute( OUString( ".uno:StatusBarFunc" ), aArgs );
-//              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
+//              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SfxCallMode::RECORD, &aItem, 0L );
             }
         }
     }

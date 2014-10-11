@@ -300,7 +300,7 @@ bool ScTabViewShell::PrepareClose(bool bUI)
     {
         // "clean" end of text edit, including note handling, subshells and draw func switching,
         // as in FuDraw and ScTabView::DrawDeselectAll
-        GetViewData().GetDispatcher().Execute( pPoor->GetSlotID(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+        GetViewData().GetDispatcher().Execute( pPoor->GetSlotID(), SfxCallMode::SLOT | SfxCallMode::RECORD );
     }
     ScDrawView* pDrView = GetScDrawView();
     if ( pDrView )
@@ -1330,10 +1330,10 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                         {
                             if( bShift )
                                 GetViewData().GetDispatcher().Execute( SID_CURSORENTERUP,
-                                            SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+                                            SfxCallMode::SLOT | SfxCallMode::RECORD );
                             else
                                 GetViewData().GetDispatcher().Execute( SID_CURSORENTERDOWN,
-                                            SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+                                            SfxCallMode::SLOT | SfxCallMode::RECORD );
                         }
                         else
                             UpdateInputHandler(true);
@@ -1384,7 +1384,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         }
         if ( nSlotId )
         {
-            GetViewData().GetDispatcher().Execute( nSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            GetViewData().GetDispatcher().Execute( nSlotId, SfxCallMode::SLOT | SfxCallMode::RECORD );
             bUsed = true;
         }
     }
@@ -1428,7 +1428,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         {
             sal_uInt16 nMode = GetLockedModifiers();
             LockModifiers(KEY_MOD1);
-            GetViewData().GetDispatcher().Execute( nSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+            GetViewData().GetDispatcher().Execute( nSlotId, SfxCallMode::SLOT | SfxCallMode::RECORD );
             LockModifiers(nMode);
             bUsed = true;
         }
@@ -1644,7 +1644,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
                 if(SC_MOD()->GetCurRefDlgId()==0)
                 {
                         pFirst->GetDispatcher()->Execute( SID_UPDATETABLINKS,
-                                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                 }
             }
 
@@ -1670,7 +1670,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
                 if(SC_MOD()->GetCurRefDlgId()==0)
                 {
                     pFirst->GetDispatcher()->Execute( SID_REIMPORT_AFTER_LOAD,
-                                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                                            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                 }
             }
         }

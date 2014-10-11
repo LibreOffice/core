@@ -240,7 +240,7 @@ bool SmToolBoxWindow::Close()
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
-                SID_TOOLBOX, SFX_CALLMODE_STANDARD,
+                SID_TOOLBOX, SfxCallMode::RECORD,
                 new SfxBoolItem(SID_TOOLBOX, false), 0L);
     return true;
 }
@@ -334,7 +334,7 @@ IMPL_LINK( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
-                SID_INSERTCOMMAND, SFX_CALLMODE_STANDARD,
+                SID_INSERTCOMMAND, SfxCallMode::RECORD,
                 new SfxInt16Item(SID_INSERTCOMMAND, pToolBox->GetCurItemId()), 0L);
     return 0;
 }

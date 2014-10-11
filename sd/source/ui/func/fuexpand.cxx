@@ -254,7 +254,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
         delete pOutl;
 
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE_PAGE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_DELETE_PAGE, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
     }
 }
 

@@ -2854,7 +2854,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
         // So we can't call ShowSelectionProperties directly as the according feature isn't enabled yet.
         // That's why we use an asynchron execution on the dispatcher.
         // (And that's why this has to be done AFTER the UIFeatureChanged.)
-        m_pShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON );
+        m_pShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
     }
     m_bChangingDesignMode = false;
 }

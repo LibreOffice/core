@@ -120,7 +120,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
             {
                 SdPage* pMaster = pDoc->GetMasterSdPage(nCurrId, PK_STANDARD);
                 SfxStringItem aStyle( ATTR_PRESLAYOUT_NAME, pMaster->GetName() );
-                pViewFrame->GetDispatcher()->Execute(SID_PRESENTATION_LAYOUT,SFX_CALLMODE_SLOT, &aStyle, 0L );
+                pViewFrame->GetDispatcher()->Execute(SID_PRESENTATION_LAYOUT,SfxCallMode::SLOT, &aStyle, 0L );
                 pViewFrame->GetBindings().Invalidate(SID_PRESENTATION_LAYOUT);
                 pViewFrame->GetBindings().Invalidate(SID_STATUS_LAYOUT);
             }
