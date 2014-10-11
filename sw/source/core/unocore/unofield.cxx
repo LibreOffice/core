@@ -2189,7 +2189,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         if (RES_POSTITFLD == nWhich && m_pImpl->m_pFmtFld)
         {
             const_cast<SwFmtFld*>(m_pImpl->m_pFmtFld)->Broadcast(
-                    SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
+                    SwFmtFldHint( 0, SwFmtFldHintWhich::CHANGED ));
         }
 
         // fdo#42073 notify SwTxtFld about changes of the expanded string

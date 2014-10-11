@@ -98,7 +98,7 @@ void SwUndoFieldFromDoc::DoImpl()
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
 
         if ( pDoc->getIDocumentFieldsAccess().GetFldType(RES_POSTITFLD, aEmptyOUStr, false) == pDstFmtFld->GetField()->GetTyp() )
-            pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
+            pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SwFmtFldHintWhich::INSERTED ) );
     }
 }
 

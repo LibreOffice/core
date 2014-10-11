@@ -119,7 +119,7 @@ SwFmtFld::~SwFmtFld()
     if (pType && pType->Which() == RES_DBFLD)
         pType = 0;  // DB-Feldtypen zerstoeren sich selbst
 
-    Broadcast( SwFmtFldHint( this, SWFMTFLD_REMOVED ) );
+    Broadcast( SwFmtFldHint( this, SwFmtFldHintWhich::REMOVED ) );
     delete mpField;
 
     // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
@@ -170,7 +170,7 @@ void SwFmtFld::SetField(SwField * _pField)
         // see SwWrtShell::StartInputFldDlg
         static_cast<SwSetExpField *>(GetField())->SetFmtFld(*this);
     }
-    Broadcast( SwFmtFldHint( this, SWFMTFLD_CHANGED ) );
+    Broadcast( SwFmtFldHint( this, SwFmtFldHintWhich::CHANGED ) );
 }
 
 void SwFmtFld::SetTxtFld( SwTxtFld& rTxtFld )

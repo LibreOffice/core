@@ -134,7 +134,7 @@ void SwAnnotationWin::UpdateData()
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr().SetLayout();
         // #i98686# if we have several views, all notes should update their text
-        mpFmtFld->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED));
+        mpFmtFld->Broadcast(SwFmtFldHint( 0, SwFmtFldHintWhich::CHANGED));
         DocView().GetDocShell()->SetModified();
     }
     Engine()->ClearModifyFlag();

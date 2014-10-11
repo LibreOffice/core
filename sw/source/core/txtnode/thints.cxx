@@ -1172,7 +1172,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                     break;
                 case RES_POSTITFLD:
                     {
-                        const_cast<SwFmtFld&>(pAttr->GetFmtFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pAttr)->GetFmtFld(), SWFMTFLD_REMOVED ) );
+                        const_cast<SwFmtFld&>(pAttr->GetFmtFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pAttr)->GetFmtFld(), SwFmtFldHintWhich::REMOVED ) );
                         break;
                     }
                 }
@@ -3076,7 +3076,7 @@ bool SwpHints::TryInsertHint(
 
                 case RES_POSTITFLD:
                     if ( pDoc->GetDocShell() )
-                        pDoc->GetDocShell()->Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFmtFld(), SWFMTFLD_INSERTED ) );
+                        pDoc->GetDocShell()->Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFmtFld(), SwFmtFldHintWhich::INSERTED ) );
                     break;
                 }
                 if( bInsFldType )
@@ -3297,7 +3297,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     }
     else if ( pHint->Which() == RES_TXTATR_ANNOTATION )
     {
-        const_cast<SwFmtFld&>(((SwTxtFld*)pHint)->GetFmtFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFmtFld(), SWFMTFLD_REMOVED ) );
+        const_cast<SwFmtFld&>(((SwTxtFld*)pHint)->GetFmtFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFmtFld(), SwFmtFldHintWhich::REMOVED ) );
     }
 
     CalcFlags();
