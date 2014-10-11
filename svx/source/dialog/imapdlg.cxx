@@ -238,7 +238,7 @@ bool SvxIMapDlg::Close()
         {
             SfxBoolItem aBoolItem( SID_IMAP_EXEC, true );
             GetBindings().GetDispatcher()->Execute(
-                SID_IMAP_EXEC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
+                SID_IMAP_EXEC, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, &aBoolItem, 0L );
         }
         else if( nRet == RET_CANCEL )
             bRet = false;
@@ -338,7 +338,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         URLLoseFocusHdl( NULL );
         SfxBoolItem aBoolItem( SID_IMAP_EXEC, true );
         GetBindings().GetDispatcher()->Execute(
-            SID_IMAP_EXEC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
+            SID_IMAP_EXEC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aBoolItem, 0L );
     }
     else if(nNewItemId == mnOpenId)
         DoOpen();

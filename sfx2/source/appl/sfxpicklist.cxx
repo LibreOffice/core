@@ -337,7 +337,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
 
     if ( pPick )
     {
-        SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, SfxGetpApp()->GetPool() );
+        SfxRequest aReq( SID_OPENDOC, SfxCallMode::ASYNCHRON, SfxGetpApp()->GetPool() );
         aReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPick->aName ));
         aReq.AppendItem( SfxStringItem( SID_REFERER, "private:user" ) );
         aReq.AppendItem( SfxStringItem( SID_TARGETNAME, "_default" ) );

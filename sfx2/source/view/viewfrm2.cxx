@@ -218,7 +218,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                 break;
             }
 
-            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
+            SfxRequest aReq( SID_OPENDOC, SfxCallMode::SYNCHRON, GetPool() );
             OUString aFact("private:factory/");
             aFact += aFactName;
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );

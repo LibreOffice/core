@@ -397,7 +397,7 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
     SfxBoolItem aItem( SID_ANIMATOR_ADD, true );
 
     GetBindings().GetDispatcher()->Execute(
-        SID_ANIMATOR_ADD, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
+        SID_ANIMATOR_ADD, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
     return( 0L );
 }
 
@@ -482,7 +482,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, true );
 
     GetBindings().GetDispatcher()->Execute(
-        SID_ANIMATOR_CREATE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
+        SID_ANIMATOR_CREATE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
     return( 0L );
 }
 
@@ -776,7 +776,7 @@ bool AnimationWindow::Close()
         SfxBoolItem aItem( SID_ANIMATION_OBJECTS, false );
 
         GetBindings().GetDispatcher()->Execute(
-            SID_ANIMATION_OBJECTS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+            SID_ANIMATION_OBJECTS, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
 
         SfxDockingWindow::Close();
 

@@ -1215,7 +1215,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 SfxLinkItem aLink( SID_DONELINK,
                                     LINK( this, SwNavigationPI, DoneLink ) );
                 GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(
-                            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON,
+                            SID_OPENDOC, SfxCallMode::ASYNCHRON,
                             &aFileItem, &aOptionsItem, &aLink, 0L );
             }
         }

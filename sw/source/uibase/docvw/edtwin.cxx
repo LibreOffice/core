@@ -3327,7 +3327,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 RstMBDownFlags();
                                 GetView().GetViewFrame()->GetBindings().Execute(
                                     FN_FORMAT_GRAFIC_DLG, 0, 0,
-                                    SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
+                                    SfxCallMode::RECORD|SfxCallMode::SLOT);
                                 return;
 
                             // double click on OLE object --> OLE-InPlace
@@ -3342,7 +3342,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             case nsSelectionType::SEL_FRM:
                                 RstMBDownFlags();
                                 GetView().GetViewFrame()->GetBindings().Execute(
-                                    FN_FORMAT_FRAME_DLG, 0, 0, SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
+                                    FN_FORMAT_FRAME_DLG, 0, 0, SfxCallMode::RECORD|SfxCallMode::SLOT);
                                 return;
 
                             case nsSelectionType::SEL_DRW:

@@ -229,7 +229,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                 // #i122676# need to call a single SID_ATTR_FILL_STYLE change
                 GetBindings()->GetDispatcher()->Execute(
-                    SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L);
+                    SID_ATTR_FILL_STYLE, SfxCallMode::RECORD, &aXFillStyleItem, 0L);
                 break;
             }
             case drawing::FillStyle_SOLID:
@@ -242,7 +242,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                 // #i122676# change FillStyle and Color in one call
                 GetBindings()->GetDispatcher()->Execute(
-                    SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, &aXFillStyleItem, 0L);
+                    SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, &aXFillColorItem, &aXFillStyleItem, 0L);
                 break;
             }
             case drawing::FillStyle_GRADIENT:
@@ -273,7 +273,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                             // #i122676# change FillStyle and Gradient in one call
                             GetBindings()->GetDispatcher()->Execute(
-                                SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD, &aXFillGradientItem, &aXFillStyleItem, 0L);
+                                SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &aXFillGradientItem, &aXFillStyleItem, 0L);
                             mpLbFillAttr->SelectEntryPos(mnLastPosGradient);
                         }
                     }
@@ -312,7 +312,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                             // #i122676# change FillStyle and Hatch in one call
                             GetBindings()->GetDispatcher()->Execute(
-                                SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD, &aXFillHatchItem, &aXFillStyleItem, 0L);
+                                SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &aXFillHatchItem, &aXFillStyleItem, 0L);
                             mpLbFillAttr->SelectEntryPos(mnLastPosHatch);
                         }
                     }
@@ -351,7 +351,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                             // #i122676# change FillStyle and Bitmap in one call
                             GetBindings()->GetDispatcher()->Execute(
-                                SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD, &aXFillBitmapItem, &aXFillStyleItem, 0L);
+                                SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &aXFillBitmapItem, &aXFillStyleItem, 0L);
                             mpLbFillAttr->SelectEntryPos(mnLastPosBitmap);
                         }
                     }
@@ -399,7 +399,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
                 if(bFillStyleChange)
                 {
                     // #i122676# Single FillStyle change call needed here
-                    GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L);
+                    GetBindings()->GetDispatcher()->Execute(SID_ATTR_FILL_STYLE, SfxCallMode::RECORD, &aXFillStyleItem, 0L);
                 }
                 break;
             }
@@ -423,7 +423,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 
                         // #i122676# Change FillStale and Gradinet in one call
                         GetBindings()->GetDispatcher()->Execute(
-                            SID_ATTR_FILL_GRADIENT, SFX_CALLMODE_RECORD, &aXFillGradientItem,
+                            SID_ATTR_FILL_GRADIENT, SfxCallMode::RECORD, &aXFillGradientItem,
                             bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
                     }
                 }
@@ -454,7 +454,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 
                         // #i122676# Change FillStale and Hatch in one call
                         GetBindings()->GetDispatcher()->Execute(
-                            SID_ATTR_FILL_HATCH, SFX_CALLMODE_RECORD, &aXFillHatchItem,
+                            SID_ATTR_FILL_HATCH, SfxCallMode::RECORD, &aXFillHatchItem,
                             bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
                     }
                 }
@@ -485,7 +485,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 
                         // #i122676# Change FillStale and Bitmap in one call
                         GetBindings()->GetDispatcher()->Execute(
-                            SID_ATTR_FILL_BITMAP, SFX_CALLMODE_RECORD, &aXFillBitmapItem,
+                            SID_ATTR_FILL_BITMAP, SfxCallMode::RECORD, &aXFillBitmapItem,
                             bFillStyleChange ? &aXFillStyleItem : 0L, 0L);
                     }
                 }
@@ -532,7 +532,7 @@ void AreaPropertyPanel::SetColor (
     const Color aColor)
 {
     const XFillColorItem aXFillColorItem(rsColorName, aColor);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_FILL_COLOR, SFX_CALLMODE_RECORD, &aXFillColorItem, 0L);
+    mpBindings->GetDispatcher()->Execute(SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, &aXFillColorItem, 0L);
     maLastColor = aColor;
 }
 
@@ -1264,7 +1264,7 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
     }
 
     const XFillTransparenceItem aLinearItem(nTrans);
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_TRANSPARENCE, SFX_CALLMODE_RECORD, &aLinearItem, 0L );
+    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_TRANSPARENCE, SfxCallMode::RECORD, &aLinearItem, 0L );
 
     if(nSelectType > 1)
     {
@@ -1297,7 +1297,7 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
 
     SfxItemPool* pPool = 0;
     const XFillFloatTransparenceItem aGradientItem(pPool, aTmpGradient, bGradient);
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SFX_CALLMODE_RECORD, &aGradientItem, 0L );
+    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SfxCallMode::RECORD, &aGradientItem, 0L );
 
     return( 0L );
 }
@@ -1316,7 +1316,7 @@ IMPL_LINK(AreaPropertyPanel, ModifyTransparentHdl_Impl, void*, EMPTYARG)
     }
 
     const XFillTransparenceItem aLinearItem(nTrans);
-    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_TRANSPARENCE, SFX_CALLMODE_RECORD, &aLinearItem, 0L );
+    GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_TRANSPARENCE, SfxCallMode::RECORD, &aLinearItem, 0L );
 
     return 0L;
 }

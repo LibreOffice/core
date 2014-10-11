@@ -741,7 +741,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         {
             SfxAllItemSet aArgs( GetPool() );
             aArgs.Put( SfxBoolItem( SID_SAVEACOPYITEM, true ) );
-            SfxRequest aSaveACopyReq( SID_EXPORTDOC, SFX_CALLMODE_API, aArgs );
+            SfxRequest aSaveACopyReq( SID_EXPORTDOC, SfxCallMode::API, aArgs );
             ExecFile_Impl( aSaveACopyReq );
             if ( !aSaveACopyReq.IsDone() )
             {
@@ -814,7 +814,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     SfxAllItemSet aArgs( GetPool() );
                     SfxStringItem aTmpItem( SID_FILE_NAME, pNameItem->GetValue() );
                     aArgs.Put( aTmpItem, aTmpItem.Which() );
-                    SfxRequest aSaveAsReq( SID_SAVEASDOC, SFX_CALLMODE_API, aArgs );
+                    SfxRequest aSaveAsReq( SID_SAVEASDOC, SfxCallMode::API, aArgs );
                     ExecFile_Impl( aSaveAsReq );
                     if ( !aSaveAsReq.IsDone() )
                     {
@@ -1267,7 +1267,7 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
                     SfxStringItem aName( SID_FILE_NAME, aFileName );
                     SfxBoolItem aCreateView( SID_OPEN_NEW_VIEW, true );
                     SfxGetpApp()->GetAppDispatcher_Impl()->Execute(
-                        SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aName,
+                        SID_OPENDOC, SfxCallMode::ASYNCHRON, &aName,
                         &aCreateView, 0L);
                 }
             }
@@ -1432,7 +1432,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
                 sal_uInt16 nId = SID_SAVEDOC;
                 if ( !GetMedium() || GetMedium()->GetName().isEmpty() )
                     nId = SID_SAVEASDOC;
-                SfxRequest aSaveRequest( nId, 0, GetPool() );
+                SfxRequest aSaveRequest( nId, SfxCallMode::SLOT, GetPool() );
                 //ToDo: Review. We needed to call SetModified, otherwise the document would not be saved.
                 SetModified(true);
                 ExecFile_Impl( aSaveRequest );

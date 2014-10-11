@@ -86,7 +86,7 @@ void CellAppearancePropertyPanel::SetFillColor(
     const Color aColor)
 {
     const SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);
-    mpBindings->GetDispatcher()->Execute(SID_BACKGROUND_COLOR, SFX_CALLMODE_RECORD, &aColorItem, 0L);
+    mpBindings->GetDispatcher()->Execute(SID_BACKGROUND_COLOR, SfxCallMode::RECORD, &aColorItem, 0L);
     maBackColor = aColor;
 }
 
@@ -108,7 +108,7 @@ void CellAppearancePropertyPanel::SetLineColor(
     const Color aColor)
 {
     const SvxColorItem aColorItem(aColor, SID_FRAME_LINECOLOR);
-    mpBindings->GetDispatcher()->Execute(SID_FRAME_LINECOLOR, SFX_CALLMODE_RECORD, &aColorItem, 0L);
+    mpBindings->GetDispatcher()->Execute(SID_FRAME_LINECOLOR, SfxCallMode::RECORD, &aColorItem, 0L);
     maLineColor = aColor;
 }
 
@@ -334,7 +334,7 @@ IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
 {
     bool bState = mpCBXShowGrid->IsChecked();
     SfxBoolItem aItem( FID_TAB_TOGGLE_GRID , bState);
-    GetBindings()->GetDispatcher()->Execute(FID_TAB_TOGGLE_GRID, SFX_CALLMODE_RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(FID_TAB_TOGGLE_GRID, SfxCallMode::RECORD, &aItem, 0L);
     return 0;
 }
 

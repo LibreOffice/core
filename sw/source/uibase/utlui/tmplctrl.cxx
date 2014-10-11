@@ -123,7 +123,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                         SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
                         pWrtShell->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                     FN_SET_PAGE_STYLE,
-                                    SFX_CALLMODE_SLOT|SFX_CALLMODE_RECORD,
+                                    SfxCallMode::SLOT|SfxCallMode::RECORD,
                                     &aStyle, 0L );
                     }
                 }

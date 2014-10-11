@@ -252,7 +252,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     // in case of vertical toolbar
     if ( !rReq.GetArgs() )
     {
-        pViewData->GetDispatcher().Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+        pViewData->GetDispatcher().Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
         return;
     }
 

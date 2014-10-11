@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
             SetDispatcherLock( false );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( SID_CONSOLIDATE,
-                                      SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                                      SfxCallMode::SLOT | SfxCallMode::RECORD,
                                       &aOutItem, 0L, 0L );
             Close();
         }

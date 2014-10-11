@@ -484,7 +484,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
                 SetDispatcherLock( false );
                 SwitchToDocument();
                 GetBindings().GetDispatcher()->Execute( SID_CHANGE_PRINTAREA,
-                                          SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                                          SfxCallMode::SLOT | SfxCallMode::RECORD,
                                           &aPrintArea, &aRepeatRow, &aRepeatCol, &aEntireSheet, 0L );
             }
 

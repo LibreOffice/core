@@ -1877,7 +1877,7 @@ void SfxViewShell::JumpToMark( const OUString& rMark )
     SfxStringItem aMarkItem( SID_JUMPTOMARK, rMark );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_JUMPTOMARK,
-        SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
+        SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
         &aMarkItem, 0L );
 }
 

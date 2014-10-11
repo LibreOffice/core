@@ -229,7 +229,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                 }
 
                 // force update of TabBar
-                mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
             }
             else
             {

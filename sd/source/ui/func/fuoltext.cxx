@@ -154,14 +154,14 @@ bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( rMEvt.IsMod1() )
                 {
                     // open in new frame
-                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                 &aStrItem, &aBrowseItem, &aReferer, 0L);
                 }
                 else
                 {
                     // open in current frame
                     SfxFrameItem aFrameItem( SID_DOCFRAME, pFrame );
-                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
                 }
             }

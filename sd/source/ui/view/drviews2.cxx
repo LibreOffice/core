@@ -304,7 +304,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_ATTR_FILL_BITMAP:
                     case SID_ATTR_FILL_TRANSPARENCE:
                     case SID_ATTR_FILL_FLOATTRANSPARENCE:
-                        GetViewFrame()->GetDispatcher()->Execute( SID_ATTRIBUTES_AREA, SFX_CALLMODE_ASYNCHRON );
+                        GetViewFrame()->GetDispatcher()->Execute( SID_ATTRIBUTES_AREA, SfxCallMode::ASYNCHRON );
                         break;
                     case SID_ATTR_LINE_STYLE:
                     case SID_ATTR_LINE_DASH:
@@ -313,10 +313,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_ATTR_LINE_TRANSPARENCE:
                     case SID_ATTR_LINE_JOINT:
                     case SID_ATTR_LINE_CAP:
-                        GetViewFrame()->GetDispatcher()->Execute( SID_ATTRIBUTES_LINE, SFX_CALLMODE_ASYNCHRON );
+                        GetViewFrame()->GetDispatcher()->Execute( SID_ATTRIBUTES_LINE, SfxCallMode::ASYNCHRON );
                         break;
                     case SID_ATTR_TEXT_FITTOSIZE:
-                        GetViewFrame()->GetDispatcher()->Execute( SID_TEXTATTR_DLG, SFX_CALLMODE_ASYNCHRON );
+                        GetViewFrame()->GetDispatcher()->Execute( SID_TEXTATTR_DLG, SfxCallMode::ASYNCHRON );
                         break;
                 }
             }
@@ -357,7 +357,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdPage* pNewPage = CreateOrDuplicatePage (rReq, mePageKind, GetActualPage());
             Cancel();
             if(HasCurrentFunction(SID_BEZIER_EDIT) )
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             if (pNewPage != NULL)
                 SwitchPage((pNewPage->GetPageNum()-1)/2);
             rReq.Done ();
@@ -388,7 +388,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Cancel();
             if(HasCurrentFunction(SID_BEZIER_EDIT))
                 GetViewFrame()->GetDispatcher()->Execute(
-                    SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                    SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             rReq.Done ();
         }
         break;
@@ -618,17 +618,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     case SVX_ZOOM_OPTIMAL:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL,
-                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                         break;
 
                     case SVX_ZOOM_PAGEWIDTH:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH,
-                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                         break;
 
                     case SVX_ZOOM_WHOLEPAGE:
                         GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE,
-                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
                         break;
                     case SVX_ZOOM_PAGEWIDTH_NOBORDER:
                         OSL_FAIL("sd::DrawViewShell::FuTemporary(), SVX_ZOOM_PAGEWIDTH_NOBORDER not handled!" );
@@ -650,7 +650,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsTextEdit() )
             {
                 mpDrawView->SdrEndTextEdit();
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             }
 
             if ( mpDrawView->IsPresObjSelected() )
@@ -686,7 +686,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( HasCurrentFunction(SID_BEZIER_EDIT) )
             {   // where applicable, activate right edit action
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
-                                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
             }
             rReq.Ignore ();
             break;
@@ -695,7 +695,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsTextEdit() )
             {
                 mpDrawView->SdrEndTextEdit();
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             }
 
             if ( mpDrawView->IsPresObjSelected() )
@@ -723,7 +723,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsTextEdit() )
             {
                 mpDrawView->SdrEndTextEdit();
-                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
             }
 
             if ( mpDrawView->IsPresObjSelected(true,true,true) )
@@ -1079,7 +1079,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_BULLET, (sal_uInt16)0xFFFF);
-            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SFX_CALLMODE_RECORD, &aItem, 0L );
+            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SfxCallMode::RECORD, &aItem, 0L );
         }
         break;
 
@@ -1087,7 +1087,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             // The value (sal_uInt16)0xFFFF means set bullet on/off.
             SfxUInt16Item aItem(FN_SVX_SET_NUMBER, (sal_uInt16)0xFFFF);
-            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SFX_CALLMODE_RECORD, &aItem, 0L );
+            GetViewFrame()->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SfxCallMode::RECORD, &aItem, 0L );
         }
         break;
 
@@ -1539,7 +1539,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             GetDoc()->SetChanged(true);
 
             GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 
             Cancel();
             rReq.Done ();
@@ -1763,7 +1763,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
                             pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                                         &aUrl, &aTarget,
                                                         &aFrm, &aReferer,
                                                         &aNewView, &aBrowsing,
@@ -2604,7 +2604,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 Cancel();
             }
             else if( rReq.GetSlot() == SID_STYLE_APPLY )
-                GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON );
+                GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON );
             rReq.Ignore ();
         }
         break;

@@ -70,7 +70,7 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
 
 IMPL_LINK_NOARG(SwSyncBtnDlg, BtnHdl)
 {
-    SfxViewFrame::Current()->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SFX_CALLMODE_ASYNCHRON);
+    SfxViewFrame::Current()->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SfxCallMode::ASYNCHRON);
     return 0;
 }
 

@@ -181,9 +181,9 @@ IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
     }
 
     // ohne dispatcher!!!
-    // GetBindings().Execute( GetId(), SFX_CALLMODE_RECORD,meine beiden items, 0L );*/
+    // GetBindings().Execute( GetId(), SfxCallMode::RECORD,meine beiden items, 0L );*/
     //SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, sal_True);
-    //GetBindings().GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SFX_CALLMODE_ASYNCHRON, &aBool, 0L );
+    //GetBindings().GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON, &aBool, 0L );
 
     return 0;
 }

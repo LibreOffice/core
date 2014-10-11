@@ -739,7 +739,7 @@ bool SpellDialog::Close()
 {
     GetBindings().GetDispatcher()->
         Execute(rParent.GetType(),
-        SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+        SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
     return true;
 }
 

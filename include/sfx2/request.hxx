@@ -37,6 +37,7 @@ class SfxShell;
 class SfxSlot;
 class SfxViewFrame;
 struct SfxRequest_Impl;
+enum class SfxCallMode : sal_uInt16;
 
 
 
@@ -44,7 +45,7 @@ class SFX2_DLLPUBLIC SfxRequest: public SfxHint
 {
 friend struct SfxRequest_Impl;
 
-    sal_uInt16              nSlot;
+    sal_uInt16          nSlot;
     SfxAllItemSet*      pArgs;
     SfxRequest_Impl*    pImp;
 
@@ -60,10 +61,10 @@ private:
 
 public:
                         SfxRequest( SfxViewFrame*, sal_uInt16 nSlotId );
-                        SfxRequest( sal_uInt16 nSlot, sal_uInt16 nCallMode, SfxItemPool &rPool );
+                        SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, SfxItemPool &rPool );
                         SfxRequest( const SfxSlot* pSlot, const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rArgs,
-                                            sal_uInt16 nCallMode, SfxItemPool &rPool );
-                        SfxRequest( sal_uInt16 nSlot, sal_uInt16 nCallMode, const SfxAllItemSet& rSfxArgs );
+                                            SfxCallMode nCallMode, SfxItemPool &rPool );
+                        SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs );
                         SfxRequest( const SfxRequest& rOrig );
                         virtual ~SfxRequest();
 
@@ -89,7 +90,7 @@ public:
 
     static com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetMacroRecorder( SfxViewFrame* pFrame=NULL );
     static bool         HasMacroRecorder( SfxViewFrame* pFrame=NULL );
-    sal_uInt16          GetCallMode() const;
+    SfxCallMode         GetCallMode() const;
     void                AllowRecording( bool );
     bool                AllowsRecording() const;
     bool                IsAPI() const;

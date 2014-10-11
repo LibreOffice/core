@@ -430,7 +430,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 // Switch to FuSelect.
                 mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                     SID_OBJECT_SELECT,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 
                 // changeover to the next object
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
@@ -765,7 +765,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             {
                 mpViewShell->GetViewFrame()->
                     GetDispatcher()->Execute( SID_INSERT_GRAPHIC,
-                                              SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                                              SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
             }
             else if ( ( pObj->ISA(SdrTextObj) || pObj->ISA(SdrObjGroup) ) &&
                       !SD_MOD()->GetWaterCan()                            &&
@@ -774,8 +774,8 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             {
                 SfxUInt16Item aItem(SID_TEXTEDIT, 2);
                 mpViewShell->GetViewFrame()->GetDispatcher()->
-                                 Execute(SID_TEXTEDIT, SFX_CALLMODE_ASYNCHRON |
-                                         SFX_CALLMODE_RECORD, &aItem, 0L);
+                                 Execute(SID_TEXTEDIT, SfxCallMode::ASYNCHRON |
+                                         SfxCallMode::RECORD, &aItem, 0L);
             }
             else if (nInv == SdrInventor &&  nSdrObjKind == OBJ_GRUP)
             {
@@ -786,7 +786,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
         }
     }
     else
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 }
 
 bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
@@ -1025,7 +1025,7 @@ bool FuDraw::cancel()
         // Switch to FuSelect.
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
             SID_OBJECT_SELECT,
-            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 
         bReturn = true;
     }

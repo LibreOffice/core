@@ -118,7 +118,7 @@ void  SwTbxAnchor::Click()
     GetToolBox().EndSelection();
 
     if (nSlotId)
-        pDispatch->Execute(nSlotId, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+        pDispatch->Execute(nSlotId, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

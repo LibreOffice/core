@@ -200,7 +200,7 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const 
         if ( !pPoor || pPoor->GetSlotID() != nTextSlotId )
         {
             pViewShell->GetViewData().GetDispatcher().
-                Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+                Execute(nTextSlotId, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
         }
 
         // get the resulting FuText and set in edit mode
@@ -227,13 +227,13 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             if ( pViewShell->IsDrawTextShell() || aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
             {
                 // in normale Draw-Shell, wenn Objekt selektiert, sonst Zeichnen aus
-                rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
                 bReturn = true;
             }
             else if ( pViewShell->IsDrawSelMode() )
             {
                 pView->UnmarkAll();
-                rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rViewData.GetDispatcher().Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
                 bReturn = true;
             }
             else if ( pView->AreObjectsMarked() )

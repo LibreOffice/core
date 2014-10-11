@@ -242,7 +242,7 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
 
         if( !pFloater )
         {
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_AVMEDIA_PLAYER, SFX_CALLMODE_SYNCHRON );
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_AVMEDIA_PLAYER, SfxCallMode::SYNCHRON );
             pFloater = avmedia::getMediaFloater();
         }
 

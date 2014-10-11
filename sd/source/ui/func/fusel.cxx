@@ -251,8 +251,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     SfxUInt16Item aItem(SID_TEXTEDIT, 1);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
-                    Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
-                            SFX_CALLMODE_RECORD, &aItem, 0L);
+                    Execute(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
+                            SfxCallMode::RECORD, &aItem, 0L);
                     return bReturn; // CAUTION, due to the synchronous slot the object is deleted now
                 }
             }
@@ -269,14 +269,14 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if (rMEvt.IsMod1())
                 {
                     // Open in new frame
-                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                 &aStrItem, &aBrowseItem, &aReferer, 0L);
                 }
                 else
                 {
                     // Open in current frame
                     SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                    pFrame->GetDispatcher()->Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
                 }
 
@@ -754,7 +754,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             if( rMEvt.IsRight() )
             {
                 // In watering-can mode, on press onto right mouse button, a undo is executed
-                mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SFX_CALLMODE_ASYNCHRON );
+                mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SfxCallMode::ASYNCHRON );
             }
             else if (pWaterCanCandidate != NULL)
             {
@@ -823,7 +823,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             pHdl = NULL;
             mpWindow->ReleaseMouse();
             FuDraw::MouseButtonUp(rMEvt);
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SYNCHRON);
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::SYNCHRON);
             return bReturn; // CAUTION, due to the synchronous slot, the object is deleted now.
         }
 
@@ -988,7 +988,7 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
         {
             mpView->ResetCreationActive();
 
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
         }
     }
 
@@ -1235,7 +1235,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 SfxBoolItem aBrowseItem( SID_BROWSE, true );
                 mpWindow->ReleaseMouse();
                 pFrame->GetDispatcher()->
-                    Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                    Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                             &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
 
                 bAnimated = true;
@@ -1259,7 +1259,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                      // Jump to Bookmark (Page or Object)
                     SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->GetBookmark());
                     mpViewShell->GetViewFrame()->GetDispatcher()->
-                    Execute(SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L);
+                    Execute(SID_NAVIGATOR_OBJECT, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L);
                     bAnimated = true;
                 }
                 break;
@@ -1276,7 +1276,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                         SfxBoolItem aBrowseItem( SID_BROWSE, true );
                         pFrame->GetDispatcher()->
-                        Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                        Execute(SID_OPENDOC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
                     }
 
@@ -1289,7 +1289,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     // Jump to the previous page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_PREVIOUS);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
-                    Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                    Execute(SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD,
                             &aItem, 0L);
                     bAnimated = true;
                 }
@@ -1300,7 +1300,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     // Jump to the next page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_NEXT);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
-                    Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                    Execute(SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD,
                             &aItem, 0L);
                     bAnimated = true;
                 }
@@ -1311,7 +1311,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     // Jump to the first page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_FIRST);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
-                    Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                    Execute(SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD,
                             &aItem, 0L);
                     bAnimated = true;
                 }
@@ -1322,7 +1322,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     // Jump to the last page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_LAST);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
-                    Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                    Execute(SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD,
                             &aItem, 0L);
                     bAnimated = true;
                 }
@@ -1367,7 +1367,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
                             pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                                          SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                                          SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                                         &aUrl,
                                                         &aBrowsing,
                                                         0L );
@@ -1469,7 +1469,7 @@ bool FuSelection::cancel()
     if (mpView->Is3DRotationCreationActive())
     {
         mpView->ResetCreationActive();
-        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
         return true;
     }
     else

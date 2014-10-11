@@ -138,7 +138,7 @@ void SlideShowRestarter::StartPresentation (void)
     // Start the slide show on the saved current slide.
     if (mpDispatcher != NULL)
     {
-        mpDispatcher->Execute(SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON);
+        mpDispatcher->Execute(SID_PRESENTATION, SfxCallMode::ASYNCHRON);
         if (mpSlideShow.is())
         {
             Sequence<css::beans::PropertyValue> aProperties (1);

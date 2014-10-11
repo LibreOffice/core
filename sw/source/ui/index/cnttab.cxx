@@ -2092,7 +2092,7 @@ IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
         Application::SetDefDialogParent( pBtn );
         ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell().
         GetView().GetViewFrame()->GetDispatcher()->Execute(
-        SID_STYLE_EDIT, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_MODAL,
+        SID_STYLE_EDIT, SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
             &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }
@@ -3607,7 +3607,7 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
         Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
-        SID_STYLE_EDIT, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_MODAL,
+        SID_STYLE_EDIT, SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
             &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }

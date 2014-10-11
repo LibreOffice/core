@@ -361,7 +361,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         aSet.Put( *pOptions );
                 }
 
-                GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
+                GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, aSet );
                 return;
             }
 
@@ -520,7 +520,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                     aSet.Put( *pOptions );
                             }
 
-                            GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
+                            GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, aSet );
                             return;
                         }
                         else
@@ -772,7 +772,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
                             if( pFilter )
                                 aSet.Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
-                            GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
+                            GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, aSet );
                         }
                     }
                 }
@@ -2601,7 +2601,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         return;
 
     SfxApplication* pSfxApp = SfxGetpApp();
-    SfxRequest aReq( SID_BASICCHOOSER, SFX_CALLMODE_SYNCHRON, pSfxApp->GetPool() );
+    SfxRequest aReq( SID_BASICCHOOSER, SfxCallMode::SYNCHRON, pSfxApp->GetPool() );
     aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,true) );
     const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot( aReq );
     OUString aScriptURL;
@@ -2764,7 +2764,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
                 if ( pDispat )
                 {
                     SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLibName, aModuleName, OUString(), OUString() );
-                    pDispat->Execute( SID_BASICIDE_UPDATEMODULESOURCE, SFX_CALLMODE_SYNCHRON, &aInfoItem, 0L );
+                    pDispat->Execute( SID_BASICIDE_UPDATEMODULESOURCE, SfxCallMode::SYNCHRON, &aInfoItem, 0L );
                 }
             }
         }

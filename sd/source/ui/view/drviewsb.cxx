@@ -122,7 +122,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         // inform navigator about change
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         GetViewFrame()->GetDispatcher()->Execute(
-            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+            SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
 
         // Tell the slide sorter about the name change (necessary for
         // accessibility.)
@@ -204,7 +204,7 @@ void DrawViewShell::ModifyLayer (
 
         GetViewFrame()->GetDispatcher()->Execute(
             SID_SWITCHLAYER,
-            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 
         // Call Invalidate at the form shell.
         FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();

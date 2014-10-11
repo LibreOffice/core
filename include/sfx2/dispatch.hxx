@@ -101,7 +101,7 @@ friend class SfxHelp;
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
     void                _Execute( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
-                                  SfxCallMode eCall = SFX_CALLMODE_STANDARD);
+                                  SfxCallMode eCall = SfxCallMode::RECORD);
 
 protected:
     void FlushImpl();
@@ -115,7 +115,7 @@ public:
     virtual             ~SfxDispatcher();
 
     const SfxPoolItem*  Execute( sal_uInt16 nSlot,
-                                 SfxCallMode nCall = SFX_CALLMODE_SLOT,
+                                 SfxCallMode nCall = SfxCallMode::SLOT,
                                  const SfxPoolItem **pArgs = 0,
                                  sal_uInt16 nModi = 0,
                                  const SfxPoolItem **pInternalArgs = 0);

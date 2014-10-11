@@ -269,7 +269,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
             {
                 SfxBoolItem aItem( nSId, true );
                 mpBindings->GetDispatcher()->Execute(
-                    nSId, SFX_CALLMODE_SLOT |SFX_CALLMODE_RECORD, &aItem, 0L );
+                    nSId, SfxCallMode::SLOT |SfxCallMode::RECORD, &aItem, 0L );
             }
         }
         break;
@@ -292,7 +292,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
             {
                 SfxUInt16Item aItem( SID_NAVIGATOR_PAGE, (sal_uInt16)ePage );
                 mpBindings->GetDispatcher()->Execute(
-                    SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
+                    SID_NAVIGATOR_PAGE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
             }
         }
         break;
@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
             {
                 SfxStringItem aItem( SID_NAVIGATOR_OBJECT, aStr );
                 mpBindings->GetDispatcher()->Execute(
-                    SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
+                    SID_NAVIGATOR_OBJECT, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
                 //set sign variable
                 maTlbObjects.MarkCurEntry(aStr);
 

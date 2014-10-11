@@ -96,11 +96,11 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                     {
                         //remove object -> results in destruction of this!
                         SwView& rTempView = GetView();
-                        rTempView.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SFX_CALLMODE_SYNCHRON );
+                        rTempView.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SfxCallMode::SYNCHRON );
                         rTempView.StopShellTimer();
                         //issue a new command to insert the link
                         rTempView.GetViewFrame()->GetDispatcher()->Execute(
-                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0);
+                                SID_HYPERLINK_SETLINK, SfxCallMode::ASYNCHRON, &rHLinkItem, 0);
                     }
                     else
                     {

@@ -737,7 +737,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 if (pOldSettings->GetStyleSettings().GetScreenZoom()
                     != rNewSettings.GetStyleSettings().GetScreenZoom())
                     mpViewShell->GetViewFrame()->GetDispatcher()->
-                        Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                        Execute(SID_SIZE_PAGE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 
             /* Rearrange or initiate Resize for scroll bars since the size of
                the scroll bars my have changed. Within this, inside the resize-
@@ -780,7 +780,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                     SetBackground( Wallpaper( aDocColor ) );
                 }
 
-                SfxRequest aReq( nPreviewSlot, 0, mpViewShell->GetDocSh()->GetDoc()->GetItemPool() );
+                SfxRequest aReq( nPreviewSlot, SfxCallMode::SLOT, mpViewShell->GetDocSh()->GetDoc()->GetItemPool() );
                 mpViewShell->ExecReq( aReq );
                 mpViewShell->Invalidate();
                 mpViewShell->ArrangeGUIElements();

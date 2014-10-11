@@ -352,7 +352,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             pAFlags->m_pAutoCompleteList = &aTmpLst;
 
             SfxApplication* pApp = SfxGetpApp();
-            SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pApp->GetPool());
+            SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SfxCallMode::SYNCHRON, pApp->GetPool());
             SfxBoolItem aSwOptions( SID_AUTO_CORRECT_DLG, true );
             aAppReq.AppendItem(aSwOptions);
 
@@ -450,7 +450,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pTmpFrm = SfxViewFrame::GetFirst( this );
 
                     if (pTmpFrm)
-                        pTmpFrm->GetDispatcher()->Execute( nSlotId, 0, 0, SFX_CALLMODE_ASYNCHRON );
+                        pTmpFrm->GetDispatcher()->Execute( nSlotId, SfxCallMode::ASYNCHRON );
                 }
 
                 rReq.SetReturnValue(SfxBoolItem(SID_PRINTPREVIEW, bSet ));
@@ -622,7 +622,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         SfxStringItem aFilter(SID_FILTER_NAME, pHtmlFlt->GetName());
                         const SfxBoolItem* pBool = (const SfxBoolItem*)
                                 pViewFrm->GetDispatcher()->Execute(
-                                        SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aName, &aFilter, 0L );
+                                        SID_SAVEASDOC, SfxCallMode::SYNCHRON, &aName, &aFilter, 0L );
                         if(!pBool || !pBool->GetValue())
                             break;
                     }
@@ -661,7 +661,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                 }
                 if(nSlot)
-                    pViewFrm->GetDispatcher()->Execute(nSlot, SFX_CALLMODE_SYNCHRON);
+                    pViewFrm->GetDispatcher()->Execute(nSlot, SfxCallMode::SYNCHRON);
                 if(bSetModified)
                     GetDoc()->getIDocumentState().SetModified();
                 if(pSavePrinter)
@@ -1071,7 +1071,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     SfxDispatcher* pDispatch = pViewShell->GetDispatcher();
                                     pDispatch->Execute(
                                             SID_OPENDOC,
-                                            SFX_CALLMODE_ASYNCHRON,
+                                            SfxCallMode::ASYNCHRON,
                                             &aName,
                                             &aReferer,
                                             pFrameItem.get(), 0L );
@@ -1129,7 +1129,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SfxStringItem aApp(SID_DOC_SERVICE, OUString("com.sun.star.text.TextDocument"));
             SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
             pViewShell->GetDispatcher()->Execute(
-                SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aApp, &aTarget, 0L);
+                SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, &aApp, &aTarget, 0L);
         }
         break;
 
@@ -1314,7 +1314,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
                     SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
                     pSrcView->GetViewFrame()->GetDispatcher()->Execute(
                                             SID_BASICIDE_LIBREMOVED,
-                                            SFX_CALLMODE_SYNCHRON,
+                                            SfxCallMode::SYNCHRON,
                                             &aShellItem, &aLibNameItem, 0L );
 
                     // Only the modules are deleted from the standard-lib
@@ -1352,7 +1352,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     SfxViewShell* pViewShell = GetView() ? (SfxViewShell*)GetView()
                                          : SfxViewShell::Current();
     SfxViewFrame*  pViewFrm = pViewShell->GetViewFrame();
-    pViewFrm->GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON );
+    pViewFrm->GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON );
 
     SubInitNew();
 

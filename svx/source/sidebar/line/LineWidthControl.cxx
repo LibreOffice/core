@@ -274,7 +274,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             sal_IntPtr nVal = LogicToLogic((sal_IntPtr)maVSWidth.GetItemData( iPos ) , MAP_POINT, (MapUnit)meMapUnit);
             nVal = maMFWidth.Denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
-            mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
+            mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
             mrLinePropertyPanel.SetWidthIcon(iPos);
             mrLinePropertyPanel.SetWidth(nVal);
             mbCloseByEdit = false;
@@ -288,7 +288,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
                 long nVal = LogicToLogic(mnCustomWidth , MAP_POINT, (MapUnit)meMapUnit);
                 nVal = maMFWidth.Denormalize(nVal);
                 XLineWidthItem aWidthItem( nVal );
-                mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
+                mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
                 mrLinePropertyPanel.SetWidth(nVal);
                 mbCloseByEdit = false;
                 mnTmpCustomWidth = 0;
@@ -326,7 +326,7 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         long nVal = LogicToLogic( nTmp, MAP_POINT, (MapUnit)meMapUnit );
         sal_Int32 nNewWidth = (short)maMFWidth.Denormalize( nVal );
         XLineWidthItem aWidthItem(nNewWidth);
-        mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
+        mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);
 
         mbCloseByEdit = true;
         mnTmpCustomWidth = nTmp;

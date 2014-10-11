@@ -178,7 +178,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     {
         rSh.StartAllAction();
         rSh.Push();
-        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_TABLE_SELECT_ALL, sal_False );
+        rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_TABLE_SELECT_ALL );
     }
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
@@ -894,7 +894,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
                     if( pVFrame )
-                        pVFrame->GetDispatcher()->Execute( nDispatchSlot, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aCountItem, &aAfter, 0L);
+                        pVFrame->GetDispatcher()->Execute( nDispatchSlot, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aCountItem, &aAfter, 0L);
                 }
             }
             break;
@@ -1017,7 +1017,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_AUTOSUM:
         {
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            pVFrame->GetDispatcher()->Execute(FN_EDIT_FORMULA, SFX_CALLMODE_SYNCHRON);
+            pVFrame->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::SYNCHRON);
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
             SwInputChild* pChildWin = (SwInputChild*)pVFrame->
                                                 GetChildWindow( nId );

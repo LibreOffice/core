@@ -183,7 +183,7 @@ namespace
             SfxStringItem aURL(SID_FILE_NAME, OUString(".component:Bibliography/View1"));
             SfxStringItem aRef(SID_REFERER, OUString("private:user"));
             SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
-            SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
+            SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SfxCallMode::ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
         }
         catch (const Exception & e)
         {
@@ -294,7 +294,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 SfxStringItem aNameItem( SID_FILE_NAME, OUString("vnd.sun.star.cmd:logout") );
                 SfxStringItem aReferer( SID_REFERER, "private/user" );
-                pAppData_Impl->pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
+                pAppData_Impl->pAppDispat->Execute( SID_OPENDOC, SfxCallMode::SLOT, &aNameItem, &aReferer, 0L );
                 return;
             }
 
@@ -415,7 +415,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                   pObjSh;
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
             {
-                SfxRequest aReq( SID_SAVEDOC, 0, pObjSh->GetPool() );
+                SfxRequest aReq( SID_SAVEDOC, SfxCallMode::SLOT, pObjSh->GetPool() );
                 if ( pObjSh->IsModified() )
                 {
                     pObjSh->ExecuteSlot( aReq );
@@ -623,7 +623,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     break;
             }
 
-            pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SFX_CALLMODE_ASYNCHRON, &aZoom, 0L);
+            pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, &aZoom, 0L);
 
             break;
         }
@@ -1087,7 +1087,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 SfxObjectShell* pObjShell = pView->GetObjectShell();
                 if ( pViewShell && pObjShell )
                 {
-                    SfxRequest aReq( SID_BASICIDE_SHOWWINDOW, SFX_CALLMODE_SYNCHRON, pObjShell->GetPool() );
+                    SfxRequest aReq( SID_BASICIDE_SHOWWINDOW, SfxCallMode::SYNCHRON, pObjShell->GetPool() );
                     aReq.SetArgs( *pArgs );
                     pViewShell->ExecuteSlot( aReq );
                 }

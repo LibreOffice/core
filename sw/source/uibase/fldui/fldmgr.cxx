@@ -1266,7 +1266,7 @@ bool SwFldMgr::InsertFld(
                 {
                     SfxStringItem aFormat(FN_NUMBER_FORMAT, pEntry->GetFormatstring());
                     pCurShell->GetView().GetViewFrame()->GetDispatcher()->
-                        Execute(FN_NUMBER_FORMAT, SFX_CALLMODE_SYNCHRON, &aFormat, 0L);
+                        Execute(FN_NUMBER_FORMAT, SfxCallMode::SYNCHRON, &aFormat, 0L);
                 }
 
                 SfxItemSet aBoxSet( pCurShell->GetAttrPool(),

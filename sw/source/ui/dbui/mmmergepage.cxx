@@ -73,7 +73,7 @@ IMPL_LINK_NOARG(SwMailMergeMergePage, FindHdl_Impl)
     if(pTargetView)
     {
         pTargetView->GetViewFrame()->GetDispatcher()->Execute(
-            FID_SEARCH_NOW, SFX_CALLMODE_SYNCHRON, &aSearchItem, &aQuiet, 0L );
+            FID_SEARCH_NOW, SfxCallMode::SYNCHRON, &aSearchItem, &aQuiet, 0L );
     }
 
     return 0;

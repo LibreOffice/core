@@ -1029,7 +1029,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         SfxBoolItem aItem( SID_NAVIGATOR_INIT, true );
         if (mrSlideSorter.GetViewShell() != NULL)
             mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
-                SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+                SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
     }
 
     return bSuccess;

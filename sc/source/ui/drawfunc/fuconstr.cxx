@@ -237,7 +237,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                     sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
                     pViewShell->GetViewData().GetDispatcher().
-                        Execute(nTextSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                        Execute(nTextSlotId, SfxCallMode::SLOT | SfxCallMode::RECORD);
 
                     // jetzt den erzeugten FuText holen und in den EditModus setzen
                     FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
@@ -289,9 +289,9 @@ bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 
             SfxDispatcher& rDisp = pViewShell->GetViewData().GetDispatcher();
             if ( pView->AreObjectsMarked() )
-                rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rDisp.Execute(SID_OBJECT_SELECT, SfxCallMode::SLOT | SfxCallMode::RECORD);
             else
-                rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                rDisp.Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
         }
     }
 
@@ -323,7 +323,7 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
             else                            // Zeichenmodus beenden
             {
                 pViewShell->GetViewData().GetDispatcher().
-                    Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+                    Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
             }
             break;
 

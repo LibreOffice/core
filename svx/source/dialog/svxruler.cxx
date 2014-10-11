@@ -2070,7 +2070,7 @@ void SvxRuler::ApplyMargins()
 #endif // DEBUGLIN
 
     }
-    pBindings->GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, pItem, 0L );
+    pBindings->GetDispatcher()->Execute( nId, SfxCallMode::RECORD, pItem, 0L );
     if(mpTabStopItem.get())
         UpdateTabs();
 }
@@ -2176,7 +2176,7 @@ void SvxRuler::ApplyIndents()
     mpParaItem->SetRight(nNewRight);
 
     sal_uInt16 nParagraphId  = bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL;
-    pBindings->GetDispatcher()->Execute( nParagraphId, SFX_CALLMODE_RECORD, mpParaItem.get(), 0L );
+    pBindings->GetDispatcher()->Execute( nParagraphId, SfxCallMode::RECORD, mpParaItem.get(), 0L );
     UpdateTabs();
 }
 
@@ -2256,7 +2256,7 @@ void SvxRuler::ApplyTabs()
         mpTabStopItem->Insert(aTabStop);
     }
     sal_uInt16 nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
-    pBindings->GetDispatcher()->Execute( nTabStopId, SFX_CALLMODE_RECORD, mpTabStopItem.get(), 0L );
+    pBindings->GetDispatcher()->Execute( nTabStopId, SfxCallMode::RECORD, mpTabStopItem.get(), 0L );
     UpdateTabs();
 }
 
@@ -2318,7 +2318,7 @@ void SvxRuler::ApplyBorders()
     sal_uInt16 nColId = mpRulerImpl->bIsTableRows ? (bHorz ? SID_RULER_ROWS : SID_RULER_ROWS_VERTICAL) :
                             (bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL);
 
-    pBindings->GetDispatcher()->Execute( nColId, SFX_CALLMODE_RECORD, mpColumnItem.get(), &aFlag, 0L );
+    pBindings->GetDispatcher()->Execute( nColId, SfxCallMode::RECORD, mpColumnItem.get(), &aFlag, 0L );
 }
 
 void SvxRuler::ApplyObject()
@@ -2356,7 +2356,7 @@ void SvxRuler::ApplyObject()
                     mpObjectItem->GetEndY());
     mpObjectItem->SetEndY(nEndY);
 
-    pBindings->GetDispatcher()->Execute(SID_RULER_OBJECT, SFX_CALLMODE_RECORD, mpObjectItem.get(), 0L);
+    pBindings->GetDispatcher()->Execute(SID_RULER_OBJECT, SfxCallMode::RECORD, mpObjectItem.get(), 0L);
 }
 
 void SvxRuler::PrepareProportional_Impl(RulerType eType)
@@ -3399,7 +3399,7 @@ IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu )
         mpTabStopItem->Remove(mpRulerImpl->nIdx);
         mpTabStopItem->Insert(aTabStop);
         sal_uInt16 nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
-        pBindings->GetDispatcher()->Execute( nTabStopId, SFX_CALLMODE_RECORD, mpTabStopItem.get(), 0L );
+        pBindings->GetDispatcher()->Execute( nTabStopId, SfxCallMode::RECORD, mpTabStopItem.get(), 0L );
         UpdateTabs();
         mpRulerImpl->nIdx = 0;
     }

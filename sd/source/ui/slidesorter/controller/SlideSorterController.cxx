@@ -151,7 +151,7 @@ void SlideSorterController::Init (void)
     // Create the selection function.
     SfxRequest aRequest (
         SID_OBJECT_SELECT,
-        0,
+        SfxCallMode::SLOT,
         mrModel.GetDocument()->GetItemPool());
     mrSlideSorter.SetCurrentFunction(CreateSelectionFunction(aRequest));
 

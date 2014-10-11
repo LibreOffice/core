@@ -578,7 +578,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
         return ( 0 != GetViewData().GetDispatcher().Execute(
-                                SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON,
+                                SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON,
                                 &aMediaURLItem, 0L ) );
     }
 
@@ -607,7 +607,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
             // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
             // und das bekommt dem MAC nicht so gut ...
             return ( 0 != rDispatcher.Execute( SID_OPENDOC,
-                                    SFX_CALLMODE_ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
+                                    SfxCallMode::ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
         }
     }
 

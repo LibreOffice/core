@@ -1663,7 +1663,7 @@ namespace svxform
         if ( pFormShell->GetImpl()->IsPropBrwOpen() || bForce )
         {
             // und jetzt kann ich das Ganze dem PropertyBrowser uebergeben
-            pFormShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON );
+            pFormShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SfxCallMode::ASYNCHRON );
         }
     }
 

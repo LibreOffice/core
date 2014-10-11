@@ -406,7 +406,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
             //  asynchronous, to avoid doing the whole import in drop handler
             SfxDispatcher& rDisp = GetViewData().GetDispatcher();
-            rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
+            rDisp.Execute(SID_SBA_IMPORT, SfxCallMode::ASYNCHRON,
                                         &aDataDesc, &aTarget, &aAreaNew, (void*)0 );
 
             bRet = true;

@@ -83,7 +83,7 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
         //  for sounds (linked or not), insert a hyperlink button,
         //  like in Impress and Writer
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
-        GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
+        GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON, &aMediaURLItem, 0L );
     }
 }
 

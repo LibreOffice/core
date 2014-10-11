@@ -62,7 +62,7 @@ LayerTabBar::~LayerTabBar()
 void LayerTabBar::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-    pDispatcher->Execute(SID_SWITCHLAYER, SFX_CALLMODE_ASYNCHRON);
+    pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::ASYNCHRON);
 }
 
 void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
@@ -77,7 +77,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         if (aLayerId == 0)
         {
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-            pDispatcher->Execute(SID_INSERTLAYER, SFX_CALLMODE_SYNCHRON);
+            pDispatcher->Execute(SID_INSERTLAYER, SfxCallMode::SYNCHRON);
 
             bSetPageID=true;
         }
@@ -103,7 +103,7 @@ void LayerTabBar::DoubleClick()
     if (GetCurPageId() != 0)
     {
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute( SID_MODIFYLAYER, SFX_CALLMODE_SYNCHRON );
+        pDispatcher->Execute( SID_MODIFYLAYER, SfxCallMode::SYNCHRON );
     }
 }
 
@@ -283,7 +283,7 @@ void LayerTabBar::ActivatePage()
     {
 
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute(SID_SWITCHLAYER, SFX_CALLMODE_ASYNCHRON);
+        pDispatcher->Execute(SID_SWITCHLAYER, SfxCallMode::ASYNCHRON);
     }
 }
 

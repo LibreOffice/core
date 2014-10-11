@@ -2343,14 +2343,14 @@ void ScViewFunc::MoveTable(
     {
         nDestTab = 0;           // firstly insert
 
-        //  execute without SFX_CALLMODE_RECORD, because already contained in move command
+        //  execute without SfxCallMode::RECORD, because already contained in move command
 
         OUString aUrl("private:factory/" STRING_SCAPP);
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
         SfxStringItem aTarget( SID_TARGETNAME, OUString("_blank") );
 
         const SfxPoolItem* pRetItem = GetViewData().GetDispatcher().Execute(
-                    SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aItem, &aTarget, 0L );
+                    SID_OPENDOC, SfxCallMode::API|SfxCallMode::SYNCHRON, &aItem, &aTarget, 0L );
         if ( pRetItem )
         {
             if ( pRetItem->ISA( SfxObjectItem ) )

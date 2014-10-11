@@ -122,7 +122,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             else
             {
                 if( mpViewShell && mpViewShell->GetViewFrame() )
-                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON );
+                    mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON );
             }
 
             rReq.Done();
@@ -572,11 +572,11 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     // attributes for TextObjectBar
                     case SID_ATTR_CHAR_FONT:
                         mpViewShell->GetViewFrame()->GetDispatcher()->
-                            Execute( SID_CHAR_DLG, SFX_CALLMODE_ASYNCHRON );
+                            Execute( SID_CHAR_DLG, SfxCallMode::ASYNCHRON );
                     break;
                     case SID_ATTR_CHAR_FONTHEIGHT:
                         mpViewShell->GetViewFrame()->GetDispatcher()->
-                            Execute( SID_CHAR_DLG, SFX_CALLMODE_ASYNCHRON );
+                            Execute( SID_CHAR_DLG, SfxCallMode::ASYNCHRON );
                     break;
                     case SID_ATTR_CHAR_COLOR:
                     break;

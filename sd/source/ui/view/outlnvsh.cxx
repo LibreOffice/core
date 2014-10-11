@@ -340,7 +340,7 @@ void OutlineViewShell::Activate( bool bIsMDIActivate )
     if ( ! mbInitialized)
     {
         mbInitialized = true;
-        SfxRequest aRequest (SID_EDIT_OUTLINER, 0, GetDoc()->GetItemPool());
+        SfxRequest aRequest (SID_EDIT_OUTLINER, SfxCallMode::SLOT, GetDoc()->GetItemPool());
         FuPermanent (aRequest);
     }
 

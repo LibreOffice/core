@@ -403,12 +403,12 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
                 {
                     // #TODO is this necessary ( calc specific )
 //                  SC_MOD()->InputEnterHandler();
-                    pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_SYNCHRON );
+                    pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SfxCallMode::SYNCHRON );
                     WaitUntilPreviewIsClosed( pViewFrame );
                 }
             }
             else
-                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
+                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SfxCallMode::SYNCHRON, aArgs );
         }
 
     }

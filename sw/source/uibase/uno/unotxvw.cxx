@@ -1332,7 +1332,7 @@ sal_Bool SwXTextViewCursor::screenDown()
     bool bRet = false;
     if(m_pView)
     {
-        SfxRequest aReq(FN_PAGEDOWN, SFX_CALLMODE_SLOT, m_pView->GetPool());
+        SfxRequest aReq(FN_PAGEDOWN, SfxCallMode::SLOT, m_pView->GetPool());
         m_pView->Execute(aReq);
         const SfxPoolItem* pRet = aReq.GetReturnValue();
         bRet = pRet && ((const SfxBoolItem*)pRet)->GetValue();
@@ -1349,7 +1349,7 @@ sal_Bool SwXTextViewCursor::screenUp()
     bool bRet = false;
     if(m_pView)
     {
-        SfxRequest aReq(FN_PAGEUP, SFX_CALLMODE_SLOT, m_pView->GetPool());
+        SfxRequest aReq(FN_PAGEUP, SfxCallMode::SLOT, m_pView->GetPool());
         m_pView->Execute(aReq);
         const SfxPoolItem* pRet = aReq.GetReturnValue();
         bRet = pRet && ((const SfxBoolItem*)pRet)->GetValue();

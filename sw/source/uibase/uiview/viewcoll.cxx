@@ -20,6 +20,7 @@
 #include "cmdid.h"
 #include "uiitems.hxx"
 #include <vcl/window.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
@@ -56,7 +57,7 @@ void SwView::ExecColl(SfxRequest &rReq)
                         SfxUInt16Item aFamItem( SID_STYLE_FAMILY,
                                             SFX_STYLE_FAMILY_PAGE);
                         SwPtrItem aShell(FN_PARAM_WRTSHELL, GetWrtShellPtr());
-                        SfxRequest aReq(SID_STYLE_APPLY, 0, GetPool());
+                        SfxRequest aReq(SID_STYLE_APPLY, SfxCallMode::SLOT, GetPool());
                         aReq.AppendItem(aName);
                         aReq.AppendItem(aFamItem);
                         aReq.AppendItem(aShell);
@@ -66,7 +67,7 @@ void SwView::ExecColl(SfxRequest &rReq)
             }
             else
             {
-                SfxRequest aReq(FN_FORMAT_PAGE_DLG, 0, GetPool());
+                SfxRequest aReq(FN_FORMAT_PAGE_DLG, SfxCallMode::SLOT, GetPool());
                 GetCurShell()->ExecuteSlot(aReq);
             }
         }

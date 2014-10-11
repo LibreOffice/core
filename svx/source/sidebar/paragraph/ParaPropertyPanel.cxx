@@ -391,7 +391,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
         nSID = FN_NUM_NUMBERING_ON;
     }
     SfxBoolItem aBoolItem(nSID, true);
-    GetBindings()->GetDispatcher()->Execute(nSID, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(nSID, SfxCallMode::RECORD, &aBoolItem, 0L);
 
     return 0;
 }
@@ -433,7 +433,7 @@ void ParaPropertyPanel::SetBGColor (
     const Color aColor)
 {
     SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);
-    mpBindings->GetDispatcher()->Execute(SID_BACKGROUND_COLOR, SFX_CALLMODE_RECORD, &aColorItem, 0L);
+    mpBindings->GetDispatcher()->Execute(SID_BACKGROUND_COLOR, SfxCallMode::RECORD, &aColorItem, 0L);
     maColor = aColor;
 }
 
@@ -446,7 +446,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
     aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
     GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
     return 0;
 }
 
@@ -464,7 +464,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                 {
                     SfxBoolItem aMargin( SID_INC_INDENT, true );
                     GetBindings()->GetDispatcher()->Execute(
-                        SID_INC_INDENT, SFX_CALLMODE_RECORD, &aMargin, 0L);
+                        SID_INC_INDENT, SfxCallMode::RECORD, &aMargin, 0L);
                 }
                 break;
             default:
@@ -479,7 +479,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                     aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
                     GetBindings()->GetDispatcher()->Execute(
-                        SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
                 }
             }
         }
@@ -493,7 +493,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                 {
                     SfxBoolItem aMargin( SID_DEC_INDENT, true );
                     GetBindings()->GetDispatcher()->Execute(
-                        SID_DEC_INDENT, SFX_CALLMODE_RECORD, &aMargin, 0L);
+                        SID_DEC_INDENT, SfxCallMode::RECORD, &aMargin, 0L);
                 }
                 break;
             default:
@@ -513,7 +513,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                     aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
 
                     GetBindings()->GetDispatcher()->Execute(
-                        SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+                        SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
                 }
             }
         }
@@ -525,7 +525,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
             aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
 
             GetBindings()->GetDispatcher()->Execute(
-                SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+                SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
         }
 
     return( 0L );
@@ -537,11 +537,11 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
 
         if (aCommand == UNO_PROMOTE)
         {
-            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_RIGHT, SFX_CALLMODE_RECORD );
+            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_RIGHT, SfxCallMode::RECORD );
         }
         else if (aCommand == UNO_DEMOTE)
         {
-            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_LEFT, SFX_CALLMODE_RECORD );
+            GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_LEFT, SfxCallMode::RECORD );
         }
         else if (aCommand == UNO_HANGINGINDENT2)
         {
@@ -550,7 +550,7 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
             aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent, m_eLRSpaceUnit ) );
             aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ))*(-1) );
 
-            GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+            GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
         }
 
     return( 0L );
@@ -578,7 +578,7 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
     aMargin.SetLower( (sal_uInt16)GetCoreValue( *mpBottomDist, m_eULSpaceUnit ) );
 
     GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_PARA_ULSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+        SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
     return 0L;
 }
 
@@ -601,7 +601,7 @@ IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
                  aMargin.SetLower( (const sal_uInt16)nVal );
 
                  GetBindings()->GetDispatcher()->Execute(
-                     SID_ATTR_PARA_ULSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+                     SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
              }
              else if( aCommand == UNO_PARASPACEDEC)
              {
@@ -627,7 +627,7 @@ IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
                     aMargin.SetLower( DEFAULT_VALUE );
 
                  GetBindings()->GetDispatcher()->Execute(
-                     SID_ATTR_PARA_ULSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
+                     SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
              }
 
     return( 0L );

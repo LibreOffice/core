@@ -99,7 +99,7 @@ IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)
 
 IMPL_LINK(PageColumnControl, MoreButtonClickHdl_Impl, void *, EMPTYARG)
 {
-    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SFX_CALLMODE_ASYNCHRON );
+    mrPagePropPanel.GetBindings()->GetDispatcher()->Execute( FN_FORMAT_PAGE_COLUMN_DLG, SfxCallMode::ASYNCHRON );
 
     mrPagePropPanel.ClosePageColumnPopup();
     return 0;

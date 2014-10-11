@@ -432,7 +432,7 @@ void  SwPagePreviewWin::KeyInput( const KeyEvent &rKEvt )
         {
             bHandled = true;
             mrView.GetViewFrame()->GetDispatcher()->Execute(
-                                nSlot, SFX_CALLMODE_ASYNCHRON );
+                                nSlot, SfxCallMode::ASYNCHRON );
         }
     }
     if( !bHandled && !mrView.KeyInput( rKEvt ) )
@@ -495,7 +495,7 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
 
             SfxViewFrame *pTmpFrm = mrView.GetViewFrame();
             pTmpFrm->GetBindings().Execute( SID_VIEWSHELL0, NULL, 0,
-                                                    SFX_CALLMODE_ASYNCHRON );
+                                                    SfxCallMode::ASYNCHRON );
         }
         else if ( bIsDocPos || bPosInEmptyPage )
         {
@@ -912,7 +912,7 @@ MOVEPAGE:
             //  print preview is now always in the same frame as the tab view
             //  -> always switch this frame back to normal view
             //  (ScTabViewShell ctor reads stored view data)
-            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, 0, 0, SFX_CALLMODE_ASYNCHRON );
+            GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::ASYNCHRON );
             break;
         case FN_INSERT_BREAK:
         {
@@ -924,7 +924,7 @@ MOVEPAGE:
             SetNewPage( nSelPage );
             SfxViewFrame *pTmpFrm = GetViewFrame();
             pTmpFrm->GetBindings().Execute( SID_VIEWSHELL0, NULL, 0,
-                                                    SFX_CALLMODE_ASYNCHRON );
+                                                    SfxCallMode::ASYNCHRON );
         }
         break;
         default:

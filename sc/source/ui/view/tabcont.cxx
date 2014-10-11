@@ -211,7 +211,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && nMouseClickPageId != 0 && nMouseClickPageId != TAB_PAGE_NOTFOUND )
     {
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute( FID_TAB_MENU_RENAME, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+        pDispatcher->Execute( FID_TAB_MENU_RENAME, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         return;
     }
 
@@ -222,7 +222,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
         // otherwise add new sheet
         sal_uInt16 nSlot = ( GetSelectPageCount() > 1 ) ? FID_TAB_DESELECTALL : FID_INS_TABLE;
         SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
-        pDispatcher->Execute( nSlot, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+        pDispatcher->Execute( nSlot, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
         // forget page ID, to be really sure that the dialog is not called twice
         nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
     }
@@ -279,7 +279,7 @@ void ScTabControl::Select()
     {
         //  Tabelle fuer Basic ist 1-basiert
         SfxUInt16Item aItem( SID_CURRENTTAB, nPage + 1 );
-        rDisp.Execute( SID_CURRENTTAB, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+        rDisp.Execute( SID_CURRENTTAB, SfxCallMode::SLOT | SfxCallMode::RECORD,
                                 &aItem, (void*) NULL );
     }
 

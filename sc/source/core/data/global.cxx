@@ -908,7 +908,7 @@ void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
         pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
-                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                                    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                     &aUrl, &aTarget,
                                     &aFrm, &aReferer,
                                     &aNewView, &aBrowsing,

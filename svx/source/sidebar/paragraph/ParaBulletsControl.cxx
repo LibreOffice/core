@@ -107,7 +107,7 @@ IMPL_LINK(ParaBulletsControl, BulletSelectHdl_Impl, ValueSet*, EMPTYARG)
     const sal_uInt16 nIdx = maBulletsVS.GetSelectItemId();
     SfxUInt16Item aItem( FN_SVX_SET_BULLET, nIdx );
     if (mpBindings)
-        mpBindings->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SFX_CALLMODE_RECORD, &aItem, 0L );
+        mpBindings->GetDispatcher()->Execute( FN_SVX_SET_BULLET, SfxCallMode::RECORD, &aItem, 0L );
 
     mrParaPropertyPanel.EndBulletsPopupMode();
 
@@ -118,7 +118,7 @@ IMPL_LINK(ParaBulletsControl, BulletSelectHdl_Impl, ValueSet*, EMPTYARG)
 IMPL_LINK(ParaBulletsControl, MoreButtonClickHdl_Impl, void*, EMPTYARG)
 {
     if (mpBindings)
-        mpBindings->GetDispatcher()->Execute( SID_OUTLINE_BULLET, SFX_CALLMODE_ASYNCHRON );
+        mpBindings->GetDispatcher()->Execute( SID_OUTLINE_BULLET, SfxCallMode::ASYNCHRON );
 
     mrParaPropertyPanel.EndBulletsPopupMode();
 

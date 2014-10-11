@@ -864,7 +864,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         }
 
         if( !bMergeShell && pSourceDocSh->IsModified() )
-            pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
+            pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SfxCallMode::SYNCHRON|SfxCallMode::RECORD);
         if( bMergeShell || !pSourceDocSh->IsModified() )
         {
             const SfxFilter* pStoreToFilter = SwIoSystem::GetFileFilter(

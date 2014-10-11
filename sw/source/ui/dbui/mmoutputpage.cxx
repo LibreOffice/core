@@ -518,7 +518,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
         uno::Reference< frame::XFrame > xFrame =
                 pSourceViewFrm->GetFrame().GetFrameInterface();
         xFrame->getContainerWindow()->setVisible(sal_True);
-        pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
+        pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SfxCallMode::SYNCHRON);
         xFrame->getContainerWindow()->setVisible(sal_False);
         SwDocShell* pDocShell = pSourceView->GetDocShell();
         //if the document has been saved its URL has to be stored for

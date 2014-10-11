@@ -212,7 +212,7 @@ IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
         SvxUnderlineItem aLineItem(eUnderline, SID_ATTR_CHAR_UNDERLINE);
 
         aLineItem.SetColor(mrTextPropertyPanel.GetUnderlineColor());
-        mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SFX_CALLMODE_RECORD, &aLineItem, 0L);
+        mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SfxCallMode::RECORD, &aLineItem, 0L);
         mrTextPropertyPanel.EndUnderlinePopupMode();
     }
     return( 0L );
@@ -225,7 +225,7 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, PushButton *, pPBtn)
         if (mpBindings)
         {
             SfxDispatcher* pDisp = mpBindings->GetDispatcher();
-            pDisp->Execute( SID_CHAR_DLG_EFFECT, SFX_CALLMODE_ASYNCHRON );
+            pDisp->Execute( SID_CHAR_DLG_EFFECT, SfxCallMode::ASYNCHRON );
         }
         mrTextPropertyPanel.EndUnderlinePopupMode();
     }

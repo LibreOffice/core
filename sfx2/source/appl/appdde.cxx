@@ -150,7 +150,7 @@ bool ImplDdeService::MakeTopic( const OUString& rNm )
             SfxBoolItem aSilent(SID_SILENT, sal_True);
             SfxDispatcher* pDispatcher = SfxGetpApp()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
-                    SFX_CALLMODE_SYNCHRON,
+                    SfxCallMode::SYNCHRON,
                     &aName, &aNewView,
                     &aSilent, 0L );
 

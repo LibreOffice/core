@@ -112,7 +112,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     bReadOnly = GetViewData().GetSfxDocShell()->IsReadOnly();
 
                     SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly);
-                    GetViewData().GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
+                    GetViewData().GetDispatcher().Execute( SID_FM_DESIGN_MODE, SfxCallMode::ASYNCHRON,
                                                 &aItem, 0L );
 
                     UpdateInputContext();

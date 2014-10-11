@@ -126,7 +126,7 @@ IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,(sal_uInt32) nTmp);
 
     GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_ALIGN_DEGREES, SFX_CALLMODE_RECORD, &aAngleItem, 0L );
+        SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
     return 0;
 }
 
@@ -136,7 +136,7 @@ IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
     SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,(sal_uInt32) nTmp);
 
     GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_ALIGN_DEGREES, SFX_CALLMODE_RECORD, &aAngleItem, 0L );
+        SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
 
     return 0;
 }
@@ -146,7 +146,7 @@ IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
     bool bVertical = mpCbStacked->IsChecked();
     SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
     GetBindings()->GetDispatcher()->Execute(
-        SID_ATTR_ALIGN_STACKED, SFX_CALLMODE_RECORD, &aStackItem, 0L );
+        SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, &aStackItem, 0L );
     return 0;
 }
 
@@ -156,7 +156,7 @@ IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
     sal_uInt16 nVal = (sal_uInt16)mpMFLeftIndent->GetValue();
     SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  (sal_uInt16)CalcToUnit( nVal,  SFX_MAPUNIT_TWIP ) );
 
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_INDENT, SFX_CALLMODE_RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_INDENT, SfxCallMode::RECORD, &aItem, 0L);
     return( 0L );
 }
 
@@ -166,11 +166,11 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
 
     //Modified
     //SfxBoolItem aItem( FID_MERGE_TOGGLE , bState);
-    //GetBindings()->GetDispatcher()->Execute(FID_MERGE_TOGGLE, SFX_CALLMODE_RECORD, &aItem, false, 0L);
+    //GetBindings()->GetDispatcher()->Execute(FID_MERGE_TOGGLE, SfxCallMode::RECORD, &aItem, false, 0L);
     if(bState)
-        GetBindings()->GetDispatcher()->Execute(FID_MERGE_ON, SFX_CALLMODE_RECORD);
+        GetBindings()->GetDispatcher()->Execute(FID_MERGE_ON, SfxCallMode::RECORD);
     else
-        GetBindings()->GetDispatcher()->Execute(FID_MERGE_OFF, SFX_CALLMODE_RECORD);
+        GetBindings()->GetDispatcher()->Execute(FID_MERGE_OFF, SfxCallMode::RECORD);
     GetBindings()->Invalidate(FID_MERGE_TOGGLE,true,false);
     //modified end
 
@@ -181,7 +181,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
 {
     bool bState = mpCBXWrapText->IsChecked();
     SfxBoolItem aItem( SID_ATTR_ALIGN_LINEBREAK , bState);
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LINEBREAK, SFX_CALLMODE_RECORD, &aItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LINEBREAK, SfxCallMode::RECORD, &aItem, 0L);
     return 0;
 }
 

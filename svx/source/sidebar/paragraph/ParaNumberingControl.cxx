@@ -106,7 +106,7 @@ IMPL_LINK(ParaNumberingControl, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     const sal_uInt16 nIdx = maNumberVS.GetSelectItemId();
     SfxUInt16Item aItem( FN_SVX_SET_NUMBER, nIdx );
     if (mpBindings)
-        mpBindings->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SFX_CALLMODE_RECORD, &aItem, 0L );
+        mpBindings->GetDispatcher()->Execute( FN_SVX_SET_NUMBER, SfxCallMode::RECORD, &aItem, 0L );
 
     mrParaPropertyPanel.EndNumberingPopupMode();
 
@@ -117,7 +117,7 @@ IMPL_LINK(ParaNumberingControl, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 IMPL_LINK(ParaNumberingControl, MoreButtonClickHdl_Impl, void*, EMPTYARG)
 {
     if (mpBindings)
-        mpBindings->GetDispatcher()->Execute( SID_OUTLINE_BULLET, SFX_CALLMODE_ASYNCHRON );
+        mpBindings->GetDispatcher()->Execute( SID_OUTLINE_BULLET, SfxCallMode::ASYNCHRON );
 
     mrParaPropertyPanel.EndNumberingPopupMode();
 

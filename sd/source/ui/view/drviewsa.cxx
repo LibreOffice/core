@@ -340,7 +340,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     }
 
     // start selection function
-    SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
+    SfxRequest aReq(SID_OBJECT_SELECT, SfxCallMode::SLOT, GetDoc()->GetItemPool());
     FuPermanent(aReq);
     mpDrawView->SetFrameDragSingles(true);
 
@@ -566,7 +566,7 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     // zoom onto (new) page size
     GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 }
 
 void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
@@ -776,7 +776,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
         // Change to selection when turning on read-only mode.
         if(GetDocSh()->IsReadOnly() && dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) )
         {
-            SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
+            SfxRequest aReq(SID_OBJECT_SELECT, SfxCallMode::SLOT, GetDoc()->GetItemPool());
             FuPermanent(aReq);
         }
 
@@ -787,7 +787,7 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 
             SfxBoolItem aItem( SID_FM_DESIGN_MODE, !mbReadOnly );
             GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
         }
     }
 

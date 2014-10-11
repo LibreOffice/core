@@ -666,7 +666,7 @@ void ScPreview::KeyInput( const KeyEvent& rKEvt )
         if(nSlot)
         {
             bHandled = true;
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute( nSlot, SFX_CALLMODE_ASYNCHRON );
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute( nSlot, SfxCallMode::ASYNCHRON );
         }
     }
 

@@ -230,7 +230,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
         SfxUsrAnyItem aDBProperties(FN_PARAM_DATABASE_PROPERTIES, uno::makeAny(aArgs));
         m_pView->GetViewFrame()->GetDispatcher()->Execute(
             FN_MAILMERGE_WIZARD,
-            SFX_CALLMODE_ASYNCHRON,
+            SfxCallMode::ASYNCHRON,
             &aDBProperties, 0L);
     }
 #endif

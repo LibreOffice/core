@@ -199,7 +199,7 @@ DrawDocShell::~DrawDocShell()
 
     if( pFrame )
         pFrame->GetDispatcher()->Execute(
-            SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
+            SID_NAVIGATOR_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L);
 }
 
 void DrawDocShell::GetState(SfxItemSet &rSet)

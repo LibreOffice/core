@@ -193,7 +193,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             case SID_ATTR_FILL_BITMAP:
             case SID_ATTR_FILL_TRANSPARENCE:
             case SID_ATTR_FILL_FLOATTRANSPARENCE:
-                pDis->Execute(SID_ATTRIBUTES_AREA, sal_False);
+                pDis->Execute(SID_ATTRIBUTES_AREA);
                 break;
             case SID_ATTR_LINE_STYLE:
             case SID_ATTR_LINE_DASH:
@@ -202,7 +202,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             case SID_ATTR_LINE_TRANSPARENCE:
             case SID_ATTR_LINE_JOINT:
             case SID_ATTR_LINE_CAP:
-                pDis->Execute(SID_ATTRIBUTES_LINE, sal_False);
+                pDis->Execute(SID_ATTRIBUTES_LINE);
                 break;
         }
     }

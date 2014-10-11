@@ -949,7 +949,7 @@ const SfxPoolItem* SfxFrame::OpenDocumentSynchron( SfxItemSet& i_rSet, const Ref
 {
     i_rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, i_rTargetFrame ) );
     i_rSet.ClearItem( SID_TARGETNAME );
-    return SfxGetpApp()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, i_rSet );
+    return SfxGetpApp()->GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, i_rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

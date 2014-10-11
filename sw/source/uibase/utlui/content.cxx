@@ -3199,7 +3199,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
                         SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, (void*)pBase);
                         pActiveShell->GetView().GetViewFrame()->
                             GetDispatcher()->Execute(FN_INSERT_MULTI_TOX,
-                                            SFX_CALLMODE_ASYNCHRON, &aPtrItem, 0L);
+                                            SfxCallMode::ASYNCHRON, &aPtrItem, 0L);
 
                     }
                 break;
@@ -3238,7 +3238,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
     }
     if(nSlot)
         pActiveShell->GetView().GetViewFrame()->
-                    GetDispatcher()->Execute(nSlot, SFX_CALLMODE_ASYNCHRON);
+                    GetDispatcher()->Execute(nSlot, SfxCallMode::ASYNCHRON);
     else if(xNameAccess.is())
     {
         uno::Any aObj = xNameAccess->getByName(pCnt->GetName());

@@ -221,7 +221,7 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
 
                         SwitchToDocument();
                         GetBindings().GetDispatcher()->Execute( SID_SOLVE,
-                                                  SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
+                                                  SfxCallMode::SLOT | SfxCallMode::RECORD,
                                                   &aOutItem, 0L, 0L );
                         Close();
                     }

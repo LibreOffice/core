@@ -172,7 +172,7 @@ IMPL_LINK(WrapPropertyPanel, WrapTypeHdl, void *, EMPTYARG)
         nSlot = FN_FRAME_NOWRAP;
     }
     SfxBoolItem bStateItem( nSlot, true );
-    mpBindings->GetDispatcher()->Execute( nSlot, SFX_CALLMODE_RECORD, &bStateItem, 0L );
+    mpBindings->GetDispatcher()->Execute( nSlot, SfxCallMode::RECORD, &bStateItem, 0L );
 
     return 0;
 }

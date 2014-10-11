@@ -428,7 +428,7 @@ The code below would only be part of the solution.
             }
 
             // close the spelling dialog
-            GetBindings().GetDispatcher()->Execute(FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON);
+            GetBindings().GetDispatcher()->Execute(FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
         }
     }
     return aRet;

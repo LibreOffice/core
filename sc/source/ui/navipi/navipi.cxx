@@ -926,7 +926,7 @@ void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
         SfxBoolItem     aUnmarkItem( FN_PARAM_1, bUnmark );     // ggf. Selektion aufheben
 
         rBindings.GetDispatcher()->Execute( SID_CURRENTCELL,
-                                  SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+                                  SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                                   &aPosItem, &aUnmarkItem, 0L );
     }
 }
@@ -937,7 +937,7 @@ void ScNavigatorDlg::SetCurrentCellStr( const OUString& rName )
     SfxStringItem   aNameItem( SID_CURRENTCELL, rName );
 
     rBindings.GetDispatcher()->Execute( SID_CURRENTCELL,
-                              SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                               &aNameItem, 0L );
 }
 
@@ -948,7 +948,7 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
         //  Tabelle fuer Basic ist 1-basiert
         SfxUInt16Item aTabItem( SID_CURRENTTAB, static_cast<sal_uInt16>(nTabNo) + 1 );
         rBindings.GetDispatcher()->Execute( SID_CURRENTTAB,
-                                  SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+                                  SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                                   &aTabItem, 0L );
     }
 }
@@ -976,7 +976,7 @@ void ScNavigatorDlg::SetCurrentObject( const OUString& rName )
 {
     SfxStringItem aNameItem( SID_CURRENTOBJECT, rName );
     rBindings.GetDispatcher()->Execute( SID_CURRENTOBJECT,
-                              SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                               &aNameItem, 0L );
 }
 
@@ -984,7 +984,7 @@ void ScNavigatorDlg::SetCurrentDoc( const OUString& rDocName )        // aktivie
 {
     SfxStringItem aDocItem( SID_CURRENTDOC, rDocName );
     rBindings.GetDispatcher()->Execute( SID_CURRENTDOC,
-                              SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+                              SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                               &aDocItem, 0L );
 }
 

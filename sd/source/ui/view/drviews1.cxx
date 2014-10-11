@@ -154,7 +154,7 @@ void DrawViewShell::SelectionHasChanged (void)
     //Update3DWindow(); // 3D-Controller
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->Execute(
-        SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
 
     SdrOle2Obj* pOleObj = NULL;
 
@@ -685,7 +685,7 @@ void DrawViewShell::ResetActualPage()
     }
 
     GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 }
 
 /**

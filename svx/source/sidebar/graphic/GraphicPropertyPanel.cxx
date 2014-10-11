@@ -131,7 +131,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyBrightnessHdl, void *, EMPTYARG )
 {
     const sal_Int16 nBright = mpMtrBrightness->GetValue();
     const SfxInt16Item aBrightItem( SID_ATTR_GRAF_LUMINANCE, nBright );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_LUMINANCE, SFX_CALLMODE_RECORD, &aBrightItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_LUMINANCE, SfxCallMode::RECORD, &aBrightItem, 0L);
     return 0L;
 }
 
@@ -141,7 +141,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyContrastHdl, void *, EMPTYARG )
 {
     const sal_Int16 nContrast = mpMtrContrast->GetValue();
     const SfxInt16Item aContrastItem( SID_ATTR_GRAF_CONTRAST, nContrast );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_CONTRAST, SFX_CALLMODE_RECORD, &aContrastItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_CONTRAST, SfxCallMode::RECORD, &aContrastItem, 0L);
     return 0L;
 }
 
@@ -151,7 +151,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyTransHdl, void *, EMPTYARG )
 {
     const sal_Int16 nTrans = mpMtrTrans->GetValue();
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_TRANSPARENCE, SFX_CALLMODE_RECORD, &aTransItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_TRANSPARENCE, SfxCallMode::RECORD, &aTransItem, 0L);
     return 0L;
 }
 
@@ -161,7 +161,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl )
 {
     const sal_Int16 nTrans = mpLBColorMode->GetSelectEntryPos();
     const SfxInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_MODE, SFX_CALLMODE_RECORD, &aTransItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_MODE, SfxCallMode::RECORD, &aTransItem, 0L);
     return 0L;
 }
 
@@ -171,7 +171,7 @@ IMPL_LINK( GraphicPropertyPanel, RedHdl, void*, EMPTYARG )
 {
     const sal_Int16 nRed = mpMtrRed->GetValue();
     const SfxInt16Item aRedItem( SID_ATTR_GRAF_RED, nRed );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_RED, SFX_CALLMODE_RECORD, &aRedItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_RED, SfxCallMode::RECORD, &aRedItem, 0L);
     return 0L;
 }
 
@@ -181,7 +181,7 @@ IMPL_LINK( GraphicPropertyPanel, GreenHdl, void*, EMPTYARG )
 {
     const sal_Int16 nGreen = mpMtrGreen->GetValue();
     const SfxInt16Item aGreenItem( SID_ATTR_GRAF_GREEN, nGreen );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_GREEN, SFX_CALLMODE_RECORD, &aGreenItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_GREEN, SfxCallMode::RECORD, &aGreenItem, 0L);
     return 0L;
 }
 
@@ -191,7 +191,7 @@ IMPL_LINK(GraphicPropertyPanel, BlueHdl, void *, EMPTYARG)
 {
     const sal_Int16 nBlue = mpMtrBlue->GetValue();
     const SfxInt16Item aBlueItem( SID_ATTR_GRAF_BLUE, nBlue );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_BLUE, SFX_CALLMODE_RECORD, &aBlueItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_BLUE, SfxCallMode::RECORD, &aBlueItem, 0L);
     return 0L;
 }
 
@@ -201,7 +201,7 @@ IMPL_LINK(GraphicPropertyPanel, GammaHdl, void *, EMPTYARG)
 {
     const sal_Int32 nGamma = mpMtrGamma->GetValue();
     const SfxInt32Item nGammaItem( SID_ATTR_GRAF_GAMMA, nGamma );
-    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_GAMMA, SFX_CALLMODE_RECORD, &nGammaItem, 0L);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_GRAF_GAMMA, SfxCallMode::RECORD, &nGammaItem, 0L);
     return 0L;
 }
 

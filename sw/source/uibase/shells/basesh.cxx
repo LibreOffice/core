@@ -723,7 +723,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 nGalleryItemType == com::sun::star::gallery::GalleryItemType::MEDIA  )
             {
                 const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
-                GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
+                GetView().GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SfxCallMode::SYNCHRON, &aMediaURLItem, 0L );
             }
         }
         break;
@@ -755,7 +755,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 rSh.ChgPageDesc(nCurIdx, aPageDesc);
             }
             else
-                GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_PAGE_COLUMN_DLG, sal_False);
+                GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_PAGE_COLUMN_DLG);
         }
         break;
         case FN_CONVERT_TABLE_TO_TEXT:
@@ -2040,7 +2040,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
         }
     }
     else
-        GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG, sal_False);
+        GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG );
     rReq.Done();
 }
 

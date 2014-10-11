@@ -131,7 +131,7 @@ void TbxControls::Select( sal_uInt16 nModifier )
     SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
     if( pDispatcher )
     {
-        pDispatcher->Execute( SID_CHOOSE_CONTROLS, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
+        pDispatcher->Execute( SID_CHOOSE_CONTROLS, SfxCallMode::SYNCHRON, &aItem, 0L );
     }
 }
 

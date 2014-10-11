@@ -150,7 +150,7 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
         {
             // select whole table
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->
-                Execute(FN_TABLE_SELECT_ALL, SFX_CALLMODE_SYNCHRON);
+                Execute(FN_TABLE_SELECT_ALL, SfxCallMode::SYNCHRON);
         }
         if( ! rWrtShell.IsTblComplexForChart())
         {

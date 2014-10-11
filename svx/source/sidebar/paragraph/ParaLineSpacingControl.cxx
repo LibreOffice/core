@@ -638,7 +638,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
     }
 
     mpBindings->GetDispatcher()->Execute(
-            SID_ATTR_PARA_LINESPACE, SFX_CALLMODE_RECORD, &aSpacing, 0L);
+            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
 
     mbUseLineSPCustom = USE_CUSTOM;
 }
@@ -738,7 +738,7 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
                         }
 
                         mpBindings->GetDispatcher()->Execute(
-                            SID_ATTR_PARA_LINESPACE, SFX_CALLMODE_RECORD, &aSpacing, 0L);
+                            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
 
                         ExecuteLineSpacing( USE_CUSTOM, 0 );
                     }
@@ -767,7 +767,7 @@ void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEnt
             SetLineSpace( aSpacing, nPos );
 
         mpBindings->GetDispatcher()->Execute(
-            SID_ATTR_PARA_LINESPACE, SFX_CALLMODE_RECORD, &aSpacing, 0L);
+            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
     }
 
     if( !aIsCustom )

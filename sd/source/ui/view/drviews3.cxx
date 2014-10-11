@@ -187,7 +187,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 SwitchPage(nSelectedPage);
 
                 if(HasCurrentFunction(SID_BEZIER_EDIT))
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
                 Invalidate();
                 InvalidateWindows();
@@ -1016,13 +1016,13 @@ void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
     {
         case SID_ATTR_SIZE:
         {
-            GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_TRANSFORM, SFX_CALLMODE_ASYNCHRON );
+            GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_TRANSFORM, SfxCallMode::ASYNCHRON );
         }
         break;
 
         case SID_STATUS_LAYOUT:
         {
-            GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION_LAYOUT, SFX_CALLMODE_ASYNCHRON );
+            GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION_LAYOUT, SfxCallMode::ASYNCHRON );
         }
         break;
     }

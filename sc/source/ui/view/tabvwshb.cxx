@@ -268,7 +268,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     //  Rahmen fuer Chart einfuegen wird abgebrochen:
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && pPoor->GetSlotID() == SID_DRAW_CHART )
-        GetViewData().GetDispatcher().Execute(SID_DRAW_CHART, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+        GetViewData().GetDispatcher().Execute(SID_DRAW_CHART, SfxCallMode::SLOT | SfxCallMode::RECORD);
 
     MakeDrawLayer();
 

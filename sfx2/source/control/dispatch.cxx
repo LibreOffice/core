@@ -836,8 +836,8 @@ void SfxDispatcher::_Execute(SfxShell& rShell, const SfxSlot& rSlot,
     if ( IsLocked( rSlot.GetSlotId() ) )
         return;
 
-    if ( (eCallMode & SFX_CALLMODE_ASYNCHRON) ||
-         ( !(eCallMode & SFX_CALLMODE_SYNCHRON) &&
+    if ( bool(eCallMode & SfxCallMode::ASYNCHRON) ||
+         ( (eCallMode & SfxCallMode::SYNCHRON) == SfxCallMode::SLOT &&
            rSlot.IsMode(SFX_SLOT_ASYNCHRON) ) )
     {
         SfxDispatcher *pDispat = this;
@@ -848,7 +848,7 @@ void SfxDispatcher::_Execute(SfxShell& rShell, const SfxSlot& rSlot,
             {
                 if ( &rShell == *(pDispat->pImp->aStack.rbegin() + n) )
                 {
-                    if ( eCallMode & SFX_CALLMODE_RECORD )
+                    if ( bool(eCallMode & SfxCallMode::RECORD) )
                         rReq.AllowRecording( true );
                     pDispat->pImp->xPoster->Post(new SfxRequest(rReq));
                     return;
@@ -859,7 +859,7 @@ void SfxDispatcher::_Execute(SfxShell& rShell, const SfxSlot& rSlot,
         }
     }
     else
-        Call_Impl( rShell, rSlot, rReq, SFX_CALLMODE_RECORD==(eCallMode&SFX_CALLMODE_RECORD) );
+        Call_Impl( rShell, rSlot, rReq, SfxCallMode::RECORD==(eCallMode&SfxCallMode::RECORD) );
 }
 
 /** Helper function to put from rItem below the Which-ID in the pool of the
@@ -913,7 +913,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
     SfxShell *pShell = 0;
     const SfxSlot *pSlot = 0;
     if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false,
-                               SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
+                               SfxCallMode::MODAL==(nCall&SfxCallMode::MODAL) ) )
     {
         SfxAllItemSet aSet( pShell->GetPool() );
         if ( pArgs )
@@ -938,7 +938,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
 /** Method to excecute a <SfxSlot>s over the Slot-Id.
 
     @param nSlot the Id of the executing function
-    @param eCall SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON or ..._SLOT
+    @param eCall SfxCallMode::SYNCRHON, ..._ASYNCHRON or ..._SLOT
     @param pArgs Zero teminated C-Array of Parameters
     @param pInternalArgs Zero terminated C-Array of Parameters
 
@@ -958,7 +958,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     SfxShell *pShell = 0;
     const SfxSlot *pSlot = 0;
     if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false,
-                               SFX_CALLMODE_MODAL==(eCall&SFX_CALLMODE_MODAL) ) )
+                               SfxCallMode::MODAL==(eCall&SfxCallMode::MODAL) ) )
     {
         SfxRequest* pReq;
         if ( pArgs && *pArgs )
@@ -988,7 +988,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 /** Method to excecute a <SfxSlot>s over the Slot-Id.
 
     @param nSlot the Id of the executing function
-    @param eCall SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON or ..._SLOT
+    @param eCall SfxCallMode::SYNCRHON, ..._ASYNCHRON or ..._SLOT
     @param rArgs <SfxItemSet> with the parameters
 
     @return const SfxPoolItem* Pointer to the SfxPoolItem valid to the next run
@@ -1013,7 +1013,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     SfxShell *pShell = 0;
     const SfxSlot *pSlot = 0;
     if ( GetShellAndSlot_Impl( nSlot,  &pShell, &pSlot, false,
-                               SFX_CALLMODE_MODAL==(eCall&SFX_CALLMODE_MODAL) ) )
+                               SfxCallMode::MODAL==(eCall&SfxCallMode::MODAL) ) )
     {
         SfxAllItemSet aSet( pShell->GetPool() );
         SfxItemIter aIter(rArgs);
@@ -1037,7 +1037,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     of stack objects.
 
     @param nSlot the Id of the executing function
-    @param eCall SFX_CALLMODE_SYNCRHON, ..._ASYNCHRON or ..._SLOT
+    @param eCall SfxCallMode::SYNCRHON, ..._ASYNCHRON or ..._SLOT
     @param pArg1 First parameter
     @param ... Zero terminated list of parameters
 
@@ -1050,7 +1050,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 
     [Example]
 
-    pDispatcher->Execute( SID_OPENDOCUMENT, SFX_CALLMODE_SYNCHRON,
+    pDispatcher->Execute( SID_OPENDOCUMENT, SfxCallMode::SYNCHRON,
         &SfxStringItem( SID_FILE_NAME, "\\tmp\\temp.sdd" ),
         &SfxStringItem( SID_FILTER_NAME, "StarDraw Presentation" ),
         &SfxBoolItem( SID_DOC_READONLY, sal_False ),
@@ -1065,7 +1065,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     SfxShell *pShell = 0;
     const SfxSlot *pSlot = 0;
     if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, false,
-                               SFX_CALLMODE_MODAL==(eCall&SFX_CALLMODE_MODAL) ) )
+                               SfxCallMode::MODAL==(eCall&SfxCallMode::MODAL) ) )
     {
        SfxAllItemSet aSet( pShell->GetPool() );
 

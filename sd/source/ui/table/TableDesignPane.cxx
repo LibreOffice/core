@@ -189,7 +189,7 @@ void TableDesignWidget::ApplyStyle()
         {
             if( pView )
             {
-                SfxRequest aReq( SID_TABLE_STYLE, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool() );
+                SfxRequest aReq( SID_TABLE_STYLE, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
                 aReq.AppendItem( SfxStringItem( SID_TABLE_STYLE, sStyleName ) );
 
                 rtl::Reference< sdr::SelectionController > xController( pView->getSelectionController() );
@@ -208,7 +208,7 @@ void TableDesignWidget::ApplyStyle()
         {
             SfxDispatcher* pDispatcher = getDispatcher( mrBase );
             SfxStringItem aArg( SID_TABLE_STYLE, sStyleName );
-            pDispatcher->Execute(SID_INSERT_TABLE, SFX_CALLMODE_ASYNCHRON, &aArg, 0 );
+            pDispatcher->Execute(SID_INSERT_TABLE, SfxCallMode::ASYNCHRON, &aArg, 0 );
         }
     }
     catch( Exception& )
@@ -238,7 +238,7 @@ void TableDesignWidget::ApplyOptions()
 
     if( mxSelectedTable.is() )
     {
-        SfxRequest aReq( SID_TABLE_STYLE_SETTINGS, SFX_CALLMODE_SYNCHRON, SfxGetpApp()->GetPool() );
+        SfxRequest aReq( SID_TABLE_STYLE_SETTINGS, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool() );
 
         for( sal_uInt16 i = CB_HEADER_ROW; i <= CB_BANDED_COLUMNS; ++i )
         {

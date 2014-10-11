@@ -134,7 +134,7 @@ sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, vcl::Window* pWi
     if ( nId == MN_SMARTTAG_OPTIONS )
     {
         SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, true);
-        mpSwView->GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SFX_CALLMODE_ASYNCHRON, &aBool, 0L );
+        mpSwView->GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON, &aBool, 0L );
     }
 
     if ( nId < MN_ST_INSERT_START) return nId;

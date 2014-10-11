@@ -56,15 +56,39 @@ class SfxUnoControllerItem;
 
 typedef std::vector<SfxUnoControllerItem*> SfxUnoControllerArr_Impl;
 
-#define SFX_CALLMODE_SLOT               0x00    // sync/async from Slot
-#define SFX_CALLMODE_SYNCHRON           0x01    // synchronously in the same Stackframe
-#define SFX_CALLMODE_ASYNCHRON          0x02    // asynchronously via AppEvent
-#define SFX_CALLMODE_RECORD             0x04    // take into account while recording
-#define SFX_CALLMODE_API                0x08    // API call (silent)
-#define SFX_CALLMODE_MODAL              0x10    // despite ModalMode
+enum class SfxCallMode : sal_uInt16
+{
+    SLOT      = 0x00,    // sync/async from Slot
+    SYNCHRON  = 0x01,    // synchronously in the same Stackframe
+    ASYNCHRON = 0x02,    // asynchronously via AppEvent
+    RECORD    = 0x04,    // take into account while recording
+    API       = 0x08,    // API call (silent)
+    MODAL     = 0x10     // despite ModalMode
+};
+// make combining these type-safe
+inline SfxCallMode operator| (SfxCallMode lhs, SfxCallMode rhs)
+{
+    return static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
+}
+inline SfxCallMode operator& (SfxCallMode lhs, SfxCallMode rhs)
+{
+    return static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
+}
+inline SfxCallMode operator~ (SfxCallMode rhs)
+{
+    return static_cast<SfxCallMode>(0x1f & ~(static_cast<sal_uInt16>(rhs)));
+}
+inline SfxCallMode& operator|= (SfxCallMode& lhs, SfxCallMode rhs)
+{
+    lhs = static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
+    return lhs;
+}
+inline SfxCallMode& operator&= (SfxCallMode& lhs, SfxCallMode rhs)
+{
+    lhs = static_cast<SfxCallMode>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
+    return lhs;
+}
 
-#define SFX_CALLMODE_STANDARD       SFX_CALLMODE_RECORD
-typedef sal_uInt16 SfxCallMode;
 
 enum SfxPopupAction
 {
@@ -177,7 +201,7 @@ public:
     bool             Execute( sal_uInt16 nSlot,
                                  const SfxPoolItem **pArgs = 0,
                                  sal_uInt16 nModi = 0,
-                                 SfxCallMode nCall = SFX_CALLMODE_SLOT,
+                                 SfxCallMode nCall = SfxCallMode::SLOT,
                                  const SfxPoolItem **pInternalArgs = 0);
 
     SAL_DLLPRIVATE void SetDispatchProvider_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & rFrame );

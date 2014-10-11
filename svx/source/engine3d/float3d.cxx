@@ -341,7 +341,7 @@ Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     {
         SfxBoolItem aItem( SID_3D_INIT, true );
         pDispatcher->Execute(
-            SID_3D_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+            SID_3D_INIT, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
     }
 
     Reset();
@@ -2321,7 +2321,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
         {
             SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->Execute(
-                SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+                SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
         }
     }
     else
@@ -2340,7 +2340,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
     {
         SfxBoolItem aItem( SID_3D_ASSIGN, true );
         pDispatcher->Execute(
-            SID_3D_ASSIGN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+            SID_3D_ASSIGN, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
     }
 
     return( 0L );
@@ -2759,7 +2759,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
             {
                 SfxBoolItem aItem( nSId, true );
                 pDispatcher->Execute(
-                    nSId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+                    nSId, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
             }
         }
         else if( bUpdatePreview )
@@ -3081,7 +3081,7 @@ void Svx3DWin::UpdatePreview()
         {
             SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->Execute(
-                SID_3D_STATE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+                SID_3D_STATE, SfxCallMode::SYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
         }
         // Reset Flag
         bOnly3DChanged = false;
@@ -3276,7 +3276,7 @@ void SvxConvertTo3DItem::StateChanged(sal_uInt16 /*_nId*/, SfxItemState eState, 
         {
             SfxBoolItem aItem( SID_3D_STATE, true );
             pDispatcher->Execute(
-                SID_3D_STATE, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, &aItem, 0L);
+                SID_3D_STATE, SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, &aItem, 0L);
         }
     }
 }

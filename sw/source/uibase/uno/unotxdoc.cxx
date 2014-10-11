@@ -1143,7 +1143,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
     if(IsValid())
     {
         SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, 7 );
-        SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SFX_CALLMODE_SYNCHRON,
+        SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SfxCallMode::SYNCHRON,
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, true));
 
@@ -1918,7 +1918,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         {
             sal_Int16 nYear = 0;
             aValue >>= nYear;
-            SfxRequest aRequest ( SID_ATTR_YEAR2000, SFX_CALLMODE_SLOT, pDocShell->GetDoc()->GetAttrPool());
+            SfxRequest aRequest ( SID_ATTR_YEAR2000, SfxCallMode::SLOT, pDocShell->GetDoc()->GetAttrPool());
             aRequest.AppendItem(SfxUInt16Item( SID_ATTR_YEAR2000, static_cast < sal_uInt16 > ( nYear ) ) );
             pDocShell->Execute ( aRequest );
         }

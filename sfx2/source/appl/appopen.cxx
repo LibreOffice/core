@@ -324,7 +324,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
         SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
         SfxStringItem aFlags( SID_OPTIONS, OUString("T") );
         SfxBoolItem aHidden( SID_HIDDEN, true );
-        const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
+        const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
         const SfxObjectItem *pObj = PTR_CAST( SfxObjectItem, pRet );
         if ( pObj )
             xDoc = const_cast<SfxObjectShell*>(PTR_CAST( SfxObjectShell, pObj->GetShell() ));
@@ -423,7 +423,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         aFactName = SvtModuleOptions().GetDefaultModuleName();
 
 
-    SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
+    SfxRequest aReq( SID_OPENDOC, SfxCallMode::SYNCHRON, GetPool() );
     OUString aFact("private:factory/");
     aFact += aFactName;
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
@@ -525,7 +525,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     }
     else
     {
-        SfxCallMode eMode = SFX_CALLMODE_SYNCHRON;
+        SfxCallMode eMode = SfxCallMode::SYNCHRON;
 
         const SfxPoolItem *pRet=0;
         SfxStringItem aReferer( SID_REFERER, "private:user" );
@@ -702,7 +702,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 // when rescheduling
                 // TODO/LATER: use URLList argument and always remove one document after another, each step in asychronous execution, until finished
                 // but only if reschedule is a problem
-                GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, *rReq.GetArgs() );
+                GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs() );
 
                 // check for special interaction "NO MORE DOCUMENTS ALLOWED" and
                 // break loop then. Otherwise we risk showing the same interaction more than once.

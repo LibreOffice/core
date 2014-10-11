@@ -281,8 +281,8 @@ void SvxRubyDialog::ClearCharStyleList()
 bool    SvxRubyDialog::Close()
 {
     pBindings->GetDispatcher()->Execute( SID_RUBY_DIALOG,
-                              SFX_CALLMODE_ASYNCHRON |
-                              SFX_CALLMODE_RECORD);
+                              SfxCallMode::ASYNCHRON |
+                              SfxCallMode::RECORD);
     return true;
 }
 
@@ -568,8 +568,8 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
     if(eState <= SfxItemState::SET || !pState || !((SfxBoolItem*)pState)->GetValue())
     {
         pBindings->GetDispatcher()->Execute( SID_STYLE_DESIGNER,
-                              SFX_CALLMODE_ASYNCHRON |
-                              SFX_CALLMODE_RECORD);
+                              SfxCallMode::ASYNCHRON |
+                              SfxCallMode::RECORD);
     }
     delete pState;
     return 0;

@@ -325,7 +325,7 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
                 if (pDispatcher != NULL)
                 {
                     sal_uInt16 nIndex = PreviewValueSet::GetSelectItemId();
-                    pDispatcher->Execute(SID_MASTERPAGE, SFX_CALLMODE_SYNCHRON);
+                    pDispatcher->Execute(SID_MASTERPAGE, SfxCallMode::SYNCHRON);
                     PreviewValueSet::SelectItem (nIndex);
                     mrBase.GetDrawController().setCurrentPage(xSelectedMaster);
                 }

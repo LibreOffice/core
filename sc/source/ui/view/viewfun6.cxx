@@ -112,7 +112,7 @@ static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
     SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
     pView->GetDispatcher().Execute(
-        SID_CURRENTCELL, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
+        SID_CURRENTCELL, SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
         &aPosItem, &aUnmarkItem, 0L);
 }
 
@@ -501,7 +501,7 @@ void ScViewFunc::EditNote()
                 static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
 
             // activate object (as in FuSelection::TestComment)
-            GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+            GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
             // now get the created FuText and set into EditMode
             FuPoor* pPoor = GetDrawFuncPtr();
             if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // has no RTTI

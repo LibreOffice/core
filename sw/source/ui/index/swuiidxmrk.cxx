@@ -614,7 +614,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl)
     {
         sal_uInt16 nSlot = FN_INSERT_IDX_ENTRY_DLG;
         SfxViewFrame::Current()->GetDispatcher()->Execute(nSlot,
-                    SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+                    SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
     }
     else
     {
@@ -1116,7 +1116,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
     {
         sal_uInt16 nSlot = FN_INSERT_AUTH_ENTRY_DLG;
         SfxViewFrame::Current()->GetDispatcher()->Execute(nSlot,
-                    SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+                    SfxCallMode::ASYNCHRON|SfxCallMode::RECORD);
     }
     else
     {

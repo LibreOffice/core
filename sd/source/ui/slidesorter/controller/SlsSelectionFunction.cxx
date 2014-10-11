@@ -411,7 +411,7 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
                 {
                     pViewShell->GetDispatcher()->Execute(
                         SID_INSERTPAGE,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                 }
                 bResult = true;
             }
@@ -1133,7 +1133,7 @@ bool NormalModeHandler::ProcessButtonDownEvent (
 
             mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
                 SID_INSERTPAGE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
             break;
         }
 

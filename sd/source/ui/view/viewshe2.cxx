@@ -643,7 +643,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     // zoom onto (new) page size
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
-            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_END));
 }
@@ -785,7 +785,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             GetDocSh()->SetWaitCursor( false );
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
-                SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+                SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
             xObj = pObj->GetObjRef();
             GetDocSh()->SetWaitCursor( true );
 
@@ -915,7 +915,7 @@ void ViewShell::ReadUserData(const OUString&)
 {
     // zoom onto VisArea from FrameView
     GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
-        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
 }
 
 void ViewShell::WriteUserData(OUString&)

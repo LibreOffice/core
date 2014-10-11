@@ -1255,7 +1255,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_RUBY_DIALOG:
         case SID_HYPERLINK_DIALOG:
         {
-            SfxRequest aReq(nSlot, SFX_CALLMODE_SLOT, SfxGetpApp()->GetPool());
+            SfxRequest aReq(nSlot, SfxCallMode::SLOT, SfxGetpApp()->GetPool());
             GetView().GetViewFrame()->ExecuteSlot( aReq);
             rReq.Ignore();
         }

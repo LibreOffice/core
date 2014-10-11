@@ -995,7 +995,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     else if (nCommand == SPELLCMD_STARTSPELLDLG)
     {
         SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELL_DIALOG,
-            SFX_CALLMODE_ASYNCHRON );
+            SfxCallMode::ASYNCHRON );
     }
 }
 

@@ -178,7 +178,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 mpView->MarkObj(aPnt, nHitLog);
             }
 
-            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+            mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         }
         else if (rMEvt.IsLeft() && !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() &&
                  !bSelectionChanged                   &&

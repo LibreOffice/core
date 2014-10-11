@@ -302,7 +302,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
             }
         }
 
-        mrView.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSID, SFX_CALLMODE_ASYNCHRON);
+        mrView.GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSID, SfxCallMode::ASYNCHRON);
     }
     return false;
 }

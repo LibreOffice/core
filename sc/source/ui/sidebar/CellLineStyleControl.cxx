@@ -168,7 +168,7 @@ IMPL_LINK(CellLineStyleControl, VSSelectHdl, void *, pControl)
         editeng::SvxBorderLine aTmp;
         aTmp.GuessLinesWidths(nStyle, n1, n2, n3);
         aLineItem.SetLine( &aTmp );
-        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_FRAME_LINESTYLE, SFX_CALLMODE_RECORD, &aLineItem, 0L);
+        mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_FRAME_LINESTYLE, SfxCallMode::RECORD, &aLineItem, 0L);
         SetAllNoSel();
         mrCellAppearancePropertyPanel.EndCellLineStylePopupMode();
     }
@@ -182,7 +182,7 @@ IMPL_LINK(CellLineStyleControl, PBClickHdl, PushButton *, pPBtn)
     {
         if(mrCellAppearancePropertyPanel.GetBindings())
         {
-            mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_CELL_FORMAT_BORDER, SFX_CALLMODE_ASYNCHRON);
+            mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_CELL_FORMAT_BORDER, SfxCallMode::ASYNCHRON);
         }
 
         mrCellAppearancePropertyPanel.EndCellLineStylePopupMode();
