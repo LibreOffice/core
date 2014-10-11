@@ -43,8 +43,6 @@ namespace sdbtools
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new DataSourceMetaData_Impl )
     {
-        if ( !_rxConnection.is() )
-            throw NullPointerException();
         setWeakConnection( _rxConnection );
     }
 
