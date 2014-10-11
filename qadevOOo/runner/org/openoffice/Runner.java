@@ -22,6 +22,7 @@ import helper.ClParser;
 
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -116,13 +117,12 @@ public class Runner
         bEmergencyStop |= checkPathVariable("sun.boot.class.path", sDelim);
 
         // ----- check all TestParameters -----
-        Iterator<String> aIter = _aParams.keySet().iterator();
-        while (aIter.hasNext())
+        for (Map.Entry<String, Object> entry : _aParams.entrySet())
         {
-            String sKey = aIter.next();
-            if (_aParams.get(sKey) instanceof String)
+            String sKey = entry.getKey();
+            if (entry.getValue() instanceof String)
             {
-                String sValue = (String) _aParams.get(sKey);
+                String sValue = (String) entry.getValue();
 
                 if (checkVariableForCygwin(sValue))
                 {

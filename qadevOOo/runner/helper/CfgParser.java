@@ -18,8 +18,11 @@
 package helper;
 
 import java.io.FileInputStream;
+
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 
 import lib.TestParameters;
@@ -102,20 +105,20 @@ public class CfgParser
         if (os != null && os.length() > 1)
         {
 
-            //found something that could be a prefix
-            //check all parameters for this
-            Iterator<String> keys = param.keySet().iterator();
-            while (keys.hasNext())
+            Map<String, Object> aux = new HashMap<String, Object>();
+            for (Iterator<Map.Entry<String, Object>> it = param.entrySet().iterator(); it.hasNext();)
             {
-                String key = keys.next();
+                Map.Entry<String, Object> entry = it.next();
+                String key = entry.getKey();
                 if (key.startsWith(os))
                 {
-                    Object oldValue = param.get(key);
+                    Object oldValue = entry.getValue();
                     String newKey = key.substring(os.length() + 1);
-                    param.remove(key);
-                    param.put(newKey, oldValue);
+                    it.remove();
+                    aux.put(newKey, oldValue);
                 }
             }
+            param.putAll(aux);
 
         }
     }
