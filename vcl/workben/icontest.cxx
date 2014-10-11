@@ -54,7 +54,6 @@ namespace {
         return (double)aValue.Seconds +
             (double)aValue.Nanosec / (1000*1000*1000);
     }
-
 }
 
 class MyWorkWindow : public WorkWindow
@@ -97,12 +96,15 @@ void MyWorkWindow::Paint( const Rectangle& /* rRect */ )
     OutputDevice &rDev = *this;
 
     // yes indeed drawinglayer re-scales the image per render etc.
-    BitmapEx aScaledBitamp( maGraphic.GetBitmapEx() );
-    aScaledBitamp.Scale( maDestinationSize, BMP_SCALE_SUPER);
+    BitmapEx aScaledBitmap( maGraphic.GetBitmapEx() );
+    aScaledBitmap.Scale( maDestinationSize, BMP_SCALE_SUPER);
 
     std::cerr << "==> Paint! " << nPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - nStartTime << " image of size " << maGraphic.GetBitmapEx().GetSizePixel() << " scale to size " << maDestinationSize << std::endl;
 
-    rDev.DrawBitmapEx( Point( 0, 0 ), aScaledBitamp );
+    rDev.DrawBitmapEx( Point( 0, 0 ), aScaledBitmap );
+
+    if (nPaintCount > 100)
+        Application::Quit();
 
     Invalidate( INVALIDATE_CHILDREN ); // trigger re-render
 }
@@ -112,11 +114,19 @@ void MyWorkWindow::Paint( const Rectangle& /* rRect */ )
 void MyOpenGLWorkWindow::Paint( const Rectangle& )
 {
     std::cerr << "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
+
     OpenGLContext& aCtx = mpOpenGLWindow->getContext();
     aCtx.makeCurrent();
     CHECK_GL_ERROR();
     aCtx.requestLegacyContext();
     CHECK_GL_ERROR();
+
+    if (aCtx.supportMultiSampling())
+    {
+        // doesn't work but worth a try ...
+        glEnable(GL_MULTISAMPLE);
+        CHECK_GL_ERROR();
+    }
 
     if (!mbHaveTexture)
         LoadTexture();
@@ -143,7 +153,7 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
     glPushMatrix();
     CHECK_GL_ERROR();
 
-    glTranslatef(-1, -1, 0);
+    glTranslatef(-1, -0.5, 0);
     glScalef(2, 2, 2);
 
     if (mnTextureAspect >= ((float) WIDTH) / HEIGHT)
@@ -169,6 +179,9 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
 
     aCtx.swapBuffers();
     CHECK_GL_ERROR();
+
+    if (nPaintCount > 100)
+        Application::Quit();
 
     Invalidate( INVALIDATE_CHILDREN ); // trigger re-render
 }
@@ -225,9 +238,11 @@ void MyOpenGLWorkWindow::LoadTexture()
     CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // Need to better simulate scale24bitRGB2 cf. bitmapscalesuper.cxx
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     CHECK_GL_ERROR();
 
     BitmapEx aBitmap( maGraphic.GetBitmapEx( ) );
@@ -365,6 +380,13 @@ void MyWorkWindow::LoadGraphic( const OUString &sImageFile )
             maDestinationSize = Size( WIDTH, HEIGHT/aspect );
         else
             maDestinationSize = Size( WIDTH * aspect, HEIGHT );
+
+        if (getenv("PRESCALE")) // test non-scaling rendering
+        {
+            BitmapEx aScaledBitmap( maGraphic.GetBitmapEx() );
+            aScaledBitmap.Scale( maDestinationSize, BMP_SCALE_SUPER);
+            maGraphic = Graphic( aScaledBitmap );
+        }
     }
     catch (const uno::Exception &e)
     {
