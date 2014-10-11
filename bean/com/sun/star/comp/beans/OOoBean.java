@@ -1330,7 +1330,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         // is new argument already set?
         for ( int n = 0; n < nNumArgs; ++n )
         {
-            if ( aArguments[n].Name == aArgument.Name )
+            if ( aArguments[n].Name.equals(aArgument.Name) )
             {
                 // substitute this argument
                 aArguments[n] = aArgument;
