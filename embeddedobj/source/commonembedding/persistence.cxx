@@ -1852,9 +1852,6 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     if ( !xNameAccess.is() )
         throw uno::RuntimeException(); //TODO
 
-    // detect entry existence
-    /*sal_Bool bElExists =*/ xNameAccess->hasByName( sEntName );
-
     m_bReadOnly = false;
 
     if ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) )
