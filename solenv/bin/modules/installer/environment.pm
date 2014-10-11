@@ -109,7 +109,7 @@ sub set_global_environment_variables
     $installer::globals::compiler = $environment->{'OUTPATH'};
     $installer::globals::os = $environment->{'OS'};
     $installer::globals::com = $environment->{'COM'};
-    $installer::globals::cpuname = $environment->{'CPUNAME};
+    $installer::globals::cpuname = $environment->{'CPUNAME'};
 
     if ( $ENV{'LAST_MINOR'} ) { $installer::globals::lastminor = $ENV{'LAST_MINOR'}; }
 
