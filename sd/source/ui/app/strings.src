@@ -1197,7 +1197,7 @@ String STR_INSERT_PICTURE
 
 String STR_INSERT_MOVIE
 {
-     Text [ en-US ] = "Insert Movie";
+     Text [ en-US ] = "Insert Audio/Video";
 };
 
 String STRING_DRAG_AND_DROP_PAGES
