@@ -896,7 +896,8 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
     OUString aName = mxSheet->getName();
     ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTab;
-    rDoc.GetTable( aName, nTab );
+    if (!rDoc.GetTable(aName, nTab))
+        return NULL;
 
     ScRangeName* pNames = rDoc.GetRangeName( nTab );
     if (!pNames)
