@@ -163,7 +163,7 @@ private:
         ::std::vector<ExtAreaRef>   maExtAreaRefs;
 
         sal_uInt16*                     pElement;   // Array with Indices for elements
-        E_TYPE*                     pType;      // ...with Typ-Info
+        E_TYPE*                         pType;      // ...with Type-Info
         sal_uInt16*                     pSize;      // ...with size (Anz. sal_uInt16)
         sal_uInt16                      nElement;
         sal_uInt16                      nElementAkt;
@@ -172,7 +172,7 @@ private:
 #ifdef DBG_UTIL
         sal_uInt16                      m_nRek; // recursion counter
 #endif
-        ScTokenArray*               pScToken;   // Tokenbastler
+        ScTokenArray*               pScToken;   // Token array
 
 		bool						GrowString( void );
 		bool						GrowDouble( void );

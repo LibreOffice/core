@@ -24,12 +24,12 @@
 #include "collect.hxx"
 #include <tools/solar.h>
 
-// FehlerNummern
+// Error numbers
 #define errUnknownFormat    1
 #define errUnknownID        2
 #define errOutOfMemory      3
 
-// Identifiers im FileFormat
+// Identifiers in FileFormat
 #define ColWidthID          1
 #define ColAttrID           2
 #define RowHeightID         3
@@ -41,18 +41,18 @@
 #define PatternID           9
 #define DataBaseID          10
 
-// Zeilen/Spalten Flags
+// Row/Column Flags
 #define crfSoftBreak        1
 #define crfHardBreak        2
 #define crfHidden           4
 
-// Zelltypen
+// Cell types
 #define ctValue             1
 #define ctString            2
 #define ctFormula           3
 #define ctNote              4
 
-// FontStyles
+// Font Styles
 #define ffDontCare          0x00
 #define ffRoman             0x10
 #define ffSwiss             0x20
@@ -60,34 +60,34 @@
 #define ffScript            0x40
 #define ffDecorative        0x50
 
-// FontWeight
+// Font Weight
 #define fwNormal            400
 
-// FontAttribute
+// Font attributes
 #define atNone              0
 #define atBold              1
 #define atItalic            2
 #define atUnderline         4
 #define atStrikeOut         8
 
-// Horizontale Ausrichtung
+// Horizontal alignment
 #define hjNone              0
 #define hjLeft              1
 #define hjCenter            2
 #define hjRight             3
 
-// Vertikale Ausrichtung
+// Vertical alignment
 #define vjNone              0
 #define vjTop               1
 #define vjCenter            2
 #define vjBottom            3
 
-// AusrichtungsFlags
+// Allignment flags
 #define ojWordBreak         0x01
 #define ojBottomTop         0x02
 #define ojTopBottom         0x04
 
-// ZellRaster
+// Cell grid
 #define raNone              0
 #define raGray12            1
 #define raGray25            2
@@ -95,13 +95,13 @@
 #define raGray75            4
 #define raGray100           5
 
-// Zellschutz
+// Cell protection
 #define paProtect           1
 #define paHideFormula       2
 #define paHideAll           4
 #define paHidePrint         8
 
-// ZahlenFormatFlags
+// Number format flags
 #define vfStandard          0
 #define vfMoney             1
 #define vfThousend          2
@@ -120,7 +120,7 @@
 #define vfString            15
 #define vfNone              16
 
-// DatumsFormatFlags
+// Date format flags
 #define df_NDMY_Long        0
 #define df_DMY_Long         1
 #define df_MY_Long          2
@@ -136,13 +136,13 @@
 #define df_Q_Long           12
 #define df_Q_Short          13
 
-// ZeitFormatFlags
+// Time format flags
 #define tf_HMS_Long         0
 #define tf_HM_Long          1
 #define tf_HMS_Short        2
 #define tf_HM_Short         3
 
-// Attribute fuer FormatVorlage
+// Attributes for format template
 #define pfValue             0x01
 #define pfFont              0x02
 #define pfJustify           0x04
@@ -150,7 +150,7 @@
 #define pfRaster            0x10
 #define pfProtection        0x20
 
-// Displayflags fuer die Tabelle
+// Display flags for table
 #define dfFormula           0x0001      // formula
 #define dfZerro             0x0002      // zero values
 #define dfGrid              0x0004      // grid
@@ -164,19 +164,19 @@
 #define dfNoteMark          0x0400      // NoteMark
 #define dfProtectMark       0x0800      // ProtectMark
 
-// Objekt Typen
+// Object types
 #define otNone              0           // see below
 #define otOle               1
 #define otImage             2
 #define otChart             3
 
-// Grafik Typen
+// Grafic types
 #define gtNone              0           // not possible
 #define gtOle               1           // Ole 1.0 Object
 #define gtImage             2           // Image (Bitmap or Metafile)
 #define gtChart             3           // Chart
 
-// Datum/Uhrzeit
+// Date/Time
 struct Sc10DateTime
 {
     sal_uInt16      Year;
@@ -187,7 +187,7 @@ struct Sc10DateTime
     sal_uInt16      Sec;
 };
 
-// ZahlenFormate
+// Number formats
 struct Sc10ValueFormat
 {
     sal_uInt8       Format;         // number, currency, percentage,...
@@ -199,7 +199,7 @@ struct Sc10ValueFormat
     }
 };
 
-// Fontbeschreibung
+// Font definition
 struct Sc10LogFont
 {
     sal_Int16       lfHeight;
@@ -238,7 +238,7 @@ struct Sc10LogFont
     bool operator==( const Sc10LogFont& rData ) const;
 };
 
-// RGB-Frabwerte
+// RGB-Color values
 struct Sc10Color
 {
     sal_uInt8       Dummy;
