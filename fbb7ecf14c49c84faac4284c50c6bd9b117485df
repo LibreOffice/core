@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_0b8d617b",
+        "filename": "vcl/source/outdev/text.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1499,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-10-11T09:34:09Z",
+      "side": 1,
+      "message": "But this means that either rTargetDevice.GetTextHeight() or the rRect rectangular height is negative! And if this can happen, then I\u0027d be concerned that nTextHeight could be zero...",
+      "revId": "fbb7ecf14c49c84faac4284c50c6bd9b117485df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
