@@ -30,10 +30,9 @@ import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.UnoRuntime;
 
 import helper.URLHelper;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HsqlDatabase extends AbstractDatabase
 {
@@ -162,14 +161,12 @@ public class HsqlDatabase extends AbstractDatabase
             createStatement.append(')');
         }
 
-        final Set<String> foreignKeyTables = foreignKeys.keySet();
-        for (final Iterator<String> foreignKey = foreignKeyTables.iterator();
-                foreignKey.hasNext();)
+        for (Map.Entry<String, String> foreignKey : foreignKeys.entrySet())
         {
-            final String foreignTable = foreignKey.next();
+            final String foreignTable = foreignKey.getKey();
 
             createStatement.append(", FOREIGN KEY (");
-            createStatement.append(foreignKeys.get(foreignTable));
+            createStatement.append(foreignKey.getValue());
             createStatement.append(") REFERENCES \"");
             createStatement.append(foreignTable);
             createStatement.append("\"(");
