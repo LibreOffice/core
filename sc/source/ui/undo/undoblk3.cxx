@@ -169,12 +169,20 @@ void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
         SetChangeTrack();
     }
 
+    if (nFlags & IDF_CONTENTS)
+    {
+        // Broadcast only when the content changes. fdo#74687
+        if (mpDataSpans)
+            BroadcastChanges(*mpDataSpans);
+        else
+            BroadcastChanges(aRange);
+    }
+
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustRowHeight(
                                 aRange.aStart.Row(), aRange.aEnd.Row() ) ) )
 /*A*/   pDocShell->PostPaint( aRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
 
-    pDocShell->PostDataChanged();
     if (pViewShell)
         pViewShell->CellContentChanged();
 
@@ -187,15 +195,6 @@ void ScUndoDeleteContents::Undo()
     DoChange( sal_True );
     EndUndo();
 
-    if (nFlags & IDF_CONTENTS)
-    {
-        // Broadcast only when the content changes. fdo#74687
-        if (mpDataSpans)
-            BroadcastChanges(*mpDataSpans);
-        else
-            BroadcastChanges(aRange);
-    }
-
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
 
@@ -204,10 +203,6 @@ void ScUndoDeleteContents::Redo()
     BeginRedo();
     DoChange( false );
     EndRedo();
-
-    if (nFlags & IDF_CONTENTS)
-        // Broadcast only when the content changes. fdo#74687
-        BroadcastChanges(aRange);
 
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
 }
