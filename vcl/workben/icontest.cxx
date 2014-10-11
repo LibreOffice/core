@@ -45,7 +45,7 @@
 using namespace com::sun::star;
 
 namespace {
-    const int WIDTH = 1000, HEIGHT = 800;
+    const int WIDTH = 1024, HEIGHT = 768;
 
     double getTimeNow()
     {
@@ -60,12 +60,15 @@ namespace {
 class MyWorkWindow : public WorkWindow
 {
 protected:
-    double nStartTime;
-    int nPaintCount;
+    double  nStartTime;
+    int     nPaintCount;
+    Graphic maGraphic;
+    Size    maDestinationSize;
 
 public:
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
 
+    virtual void LoadGraphic( const OUString &sImageFile );
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 };
@@ -75,16 +78,96 @@ class MyOpenGLWorkWindow : public MyWorkWindow
 public:
     bool mbHaveTexture;
     OpenGLWindow *mpOpenGLWindow;
-    Graphic maGraphic;
     GLuint mnTextureName;
     float mnTextureAspect;
 
-    void LoadTexture();
+    void LoadTexture(); // deferred
+    virtual void LoadGraphic( const OUString &sImageFile ) SAL_OVERRIDE;
 
     MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
+
+
+// ------------------ existing DrawingLayer behavior ------------------
+
+void MyWorkWindow::Paint( const Rectangle& /* rRect */ )
+{
+    OutputDevice &rDev = *this;
+
+    // yes indeed drawinglayer re-scales the image per render etc.
+    BitmapEx aScaledBitamp( maGraphic.GetBitmapEx() );
+    aScaledBitamp.Scale( maDestinationSize, BMP_SCALE_SUPER);
+
+    std::cerr << "==> Paint! " << nPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - nStartTime << " image of size " << maGraphic.GetBitmapEx().GetSizePixel() << " scale to size " << maDestinationSize << std::endl;
+
+    rDev.DrawBitmapEx( Point( 0, 0 ), aScaledBitamp );
+
+    Invalidate( INVALIDATE_CHILDREN ); // trigger re-render
+}
+
+// ------------------ quick hack of an openGL equivalent ------------------
+
+void MyOpenGLWorkWindow::Paint( const Rectangle& )
+{
+    std::cerr << "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
+    OpenGLContext& aCtx = mpOpenGLWindow->getContext();
+    aCtx.requestLegacyContext();
+    CHECK_GL_ERROR();
+
+    if (!mbHaveTexture)
+        LoadTexture();
+
+    aCtx.setWinSize( Size( WIDTH, HEIGHT ) );
+    CHECK_GL_ERROR();
+
+    aCtx.makeCurrent();
+    CHECK_GL_ERROR();
+
+    glViewport( 0, 0, WIDTH, HEIGHT );
+    CHECK_GL_ERROR();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    CHECK_GL_ERROR();
+
+    glBindTexture(GL_TEXTURE_2D, mnTextureName);
+    CHECK_GL_ERROR();
+
+    glPushMatrix();
+    CHECK_GL_ERROR();
+
+    glTranslatef(-1, -1, 0);
+    glScalef(2, 2, 2);
+
+    if (mnTextureAspect >= ((float) WIDTH) / HEIGHT)
+        glScalef(1, 1/mnTextureAspect, 1);
+    else
+        glScalef(1*mnTextureAspect, 1, 1);
+    CHECK_GL_ERROR();
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0);
+    glVertex3f(0, 0, 0);
+    glTexCoord2f(0, 1);
+    glVertex3f(0, 1, 0);
+    glTexCoord2f(1, 1);
+    glVertex3f(1, 1, 0);
+    glTexCoord2f(1, 0);
+    glVertex3f(1, 0, 0);
+    glEnd();
+    CHECK_GL_ERROR();
+
+    glPopMatrix();
+    CHECK_GL_ERROR();
+
+    aCtx.swapBuffers();
+    CHECK_GL_ERROR();
+
+    Invalidate( INVALIDATE_CHILDREN ); // trigger re-render
+}
+
+// ------------------ bootstrapping foo ------------------
 
 MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
@@ -94,12 +177,6 @@ MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
     EnableInput();
 }
 
-void MyWorkWindow::Paint( const Rectangle& rRect )
-{
-    std::cerr << "==> Paint! " << nPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
-    WorkWindow::Paint( rRect );
-    Invalidate( INVALIDATE_CHILDREN );
-}
 
 MyOpenGLWorkWindow::MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
     MyWorkWindow( pParent, nWinStyle )
@@ -109,6 +186,12 @@ MyOpenGLWorkWindow::MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle 
     mpOpenGLWindow->SetSizePixel( Size( WIDTH, HEIGHT ) );
     mpOpenGLWindow->Show();
     mpOpenGLWindow->EnableInput();
+}
+
+void MyOpenGLWorkWindow::LoadGraphic(const OUString &sImageFile )
+{
+    MyWorkWindow::LoadGraphic( sImageFile );
+    // do more one-off work here ? but needs an OpenGL context ...
 }
 
 void MyOpenGLWorkWindow::LoadTexture()
@@ -197,64 +280,6 @@ void MyOpenGLWorkWindow::LoadTexture()
     delete[] buffer;
 }
 
-void MyOpenGLWorkWindow::Paint( const Rectangle& )
-{
-    std::cerr << "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
-    OpenGLContext& aCtx = mpOpenGLWindow->getContext();
-    aCtx.requestLegacyContext();
-    CHECK_GL_ERROR();
-
-    if (!mbHaveTexture)
-        LoadTexture();
-
-    aCtx.setWinSize( Size( WIDTH, HEIGHT ) );
-    CHECK_GL_ERROR();
-
-    aCtx.makeCurrent();
-    CHECK_GL_ERROR();
-
-    glViewport( 0, 0, WIDTH, HEIGHT );
-    CHECK_GL_ERROR();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    CHECK_GL_ERROR();
-
-    glBindTexture(GL_TEXTURE_2D, mnTextureName);
-    CHECK_GL_ERROR();
-
-    glPushMatrix();
-    CHECK_GL_ERROR();
-
-    glTranslatef(-1, -1, 0);
-    glScalef(2, 2, 2);
-
-    if (mnTextureAspect >= ((float) WIDTH) / HEIGHT)
-        glScalef(1, 1/mnTextureAspect, 1);
-    else
-        glScalef(1*mnTextureAspect, 1, 1);
-    CHECK_GL_ERROR();
-
-    glBegin(GL_QUADS);
-    glTexCoord2f(0, 0);
-    glVertex3f(0, 0, 0);
-    glTexCoord2f(0, 1);
-    glVertex3f(0, 1, 0);
-    glTexCoord2f(1, 1);
-    glVertex3f(1, 1, 0);
-    glTexCoord2f(1, 0);
-    glVertex3f(1, 0, 0);
-    glEnd();
-    CHECK_GL_ERROR();
-
-    glPopMatrix();
-    CHECK_GL_ERROR();
-
-    aCtx.swapBuffers();
-    CHECK_GL_ERROR();
-
-    Invalidate( INVALIDATE_CHILDREN );
-}
-
 void MyWorkWindow::Resize()
 {
     SAL_INFO("vcl.icontest", "Resize " << GetSizePixel());
@@ -264,15 +289,14 @@ class IconTestApp : public Application
 {
 public:
     virtual void Init() SAL_OVERRIDE;
-    virtual int Main() SAL_OVERRIDE;
-
+    virtual int  Main() SAL_OVERRIDE;
     IconTestApp() : nRet(EXIT_SUCCESS) {};
 
 private:
     int nRet;
 
-    void DoItWithVcl(const OUString& sImageFile);
-    void DoItWithOpenGL(const OUString& sImageFile);
+    MyWorkWindow * CreateWithVcl();
+    MyWorkWindow * CreateWithOpenGL();
 };
 
 void IconTestApp::Init()
@@ -303,98 +327,80 @@ int IconTestApp::Main()
         return EXIT_FAILURE;
     }
     OUString sImageFile( GetCommandLineParam( 1 ) );
+    MyWorkWindow *pWindow;
+
     if (GetCommandLineParam(0) == "vcl")
-        DoItWithVcl( sImageFile );
+        pWindow = CreateWithVcl();
     else
-        DoItWithOpenGL( sImageFile );
+        pWindow = CreateWithOpenGL();
+
+    if (!pWindow)
+        return EXIT_FAILURE;
+
+    pWindow->LoadGraphic( sImageFile );
+
+    pWindow->Hide();
+    pWindow->Show();
+
+    Execute();
 
     return nRet;
 }
 
-void IconTestApp::DoItWithVcl( const OUString& sImageFile)
+void MyWorkWindow::LoadGraphic( const OUString &sImageFile )
 {
     try
     {
-        MyWorkWindow *pWindow = new MyWorkWindow( NULL, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
-
-        pWindow->SetText(OUString("VCL Image Test"));
-
         SvFileStream aFileStream( sImageFile, STREAM_READ );
         GraphicFilter aGraphicFilter(false);
-        Graphic aGraphic;
-        if (aGraphicFilter.ImportGraphic(aGraphic, sImageFile, aFileStream) != 0)
+        if (aGraphicFilter.ImportGraphic(maGraphic, sImageFile, aFileStream) != 0)
         {
             SAL_WARN("vcl.icontest", "Could not import image '" << sImageFile << "'");
             return;
         }
-        Size aGraphicSize( aGraphic.GetSizePixel() );
+        // destination size
+        Size aGraphicSize( maGraphic.GetSizePixel() );
         float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
-        SAL_INFO("vcl.icontest", sImageFile << ": size: " << aGraphicSize << " aspect: " << aspect);
-        Size aSize;
+        std::cerr << "icontest" << sImageFile << ": size: " << aGraphicSize << " aspect: " << aspect;
         if( aspect >= ((float) WIDTH) / HEIGHT )
-            aSize = Size( WIDTH, HEIGHT/aspect );
+            maDestinationSize = Size( WIDTH, HEIGHT/aspect );
         else
-            aSize = Size( WIDTH * aspect, HEIGHT );
-        GraphicConversionParameters aConv( aSize );
-        Bitmap *pBitmap = new Bitmap( aGraphic.GetBitmap( aConv ) );
-
-        FixedBitmap *pFixedBitmap = new FixedBitmap( pWindow );
-        pFixedBitmap->SetBitmap( *pBitmap );
-        pFixedBitmap->SetSizePixel( aSize );
-        pFixedBitmap->SetPosPixel( Point( 0, 0 ) );
-        pFixedBitmap->Show();
-
-        pWindow->Hide();
-        pWindow->Show();
-
-        Execute();
+            maDestinationSize = Size( WIDTH * aspect, HEIGHT );
     }
     catch (const uno::Exception &e)
     {
         fprintf(stderr, "fatal error: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
-        nRet = EXIT_FAILURE;
     }
     catch (const std::exception &e)
     {
         fprintf(stderr, "fatal error: %s\n", e.what());
-        nRet = EXIT_FAILURE;
     }
 }
 
-void IconTestApp::DoItWithOpenGL(const OUString& sImageFile)
+#define WINDOW_MASK ( WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN )
+
+MyWorkWindow *IconTestApp::CreateWithVcl()
 {
-    try
-    {
-        MyOpenGLWorkWindow *pWindow = new MyOpenGLWorkWindow( NULL, WB_APP | WB_STDWORK | WB_SIZEABLE | WB_CLOSEABLE | WB_CLIPCHILDREN );
+    MyWorkWindow *pWindow;
 
-        pWindow->SetText(OUString("OpenGL Image Test"));
+    pWindow = new MyWorkWindow( NULL, WINDOW_MASK );
+    pWindow->SetText(OUString("VCL Image Test"));
 
-        SvFileStream aFileStream( sImageFile, STREAM_READ );
-        GraphicFilter aGraphicFilter(false);
-        if (aGraphicFilter.ImportGraphic(pWindow->maGraphic, sImageFile, aFileStream) != 0)
-        {
-            SAL_WARN("vcl.icontest", "Could not import image '" << sImageFile << "'");
-            return;
-        }
-        Size aGraphicSize( pWindow->maGraphic.GetSizePixel() );
-        float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
-        SAL_INFO("vcl.icontest", sImageFile << ": size: " << aGraphicSize << " aspect: " << aspect);
+    pWindow->EnableChildTransparentMode( false );
+    pWindow->SetParentClipMode( 0 );
+    pWindow->SetPaintTransparent( false );
 
-        pWindow->Hide();
-        pWindow->Show();
+    return pWindow;
+}
 
-        Execute();
-    }
-    catch (const uno::Exception &e)
-    {
-        fprintf(stderr, "fatal error: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
-        nRet = EXIT_FAILURE;
-    }
-    catch (const std::exception &e)
-    {
-        fprintf(stderr, "fatal error: %s\n", e.what());
-        nRet = EXIT_FAILURE;
-    }
+MyWorkWindow * IconTestApp::CreateWithOpenGL()
+{
+    MyOpenGLWorkWindow *pWindow;
+
+    pWindow = new MyOpenGLWorkWindow( NULL, WINDOW_MASK );
+    pWindow->SetText(OUString("OpenGL Image Test"));
+
+    return pWindow;
 }
 
 void vclmain::createApplication()
