@@ -708,8 +708,8 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
 
                     OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
                     SwContentAtPos aCnt( SwContentAtPos::SW_OUTLINE );
-                    m_pWrtShell->GetContentAtPos( aPos, aCnt );
-                    if( !aCnt.sStr.isEmpty() )
+                    bool bSuccess = m_pWrtShell->GetContentAtPos(aPos, aCnt);
+                    if (bSuccess && !aCnt.sStr.isEmpty())
                     {
                         sPageStr += "  - ";
                         sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
