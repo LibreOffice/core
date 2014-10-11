@@ -48,15 +48,21 @@ bool XMLDurationPropertyHdl::importXML(
     const SvXMLUnitConverter& ) const
 {
     util::Duration aDuration;
-    ::sax::Converter::convertDuration(aDuration,  rStrImpValue);
 
-    const double fSeconds = ((aDuration.Days * 24 + aDuration.Hours) * 60
-                             + aDuration.Minutes) * 60
-                             + aDuration.Seconds
-                             + aDuration.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerSec);
-    rValue <<= fSeconds;
+    if (::sax::Converter::convertDuration(aDuration,  rStrImpValue))
+    {
+        const double fSeconds = ((aDuration.Days * 24 + aDuration.Hours) * 60
+                                 + aDuration.Minutes) * 60
+                                 + aDuration.Seconds
+                                 + aDuration.NanoSeconds / static_cast<double>(::tools::Time::nanoSecPerSec);
+        rValue <<= fSeconds;
 
-    return true;
+        return true;
+    }
+
+    SAL_WARN_IF(!rStrImpValue.isEmpty(), "xmloff", "Invalid duration: " << rStrImpValue);
+
+    return false;
 }
 
 bool XMLDurationPropertyHdl::exportXML(
