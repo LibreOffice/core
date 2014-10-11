@@ -572,9 +572,9 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
     Polygon* pPoly;
-    sal_uInt16   nPolyCount;
+    sal_uInt16 nPolyCount(0);
 
-    // read number of polygons
+    // Read number of polygons
     rIStream.ReadUInt16( nPolyCount );
 
     if( nPolyCount )
@@ -621,7 +621,7 @@ void PolyPolygon::Read( SvStream& rIStream )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "PolyPolygon::>> - Solar-Version not set on rIStream" );
 
     Polygon* pPoly;
-    sal_uInt16   nPolyCount;
+    sal_uInt16 nPolyCount(0);
 
     // Read number of polygons
     rIStream.ReadUInt16( nPolyCount );
