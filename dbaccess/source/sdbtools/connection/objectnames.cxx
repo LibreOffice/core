@@ -368,8 +368,6 @@ namespace sdbtools
         :ConnectionDependentComponent( _rContext )
         ,m_pImpl( new ObjectNames_Impl )
     {
-        if ( !_rxConnection.is() )
-            throw NullPointerException();
         setWeakConnection( _rxConnection );
     }
 
