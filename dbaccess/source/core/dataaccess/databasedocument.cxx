@@ -1088,6 +1088,18 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         if ( bIsInitializationProcess )
             impl_setInitialized();
     }
+    catch( const IOException& )
+    {
+        if ( !bIsInitializationProcess )
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
+        throw;
+    }
+    catch( const RuntimeException& )
+    {
+        if ( !bIsInitializationProcess )
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
+        throw;
+    }
     catch( const Exception& )
     {
         Any aError = ::cppu::getCaughtException();
@@ -1095,14 +1107,6 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
         // notify the failure
         if ( !bIsInitializationProcess )
             m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
-
-        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
-            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
-            )
-        {
-            // allowed to leave
-            throw;
-        }
 
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
