@@ -22,9 +22,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -229,10 +230,9 @@ public class SQLExecution {
             execute(sqlCommand.get(i), sqlOutput, update);
             // merge output with input
             if (!update && mergeOutputIntoInput) {
-                Iterator<String> keys = sqlOutput.keySet().iterator();
-                while(keys.hasNext()) {
-                    String key = keys.next();
-                    String[]val = sqlOutput.get(key);
+                for (Map.Entry<String, String[]> entry : sqlOutput.entrySet()) {
+                    String key = entry.getKey();
+                    String[] val = entry.getValue();
                     if (val != null && val.length != 0) {
                         if (val.length == 1)
                             sqlInput.put(key, val[0]);
