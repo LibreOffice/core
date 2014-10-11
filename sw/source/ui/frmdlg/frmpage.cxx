@@ -2567,7 +2567,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
         m_pBmpWin->MirrorVert(false);
 
         Graphic aGraphic;
-        GraphicFilter::LoadGraphic( pGrfDlg->GetPath(), aEmptyOUStr, aGraphic );
+        (void)GraphicFilter::LoadGraphic(pGrfDlg->GetPath(), OUString(), aGraphic);
         m_pBmpWin->SetGraphic(aGraphic);
 
         bool bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||
