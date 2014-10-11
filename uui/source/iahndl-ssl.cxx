@@ -231,9 +231,11 @@ executeSSLWarnDialog(
             }
 
             OUString aTitle;
-            ErrorResource(aResId).getString(
-                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle);
-            xDialog->SetText( aTitle );
+            if (ErrorResource(aResId).getString(
+                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle))
+            {
+                xDialog->SetText(aTitle);
+            }
         }
 
         return static_cast<bool>(xDialog->Execute());
