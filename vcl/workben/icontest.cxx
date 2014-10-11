@@ -113,19 +113,25 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
 {
     std::cerr << "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
     OpenGLContext& aCtx = mpOpenGLWindow->getContext();
+    aCtx.makeCurrent();
+    CHECK_GL_ERROR();
     aCtx.requestLegacyContext();
     CHECK_GL_ERROR();
 
     if (!mbHaveTexture)
         LoadTexture();
 
-    aCtx.setWinSize( Size( WIDTH, HEIGHT ) );
-    CHECK_GL_ERROR();
-
-    aCtx.makeCurrent();
+    // curious - if this is WIDTH, HEIGHT - I see nothing ...
+    aCtx.setWinSize( Size( WIDTH+1, HEIGHT+1 ) );
     CHECK_GL_ERROR();
 
     glViewport( 0, 0, WIDTH, HEIGHT );
+    CHECK_GL_ERROR();
+
+    glClearDepth(1.0f);
+    CHECK_GL_ERROR();
+
+    glClearColor (1.0, 0.5, 0.5, 1.0);
     CHECK_GL_ERROR();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -182,10 +188,15 @@ MyOpenGLWorkWindow::MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle 
     MyWorkWindow( pParent, nWinStyle )
 {
     mbHaveTexture = false;
+
     mpOpenGLWindow = new OpenGLWindow( this );
     mpOpenGLWindow->SetSizePixel( Size( WIDTH, HEIGHT ) );
     mpOpenGLWindow->Show();
     mpOpenGLWindow->EnableInput();
+
+    mpOpenGLWindow->EnableChildTransparentMode( false );
+    mpOpenGLWindow->SetParentClipMode( 0 );
+    mpOpenGLWindow->SetPaintTransparent( false );
 }
 
 void MyOpenGLWorkWindow::LoadGraphic(const OUString &sImageFile )
@@ -226,24 +237,12 @@ void MyOpenGLWorkWindow::LoadTexture()
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTexSize);
     CHECK_GL_ERROR();
 
-    SAL_INFO("vcl.icontest", "GL_MAX_TEXTURE_SIZE: " << maxTexSize);
+    std::cerr << "GL_MAX_TEXTURE_SIZE: " << maxTexSize << std::endl;
 
     if (aBitmapSize.Width() > maxTexSize || aBitmapSize.Height() > maxTexSize)
     {
-        Size aNewSize(aBitmapSize);
-        if (aNewSize.Width() > maxTexSize)
-        {
-            aNewSize.setHeight(aNewSize.Height() * (((float) maxTexSize) / aNewSize.Width()));
-            aNewSize.setWidth(maxTexSize);
-        }
-        if (aNewSize.Height() > maxTexSize)
-        {
-            aNewSize.setWidth(aNewSize.Width() * (((float) maxTexSize) / aNewSize.Height()));
-            aNewSize.setHeight(maxTexSize);
-        }
-        SAL_INFO("vcl.icontest", "Scaling to " << aNewSize);
-        aBitmap.Scale(aNewSize, BMP_SCALE_SUPER);
-        aBitmapSize = aNewSize;
+        std::cerr << "Failing - over-large image & tiny text size limit" << std::endl;
+        assert(false);
     }
 
     SAL_INFO("vcl.icontest", "GLEW_ARB_texture_non_power_of_two: " << (GLEW_ARB_texture_non_power_of_two ? "YES" : "NO"));
@@ -266,7 +265,7 @@ void MyOpenGLWorkWindow::LoadTexture()
         mnTextureAspect = 1;
     }
 
-    SAL_INFO("vcl.icontest", "Texture size: " << texWidth << "x" << texHeight);
+    std::cerr << "Texture size: " << texWidth << "x" << texHeight << std::endl;
 
     GLubyte *buffer = new GLubyte[texWidth * texHeight * 4];
     OpenGLHelper::ConvertBitmapExToRGBATextureBuffer( aBitmap, buffer, true );
