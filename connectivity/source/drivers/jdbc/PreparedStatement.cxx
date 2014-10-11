@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    return callIntMethod("executeUpdate",mID);
+    return callIntMethod_Throw("executeUpdate", mID);
 }
 
 

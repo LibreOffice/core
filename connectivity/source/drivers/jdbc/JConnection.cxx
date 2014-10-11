@@ -401,13 +401,13 @@ sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  ) throw(SQLException, Run
 void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethodWithBoolArg("setReadOnly",mID,readOnly);
+    callVoidMethodWithBoolArg_Throw("setReadOnly", mID, readOnly);
 }
 
 void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethodWithBoolArg("setAutoCommit",mID,autoCommit);
+    callVoidMethodWithBoolArg_Throw("setAutoCommit", mID, autoCommit);
 }
 
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
@@ -437,7 +437,7 @@ sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLExc
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
     static jmethodID mID(NULL);
-    return callIntMethod("getTransactionIsolation",mID);
+    return callIntMethod_Throw("getTransactionIsolation", mID);
 }
 
 void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException, std::exception)
@@ -446,7 +446,7 @@ void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) th
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg("setTransactionIsolation",mID,level);
+    callVoidMethodWithIntArg_Throw("setTransactionIsolation", mID, level);
 }
 
 Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)

@@ -49,7 +49,7 @@ OUString SAL_CALL java_sql_Array::getBaseTypeName(  ) throw(::com::sun::star::sd
 sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethod("getBaseType",mID);
+    return callIntMethod_Throw("getBaseType", mID);
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL java_sql_Array::getArray( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)

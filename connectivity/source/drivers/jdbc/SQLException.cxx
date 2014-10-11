@@ -84,7 +84,7 @@ OUString java_sql_SQLException_BASE::getSQLState() const
 sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
 {
     static jmethodID mID(NULL);
-    return callIntMethod("getErrorCode",mID);
+    return callIntMethod_Throw("getErrorCode", mID);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

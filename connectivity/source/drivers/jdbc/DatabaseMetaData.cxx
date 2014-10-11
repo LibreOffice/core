@@ -241,73 +241,73 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getVersionColumns(
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxBinaryLiteralLength", mID );
+    return impl_callIntMethod("getMaxBinaryLiteralLength", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxRowSize", mID );
+    return impl_callIntMethod("getMaxRowSize", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxCatalogNameLength", mID );
+    return impl_callIntMethod("getMaxCatalogNameLength", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxCharLiteralLength", mID );
+    return impl_callIntMethod("getMaxCharLiteralLength", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxColumnNameLength", mID );
+    return impl_callIntMethod("getMaxColumnNameLength", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxColumnsInIndex", mID );
+    return impl_callIntMethod("getMaxColumnsInIndex", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxCursorNameLength", mID );
+    return impl_callIntMethod("getMaxCursorNameLength", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxConnections", mID );
+    return impl_callIntMethod("getMaxConnections", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxColumnsInTable", mID );
+    return impl_callIntMethod("getMaxColumnsInTable", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxStatementLength", mID );
+    return impl_callIntMethod("getMaxStatementLength", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxTableNameLength", mID );
+    return impl_callIntMethod("getMaxTableNameLength", mID);
 }
 
 sal_Int32 java_sql_DatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxTablesInSelect", mID );
+    return impl_callIntMethod("getMaxTablesInSelect", mID);
 }
 
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getExportedKeys(
@@ -567,7 +567,7 @@ OUString java_sql_DatabaseMetaData::impl_callStringMethod( const char* _pMethodN
 sal_Int32 java_sql_DatabaseMetaData::impl_callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID )
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, _pMethodName );
-    sal_Int32 out( (sal_Int32)callIntMethod(_pMethodName,_inout_MethodID) );
+    sal_Int32 out( (sal_Int32)callIntMethod_Throw(_pMethodName,_inout_MethodID) );
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, (sal_Int32)out );
     return out;
 }
@@ -722,7 +722,7 @@ bool java_sql_DatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxIndexLength", mID );
+    return impl_callIntMethod("getMaxIndexLength", mID);
 }
 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException, std::exception)
@@ -896,19 +896,19 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTableTypes(  ) th
 sal_Int32 java_sql_DatabaseMetaData::impl_getMaxStatements_throw(  )
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxStatements", mID );
+    return impl_callIntMethod("getMaxStatements", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxProcedureNameLength", mID );
+    return impl_callIntMethod("getMaxProcedureNameLength", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxSchemaNameLength", mID );
+    return impl_callIntMethod("getMaxSchemaNameLength", mID);
 }
 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1215,19 +1215,19 @@ OUString SAL_CALL java_sql_DatabaseMetaData::getSchemaTerm(  ) throw(SQLExceptio
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getDriverMajorVersion", mID );
+    return impl_callIntMethod("getDriverMajorVersion", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDefaultTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getDefaultTransactionIsolation", mID );
+    return impl_callIntMethod("getDefaultTransactionIsolation", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getDriverMinorVersion", mID );
+    return impl_callIntMethod("getDriverMinorVersion", mID);
 }
 
 OUString SAL_CALL java_sql_DatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1299,25 +1299,25 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsLimitedOuterJoins(  ) throw
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxColumnsInGroupBy", mID );
+    return impl_callIntMethod("getMaxColumnsInGroupBy", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxColumnsInOrderBy", mID );
+    return impl_callIntMethod("getMaxColumnsInOrderBy", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxColumnsInSelect", mID );
+    return impl_callIntMethod("getMaxColumnsInSelect", mID);
 }
 
 sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return impl_callIntMethod( "getMaxUserNameLength", mID );
+    return impl_callIntMethod("getMaxUserNameLength", mID);
 }
 
 sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetType( sal_Int32 setType ) throw(SQLException, RuntimeException, std::exception)

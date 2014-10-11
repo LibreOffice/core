@@ -225,7 +225,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex ) throw(SQL
 sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethod("getRow",mID);
+    return callIntMethod_Throw("getRow", mID);
 }
 
 
@@ -574,7 +574,7 @@ void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  ) throw(::com::sun::star::s
 void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg("updateNull",mID,columnIndex);
+    callVoidMethodWithIntArg_Throw("updateNull", mID, columnIndex);
 }
 
 
@@ -824,25 +824,25 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
 sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     static jmethodID mID(NULL);
-    return callIntMethod("getConcurrency",mID,true);
+    return callIntMethod_Nothrow("getConcurrency", mID);
 }
 
 sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     static jmethodID mID(NULL);
-    return callIntMethod("getType",mID,true);
+    return callIntMethod_Nothrow("getType",mID);
 }
 
 sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     static jmethodID mID(NULL);
-    return callIntMethod("getFetchDirection",mID,true);
+    return callIntMethod_Nothrow("getFetchDirection", mID);
 }
 
 sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     static jmethodID mID(NULL);
-    return callIntMethod("getFetchSize",mID,true);
+    return callIntMethod_Nothrow("getFetchSize", mID);
 }
 
 OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -855,7 +855,7 @@ OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc:
 void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg("setFetchDirection",mID,_par0,true);
+    callVoidMethodWithIntArg_Nothrow("setFetchDirection", mID, _par0);
 }
 
 void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
@@ -867,7 +867,7 @@ void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeExce
 void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg("setFetchSize",mID,_par0,true);
+    callVoidMethodWithIntArg_Nothrow("setFetchSize", mID, _par0);
 }
 
 ::cppu::IPropertyArrayHelper* java_sql_ResultSet::createArrayHelper( ) const

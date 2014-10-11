@@ -74,7 +74,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLExcep
     if ( m_nColumnCount == -1 )
     {
         static jmethodID mID(NULL);
-        m_nColumnCount = callIntMethod("getColumnCount",mID);
+        m_nColumnCount = callIntMethod_Throw("getColumnCount", mID);
     } // if ( m_nColumnCount == -1 )
     return m_nColumnCount;
 

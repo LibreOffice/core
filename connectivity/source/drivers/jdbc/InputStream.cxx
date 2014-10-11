@@ -68,7 +68,7 @@ void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::c
 sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethod("available",mID);
+    return callIntMethod_Throw("available", mID);
 }
 void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
