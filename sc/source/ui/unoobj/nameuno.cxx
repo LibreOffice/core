@@ -925,7 +925,7 @@ ScRangeName* ScLocalNamedRangesObj::GetRangeName_Impl()
 SCTAB ScLocalNamedRangesObj::GetTab_Impl()
 {
     SCTAB nTab;
-    pDocShell->GetDocument().GetTable(mxSheet->getName(), nTab);
+    (void)pDocShell->GetDocument().GetTable(mxSheet->getName(), nTab);
     return nTab;
 }
 
