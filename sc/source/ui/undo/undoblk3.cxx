@@ -196,9 +196,7 @@ void ScUndoDeleteContents::Undo()
     DoChange( true );
     EndUndo();
 
-
     HelperNotifyChanges::NotifyIfChangesListeners(*pDocShell, aRange);
-//  pDocShell->PostDataChanged();
 }
 
 void ScUndoDeleteContents::Redo()
