@@ -532,8 +532,14 @@ void ODbaseTable::construct()
 
         sal_Size nFileSize = lcl_getFileSize(*m_pFileStream);
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
-        if ( m_aHeader.db_anz == 0 && ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng) > 0) // seems to be empty or someone wrote bullshit into the dbase file
-            m_aHeader.db_anz = ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng);
+        // seems to be empty or someone wrote bullshit into the dbase file
+        // try and recover if m_aHeader.db_slng is sane
+        if (m_aHeader.db_anz == 0 && m_aHeader.db_slng)
+        {
+            sal_Size nRecords = (nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng;
+            if (nRecords > 0)
+                m_aHeader.db_anz = nRecords;
+        }
 
         // Buffersize dependent on the file size
         m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
