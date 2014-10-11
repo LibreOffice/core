@@ -1912,7 +1912,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const OUS
         }
         if( IsXMLToken( rLocalName, XML_TYPE ) )
         {
-            SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
+            (void)SvXMLUnitConverter::convertEnum( mnType, rValue, aXML_ConnectionKind_EnumMap );
             return;
         }
         // #121965# draw:transform may be used in ODF1.2, e.g. exports from MS seem to use these
