@@ -87,9 +87,14 @@ public class GlobalFile {
   */
   public static void saveStringToFile(String inStr, String fileStr) throws Exception{
     new File(new File(fileStr).getParent()).mkdirs();
-    FileOutputStream pspOutputStream = new FileOutputStream(new File(fileStr));
-    pspOutputStream.write(inStr.getBytes());
-    pspOutputStream.close();
+    FileOutputStream pspOutputStream = null;
+    try {
+        pspOutputStream = new FileOutputStream(new File(fileStr));
+        pspOutputStream.write(inStr.getBytes());
+    } finally {
+        if (pspOutputStream != null)
+            pspOutputStream.close();
+    }
   }
 
 /**
@@ -100,12 +105,18 @@ public class GlobalFile {
   */
   public static String getStringFromFile(String fileStr) throws Exception {
     String getStr = null;
-    FileInputStream pspInputStream = new FileInputStream(fileStr);
-    byte[] pspFileBuffer = new byte[pspInputStream.available()];
-    pspInputStream.read(pspFileBuffer);
-    pspInputStream.close();
-    getStr = new String(pspFileBuffer);
-    return(getStr);
+    FileInputStream pspInputStream = null;
+    try {
+        pspInputStream = new FileInputStream(fileStr);
+        byte[] pspFileBuffer = new byte[pspInputStream.available()];
+        pspInputStream.read(pspFileBuffer);
+
+        getStr = new String(pspFileBuffer);
+    } finally {
+        if (pspInputStream != null)
+            pspInputStream.close();
+    }
+    return getStr;
   }
 
 /**
