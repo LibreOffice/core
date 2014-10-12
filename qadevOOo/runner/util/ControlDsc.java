@@ -29,7 +29,7 @@ import com.sun.star.uno.UnoRuntime;
 public class ControlDsc extends InstDescr {
 
     private String name = null;
-    final String ifcName = "com.sun.star.form.XFormComponent";
+    static final String ifcName = "com.sun.star.form.XFormComponent";
     String service = "com.sun.star.form.component.CommandButton";
 
     public ControlDsc( String kind ) {
