@@ -234,12 +234,10 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
 
     // first, find the shape type
     int nType = -1;
-    std::vector< std::pair<OUString, OUString> >::const_iterator const iter(
-        std::find_if(rShape.aProperties.begin(),
-                     rShape.aProperties.end(),
-                     boost::bind(&OUString::equals,
-                                 boost::bind(&std::pair<OUString, OUString>::first, _1),
-                                 OUString("shapeType"))));
+    auto iter = std::find_if(rShape.aProperties.begin(), rShape.aProperties.end(), [](std::pair<OUString, OUString> aProperty)
+    {
+        return aProperty.first == "shapeType";
+    });
 
     if (iter == rShape.aProperties.end())
     {
