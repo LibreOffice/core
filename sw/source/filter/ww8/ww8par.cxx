@@ -1847,8 +1847,8 @@ void SwWW8ImplReader::ImportDop()
 
     // #i78951# - remember the unknown compatibility options
     // so as to export them out
-    rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions1( pWDop->GetCompatabilityOptions());
-    rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions2( pWDop->GetCompatabilityOptions2());
+    rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions1( pWDop->GetCompatibilityOptions());
+    rDoc.getIDocumentSettingAccess().Setn32DummyCompatibilityOptions2( pWDop->GetCompatibilityOptions2());
 
     // The distance between two paragraphs is the sum of the bottom distance of
     // the first paragraph and the top distance of the second one
@@ -4633,7 +4633,7 @@ void wwSectionManager::InsertSegments()
             // The last section if continuous is always unbalanced
             if (pRet)
             {
-                // Set the columns to be UnBalanced if that compatability option is set
+                // Set the columns to be UnBalanced if that compatibility option is set
                 if (mrReader.pWDop->fNoColumnBalance)
                     pRet->SetFmtAttr(SwFmtNoBalancedColumns(true));
                 else

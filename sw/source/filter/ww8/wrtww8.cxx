@@ -323,9 +323,9 @@ static void WriteDop( WW8Export& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
 
-    // i#78951#, store the value of unknown compatability options
-    rDop.SetCompatabilityOptions( rWrt.pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions1());
-    rDop.SetCompatabilityOptions2( rWrt.pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions2());
+    // i#78951#, store the value of unknown compatibility options
+    rDop.SetCompatibilityOptions( rWrt.pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions1());
+    rDop.SetCompatibilityOptions2( rWrt.pDoc->getIDocumentSettingAccess().Getn32DummyCompatibilityOptions2());
 
     rDop.fNoLeading = !rWrt.pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::ADD_EXT_LEADING);
     rDop.fUsePrinterMetrics = !rWrt.pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);

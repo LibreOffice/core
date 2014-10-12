@@ -773,7 +773,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
                 rPropNameSupplier.GetName( PROP_SEPARATOR_LINE_IS_ON ),
                 uno::makeAny( m_bSeparatorLineIsOn ));
         xColumnContainer->setPropertyValue( sTextColumns, uno::makeAny( xColumns ) );
-        // Set the columns to be unbalanced if that compatability option is set or this is the last section.
+        // Set the columns to be unbalanced if that compatibility option is set or this is the last section.
         if (rDM_Impl.GetSettingsTable()->GetNoColumnBalance() || rDM_Impl.GetIsLastSectionGroup())
             xColumnContainer->setPropertyValue("DontBalanceTextColumns", uno::makeAny(true));
     }

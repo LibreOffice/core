@@ -171,7 +171,7 @@ public:
     virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) SAL_OVERRIDE;
 
 
-// Replace all compatability options with those from rSource.
+// Replace all compatibility options with those from rSource.
     void ReplaceCompatibilityOptions(const DocumentSettingManager& rSource);
 
     sal_uInt32 Getn32DummyCompatibilityOptions1() const SAL_OVERRIDE;

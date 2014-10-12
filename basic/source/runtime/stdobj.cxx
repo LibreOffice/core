@@ -37,7 +37,7 @@
 // allow us space for a flag to blacklist some functions in vba mode
 
 #define _ARGSMASK   0x003F  // 63 Arguments
-#define _COMPTMASK  0x00C0  // COMPATABILITY mask
+#define _COMPTMASK  0x00C0  // COMPATIBILITY mask
 #define _COMPATONLY 0x0080  // procedure is visible in vba mode only
 #define _NORMONLY   0x0040  // procedure is visible in normal mode only
 

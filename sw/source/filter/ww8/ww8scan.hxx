@@ -1548,7 +1548,7 @@ public:
     bool        fWriteReservation : 1;
     bool        fLockRev : 1;       //   when 1, the current revision marking state is locked
     bool        fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
-    //    compatability options
+    //    compatibility options
     bool       copts_fNoTabForInd : 1;          //    when 1, don't add automatic tab stops for hanging indent
     bool       copts_fNoSpaceRaiseLower : 1;        //    when 1, don't add extra space for raised or lowered characters
     bool       copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
@@ -1604,7 +1604,7 @@ public:
     /*
         bei nFib >= 103 gehts weiter:
     */
-    bool       fNoTabForInd : 1;                      // see above in compatability options
+    bool       fNoTabForInd : 1;                      // see above in compatibility options
     bool       fNoSpaceRaiseLower : 1;                // see above
     bool       fSupressSpbfAfterPageBreak : 1;        // see above
     bool       fWrapTrailSpaces : 1;                  // see above
@@ -1616,26 +1616,26 @@ public:
     bool       fTransparentMetafiles : 1;             // see above
     bool       fShowBreaksInFrames : 1;               // see above
     bool       fSwapBordersFacingPgs : 1;             // see above
-    bool       fCompatabilityOptions_Unknown1_13 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_13 : 1; // #i78591#
     bool       fExpShRtn : 1;                         // #i78591# and #i56856#
-    bool       fCompatabilityOptions_Unknown1_15 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_16 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_15 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_16 : 1; // #i78591#
     bool       fSuppressTopSpacingMac5 : 1;           // Suppress extra line spacing at top
                                                       // of page like MacWord 5.x
     bool       fTruncDxaExpand : 1;                    // Expand/Condense by whole number of points
     bool       fPrintBodyBeforeHdr : 1;               // Print body text before header/footer
     bool       fNoLeading : 1;                        // Don't add extra spacebetween rows of text
-    bool       fCompatabilityOptions_Unknown1_21 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_21 : 1; // #i78591#
     bool       fMWSmallCaps : 1;                     // Use larger small caps like MacWord 5.x
-    bool       fCompatabilityOptions_Unknown1_23 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_24 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_25 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_26 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_27 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_28 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_29 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_30 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown1_31 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_23 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_24 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_25 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_26 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_27 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_28 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_29 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_30 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown1_31 : 1; // #i78591#
     bool       fUsePrinterMetrics : 1;                //The magic option
 
     // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
@@ -1675,38 +1675,38 @@ public:
     sal_Int16 hpsZoonFontPag;
     sal_Int16 dywDispPag;
 
-    bool       fCompatabilityOptions_Unknown2_1 : 1;  // #i78591#
-    bool       fCompatabilityOptions_Unknown2_2 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_1 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_2 : 1;  // #i78591#
     bool       fDontUseHTMLAutoSpacing : 1;
-    bool       fCompatabilityOptions_Unknown2_4 : 1;  // #i78591#
-    bool       fCompatabilityOptions_Unknown2_5 : 1;  // #i78591#
-    bool       fCompatabilityOptions_Unknown2_6 : 1;  // #i78591#
-    bool       fCompatabilityOptions_Unknown2_7 : 1;  // #i78591#
-    bool       fCompatabilityOptions_Unknown2_8 : 1;  // #i78591#
-    bool       fCompatabilityOptions_Unknown2_9 : 1;  // #i78591#
-    bool       fCompatabilityOptions_Unknown2_10 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_11 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_12 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_13 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_14 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_15 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_16 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_17 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_18 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_19 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_20 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_21 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_22 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_23 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_24 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_25 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_26 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_27 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_28 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_29 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_30 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_31 : 1; // #i78591#
-    bool       fCompatabilityOptions_Unknown2_32 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_4 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_5 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_6 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_7 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_8 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_9 : 1;  // #i78591#
+    bool       fCompatibilityOptions_Unknown2_10 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_11 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_12 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_13 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_14 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_15 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_16 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_17 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_18 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_19 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_20 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_21 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_22 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_23 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_24 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_25 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_26 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_27 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_28 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_29 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_30 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_31 : 1; // #i78591#
+    bool       fCompatibilityOptions_Unknown2_32 : 1; // #i78591#
 
     sal_uInt16 fUnknown3 : 15;
     bool       fUseBackGroundInAllmodes : 1;
@@ -1735,11 +1735,11 @@ public:
     WW8Dop();
     bool Write(SvStream& rStrm, WW8Fib& rFib) const;
 
-    sal_uInt32 GetCompatabilityOptions() const;
-    void SetCompatabilityOptions(sal_uInt32 a32Bit);
+    sal_uInt32 GetCompatibilityOptions() const;
+    void SetCompatibilityOptions(sal_uInt32 a32Bit);
     // i#78591#
-    sal_uInt32 GetCompatabilityOptions2() const;
-    void SetCompatabilityOptions2(sal_uInt32 a32Bit);
+    sal_uInt32 GetCompatibilityOptions2() const;
+    void SetCompatibilityOptions2(sal_uInt32 a32Bit);
 };
 
 class WW8PLCF_HdFt

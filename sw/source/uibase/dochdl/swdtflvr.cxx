@@ -370,7 +370,7 @@ namespace
     {
         const SwDoc &rSrc = *rSrcWrtShell.GetDoc();
 
-        rDest.ReplaceCompatabilityOptions(rSrc);
+        rDest.ReplaceCompatibilityOptions(rSrc);
         rDest.ReplaceDefaults(rSrc);
 
         //It would probably make most sense here to only insert the styles used

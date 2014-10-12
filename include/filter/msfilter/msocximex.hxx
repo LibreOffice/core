@@ -74,7 +74,7 @@ public:
         com::sun::star::drawing::XShape >* /*pShape*/,
         bool /*bFloatingCtrl*/ ) {return false;}
 
-    /*begin: Backwards compatability with office 95 import, modify later*/
+    /*begin: Backwards compatibility with office 95 import, modify later*/
     const com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > & GetServiceFactory();
 protected:

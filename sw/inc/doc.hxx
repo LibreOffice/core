@@ -898,8 +898,8 @@ public:
     // Replace all property defaults with those from rSource.
     void ReplaceDefaults( const SwDoc& rSource );
 
-    // Replace all compatability options with those from rSource.
-    void ReplaceCompatabilityOptions( const SwDoc& rSource );
+    // Replace all compatibility options with those from rSource.
+    void ReplaceCompatibilityOptions( const SwDoc& rSource );
 
     /** Replace all user defined document properties with xSourceDocProps.
 

@@ -4,7 +4,7 @@
  * This is the lowest level include in unixODBC. It defines
  * the basic types required by unixODBC and is heavily based
  * upon the MS include of the same name (it has to be for
- * binary compatability between drivers developed under different
+ * binary compatibility between drivers developed under different
  * packages).
  *
  * You can include this file directly but it is almost always

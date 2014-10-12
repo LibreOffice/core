@@ -877,7 +877,7 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
         SetDefault(aNewDefaults);
 }
 
-void SwDoc::ReplaceCompatabilityOptions(const SwDoc& rSource)
+void SwDoc::ReplaceCompatibilityOptions(const SwDoc& rSource)
 {
     m_pDocumentSettingManager->ReplaceCompatibilityOptions(rSource.GetDocumentSettingManager());
 }
@@ -908,7 +908,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     pRet->ReplaceDefaults(*this);
 
-    pRet->ReplaceCompatabilityOptions(*this);
+    pRet->ReplaceCompatibilityOptions(*this);
 
     pRet->ReplaceStyles(*this);
 
