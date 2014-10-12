@@ -22,7 +22,6 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
-import java.lang.System;
 import java.util.StringTokenizer;
 import java.io.*;
 import java.util.ArrayList;
