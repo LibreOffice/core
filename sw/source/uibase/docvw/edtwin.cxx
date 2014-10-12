@@ -1187,14 +1187,14 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
         MOVE_UP_HUGE == nDir ||
         MOVE_RIGHT_HUGE == nDir ||
         MOVE_DOWN_HUGE == nDir);
-    sal_uInt16 nAnchorDir = SW_MOVE_UP;
+    SwMove nAnchorDir = SwMove::UP;
     switch(nDir)
     {
         case MOVE_LEFT_SMALL:
         case MOVE_LEFT_HUGE:
         case MOVE_LEFT_BIG:
             nX = -1;
-            nAnchorDir = SW_MOVE_LEFT;
+            nAnchorDir = SwMove::LEFT;
         break;
         case MOVE_UP_SMALL:
         case MOVE_UP_HUGE:
@@ -1205,13 +1205,13 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
         case MOVE_RIGHT_HUGE:
         case MOVE_RIGHT_BIG:
             nX = +1;
-            nAnchorDir = SW_MOVE_RIGHT;
+            nAnchorDir = SwMove::RIGHT;
         break;
         case MOVE_DOWN_SMALL:
         case MOVE_DOWN_HUGE:
         case MOVE_DOWN_BIG:
             nY = +1;
-            nAnchorDir = SW_MOVE_DOWN;
+            nAnchorDir = SwMove::DOWN;
         break;
     }
 

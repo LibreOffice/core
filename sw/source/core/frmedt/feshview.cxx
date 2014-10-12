@@ -287,7 +287,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
         ( aPt1.getY() == aPt2.getY() && ( aPt1.getX() < aPt2.getX() || \
         ( aPt1.getX() == aPt2.getX() && bOld ) ) ) )
 
-bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
+bool SwFEShell::MoveAnchor( SwMove nDir )
 {
     const SdrMarkList* pMrkList;
     if( !Imp()->GetDrawView() ||
@@ -320,17 +320,17 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
             if( pOld->IsTxtFrm() )
             {
                 switch( nDir ) {
-                    case SW_MOVE_UP: nDir = SW_MOVE_LEFT; break;
-                    case SW_MOVE_DOWN: nDir = SW_MOVE_RIGHT; break;
-                    case SW_MOVE_LEFT: nDir = SW_MOVE_DOWN; break;
-                    case SW_MOVE_RIGHT: nDir = SW_MOVE_UP; break;
+                    case SwMove::UP: nDir = SwMove::LEFT; break;
+                    case SwMove::DOWN: nDir = SwMove::RIGHT; break;
+                    case SwMove::LEFT: nDir = SwMove::DOWN; break;
+                    case SwMove::RIGHT: nDir = SwMove::UP; break;
                 }
                 if( pOld->IsRightToLeft() )
                 {
-                    if( nDir == SW_MOVE_LEFT )
-                        nDir = SW_MOVE_RIGHT;
-                    else if( nDir == SW_MOVE_RIGHT )
-                        nDir = SW_MOVE_LEFT;
+                    if( nDir == SwMove::LEFT )
+                        nDir = SwMove::RIGHT;
+                    else if( nDir == SwMove::RIGHT )
+                        nDir = SwMove::LEFT;
                 }
             }
         }
@@ -338,9 +338,9 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
             case FLY_AT_PAGE:
             {
                 OSL_ENSURE( pOld->IsPageFrm(), "Wrong anchor, page expected." );
-                if( SW_MOVE_UP == nDir )
+                if( SwMove::UP == nDir )
                     pNew = pOld->GetPrev();
-                else if( SW_MOVE_DOWN == nDir )
+                else if( SwMove::DOWN == nDir )
                     pNew = pOld->GetNext();
                 if( pNew && pNew != pOld )
                 {
@@ -352,12 +352,12 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
             case FLY_AT_CHAR:
             {
                 OSL_ENSURE( pOld->IsCntntFrm(), "Wrong anchor, page expected." );
-                if( SW_MOVE_LEFT == nDir || SW_MOVE_RIGHT == nDir )
+                if( SwMove::LEFT == nDir || SwMove::RIGHT == nDir )
                 {
                     SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
                     SwTxtNode* pTxtNd = ((SwTxtFrm*)pOld)->GetTxtNode();
                     const sal_Int32 nAct = pPos->nContent.GetIndex();
-                    if( SW_MOVE_LEFT == nDir )
+                    if( SwMove::LEFT == nDir )
                     {
                         bRet = true;
                         if( nAct )
@@ -365,7 +365,7 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                             pPos->nContent.Assign( pTxtNd, nAct-1 );
                         }
                         else
-                            nDir = SW_MOVE_UP;
+                            nDir = SwMove::UP;
                     }
                     else
                     {
@@ -377,16 +377,16 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                             pPos->nContent.Assign( pTxtNd, nAct+1 );
                         }
                         else
-                            nDir = SW_MOVE_DOWN;
+                            nDir = SwMove::DOWN;
                     }
                 }
             } // no break!
             case FLY_AT_PARA:
             {
                 OSL_ENSURE( pOld->IsCntntFrm(), "Wrong anchor, page expected." );
-                if( SW_MOVE_UP == nDir )
+                if( SwMove::UP == nDir )
                     pNew = pOld->FindPrev();
-                else if( SW_MOVE_DOWN == nDir )
+                else if( SwMove::DOWN == nDir )
                     pNew = pOld->FindNext();
                 if( pNew && pNew != pOld && pNew->IsCntntFrm() )
                 {
@@ -403,7 +403,7 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                     pPos->nContent.Assign( pTxtNd, nTmp );
                     bRet = true;
                 }
-                else if( SW_MOVE_UP == nDir || SW_MOVE_DOWN == nDir )
+                else if( SwMove::UP == nDir || SwMove::DOWN == nDir )
                     bRet = false;
                 break;
             }
@@ -445,28 +445,28 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                                             pTmp->Frm().Height()/2 );
                                 bool bAccept = false;
                                 switch( nDir ) {
-                                    case SW_MOVE_RIGHT:
+                                    case SwMove::RIGHT:
                                     {
                                         bAccept = LESS_X( aCenter, aNew, bOld )
                                              && ( !pNewFly ||
                                              LESS_X( aNew, aBest, false ) );
                                         break;
                                     }
-                                    case SW_MOVE_LEFT:
+                                    case SwMove::LEFT:
                                     {
                                         bAccept = LESS_X( aNew, aCenter, !bOld )
                                              && ( !pNewFly ||
                                              LESS_X( aBest, aNew, true ) );
                                         break;
                                     }
-                                    case SW_MOVE_UP:
+                                    case SwMove::UP:
                                     {
                                         bAccept = LESS_Y( aNew, aCenter, !bOld )
                                              && ( !pNewFly ||
                                              LESS_Y( aBest, aNew, true ) );
                                         break;
                                     }
-                                    case SW_MOVE_DOWN:
+                                    case SwMove::DOWN:
                                     {
                                         bAccept = LESS_Y( aCenter, aNew, bOld )
                                              && ( !pNewFly ||
