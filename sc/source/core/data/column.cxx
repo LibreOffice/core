@@ -2044,6 +2044,12 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
             if (pCode->IsRecalcModeOnRefMove())
                 aRes.mbValueChanged = true;
         }
+        else if (aRes.mbReferenceModified && pCode->IsRecalcModeOnRefMove())
+        {
+            // The cell itself hasn't shifted. But it may have ROW or COLUMN
+            // referencing another cell that has.
+            aRes.mbValueChanged = true;
+        }
 
         if (aRes.mbNameModified)
             recompileTokenArray(*pTop);

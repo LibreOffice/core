@@ -2788,7 +2788,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
 
     if (bOnRefMove)
         // Cell may reference itself, e.g. ocColumn, ocRow without parameter
-        bOnRefMove = (bValChanged || (aPos != aOldPos));
+        bOnRefMove = (bValChanged || (aPos != aOldPos) || bRefModified);
 
     bool bNewListening = false;
     bool bInDeleteUndo = false;
