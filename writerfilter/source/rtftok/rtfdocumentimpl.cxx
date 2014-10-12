@@ -4714,19 +4714,19 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     switch (nKeyword)
     {
     case RTF_ACCNONE:
-        nSprm = 0;
+        nSprm = NS_ooxml::LN_Value_ST_Em_none;
         break;
     case RTF_ACCDOT:
-        nSprm = 1;
+        nSprm = NS_ooxml::LN_Value_ST_Em_dot;
         break;
     case RTF_ACCCOMMA:
-        nSprm = 2;
+        nSprm = NS_ooxml::LN_Value_ST_Em_comma;
         break;
     case RTF_ACCCIRCLE:
-        nSprm = 3;
+        nSprm = NS_ooxml::LN_Value_ST_Em_circle;
         break;
     case RTF_ACCUNDERDOT:
-        nSprm = 4;
+        nSprm = NS_ooxml::LN_Value_ST_Em_underDot;
         break;
     default:
         break;

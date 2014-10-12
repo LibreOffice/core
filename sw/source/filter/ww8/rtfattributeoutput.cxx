@@ -2330,11 +2330,17 @@ void RtfAttributeOutput::CharEmphasisMark(const SvxEmphasisMarkItem& rEmphasisMa
     case EMPHASISMARK_NONE:
         pStr = OOO_STRING_SVTOOLS_RTF_ACCNONE;
         break;
-    case EMPHASISMARK_SIDE_DOTS:
+    case EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE:
+        pStr = OOO_STRING_SVTOOLS_RTF_ACCDOT;
+        break;
+    case EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE:
         pStr = OOO_STRING_SVTOOLS_RTF_ACCCOMMA;
         break;
-    default:
-        pStr = OOO_STRING_SVTOOLS_RTF_ACCDOT;
+    case EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE:
+        pStr = OOO_STRING_SVTOOLS_RTF_ACCCIRCLE;
+        break;
+    case EMPHASISMARK_DOT|EMPHASISMARK_POS_BELOW:
+        pStr = OOO_STRING_SVTOOLS_RTF_ACCUNDERDOT;
         break;
     }
     m_aStyles.append(pStr);

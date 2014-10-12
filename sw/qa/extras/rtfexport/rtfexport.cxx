@@ -16,6 +16,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -687,6 +688,18 @@ DECLARE_RTFEXPORT_TEST(testAbi10039, "abi10039.odt")
 DECLARE_RTFEXPORT_TEST(testAbi10076, "abi10076.odt")
 {
     // Just make sure that we don't crash after exporting a fully calculated layout.
+}
+
+DECLARE_RTFEXPORT_TEST(testEm, "em.rtf")
+{
+    // Test all possible \acc* control words.
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::NONE, getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharEmphasis"));
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::DOT_ABOVE, getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEmphasis"));
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::ACCENT_ABOVE, getProperty<sal_Int16>(getRun(getParagraph(1), 3), "CharEmphasis"));
+    // This was missing.
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::CIRCLE_ABOVE, getProperty<sal_Int16>(getRun(getParagraph(1), 4), "CharEmphasis"));
+    // This one, too.
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::DOT_BELOW, getProperty<sal_Int16>(getRun(getParagraph(1), 5), "CharEmphasis"));
 }
 
 DECLARE_RTFEXPORT_TEST(testNumberingFont, "numbering-font.rtf")

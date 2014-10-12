@@ -1047,6 +1047,8 @@
 #define OOO_STRING_SVTOOLS_RTF_ACCNONE "\\accnone"
 #define OOO_STRING_SVTOOLS_RTF_ACCDOT "\\accdot"
 #define OOO_STRING_SVTOOLS_RTF_ACCCOMMA "\\acccomma"
+#define OOO_STRING_SVTOOLS_RTF_ACCCIRCLE "\\acccircle"
+#define OOO_STRING_SVTOOLS_RTF_ACCUNDERDOT "\\accunderdot"
 #define OOO_STRING_SVTOOLS_RTF_TWOINONE "\\twoinone"
 #define OOO_STRING_SVTOOLS_RTF_HORZVERT "\\horzvert"
 #define OOO_STRING_SVTOOLS_RTF_FAHANG "\\fahang"
