@@ -2986,24 +2986,24 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     m_aStartPos = rMEvt.GetPosPixel();
     m_aRszMvHdlPt.X() = 0, m_aRszMvHdlPt.Y() = 0;
 
-    sal_uInt8 nMouseTabCol = 0;
+    SwTab nMouseTabCol = SwTab::COL_NONE;
     const bool bTmp = !rSh.IsDrawCreate() && !m_pApplyTempl && !rSh.IsInSelect() &&
          rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons();
     if (  bTmp &&
-         0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
+         SwTab::COL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
          !rSh.IsObjSelectable( aDocPos ) )
     {
         // Enhanced table selection
-        if ( SW_TABSEL_HORI <= nMouseTabCol && SW_TABCOLSEL_VERT >= nMouseTabCol )
+        if ( SwTab::SEL_HORI <= nMouseTabCol && SwTab::COLSEL_VERT >= nMouseTabCol )
         {
             rSh.EnterStdMode();
             rSh.SelectTableRowCol( aDocPos );
-            if( SW_TABSEL_HORI  != nMouseTabCol && SW_TABSEL_HORI_RTL  != nMouseTabCol)
+            if( SwTab::SEL_HORI  != nMouseTabCol && SwTab::SEL_HORI_RTL  != nMouseTabCol)
             {
                 m_pRowColumnSelectionStart = new Point( aDocPos );
-                m_bIsRowDrag = SW_TABROWSEL_HORI == nMouseTabCol||
-                            SW_TABROWSEL_HORI_RTL == nMouseTabCol ||
-                            SW_TABCOLSEL_VERT == nMouseTabCol;
+                m_bIsRowDrag = SwTab::ROWSEL_HORI == nMouseTabCol||
+                            SwTab::ROWSEL_HORI_RTL == nMouseTabCol ||
+                            SwTab::COLSEL_VERT == nMouseTabCol;
                 m_bMBPressed = true;
                 CaptureMouse();
             }
@@ -3013,7 +3013,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         if ( !rSh.IsTableMode() )
         {
             // comes from table columns out of the document.
-            if(SW_TABCOL_VERT == nMouseTabCol || SW_TABCOL_HORI == nMouseTabCol)
+            if(SwTab::COL_VERT == nMouseTabCol || SwTab::COL_HORI == nMouseTabCol)
                 m_rView.SetTabColFromDoc( true );
             else
                 m_rView.SetTabRowFromDoc( true );
@@ -3023,7 +3023,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             SfxBindings& rBind = m_rView.GetViewFrame()->GetBindings();
             rBind.Update();
             if ( RulerColumnDrag( rMEvt,
-                    (SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol)) )
+                    (SwTab::COL_VERT == nMouseTabCol || SwTab::ROW_HORI == nMouseTabCol)) )
             {
                 m_rView.SetTabColFromDoc( false );
                 m_rView.SetTabRowFromDoc( false );
@@ -3858,10 +3858,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         }
     }
 
-    sal_uInt8 nMouseTabCol;
+    SwTab nMouseTabCol;
     if( !bIsDocReadOnly && bInsWin && !m_pApplyTempl && !rSh.IsInSelect() )
     {
-        if ( SW_TABCOL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
+        if ( SwTab::COL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
              !rSh.IsObjSelectable( aDocPt ) )
         {
             sal_uInt16 nPointer = USHRT_MAX;
@@ -3869,35 +3869,36 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
             switch ( nMouseTabCol )
             {
-                case SW_TABCOL_VERT :
-                case SW_TABROW_HORI :
+                case SwTab::COL_VERT :
+                case SwTab::ROW_HORI :
                     nPointer = POINTER_VSIZEBAR;
                     bChkTblSel = true;
                     break;
-                case SW_TABROW_VERT :
-                case SW_TABCOL_HORI :
+                case SwTab::ROW_VERT :
+                case SwTab::COL_HORI :
                     nPointer = POINTER_HSIZEBAR;
                     bChkTblSel = true;
                     break;
                 // Enhanced table selection
-                case SW_TABSEL_HORI :
+                case SwTab::SEL_HORI :
                     nPointer = POINTER_TAB_SELECT_SE;
                     break;
-                case SW_TABSEL_HORI_RTL :
-                case SW_TABSEL_VERT :
+                case SwTab::SEL_HORI_RTL :
+                case SwTab::SEL_VERT :
                     nPointer = POINTER_TAB_SELECT_SW;
                     break;
-                case SW_TABCOLSEL_HORI :
-                case SW_TABROWSEL_VERT :
+                case SwTab::COLSEL_HORI :
+                case SwTab::ROWSEL_VERT :
                     nPointer = POINTER_TAB_SELECT_S;
                     break;
-                case SW_TABROWSEL_HORI :
+                case SwTab::ROWSEL_HORI :
                     nPointer = POINTER_TAB_SELECT_E;
                     break;
-                case SW_TABROWSEL_HORI_RTL :
-                case SW_TABCOLSEL_VERT :
+                case SwTab::ROWSEL_HORI_RTL :
+                case SwTab::COLSEL_VERT :
                     nPointer = POINTER_TAB_SELECT_W;
                     break;
+                case SwTab::COL_NONE: break; // prevent compiler warning
             }
 
             if ( USHRT_MAX != nPointer &&

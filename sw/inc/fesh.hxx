@@ -151,20 +151,23 @@ enum class SwMove
     RIGHT   = 3
 };
 
-#define SW_TABCOL_NONE          0
-#define SW_TABCOL_HORI          1
-#define SW_TABCOL_VERT          2
-#define SW_TABROW_HORI          3
-#define SW_TABROW_VERT          4
-
-#define SW_TABSEL_HORI          5
-#define SW_TABSEL_HORI_RTL      6
-#define SW_TABROWSEL_HORI       7
-#define SW_TABROWSEL_HORI_RTL   8
-#define SW_TABCOLSEL_HORI       9
-#define SW_TABSEL_VERT          10
-#define SW_TABROWSEL_VERT       11
-#define SW_TABCOLSEL_VERT       12
+// return values for WhichMouseTabCol
+enum class SwTab
+{
+    COL_NONE          = 0,
+    COL_HORI          = 1,
+    COL_VERT          = 2,
+    ROW_HORI          = 3,
+    ROW_VERT          = 4,
+    SEL_HORI          = 5,
+    SEL_HORI_RTL      = 6,
+    ROWSEL_HORI       = 7,
+    ROWSEL_HORI_RTL   = 8,
+    COLSEL_HORI       = 9,
+    SEL_VERT          = 10,
+    ROWSEL_VERT       = 11,
+    COLSEL_VERT       = 12
+};
 
 class SdrDropMarkerOverlay;
 
@@ -633,7 +636,7 @@ public:
     void SetRowBackground( const SvxBrushItem &rNew );
     bool GetRowBackground( SvxBrushItem &rToFill ) const; ///< FALSE ambiguous.
 
-    sal_uInt8 WhichMouseTabCol( const Point &rPt ) const;
+    SwTab WhichMouseTabCol( const Point &rPt ) const;
     void GetTabCols( SwTabCols &rToFill ) const; ///< Info about columns and margins.
     void SetTabCols( const SwTabCols &rNew, bool bCurRowOnly = true );
     void GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const;
