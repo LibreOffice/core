@@ -117,7 +117,7 @@ if bSet is true, rMin and rMax will be set to the left and right border of the b
 
 */
 
-static void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, sal_uInt16 nCheck, bool bSet )
+static void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, size_t nCheck, bool bSet )
 {
     ++nCheck;
     if( rLine.GetTabBoxes().size() < nCheck )
@@ -128,7 +128,7 @@ static void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, s
 
     long nNew = 0; // will be the right border of the current box
     long nWidth = 0; // the width of the current box
-    for( sal_uInt16 nCurrBox = 0; nCurrBox < nCheck; ++nCurrBox )
+    for( size_t nCurrBox = 0; nCurrBox < nCheck; ++nCurrBox )
     {
         SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
         OSL_ENSURE( pBox, "Missing table box" );
@@ -161,8 +161,8 @@ static long lcl_Box2LeftBorder( const SwTableBox& rBox )
         return 0;
     long nLeft = 0;
     const SwTableLine &rLine = *rBox.GetUpper();
-    sal_uInt16 nCount = rLine.GetTabBoxes().size();
-    for( sal_uInt16 nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
+    const size_t nCount = rLine.GetTabBoxes().size();
+    for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
     {
         SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
         OSL_ENSURE( pBox, "Missing table box" );
@@ -195,8 +195,8 @@ static SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
     if( !pLine )
         return 0;
     long nCurrLeft = 0;
-    sal_uInt16 nCount = pLine->GetTabBoxes().size();
-    for( sal_uInt16 nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
+    const size_t nCount = pLine->GetTabBoxes().size();
+    for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
         OSL_ENSURE( pBox, "Missing table box" );
@@ -269,8 +269,8 @@ static void lcl_ChangeRowSpan( const SwTable& rTable, const long nDiff,
         bGoOn = false; // will be set to true if we found a non-master cell
         // which has to be manipulated => we have to check the previous row, too.
         const SwTableLine* pLine = rTable.GetTabLines()[ nRowIdx ];
-        sal_uInt16 nBoxCount = pLine->GetTabBoxes().size();
-        for( sal_uInt16 nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
+        const size_t nBoxCount = pLine->GetTabBoxes().size();
+        for( size_t nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
         {
             long nRowSpan = pLine->GetTabBoxes()[nCurrBox]->getRowSpan();
             long nAbsSpan = nRowSpan > 0 ? nRowSpan : -nRowSpan;
@@ -332,16 +332,17 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     if( !pStartNd || !pEndNd || pStartNd == pEndNd )
         return 0;
 
-    sal_uInt16 nLines = aLines.size();
-    sal_uInt16 nTop = 0, nBottom = 0;
+    const size_t nLines = aLines.size();
+    size_t nTop = 0;
+    size_t nBottom = 0;
     long nMin = 0, nMax = 0;
     int nFound = 0;
-    for( sal_uInt16 nRow = 0; nFound < 2 && nRow < nLines; ++nRow )
+    for( size_t nRow = 0; nFound < 2 && nRow < nLines; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
-        sal_uInt16 nCols = pLine->GetTabBoxes().size();
-        for( sal_uInt16 nCol = 0; nCol < nCols; ++nCol )
+        const size_t nCols = pLine->GetTabBoxes().size();
+        for( size_t nCol = 0; nCol < nCols; ++nCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
             OSL_ENSURE( pBox, "Missing table box" );
@@ -371,12 +372,12 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
 
     SwBoxSelection* pRet = new SwBoxSelection();
     std::list< std::pair< SwTableBox*, long > > aNewWidthList;
-    sal_uInt16 nCheckBottom = nBottom;
+    size_t nCheckBottom = nBottom;
     long nLeftSpan = 0;
     long nRightSpan = 0;
     long nLeftSpanCnt = 0;
     long nRightSpanCnt = 0;
-    for( sal_uInt16 nRow = nTop; nRow <= nBottom && bOkay; ++nRow )
+    for( size_t nRow = nTop; nRow <= nBottom && bOkay; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
@@ -384,8 +385,8 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
         long nLeft = 0;
         long nRight = 0;
         long nRowSpan = 1;
-        sal_uInt16 nCount = pLine->GetTabBoxes().size();
-        for( sal_uInt16 nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
+        const size_t nCount = pLine->GetTabBoxes().size();
+        for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
             OSL_ENSURE( pBox, "Missing table box" );
@@ -447,9 +448,9 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                     break;
                 }
                 if( nRowSpan > 1 && nRow + nRowSpan - 1 > nBottom )
-                    nBottom = nRow + (sal_uInt16)nRowSpan - 1;
+                    nBottom = nRow + nRowSpan - 1;
                 if( nRowSpan < -1 && nRow - nRowSpan - 1 > nBottom )
-                    nBottom = (sal_uInt16)(nRow - nRowSpan - 1);
+                    nBottom = nRow - nRowSpan - 1;
                 if( nRightSpanCnt && nRight == nMax )
                     bOkay = false;
             }
@@ -484,9 +485,9 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                 {
                     long nTmpSpan = pInnerBox->getRowSpan();
                     if( nTmpSpan > 1 )
-                        nBottom += (sal_uInt16)nTmpSpan - 1;
+                        nBottom += nTmpSpan - 1;
                     else if( nTmpSpan < -1 )
-                        nBottom = (sal_uInt16)( nBottom - nTmpSpan - 1 );
+                        nBottom -= nTmpSpan + 1;
                 }
                 SwTableBox* pOuterBox = pLeftBox;
                 do
@@ -496,7 +497,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                         long nOutSpan = pOuterBox->getRowSpan();
                         if( nOutSpan != 1 )
                         {
-                            sal_uInt16 nCheck = nRow;
+                            size_t nCheck = nRow;
                             if( nOutSpan < 0 )
                             {
                                 const SwTableBox& rBox =
@@ -534,7 +535,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
                                     nRightSpanCnt = nOutSpan;
                                 }
                             }
-                            nCheck += (sal_uInt16)nOutSpan - 1;
+                            nCheck += nOutSpan - 1;
                             if( nCheck > nCheckBottom )
                                 nCheckBottom = nCheck;
                         }
@@ -663,7 +664,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     std::vector< sal_uInt16 > aInsPos( aLines.size(), USHRT_MAX );
     { // Calculation of the insert positions and the width of the new boxes
         sal_uInt64 nTableWidth = 0;
-        for( sal_uInt16 i = 0; i < aLines[0]->GetTabBoxes().size(); ++i )
+        for( size_t i = 0; i < aLines[0]->GetTabBoxes().size(); ++i )
             nTableWidth += aLines[0]->GetTabBoxes()[i]->GetFrmFmt()->GetFrmSize().GetWidth();
 
         // Fill the vector of insert positions and the (average) width to insert
@@ -693,10 +694,10 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     SwTableNode* pTblNd = GetTableNode();
     std::vector<SwTableBoxFmt*> aInsFormat( nCnt, 0 );
-    sal_uInt16 nLastLine = USHRT_MAX;
+    size_t nLastLine = SAL_MAX_SIZE;
     long nLastRowSpan = 1;
 
-    for( sal_uInt16 i = 0; i < aLines.size(); ++i )
+    for( size_t i = 0; i < aLines.size(); ++i )
     {
         SwTableLine* pLine = aLines[ i ];
         sal_uInt16 nInsPos = aInsPos[i];
@@ -709,7 +710,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         long nRowSpan = pBox->getRowSpan();
         long nDiff = i - nLastLine;
         bool bNewSpan = false;
-        if( nLastLine != USHRT_MAX && nDiff <= nLastRowSpan &&
+        if( nLastLine != SAL_MAX_SIZE && nDiff <= nLastRowSpan &&
             nRowSpan != nDiff - nLastRowSpan )
         {
             bNewSpan = true;
@@ -774,7 +775,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();
         long nNewWidth = 0;
-        for( sal_uInt16 i = 0; i < rTabBoxes.size(); ++i )
+        for( size_t i = 0; i < rTabBoxes.size(); ++i )
             nNewWidth += rTabBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
         OSL_ENSURE( nNewWidth > 0, "Very small" );
     }
@@ -841,15 +842,15 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
     SwPosition aInsPos( *pMergeBox->GetSttNd()->EndOfSectionNode() );
     SwPaM aChkPam( aInsPos );
     // The number of lines in the selection rectangle: nLineCount
-    const sal_uInt16 nLineCount = sal_uInt16(pSel->aBoxes.size());
+    const size_t nLineCount = pSel->aBoxes.size();
     // BTW: nLineCount is the rowspan of the new master cell
-    long nRowSpan = nLineCount;
+    long nRowSpan = static_cast<long>(nLineCount);
     // We will need the first and last line of the selection
     // to check if there any superfluous row after merging
     SwTableLine* pFirstLn = 0;
     SwTableLine* pLastLn = 0;
     // Iteration over the lines of the selection...
-    for( sal_uInt16 nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
+    for( size_t nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
     {
         // The selected boxes in the current line
         const SwSelBoxes* pBoxes = pSel->aBoxes[ nCurrLine ];
@@ -927,7 +928,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
         // pNewFmt will be set to the new master box and the overlapped cells
         SwFrmFmt* pNewFmt = pMergeBox->ClaimFrmFmt();
         pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, pSel->mnMergeWidth, 0 ) );
-        for( sal_uInt16 nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
+        for( size_t nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
         {
             const SwSelBoxes* pBoxes = pSel->aBoxes[ nCurrLine ];
             size_t nColCount = pBoxes->size();
@@ -983,9 +984,9 @@ void SwTable::_FindSuperfluousRows( SwSelBoxes& rBoxes,
     {
         SwTableLine* pLine = aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
-        sal_uInt16 nCols = pLine->GetTabBoxes().size();
+        const size_t nCols = pLine->GetTabBoxes().size();
         bool bSuperfl = true;
-        for( sal_uInt16 nCol = 0; nCol < nCols; ++nCol )
+        for( size_t nCol = 0; nCol < nCols; ++nCol )
         {
             SwTableBox *pBox = pLine->GetTabBoxes()[nCol];
             if( pBox->getRowSpan() > 0 &&
@@ -997,7 +998,7 @@ void SwTable::_FindSuperfluousRows( SwSelBoxes& rBoxes,
         }
         if( bSuperfl )
         {
-            for( sal_uInt16 nCol = 0; nCol < nCols; ++nCol )
+            for( size_t nCol = 0; nCol < nCols; ++nCol )
             {
                 SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
                 rBoxes.insert( pBox );
@@ -1142,8 +1143,8 @@ static void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
 
 static void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
 {
-    sal_uInt16 nBoxCount = rLine.GetTabBoxes().size();
-    for( sal_uInt16 i = 0; i < nBoxCount; ++i )
+    const size_t nBoxCount = rLine.GetTabBoxes().size();
+    for( size_t i = 0; i < nBoxCount; ++i )
         rBoxes.insert( rLine.GetTabBoxes()[i] );
 }
 
@@ -1169,11 +1170,11 @@ void SwTable::InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
         pFrmFmt->SetFmtAttr( aFSz );
     }
     _InsertRow( pDoc, aBoxes, nCnt, true );
-    sal_uInt16 nBoxCount = rLine.GetTabBoxes().size();
+    const size_t nBoxCount = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
         SwTableLine *pNewLine = GetTabLines()[ nRowIdx + nCnt - n ];
-        for( sal_uInt16 nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
+        for( size_t nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
         {
             long nRowSpan = rLine.GetTabBoxes()[nCurrBox]->getRowSpan();
             if( nRowSpan > 0 )
@@ -1504,12 +1505,12 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             SwSelBoxes aLineBoxes;
             lcl_FillSelBoxes( aLineBoxes, *pLine );
             _InsertRow( pDoc, aLineBoxes, nCnt, bBehind );
-            sal_uInt16 nBoxCount = pLine->GetTabBoxes().size();
+            const size_t nBoxCount = pLine->GetTabBoxes().size();
             sal_uInt16 nOfs = bBehind ? 0 : 1;
             for( sal_uInt16 n = 0; n < nCnt; ++n )
             {
                 SwTableLine *pNewLine = GetTabLines()[ nRowIdx+nCnt-n-nOfs];
-                for( sal_uInt16 nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
+                for( size_t nCurrBox = 0; nCurrBox < nBoxCount; ++nCurrBox )
                 {
                     long nRowSpan = pLine->GetTabBoxes()[nCurrBox]->getRowSpan();
                     if( bBehind )
@@ -1611,8 +1612,8 @@ static void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nM
     long nLeft = 0;
     long nRight = 0;
     long nMid = ( nMax + nMin )/ 2;
-    sal_uInt16 nCount = rLine.GetTabBoxes().size();
-    for( sal_uInt16 nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
+    const size_t nCount = rLine.GetTabBoxes().size();
+    for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
     {
         SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
         OSL_ENSURE( pBox, "Missing table box" );
@@ -1672,10 +1673,11 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
 {
     rBoxes.clear();
     // Looking for start and end of the selection given by SwNode-pointer
-    sal_uInt16 nLines = aLines.size();
+    const size_t nLines = aLines.size();
     // nTop becomes the line number of the upper box
     // nBottom becomes the line number of the lower box
-    sal_uInt16 nTop = 0, nBottom = 0;
+    size_t nTop = 0;
+    size_t nBottom = 0;
     // nUpperMin becomes the left border value of the upper box
     // nUpperMax becomes the right border of the upper box
     // nLowerMin and nLowerMax the borders of the lower box
@@ -1684,12 +1686,12 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
     // nFound will incremented if a box is found
     // 0 => no box found; 1 => the upper box has been found; 2 => both found
     int nFound = 0;
-    for( sal_uInt16 nRow = 0; nFound < 2 && nRow < nLines; ++nRow )
+    for( size_t nRow = 0; nFound < 2 && nRow < nLines; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
-        sal_uInt16 nCols = pLine->GetTabBoxes().size();
-        for( sal_uInt16 nCol = 0; nCol < nCols; ++nCol )
+        const size_t nCols = pLine->GetTabBoxes().size();
+        for( size_t nCol = 0; nCol < nCols; ++nCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
             OSL_ENSURE( pBox, "Missing table box" );
@@ -1729,12 +1731,12 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
         // Selection of a row is quiet easy:
         // every (unprotected) box between start and end line
         // with a positive row span will be collected
-        for( sal_uInt16 nRow = nTop; nRow <= nBottom; ++nRow )
+        for( size_t nRow = nTop; nRow <= nBottom; ++nRow )
         {
             SwTableLine* pLine = aLines[nRow];
             OSL_ENSURE( pLine, "Missing table line" );
-            sal_uInt16 nCount = pLine->GetTabBoxes().size();
-            for( sal_uInt16 nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
+            const size_t nCount = pLine->GetTabBoxes().size();
+            for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
             {
                 SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
                 OSL_ENSURE( pBox, "Missing table box" );
@@ -1773,7 +1775,7 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
     const bool bColumn = eSearch == SEARCH_COL;
     if( bColumn )
     {
-        for( sal_uInt16 i = 0; i < nTop; ++i )
+        for( size_t i = 0; i < nTop; ++i )
             lcl_SearchSelBox( *this, rBoxes, nUpperMin, nUpperMax,
                               *aLines[i], bChkProtected, bColumn );
     }
@@ -1781,13 +1783,13 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
     {
         long nMin = nUpperMin < nLowerMin ? nUpperMin : nLowerMin;
         long nMax = nUpperMax < nLowerMax ? nLowerMax : nUpperMax;
-        for( sal_uInt16 i = nTop; i <= nBottom; ++i )
+        for( size_t i = nTop; i <= nBottom; ++i )
             lcl_SearchSelBox( *this, rBoxes, nMin, nMax, *aLines[i],
                               bChkProtected, bColumn );
     }
     if( bColumn )
     {
-        for( sal_uInt16 i = nBottom + 1; i < nLines; ++i )
+        for( size_t i = nBottom + 1; i < nLines; ++i )
             lcl_SearchSelBox( *this, rBoxes, nLowerMin, nLowerMax, *aLines[i],
                               bChkProtected, true );
     }
@@ -1805,15 +1807,15 @@ void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax 
     if( aLines.empty() || rBoxes.empty() )
         return;
 
-    sal_uInt16 nLineCnt = aLines.size();
-    size_t const nBoxCnt = rBoxes.size();
+    const size_t nLineCnt = aLines.size();
+    const size_t nBoxCnt = rBoxes.size();
     size_t nBox = 0;
-    for( sal_uInt16 nRow = 0; nRow < nLineCnt && nBox < nBoxCnt; ++nRow )
+    for( size_t nRow = 0; nRow < nLineCnt && nBox < nBoxCnt; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
-        sal_uInt16 nCols = pLine->GetTabBoxes().size();
-        for( sal_uInt16 nCol = 0; nCol < nCols; ++nCol )
+        const size_t nCols = pLine->GetTabBoxes().size();
+        for( size_t nCol = 0; nCol < nCols; ++nCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCol];
             OSL_ENSURE( pBox, "Missing table box" );
@@ -1825,13 +1827,13 @@ void SwTable::ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax 
             }
         }
     }
-    for( sal_uInt16 nRow = 0; nRow < nLineCnt; ++nRow )
+    for( size_t nRow = 0; nRow < nLineCnt; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
-        sal_uInt16 nCols = pLine->GetTabBoxes().size();
+        const size_t nCols = pLine->GetTabBoxes().size();
         long nLeft = 0;
         long nRight = 0;
-        for( sal_uInt16 nCurrBox = 0; nCurrBox < nCols; ++nCurrBox )
+        for( size_t nCurrBox = 0; nCurrBox < nCols; ++nCurrBox )
         {
             nLeft = nRight;
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
@@ -1854,14 +1856,14 @@ void SwTable::PrepareDeleteCol( long nMin, long nMax )
     const SwTwips nTabSize = GetFrmFmt()->GetFrmSize().GetWidth();
     if( nTabSize == nMax )
         nMid = nMax;
-    sal_uInt16 nLineCnt = aLines.size();
-    for( sal_uInt16 nRow = 0; nRow < nLineCnt; ++nRow )
+    const size_t nLineCnt = aLines.size();
+    for( size_t nRow = 0; nRow < nLineCnt; ++nRow )
     {
         SwTableLine* pLine = aLines[nRow];
-        sal_uInt16 nCols = pLine->GetTabBoxes().size();
+        const size_t nCols = pLine->GetTabBoxes().size();
         long nLeft = 0;
         long nRight = 0;
-        for( sal_uInt16 nCurrBox = 0; nCurrBox < nCols; ++nCurrBox )
+        for( size_t nCurrBox = 0; nCurrBox < nCols; ++nCurrBox )
         {
             nLeft = nRight;
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
@@ -1926,8 +1928,8 @@ void SwTable::CheckRowSpan( SwTableLine* &rpLine, bool bUp ) const
         {
             bChange = false;
             rpLine = GetTabLines()[ nLineIdx ];
-            sal_uInt16 nCols = rpLine->GetTabBoxes().size();
-            for( sal_uInt16 nCol = 0; !bChange && nCol < nCols; ++nCol )
+            const size_t nCols = rpLine->GetTabBoxes().size();
+            for( size_t nCol = 0; !bChange && nCol < nCols; ++nCol )
             {
                 SwTableBox* pBox = rpLine->GetTabBoxes()[nCol];
                 if( pBox->getRowSpan() > 1 || pBox->getRowSpan() < -1 )
@@ -1947,13 +1949,13 @@ void SwTable::CheckRowSpan( SwTableLine* &rpLine, bool bUp ) const
     }
     else
     {
-        sal_uInt16 nMaxLine = GetTabLines().size();
+        const size_t nMaxLine = GetTabLines().size();
         while( bChange )
         {
             bChange = false;
             rpLine = GetTabLines()[ nLineIdx ];
-            sal_uInt16 nCols = rpLine->GetTabBoxes().size();
-            for( sal_uInt16 nCol = 0; !bChange && nCol < nCols; ++nCol )
+            const size_t nCols = rpLine->GetTabBoxes().size();
+            for( size_t nCol = 0; !bChange && nCol < nCols; ++nCol )
             {
                 SwTableBox* pBox = rpLine->GetTabBoxes()[nCol];
                 if( pBox->getRowSpan() < 0 )
@@ -1980,10 +1982,10 @@ SwSaveRowSpan::SwSaveRowSpan( SwTableBoxes& rBoxes, sal_uInt16 nSplitLn )
     : mnSplitLine( nSplitLn )
 {
     bool bDontSave = true; // nothing changed, nothing to save
-    sal_uInt16 nColCount = rBoxes.size();
+    const size_t nColCount = rBoxes.size();
     OSL_ENSURE( nColCount, "Empty Table Line" );
     mnRowSpans.resize( nColCount );
-    for( sal_uInt16 nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+    for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
     {
         SwTableBox* pBox = rBoxes[nCurrCol];
         OSL_ENSURE( pBox, "Missing Table Box" );
@@ -2011,12 +2013,12 @@ void SwTable::RestoreRowSpan( const SwSaveRowSpan& rSave )
     if( rSave.mnSplitLine < nLineCount )
     {
         SwTableLine* pLine = GetTabLines()[rSave.mnSplitLine];
-        sal_uInt16 nColCount = pLine->GetTabBoxes().size();
+        const size_t nColCount = pLine->GetTabBoxes().size();
         OSL_ENSURE( nColCount, "Empty Table Line" );
         OSL_ENSURE( nColCount == rSave.mnRowSpans.size(), "Wrong row span store" );
         if( nColCount == rSave.mnRowSpans.size() )
         {
-            for( sal_uInt16 nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+            for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
             {
                 SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
                 OSL_ENSURE( pBox, "Missing Table Box" );
@@ -2074,11 +2076,11 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
 {
     if( !IsNewModel() )
         return;
-    sal_uInt16 nLastLine = GetTabLines().size()-1;
+    const size_t nLastLine = GetTabLines().size()-1;
     SwTableLine* pLine = GetTabLines()[nLastLine];
-    sal_uInt16 nColCount = pLine->GetTabBoxes().size();
+    const size_t nColCount = pLine->GetTabBoxes().size();
     OSL_ENSURE( nColCount, "Empty Table Line" );
-    for( sal_uInt16 nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+    for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
     {
         SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
         OSL_ENSURE( pBox, "Missing Table Box" );
@@ -2087,7 +2089,8 @@ void SwTable::CleanUpBottomRowSpan( sal_uInt16 nDelLines )
             nRowSp = -nRowSp;
         if( nRowSp > 1 )
         {
-            lcl_ChangeRowSpan( *this, -static_cast<long>(nDelLines), nLastLine, false );
+            lcl_ChangeRowSpan( *this, -static_cast<long>(nDelLines),
+                               static_cast<sal_uInt16>(nLastLine), false );
             break;
         }
     }
@@ -2106,19 +2109,19 @@ void SwTable::CheckConsistency() const
 {
     if( !IsNewModel() )
         return;
-    sal_uInt16 nLineCount = GetTabLines().size();
+    const size_t nLineCount = GetTabLines().size();
     const SwTwips nTabSize = GetFrmFmt()->GetFrmSize().GetWidth();
     SwTwips nLineWidth = 0;
     std::list< RowSpanCheck > aRowSpanCells;
     std::list< RowSpanCheck >::iterator aIter = aRowSpanCells.end();
-    for( sal_uInt16 nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
+    for( size_t nCurrLine = 0; nCurrLine < nLineCount; ++nCurrLine )
     {
         SwTwips nWidth = 0;
         SwTableLine* pLine = GetTabLines()[nCurrLine];
         SAL_WARN_IF( !pLine, "sw.core", "Missing Table Line" );
-        sal_uInt16 nColCount = pLine->GetTabBoxes().size();
+        const size_t nColCount = pLine->GetTabBoxes().size();
         SAL_WARN_IF( !nColCount, "sw.core", "Empty Table Line" );
-        for( sal_uInt16 nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+        for( size_t nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
             SAL_WARN_IF( !pBox, "sw.core", "Missing Table Box" );
