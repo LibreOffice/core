@@ -2541,6 +2541,38 @@ void Test::testFuncROW()
     // The cell that references the moved cell should update its value as well.
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
+    // Clear sheet and start over.
+    clearSheet(m_pDoc, 0);
+
+    m_pDoc->SetString(ScAddress(0,1,0), "=ROW(A5)");
+    m_pDoc->SetString(ScAddress(1,1,0), "=ROW(B5)");
+    m_pDoc->SetString(ScAddress(1,2,0), "=ROW(B6)");
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
+    // B2:B3 should be shared.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,1,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    // Insert a new row at row 4.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.InsertCells(ScRange(0,3,0,MAXCOL,3,0), &aMark, INS_INSROWS, false, true, false);
+    if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "ROW(A6)"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "ROW(B6)"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "ROW(B7)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
