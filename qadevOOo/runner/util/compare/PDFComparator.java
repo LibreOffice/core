@@ -18,9 +18,7 @@
 
 package util.compare;
 
-import util.compare.DocComparator;
 import lib.TestParameters;
-import util.compare.GraphicalComparator;
 
 class PDFComparator extends GraphicalComparator
 {

@@ -25,9 +25,7 @@ import convwatch.FileHelper;
 import lib.TestParameters;
 import java.io.IOException;
 
-import util.compare.DocComparator;
 import convwatch.ConvWatchException;
-
 
 class GraphicalComparator implements DocComparator
 {
