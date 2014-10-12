@@ -143,10 +143,13 @@ struct SwGetCurColNumPara
 #define SW_ENTER_GROUP  2
 #define SW_LEAVE_FRAME  4
 
-#define SW_MOVE_UP      0
-#define SW_MOVE_DOWN    1
-#define SW_MOVE_LEFT    2
-#define SW_MOVE_RIGHT   3
+enum class SwMove
+{
+    UP      = 0,
+    DOWN    = 1,
+    LEFT    = 2,
+    RIGHT   = 3
+};
 
 #define SW_TABCOL_NONE          0
 #define SW_TABCOL_HORI          1
@@ -259,7 +262,7 @@ public:
      the draw object. */
     bool ShouldObjectBeSelected(const Point& rPt);
 
-    bool MoveAnchor( sal_uInt16 nDir );
+    bool MoveAnchor( SwMove nDir );
 
     /** @return if Upper of frame at current position is section frame
      Currently only used by the rules. To be replaced by something more
@@ -453,7 +456,7 @@ public:
     const SdrObject* GetBestObject( bool bNext, sal_uInt16 eType = GOTOOBJ_DRAW_ANY, bool bFlat = true, const ::svx::ISdrObjectFilter* pFilter = NULL );
     bool GotoObj( bool bNext, sal_uInt16 /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
 
-    /// Set DragMode (e.g. Rotae), but do nothing when frame is selected.
+    /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
     void SetDragMode( sal_uInt16 eSdrDragMode );
 
     sal_uInt16 IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
