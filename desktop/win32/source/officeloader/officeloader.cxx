@@ -46,6 +46,8 @@
 #include "../../../source/inc/exithelper.h"
 #include "../extendloaderenvironment.hxx"
 
+#include <config_version.h>
+
 #define PIPE_PREFIX                 TEXT("\\\\.\\pipe\\OSL_PIPE_")
 #define PIPE_POSTFIX                TEXT("_SingleOfficeIPC_")
 #define PIPE_TERMINATION_SEQUENCE   "InternalIPC::ProcessingDone"
@@ -250,7 +252,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                 _tcsncpy( szPipeName, PIPE_PREFIX, SAL_N_ELEMENTS(szPipeName) );
                 _tcsncat( szPipeName, szUserIdent, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
                 _tcsncat( szPipeName, PIPE_POSTFIX, SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
-                _tcsncat( szPipeName, _ultot( SUPD, szSUPD, 10), SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
+                _tcsncat( szPipeName, _ultot( LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100 + LIBO_VERSION_MICRO * 1
+                                            , szSUPD, 10), SAL_N_ELEMENTS(szPipeName) - _tcslen(szPipeName) - 1 );
 
                 LocalFree( szUserIdent );
 
