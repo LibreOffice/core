@@ -359,7 +359,7 @@ public class DBaseNumericFunctions extends SubTestCase
     private void asin(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "ASIN(0) ");
-        assure("ASIN(0) failed!", (float) row.getDouble(1) == (float) Math.asin(0.0));
+        assure("ASIN(0) failed!", (float) row.getDouble(1) == 0.0);
     }
 
     private void atan(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
