@@ -28,13 +28,14 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleEditableText;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleValue;
+
 import com.sun.star.awt.XWindow;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
+
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-
 
 /**
  * This class supports some functions to handle easily accessible objects
@@ -68,7 +69,6 @@ public class UITools {
         XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
         return AccessibilityTools.getAccessibleObject(xWindow);
     }
-
 
     private static String getString(XInterface xInt)
     {
@@ -128,7 +128,6 @@ public class UITools {
      * @param buttonName is name name of the button to click
      * @throws java.lang.Exception if something fail
      */
-
      public void clickButton(String buttonName) throws java.lang.Exception
      {
 
@@ -148,15 +147,12 @@ public class UITools {
         }
      }
 
-
-
     /**
       * Helper method: returns the entry manes of a List-Box
       * @param ListBoxName the name of the listbox
       * @return the listbox entry names
       * @throws java.lang.Exception if something fail
       */
-
      public String[] getListBoxItems(String ListBoxName)
             throws java.lang.Exception
      {
@@ -209,7 +205,6 @@ public class UITools {
         return Items.toArray(ret);
      }
 
-
      /**
       * set a value to a named check box
       * @param CheckBoxName the name of the check box
@@ -236,8 +231,6 @@ public class UITools {
         }
      }
 
-
-
       /**
        * returns the message of a Basic-MessageBox
        * @return the message of a Basic-MessageBox
@@ -246,29 +239,17 @@ public class UITools {
      public String getMsgBoxText()
         throws java.lang.Exception
      {
-        String cMessage = null;
         try{
             XAccessibleContext xMessage =AccessibilityTools.getAccessibleObjectForRole(mXRoot,
                                      AccessibleRole.LABEL);
 
             XInterface xMessageInterface = UnoRuntime.queryInterface(XInterface.class, xMessage);
-            cMessage += (getString(xMessageInterface));
 
-
-            return cMessage;
+            return getString(xMessageInterface);
          } catch (Exception e) {
             throw new Exception("Could not get message from Basic-MessageBox:", e);
         }
      }
-
-
-
-
-
-
-
-
-
 
     /**
      * Prints the accessible tree to the <CODE>logWriter</CODE> only if <CODE>debugIsActive</CODE>
