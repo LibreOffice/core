@@ -1133,9 +1133,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
     switch(nSprmId)
     {
-    case 2:  // sprmPIstd
-    case 0x4600:
-        break;  // sprmPIstd - style code
     case NS_ooxml::LN_CT_PPrBase_jc:
         handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext, m_pImpl ));
         break;
@@ -1671,9 +1668,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         rContext->Insert( PROP_HEIGHT, uno::makeAny( PaperInfo::sloppyFitPageDimension( nHeight ) ) );
     }
     break;
-    case 0x703a: //undocumented, grid related?
-        OSL_FAIL( "TODO: not handled yet"); //nIntValue like 0x008a2373 ?
-        break;
     case NS_ooxml::LN_EG_SectPrContents_textDirection:
     {
         /* 0 HoriLR 1 Vert TR 2 Vert TR 3 Vert TT 4 HoriLT
@@ -1705,35 +1699,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     }
     break;  // sprmSTextFlow
         // the following are not part of the official documentation
-    case 0x6870: //TxtForeColor
-        {
-            sal_Int32 nColor = msfilter::util::BGRToRGB(nIntValue);
-            rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
-        }
-        break;
-    case 0x6877: //underlining color
-        {
-            rContext->Insert(PROP_CHAR_UNDERLINE_HAS_COLOR, uno::makeAny( true ) );
-            rContext->Insert(PROP_CHAR_UNDERLINE_COLOR, uno::makeAny( nIntValue ) );
-        }
-        break;
-    case 0x6815:
-        break; //undocumented
-    case 0x6467:
-        break; //undocumented
-    case 0xF617:
-        break; //undocumented
-    case 0xd634: // sprmTNewSpacing - table spacing ( see WW8TabBandDesc::ProcessSpacing() )
-        break;
-    case 0x4888:
-    case 0x6887:
-        //properties of list levels - undocumented
-        break;
-    case 0xd234:
-    case 0xd235:
-    case 0xd236:
-    case 0xd237:
-        break;//undocumented section properties
     case NS_ooxml::LN_CT_Tabs_tab:
         resolveSprmProps(*this, rSprm);
         m_pImpl->IncorporateTabStop(m_pImpl->m_aCurrentTabStop);
