@@ -19,6 +19,7 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 /** Load from and save options into a file.
@@ -69,24 +70,50 @@ class Options
 
     public void Load (String sBaseName)
     {
+        FileInputStream fis = null;
         try
         {
-            load (new FileInputStream (ProvideFile(sBaseName)));
+            fis = new FileInputStream (ProvideFile(sBaseName));
+            load (fis);
         }
-        catch (java.io.IOException e)
+        catch (IOException e)
         {
             // Ignore a non-existing options file.
+        }
+        finally
+        {
+            try
+            {
+                if (fis != null)
+                    fis.close();
+            }
+            catch (IOException ex)
+            {
+            }
         }
     }
 
     public void Save (String sBaseName)
     {
+        FileOutputStream fos = null;
         try
         {
-            store (new FileOutputStream (ProvideFile(sBaseName)), null);
+            fos = new FileOutputStream (ProvideFile(sBaseName));
+            store (fos, null);
         }
-        catch (java.io.IOException e)
+        catch (IOException e)
         {
+        }
+        finally
+        {
+            try
+            {
+                if (fos != null)
+                    fos.close();
+            }
+            catch (IOException ex)
+            {
+            }
         }
     }
 
