@@ -455,7 +455,7 @@ static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
                                            sizeof( aColArr[0] )) ] );
     }
 
-    bool bBackGr = COL_NONE == rAttr.nColor;
+    bool bBackGr = COL_NONE_COLOR == rAttr.nColor;
 
     switch (rAttr.nItemId)
     {

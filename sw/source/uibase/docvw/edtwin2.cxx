@@ -389,33 +389,34 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
         if( bContinue )
         {
-            sal_uInt8 nTabCols = rSh.WhichMouseTabCol(aPos);
+            SwTab nTabCols = rSh.WhichMouseTabCol(aPos);
             sal_uInt16 nTabRes = 0;
             switch(nTabCols)
             {
-                case SW_TABCOL_HORI:
-                case SW_TABCOL_VERT:
+                case SwTab::COL_HORI:
+                case SwTab::COL_VERT:
                     nTabRes = STR_TABLE_COL_ADJUST;
                     break;
-                case SW_TABROW_HORI:
-                case SW_TABROW_VERT:
+                case SwTab::ROW_HORI:
+                case SwTab::ROW_VERT:
                     nTabRes = STR_TABLE_ROW_ADJUST;
                     break;
                 // #i32329# Enhanced table selection
-                case SW_TABSEL_HORI:
-                case SW_TABSEL_HORI_RTL:
-                case SW_TABSEL_VERT:
+                case SwTab::SEL_HORI:
+                case SwTab::SEL_HORI_RTL:
+                case SwTab::SEL_VERT:
                     nTabRes = STR_TABLE_SELECT_ALL;
                     break;
-                case SW_TABROWSEL_HORI:
-                case SW_TABROWSEL_HORI_RTL:
-                case SW_TABROWSEL_VERT:
+                case SwTab::ROWSEL_HORI:
+                case SwTab::ROWSEL_HORI_RTL:
+                case SwTab::ROWSEL_VERT:
                     nTabRes = STR_TABLE_SELECT_ROW;
                     break;
-                case SW_TABCOLSEL_HORI:
-                case SW_TABCOLSEL_VERT:
+                case SwTab::COLSEL_HORI:
+                case SwTab::COLSEL_VERT:
                     nTabRes = STR_TABLE_SELECT_COL;
                     break;
+                case SwTab::COL_NONE: break; // prevent compiler warning
             }
             if(nTabRes)
             {

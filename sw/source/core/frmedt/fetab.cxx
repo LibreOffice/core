@@ -1852,9 +1852,9 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd, bool bRowDrag
     return bRet;
 }
 
-sal_uInt8 SwFEShell::WhichMouseTabCol( const Point &rPt ) const
+SwTab SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 {
-    sal_uInt8 nRet = SW_TABCOL_NONE;
+    SwTab nRet = SwTab::COL_NONE;
     bool bRow = false;
     bool bCol = false;
     bool bSelect = false;
@@ -1883,9 +1883,9 @@ sal_uInt8 SwFEShell::WhichMouseTabCol( const Point &rPt ) const
         if ( !bSelect )
         {
             if ( pFrm->IsVertical() )
-                nRet = bRow ? SW_TABCOL_VERT : SW_TABROW_VERT;
+                nRet = bRow ? SwTab::COL_VERT : SwTab::ROW_VERT;
             else
-                nRet = bRow ? SW_TABROW_HORI : SW_TABCOL_HORI;
+                nRet = bRow ? SwTab::ROW_HORI : SwTab::COL_HORI;
         }
         else
         {
@@ -1894,15 +1894,15 @@ sal_uInt8 SwFEShell::WhichMouseTabCol( const Point &rPt ) const
             {
                 if ( bRow && bCol )
                 {
-                    nRet = SW_TABSEL_VERT;
+                    nRet = SwTab::SEL_VERT;
                 }
                 else if ( bRow )
                 {
-                    nRet = SW_TABROWSEL_VERT;
+                    nRet = SwTab::ROWSEL_VERT;
                 }
                 else if ( bCol )
                 {
-                    nRet = SW_TABCOLSEL_VERT;
+                    nRet = SwTab::COLSEL_VERT;
                 }
             }
             else
@@ -1910,18 +1910,18 @@ sal_uInt8 SwFEShell::WhichMouseTabCol( const Point &rPt ) const
                 if ( bRow && bCol )
                 {
                     nRet =  pTabFrm->IsRightToLeft() ?
-                            SW_TABSEL_HORI_RTL :
-                            SW_TABSEL_HORI;
+                            SwTab::SEL_HORI_RTL :
+                            SwTab::SEL_HORI;
                 }
                 else if ( bRow )
                 {
                     nRet = pTabFrm->IsRightToLeft() ?
-                           SW_TABROWSEL_HORI_RTL :
-                           SW_TABROWSEL_HORI;
+                           SwTab::ROWSEL_HORI_RTL :
+                           SwTab::ROWSEL_HORI;
                 }
                 else if ( bCol )
                 {
-                    nRet = SW_TABCOLSEL_HORI;
+                    nRet = SwTab::COLSEL_HORI;
                 }
             }
         }

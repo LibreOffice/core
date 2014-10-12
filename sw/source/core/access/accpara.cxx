@@ -2215,7 +2215,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             ChangeAttr.Value <<= aChangeAttr.nAttr; //underline line
             break;
         }
-        if( aChangeAttr.nColor != COL_NONE )
+        if( aChangeAttr.nColor != COL_NONE_COLOR )
         {
             if( aChangeAttr.nItemId == SID_ATTR_BRUSH )
             {

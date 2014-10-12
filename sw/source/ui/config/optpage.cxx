@@ -1761,7 +1761,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         switch (nPos)
         {
             case 0:
-                aInsertedAttr.nColor = COL_NONE;
+                aInsertedAttr.nColor = COL_NONE_COLOR;
                 break;
             case 1:
             case LISTBOX_ENTRY_NOTFOUND:
@@ -1787,7 +1787,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         switch (nPos)
         {
             case 0:
-                aDeletedAttr.nColor = COL_NONE;
+                aDeletedAttr.nColor = COL_NONE_COLOR;
                 break;
             case 1:
             case LISTBOX_ENTRY_NOTFOUND:
@@ -1813,7 +1813,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
         switch (nPos)
         {
             case 0:
-                aChangedAttr.nColor = COL_NONE;
+                aChangedAttr.nColor = COL_NONE_COLOR;
                 break;
             case 1:
             case LISTBOX_ENTRY_NOTFOUND:
@@ -1910,7 +1910,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
         case COL_TRANSPARENT:
             pInsertColorLB->SelectEntryPos(1);
             break;
-        case COL_NONE:
+        case COL_NONE_COLOR:
             pInsertColorLB->SelectEntryPos(0);
             break;
         default:
@@ -1924,7 +1924,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
         case COL_TRANSPARENT:
             pDeletedColorLB->SelectEntryPos(1);
             break;
-        case COL_NONE:
+        case COL_NONE_COLOR:
             pDeletedColorLB->SelectEntryPos(0);
             break;
         default:
@@ -1938,7 +1938,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
         case COL_TRANSPARENT:
             pChangedColorLB->SelectEntryPos(1);
             break;
-        case COL_NONE:
+        case COL_NONE_COLOR:
             pChangedColorLB->SelectEntryPos(0);
             break;
         default:
