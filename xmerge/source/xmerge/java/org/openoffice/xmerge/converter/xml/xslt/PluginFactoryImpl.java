@@ -147,6 +147,13 @@ public final class PluginFactoryImpl extends PluginFactory
         } catch (Exception e) {
 
         // It is okay for the property file to not exist.
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException ex) {
+            }
         }
         return ext;
     }
