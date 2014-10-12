@@ -28,8 +28,8 @@ import com.sun.star.text.XTextContent;
  */
 public class ParagraphDsc extends InstDescr {
 
-    private final String service = "com.sun.star.text.Paragraph";
-    private String ifcName = "com.sun.star.text.XTextContent";
+    private static final String service = "com.sun.star.text.Paragraph";
+    private static final String ifcName = "com.sun.star.text.XTextContent";
     private String name = null;
 
 
