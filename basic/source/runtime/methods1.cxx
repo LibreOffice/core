@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_version.h>
 
 #include <cstddef>
 
@@ -733,7 +734,9 @@ RTLFUNC(GetSolarVersion)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get(0)->PutLong( (sal_Int32)SUPD );
+    rPar.Get(0)->PutLong( OString(OString::number(LIBO_VERSION_MAJOR) +
+                                  OString::number(LIBO_VERSION_MINOR) +
+                                  OString::number(LIBO_VERSION_MICRO)).toInt64() );
 }
 
 RTLFUNC(TwipsPerPixelX)
