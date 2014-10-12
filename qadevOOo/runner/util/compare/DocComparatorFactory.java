@@ -19,7 +19,6 @@
 package util.compare;
 
 import lib.TestParameters;
-import util.compare.GraphicalComparator;
 
 public class DocComparatorFactory
 {

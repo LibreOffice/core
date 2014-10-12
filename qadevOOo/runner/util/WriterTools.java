@@ -19,19 +19,21 @@ package util;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+
 import com.sun.star.container.XNamed;
+
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageSupplier;
+
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+
 import com.sun.star.uno.UnoRuntime;
-
-import util.DesktopTools;
-
 
 public class WriterTools {
     public static XTextDocument createTextDoc(XMultiServiceFactory xMSF) {
