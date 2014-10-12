@@ -18,6 +18,7 @@
  */
 
 #include <config_options.h>
+#include <config_version.h>
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -229,7 +230,8 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_UPDATE_VERSION:
-                rSet.Put( SfxUInt32Item( SID_UPDATE_VERSION, SUPD ) );
+                rSet.Put( SfxUInt32Item( SID_UPDATE_VERSION, LIBO_VERSION_MAJOR * 10000 + LIBO_VERSION_MINOR * 100 +
+                                                                LIBO_VERSION_MICRO * 1 ) );
                 break;
 
             case SID_OFFICE_CUSTOMERNUMBER:
