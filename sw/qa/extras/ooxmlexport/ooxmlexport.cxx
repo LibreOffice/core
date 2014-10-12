@@ -13,6 +13,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/FontEmphasis.hpp>
 
 #include <string>
 
@@ -454,6 +455,18 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtent, "effect-extent.docx")
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
         // E.g. this was 0.
         assertXPath(pXmlDoc, "//wp:effectExtent", "l", "114300");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testEm, "em.docx")
+{
+    // Test all possible <w:em> arguments.
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::NONE, getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharEmphasis"));
+    // This was ACCENT_ABOVE.
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::DOT_ABOVE, getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEmphasis"));
+    // This was DOT_ABOVE.
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::ACCENT_ABOVE, getProperty<sal_Int16>(getRun(getParagraph(1), 3), "CharEmphasis"));
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::CIRCLE_ABOVE, getProperty<sal_Int16>(getRun(getParagraph(1), 4), "CharEmphasis"));
+    CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::DOT_BELOW, getProperty<sal_Int16>(getRun(getParagraph(1), 5), "CharEmphasis"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

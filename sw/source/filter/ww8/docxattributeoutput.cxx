@@ -6332,11 +6332,21 @@ void DocxAttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasis
 
     switch ( rEmphasisMark.GetValue() )
     {
-        case EMPHASISMARK_NONE:         pEmphasis = "none";     break;
-        case EMPHASISMARK_SIDE_DOTS:    pEmphasis = "dot";      break;
-        case EMPHASISMARK_CIRCLE_ABOVE: pEmphasis = "circle";   break;
-        case EMPHASISMARK_DOTS_BELOW:   pEmphasis = "underDot"; break;
-        default:                        pEmphasis = "comma";    break;
+    case EMPHASISMARK_NONE:
+        pEmphasis = "none";
+        break;
+    case EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE:
+        pEmphasis = "dot";
+        break;
+    case EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE:
+        pEmphasis = "comma";
+        break;
+    case EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE:
+        pEmphasis = "circle";
+        break;
+    case EMPHASISMARK_DOT|EMPHASISMARK_POS_BELOW:
+        pEmphasis = "underDot";
+        break;
     }
 
     m_pSerializer->singleElementNS( XML_w, XML_em, FSNS( XML_w, XML_val ), pEmphasis, FSEND );

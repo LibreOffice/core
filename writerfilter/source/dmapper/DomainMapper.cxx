@@ -3274,13 +3274,13 @@ sal_Int16 DomainMapper::getEmphasisValue(const sal_Int32 nIntValue)
 {
     switch (nIntValue)
     {
-    case 1:
+    case NS_ooxml::LN_Value_ST_Em_dot:
         return com::sun::star::text::FontEmphasis::DOT_ABOVE;
-    case 2:
+    case NS_ooxml::LN_Value_ST_Em_comma:
         return com::sun::star::text::FontEmphasis::ACCENT_ABOVE;
-    case 3:
+    case NS_ooxml::LN_Value_ST_Em_circle:
         return com::sun::star::text::FontEmphasis::CIRCLE_ABOVE;
-    case 4:
+    case NS_ooxml::LN_Value_ST_Em_underDot:
         return com::sun::star::text::FontEmphasis::DOT_BELOW;
     default:
         return com::sun::star::text::FontEmphasis::NONE;
