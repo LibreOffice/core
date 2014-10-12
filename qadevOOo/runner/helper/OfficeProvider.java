@@ -297,10 +297,6 @@ public class OfficeProvider implements AppProvider
             {
                 System.out.println("Could not connect an Office and cannot start one.\n".concat("please start an office with following parameter:\n").
                         concat("\nsoffice --accept=").concat((String) param.get("ConnectionString")).concat(";urp;\n"));
-                if (bAppExecutionHasWarning)
-                {
-                    System.out.println(errorMessage);
-                }
             }
         }
 
