@@ -21,12 +21,12 @@
 
 String AVMEDIA_STR_INSERTMEDIA_DLG
 {
-    Text[en-US] = "Insert Audio/Video";
+    Text[en-US] = "Insert Audio or Video";
 };
 
 String AVMEDIA_STR_OPENMEDIA_DLG
 {
-    Text[en-US] = "Open Audio/Video Dialog";
+    Text[en-US] = "Open Audio and Video Dialog";
 };
 
 String AVMEDIA_STR_ALL_MEDIAFILES
