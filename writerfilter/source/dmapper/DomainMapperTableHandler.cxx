@@ -285,10 +285,10 @@ bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const Prope
 
 }
 
-bool lcl_extractHoriOrient(uno::Sequence<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
+bool lcl_extractHoriOrient(comphelper::SequenceAsVector<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
 {
     // Shifts the frame left by the given value.
-    for (sal_Int32 i = 0; i < rFrameProperties.getLength(); ++i)
+    for (size_t i = 0; i < rFrameProperties.size(); ++i)
     {
         if (rFrameProperties[i].Name == "HoriOrient")
         {
@@ -299,10 +299,10 @@ bool lcl_extractHoriOrient(uno::Sequence<beans::PropertyValue>& rFrameProperties
     return false;
 }
 
-void lcl_DecrementHoriOrientPosition(uno::Sequence<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
+void lcl_DecrementHoriOrientPosition(comphelper::SequenceAsVector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
 {
     // Shifts the frame left by the given value.
-    for (sal_Int32 i = 0; i < rFrameProperties.getLength(); ++i)
+    for (size_t i = 0; i < rFrameProperties.size(); ++i)
     {
         beans::PropertyValue& rPropertyValue = rFrameProperties[i];
         if (rPropertyValue.Name == "HoriOrientPosition")
@@ -315,7 +315,7 @@ void lcl_DecrementHoriOrientPosition(uno::Sequence<beans::PropertyValue>& rFrame
     }
 }
 
-TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, uno::Sequence<beans::PropertyValue>& rFrameProperties)
+TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, comphelper::SequenceAsVector<beans::PropertyValue>& rFrameProperties)
 {
     // will receive the table style if any
     TableStyleSheetEntry* pTableStyle = NULL;
@@ -484,7 +484,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::makeAny( aDistances ) );
 
-        if (rFrameProperties.hasElements())
+        if (!rFrameProperties.empty())
             lcl_DecrementHoriOrientPosition(rFrameProperties, rInfo.nLeftBorderDistance);
 
         // Set table above/bottom spacing to 0.
@@ -512,7 +512,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             // Only top level table position depends on border width
             if (rInfo.nNestLevel == 1)
             {
-                if (!rFrameProperties.hasElements())
+                if (rFrameProperties.empty())
                     rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
                 else
                     lcl_DecrementHoriOrientPosition(rFrameProperties, aLeftBorder.LineWidth * 0.5);
@@ -980,7 +980,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 #endif
 
     // If we want to make this table a floating one.
-    uno::Sequence<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getCurrentTablePosition();
+    comphelper::SequenceAsVector<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getCurrentTablePosition();
     TableInfo aTableInfo;
     aTableInfo.nNestLevel = nestedTableLevel;
     aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo, aFrameProperties);
@@ -1000,7 +1000,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         uno::Reference<text::XTextRange> xStart;
         uno::Reference<text::XTextRange> xEnd;
 
-        bool bFloating = aFrameProperties.hasElements();
+        bool bFloating = !aFrameProperties.empty();
         // Additional checks: if we can do this.
         if (bFloating && (*m_pTableSeq)[0].getLength() > 0 && (*m_pTableSeq)[0][0].getLength() > 0)
         {
@@ -1083,15 +1083,17 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             xTableProperties->getPropertyValue("IsWidthRelative") >>= bIsRelative;
             if (!bIsRelative)
             {
-                aFrameProperties.realloc(aFrameProperties.getLength() + 1);
-                aFrameProperties[aFrameProperties.getLength() - 1].Name = "Width";
-                aFrameProperties[aFrameProperties.getLength() - 1].Value = xTableProperties->getPropertyValue("Width");
+                beans::PropertyValue aValue;
+                aValue.Name = "Width";
+                aValue.Value = xTableProperties->getPropertyValue("Width");
+                aFrameProperties.push_back(aValue);
             }
             else
             {
-                aFrameProperties.realloc(aFrameProperties.getLength() + 1);
-                aFrameProperties[aFrameProperties.getLength() - 1].Name = "FrameWidthPercent";
-                aFrameProperties[aFrameProperties.getLength() - 1].Value = xTableProperties->getPropertyValue("RelativeWidth");
+                beans::PropertyValue aValue;
+                aValue.Name = "FrameWidthPercent";
+                aValue.Value = xTableProperties->getPropertyValue("RelativeWidth");
+                aFrameProperties.push_back(aValue);
 
                 // Applying the relative width to the frame, needs to have the table width to be 100% of the frame width
                 xTableProperties->setPropertyValue("RelativeWidth", uno::makeAny(sal_Int16(100)));
@@ -1110,9 +1112,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
             if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1)
-                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, aFrameProperties, nTableWidth));
+                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, aFrameProperties.getAsConstList(), nTableWidth));
             else
-                m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties);
+                m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties.getAsConstList());
         }
     }
 
