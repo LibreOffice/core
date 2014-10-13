@@ -589,25 +589,15 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 
 uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
-    uno::Sequence< style::TabStop > aRet( sal_Int32( m_aCurrentTabStops.size() ) );
-    style::TabStop* pArray = aRet.getArray();
-    ::std::vector<DeletableTabStop>::const_iterator aIt = m_aCurrentTabStops.begin();
-    ::std::vector<DeletableTabStop>::const_iterator aEndIt = m_aCurrentTabStops.end();
-    sal_Int32 nDeleted = 0;
-    for(sal_Int32 nIndex = 0; aIt != aEndIt; ++aIt)
+    comphelper::SequenceAsVector<style::TabStop> aRet;
+    for (DeletableTabStop& rStop : m_aCurrentTabStops)
     {
-        if(!aIt->bDeleted)
-            pArray[nIndex++] = *aIt;
-        else
-            ++nDeleted;
+        if (!rStop.bDeleted)
+            aRet.push_back(rStop);
     }
     m_aCurrentTabStops.clear();
     m_nCurrentTabStopIndex = 0;
-    if(nDeleted)
-    {
-        aRet.realloc( aRet.getLength() - nDeleted);
-    }
-    return aRet;
+    return aRet.getAsConstList();
 }
 
 /*-------------------------------------------------------------------------
