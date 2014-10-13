@@ -79,8 +79,10 @@ void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
         return;
 
     const SwNodePtr pSrch = (SwNodePtr)&rNd;
+
     sal_uInt16 nPos;
-    pOutlineNds->Seek_Entry( pSrch, &nPos );
+    if (!pOutlineNds->Seek_Entry(pSrch, &nPos))
+        return;
     if( nPos == pOutlineNds->size() )      // none present for updating ?
         return;
 
