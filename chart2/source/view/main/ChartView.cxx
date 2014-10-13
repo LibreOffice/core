@@ -248,6 +248,15 @@ public:
 
     void initializeCooSysAndSeriesPlotter( ChartModel& rModel );
     void initAxisUsageList(const Date& rNullDate);
+
+    /**
+     * Perform automatic axis scaling and determine the amount and spacing of
+     * increments.  It assumes that the caller has determined the size of the
+     * largest axis label text object prior to calling this method.
+     *
+     * The new axis scaling data will be stored in the VCoordinateSystem
+     * objects.
+     */
     void doAutoScaling( ChartModel& rModel );
     void updateScalesAndIncrementsOnAxes();
     void setScalesFromCooSysToPlotter();
