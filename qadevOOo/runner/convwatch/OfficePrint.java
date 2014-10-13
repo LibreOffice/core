@@ -362,48 +362,56 @@ public class OfficePrint {
 
             String sBuildID = "";
 
+            FileWriter out = null;
             try
             {
-                FileWriter out = new FileWriter(aInfoFile.toString());
-                out.write("# automatically created file by graphical compare" + ls);
-                if (_aGTA != null)
+                try
                 {
-                    if (_sSpecial != null && _sSpecial.equals("msoffice"))
+                    out = new FileWriter(aInfoFile.toString());
+                    out.write("# automatically created file by graphical compare" + ls);
+                    if (_aGTA != null)
                     {
-                        out.write("# buildid from wordloadfile" + ls);
-                        sBuildID = _aGTA.getPerformance().getMSOfficeVersion();
-                        out.write("buildid=" + sBuildID + ls);
+                        if (_sSpecial != null && _sSpecial.equals("msoffice"))
+                        {
+                            out.write("# buildid from wordloadfile" + ls);
+                            sBuildID = _aGTA.getPerformance().getMSOfficeVersion();
+                            out.write("buildid=" + sBuildID + ls);
+                        }
+                        else
+                        {
+                            out.write("# buildid is read out of the bootstrap file" + ls);
+                            sBuildID = _aGTA.getBuildID();
+                            out.write("buildid=" + sBuildID + ls);
+                        }
+                        out.write(ls);
+                        out.write("# resolution given in DPI" + ls);
+                        out.write("resolution=" + _aGTA.getResolutionInDPI() + ls);
                     }
                     else
                     {
-                        out.write("# buildid is read out of the bootstrap file" + ls);
-                        sBuildID = _aGTA.getBuildID();
-                        out.write("buildid=" + sBuildID + ls);
+                        out.write("buildid=" + _sSpecial + ls);
                     }
+
                     out.write(ls);
-                    out.write("# resolution given in DPI" + ls);
-                    out.write("resolution=" + _aGTA.getResolutionInDPI() + ls);
+                    out.write("# Values out of System.getProperty(...)" + ls);
+                    out.write("os.name=" + System.getProperty("os.name") + ls);
+                    out.write("os.arch=" + System.getProperty("os.arch") + ls);
+                    out.write("os.version=" + System.getProperty("os.version") + ls);
+
+                    if (_aGTA != null)
+                    {
+                        out.write(ls);
+                        out.write("# Performance output, values are given in milli sec." + ls);
+                        _aGTA.getPerformance().print(out);
+                    }
+
+                    out.flush();
                 }
-                else
+                finally
                 {
-                    out.write("buildid=" + _sSpecial + ls);
+                    if (out != null)
+                        out.close();
                 }
-
-                out.write(ls);
-                out.write("# Values out of System.getProperty(...)" + ls);
-                out.write("os.name=" + System.getProperty("os.name") + ls);
-                out.write("os.arch=" + System.getProperty("os.arch") + ls);
-                out.write("os.version=" + System.getProperty("os.version") + ls);
-
-                if (_aGTA != null)
-                {
-                    out.write(ls);
-                    out.write("# Performance output, values are given in milli sec." + ls);
-                    _aGTA.getPerformance().print(out);
-                }
-
-                out.flush();
-                out.close();
             }
             catch (java.io.IOException e)
             {
