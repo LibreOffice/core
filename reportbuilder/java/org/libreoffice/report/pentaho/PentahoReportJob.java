@@ -40,8 +40,6 @@ import org.libreoffice.report.pentaho.output.text.TextRawReportProcessor;
 
 import java.io.IOException;
 
-import java.lang.Integer;
-
 import java.util.ArrayList;
 import java.util.List;
 
