@@ -80,17 +80,27 @@ public class FileTools {
      * @throws java.io.IOException throws java.io.IOException if something failes
      */
     public static void copyFile(File src, File dst) throws java.io.IOException {
-        InputStream in = new FileInputStream(src);
-        OutputStream out = new FileOutputStream(dst);
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = new FileInputStream(src);
+            try {
+                out = new FileOutputStream(dst);
 
-        // Transfer bytes from in to out
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            } finally {
+                if (out != null)
+                    out.close();
+            }
+        } finally {
+            if (in != null)
+                in.close();
         }
-        in.close();
-        out.close();
     }
 
 

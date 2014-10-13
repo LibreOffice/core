@@ -255,54 +255,60 @@ public class SQLExecution {
     private void execute(String command, HashMap<String, String[]> output, boolean update) {
         if (m_bDebug)
             System.out.println("Debug - SQLExecution - execute Command: " + command);
+
+        ResultSet sqlResult = null;
         try {
-            if (update) {
-                // make an update
-                mStatement.executeUpdate(command);
-            }
-            else {
-                // make a select: collect the result
-                ResultSet sqlResult = mStatement.executeQuery(command);
-                ResultSetMetaData sqlRSMeta = sqlResult.getMetaData();
-                int columnCount = sqlRSMeta.getColumnCount();
-                String[] columnNames = new String[columnCount];
-                int countRows = 0;
-                boolean goThroughRowsTheFirstTime = true;
-                for(int i=1; i<=columnCount; i++) {
-                    columnNames[i-1] = sqlRSMeta.getColumnName(i);
-                    // initialize output
-                    ArrayList<String> v = new ArrayList<String>();
+            try {
+                if (update) {
+                    // make an update
+                    mStatement.executeUpdate(command);
+                }
+                else {
+                    // make a select: collect the result
+                    sqlResult = mStatement.executeQuery(command);
+                    ResultSetMetaData sqlRSMeta = sqlResult.getMetaData();
+                    int columnCount = sqlRSMeta.getColumnCount();
+                    String[] columnNames = new String[columnCount];
+                    int countRows = 0;
+                    boolean goThroughRowsTheFirstTime = true;
+                    for(int i=1; i<=columnCount; i++) {
+                        columnNames[i-1] = sqlRSMeta.getColumnName(i);
+                        // initialize output
+                        ArrayList<String> v = new ArrayList<String>();
 
-                    sqlResult.beforeFirst();
-                    while (sqlResult.next()) {
-                        String value = sqlResult.getString(i);
-                        v.add(value);
-                        // the first time: count rows
-                        if (goThroughRowsTheFirstTime)
-                            countRows++;
-                    }
-                    // rows are counted
-                    if (goThroughRowsTheFirstTime)
-                        goThroughRowsTheFirstTime = false;
-
-                    // put result in output HashMap
-                    String[]s = new String[countRows];
-                    s = v.toArray(s);
-                    output.put(columnNames[i-1], s);
-                    if (m_bDebug) {
-                        if (i == 1) {
-                            System.out.print("Debug - SQLExecution - Command returns: ");
-                            System.out.print("row: " + columnNames[i-1] + "   vals: ");
+                        sqlResult.beforeFirst();
+                        while (sqlResult.next()) {
+                            String value = sqlResult.getString(i);
+                            v.add(value);
+                            // the first time: count rows
+                            if (goThroughRowsTheFirstTime)
+                                countRows++;
                         }
-                        for (int j=0; j<s.length; j++)
-                            System.out.print(s[j] + " ");
-                        if (i == columnCount - 1)
-                            System.out.println();
+                        // rows are counted
+                        if (goThroughRowsTheFirstTime)
+                            goThroughRowsTheFirstTime = false;
+
+                        // put result in output HashMap
+                        String[]s = new String[countRows];
+                        s = v.toArray(s);
+                        output.put(columnNames[i-1], s);
+                        if (m_bDebug) {
+                            if (i == 1) {
+                                System.out.print("Debug - SQLExecution - Command returns: ");
+                                System.out.print("row: " + columnNames[i-1] + "   vals: ");
+                            }
+                            for (int j=0; j<s.length; j++)
+                                System.out.print(s[j] + " ");
+                            if (i == columnCount - 1)
+                                System.out.println();
+                        }
                     }
                 }
+            } finally {
+                if (sqlResult != null)
+                    sqlResult.close();
             }
-        }
-        catch (java.sql.SQLException e) {
+        } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
     }

@@ -59,10 +59,20 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
 
 
     public void addFileLog(String filePath){
+        FileWriter fileWriter = null;
         try{
-            if(mFileWriters == null)
-                mFileWriters = new HashMap<String, FileWriter>();
-            mFileWriters.put(filePath, new FileWriter(filePath));
+            try{
+                if(mFileWriters == null)
+                    mFileWriters = new HashMap<String, FileWriter>();
+                fileWriter = new FileWriter(filePath);
+                mFileWriters.put(filePath, fileWriter);
+            }finally{
+                try{
+                    if (fileWriter != null)
+                        fileWriter.close();
+                }finally{
+                }
+            }
         }catch(IOException e ){
             e.printStackTrace(this);
         }

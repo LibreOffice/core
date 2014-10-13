@@ -69,11 +69,25 @@ class ShareConnection
 
                 try
                 {
-                    oStmt = m_aCon.createStatement();
+                    try
+                    {
+                        oStmt = m_aCon.createStatement();
 
-                    GlobalLogWriter.get().println("DB: " + m_sSQL);
-                    /* ResultSet oResult = */
-                    oStmt.executeUpdate(m_sSQL);
+                        GlobalLogWriter.get().println("DB: " + m_sSQL);
+                        /* ResultSet oResult = */
+                        oStmt.executeUpdate(m_sSQL);
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            if (oStmt != null)
+                                oStmt.close();
+                        }
+                        finally
+                        {
+                        }
+                    }
                 }
                 catch(Exception e)
                 {
