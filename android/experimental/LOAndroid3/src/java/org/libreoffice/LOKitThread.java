@@ -45,6 +45,22 @@ public class LOKitThread extends Thread {
         return true;
     }
 
+    /** Handle the geometry change + draw. */
+    private void redraw() {
+        if (mController == null || mTileProvider == null) {
+            // called too early...
+            return;
+        }
+
+        draw();
+
+        RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
+        mController.setPageRect(rect, rect);
+        mController.setViewportMetrics(mController.getViewportMetrics());
+        mController.setForceRedraw();
+    }
+
+    /** Invalidate everything + handle the geometry change + draw. */
     private void refresh() {
         Bitmap bitmap = mTileProvider.thumbnail(1000);
         if (bitmap != null) {
@@ -52,11 +68,7 @@ public class LOKitThread extends Thread {
         }
 
         mLayerClient.clearAndResetlayers();
-        draw();
-        RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-        mController.setPageRect(rect, rect);
-        mController.setViewportMetrics(mController.getViewportMetrics());
-        mController.setForceRedraw();
+        redraw();
     }
 
     private void changePart(int partIndex) {
@@ -119,8 +131,7 @@ public class LOKitThread extends Thread {
                 draw();
                 break;
             case LOEvent.SIZE_CHANGED:
-                // re-draw when the size has changed
-                draw();
+                redraw();
                 break;
             case LOEvent.CHANGE_PART:
                 changePart(event.getPartIndex());
