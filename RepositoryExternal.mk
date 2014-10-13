@@ -3763,6 +3763,7 @@ endef
 define gb_Executable__register_saxparser
 $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
+	$(call gb_Package_get_target_for_build,instsetoo_native_setup_ure) \
 	$(call gb_Rdb_get_target_for_build,saxparser) \
 	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(INSTROOT)/$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb \
