@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_4e3ec7b9",
+        "filename": "qadevOOo/runner/graphical/OpenOfficePostscriptCreator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-10-13T06:59:30Z",
+      "side": 1,
+      "message": "this is going to lead to a subtle change in behaviour, because it no longer validates that the property value is of type Boolean.\n\nAlso, it should have been be .equals(), not \u003d\u003d",
+      "revId": "3ed3e095b037d0ca1faa9c72dc83061cce832aae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
