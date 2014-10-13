@@ -38,25 +38,28 @@
 #include "grouptable.hxx"
 
 // PLACEMENT_ID
-#define EPP_LAYOUT_TITLESLIDE             0 /* The slide is a title slide                                                             */
-#define EPP_LAYOUT_TITLEANDBODYSLIDE      1 /* Title and body slide                                                                   */
-#define EPP_LAYOUT_TITLEMASTERSLIDE       2 /* Title master slide                                                                     */
-#define EPP_LAYOUT_MASTERSLIDE            3 /* Master slide layout                                                                    */
-#define EPP_LAYOUT_MASTERNOTES            4 /* Master notes layout                                                                    */
-#define EPP_LAYOUT_NOTESTITLEBODY         5 /* Notes title/body layout                                                                */
-#define EPP_LAYOUT_HANDOUTLAYOUT          6 /* Handout layout, therefore it doesn't have placeholders except header, footer, and date */
-#define EPP_LAYOUT_ONLYTITLE              7 /* Only title placeholder                                                                 */
-#define EPP_LAYOUT_2COLUMNSANDTITLE       8 /* Body of the slide has 2 columns and a title                                            */
-#define EPP_LAYOUT_2ROWSANDTITLE          9 /* Slide's body has 2 rows and a title                                                    */
-#define EPP_LAYOUT_RIGHTCOLUMN2ROWS      10 /* Body contains 2 columns, right column has 2 rows                                       */
-#define EPP_LAYOUT_LEFTCOLUMN2ROWS       11 /* Body contains 2 columns, left column has 2 rows                                        */
-#define EPP_LAYOUT_BOTTOMROW2COLUMNS     12 /* Body contains 2 rows, bottom row has 2 columns                                         */
-#define EPP_LAYOUT_TOPROW2COLUMN         13 /* Body contains 2 rows, top row has 2 columns                                            */
-#define EPP_LAYOUT_4OBJECTS              14 /* 4 objects                                                                              */
-#define EPP_LAYOUT_BIGOBJECT             15 /* Big object                                                                             */
-#define EPP_LAYOUT_BLANCSLIDE            16 /* Blank slide                                                                            */
-#define EPP_LAYOUT_TITLERIGHTBODYLEFT    17 /* Vertical title on the right, body on the left                                          */
-#define EPP_LAYOUT_TITLERIGHT2BODIESLEFT 18 /* Vertical title on the right, body on the left split into 2 rows                        */
+enum class EppLayout
+{
+    TITLESLIDE            =  0, /* The slide is a title slide                                                             */
+    TITLEANDBODYSLIDE     =  1, /* Title and body slide                                                                   */
+    TITLEMASTERSLIDE      =  2, /* Title master slide                                                                     */
+    MASTERSLIDE           =  3, /* Master slide layout                                                                    */
+    MASTERNOTES           =  4, /* Master notes layout                                                                    */
+    NOTESTITLEBODY        =  5, /* Notes title/body layout                                                                */
+    HANDOUTLAYOUT         =  6, /* Handout layout, therefore it doesn't have placeholders except header, footer, and date */
+    ONLYTITLE             =  7, /* Only title placeholder                                                                 */
+    TWOCOLUMNSANDTITLE    =  8, /* Body of the slide has 2 columns and a title                                            */
+    TWOROWSANDTITLE       =  9, /* Slide's body has 2 rows and a title                                                    */
+    RIGHTCOLUMN2ROWS      = 10, /* Body contains 2 columns, right column has 2 rows                                       */
+    LEFTCOLUMN2ROWS       = 11, /* Body contains 2 columns, left column has 2 rows                                        */
+    BOTTOMROW2COLUMNS     = 12, /* Body contains 2 rows, bottom row has 2 columns                                         */
+    TOPROW2COLUMN         = 13, /* Body contains 2 rows, top row has 2 columns                                            */
+    FOUROBJECTS           = 14, /* 4 objects                                                                              */
+    BIGOBJECT             = 15, /* Big object                                                                             */
+    BLANCSLIDE            = 16, /* Blank slide                                                                            */
+    TITLERIGHTBODYLEFT    = 17, /* Vertical title on the right, body on the left                                          */
+    TITLERIGHT2BODIESLEFT = 18  /* Vertical title on the right, body on the left split into 2 rows                        */
+};
 
 #define EPP_LAYOUT_SIZE 25
 
@@ -64,7 +67,7 @@ class PptEscherEx;
 
 struct PHLayout
 {
-    sal_Int32   nLayout;
+    EppLayout   nLayout;
     sal_uInt8   nPlaceHolder[ 8 ];
 
     sal_uInt8   nUsedObjectPlaceHolder;

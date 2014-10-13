@@ -175,7 +175,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_Slide | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_Slide );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    mpStrm->WriteInt32( rLayout.nLayout );
+    mpStrm->WriteInt32( static_cast<sal_Int32>(rLayout.nLayout) );
     mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs (8 parts)
     mpStrm->WriteUInt32( (nMasterNum | 0x80000000) )// master ID (equals 0x80000000 on a master page)
            .WriteUInt32( nPageNum + 0x100 )         // notes ID (equals null if no notes are present)
@@ -362,7 +362,7 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
-    mpStrm->WriteInt32( EPP_LAYOUT_TITLEANDBODYSLIDE )  // slide layout -> title and body slide
+    mpStrm->WriteInt32( static_cast<sal_Int32>(EppLayout::TITLEANDBODYSLIDE) )  // slide layout -> title and body slide
            .WriteUChar( 1 ).WriteUChar( 2 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 ).WriteUChar( 0 )     // placeholderID
            .WriteUInt32( 0 )        // master ID (equals null at a master page)
            .WriteUInt32( 0 )        // notes ID (equals null if no notes are present)
