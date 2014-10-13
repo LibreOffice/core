@@ -71,6 +71,28 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>vnd.oasis.opendocument.text-flat-xml</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Text (Flat XML)</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>fodt</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.text-flat-xml</string>
+				</array>
+			</dict>
+		</dict>
 
 		<!-- Calc documents -->
 		<dict>
@@ -116,6 +138,28 @@
 				<key>public.mime-type</key>
 				<array>
 					<string>application/vnd.oasis.opendocument.spreadsheet</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>vnd.oasis.opendocument.spreadsheet-flat-xml</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Spreadsheet (Flat XML)</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>fods</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.spreadsheet-flat-xml</string>
 				</array>
 			</dict>
 		</dict>
@@ -169,6 +213,28 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>vnd.oasis.opendocument.presentation-flat-xml</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Presentation</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>fodp</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.presentation-flat-xml</string>
+				</array>
+			</dict>
+		</dict>
 
 		<!-- Draw documents -->
 		<dict>
@@ -214,6 +280,28 @@
 				<key>public.mime-type</key>
 				<array>
 					<string>application/vnd.oasis.opendocument.graphics</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>vnd.oasis.opendocument.graphics-flat-xml</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Drawing (Flat XML)</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>fodg</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.graphics-flat-xml</string>
 				</array>
 			</dict>
 		</dict>
@@ -1373,12 +1461,16 @@
 			<array>
 				<string>org.openoffice.text</string>
 				<string>org.oasis-open.opendocument.text</string>
+				<string>vnd.oasis.opendocument.text-flat-xml</string>
 				<string>org.openoffice.spreadsheet</string>
 				<string>org.oasis-open.opendocument.spreadsheet</string>
+				<string>vnd.oasis.opendocument.spreadsheet-flat-xml</string>
 				<string>org.openoffice.presentation</string>
 				<string>org.oasis-open.opendocument.presentation</string>
+				<string>vnd.oasis.opendocument.presentation-flat-xml</string>
 				<string>org.openoffice.graphics</string>
 				<string>org.oasis-open.opendocument.graphics</string>
+				<string>vnd.oasis.opendocument.graphics-flat-xml</string>
 				<string>org.openoffice.text-master</string>
 				<string>org.oasis-open.opendocument.text-master</string>
 				<string>org.openoffice.formula</string>
