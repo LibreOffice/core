@@ -244,8 +244,10 @@ public:
 
     // converters -------------------------------------------------------------
 
-    /** Returns the import formula parser (import filter only!). */
+    /** Returns a shared import formula parser (import filter only!). */
     FormulaParser&      getFormulaParser() const;
+    /** Returns an unshared import formula parser (import filter only!). */
+    FormulaParser*      createFormulaParser() const;
     /** Returns the measurement unit converter. */
     UnitConverter&      getUnitConverter() const;
     /** Returns the converter for string to cell address/range conversion. */

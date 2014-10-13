@@ -202,8 +202,10 @@ public:
 
     // converters -------------------------------------------------------------
 
-    /** Returns the import formula parser. */
+    /** Returns a shared import formula parser. */
     inline FormulaParser& getFormulaParser() const { return *mxFmlaParser; }
+    /** Returns an unshared import formula parser. */
+    inline FormulaParser* createFormulaParser() { return new FormulaParser(*this); }
     /** Returns the measurement unit converter. */
     inline UnitConverter& getUnitConverter() const { return *mxUnitConverter; }
     /** Returns the converter for string to cell address/range conversion. */
@@ -590,7 +592,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         mpDoc->EnableExecuteLink(false);
 
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_LOAD_DOC) ) );
-        mxFmlaParser.reset( new FormulaParser( *this ) );
+        mxFmlaParser.reset( createFormulaParser() );
 
         //prevent unnecessary broadcasts and "half way listeners" as
         //is done in ScDocShell::BeforeXMLLoading() for ods
@@ -956,6 +958,11 @@ PivotTableBuffer& WorkbookHelper::getPivotTables() const
 FormulaParser& WorkbookHelper::getFormulaParser() const
 {
     return mrBookGlob.getFormulaParser();
+}
+
+FormulaParser* WorkbookHelper::createFormulaParser() const
+{
+    return mrBookGlob.createFormulaParser();
 }
 
 UnitConverter& WorkbookHelper::getUnitConverter() const

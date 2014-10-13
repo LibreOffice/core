@@ -36,7 +36,7 @@ namespace xls {
 struct SheetDataContextBase
 {
     AddressConverter&   mrAddressConv;      /// The address converter.
-    FormulaParser&      mrFormulaParser;    /// The formula parser.
+    std::unique_ptr<FormulaParser> mxFormulaParser;    /// The formula parser, different one for each SheetDataContext
     SheetDataBuffer&    mrSheetData;        /// The sheet data buffer for cell content and formatting.
     CellModel           maCellData;         /// Position, contents, formatting of current imported cell.
     CellFormulaModel    maFmlaData;         /// Settings for a cell formula.

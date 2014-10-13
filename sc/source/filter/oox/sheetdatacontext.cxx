@@ -64,10 +64,10 @@ const sal_uInt8 BIFF12_ROW_SHOWPHONETIC     = 0x01;
 
 SheetDataContextBase::SheetDataContextBase( const WorksheetHelper& rHelper ) :
     mrAddressConv( rHelper.getAddressConverter() ),
-    mrFormulaParser( rHelper.getFormulaParser() ),
     mrSheetData( rHelper.getSheetData() ),
     mnSheet( rHelper.getSheetIndex() )
 {
+    mxFormulaParser.reset(rHelper.createFormulaParser());
 }
 
 SheetDataContextBase::~SheetDataContextBase()
@@ -426,7 +426,7 @@ bool SheetDataContext::readCellHeader( SequenceInputStream& rStrm, CellType eCel
 ApiTokenSequence SheetDataContext::readCellFormula( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );
-    return mrFormulaParser.importFormula( maCellData.maCellAddr, FORMULATYPE_CELL, rStrm );
+    return mxFormulaParser->importFormula( maCellData.maCellAddr, FORMULATYPE_CELL, rStrm );
 }
 
 bool SheetDataContext::readFormulaRef( SequenceInputStream& rStrm )
@@ -536,7 +536,7 @@ void SheetDataContext::importArray( SequenceInputStream& rStrm )
     if( readFormulaRef( rStrm ) && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
     {
         rStrm.skip( 1 );
-        ApiTokenSequence aTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, FORMULATYPE_ARRAY, rStrm );
+        ApiTokenSequence aTokens = mxFormulaParser->importFormula( maCellData.maCellAddr, FORMULATYPE_ARRAY, rStrm );
         mrSheetData.createArrayFormula( maFmlaData.maFormulaRef, aTokens );
     }
 }
