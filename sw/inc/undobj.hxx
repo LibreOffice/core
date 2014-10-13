@@ -117,7 +117,7 @@ public:
     static bool FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
                               bool bDelRange = true, bool bCopyNext = true );
     static bool FillSaveDataForFmt( const SwPaM& , SwRedlineSaveDatas& );
-    static void SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData );
+    static void SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData );
     static bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
 };
 

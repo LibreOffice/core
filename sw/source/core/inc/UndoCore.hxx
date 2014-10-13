@@ -23,13 +23,13 @@
 #include <undobj.hxx>
 #include <calbck.hxx>
 #include <rtl/ustring.hxx>
+#include <redline.hxx>
 
 class SfxItemSet;
 class SwFmtColl;
 class SwFmtAnchor;
 class SdrMarkList;
 class SwUndoDelete;
-class SwRedlineSaveData;
 class SwFmt;
 
 namespace sw {
@@ -37,11 +37,43 @@ namespace sw {
     class IShellCursorSupplier;
 }
 
-class SwRedlineSaveDatas : public std::vector<SwRedlineSaveData*> {
+class SwRedlineSaveData: public SwUndRng, public SwRedlineData, private SwUndoSaveSection
+{
 public:
-    ~SwRedlineSaveDatas() { DeleteAndDestroyAll(); }
+    SwRedlineSaveData(
+        SwComparePosition eCmpPos,
+        const SwPosition& rSttPos,
+        const SwPosition& rEndPos,
+        SwRangeRedline& rRedl,
+        bool bCopyNext );
 
-    void DeleteAndDestroyAll();
+    ~SwRedlineSaveData();
+
+    void RedlineToDoc( SwPaM& rPam );
+
+    SwNodeIndex* GetMvSttIdx() const
+    {
+        return SwUndoSaveSection::GetMvSttIdx();
+    }
+
+#if OSL_DEBUG_LEVEL > 0
+    sal_uInt16 nRedlineCount;
+#endif
+};
+
+class SwRedlineSaveDatas {
+private:
+    boost::ptr_vector<SwRedlineSaveData> mvData;
+
+public:
+    SwRedlineSaveDatas() : mvData() {}
+
+    void clear() { mvData.clear(); }
+    bool empty() const { return mvData.empty(); }
+    size_t size() const { return mvData.size(); }
+    void push_back (SwRedlineSaveData* value) { mvData.push_back(value); }
+    const SwRedlineSaveData& operator[]( size_t nIdx ) const { return mvData[ nIdx ]; }
+    SwRedlineSaveData& operator[]( size_t nIdx ) { return mvData[ nIdx ]; }
 };
 
 namespace sw {
