@@ -1724,7 +1724,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, OUString &rStr)
                 break;
             case '*':
                 //Skip over MERGEFORMAT
-                aReadParam.SkipToNextToken();
+                (void)aReadParam.SkipToNextToken();
                 break;
             default:
                 OSL_ENSURE(false, "unknown option in FileName field");
