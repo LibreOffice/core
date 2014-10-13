@@ -19,7 +19,9 @@ package share;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
@@ -108,10 +110,7 @@ public abstract class DescGetter
                             line.length()).trim(), descPath,
                             debug);
 
-                    for (int i = 0; i < subs.length; i++)
-                    {
-                        entryList.add(subs[i]);
-                    }
+                    entryList.addAll(Arrays.asList(subs));
                 }
                 else if (line.startsWith("-p"))
                 {

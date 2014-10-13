@@ -17,6 +17,7 @@
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
@@ -299,10 +300,7 @@ class AccTreeNode
             HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
             NodeHandler aHandler = aDescriptor.maHandler;
             String[] aHandlerActions = aHandler.getActions (this);
-            for(int j = 0; j < aHandlerActions.length; j++ )
-            {
-                aActions.add( aHandlerActions[j] );
-            }
+            aActions.addAll(Arrays.asList(aHandlerActions));
         }
     }
 
