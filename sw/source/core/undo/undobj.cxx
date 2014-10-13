@@ -41,30 +41,6 @@
 #include <comcore.hrc>
 #include <docsh.hxx>
 
-class SwRedlineSaveData: public SwUndRng, public SwRedlineData, private SwUndoSaveSection
-{
-public:
-    SwRedlineSaveData(
-        SwComparePosition eCmpPos,
-        const SwPosition& rSttPos,
-        const SwPosition& rEndPos,
-        SwRangeRedline& rRedl,
-        bool bCopyNext );
-
-    ~SwRedlineSaveData();
-
-    void RedlineToDoc( SwPaM& rPam );
-
-    SwNodeIndex* GetMvSttIdx() const
-    {
-        return SwUndoSaveSection::GetMvSttIdx();
-    }
-
-#if OSL_DEBUG_LEVEL > 0
-    sal_uInt16 nRedlineCount;
-#endif
-};
-
 // This class saves the Pam as integers and can recompose those into a PaM
 SwUndRng::SwUndRng()
     : nSttNode( 0 ), nEndNode( 0 ), nSttCntnt( 0 ), nEndCntnt( 0 )
@@ -1004,7 +980,7 @@ bool SwUndo::FillSaveData(
     bool bDelRange,
     bool bCopyNext )
 {
-    rSData.DeleteAndDestroyAll();
+    rSData.clear();
 
     SwRedlineSaveData* pNewData;
     const SwPosition* pStt = rRange.Start();
@@ -1038,7 +1014,7 @@ bool SwUndo::FillSaveDataForFmt(
     const SwPaM& rRange,
     SwRedlineSaveDatas& rSData )
 {
-    rSData.DeleteAndDestroyAll();
+    rSData.clear();
 
     SwRedlineSaveData* pNewData;
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
@@ -1066,19 +1042,19 @@ bool SwUndo::FillSaveDataForFmt(
 }
 
 
-void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
+void SwUndo::SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData )
 {
     RedlineMode_t eOld = rDoc.getIDocumentRedlineAccess().GetRedlineMode();
     rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
 
     for( size_t n = rSData.size(); n; )
-        rSData[ --n ]->RedlineToDoc( aPam );
+        rSData[ --n ].RedlineToDoc( aPam );
 
 #if OSL_DEBUG_LEVEL > 0
     // check redline count against count saved in RedlineSaveData object
     assert(rSData.empty() ||
-           (rSData[0]->nRedlineCount == rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size()));
+           (rSData[0].nRedlineCount == rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size()));
             // "redline count not restored properly"
 #endif
 
@@ -1088,7 +1064,7 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 bool SwUndo::HasHiddenRedlines( const SwRedlineSaveDatas& rSData )
 {
     for( size_t n = rSData.size(); n; )
-        if( rSData[ --n ]->GetMvSttIdx() )
+        if( rSData[ --n ].GetMvSttIdx() )
             return true;
     return false;
 }
@@ -1101,8 +1077,8 @@ bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 
     for( size_t n = 0; n < rCurr.size(); ++n )
     {
-        const SwRedlineSaveData& rSet = *rCurr[ n ];
-        const SwRedlineSaveData& rGet = *rCheck[ n ];
+        const SwRedlineSaveData& rSet = rCurr[ n ];
+        const SwRedlineSaveData& rGet = rCheck[ n ];
         if( rSet.nSttNode != rGet.nSttNode ||
             rSet.GetMvSttIdx() || rGet.GetMvSttIdx() ||
             ( bCurrIsEnd ? rSet.nSttCntnt != rGet.nEndCntnt
@@ -1115,8 +1091,8 @@ bool SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 
     for( size_t n = 0; n < rCurr.size(); ++n )
     {
-        SwRedlineSaveData& rSet = *rCurr[ n ];
-        const SwRedlineSaveData& rGet = *rCheck[ n ];
+        SwRedlineSaveData& rSet = rCurr[ n ];
+        const SwRedlineSaveData& rGet = rCheck[ n ];
         if( bCurrIsEnd )
             rSet.nSttCntnt = rGet.nSttCntnt;
         else
@@ -1171,13 +1147,6 @@ bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
             ||  (rStart.nNode < rAnchorPos.nNode)
             ||  !rStart.nContent.GetIndex()
             );
-}
-
-void SwRedlineSaveDatas::DeleteAndDestroyAll()
-{
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
-    clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

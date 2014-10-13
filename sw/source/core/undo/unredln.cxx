@@ -95,7 +95,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
         SetSaveData( *pDoc, *mpRedlSaveData );
         if( mbHiddenRedlines )
         {
-            mpRedlSaveData->DeleteAndDestroyAll();
+            mpRedlSaveData->clear();
 
             nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex() - nEndExtra;
             nSttNode += nEndExtra;
