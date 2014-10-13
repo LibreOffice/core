@@ -1202,10 +1202,7 @@ bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::XTran
             else
             {
                 OUString aFile;
-
-                aDataHelper.GetString( FORMAT_FILE, aFile );
-
-                if( !aFile.isEmpty() )
+                if (aDataHelper.GetString(FORMAT_FILE, aFile) && !aFile.isEmpty())
                     aFileList.AppendFile( aFile );
             }
 
