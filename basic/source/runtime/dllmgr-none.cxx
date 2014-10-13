@@ -63,10 +63,10 @@ SbError returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
 
         // We expect two Longs but other mappings could be possible too.
         SbxArray* pProps = pObj->GetProperties();
-        if (pProps->Count32() != 2)
+        if (pProps->Count() != 2)
             return ERRCODE_BASIC_BAD_ARGUMENT;
-        SbxVariable* pLow = pProps->Get32( 0 );
-        SbxVariable* pHigh = pProps->Get32( 1 );
+        SbxVariable* pLow = pProps->Get( 0 );
+        SbxVariable* pHigh = pProps->Get( 1 );
         if (!pLow || !pLow->IsLong() ||
             !pHigh || !pHigh->IsLong())
             return ERRCODE_BASIC_BAD_ARGUMENT;

@@ -657,11 +657,11 @@ void EditorWindow::HandleAutoCorrect()
         {
             //autocorrect procedures
             SbxArray* pArr = rModulWindow.GetSbModule()->GetMethods();
-            for( sal_uInt32 i=0; i < pArr->Count32(); ++i )
+            for( sal_Int32 i=0; i < pArr->Count(); ++i )
             {
-                if( pArr->Get32(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
+                if( pArr->Get(i)->GetName().equalsIgnoreAsciiCase( sStr ) )
                 {
-                    sStr = pArr->Get32(i)->GetName(); //if found, get the correct case
+                    sStr = pArr->Get(i)->GetName(); //if found, get the correct case
                     pEditEngine->ReplaceText( sTextSelection, sStr );
                     pEditView->SetSelection( aSel );
                     return;
@@ -1707,7 +1707,7 @@ struct WatchItem
     SbxDimArrayRef  mpArray;
     int             nDimLevel;  // 0 = Root
     int             nDimCount;
-    std::vector<short> vIndices;
+    std::vector<sal_Int32> vIndices;
 
     WatchItem*      mpArrayParentItem;
 
@@ -2198,7 +2198,7 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
         int nParentLevel = bArrayIsRootArray ? pItem->nDimLevel : 0;
         int nThisLevel = nParentLevel + 1;
         sal_Int32 nMin, nMax;
-        pArray->GetDim32( nThisLevel, nMin, nMax );
+        pArray->GetDim( nThisLevel, nMin, nMax );
         for( sal_Int32 i = nMin ; i <= nMax ; i++ )
         {
             WatchItem* pChildItem = new WatchItem(pItem->maName);
@@ -2213,10 +2213,10 @@ void WatchTreeListBox::RequestingChildren( SvTreeListEntry * pParent )
             sal_Int32 j;
             for( j = 0 ; j < nParentLevel ; j++ )
             {
-                short n = pChildItem->vIndices[j] = pItem->vIndices[j];
+                sal_Int32 n = pChildItem->vIndices[j] = pItem->vIndices[j];
                 aIndexStr += OUString::number( n ) + ",";
             }
-            pChildItem->vIndices[nParentLevel] = sal::static_int_cast<short>( i );
+            pChildItem->vIndices[nParentLevel] = i;
             aIndexStr += OUString::number( i ) + ")";
 
             OUString aDisplayName;
@@ -2379,10 +2379,10 @@ OUString implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
         if( nDimLevel < nDims )
         {
             aRetStr += "(";
-            for( int i = nDimLevel ; i < nDims ; i++ )
+            for( sal_Int32 i = nDimLevel ; i < nDims ; i++ )
             {
-                short nMin, nMax;
-                pArray->GetDim( sal::static_int_cast<short>( i+1 ), nMin, nMax );
+                sal_Int32 nMin, nMax;
+                pArray->GetDim( i+1, nMin, nMax );
                 aRetStr += OUString::number(nMin) + " to "  + OUString::number(nMax);
                 if( i < nDims - 1 )
                     aRetStr += ", ";
@@ -2464,13 +2464,13 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             }
                             else
                             {
-                                for( int i = 0 ; i < nOldDims ; i++ )
+                                for( sal_Int32 i = 0 ; i < nOldDims ; i++ )
                                 {
-                                    short nOldMin, nOldMax;
-                                    short nNewMin, nNewMax;
+                                    sal_Int32 nOldMin, nOldMax;
+                                    sal_Int32 nNewMin, nNewMax;
 
-                                    pOldArray->GetDim( sal::static_int_cast<short>( i+1 ), nOldMin, nOldMax );
-                                    pNewArray->GetDim( sal::static_int_cast<short>( i+1 ), nNewMin, nNewMax );
+                                    pOldArray->GetDim( i+1, nOldMin, nOldMax );
+                                    pNewArray->GetDim( i+1, nNewMin, nNewMax );
                                     if( nOldMin != nNewMin || nOldMax != nNewMax )
                                     {
                                         bArrayChanged = true;

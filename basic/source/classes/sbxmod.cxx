@@ -1630,7 +1630,7 @@ SbModule::fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg ) const
 {
         if ( !pImg )
             pImg = pImage;
-        for( sal_uInt32 i = 0; i < pMethods->Count(); i++ )
+        for( sal_Int32 i = 0; i < pMethods->Count(); i++ )
         {
             SbMethod* pMeth = PTR_CAST(SbMethod,pMethods->Get( (sal_uInt16)i ) );
             if( pMeth )
@@ -1862,7 +1862,7 @@ bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 bool SbModule::LoadBinaryData( SvStream& rStrm )
 {
     OUString aKeepSource = aOUSource;
-    bool bRet = LoadData( rStrm, 2 );
+    bool bRet = LoadData( rStrm, 3 );
     LoadCompleted();
     aOUSource = aKeepSource;
     return bRet;

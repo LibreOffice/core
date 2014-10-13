@@ -644,7 +644,7 @@ void SbiParser::DefType( bool bPrivate )
                             }
                             else if ( !bCompatible )
                                 ub += nBase;
-                            pArray->AddDim32( lb, ub );
+                            pArray->AddDim( lb, ub );
                         }
                         pArray->setHasFixedSize( true );
                     }

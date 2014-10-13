@@ -528,10 +528,10 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
 
     // Copy the properties, not only the reference to them
     SbxArray* pProps = pRet->GetProperties();
-    sal_uInt32 nCount = pProps->Count32();
-    for( sal_uInt32 i = 0 ; i < nCount ; i++ )
+    sal_Int32 nCount = pProps->Count();
+    for( sal_Int32 i = 0 ; i < nCount ; i++ )
     {
-        SbxVariable* pVar = pProps->Get32( i );
+        SbxVariable* pVar = pProps->Get( i );
         SbxProperty* pProp = PTR_CAST( SbxProperty, pVar );
         if( pProp )
         {
@@ -550,8 +550,8 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                     sal_Int32 ub = 0;
                     for ( sal_Int32 j = 1 ; j <= pSource->GetDims(); ++j )
                     {
-                        pSource->GetDim32( (sal_Int32)j, lb, ub );
-                        pDest->AddDim32( lb, ub );
+                        pSource->GetDim( j, lb, ub );
+                        pDest->AddDim( lb, ub );
                     }
                 }
                 else
@@ -635,11 +635,11 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
     // Copy the methods from original class module
     SbxArray* pClassMethods = pClassModule->GetMethods();
-    sal_uInt32 nMethodCount = pClassMethods->Count32();
-    sal_uInt32 i;
+    sal_Int32 nMethodCount = pClassMethods->Count();
+    sal_Int32 i;
     for( i = 0 ; i < nMethodCount ; i++ )
     {
-        SbxVariable* pVar = pClassMethods->Get32( i );
+        SbxVariable* pVar = pClassMethods->Get( i );
 
         // Exclude SbIfaceMapperMethod to copy them in a second step
         SbIfaceMapperMethod* pIfaceMethod = PTR_CAST( SbIfaceMapperMethod, pVar );
@@ -665,7 +665,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     // the corresponding base methods have already been copied
     for( i = 0 ; i < nMethodCount ; i++ )
     {
-        SbxVariable* pVar = pClassMethods->Get32( i );
+        SbxVariable* pVar = pClassMethods->Get( i );
 
         SbIfaceMapperMethod* pIfaceMethod = PTR_CAST( SbIfaceMapperMethod, pVar );
         if( pIfaceMethod )
@@ -693,10 +693,10 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
     // Copy the properties from original class module
     SbxArray* pClassProps = pClassModule->GetProperties();
-    sal_uInt32 nPropertyCount = pClassProps->Count32();
+    sal_Int32 nPropertyCount = pClassProps->Count();
     for( i = 0 ; i < nPropertyCount ; i++ )
     {
-        SbxVariable* pVar = pClassProps->Get32( i );
+        SbxVariable* pVar = pClassProps->Get( i );
         SbProcedureProperty* pProcedureProp = PTR_CAST( SbProcedureProperty, pVar );
         if( pProcedureProp )
         {
@@ -1950,6 +1950,7 @@ bool StarBASIC::StoreData( SvStream& r ) const
     return true;
 }
 
+
 bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut )
 {
     bool bRes = false;
@@ -2115,7 +2116,7 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
             if( pVar->GetHashCode() == nCountHash
                   && aVarName.equalsIgnoreAsciiCaseAscii( pCountStr ) )
             {
-                pVar->PutLong( xItemArray->Count32() );
+                pVar->PutLong( xItemArray->Count() );
             }
             else if( pVar->GetHashCode() == nAddHash
                   && aVarName.equalsIgnoreAsciiCaseAscii( pAddStr ) )
@@ -2172,11 +2173,11 @@ sal_Int32 BasicCollection::implGetIndex( SbxVariable* pIndexVar )
 sal_Int32 BasicCollection::implGetIndexForName( const OUString& rName )
 {
     sal_Int32 nIndex = -1;
-    sal_Int32 nCount = xItemArray->Count32();
+    sal_Int32 nCount = xItemArray->Count();
     sal_Int32 nNameHash = MakeHashCode( rName );
     for( sal_Int32 i = 0 ; i < nCount ; i++ )
     {
-        SbxVariable* pVar = xItemArray->Get32( i );
+        SbxVariable* pVar = xItemArray->Get( i );
         if( pVar->GetHashCode() == nNameHash &&
             pVar->GetName().equalsIgnoreAsciiCase( rName ) )
         {
@@ -2256,7 +2257,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
             }
         }
         pNewItem->SetFlag( SBX_READWRITE );
-        xItemArray->Insert32( pNewItem, nNextIndex );
+        xItemArray->Insert( pNewItem, nNextIndex );
     }
     else
     {
@@ -2275,9 +2276,9 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
     SbxVariable* pRes = NULL;
     SbxVariable* p = pPar_->Get( 1 );
     sal_Int32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < (sal_Int32)xItemArray->Count32() )
+    if( nIndex >= 0 && nIndex < xItemArray->Count() )
     {
-        pRes = xItemArray->Get32( nIndex );
+        pRes = xItemArray->Get( nIndex );
     }
     if( !pRes )
     {
@@ -2299,9 +2300,9 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
 
     SbxVariable* p = pPar_->Get( 1 );
     sal_Int32 nIndex = implGetIndex( p );
-    if( nIndex >= 0 && nIndex < (sal_Int32)xItemArray->Count32() )
+    if( nIndex >= 0 && nIndex < xItemArray->Count() )
     {
-        xItemArray->Remove32( nIndex );
+        xItemArray->Remove( nIndex );
 
         // Correct for stack if necessary
         SbiInstance* pInst = GetSbData()->pInst;

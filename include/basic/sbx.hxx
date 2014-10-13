@@ -125,7 +125,7 @@ class BASIC_DLLPUBLIC SbxArray : public SbxBase
     friend class SbMethod;
     friend class SbClassModuleObject;
     friend SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
-    BASIC_DLLPRIVATE void PutDirect( SbxVariable* pVar, sal_uInt32 nIdx );
+    BASIC_DLLPRIVATE void PutDirect( SbxVariable* pVar, sal_Int32 nIdx );
 
     VarEntriesType* mpVarEntries;          // The variables
 
@@ -142,28 +142,20 @@ public:
     SbxArray( const SbxArray& );
     SbxArray& operator=( const SbxArray& );
     virtual void Clear() SAL_OVERRIDE;
-    sal_uInt16           Count() const;
+    sal_Int32            Count() const;
     virtual SbxDataType  GetType() const SAL_OVERRIDE;
     virtual SbxClassType GetClass() const SAL_OVERRIDE;
-    SbxVariableRef&      GetRef( sal_uInt16 );
-    SbxVariable*         Get( sal_uInt16 );
-    void                 Put( SbxVariable*, sal_uInt16 );
-    void                 Insert( SbxVariable*, sal_uInt16 );
-    void                 Remove( sal_uInt16 );
+    SbxVariableRef&      GetRef( sal_Int32 );
+    SbxVariable*         Get( sal_Int32 );
+    void                 Put( SbxVariable*, sal_Int32 );
+    void                 Insert( SbxVariable*, sal_Int32 );
+    void                 Remove( sal_Int32 );
     void                 Remove( SbxVariable* );
     void                 Merge( SbxArray* );
-    OUString             GetAlias( sal_uInt16 );
-    void                 PutAlias( const OUString&, sal_uInt16 );
+    OUString             GetAlias( sal_Int32 );
+    void                 PutAlias( const OUString&, sal_Int32 );
     SbxVariable*         FindUserData( sal_uInt32 nUserData );
     virtual SbxVariable* Find( const OUString&, SbxClassType );
-
-    // Additional methods for 32-bit indices
-    sal_uInt32           Count32() const;
-    SbxVariableRef&      GetRef32( sal_uInt32 );
-    SbxVariable*         Get32( sal_uInt32 );
-    void                 Put32( SbxVariable*, sal_uInt32 );
-    void                 Insert32( SbxVariable*, sal_uInt32 );
-    void                 Remove32( sal_uInt32 );
 };
 
 // SbxDimArray is an array that can dimensioned using BASIC conventions.
@@ -178,9 +170,8 @@ class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
     BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, bool bAllowSize0 );
     bool mbHasFixedSize;
 protected:
-    sal_uInt16  Offset( const short* );
-    sal_uInt32  Offset32( const sal_Int32* );
-    sal_uInt32  Offset32( SbxArray* );
+    sal_Int32  Offset( const sal_Int32* );
+    sal_Int32  Offset( SbxArray* );
     virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
     virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
     virtual ~SbxDimArray();
@@ -193,26 +184,18 @@ public:
     virtual void Clear() SAL_OVERRIDE;
     using SbxArray::GetRef;
     using SbxArray::Get;
-    SbxVariable* Get( const short* );
+    SbxVariable* Get( const sal_Int32* );
     using SbxArray::Put;
-    void Put( SbxVariable*, const short* );
+    void Put( SbxVariable*, const sal_Int32* );
     SbxVariable* Get( SbxArray* );
 
-    short  GetDims() const { return m_vDimensions.size();}
-    void   AddDim( short, short );
-    void   unoAddDim( short, short );
-    bool   GetDim( short, short&, short& ) const;
+    sal_Int32 GetDims() const { return m_vDimensions.size();}
 
-    using SbxArray::GetRef32;
-    using SbxArray::Get32;
-    SbxVariable* Get32( const sal_Int32* );
-    using SbxArray::Put32;
-    void Put32( SbxVariable*, const sal_Int32* );
-    void   AddDim32( sal_Int32, sal_Int32 );
-    void   unoAddDim32( sal_Int32, sal_Int32 );
-    bool   GetDim32( sal_Int32, sal_Int32&, sal_Int32& ) const;
-    bool hasFixedSize() { return mbHasFixedSize; };
-    void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
+    void   AddDim( sal_Int32, sal_Int32 );
+    void   unoAddDim( sal_Int32, sal_Int32 );
+    bool   GetDim( sal_Int32, sal_Int32&, sal_Int32& ) const;
+    bool   hasFixedSize() { return mbHasFixedSize; };
+    void   setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
 
 class BASIC_DLLPUBLIC SbxCollection : public SbxObject

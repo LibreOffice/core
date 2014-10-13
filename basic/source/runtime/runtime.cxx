@@ -668,7 +668,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 for( sal_uInt16 j = i ; j < nParamCount ; j++ )
                 {
                     SbxVariable* v = pParams->Get( j );
-                    short nDimIndex = j - i;
+                    sal_Int32 nDimIndex = j - i;
                     pArray->Put( v, &nDimIndex );
                 }
                 SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
@@ -1192,7 +1192,7 @@ void SbiRuntime::PushForEach()
         sal_Int32 lBound, uBound;
         for( short i = 0 ; i < nDims ; i++ )
         {
-            pArray->GetDim32( i+1, lBound, uBound );
+            pArray->GetDim( i+1, lBound, uBound );
             p->pArrayCurIndices[i] = p->pArrayLowerBounds[i] = lBound;
             p->pArrayUpperBounds[i] = uBound;
         }
@@ -2187,7 +2187,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
                 {
                     Error( SbERR_OUT_OF_RANGE ), ub = lb;
                 }
-                pArray->AddDim32( lb, ub );
+                pArray->AddDim( lb, ub );
                 if ( lb != ub )
                 {
                     pArray->setHasFixedSize( true );
@@ -2234,8 +2234,8 @@ void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMa
         }
         else
         {
-            SbxVariable* pSource = pOldArray->Get32( pActualIndices );
-            SbxVariable* pDest   = pNewArray->Get32( pActualIndices );
+            SbxVariable* pSource = pOldArray->Get( pActualIndices );
+            SbxVariable* pDest   = pNewArray->Get( pActualIndices );
             if( pSource && pDest )
             {
                 *pDest = *pSource;
@@ -2281,8 +2281,8 @@ void SbiRuntime::StepREDIMP()
                 {
                     sal_Int32 lBoundNew, uBoundNew;
                     sal_Int32 lBoundOld, uBoundOld;
-                    pNewArray->GetDim32( i, lBoundNew, uBoundNew );
-                    pOldArray->GetDim32( i, lBoundOld, uBoundOld );
+                    pNewArray->GetDim( i, lBoundNew, uBoundNew );
+                    pOldArray->GetDim( i, lBoundOld, uBoundOld );
                     lBoundNew = std::max( lBoundNew, lBoundOld );
                     uBoundNew = std::min( uBoundNew, uBoundOld );
                     short j = i - 1;
@@ -3055,7 +3055,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
                     bEndLoop = true;
                     break;
                 }
-                SbxVariable* pVal = pArray->Get32( p->pArrayCurIndices );
+                SbxVariable* pVal = pArray->Get( p->pArrayCurIndices );
                 *(p->refVar) = *pVal;
 
                 bool bFoundNext = false;
@@ -3082,10 +3082,10 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
         {
             BasicCollection* pCollection = static_cast<BasicCollection*>((SbxVariable*)pForStk->refEnd);
             SbxArrayRef xItemArray = pCollection->xItemArray;
-            sal_Int32 nCount = xItemArray->Count32();
+            sal_Int32 nCount = xItemArray->Count();
             if( pForStk->nCurCollectionIndex < nCount )
             {
-                SbxVariable* pRes = xItemArray->Get32( pForStk->nCurCollectionIndex );
+                SbxVariable* pRes = xItemArray->Get( pForStk->nCurCollectionIndex );
                 pForStk->nCurCollectionIndex++;
                 (*pForStk->refVar) = *pRes;
             }
@@ -4368,8 +4368,8 @@ void implCopyDimArray_DCREATE( SbxDimArray* pNewArray, SbxDimArray* pOldArray, s
         }
         else
         {
-            SbxVariable* pSource = pOldArray->Get32( pActualIndices );
-            pNewArray->Put32( pSource, pActualIndices );
+            SbxVariable* pSource = pOldArray->Get( pActualIndices );
+            pNewArray->Put( pSource, pActualIndices );
         }
     }
 }
@@ -4403,7 +4403,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         sal_Int32 i;
         for( i = 0 ; i < nDims ; i++ )
         {
-            pArray->GetDim32( i+1, nLower, nUpper );
+            pArray->GetDim( i+1, nLower, nUpper );
             nSize = nUpper - nLower + 1;
             if( i == 0 )
             {
@@ -4431,7 +4431,7 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
                 pClassObj->SetName( aName );
                 // the object must be able to call the basic
                 pClassObj->SetParent( &rBasic );
-                pArray->SbxArray::Put32( pClassObj, i );
+                pArray->SbxArray::Put( pClassObj, i );
             }
         }
     }
@@ -4459,8 +4459,8 @@ void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             {
                 sal_Int32 lBoundNew, uBoundNew;
                 sal_Int32 lBoundOld, uBoundOld;
-                pArray->GetDim32( i, lBoundNew, uBoundNew );
-                pOldArray->GetDim32( i, lBoundOld, uBoundOld );
+                pArray->GetDim( i, lBoundNew, uBoundNew );
+                pOldArray->GetDim( i, lBoundOld, uBoundOld );
 
                 lBoundNew = std::max( lBoundNew, lBoundOld );
                 uBoundNew = std::min( uBoundNew, uBoundOld );

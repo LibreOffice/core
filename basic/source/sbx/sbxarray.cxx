@@ -114,19 +114,12 @@ void SbxArray::Clear()
     mpVarEntries->clear();
 }
 
-sal_uInt32 SbxArray::Count32() const
+sal_Int32 SbxArray::Count() const
 {
     return mpVarEntries->size();
 }
 
-sal_uInt16 SbxArray::Count() const
-{
-    sal_uInt32 nCount = mpVarEntries->size();
-    DBG_ASSERT( nCount <= SBX_MAXINDEX, "SBX: Array-Index > SBX_MAXINDEX" );
-    return (sal_uInt16)nCount;
-}
-
-SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
+SbxVariableRef& SbxArray::GetRef( sal_Int32 nIdx )
 {
     // If necessary extend the array
     DBG_ASSERT( nIdx <= SBX_MAXINDEX32, "SBX: Array-Index > SBX_MAXINDEX32" );
@@ -136,46 +129,14 @@ SbxVariableRef& SbxArray::GetRef32( sal_uInt32 nIdx )
         SetError( SbxERR_BOUNDS );
         nIdx = 0;
     }
-    while( mpVarEntries->size() <= nIdx )
+    while( sal_Int32(mpVarEntries->size()) <= nIdx )
     {
         mpVarEntries->push_back(new SbxVarEntry);
     }
     return (*mpVarEntries)[nIdx]->mpVar;
 }
 
-SbxVariableRef& SbxArray::GetRef( sal_uInt16 nIdx )
-{
-    // If necessary extend the array
-    DBG_ASSERT( nIdx <= SBX_MAXINDEX, "SBX: Array-Index > SBX_MAXINDEX" );
-    // Very Hot Fix
-    if( nIdx > SBX_MAXINDEX )
-    {
-        SetError( SbxERR_BOUNDS );
-        nIdx = 0;
-    }
-    while( mpVarEntries->size() <= nIdx )
-    {
-        mpVarEntries->push_back(new SbxVarEntry);
-    }
-    return (*mpVarEntries)[nIdx]->mpVar;
-}
-
-SbxVariable* SbxArray::Get32( sal_uInt32 nIdx )
-{
-    if( !CanRead() )
-    {
-        SetError( SbxERR_PROP_WRITEONLY );
-        return NULL;
-    }
-    SbxVariableRef& rRef = GetRef32( nIdx );
-
-    if ( !rRef.Is() )
-        rRef = new SbxVariable( eType );
-
-    return rRef;
-}
-
-SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
+SbxVariable* SbxArray::Get( sal_Int32 nIdx )
 {
     if( !CanRead() )
     {
@@ -190,27 +151,7 @@ SbxVariable* SbxArray::Get( sal_uInt16 nIdx )
     return rRef;
 }
 
-void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
-{
-    if( !CanWrite() )
-        SetError( SbxERR_PROP_READONLY );
-    else
-    {
-        if( pVar )
-            if( eType != SbxVARIANT )
-                // Convert no objects
-                if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
-                    pVar->Convert( eType );
-        SbxVariableRef& rRef = GetRef32( nIdx );
-        if( (SbxVariable*) rRef != pVar )
-        {
-            rRef = pVar;
-            SetFlag( SBX_MODIFIED );
-        }
-    }
-}
-
-void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
+void SbxArray::Put( SbxVariable* pVar, sal_Int32 nIdx )
 {
     if( !CanWrite() )
         SetError( SbxERR_PROP_READONLY );
@@ -230,7 +171,7 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
     }
 }
 
-OUString SbxArray::GetAlias( sal_uInt16 nIdx )
+OUString SbxArray::GetAlias( sal_Int32 nIdx )
 {
     if( !CanRead() )
     {
@@ -245,7 +186,7 @@ OUString SbxArray::GetAlias( sal_uInt16 nIdx )
     return *rRef.maAlias;
 }
 
-void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
+void SbxArray::PutAlias( const OUString& rAlias, sal_Int32 nIdx )
 {
     if( !CanWrite() )
     {
@@ -258,7 +199,7 @@ void SbxArray::PutAlias( const OUString& rAlias, sal_uInt16 nIdx )
     }
 }
 
-void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
+void SbxArray::Insert( SbxVariable* pVar, sal_Int32 nIdx )
 {
     DBG_ASSERT( mpVarEntries->size() <= SBX_MAXINDEX32, "SBX: Array gets too big" );
     if( mpVarEntries->size() > SBX_MAXINDEX32 )
@@ -267,7 +208,7 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
     }
     SbxVarEntry* p = new SbxVarEntry;
     *((SbxVariableRef*) p) = pVar;
-    size_t nSize = mpVarEntries->size();
+    sal_Int32 nSize = mpVarEntries->size();
     if( nIdx > nSize )
     {
         nIdx = nSize;
@@ -287,30 +228,9 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
     SetFlag( SBX_MODIFIED );
 }
 
-void SbxArray::Insert( SbxVariable* pVar, sal_uInt16 nIdx )
+void SbxArray::Remove( sal_Int32 nIdx )
 {
-    DBG_ASSERT( mpVarEntries->size() <= 0x3FF0, "SBX: Array gets too big" );
-    if( mpVarEntries->size() > 0x3FF0 )
-    {
-        return;
-    }
-    Insert32( pVar, nIdx );
-}
-
-void SbxArray::Remove32( sal_uInt32 nIdx )
-{
-    if( nIdx < mpVarEntries->size() )
-    {
-        SbxVarEntry* pRef = (*mpVarEntries)[nIdx];
-        mpVarEntries->erase( mpVarEntries->begin() + nIdx );
-        delete pRef;
-        SetFlag( SBX_MODIFIED );
-    }
-}
-
-void SbxArray::Remove( sal_uInt16 nIdx )
-{
-    if( nIdx < mpVarEntries->size() )
+    if( nIdx < sal_Int32(mpVarEntries->size()) )
     {
         SbxVarEntry* pRef = (*mpVarEntries)[nIdx];
         mpVarEntries->erase( mpVarEntries->begin() + nIdx );
@@ -328,7 +248,7 @@ void SbxArray::Remove( SbxVariable* pVar )
             SbxVarEntry* pRef = (*mpVarEntries)[i];
             if (&pRef->mpVar == pVar)
             {
-                Remove32( i ); break;
+                Remove( i ); break;
             }
         }
     }
@@ -548,10 +468,11 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
     return StorePrivateData( rStrm );
 }
 
+
 // #100883 Method to set method directly to parameter array
-void SbxArray::PutDirect( SbxVariable* pVar, sal_uInt32 nIdx )
+void SbxArray::PutDirect( SbxVariable* pVar, sal_Int32 nIdx )
 {
-    SbxVariableRef& rRef = GetRef32( nIdx );
+    SbxVariableRef& rRef = GetRef( nIdx );
     rRef = pVar;
 }
 
@@ -609,22 +530,12 @@ void SbxDimArray::AddDimImpl32( sal_Int32 lb, sal_Int32 ub, bool bAllowSize0 )
 }
 
 
-void SbxDimArray::AddDim( short lb, short ub )
+void SbxDimArray::AddDim( sal_Int32 lb, sal_Int32 ub )
 {
     AddDimImpl32( lb, ub, false );
 }
 
-void SbxDimArray::unoAddDim( short lb, short ub )
-{
-    AddDimImpl32( lb, ub, true );
-}
-
-void SbxDimArray::AddDim32( sal_Int32 lb, sal_Int32 ub )
-{
-    AddDimImpl32( lb, ub, false );
-}
-
-void SbxDimArray::unoAddDim32( sal_Int32 lb, sal_Int32 ub )
+void SbxDimArray::unoAddDim( sal_Int32 lb, sal_Int32 ub )
 {
     AddDimImpl32( lb, ub, true );
 }
@@ -632,7 +543,7 @@ void SbxDimArray::unoAddDim32( sal_Int32 lb, sal_Int32 ub )
 
 // Readout dimension data
 
-bool SbxDimArray::GetDim32( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
+bool SbxDimArray::GetDim( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
 {
     if( n < 1 || n > static_cast<sal_Int32>(m_vDimensions.size()) )
     {
@@ -646,26 +557,9 @@ bool SbxDimArray::GetDim32( sal_Int32 n, sal_Int32& rlb, sal_Int32& rub ) const
     return true;
 }
 
-bool SbxDimArray::GetDim( short n, short& rlb, short& rub ) const
-{
-    sal_Int32 rlb32, rub32;
-    bool bRet = GetDim32( n, rlb32, rub32 );
-    rub = (short)rub32;
-    rlb = (short)rlb32;
-    if( bRet )
-    {
-        if( rlb32 < -SBX_MAXINDEX || rub32 > SBX_MAXINDEX )
-        {
-            SetError( SbxERR_BOUNDS );
-            return false;
-        }
-    }
-    return bRet;
-}
-
 // Element-Ptr with the help of an index list
 
-sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
+sal_Int32 SbxDimArray::Offset( const sal_Int32* pIdx )
 {
     sal_uInt32 nPos = 0;
     for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
@@ -686,50 +580,18 @@ sal_uInt32 SbxDimArray::Offset32( const sal_Int32* pIdx )
     return nPos;
 }
 
-sal_uInt16 SbxDimArray::Offset( const short* pIdx )
-{
-    long nPos = 0;
-    for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
-         it != m_vDimensions.end(); ++it )
-    {
-        short nIdx = *pIdx++;
-        if( nIdx < it->nLbound || nIdx > it->nUbound )
-        {
-            nPos = SBX_MAXINDEX + 1;
-            break;
-        }
-        nPos = nPos * it->nSize + nIdx - it->nLbound;
-    }
-    if( m_vDimensions.empty() || nPos > SBX_MAXINDEX )
-    {
-        SetError( SbxERR_BOUNDS );
-        nPos = 0;
-    }
-    return (sal_uInt16) nPos;
-}
-
-SbxVariable* SbxDimArray::Get( const short* pIdx )
+SbxVariable* SbxDimArray::Get( const sal_Int32* pIdx )
 {
     return SbxArray::Get( Offset( pIdx ) );
 }
 
-void SbxDimArray::Put( SbxVariable* p, const short* pIdx  )
+void SbxDimArray::Put( SbxVariable* p, const sal_Int32* pIdx  )
 {
     SbxArray::Put( p, Offset( pIdx ) );
 }
 
-SbxVariable* SbxDimArray::Get32( const sal_Int32* pIdx )
-{
-    return SbxArray::Get32( Offset32( pIdx ) );
-}
-
-void SbxDimArray::Put32( SbxVariable* p, const sal_Int32* pIdx  )
-{
-    SbxArray::Put32( p, Offset32( pIdx ) );
-}
-
 // Element-Number with the help of Parameter-Array
-sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
+sal_Int32 SbxDimArray::Offset( SbxArray* pPar )
 {
 #ifndef DISABLE_SCRIPTING
     if (m_vDimensions.empty() || !pPar ||
@@ -740,8 +602,8 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
         return 0;
     }
 #endif
-    sal_uInt32 nPos = 0;
-    sal_uInt16 nOff = 1;    // Non element 0!
+    sal_Int32 nPos = 0;
+    sal_Int32 nOff = 1;    // Non element 0!
     for( std::vector<SbxDim>::const_iterator it = m_vDimensions.begin();
          it != m_vDimensions.end() && !IsError(); ++it )
     {
@@ -753,7 +615,7 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
         }
         nPos = nPos * it->nSize + nIdx - it->nLbound;
     }
-    if( nPos > (sal_uInt32) SBX_MAXINDEX32 )
+    if( nPos > (sal_Int32) SBX_MAXINDEX32 )
     {
         SetError( SbxERR_BOUNDS );
         nPos = 0;
@@ -763,7 +625,7 @@ sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
 
 SbxVariable* SbxDimArray::Get( SbxArray* pPar )
 {
-    return SbxArray::Get32( Offset32( pPar ) );
+    return SbxArray::Get( Offset( pPar ) );
 }
 
 bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
@@ -772,9 +634,18 @@ bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadInt16( nDimension );
     for( short i = 0; i < nDimension && rStrm.GetError() == SVSTREAM_OK; i++ )
     {
-        sal_Int16 lb(0), ub(0);
-        rStrm.ReadInt16( lb ).ReadInt16( ub );
-        AddDim( lb, ub );
+        if (nVer < 3)
+        {
+            sal_Int16 lb(0), ub(0);
+            rStrm.ReadInt16( lb ).ReadInt16( ub );
+            AddDim( lb, ub );
+        }
+        else
+        {
+            sal_Int32 lb(0), ub(0);
+            rStrm.ReadInt32( lb ).ReadInt32( ub );
+            AddDim( lb, ub );
+        }
     }
     return SbxArray::LoadData( rStrm, nVer );
 }
@@ -784,9 +655,9 @@ bool SbxDimArray::StoreData( SvStream& rStrm ) const
     rStrm.WriteInt16(  m_vDimensions.size() );
     for( short i = 0; i < static_cast<short>(m_vDimensions.size()); i++ )
     {
-        short lb, ub;
+        sal_Int32 lb, ub;
         GetDim( i, lb, ub );
-        rStrm.WriteInt16( lb ).WriteInt16( ub );
+        rStrm.WriteInt32( lb ).WriteInt32( ub );
     }
     return SbxArray::StoreData( rStrm );
 }

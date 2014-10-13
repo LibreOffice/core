@@ -823,15 +823,12 @@ RTLFUNC(Array)
     }
 
     // insert parameters into the array
-    // ATTENTION: Using type sal_uInt16 for loop variable is
-    // mandatory to workaround a problem with the
-    // Solaris Intel compiler optimizer! See i104354
-    for( sal_uInt16 i = 0 ; i < nArraySize ; i++ )
+    for( sal_Int32 i = 0 ; i < nArraySize ; i++ )
     {
         SbxVariable* pVar = rPar.Get(i+1);
         SbxVariable* pNew = new SbxVariable( *pVar );
         pNew->SetFlag( SBX_WRITE );
-        short index = static_cast< short >(i);
+        sal_Int32 index = i;
         if ( bIncIndex )
         {
             ++index;
@@ -873,7 +870,7 @@ RTLFUNC(DimArray)
                 StarBASIC::Error( SbERR_OUT_OF_RANGE );
                 ub = 0;
             }
-            pArray->AddDim32( 0, ub );
+            pArray->AddDim( 0, ub );
         }
     }
     else
@@ -1196,20 +1193,20 @@ static bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
 // nCurDim = 1...n
 static bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
-    bool bBinary, short nCurDim, short* pOtherDims, bool bWrite )
+    bool bBinary, short nCurDim, sal_Int32* pOtherDims, bool bWrite )
 {
     SAL_WARN_IF( nCurDim <= 0,"basic", "Bad Dim");
-    short nLower, nUpper;
+    sal_Int32 nLower, nUpper;
     if( !rArr.GetDim( nCurDim, nLower, nUpper ) )
         return false;
-    for( short nCur = nLower; nCur <= nUpper; nCur++ )
+    for( sal_Int32 nCur = nLower; nCur <= nUpper; nCur++ )
     {
         pOtherDims[ nCurDim-1 ] = nCur;
         if( nCurDim != 1 )
             lcl_WriteReadSbxArray(rArr, pStrm, bBinary, nCurDim-1, pOtherDims, bWrite);
         else
         {
-            SbxVariable* pVar = rArr.Get( (const short*)pOtherDims );
+            SbxVariable* pVar = rArr.Get( pOtherDims );
             bool bRet;
             if( bWrite )
                 bRet = lcl_WriteSbxVariable(*pVar, pStrm, bBinary, 0, true );
@@ -1278,7 +1275,7 @@ void PutGet( SbxArray& rPar, bool bPut )
     {
         sal_Size nFPos = pStrm->Tell();
         short nDims = pArr->GetDims();
-        boost::scoped_array<short> pDims(new short[ nDims ]);
+        boost::scoped_array<sal_Int32> pDims(new sal_Int32[ nDims ]);
         bRet = lcl_WriteReadSbxArray(*pArr,pStrm,!bRandom,nDims,pDims.get(),bPut);
         pDims.reset();
         if( nBlockLen )
@@ -1726,9 +1723,9 @@ RTLFUNC(Join)
             aDelim = " ";
         }
         OUString aRetStr;
-        short nLower, nUpper;
+        sal_Int32 nLower, nUpper;
         pArr->GetDim( 1, nLower, nUpper );
-        for( short i = nLower ; i <= nUpper ; ++i )
+        for( sal_Int32 i = nLower ; i <= nUpper ; ++i )
         {
             OUString aStr = pArr->Get( &i )->GetOUString();
             aRetStr += aStr;
@@ -1822,7 +1819,7 @@ RTLFUNC(Split)
     pArray->unoAddDim( 0, nArraySize-1 );
 
     // insert parameter(s) into the array
-    for( short i = 0 ; i < nArraySize ; i++ )
+    for( sal_Int32 i = 0 ; i < nArraySize ; i++ )
     {
         SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
         xVar->PutString( vRet[i] );

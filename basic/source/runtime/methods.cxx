@@ -4139,8 +4139,8 @@ RTLFUNC(LBound)
     if( pArr )
     {
         sal_Int32 nLower, nUpper;
-        short nDim = (nParCount == 3) ? (short)rPar.Get(2)->GetInteger() : 1;
-        if( !pArr->GetDim32( nDim, nLower, nUpper ) )
+        sal_Int32 nDim = (nParCount == 3) ? rPar.Get(2)->GetInteger() : 1;
+        if( !pArr->GetDim( nDim, nLower, nUpper ) )
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         else
             rPar.Get(0)->PutLong( nLower );
@@ -4167,7 +4167,7 @@ RTLFUNC(UBound)
     {
         sal_Int32 nLower, nUpper;
         short nDim = (nParCount == 3) ? (short)rPar.Get(2)->GetInteger() : 1;
-        if( !pArr->GetDim32( nDim, nLower, nUpper ) )
+        if( !pArr->GetDim( nDim, nLower, nUpper ) )
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         else
             rPar.Get(0)->PutLong( nUpper );
@@ -4365,7 +4365,7 @@ RTLFUNC(StrConv)
             pNew->PutByte(*pChar);
             pChar++;
             pNew->SetFlag( SBX_WRITE );
-            short index = i;
+            sal_Int32 index = i;
             if( bIncIndex )
             {
                 ++index;

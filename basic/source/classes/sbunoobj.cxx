@@ -600,9 +600,9 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
             for ( sal_Int32 index = 0; index < nIndexLen; ++index )
             {
                 if ( bIsZeroIndex )
-                    pArray->unoAddDim32( 0, sizes[ index ] - 1);
+                    pArray->unoAddDim( 0, sizes[ index ] - 1);
                 else
-                    pArray->unoAddDim32( 1, sizes[ index ] );
+                    pArray->unoAddDim( 1, sizes[ index ] );
 
             }
         }
@@ -613,7 +613,7 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
             unoToSbxValue( (SbxVariable*)xVar, aValue );
 
             sal_Int32* pIndices = indices.getArray();
-            pArray->Put32(  (SbxVariable*)xVar, pIndices );
+            pArray->Put(  (SbxVariable*)xVar, pIndices );
 
         }
     }
@@ -779,7 +779,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             xArray = new SbxDimArray( eSbxElementType );
             if( nLen > 0 )
             {
-                xArray->unoAddDim32( 0, nLen - 1 );
+                xArray->unoAddDim( 0, nLen - 1 );
 
                 // register the elements as variables
                 for( i = 0 ; i < nLen ; i++ )
@@ -790,7 +790,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                     unoToSbxValue( (SbxVariable*)xVar, aElementAny );
 
                     // put into the Array
-                    xArray->Put32( (SbxVariable*)xVar, &i );
+                    xArray->Put( (SbxVariable*)xVar, &i );
                 }
             }
             else
@@ -893,7 +893,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
 
             // Normal case: One dimensional array
             sal_Int32 nLower, nUpper;
-            if( nDims == 1 && pArray->GetDim32( 1, nLower, nUpper ) )
+            if( nDims == 1 && pArray->GetDim( 1, nLower, nUpper ) )
             {
                 if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
                 {
@@ -905,7 +905,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                     sal_Int32 nIdx = nLower;
                     for( sal_Int32 i = 0 ; i < nSize ; i++,nIdx++ )
                     {
-                        SbxVariableRef xVar = pArray->Get32( &nIdx );
+                        SbxVariableRef xVar = pArray->Get( &nIdx );
                         Type aType = getUnoTypeForSbxValue( (SbxVariable*)xVar );
                         if( bNeedsInit )
                         {
@@ -937,12 +937,12 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                 if( eElementTypeClass == TypeClass_VOID || eElementTypeClass == TypeClass_ANY )
                 {
                     // For this check the array's dim structure does not matter
-                    sal_uInt32 nFlatArraySize = pArray->Count32();
+                    sal_Int32 nFlatArraySize = pArray->Count();
 
                     bool bNeedsInit = true;
-                    for( sal_uInt32 i = 0 ; i < nFlatArraySize ; i++ )
+                    for( sal_Int32 i = 0 ; i < nFlatArraySize ; i++ )
                     {
-                        SbxVariableRef xVar = pArray->SbxArray::Get32( i );
+                        SbxVariableRef xVar = pArray->SbxArray::Get( i );
                         Type aType = getUnoTypeForSbxValue( (SbxVariable*)xVar );
                         if( bNeedsInit )
                         {
@@ -1136,7 +1136,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
         }
         else
         {
-            SbxVariable* pSource = pArray->Get32( pActualIndices );
+            SbxVariable* pSource = pArray->Get( pActualIndices );
             aElementVal = sbxToUnoValue( pSource, aElemType );
         }
 
@@ -1329,7 +1329,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
 
                 // Normal case: One dimensional array
                 sal_Int32 nLower, nUpper;
-                if( nDims == 1 && pArray->GetDim32( 1, nLower, nUpper ) )
+                if( nDims == 1 && pArray->GetDim( 1, nLower, nUpper ) )
                 {
                     sal_Int32 nSeqSize = nUpper - nLower + 1;
 
@@ -1350,7 +1350,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                     sal_Int32 nIdx = nLower;
                     for( sal_Int32 i = 0 ; i < nSeqSize ; i++,nIdx++ )
                     {
-                        SbxVariableRef xVar = pArray->Get32( &nIdx );
+                        SbxVariableRef xVar = pArray->Get( &nIdx );
 
                         // Convert the value of Sbx to Uno
                         Any aAnyValue = sbxToUnoValue( (SbxVariable*)xVar, aElemType );
@@ -1405,7 +1405,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                         for( short i = 1 ; i <= nDims ; i++ )
                         {
                             sal_Int32 lBound, uBound;
-                            pArray->GetDim32( i, lBound, uBound );
+                            pArray->GetDim( i, lBound, uBound );
 
                             short j = i - 1;
                             pActualIndices[j] = pLowerBounds[j] = lBound;

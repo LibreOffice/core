@@ -268,9 +268,9 @@ SbxArray* StringToByteArray(const OUString& rStr)
     if( nArraySize )
     {
         if( bIncIndex )
-            pArray->AddDim32( 1, nArraySize );
+            pArray->AddDim( 1, nArraySize );
         else
-            pArray->AddDim32( 0, nArraySize-1 );
+            pArray->AddDim( 0, nArraySize-1 );
     }
     else
     {
