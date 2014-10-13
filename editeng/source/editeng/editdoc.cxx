@@ -1088,9 +1088,9 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
         pPortion = rParaPortion.GetTextPortions()[n];
         switch ( pPortion->GetKind() )
         {
-            case PORTIONKIND_TEXT:
-            case PORTIONKIND_FIELD:
-            case PORTIONKIND_HYPHENATOR:
+            case PortionKind::TEXT:
+            case PortionKind::FIELD:
+            case PortionKind::HYPHENATOR:
             {
                 aTmpSz = pPortion->GetSize();
                 aSz.Width() += aTmpSz.Width();
@@ -1098,11 +1098,12 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
                     aSz.Height() = aTmpSz.Height();
             }
             break;
-            case PORTIONKIND_TAB:
+            case PortionKind::TAB:
             {
                 aSz.Width() += pPortion->GetSize().Width();
             }
             break;
+            case PortionKind::LINEBREAK: break;
         }
     }
 

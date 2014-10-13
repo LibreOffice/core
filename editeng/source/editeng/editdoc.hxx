@@ -329,11 +329,14 @@ public:
     bool operator !() const { return !pNode && !nIndex; }
 };
 
-#define PORTIONKIND_TEXT        0
-#define PORTIONKIND_TAB         1
-#define PORTIONKIND_LINEBREAK   2
-#define PORTIONKIND_FIELD       3
-#define PORTIONKIND_HYPHENATOR  4
+enum class PortionKind
+{
+    TEXT        = 0,
+    TAB         = 1,
+    LINEBREAK   = 2,
+    FIELD       = 3,
+    HYPHENATOR  = 4
+};
 
 #define DELMODE_SIMPLE          0
 #define DELMODE_RESTOFWORD      1
@@ -378,10 +381,10 @@ class TextPortion
 {
 private:
     ExtraPortionInfo*   pExtraInfos;
-    sal_Int32              nLen;
+    sal_Int32           nLen;
     Size                aOutSz;
-    sal_uInt8               nKind;
-    sal_uInt8                nRightToLeft;
+    PortionKind         nKind;
+    sal_uInt8           nRightToLeft;
     sal_Unicode         nExtraValue;
 
 
@@ -389,7 +392,7 @@ private:
                 : pExtraInfos( NULL )
                 , nLen( 0 )
                 , aOutSz()
-                , nKind( PORTIONKIND_TEXT )
+                , nKind( PortionKind::TEXT )
                 , nRightToLeft( sal_False )
                 , nExtraValue( 0 )
                 {
@@ -400,7 +403,7 @@ public:
                 : pExtraInfos( NULL )
                 , nLen( nL )
                 , aOutSz( -1, -1 )
-                , nKind( PORTIONKIND_TEXT )
+                , nKind( PortionKind::TEXT )
                 , nRightToLeft( sal_False )
                 , nExtraValue( 0 )
                 {
@@ -418,22 +421,22 @@ public:
 
 
     sal_Int32      GetLen() const              { return nLen; }
-    void        SetLen( sal_Int32 nL )         { nLen = nL; }
+    void           SetLen( sal_Int32 nL )         { nLen = nL; }
 
-    Size&       GetSize()                   { return aOutSz; }
-    const Size& GetSize() const             { return aOutSz; }
+    Size&          GetSize()                   { return aOutSz; }
+    const Size&    GetSize() const             { return aOutSz; }
 
-    sal_uInt8&      GetKind()                   { return nKind; }
-    sal_uInt8       GetKind() const             { return nKind; }
+    PortionKind&   GetKind()                   { return nKind; }
+    PortionKind    GetKind() const             { return nKind; }
 
-    void        SetRightToLeft( sal_uInt8 b )    { nRightToLeft = b; }
-    sal_uInt8        GetRightToLeft() const      { return nRightToLeft; }
-    bool        IsRightToLeft() const       { return (nRightToLeft&1); }
+    void           SetRightToLeft( sal_uInt8 b )    { nRightToLeft = b; }
+    sal_uInt8      GetRightToLeft() const      { return nRightToLeft; }
+    bool           IsRightToLeft() const       { return (nRightToLeft&1); }
 
-    sal_Unicode GetExtraValue() const       { return nExtraValue; }
-    void        SetExtraValue( sal_Unicode n )  { nExtraValue = n; }
+    sal_Unicode    GetExtraValue() const       { return nExtraValue; }
+    void           SetExtraValue( sal_Unicode n )  { nExtraValue = n; }
 
-    bool        HasValidSize() const        { return aOutSz.Width() != (-1); }
+    bool           HasValidSize() const        { return aOutSz.Width() != (-1); }
 
     ExtraPortionInfo*   GetExtraInfos() const { return pExtraInfos; }
     void                SetExtraInfos( ExtraPortionInfo* p ) { delete pExtraInfos; pExtraInfos = p; }
