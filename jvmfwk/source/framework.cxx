@@ -732,6 +732,8 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
             //remember that the JRE was selected in this process
             jfw::setJavaSelected();
         }
+
+        jfw_freeJavaInfo(currentInfo);
     }
     catch (const jfw::FrameworkException& e)
     {
