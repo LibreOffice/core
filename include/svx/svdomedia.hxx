@@ -72,6 +72,7 @@ public:
                                     getSnapshot();
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>
                                     GetInputStream();
+        void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
 
 protected:
 

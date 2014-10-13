@@ -22,6 +22,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/io/XInputStream.hpp>
+
 #include <oox/drawingml/fillproperties.hxx>
 #include <oox/helper/helper.hxx>
 
@@ -36,7 +38,8 @@ namespace drawingml {
 struct GraphicProperties
 {
     BlipFillProperties      maBlipProps;            ///< Properties for the graphic.
-    OUString                msMediaTempFile;        ///< Audio/Video temporary file.
+    OUString                m_sMediaPackageURL;     ///< Audio/Video URL.
+    css::uno::Reference<css::io::XInputStream> m_xMediaStream; ///< Audio/Video input stream.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const GraphicProperties& rSourceProps );

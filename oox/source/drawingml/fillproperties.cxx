@@ -753,8 +753,12 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         rPropMap.setProperty(PROP_AdjustContrast, nContrast);
 
     // Media content
-    if( !msMediaTempFile.isEmpty() )
-        rPropMap.setProperty(PROP_MediaURL, msMediaTempFile);
+    assert(m_xMediaStream.is() != m_sMediaPackageURL.isEmpty());
+    if (m_xMediaStream.is() && !m_sMediaPackageURL.isEmpty())
+    {
+        rPropMap.setProperty(PROP_PrivateStream, m_xMediaStream);
+        rPropMap.setProperty(PROP_MediaURL, m_sMediaPackageURL);
+    }
 }
 
 bool ArtisticEffectProperties::isEmpty() const

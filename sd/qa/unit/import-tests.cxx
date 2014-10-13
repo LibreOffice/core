@@ -808,6 +808,7 @@ void SdImportTest::testBnc591147()
     OUString sVideoURL("emptyURL");
     bool bSucess = xPropSet->getPropertyValue("MediaURL") >>= sVideoURL;
     CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
+    CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
 
     // Second page has audio file inserted
     xPage.set( xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW );
@@ -818,6 +819,7 @@ void SdImportTest::testBnc591147()
     OUString sAudioURL("emptyURL");
     bSucess = xPropSet->getPropertyValue("MediaURL") >>= sAudioURL;
     CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
+    CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sAudioURL.isEmpty());
 
     CPPUNIT_ASSERT_MESSAGE( "sAudioURL and sVideoURL should not be equal", sAudioURL != sVideoURL );
 

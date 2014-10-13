@@ -808,6 +808,7 @@ SvxMediaShape::~SvxMediaShape() throw()
 bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))
+        || (pProperty->nWID == OWN_ATTR_MEDIA_STREAM)
         || (pProperty->nWID == OWN_ATTR_MEDIA_MIMETYPE) )
     {
         SdrMediaObj* pMedia = static_cast< SdrMediaObj* >( mpObj.get() );
@@ -884,6 +885,31 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                 aItem.setMimeType( sMimeType );
             }
         }
+        break;
+
+        case OWN_ATTR_MEDIA_STREAM:
+            try
+            {
+                uno::Reference<io::XInputStream> xStream;
+                if (rValue >>= xStream)
+                {
+                    pMedia->SetInputStream(xStream);
+                }
+            }
+            catch (const css::ucb::ContentCreationException& e)
+            {
+                throw css::lang::WrappedTargetException(
+                        "ContentCreationException Setting InputStream!",
+                        static_cast<OWeakObject *>(this),
+                        makeAny(e));
+            }
+            catch (const css::ucb::CommandFailedException& e)
+            {
+                throw css::lang::WrappedTargetException(
+                        "CommandFailedException Setting InputStream!",
+                        static_cast<OWeakObject *>(this),
+                        makeAny(e));
+            }
         break;
 
         default:

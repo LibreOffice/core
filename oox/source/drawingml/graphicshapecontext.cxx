@@ -49,20 +49,19 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
-static OUString lcl_CopyToTempFile(const OUString& rStream, const oox::core::XmlFilterBase& rFilter)
+static uno::Reference<io::XInputStream>
+lcl_GetMediaStream(const OUString& rStream, const oox::core::XmlFilterBase& rFilter)
 {
     if (rStream.isEmpty())
-        return OUString();
+        return nullptr;
 
     Reference< XInputStream > xInStrm( rFilter.openInputStream(rStream), UNO_SET_THROW );
-    Reference< XTempFile > xTempFile( TempFile::create(rFilter.getComponentContext()) );
-    Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
-    oox::BinaryXOutputStream aOutStrm( xOutStrm, false );
-    oox::BinaryXInputStream aInStrm( xInStrm, false );
-    aInStrm.copyToStream( aOutStrm );
+    return xInStrm;
+}
 
-    xTempFile->setRemoveFile( false );
-    return xTempFile->getUri();
+static OUString lcl_GetMediaReference(const OUString& rStream)
+{
+    return rStream.isEmpty() ? OUString() : "vnd.sun.star.Package:" + rStream;
 }
 
 namespace oox {
@@ -86,8 +85,11 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
         return new BlipFillContext( *this, rAttribs, mpShapePtr->getGraphicProperties().maBlipProps );
     case XML_wavAudioFile:
         {
-            mpShapePtr->getGraphicProperties().msMediaTempFile =
-                lcl_CopyToTempFile( getEmbeddedWAVAudioFile(getRelations(), rAttribs), getFilter() );
+            OUString const path(getEmbeddedWAVAudioFile(getRelations(), rAttribs));
+            mpShapePtr->getGraphicProperties().m_xMediaStream =
+                lcl_GetMediaStream(path, getFilter());
+            mpShapePtr->getGraphicProperties().m_sMediaPackageURL =
+                lcl_GetMediaReference(path);
         }
         break;
     case XML_audioFile:
@@ -95,8 +97,10 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
         {
             OUString rPath = getRelations().getFragmentPathFromRelId(
                     rAttribs.getString(R_TOKEN(link)).get() );
-            mpShapePtr->getGraphicProperties().msMediaTempFile =
-                lcl_CopyToTempFile( rPath, getFilter() );
+            mpShapePtr->getGraphicProperties().m_xMediaStream =
+                lcl_GetMediaStream(rPath, getFilter());
+            mpShapePtr->getGraphicProperties().m_sMediaPackageURL =
+                lcl_GetMediaReference(rPath);
         }
         break;
     }

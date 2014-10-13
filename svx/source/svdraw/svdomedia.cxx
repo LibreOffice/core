@@ -66,6 +66,7 @@ struct SdrMediaObj::Impl
     ::avmedia::MediaItem                  m_MediaProperties;
     ::boost::shared_ptr< MediaTempFile >  m_pTempFile;
     uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
+    OUString m_LastFailedPkgURL;
 };
 
 TYPEINIT1( SdrMediaObj, SdrRectObj );
@@ -326,6 +327,53 @@ static bool lcl_HandleJsonPackageURL(
 }
 #endif
 
+static bool lcl_CopyToTempFile(
+        uno::Reference<io::XInputStream> const& xInStream,
+        OUString & o_rTempFileURL)
+{
+    OUString tempFileURL;
+    ::osl::FileBase::RC const err =
+        ::osl::FileBase::createTempFile(0, 0, & tempFileURL);
+    if (::osl::FileBase::E_None != err)
+    {
+        SAL_INFO("svx", "cannot create temp file");
+        return false;
+    }
+
+    try
+    {
+        ::ucbhelper::Content tempContent(tempFileURL,
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
+        tempContent.writeStream(xInStream, true); // copy stream to file
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("svx", "exception: '" << e.Message << "'");
+        return false;
+    }
+    o_rTempFileURL = tempFileURL;
+    return true;
+}
+
+void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream)
+{
+    if (m_pImpl->m_pTempFile || m_pImpl->m_LastFailedPkgURL.isEmpty())
+    {
+        SAL_WARN("svx", "this is only intended for embedded media");
+        return;
+    }
+    OUString tempFileURL;
+    bool const bSuccess = lcl_CopyToTempFile(xStream, tempFileURL);
+    if (bSuccess)
+    {
+        m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
+        m_pImpl->m_MediaProperties.setURL(
+            m_pImpl->m_LastFailedPkgURL, tempFileURL, "");
+    }
+    m_pImpl->m_LastFailedPkgURL = ""; // once only
+}
+
 /// copy a stream from XStorage to temp file
 static bool lcl_HandlePackageURL(
         OUString const & rURL,
@@ -357,30 +405,7 @@ static bool lcl_HandlePackageURL(
         SAL_WARN("svx", "no stream?");
         return false;
     }
-
-    OUString tempFileURL;
-    ::osl::FileBase::RC const err =
-        ::osl::FileBase::createTempFile(0, 0, & tempFileURL);
-    if (::osl::FileBase::E_None != err)
-    {
-        SAL_INFO("svx", "cannot create temp file");
-        return false;
-    }
-
-    try
-    {
-        ::ucbhelper::Content tempContent(tempFileURL,
-                uno::Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext());
-        tempContent.writeStream(xInStream, true); // copy stream to file
-    }
-    catch (uno::Exception const& e)
-    {
-        SAL_WARN("svx", "exception: '" << e.Message << "'");
-        return false;
-    }
-    o_rTempFileURL = tempFileURL;
-    return true;
+    return lcl_CopyToTempFile(xInStream, o_rTempFileURL);
 }
 
 void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProperties )
@@ -420,6 +445,9 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 {
                     m_pImpl->m_pTempFile.reset();
                     m_pImpl->m_MediaProperties.setURL("", "", "");
+                    // UGLY: oox import also gets here, because unlike ODF
+                    // getDocumentStorage() is not the imported file...
+                    m_pImpl->m_LastFailedPkgURL = url;
                 }
             }
             else
