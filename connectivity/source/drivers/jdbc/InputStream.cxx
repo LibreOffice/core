@@ -70,10 +70,11 @@ sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io
     static jmethodID mID(NULL);
     return callIntMethod_Throw("available", mID);
 }
+
 void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod_Throw("close",mID);
+    callVoidMethod_Nothrow("close",mID);
 }
 
 sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
