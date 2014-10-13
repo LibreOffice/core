@@ -225,12 +225,19 @@ public:
     void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
 };
 
-class TEParaPortions : public ToolsList<TEParaPortion*>
+class TEParaPortions
 {
+private:
+    std::vector<TEParaPortion*> mvData;
+
 public:
-                    TEParaPortions();
+                    TEParaPortions() : mvData() {}
                     ~TEParaPortions();
-    void            Reset();
+
+    size_t          Count() const { return mvData.size(); }
+    TEParaPortion*  GetObject( size_t nIndex ) { return mvData[nIndex]; }
+    void            Insert( TEParaPortion* pObject, size_t nPos ) { mvData.insert( mvData.begin()+nPos, pObject ); }
+    void            Remove( size_t nPos ) { mvData.erase( mvData.begin()+nPos ); }
 };
 
 class TextSelFunctionSet: public FunctionSet
