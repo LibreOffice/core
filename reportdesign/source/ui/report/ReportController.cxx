@@ -17,16 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define RPTUI_ID_LRSPACE    1
-#define RPTUI_ID_ULSPACE    2
-#define RPTUI_ID_PAGE       3
-#define RPTUI_ID_SIZE       4
-#define RPTUI_ID_PAGE_MODE  5
-#define RPTUI_ID_START      6
-#define RPTUI_ID_END        7
-#define RPTUI_ID_BRUSH      8
-#define RPTUI_ID_METRIC     9
-
 #include "ReportController.hxx"
 #include "ReportDefinition.hxx"
 #include "CondFormat.hxx"
@@ -98,6 +88,17 @@
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <svx/xfillit.hxx>
+#include <svx/xflbckit.hxx>
+#include <svx/xflbmpit.hxx>
+#include <svx/xflbmsli.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbtoxy.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xgrscit.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -153,6 +154,16 @@
 #include <ReportControllerObserver.hxx>
 
 #define MAX_ROWS_FOR_PREVIEW    20
+
+#define RPTUI_ID_LRSPACE    XATTR_FILL_FIRST - 8
+#define RPTUI_ID_ULSPACE    XATTR_FILL_FIRST - 7
+#define RPTUI_ID_PAGE       XATTR_FILL_FIRST - 6
+#define RPTUI_ID_SIZE       XATTR_FILL_FIRST - 5
+#define RPTUI_ID_PAGE_MODE  XATTR_FILL_FIRST - 4
+#define RPTUI_ID_START      XATTR_FILL_FIRST - 3
+#define RPTUI_ID_END        XATTR_FILL_FIRST - 2
+#define RPTUI_ID_BRUSH      XATTR_FILL_FIRST - 1
+#define RPTUI_ID_METRIC     XATTR_FILL_LAST + 1
 
 using namespace ::com::sun::star;
 using namespace uno;
@@ -2378,12 +2389,47 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         { SID_PAPER_START,      SFX_ITEM_POOLABLE },
         { SID_PAPER_END,        SFX_ITEM_POOLABLE },
         { SID_ATTR_BRUSH,       SFX_ITEM_POOLABLE },
-        { SID_FLAG_TYPE,        SFX_ITEM_POOLABLE },
+        { XATTR_FILLSTYLE,      SFX_ITEM_POOLABLE },
+        { XATTR_FILLCOLOR,      SFX_ITEM_POOLABLE },
+        { XATTR_FILLGRADIENT,       SFX_ITEM_POOLABLE },
+        { XATTR_FILLHATCH,      SFX_ITEM_POOLABLE },
+        { XATTR_FILLBITMAP,     SFX_ITEM_POOLABLE },
+        { XATTR_FILLTRANSPARENCE,       SFX_ITEM_POOLABLE },
+        { XATTR_GRADIENTSTEPCOUNT,      SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_TILE,       SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_POS,        SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_SIZEX,      SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_SIZEY,      SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_SIZELOG,        SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_TILEOFFSETX,    SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_TILEOFFSETY,    SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_STRETCH,        SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_POSOFFSETX,     SFX_ITEM_POOLABLE },
+        { XATTR_FILLBMP_POSOFFSETY,     SFX_ITEM_POOLABLE },
+        { XATTR_FILLFLOATTRANSPARENCE,  SFX_ITEM_POOLABLE },
+        { XATTR_SECONDARYFILLCOLOR,     SFX_ITEM_POOLABLE },
+        { XATTR_FILLBACKGROUND,     SFX_ITEM_POOLABLE },
         { SID_ATTR_METRIC,      SFX_ITEM_POOLABLE }
     };
 
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     FieldUnit eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+    static const sal_uInt16 pRanges[] =
+    {
+        RPTUI_ID_LRSPACE, XATTR_FILL_LAST,
+        SID_ATTR_METRIC,SID_ATTR_METRIC,
+        0
+    };
+    SfxItemPool* pPool( new SfxItemPool(OUString("ReportPageProperties"), RPTUI_ID_LRSPACE, RPTUI_ID_METRIC, aItemInfos ) );
+
+    const Graphic aNullGraphic;
+    const ::Color aNullLineCol(COL_DEFAULT_SHAPE_STROKE); // #i121448# Use defined default color
+    const ::Color aNullFillCol(COL_DEFAULT_SHAPE_FILLING); // #i121448# Use defined default color
+    const ::Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
+    const XDash aNullDash;
+    const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
+    const XHatch aNullHatch(aNullLineCol);
+
     SfxPoolItem* pDefaults[] =
     {
         new SvxLRSpaceItem(RPTUI_ID_LRSPACE),
@@ -2394,16 +2440,32 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         new SfxAllEnumItem(RPTUI_ID_START,PAPER_A4),
         new SfxAllEnumItem(RPTUI_ID_END,PAPER_E),
         new SvxBrushItem(RPTUI_ID_BRUSH),
+        new XFillStyleItem,
+        new XFillColorItem("", aNullFillCol),
+        new XFillGradientItem(aNullGrad),
+        new XFillHatchItem(pPool, aNullHatch),
+        new XFillBitmapItem(pPool, aNullGraphic),
+        new XFillTransparenceItem,
+        new XGradientStepCountItem,
+        new XFillBmpTileItem,
+        new XFillBmpPosItem,
+        new XFillBmpSizeXItem,
+        new XFillBmpSizeYItem,
+        new XFillBmpSizeLogItem,
+        new XFillBmpTileOffsetXItem,
+        new XFillBmpTileOffsetYItem,
+        new XFillBmpStretchItem,
+        new XFillBmpPosOffsetXItem,
+        new XFillBmpPosOffsetYItem,
+        new XFillFloatTransparenceItem(pPool, aNullGrad, false),
+        new XSecondaryFillColorItem("", aNullFillCol),
+        new XFillBackgroundItem,
         new SfxUInt16Item(RPTUI_ID_METRIC,static_cast<sal_uInt16>(eUserMetric))
     };
 
-    static const sal_uInt16 pRanges[] =
-    {
-        RPTUI_ID_LRSPACE,RPTUI_ID_BRUSH,
-        SID_ATTR_METRIC,SID_ATTR_METRIC,
-        0
-    };
-    SfxItemPool* pPool( new SfxItemPool(OUString("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
+    pPool->SetDefaults(pDefaults);
+
+
     pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
