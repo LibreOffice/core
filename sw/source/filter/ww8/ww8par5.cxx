@@ -1607,7 +1607,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
                     break;
                 case '*':
                     //Skip over MERGEFORMAT
-                    aReadParam.SkipToNextToken();
+                    (void)aReadParam.SkipToNextToken();
                     break;
             }
         }
