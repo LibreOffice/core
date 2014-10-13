@@ -17,6 +17,8 @@
  */
 
 
+#include <math.h>
+
 #include <GL/glew.h>
 
 #include <glm/gtx/bit.hpp>
@@ -59,12 +61,20 @@ namespace {
 
 class MyWorkWindow : public WorkWindow
 {
+private:
+
 protected:
-    double nStartTime;
-    int nPaintCount;
+    double mnStartTime;
+    int mnPaintCount;
 
 public:
+    Graphic maGraphic;
+    Bitmap *mpBitmap;
+    FixedBitmap *mpFixedBitmap;
+
     MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle );
+
+    void LoadGraphic( const OUString& sImageFile );
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
@@ -75,7 +85,6 @@ class MyOpenGLWorkWindow : public MyWorkWindow
 public:
     bool mbHaveTexture;
     OpenGLWindow *mpOpenGLWindow;
-    Graphic maGraphic;
     GLuint mnTextureName;
     float mnTextureAspect;
 
@@ -89,14 +98,40 @@ public:
 MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle )
 {
-    nPaintCount = 0;
-    nStartTime = getTimeNow();
+    mnPaintCount = 0;
+    mnStartTime = getTimeNow();
     EnableInput();
+}
+
+void MyWorkWindow::LoadGraphic( const OUString& sImageFile )
+{
+    SvFileStream aFileStream( sImageFile, STREAM_READ );
+    GraphicFilter aGraphicFilter(false);
+    if (aGraphicFilter.ImportGraphic(maGraphic, sImageFile, aFileStream) != 0)
+    {
+        SAL_WARN("vcl.icontest", "Could not import image '" << sImageFile << "'");
+        return;
+    }
 }
 
 void MyWorkWindow::Paint( const Rectangle& rRect )
 {
-    std::cerr << "==> Paint! " << nPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
+    std::cerr << "==> Paint! " << mnPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
+    Size aGraphicSize( maGraphic.GetSizePixel() );
+    float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
+    Size aSize;
+    if( aspect >= ((float) WIDTH) / HEIGHT )
+        aSize = Size( WIDTH, HEIGHT/aspect );
+    else
+        aSize = Size( WIDTH * aspect, HEIGHT );
+    aSize.setWidth( aSize.Width() * (1 + (0.1*sin(mnPaintCount/60.))) );
+    aSize.setHeight( aSize.Height() * (1 + (0.1*sin(mnPaintCount/50.))) );
+    GraphicConversionParameters aConv( aSize );
+    Bitmap aEmpty;
+    mpFixedBitmap->SetBitmap( aEmpty );
+    mpBitmap = new Bitmap( maGraphic.GetBitmap( aConv ) );
+    mpFixedBitmap->SetBitmap( *mpBitmap );
+    mpFixedBitmap->SetSizePixel( aSize );
     WorkWindow::Paint( rRect );
     Invalidate( INVALIDATE_CHILDREN );
 }
@@ -199,7 +234,7 @@ void MyOpenGLWorkWindow::LoadTexture()
 
 void MyOpenGLWorkWindow::Paint( const Rectangle& )
 {
-    std::cerr << "==> Paint! "<< nPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - nStartTime << std::endl;
+    std::cerr << "==> Paint! "<< mnPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
     OpenGLContext& aCtx = mpOpenGLWindow->getContext();
     aCtx.requestLegacyContext();
     CHECK_GL_ERROR();
@@ -207,7 +242,7 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
     if (!mbHaveTexture)
         LoadTexture();
 
-    aCtx.setWinSize( Size( WIDTH, HEIGHT ) );
+    aCtx.setWinSize( Size( WIDTH+1, HEIGHT+1 ) );
     CHECK_GL_ERROR();
 
     aCtx.makeCurrent();
@@ -238,11 +273,11 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
     glTexCoord2f(0, 0);
     glVertex3f(0, 0, 0);
     glTexCoord2f(0, 1);
-    glVertex3f(0, 1, 0);
+    glVertex3f(0, 1 + (0.1*sin(mnPaintCount/50.)), 0);
     glTexCoord2f(1, 1);
-    glVertex3f(1, 1, 0);
+    glVertex3f(1 + (0.1*sin(mnPaintCount/60.)), 1 + (0.1*sin(mnPaintCount/50.)), 0);
     glTexCoord2f(1, 0);
-    glVertex3f(1, 0, 0);
+    glVertex3f(1 + (0.1*sin(mnPaintCount/60.)), 0, 0);
     glEnd();
     CHECK_GL_ERROR();
 
@@ -319,30 +354,10 @@ void IconTestApp::DoItWithVcl( const OUString& sImageFile)
 
         pWindow->SetText(OUString("VCL Image Test"));
 
-        SvFileStream aFileStream( sImageFile, STREAM_READ );
-        GraphicFilter aGraphicFilter(false);
-        Graphic aGraphic;
-        if (aGraphicFilter.ImportGraphic(aGraphic, sImageFile, aFileStream) != 0)
-        {
-            SAL_WARN("vcl.icontest", "Could not import image '" << sImageFile << "'");
-            return;
-        }
-        Size aGraphicSize( aGraphic.GetSizePixel() );
-        float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
-        SAL_INFO("vcl.icontest", sImageFile << ": size: " << aGraphicSize << " aspect: " << aspect);
-        Size aSize;
-        if( aspect >= ((float) WIDTH) / HEIGHT )
-            aSize = Size( WIDTH, HEIGHT/aspect );
-        else
-            aSize = Size( WIDTH * aspect, HEIGHT );
-        GraphicConversionParameters aConv( aSize );
-        Bitmap *pBitmap = new Bitmap( aGraphic.GetBitmap( aConv ) );
-
-        FixedBitmap *pFixedBitmap = new FixedBitmap( pWindow );
-        pFixedBitmap->SetBitmap( *pBitmap );
-        pFixedBitmap->SetSizePixel( aSize );
-        pFixedBitmap->SetPosPixel( Point( 0, 0 ) );
-        pFixedBitmap->Show();
+        pWindow->LoadGraphic( sImageFile );
+        pWindow->mpFixedBitmap = new FixedBitmap( pWindow );
+        pWindow->mpFixedBitmap->SetPosPixel( Point( 0, 0 ) );
+        pWindow->mpFixedBitmap->Show();
 
         pWindow->Hide();
         pWindow->Show();
@@ -369,13 +384,8 @@ void IconTestApp::DoItWithOpenGL(const OUString& sImageFile)
 
         pWindow->SetText(OUString("OpenGL Image Test"));
 
-        SvFileStream aFileStream( sImageFile, STREAM_READ );
-        GraphicFilter aGraphicFilter(false);
-        if (aGraphicFilter.ImportGraphic(pWindow->maGraphic, sImageFile, aFileStream) != 0)
-        {
-            SAL_WARN("vcl.icontest", "Could not import image '" << sImageFile << "'");
-            return;
-        }
+        pWindow->LoadGraphic( sImageFile );
+
         Size aGraphicSize( pWindow->maGraphic.GetSizePixel() );
         float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
         SAL_INFO("vcl.icontest", sImageFile << ": size: " << aGraphicSize << " aspect: " << aspect);
