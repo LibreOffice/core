@@ -4033,7 +4033,7 @@ long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
         return -1;
     }
 
-    pBook[nIsEnd]->Get( rStart, pData );    // query position
+    (void)pBook[nIsEnd]->Get( rStart, pData );    // query position
     return pBook[nIsEnd]->GetIdx();
 }
 
