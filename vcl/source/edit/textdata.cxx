@@ -212,21 +212,11 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
     }
 }
 
-TEParaPortions::TEParaPortions()
-{
-}
-
 TEParaPortions::~TEParaPortions()
 {
-    Reset();
-}
-
-void TEParaPortions::Reset()
-{
-    TEParaPortions::iterator aIter( begin() );
-    while ( aIter != end() )
+   std::vector<TEParaPortion*>::iterator aIter( mvData.begin() );
+   while ( aIter != mvData.end() )
         delete *aIter++;
-    clear();
 }
 
 IdleFormatter::IdleFormatter()
