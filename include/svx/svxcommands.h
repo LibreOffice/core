@@ -86,6 +86,7 @@
 #define CMD_SID_OUTLINE_MAKE                        ".uno:Group"
 #define CMD_SID_INSERT_POSTIT                       ".uno:InsertAnnotation"
 #define CMD_SID_REPLYTO_POSTIT                      ".uno:ReplyToAnnotation"
+#define CMD_SID_RULER                               ".uno:ShowRuler"
 #define CMD_SID_DELETE_POSTIT                       ".uno:DeleteAnnotation"
 #define CMD_SID_DELETEALL_POSTIT                    ".uno:DeleteAllAnnotation"
 #define CMD_SID_DELETEALLBYAUTHOR_POSTIT            ".uno:DeleteAllAnnotationByAuthor"

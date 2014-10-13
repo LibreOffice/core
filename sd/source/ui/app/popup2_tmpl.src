@@ -528,6 +528,7 @@
         MN_PRESENTATION
 #endif
         SEPARATOR
+        MN_RULER
         MN_GRID
         MN_HELPLINES
         MN_CAPTUREPOINT

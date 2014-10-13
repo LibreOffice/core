@@ -959,6 +959,14 @@
         RadioCheck = TRUE ; \
         Text [ en-US ] = "Fixed Ver~tical Bottom" ; \
     };
+#define MN_RULER\
+    MenuItem\
+    {\
+        Identifier = SID_RULER ; \
+        HelpId = CMD_SID_RULER ; \
+        Checkable = TRUE ; \
+        Text [ en-US ] = "Display ~Ruler" ; \
+    };
 
 #define MN_GRID_VISIBLE\
     MenuItem\
