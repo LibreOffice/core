@@ -276,7 +276,15 @@ private:
     SeriesPlottersType m_aSeriesPlotterList;
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
     ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
+
+    /**
+     * Max axis index of all dimensions.  Currently this can be either 0 or 1
+     * since we only support primary and secondary axes per dimension.  The
+     * value of 0 means all dimensions have only primary axis, while 1 means
+     * at least one dimension has a secondary axis.
+     */
     sal_Int32 m_nMaxAxisIndex;
+
     bool m_bChartTypeUsesShiftedCategoryPositionPerDefault;
     sal_Int32 m_nDefaultDateNumberFormat;
 };
@@ -778,85 +786,85 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
                 continue;
 
             uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
-            if( xDiagram.is() )
+            if (!xDiagram.is())
+                continue;
+
+            bool bSeriesAttachedToThisAxis = false;
+            sal_Int32 nAttachedAxisIndex = -1;
             {
-                bool bSeriesAttachedToThisAxis = false;
-                sal_Int32 nAttachedAxisIndex = -1;
+                ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+                ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
+                for( ; aIter != aSeriesVector.end(); ++aIter )
                 {
-                    ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-                    ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
-                    for( ; aIter != aSeriesVector.end(); ++aIter )
+                    sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
+                    if( nAxisIndex == nCurrentIndex )
                     {
-                        sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
-                        if( nAxisIndex == nCurrentIndex )
-                        {
-                            bSeriesAttachedToThisAxis = true;
-                            break;
-                        }
-                        else if( nAttachedAxisIndex<0 || nAttachedAxisIndex>nCurrentIndex )
-                            nAttachedAxisIndex=nCurrentIndex;
+                        bSeriesAttachedToThisAxis = true;
+                        break;
                     }
+                    else if( nAttachedAxisIndex<0 || nAttachedAxisIndex>nCurrentIndex )
+                        nAttachedAxisIndex=nCurrentIndex;
+                }
+            }
+
+            if (bSeriesAttachedToThisAxis || nAttachedAxisIndex < 0)
+                continue;
+
+            for( size_t nC = 0; nC < aVCooSysList_Y.size(); ++nC )
+            {
+                aVCooSysList_Y[nC]->prepareAutomaticAxisScaling( rAxisUsage.aAutoScaling, 1, nAttachedAxisIndex );
+
+                ExplicitScaleData aExplicitScaleSource = aVCooSysList_Y[nC]->getExplicitScale( 1,nAttachedAxisIndex );
+                ExplicitIncrementData aExplicitIncrementSource = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAttachedAxisIndex );
+
+                ExplicitScaleData aExplicitScaleDest = aVCooSysList_Y[nC]->getExplicitScale( 1,nAxisIndex );;
+                ExplicitIncrementData aExplicitIncrementDest = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAxisIndex );;
+
+                aExplicitScaleDest.Orientation = aExplicitScaleSource.Orientation;
+                aExplicitScaleDest.Scaling = aExplicitScaleSource.Scaling;
+                aExplicitScaleDest.AxisType = aExplicitScaleSource.AxisType;
+
+                aExplicitIncrementDest.BaseValue = aExplicitIncrementSource.BaseValue;
+
+                ScaleData aScale( rAxisUsage.aAutoScaling.getScale() );
+                if( !aScale.Minimum.hasValue() )
+                {
+                    bool bNewMinOK = true;
+                    double fMax=0.0;
+                    if( aScale.Maximum >>= fMax )
+                        bNewMinOK = (aExplicitScaleSource.Minimum <= fMax);
+                    if( bNewMinOK )
+                        aExplicitScaleDest.Minimum = aExplicitScaleSource.Minimum;
+                }
+                else
+                    aExplicitIncrementDest.BaseValue = aExplicitScaleDest.Minimum;
+
+                if( !aScale.Maximum.hasValue() )
+                {
+                    bool bNewMaxOK = true;
+                    double fMin=0.0;
+                    if( aScale.Minimum >>= fMin )
+                        bNewMaxOK = (fMin <= aExplicitScaleSource.Maximum);
+                    if( bNewMaxOK )
+                        aExplicitScaleDest.Maximum = aExplicitScaleSource.Maximum;
+                }
+                if( !aScale.Origin.hasValue() )
+                    aExplicitScaleDest.Origin = aExplicitScaleSource.Origin;
+
+                if( !aScale.IncrementData.Distance.hasValue() )
+                    aExplicitIncrementDest.Distance = aExplicitIncrementSource.Distance;
+
+                bool bAutoMinorInterval = true;
+                if( aScale.IncrementData.SubIncrements.getLength() )
+                    bAutoMinorInterval = !( aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() );
+                if( bAutoMinorInterval )
+                {
+                    if( !aExplicitIncrementDest.SubIncrements.empty() && !aExplicitIncrementSource.SubIncrements.empty() )
+                        aExplicitIncrementDest.SubIncrements[0].IntervalCount =
+                            aExplicitIncrementSource.SubIncrements[0].IntervalCount;
                 }
 
-                if( !bSeriesAttachedToThisAxis && nAttachedAxisIndex >= 0 )
-                {
-                    for( size_t nC = 0; nC < aVCooSysList_Y.size(); ++nC )
-                    {
-                        aVCooSysList_Y[nC]->prepareAutomaticAxisScaling( rAxisUsage.aAutoScaling, 1, nAttachedAxisIndex );
-
-                        ExplicitScaleData aExplicitScaleSource = aVCooSysList_Y[nC]->getExplicitScale( 1,nAttachedAxisIndex );
-                        ExplicitIncrementData aExplicitIncrementSource = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAttachedAxisIndex );
-
-                        ExplicitScaleData aExplicitScaleDest = aVCooSysList_Y[nC]->getExplicitScale( 1,nAxisIndex );;
-                        ExplicitIncrementData aExplicitIncrementDest = aVCooSysList_Y[nC]->getExplicitIncrement( 1,nAxisIndex );;
-
-                        aExplicitScaleDest.Orientation = aExplicitScaleSource.Orientation;
-                        aExplicitScaleDest.Scaling = aExplicitScaleSource.Scaling;
-                        aExplicitScaleDest.AxisType = aExplicitScaleSource.AxisType;
-
-                        aExplicitIncrementDest.BaseValue = aExplicitIncrementSource.BaseValue;
-
-                        ScaleData aScale( rAxisUsage.aAutoScaling.getScale() );
-                        if( !aScale.Minimum.hasValue() )
-                        {
-                            bool bNewMinOK = true;
-                            double fMax=0.0;
-                            if( aScale.Maximum >>= fMax )
-                                bNewMinOK = (aExplicitScaleSource.Minimum <= fMax);
-                            if( bNewMinOK )
-                                aExplicitScaleDest.Minimum = aExplicitScaleSource.Minimum;
-                        }
-                        else
-                            aExplicitIncrementDest.BaseValue = aExplicitScaleDest.Minimum;
-
-                        if( !aScale.Maximum.hasValue() )
-                        {
-                            bool bNewMaxOK = true;
-                            double fMin=0.0;
-                            if( aScale.Minimum >>= fMin )
-                                bNewMaxOK = (fMin <= aExplicitScaleSource.Maximum);
-                            if( bNewMaxOK )
-                                aExplicitScaleDest.Maximum = aExplicitScaleSource.Maximum;
-                        }
-                        if( !aScale.Origin.hasValue() )
-                            aExplicitScaleDest.Origin = aExplicitScaleSource.Origin;
-
-                        if( !aScale.IncrementData.Distance.hasValue() )
-                            aExplicitIncrementDest.Distance = aExplicitIncrementSource.Distance;
-
-                        bool bAutoMinorInterval = true;
-                        if( aScale.IncrementData.SubIncrements.getLength() )
-                            bAutoMinorInterval = !( aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() );
-                        if( bAutoMinorInterval )
-                        {
-                            if( !aExplicitIncrementDest.SubIncrements.empty() && !aExplicitIncrementSource.SubIncrements.empty() )
-                                aExplicitIncrementDest.SubIncrements[0].IntervalCount =
-                                    aExplicitIncrementSource.SubIncrements[0].IntervalCount;
-                        }
-
-                        aVCooSysList_Y[nC]->setExplicitScaleAndIncrement( 1, nAxisIndex, aExplicitScaleDest, aExplicitIncrementDest );
-                    }
-                }
+                aVCooSysList_Y[nC]->setExplicitScaleAndIncrement( 1, nAxisIndex, aExplicitScaleDest, aExplicitIncrementDest );
             }
         }
     }
