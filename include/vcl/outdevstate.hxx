@@ -53,12 +53,13 @@ enum class PushFlags : sal_uInt16 {
 
     //bool operator bool() { return static_cast<sal_uInt16>(*this) != 0; }
 };
-template<>
-struct o3tl::typed_flags<PushFlags>: o3tl::is_typed_flags<PushFlags, 0xFFFF> {};
+
+namespace o3tl
+{
+    template<> struct typed_flags<PushFlags> : is_typed_flags<PushFlags, 0xFFFF> {};
+}
 #define PUSH_ALLTEXT  (PushFlags::TEXTCOLOR | PushFlags::TEXTFILLCOLOR | PushFlags::TEXTLINECOLOR | PushFlags::OVERLINECOLOR | PushFlags::TEXTALIGN | PushFlags::TEXTLAYOUTMODE | PushFlags::TEXTLANGUAGE)
 #define PUSH_ALLFONT  (PUSH_ALLTEXT | PushFlags::FONT)
-
-
 
 // LayoutModes for Complex Text Layout
 // These are flag values, i.e they can be combined
