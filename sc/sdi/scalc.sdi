@@ -4992,6 +4992,9 @@ SfxVoidItem NumberFormatCurrency SID_NUMBER_CURRENCY
     RecordPerSet;
     Synchron;
 
+    /* status: */
+    SlotType = SfxStringItem
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,

@@ -152,7 +152,7 @@ void ScDLL::Init()
     ScPageBreakShell    ::RegisterInterface(pMod);
 
     SfxRecentFilesToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
-    SfxCurrencyToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
+    SfxCurrencyToolBoxControl::RegisterControl(SID_CURRENCY_LIST, pMod);
 
     // Own Controller
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
