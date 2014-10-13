@@ -19,7 +19,9 @@ package graphical;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 
 /**
@@ -55,10 +57,7 @@ public class IniFile implements Enumeration<String>
             if (m_aList.isEmpty())
             {
                 // can only insert if there is nothing else already in the ini file
-                for (int i = 0; i < _aList.length; i++)
-                {
-                    m_aList.add(_aList[i]);
-                }
+                m_aList.addAll(Arrays.asList(_aList));
             }
         }
 
