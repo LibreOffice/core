@@ -30,7 +30,7 @@
   </LC_INFO>
   <LC_CTYPE unoid="generic">
     <Separators>
-      <DateSeparator>／</DateSeparator>
+      <DateSeparator>/</DateSeparator>
       <ThousandSeparator>,</ThousandSeparator>
       <DecimalSeparator>.</DecimalSeparator>
       <TimeSeparator>:</TimeSeparator>
@@ -56,7 +56,7 @@
     <DateAcceptancePattern>M/D</DateAcceptancePattern>
     <DateAcceptancePattern>M／D</DateAcceptancePattern>
     <DateAcceptancePattern>Y.M.D</DateAcceptancePattern>
-    <DateAcceptancePattern>Y/M/D</DateAcceptancePattern>
+    <DateAcceptancePattern>Y／M／D</DateAcceptancePattern>
     <DateAcceptancePattern>Y年M月D日</DateAcceptancePattern>
     <DateAcceptancePattern>M月D日</DateAcceptancePattern>
     <!-- Fix number formats. Index range is from 0 to 5. -->
@@ -119,10 +119,10 @@
       <FormatCode>YYYY"年"M"月"D"日"　NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>YY／M／D</FormatCode>
+      <FormatCode>YY/M/D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>YYYY／M／D</FormatCode>
+      <FormatCode>YYYY/M/D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="short" usage="DATE" formatindex="22">
       <FormatCode>YYYY"年"M"月"</FormatCode>
@@ -143,10 +143,10 @@
       <FormatCode>YY"年"M"月"D"日" NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>YY／M／D NNNN</FormatCode>
+      <FormatCode>YY/M/D NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>YYYY／M／D NNNN</FormatCode>
+      <FormatCode>YYYY/M/D NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
       <FormatCode>YYYY"年"M"月"D"日" NNNN</FormatCode>
@@ -228,10 +228,10 @@
       <FormatCode>YY"年"M"月"D"日"HH"时"MM"分"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME"  formatindex="58">
-      <FormatCode>M／D／YY HH:MM</FormatCode>
+      <FormatCode>M/D/YY HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="59">
-      <FormatCode>MM／DD／YYYY HH:MM:SS</FormatCode>
+      <FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
