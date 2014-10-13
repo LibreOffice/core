@@ -31,13 +31,21 @@ namespace connectivity
          * for such shorter strings, however any trailing padding makes the gui
          * editing of such names harder, hence we remove all trailing whitespace.
          */
-        ::rtl::OUString sanitizeIdentifier(const ::rtl::OUString& rIdentifier);
+        OUString sanitizeIdentifier(const OUString& rIdentifier);
+
+        inline bool IndicatesError(const ISC_STATUS_ARRAY& rStatusVector)
+        {
+            return rStatusVector[0]==1 && rStatusVector[1]; // indicates error;
+        }
+
+        OUString StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
+                                    const OUString& rCause);
 
         /**
          * Evaluate a firebird status vector and throw exceptions as necessary.
          * The content of the status vector is included in the thrown exception.
          */
-        void evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,
+        void evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
                                   const ::rtl::OUString& aCause,
                                   const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext)
                 throw (::com::sun::star::sdbc::SQLException);

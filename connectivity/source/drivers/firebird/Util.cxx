@@ -26,37 +26,43 @@ OUString firebird::sanitizeIdentifier(const OUString& rIdentifier)
     return sRet;
 }
 
-void firebird::evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,
-                                    const OUString& aCause,
+OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
+                                    const OUString& rCause)
+{
+    OUStringBuffer buf;
+    char msg[512]; // Size is based on suggestion in docs.
+    const ISC_STATUS* pStatus = (const ISC_STATUS*) &rStatusVector;
+
+    buf.appendAscii("firebird_sdbc error:");
+    try
+    {
+        while(fb_interpret(msg, sizeof(msg), &pStatus))
+        {
+            // TODO: verify encoding
+            buf.appendAscii("\n*");
+            buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
+        }
+    }
+    catch (...)
+    {
+        SAL_WARN("connectivity.firebird", "ignore fb_interpret exception");
+    }
+    buf.appendAscii("\ncaused by\n'").append(rCause).appendAscii("'\n");
+
+    OUString error = buf.makeStringAndClear();
+    SAL_WARN("connectivity.firebird", error);
+    return error;
+}
+
+void firebird::evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
+                                    const OUString& rCause,
                                     const uno::Reference< XInterface >& _rxContext)
     throw(SQLException)
 {
-    if (aStatusVector[0]==1 && aStatusVector[1]) // indicates error
+    if (IndicatesError(rStatusVector))
     {
-        OUStringBuffer buf;
-        char msg[512]; // Size is based on suggestion in docs.
-        const ISC_STATUS* pStatus = (const ISC_STATUS*) &aStatusVector;
-
-        buf.appendAscii("firebird_sdbc error:");
-        try
-        {
-            while(fb_interpret(msg, sizeof(msg), &pStatus))
-            {
-                // TODO: verify encoding
-                buf.appendAscii("\n*");
-                buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
-            }
-        }
-        catch (...)
-        {
-            SAL_WARN("connectivity.firebird", "ignore fb_interpret exception");
-        }
-        buf.appendAscii("\ncaused by\n'").append(aCause).appendAscii("'\n");
-
-        OUString error = buf.makeStringAndClear();
-        SAL_WARN("connectivity.firebird", error);
-
-        throw SQLException( error, _rxContext, OUString(), 1, Any() );
+        OUString error = StatusVectorToString(rStatusVector, rCause);
+        throw SQLException(error, _rxContext, OUString(), 1, Any());
     }
 }
 

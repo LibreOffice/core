@@ -212,8 +212,11 @@ sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
                                &nBytesRead,
                                nReadSize,
                                (char*) rDataOut.getArray() + nTotalBytesRead);
-        if (aErr)
-            evaluateStatusVector(m_statusVector, "isc_get_segment", *this);
+        if (aErr && IndicatesError(m_statusVector))
+        {
+            OUString sError(StatusVectorToString(m_statusVector, "isc_get_segment"));
+            throw IOException(sError, *this);
+        }
         nTotalBytesRead += nBytesRead;
         m_nBlobPosition += nBytesRead;
     }
