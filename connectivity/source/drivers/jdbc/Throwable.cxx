@@ -59,7 +59,7 @@ OUString java_lang_Throwable::getLocalizedMessage() const
 void java_lang_Throwable::printStackTrace() const
 {
     static jmethodID mID(NULL);
-    return callVoidMethod("printStackTrace",mID);
+    return callVoidMethod_Throw("printStackTrace",mID);
 }
 #endif
 

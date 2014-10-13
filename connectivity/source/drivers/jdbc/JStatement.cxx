@@ -85,7 +85,7 @@ void SAL_CALL OStatement_BASE2::disposing()
     if ( object )
     {
         static jmethodID mID(NULL);
-        callVoidMethod("close",mID);
+        callVoidMethod_Throw("close", mID);
     }
 
     ::comphelper::disposeComponent(m_xGeneratedStatement);
@@ -192,7 +192,7 @@ void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException, std::e
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callVoidMethod("cancel",mID);
+    callVoidMethod_Nothrow("cancel",mID);
 }
 
 
@@ -214,7 +214,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
 
         createStatement(t.pEnv);
         static jmethodID mID(NULL);
-        callVoidMethod("clearBatch",mID);
+        callVoidMethod_Throw("clearBatch", mID);
     } //t.pEnv
 }
 
@@ -409,7 +409,7 @@ void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star:
     {
         createStatement(t.pEnv);
         static jmethodID mID(NULL);
-        callVoidMethod("clearWarnings",mID);
+        callVoidMethod_Throw("clearWarnings", mID);
     }
 }
 

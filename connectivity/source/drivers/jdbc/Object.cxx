@@ -296,7 +296,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg( const char* _pMethodName, j
     return (sal_Int32)out;
 }
 
-void java_lang_Object::callVoidMethod( const char* _pMethodName, jmethodID& _inout_MethodID) const
+void java_lang_Object::callVoidMethod_Throw( const char* _pMethodName, jmethodID& _inout_MethodID) const
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
@@ -305,6 +305,17 @@ void java_lang_Object::callVoidMethod( const char* _pMethodName, jmethodID& _ino
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID );
     ThrowSQLException( t.pEnv, NULL );
+}
+
+void java_lang_Object::callVoidMethod_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID) const
+{
+    SDBThreadAttach t;
+    OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java environment anymore!" );
+    obtainMethodId(t.pEnv, _pMethodName,"()V", _inout_MethodID);
+
+    // call method
+    t.pEnv->CallVoidMethod( object, _inout_MethodID );
+    isExceptionOccurred(t.pEnv, true);
 }
 
 void java_lang_Object::callVoidMethodWithIntArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
@@ -326,7 +337,7 @@ void java_lang_Object::callVoidMethodWithIntArg_Nothrow( const char* _pMethodNam
 
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
-    isExceptionOccurred(t.pEnv,true);
+    isExceptionOccurred(t.pEnv, true);
 }
 
 void java_lang_Object::callVoidMethodWithBoolArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const

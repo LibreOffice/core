@@ -120,7 +120,8 @@ namespace connectivity
         sal_Int32       callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const;
         OUString callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         OUString callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;
-        void            callVoidMethod( const char* _pMethodName, jmethodID& _inout_MethodID) const;
+        void            callVoidMethod_Throw( const char* _pMethodName, jmethodID& _inout_MethodID) const;
+        void            callVoidMethod_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID) const;
         void            callVoidMethodWithIntArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
         void            callVoidMethodWithIntArg_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
         void            callVoidMethodWithBoolArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const;
@@ -140,7 +141,7 @@ namespace connectivity
         }
 
         template< typename T >
-                        void callVoidMethod(const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID,sal_Int32 _nArgument, const T& _aValue) const
+                        void callVoidMethod_Throw(const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID,sal_Int32 _nArgument, const T& _aValue) const
         {
             SDBThreadAttach t;
             obtainMethodId(t.pEnv, _pMethodName,_pSignature, _inout_MethodID);

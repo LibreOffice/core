@@ -96,8 +96,7 @@ jclass java_sql_ResultSet::getMyClass() const
     return theClass;
 }
 
-
-void java_sql_ResultSet::disposing(void)
+void java_sql_ResultSet::disposing()
 {
     OPropertySetHelper::disposing();
 
@@ -107,7 +106,7 @@ m_xMetaData.clear();
     {
         SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
         static jmethodID mID(NULL);
-        callVoidMethod("close",mID);
+        callVoidMethod_Throw("close", mID);
         clearObject(*t.pEnv);
     }
 
@@ -407,13 +406,13 @@ sal_Bool SAL_CALL java_sql_ResultSet::isLast(  ) throw(SQLException, RuntimeExce
 void SAL_CALL java_sql_ResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("beforeFirst",mID);
+    callVoidMethod_Throw("beforeFirst", mID);
 }
 
 void SAL_CALL java_sql_ResultSet::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("afterLast",mID);
+    callVoidMethod_Throw("afterLast", mID);
 }
 
 
@@ -503,14 +502,14 @@ sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeExc
 void SAL_CALL java_sql_ResultSet::cancel(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("cancel",mID);
+    callVoidMethod_Throw("cancel", mID);
 }
 
 
 void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("clearWarnings",mID);
+    callVoidMethod_Throw("clearWarnings", mID);
 }
 
 ::com::sun::star::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -534,40 +533,40 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc
 void SAL_CALL java_sql_ResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("insertRow",mID);
+    callVoidMethod_Throw("insertRow", mID);
 }
 
 void SAL_CALL java_sql_ResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateRow",mID);
+    callVoidMethod_Throw("updateRow", mID);
 }
 
 void SAL_CALL java_sql_ResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("deleteRow",mID);
+    callVoidMethod_Throw("deleteRow", mID);
 }
 
 
 void SAL_CALL java_sql_ResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("cancelRowUpdates",mID);
+    callVoidMethod_Throw("cancelRowUpdates", mID);
 }
 
 
 void SAL_CALL java_sql_ResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("moveToInsertRow",mID);
+    callVoidMethod_Throw("moveToInsertRow", mID);
 }
 
 
 void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("moveToCurrentRow",mID);
+    callVoidMethod_Throw("moveToCurrentRow", mID);
 }
 
 
@@ -581,32 +580,32 @@ void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex ) throw(::co
 void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateBoolean", "(IZ)V", mID, columnIndex, x);
+    callVoidMethod_Throw("updateBoolean", "(IZ)V", mID, columnIndex, x);
 }
 
 void SAL_CALL java_sql_ResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateByte", "(IB)V", mID, columnIndex, x);
+    callVoidMethod_Throw("updateByte", "(IB)V", mID, columnIndex, x);
 }
 
 
 void SAL_CALL java_sql_ResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateShort", "(IS)V", mID, columnIndex, x);
+    callVoidMethod_Throw("updateShort", "(IS)V", mID, columnIndex, x);
 }
 
 void SAL_CALL java_sql_ResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateInt", "(II)V", mID, columnIndex, x);
+    callVoidMethod_Throw("updateInt", "(II)V", mID, columnIndex, x);
 }
 
 void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateLong", "(IJ)V", mID, columnIndex, x);
+    callVoidMethod_Throw("updateLong", "(IJ)V", mID, columnIndex, x);
 }
 
 
@@ -614,14 +613,14 @@ void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x
 void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateFloat", "(IF)V", mID, columnIndex, x);
+    callVoidMethod_Throw("updateFloat", "(IF)V", mID, columnIndex, x);
 }
 
 
 void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("updateDouble", "(ID)V", mID, columnIndex, x);
+    callVoidMethod_Throw("updateDouble", "(ID)V", mID, columnIndex, x);
 }
 
 
@@ -683,7 +682,7 @@ void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const ::com
 {
     java_sql_Date aD(x);
     static jmethodID mID(NULL);
-    callVoidMethod("updateDate", "(ILjava/sql/Date;)V", mID, columnIndex, aD.getJavaObject());
+    callVoidMethod_Throw("updateDate", "(ILjava/sql/Date;)V", mID, columnIndex, aD.getJavaObject());
 }
 
 
@@ -691,7 +690,7 @@ void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const ::com
 {
     java_sql_Time aD(x);
     static jmethodID mID(NULL);
-    callVoidMethod("updateTime", "(ILjava/sql/Time;)V", mID, columnIndex, aD.getJavaObject());
+    callVoidMethod_Throw("updateTime", "(ILjava/sql/Time;)V", mID, columnIndex, aD.getJavaObject());
 }
 
 
@@ -699,7 +698,7 @@ void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const 
 {
     java_sql_Timestamp aD(x);
     static jmethodID mID(NULL);
-    callVoidMethod("updateTimestamp", "(ILjava/sql/Timestamp;)V", mID, columnIndex, aD.getJavaObject());
+    callVoidMethod_Throw("updateTimestamp", "(ILjava/sql/Timestamp;)V", mID, columnIndex, aD.getJavaObject());
 }
 
 
@@ -861,7 +860,7 @@ void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::st
 void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("refreshRow",mID);
+    callVoidMethod_Throw("refreshRow",mID);
 }
 
 void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)

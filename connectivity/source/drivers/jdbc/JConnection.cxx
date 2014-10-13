@@ -309,7 +309,7 @@ void java_sql_Connection::disposing()
     if ( object )
     {
         static jmethodID mID(NULL);
-        callVoidMethod("close",mID);
+        callVoidMethod_Throw("close", mID);
     }
 }
 
@@ -361,7 +361,7 @@ void SAL_CALL java_sql_Connection::close(  ) throw(SQLException, RuntimeExceptio
 void SAL_CALL java_sql_Connection::commit(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("commit",mID);
+    callVoidMethod_Throw("commit", mID);
 }
 
 sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
@@ -389,7 +389,7 @@ void SAL_CALL java_sql_Connection::setCatalog( const OUString& catalog ) throw(S
 void SAL_CALL java_sql_Connection::rollback(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("rollback",mID);
+    callVoidMethod_Throw("rollback", mID);
 }
 
 sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
@@ -557,7 +557,7 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
 void SAL_CALL java_sql_Connection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod("clearWarnings",mID);
+    callVoidMethod_Throw("clearWarnings", mID);
 }
 
 Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
