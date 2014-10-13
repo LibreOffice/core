@@ -116,7 +116,8 @@ void MyWorkWindow::LoadGraphic( const OUString& sImageFile )
 
 void MyWorkWindow::Paint( const Rectangle& rRect )
 {
-    std::cerr << "==> Paint! " << mnPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
+    std::cout << "==> Paint! " << mnPaintCount++ << " (vcl) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
+
     Size aGraphicSize( maGraphic.GetSizePixel() );
     float aspect = ((float) aGraphicSize.Width()) / aGraphicSize.Height();
     Size aSize;
@@ -126,13 +127,19 @@ void MyWorkWindow::Paint( const Rectangle& rRect )
         aSize = Size( WIDTH * aspect, HEIGHT );
     aSize.setWidth( aSize.Width() * (1 + (0.1*sin(mnPaintCount/60.))) );
     aSize.setHeight( aSize.Height() * (1 + (0.1*sin(mnPaintCount/50.))) );
-    GraphicConversionParameters aConv( aSize );
+
     Bitmap aEmpty;
     mpFixedBitmap->SetBitmap( aEmpty );
+    GraphicConversionParameters aConv( aSize );
     mpBitmap = new Bitmap( maGraphic.GetBitmap( aConv ) );
     mpFixedBitmap->SetBitmap( *mpBitmap );
     mpFixedBitmap->SetSizePixel( aSize );
+
     WorkWindow::Paint( rRect );
+
+    if (mnPaintCount == 100)
+        Application::Quit();
+
     Invalidate( INVALIDATE_CHILDREN );
 }
 
@@ -234,7 +241,7 @@ void MyOpenGLWorkWindow::LoadTexture()
 
 void MyOpenGLWorkWindow::Paint( const Rectangle& )
 {
-    std::cerr << "==> Paint! "<< mnPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
+    std::cout << "==> Paint! "<< mnPaintCount++ << " (OpenGL) " << GetSizePixel() << " " << getTimeNow() - mnStartTime << std::endl;
     OpenGLContext& aCtx = mpOpenGLWindow->getContext();
     aCtx.requestLegacyContext();
     CHECK_GL_ERROR();
@@ -286,6 +293,9 @@ void MyOpenGLWorkWindow::Paint( const Rectangle& )
 
     aCtx.swapBuffers();
     CHECK_GL_ERROR();
+
+    if (mnPaintCount == 100)
+        Application::Quit();
 
     Invalidate( INVALIDATE_CHILDREN );
 }
