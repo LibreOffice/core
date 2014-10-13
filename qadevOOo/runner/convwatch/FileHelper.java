@@ -267,15 +267,31 @@ public class FileHelper
                 File inputFile = new File(_sSource);
                 File outputFile = new File(_sDestination);
 
-                java.io.FileReader in = new java.io.FileReader(inputFile);
-                java.io.FileWriter out = new java.io.FileWriter(outputFile);
-                int c;
+                java.io.FileReader in = null;
+                java.io.FileWriter out = null;
+                try
+                {
+                    in = new java.io.FileReader(inputFile);
+                    try
+                    {
+                        out = new java.io.FileWriter(outputFile);
+                        int c;
 
-                while ((c = in.read()) != -1)
-                    out.write(c);
+                        while ((c = in.read()) != -1)
+                            out.write(c);
 
-                in.close();
-                out.close();
+                    }
+                    finally
+                    {
+                        if (out != null)
+                            out.close();
+                    }
+                }
+                finally
+                {
+                    if (in != null)
+                        in.close();
+                }
             }
             catch (java.io.IOException e)
             {
