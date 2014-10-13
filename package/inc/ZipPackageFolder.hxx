@@ -28,20 +28,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <vector>
 
-namespace com { namespace sun { namespace star {
-namespace beans
-{
-    struct PropertyValue;
-}
-namespace packages
-{
-    class ContentInfo;
-}
-} } }
-
 class ZipOutputStream;
 struct ZipEntry;
-typedef void* rtlRandomPool;
 
 class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 <
@@ -51,14 +39,12 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 >
 {
 private:
-    css::uno::Reference< css::uno::XComponentContext> m_xContext;
     ContentHash maContents;
-    sal_Int32 m_nFormat;
     OUString m_sVersion;
 
 public:
 
-    ZipPackageFolder( css::uno::Reference< css::uno::XComponentContext> xContext,
+    ZipPackageFolder( const css::uno::Reference < css::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder();
@@ -80,7 +66,13 @@ public:
     static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId();
 
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
-    void setRemoveOnInsertMode_Impl( bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
+    void setRemoveOnInsertMode_Impl( bool bRemove ) { mbAllowRemoveOnInsert = bRemove; }
+
+    virtual bool saveChild( const OUString &rPath,
+                            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
+                            ZipOutputStream & rZipOut,
+                            const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
+                            const rtlRandomPool &rRandomPool ) SAL_OVERRIDE;
 
     // Recursive functions
     void saveContents(

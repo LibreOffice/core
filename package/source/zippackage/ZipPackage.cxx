@@ -556,7 +556,7 @@ void ZipPackage::getZipFileContents()
         {
             nStreamIndex++;
             sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex );
-            pPkgStream = new ZipPackageStream( *this, m_xContext, m_bAllowRemoveOnInsert );
+            pPkgStream = new ZipPackageStream( *this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
             pPkgStream->SetPackageMember( true );
             pPkgStream->setZipEntryOnLoading( rEntry );
             pPkgStream->setName( sTemp );
@@ -942,7 +942,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 uno::Reference< XInterface > SAL_CALL ZipPackage::createInstance()
         throw( Exception, RuntimeException, std::exception )
 {
-    uno::Reference < XInterface > xRef = *( new ZipPackageStream ( *this, m_xContext, m_bAllowRemoveOnInsert ) );
+    uno::Reference < XInterface > xRef = *( new ZipPackageStream( *this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert ) );
     return xRef;
 }
 
@@ -954,9 +954,9 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if ( bArg )
-        xRef = *new ZipPackageFolder ( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
+        xRef = *new ZipPackageFolder( m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
     else
-        xRef = *new ZipPackageStream ( *this, m_xContext, m_bAllowRemoveOnInsert );
+        xRef = *new ZipPackageStream( *this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert );
 
     return xRef;
 }

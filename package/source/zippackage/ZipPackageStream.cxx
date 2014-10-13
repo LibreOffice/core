@@ -69,9 +69,9 @@ namespace { struct lcl_CachedImplId : public rtl::Static< cppu::OImplementationI
 
 ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
                                     const uno::Reference< XComponentContext >& xContext,
+                                    sal_Int32 nFormat,
                                     bool bAllowRemoveOnInsert )
-: m_xContext( xContext )
-, m_rZipPackage( rNewPackage )
+: m_rZipPackage( rNewPackage )
 , m_bToBeCompressed ( true )
 , m_bToBeEncrypted ( false )
 , m_bHaveOwnKey ( false )
@@ -88,10 +88,9 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_bFromManifest( false )
 , m_bUseWinEncoding( false )
 {
-    OSL_ENSURE( m_xContext.is(), "No factory is provided to ZipPackageStream!\n" );
-
-    this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
-
+    m_xContext = xContext;
+    m_nFormat = nFormat;
+    mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
     SetFolder ( false );
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;

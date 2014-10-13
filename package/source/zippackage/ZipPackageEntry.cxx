@@ -40,9 +40,8 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 #define THROW_WHERE ""
 #endif
 
-ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
-: mbIsFolder ( bNewFolder )
-, mbAllowRemoveOnInsert( true )
+ZipPackageEntry::ZipPackageEntry()
+: mbIsFolder( false )
 , mpParent ( NULL )
 {
 }

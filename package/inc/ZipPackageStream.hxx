@@ -48,7 +48,6 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper2
 {
 private:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > m_xStream;
-    const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     ZipPackage          &m_rZipPackage;
     bool            m_bToBeCompressed, m_bToBeEncrypted, m_bHaveOwnKey, m_bIsEncrypted;
 
@@ -140,9 +139,10 @@ public:
 
     void CloseOwnStreamIfAny();
 
-    ZipPackageStream ( ZipPackage & rNewPackage,
-                        const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& xContext,
-                        bool bAllowRemoveOnInsert );
+    ZipPackageStream( ZipPackage & rNewPackage,
+                      const css::uno::Reference < css::uno::XComponentContext >& xContext,
+                      sal_Int32 nFormat,
+                      bool bAllowRemoveOnInsert );
     virtual ~ZipPackageStream( void );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetRawEncrStreamNoHeaderCopy();
@@ -150,6 +150,11 @@ public:
                                                                                     bool bAddHeaderForEncr );
 
     bool ParsePackageRawStream();
+    virtual bool saveChild( const OUString &rPath,
+                            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
+                            ZipOutputStream & rZipOut,
+                            const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
+                            const rtlRandomPool &rRandomPool ) SAL_OVERRIDE;
 
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
