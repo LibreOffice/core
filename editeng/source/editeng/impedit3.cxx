@@ -880,7 +880,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             nPortionStart = nTmpPos;
             pPortion = pParaPortion->GetTextPortions()[nTmpPortion];
-            if ( pPortion->GetKind() == PORTIONKIND_HYPHENATOR )
+            if ( pPortion->GetKind() == PortionKind::HYPHENATOR )
             {
                 // Throw away a Portion, if necessary correct the one before,
                 // if the Hyph portion has swallowed a character ...
@@ -890,7 +890,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 {
                     nTmpPortion--;
                     TextPortion* pPrev = pParaPortion->GetTextPortions()[nTmpPortion];
-                    DBG_ASSERT( pPrev->GetKind() == PORTIONKIND_TEXT, "Portion?!" );
+                    DBG_ASSERT( pPrev->GetKind() == PortionKind::TEXT, "Portion?!" );
                     nTmpWidth -= pPrev->GetSize().Width();
                     nTmpPos = nTmpPos - pPrev->GetLen();
                     pPrev->SetLen(pPrev->GetLen() + nTmpLen);
@@ -900,7 +900,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 DBG_ASSERT( nTmpPortion < pParaPortion->GetTextPortions().Count(), "No more Portions left!" );
                 pPortion = pParaPortion->GetTextPortions()[nTmpPortion];
             }
-            DBG_ASSERT( pPortion->GetKind() != PORTIONKIND_HYPHENATOR, "CreateLines: Hyphenator-Portion!" );
+            DBG_ASSERT( pPortion->GetKind() != PortionKind::HYPHENATOR, "CreateLines: Hyphenator-Portion!" );
             DBG_ASSERT( pPortion->GetLen() || bProcessingEmptyLine, "Empty Portion in CreateLines ?!" );
             (void)bProcessingEmptyLine;
             if ( pNextFeature && ( pNextFeature->GetStart() == nTmpPos ) )
@@ -943,7 +943,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             aCurrentTab.nTabPortion = nTmpPortion;
                         }
 
-                        pPortion->GetKind() = PORTIONKIND_TAB;
+                        pPortion->GetKind() = PortionKind::TAB;
                         pPortion->SetExtraValue( aCurrentTab.aTabStop.GetFill() );
                         pPortion->GetSize().Width() = aCurrentTab.nTabPos - (nTmpWidth+nStartX);
 
@@ -978,7 +978,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         pPortion->GetSize().Width() = 0;
                         bEOL = true;
                         bLineBreak = true;
-                        pPortion->GetKind() = PORTIONKIND_LINEBREAK;
+                        pPortion->GetKind() = PortionKind::LINEBREAK;
                         bCompressedChars = false;
                         EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
@@ -1028,7 +1028,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
                         rArray.insert(rArray.begin()+nPos, pPortion->GetSize().Width());
-                        pPortion->GetKind() = cChar ? PORTIONKIND_TEXT : PORTIONKIND_FIELD;
+                        pPortion->GetKind() = cChar ? PortionKind::TEXT : PortionKind::FIELD;
                         // If this is the first token on the line,
                         // and nTmpWidth > aPaperSize.Width, => infinite loop!
                         if ( ( nTmpWidth >= nXWidth ) && ( nTmpPortion == pLine->GetStartPortion() ) )
@@ -1181,7 +1181,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             // one Non-Feature-Portion has to be wrapped
             if ( pPortion && pPortion->GetLen() > 1 )
             {
-                DBG_ASSERT( pPortion->GetKind() == PORTIONKIND_TEXT, "Len>1, but no TextPortion?" );
+                DBG_ASSERT( pPortion->GetKind() == PortionKind::TEXT, "Len>1, but no TextPortion?" );
                 nTmpWidth -= pPortion->GetSize().Width();
                 sal_Int32 nP = SplitTextPortion( pParaPortion, nTmpPos, pLine );
                 const TextPortion* p = pParaPortion->GetTextPortions()[nP];
@@ -1199,13 +1199,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             bEOC = false;
             if( pPortion ) switch ( pPortion->GetKind() )
             {
-                case PORTIONKIND_TEXT:
+                case PortionKind::TEXT:
                 {
                     nTmpWidth -= pPortion->GetSize().Width();
                 }
                 break;
-                case PORTIONKIND_FIELD:
-                case PORTIONKIND_TAB:
+                case PortionKind::FIELD:
+                case PortionKind::TAB:
                 {
                     nTmpWidth -= pPortion->GetSize().Width();
                     bEOL = true;
@@ -1215,7 +1215,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 default:
                 {
                     //  A feature is not wrapped:
-                    DBG_ASSERT( ( pPortion->GetKind() == PORTIONKIND_LINEBREAK ), "What Feature ?" );
+                    DBG_ASSERT( ( pPortion->GetKind() == PortionKind::LINEBREAK ), "What Feature ?" );
                     bEOL = true;
                     bFixedEnd = true;
                 }
@@ -1296,7 +1296,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         {
             const TextPortion* pTP = pParaPortion->GetTextPortions()[nP];
             // problem with hard font height attribute, when everything but the line break has this attribute
-            if ( pTP->GetKind() != PORTIONKIND_LINEBREAK )
+            if ( pTP->GetKind() != PortionKind::LINEBREAK )
             {
                 SeekCursor( pNode, nTPos+1, aTmpFont );
                 aTmpFont.SetPhysFont( GetRefDevice() );
@@ -1944,7 +1944,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     if ( bCompressBlank || bHangingPunctuation )
     {
         TextPortion* const pTP = pParaPortion->GetTextPortions()[nEndPortion];
-        DBG_ASSERT( pTP->GetKind() == PORTIONKIND_TEXT, "BlankRubber: No TextPortion!" );
+        DBG_ASSERT( pTP->GetKind() == PortionKind::TEXT, "BlankRubber: No TextPortion!" );
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "SplitTextPortion at the beginning of the line?" );
         sal_Int32 nPosInArray = nBreakPos - 1 - pLine->GetStart();
         pTP->GetSize().Width() = ( nPosInArray && ( pTP->GetLen() > 1 ) ) ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0;
@@ -1954,7 +1954,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     {
         // A portion for inserting the separator ...
         TextPortion* pHyphPortion = new TextPortion( 0 );
-        pHyphPortion->GetKind() = PORTIONKIND_HYPHENATOR;
+        pHyphPortion->GetKind() = PortionKind::HYPHENATOR;
         OUString aHyphText(CH_HYPH);
         if ( (cAlternateReplChar || cAlternateExtraChar) && bAltFullRight ) // alternation after the break doesn't supported
         {
@@ -2251,7 +2251,7 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
     if (!pTextPortion)
         return 0;
 
-    DBG_ASSERT( pTextPortion->GetKind() == PORTIONKIND_TEXT, "SplitTextPortion: No TextPortion!" );
+    DBG_ASSERT( pTextPortion->GetKind() == PortionKind::TEXT, "SplitTextPortion: No TextPortion!" );
 
     sal_Int32 nOverlapp = nTmpPos - nPos;
     pTextPortion->SetLen( pTextPortion->GetLen() - nOverlapp );
@@ -2402,7 +2402,7 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
                     !pParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() )
             {
                 TextPortion* const pTP = pParaPortion->GetTextPortions()[nNewPortionPos];
-                DBG_ASSERT( pTP->GetKind() == PORTIONKIND_TEXT, "the empty portion was no TextPortion!" );
+                DBG_ASSERT( pTP->GetKind() == PortionKind::TEXT, "the empty portion was no TextPortion!" );
                 pTP->SetLen( pTP->GetLen() + nNewChars );
             }
             else
@@ -2451,9 +2451,9 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
         if ( ( nPos == nStartPos ) && ( (nPos+pTP->GetLen()) == nEnd ) )
         {
             // Remove portion;
-            sal_uInt8 nType = pTP->GetKind();
+            PortionKind nType = pTP->GetKind();
             pParaPortion->GetTextPortions().Remove( nPortion );
-            if ( nType == PORTIONKIND_LINEBREAK )
+            if ( nType == PortionKind::LINEBREAK )
             {
                 TextPortion* pNext = pParaPortion->GetTextPortions()[ nPortion ];
                 if ( pNext && !pNext->GetLen() )
@@ -2476,14 +2476,14 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
             // No HYPHENATOR portion is allowed to get stuck right at the end...
             sal_Int32 nLastPortion = nPortionCount - 1;
             pTP = pParaPortion->GetTextPortions()[nLastPortion];
-            if ( pTP->GetKind() == PORTIONKIND_HYPHENATOR )
+            if ( pTP->GetKind() == PortionKind::HYPHENATOR )
             {
                 // Discard portion; if possible, correct the ones before,
                 // if the Hyphenator portion has swallowed one character...
                 if ( nLastPortion && pTP->GetLen() )
                 {
                     TextPortion* pPrev = pParaPortion->GetTextPortions()[nLastPortion - 1];
-                    DBG_ASSERT( pPrev->GetKind() == PORTIONKIND_TEXT, "Portion?!" );
+                    DBG_ASSERT( pPrev->GetKind() == PortionKind::TEXT, "Portion?!" );
                     pPrev->SetLen( pPrev->GetLen() + pTP->GetLen() );
                     pPrev->GetSize().Width() = (-1);
                 }
@@ -2993,15 +2993,15 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                         switch ( pTextPortion->GetKind() )
                         {
-                            case PORTIONKIND_TEXT:
-                            case PORTIONKIND_FIELD:
-                            case PORTIONKIND_HYPHENATOR:
+                            case PortionKind::TEXT:
+                            case PortionKind::FIELD:
+                            case PortionKind::HYPHENATOR:
                             {
                                 SeekCursor( pPortion->GetNode(), nIndex+1, aTmpFont, pOutDev );
 
                                 bool bDrawFrame = false;
 
-                                if ( ( pTextPortion->GetKind() == PORTIONKIND_FIELD ) && !aTmpFont.IsTransparent() &&
+                                if ( ( pTextPortion->GetKind() == PortionKind::FIELD ) && !aTmpFont.IsTransparent() &&
                                      ( GetBackgroundColor() != COL_AUTO ) && GetBackgroundColor().IsDark() &&
                                      ( IsAutoColorEnabled() && ( pOutDev->GetOutDevType() != OUTDEV_PRINTER ) ) )
                                 {
@@ -3042,7 +3042,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 const long* pDXArray = 0;
                                 boost::scoped_array<long> pTmpDXArray;
 
-                                if ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
+                                if ( pTextPortion->GetKind() == PortionKind::TEXT )
                                 {
                                     aText = pPortion->GetNode()->GetString();
                                     nTextStart = nIndex;
@@ -3139,7 +3139,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         }
                                     }
                                 }
-                                else if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
+                                else if ( pTextPortion->GetKind() == PortionKind::FIELD )
                                 {
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found");
@@ -3205,7 +3205,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     }
 
                                 }
-                                else if ( pTextPortion->GetKind() == PORTIONKIND_HYPHENATOR )
+                                else if ( pTextPortion->GetKind() == PortionKind::HYPHENATOR )
                                 {
                                     if ( pTextPortion->GetExtraValue() )
                                         aText = OUString(pTextPortion->GetExtraValue());
@@ -3283,7 +3283,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                     const SvxFieldData* pFieldData = 0;
 
-                                    if(PORTIONKIND_FIELD == pTextPortion->GetKind())
+                                    if(PortionKind::FIELD == pTextPortion->GetKind())
                                     {
                                         const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                         const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
@@ -3407,7 +3407,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                             }
                                         }
                                         Point aRealOutPos( aOutPos );
-                                        if ( ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
+                                        if ( ( pTextPortion->GetKind() == PortionKind::TEXT )
                                                && pTextPortion->GetExtraInfos() && pTextPortion->GetExtraInfos()->bCompressed
                                                && pTextPortion->GetExtraInfos()->bFirstCharIsRightPunktuation )
                                         {
@@ -3438,7 +3438,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         // PDF export:
                                         if ( pPDFExtOutDevData )
                                         {
-                                            if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
+                                            if ( pTextPortion->GetKind() == PortionKind::FIELD )
                                             {
                                                 const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                                 const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
@@ -3486,7 +3486,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                 pTmpDXArray.reset();
 
-                                if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
+                                if ( pTextPortion->GetKind() == PortionKind::FIELD )
                                 {
                                     const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found" );
@@ -3509,7 +3509,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                             }
                             break;
-                            case PORTIONKIND_TAB:
+                            case PortionKind::TAB:
                             {
                                 if ( pTextPortion->GetExtraValue() && ( pTextPortion->GetExtraValue() != ' ' ) )
                                 {
@@ -3574,6 +3574,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                 }
                             }
                             break;
+                            case PortionKind::LINEBREAK: break;
                         }
                         if( bParsingFields )
                             nPortion--;
@@ -4527,7 +4528,7 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
 
     sal_Int32 nPortion = pLine->GetEndPortion();
     TextPortion* pTP = pParaPortion->GetTextPortions()[ nPortion ];
-    while ( pTP && ( pTP->GetKind() == PORTIONKIND_TEXT ) )
+    while ( pTP && ( pTP->GetKind() == PortionKind::TEXT ) )
     {
         if ( pTP->GetExtraInfos() && pTP->GetExtraInfos()->bCompressed )
         {

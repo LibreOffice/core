@@ -684,7 +684,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
 
             sal_Int32 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, true );
             const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
-            if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
+            if ( pTextPortion->GetKind() == PortionKind::TAB )
             {
                 aEditCursor.Right() += pTextPortion->GetSize().Width();
             }

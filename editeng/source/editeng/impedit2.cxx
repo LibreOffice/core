@@ -3130,14 +3130,14 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
         const TextPortion* pTextPortion = pPortion->GetTextPortions()[nTP];
         switch ( pTextPortion->GetKind() )
         {
-            case PORTIONKIND_FIELD:
-            case PORTIONKIND_HYPHENATOR:
-            case PORTIONKIND_TAB:
+            case PortionKind::FIELD:
+            case PortionKind::HYPHENATOR:
+            case PortionKind::TAB:
             {
                 nWidth += pTextPortion->GetSize().Width();
             }
             break;
-            case PORTIONKIND_TEXT:
+            case PortionKind::TEXT:
             {
                 if ( ( eJustification != SVX_ADJUST_BLOCK ) || ( !bIgnoreExtraSpace ) )
                 {
@@ -3153,6 +3153,7 @@ sal_uInt32 ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine,
                 }
             }
             break;
+            case PortionKind::LINEBREAK: break;
         }
         nPos = nPos + pTextPortion->GetLen();
     }
@@ -3690,7 +3691,7 @@ sal_Int32 ImpEditEngine::GetChar(
             // Search within Portion...
 
             // Don't search within special portions...
-            if ( pPortion->GetKind() != PORTIONKIND_TEXT )
+            if ( pPortion->GetKind() != PortionKind::TEXT )
             {
                 // ...but check on which side
                 if ( bSmart )
@@ -3811,14 +3812,15 @@ long ImpEditEngine::GetPortionXOffset(
         const TextPortion* pPortion = pParaPortion->GetTextPortions()[i];
         switch ( pPortion->GetKind() )
         {
-            case PORTIONKIND_FIELD:
-            case PORTIONKIND_TEXT:
-            case PORTIONKIND_HYPHENATOR:
-            case PORTIONKIND_TAB:
+            case PortionKind::FIELD:
+            case PortionKind::TEXT:
+            case PortionKind::HYPHENATOR:
+            case PortionKind::TAB:
             {
                 nX += pPortion->GetSize().Width();
             }
             break;
+            case PortionKind::LINEBREAK: break;
         }
     }
 
@@ -3826,7 +3828,7 @@ long ImpEditEngine::GetPortionXOffset(
     bool bR2LPara = IsRightToLeft( nPara );
 
     const TextPortion* pDestPortion = pParaPortion->GetTextPortions()[nTextPortion];
-    if ( pDestPortion->GetKind() != PORTIONKIND_TAB )
+    if ( pDestPortion->GetKind() != PortionKind::TAB )
     {
         if ( !bR2LPara && pDestPortion->GetRightToLeft() )
         {
@@ -3835,7 +3837,7 @@ long ImpEditEngine::GetPortionXOffset(
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
                 const TextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
-                if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PortionKind::TAB ) )
                     nX += pNextTextPortion->GetSize().Width();
                 else
                     break;
@@ -3847,7 +3849,7 @@ long ImpEditEngine::GetPortionXOffset(
             {
                 --nTmpPortion;
                 const TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
-                if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PortionKind::TAB ) )
                     nX -= pPrevTextPortion->GetSize().Width();
                 else
                     break;
@@ -3860,7 +3862,7 @@ long ImpEditEngine::GetPortionXOffset(
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
                 const TextPortion* pNextTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
-                if ( !pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                if ( !pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PortionKind::TAB ) )
                     nX += pNextTextPortion->GetSize().Width();
                 else
                     break;
@@ -3872,7 +3874,7 @@ long ImpEditEngine::GetPortionXOffset(
             {
                 --nTmpPortion;
                 const TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions()[nTmpPortion];
-                if ( !pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                if ( !pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PortionKind::TAB ) )
                     nX -= pPrevTextPortion->GetSize().Width();
                 else
                     break;
@@ -3916,7 +3918,7 @@ long ImpEditEngine::GetXPos(
     // calc text width, portion size may include CJK/CTL spacing...
     // But the array migh not be init yet, if using text ranger this method is called within CreateLines()...
     long nPortionTextWidth = pPortion->GetSize().Width();
-    if ( ( pPortion->GetKind() == PORTIONKIND_TEXT ) && pPortion->GetLen() && !GetTextRanger() )
+    if ( ( pPortion->GetKind() == PortionKind::TEXT ) && pPortion->GetLen() && !GetTextRanger() )
         nPortionTextWidth = pLine->GetCharPosArray()[nTextPortionStart + pPortion->GetLen() - 1 - pLine->GetStart()];
 
     if ( nTextPortionStart != nIndex )
@@ -3925,12 +3927,12 @@ long ImpEditEngine::GetXPos(
         if ( nIndex == ( nTextPortionStart + pPortion->GetLen() ) )
         {
             // End of Portion
-            if ( pPortion->GetKind() == PORTIONKIND_TAB )
+            if ( pPortion->GetKind() == PortionKind::TAB )
             {
                 if ( nTextPortion+1 < pParaPortion->GetTextPortions().Count() )
                 {
                     const TextPortion* pNextPortion = pParaPortion->GetTextPortions()[nTextPortion+1];
-                    if ( pNextPortion->GetKind() != PORTIONKIND_TAB )
+                    if ( pNextPortion->GetKind() != PortionKind::TAB )
                     {
                         if ( !bPreferPortionStart )
                             nX = GetXPos( pParaPortion, pLine, nIndex, true );
@@ -3948,7 +3950,7 @@ long ImpEditEngine::GetXPos(
                 nX += nPortionTextWidth;
             }
         }
-        else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
+        else if ( pPortion->GetKind() == PortionKind::TEXT )
         {
             OSL_ENSURE( nIndex != pLine->GetStart(), "Strange behavior in new GetXPos()" );
             OSL_ENSURE( pLine && pLine->GetCharPosArray().size(), "svx::ImpEditEngine::GetXPos(), portion in an empty line?" );
