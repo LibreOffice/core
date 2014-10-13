@@ -27,6 +27,7 @@ import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.accessibility.XAccessibleTable;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.uno.UnoRuntime;
+import java.util.Arrays;
 
 /**
  * The node type for the AccessibleTreeModel.
@@ -299,10 +300,7 @@ class AccTreeNode
             HandlerDescriptor aDescriptor = getHandlerDescriptor (i);
             NodeHandler aHandler = aDescriptor.maHandler;
             String[] aHandlerActions = aHandler.getActions (this);
-            for(int j = 0; j < aHandlerActions.length; j++ )
-            {
-                aActions.add( aHandlerActions[j] );
-            }
+            aActions.addAll(Arrays.asList(aHandlerActions));
         }
     }
 
