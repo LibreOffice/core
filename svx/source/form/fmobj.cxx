@@ -677,6 +677,12 @@ void FmFormObj::BrkCreate( SdrDragStat& rStat )
 {
     SdrUnoObj::BrkCreate( rStat );
     impl_isolateControlModel_nothrow();
+
+    FmFormView* pView( dynamic_cast< FmFormView* >( rStat.GetView() ) );
+    FmXFormView* pViewImpl = pView ? pView->GetImpl() : NULL;
+    OSL_ENSURE( pViewImpl, "FmFormObj::EndCreate: no view!?" );
+    if ( pViewImpl )
+        pViewImpl->breakCreateFormObject();
 }
 
 

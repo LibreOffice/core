@@ -1021,6 +1021,15 @@ void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
     m_nControlWizardEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnStartControlWizard ) );
 }
 
+void FmXFormView::breakCreateFormObject()
+{
+    if (m_nControlWizardEvent != 0)
+    {
+        Application::RemoveUserEvent(m_nControlWizardEvent);
+        m_nControlWizardEvent = 0;
+    }
+    m_xLastCreatedControlModel.clear();
+}
 
 IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
 {

@@ -238,6 +238,8 @@ public:
 
     void    onCreatedFormObject( FmFormObj& _rFormObject );
 
+    void    breakCreateFormObject();
+
     static bool
             isFocusable(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& i_rControl
