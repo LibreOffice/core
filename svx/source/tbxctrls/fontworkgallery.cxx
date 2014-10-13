@@ -118,9 +118,7 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
     {
         BitmapEx aThumb;
 
-        GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb);
-
-        if(!!aThumb)
+        if (GalleryExplorer::GetSdrObj(nThemeId, nModelPos, pModel, &aThumb) && !!aThumb)
         {
             VirtualDevice aVDev;
             const Point aNull(0, 0);
