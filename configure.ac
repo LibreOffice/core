@@ -3751,24 +3751,28 @@ AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$enable_debug" && test "$enable_debug" != "yes" && test "$enable_debug" != "no"; then
     AC_MSG_ERROR([--enable-debug now accepts only yes or no, use --enable-selective-debuginfo])
 fi
-if test -n "$ENABLE_DBGUTIL"; then
-    if test "$enable_debug" = "no"; then
-        AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
+if test -n "$ENABLE_DBGUTIL" -a "$enable_debug" = "no"; then
+    AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
+fi
+
+if test -n "$ENABLE_DBGUTIL" -o \( -n "$enable_debug" -a "$enable_debug" != "no" \) ; then
+    ENABLE_DEBUG="TRUE"
+    ANDROID_DEBUGGABLE='android:debuggable="true"'
+    ANDROID_INSTALL_LOCATION='android:installLocation="internalOnly"'
+    if test -n "$ENABLE_DBGUTIL" ; then
+        AC_MSG_RESULT([yes (dbgutil)])
+    else
+        AC_MSG_RESULT([yes])
     fi
-    ENABLE_DEBUG="TRUE"
-    ANDROID_DEBUGGABLE='android:debuggable="true"'
-    AC_MSG_RESULT([yes (dbgutil)])
-elif test -n "$enable_debug" && test "$enable_debug" != "no"; then
-    ENABLE_DEBUG="TRUE"
-    ANDROID_DEBUGGABLE='android:debuggable="true"'
-    AC_MSG_RESULT([yes])
 else
     ENABLE_DEBUG=""
     ANDROID_DEBUGGABLE=""
+    ANDROID_INSTALL_LOCATION='android:installLocation="preferExternal"'
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
 AC_SUBST(ANDROID_DEBUGGABLE)
+AC_SUBST(ANDROID_INSTALL_LOCATION)
 
 dnl Selective debuginfo
 ENABLE_DEBUGINFO_FOR=
