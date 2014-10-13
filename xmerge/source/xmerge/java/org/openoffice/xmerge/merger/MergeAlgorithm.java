@@ -19,8 +19,6 @@
 package org.openoffice.xmerge.merger;
 
 import org.openoffice.xmerge.MergeException;
-import org.openoffice.xmerge.merger.Iterator;
-import org.openoffice.xmerge.merger.Difference;
 
 /**
  * This is the {@code MergeAlgorithm} interface.

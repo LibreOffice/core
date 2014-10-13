@@ -18,11 +18,6 @@
 
 package com.sun.star.uno;
 
-import com.sun.star.uno.XWeak;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XAdapter;
-import com.sun.star.uno.XReference;
-
 /**
  * This class holds weak reference to an object.
  *

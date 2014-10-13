@@ -17,7 +17,6 @@
  */
 
 package com.sun.star.wizards.common;
-import com.sun.star.wizards.common.TemplateElement;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.*;

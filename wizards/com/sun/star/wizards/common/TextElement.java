@@ -17,11 +17,9 @@
  */
 
 package com.sun.star.wizards.common;
-import com.sun.star.wizards.common.ParaStyled;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.*;
-import com.sun.star.wizards.common.TextElement;
 
 public class TextElement extends ParaStyled
 {

@@ -19,7 +19,6 @@
 package lib;
 
 import java.io.PrintWriter;
-import lib.TestParameters;
 
 /**
  * <code>TestCase</code> represent a factory for <code>TestEnvironment</code>s
