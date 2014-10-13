@@ -52,7 +52,7 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
 ,   mpGlyphIds( rCR.mpGlyphIds )
 ,   mnRangeCount( rCR.mnRangeCount )
 ,   mnCharCount( 0 )
-,   mnRefCount( 1 )
+,   mnRefCount( 0 )
 {
     const sal_UCS4* pRangePtr = mpRangeCodes;
     for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
@@ -374,14 +374,17 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 }
 
 FontCharMap::FontCharMap()
-:   mpImplFontCharMap( ImplFontCharMap::getDefaultMap() )
+    : mpImplFontCharMap( ImplFontCharMap::getDefaultMap() )
+    , mnRefCount(0)
 {}
 
 FontCharMap::FontCharMap( ImplFontCharMapPtr pIFCMap )
-:   mpImplFontCharMap( pIFCMap )
+    : mpImplFontCharMap( pIFCMap )
+    , mnRefCount(0)
 {}
 
 FontCharMap::FontCharMap( const CmapResult& rCR )
+    : mnRefCount(0)
 {
     ImplFontCharMapPtr pImplFontCharMap( new ImplFontCharMap(rCR) );
     mpImplFontCharMap = pImplFontCharMap;
