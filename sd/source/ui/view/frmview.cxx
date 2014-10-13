@@ -874,19 +874,31 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             }
             else if ( pValue->Name == sUNO_View_GridSnapWidthXNumerator )
             {
-                pValue->Value >>= aSnapGridWidthXNum;
+                sal_Int32 nValue = 0;
+                pValue->Value >>= nValue;
+                if (nValue != 0) // 0 is allowed, but it doesn't make any sense...
+                    aSnapGridWidthXNum = nValue;
             }
             else if ( pValue->Name == sUNO_View_GridSnapWidthXDenominator )
             {
-                pValue->Value >>= aSnapGridWidthXDom;
+                sal_Int32 nValue = 0;
+                pValue->Value >>= nValue;
+                if (nValue != 0)
+                    aSnapGridWidthXDom = nValue;
             }
             else if ( pValue->Name == sUNO_View_GridSnapWidthYNumerator )
             {
-                pValue->Value >>= aSnapGridWidthYNum;
+                sal_Int32 nValue = 0;
+                pValue->Value >>= nValue;
+                if (nValue != 0) // 0 is allowed, but it doesn't make any sense...
+                    aSnapGridWidthYNum = nValue;
             }
             else if ( pValue->Name == sUNO_View_GridSnapWidthYDenominator )
             {
-                pValue->Value >>= aSnapGridWidthYDom;
+                sal_Int32 nValue = 0;
+                pValue->Value >>= nValue;
+                if (nValue != 0)
+                    aSnapGridWidthYDom = nValue;
             }
             else if (!bImpress && pValue->Name == sUNO_View_VisibleLayers  )
             {
