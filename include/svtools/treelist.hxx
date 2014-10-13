@@ -32,17 +32,20 @@
 #include <vector>
 #include <boost/ptr_container/ptr_map.hpp>
 
-#define LISTACTION_INSERTED         1
-#define LISTACTION_REMOVING         2
-#define LISTACTION_REMOVED          3
-#define LISTACTION_MOVING           4
-#define LISTACTION_MOVED            5
-#define LISTACTION_CLEARING         6
-#define LISTACTION_INSERTED_TREE    7
-#define LISTACTION_INVALIDATE_ENTRY 8
-#define LISTACTION_RESORTING        9
-#define LISTACTION_RESORTED         10
-#define LISTACTION_CLEARED          11
+enum class SvListAction
+{
+    INSERTED         = 1,
+    REMOVING         = 2,
+    REMOVED          = 3,
+    MOVING           = 4,
+    MOVED            = 5,
+    CLEARING         = 6,
+    INSERTED_TREE    = 7,
+    INVALIDATE_ENTRY = 8,
+    RESORTING        = 9,
+    RESORTED         = 10,
+    CLEARED          = 11
+};
 
 class SvTreeListEntry;
 class SvListView;
@@ -142,27 +145,27 @@ public:
     { return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : NULL; }
 
     void                Broadcast(
-                            sal_uInt16 nActionId,
+                            SvListAction nActionId,
                             SvTreeListEntry* pEntry1=0,
                             SvTreeListEntry* pEntry2=0,
                             sal_uLong nPos=0
                         );
 
-    void EnableInvalidate( bool bEnable );
+    void                EnableInvalidate( bool bEnable );
 
     // Notify all Listeners
     void                InvalidateEntry( SvTreeListEntry* );
 
     sal_uLong           GetEntryCount() const { return nEntryCount; }
-    SvTreeListEntry*        First() const;
-    SvTreeListEntry*        Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvTreeListEntry*        Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvTreeListEntry*        Last() const;
+    SvTreeListEntry*    First() const;
+    SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvTreeListEntry*    Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvTreeListEntry*    Last() const;
 
-    SvTreeListEntry*        FirstChild( SvTreeListEntry* pParent ) const;
-    SvTreeListEntry*        NextSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*        PrevSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry*        LastSibling( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
+    SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*    LastSibling( SvTreeListEntry* pEntry ) const;
 
     sal_uLong           Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pPar,sal_uLong nPos = TREELIST_APPEND);
     sal_uLong           Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos = TREELIST_APPEND )
@@ -273,7 +276,7 @@ public:
     void                Clear();
     virtual void        SetModel( SvTreeList* );
     virtual void        ModelNotification(
-                            sal_uInt16 nActionId,
+                            SvListAction nActionId,
                             SvTreeListEntry* pEntry1,
                             SvTreeListEntry* pEntry2,
                             sal_uLong nPos
