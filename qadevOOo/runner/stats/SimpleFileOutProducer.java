@@ -42,39 +42,43 @@ public class SimpleFileOutProducer implements LogWriter {
      * the information, maybe write them to a db
      */
     public boolean summary(share.DescEntry entry) {
+        FileWriter out = null;
         try {
-            String outpath = (String) entry.UserDefinedParams.get("OutputPath");
-            if (outpath==null) {
-                System.out.println("## Parameter OutputPath isn't defined using default");
-                return summary_default(entry);
+            try {
+                String outpath = (String) entry.UserDefinedParams.get("OutputPath");
+                if (outpath==null) {
+                    System.out.println("## Parameter OutputPath isn't defined using default");
+                    return summary_default(entry);
+                }
+                String FileName = entry.longName + ".out";
+                if (!entry.EntryType.equals("component")) {
+                    FileName = entry.longName.substring(0,
+                                    entry.longName.indexOf(':')) + ".out";
+                }
+                util.utils.make_Directories("",outpath);
+                File outputFile = new File(outpath, FileName);
+                out = new FileWriter(outputFile.toString(),true);
+                String ls = System.getProperty("line.separator");
+                String date = new java.util.Date().toString();
+                String header = "***** State for "+entry.longName+"( "+ date +" ) ******";
+                out.write(header+ls);
+                if (entry.hasErrorMsg) {
+                    out.write(entry.ErrorMsg+ls);
+                    out.write("Whole "+entry.EntryType+": "+entry.State+ls);
+                } else {
+                    out.write("Whole "+entry.EntryType+": "+entry.State+ls);
+                }
+                String bottom="";
+                for (int i=0;i<header.length();i++) {
+                    bottom += "*";
+                }
+                out.write(bottom+ls);
+                out.write(""+ls);
+            } finally {
+                if (out != null)
+                    out.close();
             }
-            String FileName = entry.longName + ".out";
-            if (!entry.EntryType.equals("component")) {
-                FileName = entry.longName.substring(0,
-                                entry.longName.indexOf(':')) + ".out";
-            }
-            util.utils.make_Directories("",outpath);
-            File outputFile = new File(outpath, FileName);
-            FileWriter out = new FileWriter(outputFile.toString(),true);
-            String ls = System.getProperty("line.separator");
-            String date = new java.util.Date().toString();
-            String header = "***** State for "+entry.longName+"( "+ date +" ) ******";
-            out.write(header+ls);
-            if (entry.hasErrorMsg) {
-                out.write(entry.ErrorMsg+ls);
-                out.write("Whole "+entry.EntryType+": "+entry.State+ls);
-            } else {
-                out.write("Whole "+entry.EntryType+": "+entry.State+ls);
-            }
-            String bottom="";
-            for (int i=0;i<header.length();i++) {
-                bottom += "*";
-            }
-            out.write(bottom+ls);
-            out.write(""+ls);
-            out.close();
         } catch (java.io.IOException e) {
-
         }
         return true;
     }
