@@ -255,11 +255,23 @@ public:
      * largest axis label text object prior to calling this method.
      *
      * The new axis scaling data will be stored in the VCoordinateSystem
-     * objects.
+     * objects.  The label alignment direction for each axis will also get
+     * determined during this process, and stored in VAxis.
      */
     void doAutoScaling( ChartModel& rModel );
+
+    /**
+     * After auto-scaling is performed, call this method to set the explicit
+     * scaling and increment data to all relevant VAxis objects.
+     */
     void updateScalesAndIncrementsOnAxes();
+
+    /**
+     * After auto-scaling is performed, call this method to set the explicit
+     * scaling data to all the plotters.
+     */
     void setScalesFromCooSysToPlotter();
+
     void setNumberFormatsFromAxes();
     drawing::Direction3D getPreferredAspectRatio();
 
