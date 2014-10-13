@@ -26,7 +26,7 @@ sal_uIntPtr UniqueIndexImpl::Insert( void* p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
    // Expend array if full
-    sal_uIntPtr nTmp = size();
+    sal_uIntPtr nTmp = maMap.size();
     if( nTmp == nCount )
         nTmp++;
 
@@ -34,11 +34,11 @@ sal_uIntPtr UniqueIndexImpl::Insert( void* p )
     nUniqIndex = nUniqIndex % nTmp;
 
     // Search next empty index
-    while ( find( nUniqIndex ) != end() )
+    while ( maMap.find( nUniqIndex ) != maMap.end() )
         nUniqIndex = (nUniqIndex+1) % nTmp;
 
     // Insert object to array
-    (*this)[ nUniqIndex ] = p;
+    maMap[ nUniqIndex ] = p;
 
     nCount++;
     nUniqIndex++;
@@ -53,10 +53,10 @@ void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 
     sal_uIntPtr nContIndex = nIndex - nStartIndex;
 
-    bool bFound = find( nContIndex ) != end();
+    bool bFound = maMap.find( nContIndex ) != maMap.end();
 
     // Insert object to array
-    (*this)[ nContIndex ] = p;
+    maMap[ nContIndex ] = p;
 
     if( !bFound )
         nCount++;
@@ -70,11 +70,11 @@ void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
     {
         // insert index as empty entry, and reduce indexcount,
         // if this entry was used
-        iterator it = find( nIndex - nStartIndex );
-        if( it != end() )
+        std::map<sal_uInt32, void*>::iterator it = maMap.find( nIndex - nStartIndex );
+        if( it != maMap.end() )
         {
             void* p = it->second;
-            erase( it );
+            maMap.erase( it );
             nCount--;
             return p;
         }
@@ -88,8 +88,8 @@ void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
     if ( (nIndex >= nStartIndex) &&
          (nIndex < (size() + nStartIndex)) )
     {
-        const_iterator it = find( nIndex - nStartIndex );
-        if( it != end() )
+        std::map<sal_uInt32, void*>::const_iterator it = maMap.find( nIndex - nStartIndex );
+        if( it != maMap.end() )
             return it->second;
     }
     return NULL;
@@ -97,34 +97,34 @@ void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
 
 sal_uIntPtr UniqueIndexImpl::FirstIndex() const
 {
-    if ( empty() )
+    if ( maMap.empty() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    return begin()->first;
+    return maMap.begin()->first;
 }
 
 sal_uIntPtr UniqueIndexImpl::LastIndex() const
 {
-    if ( empty() )
+    if ( maMap.empty() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    return rbegin()->first;
+    return maMap.rbegin()->first;
 }
 
 sal_uIntPtr UniqueIndexImpl::NextIndex(sal_uIntPtr aIndex) const
 {
-    const_iterator it = find( aIndex );
-    if ( it == end() )
+    std::map<sal_uInt32, void*>::const_iterator it = maMap.find( aIndex );
+    if ( it == maMap.end() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
     ++it;
-    if ( it == end() )
+    if ( it == maMap.end() )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
     return it->first;
 }
 
 sal_uIntPtr UniqueIndexImpl::GetIndexOf(void* p) const
 {
-    for( const_iterator it = begin(); it != end(); ++it )
+    for( std::map<sal_uInt32, void*>::const_iterator it = maMap.begin(); it != maMap.end(); ++it )
         if( it->second == p )
             return it->first;
     return UNIQUEINDEX_ENTRY_NOTFOUND;
