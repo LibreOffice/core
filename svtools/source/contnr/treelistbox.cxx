@@ -3644,18 +3644,18 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
     return pImp->m_pStringSorter->compare(aLeft, aRight);
 }
 
-void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntry1,
+void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos )
 {
     SolarMutexGuard aSolarGuard;
 
-    if( nActionId == LISTACTION_CLEARING )
+    if( nActionId == SvListAction::CLEARING )
         CancelTextEditing();
 
     SvListView::ModelNotification( nActionId, pEntry1, pEntry2, nPos );
     switch( nActionId )
     {
-        case LISTACTION_INSERTED:
+        case SvListAction::INSERTED:
         {
             SvTreeListEntry* pEntry( dynamic_cast< SvTreeListEntry* >( pEntry1 ) );
             if ( !pEntry )
@@ -3681,20 +3681,22 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pE
         }
         break;
 
-        case LISTACTION_RESORTING:
+        case SvListAction::RESORTING:
             SetUpdateMode( false );
             break;
 
-        case LISTACTION_RESORTED:
+        case SvListAction::RESORTED:
             // after a selection: show first entry and also keep the selection
             MakeVisible( (SvTreeListEntry*)pModel->First(), true );
             SetUpdateMode( true );
             break;
 
-        case LISTACTION_CLEARED:
+        case SvListAction::CLEARED:
             if( IsUpdateMode() )
                 Update();
             break;
+
+        default: break;
     }
 }
 

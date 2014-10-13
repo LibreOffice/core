@@ -752,7 +752,7 @@ public:
     void            RemoveParentKeepChildren( SvTreeListEntry* pParent );
 
     DECL_LINK( DefaultCompare, SvSortData* );
-    virtual void    ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntry1,
+    virtual void    ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos ) SAL_OVERRIDE;
 
     void            EndSelection();

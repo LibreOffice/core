@@ -44,7 +44,7 @@ SvTreeList::~SvTreeList()
 }
 
 void SvTreeList::Broadcast(
-    sal_uInt16 nActionId,
+    SvListAction nActionId,
     SvTreeListEntry* pEntry1,
     SvTreeListEntry* pEntry2,
     sal_uLong nPos
@@ -119,10 +119,10 @@ bool SvTreeList::IsAtRootDepth( const SvTreeListEntry* pEntry ) const
 
 void SvTreeList::Clear()
 {
-    Broadcast( LISTACTION_CLEARING );
+    Broadcast( SvListAction::CLEARING );
     pRootItem->ClearChildren();
     nEntryCount = 0;
-    Broadcast( LISTACTION_CLEARED );
+    Broadcast( SvListAction::CLEARED );
 }
 
 bool SvTreeList::IsChild(const SvTreeListEntry* pParent, const SvTreeListEntry* pChild) const
@@ -182,7 +182,7 @@ sal_uLong SvTreeList::Move(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
         pTargetParent = pRootItem;
     DBG_ASSERT(pSrcEntry!=pTargetParent,"Move:Source=Target");
 
-    Broadcast( LISTACTION_MOVING, pSrcEntry, pTargetParent, nListPos );
+    Broadcast( SvListAction::MOVING, pSrcEntry, pTargetParent, nListPos );
 
     if ( pSrcEntry == pTargetParent )
         // You can't move an entry onto itself as the parent. Just return its
@@ -260,7 +260,7 @@ sal_uLong SvTreeList::Move(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
 
     sal_uLong nRetVal = findEntryPosition(rDst, pSrcEntry);
     OSL_ENSURE(nRetVal == pSrcEntry->GetChildListPos(), "ListPos not valid");
-    Broadcast( LISTACTION_MOVED,pSrcEntry,pTargetParent,nRetVal);
+    Broadcast( SvListAction::MOVED,pSrcEntry,pTargetParent,nRetVal);
     return nRetVal;
 }
 
@@ -292,7 +292,7 @@ sal_uLong SvTreeList::Copy(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
 
     SetListPositions(rDst); // correct list position in target list
 
-    Broadcast( LISTACTION_INSERTED_TREE, pClonedEntry );
+    Broadcast( SvListAction::INSERTED_TREE, pClonedEntry );
     sal_uLong nRetVal = findEntryPosition(rDst, pClonedEntry);
     return nRetVal;
 }
@@ -347,7 +347,7 @@ void SvTreeList::InsertTree(SvTreeListEntry* pSrcEntry,
     nEntryCount += GetChildCount( pSrcEntry );
     nEntryCount++; // the parent is new, too
 
-    Broadcast(LISTACTION_INSERTED_TREE, pSrcEntry );
+    Broadcast(SvListAction::INSERTED_TREE, pSrcEntry );
 }
 
 SvTreeListEntry* SvTreeList::CloneEntry( SvTreeListEntry* pSource ) const
@@ -904,7 +904,7 @@ sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,s
     else
         pEntry->nListPos = rList.size()-1;
 
-    Broadcast( LISTACTION_INSERTED, pEntry );
+    Broadcast( SvListAction::INSERTED, pEntry );
     return nPos; // pEntry->nListPos;
 }
 
@@ -1011,7 +1011,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
         return false;
     }
 
-    Broadcast(LISTACTION_REMOVING, const_cast<SvTreeListEntry*>(pEntry));
+    Broadcast(SvListAction::REMOVING, const_cast<SvTreeListEntry*>(pEntry));
     sal_uLong nRemoved = 1 + GetChildCount(pEntry);
     bAbsPositionsValid = false;
 
@@ -1043,7 +1043,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
         SetListPositions(rList);
 
     nEntryCount -= nRemoved;
-    Broadcast(LISTACTION_REMOVED, const_cast<SvTreeListEntry*>(pEntry));
+    Broadcast(SvListAction::REMOVED, const_cast<SvTreeListEntry*>(pEntry));
     delete pEntry;
 
     return true;
@@ -1109,7 +1109,7 @@ void SvTreeList::InvalidateEntry( SvTreeListEntry* pEntry )
     if (!mbEnableInvalidate)
         return;
 
-    Broadcast( LISTACTION_INVALIDATE_ENTRY, pEntry );
+    Broadcast( SvListAction::INVALIDATE_ENTRY, pEntry );
 }
 
 SvTreeListEntry* SvTreeList::GetRootLevelParent( SvTreeListEntry* pEntry ) const
@@ -1225,7 +1225,7 @@ void SvListView::SetModel( SvTreeList* pNewModel )
     {
         pModel->RemoveView( this );
         bBroadcastCleared = true;
-        ModelNotification( LISTACTION_CLEARING,0,0,0 );
+        ModelNotification( SvListAction::CLEARING,0,0,0 );
         if ( pModel->GetRefCount() == 0 )
             delete pModel;
     }
@@ -1233,7 +1233,7 @@ void SvListView::SetModel( SvTreeList* pNewModel )
     InitTable();
     pNewModel->InsertView( this );
     if( bBroadcastCleared )
-        ModelNotification( LISTACTION_CLEARED,0,0,0 );
+        ModelNotification( SvListAction::CLEARED,0,0,0 );
 }
 
 
@@ -1394,49 +1394,49 @@ void SvListView::ActionClear()
     Clear();
 }
 
-void SvListView::ModelNotification( sal_uInt16 nActionId, SvTreeListEntry* pEntry1,
+void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos )
 {
     switch( nActionId )
     {
-        case LISTACTION_INSERTED:
+        case SvListAction::INSERTED:
             ActionInserted( pEntry1 );
             ModelHasInserted( pEntry1 );
             break;
-        case LISTACTION_INSERTED_TREE:
+        case SvListAction::INSERTED_TREE:
             ActionInsertedTree( pEntry1 );
             ModelHasInsertedTree( pEntry1 );
             break;
-        case LISTACTION_REMOVING:
+        case SvListAction::REMOVING:
             ModelIsRemoving( pEntry1 );
             ActionRemoving( pEntry1 );
             break;
-        case LISTACTION_REMOVED:
+        case SvListAction::REMOVED:
             ActionRemoved( pEntry1 );
             ModelHasRemoved( pEntry1 );
             break;
-        case LISTACTION_MOVING:
+        case SvListAction::MOVING:
             ModelIsMoving( pEntry1, pEntry2, nPos );
             ActionMoving( pEntry1, pEntry2, nPos );
             break;
-        case LISTACTION_MOVED:
+        case SvListAction::MOVED:
             ActionMoved( pEntry1, pEntry2, nPos );
             ModelHasMoved( pEntry1 );
             break;
-        case LISTACTION_CLEARING:
+        case SvListAction::CLEARING:
             ActionClear();
             ModelHasCleared(); // sic! for compatibility reasons!
             break;
-        case LISTACTION_CLEARED:
+        case SvListAction::CLEARED:
             break;
-        case LISTACTION_INVALIDATE_ENTRY:
+        case SvListAction::INVALIDATE_ENTRY:
             // no action for the base class
             ModelHasEntryInvalidated( pEntry1 );
             break;
-        case LISTACTION_RESORTED:
+        case SvListAction::RESORTED:
             bVisPositionsValid = false;
             break;
-        case LISTACTION_RESORTING:
+        case SvListAction::RESORTING:
             break;
         default:
             OSL_FAIL("unknown ActionId");
@@ -1503,10 +1503,10 @@ sal_Int32 SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntr
 
 void SvTreeList::Resort()
 {
-    Broadcast( LISTACTION_RESORTING );
+    Broadcast( SvListAction::RESORTING );
     bAbsPositionsValid = false;
     ResortChildren( pRootItem );
-    Broadcast( LISTACTION_RESORTED );
+    Broadcast( SvListAction::RESORTED );
 }
 
 namespace {
