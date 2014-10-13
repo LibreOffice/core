@@ -491,20 +491,17 @@ sal_Bool SAL_CALL java_sql_ResultSet::next(  ) throw(SQLException, RuntimeExcept
     return callBooleanMethod( "next", mID );
 }
 
-
 sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
     return callBooleanMethod( "wasNull", mID );
 }
 
-
 void SAL_CALL java_sql_ResultSet::cancel(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod_Throw("cancel", mID);
+    callVoidMethod_Nothrow("cancel", mID);
 }
-
 
 void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
