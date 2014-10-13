@@ -778,7 +778,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         }
     }
 
-    rDoc.acquire(); // prevent deletion
+    (void)rDoc.acquire(); // prevent deletion
     sal_uInt32 nRet = 0;
 
     // save redline mode into import info property set
@@ -893,7 +893,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
                 rDoc.ReadLayoutCache( *pStrm2 );
             delete pStrm2;
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
         }
     }
@@ -939,7 +939,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     if( pObjectHelper )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
-    rDoc.release();
+    (void)rDoc.release();
 
     if ( !bOASIS )
     {
