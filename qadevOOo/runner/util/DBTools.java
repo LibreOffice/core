@@ -326,6 +326,7 @@ public class DBTools {
     public void initTestTableUsingJDBC(String tbl_name, DataSourceInfo dsi)
         throws java.sql.SQLException,
                ClassNotFoundException {
+
         //register jdbc driver
         if ( dsi.Info[0].Name.equals("JavaDriverClass") ) {
             Class.forName((String)dsi.Info[0].Value);
@@ -333,21 +334,25 @@ public class DBTools {
             Class.forName(TST_JDBC_DRIVER);
         }
 
-        //getting connection
         Connection connection = null;
 
-        connection = DriverManager.getConnection(
-            dsi.URL, dsi.User, dsi.Password);
-        Statement statement = connection.createStatement();
+        try {
+            //getting connection
+            connection = DriverManager.getConnection(dsi.URL, dsi.User, dsi.Password);
+            Statement statement = connection.createStatement();
 
-        //drop table
-        dropMySQLTable(statement, tbl_name);
+            //drop table
+            dropMySQLTable(statement, tbl_name);
 
-        //create table
-        createMySQLTable(statement, tbl_name);
+            //create table
+            createMySQLTable(statement, tbl_name);
 
-        //insert some content
-        insertContentMySQLTable(statement, tbl_name);
+            //insert some content
+            insertContentMySQLTable(statement, tbl_name);
+        } finally {
+            if (connection != null)
+                connection.close();
+        }
     }
 
     /**

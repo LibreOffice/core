@@ -28,6 +28,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FileLogWriter extends PrintWriter implements LogWriter {
 
@@ -59,12 +61,21 @@ public class FileLogWriter extends PrintWriter implements LogWriter {
 
 
     public void addFileLog(String filePath){
+        FileWriter fileWriter = null;
         try{
             if(mFileWriters == null)
                 mFileWriters = new HashMap<String, FileWriter>();
-            mFileWriters.put(filePath, new FileWriter(filePath));
+            fileWriter = new FileWriter(filePath);
+            mFileWriters.put(filePath, fileWriter);
         }catch(IOException e ){
             e.printStackTrace(this);
+        }finally{
+            try{
+                if (fileWriter != null)
+                    fileWriter.close();
+            }catch (IOException ex){
+                ex.printStackTrace(this);
+            }
         }
     }
 

@@ -216,53 +216,74 @@ public class DB extends DBHelper
             try
             {
                 oStmt = _aCon.createStatement();
-
-                java.sql.ResultSet aResultSet = oStmt.executeQuery(_sSQL);
-                java.sql.ResultSetMetaData aResultSetMetaData = aResultSet.getMetaData();
-
-                int nColumnCount = aResultSetMetaData.getColumnCount();         // java sql starts with '1'
-
-                while( aResultSet.next() )
+                java.sql.ResultSet aResultSet = null;
+                try
                 {
-                    StringBuffer aResult = new StringBuffer();
-                    try
-                    {
-                        aResult.append("sqlresult: ");
-                        for (int i=1;i<=nColumnCount;i++)
-                        {
-                            String sColumnName = aResultSetMetaData.getColumnName(i);
-                            aResult.append(sColumnName).append("=");
-                            String sValue;
-                            int nSQLType = aResultSetMetaData.getColumnType(i);
-                            switch(nSQLType)
-                            {
-                            case java.sql.Types.VARCHAR:
-                                sValue = "'" + aResultSet.getString(i)  +  "'";
-                                break;
-                            case java.sql.Types.INTEGER:
-                            {
-                                int nValue = aResultSet.getInt(i);
-                                sValue = String.valueOf(nValue);
-                                break;
-                            }
+                    aResultSet = oStmt.executeQuery(_sSQL);
+                    java.sql.ResultSetMetaData aResultSetMetaData = aResultSet.getMetaData();
 
-                            default:
-                                sValue = "UNSUPPORTED TYPE";
-                            }
-                            aResult.append(sValue).append(", ");
-                        }
-                        String sResult = aResult.toString();
-                        aResultList.add(sResult);
-                    }
-                    catch (java.sql.SQLException e)
+                    int nColumnCount = aResultSetMetaData.getColumnCount();         // java sql starts with '1'
+
+                    while( aResultSet.next() )
                     {
+                        StringBuffer aResult = new StringBuffer();
+                        try
+                        {
+                            aResult.append("sqlresult: ");
+                            for (int i=1;i<=nColumnCount;i++)
+                            {
+                                String sColumnName = aResultSetMetaData.getColumnName(i);
+                                aResult.append(sColumnName).append("=");
+                                String sValue;
+                                int nSQLType = aResultSetMetaData.getColumnType(i);
+                                switch(nSQLType)
+                                {
+                                case java.sql.Types.VARCHAR:
+                                    sValue = "'" + aResultSet.getString(i)  +  "'";
+                                    break;
+                                case java.sql.Types.INTEGER:
+                                {
+                                    int nValue = aResultSet.getInt(i);
+                                    sValue = String.valueOf(nValue);
+                                    break;
+                                }
+
+                                default:
+                                    sValue = "UNSUPPORTED TYPE";
+                                }
+                                aResult.append(sValue).append(", ");
+                            }
+                            String sResult = aResult.toString();
+                            aResultList.add(sResult);
+                        }
+                        catch (java.sql.SQLException e)
+                        {
+                        }
                     }
+                }
+                finally
+                {
+                    if (aResultSet != null)
+                        aResultSet.close();
                 }
             }
             catch (java.sql.SQLException e)
             {
                 String sError = e.getMessage();
                 GlobalLogWriter.get().println("DB: Original SQL error: " + sError);
+            }
+            finally
+            {
+                try
+                {
+                    if (oStmt != null)
+                        oStmt.close();
+                }
+                catch (java.sql.SQLException e)
+                {
+                    String sError = e.getMessage();
+                    GlobalLogWriter.get().println("DB: Original SQL error: " + sError);
+                }
             }
             return aResultList;
         }

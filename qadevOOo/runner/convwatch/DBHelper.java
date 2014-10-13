@@ -80,6 +80,18 @@ class ShareConnection
                     GlobalLogWriter.get().println("DB: Couldn't execute sql string '" + m_sSQL + "'");
                     GlobalLogWriter.get().println("DB: Reason: " + e.getMessage());
                 }
+                finally
+                {
+                    try
+                    {
+                        oStmt.close();
+                    }
+                    catch (SQLException ex)
+                    {
+                        GlobalLogWriter.get().println("DB: Couldn't execute sql string '" + m_sSQL + "'");
+                        GlobalLogWriter.get().println("DB: Reason: " + ex.getMessage());
+                    }
+                }
             }
     }
 
