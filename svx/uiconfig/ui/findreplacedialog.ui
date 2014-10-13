@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="FindReplaceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Find &amp; Replace</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
@@ -99,8 +101,6 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -114,8 +114,6 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -141,8 +139,6 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -154,15 +150,12 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
                                 <property name="height">2</property>
                               </packing>
                             </child>
@@ -170,8 +163,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -182,7 +173,6 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkLabel" id="searchdesc">
-                                <property name="width_request">1</property>
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
@@ -198,7 +188,6 @@
                             </child>
                             <child>
                               <object class="GtkLabel" id="searchlabel">
-                                <property name="width_request">1</property>
                                 <property name="can_focus">False</property>
                                 <property name="no_show_all">True</property>
                                 <property name="hexpand">True</property>
@@ -215,8 +204,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -227,7 +214,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Search for</property>
+                    <property name="label" translatable="yes">_Search For</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -279,8 +266,6 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -294,8 +279,6 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -321,8 +304,6 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -334,15 +315,12 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
                                 <property name="height">2</property>
                               </packing>
                             </child>
@@ -350,8 +328,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -379,8 +355,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -391,7 +365,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Re_place with</property>
+                    <property name="label" translatable="yes">Re_place With</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -436,8 +410,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -450,8 +422,6 @@
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -486,223 +456,148 @@
                   <object class="GtkExpander" id="expander1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="margin_top">1</property>
+                    <property name="margin_bottom">1</property>
                     <property name="hexpand">True</property>
                     <child>
-                      <object class="GtkBox" id="box2">
+                      <object class="GtkAlignment" id="alignment4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">6</property>
-                        <property name="hexpand">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">18</property>
+                        <property name="top_padding">6</property>
+                        <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkGrid" id="grid4">
+                          <object class="GtkBox" id="box2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
-                            <property name="column_homogeneous">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">12</property>
                             <child>
-                              <object class="GtkCheckButton" id="selection">
-                                <property name="label" translatable="yes">C_urrent selection only</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="regexp">
-                                <property name="label" translatable="yes">Regular e_xpressions</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButtonBox" id="buttonbox1">
+                              <object class="GtkGrid" id="grid4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
-                                <property name="spacing">12</property>
-                                <property name="layout_style">spread</property>
-                                <child>
-                                  <object class="GtkButton" id="attributes">
-                                    <property name="label" translatable="yes">Attri_butes...</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="no_show_all">True</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="format">
-                                    <property name="label" translatable="yes">For_mat...</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="no_show_all">True</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkButton" id="noformat">
-                                    <property name="label" translatable="yes">_No Format</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="no_show_all">True</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">5</property>
-                                <property name="width">2</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="backwards">
-                                <property name="label" translatable="yes">Bac_kwards</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="layout">
-                                <property name="label" translatable="yes">Search for St_yles</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="ignorediacritics">
-                                <property name="label" translatable="yes">Ignore diacritics CTL</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkGrid" id="grid6">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="similarity">
-                                    <property name="label" translatable="yes">S_imilarity search</property>
+                                  <object class="GtkCheckButton" id="selection">
+                                    <property name="label" translatable="yes">C_urrent selection only</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
-                                    <accessibility>
-                                      <relation type="label-for" target="similaritybtn"/>
-                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkButton" id="similaritybtn">
-                                    <property name="label" translatable="yes">...</property>
+                                  <object class="GtkCheckButton" id="regexp">
+                                    <property name="label" translatable="yes">Regular e_xpressions</property>
                                     <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
+                                    <property name="receives_default">False</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">True</property>
                                     <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButtonBox" id="buttonbox1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="spacing">12</property>
+                                    <property name="layout_style">spread</property>
+                                    <child>
+                                      <object class="GtkButton" id="attributes">
+                                        <property name="label" translatable="yes">Attri_butes...</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="use_underline">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="format">
+                                        <property name="label" translatable="yes">For_mat...</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="use_underline">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="noformat">
+                                        <property name="label" translatable="yes">_No Format</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="use_underline">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="width">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="backwards">
+                                    <property name="label" translatable="yes">Bac_kwards</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="box7">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="notes">
-                                    <property name="label" translatable="yes">Comments</property>
+                                  <object class="GtkCheckButton" id="layout">
+                                    <property name="label" translatable="yes">Search for st_yles</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="ignorediacritics">
+                                    <property name="label" translatable="yes">Ignore diacritics CTL</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -711,241 +606,283 @@
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">4</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="allsheets">
-                                    <property name="label" translatable="yes">Search in all sheets</property>
+                                  <object class="GtkGrid" id="grid6">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="row_spacing">6</property>
+                                    <property name="column_spacing">12</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="similarity">
+                                        <property name="label" translatable="yes">S_imilarity search</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="draw_indicator">True</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="similaritybtn"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="similaritybtn">
+                                        <property name="label" translatable="yes">...</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="use_underline">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="box7">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="notes">
+                                        <property name="label" translatable="yes">Comments</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="allsheets">
+                                        <property name="label" translatable="yes">Search in all sheets</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkGrid" id="grid8">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="row_spacing">6</property>
+                                    <property name="column_spacing">12</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="soundslike">
+                                        <property name="label" translatable="yes">Sounds like (Japanese)</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="draw_indicator">True</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="soundslikebtn"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">0</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="soundslikebtn">
+                                        <property name="label" translatable="yes">...</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                        <property name="no_show_all">True</property>
+                                        <property name="halign">start</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="use_underline">True</property>
+                                        <accessibility>
+                                          <relation type="labelled-by" target="soundslike"/>
+                                        </accessibility>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="top_attach">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="matchcharwidth">
+                                    <property name="label" translatable="yes">Match character width</property>
+                                    <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="no_show_all">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="ignorekashida">
+                                    <property name="label" translatable="yes">Ig_nore kashida CTL</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">4</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkGrid" id="grid8">
-                                <property name="visible">True</property>
+                              <object class="GtkGrid" id="calcgrid">
                                 <property name="can_focus">False</property>
+                                <property name="no_show_all">True</property>
+                                <property name="halign">start</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="soundslike">
-                                    <property name="label" translatable="yes">Sounds like (Japanese)</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
+                                  <object class="GtkLabel" id="searchinlabel">
+                                    <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
-                                    <property name="draw_indicator">True</property>
-                                    <accessibility>
-                                      <relation type="label-for" target="soundslikebtn"/>
-                                    </accessibility>
+                                    <property name="label" translatable="yes">Search i_n:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">calcsearchin</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkButton" id="soundslikebtn">
-                                    <property name="label" translatable="yes">...</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
+                                  <object class="GtkComboBoxText" id="calcsearchin">
+                                    <property name="can_focus">False</property>
                                     <property name="no_show_all">True</property>
-                                    <property name="halign">start</property>
-                                    <property name="hexpand">True</property>
-                                    <property name="use_underline">True</property>
-                                    <accessibility>
-                                      <relation type="labelled-by" target="soundslike"/>
-                                    </accessibility>
+                                    <items>
+                                      <item translatable="yes">Formulas</item>
+                                      <item translatable="yes">Values</item>
+                                      <item translatable="yes">Notes</item>
+                                    </items>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="searchdir">
+                                    <property name="can_focus">False</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Search _direction:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">calcsearchin</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="rows">
+                                    <property name="label" translatable="yes">Ro_ws</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">cols</property>
+                                    <accessibility>
+                                      <relation type="member-of" target="searchdir"/>
+                                    </accessibility>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="cols">
+                                    <property name="label" translatable="yes">Colu_mns</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="no_show_all">True</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">rows</property>
+                                    <accessibility>
+                                      <relation type="member-of" target="searchdir"/>
+                                    </accessibility>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="matchcharwidth">
-                                <property name="label" translatable="yes">Match character width</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">3</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="ignorekashida">
-                                <property name="label" translatable="yes">Ig_nore kashida CTL</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">4</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkGrid" id="calcgrid">
-                            <property name="can_focus">False</property>
-                            <property name="no_show_all">True</property>
-                            <property name="halign">start</property>
-                            <property name="row_spacing">6</property>
-                            <property name="column_spacing">12</property>
-                            <child>
-                              <object class="GtkLabel" id="searchinlabel">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Search i_n</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">calcsearchin</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkComboBoxText" id="calcsearchin">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="entry_text_column">0</property>
-                                <property name="id_column">1</property>
-                                <items>
-                                  <item translatable="yes">Formulas</item>
-                                  <item translatable="yes">Values</item>
-                                  <item translatable="yes">Notes</item>
-                                </items>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="searchdir">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Search _direction</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">calcsearchin</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="rows">
-                                <property name="label" translatable="yes">Ro_ws</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                                <property name="group">cols</property>
-                                <accessibility>
-                                  <relation type="member-of" target="searchdir"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="cols">
-                                <property name="label" translatable="yes">Colu_mns</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="xalign">0</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                                <property name="group">rows</property>
-                                <accessibility>
-                                  <relation type="member-of" target="searchdir"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -953,7 +890,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Other _Options</property>
+                        <property name="label" translatable="yes">Other _options</property>
                         <property name="use_underline">True</property>
                       </object>
                     </child>
@@ -961,8 +898,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -970,7 +905,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="column_spacing">12</property>
-                    <property name="column_homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="matchcase">
                         <property name="label" translatable="yes">Ma_tch case</property>
@@ -984,8 +918,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -1025,23 +957,19 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
@@ -1073,10 +1001,5 @@
       <widget name="soundslike"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup3">
-    <widgets>
-      <widget name="box2"/>
-      <widget name="grid13"/>
-    </widgets>
-  </object>
+  <object class="GtkSizeGroup" id="sizegroup3"/>
 </interface>
