@@ -710,7 +710,7 @@ ERRTYPE RscCompiler::Link()
             else
             {
 #ifdef UNX
-                chmod( it->aOutputRc.getStr(), S_IRWXU | S_IRWXG | S_IROTH );
+                (void)chmod( it->aOutputRc.getStr(), S_IRWXU | S_IRWXG | S_IROTH );
 #endif
             }
 
@@ -726,7 +726,7 @@ ERRTYPE RscCompiler::Link()
             else
             {
 #ifdef UNX
-                chmod( aSysList.getStr(), S_IRWXU | S_IRWXG | S_IROTH );
+                (void)chmod( aSysList.getStr(), S_IRWXU | S_IRWXG | S_IROTH );
 #endif
             }
         }
