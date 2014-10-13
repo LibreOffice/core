@@ -30,7 +30,7 @@
   </LC_INFO>
   <LC_CTYPE unoid="generic">
     <Separators>
-      <DateSeparator>／</DateSeparator>
+      <DateSeparator>/</DateSeparator>
       <ThousandSeparator>,</ThousandSeparator>
       <DecimalSeparator>.</DecimalSeparator>
       <TimeSeparator>:</TimeSeparator>
@@ -119,10 +119,10 @@
       <FormatCode>YYYY"年"M"月"D"日"　NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>YY／M／D</FormatCode>
+      <FormatCode>YY/M/D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>YYYY／M／D</FormatCode>
+      <FormatCode>YYYY/M/D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="short" usage="DATE" formatindex="22">
       <FormatCode>YYYY"年"M"月"</FormatCode>
@@ -143,10 +143,10 @@
       <FormatCode>YY"年"M"月"D"日" NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>YY／M／D NNNN</FormatCode>
+      <FormatCode>YY/M/D NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>YYYY／M／D NNNN</FormatCode>
+      <FormatCode>YYYY/M/D NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
       <FormatCode>YYYY"年"M"月"D"日" NNNN</FormatCode>
@@ -228,10 +228,10 @@
       <FormatCode>YY"年"M"月"D"日"HH"时"MM"分"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME"  formatindex="58">
-      <FormatCode>M／D／YY HH:MM</FormatCode>
+      <FormatCode>M/D/YY HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="59">
-      <FormatCode>MM／DD／YYYY HH:MM:SS</FormatCode>
+      <FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
@@ -406,18 +406,18 @@
       <LineBreakHangingCharacters>!,.:;?、。！，．：；？</LineBreakHangingCharacters>
     </ForbiddenCharacters>
     <ReservedWords>
-      <trueWord>真</trueWord>
-      <falseWord>假</falseWord>
+      <trueWord>TRUE</trueWord>
+      <falseWord>FALSE</falseWord>
       <quarter1Word>第1季度</quarter1Word>
       <quarter2Word>第2季度</quarter2Word>
       <quarter3Word>第3季度</quarter3Word>
       <quarter4Word>第4季度</quarter4Word>
       <aboveWord>上面</aboveWord>
       <belowWord>下面</belowWord>
-      <quarter1Abbreviation>1季</quarter1Abbreviation>
-      <quarter2Abbreviation>2季</quarter2Abbreviation>
-      <quarter3Abbreviation>3季</quarter3Abbreviation>
-      <quarter4Abbreviation>4季</quarter4Abbreviation>
+      <quarter1Abbreviation>Q1</quarter1Abbreviation>
+      <quarter2Abbreviation>Q2</quarter2Abbreviation>
+      <quarter3Abbreviation>Q3</quarter3Abbreviation>
+      <quarter4Abbreviation>Q4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
