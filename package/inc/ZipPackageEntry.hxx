@@ -21,13 +21,19 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <ZipEntry.hxx>
 #include <cppuhelper/implbase5.hxx>
 
+#include <vector>
+
+typedef void* rtlRandomPool;
+class ZipOutputStream;
 class ZipPackageFolder;
 
 class ZipPackageEntry : public cppu::WeakImplHelper5
@@ -40,15 +46,18 @@ class ZipPackageEntry : public cppu::WeakImplHelper5
 >
 {
 protected:
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     OUString msName;
     bool mbIsFolder:1;
     bool mbAllowRemoveOnInsert:1;
     // com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xParent;
     OUString msMediaType;
     ZipPackageFolder* mpParent;
+    sal_Int32 m_nFormat;
+
 public:
     ZipEntry aEntry;
-    ZipPackageEntry ( bool bNewFolder = false );
+    ZipPackageEntry();
     virtual ~ZipPackageEntry( void );
 
     const OUString& GetMediaType () const { return msMediaType; }
@@ -57,6 +66,12 @@ public:
     bool IsFolder ( ) { return mbIsFolder; }
     const ZipPackageFolder* GetParent () const { return mpParent; }
     void SetFolder ( bool bSetFolder ) { mbIsFolder = bSetFolder; }
+
+    virtual bool saveChild( const OUString &rPath,
+                            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
+                            ZipOutputStream & rZipOut,
+                            const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
+                            const rtlRandomPool &rRandomPool ) = 0;
 
     void clearParent ( void )
     {
