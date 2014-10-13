@@ -1078,9 +1078,10 @@ bool SfxObjectShell::DoSave()
         }
 
         if (bOk)
-            Save();
+            bOk = Save();
 
-        bOk = pMedium->Commit();
+        if (bOk)
+            bOk = pMedium->Commit();
     }
 
     return bOk;
