@@ -375,6 +375,19 @@ an "adb logcat" running in another window.
 To debug, do manually what "make run" would do and when the app has
 started, run ndk-gdb.
 
+You can also do that manually; to install:
+
+  <android-sdk-linux>/platform-tools/adb install -r android/experimental/LOAndroid3/bin/LibreOfficeViewer-debug.apk
+
+To see the log:
+
+  <android-sdk-linux>/platform-tools/adb logcat
+
+To debug, install the .apk, run it, and then:
+
+  cd android/experimental/LOAndroid3
+  <android-ndk-r9d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb
+
 NB: If you happen to upgrade to Android SDK Tools 23, and the build (using
 'make verbose=t android') fails for you with:
 
