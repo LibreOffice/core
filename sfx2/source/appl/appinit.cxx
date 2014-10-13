@@ -178,14 +178,14 @@ OUString GetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
         bDetermineFunction = true;
 
 #ifndef DISABLE_DYNLOADING
-        static OUString aLibName( SVLIBRARY( "cui" ) );
-        oslModule handleMod = osl_loadModuleRelative(
-            &thisModule, aLibName.pData, 0 );
+        osl::Module aMod;
+        aMod.loadRelative(&thisModule, "cui", 0);
 
         // get symbol
         OUString aSymbol( "GetSpecialCharsForEdit"  );
-        pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getFunctionSymbol( handleMod, aSymbol.pData );
+        pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)aMod.getFunctionSymbol(aSymbol);
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
+        aMod.release();
 #else
         pfunc_getSpecialCharsForEdit = GetSpecialCharsForEdit;
 #endif
