@@ -96,7 +96,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
 				cat $@.log; $(SRCDIR)/solenv/bin/unittest-failed.sh Cppunit $*))) \
 		$(if $(PERFTEST), && VAL=$$(grep '^==.*== Collected : ' $@.log | sed "s/==.*== Collected : //") && \
-			$(if $(filter 0,$(PERFTEST)), expr "$$VAL" "*" "101" "/" "100", test $$VAL -le $(PERFTEST) || (echo "Unit test is slow! $$VAL instructions detected." && false))) \
+			$(if $(filter 0,$(PERFTEST)), expr "$$VAL" "*" "101" "/" "100", test $$VAL -le $(PERFTEST) || (echo "Unit test is slow! $$VAL instructions detected (expected $(PERFTEST))." && false))) \
 	)
 
 define gb_CppunitTest_CppunitTest
