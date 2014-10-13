@@ -30,10 +30,15 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
-namespace chart
-{
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+
+namespace chart {
+
+AxisLabelAlignment::AxisLabelAlignment() :
+    mfLabelDirection(1.0),
+    mfInnerTickDirection(1.0),
+    meAlignment(LABEL_ALIGN_RIGHT_TOP) {}
 
 sal_Int32 lcl_calcTickLengthForDepth(sal_Int32 nDepth,sal_Int32 nTickmarkStyle)
 {
@@ -112,7 +117,7 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
         nTickmarkStyle = m_nMinorTickmarks;
     }
 
-    if( m_fInnerDirectionSign == 0.0 )
+    if (maLabelAlignment.mfInnerTickDirection == 0.0)
     {
         if( nTickmarkStyle != 0 )
             nTickmarkStyle = 3; //inner and outer tickmarks
@@ -128,7 +133,7 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
 TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
     sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 /*nTextLevel*/ ) const
 {
-    sal_Int32 nTickmarkStyle = (m_fLabelDirectionSign==m_fInnerDirectionSign) ? 2/*outside*/ : 1/*inside*/;
+    sal_Int32 nTickmarkStyle = (maLabelAlignment.mfLabelDirection == maLabelAlignment.mfInnerTickDirection) ? 2/*outside*/ : 1/*inside*/;
 
     TickmarkProperties aTickmarkProperties;
     aTickmarkProperties.Length = nTickLength;// + nTextLevel*( lcl_calcTickLengthForDepth(0,nTickmarkStyle) );
@@ -158,9 +163,6 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_eTickmarkPos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
     , m_bCrossingAxisHasReverseDirection(false)
     , m_bCrossingAxisIsCategoryAxes(false)
-    , m_fLabelDirectionSign(1.0)
-    , m_fInnerDirectionSign(1.0)
-    , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
     , m_bDisplayLabels( true )
     , m_nNumberFormatKey(0)
     , m_nMajorTickmarks(1)
@@ -185,9 +187,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_eTickmarkPos( rAxisProperties.m_eTickmarkPos )
     , m_bCrossingAxisHasReverseDirection( rAxisProperties.m_bCrossingAxisHasReverseDirection )
     , m_bCrossingAxisIsCategoryAxes( rAxisProperties.m_bCrossingAxisIsCategoryAxes )
-    , m_fLabelDirectionSign( rAxisProperties.m_fLabelDirectionSign )
-    , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
-    , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
+    , maLabelAlignment( rAxisProperties.maLabelAlignment )
     , m_bDisplayLabels( rAxisProperties.m_bDisplayLabels )
     , m_nNumberFormatKey( rAxisProperties.m_nNumberFormatKey )
     , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
@@ -209,7 +209,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
 LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_RIGHT );
-    if( rAxisProperties.m_fLabelDirectionSign<0 )
+    if (rAxisProperties.maLabelAlignment.mfLabelDirection < 0)
         aRet = LABEL_ALIGN_LEFT;
     return aRet;
 }
@@ -217,7 +217,7 @@ LabelAlignment lcl_getLabelAlignmentForZAxis( const AxisProperties& rAxisPropert
 LabelAlignment lcl_getLabelAlignmentForYAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_RIGHT );
-    if( rAxisProperties.m_fLabelDirectionSign<0 )
+    if (rAxisProperties.maLabelAlignment.mfLabelDirection < 0)
         aRet = LABEL_ALIGN_LEFT;
     return aRet;
 }
@@ -225,7 +225,7 @@ LabelAlignment lcl_getLabelAlignmentForYAxis( const AxisProperties& rAxisPropert
 LabelAlignment lcl_getLabelAlignmentForXAxis( const AxisProperties& rAxisProperties )
 {
     LabelAlignment aRet( LABEL_ALIGN_BOTTOM );
-    if( rAxisProperties.m_fLabelDirectionSign<0 )
+    if (rAxisProperties.maLabelAlignment.mfLabelDirection < 0)
         aRet = LABEL_ALIGN_TOP;
     return aRet;
 }
@@ -291,35 +291,35 @@ void AxisProperties::init( bool bCartesian )
             m_bComplexCategories = true;
 
         if( ::com::sun::star::chart::ChartAxisPosition_END == m_eCrossoverType )
-            m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
+            maLabelAlignment.mfInnerTickDirection = m_bCrossingAxisHasReverseDirection ? 1.0 : -1.0;
         else
-            m_fInnerDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
+            maLabelAlignment.mfInnerTickDirection = m_bCrossingAxisHasReverseDirection ? -1.0 : 1.0;
 
         if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS == m_eLabelPos )
-            m_fLabelDirectionSign = m_fInnerDirectionSign;
+            maLabelAlignment.mfLabelDirection = maLabelAlignment.mfInnerTickDirection;
         else if( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE == m_eLabelPos )
-            m_fLabelDirectionSign = -m_fInnerDirectionSign;
+            maLabelAlignment.mfLabelDirection = -maLabelAlignment.mfInnerTickDirection;
         else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START == m_eLabelPos )
-            m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? -1 : 1;
+            maLabelAlignment.mfLabelDirection = m_bCrossingAxisHasReverseDirection ? -1 : 1;
         else if( ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == m_eLabelPos )
-            m_fLabelDirectionSign = m_bCrossingAxisHasReverseDirection ? 1 : -1;
+            maLabelAlignment.mfLabelDirection = m_bCrossingAxisHasReverseDirection ? 1 : -1;
 
         if( m_nDimensionIndex==2 )
-            m_aLabelAlignment = lcl_getLabelAlignmentForZAxis(*this);
+            maLabelAlignment.meAlignment = lcl_getLabelAlignmentForZAxis(*this);
         else
         {
             bool bIsYAxisPosition = (m_nDimensionIndex==1 && !m_bSwapXAndY)
                 || (m_nDimensionIndex==0 && m_bSwapXAndY);
             if( bIsYAxisPosition )
             {
-                m_fLabelDirectionSign*=-1;
-                m_fInnerDirectionSign*=-1;
+                maLabelAlignment.mfLabelDirection *= -1.0;
+                maLabelAlignment.mfInnerTickDirection *= -1.0;
             }
 
             if( bIsYAxisPosition )
-                m_aLabelAlignment = lcl_getLabelAlignmentForYAxis(*this);
+                maLabelAlignment.meAlignment = lcl_getLabelAlignmentForYAxis(*this);
             else
-                m_aLabelAlignment = lcl_getLabelAlignmentForXAxis(*this);
+                maLabelAlignment.meAlignment = lcl_getLabelAlignmentForXAxis(*this);
         }
     }
 
