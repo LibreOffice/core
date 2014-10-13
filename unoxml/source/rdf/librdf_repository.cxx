@@ -359,7 +359,6 @@ public:
     virtual beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
         getStatementRDFa(uno::Reference< rdf::XMetadatable > const& i_xElement)
         throw (uno::RuntimeException, lang::IllegalArgumentException,
-            container::NoSuchElementException,
             rdf::RepositoryException, std::exception) SAL_OVERRIDE;
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         getStatementsRDFa(
@@ -1647,7 +1646,6 @@ beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool > SAL_CALL
 librdf_Repository::getStatementRDFa(
     const uno::Reference< rdf::XMetadatable > & i_xElement)
 throw (uno::RuntimeException, lang::IllegalArgumentException,
-    container::NoSuchElementException,
     rdf::RepositoryException, std::exception)
 {
     if (!i_xElement.is()) {
@@ -1671,17 +1669,26 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     ::comphelper::SequenceAsVector< rdf::Statement > ret;
-    const uno::Reference<container::XEnumeration> xIter(
-        getStatementsGraph_NoLock(0, 0, 0, xXmlId, true) );
-    OSL_ENSURE(xIter.is(), "getStatementRDFa: no result?");
-    if (!xIter.is()) throw uno::RuntimeException();
-    while (xIter->hasMoreElements()) {
-        rdf::Statement stmt;
-        if (!(xIter->nextElement() >>= stmt)) {
-            OSL_FAIL("getStatementRDFa: result of wrong type?");
-        } else {
-            ret.push_back(stmt);
+    try
+    {
+        const uno::Reference<container::XEnumeration> xIter(
+            getStatementsGraph_NoLock(0, 0, 0, xXmlId, true) );
+        OSL_ENSURE(xIter.is(), "getStatementRDFa: no result?");
+        if (!xIter.is()) throw uno::RuntimeException();
+        while (xIter->hasMoreElements()) {
+            rdf::Statement stmt;
+            if (!(xIter->nextElement() >>= stmt)) {
+                OSL_FAIL("getStatementRDFa: result of wrong type?");
+            } else {
+                ret.push_back(stmt);
+            }
         }
+    }
+    catch (const container::NoSuchElementException& e)
+    {
+        throw lang::WrappedTargetRuntimeException(
+                "librdf_Repository::getStatementRDFa: "
+                "cannot getStatementsGraph", *this, uno::makeAny(e));
     }
 
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
