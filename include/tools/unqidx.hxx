@@ -25,17 +25,20 @@
 
 #define UNIQUEINDEX_ENTRY_NOTFOUND   CONTAINER_ENTRY_NOTFOUND
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED UniqueIndexImpl : public std::map<sal_uInt32, void*>
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED UniqueIndexImpl
 {
 private:
+    std::map<sal_uInt32, void*> maMap;
     sal_uIntPtr   nStartIndex;
     sal_uIntPtr   nUniqIndex;
     sal_uIntPtr   nCount;
 
 public:
     UniqueIndexImpl( sal_uIntPtr _nStartIndex = 0 )
-        : std::map<sal_uInt32, void*>(),
+        : maMap(),
           nStartIndex(_nStartIndex), nUniqIndex(_nStartIndex), nCount(0) {}
+
+    size_t size() const { return maMap.size(); }
 
     sal_uIntPtr   Insert( void* p );
     // insert value with key, replacing existing entry if necessary
