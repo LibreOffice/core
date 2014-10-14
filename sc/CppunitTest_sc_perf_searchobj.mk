@@ -14,7 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_perf_searchobj))
 $(eval $(call gb_CppunitTest_use_external,sc_perf_searchobj,boost_headers))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_perf_searchobj, \
-    sc/qa/perf/scsearchobj \
+    sc/qa/perf/scperfsearch \
 ))
 
 $(eval $(call gb_CppunitTest_set_performance_test,sc_perf_searchobj, 0))
@@ -75,5 +75,9 @@ $(eval $(call gb_CppunitTest_use_rdb,sc_perf_searchobj,services))
 $(eval $(call gb_CppunitTest_use_configuration,sc_perf_searchobj))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sc_perf_searchobj))
+
+$(eval $(call gb_CppunitTest_add_defs,sc_perf_searchobj,\
+    -DIS_PERFCHECK \
+))
 
 # vim: set noet sw=4 ts=4:

@@ -13,6 +13,9 @@
 
 #include <valgrind/callgrind.h>
 
+#include <string>
+
+
 using namespace css;
 using namespace css::uno;
 
@@ -27,6 +30,9 @@ public:
 
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
+
+    virtual void startPerfInstrumentation() SAL_OVERRIDE;
+    virtual void endPerfInstrumentation(const char* message) SAL_OVERRIDE;
 
     virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
 
@@ -57,15 +63,11 @@ uno::Reference< uno::XInterface > ScSearchObj::init()
     OUString aFileURL;
     createFileURL(OUString("scBigFile.ods"), aFileURL);
 
-    CALLGRIND_START_INSTRUMENTATION;
-    CALLGRIND_ZERO_STATS;
+    startPerfInstrumentation();
 
     mxComponent = loadFromDesktop(aFileURL);
 
-    CALLGRIND_DUMP_STATS_AT("Load Big File");
-    CALLGRIND_STOP_INSTRUMENTATION;
-
-    CPPUNIT_ASSERT(mxComponent.is());
+    endPerfInstrumentation("Load big file");
 
     return mxComponent;
 }
@@ -87,6 +89,22 @@ void ScSearchObj::tearDown()
       }
     }
     CalcUnoApiTest::tearDown();
+}
+
+void ScSearchObj::startPerfInstrumentation()
+{
+  #ifdef IS_PERFCHECK
+    CALLGRIND_START_INSTRUMENTATION;
+    CALLGRIND_ZERO_STATS;
+  #endif
+}
+
+void ScSearchObj::endPerfInstrumentation(const char* message)
+{
+  #ifdef IS_PERFCHECK
+    CALLGRIND_DUMP_STATS_AT(message);
+    CALLGRIND_STOP_INSTRUMENTATION;
+  #endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScSearchObj);

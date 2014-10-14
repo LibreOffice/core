@@ -45,13 +45,11 @@ void XCalcSearch::testSheetFindAll()
   // search for a value
   xSearchDescr->setSearchString(OUString("value_1"));
 
-  CALLGRIND_START_INSTRUMENTATION;
-  CALLGRIND_ZERO_STATS;
+  startPerfInstrumentation();
 
   uno::Reference< container::XIndexAccess > xIndex = xSearchable->findAll(xSearchDescr);
 
-  CALLGRIND_STOP_INSTRUMENTATION;
-  CALLGRIND_DUMP_STATS_AT("testSheetFindAll - Search value");
+  endPerfInstrumentation("testSheetFindAll - Search value");
 
   CPPUNIT_ASSERT(xIndex.is());
 
@@ -70,13 +68,11 @@ void XCalcSearch::testSheetFindAll()
 
   xSearchDescr->setSearchString(OUString("aCellStyle"));
 
-  CALLGRIND_START_INSTRUMENTATION;
-  CALLGRIND_ZERO_STATS;
+  startPerfInstrumentation();
 
   uno::Reference< container::XIndexAccess > xIndex2 = xSearchableStyle->findAll(xSearchDescr);
 
-  CALLGRIND_STOP_INSTRUMENTATION;
-  CALLGRIND_DUMP_STATS_AT("testSheetFindAll - Search style");
+  endPerfInstrumentation("testSheetFindAll - Search style");
 
   CPPUNIT_ASSERT(xIndex2.is());
 
