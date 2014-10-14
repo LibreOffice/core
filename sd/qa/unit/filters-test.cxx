@@ -91,6 +91,10 @@ void SdFiltersTest::testCVEs()
     testDir(OUString("draw8"),
             getURLFromSrc("/sd/qa/unit/data/odg/"),
             OUString("sdfilt"));
+
+    testDir(OUString("CGM - Computer Graphics Metafile"),
+            getURLFromSrc("/sd/qa/unit/data/cgm/"),
+            OUString("icg"));
 #endif
 }
 
