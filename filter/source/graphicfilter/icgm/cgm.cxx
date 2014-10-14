@@ -193,7 +193,7 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     float   fFloatBuf;
 
 #ifdef OSL_BIGENDIAN
-        bCompatible = sal_True;
+        bCompatible = true;
 #else
         bCompatible = false;
 #endif
