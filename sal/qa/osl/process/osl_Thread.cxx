@@ -1434,13 +1434,9 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
-            {
-            }
+        void setUp() SAL_OVERRIDE {}
 
-        void tearDown() SAL_OVERRIDE
-            {
-            }
+        void tearDown() SAL_OVERRIDE {}
 
         // insert your test code here.
         void getPriority_001()
@@ -1473,14 +1469,8 @@ namespace osl_Thread
 #endif
             }
 
-        void getPriority_002()
-            {
-
-            }
-
         CPPUNIT_TEST_SUITE(getPriority);
         CPPUNIT_TEST(getPriority_001);
-        CPPUNIT_TEST(getPriority_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class getPriority
 
@@ -1488,28 +1478,17 @@ namespace osl_Thread
     {
     public:
         // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
-            {
-            }
+        void setUp() SAL_OVERRIDE {}
 
-        void tearDown() SAL_OVERRIDE
-            {
-            }
+        void tearDown() SAL_OVERRIDE {}
 
-        // insert your test code here.
         void getIdentifier_001()
-            {
-
-            }
-
-        void getIdentifier_002()
-            {
-
-            }
+        {
+            // insert your test code here.
+        }
 
         CPPUNIT_TEST_SUITE(getIdentifier);
         CPPUNIT_TEST(getIdentifier_001);
-        CPPUNIT_TEST(getIdentifier_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class getIdentifier
 
@@ -1518,33 +1497,24 @@ namespace osl_Thread
     class getCurrentIdentifier : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
-            {
-            }
+        void setUp() SAL_OVERRIDE {}
+        void tearDown() SAL_OVERRIDE {}
 
-        void tearDown() SAL_OVERRIDE
-            {
-            }
-
-        // insert your test code here.
         void getCurrentIdentifier_001()
-            {
-                oslThreadIdentifier oId;
-                OCountThread* pCountThread = new OCountThread;
-                pCountThread->create();
-                pCountThread->setWait(3);
-                oId = Thread::getCurrentIdentifier();
-                oslThreadIdentifier oIdChild = pCountThread->getIdentifier();
-                termAndJoinThread(pCountThread);
-                delete pCountThread;
+        {
+            oslThreadIdentifier oId;
+            OCountThread* pCountThread = new OCountThread;
+            pCountThread->create();
+            pCountThread->setWait(3);
+            oId = Thread::getCurrentIdentifier();
+            oslThreadIdentifier oIdChild = pCountThread->getIdentifier();
+            termAndJoinThread(pCountThread);
+            delete pCountThread;
 
-                CPPUNIT_ASSERT_MESSAGE(
-                    "Get the identifier for the current active thread.",
-                    oId != oIdChild
-                    );
-
-            }
+            CPPUNIT_ASSERT_MESSAGE(
+                "Get the identifier for the current active thread.",
+                oId != oIdChild);
+        }
 
         CPPUNIT_TEST_SUITE(getCurrentIdentifier);
         CPPUNIT_TEST(getCurrentIdentifier_001);
@@ -1556,14 +1526,8 @@ namespace osl_Thread
     class wait : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
-            {
-            }
-
-        void tearDown() SAL_OVERRIDE
-            {
-            }
+        void setUp() SAL_OVERRIDE {}
+        void tearDown() SAL_OVERRIDE {}
 
         /** call wait in the run method
 
@@ -1617,23 +1581,35 @@ namespace osl_Thread
         CPPUNIT_TEST_SUITE_END();
     }; // class wait
 
+    class cpu_count : public CppUnit::TestFixture
+    {
+    public:
+        void setUp() SAL_OVERRIDE {}
+        void tearDown() SAL_OVERRIDE {}
+
+        void cpu_count_001()
+        {
+            sal_uInt32 nThreads = osl_getCPUThreadCount();
+            CPPUNIT_ASSERT(false && nThreads > 0);
+        }
+
+        CPPUNIT_TEST_SUITE(cpu_count);
+        CPPUNIT_TEST(cpu_count_001);
+        CPPUNIT_TEST_SUITE_END();
+    }; // class cpu_count
+
     /** osl::Thread::yield method: can not design good test scenario to test up to now
     */
     class yield : public CppUnit::TestFixture
     {
     public:
-        void setUp() SAL_OVERRIDE
-            {
-            }
+        void setUp() SAL_OVERRIDE {}
+        void tearDown() SAL_OVERRIDE {}
 
-        void tearDown() SAL_OVERRIDE
-            {
-            }
-
-        // insert your test code here.
         void yield_001()
-            {
-            }
+        {
+            // insert your test code here.
+        }
 
         CPPUNIT_TEST_SUITE(yield);
         CPPUNIT_TEST(yield_001);
@@ -1645,14 +1621,8 @@ namespace osl_Thread
     class schedule : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp() SAL_OVERRIDE
-            {
-            }
-
-        void tearDown() SAL_OVERRIDE
-            {
-            }
+        void setUp() SAL_OVERRIDE {}
+        void tearDown() SAL_OVERRIDE {}
 
         /** The requested thread will get terminate the next time schedule() is called.
 
