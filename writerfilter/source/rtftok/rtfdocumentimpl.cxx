@@ -464,9 +464,14 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
                 // createStyleProperties() puts properties to rPr, but here we need a flat list.
                 if (itSprm->first == NS_ooxml::LN_CT_Style_rPr)
                 {
+                    // rPr can have both attributes and SPRM's, copy over both types.
                     RTFSprms& rRPrSprms = itSprm->second->getSprms();
                     for (RTFSprms::Iterator_t itRPrSprm = rRPrSprms.begin(); itRPrSprm != rRPrSprms.end(); ++itRPrSprm)
                         aStyleSprms.set(itRPrSprm->first, itRPrSprm->second);
+
+                    RTFSprms& rRPrAttributes = itSprm->second->getAttributes();
+                    for (RTFSprms::Iterator_t itRPrAttribute = rRPrAttributes.begin(); itRPrAttribute != rRPrAttributes.end(); ++itRPrAttribute)
+                        aStyleAttributes.set(itRPrAttribute->first, itRPrAttribute->second);
                 }
                 else
                     aStyleSprms.set(itSprm->first, itSprm->second);

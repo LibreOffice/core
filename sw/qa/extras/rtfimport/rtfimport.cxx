@@ -9,6 +9,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -1961,6 +1962,16 @@ DECLARE_RTFIMPORT_TEST(testFdo84679, "fdo84679.rtf")
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // This was 282.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(getParagraphOfText(1, xCell->getText()), "ParaBottomMargin"));
+}
+
+DECLARE_RTFIMPORT_TEST(testFdo82071, "fdo82071.rtf")
+{
+    // The problem was that in TOC, chapter names were underlined, but they should not be.
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(2), 1);
+    // Make sure we test the right text portion.
+    CPPUNIT_ASSERT_EQUAL(OUString("Chapter 1"), xRun->getString());
+    // This was awt::FontUnderline::SINGLE.
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE, getProperty<sal_Int16>(xRun, "CharUnderline"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
