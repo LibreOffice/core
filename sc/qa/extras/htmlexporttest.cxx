@@ -19,6 +19,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <unotest/macros_test.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -33,7 +34,6 @@ using namespace utl;
 class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools, public HtmlTestTools
 {
     Reference<XComponent> mxComponent;
-    TempFile              maTempFile;
     OUString              maFilterOptions;
 
     void load(const char* pDir, const char* pName)
@@ -45,8 +45,6 @@ class ScHTMLExportTest : public test::BootstrapFixture, public unotest::MacrosTe
 
     void save(const OUString& aFilterName, TempFile& rTempFile)
     {
-        rTempFile.EnableKillingFile();
-
         Reference<XStorable> xStorable(mxComponent, UNO_QUERY);
         MediaDescriptor aMediaDescriptor;
         aMediaDescriptor["FilterName"] <<= aFilterName;
@@ -75,11 +73,16 @@ public:
 
     void testHtmlSkipImage()
     {
+        // need a temp dir, because there's an image exported too
+        TempFile aTempDir(0, true);
+        OUString const url(aTempDir.GetURL());
+        TempFile aTempFile(&url, false);
+
         htmlDocPtr pDoc;
 
         load("/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
-        save("HTML (StarCalc)", maTempFile);
-        pDoc = parseHtml(maTempFile);
+        save("HTML (StarCalc)", aTempFile);
+        pDoc = parseHtml(aTempFile);
         CPPUNIT_ASSERT (pDoc);
 
         assertXPath(pDoc, "/html/body", 1);
@@ -87,12 +90,14 @@ public:
 
         load("/sc/qa/extras/testdocuments/", "BaseForHTMLExport.ods");
         maFilterOptions = OUString("SkipImages");
-        save("HTML (StarCalc)", maTempFile);
+        save("HTML (StarCalc)", aTempFile);
 
-        pDoc = parseHtml(maTempFile);
+        pDoc = parseHtml(aTempFile);
         CPPUNIT_ASSERT (pDoc);
         assertXPath(pDoc, "/html/body", 1);
         assertXPath(pDoc, "/html/body/table/tr/td/img", 0);
+
+        utl::removeTree(aTempDir.GetURL());
     }
 
     CPPUNIT_TEST_SUITE(ScHTMLExportTest);
