@@ -978,10 +978,15 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                      ? 1 : 0;
     // --> OD #i84870#
     // no split of text frame, which only contains a as-character anchored object
-    const bool bOnlyContainsAsCharAnchoredObj =
+    bool bOnlyContainsAsCharAnchoredObj =
             !IsFollow() && nStrLen == 1 &&
             GetDrawObjs() && GetDrawObjs()->Count() == 1 &&
             (*GetDrawObjs())[0]->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR;
+
+    // Still try split text frame if we have columns.
+    if (FindColFrm())
+        bOnlyContainsAsCharAnchoredObj = false;
+
     if ( nNew && bOnlyContainsAsCharAnchoredObj )
     {
         nNew = 0;

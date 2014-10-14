@@ -14,6 +14,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <wrtsh.hxx>
@@ -511,6 +512,16 @@ DECLARE_ODFIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.odt")
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "Looses: bold");
     // Formatting was lost: the second text portion was NORMAL, not BOLD.
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 2), "CharWeight"));
+}
+
+DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
+{
+    // Document's second paragraph wants to be together with the third one, but:
+    // - it's in a section with multiple columns
+    // - contains a single as-char anchored frame
+    // This was a layout loop.
+    CPPUNIT_ASSERT(getProperty< uno::Reference<text::XTextSection> >(getParagraph(2), "TextSection").is());
+    CPPUNIT_ASSERT(getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
 }
 
 #endif

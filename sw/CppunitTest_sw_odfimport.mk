@@ -57,6 +57,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
 	embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
     filter/source/storagefilterdetect/storagefd \
+	filter/source/odfflatxml/odfflatxml \
+	filter/source/xmlfilterdetect/xmlfd \
+	filter/source/xmlfilteradaptor/xmlfa \
     framework/util/fwk \
     i18npool/util/i18npool \
 	lingucomponent/source/languageguessing/guesslang \
