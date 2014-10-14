@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_0eefafb1",
+        "filename": "jurt/test/com/sun/star/lib/uno/environments/remote/ThreadId_Test.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-10-14T12:27:12Z",
+      "side": 1,
+      "message": "that\u0027s not quite the same thing - the original code is testing the implementation of the equals method in ThreadId",
+      "revId": "38e65a27e8b3a58ddc991960f14fec646acab96a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
