@@ -175,7 +175,7 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 }
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg(Window *parent)
-    : ModelessDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
+    : ModalDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
       maSelTemplates(cmpSelectionItems),
       maSelFolders(cmpSelectionItems),
       mbIsSaveMode(false),
@@ -183,6 +183,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(Window *parent)
       mbIsSynced(false),
       maRepositories()
 {
+    fprintf(stderr, "SfxTemplateManagerDlg::SfxTemplateManagerDlg\n");
+
     get(mpTabControl, "tab_control");
     get(mpSearchEdit, "search_edit");
     get(mpViewBar, "action_view");
