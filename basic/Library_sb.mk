@@ -29,7 +29,10 @@ $(eval $(call gb_Library_set_include,sb,\
 
 $(eval $(call gb_Library_set_precompiled_header,sb,$(SRCDIR)/basic/inc/pch/precompiled_sb))
 
-$(eval $(call gb_Library_use_external,sb,boost_headers))
+$(eval $(call gb_Library_use_externals,sb,\
+	boost_headers \
+	icu_headers \
+	))
 
 $(eval $(call gb_Library_use_custom_headers,sb,\
 	officecfg/registry \
@@ -49,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,sb,\
 	sal \
 	salhelper \
 	i18nlangtag \
+	i18nutil \
 	sot \
 	svl \
 	svt \
