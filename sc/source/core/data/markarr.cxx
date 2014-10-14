@@ -274,6 +274,21 @@ bool ScMarkArray::HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const
     return bRet;
 }
 
+bool ScMarkArray::HasEqualRowsMarked( const ScMarkArray& rOther ) const
+{
+    if (nCount != rOther.nCount)
+        return false;
+
+    for (size_t i=0; i < nCount; ++i)
+    {
+        if (pData[i].bMarked != rOther.pData[i].bMarked ||
+                pData[i].nRow != rOther.pData[i].nRow)
+            return false;
+    }
+
+    return true;
+}
+
 void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
 {
     delete[] rDestMarkArray.pData;

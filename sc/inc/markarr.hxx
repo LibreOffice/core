@@ -47,6 +47,7 @@ public:
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked );
     bool    IsAllMarked( SCROW nStartRow, SCROW nEndRow ) const;
     bool    HasOneMark( SCROW& rStartRow, SCROW& rEndRow ) const;
+    bool    HasEqualRowsMarked( const ScMarkArray& rOther ) const;
 
     bool    HasMarks() const    { return ( nCount > 1 || ( nCount == 1 && pData[0].bMarked ) ); }
 

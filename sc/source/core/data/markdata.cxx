@@ -386,10 +386,23 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
         SCCOL nStartCol = aMultiRange.aStart.Col();
         SCCOL nEndCol = aMultiRange.aEnd.Col();
         for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
+        {
             if (pMultiSel[nCol].HasMarks())
             {
+                // Feeding column-wise fragments to ScRangeList::Join() is a
+                // huge bottleneck, speed this up for multiple columns
+                // consisting of identical row sets by building a column span
+                // first. This is usually the case for filtered data, for
+                // example.
+                SCCOL nToCol = nCol+1;
+                for ( ; nToCol <= nEndCol; ++nToCol)
+                {
+                    if (!pMultiSel[nCol].HasEqualRowsMarked( pMultiSel[nToCol]))
+                        break;
+                }
+                --nToCol;
+                ScRange aRange( nCol, 0, nTab, nToCol, 0, nTab );
                 SCROW nTop, nBottom;
-                ScRange aRange( nCol, 0, nTab );
                 ScMarkArrayIter aMarkIter( &pMultiSel[nCol] );
                 while ( aMarkIter.Next( nTop, nBottom ) )
                 {
@@ -397,7 +410,9 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
                     aRange.aEnd.SetRow( nBottom );
                     pList->Join( aRange );
                 }
+                nCol = nToCol;
             }
+        }
     }
 
     if ( bMarked )
