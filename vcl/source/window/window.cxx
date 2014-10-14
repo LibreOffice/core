@@ -137,6 +137,8 @@ Window::~Window()
 
     DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
 
+    dispose();
+
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
 
