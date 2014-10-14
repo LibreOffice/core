@@ -1192,7 +1192,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
     {
         if( n > THRESHOLD )
         {
-            aName = utl::TempFile::CreateTempName();
+            aName = utl::TempFile(0, false).GetURL();
             SvFileStream* s = new SvFileStream( aName, STREAM_READWRITE );
             sal_uLong nCur = Tell();
             sal_uLong i = nEndOfData;
