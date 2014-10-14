@@ -87,8 +87,6 @@ FillBundle& FillBundle::operator=( FillBundle& rSource )
     return *this;
 };
 
-
-
 FontEntry::FontEntry() :
     pFontName       ( NULL ),
     eCharSetType    ( CST_CCOMPLETE ),
@@ -99,11 +97,9 @@ FontEntry::FontEntry() :
 
 FontEntry::~FontEntry()
 {
-    delete pFontName;
+    delete [] pFontName;
     delete pCharSetValue;
 }
-
-
 
 CGMFList::CGMFList() :
     nFontNameCount      ( 0 ),
@@ -209,7 +205,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         sal_uInt32 nToCopy = nSize - nToCopyOfs - nPrev;
         if ( nToCopy )
         {
-            memcpy( pFound, pFound + nToCopyOfs, nToCopy );
+            memmove( pFound, pFound + nToCopyOfs, nToCopy );
         }
         nSize -= nToCopyOfs;
     }
@@ -229,7 +225,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         sal_uInt32 nToCopy = nSize - nToCopyOfs - nPrev;
         if ( nToCopy )
         {
-            memcpy( pFound, pFound + nToCopyOfs, nToCopy );
+            memmove( pFound, pFound + nToCopyOfs, nToCopy );
         }
         nSize -= nToCopyOfs;
     }

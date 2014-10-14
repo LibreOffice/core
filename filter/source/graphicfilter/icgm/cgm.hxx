@@ -79,8 +79,9 @@ class CGM
         ::std::vector< sal_uInt8 * > maDefRepList;
         ::std::vector< sal_uInt32  > maDefRepSizeList;
 
-        sal_uInt8*              mpSource;       // source buffer that is not increased
-                                            // ( instead use mnParaCount to index )
+        sal_uInt8*              mpSource;         // start of source buffer that is not increased
+                                                  // ( instead use mnParaCount to index )
+        sal_uInt8*              mpEndValidSource; // end position in source buffer of last valid data
         sal_uInt32              mnParaSize;     // actual parameter size which has been done so far
         sal_uInt32              mnActCount;     // increased by each action
         sal_uInt8*              mpBuf;          // source stream operation -> then this is allocated for

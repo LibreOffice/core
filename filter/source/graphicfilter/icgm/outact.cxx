@@ -20,37 +20,31 @@
 
 #include <outact.hxx>
 #include <vcl/gradient.hxx>
+#include <string.h>
 
 using namespace ::com::sun::star;
-
-
 
 CGMOutAct::CGMOutAct( CGM& rCGM )
 {
     mpCGM = &rCGM;
     mnCurrentPage = 0;
     mnGroupActCount = mnGroupLevel = 0;
-    mpGroupLevel = new sal_uInt32[ CGM_OUTACT_MAX_GROUP_LEVEL ];
+    mpGroupLevel = new sal_uInt32[CGM_OUTACT_MAX_GROUP_LEVEL];
+    memset(mpGroupLevel, 0, sizeof(sal_uInt32) * CGM_OUTACT_MAX_GROUP_LEVEL);
     mpPoints = (Point*)new sal_Int8[ 0x2000 * sizeof( Point ) ];
     mpFlags = new sal_uInt8[ 0x2000 ];
 
     mnIndex = 0;
     mpGradient = NULL;
-};
-
-
+}
 
 CGMOutAct::~CGMOutAct()
 {
     delete[] (sal_Int8*) mpPoints;
     delete[] mpFlags;
     delete[] mpGroupLevel;
-
-    if ( mpGradient )
-        delete mpGradient;
-};
-
-
+    delete mpGradient;
+}
 
 void CGMOutAct::BeginFigure()
 {
@@ -60,8 +54,6 @@ void CGMOutAct::BeginFigure()
     BeginGroup();
     mnIndex = 0;
 }
-
-
 
 void CGMOutAct::CloseRegion()
 {
@@ -73,8 +65,6 @@ void CGMOutAct::CloseRegion()
     }
 }
 
-
-
 void CGMOutAct::NewRegion()
 {
     if ( mnIndex > 2 )
@@ -85,8 +75,6 @@ void CGMOutAct::NewRegion()
     mnIndex = 0;
 }
 
-
-
 void CGMOutAct::EndFigure()
 {
     NewRegion();
@@ -95,8 +83,6 @@ void CGMOutAct::EndFigure()
     EndGroup();
     mnIndex = 0;
 }
-
-
 
 void CGMOutAct::RegPolyLine( Polygon& rPolygon, bool bReverse )
 {
@@ -123,8 +109,6 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, bool bReverse )
     }
 }
 
-
-
 void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nType*/ )
 {
     if ( !mpGradient )
@@ -133,16 +117,12 @@ void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nT
     mpGradient->YOffset = ( (sal_uInt16)nVertOfs & 0x7f );
 }
 
-
-
 void CGMOutAct::SetGradientAngle( long nAngle )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
     mpGradient->Angle = sal::static_int_cast< sal_Int16 >(nAngle);
 }
-
-
 
 void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo )
 {
@@ -151,8 +131,6 @@ void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorT
     mpGradient->StartColor = nColorFrom;
     mpGradient->EndColor = nColorTo;
 }
-
-
 
 void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
 {
@@ -186,6 +164,5 @@ void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
