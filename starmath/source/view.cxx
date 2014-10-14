@@ -1972,7 +1972,6 @@ SmViewShell::~SmViewShell()
     SmEditWindow *pEditWin = GetEditWindow();
     if (pEditWin)
         pEditWin->DeleteEditView( *this );
-    delete pImpl;
 }
 
 void SmViewShell::Deactivate( bool bIsMDIActivate )

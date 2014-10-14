@@ -19,6 +19,10 @@
 #ifndef INCLUDED_STARMATH_INC_VIEW_HXX
 #define INCLUDED_STARMATH_INC_VIEW_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svtools/scrwin.hxx>
@@ -224,7 +228,7 @@ class SmViewShell: public SfxViewShell
     // for handling the PasteClipboardState
     friend class SmClipboardChangeListener;
 
-    SmViewShell_Impl*   pImpl;
+    std::unique_ptr<SmViewShell_Impl> pImpl;
 
     SmGraphicWindow     aGraphic;
     SmGraphicController aGraphicController;
