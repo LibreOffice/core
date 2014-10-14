@@ -63,11 +63,6 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         // #115391#
         AdaptTextMinSize();
 
-        if (bTextFrame && (pModel==NULL || !pModel->IsPasteResize()))
-        {
-            NbcAdjustTextFrameWidthAndHeight();
-        }
-
         ImpCheckShear();
         SetRectsDirty();
     }
@@ -91,11 +86,6 @@ void SdrTextObj::NbcSetLogicRect(const Rectangle& rRect)
 
     // #115391#
     AdaptTextMinSize();
-
-    if(bTextFrame)
-    {
-        NbcAdjustTextFrameWidthAndHeight();
-    }
 
     SetRectsDirty();
 }
