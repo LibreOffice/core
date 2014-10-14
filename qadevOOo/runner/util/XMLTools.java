@@ -718,7 +718,7 @@ public class XMLTools {
             if (!isWellFormed())
                 log.println("!!! Some errors were found in XML structure") ;
 
-            boolean result = tags.isEmpty() && chars.size() == 0 && isWellFormed();
+            boolean result = tags.isEmpty() && chars.isEmpty() && isWellFormed();
             reset();
             return result;
         }
