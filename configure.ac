@@ -1239,7 +1239,10 @@ AC_ARG_ENABLE(cve-tests,
 
 AC_ARG_ENABLE(chart-tests,
     AS_HELP_STRING([--enable-chart-tests],
-        [Executes chart XShape tests]),
+        [Executes chart XShape tests. In a perfect world these tests would be
+         stable and everyone could run them, in reality it is best to run them
+         only on a few machines that are known to work and maintained by people
+         who can judge if a test failure is a regression or not.]),
 ,)
 
 AC_ARG_ENABLE(build-unowinreg,
