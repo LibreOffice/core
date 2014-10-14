@@ -572,7 +572,7 @@ enum DFF_TextHeader {
 #define DFF_Prop_metroBlob					937 // XML ZipPackage*
 
 // linchpin: the shape type
-enum MSO_SPT {
+enum MSO_SPT: sal_Int32 {
    mso_sptMin = 0,
    mso_sptNotPrimitive = mso_sptMin,
    mso_sptRectangle = 1,
