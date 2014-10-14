@@ -417,10 +417,13 @@ public:
     SdrTextVertAdjust GetTextVerticalAdjust(const SfxItemSet& rSet) const;
     SdrTextVertAdjust GetTextVerticalAdjust() const;
 
-    // Textrahmenabstaende
+    /** Left inner spacing to borders  */
     long GetTextLeftDistance() const;
+    /** Right inner spacing to borders  */
     long GetTextRightDistance() const;
+    /** Top inner spacing to borders */
     long GetTextUpperDistance() const;
+    /** Bottom inner spacing to borders */
     long GetTextLowerDistance() const;
     SdrTextAniKind GetTextAniKind() const;
     SdrTextAniDirection GetTextAniDirection() const;
