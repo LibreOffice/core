@@ -230,7 +230,7 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
     for (size_t i = 0; i < rMrkList.GetMarkCount(); ++i)
     {
         SdrObject* pObject = rMrkList.GetMark(i)->GetMarkedSdrObj();
-        SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObject));
+        SwContact* pDrawContact = static_cast<SwContact*>(GetUserCall(pObject));
         SwFrmFmt* pFmt = pDrawContact->GetFmt();
         if (aTextBoxShapes.find(pFmt) != aTextBoxShapes.end())
         {

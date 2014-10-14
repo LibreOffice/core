@@ -313,7 +313,7 @@ void SwUiWriterTest::testShapeTextboxSelect()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
-    SwDrawContact* pTextBox = static_cast<SwDrawContact*>(pObject->GetUserCall());
+    SwContact* pTextBox = static_cast<SwContact*>(pObject->GetUserCall());
     // First, make sure that pTextBox is a fly frame (textbox of a shape).
     CPPUNIT_ASSERT_EQUAL(RES_FLYFRMFMT, static_cast<RES_FMT>(pTextBox->GetFmt()->Which()));
 
@@ -386,7 +386,7 @@ void SwUiWriterTest::testShapeTextboxVertadjust()
     SwDoc* pDoc = createDoc("shape-textbox-vertadjust.odt");
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(1);
-    SwFrmFmt* pFmt = static_cast<SwDrawContact*>(pObject->GetUserCall())->GetFmt();
+    SwFrmFmt* pFmt = static_cast<SwContact*>(pObject->GetUserCall())->GetFmt();
     // This was SDRTEXTVERTADJUST_TOP.
     CPPUNIT_ASSERT_EQUAL(SDRTEXTVERTADJUST_CENTER, pFmt->GetTextVertAdjust().GetValue());
 }
