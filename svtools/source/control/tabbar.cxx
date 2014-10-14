@@ -788,10 +788,11 @@ void TabBar::SetScrollAlwaysEnabled(bool bScrollAlwaysEnabled)
     ImplEnableControls();
 }
 
-
-
 void TabBar::ImplShowPage( sal_uInt16 nPos )
 {
+    if (nPos >= mpItemList->size())
+        return;
+
     // calculate width
     long nWidth = GetOutputSizePixel().Width();
 
@@ -810,8 +811,6 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
         }
     }
 }
-
-
 
 IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
 {
