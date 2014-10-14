@@ -77,21 +77,21 @@ class BibliographyLoader : public cppu::WeakImplHelper4
                             < XServiceInfo, XNameAccess, XPropertySet, XFrameLoader >
 {
     HdlBibModul                                     m_pBibMod;
-    Reference< XLoadable >                          m_xDatMan;
+    css::uno::Reference< XLoadable >                m_xDatMan;
     BibDataManager*                                 m_pDatMan;
-    Reference< XNameAccess >                        m_xColumns;
-    Reference< XResultSet >                         m_xCursor;
+    css::uno::Reference< XNameAccess >              m_xColumns;
+    css::uno::Reference< XResultSet >               m_xCursor;
 
 private:
 
-    void                    loadView(const Reference< XFrame > & aFrame, const OUString& aURL,
+    void                    loadView(const css::uno::Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< XLoadEventListener > & aListener);
+                                const css::uno::Reference< XLoadEventListener > & aListener);
 
-    BibDataManager*         GetDataManager()const;
-    Reference< XNameAccess >            GetDataColumns() const;
-    Reference< XResultSet >             GetDataCursor() const;
-    Reference< sdb::XColumn >               GetIdentifierColumn() const;
+    BibDataManager*                      GetDataManager() const;
+    css::uno::Reference< XNameAccess >   GetDataColumns() const;
+    css::uno::Reference< XResultSet >    GetDataCursor() const;
+    css::uno::Reference< sdb::XColumn >  GetIdentifierColumn() const;
 
 public:
                             BibliographyLoader();
@@ -119,22 +119,22 @@ public:
     virtual sal_Bool SAL_CALL hasElements(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     //XPropertySet
-    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo(void) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) throw ( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const css::uno::Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const css::uno::Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
     static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static(void) throw(  );
 
-    friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
+    friend  css::uno::Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const css::uno::Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
 
     // XLoader
-    virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
+    virtual void            SAL_CALL load(const css::uno::Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                                const css::uno::Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void            SAL_CALL cancel(void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
@@ -146,7 +146,7 @@ BibliographyLoader::BibliographyLoader() :
 
 BibliographyLoader::~BibliographyLoader()
 {
-    Reference< lang::XComponent >  xComp(m_xCursor, UNO_QUERY);
+    css::uno::Reference< lang::XComponent >  xComp(m_xCursor, UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
     if(m_pBibMod)
@@ -154,7 +154,7 @@ BibliographyLoader::~BibliographyLoader()
 }
 
 
-Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & /*rSMgr*/ ) throw( Exception )
+css::uno::Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const css::uno::Reference< XMultiServiceFactory >  & /*rSMgr*/ ) throw( Exception )
 {
     return *(new BibliographyLoader);
 }
@@ -199,7 +199,7 @@ extern "C"
         if (BibliographyLoader::getImplementationName_Static().equalsAscii( pImplName ) )
         {
             // create the factory
-            Reference< XSingleServiceFactory > xFactory =
+            css::uno::Reference< XSingleServiceFactory > xFactory =
                 cppu::createSingleFactory(
                     static_cast<css::lang::XMultiServiceFactory *>(pServiceManager),
                     BibliographyLoader::getImplementationName_Static(),
@@ -220,9 +220,9 @@ void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeExcep
     //!
 }
 
-void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
+void BibliographyLoader::load(const css::uno::Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException, std::exception)
+        const css::uno::Reference< XLoadEventListener > & rListener) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
 
     SolarMutexGuard aGuard;
@@ -231,7 +231,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
 
     OUString aURLStr( rURL );
     OUString aPartName = aURLStr.getToken( 1, '/' );
-    Reference<XPropertySet> xPrSet(rFrame, UNO_QUERY);
+    css::uno::Reference<XPropertySet> xPrSet(rFrame, UNO_QUERY);
     if(xPrSet.is())
     {
         Any aTitle;
@@ -245,9 +245,9 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
 }
 
 
-void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUString& /*rURL*/,
+void BibliographyLoader::loadView(const css::uno::Reference< XFrame > & rFrame, const OUString& /*rURL*/,
         const Sequence< PropertyValue >& /*rArgs*/,
-        const Reference< XLoadEventListener > & rListener)
+        const css::uno::Reference< XLoadEventListener > & rListener)
 {
     SolarMutexGuard aGuard;
     //!
@@ -266,9 +266,9 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
             aBibDesc.sDataSource = aSources.getConstArray()[0];
     }
 
-    Reference< XForm > xForm = m_pDatMan->createDatabaseForm( aBibDesc );
+    css::uno::Reference< XForm > xForm = m_pDatMan->createDatabaseForm( aBibDesc );
 
-    Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
+    css::uno::Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
     assert(pParentComponent);
 
@@ -287,9 +287,9 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
 
     pMyWindow->createBottomFrame(pView);
 
-    Reference< awt::XWindow >  xWin ( pMyWindow->GetComponentInterface(), UNO_QUERY );
+    css::uno::Reference< awt::XWindow >  xWin ( pMyWindow->GetComponentInterface(), UNO_QUERY );
 
-    Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_pDatMan ) );
+    css::uno::Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_pDatMan ) );
 
     xCtrRef->attachFrame(rFrame);
     rFrame->setComponent( xWin, xCtrRef);
@@ -309,8 +309,8 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
         rListener->loadFinished( this );
 
     // attach menu bar
-    Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    css::uno::Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
+    css::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
     {
         try
@@ -339,13 +339,13 @@ BibDataManager* BibliographyLoader::GetDataManager()const
     return m_pDatMan;
 }
 
-Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
+css::uno::Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
 {
     if (!m_xColumns.is())
     {
-        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        Reference< XRowSet >  xRowSet(xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
-        Reference< XPropertySet >  xResultSetProps(xRowSet, UNO_QUERY);
+        css::uno::Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
+        css::uno::Reference< XRowSet >  xRowSet(xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
+        css::uno::Reference< XPropertySet >  xResultSetProps(xRowSet, UNO_QUERY);
         DBG_ASSERT(xResultSetProps.is() , "BibliographyLoader::GetDataCursor : invalid row set (no XResultSet or no XPropertySet) !");
 
         BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
@@ -379,7 +379,7 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
 
         if (!bSuccess)
         {
-            Reference< XComponent >  xSetComp(xRowSet, UNO_QUERY);
+            css::uno::Reference< XComponent >  xSetComp(xRowSet, UNO_QUERY);
             if (xSetComp.is())
                 xSetComp->dispose();
             xRowSet = NULL;
@@ -387,7 +387,7 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
         else
             ((BibliographyLoader*)this)->m_xCursor = xRowSet.get();
 
-        Reference< sdbcx::XColumnsSupplier >  xSupplyCols(m_xCursor, UNO_QUERY);
+        css::uno::Reference< sdbcx::XColumnsSupplier >  xSupplyCols(m_xCursor, UNO_QUERY);
         if (xSupplyCols.is())
             ((BibliographyLoader*)this)->m_xColumns = xSupplyCols->getColumns();
     }
@@ -395,22 +395,22 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
     return m_xColumns;
 }
 
-Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
+css::uno::Reference< sdb::XColumn >  BibliographyLoader::GetIdentifierColumn() const
 {
     BibDataManager* pDatMan = GetDataManager();
-    Reference< XNameAccess >  xColumns = GetDataColumns();
+    css::uno::Reference< XNameAccess >  xColumns = GetDataColumns();
     OUString sIdentifierColumnName = pDatMan->GetIdentifierMapping();
 
-    Reference< sdb::XColumn >  xReturn;
+    css::uno::Reference< sdb::XColumn >  xReturn;
     if (xColumns.is() && xColumns->hasByName(sIdentifierColumnName))
     {
-        xReturn = Reference< XColumn > (*(Reference< XInterface > *)
+        xReturn = css::uno::Reference< XColumn > (*(css::uno::Reference< XInterface > *)
                 xColumns->getByName(sIdentifierColumnName).getValue(), UNO_QUERY);
     }
     return xReturn;
 }
 
-Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
+css::uno::Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
 {
     if (!m_xCursor.is())
         GetDataColumns();
@@ -419,7 +419,7 @@ Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
     return m_xCursor;
 }
 
-static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
+static OUString lcl_AddProperty(css::uno::Reference< XNameAccess >  xColumns,
         const Mapping* pMapping, const OUString& rColumnName)
 {
     OUString sColumnName(rColumnName);
@@ -436,9 +436,9 @@ static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
     }
     OUString uColumnName(sColumnName);
     OUString uRet;
-    Reference< sdb::XColumn >  xCol;
+    css::uno::Reference< sdb::XColumn >  xCol;
     if (xColumns->hasByName(uColumnName))
-        xCol = Reference< sdb::XColumn > (*(Reference< XInterface > *)xColumns->getByName(uColumnName).getValue(), UNO_QUERY);
+        xCol = css::uno::Reference< sdb::XColumn > (*(css::uno::Reference< XInterface > *)xColumns->getByName(uColumnName).getValue(), UNO_QUERY);
     if (xCol.is())
         uRet = xCol->getString();
     return uRet;
@@ -451,9 +451,9 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
     try
     {
         BibDataManager* pDatMan = ((BibliographyLoader*)this)->GetDataManager();
-        Reference< XResultSet >  xCursor = GetDataCursor();
-        Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xCursor, UNO_QUERY);
-        Reference< XNameAccess >  xColumns;
+        css::uno::Reference< XResultSet >  xCursor = GetDataCursor();
+        css::uno::Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xCursor, UNO_QUERY);
+        css::uno::Reference< XNameAccess >  xColumns;
         if (!xSupplyCols.is())
             return aRet;
         xColumns = xSupplyCols->getColumns();
@@ -463,9 +463,9 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
 
         OUString sIdentifierMapping = pDatMan->GetIdentifierMapping();
         OUString sId = sIdentifierMapping;
-        Reference< sdb::XColumn >  xColumn;
+        css::uno::Reference< sdb::XColumn >  xColumn;
         if (xColumns->hasByName(sId))
-            xColumn = Reference< sdb::XColumn > (*(Reference< XInterface > *)xColumns->getByName(sId).getValue(), UNO_QUERY);
+            xColumn = css::uno::Reference< sdb::XColumn > (*(css::uno::Reference< XInterface > *)xColumns->getByName(sId).getValue(), UNO_QUERY);
         if (xColumn.is())
         {
             do
@@ -505,8 +505,8 @@ Sequence< OUString > BibliographyLoader::getElementNames(void) throw ( RuntimeEx
     int nRealNameCount = 0;
     try
     {
-        Reference< XResultSet >  xCursor(GetDataCursor());
-        Reference< sdb::XColumn >  xIdColumn(GetIdentifierColumn());
+        css::uno::Reference< XResultSet >  xCursor(GetDataCursor());
+        css::uno::Reference< sdb::XColumn >  xIdColumn(GetIdentifierColumn());
         if (xIdColumn.is()) // implies xCursor.is()
         {
             do
@@ -539,8 +539,8 @@ sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeExc
     bool bRet = false;
     try
     {
-        Reference< XResultSet >  xCursor = GetDataCursor();
-        Reference< sdb::XColumn >  xIdColumn = GetIdentifierColumn();
+        css::uno::Reference< XResultSet >  xCursor = GetDataCursor();
+        css::uno::Reference< sdb::XColumn >  xIdColumn = GetIdentifierColumn();
 
         if (xIdColumn.is())     // implies xCursor.is()
         {
@@ -570,12 +570,12 @@ Type  BibliographyLoader::getElementType(void) throw ( RuntimeException, std::ex
 
 sal_Bool BibliographyLoader::hasElements(void) throw ( RuntimeException, std::exception )
 {
-    Reference< XResultSet >  xCursor = GetDataCursor();
-    Reference< XNameAccess >  xColumns = GetDataColumns();
+    css::uno::Reference< XResultSet >  xCursor = GetDataCursor();
+    css::uno::Reference< XNameAccess >  xColumns = GetDataColumns();
     return xColumns.is() && (xColumns->getElementNames().getLength() != 0);
 }
 
-Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) throw
+css::uno::Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) throw
                                             ( RuntimeException, std::exception )
 {
     static const SfxItemPropertyMapEntry aBibProps_Impl[] =
@@ -583,7 +583,7 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) thro
         { OUString("BibliographyDataFieldNames"), 0, ::getCppuType((Sequence<PropertyValue>*)0), PropertyAttribute::READONLY, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
-    static Reference< XPropertySetInfo >  xRet =
+    static css::uno::Reference< XPropertySetInfo >  xRet =
         SfxItemPropertySet(aBibProps_Impl).getPropertySetInfo();
     return xRet;
 }
@@ -653,28 +653,28 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
 }
 
 void BibliographyLoader::addPropertyChangeListener(
-        const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
+        const OUString& /*PropertyName*/, const css::uno::Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no bound properties
 }
 
 void BibliographyLoader::removePropertyChangeListener(
-        const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
+        const OUString& /*PropertyName*/, const css::uno::Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no bound properties
 }
 
 void BibliographyLoader::addVetoableChangeListener(
-    const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
+    const OUString& /*PropertyName*/, const css::uno::Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no vetoable properties
 }
 
 void BibliographyLoader::removeVetoableChangeListener(
-    const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
+    const OUString& /*PropertyName*/, const css::uno::Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no vetoable properties

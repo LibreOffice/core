@@ -344,7 +344,7 @@ void ValueSet::Format()
     long        nOff;
     long        nNoneHeight;
     long        nNoneSpace;
-    ScrollBarPtr pDeletedScrollBar(NULL);
+    boost::scoped_ptr<ScrollBar> pDeletedScrollBar(NULL);
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )

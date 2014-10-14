@@ -488,7 +488,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     xPropSet->setPropertyValue( "Dropdown", aAny );
 
                     aControlName = "com.sun.star.form.control.ListBox";
-                    xLBModel = Reference< form::XBoundComponent >(xCtrModel, UNO_QUERY);
+                    xLBModel = css::uno::Reference< form::XBoundComponent >(xCtrModel, UNO_QUERY);
 
                 }
 
@@ -597,7 +597,7 @@ void BibGeneralPage::InitFixedTexts( void )
 
 void BibGeneralPage::focusGained(const awt::FocusEvent& rEvent) throw( uno::RuntimeException, std::exception )
 {
-    Reference<awt::XWindow> xCtrWin(rEvent.Source, UNO_QUERY );
+    css::uno::Reference<awt::XWindow> xCtrWin(rEvent.Source, UNO_QUERY );
     if(xCtrWin.is())
     {
         ::Size aOutSize = pScrolledWindow->getVisibleChildSize();
@@ -628,7 +628,7 @@ void BibGeneralPage::disposing(const lang::EventObject& /*Source*/) throw( uno::
 
 void BibGeneralPage::GetFocus()
 {
-    Reference< awt::XWindow >*  pxControl = aControls;
+    css::uno::Reference< awt::XWindow >*  pxControl = aControls;
 
     for( int i = FIELD_COUNT ; i ; --i, ++pxControl )
     {
