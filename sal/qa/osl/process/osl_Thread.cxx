@@ -1590,7 +1590,7 @@ namespace osl_Thread
         void cpu_count_001()
         {
             sal_uInt32 nThreads = osl_getCPUThreadCount();
-            CPPUNIT_ASSERT(false && nThreads > 0);
+            CPPUNIT_ASSERT(nThreads > 0);
         }
 
         CPPUNIT_TEST_SUITE(cpu_count);
@@ -1734,6 +1734,7 @@ namespace osl_Thread
         CPPUNIT_TEST_SUITE_END();
     }; // class schedule
 
+#if 0 // FIXME: these were never registered & are => un-tested
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::create, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::createSuspended, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::suspend, "osl_Thread");
@@ -1748,6 +1749,9 @@ namespace osl_Thread
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::wait, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::yield, "osl_Thread");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::schedule, "osl_Thread");
+#endif
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Thread::cpu_count, "osl_Thread");
+    CPPUNIT_REGISTRY_ADD_TO_DEFAULT( "osl_Thread" );
 } // namespace osl_Thread
 
 // destroy function when the binding thread terminate
