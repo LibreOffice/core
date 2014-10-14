@@ -296,8 +296,7 @@ bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
         {
             aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
-            if( mpViewShell )
-                aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
+            aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) );
 
             rtl::Reference<FuPoor> xFunc( mpViewShell->GetCurrentFunction() );
             if( xFunc.is() )
