@@ -1041,4 +1041,17 @@ rtl_TextEncoding osl_setThreadTextEncoding(rtl_TextEncoding Encoding)
     return oldThreadEncoding;
 }
 
+sal_uInt32 SAL_CALL osl_getCPUThreadCount(void)
+{
+#if defined(_SC_NPROCESSORS_ONLN)
+    sal_uInt32 nProcessors;
+
+    nProcessors = sysconf (_SC_NPROCESSORS_ONLN);
+    if (nProcessors > 0)
+        return nProcessors;
+// FIXME: other Unixes can use sysctl for this.
+#endif
+    return 1; // spot the Raspberry Pi
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

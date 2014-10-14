@@ -590,4 +590,27 @@ rtl_TextEncoding SAL_CALL osl_setThreadTextEncoding( rtl_TextEncoding Encoding )
     return oldEncoding;
 }
 
+sal_uInt32 SAL_CALL osl_getCPUThreadCount(void)
+{
+    DWORD_PTR nProcessCPUMask = 0, nDummy = 0;
+
+    if (GetProcessAffinityMask (GetCurrentProcess (),
+                                &nProcessCPUMask, &nDummy))
+    {
+        sal_uInt32 nThreads = 0;
+
+        // nProcessCPUMask has a bit set for each CPU.
+        while (nProcessCPUMask > 0)
+        {
+            nThreads++;
+            nProcessCPUMask >>= 1;
+        }
+
+        if (nThreads > 0)
+            return nThreads;
+    }
+
+    return 1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

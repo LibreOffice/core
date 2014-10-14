@@ -163,6 +163,15 @@ SAL_DLLPUBLIC void SAL_CALL osl_yieldThread(void);
 */
 SAL_DLLPUBLIC void SAL_CALL osl_setThreadName(char const * name);
 
+/** Fetches the number of runnable threads for the CPU
+
+    @since LibreOffice 4.4
+
+    @return number of threads; how wide we should parallelize if we can,
+    will always return a value greater than zero.
+*/
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getCPUThreadCount(void);
+
 /* Callback when data stored in a thread key is no longer needed */
 
 typedef void (SAL_CALL *oslThreadKeyCallbackFunction)(void *);
