@@ -83,8 +83,6 @@ FillBundle& FillBundle::operator=( FillBundle& rSource )
     return *this;
 };
 
-
-
 FontEntry::FontEntry() :
     pFontName       ( NULL ),
     eCharSetType    ( CST_CCOMPLETE ),
@@ -95,11 +93,9 @@ FontEntry::FontEntry() :
 
 FontEntry::~FontEntry()
 {
-    delete pFontName;
+    delete [] pFontName;
     delete pCharSetValue;
 }
-
-
 
 CGMFList::CGMFList() :
     nFontNameCount      ( 0 ),
