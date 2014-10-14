@@ -60,7 +60,9 @@
 #include <salhelper/thread.hxx>
 #include <osl/conditn.hxx>
 
+#include <algorithm>
 #include <queue>
+#include <thread>
 #include <boost/scoped_ptr.hpp>
 
 #include <oox/ole/vbaproject.hxx>
@@ -296,7 +298,7 @@ public:
 
 void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
-    sal_Int32 nThreads = std::min( rSheets.size(), (size_t) 4 /* FIXME: ncpus/2 */ );
+    sal_Int32 nThreads = std::min( rSheets.size(), (size_t) std::max(std::thread::hardware_concurrency(), 1U) );
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
