@@ -209,14 +209,13 @@ ScDataFormDlg::~ScDataFormDlg()
 
 void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
 {
-    OUString  aFieldName;
     for (sal_uInt16 i = 0; i < aColLength; ++i)
     {
         if (!maEdits.is_null(i))
         {
-            if (nCurrentRow<=nEndRow)
+            if (nCurrentRow<=nEndRow && pDoc)
             {
-                aFieldName = pDoc->GetString(i + nStartCol, nCurrentRow, nTab);
+                OUString  aFieldName(pDoc->GetString(i + nStartCol, nCurrentRow, nTab));
                 maEdits[i].SetText(aFieldName);
             }
             else
