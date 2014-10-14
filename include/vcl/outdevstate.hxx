@@ -50,8 +50,6 @@ enum class PushFlags {
     TEXTLANGUAGE    = 0x1000,
     OVERLINECOLOR   = 0x2000,
     ALL             = 0xFFFF
-
-    //bool operator bool() { return static_cast<sal_uInt16>(*this) != 0; }
 };
 
 namespace o3tl
