@@ -21,41 +21,41 @@ package com.sun.star.wizards.ui;
 public interface UIConsts
 {
 
-    public static final int RID_COMMON = 500;
-    public static final int RID_DB_COMMON = 1000;
-    public static final int RID_FORM = 2200;
-    public static final int RID_QUERY = 2300;
-    public static final int RID_REPORT = 2400;
-    public static final int RID_TABLE = 2600;
-    public static final int RID_IMG_REPORT = 1000;
-    public static final int RID_IMG_FORM = 1100;
-    public static final int RID_IMG_WEB = 1200;
-    public static final Integer INVISIBLESTEP = 99;
-    public static final String INFOIMAGEURL = "private:resource/dbu/image/19205";
-    public static final String INFOIMAGEURL_HC = "private:resource/dbu/image/19230";
+    int RID_COMMON = 500;
+    int RID_DB_COMMON = 1000;
+    int RID_FORM = 2200;
+    int RID_QUERY = 2300;
+    int RID_REPORT = 2400;
+    int RID_TABLE = 2600;
+    int RID_IMG_REPORT = 1000;
+    int RID_IMG_FORM = 1100;
+    int RID_IMG_WEB = 1200;
+    Integer INVISIBLESTEP = 99;
+    String INFOIMAGEURL = "private:resource/dbu/image/19205";
+    String INFOIMAGEURL_HC = "private:resource/dbu/image/19230";
     /**
      * The tabindex of the navigation buttons in a wizard must be assigned a very
      * high tabindex because on every step their taborder must appear at the end
      */
-    public static final short SOFIRSTWIZARDNAVITABINDEX = 30000;
-    public static final Integer INTEGER_8 = 8;
-    public static final Integer INTEGER_12 = 12;
-    public static final Integer INTEGER_14 = 14;
-    public static final Integer INTEGER_16 = 16;
-    public static final Integer INTEGER_40 = 40;
-    public static final Integer INTEGER_50 = 50;
+    short SOFIRSTWIZARDNAVITABINDEX = 30000;
+    Integer INTEGER_8 = 8;
+    Integer INTEGER_12 = 12;
+    Integer INTEGER_14 = 14;
+    Integer INTEGER_16 = 16;
+    Integer INTEGER_40 = 40;
+    Integer INTEGER_50 = 50;
     /**Steps of the QueryWizard
      *
      */
-    public static final int SOFIELDSELECTIONPAGE = 1;
-    public static final int SOSORTINGPAGE = 2;
-    public static final int SOFILTERPAGE = 3;
-    public static final int SOAGGREGATEPAGE = 4;
-    public static final int SOGROUPSELECTIONPAGE = 5;
-    public static final int SOGROUPFILTERPAGE = 6;
-    public static final int SOTITLESPAGE = 7;
-    public static final int SOSUMMARYPAGE = 8;
-    public static final Integer[] INTEGERS = new Integer[]
+    int SOFIELDSELECTIONPAGE = 1;
+    int SOSORTINGPAGE = 2;
+    int SOFILTERPAGE = 3;
+    int SOAGGREGATEPAGE = 4;
+    int SOGROUPSELECTIONPAGE = 5;
+    int SOGROUPFILTERPAGE = 6;
+    int SOTITLESPAGE = 7;
+    int SOSUMMARYPAGE = 8;
+    Integer[] INTEGERS = new Integer[]
     {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
     };
