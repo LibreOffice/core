@@ -1388,7 +1388,7 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const S
     sal_uInt32 nIndex = 0;
     double nVal = 0;
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-    pNumberFormatter->IsNumberFormat(aText, nIndex, nVal);
+    (void)pNumberFormatter->IsNumberFormat(aText, nIndex, nVal);
     pEntry->SetValue(nVal);
 
     switch(nPos)
