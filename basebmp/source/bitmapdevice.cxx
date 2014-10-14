@@ -1944,7 +1944,8 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                                                    boost::shared_array< sal_uInt8 >           pMem,
                                                    PaletteMemorySharedVector                  pPal,
                                                    const basegfx::B2IBox*                     pSubset,
-                                                   const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
+                                                   const IBitmapDeviceDamageTrackerSharedPtr& rDamage,
+                                                   bool bBlack = true)
 {
     OSL_ASSERT(rSize.getX() > 0 && rSize.getY() > 0);
 
@@ -1990,7 +1991,10 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
             &rtl_freeMemory );
         if (pMem.get() == 0 && nMemSize != 0)
             return BitmapDeviceSharedPtr();
-        memset(pMem.get(), 0, nMemSize);
+        if (bBlack)
+            memset(pMem.get(), 0, nMemSize);
+        else
+            memset(pMem.get(), 0xFF, nMemSize);
     }
 
     sal_uInt8* pFirstScanline = nScanlineStride < 0 ?
@@ -2129,9 +2133,10 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
                                               boost::shared_array< sal_uInt8 >           pMem,
                                               PaletteMemorySharedVector                  pPal,
                                               const basegfx::B2IBox*                     pSubset,
-                                              const IBitmapDeviceDamageTrackerSharedPtr& rDamage )
+                                              const IBitmapDeviceDamageTrackerSharedPtr& rDamage,
+                                              bool bBlack = true)
 {
-    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, bTopDown, nScanlineFormat, pMem, pPal, pSubset, rDamage ) );
+    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, bTopDown, nScanlineFormat, pMem, pPal, pSubset, rDamage, bBlack ) );
 
 #ifdef SAL_LOG_INFO
     std::ostringstream subset;
@@ -2192,6 +2197,20 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
                                    rPalette,
                                    NULL,
                                    IBitmapDeviceDamageTrackerSharedPtr() );
+}
+
+BitmapDeviceSharedPtr createClipDevice( const basegfx::B2IVector&        rSize )
+{
+    BitmapDeviceSharedPtr xClip(
+             createBitmapDeviceImpl( rSize,
+                                     false, /* bTopDown */
+                                     basebmp::FORMAT_ONE_BIT_MSB_GREY,
+                                     boost::shared_array< sal_uInt8 >(),
+                                     PaletteMemorySharedVector(),
+                                     NULL,
+                                     IBitmapDeviceDamageTrackerSharedPtr(),
+                                     false /* white */) );
+    return xClip;
 }
 
 BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
