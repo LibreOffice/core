@@ -148,6 +148,12 @@ public:
     BadSeek() : std::runtime_error("Lotus Word Pro Bad Seek") { }
 };
 
+class BadRead: public std::runtime_error
+{
+public:
+    BadRead() : std::runtime_error("Lotus Word Pro Bad Read") { }
+};
+
 class BadDecompress : public std::runtime_error
 {
 public:

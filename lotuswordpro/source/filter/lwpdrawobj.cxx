@@ -505,7 +505,10 @@ void LwpDrawPolyLine::Read()
     m_pStream->ReadUChar( m_aPolyLineRec.aPenColor.unused );
     m_pStream->ReadUInt16( m_aPolyLineRec.nNumPoints );
 
-    m_pVector= new SdwPoint [m_aPolyLineRec.nNumPoints];
+    if (m_aPolyLineRec.nNumPoints > m_pStream->remainingSize() / 4)
+        throw BadRead();
+
+    m_pVector= new SdwPoint[m_aPolyLineRec.nNumPoints];
 
     for (sal_uInt16 nC = 0; nC < m_aPolyLineRec.nNumPoints; nC++)
     {
