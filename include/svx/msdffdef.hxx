@@ -572,8 +572,7 @@ enum DFF_TextHeader {
 #define DFF_Prop_metroBlob					937 // XML ZipPackage*
 
 // linchpin: the shape type
-typedef enum
-   {
+enum MSO_SPT {
    mso_sptMin = 0,
    mso_sptNotPrimitive = mso_sptMin,
    mso_sptRectangle = 1,
@@ -782,7 +781,7 @@ typedef enum
    mso_sptTearDrop = 203,
    mso_sptMax = 0x0FFF,
    mso_sptNil = mso_sptMax
- } MSO_SPT;
+};
 
 // different enums from the OfficeDraw documentation, Appendix D - beginning
 
@@ -1070,7 +1069,7 @@ enum MSO_LineCap {
 
 // BStore-Container
 // FBSE - File Blip Store Entry
-typedef struct _MSOF_BSE {
+struct MSOF_BSE {
    sal_uInt8      btWin32;    // Required type on Win32
    sal_uInt8      btMacOS;    // Required type on Mac
    sal_uInt8      rgbUid[16]; // Identifier of blip
@@ -1082,15 +1081,15 @@ typedef struct _MSOF_BSE {
    sal_uInt8      cbName;     // length of the blip name
    sal_uInt8      unused2;    // for the future
    sal_uInt8      unused3;    // for the future
-} MSO_FBSE;
+};
 
-typedef enum {
+enum MSO_BLIPUSAGE {
    mso_blipUsageDefault,  // All non-texture fill blips get this.
    mso_blipUsageTexture,
    mso_blipUsageMax = 255 // Since this is stored in a byte
-} MSO_BLIPUSAGE;
+};
 
-typedef enum {                 // GEL provided types...
+enum MSO_BLIPTYPE {            // GEL provided types...
    mso_blipERROR = 0,          // An error occurred during loading
    mso_blipUNKNOWN,            // An unknown blip type
    mso_blipEMF,                // Windows Enhanced Metafile
@@ -1101,9 +1100,9 @@ typedef enum {                 // GEL provided types...
    mso_blipDIB,                // Windows DIB
    mso_blipFirstClient = 32,   // First client defined blip type
    mso_blipLastClient  = 255   // Last client defined blip type
-} MSO_BLIPTYPE;
+};
 
-typedef enum {
+enum MSO_BI {
    mso_biUNKNOWN = 0,
    mso_biWMF  = 0x216,      // Metafile header then compressed WMF
    mso_biEMF  = 0x3D4,      // Metafile header then compressed EMF
@@ -1113,21 +1112,21 @@ typedef enum {
    mso_biJPEG = mso_biJFIF,
    mso_biDIB  = 0x7A8,      // One byte tag then DIB data
    mso_biClient=0x800       // Clients should set this bit
-} MSO_BI;                     // Blip signature as encoded in the MSO_FBH.inst
+};                          // Blip signature as encoded in the MSO_FBH.inst
 
-typedef enum {
+enum MSO_BLIPCOMPRESSION {
    mso_compressionDeflate = 0,
    mso_compressionNone = 254,    // Used only if compression fails
    mso_compressionTest = 255     // For testing only
-} MSO_BLIPCOMPRESSION;
+};
 
-typedef enum {
+enum MSO_BLIPFILTER {
    mso_filterAdaptive = 0,       // PNG type - not used/supported for metafile
    mso_filterNone = 254,
    mso_filterTest = 255          // For testing only
-} MSO_BLIPFILTER;
+};
 
-typedef enum {
+enum MSO_SYSCOLORINDEX {
     mso_syscolorButtonFace,             // COLOR_BTNFACE
     mso_syscolorWindowText,             // COLOR_WINDOWTEXT
     mso_syscolorMenu,                   // COLOR_MENU
@@ -1177,7 +1176,7 @@ typedef enum {
     mso_colorGray             =0x8000,  // Make the color gray (before the above!)
     mso_colorBParamMask       =0xFF0000,// Parameter used as above
     mso_colorBParamShift = 16           // To extract the parameter value
-} MSO_SYSCOLORINDEX;
+};
 
 //ALT_TXT_MSINTEROP
 #define MSPROP_DESCRIPTION_MAX_LEN  4096
