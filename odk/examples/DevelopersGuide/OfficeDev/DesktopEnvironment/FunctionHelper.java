@@ -111,14 +111,12 @@ public class FunctionHelper
         {
             // Any UNO method of this scope can throw this exception.
             // Reset the return value only.
-            aURL = null;
         }
         catch(com.sun.star.uno.Exception exUno)
         {
             // "createInstance()" method of used service manager can throw it.
             // Then it wasn't possible to get the URL transformer.
             // Return default instead of really parsed URL.
-            aURL = null;
         }
 
         return aURL;
