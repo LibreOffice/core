@@ -43,8 +43,8 @@ void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
 }
 
 struct ScaleContext {
-    BitmapReadAccess *mpSrc;   // was pAcc
-    BitmapWriteAccess *mpDest; // was pWAcc
+    BitmapReadAccess  *mpSrc;
+    BitmapWriteAccess *mpDest;
     long mnSrcW, mnDestW;
     long mnSrcH, mnDestH;
     bool mbHMirr, mbVMirr;
@@ -58,7 +58,7 @@ struct ScaleContext {
                   long nSrcH, long nDestH,
                   bool bHMirr, bool bVMirr)
         : mpSrc( pSrc ), mpDest( pDest )
-        , mnSrcW( nSrcW ), mnDestW( nDestH )
+        , mnSrcW( nSrcW ), mnDestW( nDestW )
         , mnSrcH( nSrcH ), mnDestH( nDestH )
         , mbHMirr( bHMirr ), mbVMirr( bVMirr )
         , mpMapIX( new long[ nDestW ] )
@@ -71,34 +71,26 @@ struct ScaleContext {
     }
 };
 
-void scalePallete8bit(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                      long nStartX, long nEndX, long nStartY, long nEndY,
-                      bool bVMirr, bool bHMirr)
+void scalePallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
     for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTempY = pMapIY[ nY ];
-        long nTempFY = pMapFY[ nY ];
-        Scanline pLine0 = pAcc->GetScanline( nTempY );
-        Scanline pLine1 = pAcc->GetScanline( ++nTempY );
+        long nTempY = rCtx.mpMapIY[ nY ];
+        long nTempFY = rCtx.mpMapFY[ nY ];
+        Scanline pLine0 = rCtx.mpSrc->GetScanline( nTempY );
+        Scanline pLine1 = rCtx.mpSrc->GetScanline( ++nTempY );
 
         for(long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nTempX = pMapIX[ nX ];
-            long nTempFX = pMapFX[ nX ];
+            long nTempX = rCtx.mpMapIX[ nX ];
+            long nTempFX = rCtx.mpMapFX[ nX ];
 
-            const BitmapColor& rCol0 = pAcc->GetPaletteColor( pLine0[ nTempX ] );
-            const BitmapColor& rCol2 = pAcc->GetPaletteColor( pLine1[ nTempX ] );
-            const BitmapColor& rCol1 = pAcc->GetPaletteColor( pLine0[ ++nTempX ] );
-            const BitmapColor& rCol3 = pAcc->GetPaletteColor( pLine1[ nTempX ] );
+            const BitmapColor& rCol0 = rCtx.mpSrc->GetPaletteColor( pLine0[ nTempX ] );
+            const BitmapColor& rCol2 = rCtx.mpSrc->GetPaletteColor( pLine1[ nTempX ] );
+            const BitmapColor& rCol1 = rCtx.mpSrc->GetPaletteColor( pLine0[ ++nTempX ] );
+            const BitmapColor& rCol3 = rCtx.mpSrc->GetPaletteColor( pLine1[ nTempX ] );
 
             sal_uInt8 cR0 = MAP( rCol0.GetRed(), rCol1.GetRed(), nTempFX );
             sal_uInt8 cG0 = MAP( rCol0.GetGreen(), rCol1.GetGreen(), nTempFX );
@@ -111,42 +103,33 @@ void scalePallete8bit(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scalePalleteGeneral(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                         long nStartX, long nEndX, long nStartY, long nEndY,
-                         bool bVMirr, bool bHMirr)
-
+void scalePalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
     for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTempY = pMapIY[ nY ];
-        long nTempFY = pMapFY[ nY ];
+        long nTempY = rCtx.mpMapIY[ nY ];
+        long nTempFY = rCtx.mpMapFY[ nY ];
 
         for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nTempX = pMapIX[ nX ];
-            long nTempFX = pMapFX[ nX ];
+            long nTempX = rCtx.mpMapIX[ nX ];
+            long nTempFX = rCtx.mpMapFX[ nX ];
 
-            BitmapColor aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, nTempX ) );
-            BitmapColor aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, ++nTempX ) );
+            BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor( rCtx.mpSrc->GetPixelIndex( nTempY, nTempX ) );
+            BitmapColor aCol1 = rCtx.mpSrc->GetPaletteColor( rCtx.mpSrc->GetPixelIndex( nTempY, ++nTempX ) );
             sal_uInt8 cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
             sal_uInt8 cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
             sal_uInt8 cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
 
-            aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( ++nTempY, nTempX ) );
-            aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY--, --nTempX ) );
+            aCol1 = rCtx.mpSrc->GetPaletteColor( rCtx.mpSrc->GetPixelIndex( ++nTempY, nTempX ) );
+            aCol0 = rCtx.mpSrc->GetPaletteColor( rCtx.mpSrc->GetPixelIndex( nTempY--, --nTempX ) );
             sal_uInt8 cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
             sal_uInt8 cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
             sal_uInt8 cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
@@ -154,34 +137,26 @@ void scalePalleteGeneral(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scale24bitBGR(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                         long nStartX, long nEndX, long nStartY, long nEndY,
-                         bool bVMirr, bool bHMirr)
+void scale24bitBGR(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
     for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTempY = pMapIY[ nY ];
-        long nTempFY = pMapFY[ nY ];
-        Scanline pLine0 = pAcc->GetScanline( nTempY );
-        Scanline pLine1 = pAcc->GetScanline( ++nTempY );
+        long nTempY = rCtx.mpMapIY[ nY ];
+        long nTempFY = rCtx.mpMapFY[ nY ];
+        Scanline pLine0 = rCtx.mpSrc->GetScanline( nTempY );
+        Scanline pLine1 = rCtx.mpSrc->GetScanline( ++nTempY );
 
         for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nOff = 3L * pMapIX[ nX ];
-            long nTempFX = pMapFX[ nX ];
+            long nOff = 3L * rCtx.mpMapIX[ nX ];
+            long nTempFX = rCtx.mpMapFX[ nX ];
 
             Scanline pTmp0 = pLine0 + nOff ;
             Scanline pTmp1 = pTmp0 + 3L;
@@ -201,34 +176,26 @@ void scale24bitBGR(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scale24bitRGB(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                   long nStartX, long nEndX, long nStartY, long nEndY,
-                   bool bVMirr, bool bHMirr)
+void scale24bitRGB(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
     for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTempY = pMapIY[ nY ];
-        long nTempFY = pMapFY[ nY ];
-        Scanline pLine0 = pAcc->GetScanline( nTempY );
-        Scanline pLine1 = pAcc->GetScanline( ++nTempY );
+        long nTempY = rCtx.mpMapIY[ nY ];
+        long nTempFY = rCtx.mpMapFY[ nY ];
+        Scanline pLine0 = rCtx.mpSrc->GetScanline( nTempY );
+        Scanline pLine1 = rCtx.mpSrc->GetScanline( ++nTempY );
 
         for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nOff = 3L * pMapIX[ nX ];
-            long nTempFX = pMapFX[ nX ];
+            long nOff = 3L * rCtx.mpMapIX[ nX ];
+            long nTempFX = rCtx.mpMapFX[ nX ];
 
             Scanline pTmp0 = pLine0 + nOff;
             Scanline pTmp1 = pTmp0 + 3L;
@@ -248,41 +215,33 @@ void scale24bitRGB(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scaleNonPalleteGeneral(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                            long nStartX, long nEndX, long nStartY, long nEndY,
-                            bool bVMirr, bool bHMirr)
+void scaleNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
     for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTempY = pMapIY[ nY ];
-        long nTempFY = pMapFY[ nY ];
+        long nTempY = rCtx.mpMapIY[ nY ];
+        long nTempFY = rCtx.mpMapFY[ nY ];
 
         for( long nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nTempX = pMapIX[ nX ];
-            long nTempFX = pMapFX[ nX ];
+            long nTempX = rCtx.mpMapIX[ nX ];
+            long nTempFX = rCtx.mpMapFX[ nX ];
 
-            BitmapColor aCol0 = pAcc->GetPixel( nTempY, nTempX );
-            BitmapColor aCol1 = pAcc->GetPixel( nTempY, ++nTempX );
+            BitmapColor aCol0 = rCtx.mpSrc->GetPixel( nTempY, nTempX );
+            BitmapColor aCol1 = rCtx.mpSrc->GetPixel( nTempY, ++nTempX );
             sal_uInt8 cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
             sal_uInt8 cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
             sal_uInt8 cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
 
-            aCol1 = pAcc->GetPixel( ++nTempY, nTempX );
-            aCol0 = pAcc->GetPixel( nTempY--, --nTempX );
+            aCol1 = rCtx.mpSrc->GetPixel( ++nTempY, nTempX );
+            aCol0 = rCtx.mpSrc->GetPixel( nTempY--, --nTempX );
             sal_uInt8 cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
             sal_uInt8 cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
             sal_uInt8 cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
@@ -290,58 +249,49 @@ void scaleNonPalleteGeneral(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-               long nStartX, long nEndX, long nStartY, long nEndY,
-               bool bVMirr, bool bHMirr)
+void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
-
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
     for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTop = bVMirr ? ( nY + 1 ) : nY;
-        long nBottom = bVMirr ? nY : ( nY + 1 ) ;
+        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
         long nLineStart, nLineRange;
         if( nY == nEndY )
         {
-            nLineStart = pMapIY[ nY ];
+            nLineStart = rCtx.mpMapIY[ nY ];
             nLineRange = 0;
         }
         else
         {
-            nLineStart = pMapIY[ nTop ] ;
-            nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+            nLineStart = rCtx.mpMapIY[ nTop ] ;
+            nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
         for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = bHMirr ? ( nX + 1 ) : nX;
-            long nRight = bHMirr ? nX : ( nX + 1 ) ;
+            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
             long nRowStart;
             long nRowRange;
             if( nX == nEndX )
             {
-                nRowStart = pMapIX[ nX ];
+                nRowStart = rCtx.mpMapIX[ nX ];
                 nRowRange = 0;
             }
             else
             {
-                nRowStart = pMapIX[ nLeft ];
-                nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                nRowStart = rCtx.mpMapIX[ nLeft ];
+                nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
             long nSumR = 0;
@@ -351,7 +301,7 @@ void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 
             for(int i = 0; i<= nLineRange; i++)
             {
-                Scanline pTmpY = pAcc->GetScanline( nLineStart + i );
+                Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 long nSumRowR = 0;
                 long nSumRowG = 0;
                 long nSumRowB = 0;
@@ -359,7 +309,7 @@ void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 
                 for(int j = 0; j <= nRowRange; j++)
                 {
-                    const BitmapColor& rCol = pAcc->GetPaletteColor( pTmpY[ nRowStart + j ] );
+                    const BitmapColor& rCol = rCtx.mpSrc->GetPaletteColor( pTmpY[ nRowStart + j ] );
 
                     if(nX == nEndX )
                     {
@@ -370,7 +320,7 @@ void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     }
                     else if( j == 0 )
                     {
-                        long nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *rCol.GetBlue()) ;
                         nSumRowG += ( nWeightX *rCol.GetGreen()) ;
                         nSumRowR += ( nWeightX *rCol.GetRed()) ;
@@ -378,7 +328,7 @@ void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     }
                     else if ( nRowRange == j )
                     {
-                        long nWeightX = pMapFX[ nRight ] ;
+                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *rCol.GetBlue() );
                         nSumRowG += ( nWeightX *rCol.GetGreen() );
                         nSumRowR += ( nWeightX *rCol.GetRed() );
@@ -397,11 +347,11 @@ void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
-                    nWeightY = nMax - pMapFY[ nTop ];
+                    nWeightY = nMax - rCtx.mpMapFY[ nTop ];
                 else if( nLineRange == 1 )
-                    nWeightY = pMapFY[ nTop ];
+                    nWeightY = rCtx.mpMapFY[ nTop ];
                 else if ( nLineRange == i )
-                    nWeightY = pMapFY[ nBottom ];
+                    nWeightY = rCtx.mpMapFY[ nBottom ];
 
                 if (nTotalWeightX)
                 {
@@ -424,57 +374,48 @@ void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             }
 
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scalePalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                          long nStartX, long nEndX, long nStartY, long nEndY,
-                          bool bVMirr, bool bHMirr)
+void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
-
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
     for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTop = bVMirr ? ( nY + 1 ) : nY;
-        long nBottom = bVMirr ? nY : ( nY + 1 ) ;
+        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
         long nLineStart, nLineRange;
         if( nY ==nEndY )
         {
-            nLineStart = pMapIY[ nY ];
+            nLineStart = rCtx.mpMapIY[ nY ];
             nLineRange = 0;
         }
         else
         {
-            nLineStart = pMapIY[ nTop ] ;
-            nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+            nLineStart = rCtx.mpMapIY[ nTop ] ;
+            nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
         for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = bHMirr ? ( nX + 1 ) : nX;
-            long nRight = bHMirr ? nX : ( nX + 1 ) ;
+            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
             long nRowStart, nRowRange;
             if( nX == nEndX )
             {
-                nRowStart = pMapIX[ nX ];
+                nRowStart = rCtx.mpMapIX[ nX ];
                 nRowRange = 0;
             }
             else
             {
-                nRowStart = pMapIX[ nLeft ];
-                nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                nRowStart = rCtx.mpMapIX[ nLeft ];
+                nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
             long nSumR = 0;
@@ -491,7 +432,7 @@ void scalePalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 
                 for(int j = 0; j <= nRowRange; j++)
                 {
-                    BitmapColor aCol0 = pAcc->GetPaletteColor ( pAcc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
+                    BitmapColor aCol0 = rCtx.mpSrc->GetPaletteColor ( rCtx.mpSrc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
 
                     if(nX == nEndX )
                     {
@@ -504,7 +445,7 @@ void scalePalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     else if( j == 0 )
                     {
 
-                        long nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue()) ;
                         nSumRowG += ( nWeightX *aCol0.GetGreen()) ;
                         nSumRowR += ( nWeightX *aCol0.GetRed()) ;
@@ -513,7 +454,7 @@ void scalePalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     else if ( nRowRange == j )
                     {
 
-                        long nWeightX = pMapFX[ nRight ] ;
+                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue() );
                         nSumRowG += ( nWeightX *aCol0.GetGreen() );
                         nSumRowR += ( nWeightX *aCol0.GetRed() );
@@ -533,11 +474,11 @@ void scalePalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
-                    nWeightY = nMax - pMapFY[ nTop ];
+                    nWeightY = nMax - rCtx.mpMapFY[ nTop ];
                 else if( nLineRange == 1 )
-                    nWeightY = pMapFY[ nTop ];
+                    nWeightY = rCtx.mpMapFY[ nTop ];
                 else if ( nLineRange == i )
-                    nWeightY = pMapFY[ nBottom ];
+                    nWeightY = rCtx.mpMapFY[ nBottom ];
 
                 if (nTotalWeightX)
                 {
@@ -560,59 +501,50 @@ void scalePalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             }
 
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scale24bitBGR2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                    long nStartX, long nEndX, long nStartY, long nEndY,
-                    bool bVMirr, bool bHMirr)
+void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
-
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
     for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTop = bVMirr ? ( nY + 1 ) : nY;
-        long nBottom = bVMirr ? nY : ( nY + 1 ) ;
+        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
         long nLineStart;
         long nLineRange;
         if( nY ==nEndY )
         {
-            nLineStart = pMapIY[ nY ];
+            nLineStart = rCtx.mpMapIY[ nY ];
             nLineRange = 0;
         }
         else
         {
-            nLineStart = pMapIY[ nTop ] ;
-            nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+            nLineStart = rCtx.mpMapIY[ nTop ] ;
+            nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
         for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = bHMirr ? ( nX + 1 ) : nX;
-            long nRight = bHMirr ? nX : ( nX + 1 ) ;
+            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
             long nRowStart;
             long nRowRange;
             if( nX == nEndX )
             {
-                nRowStart = pMapIX[ nX ];
+                nRowStart = rCtx.mpMapIX[ nX ];
                 nRowRange = 0;
             }
             else
             {
-                nRowStart = pMapIX[ nLeft ];
-                nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                nRowStart = rCtx.mpMapIX[ nLeft ];
+                nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
             long nSumR = 0;
@@ -622,7 +554,7 @@ void scale24bitBGR2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 
             for(int i = 0; i<= nLineRange; i++)
             {
-                Scanline pTmpY = pAcc->GetScanline( nLineStart + i );
+                Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 Scanline pTmpX = pTmpY + 3L * nRowStart;
                 long nSumRowR = 0;
                 long nSumRowG = 0;
@@ -640,7 +572,7 @@ void scale24bitBGR2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     }
                     else if( j == 0 )
                     {
-                        long nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowR += ( nWeightX *( *pTmpX )) ;pTmpX++;
@@ -648,7 +580,7 @@ void scale24bitBGR2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     }
                     else if ( nRowRange == j )
                     {
-                        long nWeightX = pMapFX[ nRight ] ;
+                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowR += ( nWeightX *( *pTmpX ) );pTmpX++;
@@ -667,11 +599,11 @@ void scale24bitBGR2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
-                    nWeightY = nMax - pMapFY[ nTop ];
+                    nWeightY = nMax - rCtx.mpMapFY[ nTop ];
                 else if( nLineRange == 1 )
-                    nWeightY = pMapFY[ nTop ];
+                    nWeightY = rCtx.mpMapFY[ nTop ];
                 else if ( nLineRange == i )
-                    nWeightY = pMapFY[ nBottom ];
+                    nWeightY = rCtx.mpMapFY[ nBottom ];
 
                 if (nTotalWeightX)
                 {
@@ -692,57 +624,48 @@ void scale24bitBGR2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 nSumB /= nTotalWeightY;
             }
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scale24bitRGB2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                    long nStartX, long nEndX, long nStartY, long nEndY,
-                    bool bVMirr, bool bHMirr)
+void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
-
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
     for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTop = bVMirr ? ( nY + 1 ) : nY;
-        long nBottom = bVMirr ? nY : ( nY + 1 ) ;
+        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
         long nLineStart, nLineRange;
         if( nY ==nEndY )
         {
-            nLineStart = pMapIY[ nY ];
+            nLineStart = rCtx.mpMapIY[ nY ];
             nLineRange = 0;
         }
         else
         {
-            nLineStart = pMapIY[ nTop ] ;
-            nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+            nLineStart = rCtx.mpMapIY[ nTop ] ;
+            nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
         for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = bHMirr ? ( nX + 1 ) : nX;
-            long nRight = bHMirr ? nX : ( nX + 1 ) ;
+            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
             long nRowStart, nRowRange;
             if( nX == nEndX )
             {
-                nRowStart = pMapIX[ nX ];
+                nRowStart = rCtx.mpMapIX[ nX ];
                 nRowRange = 0;
             }
             else
             {
-                nRowStart = pMapIX[ nLeft ];
-                nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                nRowStart = rCtx.mpMapIX[ nLeft ];
+                nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
             long nSumR = 0;
@@ -752,7 +675,7 @@ void scale24bitRGB2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 
             for(int i = 0; i<= nLineRange; i++)
             {
-                Scanline pTmpY = pAcc->GetScanline( nLineStart + i );
+                Scanline pTmpY = rCtx.mpSrc->GetScanline( nLineStart + i );
                 Scanline pTmpX = pTmpY + 3L * nRowStart;
                 long nSumRowR = 0;
                 long nSumRowG = 0;
@@ -770,7 +693,7 @@ void scale24bitRGB2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     }
                     else if( j == 0 )
                     {
-                        long nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowR += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX )) ;pTmpX++;
                         nSumRowB += ( nWeightX *( *pTmpX )) ;pTmpX++;
@@ -778,7 +701,7 @@ void scale24bitRGB2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     }
                     else if ( nRowRange == j )
                     {
-                        long nWeightX = pMapFX[ nRight ] ;
+                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowR += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowG += ( nWeightX *( *pTmpX ) );pTmpX++;
                         nSumRowB += ( nWeightX *( *pTmpX ) );pTmpX++;
@@ -797,11 +720,11 @@ void scale24bitRGB2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
-                    nWeightY = nMax - pMapFY[ nTop ];
+                    nWeightY = nMax - rCtx.mpMapFY[ nTop ];
                 else if( nLineRange == 1 )
-                    nWeightY = pMapFY[ nTop ];
+                    nWeightY = rCtx.mpMapFY[ nTop ];
                 else if ( nLineRange == i )
-                    nWeightY = pMapFY[ nBottom ];
+                    nWeightY = rCtx.mpMapFY[ nBottom ];
 
                 if (nTotalWeightX)
                 {
@@ -822,57 +745,48 @@ void scale24bitRGB2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 nSumB /= nTotalWeightY;
             }
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
 
-void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                             long nStartX, long nEndX, long nStartY, long nEndY,
-                             bool bVMirr, bool bHMirr)
+void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
 {
-    boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
-    boost::scoped_array<long> pMapFX(new long[pWAcc->Width()]);
-    boost::scoped_array<long> pMapFY(new long[pWAcc->Height()]);
-
-    generateMap(pAcc->Width(),  pWAcc->Width(),  bHMirr, pMapIX.get(), pMapFX.get());
-    generateMap(pAcc->Height(), pWAcc->Height(), bVMirr, pMapIY.get(), pMapFY.get());
-
+    const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
     for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
     {
-        long nTop = bVMirr ? ( nY + 1 ) : nY;
-        long nBottom = bVMirr ? nY : ( nY + 1 ) ;
+        long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
+        long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
 
         long nLineStart, nLineRange;
         if( nY ==nEndY )
         {
-            nLineStart = pMapIY[ nY ];
+            nLineStart = rCtx.mpMapIY[ nY ];
             nLineRange = 0;
         }
         else
         {
-            nLineStart = pMapIY[ nTop ] ;
-            nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+            nLineStart = rCtx.mpMapIY[ nTop ] ;
+            nLineRange = ( rCtx.mpMapIY[ nBottom ] == rCtx.mpMapIY[ nTop ] ) ? 1 :( rCtx.mpMapIY[ nBottom ] - rCtx.mpMapIY[ nTop ] );
         }
 
         for( long nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
         {
-            long nLeft = bHMirr ? ( nX + 1 ) : nX;
-            long nRight = bHMirr ? nX : ( nX + 1 ) ;
+            long nLeft = rCtx.mbHMirr ? ( nX + 1 ) : nX;
+            long nRight = rCtx.mbHMirr ? nX : ( nX + 1 ) ;
 
             long nRowStart, nRowRange;
             if( nX == nEndX )
             {
-                nRowStart = pMapIX[ nX ];
+                nRowStart = rCtx.mpMapIX[ nX ];
                 nRowRange = 0;
             }
             else
             {
-                nRowStart = pMapIX[ nLeft ];
-                nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                nRowStart = rCtx.mpMapIX[ nLeft ];
+                nRowRange = ( rCtx.mpMapIX[ nRight ] == rCtx.mpMapIX[ nLeft ] )? 1 : ( rCtx.mpMapIX[ nRight ] - rCtx.mpMapIX[ nLeft ] );
             }
 
             long nSumR = 0;
@@ -889,7 +803,7 @@ void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 
                 for(int j = 0; j <= nRowRange; j++)
                 {
-                    BitmapColor aCol0 = pAcc->GetPixel( nLineStart + i, nRowStart + j );
+                    BitmapColor aCol0 = rCtx.mpSrc->GetPixel( nLineStart + i, nRowStart + j );
 
                     if(nX == nEndX )
                     {
@@ -902,7 +816,7 @@ void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     else if( j == 0 )
                     {
 
-                        long nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                        long nWeightX = (nMax- rCtx.mpMapFX[ nLeft ]) ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue()) ;
                         nSumRowG += ( nWeightX *aCol0.GetGreen()) ;
                         nSumRowR += ( nWeightX *aCol0.GetRed()) ;
@@ -911,7 +825,7 @@ void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                     else if ( nRowRange == j )
                     {
 
-                        long nWeightX = pMapFX[ nRight ] ;
+                        long nWeightX = rCtx.mpMapFX[ nRight ] ;
                         nSumRowB += ( nWeightX *aCol0.GetBlue() );
                         nSumRowG += ( nWeightX *aCol0.GetGreen() );
                         nSumRowR += ( nWeightX *aCol0.GetRed() );
@@ -930,11 +844,11 @@ void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 if( nY == nEndY )
                     nWeightY = nMax;
                 else if( i == 0 )
-                    nWeightY = nMax - pMapFY[ nTop ];
+                    nWeightY = nMax - rCtx.mpMapFY[ nTop ];
                 else if( nLineRange == 1 )
-                    nWeightY = pMapFY[ nTop ];
+                    nWeightY = rCtx.mpMapFY[ nTop ];
                 else if ( nLineRange == i )
-                    nWeightY = pMapFY[ nBottom ];
+                    nWeightY = rCtx.mpMapFY[ nBottom ];
 
                 if (nTotalWeightX)
                 {
@@ -957,7 +871,7 @@ void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
             }
 
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
 }
@@ -997,44 +911,33 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
     Bitmap aOutBmp(Size(nDstW, nDstH), 24);
     Bitmap::ScopedWriteAccess pWriteAccess(aOutBmp);
 
-    const long nStartX = 0;
     const long nStartY = 0;
-    const long nEndX = nDstW - 1L;
-    const long nEndY = nDstH - 1L;
+    const long nEndY   = nDstH - 1L;
 
     if (pReadAccess && pWriteAccess)
     {
+        ScaleContext aContext( pReadAccess.get(),
+                               pWriteAccess.get(),
+                               pReadAccess->Width(),
+                               pWriteAccess->Width(),
+                               pReadAccess->Height(),
+                               pWriteAccess->Height(),
+                               bVMirr, bHMirr );
         if( pReadAccess->HasPalette() )
         {
             if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
             {
                 if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                {
-                    scalePallete8bit(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scalePallete8bit(aContext, nStartY, nEndY);
                 else
-                {
-                    scalePallete8bit2(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scalePallete8bit2(aContext, nStartY, nEndY);
             }
             else
             {
                 if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                {
-                    scalePalleteGeneral(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scalePalleteGeneral(aContext, nStartY, nEndY);
                 else
-                {
-                    scalePalleteGeneral2(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scalePalleteGeneral2(aContext, nStartY, nEndY);
             }
         }
         else
@@ -1042,47 +945,23 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
             if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
             {
                 if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                {
-                    scale24bitBGR(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scale24bitBGR(aContext, nStartY, nEndY);
                 else
-                {
-                    scale24bitBGR2(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scale24bitBGR2(aContext, nStartY, nEndY);
             }
             else if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
             {
                 if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                {
-                    scale24bitRGB(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scale24bitRGB(aContext, nStartY, nEndY);
                 else
-                {
-                    scale24bitRGB2(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scale24bitRGB2(aContext, nStartY, nEndY);
             }
             else
             {
                 if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                {
-                    scaleNonPalleteGeneral(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scaleNonPalleteGeneral(aContext, nStartY, nEndY);
                 else
-                {
-                    scaleNonPalleteGeneral2(pReadAccess.get(), pWriteAccess.get(),
-                               nStartX, nEndX, nStartY, nEndY,
-                               bVMirr, bHMirr);
-                }
+                    scaleNonPalleteGeneral2(aContext, nStartY, nEndY);
             }
         }
 
