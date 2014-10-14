@@ -23,8 +23,11 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.net.Socket;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnectionBroadcaster;
@@ -154,7 +157,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
             throw unoIOException;
         }
 
-        if (DEBUG) System.err.println("##### " + getClass().getName() + " - read byte:" + read_bytes + " " + bytes[0]);
+        if (DEBUG) System.err.println("##### " + getClass().getName() + " - read byte:" + read_bytes + " " + Arrays.toString(bytes[0]));
 
         return read_bytes;
     }
@@ -176,7 +179,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
             throw unoIOException;
         }
 
-        if (DEBUG) System.err.println("##### " + getClass().getName() + " - written bytes:" + aData + " " + aData.length);
+        if (DEBUG) System.err.println("##### " + getClass().getName() + " - written bytes:" + Arrays.toString(aData) + " " + aData.length);
     }
 
     /**
