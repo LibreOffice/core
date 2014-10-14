@@ -28,6 +28,7 @@
 #include "tools/solar.h"
 #include "displayconnectiondispatch.hxx"
 #include "vcl/dllapi.h"
+#include <sal/types.h>
 
 #include "rtl/ref.hxx"
 
@@ -155,24 +156,18 @@ public:
     virtual void            FillFontPathList( std::list< OString >& o_rFontPaths );
 
     // dtrans implementation
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-                            CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-                            CreateDragSource();
-    virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-                            CreateDropTarget();
+    virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments );
+    virtual css::uno::Reference< css::uno::XInterface > CreateDragSource();
+    virtual css::uno::Reference< css::uno::XInterface > CreateDropTarget();
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
     virtual bool            hasNativeFileSelection() const { return false; }
 
-    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >
-                            createFilePicker( const com::sun::star::uno::Reference<
-                                              com::sun::star::uno::XComponentContext >& )
-        { return com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFilePicker2 >(); }
+    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker( const css::uno::Reference< css::uno::XComponentContext >& )
+        { return css::uno::Reference< css::ui::dialogs::XFilePicker2 >(); }
 
-    virtual com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >
-                            createFolderPicker( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& )
-        { return com::sun::star::uno::Reference< com::sun::star::ui::dialogs::XFolderPicker2 >(); }
+    virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& )
+        { return css::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
 
     // callbacks for printer updates
     virtual void            updatePrinterUpdate() {}
