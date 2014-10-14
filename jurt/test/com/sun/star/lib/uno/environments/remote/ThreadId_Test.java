@@ -26,7 +26,7 @@ public final class ThreadId_Test {
     @Test public void test() {
         ThreadId i1 = ThreadId.createFresh();
         assertTrue(i1.equals(i1));
-        assertFalse(i1.equals(null));
+        assertNotNull(i1);
         assertFalse(i1.equals(new Object()));
         assertEquals(i1.hashCode(), i1.hashCode());
         byte[] i1bytes = i1.getBytes();
