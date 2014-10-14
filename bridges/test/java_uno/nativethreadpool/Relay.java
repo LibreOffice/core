@@ -45,7 +45,7 @@ public final class Relay implements XRelay, XSource {
         } catch (com.sun.star.uno.Exception e) {
             throw new WrappedTargetRuntimeException(e.getMessage(), this, e);
         } catch (Exception e) {
-            throw new com.sun.star.uno.RuntimeException(e, this);
+            throw new com.sun.star.uno.RuntimeException(e, "", this);
         }
         final XAcceptor acceptor = Acceptor.create(context);
         final XBridgeFactory factory;
@@ -85,7 +85,7 @@ public final class Relay implements XRelay, XSource {
             Thread.sleep(3000); // wait for new thread to accept connection
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new com.sun.star.uno.RuntimeException(e, this);
+            throw new com.sun.star.uno.RuntimeException(e, "", this);
         }
     }
 
