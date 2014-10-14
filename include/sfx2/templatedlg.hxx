@@ -48,7 +48,7 @@ class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModelessDialog
 
 public:
 
-    SfxTemplateManagerDlg (vcl::Window *parent = DIALOG_NO_PARENT);
+    SfxTemplateManagerDlg(vcl::Window *parent = NULL);
 
     virtual ~SfxTemplateManagerDlg ();
 

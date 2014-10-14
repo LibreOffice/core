@@ -175,7 +175,7 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 }
 
 SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
-    : ModelessDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
+    : ModalDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
       maSelTemplates(cmpSelectionItems),
       maSelFolders(cmpSelectionItems),
       mbIsSaveMode(false),

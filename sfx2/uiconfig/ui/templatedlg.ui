@@ -7,6 +7,7 @@
     <property name="width_request">800</property>
     <property name="height_request">560</property>
     <property name="can_focus">False</property>
+    <property name="modal">True</property>
     <property name="title" translatable="yes">Template Manager</property>
     <child>
       <object class="GtkBox" id="box1">
@@ -327,6 +328,7 @@
                   <object class="sfxlo-TemplateSearchView" id="search_view">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="margin">0</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                   </object>
@@ -340,6 +342,7 @@
                   <object class="sfxlo-TemplateRemoteView" id="remote_view">
                     <property name="can_focus">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="margin">0</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                   </object>
