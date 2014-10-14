@@ -42,6 +42,35 @@ void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
     }
 }
 
+struct ScaleContext {
+    BitmapReadAccess *mpSrc;   // was pAcc
+    BitmapWriteAccess *mpDest; // was pWAcc
+    long mnSrcW, mnDestW;
+    long mnSrcH, mnDestH;
+    bool mbHMirr, mbVMirr;
+    boost::scoped_array<long> mpMapIX;
+    boost::scoped_array<long> mpMapIY;
+    boost::scoped_array<long> mpMapFX;
+    boost::scoped_array<long> mpMapFY;
+    ScaleContext( BitmapReadAccess *pSrc,
+                  BitmapWriteAccess *pDest,
+                  long nSrcW, long nDestW,
+                  long nSrcH, long nDestH,
+                  bool bHMirr, bool bVMirr)
+        : mpSrc( pSrc ), mpDest( pDest )
+        , mnSrcW( nSrcW ), mnDestW( nDestH )
+        , mnSrcH( nSrcH ), mnDestH( nDestH )
+        , mbHMirr( bHMirr ), mbVMirr( bVMirr )
+        , mpMapIX( new long[ nDestW ] )
+        , mpMapIY( new long[ nDestH ] )
+        , mpMapFX( new long[ nDestW ] )
+        , mpMapFY( new long[ nDestH ] )
+    {
+        generateMap(nSrcW, nDestW, bHMirr, mpMapIX.get(), mpMapFX.get());
+        generateMap(nSrcH, nDestH, bVMirr, mpMapIY.get(), mpMapFY.get());
+    }
+};
+
 void scalePallete8bit(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                       long nStartX, long nEndX, long nStartY, long nEndY,
                       bool bVMirr, bool bHMirr)
@@ -799,8 +828,8 @@ void scale24bitRGB2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 }
 
 void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                    long nStartX, long nEndX, long nStartY, long nEndY,
-                    bool bVMirr, bool bHMirr)
+                             long nStartX, long nEndX, long nStartY, long nEndY,
+                             bool bVMirr, bool bHMirr)
 {
     boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
     boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
