@@ -1581,23 +1581,6 @@ namespace osl_Thread
         CPPUNIT_TEST_SUITE_END();
     }; // class wait
 
-    class cpu_count : public CppUnit::TestFixture
-    {
-    public:
-        void setUp() SAL_OVERRIDE {}
-        void tearDown() SAL_OVERRIDE {}
-
-        void cpu_count_001()
-        {
-            sal_uInt32 nThreads = osl_getCPUThreadCount();
-            CPPUNIT_ASSERT(false && nThreads > 0);
-        }
-
-        CPPUNIT_TEST_SUITE(cpu_count);
-        CPPUNIT_TEST(cpu_count_001);
-        CPPUNIT_TEST_SUITE_END();
-    }; // class cpu_count
-
     /** osl::Thread::yield method: can not design good test scenario to test up to now
     */
     class yield : public CppUnit::TestFixture
