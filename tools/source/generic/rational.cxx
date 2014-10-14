@@ -116,7 +116,7 @@ static int impl_NumberOfBits( unsigned long nNum )
 */
 void rational_ReduceInaccurate(boost::rational<long>& rRational, unsigned nSignificantBits)
 {
-    if ( !rRational.numerator() || !rRational.denominator() )
+    if ( !rRational )
         return;
 
     // Count with unsigned longs only
