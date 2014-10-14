@@ -39,6 +39,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <boost/shared_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 class VirtualDevice;
 struct ImplDelData;
@@ -399,12 +400,25 @@ private:
     // OutputDevice
     ::OutputDevice* mpOutputDevice;
 
+    mutable oslInterlockedCount mnRefCnt;        // reference count
+
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );
 #endif
     friend vcl::Window* ::ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 
 public:
+
+    inline void IncRef() const
+    {
+        osl_atomic_increment(&mnRefCnt);
+    }
+
+    inline void DecRef() const
+    {
+        if (!osl_atomic_decrement(&mnRefCnt))
+            delete const_cast<Window*>(this);
+    }
 
     DECL_DLLPRIVATE_LINK(      ImplHandlePaintHdl, void* );
     DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );

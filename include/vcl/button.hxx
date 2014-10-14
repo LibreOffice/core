@@ -566,6 +566,19 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
+typedef boost::intrusive_ptr<DisclosureButton> DisclosureButtonPtr;
+
+inline void intrusive_ptr_add_ref(const DisclosureButton* p)
+{
+    p->IncRef();
+}
+
+inline void intrusive_ptr_release(const DisclosureButton* p)
+{
+    p->DecRef();
+}
+
+
 #endif // INCLUDED_VCL_BUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

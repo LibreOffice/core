@@ -141,6 +141,18 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
+typedef boost::intrusive_ptr<ScrollBar> ScrollBarPtr;
+
+inline void intrusive_ptr_add_ref(const ScrollBar* p)
+{
+    p->IncRef();
+}
+
+inline void intrusive_ptr_release(const ScrollBar* p)
+{
+    p->DecRef();
+}
+
 
 // - ScrollBarBox -
 

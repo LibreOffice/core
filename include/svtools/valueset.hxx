@@ -25,6 +25,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/scrbar.hxx>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
@@ -177,7 +178,6 @@ to be set (before Show) with SetStyle().
 *************************************************************************/
 
 typedef std::vector<ValueSetItem*> ValueItemList;
-typedef boost::scoped_ptr<ScrollBar> ScrollBarPtr;
 typedef boost::scoped_ptr<ValueSetItem> ValueSetItemPtr;
 
 // - ValueSet types -
