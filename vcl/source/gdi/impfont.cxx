@@ -416,7 +416,7 @@ bool FontCharMap::IsDefaultMap() const
 
 int FontCharMap::GetCharCount() const
 {
-    return GetCharCount();
+    return mpImplFontCharMap->mnCharCount;
 }
 
 int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
