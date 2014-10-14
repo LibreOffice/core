@@ -197,8 +197,8 @@ long GetLen(const Point& rPnt);
 
 class GeoStat { // Geometrischer Status fuer ein Rect
 public:
-    long     nDrehWink;
-    long     nShearWink;
+    long     nDrehWink;  /// rotation angle
+    long     nShearWink; /// shear angle
     double   nTan;      // tan(nShearWink)
     double   nSin;      // sin(nDrehWink)
     double   nCos;      // cos(nDrehWink)
