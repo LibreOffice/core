@@ -74,9 +74,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
         }
         mpCGM->mbStatus = bStatRet;
     }
-};
-
-
+}
 
 bool CGMImpressOutAct::ImplInitPage()
 {
@@ -176,9 +174,7 @@ void CGMImpressOutAct::ImplSetLineBundle()
         aAny <<= aLineDash;
         maXPropSet->setPropertyValue( "LineDash", aAny );
     }
-};
-
-
+}
 
 void CGMImpressOutAct::ImplSetFillBundle()
 {
@@ -343,9 +339,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
         aAny <<= aHatch;
         maXPropSet->setPropertyValue( "FillHatch", aAny );
     }
-};
-
-
+}
 
 void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XPropertySet > & rProperty )
 {
@@ -387,9 +381,7 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     }
     aAny <<= aFontDescriptor;
     rProperty->setPropertyValue( "FontDescriptor", aAny );
-};
-
-
+}
 
 void CGMImpressOutAct::InsertPage()
 {
@@ -401,9 +393,7 @@ void CGMImpressOutAct::InsertPage()
             mpCGM->mbStatus = false;
     }
     mnCurrentPage++;
-};
-
-
+}
 
 void CGMImpressOutAct::BeginGroup()
 {
@@ -413,9 +403,7 @@ void CGMImpressOutAct::BeginGroup()
     }
     mnGroupLevel++;
     mnGroupActCount = mpCGM->mnActCount;
-};
-
-
+}
 
 void CGMImpressOutAct::EndGroup()
 {
@@ -446,9 +434,7 @@ void CGMImpressOutAct::EndGroup()
             }
         }
     }
-};
-
-
+}
 
 void CGMImpressOutAct::EndGrouping()
 {
@@ -457,8 +443,6 @@ void CGMImpressOutAct::EndGrouping()
         EndGroup();
     }
 }
-
-
 
 void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
 {
@@ -472,9 +456,7 @@ void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
             ImplSetFillBundle();
         }
     }
-};
-
-
+}
 
 void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation )
 {
@@ -499,9 +481,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
         }
         ImplSetFillBundle();
     }
-};
-
-
+}
 
 void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation,
             sal_uInt32 nType, double& fStartAngle, double& fEndAngle )
@@ -572,9 +552,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
             }
         }
     }
-};
-
-
+}
 
 void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
 {
@@ -613,9 +591,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
 
         }
     }
-};
-
-
+}
 
 void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
 {
@@ -645,10 +621,7 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
         maXPropSet->setPropertyValue( "PolyPolygon", aParam );
         ImplSetFillBundle();
     }
-};
-
-
-
+}
 
 void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 {
@@ -678,9 +651,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
         maXPropSet->setPropertyValue( "PolyPolygon", aParam );
         ImplSetLineBundle();
     }
-};
-
-
+}
 
 void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 {
@@ -713,9 +684,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
         maXPropSet->setPropertyValue( "PolyPolygonBezier", aParam );
         ImplSetLineBundle();
     }
-};
-
-
+}
 
 void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
 {
@@ -758,9 +727,7 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
         maXPropSet->setPropertyValue( "PolyPolygonBezier", aParam);
         ImplSetFillBundle();
     }
-};
-
-
+}
 
 void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
 {
@@ -907,9 +874,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
             nFinalTextCount = maXShapes->getCount();
         }
     }
-};
-
-
+}
 
 void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFlag /*eFlag*/ )
 {
