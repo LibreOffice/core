@@ -148,6 +148,22 @@ inline bool isAsciiHexDigit(sal_uInt32 code)
     return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
 }
 
+/** Check for ASCII white space character.
+
+    @param code  A Unicode code point.
+
+    @return  True if code is an ASCII white space character (ASCII
+    ' ' '\t' or '\f').
+
+    @since LibreOffice 4.4
+ */
+inline bool isAsciiWhiteSpace(sal_uInt32 code)
+{
+    assert(code <= 0x10FFFF);
+    return code == ' ' || code == '\t' || code == '\f';
+}
+
+
 /** Convert a character, if ASCII, to upper case.
 
     @param code  A Unicode code point.
