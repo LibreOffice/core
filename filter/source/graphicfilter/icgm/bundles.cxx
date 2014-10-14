@@ -201,7 +201,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         sal_uInt32 nToCopy = nSize - nToCopyOfs - nPrev;
         if ( nToCopy )
         {
-            memcpy( pFound, pFound + nToCopyOfs, nToCopy );
+            memmove( pFound, pFound + nToCopyOfs, nToCopy );
         }
         nSize -= nToCopyOfs;
     }
@@ -221,7 +221,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
         sal_uInt32 nToCopy = nSize - nToCopyOfs - nPrev;
         if ( nToCopy )
         {
-            memcpy( pFound, pFound + nToCopyOfs, nToCopy );
+            memmove( pFound, pFound + nToCopyOfs, nToCopy );
         }
         nSize -= nToCopyOfs;
     }
