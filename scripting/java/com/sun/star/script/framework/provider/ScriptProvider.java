@@ -131,10 +131,8 @@ public abstract class ScriptProvider implements
 
         } catch (Exception e) {
             LogUtils.DEBUG(LogUtils.getTrace(e));
-            com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException(
-                "Error constructing  ScriptProvider: " + e);
-            e2.initCause(e);
-            throw e2;
+            throw new com.sun.star.uno.RuntimeException(
+                e, "Error constructing  ScriptProvider: " + e);
         }
 
         LogUtils.DEBUG("ScriptProvider: constructor - finished.");
