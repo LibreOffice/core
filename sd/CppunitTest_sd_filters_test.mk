@@ -100,6 +100,9 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_filters_test))
 
-$(call gb_CppunitTest_get_target,sd_filters_test) : $(call gb_AllLangResTarget_get_target,sd)
+# sd dlopens libicg.so for cgm import, so ensure its built by now
+$(call gb_CppunitTest_get_target,sd_filters_test) : | \
+    $(call gb_AllLangResTarget_get_target,sd) \
+    $(call gb_Library_get_target,icg) \
 
 # vim: set noet sw=4 ts=4:
