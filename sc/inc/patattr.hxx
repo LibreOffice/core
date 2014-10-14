@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SC_INC_PATATTR_HXX
 #define INCLUDED_SC_INC_PATATTR_HXX
 
+#include <boost/rational.hpp>
+
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/fontcvt.hxx>
@@ -28,7 +30,6 @@
 
 namespace vcl { class Font; }
 class OutputDevice;
-namespace boost { template<class T> class rational; }
 class ScStyleSheet;
 class SvNumberFormatter;
 class ScDocument;

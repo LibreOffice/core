@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SFX2_IPCLIENT_HXX
 #define INCLUDED_SFX2_IPCLIENT_HXX
 
+#include <boost/rational.hpp>
+
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
@@ -34,9 +36,6 @@ class SfxInPlaceClient_Impl;
 class SfxViewShell;
 class SfxObjectShell;
 namespace vcl { class Window; }
-namespace boost { template<typename T> class rational; }
-
-
 
 class SFX2_DLLPUBLIC SfxInPlaceClient
 {

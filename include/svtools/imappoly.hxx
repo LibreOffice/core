@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SVTOOLS_IMAPPOLY_HXX
 #define INCLUDED_SVTOOLS_IMAPPOLY_HXX
 
+#include <boost/rational.hpp>
+
 #include <svtools/svtdllapi.h>
 #include <svtools/imapobj.hxx>
 #include <tools/poly.hxx>
-
-namespace boost { template<typename T> class rational; }
 
 class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
 {

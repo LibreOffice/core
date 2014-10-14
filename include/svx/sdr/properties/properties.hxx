@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 #define INCLUDED_SVX_SDR_PROPERTIES_PROPERTIES_HXX
 
+#include <boost/rational.hpp>
+
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 
@@ -30,7 +32,6 @@ class SdrObject;
 class SfxItemSet;
 class SfxPoolItem;
 class SfxStyleSheet;
-namespace boost { template<typename T> class rational; }
 class SfxItemPool;
 class SdrModel;
 

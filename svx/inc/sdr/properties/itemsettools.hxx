@@ -1,5 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */ /*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -20,6 +19,8 @@
 #ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_ITEMSETTOOLS_HXX
 
+#include <boost/rational.hpp>
+
 #include <sal/types.h>
 
 
@@ -28,8 +29,6 @@
 class SdrObject;
 class SfxItemSet;
 class Rectangle;
-namespace boost { template<class T> class rational; }
-
 
 // class to remember broadcast start positions
 namespace sdr

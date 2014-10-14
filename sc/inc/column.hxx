@@ -34,6 +34,7 @@
 #include <vector>
 
 #include <boost/intrusive_ptr.hpp>
+#include <boost/rational.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 namespace editeng { class SvxBorderLine; }
@@ -69,7 +70,6 @@ class RefMovedHint;
 
 }
 
-namespace boost { template<typename T> class rational; }
 class OutputDevice;
 class SfxItemPoolCache;
 class SvtListener;
