@@ -690,6 +690,10 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
                                                             const PaletteMemorySharedVector& rPalette );
 
 
+/** Function to create a 1 bit grey clipping mask initialized to white.
+ */
+BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createClipDevice( const basegfx::B2IVector&        rSize );
+
 /** Function to retrieve a subsetted BitmapDevice to the same
     memory.
 

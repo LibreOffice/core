@@ -168,8 +168,7 @@ void SvpSalGraphics::ensureClip()
 
     m_aDevice = m_aOrigDevice;
     basegfx::B2IVector aSize = m_aDevice->getSize();
-    m_aClipMap = basebmp::createBitmapDevice( aSize, false, basebmp::FORMAT_ONE_BIT_MSB_GREY );
-    m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
+    m_aClipMap = basebmp::createClipDevice( aSize );
 
     RectangleVector aRectangles;
     m_aClipRegion.GetRegionRectangles(aRectangles);
