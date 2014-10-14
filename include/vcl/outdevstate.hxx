@@ -33,7 +33,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 // Flags for OutputDevice::Push() and OutDevState
-enum class PushFlags : sal_uInt16 {
+enum class PushFlags {
     NONE            = 0x0000,
     LINECOLOR       = 0x0001,
     FILLCOLOR       = 0x0002,
