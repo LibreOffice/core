@@ -99,12 +99,12 @@ struct SystemParentData;
 class VCL_PLUGIN_PUBLIC SalFrame : public vcl::DeletionNotifier
 {
     // the VCL window corresponding to this frame
-    vcl::Window*                 m_pWindow;
+    vcl::Window*            m_pWindow;
     SALFRAMEPROC            m_pProc;
 
 public:
-    SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
-    virtual ~SalFrame();
+                            SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
+    virtual                 ~SalFrame();
 
     SalFrameGeometry        maGeometry;
 
@@ -181,7 +181,7 @@ public:
 
     virtual void            UpdateSettings( AllSettings& rSettings ) = 0;
 
-    virtual void                Beep() = 0;
+    virtual void            Beep() = 0;
 
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*
@@ -233,7 +233,7 @@ public:
         { m_pWindow = pWindow; m_pProc = pProc; }
 
     // returns the instance set
-    vcl::Window*                 GetWindow() const { return m_pWindow; }
+    vcl::Window*            GetWindow() const { return m_pWindow; }
 
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not know more than necessary about the SalFrame implementation
