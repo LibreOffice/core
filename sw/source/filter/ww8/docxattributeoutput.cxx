@@ -2969,7 +2969,8 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
     {
        if (m_oldTableReference->m_pOldTablepInner)
        {
-           *m_tableReference = *m_oldTableReference;
+           m_tableReference->m_bTableCellOpen = m_oldTableReference->m_bTableCellOpen;
+           m_tableReference->m_nTableDepth = m_oldTableReference->m_nTableDepth;
 
             //Reset the oldReference, after copying it back to the original.
             m_oldTableReference->m_bTableCellOpen = false ;

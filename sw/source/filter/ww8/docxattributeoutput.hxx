@@ -143,13 +143,6 @@ struct TableReference
         m_nTableDepth(0)
     {
     }
-
-    TableReference& operator= (const TableReference& rhs)
-    {
-        m_bTableCellOpen = rhs.m_bTableCellOpen ;
-        m_nTableDepth    = rhs.m_nTableDepth ;
-        return *this ;
-    }
 };
 
 /// The class that has handlers for various resource types when exporting as DOCX.
