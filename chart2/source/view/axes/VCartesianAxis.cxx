@@ -1248,10 +1248,9 @@ TickFactory* VCartesianAxis::createTickFactory()
 
 TickFactory2D* VCartesianAxis::createTickFactory2D()
 {
-    AxisLabelAlignment aLabelAlign;
+    AxisLabelAlignment aLabelAlign = m_aAxisProperties.maLabelAlignment;
     B2DVector aStart, aEnd;
     get2DAxisMainLine(aStart, aEnd, aLabelAlign, getAxisIntersectionValue());
-    m_aAxisProperties.maLabelAlignment = aLabelAlign;
 
     B2DVector aLabelLineStart, aLabelLineEnd;
     get2DAxisMainLine(aLabelLineStart, aLabelLineEnd, aLabelAlign, getLabelLineIntersectionValue());
@@ -1301,7 +1300,7 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
         return nRet;
 
     B2DVector aStart, aEnd;
-    AxisLabelAlignment aLabelAlign;
+    AxisLabelAlignment aLabelAlign = m_aAxisProperties.maLabelAlignment;
     get2DAxisMainLine(aStart, aEnd, aLabelAlign, getAxisIntersectionValue());
     m_aAxisProperties.maLabelAlignment = aLabelAlign;
 
@@ -1647,7 +1646,7 @@ void VCartesianAxis::createShapes()
             if (!rtl::math::isNan(fExtraLineCrossesOtherAxis))
             {
                 B2DVector aStart, aEnd;
-                AxisLabelAlignment aLabelAlign;
+                AxisLabelAlignment aLabelAlign = m_aAxisProperties.maLabelAlignment;
                 get2DAxisMainLine(aStart, aEnd, aLabelAlign, fExtraLineCrossesOtherAxis);
                 m_aAxisProperties.maLabelAlignment = aLabelAlign;
                 drawing::PointSequenceSequence aPoints( lcl_makePointSequence(aStart,aEnd) );
