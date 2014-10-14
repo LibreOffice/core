@@ -1209,10 +1209,14 @@ void LwpDrawTextArt::Read()
     sal_uInt16 nPointNumber;
     sal_Int16 nX, nY;
     m_pStream->ReadUInt16( nPointNumber );
+
+    size_t nPoints = nPointNumber*3+1;
+    if (nPoints > m_pStream->remainingSize() / 4)
+        throw BadRead();
+
     m_aTextArtRec.aPath[0].n = nPointNumber;
-    m_aTextArtRec.aPath[0].pPts = new SdwPoint [nPointNumber*3+1];
-    sal_uInt16 nPt = 0;
-    for ( nPt = 0; nPt <= nPointNumber*3; nPt++)
+    m_aTextArtRec.aPath[0].pPts = new SdwPoint[nPoints];
+    for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
@@ -1221,9 +1225,14 @@ void LwpDrawTextArt::Read()
     }
 
     m_pStream->ReadUInt16( nPointNumber );
+
+    nPoints = nPointNumber*3+1;
+    if (nPoints > m_pStream->remainingSize() / 4)
+        throw BadRead();
+
     m_aTextArtRec.aPath[1].n = nPointNumber;
-    m_aTextArtRec.aPath[1].pPts = new SdwPoint [nPointNumber*3+1];
-    for (nPt = 0; nPt <= nPointNumber*3; nPt++)
+    m_aTextArtRec.aPath[1].pPts = new SdwPoint[nPoints];
+    for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
@@ -1250,6 +1259,10 @@ void LwpDrawTextArt::Read()
     m_aTextArtRec.nTextLen = m_aObjHeader.nRecLen - nTextArtFixedLength
                                                     - (m_aTextArtRec.aPath[0].n*3 + 1)*4
                                                     - (m_aTextArtRec.aPath[1].n*3 + 1)*4;
+
+
+    if (m_aTextArtRec.nTextLen > m_pStream->remainingSize())
+        throw BadRead();
 
     m_aTextArtRec.pTextString = new sal_uInt8 [m_aTextArtRec.nTextLen];
     m_pStream->Read(m_aTextArtRec.pTextString, m_aTextArtRec.nTextLen);
