@@ -483,33 +483,21 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         cols = i;
     }
 
-    /**
-     * @param size
-     */
     public void setGap(Size size)
     {
         gap = size;
     }
 
-    /**
-     * @param model
-     */
     public void setListModel(ListModel model)
     {
         listModel = model;
     }
 
-    /**
-     * @param short1
-     */
     public void setStep(Short short1)
     {
         step = short1;
     }
 
-    /**
-     * @param i
-     */
     public void setPageStart(int i)
     {
         if (i == pageStart)
@@ -521,33 +509,21 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         refreshImages();
     }
 
-    /**
-     * @param _size
-     */
     public void setPos(Size _size)
     {
         pos = _size;
     }
 
-    /**
-     * @param _renderer
-     */
     public void setRenderer(IImageRenderer _renderer)
     {
         this.renderer = _renderer;
     }
 
-    /**
-     * @param i
-     */
     public void setRows(int i)
     {
         rows = i;
     }
 
-    /**
-     * @param i
-     */
     public void setSelected(int i)
     {
         if (rowSelect && (i >= 0))
@@ -575,17 +551,11 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, sText);
     }
 
-    /**
-     * @param size
-     */
     public void setSelectionGap(Size size)
     {
         selectionGap = size;
     }
 
-    /**
-     * @param b
-     */
     public void setShowButtons(boolean b)
     {
         showButtons = b;
@@ -642,7 +612,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
 
         /**
-         * @param listItem
          * @return two resource ids for an image referenced in the imaglist resourcefile of the
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
@@ -691,7 +660,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     /**
      * jump to the given item (display the screen
      * that contains the given item).
-     * @param i
      */
     public void display(int i)
     {
@@ -705,9 +673,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return benabled;
     }
 
-    /**
-     * @param b
-     */
     public void setenabled(boolean b)
     {
 
@@ -725,9 +690,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         benabled = b;
     }
 
-/**
- * refresh on all buttons, the selected button will get state pressed
- */
+    /**
+     * refresh on all buttons, the selected button will get state pressed
+     */
     private void refreshSelection()
     {
         // reset all buttons to not set
@@ -751,11 +716,10 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
     }
 
-/**
- * implementation of XActionListener
- * will call if a button from the m_aButtonList is pressed.
- * @param actionEvent
- */
+    /**
+     * implementation of XActionListener
+     * will call if a button from the m_aButtonList is pressed.
+     */
     public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
     {
         XControlModel xModel = (XControlModel)UnoDialog2.getModel(actionEvent.Source);

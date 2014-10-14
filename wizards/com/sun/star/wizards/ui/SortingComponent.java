@@ -193,7 +193,6 @@ public class SortingComponent
     /**
      * sets the controls of a Sorting criterion to readonly or not.
      * @param _index index of the Sorting criterion
-     * @param _breadonly
      */
     public void setReadOnly(int _index, boolean _breadonly)
     {
@@ -203,7 +202,6 @@ public class SortingComponent
     /**
      *
      * @param _index the first Sorting criterion in which 'ReadOnly is set to 'false'
-     * @param _bcomplete
      */
     public void setReadOnlyUntil(int _index, boolean _bcomplete)
     {

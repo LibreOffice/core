@@ -110,7 +110,6 @@ public class OfficeDocument
 
     /**
      * Create a new office document, attached to the given frame.
-     * @param frame
      * @param sDocumentType e.g. swriter, scalc, ( simpress, scalc : not tested)
      * @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
      */

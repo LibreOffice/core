@@ -41,7 +41,6 @@ public interface IReportBuilderLayouter
     /**
      * For Landscape give nOrientation == com.sun.star.wizards.report.ReportLayouter.SOOPTLANDSCAPE
      * All other numbers are interpreted as portrait format.
-     * @param nOrientation
      */
     public void setPageOrientation(int nOrientation);
 
@@ -54,31 +53,26 @@ public interface IReportBuilderLayouter
      * Set the table name of the report
      * This is the name to the database table.
      * @param _nType something of com.sun.star.sdb.CommandType
-     * @param TableName
      */
     public void setTableName(int _nType, String TableName);
 
     /**
      * Insert the field names, these are the field names out of a given datebase table
-     * @param FieldNames
      */
     public void insertFieldNames(final String[] FieldNames);
 
     /**
      * Insert the field type (Varchar, int, ...) as internal an int representation.
-     * @param FieldTypes
      */
     public void insertFieldTypes(int[] FieldTypes);
 
     /**
      * Insert the field width in count of chars as given in the database.
-     * @param FieldWidths
      */
     public void insertFieldWidths(int[] FieldWidths);
 
     /**
      * Insert the titles of the field names. This names are free formed
-     * @param _aFieldTitles
      */
     public void insertFieldTitles(String[] _aFieldTitles);
 
@@ -86,7 +80,6 @@ public interface IReportBuilderLayouter
      * Insert the names of the groups, the group names are names out of the field names.
      *
      * If a group name is given here, it will not shown in the fields/titles, but must be in the field string list.
-     * @param _aGroupFieldNames
      */
     public void insertGroupNames(String[] _aGroupFieldNames);
 
@@ -94,7 +87,6 @@ public interface IReportBuilderLayouter
      * Insert the names of the groups which should be used as sorting, the group names are names out of the field names.
      *
      * If a group name is given here, it will not shown in the fields/titles, but must be in the field string list.
-     * @param _aSortFieldNames
      */
     public void insertSortingNames(String[][] _aSortFieldNames);
 
@@ -107,7 +99,6 @@ public interface IReportBuilderLayouter
      * Initialize the current Layouter with data's out of an other Layouter.
      *
      * This Method copies the internal fields, groups and titles
-     * @param aOtherLayouter
      */
     public void initializeData(IReportBuilderLayouter aOtherLayouter);
 

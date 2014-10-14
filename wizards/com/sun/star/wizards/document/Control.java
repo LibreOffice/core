@@ -262,8 +262,6 @@ public class Control extends Shape
 
     /** the peer should be retrieved every time before it is used because it
      * might be disposed otherwise
-     *
-     * @return
      */
     public XLayoutConstrains getPeer()
     {
@@ -345,9 +343,6 @@ public class Control extends Shape
         }
     }
 
-    /**
-     * @return
-     */
     public int getControlType()
     {
         return icontroltype;

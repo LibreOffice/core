@@ -140,10 +140,6 @@ public abstract class Configuration
     }
 
     /** Creates a new instance of RegistryEntry
-     * @param name
-     * @param parent
-     * @return
-     * @throws Exception
      */
     public static Object getConfigurationNode(String name, Object parent) throws Exception
     {
@@ -257,13 +253,7 @@ public abstract class Configuration
      * to the given view. Note that if a node with the given name
      * already exists it will be completely removed from
      * the configuration.
-     * @param configView
-     * @param name
      * @return the new created configuration node.
-     * @throws com.sun.star.lang.WrappedTargetException
-     * @throws ElementExistException
-     * @throws NoSuchElementException
-     * @throws com.sun.star.uno.Exception
      */
     public static Object addConfigNode(Object configView, String name) throws com.sun.star.lang.WrappedTargetException, ElementExistException, NoSuchElementException, com.sun.star.uno.Exception
     {

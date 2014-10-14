@@ -37,11 +37,6 @@ public class DataAwareFields
     /**
      * returns a Value Object which sets and gets values
      * and converting them to other types, according to the "value" argument.
-     *
-     * @param owner
-     * @param fieldname
-     * @param value
-     * @return
      */
     public static DataAware.Value getFieldValueFor(Object owner, String fieldname, Object value)
     {

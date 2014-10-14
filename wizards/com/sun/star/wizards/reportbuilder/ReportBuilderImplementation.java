@@ -599,7 +599,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     /**
      * Return a string array array with all found layouts
      * At the moment these layout are hard coded
-     * @return
      */
     public String[][] getDataLayout()
     {

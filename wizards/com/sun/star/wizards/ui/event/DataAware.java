@@ -62,7 +62,6 @@ public abstract class DataAware {
 
     /**
      * returns the data object.
-     * @return
      */
     public Object getDataObject() {
         return dataObject;

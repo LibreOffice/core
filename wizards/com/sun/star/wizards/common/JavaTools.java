@@ -91,10 +91,6 @@ public class JavaTools
     }
 
     /**converts a list of Integer values included in an Integer vector to a list of int values
-     *
-     *
-     * @param _aIntegerVector
-     * @return
      */
     public static int[] IntegerTointList(java.util.List<Integer> _aIntegerVector)
     {
@@ -110,10 +106,6 @@ public class JavaTools
     }
 
     /**converts a list of Boolean values included in a Boolean vector to a list of boolean values
-     *
-     *
-     * @param _aBooleanVector
-     * @return
      */
     public static boolean[] BooleanTobooleanList(java.util.List<Boolean> _aBooleanVector)
     {
@@ -174,8 +166,6 @@ public class JavaTools
     }
 
     /**
-     * @param SearchList
-     * @param SearchString
      * @return the index of the field that contains the string 'SearchString' or '-1' if not it is
      * not contained within the array
      */
@@ -296,11 +286,6 @@ public class JavaTools
         return SortList;
     }
 
-    /**
-     * @param MainString
-     * @param Token
-     * @return
-     */
     public static String[] ArrayoutofString(String MainString, String Token)
     {
         String[] StringArray;
@@ -515,8 +500,6 @@ public class JavaTools
      * MasterFieldName1;MasterFieldName2;MasterFieldName3
      * The entries SlaveFieldNameX and MasterFieldNameX are grouped together and then the created groups are compared
      * If a group is duplicate the entry of the second group is returned.
-     * @param _scomplist
-     * @return
      */
     public static int getDuplicateFieldIndex(String[][] _scomplist)
     {
@@ -543,8 +526,6 @@ public class JavaTools
 
     /**
      * not tested!!!!!
-     * @param scomplist
-     * @return
      */
     public static int getDuplicateFieldIndex(String[] scomplist)
     {
@@ -658,9 +639,6 @@ public class JavaTools
 
     /**
      * compares two strings. If one of them is empty and the other one is null it also returns true
-     * @param sFirstString
-     * @param sSecondString
-     * @return
      */
     public static boolean isSame(String sFirstString, String sSecondString)
     {

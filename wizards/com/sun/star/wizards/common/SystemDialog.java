@@ -48,8 +48,6 @@ public class SystemDialog
 
     /**
      *
-     * @param xMSF
-     * @param ServiceName
      * @param type  according to com.sun.star.ui.dialogs.TemplateDescription
      */
     public SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type)
@@ -118,11 +116,6 @@ public class SystemDialog
      * ATTENTION a BUG : The extension calculated
      * here gives the last 3 chars of the filename - what
      * if the extension is of 4 or more chars?
-     *
-     * @param DisplayDirectory
-     * @param DefaultName
-     * @param sDocuType
-     * @return
      */
     public String callStoreDialog(String DisplayDirectory, String DefaultName, String sDocuType)
     {
@@ -131,13 +124,6 @@ public class SystemDialog
         return callStoreDialog(DisplayDirectory, DefaultName);
     }
 
-    /**
-     *
-     * @param displayDir
-     * @param defaultName
-     * given url to a local path.
-     * @return
-     */
     public String callStoreDialog(String displayDir, String defaultName)
     {
         sStorePath = null;
@@ -350,12 +336,6 @@ public class SystemDialog
     /**
      * just like the other showMessageBox(...) method, but receives a
      * peer argument to use to create the message box.
-     * @param xMSF
-     * @param peer
-     * @param windowServiceName
-     * @param windowAttribute
-     * @param MessageText
-     * @return
      */
     public static int showMessageBox(XMultiServiceFactory xMSF, XWindowPeer peer, String windowServiceName, int windowAttribute, String MessageText)
     {

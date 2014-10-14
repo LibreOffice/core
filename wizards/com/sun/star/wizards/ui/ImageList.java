@@ -570,9 +570,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         }
     }
 
-    /**
-     * @return
-     */
     public int getCols()
     {
         return cols;
@@ -796,9 +793,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     {
 
         /**
-         * @param listItem
          * @return two resource ids for an image referenced in the imaglist resourcefile of the
-         * wizards project; The second one of them is designed to be used for High Contrast Mode.
+         *         wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
         public Object[] getImageUrls(Object listItem);
     }
@@ -956,9 +952,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /**
-     * jump to the given item (display the screen
-     * that contains the given item).
-     * @param i
+     * jump to the given item (display the screen that contains the given item).
      */
     public void display(int i)
     {

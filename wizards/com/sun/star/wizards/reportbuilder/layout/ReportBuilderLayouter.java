@@ -338,7 +338,6 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Stores the Group names. To insert/create a report with such group names, call layout()
-     * @param _aGroupNames
      */
     public void insertGroupNames(String[] _aGroupNames)
     {
@@ -467,7 +466,6 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Give a list off all field title names to insert the field title names, call layout()
-     * @param _aFieldTitleNames
      */
     public void insertFieldTitles(String[] _aFieldTitleNames)
     {
@@ -582,7 +580,6 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Give a list off all field names to insert the field names, call layout()
-     * @param _aFieldNames
      */
     public void insertFieldNames(String[] _aFieldNames)
     {
@@ -1568,7 +1565,6 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * load the given string as a template and use it's content to paint the other
-     * @param LayoutTemplatePath
      */
     public void loadAndSetBackgroundTemplate(String LayoutTemplatePath)
     {

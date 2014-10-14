@@ -377,18 +377,14 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
     }
 
     /**
-     * Set members might include a property
-     * which orders them.
-     * This method reindexes the given member to be
-     * the index number 0
+     * Set members might include a property which orders them.
+     * This method reindexes the given member to b the index number 0.
      * Do not forget to call commit() after calling this method.
-     * @param confView
-     * @param memberName
      */
     public void reindexSet(Object confView, String memberName, String indexPropertyName) throws Exception
     {
         /*
-         * First I read all memebrs of the set,
+         * First I read all members of the set,
          * except the one that should be number 0
          * to a vector, ordered by there index property
          */

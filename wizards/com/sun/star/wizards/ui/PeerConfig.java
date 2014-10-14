@@ -150,7 +150,6 @@ public class PeerConfig implements XWindowListener
 
     /**
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param _saccessname
      */
     public void setAccessibleName(Object oAPIControl, String _saccessname)
     {
@@ -177,8 +176,6 @@ public class PeerConfig implements XWindowListener
 
     /**
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param _propnames
-     * @param _propvalues
      */
     public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues)
     {
@@ -195,9 +192,6 @@ public class PeerConfig implements XWindowListener
     /**
      * assigns an arbitrary property to a control as soon as the peer is created
      * Note: The property 'ImageUrl' should better be assigned with 'setImageurl(...)', to consider the High Contrast Mode
-     * @param _ocontrolmodel
-     * @param _spropname
-     * @param _propvalue
      */
     public void setControlProperty(Object _ocontrolmodel, String _spropname, Object _propvalue)
     {
@@ -209,9 +203,6 @@ public class PeerConfig implements XWindowListener
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
      * wizards project
-     * @param _ocontrolmodel
-     * @param _nResId
-     * @param _nhcResId
      */
     public void setImageUrl(Object _ocontrolmodel, int _nResId, int _nhcResId)
     {
@@ -222,9 +213,6 @@ public class PeerConfig implements XWindowListener
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image ids that the Resource urls point to
      * may be assigned in a Resource file outside the wizards project
-     * @param _ocontrolmodel
-     * @param _sResourceUrl
-     * @param _sHCResourceUrl
      */
     public void setImageUrl(Object _ocontrolmodel, String _sResourceUrl, String _sHCResourceUrl)
     {
@@ -236,9 +224,6 @@ public class PeerConfig implements XWindowListener
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
      * wizards project
-     * @param _ocontrolmodel
-     * @param _oResource
-     * @param _oHCResource
      */
     public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource)
     {
