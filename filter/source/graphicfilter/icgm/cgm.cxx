@@ -662,7 +662,8 @@ bool CGM::Write( SvStream& rIStm )
 
     mnParaSize = 0;
     mpSource = mpBuf;
-    rIStm.Read( mpSource, 2 );
+    if (rIStm.Read(mpSource, 2) != 2)
+        return false;
     mnEscape = ImplGetUI16();
     mnElementClass = mnEscape >> 12;
     mnElementID = ( mnEscape & 0x0fe0 ) >> 5;
@@ -670,12 +671,16 @@ bool CGM::Write( SvStream& rIStm )
 
     if ( mnElementSize == 31 )
     {
-        rIStm.Read( mpSource + mnParaSize, 2 );
+        if (rIStm.Read(mpSource + mnParaSize, 2) != 2)
+            return false;
         mnElementSize = ImplGetUI16();
     }
     mnParaSize = 0;
-    if ( mnElementSize )
-        rIStm.Read( mpSource + mnParaSize, mnElementSize );
+    if (mnElementSize)
+    {
+        if (rIStm.Read(mpSource + mnParaSize, mnElementSize) != mnElementSize)
+            return false;
+    }
 
     if ( mnElementSize & 1 )
         rIStm.SeekRel( 1 );
