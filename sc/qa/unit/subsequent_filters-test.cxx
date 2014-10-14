@@ -447,6 +447,8 @@ void ScFiltersTest::testFunctionsODS()
     ScDocument& rDoc3 = xDocSh->GetDocument();
     createCSVPath("date-time-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc3, 0, PureString);
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testFunctionsExcel2010()
