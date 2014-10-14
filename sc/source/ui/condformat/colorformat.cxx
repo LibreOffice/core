@@ -208,10 +208,10 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
             OUString aMaxString = mpEdMax->GetText();
             double nMinValue = 0;
             sal_uInt32 nIndex = 0;
-            mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
+            (void)mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);
             nIndex = 0;
             double nMaxValue = 0;
-            mpNumberFormatter->IsNumberFormat(aMaxString, nIndex, nMaxValue);
+            (void)mpNumberFormatter->IsNumberFormat(aMaxString, nIndex, nMaxValue);
             if(rtl::math::approxEqual(nMinValue, nMaxValue) || nMinValue > nMaxValue)
                 bWarn = true;
         }
