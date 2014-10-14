@@ -68,7 +68,13 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 # FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
 # CppunitTest_sc_annotationshapeobj \
 
+# for testing purpose
 $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+    CppunitTest_sc_searchobj \
+))
+
+#$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+    CppunitTest_sc_searchobj \
     JunitTest_sc_complex \
     JunitTest_sc_unoapi \
     CppunitTest_sc_outlineobj \

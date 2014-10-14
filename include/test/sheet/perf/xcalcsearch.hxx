@@ -24,6 +24,9 @@ class OOO_DLLPUBLIC_TEST XCalcSearch
 public:
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 
+    virtual void PERF_INSTRUMENTATION_START() = 0;
+    virtual void PERF_INSTRUMENTATION_END(const char* message) = 0;
+
     // XSearchable
     void testSheetFindAll();
 

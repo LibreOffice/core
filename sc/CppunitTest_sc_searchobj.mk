@@ -9,17 +9,16 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_perf_searchobj))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_searchobj))
 
-$(eval $(call gb_CppunitTest_use_external,sc_perf_searchobj,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sc_searchobj,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_perf_searchobj, \
-    sc/qa/perf/scperfsearch \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_searchobj, \
+    sc/qa/perf/scsearchobj \
+    sc/qa/perf/perf_instrumentation \
 ))
 
-$(eval $(call gb_CppunitTest_set_performance_test,sc_perf_searchobj, 0))
-
-$(eval $(call gb_CppunitTest_use_libraries,sc_perf_searchobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_searchobj, \
     basegfx \
     comphelper \
     cppu \
@@ -55,29 +54,25 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_perf_searchobj, \
     $(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_perf_searchobj,\
+$(eval $(call gb_CppunitTest_set_include,sc_searchobj,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_perf_searchobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_searchobj,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_perf_searchobj))
-$(eval $(call gb_CppunitTest_use_vcl,sc_perf_searchobj))
+$(eval $(call gb_CppunitTest_use_ure,sc_searchobj))
+$(eval $(call gb_CppunitTest_use_vcl,sc_searchobj))
 
 
-$(eval $(call gb_CppunitTest_use_rdb,sc_perf_searchobj,services))
+$(eval $(call gb_CppunitTest_use_rdb,sc_searchobj,services))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_perf_searchobj))
+$(eval $(call gb_CppunitTest_use_configuration,sc_searchobj))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_perf_searchobj))
-
-$(eval $(call gb_CppunitTest_add_defs,sc_perf_searchobj,\
-    -DIS_PERFCHECK \
-))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_searchobj))
 
 # vim: set noet sw=4 ts=4:
