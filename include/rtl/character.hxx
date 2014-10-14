@@ -148,6 +148,21 @@ inline bool isAsciiHexDigit(sal_uInt32 code)
     return isAsciiCanonicHexDigit(code) || (code >= 'a' && code <= 'f');
 }
 
+/** Check for ASCII octal digit character.
+
+    @param code  A Unicode code point.
+
+    @return  True if code is an ASCII (octal) digit character (ASCII
+    '0'--'9').
+
+    @since LibreOffice 4.4
+ */
+inline bool isAsciiOctalDigit(sal_uInt32 code)
+{
+    assert(code <= 0x10FFFF);
+    return code >= '0' && code < '8';
+}
+
 /** Convert a character, if ASCII, to upper case.
 
     @param code  A Unicode code point.

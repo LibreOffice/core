@@ -23,7 +23,8 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_scanner, \
     cppuhelper \
     sal \
     salhelper \
-	i18nlangtag \
+    i18nlangtag \
+    i18nutil \
     sot \
     svl \
     svt \

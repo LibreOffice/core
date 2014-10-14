@@ -20,6 +20,8 @@
 #include "basiccharclass.hxx"
 #include "sbcomp.hxx"
 
+#include <rtl/character.hxx>
+
 #include <vcl/svapp.hxx>
 
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
@@ -141,7 +143,7 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 void SbiScanner::scanAlphanumeric()
 {
     sal_Int32 n = nCol;
-    while(nCol < aLine.getLength() && (theBasicCharClass::get().isAlphaNumeric(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
+    while(nCol < aLine.getLength() && (basic::isAlphaNumeric(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
         ++pLine;
         ++nCol;
@@ -152,7 +154,7 @@ void SbiScanner::scanAlphanumeric()
 void SbiScanner::scanGoto()
 {
     sal_Int32 n = nCol;
-    while(n < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[n]))
+    while(n < aLine.getLength() && basic::isWhiteSpace(aLine[n]))
         ++n;
 
     if(n + 1 < aLine.getLength())
@@ -180,7 +182,7 @@ bool SbiScanner::readLine()
 
     // Trim trailing whitespace
     sal_Int32 nEnd = n;
-    while(nBufPos < nEnd && theBasicCharClass::get().isWhitespace(aBuf[nEnd - 1]))
+    while(nBufPos < nEnd && basic::isWhiteSpace(aBuf[nEnd - 1]))
         --nEnd;
 
     aLine = aBuf.copy(nBufPos, nEnd - nBufPos);
@@ -223,10 +225,10 @@ bool SbiScanner::NextSym()
         nOldCol1 = nOldCol2 = 0;
     }
 
-    if(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
+    if(nCol < aLine.getLength() && basic::isWhiteSpace(aLine[nCol]))
     {
         bSpaces = true;
-        while(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
+        while(nCol < aLine.getLength() && basic::isWhiteSpace(aLine[nCol]))
             ++pLine, ++nCol;
     }
 
@@ -247,7 +249,7 @@ bool SbiScanner::NextSym()
     }
 
     // copy character if symbol
-    if(nCol < aLine.getLength() && (theBasicCharClass::get().isAlpha(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
+    if(nCol < aLine.getLength() && (basic::isAlpha(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
         // if there's nothing behind '_' , it's the end of a line!
         if(nCol + 1 == aLine.getLength() && aLine[nCol] == '_')
@@ -282,7 +284,7 @@ bool SbiScanner::NextSym()
         // don't test the exclamation mark
         // if there's a symbol behind it
         else if((nCol >= aLine.getLength() || aLine[nCol] != '!') ||
-                (nCol + 1 >= aLine.getLength() || !theBasicCharClass::get().isAlpha(aLine[nCol + 1], bCompatible)))
+                (nCol + 1 >= aLine.getLength() || !basic::isAlpha(aLine[nCol + 1], bCompatible)))
         {
             if(nCol < aLine.getLength())
             {
@@ -298,8 +300,8 @@ bool SbiScanner::NextSym()
     }
 
     // read in and convert if number
-    else if((nCol < aLine.getLength() && theBasicCharClass::get().isDigit(aLine[nCol] & 0xFF)) ||
-            (nCol + 1 < aLine.getLength() && aLine[nCol] == '.' && theBasicCharClass::get().isDigit(aLine[nCol + 1] & 0xFF)))
+    else if((nCol < aLine.getLength() && rtl::isAsciiDigit(aLine[nCol])) ||
+            (nCol + 1 < aLine.getLength() && aLine[nCol] == '.' && rtl::isAsciiDigit(aLine[nCol + 1])))
     {
         short exp = 0;
         short dec = 0;
@@ -417,17 +419,13 @@ bool SbiScanner::NextSym()
     else if(nCol < aLine.getLength() && aLine[nCol] == '&')
     {
         ++pLine; ++nCol;
-        sal_Unicode cmp1[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F', 0 };
-        sal_Unicode cmp2[] = { '0', '1', '2', '3', '4', '5', '6', '7', 0 };
-        sal_Unicode *cmp = cmp1;
-        sal_Unicode base = 16;
-        sal_Unicode ndig = 8;
-        sal_Unicode xch  = aLine[nCol] & 0xFF;
+        sal_uInt32 base = 16;
+        sal_Unicode xch  = aLine[nCol];
         ++pLine; ++nCol;
-        switch( toupper( xch ) )
+        switch( rtl::toAsciiUpperCase( xch ) )
         {
             case 'O':
-                cmp = cmp2; base = 8; ndig = 11; break;
+                base = 8; break;
             case 'H':
                 break;
             default :
@@ -439,17 +437,18 @@ bool SbiScanner::NextSym()
         bNumber = true;
         // Hex literals are signed Integers ( as defined by basic
         // e.g. -2,147,483,648 through 2,147,483,647 (signed)
-        sal_uInt32 lu = 0;
+        sal_uInt64 lu = 0;
+        int i;
         bool bBufOverflow = false;
-        while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol] & 0xFF, bCompatible))
+        while(nCol < aLine.getLength() &&  basic::isAlphaNumeric(aLine[nCol], false))
         {
-            sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
-                toupper(aLine[nCol] & 0xFF));
+            sal_Unicode ch = rtl::toAsciiUpperCase(aLine[nCol]);
             ++pLine; ++nCol;
             // from 4.1.1996: buffer full, go on scanning empty
             if( (p-buf) == (BUF_SIZE-1) )
                 bBufOverflow = true;
-            else if( OUString( cmp ).indexOf( ch ) != -1 )
+            else if( ((base == 8)  && rtl::isAsciiOctalDigit( ch )) ||
+                     ((base == 16) && rtl::isAsciiCanonicHexDigit( ch )))
                 *p++ = ch;
             else
             {
@@ -460,10 +459,10 @@ bool SbiScanner::NextSym()
         *p = 0;
         for( p = buf; *p; ++p )
         {
-            int i = (*p & 0xFF) - '0';
+            i = (*p) - '0';
             if( i > 9 ) i -= 7;
             lu = ( lu * base ) + i;
-            if( !ndig-- )
+            if( lu > SAL_MAX_UINT32 )
             {
                 GenError( SbERR_MATH_OVERFLOW ); break;
             }
@@ -512,9 +511,10 @@ bool SbiScanner::NextSym()
                 }
             } else aError = OUString(cSep), GenError( SbERR_EXPECTED );
         }
+
     }
     // invalid characters:
-    else if( ( *pLine & 0xFF ) >= 0x7F )
+    else if( ! rtl::isAscii( *pLine ) )
     {
         GenError( SbERR_SYNTAX ); pLine++; nCol++;
     }

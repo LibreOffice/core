@@ -20,27 +20,14 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
 #define INCLUDED_BASIC_SOURCE_INC_BASICCHARCLASS_HXX
 
-#include <unotools/charclass.hxx>
-#include <rtl/instance.hxx>
+#include <sal/types.h>
 
-#include <vcl/svapp.hxx>
-
-class BasicCharClass
+namespace basic
 {
-    bool IsLetterTab[256];
-
-public:
-    BasicCharClass();
-
-    bool isLetter( sal_Unicode c );
-    bool isLetterUnicode( sal_Unicode c );
     bool isAlpha( sal_Unicode c, bool bCompatible );
-    bool isDigit( sal_Unicode c );
     bool isAlphaNumeric( sal_Unicode c, bool bCompatible );
-    bool isWhitespace( sal_Unicode c );
+    bool isWhiteSpace( sal_Unicode c );
 };
-
-class theBasicCharClass: public rtl::Static<BasicCharClass, theBasicCharClass> {};
 
 #endif
 
