@@ -42,7 +42,7 @@ namespace com {
     }   }   }
 }
 
-class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModelessDialog
+class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModalDialog
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
