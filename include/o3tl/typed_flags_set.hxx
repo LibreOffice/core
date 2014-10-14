@@ -177,7 +177,7 @@ inline typename o3tl::typed_flags<E>::Self operator |(
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator &=(E & lhs, E rhs) {
+inline E operator &=(E & lhs, E rhs) {
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs) >= 0);
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs) >= 0);
     lhs = lhs & rhs;
@@ -185,16 +185,14 @@ inline typename o3tl::typed_flags<E>::Self operator &=(E & lhs, E rhs) {
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator &=(
-    E & lhs, typename o3tl::typed_flags<E>::Self rhs)
-{
+inline E operator &=(E & lhs, typename o3tl::typed_flags<E>::Self rhs) {
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs) >= 0);
     lhs = lhs & rhs;
     return lhs;
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator |=(E & lhs, E rhs) {
+inline E operator |=(E & lhs, E rhs) {
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs) >= 0);
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(rhs) >= 0);
     lhs = lhs | rhs;
@@ -202,9 +200,7 @@ inline typename o3tl::typed_flags<E>::Self operator |=(E & lhs, E rhs) {
 }
 
 template<typename E>
-inline typename o3tl::typed_flags<E>::Self operator |=(
-    E & lhs, typename o3tl::typed_flags<E>::Self rhs)
-{
+inline E operator |=(E & lhs, typename o3tl::typed_flags<E>::Self rhs) {
     assert(static_cast<O3TL_STD_UNDERLYING_TYPE_E>(lhs) >= 0);
     lhs = lhs | rhs;
     return lhs;
