@@ -254,6 +254,7 @@ void ScExportTest::test()
     ScDocument& rLoadedDoc = xDocSh->GetDocument();
     double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
+    xDocSh->DoClose();
 }
 
 #if !defined MACOSX && !defined DRAGONFLY
