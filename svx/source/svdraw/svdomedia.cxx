@@ -41,6 +41,7 @@
 
 // For handling of glTF models
 #include <unotools/tempfile.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
@@ -54,10 +55,17 @@ using namespace ::com::sun::star;
 struct MediaTempFile
 {
     OUString const m_TempFileURL;
-    MediaTempFile(OUString const& rURL) : m_TempFileURL(rURL) {}
+    OUString const m_TempDirURL; // yet another hack, for the glTF models
+    MediaTempFile(OUString const& rURL, OUString const& rDirURL)
+        : m_TempFileURL(rURL), m_TempDirURL(rDirURL)
+    {}
     ~MediaTempFile()
     {
         ::osl::File::remove(m_TempFileURL);
+        if (!m_TempDirURL.isEmpty())
+        {
+            ::utl::removeTree(m_TempDirURL);
+        }
     }
 };
 
@@ -270,10 +278,11 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 static bool lcl_HandleJsonPackageURL(
     const OUString& rURL,
     SdrModel* const pModel,
-    OUString& o_rTempFileURL)
+    OUString& o_rTempFileURL,
+    OUString& o_rTempDirURL)
 {
     // Create a temporary folder which will contain all files of glTF model
-    const OUString sTempFolder = ::utl::TempFile( NULL, true ).GetURL();
+    o_rTempDirURL = ::utl::TempFile(NULL, true).GetURL();
 
     const sal_uInt16 nPackageLength = OString("vnd.sun.star.Package:").getLength();
     const OUString sUrlPath = rURL.copy(nPackageLength,rURL.lastIndexOf("/")-nPackageLength);
@@ -298,7 +307,7 @@ static bool lcl_HandleJsonPackageURL(
         {
             // Generate temp file path
             const OUString& rFilename = aFilenames[nFileIndex];
-            INetURLObject aUrlObj(sTempFolder);
+            INetURLObject aUrlObj(o_rTempDirURL);
             aUrlObj.insertName(rFilename);
             const OUString sFilepath = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -367,7 +376,7 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
     bool const bSuccess = lcl_CopyToTempFile(xStream, tempFileURL);
     if (bSuccess)
     {
-        m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
+        m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL, ""));
         m_pImpl->m_MediaProperties.setURL(
             m_pImpl->m_LastFailedPkgURL, tempFileURL, "");
     }
@@ -429,16 +438,18 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                                 rNewProperties.getTempURL()))
             {
                 OUString tempFileURL;
+                OUString tempDirURL;
                 bool bSuccess;
 #if HAVE_FEATURE_GLTF
                 if( url.endsWith(".json") )
-                    bSuccess = lcl_HandleJsonPackageURL(url, GetModel(), tempFileURL);
+                    bSuccess = lcl_HandleJsonPackageURL(url, GetModel(), tempFileURL, tempDirURL);
                 else
 #endif
-                    bSuccess = lcl_HandlePackageURL( url, GetModel(), tempFileURL);
+                    bSuccess = lcl_HandlePackageURL(url, GetModel(), tempFileURL);
                 if (bSuccess)
                 {
-                    m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL));
+                    m_pImpl->m_pTempFile.reset(
+                            new MediaTempFile(tempFileURL, tempDirURL));
                     m_pImpl->m_MediaProperties.setURL(url, tempFileURL, "");
                 }
                 else // this case is for Clone via operator=
