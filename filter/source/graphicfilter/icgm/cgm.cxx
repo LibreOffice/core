@@ -74,7 +74,6 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )
 
 CGM::~CGM()
 {
-
     if ( mpGraphic )
     {
         mpGDIMetaFile->Stop();
@@ -84,7 +83,7 @@ CGM::~CGM()
         *mpGraphic = Graphic( *mpGDIMetaFile );
     }
     for( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
-        delete maDefRepList[ i ];
+        delete [] maDefRepList[i];
     maDefRepList.clear();
     maDefRepSizeList.clear();
     delete mpBitmapInUse;
