@@ -167,6 +167,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
+    m_pImpl->m_xDocShell->DoClose();
     m_pImpl->m_xDocShell.Clear();
     BootstrapFixture::tearDown();
 }
@@ -4686,6 +4687,8 @@ void Test::testCopyPasteFormulasExternalDoc()
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.B$1"));
     rExtDoc.GetFormula(1,6,1, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$ExtSheet2.$B$2"));
+
+    xExtDocSh->DoClose();
 }
 
 void Test::testFindAreaPosVertical()
