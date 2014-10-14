@@ -23,8 +23,6 @@
 
 using namespace ::com::sun::star;
 
-
-
 CGMOutAct::CGMOutAct( CGM& rCGM )
 {
     mpCGM = &rCGM;
@@ -36,9 +34,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
 
     mnIndex = 0;
     mpGradient = NULL;
-};
-
-
+}
 
 CGMOutAct::~CGMOutAct()
 {
@@ -48,9 +44,7 @@ CGMOutAct::~CGMOutAct()
 
     if ( mpGradient )
         delete mpGradient;
-};
-
-
+}
 
 void CGMOutAct::BeginFigure()
 {
@@ -60,8 +54,6 @@ void CGMOutAct::BeginFigure()
     BeginGroup();
     mnIndex = 0;
 }
-
-
 
 void CGMOutAct::CloseRegion()
 {
@@ -73,8 +65,6 @@ void CGMOutAct::CloseRegion()
     }
 }
 
-
-
 void CGMOutAct::NewRegion()
 {
     if ( mnIndex > 2 )
@@ -85,8 +75,6 @@ void CGMOutAct::NewRegion()
     mnIndex = 0;
 }
 
-
-
 void CGMOutAct::EndFigure()
 {
     NewRegion();
@@ -95,8 +83,6 @@ void CGMOutAct::EndFigure()
     EndGroup();
     mnIndex = 0;
 }
-
-
 
 void CGMOutAct::RegPolyLine( Polygon& rPolygon, bool bReverse )
 {
@@ -123,8 +109,6 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, bool bReverse )
     }
 }
 
-
-
 void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nType*/ )
 {
     if ( !mpGradient )
@@ -133,16 +117,12 @@ void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nT
     mpGradient->YOffset = ( (sal_uInt16)nVertOfs & 0x7f );
 }
 
-
-
 void CGMOutAct::SetGradientAngle( long nAngle )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
     mpGradient->Angle = sal::static_int_cast< sal_Int16 >(nAngle);
 }
-
-
 
 void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo )
 {
@@ -151,8 +131,6 @@ void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorT
     mpGradient->StartColor = nColorFrom;
     mpGradient->EndColor = nColorTo;
 }
-
-
 
 void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
 {
@@ -186,6 +164,5 @@ void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
