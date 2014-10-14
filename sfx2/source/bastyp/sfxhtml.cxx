@@ -332,7 +332,7 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
     LanguageType eParseLang = (LanguageType )aNumStr.toInt32();
     sal_uInt32 nParseForm = rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
     double fVal;
-    rFormatter.IsNumberFormat( aValStr, nParseForm, fVal );
+    (void)rFormatter.IsNumberFormat(aValStr, nParseForm, fVal);
     if ( comphelper::string::getTokenCount(aNumStr, ';') > 2 )
     {
         eNumLang = (LanguageType)aNumStr.getToken( 1, ';' ).toInt32();
