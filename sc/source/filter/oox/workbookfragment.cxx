@@ -296,7 +296,7 @@ public:
 
 void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVector& rSheets )
 {
-    sal_Int32 nThreads = std::min( rSheets.size(), (size_t) 4 /* FIXME: ncpus/2 */ );
+    sal_Int32 nThreads = std::min( rSheets.size(), (size_t)osl_getCPUThreadCount() );
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
