@@ -42,7 +42,9 @@ using namespace com::sun::star;
 
 void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
 {
-    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0) {
+    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0)
+    {
+        // Either the rotation or shear angle exists.
         Rectangle aSR0(GetSnapRect());
         long nWdt0=aSR0.Right()-aSR0.Left();
         long nHgt0=aSR0.Bottom()-aSR0.Top();
@@ -50,13 +52,11 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         long nHgt1=rRect.Bottom()-rRect.Top();
         SdrTextObj::NbcResize(maSnapRect.TopLeft(),boost::rational<sal_Int64>(nWdt1,nWdt0),boost::rational<sal_Int64>(nHgt1,nHgt0));
         SdrTextObj::NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
-    } else {
-        long nHDist=GetTextLeftDistance()+GetTextRightDistance();
-        long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-        long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
-        long nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-        long nTWdt1=rRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
-        long nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
+    }
+    else
+    {
+        // No rotation or shear.
+
         aRect=rRect;
         ImpJustifyRect(aRect);
 
