@@ -84,16 +84,6 @@ struct AxisLabelProperties SAL_FINAL
     bool getIsStaggered() const;
 };
 
-struct AxisLabelAlignment
-{
-    double mfLabelDirection; /// which direction the labels are to be drawn.
-    double mfInnerTickDirection; /// which direction the inner tickmarks are to be drawn.
-
-    LabelAlignment meAlignment;
-
-    AxisLabelAlignment();
-};
-
 struct AxisProperties SAL_FINAL
 {
     css::uno::Reference<css::chart2::XAxis> m_xAxisModel;
@@ -112,8 +102,11 @@ struct AxisProperties SAL_FINAL
     bool        m_bCrossingAxisHasReverseDirection;
     bool        m_bCrossingAxisIsCategoryAxes;
 
-    AxisLabelAlignment maLabelAlignment;
-
+    //this direction is used to indicate in which direction the labels are to be drawn
+    double          m_fLabelDirectionSign;
+    //this direction is used to indicate in which direction inner tickmarks are to be drawn
+    double          m_fInnerDirectionSign;
+    LabelAlignment  m_aLabelAlignment;
     bool            m_bDisplayLabels;
 
     sal_Int32       m_nNumberFormatKey;

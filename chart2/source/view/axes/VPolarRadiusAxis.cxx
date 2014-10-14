@@ -35,10 +35,10 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
             , sal_Int32 nDimensionCount )
             : VPolarAxis( rAxisProperties, xNumberFormatsSupplier, 1/*nDimensionIndex*/, nDimensionCount )
 {
-    m_aAxisProperties.maLabelAlignment.mfLabelDirection = 0.0;
-    m_aAxisProperties.maLabelAlignment.mfInnerTickDirection = 0.0;
-    m_aAxisProperties.maLabelAlignment.meAlignment = LABEL_ALIGN_RIGHT;
+    m_aAxisProperties.m_fLabelDirectionSign=0.0;
+    m_aAxisProperties.m_fInnerDirectionSign=0.0;
     m_aAxisProperties.m_bIsMainAxis=false;
+    m_aAxisProperties.m_aLabelAlignment=LABEL_ALIGN_RIGHT;
     m_aAxisProperties.init();
 
     m_apAxisWithLabels.reset( new VCartesianAxis(

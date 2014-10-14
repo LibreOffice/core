@@ -98,7 +98,7 @@ Reference< drawing::XShape > createSingleLabel(
                     ->createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
 
     LabelPositionHelper::correctPositionForRotation( xShape2DText
-        , rAxisProperties.maLabelAlignment.meAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
+        , rAxisProperties.m_aLabelAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
 
     return xShape2DText;
 }
@@ -649,7 +649,7 @@ bool VCartesianAxis::createTextShapes(
         , nLimitedSpaceForText, bLimitedHeight );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , m_aAxisLabelProperties.m_aFontReferenceSize );
-    LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, m_aAxisProperties.maLabelAlignment.meAlignment );
+    LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, m_aAxisProperties.m_aLabelAlignment );
 
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
     sal_Int32 nColor = Color( COL_AUTO ).GetColor();
@@ -922,8 +922,7 @@ struct lcl_GreaterYPos : ::std::binary_function< VCartesianAxis::ScreenPosAndLog
     }
 };
 
-void VCartesianAxis::get2DAxisMainLine(
-    B2DVector& rStart, B2DVector& rEnd, AxisLabelAlignment& rAlignment, double fCrossesOtherAxis ) const
+void VCartesianAxis::get2DAxisMainLine( B2DVector& rStart, B2DVector& rEnd, double fCrossesOtherAxis )
 {
     //m_aAxisProperties might get updated and changed here because
     //    the label alignmant and inner direction sign depends exactly of the choice of the axis line position which is made here in this method
@@ -1012,23 +1011,23 @@ void VCartesianAxis::get2DAxisMainLine(
 
                 if( fabs(fDeltaY) > fabs(fDeltaX)  )
                 {
-                    rAlignment.meAlignment = LABEL_ALIGN_LEFT;
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
                     //choose most left positions
                     ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
-                    rAlignment.mfLabelDirection = (fDeltaY < 0) ? -1.0 : 1.0;
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaY<0 ? -1 : 1;
                 }
                 else
                 {
-                    rAlignment.meAlignment = LABEL_ALIGN_BOTTOM;
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
                     //choose most bottom positions
                     ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
-                    rAlignment.mfLabelDirection = (fDeltaX < 0) ? -1.0 : 1.0;
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaX<0 ? -1 : 1;
                 }
                 ScreenPosAndLogicPos aBestPos( aPosList[0] );
                 fYStart = fYEnd = aBestPos.fLogicY;
                 fZStart = fZEnd = aBestPos.fLogicZ;
                 if( !m_pPosHelper->isMathematicalOrientationX() )
-                    rAlignment.mfLabelDirection *= -1.0;
+                    m_aAxisProperties.m_fLabelDirectionSign *= -1;
             }
         }//end 3D x axis
     }
@@ -1066,23 +1065,23 @@ void VCartesianAxis::get2DAxisMainLine(
 
                 if( fabs(fDeltaY) > fabs(fDeltaX)  )
                 {
-                    rAlignment.meAlignment = LABEL_ALIGN_LEFT;
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
                     //choose most left positions
                     ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
-                    rAlignment.mfLabelDirection = (fDeltaY < 0) ? -1.0 : 1.0;
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaY<0 ? -1 : 1;
                 }
                 else
                 {
-                    rAlignment.meAlignment = LABEL_ALIGN_BOTTOM;
+                    m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
                     //choose most bottom positions
                     ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
-                    rAlignment.mfLabelDirection = (fDeltaX < 0) ? -1.0 : 1.0;
+                    m_aAxisProperties.m_fLabelDirectionSign = fDeltaX<0 ? -1 : 1;
                 }
                 ScreenPosAndLogicPos aBestPos( aPosList[0] );
                 fXStart = fXEnd = aBestPos.fLogicX;
                 fZStart = fZEnd = aBestPos.fLogicZ;
                 if( !m_pPosHelper->isMathematicalOrientationY() )
-                    rAlignment.mfLabelDirection *= -1.0;
+                    m_aAxisProperties.m_fLabelDirectionSign *= -1;
             }
         }//end 3D y axis
     }
@@ -1151,21 +1150,21 @@ void VCartesianAxis::get2DAxisMainLine(
                 if( !::rtl::math::approxEqual( fDeltaX, 0.0 ) ) // prefer left-right alignments
                 {
                     if( aBestPos.aScreenPos.getX() > aNotSoGoodPos.aScreenPos.getX() )
-                        rAlignment.meAlignment = LABEL_ALIGN_RIGHT;
+                        m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_RIGHT;
                     else
-                         rAlignment.meAlignment = LABEL_ALIGN_LEFT;
+                         m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_LEFT;
                 }
                 else
                 {
                     if( aBestPos.aScreenPos.getY() > aNotSoGoodPos.aScreenPos.getY() )
-                        rAlignment.meAlignment = LABEL_ALIGN_BOTTOM;
+                        m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_BOTTOM;
                     else
-                        rAlignment.meAlignment = LABEL_ALIGN_TOP;
+                         m_aAxisProperties.m_aLabelAlignment = LABEL_ALIGN_TOP;
                 }
 
-                rAlignment.mfLabelDirection = (fDeltaX < 0) ? -1.0 : 1.0;
+                m_aAxisProperties.m_fLabelDirectionSign = fDeltaX<0 ? -1 : 1;
                 if( !m_pPosHelper->isMathematicalOrientationZ() )
-                    rAlignment.mfLabelDirection *= -1.0;
+                    m_aAxisProperties.m_fLabelDirectionSign *= -1;
 
                 fXStart = fXEnd = aBestPos.fLogicX;
                 fYStart = fYEnd = aBestPos.fLogicY;
@@ -1177,7 +1176,7 @@ void VCartesianAxis::get2DAxisMainLine(
     rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
 
     if(3==m_nDimension && !AxisHelper::isAxisPositioningEnabled() )
-        rAlignment.mfInnerTickDirection = rAlignment.mfLabelDirection;//to behave like before
+        m_aAxisProperties.m_fInnerDirectionSign = m_aAxisProperties.m_fLabelDirectionSign;//to behave like before
 
     if(3==m_nDimension && AxisHelper::isAxisPositioningEnabled() )
     {
@@ -1188,54 +1187,54 @@ void VCartesianAxis::get2DAxisMainLine(
         {
             if( m_eLeftWallPos != CuboidPlanePosition_Left )
             {
-                rAlignment.mfLabelDirection *= -1.0;
-                rAlignment.mfInnerTickDirection *= -1.0;
+                m_aAxisProperties.m_fLabelDirectionSign *= -1.0;
+                m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
             }
 
-            rAlignment.meAlignment =
-                (rAlignment.mfLabelDirection < 0) ?
+            m_aAxisProperties.m_aLabelAlignment =
+                ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
 
             if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
                 ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
-                rAlignment.meAlignment =
-                    (rAlignment.meAlignment == LABEL_ALIGN_RIGHT) ?
-                        LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
+                m_aAxisProperties.m_aLabelAlignment =
+                    ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
+                        LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
         }
         else if( fabs(fDeltaY) > fabs(fDeltaX) )
         {
             if( m_eBackWallPos != CuboidPlanePosition_Back )
             {
-                rAlignment.mfLabelDirection *= -1.0;
-                rAlignment.mfInnerTickDirection *= -1.0;
+                m_aAxisProperties.m_fLabelDirectionSign *= -1.0;
+                m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
             }
 
-            rAlignment.meAlignment =
-                (rAlignment.mfLabelDirection < 0) ?
-                    LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
+            m_aAxisProperties.m_aLabelAlignment =
+                ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
+                    LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
 
             if( ( fDeltaY<0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
                 ( fDeltaY>0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
-                rAlignment.meAlignment =
-                    (rAlignment.meAlignment == LABEL_ALIGN_RIGHT) ?
+                m_aAxisProperties.m_aLabelAlignment =
+                    ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_RIGHT ) ?
                         LABEL_ALIGN_LEFT :  LABEL_ALIGN_RIGHT;
         }
         else
         {
             if( m_eBackWallPos != CuboidPlanePosition_Back )
             {
-                rAlignment.mfLabelDirection *= -1.0;
-                rAlignment.mfInnerTickDirection *= -1.0;
+                m_aAxisProperties.m_fLabelDirectionSign *= -1.0;
+                m_aAxisProperties.m_fInnerDirectionSign *= -1.0;
             }
 
-            rAlignment.meAlignment =
-                (rAlignment.mfLabelDirection < 0) ?
+            m_aAxisProperties.m_aLabelAlignment =
+                ( m_aAxisProperties.m_fLabelDirectionSign<0 ) ?
                     LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
 
             if( ( fDeltaX>0 && m_aScale.Orientation == chart2::AxisOrientation_REVERSE ) ||
                 ( fDeltaX<0 && m_aScale.Orientation == chart2::AxisOrientation_MATHEMATICAL ) )
-                rAlignment.meAlignment =
-                    (rAlignment.meAlignment == LABEL_ALIGN_TOP) ?
+                m_aAxisProperties.m_aLabelAlignment =
+                    ( m_aAxisProperties.m_aLabelAlignment==LABEL_ALIGN_TOP ) ?
                         LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
         }
     }
@@ -1248,14 +1247,11 @@ TickFactory* VCartesianAxis::createTickFactory()
 
 TickFactory2D* VCartesianAxis::createTickFactory2D()
 {
-    AxisLabelAlignment aLabelAlign;
     B2DVector aStart, aEnd;
-    get2DAxisMainLine(aStart, aEnd, aLabelAlign, getAxisIntersectionValue());
-    m_aAxisProperties.maLabelAlignment = aLabelAlign;
+    get2DAxisMainLine( aStart, aEnd, getAxisIntersectionValue() );
 
     B2DVector aLabelLineStart, aLabelLineEnd;
-    get2DAxisMainLine(aLabelLineStart, aLabelLineEnd, aLabelAlign, getLabelLineIntersectionValue());
-    m_aAxisProperties.maLabelAlignment = aLabelAlign;
+    get2DAxisMainLine( aLabelLineStart, aLabelLineEnd, getLabelLineIntersectionValue() );
 
     return new TickFactory2D( m_aScale, m_aIncrement, aStart, aEnd, aLabelLineStart-aStart );
 }
@@ -1301,9 +1297,7 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
         return nRet;
 
     B2DVector aStart, aEnd;
-    AxisLabelAlignment aLabelAlign;
-    get2DAxisMainLine(aStart, aEnd, aLabelAlign, getAxisIntersectionValue());
-    m_aAxisProperties.maLabelAlignment = aLabelAlign;
+    this->get2DAxisMainLine( aStart, aEnd, getAxisIntersectionValue() );
 
     sal_Int32 nMaxHeight = static_cast<sal_Int32>(fabs(aEnd.getY()-aStart.getY()));
     sal_Int32 nMaxWidth = static_cast<sal_Int32>(fabs(aEnd.getX()-aStart.getX()));
@@ -1522,7 +1516,7 @@ void VCartesianAxis::updatePositions()
 
                 //correctPositionForRotation
                 LabelPositionHelper::correctPositionForRotation( xShape2DText
-                    , m_aAxisProperties.maLabelAlignment.meAlignment, fRotationAngleDegree, m_aAxisProperties.m_bComplexCategories );
+                    , m_aAxisProperties.m_aLabelAlignment, fRotationAngleDegree, m_aAxisProperties.m_bComplexCategories );
             }
         }
     }
@@ -1544,7 +1538,7 @@ void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, co
             continue;
 
         bool bTicksAtLabels = ( m_aAxisProperties.m_eTickmarkPos != ::com::sun::star::chart::ChartAxisMarkPosition_AT_AXIS );
-        double fInnerDirectionSign = m_aAxisProperties.maLabelAlignment.mfInnerTickDirection;
+        double fInnerDirectionSign = m_aAxisProperties.m_fInnerDirectionSign;
         if( bTicksAtLabels && m_aAxisProperties.m_eLabelPos == ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END )
             fInnerDirectionSign *= -1.0;
         bTicksAtLabels = bTicksAtLabels || bOnlyAtLabels;
@@ -1554,7 +1548,7 @@ void VCartesianAxis::createTickMarkLineShapes( TickInfoArrayType& rTickInfos, co
         //add ticks at axis (without lables):
         if( !bOnlyAtLabels && m_aAxisProperties.m_eTickmarkPos == ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS )
             rTickFactory2D.addPointSequenceForTickLine( aPoints, nN++, (*aTickIter).fScaledTickValue
-                , m_aAxisProperties.maLabelAlignment.mfInnerTickDirection, rTickmarkProperties, !bTicksAtLabels );
+                , m_aAxisProperties.m_fInnerDirectionSign, rTickmarkProperties, !bTicksAtLabels );
     }
     aPoints.realloc(nN);
     m_pShapeFactory->createLine2D( m_xGroupShape_Shapes, aPoints
@@ -1647,9 +1641,7 @@ void VCartesianAxis::createShapes()
             if (!rtl::math::isNan(fExtraLineCrossesOtherAxis))
             {
                 B2DVector aStart, aEnd;
-                AxisLabelAlignment aLabelAlign;
-                get2DAxisMainLine(aStart, aEnd, aLabelAlign, fExtraLineCrossesOtherAxis);
-                m_aAxisProperties.maLabelAlignment = aLabelAlign;
+                this->get2DAxisMainLine( aStart, aEnd, fExtraLineCrossesOtherAxis );
                 drawing::PointSequenceSequence aPoints( lcl_makePointSequence(aStart,aEnd) );
                 Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                         m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
