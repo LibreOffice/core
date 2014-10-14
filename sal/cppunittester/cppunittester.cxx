@@ -237,6 +237,9 @@ public:
 #ifdef UNX
             EyecatcherListener eye;
             result.addListener(&eye);
+            // set this to track down files created before first test method
+            std::string lib(testlib.substr(testlib.rfind('/')+1));
+            setenv("LO_TESTNAME", lib.c_str(), true);
 #endif
 
             CppUnit::TestRunner runner;
