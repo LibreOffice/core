@@ -47,7 +47,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 import bsh.Interpreter;
 
 public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener,

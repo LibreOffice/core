@@ -19,7 +19,7 @@
 package org.libreoffice.example.java_scripts;
 
 import java.io.InputStream;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 
 public interface OOScriptDebugger {
     public void go(XScriptContext ctxt, String filename);

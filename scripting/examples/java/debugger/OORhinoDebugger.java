@@ -27,7 +27,7 @@ import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.tools.debugger.Main;
 import org.mozilla.javascript.tools.debugger.ScopeProvider;
 
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 
 public class OORhinoDebugger implements OOScriptDebugger {
 
