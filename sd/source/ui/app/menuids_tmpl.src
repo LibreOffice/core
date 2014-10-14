@@ -35,41 +35,6 @@
         Text [ en-US ] = "~Distribution..." ; \
     };
 
-#define MN_DRAWINGMODE \
-    MenuItem\
-    {\
-        Identifier = SID_DRAWINGMODE ; \
-        HelpId = CMD_SID_DRAWINGMODE ; \
-        Check = TRUE ; \
-        Text [ en-US ] = "~Drawing View" ; \
-    };
-
-#define MN_OUTLINEMODE \
-    MenuItem\
-    {\
-        Identifier = SID_OUTLINEMODE ; \
-        HelpId = CMD_SID_OUTLINEMODE ; \
-        Check = TRUE ; \
-        Text [ en-US ] = "~Outline View" ; \
-    };
-
-#define MN_DIAMODE \
-    MenuItem\
-    {\
-        Identifier = SID_DIAMODE ; \
-        HelpId = CMD_SID_DIAMODE ; \
-        Check = TRUE ; \
-        Text [ en-US ] = "~Slide Sorter" ; \
-    };
-
-#define MN_PRESENTATION \
-    MenuItem\
-    {\
-        Identifier = SID_PRESENTATION ; \
-        HelpId = CMD_SID_PRESENTATION ; \
-        Text [ en-US ] = "Slide Sho~w" ; \
-    };
-
 #define MN_CAPTUREPOINT \
     MenuItem\
     {\
