@@ -591,7 +591,10 @@ void LwpDrawPolygon::Read()
     this->ReadClosedObjStyle();
     m_pStream->ReadUInt16( m_nNumPoints );
 
-    m_pVector = new SdwPoint [m_nNumPoints];
+    if (m_nNumPoints > m_pStream->remainingSize() / 4)
+        throw BadRead();
+
+    m_pVector = new SdwPoint[m_nNumPoints];
 
     for (sal_uInt16 nC = 0; nC < m_nNumPoints; nC++)
     {
