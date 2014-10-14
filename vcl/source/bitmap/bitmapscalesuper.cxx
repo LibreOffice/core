@@ -923,47 +923,39 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
                                pReadAccess->Height(),
                                pWriteAccess->Height(),
                                bVMirr, bHMirr );
+        void (*scaleRangeFn)(ScaleContext &rCtx, long nStartY, long nEndY);
+
+        bool bScaleUp = fScaleX >= fScaleThresh && fScaleY >= fScaleThresh;
         if( pReadAccess->HasPalette() )
         {
-            if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+            switch( pReadAccess->GetScanlineFormat() )
             {
-                if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                    scalePallete8bit(aContext, nStartY, nEndY);
-                else
-                    scalePallete8bit2(aContext, nStartY, nEndY);
-            }
-            else
-            {
-                if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                    scalePalleteGeneral(aContext, nStartY, nEndY);
-                else
-                    scalePalleteGeneral2(aContext, nStartY, nEndY);
+            case BMP_FORMAT_8BIT_PAL:
+                scaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
+                break;
+            default:
+                scaleRangeFn = bScaleUp ? scalePalleteGeneral
+                                        : scalePalleteGeneral2;
+                break;
             }
         }
         else
         {
-            if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
+            switch( pReadAccess->GetScanlineFormat() )
             {
-                if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                    scale24bitBGR(aContext, nStartY, nEndY);
-                else
-                    scale24bitBGR2(aContext, nStartY, nEndY);
-            }
-            else if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
-            {
-                if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                    scale24bitRGB(aContext, nStartY, nEndY);
-                else
-                    scale24bitRGB2(aContext, nStartY, nEndY);
-            }
-            else
-            {
-                if( fScaleX >= fScaleThresh && fScaleY >= fScaleThresh )
-                    scaleNonPalleteGeneral(aContext, nStartY, nEndY);
-                else
-                    scaleNonPalleteGeneral2(aContext, nStartY, nEndY);
+            case BMP_FORMAT_24BIT_TC_BGR:
+                scaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
+                break;
+            case BMP_FORMAT_24BIT_TC_RGB:
+                scaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
+                break;
+            default:
+                scaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
+                                        : scaleNonPalleteGeneral2;
+                break;
             }
         }
+        scaleRangeFn( aContext, nStartY, nEndY );
 
         bRet = true;
     }
