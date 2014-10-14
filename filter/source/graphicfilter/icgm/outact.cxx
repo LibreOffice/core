@@ -28,7 +28,7 @@ CGMOutAct::CGMOutAct( CGM& rCGM )
     mpCGM = &rCGM;
     mnCurrentPage = 0;
     mnGroupActCount = mnGroupLevel = 0;
-    mpGroupLevel = new sal_uInt32[ CGM_OUTACT_MAX_GROUP_LEVEL ];
+    mpGroupLevel = new sal_uInt32[CGM_OUTACT_MAX_GROUP_LEVEL] {};
     mpPoints = (Point*)new sal_Int8[ 0x2000 * sizeof( Point ) ];
     mpFlags = new sal_uInt8[ 0x2000 ];
 
@@ -41,9 +41,7 @@ CGMOutAct::~CGMOutAct()
     delete[] (sal_Int8*) mpPoints;
     delete[] mpFlags;
     delete[] mpGroupLevel;
-
-    if ( mpGradient )
-        delete mpGradient;
+    delete mpGradient;
 }
 
 void CGMOutAct::BeginFigure()
