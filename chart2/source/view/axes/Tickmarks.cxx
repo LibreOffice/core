@@ -237,7 +237,7 @@ B2DVector TickFactory2D::getDistanceAxisTickToText( const AxisProperties& rAxisP
         || ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END == rAxisProperties.m_eLabelPos )
         bFarAwayLabels = true;
 
-    double fInnerDirectionSign = rAxisProperties.m_fInnerDirectionSign;
+    double fInnerDirectionSign = rAxisProperties.maLabelAlignment.mfInnerTickDirection;
     if( fInnerDirectionSign==0.0 )
         fInnerDirectionSign = 1.0;
 
@@ -269,11 +269,11 @@ B2DVector TickFactory2D::getDistanceAxisTickToText( const AxisProperties& rAxisP
     }
 
     B2DVector aLabelDirection(aStart);
-    if( rAxisProperties.m_fInnerDirectionSign != rAxisProperties.m_fLabelDirectionSign )
+    if (rAxisProperties.maLabelAlignment.mfInnerTickDirection != rAxisProperties.maLabelAlignment.mfLabelDirection)
         aLabelDirection = aEnd;
 
     B2DVector aOrthoLabelDirection(aOrthoDirection);
-    if( rAxisProperties.m_fInnerDirectionSign != rAxisProperties.m_fLabelDirectionSign )
+    if (rAxisProperties.maLabelAlignment.mfInnerTickDirection != rAxisProperties.maLabelAlignment.mfLabelDirection)
         aOrthoLabelDirection*=-1.0;
     aOrthoLabelDirection.normalize();
     if( bIncludeSpaceBetweenTickAndText )
