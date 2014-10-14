@@ -33,8 +33,6 @@ class Test : public SwModelTestBase
         Test() : SwModelTestBase("/sw/qa/extras/odfimport/data/", "writer8") {}
 };
 
-#define DECLARE_ODFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-
 DECLARE_ODFIMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt")
 {
     // .odt import did crash on the empty font list (which I think is valid according SVG spec)
