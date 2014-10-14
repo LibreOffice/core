@@ -39,13 +39,13 @@ namespace com {
     }   }   }
 }
 
-class SfxTemplateManagerDlg : public ModelessDialog
+class SfxTemplateManagerDlg : public ModalDialog
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 
 public:
 
-    SfxTemplateManagerDlg (Window *parent = DIALOG_NO_PARENT);
+    SfxTemplateManagerDlg(Window *parent = NULL);
 
     virtual ~SfxTemplateManagerDlg ();
 
