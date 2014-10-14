@@ -6333,6 +6333,7 @@ void DocxAttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasis
 
     switch ( rEmphasisMark.GetValue() )
     {
+    default:
     case EMPHASISMARK_NONE:
         pEmphasis = "none";
         break;
