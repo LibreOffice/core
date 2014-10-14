@@ -126,8 +126,8 @@ void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
     long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
     long nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-    bool bXMirr = xFact.numerator() < 0;
-    bool bYMirr = yFact.numerator() < 0;
+    bool bXMirr = xFact < 0;
+    bool bYMirr = yFact < 0;
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {

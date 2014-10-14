@@ -121,7 +121,7 @@ void rational_ReduceInaccurate(boost::rational<long>& rRational, unsigned nSigni
 
     // Count with unsigned longs only
     // http://www.boost.org/doc/libs/release/libs/rational/rational.html#Internal%20representation
-    const bool bNeg = ( rRational.numerator() < 0 );
+    const bool bNeg = ( rRational < 0 );
     unsigned long nMul = (unsigned long)( bNeg? -rRational.numerator(): rRational.numerator() );
     unsigned long nDiv = (unsigned long)( rRational.denominator() );
 

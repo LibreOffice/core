@@ -901,8 +901,8 @@ void SdrGrafObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact
 {
     SdrRectObj::NbcResize( rRef, xFact, yFact );
 
-    bool bMirrX = xFact.numerator() < 0;
-    bool bMirrY = yFact.numerator() < 0;
+    bool bMirrX = xFact < 0;
+    bool bMirrY = yFact < 0;
 
     if( bMirrX != bMirrY )
         bMirrored = !bMirrored;

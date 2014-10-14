@@ -1497,8 +1497,8 @@ void SdrObject::NbcMove(const Size& rSiz)
 
 void SdrObject::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
-    bool bXMirr = xFact.numerator() < 0;
-    bool bYMirr = yFact.numerator() < 0;
+    bool bXMirr = xFact < 0;
+    bool bYMirr = yFact < 0;
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
