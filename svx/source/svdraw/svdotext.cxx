@@ -548,51 +548,59 @@ bool SdrTextObj::NbcSetEckenradius(long nRad)
 // states of IsAutoGrowWidth/Height to correctly set TextMinFrameWidth/Height
 void SdrTextObj::AdaptTextMinSize()
 {
-    if(bTextFrame && (!pModel || !pModel->IsPasteResize()))
+    if (!bTextFrame)
+        // Only do this for text frame.
+        return;
+
+    if (pModel && pModel->IsPasteResize())
+        // Don't do this during paste resize.
+        return;
+
+    const bool bW = IsAutoGrowWidth();
+    const bool bH = IsAutoGrowHeight();
+
+    if (!bW && !bH)
+        // No auto grow requested.  Bail out.
+        return;
+
+    SfxItemSet aSet(
+        *GetObjectItemSet().GetPool(),
+        SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
+        SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH, // contains SDRATTR_TEXT_MAXFRAMEWIDTH
+        0, 0);
+
+    if(bW)
     {
-        const bool bW(IsAutoGrowWidth());
-        const bool bH(IsAutoGrowHeight());
+        // Set minimum width.
+        const long nDist = GetTextLeftDistance() + GetTextRightDistance();
+        const long nW = std::max<long>(0, aRect.GetWidth() - 1 - nDist); // text width without margins
 
-        if(bW || bH)
+        aSet.Put(makeSdrTextMinFrameWidthItem(nW));
+
+        if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
-            SfxItemSet aSet(
-                *GetObjectItemSet().GetPool(),
-                SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-                SDRATTR_TEXT_MINFRAMEWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH, // contains SDRATTR_TEXT_MAXFRAMEWIDTH
-                0, 0);
-
-            if(bW)
-            {
-                const long nDist(GetTextLeftDistance() + GetTextRightDistance());
-                const long nW(std::max(long(0), (long)(aRect.GetWidth() - 1 - nDist)));
-
-                aSet.Put(makeSdrTextMinFrameWidthItem(nW));
-
-                if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
-                {
-                    bDisableAutoWidthOnDragging = true;
-                    aSet.Put(makeSdrTextAutoGrowWidthItem(false));
-                }
-            }
-
-            if(bH)
-            {
-                const long nDist(GetTextUpperDistance() + GetTextLowerDistance());
-                const long nH(std::max(long(0), (long)(aRect.GetHeight() - 1 - nDist)));
-
-                aSet.Put(makeSdrTextMinFrameHeightItem(nH));
-
-                if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
-                {
-                    bDisableAutoWidthOnDragging = false;
-                    aSet.Put(makeSdrTextAutoGrowHeightItem(false));
-                }
-            }
-
-            SetObjectItemSet(aSet);
-            NbcAdjustTextFrameWidthAndHeight();
+            bDisableAutoWidthOnDragging = true;
+            aSet.Put(makeSdrTextAutoGrowWidthItem(false));
         }
     }
+
+    if(bH)
+    {
+        // Set Minimum height.
+        const long nDist = GetTextUpperDistance() + GetTextLowerDistance();
+        const long nH = std::max<long>(0, aRect.GetHeight() - 1 - nDist); // text height without margins
+
+        aSet.Put(makeSdrTextMinFrameHeightItem(nH));
+
+        if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+        {
+            bDisableAutoWidthOnDragging = false;
+            aSet.Put(makeSdrTextAutoGrowHeightItem(false));
+        }
+    }
+
+    SetObjectItemSet(aSet);
+    NbcAdjustTextFrameWidthAndHeight();
 }
 
 void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const
