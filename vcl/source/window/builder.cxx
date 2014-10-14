@@ -66,33 +66,33 @@ namespace
 
     SymbolType mapStockToSymbol(const OString& sType)
     {
-        SymbolType eRet = SYMBOL_NOSYMBOL;
+        SymbolType eRet = SymbolType::DONTKNOW;
         if (sType == "gtk-media-next")
-            eRet = SYMBOL_NEXT;
+            eRet = SymbolType::NEXT;
         else if (sType == "gtk-media-previous")
-            eRet = SYMBOL_PREV;
+            eRet = SymbolType::PREV;
         else if (sType == "gtk-media-play")
-            eRet = SYMBOL_PLAY;
+            eRet = SymbolType::PLAY;
         else if (sType == "gtk-goto-first")
-            eRet = SYMBOL_FIRST;
+            eRet = SymbolType::FIRST;
         else if (sType == "gtk-goto-last")
-            eRet = SYMBOL_LAST;
+            eRet = SymbolType::LAST;
         else if (sType == "gtk-go-back")
-            eRet = SYMBOL_ARROW_LEFT;
+            eRet = SymbolType::ARROW_LEFT;
         else if (sType == "gtk-go-forward")
-            eRet = SYMBOL_ARROW_RIGHT;
+            eRet = SymbolType::ARROW_RIGHT;
         else if (sType == "gtk-go-up")
-            eRet = SYMBOL_ARROW_UP;
+            eRet = SymbolType::ARROW_UP;
         else if (sType == "gtk-go-down")
-            eRet = SYMBOL_ARROW_DOWN;
+            eRet = SymbolType::ARROW_DOWN;
         else if (sType == "gtk-missing-image")
-            eRet = SYMBOL_IMAGE;
+            eRet = SymbolType::IMAGE;
         else if (sType == "gtk-help")
-            eRet = SYMBOL_HELP;
+            eRet = SymbolType::HELP;
         else if (sType == "gtk-close")
-            eRet = SYMBOL_CLOSE;
+            eRet = SymbolType::CLOSE;
         else if (mapStockToImageResource(sType))
-            eRet = SYMBOL_IMAGE;
+            eRet = SymbolType::IMAGE;
         return eRet;
     }
 }
@@ -389,8 +389,8 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         {
             const stockinfo &rImageInfo = aFind->second;
             SymbolType eType = mapStockToSymbol(rImageInfo.m_sStock);
-            SAL_WARN_IF(eType == SYMBOL_NOSYMBOL, "vcl", "missing stock image element for button");
-            if (eType == SYMBOL_NOSYMBOL)
+            SAL_WARN_IF(eType == SymbolType::DONTKNOW, "vcl", "missing stock image element for button");
+            if (eType == SymbolType::DONTKNOW)
                 continue;
             if (!aI->m_bRadio)
             {
@@ -399,12 +399,12 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
                 //but images the right size. Really the PushButton::CalcMinimumSize
                 //and PushButton::ImplDrawPushButton are the better place to handle
                 //this, but its such a train-wreck
-                if (eType != SYMBOL_IMAGE)
+                if (eType != SymbolType::IMAGE)
                     pTargetButton->SetStyle(pTargetButton->GetStyle() | WB_SMALLSTYLE);
             }
             else
-                SAL_WARN_IF(eType != SYMBOL_IMAGE, "vcl.layout", "inimplemented symbol type for radiobuttons");
-            if (eType == SYMBOL_IMAGE)
+                SAL_WARN_IF(eType != SymbolType::IMAGE, "vcl.layout", "inimplemented symbol type for radiobuttons");
+            if (eType == SymbolType::IMAGE)
             {
                 Bitmap aBitmap(VclResId(mapStockToImageResource(rImageInfo.m_sStock)));
                 Image const aImage(aBitmap);

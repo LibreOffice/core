@@ -62,12 +62,12 @@ void MoreButton::ShowState()
 {
     if ( mbState )
     {
-        SetSymbol( SYMBOL_PAGEUP );
+        SetSymbol( SymbolType::PAGEUP );
         SetText( mpMBData->maLessText );
     }
     else
     {
-        SetSymbol( SYMBOL_PAGEDOWN );
+        SetSymbol( SymbolType::PAGEDOWN );
         SetText( mpMBData->maMoreText );
     }
 }

@@ -150,11 +150,11 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
         aCloseBtn.SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());
 
         aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
-        aFloatBtn.SetSymbol( SYMBOL_FLOAT );
+        aFloatBtn.SetSymbol( SymbolType::FLOAT );
         aFloatBtn.SetQuickHelpText( ResId(SV_HELPTEXT_RESTORE, *pResMgr).toString() );
 
         aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
-        aHideBtn.SetSymbol( SYMBOL_HIDE );
+        aHideBtn.SetSymbol( SymbolType::HIDE );
         aHideBtn.SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr).toString() );
     }
 
@@ -938,9 +938,8 @@ void MenuBarWindow::Resize()
         aHideBtn.setPosSizePixel( nX, nY, n, n );
     }
 
-    aFloatBtn.SetSymbol( SYMBOL_FLOAT );
-    aHideBtn.SetSymbol( SYMBOL_HIDE );
-    //aCloseBtn.SetSymbol( SYMBOL_CLOSE ); //is a toolbox now
+    aFloatBtn.SetSymbol( SymbolType::FLOAT );
+    aHideBtn.SetSymbol( SymbolType::HIDE );
 
     Invalidate();
 }

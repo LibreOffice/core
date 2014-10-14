@@ -28,6 +28,7 @@
 #include <rscstr.hxx>
 #include <rscarray.hxx>
 #include <rscdef.hxx>
+#include <rsc/rsc-vcl-shared-types.hxx>
 
 #include <vector>
 #include <map>
@@ -138,6 +139,7 @@ class RscTypCont
 
     void        Init();         // Initialisiert Klassen und Tabelle
     void        SETCONST( RscConst *, const char *, sal_uInt32 );
+    inline void SETCONST( RscConst *p1, const char * p2, SymbolType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     void        SETCONST( RscConst *, Atom, sal_uInt32 );
     RscEnum *   InitLangType();
     RscEnum *   InitFieldUnitsType();

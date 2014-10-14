@@ -911,7 +911,7 @@ ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
       aButton.SetClickHdl( LINK( this, ScInputBarGroup, ClickHdl ) );
       aButton.SetSizePixel( aSize );
       aButton.Enable();
-      aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
+      aButton.SetSymbol( SymbolType::SPIN_DOWN  );
       aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
       aButton.Show();
 
@@ -979,7 +979,7 @@ void ScInputBarGroup::Resize()
 
     if( aMultiTextWnd.GetNumLines() > 1 )
     {
-        aButton.SetSymbol( SYMBOL_SPIN_UP  );
+        aButton.SetSymbol( SymbolType::SPIN_UP  );
         aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
         Size scrollSize = aButton.GetSizePixel();
         scrollSize.Height() = aMultiTextWnd.GetSizePixel().Height() - aButton.GetSizePixel().Height();
@@ -997,7 +997,7 @@ void ScInputBarGroup::Resize()
     }
     else
     {
-        aButton.SetSymbol( SYMBOL_SPIN_DOWN  );
+        aButton.SetSymbol( SymbolType::SPIN_DOWN  );
         aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
         aScrollBar.Hide();
     }

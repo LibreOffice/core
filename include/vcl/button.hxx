@@ -126,7 +126,7 @@ protected:
     SAL_DLLPRIVATE void            ImplDrawPushButton( bool bLayout = false );
     using Button::ImplGetTextStyle;
     SAL_DLLPRIVATE sal_uInt16          ImplGetTextStyle( sal_uLong nDrawFlags ) const;
-    SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SYMBOL_NOSYMBOL) && (meSymbol != SYMBOL_IMAGE) ); }
+    SAL_DLLPRIVATE bool            IsSymbol() const { return ( (meSymbol != SymbolType::DONTKNOW) && (meSymbol != SymbolType::IMAGE) ); }
     SAL_DLLPRIVATE bool            IsImage() const { return Button::HasImage(); }
 
     // Copy assignment is forbidden and not implemented.

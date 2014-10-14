@@ -1674,7 +1674,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
         Rectangle aSymbolRect( pData->maCloseRect );
         if ( pOffset )
             aSymbolRect.Move( pOffset->X(), pOffset->Y() );
-        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_CLOSE, pData->mnCloseState );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SymbolType::CLOSE, pData->mnCloseState );
     }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_DOCK) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maDockRect.IsEmpty() )
@@ -1682,7 +1682,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
         Rectangle aSymbolRect( pData->maDockRect );
         if ( pOffset )
             aSymbolRect.Move( pOffset->X(), pOffset->Y() );
-        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_DOCK, pData->mnDockState );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SymbolType::DOCK, pData->mnDockState );
     }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_MENU) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maMenuRect.IsEmpty() )
@@ -1690,7 +1690,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
         Rectangle aSymbolRect( pData->maMenuRect );
         if ( pOffset )
             aSymbolRect.Move( pOffset->X(), pOffset->Y() );
-        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_MENU, pData->mnMenuState );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SymbolType::MENU, pData->mnMenuState );
     }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_HIDE) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maHideRect.IsEmpty() )
@@ -1698,16 +1698,16 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
         Rectangle aSymbolRect( pData->maHideRect );
         if ( pOffset )
             aSymbolRect.Move( pOffset->X(), pOffset->Y() );
-        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_HIDE, pData->mnHideState );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SymbolType::HIDE, pData->mnHideState );
     }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_ROLL) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maRollRect.IsEmpty() )
     {
         SymbolType eType;
         if ( pBorderWindow->mbRollUp )
-            eType = SYMBOL_ROLLDOWN;
+            eType = SymbolType::ROLLDOWN;
         else
-            eType = SYMBOL_ROLLUP;
+            eType = SymbolType::ROLLUP;
         Rectangle aSymbolRect( pData->maRollRect );
         if ( pOffset )
             aSymbolRect.Move( pOffset->X(), pOffset->Y() );
@@ -1720,7 +1720,7 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
         Rectangle aSymbolRect( pData->maHelpRect );
         if ( pOffset )
             aSymbolRect.Move( pOffset->X(), pOffset->Y() );
-        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_HELP, pData->mnHelpState );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SymbolType::HELP, pData->mnHelpState );
     }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_PIN) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maPinRect.IsEmpty() )

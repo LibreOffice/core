@@ -1124,7 +1124,7 @@ void MenuFloatingWindow::ImplDrawScroller( bool bUp )
     Rectangle aRect( Point( nX, nY ), Size( aOutSz.Width()-nX, nScrollerHeight ) );
 
     DecorationView aDecoView( this );
-    SymbolType eSymbol = bUp ? SYMBOL_SPIN_UP : SYMBOL_SPIN_DOWN;
+    SymbolType eSymbol = bUp ? SymbolType::SPIN_UP : SymbolType::SPIN_DOWN;
 
     sal_uInt16 nStyle = 0;
     if ( ( bUp && !bScrollUp ) || ( !bUp && !bScrollDown ) )

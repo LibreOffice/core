@@ -178,7 +178,7 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
         const long nBorderDistanceBottom = ((aSymbolRect.GetHeight()*150)+500)/1000;
         aSymbolRect.Bottom()-=nBorderDistanceBottom;
         DecorationView aDecoView( this );
-        aDecoView.DrawSymbol( aSymbolRect, SYMBOL_SPIN_DOWN,
+        aDecoView.DrawSymbol( aSymbolRect, SymbolType::SPIN_DOWN,
                               ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                                 ? Color( COL_WHITE )
                                 : Color( COL_BLACK ) ) );

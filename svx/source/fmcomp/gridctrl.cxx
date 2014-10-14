@@ -345,10 +345,10 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent, WinBits nStyle
           ,m_nCurrentPos(-1)
           ,m_bPositioning(false)
 {
-    m_aFirstBtn.SetSymbol(SYMBOL_FIRST);
-    m_aPrevBtn.SetSymbol(SYMBOL_PREV);
-    m_aNextBtn.SetSymbol(SYMBOL_NEXT);
-    m_aLastBtn.SetSymbol(SYMBOL_LAST);
+    m_aFirstBtn.SetSymbol(SymbolType::FIRST);
+    m_aPrevBtn.SetSymbol(SymbolType::PREV);
+    m_aNextBtn.SetSymbol(SymbolType::NEXT);
+    m_aLastBtn.SetSymbol(SymbolType::LAST);
     m_aNewBtn.SetModeImage(((DbGridControl*)pParent)->GetImage(DbGridControl_Base::NEW));
 
     m_aFirstBtn.SetHelpId(HID_GRID_TRAVEL_FIRST);

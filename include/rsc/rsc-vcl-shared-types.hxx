@@ -68,47 +68,47 @@ enum ToolBoxItemType { TOOLBOXITEM_DONTKNOW, TOOLBOXITEM_BUTTON,
 
 enum ButtonType { BUTTON_SYMBOL, BUTTON_TEXT, BUTTON_SYMBOLTEXT };
 
-typedef sal_uInt16 SymbolType;
+enum class SymbolType : sal_uInt16
+{
+    DONTKNOW         = 0,
+    IMAGE            = 1,
+    ARROW_UP         = 2,
+    ARROW_DOWN       = 3,
+    ARROW_LEFT       = 4,
+    ARROW_RIGHT      = 5,
+    SPIN_UP          = 6,
+    SPIN_DOWN        = 7,
+    SPIN_LEFT        = 8,
+    SPIN_RIGHT       = 9,
+    FIRST            = 10,
+    LAST             = 11,
+    PREV             = 12,
+    NEXT             = 13,
+    PAGEUP           = 14,
+    PAGEDOWN         = 15,
+    PLAY             = 16,
+    REVERSEPLAY      = 17,
+    RECORD           = 18,
+    STOP             = 19,
+    PAUSE            = 20,
+    WINDSTART        = 21,
+    WINDEND          = 22,
+    WINDBACKWARD     = 23,
+    WINDFORWARD      = 24,
+    CLOSE            = 25,
+    ROLLUP           = 26,
+    ROLLDOWN         = 27,
+    CHECKMARK        = 28,
+    RADIOCHECKMARK   = 29,
+    SPIN_UPDOWN      = 30,
+    FLOAT            = 31,
+    DOCK             = 32,
+    HIDE             = 33,
+    HELP             = 34,
+    PLUS             = 35,
+    MENU             = SymbolType::SPIN_DOWN
+};
 
-#define SYMBOL_DONTKNOW         ((SymbolType)0)
-#define SYMBOL_IMAGE            ((SymbolType)1)
-#define SYMBOL_ARROW_UP         ((SymbolType)2)
-#define SYMBOL_ARROW_DOWN       ((SymbolType)3)
-#define SYMBOL_ARROW_LEFT       ((SymbolType)4)
-#define SYMBOL_ARROW_RIGHT      ((SymbolType)5)
-#define SYMBOL_SPIN_UP          ((SymbolType)6)
-#define SYMBOL_SPIN_DOWN        ((SymbolType)7)
-#define SYMBOL_SPIN_LEFT        ((SymbolType)8)
-#define SYMBOL_SPIN_RIGHT       ((SymbolType)9)
-#define SYMBOL_FIRST            ((SymbolType)10)
-#define SYMBOL_LAST             ((SymbolType)11)
-#define SYMBOL_PREV             ((SymbolType)12)
-#define SYMBOL_NEXT             ((SymbolType)13)
-#define SYMBOL_PAGEUP           ((SymbolType)14)
-#define SYMBOL_PAGEDOWN         ((SymbolType)15)
-#define SYMBOL_PLAY             ((SymbolType)16)
-#define SYMBOL_REVERSEPLAY      ((SymbolType)17)
-#define SYMBOL_RECORD           ((SymbolType)18)
-#define SYMBOL_STOP             ((SymbolType)19)
-#define SYMBOL_PAUSE            ((SymbolType)20)
-#define SYMBOL_WINDSTART        ((SymbolType)21)
-#define SYMBOL_WINDEND          ((SymbolType)22)
-#define SYMBOL_WINDBACKWARD     ((SymbolType)23)
-#define SYMBOL_WINDFORWARD      ((SymbolType)24)
-#define SYMBOL_CLOSE            ((SymbolType)25)
-#define SYMBOL_ROLLUP           ((SymbolType)26)
-#define SYMBOL_ROLLDOWN         ((SymbolType)27)
-#define SYMBOL_CHECKMARK        ((SymbolType)28)
-#define SYMBOL_RADIOCHECKMARK   ((SymbolType)29)
-#define SYMBOL_SPIN_UPDOWN      ((SymbolType)30)
-#define SYMBOL_FLOAT            ((SymbolType)31)
-#define SYMBOL_DOCK             ((SymbolType)32)
-#define SYMBOL_HIDE             ((SymbolType)33)
-#define SYMBOL_HELP             ((SymbolType)34)
-#define SYMBOL_PLUS             ((SymbolType)35)
-#define SYMBOL_MENU             SYMBOL_SPIN_DOWN
-
-#define SYMBOL_NOSYMBOL         (SYMBOL_DONTKNOW)
 
 // Border-Styles fuer SetBorder()
 typedef sal_uInt16 WindowBorderStyle;
