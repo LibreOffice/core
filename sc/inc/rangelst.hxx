@@ -93,6 +93,7 @@ public:
 
 private:
     ::std::vector<ScRange*> maRanges;
+    SCROW           mnMaxRowUsed;
     typedef std::vector<ScRange*>::iterator iterator;
     typedef std::vector<ScRange*>::const_iterator const_iterator;
 };

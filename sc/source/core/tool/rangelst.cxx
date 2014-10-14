@@ -229,6 +229,37 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
     SCROW nRow2 = r.aEnd.Row();
     SCTAB nTab2 = r.aEnd.Tab();
 
+    // One common usage is to join ranges that actually are top to bottom
+    // appends but the caller doesn't exactly know about it, e.g. when invoked
+    // by ScMarkData::FillRangeListWithMarks(), check for this special case
+    // first and speed up things by not looping over all ranges for each range
+    // to be joined. We don't remember the exact encompassing range that would
+    // have to be updated on refupdates and insertions and deletions, instead
+    // remember just the maximum row used, even independently of the sheet.
+    // This satisfies most use cases.
+
+    if (!bIsInList)
+    {
+        if (nRow1 > mnMaxRowUsed + 1)
+        {
+            Append( r );
+            return;
+        }
+        else if (nRow1 == mnMaxRowUsed + 1)
+        {
+            // Check if we can simply enlarge the last range.
+            ScRange* p = maRanges.back();
+            if (p->aEnd.Row() + 1 == nRow1 &&
+                    p->aStart.Col() == nCol1 && p->aEnd.Col() == nCol2 &&
+                    p->aStart.Tab() == nTab1 && p->aEnd.Tab() == nTab2)
+            {
+                p->aEnd.SetRow( nRow2 );
+                mnMaxRowUsed = nRow2;
+                return;
+            }
+        }
+    }
+
     ScRange* pOver = (ScRange*) &r;     // fies aber wahr wenn bInList
     size_t nOldPos = 0;
     if ( bIsInList )
@@ -403,6 +434,8 @@ bool ScRangeList::UpdateReference(
             bChanged = true;
             pR->aStart.Set( theCol1, theRow1, theTab1 );
             pR->aEnd.Set( theCol2, theRow2, theTab2 );
+            if (mnMaxRowUsed < theRow2)
+                mnMaxRowUsed = theRow2;
         }
     }
 
@@ -435,6 +468,8 @@ void ScRangeList::InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW n
                 SCROW nNewRangeEndRow = nRowPos + nSize - 1;
                 aNewRanges.push_back(ScRange(nNewRangeStartCol, nNewRangeStartRow, nTab, nNewRangeEndCol,
                             nNewRangeEndRow, nTab));
+                if (mnMaxRowUsed < nNewRangeEndRow)
+                    mnMaxRowUsed = nNewRangeEndRow;
             }
         }
     }
@@ -983,16 +1018,19 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr )
     return itr == maRanges.end() ? NULL : *itr;
 }
 
-ScRangeList::ScRangeList() {}
+ScRangeList::ScRangeList() : mnMaxRowUsed(-1) {}
 
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
-    SvRefBase()
+    SvRefBase(),
+    mnMaxRowUsed(-1)
 {
     maRanges.reserve(rList.maRanges.size());
     for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
+    mnMaxRowUsed = rList.mnMaxRowUsed;
 }
 
-ScRangeList::ScRangeList( const ScRange& rRange )
+ScRangeList::ScRangeList( const ScRange& rRange ) :
+    mnMaxRowUsed(-1)
 {
     maRanges.reserve(1);
     Append(rRange);
@@ -1003,13 +1041,14 @@ ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
     RemoveAll();
     maRanges.reserve(rList.maRanges.size());
     for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
+    mnMaxRowUsed = rList.mnMaxRowUsed;
     return *this;
 }
 
 void ScRangeList::Append( const ScRange& rRange )
 {
     ScRange* pR = new ScRange( rRange );
-    maRanges.push_back( pR );
+    push_back( pR );
 }
 
 bool ScRangeList::Intersects( const ScRange& rRange ) const
@@ -1126,6 +1165,8 @@ const ScRange* ScRangeList::back() const
 void ScRangeList::push_back(ScRange* p)
 {
     maRanges.push_back(p);
+    if (mnMaxRowUsed < p->aEnd.Row())
+        mnMaxRowUsed = p->aEnd.Row();
 }
 
 ScAddress ScRangeList::GetTopLeftCorner() const
