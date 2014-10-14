@@ -117,7 +117,8 @@ public class UCBStreamHandler extends URLStreamHandler {
 
             try {
                 String sUrl = url.toString();
-                if ( sUrl.lastIndexOf(separator) != -1 ) {
+
+                if (sUrl.lastIndexOf(separator) != -1) {
                     String path = sUrl.substring(0, sUrl.lastIndexOf(separator));
 
                     if (m_xSimpleFileAccess.isReadOnly(path)) {
