@@ -57,6 +57,7 @@ CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )
     , mpChart(NULL)
     , mpOutAct(new CGMImpressOutAct(*this, rModel))
     , mpSource(NULL)
+    , mpEndValidSource(NULL)
     , mnParaSize(0)
     , mnActCount(0)
     , mpBuf(NULL)
@@ -102,6 +103,8 @@ sal_uInt32 CGM::GetBackGroundColor()
 sal_uInt32 CGM::ImplGetUI16( sal_uInt32 /*nAlign*/ )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
+    if (pSource + 2 > mpEndValidSource)
+        throw css::uno::Exception("attempt to read past end of input", 0);
     mnParaSize += 2;
     return ( pSource[ 0 ] << 8 ) +  pSource[ 1 ];
 };
@@ -114,6 +117,8 @@ sal_uInt8 CGM::ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision )
 sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
+    if (pSource + nPrecision > mpEndValidSource)
+        throw css::uno::Exception("attempt to read past end of input", 0);
     mnParaSize += nPrecision;
     switch( nPrecision )
     {
@@ -144,6 +149,8 @@ sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
+    if (pSource + nPrecision > mpEndValidSource)
+        throw css::uno::Exception("attempt to read past end of input", 0);
     mnParaSize += nPrecision;
     switch( nPrecision )
     {
@@ -193,12 +200,18 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     float   fFloatBuf;
 
 #ifdef OSL_BIGENDIAN
-        bCompatible = true;
+    bCompatible = true;
 #else
-        bCompatible = false;
+    bCompatible = false;
 #endif
+
+    if (mpSource + mnParaSize + nRealSize > mpEndValidSource)
+        throw css::uno::Exception("attempt to read past end of input", 0);
+
     if ( bCompatible )
+    {
         pPtr = mpSource + mnParaSize;
+    }
     else
     {
         if ( nRealSize == 4 )
@@ -619,11 +632,13 @@ void CGM::ImplDefaultReplacement()
         sal_uInt32  nOldElementID = mnElementID;
         sal_uInt32  nOldElementSize = mnElementSize;
         sal_uInt8*  pOldBuf = mpSource;
+        sal_uInt8*  pOldEndValidSource = mpEndValidSource;
 
         for ( size_t i = 0, n = maDefRepList.size(); i < n; ++i )
         {
             sal_uInt8*  pBuf = maDefRepList[ i ];
             sal_uInt32  nElementSize = maDefRepSizeList[ i ];
+            mpEndValidSource = pBuf + nElementSize;
             sal_uInt32  nCount = 0;
             while ( mbStatus && ( nCount < nElementSize ) )
             {
@@ -652,6 +667,7 @@ void CGM::ImplDefaultReplacement()
         mnElementID = nOldElementID;
         mnParaSize = mnElementSize = nOldElementSize;
         mpSource = pOldBuf;
+        mpEndValidSource = pOldEndValidSource;
     }
 }
 
@@ -664,6 +680,7 @@ bool CGM::Write( SvStream& rIStm )
     mpSource = mpBuf;
     if (rIStm.Read(mpSource, 2) != 2)
         return false;
+    mpEndValidSource = mpSource + 2;
     mnEscape = ImplGetUI16();
     mnElementClass = mnEscape >> 12;
     mnElementID = ( mnEscape & 0x0fe0 ) >> 5;
@@ -673,13 +690,15 @@ bool CGM::Write( SvStream& rIStm )
     {
         if (rIStm.Read(mpSource + mnParaSize, 2) != 2)
             return false;
+        mpEndValidSource = mpSource + mnParaSize + 2;
         mnElementSize = ImplGetUI16();
     }
     mnParaSize = 0;
     if (mnElementSize)
     {
-        if (rIStm.Read(mpSource + mnParaSize, mnElementSize) != mnElementSize)
+        if (rIStm.Read(mpSource, mnElementSize) != mnElementSize)
             return false;
+        mpEndValidSource = mpSource + mnElementSize;
     }
 
     if ( mnElementSize & 1 )
@@ -748,7 +767,7 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                 }
             }
         }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch (const css::uno::Exception&)
         {
             nStatus = 0;
         }
