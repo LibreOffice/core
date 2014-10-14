@@ -212,7 +212,7 @@ public class ScriptMetaData extends ScriptEntry {
 
             }
 
-            if (classPathVec.size() == 0) {
+            if (classPathVec.isEmpty()) {
                 URL url = createURL(parcelPath);
 
                 if (url != null) {

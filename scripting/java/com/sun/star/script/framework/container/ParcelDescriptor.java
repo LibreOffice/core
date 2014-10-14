@@ -352,7 +352,7 @@ public class ParcelDescriptor {
         item.setAttribute("value", script.getLanguageName());
         root.appendChild(item);
 
-        if (languagedepprops != null && languagedepprops.size() != 0) {
+        if (languagedepprops != null && !languagedepprops.isEmpty()) {
             String key;
             item = document.createElement("languagedepprops");
 
