@@ -22,6 +22,8 @@
 
 #include <boost/scoped_array.hpp>
 
+namespace {
+
 #define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<7L)+nFrac*((long)(cVal1)-(cVal0)))>>7L))
 
 void generateMap(long nW, long nDstW, bool bHMirr, long* pMapIX, long* pMapFX)
@@ -176,8 +178,8 @@ void scale24bitBGR(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
 }
 
 void scale24bitRGB(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
-                         long nStartX, long nEndX, long nStartY, long nEndY,
-                         bool bVMirr, bool bHMirr)
+                   long nStartX, long nEndX, long nStartY, long nEndY,
+                   bool bVMirr, bool bHMirr)
 {
     boost::scoped_array<long> pMapIX(new long[pWAcc->Width()]);
     boost::scoped_array<long> pMapIY(new long[pWAcc->Height()]);
@@ -930,6 +932,8 @@ void scaleNonPalleteGeneral2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
         }
     }
 }
+
+} // end anonymous namespace
 
 BitmapScaleSuper::BitmapScaleSuper(const double& rScaleX, const double& rScaleY) :
     mrScaleX(rScaleX),
