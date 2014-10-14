@@ -442,30 +442,30 @@ RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
 
         aBaseLst.push_back( pSymbol = new RscEnum( pHS->getID( "EnumSymbolButton" ), RSC_NOTYPE ) );
 
-        SETCONST( pSymbol, "IMAGEBUTTON_DONTKNOW",      SYMBOL_DONTKNOW );
-        SETCONST( pSymbol, "IMAGEBUTTON_IMAGE",         SYMBOL_IMAGE );
-        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_UP",      SYMBOL_ARROW_UP );
-        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_DOWN",    SYMBOL_ARROW_DOWN );
-        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_LEFT",    SYMBOL_ARROW_LEFT );
-        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_RIGHT",   SYMBOL_ARROW_RIGHT );
-        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_UP",       SYMBOL_SPIN_UP );
-        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_DOWN",     SYMBOL_SPIN_DOWN );
-        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_LEFT",     SYMBOL_SPIN_LEFT );
-        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_RIGHT",    SYMBOL_SPIN_RIGHT );
-        SETCONST( pSymbol, "IMAGEBUTTON_FIRST",         SYMBOL_FIRST );
-        SETCONST( pSymbol, "IMAGEBUTTON_LAST",          SYMBOL_LAST );
-        SETCONST( pSymbol, "IMAGEBUTTON_PREV",          SYMBOL_PREV );
-        SETCONST( pSymbol, "IMAGEBUTTON_NEXT",          SYMBOL_NEXT );
-        SETCONST( pSymbol, "IMAGEBUTTON_PAGEUP",        SYMBOL_PAGEUP );
-        SETCONST( pSymbol, "IMAGEBUTTON_PAGEDOWN",      SYMBOL_PAGEDOWN );
-        SETCONST( pSymbol, "IMAGEBUTTON_PLAY",          SYMBOL_PLAY );
-        SETCONST( pSymbol, "IMAGEBUTTON_REVERSEPLAY",   SYMBOL_REVERSEPLAY );
-        SETCONST( pSymbol, "IMAGEBUTTON_STOP",          SYMBOL_STOP );
-        SETCONST( pSymbol, "IMAGEBUTTON_PAUSE",         SYMBOL_PAUSE );
-        SETCONST( pSymbol, "IMAGEBUTTON_WINDSTART",     SYMBOL_WINDSTART );
-        SETCONST( pSymbol, "IMAGEBUTTON_WINDEND",       SYMBOL_WINDEND );
-        SETCONST( pSymbol, "IMAGEBUTTON_WINDBACKWARD",  SYMBOL_WINDBACKWARD );
-        SETCONST( pSymbol, "IMAGEBUTTON_WINDFORWARD",   SYMBOL_WINDFORWARD );
+        SETCONST( pSymbol, "IMAGEBUTTON_DONTKNOW",      SymbolType::DONTKNOW );
+        SETCONST( pSymbol, "IMAGEBUTTON_IMAGE",         SymbolType::IMAGE );
+        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_UP",      SymbolType::ARROW_UP );
+        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_DOWN",    SymbolType::ARROW_DOWN );
+        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_LEFT",    SymbolType::ARROW_LEFT );
+        SETCONST( pSymbol, "IMAGEBUTTON_ARROW_RIGHT",   SymbolType::ARROW_RIGHT );
+        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_UP",       SymbolType::SPIN_UP );
+        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_DOWN",     SymbolType::SPIN_DOWN );
+        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_LEFT",     SymbolType::SPIN_LEFT );
+        SETCONST( pSymbol, "IMAGEBUTTON_SPIN_RIGHT",    SymbolType::SPIN_RIGHT );
+        SETCONST( pSymbol, "IMAGEBUTTON_FIRST",         SymbolType::FIRST );
+        SETCONST( pSymbol, "IMAGEBUTTON_LAST",          SymbolType::LAST );
+        SETCONST( pSymbol, "IMAGEBUTTON_PREV",          SymbolType::PREV );
+        SETCONST( pSymbol, "IMAGEBUTTON_NEXT",          SymbolType::NEXT );
+        SETCONST( pSymbol, "IMAGEBUTTON_PAGEUP",        SymbolType::PAGEUP );
+        SETCONST( pSymbol, "IMAGEBUTTON_PAGEDOWN",      SymbolType::PAGEDOWN );
+        SETCONST( pSymbol, "IMAGEBUTTON_PLAY",          SymbolType::PLAY );
+        SETCONST( pSymbol, "IMAGEBUTTON_REVERSEPLAY",   SymbolType::REVERSEPLAY );
+        SETCONST( pSymbol, "IMAGEBUTTON_STOP",          SymbolType::STOP );
+        SETCONST( pSymbol, "IMAGEBUTTON_PAUSE",         SymbolType::PAUSE );
+        SETCONST( pSymbol, "IMAGEBUTTON_WINDSTART",     SymbolType::WINDSTART );
+        SETCONST( pSymbol, "IMAGEBUTTON_WINDEND",       SymbolType::WINDEND );
+        SETCONST( pSymbol, "IMAGEBUTTON_WINDBACKWARD",  SymbolType::WINDBACKWARD );
+        SETCONST( pSymbol, "IMAGEBUTTON_WINDFORWARD",   SymbolType::WINDFORWARD );
 
         // Variable einfuegen
         nVarId = aNmTb.Put( "Symbol", VARNAME );

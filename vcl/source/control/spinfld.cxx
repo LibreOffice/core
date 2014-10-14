@@ -156,26 +156,26 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
         // arrows are only use in OS/2 look
         if ( bHorz )
         {
-            eType1 = bMirrorHorz ? SYMBOL_ARROW_RIGHT : SYMBOL_ARROW_LEFT;
-            eType2 = bMirrorHorz ? SYMBOL_ARROW_LEFT : SYMBOL_ARROW_RIGHT;
+            eType1 = bMirrorHorz ? SymbolType::ARROW_RIGHT : SymbolType::ARROW_LEFT;
+            eType2 = bMirrorHorz ? SymbolType::ARROW_LEFT : SymbolType::ARROW_RIGHT;
         }
         else
         {
-            eType1 = SYMBOL_ARROW_UP;
-            eType2 = SYMBOL_ARROW_DOWN;
+            eType1 = SymbolType::ARROW_UP;
+            eType2 = SymbolType::ARROW_DOWN;
         }
     }
     else
     {
         if ( bHorz )
         {
-            eType1 = bMirrorHorz ? SYMBOL_SPIN_RIGHT : SYMBOL_SPIN_LEFT;
-            eType2 = bMirrorHorz ? SYMBOL_SPIN_LEFT : SYMBOL_SPIN_RIGHT;
+            eType1 = bMirrorHorz ? SymbolType::SPIN_RIGHT : SymbolType::SPIN_LEFT;
+            eType2 = bMirrorHorz ? SymbolType::SPIN_LEFT : SymbolType::SPIN_RIGHT;
         }
         else
         {
-            eType1 = SYMBOL_SPIN_UP;
-            eType2 = SYMBOL_SPIN_DOWN;
+            eType1 = SymbolType::SPIN_UP;
+            eType2 = SymbolType::SPIN_DOWN;
         }
     }
 
@@ -615,9 +615,9 @@ void SpinField::Paint( const Rectangle& rRect )
             nStyle |= BUTTON_DRAW_PRESSED;
         Rectangle aInnerRect = aView.DrawButton( maDropDownRect, nStyle );
 
-        SymbolType eSymbol = SYMBOL_SPIN_DOWN;
+        SymbolType eSymbol = SymbolType::SPIN_DOWN;
         if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
-            eSymbol = SYMBOL_SPIN_UPDOWN;
+            eSymbol = SymbolType::SPIN_UPDOWN;
 
         nStyle = IsEnabled() ? 0 : SYMBOL_DRAW_DISABLE;
         aView.DrawSymbol( aInnerRect, eSymbol, GetSettings().GetStyleSettings().GetButtonTextColor(), nStyle );
@@ -1023,9 +1023,9 @@ void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
             DecorationView aView( pDev );
             sal_uInt16 nStyle = BUTTON_DRAW_NOLIGHTBORDER;
             Rectangle aInnerRect = aView.DrawButton( aDD, nStyle );
-            SymbolType eSymbol = SYMBOL_SPIN_DOWN;
+            SymbolType eSymbol = SymbolType::SPIN_DOWN;
             if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
-                eSymbol = SYMBOL_SPIN_UPDOWN;
+                eSymbol = SymbolType::SPIN_UPDOWN;
 
             nStyle = ( IsEnabled() || ( nFlags & WINDOW_DRAW_NODISABLE ) ) ? 0 : SYMBOL_DRAW_DISABLE;
             aView.DrawSymbol( aInnerRect, eSymbol, aButtonTextColor, nStyle );

@@ -1905,12 +1905,12 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                             Size aSymbolSize;
                             if ( pData->nBits & MIB_RADIOCHECK )
                             {
-                                eSymbol = SYMBOL_RADIOCHECKMARK;
+                                eSymbol = SymbolType::RADIOCHECKMARK;
                                 aSymbolSize = Size( nFontHeight/2, nFontHeight/2 );
                             }
                             else
                             {
-                                eSymbol = SYMBOL_CHECKMARK;
+                                eSymbol = SymbolType::CHECKMARK;
                                 aSymbolSize = Size( (nFontHeight*25)/40, nFontHeight/2 );
                             }
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width())/2;
@@ -2045,7 +2045,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                         }
                         aDecoView.DrawSymbol(
                             Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
-                            SYMBOL_SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
+                            SymbolType::SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
                     }
                 }
 

@@ -638,7 +638,7 @@ void PushButton::ImplInitPushButtonData()
 {
     mpWindowImpl->mbPushButton    = true;
 
-    meSymbol        = SYMBOL_NOSYMBOL;
+    meSymbol        = SymbolType::DONTKNOW;
     meState         = TRISTATE_FALSE;
     meSaveValue     = TRISTATE_FALSE;
     mnDDStyle       = 0;
@@ -899,7 +899,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
             }
             ImplSetSeparatorX( nSeparatorX );
 
-            aDecoView.DrawSymbol( aSymbolRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
+            aDecoView.DrawSymbol( aSymbolRect, SymbolType::SPIN_DOWN, aColor, nStyle );
         }
 
     }
@@ -986,7 +986,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
             break;
     }
 
-    bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
+    bool bDropDown = ( IsSymbol() && (GetSymbol()==SymbolType::SPIN_DOWN) && GetText().isEmpty() );
 
     if( bDropDown && (aCtrlType == CTRL_COMBOBOX || aCtrlType == CTRL_LISTBOX ) )
     {
@@ -1526,7 +1526,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
                     break;
             }
 
-            bool bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && GetText().isEmpty() );
+            bool bDropDown = ( IsSymbol() && (GetSymbol()==SymbolType::SPIN_DOWN) && GetText().isEmpty() );
 
             if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) &&
                    !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )

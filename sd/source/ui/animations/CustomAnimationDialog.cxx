@@ -339,7 +339,7 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, Popup
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
     mpDropdownButton = new MenuButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
-    mpDropdownButton->SetSymbol(SYMBOL_SPIN_DOWN);
+    mpDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
     mpDropdownButton->Show();
     mpDropdownButton->SetPopupMenu( pMenu );
 

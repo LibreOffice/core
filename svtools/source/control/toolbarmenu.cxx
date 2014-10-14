@@ -1435,12 +1435,12 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             Size aSymbolSize;
                             if ( pEntry->mnBits & MIB_RADIOCHECK )
                             {
-                                eSymbol = SYMBOL_RADIOCHECKMARK;
+                                eSymbol = SymbolType::RADIOCHECKMARK;
                                 aSymbolSize = Size( nFontHeight/2, nFontHeight/2 );
                             }
                             else
                             {
-                                eSymbol = SYMBOL_CHECKMARK;
+                                eSymbol = SymbolType::CHECKMARK;
                                 aSymbolSize = Size( (nFontHeight*25)/40, nFontHeight/2 );
                             }
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - aSymbolSize.Width())/2;

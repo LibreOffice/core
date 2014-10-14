@@ -1039,7 +1039,7 @@ namespace pcr
         if ( _nStyle & WB_DROPDOWN )
         {
             m_pDropdownButton = new PushButton( this, WB_NOLIGHTBORDER | WB_RECTSTYLE | WB_NOTABSTOP);
-            m_pDropdownButton->SetSymbol(SYMBOL_SPIN_DOWN);
+            m_pDropdownButton->SetSymbol(SymbolType::SPIN_DOWN);
             m_pDropdownButton->SetClickHdl( LINK( this, DropDownEditControl, DropDownHdl ) );
             m_pDropdownButton->Show();
         }

@@ -717,7 +717,7 @@ void TabBar::ImplInitControls()
             mpPrevBtn = new ImplTabButton( this, WB_REPEAT );
             mpPrevBtn->SetClickHdl( aLink );
         }
-        mpPrevBtn->SetSymbol( mbMirrored ? SYMBOL_NEXT : SYMBOL_PREV );
+        mpPrevBtn->SetSymbol( mbMirrored ? SymbolType::NEXT : SymbolType::PREV );
         mpPrevBtn->Show();
 
         if ( !mpNextBtn )
@@ -725,7 +725,7 @@ void TabBar::ImplInitControls()
             mpNextBtn = new ImplTabButton( this, WB_REPEAT );
             mpNextBtn->SetClickHdl( aLink );
         }
-        mpNextBtn->SetSymbol( mbMirrored ? SYMBOL_PREV : SYMBOL_NEXT );
+        mpNextBtn->SetSymbol( mbMirrored ? SymbolType::PREV : SymbolType::NEXT );
         mpNextBtn->Show();
     }
     else
@@ -741,7 +741,7 @@ void TabBar::ImplInitControls()
             mpFirstBtn = new ImplTabButton( this );
             mpFirstBtn->SetClickHdl( aLink );
         }
-        mpFirstBtn->SetSymbol( mbMirrored ? SYMBOL_LAST : SYMBOL_FIRST );
+        mpFirstBtn->SetSymbol( mbMirrored ? SymbolType::LAST : SymbolType::FIRST );
         mpFirstBtn->Show();
 
         if ( !mpLastBtn )
@@ -749,7 +749,7 @@ void TabBar::ImplInitControls()
             mpLastBtn = new ImplTabButton( this );
             mpLastBtn->SetClickHdl( aLink );
         }
-        mpLastBtn->SetSymbol( mbMirrored ? SYMBOL_FIRST : SYMBOL_LAST );
+        mpLastBtn->SetSymbol( mbMirrored ? SymbolType::FIRST : SymbolType::LAST );
         mpLastBtn->Show();
     }
     else

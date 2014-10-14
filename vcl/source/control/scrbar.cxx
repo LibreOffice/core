@@ -646,16 +646,16 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
         if ( rStyleSettings.GetOptions() & STYLE_OPTION_SCROLLARROW )
         {
             if ( GetStyle() & WB_HORZ )
-                eSymbolType = SYMBOL_ARROW_LEFT;
+                eSymbolType = SymbolType::ARROW_LEFT;
             else
-                eSymbolType = SYMBOL_ARROW_UP;
+                eSymbolType = SymbolType::ARROW_UP;
         }
         else
         {
             if ( GetStyle() & WB_HORZ )
-                eSymbolType = SYMBOL_SPIN_LEFT;
+                eSymbolType = SymbolType::SPIN_LEFT;
             else
-                eSymbolType = SYMBOL_SPIN_UP;
+                eSymbolType = SymbolType::SPIN_UP;
         }
         aDecoView.DrawSymbol( aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nStyle );
     }
@@ -673,16 +673,16 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
         if ( rStyleSettings.GetOptions() & STYLE_OPTION_SCROLLARROW )
         {
             if ( GetStyle() & WB_HORZ )
-                eSymbolType = SYMBOL_ARROW_RIGHT;
+                eSymbolType = SymbolType::ARROW_RIGHT;
             else
-                eSymbolType = SYMBOL_ARROW_DOWN;
+                eSymbolType = SymbolType::ARROW_DOWN;
         }
         else
         {
             if ( GetStyle() & WB_HORZ )
-                eSymbolType = SYMBOL_SPIN_RIGHT;
+                eSymbolType = SymbolType::SPIN_RIGHT;
             else
-                eSymbolType = SYMBOL_SPIN_DOWN;
+                eSymbolType = SymbolType::SPIN_DOWN;
         }
         aDecoView.DrawSymbol( aTempRect, eSymbolType, rStyleSettings.GetButtonTextColor(), nStyle );
     }

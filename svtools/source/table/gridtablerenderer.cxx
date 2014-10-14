@@ -92,7 +92,7 @@ namespace svt { namespace table
             DecorationView aDecoView( &aDevice );
             aDecoView.DrawSymbol(
                 Rectangle( aBitmapPos, aBitmapSize ),
-                i_sortAscending ? SYMBOL_SPIN_UP : SYMBOL_SPIN_DOWN,
+                i_sortAscending ? SymbolType::SPIN_UP : SymbolType::SPIN_DOWN,
                 i_style.GetActiveColor()
             );
 

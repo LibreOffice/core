@@ -78,9 +78,9 @@ void ImplInitFieldSettings( vcl::Window* pWin, bool bFont, bool bForeground, boo
 void ImplInitDropDownButton( PushButton* pButton )
 {
     if ( pButton->GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_SPINUPDOWN )
-        pButton->SetSymbol( SYMBOL_SPIN_UPDOWN );
+        pButton->SetSymbol( SymbolType::SPIN_UPDOWN );
     else
-        pButton->SetSymbol( SYMBOL_SPIN_DOWN );
+        pButton->SetSymbol( SymbolType::SPIN_DOWN );
 
     if ( pButton->IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && ! pButton->IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
