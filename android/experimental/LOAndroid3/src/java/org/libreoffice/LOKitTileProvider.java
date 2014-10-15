@@ -34,7 +34,7 @@ public class LOKitTileProvider implements TileProvider {
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 
-        LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl-INFO.i18nlangtag");
+        LibreOfficeKit.putenv("SAL_LOG=-WARN+INFO.lok");
         LibreOfficeKit.init(LibreOfficeMainActivity.mAppContext);
 
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
