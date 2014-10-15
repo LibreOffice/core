@@ -904,7 +904,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         if( bMergeShell || !pSourceDocSh->IsModified() )
         {
             const SfxFilter* pStoreToFilter = SwIoSystem::GetFileFilter(
-                pSourceDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), ::aEmptyStr );
+                pSourceDocSh->GetMedium()->GetURLObject().GetMainURL(INetURLObject::NO_DECODE));
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
             const String* pStoreToFilterOptions = 0;
 

@@ -2431,8 +2431,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 //Own FileFormat? --> insert, not for StarWriter/Web
                 String sFileURL = URIHelper::SmartRel2Abs(INetURLObject(), sFile, Link(), false );
                 const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
-                        ? 0 : SwIoSystem::GetFileFilter(
-                        sFileURL, aEmptyStr );
+                        ? 0 : SwIoSystem::GetFileFilter(sFileURL);
                 if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
                 {
                 // and then pull up the insert-region-dialog by PostUser event
