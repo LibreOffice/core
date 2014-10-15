@@ -21,11 +21,15 @@ package org.openoffice.xmerge.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
+
 import java.util.StringTokenizer;
+import java.util.NoSuchElementException;
 
 import org.openoffice.xmerge.Convert;
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
+import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.ConverterFactory;
 import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
@@ -103,36 +107,37 @@ public class ActiveSyncDriver {
         }
 
         // Everything is registered so do the conversion
-        FileInputStream fis = new FileInputStream(srcFile);
-        FileOutputStream fos = new FileOutputStream(dstFile);
-
-        conv.addInputStream(srcFile, fis);
-
-        ConvertData dataOut;
+        boolean bOK = true;
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
         try {
-            dataOut = conv.convert();
-        }
-        catch (Exception e) {
-            fos.close();
-            return false;
+            fis = new FileInputStream(srcFile);
+            conv.addInputStream(srcFile, fis);
+            try {
+                fos = new FileOutputStream(dstFile);
+                ConvertData dataOut = conv.convert();
+
+                // Get the document and write it out.
+                Document doc = (Document)dataOut.getDocumentEnumeration().next();
+                doc.write(fos);
+                fos.flush();
+            } finally {
+                if (fos != null)
+                    fos.close();
+            }
+        } catch (IOException e) {
+            bOK = false;
+        } catch (NullPointerException e) {
+            bOK = false;
+        } catch (ConvertException e) {
+            bOK = false;
+        } catch (NoSuchElementException e) {
+            bOK = false;
+        } finally {
+            if (fis != null)
+                fis.close();
         }
 
-        if (dataOut == null) {
-            fos.close();
-            return false;
-        }
-
-        // Get the document and write it out.
-        Document doc = (Document)dataOut.getDocumentEnumeration().next();
-        if (doc == null) {
-            fos.close();
-            return false;
-        }
-
-        doc.write(fos);
-        fos.flush();
-        fos.close();
-
-        return true;
+        return bOK;
     }
 }
