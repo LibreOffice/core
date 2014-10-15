@@ -655,11 +655,12 @@ static void* lo_startmain(void*)
     return 0;
 }
 
+static bool bInitialized = false;
+
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
-    static bool bInitialized = false;
     if (bInitialized)
         return 1;
 
@@ -778,10 +779,14 @@ static void lo_destroy(LibreOfficeKit *pThis)
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     gImpl = NULL;
 
+    SAL_INFO("lok", "lo_destroy");
+
     Application::Quit();
     pthread_join(pLib->maThread, NULL);
 
     delete pLib;
+    bInitialized = false;
+    SAL_INFO("lok", "lo_destroy done");
 }
 
 }
