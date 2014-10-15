@@ -123,14 +123,8 @@ public abstract class AbstractDatabase implements DatabaseAccess
 
         if (m_databaseDocumentFile != null)
         {
-            try
-            {
-                final File file = new File(m_databaseDocumentFile);
-                file.delete();
-            }
-            catch (Exception e)
-            {
-            }
+            final File file = new File(m_databaseDocumentFile);
+            file.delete();
         }
     }
 

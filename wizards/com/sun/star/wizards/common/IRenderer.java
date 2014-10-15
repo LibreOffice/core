@@ -26,5 +26,5 @@ package com.sun.star.wizards.common;
 public interface IRenderer
 {
 
-    public String render(Object object);
+    String render(Object object);
 }

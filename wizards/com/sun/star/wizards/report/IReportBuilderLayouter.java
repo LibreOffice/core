@@ -29,78 +29,78 @@ public interface IReportBuilderLayouter
      * This name identifies the layout in the internal access list.
      * @return the internal layout name.
      */
-    public String getName();
+    String getName();
 
     /**
      * Get the localized name of the layout, which is shown in the layout page of the report wizard.
      * This name comes out of the resource and will be translate in different languages.
      * @return localized name of the layout.
      */
-    public String getLocalizedName();
+    String getLocalizedName();
 
     /**
      * For Landscape give nOrientation == com.sun.star.wizards.report.ReportLayouter.SOOPTLANDSCAPE
      * All other numbers are interpreted as portrait format.
      */
-    public void setPageOrientation(int nOrientation);
+    void setPageOrientation(int nOrientation);
 
     /**
      * dispose the layouter
      */
-    public void dispose();
+    void dispose();
 
     /**
      * Set the table name of the report
      * This is the name to the database table.
      * @param _nType something of com.sun.star.sdb.CommandType
      */
-    public void setTableName(int _nType, String TableName);
+    void setTableName(int _nType, String TableName);
 
     /**
      * Insert the field names, these are the field names out of a given datebase table
      */
-    public void insertFieldNames(final String[] FieldNames);
+    void insertFieldNames(final String[] FieldNames);
 
     /**
      * Insert the field type (Varchar, int, ...) as internal an int representation.
      */
-    public void insertFieldTypes(int[] FieldTypes);
+    void insertFieldTypes(int[] FieldTypes);
 
     /**
      * Insert the field width in count of chars as given in the database.
      */
-    public void insertFieldWidths(int[] FieldWidths);
+    void insertFieldWidths(int[] FieldWidths);
 
     /**
      * Insert the titles of the field names. This names are free formed
      */
-    public void insertFieldTitles(String[] _aFieldTitles);
+    void insertFieldTitles(String[] _aFieldTitles);
 
     /**
      * Insert the names of the groups, the group names are names out of the field names.
      *
      * If a group name is given here, it will not shown in the fields/titles, but must be in the field string list.
      */
-    public void insertGroupNames(String[] _aGroupFieldNames);
+    void insertGroupNames(String[] _aGroupFieldNames);
 
     /**
      * Insert the names of the groups which should be used as sorting, the group names are names out of the field names.
      *
      * If a group name is given here, it will not shown in the fields/titles, but must be in the field string list.
      */
-    public void insertSortingNames(String[][] _aSortFieldNames);
+    void insertSortingNames(String[][] _aSortFieldNames);
 
     /**
      * This method redraws the whole layout with all its content
      */
-    public void layout();
+    void layout();
 
     /**
      * Initialize the current Layouter with data's out of an other Layouter.
      *
      * This Method copies the internal fields, groups and titles
      */
-    public void initializeData(IReportBuilderLayouter aOtherLayouter);
+    void initializeData(IReportBuilderLayouter aOtherLayouter);
 
-    public void loadAndSetBackgroundTemplate(String LayoutTemplatePath);
+    void loadAndSetBackgroundTemplate(String LayoutTemplatePath);
 }
