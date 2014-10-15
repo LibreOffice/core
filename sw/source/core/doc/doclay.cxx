@@ -304,7 +304,6 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
                                     SwFrmFmt* pFrmFmt, bool bCalledFromShell )
 {
     SwFlyFrmFmt* pFmt = 0;
-    bool bCallMake = true;
     if ( !pAnchorPos && (FLY_AT_PAGE != eAnchorType) )
     {
         const SwFmtAnchor* pAnch;
@@ -316,15 +315,11 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
             if ( (FLY_AT_PAGE != pAnch->GetAnchorId()) )
             {
                 pAnchorPos = pAnch->GetCntntAnchor();
-                if (pAnchorPos)
-                {
-                    bCallMake = false;
-                }
             }
         }
     }
 
-    if( bCallMake )
+    if (pAnchorPos)
     {
         if( !pFrmFmt )
             pFrmFmt = getIDocumentStylePoolAccess().GetFrmFmtFromPool( RES_POOLFRM_FRAME );
