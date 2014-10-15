@@ -198,6 +198,10 @@ SvStream& ReadPptSlidePersistAtom( SvStream& rIn, PptSlidePersistAtom& rAtom )
     return rIn;
 }
 
+PptSlidePersistList::PptSlidePersistList() {}
+
+PptSlidePersistList::~PptSlidePersistList() {}
+
 sal_uInt16 PptSlidePersistList::FindPage(sal_uInt32 nId) const
 {
     for ( sal_uInt16 i=0; i < mvEntries.size(); i++ )

@@ -349,12 +349,15 @@ public:
 
 #define PPTSLIDEPERSIST_ENTRY_NOTFOUND 0xFFFF
 
-class MSFILTER_DLLPUBLIC PptSlidePersistList
+class MSFILTER_DLLPUBLIC PptSlidePersistList: private boost::noncopyable
 {
 private:
     boost::ptr_vector<PptSlidePersistEntry> mvEntries;
 
 public:
+    PptSlidePersistList();
+    ~PptSlidePersistList();
+
     size_t size() const { return mvEntries.size(); }
     bool is_null( size_t nIdx ) const { return mvEntries.is_null( nIdx ); }
     const PptSlidePersistEntry& operator[]( size_t nIdx ) const { return mvEntries[ nIdx ]; }
