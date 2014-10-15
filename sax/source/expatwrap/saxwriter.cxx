@@ -874,8 +874,7 @@ class SAXWriter :
 {
 public:
     SAXWriter()
-        : m_seqStartElement()
-        , m_pSaxWriterHelper(NULL)
+        : m_pSaxWriterHelper(NULL)
         , m_bDocStarted(false)
         , m_bIsCDATA(false)
         , m_bForceLineBreak(false)
@@ -965,7 +964,6 @@ private:
     sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurrence ) throw();
 
     Reference< XOutputStream >  m_out;
-    Sequence < sal_Int8 >       m_seqStartElement;
     SaxWriterHelper*            m_pSaxWriterHelper;
 
     // Status information

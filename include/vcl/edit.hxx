@@ -76,7 +76,6 @@ private:
     OUString            maPlaceholderText;
     OUString            maSaveValue;
     OUString            maUndoText;
-    OUString            maRedoText;
     long                mnXOffset;
     Selection           maSelection;
     sal_uInt16          mnAlign;

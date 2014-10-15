@@ -253,7 +253,6 @@ class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
     SvXMLExport& rExport;
     const OUString sListStyleName;
     const OUString sMasterPageName;
-    const OUString sCDATA;
 
 protected:
 
@@ -329,8 +328,7 @@ SwXMLAutoStylePoolP::SwXMLAutoStylePoolP(SvXMLExport& rExp ) :
     SvXMLAutoStylePoolP( rExp ),
     rExport( rExp ),
     sListStyleName( GetXMLToken( XML_LIST_STYLE_NAME ) ),
-    sMasterPageName( GetXMLToken( XML_MASTER_PAGE_NAME ) ),
-    sCDATA( GetXMLToken( XML_CDATA ) )
+    sMasterPageName( GetXMLToken( XML_MASTER_PAGE_NAME ) )
 {
 }
 

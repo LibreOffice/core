@@ -93,7 +93,6 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase :
         OUString m_aHelpURL;
         OUString m_aCommandURL;
         OUString m_aStyle;
-        ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > m_aItemProp;
 };
 
 class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBase

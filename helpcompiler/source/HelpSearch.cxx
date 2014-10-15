@@ -13,8 +13,7 @@
 
 #include "LuceneHelper.hxx"
 
-HelpSearch::HelpSearch(OUString const &lang, OUString const &indexDir)
-    : d_lang(lang)
+HelpSearch::HelpSearch(OUString const &indexDir)
 {
     OUString ustrSystemPath;
     osl::File::getSystemPathFromFileURL(indexDir, ustrSystemPath);

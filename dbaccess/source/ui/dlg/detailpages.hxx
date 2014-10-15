@@ -253,11 +253,6 @@ namespace dbaui
         OTextDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
 
-    private:
-
-        OUString      m_aFieldSeparatorList;
-        OUString      m_aTextSeparatorList;
-        OUString      m_aTextNone;
     protected:
         virtual ~OTextDetailsPage();
         virtual bool prepareLeave() SAL_OVERRIDE;

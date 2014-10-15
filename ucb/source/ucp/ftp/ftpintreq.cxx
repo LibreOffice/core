@@ -62,10 +62,9 @@ void SAL_CALL XInteractionDisapproveImpl::select()
 
 // XInteractionRequestImpl
 
-XInteractionRequestImpl::XInteractionRequestImpl(const OUString& aName)
+XInteractionRequestImpl::XInteractionRequestImpl()
     : p1( new XInteractionApproveImpl )
     , p2( new XInteractionDisapproveImpl )
-    , m_aName(aName)
     , m_aSeq( 2 )
 {
     m_aSeq[0] = Reference<XInteractionContinuation>(p1);

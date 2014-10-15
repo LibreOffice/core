@@ -402,7 +402,6 @@ class SaveProgressDialog : public ModalDialog
 {
     // member
     private:
-        OUString      m_aProgrBaseTxt;
         vcl::Window*       m_pProgrParent;
 
         // @short   TODO

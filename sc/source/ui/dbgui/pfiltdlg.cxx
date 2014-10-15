@@ -45,7 +45,6 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
             "modules/scalc/ui/pivotfilterdialog.ui" )
     ,
 
-        aStrUndefined   ( SC_RESSTR(SCSTR_UNDEFINED) ),
         aStrNone        ( SC_RESSTR(SCSTR_NONE) ),
         aStrEmpty       ( SC_RESSTR(SCSTR_FILTER_EMPTY) ),
         aStrNotEmpty    ( SC_RESSTR(SCSTR_FILTER_NOTEMPTY) ),

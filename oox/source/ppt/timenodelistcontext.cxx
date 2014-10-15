@@ -885,8 +885,6 @@ namespace oox { namespace ppt {
             }
     private:
         Any maProgress;
-        OUString msFilter;
-        OUString msPrList;
     };
 
     TimeNodeContext * TimeNodeContext::makeContext(

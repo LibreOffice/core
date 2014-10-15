@@ -62,9 +62,6 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper2<
         /** @short  our "context" frame. */
         css::uno::WeakReference< css::frame::XFrame > m_xOwner;
 
-        /** @short  the original queryDispatch() target. */
-        OUString m_sDispatchTarget;
-
         /** @short  list of registered status listener */
         osl::Mutex m_mutex;
         ListenerHash m_lStatusListener;
@@ -83,13 +80,9 @@ class StartModuleDispatcher : public  ::cppu::WeakImplHelper2<
 
             @param  xFrame
                     the frame where the corresponding dispatch was started.
-
-            @param  sTarget
-                    the original target information used for the related queryDispatch() call.
          */
         StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
-                              const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                              const OUString&                                        sTarget);
+                              const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
         /** @short  does nothing real. */
         virtual ~StartModuleDispatcher();

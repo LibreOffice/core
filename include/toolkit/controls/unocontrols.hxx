@@ -363,7 +363,6 @@ class UnoImageControlControl : public UnoImageControlControl_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
-    OUString             maActionCommand;
 
 public:
 

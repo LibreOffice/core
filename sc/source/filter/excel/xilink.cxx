@@ -130,8 +130,6 @@ private:
     XclImpSupbookTabList maSupbTabList;     /// All sheet names of the document.
     XclImpExtNameList   maExtNameList;      /// All external names of the document.
     OUString            maXclUrl;           /// URL of the external document (Excel mode).
-    OUString            maFilterName;       /// Detected filer name.
-    OUString            maFilterOpt;        /// Detected filer options.
     XclSupbookType      meType;             /// Type of the supbook record.
     sal_uInt16          mnSBTab;            /// Current Excel sheet index from SUPBOOK for XCT/CRN records.
 };

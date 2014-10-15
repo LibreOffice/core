@@ -71,7 +71,6 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
       mbIsMakeSelectionVisiblePending(true),
       mnInsertionPosition(-1),
       mnAnimationId(Animator::NotAnAnimationId),
-      maRequestedTopLeft(),
       mpPageInsertionListener(),
       mpSelectionObserver(new SelectionObserver(rSlideSorter))
 {

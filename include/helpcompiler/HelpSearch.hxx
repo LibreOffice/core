@@ -17,16 +17,14 @@
 
 class L10N_DLLPUBLIC HelpSearch{
 	private:
-                OUString d_lang;
                 OString d_indexDir;
 
 	public:
 
 	/**
-	 * @param lang Help files language.
 	 * @param indexDir The directory where the index files are stored.
 	 */
-        HelpSearch(OUString const &lang, OUString const &indexDir);
+        HelpSearch(OUString const &indexDir);
 
 	/**
 	 * Query the index for a certain query string.

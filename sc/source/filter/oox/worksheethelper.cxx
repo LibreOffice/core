@@ -373,7 +373,6 @@ private:
     typedef ::std::unique_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
     const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
-    const OUString      maUrlTextField;     /// Service name for a URL text field.
     const CellAddress&  mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
     CellRangeAddress    maUsedArea;         /// Used area of the sheet, and sheet index of the sheet.
     ColumnModel         maDefColModel;      /// Default column formatting.
@@ -409,7 +408,6 @@ private:
 WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
     maSheetCellRanges( "com.sun.star.sheet.SheetCellRanges" ),
-    maUrlTextField( "com.sun.star.text.TextField.URL" ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
     maUsedArea( nSheet, SAL_MAX_INT32, SAL_MAX_INT32, -1, -1 ),
     maSheetData( *this ),

@@ -109,10 +109,6 @@ private:
     const OUString sTypes;
     const OUString sFilterAdaptorService;
     const OUString sXSLTFilterService;
-
-    const OUString sCdataAttribute;
-    const OUString sWhiteSpace;
-
 };
 #endif
 

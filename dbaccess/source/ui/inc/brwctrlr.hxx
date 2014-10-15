@@ -96,8 +96,6 @@ namespace dbaui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    // notifier for changes in the clipboard
 
-        ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
-
         OAsyncronousLink        m_aAsyncGetCellFocus;
         OAsyncronousLink        m_aAsyncDisplayError;
         ::dbtools::SQLExceptionInfo m_aCurrentError;

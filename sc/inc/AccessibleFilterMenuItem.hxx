@@ -105,7 +105,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
     ScMenuFloatingWindow* mpWindow;
-    OUString maName;
     size_t mnMenuPos;
     bool mbEnabled;
 };

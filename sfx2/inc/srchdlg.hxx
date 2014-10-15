@@ -46,7 +46,6 @@ private:
     Link                m_aFindHdl;
     Link                m_aCloseHdl;
 
-    OUString            m_sToggleText;
     OUString            m_sConfigName;
     OString             m_sWinState;
 

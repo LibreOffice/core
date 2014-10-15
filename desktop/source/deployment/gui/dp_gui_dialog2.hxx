@@ -249,8 +249,6 @@ class UpdateRequiredDialogService : public ::cppu::WeakImplHelper1< ::com::sun::
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xParent;
-    OUString m_sInitialTitle;
-
 public:
     UpdateRequiredDialogService( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & args,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xComponentContext );

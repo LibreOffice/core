@@ -61,7 +61,6 @@ namespace basprov
         OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
         bool m_bIsUserCtx;
-        OUString m_sCtxLocation;
 
         bool isLibraryShared(
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& rxLibContainer,

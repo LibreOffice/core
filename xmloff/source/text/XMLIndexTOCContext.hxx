@@ -54,7 +54,6 @@ enum IndexTypeEnum
  */
 class XMLIndexTOCContext : public SvXMLImportContext
 {
-    const OUString sTitle;
     const OUString sIsProtected;
     const OUString sName;
 

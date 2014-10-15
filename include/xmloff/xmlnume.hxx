@@ -40,8 +40,6 @@ class XMLTextListAutoStylePool;
 class SvxXMLNumRuleExport
 {
     SvXMLExport& rExport;
-    const OUString sCDATA;
-    const OUString sWS;
     const OUString sNumberingRules;
     const OUString sIsPhysical;
     const OUString sIsContinuousNumbering;

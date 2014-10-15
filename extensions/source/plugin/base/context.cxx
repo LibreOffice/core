@@ -63,14 +63,12 @@ private:
     Reference< ::com::sun::star::uno::XComponentContext >   m_xContext;
     FILE*                   fp;
     Reference< ::com::sun::star::plugin::XPlugin >          m_xPlugin;
-    OUString                 m_aMIMEType;
     OUString                 m_aTarget;
     OUString                 m_aFileName;
 
 public:
     FileSink( const Reference< ::com::sun::star::uno::XComponentContext > &,
               const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
-              const OUString& mimetype,
               const OUString& target,
               const Reference< ::com::sun::star::io::XActiveDataSource > & source );
     virtual ~FileSink();
@@ -259,21 +257,19 @@ void XPluginContext_Impl::postURLNotify(const Reference< ::com::sun::star::plugi
         listener->disposing( ::com::sun::star::lang::EventObject() );
 }
 
-void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source )
+void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString&, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source )
     throw( ::com::sun::star::plugin::PluginException, RuntimeException, std::exception )
 {
-    FileSink*  pNewSink = new FileSink( m_xContext, plugin, mimetype, target, source );
+    FileSink*  pNewSink = new FileSink( m_xContext, plugin, target, source );
     pNewSink->acquire();
 }
 
 
 
 FileSink::FileSink( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext, const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
-                    const OUString& mimetype,
                     const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source ) :
         m_xContext( rxContext ),
         m_xPlugin( plugin ),
-        m_aMIMEType( mimetype ),
         m_aTarget( target )
 {
     osl::FileBase::createTempFile( 0, 0, &m_aFileName );

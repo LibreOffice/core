@@ -57,17 +57,13 @@ bool SdHTMLFilter::Export()
     SfxItemSet *pSet = mrMedium.GetItemSet();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aParams;
-    OUString sFilterOptions;
 
     const SfxPoolItem* pItem;
 
     if ( pSet->GetItemState( SID_FILTER_DATA, false, &pItem ) == SfxItemState::SET )
         ((SfxUnoAnyItem*)pItem)->GetValue() >>= aParams;
 
-    if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
-        sFilterOptions = ((SfxStringItem*)pItem)->GetValue();
-
-    HtmlExport aExport(mrMedium.GetName(), aParams, sFilterOptions, &mrDocument, &mrDocShell);
+    HtmlExport aExport(mrMedium.GetName(), aParams, &mrDocument, &mrDocShell);
 
     return true;
 }

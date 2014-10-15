@@ -44,7 +44,6 @@ ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :
     ScAccessibleContextBase(rxParent, AccessibleRole::MENU_ITEM),
     mpWindow(pWin),
-    maName(rName),
     mnMenuPos(nMenuPos),
     mbEnabled(true)
 {

@@ -172,9 +172,6 @@ private:
 
     /// index of the current active page
     ::sal_Int32 m_nCurrentPageIndex;
-
-    /// title of the tabcontrolled window
-    OUString m_sTitle;
 };
 
 DEFINE_XINTERFACE_6                 (   TabWindowService                                ,

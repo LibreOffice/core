@@ -278,7 +278,6 @@ XMLTextColumnsContext::XMLTextColumnsContext(
 ,   sSeparatorLineColor("SeparatorLineColor")
 ,   sSeparatorLineRelativeHeight("SeparatorLineRelativeHeight")
 ,   sSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment")
-,   sIsAutomatic("IsAutomatic")
 ,   sAutomaticDistance("AutomaticDistance")
 ,   sSeparatorLineStyle("SeparatorLineStyle")
 ,   pColumns( 0 )

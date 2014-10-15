@@ -105,7 +105,6 @@ private:
     ::com::sun::star::chart::ChartDataRowSource meDataRowSource;
     bool mbIsStockChart;
 
-    com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress > maSeriesAddresses;
     OUString msCategoriesAddress;
     OUString msChartAddress;
 

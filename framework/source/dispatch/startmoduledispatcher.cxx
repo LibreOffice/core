@@ -49,11 +49,9 @@ namespace framework{
 namespace fpf = ::framework::pattern::frame;
 
 StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
-                                             const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                                             const OUString&                                        sTarget)
+                                             const css::uno::Reference< css::frame::XFrame >&              xFrame)
     : m_xContext         (rxContext                         )
     , m_xOwner           (xFrame                        )
-    , m_sDispatchTarget  (sTarget                       )
     , m_lStatusListener  (m_mutex)
 {
 }

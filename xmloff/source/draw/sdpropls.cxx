@@ -1177,9 +1177,6 @@ XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const rtl::Reference
 : SvXMLExportPropertyMapper( rMapper )
 , maNumRuleExp( rExport )
 , mbIsInAutoStyles( true )
-, msCDATA( GetXMLToken(XML_CDATA))
-, msTrue( GetXMLToken(XML_TRUE))
-, msFalse( GetXMLToken(XML_FALSE))
 {
 }
 
@@ -1560,8 +1557,7 @@ void XMLShapeExportPropertyMapper::handleElementItem(
 
 XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport ) :
         SvXMLExportPropertyMapper( rMapper ),
-        mrExport( rExport ),
-        msCDATA( GetXMLToken(XML_CDATA))
+        mrExport( rExport )
 {
 }
 

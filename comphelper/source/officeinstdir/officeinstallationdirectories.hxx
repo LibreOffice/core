@@ -87,7 +87,6 @@ private:
     void initDirs();
 
     OUString                                   m_aOfficeBrandDirMacro;
-    OUString                                   m_aOfficeBaseDirMacro;
     OUString                                   m_aUserDirMacro;
     com::sun::star::uno::Reference<
         com::sun::star::uno::XComponentContext >    m_xCtx;

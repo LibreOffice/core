@@ -161,7 +161,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 }
                 pQueryResultVector->reserve( hitCount );
 
-                OUString aLang = m_aURLParameter.get_language();
                 const std::vector< OUString >& aListItem = queryList[i];
                 OUString aNewQueryStr = aListItem[0];
 
@@ -170,7 +169,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
                 try
                 {
-                    HelpSearch searcher(aLang, idxDir);
+                    HelpSearch searcher(idxDir);
                     searcher.query(aNewQueryStr, bCaptionsOnly, aPathVector, aScoreVector);
                 }
                 catch (CLuceneError &e)

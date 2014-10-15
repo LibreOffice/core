@@ -141,7 +141,6 @@ private:
     METGDIStackMember*  pGDIStack;
     Color               aMETColor;
     Color               aMETBackgroundColor;
-    Color               aMETPatternSymbol;
     RasterOp            eMETMix ;
     long                nMETStrokeLineWidth;
     Size                aMETChrCellSize;

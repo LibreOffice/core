@@ -128,7 +128,6 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     OUString       sFormatTitle;
 //  OUString       sMapName;
     OUString       sCalendar;
-    OUString       sFormatString;
     LanguageType   nFormatLang;
     com::sun::star::lang::Locale    aLocale;
     bool            bAutoOrder;

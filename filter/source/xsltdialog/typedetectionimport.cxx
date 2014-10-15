@@ -46,9 +46,7 @@ TypeDetectionImporter::TypeDetectionImporter()
     sFilters( "Filters" ),
     sTypes( "Types" ),
     sFilterAdaptorService( "com.sun.star.comp.Writer.XmlFilterAdaptor" ),
-    sXSLTFilterService( "com.sun.star.documentconversion.XSLTFilter" ),
-    sCdataAttribute( "CDATA" ),
-    sWhiteSpace( " " )
+    sXSLTFilterService( "com.sun.star.documentconversion.XSLTFilter" )
 {
 }
 

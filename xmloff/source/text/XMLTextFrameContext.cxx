@@ -375,7 +375,6 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     const OUString sHoriOrientPosition;
     const OUString sVertOrient;
     const OUString sVertOrientPosition;
-    const OUString sChainNextName;
     const OUString sAnchorType;
     const OUString sAnchorPageNo;
     const OUString sGraphicURL;
@@ -863,7 +862,6 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
 ,   sHoriOrientPosition("HoriOrientPosition")
 ,   sVertOrient("VertOrient")
 ,   sVertOrientPosition("VertOrientPosition")
-,   sChainNextName("ChainNextName")
 ,   sAnchorType("AnchorType")
 ,   sAnchorPageNo("AnchorPageNo")
 ,   sGraphicURL("GraphicURL")

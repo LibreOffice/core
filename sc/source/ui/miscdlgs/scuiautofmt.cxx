@@ -60,7 +60,6 @@ ScAutoFormatDlg::ScAutoFormatDlg(vcl::Window* pParent,
     , aStrTitle(ScResId(STR_ADD_AUTOFORMAT_TITLE))
     , aStrLabel(ScResId(STR_ADD_AUTOFORMAT_LABEL))
     , aStrClose(ScResId(STR_BTN_AUTOFORMAT_CLOSE))
-    , aStrDelTitle(ScResId(STR_DEL_AUTOFORMAT_TITLE))
     , aStrDelMsg(ScResId(STR_DEL_AUTOFORMAT_MSG))
     , aStrRename(ScResId(STR_RENAME_AUTOFORMAT_TITLE))
     , pFormat(pAutoFormat)

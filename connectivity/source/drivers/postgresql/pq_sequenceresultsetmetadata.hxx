@@ -50,8 +50,6 @@ namespace pq_sdbc_driver
     {
         ::rtl::Reference< RefCountedMutex > m_refMutex;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > m_origin;
-        OUString m_tableName;
-        OUString m_schemaName;
         ColumnMetaDataVector m_columnData;
         sal_Int32 m_colCount;
 

@@ -110,8 +110,6 @@ enum XMLTextFieldAttrTokens
 /// abstract class for text field import
 class XMLTextFieldImportContext : public SvXMLImportContext
 {
-    const OUString sIsFixed;
-
     // data members
     OUStringBuffer sContentBuffer;   /// collect character data
     OUString sContent;               /// character data after collection
@@ -191,7 +189,6 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 
     sal_Int16 nSubType;         /// API subtype for ExtUser field
 
-    const OUString sEmpty;       /// empty string
     const OUString sPropertyFixed;
     const OUString sPropertyFieldSubType;
     const OUString sPropertyContent;
@@ -260,8 +257,6 @@ protected:
 
 class XMLPlaceholderFieldImportContext : public XMLTextFieldImportContext
 {
-    const OUString sEmpty;       /// empty string
-    const OUString sServiceJumpEdit;
     const OUString sPropertyPlaceholderType;
     const OUString sPropertyPlaceholder;
     const OUString sPropertyHint;
@@ -966,7 +961,6 @@ class XMLMacroFieldImportContext : public XMLTextFieldImportContext
     const OUString sPropertyHint;
     const OUString sPropertyMacroName;
     const OUString sPropertyScriptURL;
-    const OUString sPropertyLibraryName;
 
     OUString sDescription;
     SvXMLImportContextRef xEventContext;

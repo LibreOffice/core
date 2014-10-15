@@ -37,7 +37,6 @@ class XMLIndexTOCSourceContext : public XMLIndexSourceBaseContext
 {
     const OUString sCreateFromMarks;
     const OUString sLevel;
-    const OUString sCreateFromChapter;
     const OUString sCreateFromOutline;
     const OUString sCreateFromLevelParagraphStyles;
 

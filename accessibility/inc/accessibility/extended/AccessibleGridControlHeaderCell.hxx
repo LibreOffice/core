@@ -85,8 +85,6 @@ namespace accessibility
         virtual Rectangle implGetBoundingBox() SAL_OVERRIDE;
 
         virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
-    private:
-        OUString m_sHeaderName;
     };
 }
 

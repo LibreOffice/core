@@ -31,8 +31,6 @@ namespace x11 {
     class X11Transferable : public ::cppu::WeakImplHelper1 <
         ::com::sun::star::datatransfer::XTransferable >
     {
-        ::osl::Mutex m_aMutex;
-
         SelectionManager&               m_rManager;
         Atom                m_aSelection;
     public:

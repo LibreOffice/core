@@ -353,7 +353,6 @@ namespace {
         }
 
     private:
-        Any maDialog;
         ::std::vector<beans::PropertyValue> maProperties;
         ::std::vector<sal_Int32> maSlidesPerPage;
         bool mbImpress;

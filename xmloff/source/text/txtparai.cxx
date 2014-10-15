@@ -270,8 +270,6 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
 
 class XMLImpSpanContext_Impl : public SvXMLImportContext
 {
-    const OUString sTextFrame;
-
     XMLHints_Impl&      rHints;
     XMLStyleHint_Impl   *pHint;
 
@@ -1519,7 +1517,6 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
         sal_uInt8 nSFConvFlags
                                               )
 :   SvXMLImportContext( rImport, nPrfx, rLName )
-,   sTextFrame("TextFrame")
 ,   rHints( rHnts )
 ,   pHint( 0  )
 ,   rIgnoreLeadingSpace( rIgnLeadSpace )

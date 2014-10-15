@@ -37,10 +37,6 @@ using namespace ::com::sun::star::lang;
 XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( vcl::Window* pParent) :
     TabPage( pParent, "XmlFilterTabPageTransformation", "filter/ui/xmlfiltertabpagetransformation.ui" ),
 
-    sHTTPSchema( "http://" ),
-    sSHTTPSchema( "https://" ),
-    sFILESchema( "file://" ),
-    sFTPSchema( "ftp://" ),
     sInstPath( "$(prog)/" )
 {
     get(m_pEDDocType,"doc");

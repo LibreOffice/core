@@ -77,7 +77,6 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
         osl::Mutex m_mutex;
         bool                                                                            m_bDisposed   : 1,
                                                                                             m_bConfigRead : 1;
-        OUString                                                                       m_aConfigSettingsAccess;
         OUString                                                                       m_aNodeRefStates;
         OUString                                                                       m_aPropStatesEnabled;
         OUString                                                                       m_aPropLocked;
@@ -89,7 +88,6 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper2<
 GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     m_bDisposed( false ),
     m_bConfigRead( false ),
-    m_aConfigSettingsAccess( GLOBALSETTINGS_ROOT_ACCESS ),
     m_aNodeRefStates( GLOBALSETTINGS_NODEREF_STATES ),
     m_aPropStatesEnabled( GLOBALSETTINGS_PROPERTY_STATESENABLED ),
     m_aPropLocked( GLOBALSETTINGS_PROPERTY_LOCKED ),

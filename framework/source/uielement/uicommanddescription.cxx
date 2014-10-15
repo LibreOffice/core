@@ -155,9 +155,6 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         OUString                     m_aPropName;
         OUString                     m_aPropPopup;
         OUString                     m_aPropProperties;
-        OUString                     m_aXMLFileFormatVersion;
-        OUString                     m_aVersion;
-        OUString                     m_aExtension;
         OUString                     m_aPrivateResourceURL;
         Reference< XNameAccess >          m_xGenericUICommands;
         Reference< XMultiServiceFactory > m_xConfigProvider;

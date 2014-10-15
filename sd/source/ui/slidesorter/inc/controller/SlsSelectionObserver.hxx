@@ -65,7 +65,6 @@ public:
 
 private:
     SlideSorter& mrSlideSorter;
-    SdDrawDocument* mpDocument;
     bool mbIsOvservationActive;
 
     ::std::vector<const SdPage*> maInsertedPages;

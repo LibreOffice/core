@@ -42,8 +42,6 @@ namespace dbaui
         OUString         m_sCatalogSeparator;
         bool                m_bCatalogAtStart : 1;
 
-        ::osl::Mutex            m_aNotifierMutex;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                 m_xCurrentConnection;   /// valid as long as the page is active
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >

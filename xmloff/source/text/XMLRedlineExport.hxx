@@ -67,14 +67,11 @@ class XMLRedlineExport
     const OUString sRedlineSuccessorData;
     const OUString sRedlineText;
     const OUString sRedlineType;
-    const OUString sStyle;
-    const OUString sTextTable;
     const OUString sUnknownChange;
     const OUString sStartRedline;
     const OUString sEndRedline;
     const OUString sRedlineIdentifier;
     const OUString sIsInHeaderFooter;
-    const OUString sRedlineProtectionKey;
     const OUString sRecordChanges;
     const OUString sMergeLastPara;
 

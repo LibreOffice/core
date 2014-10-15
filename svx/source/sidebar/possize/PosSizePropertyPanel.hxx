@@ -125,18 +125,6 @@ private:
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
-    // to remember original positions for restoring these for different layouts
-    Point                                   maFtWidthOrigPos;
-    Point                                   maMtrWidthOrigPos;
-    Point                                   maFtHeightOrigPos;
-    Point                                   maMtrHeightOrigPos;
-    Point                                   maCbxScaleOrigPos;
-    Point                                   maFtAngleOrigPos;
-    Point                                   maMtrAnglOrigPos;
-    Point                                   maFlipTbxOrigPos;
-    Point                                   maDialOrigPos;
-    Point                                   maFtFlipOrigPos;
-
     /// bitfield
     bool                                    mbMtrPosXMirror : 1;
     bool                                    mbSizeProtected : 1;

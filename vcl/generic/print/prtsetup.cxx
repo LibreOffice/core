@@ -71,10 +71,9 @@ void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, con
  * RTSDialog
  */
 
-RTSDialog::RTSDialog(const PrinterInfo& rJobData, const OUString& rPrinter, vcl::Window* pParent)
+RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
     : TabDialog(pParent, "PrinterPropertiesDialog", "vcl/ui/printerpropertiesdialog.ui")
     , m_aJobData(rJobData)
-    , m_aPrinter(rPrinter)
     , m_pPaperPage(NULL)
     , m_pDevicePage(NULL)
     , m_aInvalidString(VclResId(SV_PRINT_INVALID_TXT))
@@ -474,7 +473,7 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
 {
     int nRet = 0;
-    RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, NULL );
+    RTSDialog aDialog( rJobData, NULL );
 
     if( aDialog.Execute() )
     {

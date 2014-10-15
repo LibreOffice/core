@@ -79,10 +79,6 @@ private:
     SvxXMLNumRuleExport maNumRuleExp;
     bool mbIsInAutoStyles;
 
-    const OUString msCDATA;
-    const OUString msTrue;
-    const OUString msFalse;
-
 protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
@@ -116,10 +112,6 @@ class XMLPageExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:
     SvXMLExport& mrExport;
-
-    const OUString msCDATA;
-    const OUString msTrue;
-    const OUString msFalse;
 
 protected:
     virtual void ContextFilter(

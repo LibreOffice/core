@@ -63,7 +63,6 @@ private:
     ScViewData*             pViewData;
     ScDocument*             pDoc;
     ScRangeName             aLocalRangeName;
-    Selection               theCurSel;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
 

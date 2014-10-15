@@ -289,7 +289,6 @@ class SmShowSymbolSet : public VclHBox
 {
     SmShowSymbolSetWindow aSymbolWindow;
     ScrollBar   aVScrollBar;
-    Size        aOutputSize;
 
 public:
     SmShowSymbolSet(vcl::Window *pParent);

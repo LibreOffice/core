@@ -43,7 +43,6 @@ ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,
     : ModalDialog(pParent, "TabColorDialog", "modules/scalc/ui/tabcolordialog.ui")
     , m_aTabBgColor(rDefaultColor)
     , m_aTabBgColorNoColorText(rTabBgColorNoColorText)
-    , m_sHelpId(sHelpId)
 
 {
     get(m_pTabBgColorSet, "colorset");

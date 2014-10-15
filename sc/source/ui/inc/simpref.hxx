@@ -30,7 +30,6 @@
 #include "anyrefdg.hxx"
 #include "dbdata.hxx"
 
-class ScViewData;
 class ScDocument;
 
 class ScSimpleRefDlg: public ScAnyRefDlg
@@ -47,8 +46,6 @@ private:
 
     OKButton*       m_pBtnOk;
     CancelButton*   m_pBtnCancel;
-
-    ScDocument*     pDoc;
 
     ScRange         theCurArea;
     bool            bCloseFlag;
@@ -67,8 +64,7 @@ protected:
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;
 
 public:
-                    ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                 ScViewData*    ptrViewData );
+                    ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent);
                     virtual ~ScSimpleRefDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;

@@ -106,7 +106,6 @@ class SwFrmPage: public SfxTabPage
     sal_uInt16          nHtmlMode;
     OString         sDlgType;
     Size            aGrfSize;
-    Size            aWrap;
     SwTwips         nUpperBorder;
     SwTwips         nLowerBorder;
     double          fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button

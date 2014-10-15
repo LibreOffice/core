@@ -66,7 +66,6 @@ XMLFilterJarHelper::XMLFilterJarHelper( const Reference< XComponentContext >& rx
     sVndSunStarPackage( "vnd.sun.star.Package:" ),
     sXSLTPath( "$(user)/xslt/" ),
     sTemplatePath( "$(user)/template/" ),
-    sPump( "com.sun.star.io.Pump" ),
     sProgPath( "$(prog)/" )
 {
     SvtPathOptions aOptions;

@@ -41,8 +41,6 @@ private:
     bool                              mbHasStartSound;
     bool                              mbLoopSound;
     bool                              mbStopSound;
-    OUString                   msEmbedded;
-    OUString                   msLink;
     OUString                   msSndName;
 };
 

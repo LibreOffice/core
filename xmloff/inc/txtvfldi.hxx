@@ -48,7 +48,6 @@ class XMLValueImportHelper
 
     const OUString sPropertyContent;
     const OUString sPropertyValue;
-    const OUString sPropertyFormula;
     const OUString sPropertyNumberFormat;
     const OUString sPropertyIsFixedLanguage;
 
@@ -217,8 +216,6 @@ protected:
 /** import variable get fields (<text:variable-get>) */
 class XMLVariableGetFieldImportContext : public XMLVarFieldImportContext
 {
-    const OUString sPropertySubType;
-
 public:
 
     TYPEINFO_OVERRIDE();
@@ -423,10 +420,8 @@ public:
 /** sequence fields (<text:sequence>) */
 class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
 {
-    const OUString sPropertyFormula;
     const OUString sPropertyNumberFormat;
     const OUString sPropertySequenceValue;
-    OUString sFormula;
     OUString sNumFormat;
     OUString sNumFormatSync;
     OUString sRefName;
@@ -493,7 +488,6 @@ public:
  */
 class XMLVariableDeclImportContext : public SvXMLImportContext
 {
-    const OUString sPropertyName;
     const OUString sPropertySubType;
     const OUString sPropertyNumberingLevel;
     const OUString sPropertyNumberingSeparator;
@@ -531,14 +525,10 @@ public:
 /** import table formula fields (deprecated; for Writer 2.0 compatibility) */
 class XMLTableFormulaImportContext : public XMLTextFieldImportContext
 {
-    const OUString sPropertyNumberFormat;
-    const OUString sPropertyContent;
     const OUString sPropertyIsShowFormula;
     const OUString sPropertyCurrentPresentation;
 
     XMLValueImportHelper aValueHelper;
-
-    OUString sFormula;
 
     bool bIsShowFormula;
 

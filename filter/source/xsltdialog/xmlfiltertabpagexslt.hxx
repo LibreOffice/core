@@ -59,10 +59,6 @@ private:
     void SetURL( SvtURLBox *rURLBox, const OUString& rURL );
     OUString GetURL( SvtURLBox* rURLBox );
 
-    OUString sHTTPSchema;
-    OUString sSHTTPSchema;
-    OUString sFILESchema;
-    OUString sFTPSchema;
     OUString sInstPath;
 };
 

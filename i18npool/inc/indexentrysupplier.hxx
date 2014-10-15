@@ -86,7 +86,6 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    OUString aServiceName;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( com::sun::star::uno::RuntimeException );

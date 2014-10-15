@@ -62,7 +62,6 @@ class SwAddressListDialog : public SfxModalDialog
     OUString        m_sTable;
     OUString        m_sConnecting;
 
-    OUString        m_sCreatedURL;
     SvTreeListEntry*    m_pCreatedDataSource;
 
     bool            m_bInSelectHdl;

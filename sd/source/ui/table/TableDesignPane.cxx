@@ -91,7 +91,6 @@ static const OUString* getPropertyNames()
 
 TableDesignWidget::TableDesignWidget( VclBuilderContainer* pParent, ViewShellBase& rBase, bool bModal )
     : mrBase(rBase)
-    , msTableTemplate("TableTemplate")
     , mbModal(bModal)
     , mbStyleSelected(false)
     , mbOptionsChanged(false)

@@ -157,7 +157,6 @@ namespace connectivity
         private:
             typedef ::boost::unordered_map< OString, OUString, OStringHash >  FieldMap;
 
-            mutable ::osl::Mutex    m_aMutex;
             FieldMap                m_Fields;
 
         public:

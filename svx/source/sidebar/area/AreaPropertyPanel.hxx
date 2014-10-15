@@ -137,7 +137,6 @@ private:
     Image                                               maImgLinear;
     Image                                               maImgColor;
 
-    OUString                                            msHelpFillType;
     OUString                                            msHelpFillAttr;
 
     AreaTransparencyGradientPopup maTrGrPopup;

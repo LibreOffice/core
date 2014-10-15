@@ -35,7 +35,6 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
-        const OUString &rSeriesStyleName,
         std::list< RegressionStyle >& rRegressionStyleList,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
@@ -54,7 +53,6 @@ private:
     SchXMLImportHelper&                mrImportHelper;
     com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries > mxSeries;
     com::sun::star::awt::Size          maChartSize;
-    OUString                           maSeriesStyleName;
     std::list< RegressionStyle >&      mrRegressionStyleList;
 };
 

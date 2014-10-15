@@ -803,8 +803,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
                 ucbhelper::cancelCommandExecution(aAny,Env);
             }
 
-            XInteractionRequestImpl* p =
-                new XInteractionRequestImpl(m_aFTPURL.child());
+            XInteractionRequestImpl* p = new XInteractionRequestImpl;
             Reference<XInteractionRequest> req(p);
             xInt->handle(req);
             if(p->approved()) {

@@ -53,7 +53,6 @@ namespace dbaui
         typedef ::std::pair< OUString, OUString >       StringPair;
         typedef ::std::map< sal_uInt16, StringPair >    MapIndexToStringPair;
 
-        OUString         m_sModule;
         MapIndexToStringPair    m_aURLs;
 
     public:

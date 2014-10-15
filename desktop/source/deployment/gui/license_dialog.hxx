@@ -35,7 +35,6 @@ class LicenseDialog
     css::uno::Reference<css::awt::XWindow> /* const */ m_parent;
     OUString m_sExtensionName;
     OUString /* const */ m_sLicenseText;
-    OUString m_initialTitle;
 
     sal_Int16 solar_execute();
 

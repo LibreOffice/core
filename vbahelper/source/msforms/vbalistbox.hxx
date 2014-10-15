@@ -34,8 +34,6 @@ class ScVbaListBox : public ListBoxImpl_BASE
     ,public PropListener
 {
     std::unique_ptr< ListControlHelper > mpListHelper;
-    OUString sSourceName;
-    OUString msDftPropName;
 
     sal_Int16 m_nIndex;
 

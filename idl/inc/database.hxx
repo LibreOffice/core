@@ -59,7 +59,6 @@ class SvIdlDataBase
     OUString                    aExportFile;
     sal_uInt32                  nUniqueId;
     sal_uInt32                  nVerbosity;
-    OUString                    aDataBaseFile;
     SvPersistStream             aPersStream;
     StringList                  aIdFileList;
     SvStringHashTable *         pIdTable;

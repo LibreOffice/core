@@ -93,7 +93,6 @@ static bool makeCanonicalFileURL( OUString & rURL )
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
 : m_aOfficeBrandDirMacro( "$(brandbaseurl)" ),
-  m_aOfficeBaseDirMacro( "$(baseinsturl)" ),
   m_aUserDirMacro( "$(userdataurl)" ),
   m_xCtx( xCtx ),
   m_pOfficeBrandDir( 0 ),

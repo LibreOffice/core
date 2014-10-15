@@ -36,7 +36,6 @@ class ScVbaComboBox : public ComboBoxImpl_BASE
 {
     std::unique_ptr< ListControlHelper > mpListHelper;
     OUString sSourceName;
-    OUString msDftPropName;
 
 public:
     ScVbaComboBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper );

@@ -86,11 +86,8 @@ public:
     };
 
 private:
-    const ::rtl::OUString msTitle;
     const ::rtl::OUString msId;
     Image maIcon;
-    const ::rtl::OUString msIconURL;
-    const ::rtl::OUString msHighContrastIconURL;
     sal_Int32 mnMinimalWidth;
     SharedPanelContainer maPanels;
     ::boost::scoped_ptr<DeckTitleBar> mpTitleBar;

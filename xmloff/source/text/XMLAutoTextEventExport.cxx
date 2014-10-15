@@ -64,9 +64,6 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
     OUString const & implementationName, sal_uInt16 nFlags
     )
 :   SvXMLExport(util::MeasureUnit::INCH, xContext, implementationName, XML_AUTO_TEXT, nFlags)
-,
-        sEventType("EventType"),
-        sNone("None")
 {
 }
 

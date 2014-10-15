@@ -90,7 +90,6 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 
 class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
-    OUString    sBullets;
     Timer       aFormatTimer;
     bool        bGrfNotFound;
 

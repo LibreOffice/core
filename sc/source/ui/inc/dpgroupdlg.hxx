@@ -104,7 +104,6 @@ private:
     RadioButton*         mpRbManEnd;
     ScDoubleField*       mpEdEnd;
     ScDoubleField*       mpEdBy;
-    OKButton*            mpBtnOk;
     ScDPNumGroupEditHelper maStartHelper;
     ScDPNumGroupEditHelper maEndHelper;
 };

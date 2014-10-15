@@ -57,7 +57,6 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 
     typedef std::map <OUString, sal_Int32> MapString2Int;
     MapString2Int   aURLIgnoreCounters;
-    ::osl::Mutex    aIgnoreCounterSafety;
 
     Sequence< OUString > GetPropertyNames();
 

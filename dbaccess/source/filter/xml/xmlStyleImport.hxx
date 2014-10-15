@@ -40,9 +40,7 @@ namespace dbaxml
     {
         OUString             m_sDataStyleName;
         OUString             sPageStyle;
-        const OUString         sNumberFormat;
         SvXMLStylesContext*         pStyles;
-        com::sun::star::uno::Any    aConditionalFormat;
         sal_Int32                   m_nNumberFormat;
 
         ODBFilter& GetOwnImport();

@@ -32,7 +32,6 @@ namespace Stringtest
 
     class Convert : public CppUnit::TestFixture
     {
-        rtl::OUString m_aStr;
     public:
         rtl::OString convertToOString(rtl::OUString const& _suStr)
             {

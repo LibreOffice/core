@@ -129,7 +129,6 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long            m_nStdHeight;
     long            m_nActiveHeight;
     long            m_nExtraHeight;
-    Size            m_aOutputSize;
     Image           m_aSharedImage;
     Image           m_aLockedImage;
     Image           m_aWarningImage;

@@ -462,7 +462,6 @@ private:
     const OUString sPropertyDataColumnName;
     const OUString sPropertyDataCommandType;
     const OUString sPropertyDataTableName;
-    const OUString sPropertyDate;
     const OUString sPropertyDateTime;
     const OUString sPropertyDateTimeValue;
     const OUString sPropertyDDECommandElement;
@@ -490,7 +489,6 @@ private:
     const OUString sPropertyIsVisible;
     const OUString sPropertyItems;
     const OUString sPropertyLevel;
-    const OUString sPropertyMacro;
     const OUString sPropertyMeasureKind;
     const OUString sPropertyName;
     const OUString sPropertyNumberFormat;
@@ -498,12 +496,9 @@ private:
     const OUString sPropertyNumberingType;
     const OUString sPropertyOffset;
     const OUString sPropertyOn;
-    const OUString sPropertyPlaceholder;
     const OUString sPropertyPlaceholderType;
     const OUString sPropertyReferenceFieldPart;
     const OUString sPropertyReferenceFieldSource;
-    const OUString sPropertyReferenceFieldType;
-    const OUString sPropertyRevision;
     const OUString sPropertyScriptType;
     const OUString sPropertySelectedItem;
     const OUString sPropertySequenceNumber;
@@ -518,7 +513,6 @@ private:
     const OUString sPropertyUserText;
     const OUString sPropertyValue;
     const OUString sPropertyVariableName;
-    const OUString sPropertyVariableSubType;
     const OUString sPropertyHelp;
     const OUString sPropertyTooltip;
     const OUString sPropertyTextRange;

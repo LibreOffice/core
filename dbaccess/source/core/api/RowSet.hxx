@@ -109,7 +109,6 @@ namespace dbaccess
         OUString                               m_aGroupBy;
         OUString                               m_aOrder;
         OUString                               m_aActiveCommand;
-        OUString                               m_aCursorName;
         OUString                               m_aUpdateCatalogName; // is set by a query
         OUString                               m_aUpdateSchemaName; // is set by a query
         OUString                               m_aUpdateTableName; // is set by a query

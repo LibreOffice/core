@@ -191,14 +191,13 @@ class SwAutoMarkDlg_Impl : public ModalDialog
     SwEntryBrowseBox*   m_pEntriesBB;
 
     OUString            sAutoMarkURL;
-    const OUString      sAutoMarkType;
 
     bool                bCreateMode;
 
     DECL_LINK(OkHdl, void *);
 public:
     SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
-                        const OUString& rAutoMarkType, bool bCreate);
+                       bool bCreate);
     virtual ~SwAutoMarkDlg_Impl();
 
 };
@@ -1447,7 +1446,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
         }
 
         boost::scoped_ptr<SwAutoMarkDlg_Impl> pAutoMarkDlg(new SwAutoMarkDlg_Impl(
-                m_pAutoMarkPB, sAutoMarkURL, sAutoMarkType, bNew ));
+                m_pAutoMarkPB, sAutoMarkURL, bNew ));
 
         if( RET_OK != pAutoMarkDlg->Execute() && bNew )
             sAutoMarkURL = sSaveAutoMarkURL;
@@ -4012,11 +4011,10 @@ bool SwEntryBrowseBox::IsModified()const
 }
 
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
-        const OUString& rAutoMarkType, bool bCreate)
+        bool bCreate)
     : ModalDialog(pParent, "CreateAutomarkDialog",
         "modules/swriter/ui/createautomarkdialog.ui")
     , sAutoMarkURL(rAutoMarkURL)
-    , sAutoMarkType(rAutoMarkType)
     , bCreateMode(bCreate)
 {
     get(m_pOKPB, "ok");

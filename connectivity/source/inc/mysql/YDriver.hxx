@@ -66,7 +66,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xODBCDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xNativeDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-            OUString     m_sOldDriverClass;
 
             /** load the driver we want to delegate.
                 The <member>m_xODBCDriver</member> or <member>m_xDBCDriver</member> may be <NULL/> if the driver could not be loaded.

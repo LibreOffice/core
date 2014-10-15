@@ -47,8 +47,6 @@ Deck::Deck (
     : Window(pParentWindow, 0),
       msId(rDeckDescriptor.msId),
       maIcon(),
-      msIconURL(rDeckDescriptor.msIconURL),
-      msHighContrastIconURL(rDeckDescriptor.msHighContrastIconURL),
       mnMinimalWidth(0),
       maPanels(),
       mpTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, this, rCloserAction)),

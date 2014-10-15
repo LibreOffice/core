@@ -55,7 +55,6 @@ private:
     OKButton*               m_pBtnOk;
     Color                   m_aTabBgColor;
     const OUString          m_aTabBgColorNoColorText;
-    OString                 m_sHelpId;
 
     void            FillColorValueSets_Impl();
 

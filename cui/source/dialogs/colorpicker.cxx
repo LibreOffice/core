@@ -970,7 +970,6 @@ public:
     void setColorComponent( sal_uInt16 nComp, double dValue );
 
 private:
-    Color maPreviousColor;
     sal_Int16 mnDialogMode;
     ColorMode meMode;
 
@@ -1012,7 +1011,6 @@ private:
 
 ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sal_Int16 nMode )
 : ModalDialog( pParent, "ColorPicker", "cui/ui/colorpickerdialog.ui" )
-, maPreviousColor( nColor )
 , mnDialogMode( nMode )
 , meMode( DefaultMode )
 , maSliderImage( FixedImage::loadThemeImage("res/colorslider.png") )

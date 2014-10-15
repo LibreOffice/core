@@ -76,7 +76,7 @@ namespace ftp {
     {
     public:
 
-        XInteractionRequestImpl(const OUString& aName);
+        XInteractionRequestImpl();
 
         com::sun::star::uno::Any SAL_CALL getRequest(  )
             throw (css::uno::RuntimeException,
@@ -93,8 +93,6 @@ namespace ftp {
 
         XInteractionApproveImpl* p1;
         XInteractionDisapproveImpl* p2;
-
-        OUString m_aName;
 
         css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_aSeq;
     };

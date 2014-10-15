@@ -345,11 +345,9 @@ void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUStrin
 HtmlExport::HtmlExport(
     const OUString& aPath,
     const Sequence< PropertyValue >& rParams,
-    const OUString& rFilterOptions,
     SdDrawDocument* pExpDoc,
     sd::DrawDocShell* pDocShell )
     :   maPath( aPath ),
-        maFilterOptions( rFilterOptions ),
         mpDoc(pExpDoc),
         mpDocSh( pDocShell ),
         meEC(NULL),

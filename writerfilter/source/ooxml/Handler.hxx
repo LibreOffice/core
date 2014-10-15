@@ -75,7 +75,6 @@ public:
 class OOXMLCommentHandler : public Properties
 {
     OOXMLFastContextHandler * mpFastContext;
-    OUString msStreamId;
 public:
     OOXMLCommentHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLCommentHandler();

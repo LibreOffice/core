@@ -665,7 +665,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
         case XML_TOK_SERIES_REGRESSION_CURVE:
             pContext = new SchXMLRegressionCurveObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName, msAutoStyleName, mrRegressionStyleList,
+                nPrefix, rLocalName, mrRegressionStyleList,
                 m_xSeries, maChartSize );
             break;
         case XML_TOK_SERIES_ERROR_INDICATOR:

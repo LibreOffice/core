@@ -65,7 +65,6 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         bool bOverwrite )
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE )
 ,   sIsPhysical( "IsPhysical" )
-,   sPageStyleLayout( "PageStyleLayout" )
 ,   sFollowStyle( "FollowStyle" )
 ,   bInsertHeader( false )
 ,   bInsertFooter( false )

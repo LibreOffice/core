@@ -198,7 +198,6 @@ XMLTextFieldImportContext::XMLTextFieldImportContext(
     const sal_Char* pService,
     sal_uInt16 nPrefix, const OUString& rElementName)
 :   SvXMLImportContext( rImport, nPrefix, rElementName )
-,   sIsFixed(sAPI_is_fixed)
 ,   rTextImportHelper(rHlp)
 ,   sServicePrefix(sAPI_textfield_prefix)
 ,   bValid(false)

@@ -103,8 +103,6 @@ private:
     OUString m_sURL;
     OUString m_sNoDblSpaces;
     OUString m_sDash;
-    OUString m_sNonBrkSpace;
-    OUString m_sFirst;
     OUString m_sAccidentalCaps;
 
 public:
@@ -134,14 +132,11 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     OUString        sCptlSttSent;
     OUString        sUserStyle;
     OUString        sBullet;
-    OUString        sByInputBullet;
     OUString        sBoldUnder;
     OUString        sNoDblSpaces;
     OUString        sCorrectCapsLock;
     OUString        sDetectURL;
     OUString        sDash;
-    OUString        sNonBrkSpace;
-    OUString        sOrdinal;
     OUString        sRightMargin;
     OUString        sNum;
     OUString        sBorder;

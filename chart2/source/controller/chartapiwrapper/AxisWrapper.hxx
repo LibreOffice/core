@@ -127,7 +127,6 @@ private: //member
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     tAxisType           m_eType;
-    ::com::sun::star::uno::Any m_aTemporaryHelpStepValue;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xAxisTitle;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xMajorGrid;

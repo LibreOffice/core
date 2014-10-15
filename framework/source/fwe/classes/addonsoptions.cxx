@@ -76,7 +76,6 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_IMAGEBIGHC_URL                     OUString("ImageBigHCURL" )
 
 #define IMAGES_NODENAME                                 OUString("UserDefinedImages" )
-#define PRIVATE_IMAGE_URL                               OUString("private:image/" )
 
 #define PROPERTYNAME_MERGEMENU_MERGEPOINT               OUString("MergePoint" )
 #define PROPERTYNAME_MERGEMENU_MERGECOMMAND             OUString("MergeCommand" )
@@ -335,9 +334,7 @@ class AddonsOptions_Impl : public ConfigItem
         OUString                                   m_aPropMergeStatusbarNames[PROPERTYCOUNT_MERGE_STATUSBAR];
         OUString                                   m_aEmpty;
         OUString                                   m_aPathDelimiter;
-        OUString                                   m_aSeparator;
         OUString                                   m_aRootAddonPopupMenuURLPrexfix;
-        OUString                                   m_aPrivateImageURL;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuProperties;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuBarPartProperties;
         AddonToolBars                                     m_aCachedToolBarPartProperties;
@@ -366,9 +363,7 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     : ConfigItem( ROOTNODE_ADDONMENU ),
     m_nRootAddonPopupMenuId( 0 ),
     m_aPathDelimiter( PATHDELIMITER ),
-    m_aSeparator( SEPARATOR_URL ),
-    m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX ),
-    m_aPrivateImageURL( PRIVATE_IMAGE_URL )
+    m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX )
 {
     // initialize array with fixed property names
     m_aPropNames[ INDEX_URL             ] = PROPERTYNAME_URL;

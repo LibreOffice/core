@@ -596,8 +596,7 @@ XMLVariableGetFieldImportContext::XMLVariableGetFieldImportContext(
                                  false, false, false,
                                  false, true,
                                  true, true, false,
-                                 true),
-        sPropertySubType(sAPI_sub_type)
+                                 true)
 {
 }
 
@@ -702,7 +701,6 @@ XMLTableFormulaImportContext::XMLTableFormulaImportContext(
         sPropertyCurrentPresentation(
             "CurrentPresentation"),
         aValueHelper(rImport, rHlp, false, true, false, true),
-        sFormula(),
         bIsShowFormula(false)
 {
 }
@@ -835,7 +833,6 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
     enum VarType eVarType) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         // bug?? which properties for userfield/userfieldmaster
-        sPropertyName(sAPI_name),
         sPropertySubType(sAPI_sub_type),
         sPropertyNumberingLevel(sAPI_chapter_numbering_level),
         sPropertyNumberingSeparator(sAPI_numbering_separator),

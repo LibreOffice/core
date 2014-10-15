@@ -107,7 +107,6 @@ private:
 
     OUString            sCapitalWords;
     OUString            sWordsWithDigits;
-    OUString            sCapitalization;
     OUString            sSpellSpecial;
     OUString            sSpellAuto;
     OUString            sGrammarAuto;

@@ -402,7 +402,6 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     : SwUndo( UNDO_TABLETOTEXT ),
     sTblNm( rTbl.GetFrmFmt()->GetName() ), pDDEFldType( 0 ), pHistory( 0 ),
     nSttNd( 0 ), nEndNd( 0 ),
-    nAdjust( static_cast<sal_uInt16>(rTbl.GetFrmFmt()->GetHoriOrient().GetHoriOrient()) ),
     cTrenner( cCh ), nHdlnRpt( rTbl.GetRowsToRepeat() )
 {
     pTblSave = new _SaveTable( rTbl );

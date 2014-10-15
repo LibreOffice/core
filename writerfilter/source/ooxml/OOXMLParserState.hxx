@@ -53,7 +53,6 @@ class OOXMLParserState
     unsigned int mnContexts;
     unsigned int mnHandle;
     OOXMLDocumentImpl* mpDocument;
-    OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     std::stack<OOXMLPropertySet::Pointer_t> mCellProps;
     std::stack<OOXMLPropertySet::Pointer_t> mRowProps;

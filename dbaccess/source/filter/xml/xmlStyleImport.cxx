@@ -54,7 +54,6 @@ OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle )
     :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
-    ,sNumberFormat(OUString("NumberFormat"))
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
 {

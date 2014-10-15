@@ -233,7 +233,6 @@ private:
     size_t mnStepsTotal;
     TimeValue maClickFlyBackStartTime;
     TimeValue maClickFlyBackEndTime;
-    OUString maFPS;
     glm::vec3 maTargetPosition;
     glm::vec3 maTargetDirection;
 };

@@ -91,7 +91,6 @@ private:
 
 private:
     ViewShellBase& mrBase;
-    const OUString msTableTemplate;
 
     TableValueSet* m_pValueSet;
     CheckBox* m_aCheckBoxes[CB_COUNT];

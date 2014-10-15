@@ -114,8 +114,7 @@ extern "C" {
 
 
 FTPURL::FTPURL(const FTPURL& r)
-    : m_mutex(),
-      m_pFCP(r.m_pFCP),
+    : m_pFCP(r.m_pFCP),
       m_aUsername(r.m_aUsername),
       m_bShowPassword(r.m_bShowPassword),
       m_aHost(r.m_aHost),

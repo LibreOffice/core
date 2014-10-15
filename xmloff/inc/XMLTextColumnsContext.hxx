@@ -35,7 +35,6 @@ class XMLTextColumnsContext :public XMLElementPropertyContext
     const OUString sSeparatorLineColor;
     const OUString sSeparatorLineRelativeHeight;
     const OUString sSeparatorLineVerticalAlignment;
-    const OUString sIsAutomatic;
     const OUString sAutomaticDistance;
     const OUString sSeparatorLineStyle;
 

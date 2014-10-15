@@ -57,7 +57,6 @@ void SelectionObserver::Context::Abort(void)
 
 SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      mpDocument(mrSlideSorter.GetModel().GetDocument()),
       mbIsOvservationActive(false),
       maInsertedPages(),
       maDeletedPages()

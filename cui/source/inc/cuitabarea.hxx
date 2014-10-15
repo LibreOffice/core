@@ -640,7 +640,6 @@ class SvxColorTabPage : public SfxTabPage
 
 private:
     XPropertyListType   meType;
-    XOutdevItemPool*    mpXPool;
 
     Window             *mpTopDlg;
     CheckBox           *m_pBoxEmbed;

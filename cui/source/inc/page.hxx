@@ -131,7 +131,6 @@ private:
     long                nLastTopMargin;
     long                nLastBottomMargin;
 
-    Size                aMaxSize;
     bool                bLandscape;
     bool                bBorderModified;
     SvxModeType         eMode;

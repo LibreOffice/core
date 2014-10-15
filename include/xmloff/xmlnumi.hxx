@@ -34,7 +34,6 @@ class SvxXMLListStyleContext : public SvXMLStyleContext
 {
     const OUString       sIsPhysical;
     const OUString       sNumberingRules;
-    const OUString       sName;
     const OUString       sIsContinuousNumbering;
 
     ::com::sun::star::uno::Reference <

@@ -164,7 +164,6 @@ private:
     sal_Int32   m_nRepeated;
     enumXFValueType m_eValueType;
     OUString   m_strValue;
-    OUString   m_strDisplay;
     OUString   m_strFormula;
     bool    m_bProtect;
 };

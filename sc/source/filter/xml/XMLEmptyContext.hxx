@@ -25,8 +25,6 @@ class ScXMLImport;
 
 class ScXMLEmptyContext : public SvXMLImportContext
 {
-    OUString   sPrintRanges;
-
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 

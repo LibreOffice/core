@@ -114,7 +114,6 @@ enum MENU_COMMAND
 
 class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
 {
-    Size            m_aOutputSize;
     bool            m_bInterfaceLocked;
 
     PushButton     *m_pOptionsBtn;

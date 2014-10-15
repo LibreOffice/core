@@ -57,7 +57,6 @@ class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
     ::rtl::Reference< FormObjEventListenerImpl > m_DialogListener;
     css::uno::Reference<css::awt::XDialog> m_xDialog;
     css::uno::Reference<css::frame::XModel> m_xModel;
-    OUString sFormName;
     bool mbInit;
 
 //protected:

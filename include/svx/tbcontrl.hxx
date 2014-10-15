@@ -185,7 +185,6 @@ private:
                                         m_xBoundItems[MAX_FAMILIES];
     SfxTemplateItem*                    pFamilyState[MAX_FAMILIES];
     sal_uInt16                          nActFamily; // Id in the ToolBox = Position - 1
-    OUString                            aCurSel;
     Impl*                               pImpl;
 
     SVX_DLLPRIVATE void Update();

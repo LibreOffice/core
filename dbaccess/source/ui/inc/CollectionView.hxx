@@ -42,8 +42,6 @@ namespace dbaui
         PushButton*     m_pPB_OK;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>                  m_xContent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        Size            m_aDlgSize;
-        Size            m_a6Size;
         bool        m_bCreateForm;
 
         DECL_LINK(Up_Click,void*);

@@ -50,8 +50,6 @@ class SwXMLTableContext : public XMLTextTableContext
 {
     OUString     aStyleName;
     OUString     aDfltCellStyleName;
-    /// NB: this contains the xml:id only if this table is a subtable!
-    OUString     mXmlId;
 
     //! Holds basic information about a column's width.
     struct ColumnWidthInfo {
@@ -142,8 +140,7 @@ public:
                    const OUString& rLName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-                SwXMLTableContext *pTable,
-                const OUString& i_rXmlId );
+                SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableContext();
 

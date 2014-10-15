@@ -48,7 +48,6 @@ private:
     OUString        aStrTitle;
     OUString        aStrLabel;
     OUString        aStrClose;
-    OUString        aStrDelTitle;
     OUString        aStrDelMsg;
     OUString        aStrRename;
 

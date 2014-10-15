@@ -156,13 +156,11 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 
     OUString                m_sContinue;
     OUString                m_sStop;
-    OUString                m_sSend;
     OUString                m_sTransferStatus;
     OUString                m_sErrorStatus;
     OUString                m_sSendingTo;
     OUString                m_sCompleted;
     OUString                m_sFailed;
-    OUString                m_sTerminateQuery;
 
     bool                    m_bCancel;
     bool                    m_bDesctructionEnabled;

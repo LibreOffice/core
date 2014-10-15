@@ -106,7 +106,6 @@ class SwUndoTblToTxt : public SwUndo
     SwTblToTxtSaves* pBoxSaves;
     SwHistory* pHistory;
     sal_uLong nSttNd, nEndNd;
-    sal_uInt16 nAdjust;
     sal_Unicode cTrenner;
     sal_uInt16 nHdlnRpt;
     bool bCheckNumFmt : 1;

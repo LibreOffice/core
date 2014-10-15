@@ -84,7 +84,6 @@ private:
     Bitmap maMouseOverFocusedBackground;
     Bitmap maMouseOverSelectedBackground;
     Bitmap maMouseOverSelectedAndFocusedBackground;
-    Size maSize;
 
     void PaintBackground (
         PageObjectLayouter *pPageObjectLayouter,

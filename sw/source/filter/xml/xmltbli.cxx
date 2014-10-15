@@ -643,7 +643,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
         {
             SwXMLTableContext *pTblContext =
                 new SwXMLTableContext( GetSwImport(), nPrefix, rLocalName,
-                                       xAttrList, GetTable(), sXmlId );
+                                       xAttrList, GetTable() );
             pContext = pTblContext;
             if( GetTable()->IsValid() )
                 InsertContent( pTblContext );
@@ -1418,10 +1418,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > &,
-        SwXMLTableContext *pTable,
-        OUString const & i_rXmlId ) :
+        SwXMLTableContext *pTable ) :
     XMLTextTableContext( rImport, nPrfx, rLName ),
-    mXmlId( i_rXmlId ),
     pColumnDefaultCellStyleNames( 0 ),
     pRows( new SwXMLTableRows_Impl ),
     pTableNode( pTable->pTableNode ),

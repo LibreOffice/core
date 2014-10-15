@@ -43,7 +43,6 @@ class RTSDialog : public TabDialog
     friend class RTSDevicePage;
 
     ::psp::PrinterInfo      m_aJobData;
-    OUString                m_aPrinter;
 
     // controls
     TabControl*             m_pTabControl;
@@ -63,7 +62,7 @@ class RTSDialog : public TabDialog
     // helper functions
     void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
-    RTSDialog(const ::psp::PrinterInfo& rJobData, const OUString& rPrinter, vcl::Window* pParent = NULL);
+    RTSDialog(const ::psp::PrinterInfo& rJobData, vcl::Window* pParent = NULL);
     virtual ~RTSDialog();
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
@@ -97,9 +96,6 @@ public:
 class RTSDevicePage : public TabPage
 {
     RTSDialog*          m_pParent;
-
-    OUString            m_aSpaceColor;
-    OUString            m_aSpaceGray;
 
     ListBox*            m_pPPDKeyBox;
     ListBox*            m_pPPDValueBox;

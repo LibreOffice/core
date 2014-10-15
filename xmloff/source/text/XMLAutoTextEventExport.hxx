@@ -49,10 +49,6 @@ class XMLAutoTextEventExport : public SvXMLExport
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XNameAccess> xEvents;
 
-    const OUString sEventType;
-    const OUString sNone;
-
-
 public:
 
     XMLAutoTextEventExport(

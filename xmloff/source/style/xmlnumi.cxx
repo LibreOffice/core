@@ -1029,7 +1029,6 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 :   SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, bOutl ? XML_STYLE_FAMILY_TEXT_OUTLINE : XML_STYLE_FAMILY_TEXT_LIST )
 ,   sIsPhysical( "IsPhysical"  )
 ,   sNumberingRules( "NumberingRules"  )
-,   sName( "Name"  )
 ,   sIsContinuousNumbering( "IsContinuousNumbering"  )
 ,   pLevelStyles( 0 )
 ,   nLevels( 0 )

@@ -43,7 +43,6 @@ SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
                                         SvXMLImport& rImport,
                                         sal_uInt16 nPrefix,
                                         const OUString& rLocalName,
-                                        const OUString &rSeriesStyleName,
                                         std::list< RegressionStyle >& rRegressionStyleList,
                                         const css::uno::Reference<
                                                     css::chart2::XDataSeries >& xSeries,
@@ -52,7 +51,6 @@ SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
     mrImportHelper( rImpHelper ),
     mxSeries( xSeries ),
     maChartSize( rChartSize ),
-    maSeriesStyleName( rSeriesStyleName),
     mrRegressionStyleList( rRegressionStyleList )
 {
 }

@@ -440,10 +440,6 @@ namespace osl_FileBase
 
     class getAbsoluteFileURL:public CppUnit::TestFixture
     {
-        //::osl::FileBase  aFileBase;
-        ::rtl::OUString  aResultURL1, aResultURL2, aResultURL3, aResultURL4, aResultURL5, aResultURL6;
-            // ::osl::FileBase::RC nError;
-
         public:
 
             void check_getAbsoluteFileURL( rtl::OUString const& _suBaseURL,  rtl::OString const& _sRelativeURL, ::osl::FileBase::RC _nAssumeError, rtl::OUString const& _suAssumeResultStr );
@@ -1313,7 +1309,6 @@ namespace osl_FileStatus
 
     class  isValid : public CppUnit::TestFixture
     {
-        ::rtl::OUString         aUStr;
         ::osl::Directory        *pDir;
         ::osl::DirectoryItem    rItem_file, rItem_link;
 
@@ -1517,7 +1512,6 @@ namespace osl_FileStatus
 
     class  getFileType : public CppUnit::TestFixture
     {
-        ::rtl::OUString         aUStr;
         ::osl::FileBase::RC     nError1;
 
         ::osl::DirectoryItem    m_aItem_1, m_aItem_2, m_aVolumeItem, m_aFifoItem;
@@ -1991,7 +1985,6 @@ namespace osl_FileStatus
 
     class  getFileURL : public CppUnit::TestFixture
     {
-        ::rtl::OUString         aTypeURL;
         ::osl::FileBase::RC     nError;
         ::osl::DirectoryItem    rItem;
 

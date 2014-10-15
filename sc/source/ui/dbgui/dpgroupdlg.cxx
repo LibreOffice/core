@@ -155,7 +155,6 @@ ScDPNumGroupDlg::ScDPNumGroupDlg( vcl::Window* pParent, const ScDPNumGroupInfo& 
     mpRbManEnd      ( get<RadioButton> ("manual_end") ),
     mpEdEnd         ( get<ScDoubleField>( "edit_end") ),
     mpEdBy          ( get<ScDoubleField> ("edit_by") ),
-    mpBtnOk         ( get<OKButton> ("ok" ) ),
     maStartHelper   ( mpRbAutoStart, mpRbManStart, mpEdStart ),
     maEndHelper     ( mpRbAutoEnd, mpRbManEnd, mpEdEnd )
 {

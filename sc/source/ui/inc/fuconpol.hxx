@@ -25,8 +25,6 @@
 /** Base class for all functions */
 class FuConstPolygon : public FuConstruct
 {
-    Point aLastPos;
-
  public:
     FuConstPolygon(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pView,
                    SdrModel* pDoc, SfxRequest& rReq);

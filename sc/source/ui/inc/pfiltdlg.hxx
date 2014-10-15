@@ -62,7 +62,6 @@ private:
     CheckBox*       m_pBtnRegExp;
     CheckBox*       m_pBtnUnique;
     FixedText*      m_pFtDbArea;
-    const OUString aStrUndefined;
     const OUString aStrNone;
     const OUString aStrEmpty;
     const OUString aStrNotEmpty;

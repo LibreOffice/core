@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star {
 class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 {
     const OUString sIsPhysical;
-    const OUString sPageStyleLayout;
     const OUString sFollowStyle;
     OUString       sFollow;
     OUString       sPageMasterName;

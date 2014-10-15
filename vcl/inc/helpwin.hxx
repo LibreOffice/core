@@ -28,7 +28,6 @@
 class HelpTextWindow : public FloatingWindow
 {
 private:
-    Point               maPos;
     Rectangle           maHelpArea; // If next Help for the same rectangle w/ same text, then keep window
 
     Rectangle           maTextRect; // For wrapped text in QuickHelp

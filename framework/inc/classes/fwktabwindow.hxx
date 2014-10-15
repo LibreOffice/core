@@ -53,7 +53,6 @@ class FwkTabPage : public TabPage
 {
 private:
     OUString                                                   m_sPageURL;
-    OUString                                                   m_sEventHdl;
     css::uno::Reference< css::awt::XWindow >                        m_xPage;
     css::uno::Reference< css::awt::XContainerWindowEventHandler >   m_xEventHdl;
     css::uno::Reference< css::awt::XContainerWindowProvider >       m_xWinProvider;

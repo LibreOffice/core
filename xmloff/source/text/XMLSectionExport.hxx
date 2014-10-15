@@ -85,7 +85,6 @@ class XMLSectionExport
     const OUString sCreateFromStarCalc;
     const OUString sCreateFromStarChart;
     const OUString sCreateFromStarDraw;
-    const OUString sCreateFromStarImage;
     const OUString sCreateFromStarMath;
     const OUString sCreateFromTables;
     const OUString sCreateFromTextFrames;
@@ -104,7 +103,6 @@ class XMLSectionExport
     const OUString sLinkRegion;
     const OUString sMainEntryCharacterStyleName;
     const OUString sParaStyleHeading;
-    const OUString sParaStyleLevel;
     const OUString sTitle;
     const OUString sName;
     const OUString sUseAlphabeticalSeparators;

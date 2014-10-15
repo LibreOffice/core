@@ -440,7 +440,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
             ScViewData& rViewData = GetViewData();
             rViewData.SetRefTabNo( rViewData.GetTabNo() );
-            pResult = new ScSimpleRefDlg( pB, pCW, pParent, &rViewData );
+            pResult = new ScSimpleRefDlg( pB, pCW, pParent );
         }
         break;
 

@@ -40,13 +40,11 @@ public:
 
 private:
     XclFunctionProvider maFuncProv;     /// Excel function data provider.
-    const XclBiff       meBiff;         /// Cached BIFF version to save GetBiff() calls.
 };
 
 XclImpFmlaCompImpl::XclImpFmlaCompImpl( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    maFuncProv( rRoot ),
-    meBiff( rRoot.GetBiff() )
+    maFuncProv( rRoot )
 {
 }
 

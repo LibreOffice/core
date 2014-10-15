@@ -212,7 +212,6 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
     OUString        sExpand;
     OUString        aPText;
-    OUString        aSeqText;
     bool            bInput;
     sal_uInt16          nSeqNo;
     sal_uInt16          nSubType;

@@ -132,7 +132,6 @@ private:
         and left of the visible area to maRequestedTopLeft.
     */
     Animator::AnimationId mnAnimationId;
-    Point maRequestedTopLeft;
 
     class PageInsertionListener;
     ::boost::scoped_ptr<PageInsertionListener> mpPageInsertionListener;

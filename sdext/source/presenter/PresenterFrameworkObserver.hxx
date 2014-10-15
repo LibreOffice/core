@@ -57,7 +57,6 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    OUString msEventType;
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
     Predicate maPredicate;
     Action maAction;

@@ -118,7 +118,6 @@ protected:
 private:
     //CColumnLayoutHead cColumnLayout;
     LwpObjectID m_ColumnLayout;
-    OUString m_FrameStyleName;
     LwpCellLayout * m_pDefaultCellLayout;
     OUString m_DefaultColumnStyleName;
     OUString m_DefaultRowStyleName;

@@ -29,7 +29,6 @@ class ODBTypeWizDialogSetup
         :public ODatabaseAdministrationDialog
         ,public ::comphelper::OPropertyArrayUsageHelper< ODBTypeWizDialogSetup >
 {
-    OUString m_sExistingDocToOpen;
     bool        m_bOpenDatabase;
     bool        m_bStartTableWizard;
 

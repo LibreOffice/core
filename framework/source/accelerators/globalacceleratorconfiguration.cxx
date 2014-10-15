@@ -84,8 +84,6 @@ public:
 
 private:
 
-    OUString m_sLocale;
-
     /** helper to listen for configuration changes without ownership cycle problems */
     css::uno::Reference< css::util::XChangesListener > m_xCfgListener;
 };

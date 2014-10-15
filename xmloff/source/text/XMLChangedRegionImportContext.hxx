@@ -40,8 +40,6 @@ namespace com { namespace sun { namespace star {
  */
 class XMLChangedRegionImportContext : public SvXMLImportContext
 {
-    const OUString sEmpty;
-
     /// if we replace the current XTextCursor/XText by the ones for
     /// the redline, we remember the old cursor here.
     ::com::sun::star::uno::Reference<

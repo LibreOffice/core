@@ -142,8 +142,6 @@ namespace ftp {
 
     private:
 
-        osl::Mutex m_mutex;
-
         FTPHandleProvider *m_pFCP;
 
         mutable OUString m_aUsername;

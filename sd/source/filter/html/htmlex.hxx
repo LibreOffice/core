@@ -85,7 +85,6 @@ class HtmlExport
     std::vector< SdPage* > maNotesPages;
 
     OUString maPath;
-    OUString maFilterOptions;
 
     SdDrawDocument* mpDoc;
     ::sd::DrawDocShell* mpDocSh;
@@ -230,7 +229,6 @@ class HtmlExport
  public:
     HtmlExport(const OUString& aPath,
                const css::uno::Sequence<css::beans::PropertyValue>& rParams,
-               const OUString& rFilterOptions,
                SdDrawDocument* pExpDoc,
                sd::DrawDocShell* pDocShell);
 

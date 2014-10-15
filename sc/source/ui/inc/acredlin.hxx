@@ -101,7 +101,6 @@ private:
     ScViewData*             pViewData;
     ScDocument*             pDoc;
     ScRangeName             aLocalRangeName;
-    Selection               theCurSel;
     SvxTPFilter*            pTPFilter;
     SvxTPView*              pTPView;
     SvxRedlinTable*         pTheView; // #i48648 now SvHeaderTabListBox

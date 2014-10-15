@@ -497,7 +497,6 @@ friend class SfxHelpIndexWindow_Impl;
     bool            bGrabFocusToToolBox;
     Point               aWinPos;
     OUString            sTitle;
-    OUString            sKeyword;
 
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        Split() SAL_OVERRIDE;

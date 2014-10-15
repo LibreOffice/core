@@ -42,7 +42,6 @@ private:
     PushButton*          m_pCreditsButton;
     PushButton*          m_pWebsiteButton;
 
-    OUString aVersionData;
     OUString m_aVersionTextStr;
     OUString m_aVendorTextStr;
     OUString m_aCopyrightTextStr;

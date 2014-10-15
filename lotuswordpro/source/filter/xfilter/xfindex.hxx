@@ -128,8 +128,6 @@ private:
     typedef std::pair<enumXFIndexTemplate, OUString> TOCTEMPLATE_ENTRY_TYPE;
     std::vector<TOCTEMPLATE_ENTRY_TYPE> m_aEntries; // template entry + text style
     std::map<sal_uInt16, OUString> m_aTextEntries;
-
-    OUString m_strChapterTextStyle;
 };
 
 /**
@@ -171,7 +169,6 @@ public:
 private:
     enumXFIndex     m_eType;
     OUString        m_strTitle;
-    OUString        m_strSectStyle;
     bool            m_bProtect;
     bool            m_bSeparator;
     XFParagraph*    m_pTitle;

@@ -60,7 +60,6 @@ private:
     boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
     OUString            m_sDefLangStr;
-    OUString            m_sDeleteStr;
     OUString            m_sCreateLangStr;
 
     void                Init();

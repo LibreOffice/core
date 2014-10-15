@@ -99,7 +99,6 @@ class SpellUndoAction_Impl : public SfxUndoAction
     long            m_nOldErrorStart;
     long            m_nOldErrorEnd;
     bool            m_bIsErrorLanguageSelected;
-    OUString m_sRuleId;
     //undo of AddToDictionary
     Reference<XDictionary>  m_xDictionary;
     OUString                m_sAddedWord;

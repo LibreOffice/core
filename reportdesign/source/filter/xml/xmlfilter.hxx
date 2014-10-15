@@ -73,7 +73,6 @@ public:
 private:
 
     TGroupFunctionMap                               m_aFunctions;
-    com::sun::star::uno::Any                        m_aViewSettings;
     Reference< XComponent >                         m_xSrcDoc;
 
     mutable ::std::unique_ptr<SvXMLTokenMap>        m_pDocElemTokenMap;
