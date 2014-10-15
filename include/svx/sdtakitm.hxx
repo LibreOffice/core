@@ -23,15 +23,16 @@
 #include <svx/svddef.hxx>
 #include <svx/svxdllapi.h>
 
-
-// class SdrTextAniKindItem
-
-
-enum SdrTextAniKind {SDRTEXTANI_NONE,
-                     SDRTEXTANI_BLINK,
-                     SDRTEXTANI_SCROLL,
-                     SDRTEXTANI_ALTERNATE,
-                     SDRTEXTANI_SLIDE};
+/**
+ * Animation type for text frame.
+ */
+enum SdrTextAniKind {
+    SDRTEXTANI_NONE,      /// no animation
+    SDRTEXTANI_BLINK,     /// blinking
+    SDRTEXTANI_SCROLL,    /// scroll through
+    SDRTEXTANI_ALTERNATE, /// scroll back and forth
+    SDRTEXTANI_SLIDE      /// scroll in
+};
 
 // - SDRTEXTANI_BLINK:
 //   Just blink.  Direction and Amount don't effect things.
