@@ -1105,6 +1105,8 @@ bool TcgSttbfCore::Read( SvStream& rS )
     rS.ReadUInt16( fExtend ).ReadUInt16( cData ).ReadUInt16( cbExtra );
     if ( cData )
     {
+        if (cData > rS.remainingSize() / 4) //definitely an invalid record
+            return false;
         dataItems = new SBBItem[ cData ];
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
