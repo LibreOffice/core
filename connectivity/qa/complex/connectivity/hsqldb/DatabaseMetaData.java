@@ -53,6 +53,7 @@ public class DatabaseMetaData {
                 ResultSetMetaData rsMD = rs.getMetaData();
 
                 assure( sName + " returns wrong column count" , rsMD.getColumnCount() == nCount);
+                rs.close();
             }
             else
                 assure( sName + " returns wrong column count" , false);
@@ -67,33 +68,37 @@ public class DatabaseMetaData {
         }
     }
 
-    public void test(){
+    public void test() {
 
-            try{
-        ResultSet rs = m_xMD.getTables(null,null,"TESTCASE",null);
-        while ( rs.next() )
-        {
-            String catalog = rs.getString( 1 );
-            if ( rs.wasNull() )
-                catalog = null;
+        try {
+            ResultSet rs = m_xMD.getTables(null, null, "TESTCASE", null);
+            while (rs.next()) {
+                String catalog = rs.getString(1);
+                if (rs.wasNull())
+                    catalog = null;
 
-            String schema = rs.getString( 2 );
-            if ( rs.wasNull() )
-                schema = null;
+                String schema = rs.getString(2);
+                if (rs.wasNull())
+                    schema = null;
 
-            String table = rs.getString( 3 );
-            String type = rs.getString( 4 );
-            System.out.println("Catalog: " + catalog + " Schema: " + schema + " Table: " + table + " Type: " + type);
-            System.out.println("------------------ Columns ------------------");
-            ResultSet rsColumns = m_xMD.getColumns(catalog,schema,table,"%");
-            while ( rsColumns.next() )
-            {
-                System.out.println("Column: " + rsColumns.getString( 4 ) + " Type: " + rsColumns.getInt( 5 ) + " TypeName: " + rsColumns.getString( 6 ) );
+                String table = rs.getString(3);
+                String type = rs.getString(4);
+                System.out.println("Catalog: " + catalog + " Schema: " + schema
+                        + " Table: " + table + " Type: " + type);
+                System.out
+                        .println("------------------ Columns ------------------");
+                ResultSet rsColumns = m_xMD.getColumns(catalog, schema, table,
+                        "%");
+                while (rsColumns.next()) {
+                    System.out.println("Column: " + rsColumns.getString(4)
+                            + " Type: " + rsColumns.getInt(5) + " TypeName: "
+                            + rsColumns.getString(6));
+                }
+
             }
+            rs.close();
+        } catch (Exception e) {
 
         }
-            } catch(Exception e){
-
-            }
     }
 }
