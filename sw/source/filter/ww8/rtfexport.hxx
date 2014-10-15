@@ -173,6 +173,12 @@ public:
     sal_uLong m_nCurrentNodeIndex;
 
     SvStream& Strm();
+    /// From now on, let Strm() return a memory stream, not a real one.
+    void setStream();
+    /// Get the contents of the memory stream as a string.
+    OString getStream();
+    /// Return back to the real stream.
+    void resetStream();
     SvStream& OutULong(sal_uLong nVal);
     SvStream& OutLong(long nVal);
     void OutUnicode(const sal_Char* pToken, const OUString& rContent, bool bUpr = false);
@@ -211,6 +217,8 @@ private:
     RtfColorTbl m_aColTbl;
     RtfStyleTbl m_aStyTbl;
     RtfRedlineTbl m_aRedlineTbl;
+    /// If set, then Strm() returns this tream, instead of m_pWriter's stream.
+    std::unique_ptr<SvMemoryStream> m_pStream;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORT_HXX

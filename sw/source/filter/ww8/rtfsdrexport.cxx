@@ -28,6 +28,7 @@
 #include <svx/unoapi.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <textboxhelper.hxx>
+#include <dcontact.hxx>
 
 #include <algorithm>
 
@@ -499,6 +500,27 @@ sal_Int32 RtfSdrExport::StartShape()
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString(m_pSdrObject->GetTitle(), m_rExport.eCurrentEncoding));
 
     // now check if we have some text
+    const SwFrmFmt* pShape = FindFrmFmt(m_pSdrObject);
+    if (pShape)
+    {
+        if (SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pShape))
+        {
+            sw::Frame* pFrame = 0;
+            for (sw::FrameIter it = m_rExport.maFrames.begin(); it != m_rExport.maFrames.end(); ++it)
+            {
+                if (pTextBox == &it->GetFrmFmt())
+                {
+                    pFrame = &(*it);
+                    break;
+                }
+            }
+
+            if (pFrame)
+                m_rAttrOutput.writeTextFrame(*pFrame, /*bTextBox=*/true);
+            return m_nShapeType;
+        }
+    }
+
     const SdrTextObj* pTxtObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
     if (pTxtObj)
     {

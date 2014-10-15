@@ -1592,6 +1592,75 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
     }
 }
 
+void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)
+{
+    RtfStringBuffer aRunText;
+    if (bTextBox)
+    {
+        m_rExport.setStream();
+        aRunText = m_aRunText;
+        m_aRunText.clear();
+    }
+
+    m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHPTXT);
+
+    {
+        // Save table state, in case the inner text also contains a table.
+        ww8::WW8TableInfo::Pointer_t pTableInfoOrig = m_rExport.mpTableInfo;
+        m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+        SwWriteTable* pTableWrt = m_pTableWrt;
+        m_pTableWrt = 0;
+        sal_uInt32 nTableDepth = m_nTableDepth;
+
+        m_nTableDepth = 0;
+        /*
+         * Save m_aRun as we should not lose the opening brace.
+         * OTOH, just drop the contents of m_aRunText in case something
+         * would be there, causing a problem later.
+         */
+        OString aSave = m_aRun.makeStringAndClear();
+        // Also back m_bInRun and m_bSingleEmptyRun up.
+        bool bInRunOrig = m_bInRun;
+        m_bInRun = false;
+        bool bSingleEmptyRunOrig = m_bSingleEmptyRun;
+        m_bSingleEmptyRun = false;
+        m_rExport.bRTFFlySyntax = true;
+
+        const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
+        const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+        sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+        sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+        m_rExport.SaveData(nStt, nEnd);
+        m_rExport.mpParentFrame = &rFrame;
+        m_rExport.WriteText();
+        m_rExport.RestoreData();
+
+        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PARD);
+        m_rExport.bRTFFlySyntax = false;
+        m_aRun->append(aSave);
+        m_aRunText.clear();
+        m_bInRun = bInRunOrig;
+        m_bSingleEmptyRun = bSingleEmptyRunOrig;
+
+        // Restore table state.
+        m_rExport.mpTableInfo = pTableInfoOrig;
+        delete m_pTableWrt;
+        m_pTableWrt = pTableWrt;
+        m_nTableDepth = nTableDepth;
+    }
+
+    m_rExport.mpParentFrame = NULL;
+
+    m_rExport.Strm().WriteChar('}');   // shptxt
+
+    if (bTextBox)
+    {
+        m_aRunText = aRunText;
+        m_aRunText->append(m_rExport.getStream());
+        m_rExport.resetStream();
+    }
+}
+
 void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Point& /*rNdTopLeft*/)
 {
     const SwNode* pNode = rFrame.GetContent();
@@ -1641,55 +1710,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
         }
         m_aFlyProperties.clear();
 
-        m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHPTXT);
+        writeTextFrame(rFrame);
 
-        {
-            // Save table state, in case the inner text also contains a table.
-            ww8::WW8TableInfo::Pointer_t pTableInfoOrig = m_rExport.mpTableInfo;
-            m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
-            SwWriteTable* pTableWrt = m_pTableWrt;
-            m_pTableWrt = 0;
-            sal_uInt32 nTableDepth = m_nTableDepth;
-
-            m_nTableDepth = 0;
-            /*
-             * Save m_aRun as we should not lose the opening brace.
-             * OTOH, just drop the contents of m_aRunText in case something
-             * would be there, causing a problem later.
-             */
-            OString aSave = m_aRun.makeStringAndClear();
-            // Also back m_bInRun and m_bSingleEmptyRun up.
-            bool bInRunOrig = m_bInRun;
-            m_bInRun = false;
-            bool bSingleEmptyRunOrig = m_bSingleEmptyRun;
-            m_bSingleEmptyRun = false;
-            m_rExport.bRTFFlySyntax = true;
-
-            const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
-            sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
-            sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
-            m_rExport.SaveData(nStt, nEnd);
-            m_rExport.mpParentFrame = &rFrame;
-            m_rExport.WriteText();
-            m_rExport.RestoreData();
-
-            m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PARD);
-            m_rExport.bRTFFlySyntax = false;
-            m_aRun->append(aSave);
-            m_aRunText.clear();
-            m_bInRun = bInRunOrig;
-            m_bSingleEmptyRun = bSingleEmptyRunOrig;
-
-            // Restore table state.
-            m_rExport.mpTableInfo = pTableInfoOrig;
-            delete m_pTableWrt;
-            m_pTableWrt = pTableWrt;
-            m_nTableDepth = nTableDepth;
-        }
-
-        m_rExport.mpParentFrame = NULL;
-
-        m_rExport.Strm().WriteChar('}');   // shptxt
         m_rExport.Strm().WriteChar('}');   // shpinst
         m_rExport.Strm().WriteChar('}');   // shp
 

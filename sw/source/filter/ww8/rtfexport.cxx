@@ -840,7 +840,30 @@ RtfExport::~RtfExport()
 
 SvStream& RtfExport::Strm()
 {
-    return m_pWriter->Strm();
+    if (m_pStream)
+        return *m_pStream;
+    else
+        return m_pWriter->Strm();
+}
+
+void RtfExport::setStream()
+{
+    m_pStream.reset(new SvMemoryStream());
+}
+
+OString RtfExport::getStream()
+{
+    OString aRet;
+
+    if (m_pStream)
+        aRet = OString(static_cast<const sal_Char*>(m_pStream->GetData()), m_pStream->Tell());
+
+    return aRet;
+}
+
+void RtfExport::resetStream()
+{
+    m_pStream.reset();
 }
 
 SvStream& RtfExport::OutULong(sal_uLong nVal)

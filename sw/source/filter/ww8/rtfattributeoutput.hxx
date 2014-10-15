@@ -632,6 +632,9 @@ public:
     static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = 0, sal_uInt32 nLimit = 64);
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
+
+    /// Handles just the {\shptxt ...} part of a shape export.
+    void writeTextFrame(const sw::Frame& rFrame, bool bTextBox = false);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFATTRIBUTEOUTPUT_HXX
