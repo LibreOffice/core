@@ -1263,8 +1263,9 @@ void SwDocTest::setUp()
 
 void SwDocTest::tearDown()
 {
+    m_pDoc = 0; // deleted by DoClose()
+    m_xDocShRef->DoClose();
     m_xDocShRef.Clear();
-    delete m_pDoc;
 
     BootstrapFixture::tearDown();
 }
