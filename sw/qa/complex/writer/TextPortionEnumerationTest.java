@@ -1183,42 +1183,66 @@ class RangeInserter extends Inserter
     {
         String type = node.getType();
         if (type.equals("Bookmark")) {
+            if (!(node instanceof BookmarkNode))
+                throw new AssertionError("Unexpected type: " + node);
             BookmarkNode bkmk = (BookmarkNode) node;
             if (bkmk.isPoint()) throw new RuntimeException("range only");
             insertBookmark(xCursor, bkmk.getName(), bkmk.getXmlId());
         } else if (type.equals("ReferenceMark")) {
+            if (!(node instanceof ReferenceMarkNode))
+                throw new AssertionError("Unexpected type: " + node);
             ReferenceMarkNode mark = (ReferenceMarkNode) node;
             if (mark.isPoint()) throw new RuntimeException("range only");
             insertReferenceMark(xCursor, mark.getName());
         } else if (type.equals("DocumentIndexMark")) {
+            if (!(node instanceof DocumentIndexMarkNode))
+                throw new AssertionError("Unexpected type: " + node);
             DocumentIndexMarkNode mark = (DocumentIndexMarkNode) node;
             if (mark.isPoint()) throw new RuntimeException("range only");
             insertDocumentIndexMark(xCursor, mark.getName());
         } else if (type.equals("Hyperlink")) {
+            if (!(node instanceof HyperlinkNode))
+                throw new AssertionError("Unexpected type: " + node);
             HyperlinkNode href = (HyperlinkNode) node;
             insertHyperlink(xCursor, href.getURL());
         } else if (type.equals("Ruby")) {
+            if (!(node instanceof RubyNode))
+                throw new AssertionError("Unexpected type: " + node);
             RubyNode ruby = (RubyNode) node;
             insertRuby(xCursor, ruby.getRubyText());
         } else if (type.equals("InContentMetadata")) {
+            if (!(node instanceof MetaNode))
+                throw new AssertionError("Unexpected type: " + node);
             MetaNode meta = (MetaNode) node;
             return insertMeta(xCursor, meta.getXmlId());
         } else if (type.equals("MetadataField")) {
+            if (!(node instanceof MetaFieldNode))
+                throw new AssertionError("Unexpected type: " + node);
             MetaFieldNode meta = (MetaFieldNode) node;
             return insertMetaField(xCursor, meta.getXmlId());
         } else if (type.equals("Text")) {
+            if (!(node instanceof TextNode))
+                throw new AssertionError("Unexpected type: " + node);
             TextNode text = (TextNode) node;
             insertText(xCursor, text.getContent());
         } else if (type.equals("TextField")) {
+            if (!(node instanceof TextFieldNode))
+                throw new AssertionError("Unexpected type: " + node);
             TextFieldNode field = (TextFieldNode) node;
             insertTextField(m_xCursor, field.getContent());
         } else if (type.equals("Footnote")) {
+            if (!(node instanceof FootnoteNode))
+                throw new AssertionError("Unexpected type: " + node);
             FootnoteNode note = (FootnoteNode) node;
             insertFootnote(m_xCursor, note.getLabel());
         } else if (type.equals("Frame")) {
+            if (!(node instanceof FrameNode))
+                throw new AssertionError("Unexpected type: " + node);
             FrameNode frame = (FrameNode) node;
             insertFrame(xCursor, frame.getName(), frame.getAnchor());
         } else if (type.equals("ControlCharacter")) {
+            if (!(node instanceof ControlCharacterNode))
+                throw new AssertionError("Unexpected type: " + node);
             ControlCharacterNode cchar = (ControlCharacterNode) node;
             insertControlCharacter(m_xCursor, cchar.getChar());
         } else if (type.equals("SoftPageBreak")) {
@@ -3365,6 +3389,8 @@ public class TextPortionEnumerationTest
                 @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
+                    if (!(node instanceof DocumentIndexMarkNode))
+                        throw new AssertionError("Unexpected type: " + node);
                     return inserter.makeDocumentIndexMark(
                         ((DocumentIndexMarkNode)node).getName());
                 }
@@ -3384,6 +3410,8 @@ public class TextPortionEnumerationTest
                 @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
+                    if (!(node instanceof ReferenceMarkNode))
+                        throw new AssertionError("Unexpected type: " + node);
                     return inserter.makeReferenceMark(
                         ((ReferenceMarkNode)node).getName());
                 }
@@ -3403,6 +3431,8 @@ public class TextPortionEnumerationTest
                 @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
+                    if (!(node instanceof TextFieldNode))
+                        throw new AssertionError("Unexpected type: " + node);
                     return inserter.makeTextField(
                         ((TextFieldNode)node).getContent());
                 }
@@ -3422,6 +3452,8 @@ public class TextPortionEnumerationTest
                 @Override
                 XTextContent mkTextContent(Inserter inserter, TreeNode node)
                         throws Exception {
+                    if (!(node instanceof FootnoteNode))
+                        throw new AssertionError("Unexpected type: " + node);
                     return inserter.makeFootnote(
                         ((FootnoteNode)node).getLabel());
                 }
@@ -3446,6 +3478,8 @@ public class TextPortionEnumerationTest
                 void postInserted(TreeNode node, XTextContent xContent)
                         throws Exception {
                     XMetadatable xMetadatable = UnoRuntime.queryInterface(XMetadatable.class, xContent);
+                    if (!(node instanceof MetaNode))
+                        throw new AssertionError("Unexpected type: " + node);
                     xMetadatable.setMetadataReference(
                             ((MetaNode)node).getXmlId());
                 }

@@ -164,6 +164,9 @@ public static class StateSetAllView
                 aSize.width-aInsets.left-aInsets.right,
                 aSize.height-aInsets.top-aInsets.bottom);
 
+            if (!(g instanceof Graphics2D))
+                throw new AssertionError("Unexpected type: " + g);
+
             PaintAllStates ((Graphics2D)g, aWidgetArea);
         }
     }

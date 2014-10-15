@@ -77,6 +77,8 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     {
         super(_CurUnoDialog, iStep, 95, 57, 210, _iHeight, _reslblFields, _reslblSelFields, (_ifirstHID + 1), true);
         insertControls(_CurDBMetaData, _bgetQueries, _reslblTables);
+        if (!(CurUnoDialog instanceof WizardDialog))
+            throw new AssertionError("Unexpected type: " + CurUnoDialog);
         oWizardDialog = (WizardDialog) CurUnoDialog;
     }
 
@@ -87,6 +89,8 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     {
         super(_CurUnoDialog, 1, 95, 57, 210, _iHeight, _reslblFields, _reslblSelFields, (_ifirstHID + 1), true);
         insertControls(_CurDBMetaData, _bgetQueries, _reslblTables);
+        if (!(CurUnoDialog instanceof WizardDialog))
+            throw new AssertionError("Unexpected type: " + CurUnoDialog);
         oWizardDialog = (WizardDialog) CurUnoDialog;
     }
 
