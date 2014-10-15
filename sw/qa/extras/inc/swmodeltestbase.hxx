@@ -27,6 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <dbmgr.hxx>
 #include <unoprnms.hxx>
 
@@ -131,7 +132,6 @@ protected:
 
         const OUString aPrefix( "LOMM_" );
         utl::TempFile maTempDir(NULL, true);
-        maTempDir.EnableKillingFile();
         const String aWorkDir = maTempDir.GetURL();
         const OUString aURI( getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
         OUString aDBName = registerDBsource( aURI, aPrefix, aWorkDir );
@@ -139,6 +139,8 @@ protected:
 
         verify();
         finish();
+
+        ::utl::removeTree(aWorkDir);
     }
 
     /**
