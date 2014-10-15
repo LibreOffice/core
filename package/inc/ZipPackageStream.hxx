@@ -75,9 +75,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnSeekStream();
 
 public:
-    bool HasOwnKey () const  { return m_bHaveOwnKey;}
-    bool IsToBeCompressed () const { return m_bToBeCompressed;}
-    bool IsToBeEncrypted () const { return m_bToBeEncrypted;}
     bool IsEncrypted () const    { return m_bIsEncrypted;}
     bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
 
@@ -90,20 +87,6 @@ public:
 
     sal_Int32 GetStartKeyGenID();
 
-    const com::sun::star::uno::Sequence < sal_Int8 > getInitialisationVector () const
-    { return m_xBaseEncryptionData->m_aInitVector;}
-    const com::sun::star::uno::Sequence < sal_Int8 > getDigest () const
-    { return m_xBaseEncryptionData->m_aDigest;}
-    const com::sun::star::uno::Sequence < sal_Int8 > getSalt () const
-    { return m_xBaseEncryptionData->m_aSalt;}
-    sal_Int32 getIterationCount () const
-    { return m_xBaseEncryptionData->m_nIterationCount;}
-    sal_Int64 getSize () const
-    { return aEntry.nSize;}
-
-    sal_uInt8 GetStreamMode() const { return m_nStreamMode; }
-    sal_uInt32 GetMagicalHackPos() const { return m_nMagicalHackPos; }
-    sal_uInt32 GetMagicalHackSize() const { return m_nMagicalHackSize; }
     sal_Int32 GetEncryptionAlgorithm() const;
     sal_Int32 GetBlockSize() const;
 
@@ -123,8 +106,6 @@ public:
     }
     void SetPackageMember (bool bNewValue);
 
-    void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )
-    { m_aEncryptionKey = rNewKey; m_aStorageEncryptionKeys.realloc( 0 ); }
     void setInitialisationVector (const com::sun::star::uno::Sequence < sal_Int8 >& rNewVector )
     { m_xBaseEncryptionData->m_aInitVector = rNewVector;}
     void setSalt (const com::sun::star::uno::Sequence < sal_Int8 >& rNewSalt )
@@ -134,8 +115,6 @@ public:
     void setIterationCount (const sal_Int32 nNewCount)
     { m_xBaseEncryptionData->m_nIterationCount = nNewCount;}
     void setSize (const sal_Int64 nNewSize);
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnStreamNoWrap() { return m_xStream; }
 
     void CloseOwnStreamIfAny();
 
