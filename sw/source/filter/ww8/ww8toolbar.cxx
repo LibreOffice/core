@@ -1143,7 +1143,7 @@ MacroNames::MacroNames( bool bReadId ) : Tcg255SubStruct( bReadId )
 
 MacroNames::~MacroNames()
 {
-        delete[] rgNames;
+    delete[] rgNames;
 }
 
 bool MacroNames::Read( SvStream &rS)
