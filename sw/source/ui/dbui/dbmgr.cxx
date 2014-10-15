@@ -816,21 +816,20 @@ static void lcl_CopyDocumentPorperties(
 static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
                          const char *name, int no = 0 )
 {
-    boost::scoped_ptr< utl::TempFile > aTempFile;
     String sExt( ".odt" );
     String basename = OUString::createFromAscii( name );
     if (no > 0)
         basename += OUString::number(no) + "-";
-    aTempFile.reset( new utl::TempFile( basename, true, &sExt ) );
-    OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
-    INetURLObject aTempFileURL( aTempFile->GetURL() );
+    // aTempFile is not deleted, but that seems to be intentional
+    utl::TempFile aTempFile(basename, true, &sExt);
+    INetURLObject aTempFileURL( aTempFile.GetURL() );
     SfxMedium* pDstMed = new SfxMedium(
         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
         STREAM_STD_READWRITE );
     if( !xTargetDocShell->DoSaveAs( *pDstMed ) )
-        SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile->GetURL() );
+        SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile.GetURL() );
     else
-        SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile->GetURL() );
+        SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile.GetURL() );
     delete pDstMed;
 }
 
