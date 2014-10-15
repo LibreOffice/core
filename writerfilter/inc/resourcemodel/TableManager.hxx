@@ -31,9 +31,7 @@
 #include "util.hxx"
 #include "TagLogger.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
-#   include <rtl/strbuf.hxx>
-#endif
+#include <rtl/strbuf.hxx>
 
 namespace writerfilter
 {
@@ -1047,10 +1045,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
         }
         catch (css::uno::Exception const& e)
         {
-            (void) e;
-#if OSL_DEBUG_LEVEL > 0
             SAL_WARN("writerfilter", "resolving of current table failed with: " << e.Message);
-#endif
         }
     }
     resetTableProps();

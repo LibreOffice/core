@@ -1122,13 +1122,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
             }
         break;
         default:
-#if OSL_DEBUG_LEVEL > 0
-            OString sMessage( "GraphicImport::sprm() - Id: ");
-            sMessage += OString::number( nSprmId, 10 );
-            sMessage += " / 0x";
-            sMessage += OString::number( nSprmId, 16 );
-            SAL_WARN("writerfilter", sMessage.getStr());
-#endif
+            SAL_WARN("writerfilter", "GraphicImport::lcl_sprm: unhandled token: " << nSprmId);
         break;
     }
 }

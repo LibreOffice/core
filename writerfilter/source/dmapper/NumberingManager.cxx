@@ -809,19 +809,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             m_pCurrentNumPicBullet->SetId(rVal.getString().toInt32());
         break;
         default:
-        {
-#if OSL_DEBUG_LEVEL > 0
-            OString sMessage( "ListTable::attribute() - Id: ");
-            sMessage += OString::number( nName, 10 );
-            sMessage += " / 0x";
-            sMessage += OString::number( nName, 16 );
-            sMessage += " value: ";
-            sMessage += OString::number( nIntValue, 10 );
-            sMessage += " / 0x";
-            sMessage += OString::number( nIntValue, 16 );
-            SAL_WARN("writerfilter", sMessage.getStr());
-#endif
-        }
+            SAL_WARN("writerfilter", "ListsManager::lcl_attribute: unhandled token: " << nName);
     }
 }
 

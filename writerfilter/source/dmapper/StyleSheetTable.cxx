@@ -1174,19 +1174,15 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
                             (void) rWrapped;
-                            OString aMessage("Some style properties could not be set");
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DEBUG_DOMAINMAPPER
+                            OUString aMessage("StyleSheetTable::ApplyStyleSheets: Some style properties could not be set");
                             beans::UnknownPropertyException aUnknownPropertyException;
 
-                            if( rWrapped.TargetException >>= aUnknownPropertyException )
-                            {
-                                aMessage += ": ";
-                                OString sTemp;
-                                aUnknownPropertyException.Message.convertToString(&sTemp, RTL_TEXTENCODING_ASCII_US, 0 );
-                                aMessage += sTemp;
-                            }
+                            if (rWrapped.TargetException >>= aUnknownPropertyException)
+                                aMessage += ": " + aUnknownPropertyException.Message;
+
+                            SAL_WARN("writerfilter", aMessage);
 #endif
-                            SAL_WARN("writerfilter", aMessage.getStr());
                         }
                         catch( const uno::Exception& )
                         {
