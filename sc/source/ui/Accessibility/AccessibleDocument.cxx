@@ -1691,10 +1691,6 @@ void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /
 
         CommitChange(aEvent);
     }
-    if(mpChildrenShapes )
-    {
-        mpChildrenShapes->SelectionChanged();
-    }
 }
 
     //=====  XInterface  =====================================================
