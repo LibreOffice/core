@@ -21,18 +21,15 @@ import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.PropertyValue;
-
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.logging.XLogger;
 import com.sun.star.logging.XLoggerPool;
 import com.sun.star.sdb.CommandType;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-
 import com.sun.star.logging.LogLevel;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
@@ -49,6 +46,7 @@ import com.sun.star.wizards.ui.SortingComponent;
 import com.sun.star.wizards.ui.TitlesComponent;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
+
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -110,7 +108,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                         102,
                         41,
                         1,
-                        new Short((short) 0),
+                        Short.valueOf((short) 0),
                         sMsgWizardName,
                         310
                     });

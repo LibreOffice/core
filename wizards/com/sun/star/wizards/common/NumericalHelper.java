@@ -1033,7 +1033,7 @@ public class NumericalHelper
                 break;
             case TypeClass.SHORT_value:
                 aTypeObject.iType = SHORT_TYPE;
-                aTypeObject.aValue = new Short(AnyConverter.toShort(aValue));
+                aTypeObject.aValue = Short.valueOf(AnyConverter.toShort(aValue));
                 break;
             case TypeClass.LONG_value:
                 aTypeObject.iType = INT_TYPE;
@@ -1256,7 +1256,7 @@ public class NumericalHelper
             aShortVal = new Object[vals.length];
             for (int i = 0; i < vals.length; i++)
             {
-                aShortVal[i] = new Short(vals[i]);
+                aShortVal[i] = Short.valueOf(vals[i]);
             }
         }
         else if (c.equals(int[].class))

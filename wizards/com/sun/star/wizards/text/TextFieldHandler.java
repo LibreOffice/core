@@ -297,7 +297,7 @@ public class TextFieldHandler
     {
         try
         {
-            XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("UserDataType", new Short(UserDataPart), "Short");
+            XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("UserDataType", Short.valueOf(UserDataPart), "Short");
             if (xDependentTextFields != null)
             {
                 for (int i = 0; i < xDependentTextFields.length; i++)

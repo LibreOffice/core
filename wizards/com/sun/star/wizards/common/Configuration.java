@@ -114,7 +114,7 @@ public abstract class Configuration
 
     public static void set(short value, String name, Object parent) throws Exception
     {
-        set(new Short(value), name, parent);
+        set(Short.valueOf(value), name, parent);
     }
 
     public static void set(String value, String name, Object parent) throws Exception

@@ -21,10 +21,10 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.text.XTextDocument;
-
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -130,7 +130,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     },
                     new Object[]
                     {
-                        14, HelpIds.getHelpIdString(34321), 74, 58, 0, new Short((short) 1), 40, sStop
+                        14, HelpIds.getHelpIdString(34321), 74, 58, 0, Short.valueOf((short) 1), 40, sStop
                     });
             createWindowPeer(CurReportDocument.getWizardParent());
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());

@@ -172,7 +172,7 @@ public class UnoDataAware extends DataAware
         XCheckBox xcheckBox = UnoRuntime.queryInterface(XCheckBox.class, checkBox);
         final UnoDataAware uda = new UnoDataAware(data,
                 field
-                ? DataAwareFields.getFieldValueFor(data, prop, new Short((short) 0))
+                ? DataAwareFields.getFieldValueFor(data, prop, Short.valueOf((short) 0))
                 : new DataAware.PropertyValue(prop, data),
                 checkBox, PropertyNames.PROPERTY_STATE);
         xcheckBox.addItemListener(itemListener(uda, listener));

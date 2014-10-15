@@ -107,7 +107,7 @@ public class QueryWizard extends DatabaseObjectWizard
                         },
                         new Object[]
                         {
-                            210, Boolean.TRUE, "DialogQuery", 102, 41, 1, new Short((short) 0), resQueryWizard, 310
+                            210, Boolean.TRUE, "DialogQuery", 102, 41, 1, Short.valueOf((short) 0), resQueryWizard, 310
                         });
                 drawNaviBar();
                 setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);

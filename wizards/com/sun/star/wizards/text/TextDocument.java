@@ -43,7 +43,6 @@ import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.task.XStatusIndicatorFactory;
@@ -270,7 +269,7 @@ public class TextDocument
         ViewHandler myViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
         try
         {
-            myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
+            myViewHandler.setViewSetting("ZoomType", Short.valueOf(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
         }
         catch (Exception e)
         {

@@ -75,7 +75,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sFieldNames, 91, 27, IFieldFormatStep, new Short(curtabindex++), 90
+                    UIConsts.INTEGERS[8], sFieldNames, 91, 27, IFieldFormatStep, Short.valueOf(curtabindex++), 90
                 });
 
         try
@@ -87,7 +87,7 @@ public class FieldFormatter implements XItemListener
                     },
                     new Object[]
                     {
-                        133, "HID:WIZARDS_HID_DLGTABLE_LB_SELFIELDNAMES", 92, 37, IFieldFormatStep, new Short(curtabindex++), 62
+                        133, "HID:WIZARDS_HID_DLGTABLE_LB_SELFIELDNAMES", 92, 37, IFieldFormatStep, Short.valueOf(curtabindex++), 62
                     });
         }
         catch (Exception e)
@@ -105,7 +105,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDUP", String.valueOf((char) 8743), 158, 139, IFieldFormatStep, new Short(curtabindex++), 14
+                    Boolean.FALSE, oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDUP", String.valueOf((char) 8743), 158, 139, IFieldFormatStep, Short.valueOf(curtabindex++), 14
                 });
 
         btnShiftDown = CurUnoDialog.insertButton("btnShiftDown", "shiftFieldNameDown", this,
@@ -115,7 +115,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDDOWN", String.valueOf((char) 8744), 158, 156, IFieldFormatStep, new Short(curtabindex++), 14
+                    Boolean.FALSE, oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDDOWN", String.valueOf((char) 8744), 158, 156, IFieldFormatStep, Short.valueOf(curtabindex++), 14
                 });
         oFontDesc = new FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
@@ -127,7 +127,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMINUS", "-", 118, 175, IFieldFormatStep, new Short(curtabindex++), 14
+                    oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMINUS", "-", 118, 175, IFieldFormatStep, Short.valueOf(curtabindex++), 14
                 });
 
         btnplus = CurUnoDialog.insertButton("btnplus", "addFieldName", this,
@@ -137,7 +137,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDPLUS", "+", 137, 175, IFieldFormatStep, new Short(curtabindex++), 14
+                    oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDPLUS", "+", 137, 175, IFieldFormatStep, Short.valueOf(curtabindex++), 14
                 });
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "ColDescriptorHeader",
@@ -147,7 +147,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    8, sfieldinfo, 0, 158, 27, IFieldFormatStep, new Short(curtabindex++), 165
+                    8, sfieldinfo, 0, 158, 27, IFieldFormatStep, Short.valueOf(curtabindex++), 165
                 });
 
 
@@ -158,7 +158,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sFieldName, 158, 39, IFieldFormatStep, new Short(curtabindex++), 94
+                    UIConsts.INTEGERS[8], sFieldName, 158, 39, IFieldFormatStep, Short.valueOf(curtabindex++), 94
                 });
 
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
@@ -168,7 +168,7 @@ public class FieldFormatter implements XItemListener
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_COLNAME", 274, 37, IFieldFormatStep, new Short(curtabindex++), PropertyNames.EMPTY_STRING, 50
+                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_COLNAME", 274, 37, IFieldFormatStep, Short.valueOf(curtabindex++), PropertyNames.EMPTY_STRING, 50
                 });
         txtfieldname.addTextListener(CurUnoDialog);
         CurUnoDialog.getPeerConfiguration().setAccessibleName(btnplus, sbtnplushelptext);
@@ -186,7 +186,7 @@ public class FieldFormatter implements XItemListener
                     }, // PropertyNames.PROPERTY_HELPURL
                     new Object[]
                     {
-                        85, 158, 49, IFieldFormatStep, new Short(curtabindex++), 166, 50
+                        85, 158, 49, IFieldFormatStep, Short.valueOf(curtabindex++), 166, 50
                     });  //, "HID:WIZARDS_HID_DLGTABLE_COLMODIFIER"
             curTableDescriptor = _curTableDescriptor;
             Helper.setUnoPropertyValue(oColumnDescriptorModel, PropertyNames.ACTIVE_CONNECTION, _curTableDescriptor.DBConnection);
@@ -202,7 +202,7 @@ public class FieldFormatter implements XItemListener
             }
         }
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST, _fieldnames);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new Short[]
                 {
                     0
                 });
@@ -237,7 +237,7 @@ public class FieldFormatter implements XItemListener
         if (CurUnoDialog.verifyfieldcount(icount))
         {
             xlstFieldNames.addItem(snewfieldname, icount);
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new Short[]
                     {
                         icount
                     });
@@ -261,7 +261,7 @@ public class FieldFormatter implements XItemListener
         int ilistcount = /* xlstFieldNames.getItemCount();*/ UnoDialog.getListBoxItemCount(xlstFieldNames);
         if ((ipos) < ilistcount)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new Short[]
                     {
                         ipos
                     });
@@ -271,7 +271,7 @@ public class FieldFormatter implements XItemListener
             if (ilistcount > -1)
             {
                 ipos = (short) ((short) ilistcount - (short) 1);
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new Short[]
                         {
                             ipos
                         });
@@ -315,7 +315,7 @@ public class FieldFormatter implements XItemListener
                 short ipos = xlstFieldNames.getSelectedItemPos();
                 fieldnames[ipos] = newfieldname;
                 Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST, fieldnames);
-                Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
+                Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new Short[]
                         {
                             ipos
                         });
@@ -330,7 +330,7 @@ public class FieldFormatter implements XItemListener
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST, snewlist);
         if ((ipos - 1) > -1)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new Short[]
                     {
                         (short) (ipos - 1)
                     });
@@ -346,7 +346,7 @@ public class FieldFormatter implements XItemListener
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST, snewlist);
         if ((ipos + 1) < xlstFieldNames.getItemCount())
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new short[]
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.SELECTED_ITEMS, new Short[]
                     {
                         (short) (ipos + 1)
                     });

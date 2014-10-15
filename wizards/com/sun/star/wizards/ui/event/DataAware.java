@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
@@ -304,7 +305,7 @@ public abstract class DataAware {
                 if (getMethod.getReturnType().equals(String.class))
                     return PropertyNames.EMPTY_STRING;
                 if (getMethod.getReturnType().equals(Short.class))
-                    return new Short((short) 0);
+                    return Short.valueOf((short) 0);
                 if (getMethod.getReturnType().equals(Integer.class))
                     return 0;
                 if (getMethod.getReturnType().equals(short[].class))
