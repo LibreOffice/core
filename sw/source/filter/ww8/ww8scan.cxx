@@ -2565,12 +2565,21 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                         {
                             sal_uInt32 nCurr = pDataSt->Tell();
                             sal_uInt32 nPos = SVBT32ToUInt32(aEntry.mpData + 2);
-                            if (checkSeek(*pDataSt, nPos))
+                            sal_uInt16 nLen(0);
+
+                            bool bOk = checkSeek(*pDataSt, nPos);
+                            if (bOk)
+                            {
+                                pDataSt->ReadUInt16( nLen );
+                                bOk = nLen <= pDataSt->remainingSize();
+                            }
+
+                            if (bOk)
                             {
                                 const sal_uInt16 nOrigLen = bExpand ? aEntry.mnLen : 0;
                                 sal_uInt8 *pOrigData = bExpand ? aEntry.mpData : 0;
 
-                                pDataSt->ReadUInt16( aEntry.mnLen );
+                                aEntry.mnLen = nLen;
                                 aEntry.mpData =
                                     new sal_uInt8[aEntry.mnLen + nOrigLen];
                                 aEntry.mbMustDelete = true;
