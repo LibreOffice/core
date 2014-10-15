@@ -4001,20 +4001,26 @@ void DomainMapper_Impl::CloseFieldCommand()
                  * To handle unsupported fields used fieldmark API.
                  */
                 OUString aCode( pContext->GetCommand().trim() );
-                xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
-                const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
-                uno::Reference< text::XTextAppend >  xTextAppend;
-                xTextAppend = m_aTextAppendStack.top().xTextAppend;
-                uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
-                if (xTextContent.is())
+                // Don't waste resources on wrapping shapes inside a fieldmark.
+                if (aCode != "SHAPE")
                 {
-                    xTextAppend->insertTextContent(xCrsr,xTextContent, sal_True);
+                    xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
+                    const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
+                    uno::Reference< text::XTextAppend >  xTextAppend;
+                    xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                    uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
+                    if (xTextContent.is())
+                    {
+                        xTextAppend->insertTextContent(xCrsr,xTextContent, sal_True);
+                    }
+                    const uno::Reference<uno::XInterface> xContent(xTextContent);
+                    uno::Reference< text::XFormField> xFormField(xContent, uno::UNO_QUERY);
+                    xFormField->setFieldType(aCode);
+                    m_bStartGenericField = true;
+                    pContext->SetFormField( xFormField );
                 }
-                const uno::Reference<uno::XInterface> xContent(xTextContent);
-                uno::Reference< text::XFormField> xFormField(xContent, uno::UNO_QUERY);
-                xFormField->setFieldType(aCode);
-                m_bStartGenericField = true;
-                pContext->SetFormField( xFormField );
+                else
+                    m_bParaHadField = false;
             }
             //set the text field if there is any
             pContext->SetTextField( uno::Reference< text::XTextField >( xFieldInterface, uno::UNO_QUERY ) );

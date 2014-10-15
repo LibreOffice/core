@@ -709,6 +709,16 @@ DECLARE_RTFEXPORT_TEST(testNumberingFont, "numbering-font.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(xStyle, "CharFontName"));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo82860, "fdo82860.odt")
+{
+    // The problem was that:
+    // 1) The import tried to use fieldmarks for SHAPE fields
+    // 2) The exporter did not handle "shape with textbox" text.
+    uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString("hello"), getParagraphOfText(1, xText)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
