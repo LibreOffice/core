@@ -94,7 +94,7 @@ public:
     /** Detect for the given file which filter should be used. The filter name
      is returned. If no filter could be found, the name of the ASCII filter
      is returned! */
-    static const SfxFilter* GetFileFilter( const OUString& rFileName, const OUString& rPrefFltName, SfxMedium* pMedium = 0 );
+    static const SfxFilter* GetFileFilter(const OUString& rFileName);
 
     static bool IsValidStgFilter( SotStorage& , const SfxFilter& );
     static bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);

@@ -867,7 +867,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if( bMergeShell || !pSourceDocSh->IsModified() )
         {
             const SfxFilter* pStoreToFilter = SwIoSystem::GetFileFilter(
-                pSourceDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), ::aEmptyOUStr );
+                pSourceDocSh->GetMedium()->GetURLObject().GetMainURL(INetURLObject::NO_DECODE));
             SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
             const OUString* pStoreToFilterOptions = 0;
 

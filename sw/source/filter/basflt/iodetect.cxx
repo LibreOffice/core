@@ -198,9 +198,7 @@ void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferL
 // Check the type of the stream (file) by searching for corresponding set of bytes.
 // If no known type is found, return ASCII for now!
 // Returns the internal FilterName.
-// rPrefFltName is the internal FilterName that was chosen by the user in the Open Dlg.
-const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
-    const OUString& rPrefFltName, SfxMedium* pMedium)
+const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
 {
     SfxFilterContainer aCntSw( OUString(sSWRITER) );
     SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
@@ -212,21 +210,20 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
     if ( !pFilter )
         return 0;
 
-    if( pMedium ? ( pMedium->IsStorage() || SotStorage::IsStorageFile( pMedium->GetInStream() ) ) : SotStorage::IsStorageFile( rFileName ) )
+    ::boost::scoped_ptr<SfxMedium> pMedium;
+    if (SotStorage::IsStorageFile(rFileName))
     {
         // package storage or OLEStorage based format
         SotStorageRef xStg;
-        if (!pMedium )
-        {
-            INetURLObject aObj;
-            aObj.SetSmartProtocol( INET_PROT_FILE );
-            aObj.SetSmartURL( rFileName );
-            pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
-        }
+        INetURLObject aObj;
+        aObj.SetSmartProtocol( INET_PROT_FILE );
+        aObj.SetSmartURL( rFileName );
+        pMedium.reset(new SfxMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ));
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
         const SfxFilter* pTemplateFilter = 0;
-        const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName( rPrefFltName );
+        const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName("");
+        assert(!pOldFilter);
         bool bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
         if ( pMedium->IsStorage() )
         {
