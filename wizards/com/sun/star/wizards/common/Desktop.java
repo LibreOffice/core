@@ -45,11 +45,6 @@ import com.sun.star.i18n.XCharacterClassification;
 public class Desktop
 {
 
-    /** Creates a new instance of Desktop */
-    public Desktop()
-    {
-    }
-
     public static XDesktop getDesktop(XMultiServiceFactory xMSF)
     {
         com.sun.star.uno.XInterface xInterface = null;

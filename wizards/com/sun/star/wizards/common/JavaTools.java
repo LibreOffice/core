@@ -29,11 +29,6 @@ import java.net.URL;
 public class JavaTools
 {
 
-    /** Creates a new instance of JavaTools */
-    public JavaTools()
-    {
-    }
-
     public static String[] copyStringArray(String[] FirstArray)
     {
         if (FirstArray != null)

@@ -102,8 +102,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     class OMouseListener implements XMouseListener
     {
-        public OMouseListener()
-        {}
         public void mousePressed(MouseEvent arg0)
         {
             focus(getImageIndexFor(getSelected()));
