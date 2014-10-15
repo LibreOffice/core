@@ -3155,43 +3155,6 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
-    AC_MSG_CHECKING([whether to use DirectX])
-    if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
-        ENABLE_DIRECTX="TRUE"
-        AC_MSG_RESULT([yes])
-    else
-        ENABLE_DIRECTX=""
-        AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([whether to use ActiveX])
-    if test "$enable_activex" = "yes" -o "$enable_activex" = ""; then
-        DISABLE_ACTIVEX=""
-        AC_MSG_RESULT([yes])
-    else
-        DISABLE_ACTIVEX="TRUE"
-        AC_MSG_RESULT([no])
-    fi
-
-    AC_MSG_CHECKING([whether to use ATL])
-    if test "$enable_atl" = "yes" -o "$enable_atl" = ""; then
-        DISABLE_ATL=""
-        AC_MSG_RESULT([yes])
-    else
-        DISABLE_ATL="TRUE"
-        AC_MSG_RESULT([no])
-    fi
-else
-    ENABLE_DIRECTX=""
-    DISABLE_ACTIVEX="TRUE"
-    DISABLE_ATL="TRUE"
-fi
-
-AC_SUBST(ENABLE_DIRECTX)
-AC_SUBST(DISABLE_ACTIVEX)
-AC_SUBST(DISABLE_ATL)
-
 if test "$cross_compiling" = "yes"; then
     export CROSS_COMPILING=TRUE
     SCPDEFS="$SCPDEFS -DCROSS_COMPILING"
@@ -3431,7 +3394,7 @@ find_msvc()
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
-    unset vctest vcnum vcnumwithdot
+    unset vctest vcnum vcnumwithdot vcexpress
 
     vs_versions_to_check "$1"
 
@@ -3444,6 +3407,7 @@ find_msvc()
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
+            vcexpress="yes"
             break
         fi
     done
@@ -3667,6 +3631,48 @@ AC_SUBST(VCVER)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
 AC_SUBST(SHOWINCLUDES_PREFIX)
+
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
+    AC_MSG_CHECKING([whether to use DirectX])
+    if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
+        ENABLE_DIRECTX="TRUE"
+        AC_MSG_RESULT([yes])
+    else
+        ENABLE_DIRECTX=""
+        AC_MSG_RESULT([no])
+    fi
+
+    AC_MSG_CHECKING([whether to use ActiveX])
+    if test "$enable_activex" = "yes" -o "$enable_activex" = "" -a "$vcexpress" != yes; then
+        DISABLE_ACTIVEX=""
+        AC_MSG_RESULT([yes])
+    else
+        DISABLE_ACTIVEX="TRUE"
+        AC_MSG_RESULT([no])
+    fi
+
+    AC_MSG_CHECKING([whether to use ATL])
+    if test "$enable_atl" = "yes" -o "$enable_atl" = ""; then
+        if test "$vcexpress" != yes; then
+            DISABLE_ATL=""
+            AC_MSG_RESULT([yes])
+        else
+            DISABLE_ATL="TRUE"
+            AC_MSG_RESULT([no])
+        fi
+    else
+        DISABLE_ATL="TRUE"
+        AC_MSG_RESULT([no])
+    fi
+else
+    ENABLE_DIRECTX=""
+    DISABLE_ACTIVEX="TRUE"
+    DISABLE_ATL="TRUE"
+fi
+
+AC_SUBST(ENABLE_DIRECTX)
+AC_SUBST(DISABLE_ACTIVEX)
+AC_SUBST(DISABLE_ATL)
 
 #
 # dbghelp.dll
