@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 public class LOKitTileProvider implements TileProvider {
     private static final String LOGTAG = LOKitTileProvider.class.getSimpleName();
     private static int TILE_SIZE = 256;
-    private final Office mOffice;
+    private Office mOffice;
     private Document mDocument;
     private final LayerController mLayerController;
     private final float mTileWidth;
@@ -41,6 +41,19 @@ public class LOKitTileProvider implements TileProvider {
 
         mInputFile = input;
         mDocument = mOffice.documentLoad(input);
+
+        if (mDocument == null) {
+            Log.i(LOGTAG, "====> mOffice.documentLoad() returned null, trying to restart 'Office' and loading again");
+            mOffice.destroy();
+            Log.i(LOGTAG, "====> mOffice.destroy() done");
+            long handle = LibreOfficeKit.getLibreOfficeKitHandle();
+            Log.i(LOGTAG, "====> getLibreOfficeKitHandle() = " + handle);
+            mOffice = new Office(handle);
+            Log.i(LOGTAG, "====> new Office created");
+            mDocument = mOffice.documentLoad(input);
+        }
+
+        Log.i(LOGTAG, "====> mDocument = " + mDocument);
 
         if (checkDocument()) {
             int parts = mDocument.getParts();
