@@ -87,8 +87,9 @@ public final class XOutputStreamToByteArrayAdapter
         {
             if ( externalBuffer )
                 throw new BufferSizeExceededException("out of buffer space, cannot grow external buffer");
-            while ( values.length > size-position )
+            while ( values.length > size-position ) {
                 size *= 2;
+            }
             byte[] newBuffer = new byte[size];
             System.arraycopy(buffer, 0, newBuffer, 0, position);
             buffer = newBuffer;

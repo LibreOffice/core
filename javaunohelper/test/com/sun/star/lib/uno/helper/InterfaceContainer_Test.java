@@ -571,11 +571,13 @@ public class InterfaceContainer_Test
         cont.addAll(list1);
         // go to the end of our list and list1
         ListIterator it= cont.listIterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             it.next();
+        }
         ListIterator it_list1= list1.listIterator();
-        while (it_list1.hasNext())
+        while (it_list1.hasNext()) {
             it_list1.next();
+        }
 
         while (it.hasPrevious())
         {
@@ -612,8 +614,9 @@ public class InterfaceContainer_Test
         ListIterator it;
         cont.addAll(list1);
         it= cont.listIterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             it.next();
+        }
 
         assertEquals(it.previousIndex(), 2);
         it.previous();

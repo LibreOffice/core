@@ -233,8 +233,9 @@ public class ParcelDescriptor {
     public void setScriptEntries(Iterator<ScriptEntry> scripts) {
         clearEntries();
 
-        while (scripts.hasNext())
+        while (scripts.hasNext()) {
             addScriptEntry(scripts.next());
+        }
     }
 
     private String getLanguageProperty(String name) {

@@ -499,8 +499,9 @@ public class _CharacterProperties extends MultiPropertyTest {
             int count = members.size();
             String[] res = new String[count];
             int i=0;
-            while(oEnum.hasNext())
+            while(oEnum.hasNext()) {
                 res[i++] = oEnum.next();
+            }
             return res;
         }
 

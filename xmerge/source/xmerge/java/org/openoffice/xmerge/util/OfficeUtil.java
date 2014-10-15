@@ -95,8 +95,9 @@ public class OfficeUtil implements OfficeConstants {
                 // Compute length of space sequence.
                 int nrSpaces = 2;
                 while ((nrSpaces < text.length())
-                && text.substring(nrSpaces, nrSpaces + 1).equals(" "))
+                        && text.substring(nrSpaces, nrSpaces + 1).equals(" ")) {
                     nrSpaces++;
+                }
 
                 Element spaceNode = parentDoc.createElement(TAG_SPACE);
                 spaceNode.setAttribute(ATTRIBUTE_SPACE_COUNT,

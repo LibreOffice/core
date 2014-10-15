@@ -222,8 +222,9 @@ public class InformationWriter
         {
             // Create indentation string.
             String sIndent = "";
-            while (depth-- > 0)
+            while (depth-- > 0) {
                 sIndent += "    ";
+            }
 
             //  Get XAccessibleContext object if given object does not
             //  already support this interface.

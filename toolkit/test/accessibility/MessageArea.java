@@ -76,8 +76,9 @@ public class MessageArea
     */
     public static synchronized void print (int nIndentation, String aMessage)
     {
-        while (nIndentation-- > 0)
+        while (nIndentation-- > 0) {
             aMessage = " " + aMessage;
+        }
         Instance().printMessage(aMessage);
     }
 

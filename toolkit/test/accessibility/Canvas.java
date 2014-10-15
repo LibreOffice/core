@@ -144,9 +144,9 @@ class Canvas
 
     public void clear ()
     {
-        while (maNodes.size() > 0)
+        while (maNodes.size() > 0) {
             removeNode (maNodes.get(0));
-
+        }
         maNodes.clear();
         maObjects.clear();
         maObjectList.clear();

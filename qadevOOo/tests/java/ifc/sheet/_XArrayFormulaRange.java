@@ -152,8 +152,8 @@ public class _XArrayFormulaRange extends MultiMethodTest {
         s1 = s1.trim() ;
         s2 = s2.trim() ;
         while (p1 < s1.length() && p2 < s2.length()) {
-            while (s1.charAt(p1) == ' ') p1 ++ ;
-            while (s2.charAt(p2) == ' ') p2 ++ ;
+            while (s1.charAt(p1) == ' ') { p1 ++; }
+            while (s2.charAt(p2) == ' ') { p2 ++; }
             if (s1.charAt(p1) != s2.charAt(p2)) return false ;
             p1 ++ ;
             p2 ++ ;

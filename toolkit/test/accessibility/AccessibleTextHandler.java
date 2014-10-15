@@ -650,13 +650,15 @@ class TextEditDialog extends TextActionDialog
         // count equal characters from front and end
         int nFront = 0;
         while( (nFront < nMinLength) &&
-               (sNew.charAt(nFront) == sOld.charAt(nFront)) )
+               (sNew.charAt(nFront) == sOld.charAt(nFront)) ) {
             nFront++;
+        }
         int nBack = 0;
         while( (nBack < nMinLength) &&
                ( sNew.charAt(sNew.length()-nBack-1) ==
-                 sOld.charAt(sOld.length()-nBack-1)    ) )
+                 sOld.charAt(sOld.length()-nBack-1)    ) ) {
             nBack++;
+        }
         if( nFront + nBack > nMinLength )
             nBack = nMinLength - nFront;
 

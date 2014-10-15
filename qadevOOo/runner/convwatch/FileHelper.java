@@ -277,8 +277,9 @@ public class FileHelper
                         out = new java.io.FileWriter(outputFile);
                         int c;
 
-                        while ((c = in.read()) != -1)
+                        while ((c = in.read()) != -1) {
                             out.write(c);
+                        }
 
                     }
                     finally

@@ -138,14 +138,16 @@ public class MultiTypeInterfaceContainer
         {
             it= map.values().iterator();
         }
-        while (it.hasNext() )
+        while (it.hasNext() ) {
             it.next().disposeAndClear(evt);
+        }
     }
 
     synchronized public void clear()
     {
         Iterator<InterfaceContainer> it= map.values().iterator();
-        while (it.hasNext())
+        while (it.hasNext()) {
             it.next().clear();
+        }
     }
 }

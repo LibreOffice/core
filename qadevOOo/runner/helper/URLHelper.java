@@ -139,8 +139,9 @@ public class URLHelper
                 if (lSubFiles != null)
                 {
                     Iterator<File> aSnapshot = lSubFiles.iterator();
-                    while (aSnapshot.hasNext())
+                    while (aSnapshot.hasNext()) {
                         lFilteredFiles.add(aSnapshot.next());
+                    }
                 }
             }
         }

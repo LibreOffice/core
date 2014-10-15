@@ -76,8 +76,9 @@ public class SimpleRegistry extends TestCase {
 
         byte[] buf = new byte[1024] ;
         int bytesRead = 0 ;
-        while ((bytesRead = fIn.read(buf)) > 0)
+        while ((bytesRead = fIn.read(buf)) > 0) {
             fOut.write(buf, 0, bytesRead) ;
+        }
 
         fIn.close() ;
         fOut.close() ;

@@ -73,8 +73,9 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, false, threadId, "notifyme");
 
-            while(!workAt._notified)
+            while(!workAt._notified) {
                 workAt.wait();
+            }
         }
 
         assertEquals(TestWorkAt.MESSAGES, workAt._counter);
@@ -94,8 +95,9 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, true, threadId, "notifyme");
 
-            while(!workAt._notified)
+            while(!workAt._notified) {
                 workAt.wait();
+            }
         }
 
         assertEquals(TestWorkAt.MESSAGES, workAt._counter);
@@ -161,8 +163,9 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, true, threadId, "notifyme");
 
-            while(!workAt._notified)
+            while(!workAt._notified) {
                 workAt.wait();
+            }
         }
 
         assertTrue(workAt.passedAsyncTest());
@@ -322,8 +325,9 @@ public class ThreadPool_Test {
         synchronized(workAt) {
             putJob(workAt, false, threadId, "notifyme");
 
-            while(!workAt._notified)
+            while(!workAt._notified) {
                 workAt.wait();
+            }
         }
 
         assertEquals(TestWorkAt.MESSAGES, workAt._async_counter);

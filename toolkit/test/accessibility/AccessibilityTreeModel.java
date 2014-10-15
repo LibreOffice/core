@@ -160,9 +160,10 @@ public class AccessibilityTreeModel
             else
             {
                 // depth-first removal of children
-                while (aNode.getChildCount() > 0)
+                while (aNode.getChildCount() > 0) {
                     if ( ! removeChild (aNode.getChildNoCreate (0)))
                         break;
+                }
 
                 // Remove node from its parent.
                 AccessibleTreeNode aParent = aNode.getParent();

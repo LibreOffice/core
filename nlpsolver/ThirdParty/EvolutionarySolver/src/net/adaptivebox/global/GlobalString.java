@@ -39,8 +39,9 @@ public class GlobalString {
   public static String[] tokenize(String input , String tokenKey) {
     ArrayList<String> v = new ArrayList<String>();
     StringTokenizer t = new StringTokenizer(input, tokenKey);
-    while (t.hasMoreTokens())
+    while (t.hasMoreTokens()) {
       v.add(t.nextToken());
+    }
     return v.toArray(new String[v.size()]);
   }
 

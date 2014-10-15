@@ -1062,8 +1062,9 @@ public abstract class OfficeDocument
         char[] charArray = new char[4096];
         StringBuffer sBuf = new StringBuffer();
         int n;
-        while ((n=br.read(charArray, 0, charArray.length)) > 0)
+        while ((n=br.read(charArray, 0, charArray.length)) > 0) {
             sBuf.append(charArray, 0, n);
+        }
 
         // ensure there is no trailing garbage after the end of the stream.
         int sIndex = sBuf.lastIndexOf("</office:document>");

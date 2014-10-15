@@ -79,8 +79,9 @@ public class AccessibleTreeCellRenderer
     */
     public void addChangedLine (int nRow)
     {
-        while (maChangedLines.size() <= nRow)
+        while (maChangedLines.size() <= nRow) {
             maChangedLines.add(null);
+        }
         nRow -= 1; // row index is one to large for some reason.
         maChangedLines.set (nRow, true);
     }
