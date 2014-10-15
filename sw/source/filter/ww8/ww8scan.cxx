@@ -1570,6 +1570,8 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             return NULL;                        // gone wrong
         if( 1 == clxt )                         // clxtGrpprl ?
         {
+            if (nLen > pStr->remainingSize())
+                return NULL;
             sal_uInt8* p = new sal_uInt8[nLen+2];         // allocate
             ShortToSVBT16(nLen, p);             // trage Laenge ein
             if (!checkRead(*pStr, p+2, nLen))   // read grpprl
