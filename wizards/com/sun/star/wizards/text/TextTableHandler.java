@@ -226,7 +226,7 @@ public class TextTableHandler
             xSelection.select(xLocCellRange);
             Desktop.dispatchURL(_xMSF, ".Uno:DistributeColumns", xFrame);
             Desktop.dispatchURL(_xMSF, ".Uno:SetOptimalColumnWidth", xFrame);
-            Helper.setUnoPropertyValue(xTextTable, "HoriOrient", new Short(iHoriOrient));
+            Helper.setUnoPropertyValue(xTextTable, "HoriOrient", Short.valueOf(iHoriOrient));
         }
         catch (Exception exception)
         {
