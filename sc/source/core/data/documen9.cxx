@@ -133,7 +133,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
         if (pMgr)
             pDrawLayer->SetLinkManager(pMgr);
-#if 1
+
         //UUUU set DrawingLayer's SfxItemPool at Calc's SfxItemPool as
         // secondary pool to support DrawingLayer FillStyle ranges (and similar)
         // in SfxItemSets using the Calc SfxItemPool. This is e.g. needed when
@@ -146,13 +146,9 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             if(pLocalPool)
             {
                 OSL_ENSURE(!pLocalPool->GetSecondaryPool(), "OOps, already a secondary pool set where the DrawingLayer ItemPool is to be placed (!)");
-#if 0
-            // FIXME apparently this is disabled because it breaks tests
                 pLocalPool->SetSecondaryPool(&pDrawLayer->GetItemPool());
-#endif
             }
         }
-#endif
 
         //  Drawing pages are accessed by table number, so they must also be present
         //  for preceding table numbers, even if the tables aren't allocated
@@ -252,10 +248,7 @@ void ScDocument::DeleteDrawLayer()
 
         if(pLocalPool && pLocalPool->GetSecondaryPool())
         {
-#if 0
-            // FIXME apparently this is disabled because it breaks tests
             pLocalPool->SetSecondaryPool(0);
-#endif
         }
     }
     delete pDrawLayer;

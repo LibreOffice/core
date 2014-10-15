@@ -46,7 +46,10 @@ lcl_CheckSlots2(std::map<sal_uInt16, sal_uInt16> & rSlotMap,
         sal_uInt16 const nSlotId(pInfos[n]._nSID);
         if (nSlotId != 0
             && nSlotId != 10883  // preexisting duplicate SID_ATTR_GRAF_CROP
-            && nSlotId != 10024) // preexisting duplicate SID_ATTR_BORDER_OUTER
+            && nSlotId != 10023  // preexisting duplicate SID_ATTR_BORDER_INNER
+            && nSlotId != 10024  // preexisting duplicate SID_ATTR_BORDER_OUTER
+            && nSlotId != 11013  // preexisting duplicate SID_ATTR_BORDER_DIAG_TLBR
+            && nSlotId != 11014) // preexisting duplicate SID_ATTR_BORDER_DIAG_BLTR
         {   // check for duplicate slot-id mapping
             std::map<sal_uInt16, sal_uInt16>::const_iterator const iter(
                 rSlotMap.find(nSlotId));
