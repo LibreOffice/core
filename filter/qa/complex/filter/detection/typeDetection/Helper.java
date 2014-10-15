@@ -153,7 +153,7 @@ public class Helper  {
                      }
                      nextIsData = true;
                  } else {
-                     vData.add(myToken.toString());
+                     vData.add(myToken);
                      dataCount++;
                      nextIsData = false;
                  }
