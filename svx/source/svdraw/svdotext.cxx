@@ -600,7 +600,6 @@ void SdrTextObj::AdaptTextMinSize()
     }
 
     SetObjectItemSet(aSet);
-    NbcAdjustTextFrameWidthAndHeight();
 }
 
 void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, bool bLineWidth ) const

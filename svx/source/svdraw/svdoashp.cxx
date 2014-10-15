@@ -1480,10 +1480,7 @@ void SdrObjCustomShape::AdaptTextMinSize()
         }
 
         if(bChanged)
-        {
             SetObjectItemSet(aSet);
-            NbcAdjustTextFrameWidthAndHeight();
-        }
     }
 }
 
