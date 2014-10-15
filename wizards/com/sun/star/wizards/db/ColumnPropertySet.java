@@ -96,7 +96,7 @@ public class ColumnPropertySet
             }
             if (_bsetDefaultProperties)
             {
-                assignPropertyValue("IsNullable", new Integer(oTypeInspector.isNullable(xPropertySet)));
+                assignPropertyValue("IsNullable", Integer.valueOf(oTypeInspector.isNullable(xPropertySet)));
             }
         }
         catch (Exception e)
@@ -135,7 +135,7 @@ public class ColumnPropertySet
             sTypeName = _sTypeName;
         }
         nType = oTypeInspector.getDataType(sTypeName);
-        assignPropertyValue("Type", new Integer(nType));
+        assignPropertyValue("Type", Integer.valueOf(nType));
         assignPropertyValue("TypeName", sTypeName);
     }
 
@@ -146,7 +146,7 @@ public class ColumnPropertySet
             if (_spropname.equals("Type"))
             {
                 nType = ((Integer) _oValue).intValue();
-                xPropertySet.setPropertyValue("Type", new Integer(nType));
+                xPropertySet.setPropertyValue("Type", Integer.valueOf(nType));
             }
             else if (_spropname.equals(PropertyNames.PROPERTY_NAME))
             {
@@ -160,13 +160,13 @@ public class ColumnPropertySet
             {
                 int nScale = ((Integer) _oValue).intValue();
                 nScale = oTypeInspector.getScale(xPropertySet);
-                xPropertySet.setPropertyValue("Scale", new Integer(nScale));
+                xPropertySet.setPropertyValue("Scale", Integer.valueOf(nScale));
             }
             else if (_spropname.equals("IsNullable"))
             {
                 int nNullability = ((Integer) _oValue).intValue();
                 nNullability = oTypeInspector.getNullability(xPropertySet, nNullability);
-                xPropertySet.setPropertyValue("IsNullable", new Integer(nNullability));
+                xPropertySet.setPropertyValue("IsNullable", Integer.valueOf(nNullability));
             }
             else if (_spropname.equals("TypeName"))
             {

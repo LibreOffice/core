@@ -51,11 +51,11 @@ public abstract class DBLimitedFieldSelection
         FirstHelpIndex = _FirstHelpIndex;
         curtabindex = (short) (iStep * 100);
         sNoField = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
-        IStep = new Integer(iStep);
+        IStep = Integer.valueOf(iStep);
         iCompPosX = _iCompPosX;
-        ICompPosX = new Integer(iCompPosX);
-        ICompPosY = new Integer(iCompPosY);
-        ICompWidth = new Integer(iCompWidth);
+        ICompPosX = Integer.valueOf(iCompPosX);
+        ICompPosY = Integer.valueOf(iCompPosY);
+        ICompWidth = Integer.valueOf(iCompWidth);
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)
         {

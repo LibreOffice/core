@@ -18,6 +18,7 @@
 package com.sun.star.wizards.ui.event;
 
 import java.lang.reflect.Field;
+
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.uno.Any;
 
@@ -306,7 +307,7 @@ public class DataAwareFields
                     }
                     else
                     {
-                        return new Integer(s);
+                        return Integer.valueOf(s);
                     }
                 }
                 else if (convertTo.equals(Double.class))
@@ -473,7 +474,7 @@ public class DataAwareFields
     {
         if (c.equals(Integer.class))
         {
-            return new Integer((int) i);
+            return Integer.valueOf((int) i);
         }
         else if (c.equals(Short.class))
         {

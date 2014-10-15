@@ -18,6 +18,7 @@
 package com.sun.star.wizards.table;
 
 import java.util.ArrayList;
+
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XItemListener;
@@ -80,7 +81,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         String sPrivate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 17);
         String sTableNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 18);
         smytable = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 44);
-        Integer IMAINSTEP = new Integer(TableWizard.SOMAINPAGE);
+        Integer IMAINSTEP = Integer.valueOf(TableWizard.SOMAINPAGE);
         oCGCategory = new CGCategory(CurUnoDialog.xMSF);
         oCGTable = new CGTable(CurUnoDialog.xMSF);
         lblExplanation = CurUnoDialog.insertLabel("lblScenarioExplanation",

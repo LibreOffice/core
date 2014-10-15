@@ -24,6 +24,7 @@ import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.awt.*;
 import com.sun.star.beans.PropertyValue;
+
 import java.text.Collator;
 import java.util.Comparator;
 
@@ -102,7 +103,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
             sTableListBoxName = "lstTables_" + super.sIncSuffix;
             sTablePrefix = getTablePrefix();
             sQueryPrefix = getQueryPrefix();
-            Integer LabelWidth = new Integer(getListboxWidth().intValue() + 6);
+            Integer LabelWidth = Integer.valueOf(getListboxWidth().intValue() + 6);
             // Label 'Tables or Queries'
             xlblTable = CurUnoDialog.insertLabel(sTableLabelName,
                     new String[]

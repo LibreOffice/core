@@ -78,7 +78,7 @@ public class ConfigGroup implements ConfigNode
         }
         if (field.getType().equals(Integer.TYPE))
         {
-            return new Integer(field.getInt(this));
+            return Integer.valueOf(field.getInt(this));
         }
         if (field.getType().equals(Short.TYPE))
         {
