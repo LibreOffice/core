@@ -72,7 +72,7 @@ public:
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
-    const sal_Char *cBreakIterator, *wordRule, *lineRule;
+    const sal_Char *cBreakIterator, *lineRule;
     Boundary result; // for word break iterator
 
     struct BI_Data

@@ -42,7 +42,6 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 BreakIterator_Unicode::BreakIterator_Unicode()
     : cBreakIterator( "com.sun.star.i18n.BreakIterator_Unicode" )    // implementation name
-    , wordRule( "word" )
     , lineRule( "line" )
     , icuBI( NULL )
     , aBreakType(0)
@@ -91,12 +90,12 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             switch (nWordType) {
                 case WordType::ANY_WORD: break; // odd but previous behavior
                 case WordType::ANYWORD_IGNOREWHITESPACES:
-                    breakType = 0; rule = wordRule = "edit_word"; break;
+                    breakType = 0; rule = "edit_word"; break;
                 case WordType::DICTIONARY_WORD:
-                    breakType = 1; rule = wordRule = "dict_word"; break;
+                    breakType = 1; rule = "dict_word"; break;
                 default:
                 case WordType::WORD_COUNT:
-                    breakType = 2; rule = wordRule = "count_word"; break;
+                    breakType = 2; rule = "count_word"; break;
             }
             break;
         case LOAD_SENTENCE_BREAKITERATOR: icuBI=&sentence; breakType = 5; break;
