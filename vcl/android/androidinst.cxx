@@ -192,6 +192,8 @@ AndroidSalInstance::AndroidSalInstance( SalYieldMutex *pMutex )
 
 AndroidSalInstance::~AndroidSalInstance()
 {
+    int res = (lo_get_javavm())->DetachCurrentThread();
+    LOGI("DetachCurrentThread res=%d", res);
     LOGI("destroyed Android Sal Instance");
 }
 
