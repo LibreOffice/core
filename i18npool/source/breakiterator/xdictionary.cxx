@@ -403,7 +403,9 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
 Boundary xdictionary::previousWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
 {
         // looking for the first non-whitespace character from anyPos
-        sal_uInt32 ch = rText.iterateCodePoints(&anyPos, -1);
+        sal_uInt32 ch = 0;
+        if (anyPos > 0)
+            rText.iterateCodePoints(&anyPos, -1);
 
         while (anyPos > 0 && u_isWhitespace(ch)) ch = rText.iterateCodePoints(&anyPos, -1);
 
