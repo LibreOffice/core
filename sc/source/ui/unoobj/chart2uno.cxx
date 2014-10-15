@@ -2666,7 +2666,7 @@ void ScChart2DataSequence::RebuildDataCache()
     if (!m_bExtDataRebuildQueued)
     {
         m_aDataArray.clear();
-        m_pDocument->BroadcastUno(ScHint(SC_HINT_DATACHANGED, ScAddress()));
+        m_pDocument->BroadcastUno(ScHint(ScHintId::DATACHANGED, ScAddress()));
         m_bExtDataRebuildQueued = true;
         m_bGotDataChangedHint = true;
     }
@@ -2863,7 +2863,10 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 m_bGotDataChangedHint = false;
             }
         }
-        else if ( nId == SC_HINT_CALCALL )
+    }
+    else if ( dynamic_cast<const ScHint*>(&rHint) )
+    {
+        if ( ((const ScHint&)rHint).GetHintId() == ScHintId::CALCALL )
         {
             // broadcast from DoHardRecalc - set m_bGotDataChangedHint
             // (SFX_HINT_DATACHANGED follows separately)
@@ -2950,8 +2953,8 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
 IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
 {
-    if ( m_pDocument && pHint && dynamic_cast<const SfxSimpleHint*>(pHint) &&
-            ((const SfxSimpleHint*)pHint)->GetId() & SC_HINT_DATACHANGED)
+    if ( m_pDocument && pHint && dynamic_cast<const ScHint*>(pHint) &&
+            ((const ScHint*)pHint)->GetHintId() == ScHintId::DATACHANGED)
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when

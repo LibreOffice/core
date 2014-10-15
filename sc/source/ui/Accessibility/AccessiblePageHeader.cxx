@@ -123,45 +123,45 @@ void SAL_CALL ScAccessiblePageHeader::disposing()
 
 void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
-    if (pSimpleHint)
+    const ScHint* pScHint = dynamic_cast<const ScHint*>( &rHint );
+    if (pScHint && pScHint->GetHintId() == ScHintId::DATACHANGED)
     {
-        // only notify if child exist, otherwise it is not necessary
-        if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
+        ScHFAreas aOldAreas(maAreas);
+        std::for_each(aOldAreas.begin(), aOldAreas.end(), Acquire());
+        mnChildCount = -1;
+        getAccessibleChildCount();
+        for (sal_uInt8 i = 0; i < MAX_AREAS; ++i)
         {
-            ScHFAreas aOldAreas(maAreas);
-            std::for_each(aOldAreas.begin(), aOldAreas.end(), Acquire());
-            mnChildCount = -1;
-            getAccessibleChildCount();
-            for (sal_uInt8 i = 0; i < MAX_AREAS; ++i)
+            if ((aOldAreas[i] && maAreas[i] && !ScGlobal::EETextObjEqual(aOldAreas[i]->GetEditTextObject(), maAreas[i]->GetEditTextObject())) ||
+                (aOldAreas[i] && !maAreas[i]) || (!aOldAreas[i] && maAreas[i]))
             {
-                if ((aOldAreas[i] && maAreas[i] && !ScGlobal::EETextObjEqual(aOldAreas[i]->GetEditTextObject(), maAreas[i]->GetEditTextObject())) ||
-                    (aOldAreas[i] && !maAreas[i]) || (!aOldAreas[i] && maAreas[i]))
+                if (aOldAreas[i] && aOldAreas[i]->GetEditTextObject())
                 {
-                    if (aOldAreas[i] && aOldAreas[i]->GetEditTextObject())
-                    {
-                        AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::CHILD;
-                        aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                        aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i]));
+                    AccessibleEventObject aEvent;
+                    aEvent.EventId = AccessibleEventId::CHILD;
+                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
+                    aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i]));
 
-                        CommitChange(aEvent); // child gone - event
-                        aOldAreas[i]->dispose();
-                    }
-                    if (maAreas[i] && maAreas[i]->GetEditTextObject())
-                    {
-                        AccessibleEventObject aEvent;
-                        aEvent.EventId = AccessibleEventId::CHILD;
-                        aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                        aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(maAreas[i]));
+                    CommitChange(aEvent); // child gone - event
+                    aOldAreas[i]->dispose();
+                }
+                if (maAreas[i] && maAreas[i]->GetEditTextObject())
+                {
+                    AccessibleEventObject aEvent;
+                    aEvent.EventId = AccessibleEventId::CHILD;
+                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
+                    aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(maAreas[i]));
 
-                        CommitChange(aEvent); // new child - event
-                    }
+                    CommitChange(aEvent); // new child - event
                 }
             }
-            std::for_each(aOldAreas.begin(), aOldAreas.end(), Release());
         }
-        else if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
+        std::for_each(aOldAreas.begin(), aOldAreas.end(), Release());
+    }
+    else if ( dynamic_cast<const SfxSimpleHint*>( &rHint ) )
+    {
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+        if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;

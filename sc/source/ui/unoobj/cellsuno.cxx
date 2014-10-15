@@ -1619,7 +1619,10 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 bGotDataChangedHint = false;
             }
         }
-        else if ( nId == SC_HINT_CALCALL )
+    }
+    else if ( dynamic_cast<const ScHint*>(&rHint) )
+    {
+        if ( ((const ScHint&)rHint).GetHintId() == ScHintId::CALCALL )
         {
             // broadcast from DoHardRecalc - set bGotDataChangedHint
             // (SFX_HINT_DATACHANGED follows separately)
@@ -2749,8 +2752,8 @@ void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< 
 
 IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
 {
-    if ( pDocShell && pHint && dynamic_cast<const SfxSimpleHint*>(pHint) &&
-            (((const SfxSimpleHint*)pHint)->GetId() & SC_HINT_DATACHANGED))
+    if ( pDocShell && pHint && dynamic_cast<const ScHint*>(pHint) &&
+            (((const ScHint*)pHint)->GetHintId() == ScHintId::DATACHANGED))
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when

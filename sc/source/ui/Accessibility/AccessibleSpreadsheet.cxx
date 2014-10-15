@@ -464,12 +464,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     bNewPosCellFocus=true;
                 }
                 ScMarkData &refScMarkData = rViewData.GetMarkData();
-                // MT IA2: Not used
-                // int nSelCount = refScMarkData.GetSelectCount();
                 bool bIsMark =refScMarkData.IsMarked();
                 bool bIsMultMark = refScMarkData.IsMultiMarked();
                 bool bNewMarked = refScMarkData.GetTableSelect(aNewCell.Tab()) && ( bIsMark || bIsMultMark );
-//              sal_Bool bNewCellSelected = isAccessibleSelected(aNewCell.Row(), aNewCell.Col());
                 sal_uInt16 nTab = rViewData.GetTabNo();
                 ScRange aMarkRange;
                 refScMarkData.GetMarkArea(aMarkRange);
@@ -600,7 +597,11 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 m_LastMarkedRanges = *mpMarkedRanges;
             }
         }
-        else if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
+    }
+    else if ( dynamic_cast<const ScHint*>( &rHint ) )
+    {
+        const ScHint* pScHint = dynamic_cast<const ScHint*>( &rHint );
+        if (pScHint->GetHintId() == ScHintId::DATACHANGED)
         {
             if (!mbDelIns)
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
@@ -639,24 +640,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
             }
         }
-        // commented out, because to use a ModelChangeEvent is not the right way
-        // at the moment there is no way, but the Java/Gnome Api should be extended sometime
-/*          if (mpViewShell)
-            {
-                Rectangle aNewVisCells(GetVisCells(GetVisArea(mpViewShell, meSplitPos)));
-
-                Rectangle aNewPos(aNewVisCells);
-
-                if (aNewVisCells.IsOver(maVisCells))
-                    aNewPos.Union(maVisCells);
-                else
-                    CommitTableModelChange(maVisCells.Top(), maVisCells.Left(), maVisCells.Bottom(), maVisCells.Right(), AccessibleTableModelChangeType::UPDATE);
-
-                maVisCells = aNewVisCells;
-
-                CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
-            }
-        }*/
     }
     else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {

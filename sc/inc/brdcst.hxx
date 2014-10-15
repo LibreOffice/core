@@ -26,15 +26,17 @@
 
 class SvtBroadcaster;
 
-class ScHint : public SfxSimpleHint
+class ScHint : public SfxHint
 {
     ScAddress   aAddress;
+    ScHintId    nHintId;
 
 public:
-    ScHint( sal_uLong n, const ScAddress& a );
+    ScHint( ScHintId n, const ScAddress& a = ScAddress() );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
     void                SetAddress( const ScAddress& rAdr ) { aAddress = rAdr; }
+    ScHintId            GetHintId() const { return nHintId; }
 };
 
 class ScAreaChangedHint : public SfxHint

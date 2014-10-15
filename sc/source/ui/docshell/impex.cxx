@@ -918,7 +918,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
     EndPaste();
     if (bOk && mbImportBroadcast)
     {
-        pDoc->BroadcastCells(aRange, SC_HINT_DATACHANGED);
+        pDoc->BroadcastCells(aRange, ScHintId::DATACHANGED);
         pDocSh->PostDataChanged();
     }
 
@@ -1455,7 +1455,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     if (mbImportBroadcast)
     {
-        pDoc->BroadcastCells(aRange, SC_HINT_DATACHANGED);
+        pDoc->BroadcastCells(aRange, ScHintId::DATACHANGED);
         pDocSh->PostDataChanged();
     }
     return true;

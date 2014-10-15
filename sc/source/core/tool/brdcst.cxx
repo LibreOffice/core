@@ -19,7 +19,7 @@
 
 #include "brdcst.hxx"
 
-ScHint::ScHint( sal_uLong n, const ScAddress& a ) :
-    SfxSimpleHint(n), aAddress(a) {}
+ScHint::ScHint( ScHintId n, const ScAddress& a ) :
+    aAddress(a), nHintId(n) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

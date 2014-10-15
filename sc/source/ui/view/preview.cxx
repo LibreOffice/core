@@ -699,7 +699,7 @@ void ScPreview::DataChanged(bool bNewTime)
     }
 
     bValid = false;
-    InvalidateLocationData( SC_HINT_DATACHANGED );
+    InvalidateLocationData( ScHint(ScHintId::DATACHANGED) );
     Invalidate();
 }
 
@@ -742,7 +742,7 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
         bInSetZoom = false;
 
         bStateValid = false;
-        InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+        InvalidateLocationData( SfxSimpleHint(SC_HINT_ACC_VISAREACHANGED) );
         DoInvalidate();
         Invalidate();
     }
@@ -753,7 +753,7 @@ void ScPreview::SetPageNo( long nPage )
     nPageNo = nPage;
     RecalcPages();
     UpdateDrawView();       // The table eventually changes
-    InvalidateLocationData( SC_HINT_DATACHANGED );
+    InvalidateLocationData( ScHint(ScHintId::DATACHANGED) );
     Invalidate();
 }
 
@@ -856,7 +856,7 @@ void ScPreview::SetXOffset( long nX )
         if (!bInSetZoom)
             Invalidate();
     }
-    InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+    InvalidateLocationData( SfxSimpleHint(SC_HINT_ACC_VISAREACHANGED) );
     Paint(Rectangle());
 }
 
@@ -882,7 +882,7 @@ void ScPreview::SetYOffset( long nY )
         if (!bInSetZoom)
             Invalidate();
     }
-    InvalidateLocationData( SC_HINT_ACC_VISAREACHANGED );
+    InvalidateLocationData( SfxSimpleHint(SC_HINT_ACC_VISAREACHANGED) );
     Paint(Rectangle());
 }
 
@@ -954,7 +954,7 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
                 pViewShell->InvalidateBorder();     // calls OuterResizePixel
             }
             Invalidate();
-            InvalidateLocationData( SC_HINT_DATACHANGED );
+            InvalidateLocationData( ScHint(ScHintId::DATACHANGED) );
         }
     }
 }
@@ -1491,11 +1491,11 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-void ScPreview::InvalidateLocationData(sal_uLong nId)
+void ScPreview::InvalidateLocationData(const SfxHint& rHint)
 {
     bLocationValid = false;
     if (pViewShell->HasAccessibilityObjects())
-        pViewShell->BroadcastAccessibility( SfxSimpleHint( nId ) );
+        pViewShell->BroadcastAccessibility(rHint);
 }
 
 void ScPreview::GetFocus()

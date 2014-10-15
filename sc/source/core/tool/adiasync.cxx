@@ -18,6 +18,7 @@
  */
 
 #include <sfx2/objsh.hxx>
+#include <svl/smplhint.hxx>
 
 #include "adiasync.hxx"
 #include "brdcst.hxx"
@@ -115,7 +116,7 @@ void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
             return;
     }
     p->bValid = true;
-    p->Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
+    p->Broadcast( ScHint(ScHintId::DATACHANGED) );
 
     for ( ScAddInDocs::iterator it = p->pDocs->begin(); it != p->pDocs->end(); ++it )
     {

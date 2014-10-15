@@ -76,7 +76,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
             bIsBroadcasted = true;
         }
         if ( pBASM->AreaBroadcast( rHint ) || bIsBroadcasted )
-            TrackFormulas( rHint.GetId() );
+            TrackFormulas( rHint.GetHintId() );
     }
 
     //  Repaint fuer bedingte Formate mit relativen Referenzen:
@@ -99,7 +99,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     }
 }
 
-void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
+void ScDocument::BroadcastCells( const ScRange& rRange, ScHintId nHint )
 {
     ClearFormulaContext();
 
@@ -121,7 +121,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
         }
     }
 
-    BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
+    BroadcastUno(ScHint(ScHintId::DATACHANGED, ScAddress()));
 }
 
 namespace {
@@ -219,7 +219,7 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         if ( pBASM->AreaBroadcast( rHint ) )
-            TrackFormulas( rHint.GetId() );
+            TrackFormulas( rHint.GetHintId() );
     }
 
     for(SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab)
@@ -241,7 +241,7 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         if ( pBASM->AreaBroadcastInRange( rRange, rHint ) )
-            TrackFormulas( rHint.GetId() );
+            TrackFormulas( rHint.GetHintId() );
     }
 
     // Repaint for conditional formats containing relative references.
@@ -564,7 +564,7 @@ bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
     Der nachfolgende broadcastet wieder usw.
     View stoesst Interpret an.
  */
-void ScDocument::TrackFormulas( sal_uLong nHintId )
+void ScDocument::TrackFormulas( ScHintId nHintId )
 {
 
     if ( pFormulaTrack )

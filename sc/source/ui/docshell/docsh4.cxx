@@ -1242,7 +1242,7 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
 
     // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
     // in addition to SFX_HINT_DATACHANGED.
-    aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
+    aDocument.BroadcastUno( ScHint( ScHintId::CALCALL) );
     aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
     // use hard recalc also to disable stream-copying of all sheets

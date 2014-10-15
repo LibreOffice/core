@@ -505,7 +505,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::R
     else
     {
         // still need to recalc volatile formula cells.
-        aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
+        aDocument.Broadcast(ScHint(ScHintId::DATACHANGED, BCA_BRDCST_ALWAYS));
     }
 
     AfterXMLLoading(bRet);
@@ -2781,7 +2781,7 @@ void ScDocShell::SetDocumentModified( bool bIsModified /* = true */ )
     {
         // #i115009# broadcast BCA_BRDCST_ALWAYS, so a component can read recalculated results
         // of RecalcModeAlways formulas (like OFFSET) after modifying cells
-        aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
+        aDocument.Broadcast(ScHint(ScHintId::DATACHANGED, BCA_BRDCST_ALWAYS));
         aDocument.InvalidateTableArea();    // #i105279# needed here
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
@@ -2801,7 +2801,7 @@ void ScDocShell::SetDocumentModified( bool bIsModified /* = true */ )
             aDocument.InvalidateStyleSheetUsage();
             aDocument.InvalidateTableArea();
             aDocument.InvalidateLastTableOpParams();
-            aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
+            aDocument.Broadcast(ScHint(ScHintId::DATACHANGED, BCA_BRDCST_ALWAYS));
             if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
                 aDocument.CalcFormulaTree( true );
             PostDataChanged();

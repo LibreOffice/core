@@ -1863,7 +1863,7 @@ public:
                          */
     void                Broadcast( const ScHint& rHint );
 
-    void BroadcastCells( const ScRange& rRange, sal_uLong nHint );
+    void BroadcastCells( const ScRange& rRange, ScHintId nHint );
     void BroadcastRefMoved( const sc::RefMovedHint& rHint );
 
                         /// only area, no cell broadcast
@@ -1909,7 +1909,7 @@ public:
     void                ClearFormulaTree();
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
-    void                TrackFormulas( sal_uLong nHintId = SC_HINT_DATACHANGED );
+    void                TrackFormulas( ScHintId nHint = ScHintId::DATACHANGED );
     sal_uInt16              GetFormulaTrackCount() const { return nFormulaTrackCount; }
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;

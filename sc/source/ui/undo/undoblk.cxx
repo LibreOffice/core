@@ -955,7 +955,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     aMarkData.MarkToMulti();
     rDoc.DeleteSelection(nUndoFlags, aMarkData, false); // no broadcasting here
     for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
-        rDoc.BroadcastCells(*maBlockRanges[i], SC_HINT_DATACHANGED);
+        rDoc.BroadcastCells(*maBlockRanges[i], ScHintId::DATACHANGED);
 
     aMarkData.MarkToSimple();
 
@@ -1256,7 +1256,7 @@ class DataChangeNotifier : std::unary_function<SvtListener*, void>
 {
     ScHint maHint;
 public:
-    DataChangeNotifier() : maHint(SC_HINT_DATACHANGED, ScAddress()) {}
+    DataChangeNotifier() : maHint(ScHintId::DATACHANGED) {}
 
     void operator() ( SvtListener* p )
     {

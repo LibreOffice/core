@@ -228,7 +228,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         //  must be from Area broadcasters
 
         const ScHint* pScHint = dynamic_cast<const ScHint*>( &rHint );
-        if (pScHint && (pScHint->GetId() & SC_HINT_DATACHANGED))
+        if (pScHint && (pScHint->GetHintId() == ScHintId::DATACHANGED))
             bDataChanged = true;
         else if ( dynamic_cast<const ScAreaChangedHint*>(&rHint) )      // position of broadcaster changed
         {

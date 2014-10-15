@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SC_INC_REFHINT_HXX
 #define INCLUDED_SC_INC_REFHINT_HXX
 
+#include <svl/hint.hxx>
 #include "address.hxx"
 #include "simplehintids.hxx"
 
@@ -17,7 +18,7 @@ namespace sc {
 
 struct RefUpdateContext;
 
-class RefHint : public SfxSimpleHint
+class RefHint : public SfxHint
 {
 public:
     enum Type {

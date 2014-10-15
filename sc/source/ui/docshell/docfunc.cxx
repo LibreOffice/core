@@ -5437,7 +5437,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bRecord, bool
 
     rDocShell.PostPaint(rRange, PAINT_GRID);
     rDocShell.PostDataChanged();
-    rDoc.BroadcastCells(rRange, SC_HINT_DATACHANGED);
+    rDoc.BroadcastCells(rRange, ScHintId::DATACHANGED);
     aModificator.SetDocumentModified();
 }
 

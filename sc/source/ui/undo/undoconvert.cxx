@@ -43,7 +43,7 @@ void UndoFormulaToValue::Execute()
 
     pDocShell->PostPaint(maUndoValues.getRange(), PAINT_GRID);
     pDocShell->PostDataChanged();
-    rDoc.BroadcastCells(maUndoValues.getRange(), SC_HINT_DATACHANGED);
+    rDoc.BroadcastCells(maUndoValues.getRange(), ScHintId::DATACHANGED);
 }
 
 }

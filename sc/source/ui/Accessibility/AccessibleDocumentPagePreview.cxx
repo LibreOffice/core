@@ -1297,61 +1297,62 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if (pSimpleHint)
+    const ScHint* pScHint = dynamic_cast<const ScHint*>(&rHint);
+    // only notify if child exist, otherwise it is not necessary
+    if (pScHint && pScHint->GetHintId() == ScHintId::DATACHANGED)
     {
-        // only notify if child exist, otherwise it is not necessary
-        if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
+        if (mpTable) // if there is no table there is nothing to notify, because no one recongnizes the change
         {
-            if (mpTable) // if there is no table there is nothing to notify, because no one recongnizes the change
             {
-                {
-                    uno::Reference<XAccessible> xAcc = mpTable;
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.OldValue <<= xAcc;
-                    CommitChange(aEvent);
-                }
+                 uno::Reference<XAccessible> xAcc = mpTable;
+                 AccessibleEventObject aEvent;
+                 aEvent.EventId = AccessibleEventId::CHILD;
+                 aEvent.Source = uno::Reference< XAccessibleContext >(this);
+                 aEvent.OldValue <<= xAcc;
+                 CommitChange(aEvent);
+             }
 
-                mpTable->dispose();
-                mpTable->release();
-                mpTable = NULL;
-            }
+            mpTable->dispose();
+            mpTable->release();
+            mpTable = NULL;
+        }
 
-            Size aOutputSize;
-            vcl::Window* pSizeWindow = mpViewShell->GetWindow();
-            if ( pSizeWindow )
-                aOutputSize = pSizeWindow->GetOutputSizePixel();
-            Point aPoint;
-            Rectangle aVisRect( aPoint, aOutputSize );
-            GetNotesChildren()->DataChanged(aVisRect);
+        Size aOutputSize;
+        vcl::Window* pSizeWindow = mpViewShell->GetWindow();
+        if ( pSizeWindow )
+            aOutputSize = pSizeWindow->GetOutputSizePixel();
+        Point aPoint;
+        Rectangle aVisRect( aPoint, aOutputSize );
+        GetNotesChildren()->DataChanged(aVisRect);
 
-            GetShapeChildren()->DataChanged();
+        GetShapeChildren()->DataChanged();
 
-            const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-            ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
 
-            if (aCount.nTables > 0)
+        if (aCount.nTables > 0)
+        {
+            //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+            sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
+
+            mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+            mpTable->acquire();
+            mpTable->Init();
+
             {
-                //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-                sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
-
-                mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                mpTable->acquire();
-                mpTable->Init();
-
-                {
-                    uno::Reference<XAccessible> xAcc = mpTable;
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.NewValue <<= xAcc;
-                    CommitChange(aEvent);
-                }
+                uno::Reference<XAccessible> xAcc = mpTable;
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::CHILD;
+                aEvent.Source = uno::Reference< XAccessibleContext >(this);
+                aEvent.NewValue <<= xAcc;
+                CommitChange(aEvent);
             }
         }
-        else if (pSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+    }
+    else if ( dynamic_cast<const SfxSimpleHint*>( &rHint ) )
+    {
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+        if (pSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             GetShapeChildren()->SetDrawBroadcaster();
         }

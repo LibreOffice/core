@@ -19,6 +19,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/smplhint.hxx>
 
 #include "addinlis.hxx"
 #include "miscuno.hxx"
@@ -114,7 +115,7 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
 
     // notify document of changes
 
-    Broadcast( ScHint(SC_HINT_DATACHANGED, ScAddress()) );
+    Broadcast( ScHint(ScHintId::DATACHANGED) );
 
     for ( ScAddInDocs::iterator it = pDocs->begin(); it != pDocs->end(); ++it )
     {

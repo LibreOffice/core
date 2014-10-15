@@ -1878,7 +1878,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     rCol.CellStorageModified();
 
     // Broadcast on moved ranges. Area-broadcast only.
-    ScHint aHint(SC_HINT_DATACHANGED, ScAddress(nCol, 0, nTab));
+    ScHint aHint(ScHintId::DATACHANGED, ScAddress(nCol, 0, nTab));
     ScAddress& rPos = aHint.GetAddress();
     sc::SingleColumnSpanSet::SpansType::const_iterator itRange = aRanges.begin(), itRangeEnd = aRanges.end();
     for (; itRange != itRangeEnd; ++itRange)
@@ -2631,7 +2631,7 @@ public:
     {
         std::vector<SCROW> aRows;
         maValueRanges.getRows(aRows);
-        mrColumn.BroadcastCells(aRows, SC_HINT_DATACHANGED);
+        mrColumn.BroadcastCells(aRows, ScHintId::DATACHANGED);
     }
 };
 
@@ -2663,7 +2663,7 @@ public:
     {
         std::vector<SCROW> aRows;
         maValueRanges.getRows(aRows);
-        mrColumn.BroadcastCells(aRows, SC_HINT_TABLEOPDIRTY);
+        mrColumn.BroadcastCells(aRows, ScHintId::TABLEOPDIRTY);
     }
 };
 
@@ -3053,7 +3053,7 @@ void ScColumn::BroadcastRecalcOnRefMove()
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     RecalcOnRefMoveCollector aFunc;
     sc::ProcessFormula(maCells, aFunc);
-    BroadcastCells(aFunc.getDirtyRows(), SC_HINT_DATACHANGED);
+    BroadcastCells(aFunc.getDirtyRows(), ScHintId::DATACHANGED);
 }
 
 namespace {

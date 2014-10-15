@@ -27,6 +27,8 @@
 #include "rangelst.hxx"
 #include "types.hxx"
 #include "mtvelements.hxx"
+#include "simplehintids.hxx"
+
 #include <formula/types.hxx>
 #include <svl/zforlist.hxx>
 
@@ -535,7 +537,7 @@ public:
     bool HasBroadcaster() const;
 
     void Broadcast( SCROW nRow );
-    void BroadcastCells( const std::vector<SCROW>& rRows, sal_uLong nHint );
+    void BroadcastCells( const std::vector<SCROW>& rRows, ScHintId nHint );
 
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
