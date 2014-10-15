@@ -414,11 +414,13 @@ Boundary xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int1
 {
         boundary = getWordBoundary(rText, anyPos, wordType, true);
         anyPos = boundary.endPos;
-        if (anyPos < rText.getLength()) {
+        const sal_Int32 nLen = rText.getLength();
+        if (anyPos < nLen) {
             // looknig for the first non-whitespace character from anyPos
             sal_uInt32 ch = rText.iterateCodePoints(&anyPos, 1);
-            while (u_isWhitespace(ch)) ch=rText.iterateCodePoints(&anyPos, 1);
-            rText.iterateCodePoints(&anyPos, -1);
+            while (u_isWhitespace(ch) && (anyPos < nLen)) ch=rText.iterateCodePoints(&anyPos, 1);
+            if (anyPos > 0)
+                rText.iterateCodePoints(&anyPos, -1);
         }
 
         return getWordBoundary(rText, anyPos, wordType, true);
