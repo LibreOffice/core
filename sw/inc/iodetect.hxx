@@ -102,8 +102,6 @@ public:
     static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
             rtl_TextEncoding *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
 
-    static const SfxFilter* GetTextFilter( const sal_Char* pBuf, sal_uLong nLen );
-
     static const OUString GetSubStorageName( const SfxFilter& rFltr );
 };
 

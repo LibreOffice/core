@@ -25,6 +25,9 @@
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>
 
+
+using namespace ::com::sun::star;
+
 static bool IsDocShellRegistered()
 {
     return SvtModuleOptions().IsWriter();
@@ -210,7 +213,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
     if ( !pFilter )
         return 0;
 
-    ::boost::scoped_ptr<SfxMedium> pMedium;
     if (SotStorage::IsStorageFile(rFileName))
     {
         // package storage or OLEStorage based format
@@ -218,25 +220,24 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
         INetURLObject aObj;
         aObj.SetSmartProtocol( INET_PROT_FILE );
         aObj.SetSmartURL( rFileName );
-        pMedium.reset(new SfxMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ));
+        SfxMedium aMedium(aObj.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ);
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
         const SfxFilter* pTemplateFilter = 0;
-        const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName("");
-        assert(!pOldFilter);
-        bool bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
-        if ( pMedium->IsStorage() )
+        if (aMedium.IsStorage())
         {
-            com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStor = pMedium->GetStorage();
+            uno::Reference<embed::XStorage> const xStor = aMedium.GetStorage();
             if ( xStor.is() )
             {
                 while ( pFilter )
                 {
                     if( 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( xStor, *pFilter ) )
                     {
-                        if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
+                        if (pFilter->IsOwnTemplateFormat())
+                        {
                             // found template filter; maybe there's a "normal" one also
                             pTemplateFilter = pFilter;
+                        }
                         else
                             return pFilter;
                     }
@@ -253,7 +254,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
         {
             try
             {
-                SvStream* pStream = pMedium->GetInStream();
+                SvStream *const pStream = aMedium.GetInStream();
                 if ( pStream && SotStorage::IsStorageFile(pStream) )
                     xStg = new SotStorage( pStream, false );
             }
@@ -267,9 +268,11 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
                 {
                     if( 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( *xStg, *pFilter ) )
                     {
-                        if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
+                        if (pFilter->IsOwnTemplateFormat())
+                        {
                             // found template filter; maybe there's a "normal" one also
                             pTemplateFilter = pFilter;
+                        }
                         else
                             return pFilter;
                     }
@@ -287,42 +290,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
         return pFilter;
     }
 
-    sal_Char aBuffer[4098];
-    const sal_uLong nMaxRead = sizeof(aBuffer) - 2;
-    sal_uLong nBytesRead = 0;
-    if (pMedium)
-    {
-        SvStream* pIStrm = pMedium->GetInStream();
-        if( !pIStrm || SVSTREAM_OK != pIStrm->GetError() )
-            return 0;
-        sal_uLong nCurrPos = pIStrm->Tell();
-        nBytesRead = pIStrm->Read(aBuffer, nMaxRead);
-        pIStrm->Seek( nCurrPos );
-    }
-
-    TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
-
-    {
-        for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
-        {
-            OUString sNm(aFilterDetect[n].IsReader(aBuffer, nBytesRead));
-            const SfxFilter* pFilterTmp =
-                sNm.isEmpty() ? 0 : SwIoSystem::GetFilterOfFormat(sNm, pFCntnr);
-            if (pFilterTmp)
-            {
-                return pFilterTmp;
-            }
-        }
-    }
-
-    // no filter recognized so far; thus check "WORD 4 WORD" Filter
-    if( !rFileName.isEmpty() )
-    {
-        if( pMedium )
-            pMedium->CloseInStream();
-
-    }
-    return SwIoSystem::GetTextFilter( aBuffer, nBytesRead);
+    return SwIoSystem::GetFilterOfFormat(OUString::createFromAscii(FILTER_TEXT), 0);
 }
 
 bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
@@ -462,13 +430,6 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
         *pLineEnd = eLineEnd;
 
     return bEncodedFilter || (!bIsBareUnicode && eSysLE == eLineEnd);
-}
-
-const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, sal_uLong nLen)
-{
-    bool bAuto = IsDetectableText(pBuf, nLen);
-    const sal_Char* pNm = bAuto ? FILTER_TEXT : FILTER_TEXT_DLG;
-    return SwIoSystem::GetFilterOfFormat( OUString::createFromAscii(pNm), 0 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
