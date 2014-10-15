@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDRCIRCOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
-
-
-// predeclarations
-
-class SdrCircObj;
-
+#include <svx/svdocirc.hxx>
 
 
 namespace sdr
@@ -37,9 +32,9 @@ namespace sdr
         {
         protected:
             // internal access to SdrCircObj
-            SdrCircObj& GetCircObj() const
+            const SdrCircObj& GetCircObj() const
             {
-                return (SdrCircObj&)GetSdrObject();
+                return static_cast<const SdrCircObj&>(GetSdrObject());
             }
 
         public:

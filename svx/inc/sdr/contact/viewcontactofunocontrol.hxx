@@ -22,13 +22,13 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/svxdllapi.h>
 
 #include <memory>
 
 class OutputDevice;
 namespace vcl { class Window; }
-class SdrUnoObj;
 namespace com { namespace sun { namespace star {
     namespace awt {
         class XControl;
@@ -51,9 +51,9 @@ namespace sdr { namespace contact {
 
     public:
         // access to SdrObject
-        SdrUnoObj& GetSdrUnoObj() const
+        const SdrUnoObj& GetSdrUnoObj() const
         {
-            return ((SdrUnoObj&)GetSdrObject());
+            return static_cast<const SdrUnoObj&>(GetSdrObject());
         }
 
         explicit ViewContactOfUnoControl( SdrUnoObj& _rUnoObject );

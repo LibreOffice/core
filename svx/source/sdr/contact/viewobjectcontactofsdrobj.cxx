@@ -101,7 +101,7 @@ namespace sdr
                 {
                     if(OBJ_OLE2 == rObject.GetObjIdentifier())
                     {
-                        if(((SdrOle2Obj&)rObject).IsChart())
+                        if(static_cast<const SdrOle2Obj&>(rObject).IsChart())
                         {
                             // chart
                             if(bHideChart)

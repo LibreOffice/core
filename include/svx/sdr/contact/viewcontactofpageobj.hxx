@@ -22,11 +22,11 @@
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdopage.hxx>
 
 
 // predeclarations
 
-class SdrPageObj;
 class SdrPage;
 
 
@@ -53,9 +53,9 @@ namespace sdr
             virtual void ActionChanged() SAL_OVERRIDE;
 
             // access to SdrObject
-            SdrPageObj& GetPageObj() const
+            const SdrPageObj& GetPageObj() const
             {
-                return (SdrPageObj&)GetSdrObject();
+                return static_cast<const SdrPageObj&>(GetSdrObject());
             }
         };
     } // end of namespace contact

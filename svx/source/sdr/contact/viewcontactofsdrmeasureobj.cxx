@@ -55,18 +55,18 @@ namespace sdr
             // take properties which are the model data.
             const ::basegfx::B2DPoint aStart(GetMeasureObj().GetPoint(0).X(), GetMeasureObj().GetPoint(0).Y());
             const ::basegfx::B2DPoint aEnd(GetMeasureObj().GetPoint(1).X(), GetMeasureObj().GetPoint(1).Y());
-            const double fDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
-            const double fUpperDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
-            const double fLowerDistance(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
-            const double fLeftDelta(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
-            const double fRightDelta(((SdrMetricItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
-            const bool bBelow(((SdrMeasureBelowRefEdgeItem&)rItemSet.Get(SDRATTR_MEASUREBELOWREFEDGE)).GetValue());
-            const bool bTextRotation(((SdrMeasureTextRota90Item&)rItemSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue());
-            const bool bTextAutoAngle(((SdrMeasureTextAutoAngleItem&)rItemSet.Get(SDRATTR_MEASURETEXTAUTOANGLE)).GetValue());
+            const double fDistance(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
+            const double fUpperDistance(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
+            const double fLowerDistance(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
+            const double fLeftDelta(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
+            const double fRightDelta(static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
+            const bool bBelow(static_cast<const SdrMeasureBelowRefEdgeItem&>(rItemSet.Get(SDRATTR_MEASUREBELOWREFEDGE)).GetValue());
+            const bool bTextRotation(static_cast<const SdrMeasureTextRota90Item&>(rItemSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue());
+            const bool bTextAutoAngle(static_cast<const SdrMeasureTextAutoAngleItem&>(rItemSet.Get(SDRATTR_MEASURETEXTAUTOANGLE)).GetValue());
             drawinglayer::primitive2d::MeasureTextPosition aMTPHor(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
             drawinglayer::primitive2d::MeasureTextPosition aMTPVer(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
 
-            switch(((SdrMeasureTextHPosItem&)rItemSet.Get(SDRATTR_MEASURETEXTHPOS)).GetValue())
+            switch(static_cast<const SdrMeasureTextHPosItem&>(rItemSet.Get(SDRATTR_MEASURETEXTHPOS)).GetValue())
             {
                 case SDRMEASURE_TEXTLEFTOUTSIDE :
                 {
@@ -89,7 +89,7 @@ namespace sdr
                 }
             }
 
-            switch(((SdrMeasureTextVPosItem&)rItemSet.Get(SDRATTR_MEASURETEXTVPOS)).GetValue())
+            switch(static_cast<const SdrMeasureTextVPosItem&>(rItemSet.Get(SDRATTR_MEASURETEXTVPOS)).GetValue())
             {
                 case SDRMEASURE_ABOVE :
                 {

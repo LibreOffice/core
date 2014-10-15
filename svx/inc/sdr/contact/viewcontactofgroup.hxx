@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFGROUP_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-
-
-// predeclarations
-
-class SdrObjGroup;
-
+#include <svx/svdogrp.hxx>
 
 
 namespace sdr
@@ -42,9 +37,9 @@ namespace sdr
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
             // internal access to SdrObject
-            SdrObjGroup& GetSdrObjGroup() const
+            const SdrObjGroup& GetSdrObjGroup() const
             {
-                return (SdrObjGroup&)GetSdrObject();
+                return static_cast<const SdrObjGroup&>(GetSdrObject());
             }
 
         public:

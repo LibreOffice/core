@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDROBJCUSTOMSHAPE_HXX
 
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
-
-
-// predeclarations
-
-class SdrObjCustomShape;
-
+#include <svx/svdoashp.hxx>
 
 
 namespace sdr
@@ -37,9 +32,9 @@ namespace sdr
         {
         protected:
             // internal access to SdrObjCustomShape
-            SdrObjCustomShape& GetCustomShapeObj() const
+            const SdrObjCustomShape& GetCustomShapeObj() const
             {
-                return (SdrObjCustomShape&)GetSdrObject();
+                return static_cast<const SdrObjCustomShape&>(GetSdrObject());
             }
 
             // #i101684# internal tooling

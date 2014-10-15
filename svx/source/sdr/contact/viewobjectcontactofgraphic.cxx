@@ -230,9 +230,14 @@ namespace sdr
             }
         }
 
+        const SdrGrafObj& ViewObjectContactOfGraphic::getSdrGrafObj() const
+        {
+            return static_cast<const ViewContactOfGraphic& >(GetViewContact()).GetGrafObject();
+        }
+
         SdrGrafObj& ViewObjectContactOfGraphic::getSdrGrafObj()
         {
-            return static_cast< ViewContactOfGraphic& >(GetViewContact()).GetGrafObject();
+            return static_cast<ViewContactOfGraphic& >(GetViewContact()).GetGrafObject();
         }
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactOfGraphic::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const

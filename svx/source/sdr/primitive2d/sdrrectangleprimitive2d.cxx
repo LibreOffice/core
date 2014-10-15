@@ -135,7 +135,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SdrRectanglePrimitive2D& rCompare = (SdrRectanglePrimitive2D&)rPrimitive;
+                const SdrRectanglePrimitive2D& rCompare = static_cast<const SdrRectanglePrimitive2D&>(rPrimitive);
 
                 return (getCornerRadiusX() == rCompare.getCornerRadiusX()
                     && getCornerRadiusY() == rCompare.getCornerRadiusY()

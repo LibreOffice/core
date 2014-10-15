@@ -49,7 +49,7 @@ namespace drawinglayer
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
-                const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
+                const SdrOle2Primitive2D& rCompare = static_cast<const SdrOle2Primitive2D&>(rPrimitive);
 
                 // #i108636# The standard operator== on two UNO sequences did not work as i
                 // would have expected; it just checks the .is() states and the data type

@@ -151,7 +151,7 @@ namespace drawinglayer
         {
             if( BufferedDecompositionPrimitive2D::operator==(rPrimitive) )
             {
-                const SdrOleContentPrimitive2D& rCompare = (SdrOleContentPrimitive2D&)rPrimitive;
+                const SdrOleContentPrimitive2D& rCompare = static_cast<const SdrOleContentPrimitive2D&>(rPrimitive);
                 const bool bBothNot(!mpSdrOle2Obj.is() && !rCompare.mpSdrOle2Obj.is());
                 const bool bBothAndEqual(mpSdrOle2Obj.is() && rCompare.mpSdrOle2Obj.is()
                     && mpSdrOle2Obj.get() == rCompare.mpSdrOle2Obj.get());

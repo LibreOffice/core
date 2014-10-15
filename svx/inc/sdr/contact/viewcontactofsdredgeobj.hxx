@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDREDGEOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
-
-
-// predeclarations
-
-class SdrEdgeObj;
-
+#include <svx/svdoedge.hxx>
 
 
 namespace sdr
@@ -37,9 +32,9 @@ namespace sdr
         {
         protected:
             // internal access to SdrEdgeObj
-            SdrEdgeObj& GetEdgeObj() const
+            const SdrEdgeObj& GetEdgeObj() const
             {
-                return (SdrEdgeObj&)GetSdrObject();
+                return static_cast<const SdrEdgeObj&>(GetSdrObject());
             }
 
         public:

@@ -218,11 +218,11 @@ namespace drawinglayer
     {
         attribute::SdrLineAttribute createNewSdrLineAttribute(const SfxItemSet& rSet)
         {
-            const XLineStyle eStyle(((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue());
+            const XLineStyle eStyle(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
 
             if(XLINE_NONE != eStyle)
             {
-                sal_uInt16 nTransparence(((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue());
+                sal_uInt16 nTransparence(static_cast<const XLineTransparenceItem&>(rSet.Get(XATTR_LINETRANSPARENCE)).GetValue());
 
                 if(nTransparence > 100)
                 {
@@ -231,16 +231,16 @@ namespace drawinglayer
 
                 if(100 != nTransparence)
                 {
-                    const sal_uInt32 nWidth(((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue());
-                    const Color aColor(((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetColorValue());
-                    const com::sun::star::drawing::LineJoint eJoint(((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue());
-                    const com::sun::star::drawing::LineCap eCap(((const XLineCapItem&)(rSet.Get(XATTR_LINECAP))).GetValue());
+                    const sal_uInt32 nWidth(static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue());
+                    const Color aColor(static_cast<const XLineColorItem&>(rSet.Get(XATTR_LINECOLOR)).GetColorValue());
+                    const com::sun::star::drawing::LineJoint eJoint(static_cast<const XLineJointItem&>(rSet.Get(XATTR_LINEJOINT)).GetValue());
+                    const com::sun::star::drawing::LineCap eCap(static_cast<const XLineCapItem&>(rSet.Get(XATTR_LINECAP)).GetValue());
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
                     if(XLINE_DASH == eStyle)
                     {
-                        const XDash& rDash = ((const XLineDashItem&)(rSet.Get(XATTR_LINEDASH))).GetDashValue();
+                        const XDash& rDash = static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH)).GetDashValue();
 
                         if(rDash.GetDots() || rDash.GetDashes())
                         {
@@ -266,8 +266,8 @@ namespace drawinglayer
             const SfxItemSet& rSet,
             double fWidth)
         {
-            const sal_Int32 nTempStartWidth(((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue());
-            const sal_Int32 nTempEndWidth(((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue());
+            const sal_Int32 nTempStartWidth(static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue());
+            const sal_Int32 nTempEndWidth(static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue());
             basegfx::B2DPolyPolygon aStartPolyPolygon;
             basegfx::B2DPolyPolygon aEndPolyPolygon;
             double fStartWidth(0.0);
@@ -290,12 +290,12 @@ namespace drawinglayer
 
                 if(0.0 != fStartWidth)
                 {
-                    aStartPolyPolygon = basegfx::B2DPolyPolygon(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
+                    aStartPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue());
 
                     if(aStartPolyPolygon.count() && aStartPolyPolygon.getB2DPolygon(0L).count())
                     {
                         bStartActive = true;
-                        bStartCentered = ((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
+                        bStartCentered = static_cast<const XLineStartCenterItem&>(rSet.Get(XATTR_LINESTARTCENTER)).GetValue();
                     }
                 }
             }
@@ -313,12 +313,12 @@ namespace drawinglayer
 
                 if(0.0 != fEndWidth)
                 {
-                    aEndPolyPolygon = basegfx::B2DPolyPolygon(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
+                    aEndPolyPolygon = basegfx::B2DPolyPolygon(static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue());
 
                     if(aEndPolyPolygon.count() && aEndPolyPolygon.getB2DPolygon(0L).count())
                     {
                         bEndActive = true;
-                        bEndCentered = ((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
+                        bEndCentered = static_cast<const XLineEndCenterItem&>(rSet.Get(XATTR_LINEENDCENTER)).GetValue();
                     }
                 }
             }
@@ -335,11 +335,11 @@ namespace drawinglayer
 
         attribute::SdrShadowAttribute createNewSdrShadowAttribute(const SfxItemSet& rSet)
         {
-            const bool bShadow(((SdrOnOffItem&)rSet.Get(SDRATTR_SHADOW)).GetValue());
+            const bool bShadow(static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_SHADOW)).GetValue());
 
             if(bShadow)
             {
-                sal_uInt16 nTransparence(((SdrPercentItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
+                sal_uInt16 nTransparence(static_cast<const SdrPercentItem&>(rSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
 
                 if(nTransparence > 100)
                 {
@@ -348,7 +348,7 @@ namespace drawinglayer
 
                 if(nTransparence)
                 {
-                    sal_uInt16 nFillTransparence(((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue());
+                    sal_uInt16 nFillTransparence(static_cast<const XFillTransparenceItem&>(rSet.Get(XATTR_FILLTRANSPARENCE)).GetValue());
 
                     if(nFillTransparence > 100)
                     {
@@ -368,9 +368,9 @@ namespace drawinglayer
                 if(100 != nTransparence)
                 {
                     const basegfx::B2DVector aOffset(
-                        (double)((SdrMetricItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue(),
-                        (double)((SdrMetricItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
-                    const Color aColor(((XColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
+                        (double)static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_SHADOWXDIST)).GetValue(),
+                        (double)static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_SHADOWYDIST)).GetValue());
+                    const Color aColor(static_cast<const XColorItem&>(rSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue());
 
                     return attribute::SdrShadowAttribute(aOffset, (double)nTransparence * 0.01, aColor.getBColor());
                 }
@@ -381,9 +381,9 @@ namespace drawinglayer
 
         attribute::SdrFillAttribute createNewSdrFillAttribute(const SfxItemSet& rSet)
         {
-            const drawing::FillStyle eStyle(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
+            const drawing::FillStyle eStyle(static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue());
 
-            sal_uInt16 nTransparence(((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue());
+            sal_uInt16 nTransparence(static_cast<const XFillTransparenceItem&>(rSet.Get(XATTR_FILLTRANSPARENCE)).GetValue());
 
             if(nTransparence > 100)
             {
@@ -398,9 +398,9 @@ namespace drawinglayer
                     const SfxPoolItem* pGradientItem;
 
                     if(SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
-                        && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
+                        && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled())
                     {
-                        const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
+                        const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
                         const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                         const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
                         const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
@@ -414,7 +414,7 @@ namespace drawinglayer
 
                 if(100 != nTransparence)
                 {
-                    const Color aColor(((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetColorValue());
+                    const Color aColor(static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)).GetColorValue());
                     attribute::FillGradientAttribute aGradient;
                     attribute::FillHatchAttribute aHatch;
                     attribute::SdrFillGraphicAttribute aFillGraphic;
@@ -430,7 +430,7 @@ namespace drawinglayer
                         }
                         case drawing::FillStyle_GRADIENT :
                         {
-                            XGradient aXGradient(((XFillGradientItem&)(rSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());
+                            XGradient aXGradient(static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
 
                             const Color aStartColor(aXGradient.GetStartColor());
                             const sal_uInt16 nStartIntens(aXGradient.GetStartIntens());
@@ -460,13 +460,13 @@ namespace drawinglayer
                                 (double)aXGradient.GetAngle() * F_PI1800,
                                 aStart,
                                 aEnd,
-                                ((const XGradientStepCountItem&)rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue());
+                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue());
 
                             break;
                         }
                         case drawing::FillStyle_HATCH :
                         {
-                            const XHatch& rHatch(((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetHatchValue());
+                            const XHatch& rHatch(static_cast<const XFillHatchItem&>(rSet.Get(XATTR_FILLHATCH)).GetHatchValue());
                             const Color aColorB(rHatch.GetColor());
 
                             aHatch = attribute::FillHatchAttribute(
@@ -475,7 +475,7 @@ namespace drawinglayer
                                 (double)rHatch.GetAngle() * F_PI1800,
                                 aColorB.getBColor(),
                                 3, // same default as VCL, a minimum of three discrete units (pixels) offset
-                                ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue());
+                                static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)).GetValue());
 
                             break;
                         }
@@ -565,21 +565,21 @@ namespace drawinglayer
                 return attribute::SdrTextAttribute(
                     rText,
                     aOutlinerParaObject,
-                    ((const XFormTextStyleItem&)rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
+                    static_cast<const XFormTextStyleItem&>(rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
                     pLeft ? *pLeft : rTextObj.GetTextLeftDistance(),
                     pUpper ? *pUpper : rTextObj.GetTextUpperDistance(),
                     pRight ? *pRight : rTextObj.GetTextRightDistance(),
                     pLower ? *pLower : rTextObj.GetTextLowerDistance(),
                     rTextObj.GetTextHorizontalAdjust(rSet),
                     rTextObj.GetTextVerticalAdjust(rSet),
-                    ((const SdrOnOffItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
+                    static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
                     rTextObj.IsFitToSize(),
                     rTextObj.IsAutoFit(),
-                    ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
+                    static_cast<const XFormTextHideFormItem&>(rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
                     SDRTEXTANI_BLINK == eAniKind,
                     SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,
                     bInEditMode,
-                    ((const SdrTextFixedCellHeightItem&)rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
+                    static_cast<const SdrTextFixedCellHeightItem&>(rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
                     bWrongSpell);
             }
 
@@ -591,10 +591,10 @@ namespace drawinglayer
             const SfxPoolItem* pGradientItem;
 
             if(SfxItemState::SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
-                && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
+                && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled())
             {
                 // test if float transparence is completely transparent
-                const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
+                const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
                 const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                 const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
                 const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
@@ -626,7 +626,7 @@ namespace drawinglayer
 
         attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(const SfxItemSet& rSet)
         {
-            Graphic aGraphic(((const XFillBitmapItem&)(rSet.Get(XATTR_FILLBITMAP))).GetGraphicObject().GetGraphic());
+            Graphic aGraphic(static_cast<const XFillBitmapItem&>(rSet.Get(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic());
 
             if(!(GRAPHIC_BITMAP == aGraphic.GetType() || GRAPHIC_GDIMETAFILE == aGraphic.GetType()))
             {
@@ -685,14 +685,14 @@ namespace drawinglayer
 
             // get size
             const basegfx::B2DVector aSize(
-                (double)((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEX))).GetValue(),
-                (double)((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEY))).GetValue());
+                (double) static_cast<const SfxMetricItem&>(rSet.Get(XATTR_FILLBMP_SIZEX)).GetValue(),
+                (double) static_cast<const SfxMetricItem&>(rSet.Get(XATTR_FILLBMP_SIZEY)).GetValue());
             const basegfx::B2DVector aOffset(
-                (double)((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETX))).GetValue(),
-                (double)((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETY))).GetValue());
+                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_TILEOFFSETX)).GetValue(),
+                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_TILEOFFSETY)).GetValue());
             const basegfx::B2DVector aOffsetPosition(
-                (double)((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETX))).GetValue(),
-                (double)((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETY))).GetValue());
+                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_POSOFFSETX)).GetValue(),
+                (double) static_cast<const SfxUInt16Item&>(rSet.Get(XATTR_FILLBMP_POSOFFSETY)).GetValue());
 
             return attribute::SdrFillGraphicAttribute(
                 aGraphic,
@@ -700,10 +700,11 @@ namespace drawinglayer
                 aSize,
                 aOffset,
                 aOffsetPosition,
-                RectPointToB2DVector((RECT_POINT)((const SfxEnumItem&)(rSet.Get(XATTR_FILLBMP_POS))).GetValue()),
-                ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_TILE))).GetValue(),
-                ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_STRETCH))).GetValue(),
-                ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_SIZELOG))).GetValue());
+                RectPointToB2DVector(
+                    (RECT_POINT)static_cast<const SfxEnumItem&>(rSet.Get(XATTR_FILLBMP_POS)).GetValue()),
+                    static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_TILE)).GetValue(),
+                    static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_STRETCH)).GetValue(),
+                    static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_SIZELOG)).GetValue());
         }
 
         attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(
@@ -880,7 +881,7 @@ namespace drawinglayer
         {
             // get perspective
             ::com::sun::star::drawing::ProjectionMode aProjectionMode(::com::sun::star::drawing::ProjectionMode_PARALLEL);
-            const sal_uInt16 nProjectionValue(((const Svx3DPerspectiveItem&)rSet.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue());
+            const sal_uInt16 nProjectionValue(static_cast<const Svx3DPerspectiveItem&>(rSet.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue());
 
             if(1L == nProjectionValue)
             {
@@ -888,14 +889,14 @@ namespace drawinglayer
             }
 
             // get distance
-            const double fDistance(((const SfxUInt32Item&)rSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue());
+            const double fDistance(static_cast<const SfxUInt32Item&>(rSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue());
 
             // get shadow slant
-            const double fShadowSlant(F_PI180 * ((const SfxUInt16Item&)rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());
+            const double fShadowSlant(F_PI180 * static_cast<const SfxUInt16Item&>(rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());
 
             // get shade mode
             ::com::sun::star::drawing::ShadeMode aShadeMode(::com::sun::star::drawing::ShadeMode_FLAT);
-            const sal_uInt16 nShadeValue(((const Svx3DShadeModeItem&)rSet.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue());
+            const sal_uInt16 nShadeValue(static_cast<const Svx3DShadeModeItem&>(rSet.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue());
 
             if(1L == nShadeValue)
             {
@@ -911,7 +912,7 @@ namespace drawinglayer
             }
 
             // get two sided lighting
-            const bool bTwoSidedLighting(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue());
+            const bool bTwoSidedLighting(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue());
 
             return attribute::SdrSceneAttribute(fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting);
         }
@@ -921,64 +922,64 @@ namespace drawinglayer
             // extract lights from given SfxItemSet (from scene)
             ::std::vector< attribute::Sdr3DLightAttribute > aLightVector;
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, true));
             }
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue())
+            if(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue())
             {
-                const basegfx::BColor aColor(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().getBColor());
-                const basegfx::B3DVector aDirection(((const SvxB3DVectorItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
+                const basegfx::BColor aColor(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().getBColor());
+                const basegfx::B3DVector aDirection(static_cast<const SvxB3DVectorItem&>(rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
             // get ambient color
-            const Color aAmbientValue(((const SvxColorItem&)rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue());
+            const Color aAmbientValue(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue());
             const basegfx::BColor aAmbientLight(aAmbientValue.getBColor());
 
             return attribute::SdrLightingAttribute(aAmbientLight, aLightVector);
