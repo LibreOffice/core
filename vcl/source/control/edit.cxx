@@ -2437,7 +2437,7 @@ bool Edit::IsInsertMode() const
 
 void Edit::SetMaxTextLen(sal_Int32 nMaxLen)
 {
-    mnMaxTextLen = nMaxLen ? nMaxLen : EDIT_NOLIMIT;
+    mnMaxTextLen = nMaxLen > 0 ? nMaxLen : EDIT_NOLIMIT;
 
     if ( mpSubEdit )
         mpSubEdit->SetMaxTextLen( mnMaxTextLen );
