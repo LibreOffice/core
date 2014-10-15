@@ -47,10 +47,10 @@ class ZipPackageStream : public cppu::ImplInheritanceHelper2
 >
 {
 private:
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > m_xStream;
     const ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
-    ZipPackage          &rZipPackage;
-    bool            bToBeCompressed, bToBeEncrypted, bHaveOwnKey, bIsEncrypted;
+    ZipPackage          &m_rZipPackage;
+    bool            m_bToBeCompressed, m_bToBeEncrypted, m_bHaveOwnKey, m_bIsEncrypted;
 
     ::rtl::Reference< BaseEncryptionData > m_xBaseEncryptionData;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aStorageEncryptionKeys;
@@ -76,10 +76,10 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnSeekStream();
 
 public:
-    bool HasOwnKey () const  { return bHaveOwnKey;}
-    bool IsToBeCompressed () const { return bToBeCompressed;}
-    bool IsToBeEncrypted () const { return bToBeEncrypted;}
-    bool IsEncrypted () const    { return bIsEncrypted;}
+    bool HasOwnKey () const  { return m_bHaveOwnKey;}
+    bool IsToBeCompressed () const { return m_bToBeCompressed;}
+    bool IsToBeEncrypted () const { return m_bToBeEncrypted;}
+    bool IsEncrypted () const    { return m_bIsEncrypted;}
     bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
 
     bool IsFromManifest() const { return m_bFromManifest; }
@@ -108,18 +108,18 @@ public:
     sal_Int32 GetEncryptionAlgorithm() const;
     sal_Int32 GetBlockSize() const;
 
-    void SetToBeCompressed (bool bNewValue) { bToBeCompressed = bNewValue;}
-    void SetIsEncrypted (bool bNewValue) { bIsEncrypted = bNewValue;}
+    void SetToBeCompressed (bool bNewValue) { m_bToBeCompressed = bNewValue;}
+    void SetIsEncrypted (bool bNewValue) { m_bIsEncrypted = bNewValue;}
     void SetImportedStartKeyAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedStartKeyAlgorithm = nAlgorithm; }
     void SetImportedEncryptionAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedEncryptionAlgorithm = nAlgorithm; }
     void SetImportedChecksumAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedChecksumAlgorithm = nAlgorithm; }
     void SetImportedDerivedKeySize( sal_Int32 nSize ) { m_nImportedDerivedKeySize = nSize; }
     void SetToBeEncrypted (bool bNewValue)
     {
-        bToBeEncrypted  = bNewValue;
-        if ( bToBeEncrypted && !m_xBaseEncryptionData.is())
+        m_bToBeEncrypted  = bNewValue;
+        if ( m_bToBeEncrypted && !m_xBaseEncryptionData.is())
             m_xBaseEncryptionData = new BaseEncryptionData;
-        else if ( !bToBeEncrypted && m_xBaseEncryptionData.is() )
+        else if ( !m_bToBeEncrypted && m_xBaseEncryptionData.is() )
             m_xBaseEncryptionData.clear();
     }
     void SetPackageMember (bool bNewValue);
@@ -136,7 +136,7 @@ public:
     { m_xBaseEncryptionData->m_nIterationCount = nNewCount;}
     void setSize (const sal_Int64 nNewSize);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnStreamNoWrap() { return xStream; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnStreamNoWrap() { return m_xStream; }
 
     void CloseOwnStreamIfAny();
 
