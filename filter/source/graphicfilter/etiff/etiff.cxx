@@ -147,20 +147,12 @@ TIFFWriter::TIFFWriter(SvStream &rStream)
 {
 }
 
-
-
 TIFFWriter::~TIFFWriter()
 {
 }
 
-
-
 bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
-    sal_uLong*  pDummy = new sal_uLong; delete pDummy; // So that under OS/2
-                                               // the right (tools-)new
-                                               // is used. Otherwise only vector
-                                               // exist within this dll.
     if ( pFilterConfigItem )
     {
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();

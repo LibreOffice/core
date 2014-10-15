@@ -93,11 +93,6 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
     if ( m_rPCX.GetError() )
         return false;
 
-    sal_uLong*  pDummy = new sal_uLong; delete pDummy; // to achive that under OS/2
-                                               // the right (Tools-) new is used
-                                               // otherwise there are only Vector-news
-                                               // in this DLL
-
     m_rPCX.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
     // read header:
