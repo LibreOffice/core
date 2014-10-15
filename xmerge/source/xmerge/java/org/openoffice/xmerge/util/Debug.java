@@ -53,38 +53,42 @@ public final class Debug {
 
     static {
 
+        InputStream is = null;
         try {
+            try {
+                is = Debug.class.getResourceAsStream("Debug.properties");
+                Properties props = new Properties();
+                props.load(is);
 
-            InputStream is = Debug.class.getResourceAsStream("Debug.properties");
-            Properties props = new Properties();
-            props.load(is);
+                String info = props.getProperty("debug.info", "false");
+                info = info.toLowerCase();
 
-            String info = props.getProperty("debug.info", "false");
-            info = info.toLowerCase();
+                if (info.equals("true")) {
+                    setFlags(Debug.INFO, Debug.SET);
+                }
 
-            if (info.equals("true")) {
-                setFlags(Debug.INFO, Debug.SET);
+                String trace = props.getProperty("debug.trace", "false");
+                trace = trace.toLowerCase();
+
+                if (trace.equals("true")) {
+                    setFlags(Debug.TRACE, Debug.SET);
+                }
+
+                String error = props.getProperty("debug.error", "false");
+                error = error.toLowerCase();
+
+                if (error.equals("true")) {
+                    setFlags(Debug.ERROR, Debug.SET);
+                }
+
+                String w = props.getProperty("debug.output", "System.out");
+                setOutput(w);
+
+            } finally {
+                if (is !=null)
+                    is.close();
             }
-
-            String trace = props.getProperty("debug.trace", "false");
-            trace = trace.toLowerCase();
-
-            if (trace.equals("true")) {
-                setFlags(Debug.TRACE, Debug.SET);
-            }
-
-            String error = props.getProperty("debug.error", "false");
-            error = error.toLowerCase();
-
-            if (error.equals("true")) {
-                setFlags(Debug.ERROR, Debug.SET);
-            }
-
-            String w = props.getProperty("debug.output", "System.out");
-            setOutput(w);
-
         } catch (Throwable ex) {
-
             ex.printStackTrace(System.err);
         }
     }

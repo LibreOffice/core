@@ -868,9 +868,17 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     {
         m_sImageURL = util.utils.getOfficeTempDir( m_orb ) + "image.gif";
 
-        FileOutputStream aFile = new FileOutputStream( m_sImageURL );
-        aFile.write( getSamplePicture() );
-        aFile.close();
+        FileOutputStream aFile = null;
+        try
+        {
+            aFile = new FileOutputStream( m_sImageURL );
+            aFile.write( getSamplePicture() );
+        }
+        finally
+        {
+            if ( aFile != null )
+                aFile.close();
+        }
         log.println( "created temporary image file: " + m_sImageURL );
 
         // for later setting the url at the imaghe control, we need a real URL, no system path
