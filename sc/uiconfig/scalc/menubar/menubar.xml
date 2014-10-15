@@ -81,6 +81,10 @@
             <menu:menuitem menu:id=".uno:PasteSpecial"/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
+            <menu:menuitem menu:id=".uno:SearchDialog"/>
+            <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:ChangesMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:TraceChangeMode"/>
@@ -94,9 +98,6 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
-            <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
-            <menu:menuitem menu:id=".uno:SearchDialog"/>
-            <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:FillCellsMenu">
                 <menu:menupopup>

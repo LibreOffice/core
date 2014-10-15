@@ -92,6 +92,10 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:SelectAll"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
+      <menu:menuitem menu:id=".uno:SearchDialog"/>
+      <menu:menuitem menu:id=".uno:EditGlossary"/>
+      <menu:menuseparator/>
       <menu:menu menu:id=".uno:ChangesMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:TrackChanges"/>
@@ -107,9 +111,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuitem menu:id=".uno:CompareDocuments"/>
-      <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
-      <menu:menuitem menu:id=".uno:SearchDialog"/>
-      <menu:menuitem menu:id=".uno:EditGlossary"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
       <menu:menuitem menu:id=".uno:FieldDialog"/>
