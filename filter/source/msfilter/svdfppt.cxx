@@ -2443,14 +2443,14 @@ void SdrPowerPointImport::SetPageNum( sal_uInt16 nPageNum, PptPageKind eKind )
         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
         if ( pPageList && nMasterIndex < pPageList->size() )
         {
-            PptSlidePersistEntry& rMasterPersist = (*pPageList)[ nMasterIndex ];
-            if ( ( rMasterPersist.pStyleSheet == NULL ) && rMasterPersist.aSlideAtom.nMasterId )
+            PptSlidePersistEntry* pMasterPersist = &(*pPageList)[ nMasterIndex ];
+            if ( ( pMasterPersist->pStyleSheet == NULL ) && pMasterPersist->aSlideAtom.nMasterId )
             {
-                nMasterIndex = pMasterPages->FindPage( rMasterPersist.aSlideAtom.nMasterId );
+                nMasterIndex = pMasterPages->FindPage( pMasterPersist->aSlideAtom.nMasterId );
                 if ( nMasterIndex != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
-                    rMasterPersist = (*pPageList)[ nMasterIndex ];
+                    pMasterPersist = &(*pPageList)[ nMasterIndex ];
             }
-            pPPTStyleSheet = rMasterPersist.pStyleSheet;
+            pPPTStyleSheet = pMasterPersist->pStyleSheet;
          }
     }
     if ( !pPPTStyleSheet )
@@ -2753,21 +2753,21 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                         {
                                             sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                                             PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                                            PptSlidePersistEntry& rE = (*pPageList)[ nMasterNum ];
-                                            while( ( rE.aSlideAtom.nFlags & 4 ) && rE.aSlideAtom.nMasterId )
+                                            PptSlidePersistEntry* pE = &(*pPageList)[ nMasterNum ];
+                                            while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
                                             {
-                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( rE.aSlideAtom.nMasterId );
+                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
                                                 if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                                     break;
                                                 else
-                                                    rE = (*pPageList)[ nNextMaster ];
+                                                    pE = &(*pPageList)[ nNextMaster ];
                                             }
-                                            if ( rE.nBackgroundOffset )
+                                            if ( pE->nBackgroundOffset )
                                             {
                                                 // do not follow master colorscheme?
                                                 bool bTemporary = ( rSlidePersist.aSlideAtom.nFlags & 2 ) != 0;
                                                 sal_uInt32 nPos = rStCtrl.Tell();
-                                                rStCtrl.Seek( rE.nBackgroundOffset );
+                                                rStCtrl.Seek( pE->nBackgroundOffset );
                                                 rSlidePersist.pBObj = ImportObj( rStCtrl, (void*)&aProcessData, aPageSize, aPageSize );
                                                 rSlidePersist.bBObjIsTemporary = bTemporary;
                                                 rStCtrl.Seek( nPos );

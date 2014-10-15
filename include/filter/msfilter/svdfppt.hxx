@@ -36,6 +36,7 @@
 #include <filter/msfilter/msfilterdllapi.h>
 #include <vcl/font.hxx>
 #include <vector>
+#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -315,7 +316,7 @@ public:
 struct ProcessData;
 struct PPTStyleSheet;
 struct HeaderFooterEntry;
-struct PptSlidePersistEntry
+struct PptSlidePersistEntry : private boost::noncopyable
 {
     PptSlidePersistAtom aPersistAtom;
     PptSlideAtom        aSlideAtom;
