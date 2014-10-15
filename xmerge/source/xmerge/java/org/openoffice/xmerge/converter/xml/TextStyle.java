@@ -456,6 +456,9 @@ public class TextStyle extends Style implements Cloneable {
     public boolean isSubset(Style style) {
         if (style.getClass() != this.getClass())
                 return false;
+
+        if (!(style instanceof TextStyle))
+            throw new AssertionError("Unexpected type: " + style);
         TextStyle tStyle = (TextStyle)style;
 
         if (tStyle.values != values)

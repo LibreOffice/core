@@ -223,6 +223,9 @@ public class ColumnStyle extends Style implements Cloneable {
     public boolean isSubset(Style style) {
         if (style.getClass() != this.getClass())
                 return false;
+
+        if (!(style instanceof ColumnStyle))
+            throw new AssertionError("Unexpected type: " + style);
         ColumnStyle tStyle = (ColumnStyle)style;
 
         return colWidth == tStyle.getColWidth();

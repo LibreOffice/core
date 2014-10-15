@@ -140,6 +140,9 @@ class AccessibleSelectionHandler
     @Override
     public void performAction (AccessibleTreeNode aNode, int nIndex)
     {
+        if (!(aNode instanceof AccTreeNode))
+            throw new AssertionError("Unexpected type: " + aNode);
+
         SelectionDialog selectionDialog = new SelectionDialog( (AccTreeNode)aNode );
         selectionDialog.setVisible(true);
     }

@@ -222,6 +222,9 @@ public class RowStyle extends Style implements Cloneable {
     public boolean isSubset(Style style) {
         if (style.getClass() != this.getClass())
                 return false;
+
+        if (!(style instanceof RowStyle))
+            throw new AssertionError("Unexpected type: " + style);
         RowStyle tStyle = (RowStyle)style;
 
         return rowHeight == tStyle.getRowHeight();

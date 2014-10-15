@@ -66,6 +66,9 @@ public class DocumentMergerImpl implements DocumentMerger {
     public void merge(Document modifiedDoc) throws MergeException {
 
         SxcDocument sdoc1 = (SxcDocument)orig;
+
+        if (!(modifiedDoc instanceof SxcDocument))
+            throw new AssertionError("Unexpected type: " + modifiedDoc);
         SxcDocument sdoc2 = (SxcDocument)modifiedDoc;
 
         org.w3c.dom.Document doc1 = sdoc1.getContentDOM();

@@ -521,6 +521,8 @@ public abstract class ScriptProvider implements
 
     // Performs the getRegStatus functionality for the PkgMgr
     public boolean hasByName(String aName) {
+        if (!(m_container instanceof UnoPkgContainer))
+            throw new AssertionError("Unexpected type: " + m_container);
         return ((UnoPkgContainer)m_container).hasRegisteredUnoPkgContainer(aName);
     }
 
@@ -561,6 +563,8 @@ public abstract class ScriptProvider implements
             throw new com.sun.star.lang.IllegalArgumentException("No package supplied");
         }
 
+        if (!(m_container instanceof UnoPkgContainer))
+            throw new AssertionError("Unexpected type: " + m_container);
         ((UnoPkgContainer)m_container).processUnoPackage(newPackage, language);
     }
 
@@ -571,6 +575,9 @@ public abstract class ScriptProvider implements
 
         LogUtils.DEBUG("In ScriptProvider.removeByName() for " + Name
                        +                       " this provider = " + language);
+
+        if (!(m_container instanceof UnoPkgContainer))
+            throw new AssertionError("Unexpected type: " + m_container);
 
         ParcelContainer c =
             ((UnoPkgContainer)m_container).getRegisteredUnoPkgContainer(

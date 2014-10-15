@@ -221,6 +221,9 @@ public class ListSelection extends integration.forms.TestCase
         super.prepareDocument();
         impl_setupListenerScript();
 
+        if (!(m_document instanceof SpreadsheetDocument))
+            throw new AssertionError("Unexpected type: " + m_document);
+
         SpreadsheetDocument document = (SpreadsheetDocument)m_document;
         XSpreadsheets sheets = document.getSheets();
 
