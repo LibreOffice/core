@@ -202,7 +202,8 @@ namespace connectivity
     private:
         bool        impl_callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
         OUString impl_callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
-        sal_Int32       impl_callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
+        sal_Int32   impl_callIntMethod_Throw( const char* _pMethodName, jmethodID& _inout_MethodID );
+        sal_Int32   impl_callIntMethod_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID );
         bool        impl_callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
                         impl_callResultSetMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
