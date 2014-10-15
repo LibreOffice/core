@@ -861,7 +861,7 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
                 mnCurrentPos = nSelect;
                 mbTrackingSelect = true;
                 bool bCurPosChange = (mnCurrentPos != nSelect);
-                SelectEntries( nSelect, LET_MBDOWN, rMEvt.IsShift(), rMEvt.IsMod1() ,bCurPosChange);
+                (void)SelectEntries( nSelect, LET_MBDOWN, rMEvt.IsShift(), rMEvt.IsMod1() ,bCurPosChange);
                 mbTrackingSelect = false;
                 if ( mbGrabFocus )
                     GrabFocus();
