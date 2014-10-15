@@ -116,7 +116,17 @@ public:
 
 //TODO/CLEANUP
 //is apparently used only in SfxPickList/SfxFrameLoader
-DECL_OBJHINT( SfxStringHint, OUString );
+class SfxStringHint: public SfxSimpleHint
+{
+    OUString  aObj;
+
+public:
+    SfxStringHint( sal_uInt16 nId, const OUString& rObject ):
+        SfxSimpleHint( nId ),
+        aObj(rObject) { }
+    const OUString& GetObject() const { return aObj; }
+    virtual ~SfxStringHint() {}
+};
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED

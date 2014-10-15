@@ -66,25 +66,6 @@ public:
     sal_uLong GetId() const { return mnId; }
 };
 
-
-
-#define DECL_OBJHINT(Name, Type) \
-        class Name: public SfxSimpleHint \
-        { \
-            Type  aObj; \
-        \
-        public: \
-            Name( sal_uInt16 nId, const Type& rObject ); \
-            virtual ~Name(); \
-            const Type& GetObject() const { return aObj; } \
-        }
-
-#define IMPL_OBJHINT(Name, Type) \
-        Name::Name( sal_uInt16 nID, const Type& rObject ): \
-            SfxSimpleHint( nID ), aObj(rObject) \
-            { } \
-        Name::~Name() {}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

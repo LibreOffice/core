@@ -898,6 +898,4 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
         new SfxEventAsyncer_Impl( rEventHint );
 }
 
-IMPL_OBJHINT( SfxStringHint, OUString )
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
