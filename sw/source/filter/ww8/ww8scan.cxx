@@ -3470,7 +3470,13 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
                 nSprmSiz = nSiz;
             }
             else
+            {
                 pStrm->ReadUInt16( nSprmSiz );
+            }
+
+            sal_Size nRemaining = pStrm->remainingSize();
+            if (nSprmSiz > nRemaining)
+                nSprmSiz = nRemaining;
 
             if( nSprmSiz > nArrMax )
             {               // does not fit
