@@ -329,6 +329,10 @@ void PageObjectPainter::PaintBackgroundDetail (
             break;
 
         case MouseOver | Selected:
+            eColorType = Theme::Gradient_MouseOverSelected;
+            bHasFocusBorder = false;
+            break;
+
         case MouseOver:
             eColorType = Theme::Gradient_MouseOverPage;
             bHasFocusBorder = false;
