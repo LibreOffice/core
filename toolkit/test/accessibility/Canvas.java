@@ -215,6 +215,7 @@ class Canvas
         {
             super.paintComponent (g);
 
+            assert g instanceof Graphics2D : "Unexpected type: " + g;
             Graphics2D g2 = (Graphics2D)g;
             if (getAntialiasing())
                 g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING,

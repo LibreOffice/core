@@ -50,6 +50,7 @@ public class DocumentMergerImpl implements DocumentMerger {
     public void merge(org.openoffice.xmerge.Document modifiedDoc) throws MergeException {
 
         GenericOfficeDocument wdoc1 = (GenericOfficeDocument) orig;
+        assert modifiedDoc instanceof GenericOfficeDocument : "Unexpected type: " + modifiedDoc;
         GenericOfficeDocument wdoc2 = (GenericOfficeDocument) modifiedDoc;
 
         Document doc1 = wdoc1.getContentDOM();

@@ -88,6 +88,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      */
     public SxcDocumentSerializer(Document document) {
         fmt = new Format();
+        assert document instanceof SxcDocument : "Unexpected type: " + document;
         sxcDoc = (SxcDocument) document;
     }
 

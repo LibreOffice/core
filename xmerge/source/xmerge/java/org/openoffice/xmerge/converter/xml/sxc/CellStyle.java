@@ -348,6 +348,8 @@ public class CellStyle extends Style implements Cloneable {
     public boolean isSubset(Style style) {
         if (style.getClass() != this.getClass())
                 return false;
+
+        assert style instanceof CellStyle : "Unexpected type: " + style;
         CellStyle tStyle = (CellStyle)style;
 
         Format rhs = tStyle.getFormat();

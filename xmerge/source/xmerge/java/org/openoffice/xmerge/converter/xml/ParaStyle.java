@@ -460,6 +460,8 @@ public class ParaStyle extends Style implements Cloneable {
             return false;
         if (!this.getClass().isAssignableFrom(style.getClass()))
             return false;
+
+        assert style instanceof ParaStyle : "Unexpected type: " + style;
         ParaStyle ps = (ParaStyle)style;
 
         for (int i = 0; i < NR_PROPERTIES; i++) {

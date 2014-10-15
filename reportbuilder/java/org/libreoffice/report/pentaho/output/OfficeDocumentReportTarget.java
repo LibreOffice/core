@@ -396,6 +396,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             tableNameGenerator.reset();
             frameNameGenerator.reset();
 
+            assert report instanceof OfficeDocument : "Unexpected type: " + report;
             final OfficeDocument reportDoc = (OfficeDocument) report;
             predefinedStylesCollection = reportDoc.getStylesCollection();
 

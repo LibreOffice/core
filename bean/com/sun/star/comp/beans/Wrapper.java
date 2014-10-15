@@ -50,6 +50,9 @@ class Wrapper
 
     public Wrapper( com.sun.star.uno.XInterface xProxy )
     {
+        assert xProxy instanceof com.sun.star.uno.IQueryInterface
+            : "Unexpected type: " + xProxy;
+
         xQueryInterface = (com.sun.star.uno.IQueryInterface) xProxy;
         xComponent = UnoRuntime.queryInterface(
             com.sun.star.lang.XComponent.class, xProxy );

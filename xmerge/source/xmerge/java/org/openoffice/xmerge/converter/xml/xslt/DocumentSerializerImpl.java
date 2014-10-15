@@ -72,7 +72,8 @@ public final class DocumentSerializerImpl
      * @param  doc  A SXW {@code Document} to be converted.
      */
     public DocumentSerializerImpl(PluginFactoryImpl pf,Document doc) {
-    pluginFactory=pf;
+        pluginFactory = pf;
+        assert doc instanceof GenericOfficeDocument : "Unexpected type: " + doc;
         sxwDoc = (GenericOfficeDocument) doc;
     }
 
