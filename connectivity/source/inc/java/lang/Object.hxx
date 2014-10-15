@@ -116,7 +116,8 @@ namespace connectivity
         jobject         callResultSetMethod( JNIEnv& _rEnv, const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         sal_Int32       callIntMethod_Throw(const char* _pMethodName, jmethodID& _inout_MethodID) const;
         sal_Int32       callIntMethod_Nothrow(const char* _pMethodName, jmethodID& _inout_MethodID) const;
-        sal_Int32       callIntMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
+        sal_Int32       callIntMethodWithIntArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
+        sal_Int32       callIntMethodWithIntArg_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
         sal_Int32       callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const;
         OUString callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         OUString callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;

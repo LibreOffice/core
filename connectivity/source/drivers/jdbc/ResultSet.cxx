@@ -217,7 +217,7 @@ float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLEx
 sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg("getInt",mID,columnIndex);
+    return callIntMethodWithIntArg_Throw("getInt",mID,columnIndex);
 }
 
 

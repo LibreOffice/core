@@ -58,14 +58,14 @@ jclass java_sql_ResultSetMetaData::getMyClass() const
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg("getColumnDisplaySize",mID,column);
+    return callIntMethodWithIntArg_Throw("getColumnDisplaySize",mID,column);
 }
 
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg("getColumnType",mID,column);
+    return callIntMethodWithIntArg_Throw("getColumnType",mID,column);
 }
 
 
@@ -157,19 +157,19 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg("getPrecision",mID,column);
+    return callIntMethodWithIntArg_Throw("getPrecision",mID,column);
 }
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg("getScale",mID,column);
+    return callIntMethodWithIntArg_Throw("getScale",mID,column);
 }
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg("isNullable",mID,column);
+    return callIntMethodWithIntArg_Throw("isNullable",mID,column);
 }
 
 

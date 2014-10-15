@@ -140,7 +140,7 @@ sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex ) t
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg("getInt",mID,columnIndex);
+    return callIntMethodWithIntArg_Throw("getInt",mID,columnIndex);
 }
 
 sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, RuntimeException, std::exception)

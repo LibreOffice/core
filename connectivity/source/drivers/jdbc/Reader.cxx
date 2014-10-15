@@ -52,7 +52,7 @@ sal_Int32 SAL_CALL java_io_Reader::readSomeBytes( ::com::sun::star::uno::Sequenc
 void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callIntMethodWithIntArg("skip",mID,nBytesToSkip);
+    callIntMethodWithIntArg_Nothrow("skip",mID,nBytesToSkip);
 }
 
 sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
