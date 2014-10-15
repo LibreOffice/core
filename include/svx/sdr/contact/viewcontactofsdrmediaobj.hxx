@@ -22,12 +22,12 @@
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdomedia.hxx>
 #include <tools/gen.hxx>
 
 
 // predeclarations
 
-class SdrMediaObj;
 namespace avmedia { class MediaItem; }
 
 
@@ -49,9 +49,9 @@ namespace sdr
         public:
 
             // access to SdrMediaObj
-            SdrMediaObj& GetSdrMediaObj() const
+            const SdrMediaObj& GetSdrMediaObj() const
             {
-                return (SdrMediaObj&)GetSdrObject();
+                return static_cast<const SdrMediaObj&>(GetSdrObject());
             }
 
             Size    getPreferredSize() const;

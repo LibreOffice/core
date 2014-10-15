@@ -21,12 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDRPATHOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
-
-
-// predeclarations
-
-class SdrPathObj;
-
+#include <svx/svdopath.hxx>
 
 
 namespace sdr
@@ -37,9 +32,9 @@ namespace sdr
         {
         protected:
             // internal access to SdrPathObj
-            SdrPathObj& GetPathObj() const
+            const SdrPathObj& GetPathObj() const
             {
-                return (SdrPathObj&)GetSdrObject();
+                return static_cast<const SdrPathObj&>(GetSdrObject());
             }
 
         public:

@@ -54,6 +54,7 @@ namespace sdr
             void forgetAsynchGraphicLoadingEvent(sdr::event::AsynchGraphicLoadingEvent* pEvent);
 
         protected:
+            const SdrGrafObj& getSdrGrafObj() const;
             SdrGrafObj& getSdrGrafObj();
 
             // This method is responsible for creating the graphical visualisation data

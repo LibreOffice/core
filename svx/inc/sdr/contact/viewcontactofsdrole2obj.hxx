@@ -21,12 +21,12 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFSDROLE2OBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
+#include <svx/svdoole2.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 
 // predeclarations
 
-class SdrOle2Obj;
 class Graphic;
 
 
@@ -48,9 +48,9 @@ namespace sdr
 
         public:
             // access to SdrOle2Obj
-            SdrOle2Obj& GetOle2Obj() const
+            const SdrOle2Obj& GetOle2Obj() const
             {
-                return (SdrOle2Obj&)GetSdrObject();
+                return static_cast<const SdrOle2Obj&>(GetSdrObject());
             }
 
             /// helper to create transformation from SdrObject

@@ -193,7 +193,7 @@ namespace sdr
             // but always the exact redraw area
             if(OUTDEV_WINDOW == rSource.GetOutDevType())
             {
-                vcl::Window& rWindow = (vcl::Window&)rSource;
+                vcl::Window& rWindow = static_cast<vcl::Window&>(rSource);
                 vcl::Region aPaintRegionPixel = rWindow.LogicToPixel(rWindow.GetPaintRegion());
                 aRegion.Intersect(aPaintRegionPixel);
 

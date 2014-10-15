@@ -129,7 +129,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SdrTextPrimitive2D& rCompare = (SdrTextPrimitive2D&)rPrimitive;
+                const SdrTextPrimitive2D& rCompare = static_cast<const SdrTextPrimitive2D&>(rPrimitive);
 
                 return (
 
@@ -274,7 +274,7 @@ namespace drawinglayer
         {
             if(SdrTextPrimitive2D::operator==(rPrimitive))
             {
-                const SdrContourTextPrimitive2D& rCompare = (SdrContourTextPrimitive2D&)rPrimitive;
+                const SdrContourTextPrimitive2D& rCompare = static_cast<const SdrContourTextPrimitive2D&>(rPrimitive);
 
                 return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
                     && getObjectTransform() == rCompare.getObjectTransform());
@@ -327,7 +327,7 @@ namespace drawinglayer
         {
             if(SdrTextPrimitive2D::operator==(rPrimitive))
             {
-                const SdrPathTextPrimitive2D& rCompare = (SdrPathTextPrimitive2D&)rPrimitive;
+                const SdrPathTextPrimitive2D& rCompare = static_cast<const SdrPathTextPrimitive2D&>(rPrimitive);
 
                 return (getPathPolyPolygon() == rCompare.getPathPolyPolygon()
                     && getSdrFormTextAttribute() == rCompare.getSdrFormTextAttribute());
@@ -395,7 +395,7 @@ namespace drawinglayer
         {
             if(SdrTextPrimitive2D::operator==(rPrimitive))
             {
-                const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
+                const SdrBlockTextPrimitive2D& rCompare = static_cast<const SdrBlockTextPrimitive2D&>(rPrimitive);
 
                 return (getTextRangeTransform() == rCompare.getTextRangeTransform()
                     && getSdrTextHorzAdjust() == rCompare.getSdrTextHorzAdjust()
@@ -460,7 +460,7 @@ namespace drawinglayer
          {
              if(SdrTextPrimitive2D::operator==(rPrimitive))
              {
-                 const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
+                 const SdrBlockTextPrimitive2D& rCompare = static_cast<const SdrBlockTextPrimitive2D&>(rPrimitive);
 
                  return (getTextRangeTransform() == rCompare.getTextRangeTransform()
                      && getWordWrap() == rCompare.getWordWrap());
@@ -509,7 +509,7 @@ namespace drawinglayer
         {
             if(SdrTextPrimitive2D::operator==(rPrimitive))
             {
-                const SdrStretchTextPrimitive2D& rCompare = (SdrStretchTextPrimitive2D&)rPrimitive;
+                const SdrStretchTextPrimitive2D& rCompare = static_cast<const SdrStretchTextPrimitive2D&>(rPrimitive);
 
                 return (getTextRangeTransform() == rCompare.getTextRangeTransform()
                     && isFixedCellHeight() == rCompare.isFixedCellHeight());

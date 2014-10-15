@@ -31,11 +31,6 @@ namespace sdr
 {
     namespace contact
     {
-        SdrVirtObj& ViewContactOfVirtObj::GetVirtObj() const
-        {
-            return (SdrVirtObj&)mrObject;
-        }
-
         ViewContactOfVirtObj::ViewContactOfVirtObj(SdrVirtObj& rObj)
         :   ViewContactOfSdrObj(rObj)
         {
@@ -43,6 +38,11 @@ namespace sdr
 
         ViewContactOfVirtObj::~ViewContactOfVirtObj()
         {
+        }
+
+        SdrVirtObj& ViewContactOfVirtObj::GetVirtObj() const
+        {
+            return static_cast<SdrVirtObj&>(mrObject);
         }
 
         // Access to possible sub-hierarchy

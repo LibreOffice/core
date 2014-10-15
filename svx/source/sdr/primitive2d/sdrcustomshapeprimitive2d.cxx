@@ -98,7 +98,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SdrCustomShapePrimitive2D& rCompare = (SdrCustomShapePrimitive2D&)rPrimitive;
+                const SdrCustomShapePrimitive2D& rCompare = static_cast<const SdrCustomShapePrimitive2D&>(rPrimitive);
 
                 return (getSdrSTAttribute() == rCompare.getSdrSTAttribute()
                     && getSubPrimitives() == rCompare.getSubPrimitives()

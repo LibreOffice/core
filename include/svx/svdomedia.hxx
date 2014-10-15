@@ -68,8 +68,8 @@ public:
 
         Size                        getPreferredSize() const;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                                    getSnapshot();
+        const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+                                    getSnapshot() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>
                                     GetInputStream();
         void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);

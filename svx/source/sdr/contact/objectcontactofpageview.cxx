@@ -325,7 +325,7 @@ namespace sdr
                 if(pActiveGroupList->ISA(SdrPage))
                 {
                     // It's a Page itself
-                    return &(((SdrPage*)pActiveGroupList)->GetViewContact());
+                    return &(static_cast<SdrPage*>(pActiveGroupList)->GetViewContact());
                 }
                 else if(pActiveGroupList->GetOwnerObj())
                 {

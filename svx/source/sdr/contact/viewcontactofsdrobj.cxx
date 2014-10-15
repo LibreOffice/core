@@ -58,7 +58,7 @@ namespace sdr
             // init AnimationKind
             if(GetSdrObject().ISA(SdrTextObj))
             {
-                SdrTextObj& rTextObj = (SdrTextObj&)GetSdrObject();
+                SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
                 meRememberedAnimationKind = rTextObj.GetTextAniKind();
             }
         }
@@ -97,7 +97,7 @@ namespace sdr
                 if(pObjList->ISA(SdrPage))
                 {
                     // Is a page
-                    pRetval = &(((SdrPage*)pObjList)->GetViewContact());
+                    pRetval = &(static_cast<SdrPage*>(pObjList)->GetViewContact());
                 }
                 else
                 {
@@ -118,7 +118,7 @@ namespace sdr
             // look for own changes
             if(GetSdrObject().ISA(SdrTextObj))
             {
-                SdrTextObj& rTextObj = (SdrTextObj&)GetSdrObject();
+                SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
 
                 if(rTextObj.GetTextAniKind() != meRememberedAnimationKind)
                 {

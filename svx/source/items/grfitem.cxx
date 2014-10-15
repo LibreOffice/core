@@ -43,10 +43,11 @@ SvxGrfCrop::~SvxGrfCrop()
 bool SvxGrfCrop::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "not equal attributes" );
-    return nLeft    == ((const SvxGrfCrop&)rAttr).GetLeft() &&
-           nRight   == ((const SvxGrfCrop&)rAttr).GetRight() &&
-           nTop     == ((const SvxGrfCrop&)rAttr).GetTop() &&
-           nBottom  == ((const SvxGrfCrop&)rAttr).GetBottom();
+    const SvxGrfCrop& rCrop = static_cast<const SvxGrfCrop&>(rAttr);
+    return nLeft    == rCrop.GetLeft() &&
+           nRight   == rCrop.GetRight() &&
+           nTop     == rCrop.GetTop() &&
+           nBottom  == rCrop.GetBottom();
 }
 
 SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
@@ -57,7 +58,7 @@ SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
     if( GRFCROP_VERSION_SWDEFAULT == nVersion )
         top = -top, bottom = -bottom, left = -left, right = -right;
 
-    SvxGrfCrop* pNew = (SvxGrfCrop*)Clone();
+    SvxGrfCrop* pNew = static_cast<SvxGrfCrop*>(Clone());
     pNew->SetLeft( left );
     pNew->SetRight( right );
     pNew->SetTop( top );

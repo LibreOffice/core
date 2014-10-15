@@ -175,7 +175,7 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
     return *this;
 }
 
-uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
+const uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot() const
 {
     if( !m_pImpl->m_xCachedSnapshot.is() )
     {

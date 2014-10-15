@@ -127,7 +127,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SdrEllipsePrimitive2D& rCompare = (SdrEllipsePrimitive2D&)rPrimitive;
+                const SdrEllipsePrimitive2D& rCompare = static_cast<const SdrEllipsePrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute());
@@ -253,7 +253,7 @@ namespace drawinglayer
         {
             if(SdrEllipsePrimitive2D::operator==(rPrimitive))
             {
-                const SdrEllipseSegmentPrimitive2D& rCompare = (SdrEllipseSegmentPrimitive2D&)rPrimitive;
+                const SdrEllipseSegmentPrimitive2D& rCompare = static_cast<const SdrEllipseSegmentPrimitive2D&>(rPrimitive);
 
                 if( mfStartAngle == rCompare.mfStartAngle
                     && mfEndAngle == rCompare.mfEndAngle

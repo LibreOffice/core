@@ -122,7 +122,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SdrPathPrimitive2D& rCompare = (SdrPathPrimitive2D&)rPrimitive;
+                const SdrPathPrimitive2D& rCompare = static_cast<const SdrPathPrimitive2D&>(rPrimitive);
 
                 return (getUnitPolyPolygon() == rCompare.getUnitPolyPolygon()
                     && getTransform() == rCompare.getTransform()

@@ -22,11 +22,11 @@
 
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
+#include <svx/svdograf.hxx>
 
 
 // predeclarations
 
-class SdrGrafObj;
 namespace drawinglayer { namespace attribute { class SdrLineFillShadowTextAttribute; }}
 class GraphicAttr;
 
@@ -54,9 +54,13 @@ namespace sdr
 
         public:
             // access to SdrObject
-            SdrGrafObj& GetGrafObject() const
+            const SdrGrafObj& GetGrafObject() const
             {
-                return ((SdrGrafObj&)GetSdrObject());
+                return static_cast<const SdrGrafObj&>(GetSdrObject());
+            }
+            SdrGrafObj& GetGrafObject()
+            {
+                return static_cast<SdrGrafObj&>(GetSdrObject());
             }
 
             // basic constructor, destructor
