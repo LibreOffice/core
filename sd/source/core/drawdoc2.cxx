@@ -990,7 +990,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
             SdrGrafObjGeoData*  pGeoData = (SdrGrafObjGeoData*) pGrafObj->GetGeoData();
 
             // Undo rotation
-            if ( rGeo.nDrehWink )
+            if ( rGeo.nRotationAngle )
                 RotatePoint( aRelPoint, rRect.TopLeft(), -rGeo.nSin, rGeo.nCos );
 
             // Undo mirroring

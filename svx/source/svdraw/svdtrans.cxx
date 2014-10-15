@@ -444,11 +444,11 @@ long GetLen(const Point& rPnt)
 
 void GeoStat::RecalcSinCos()
 {
-    if (nDrehWink==0) {
+    if (nRotationAngle==0) {
         nSin=0.0;
         nCos=1.0;
     } else {
-        double a=nDrehWink*nPi180;
+        double a=nRotationAngle*nPi180;
         nSin=sin(a);
         nCos=cos(a);
     }
@@ -475,24 +475,24 @@ Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
     aPol[3]=rRect.BottomLeft();
     aPol[4]=rRect.TopLeft();
     if (rGeo.nShearWink!=0) ShearPoly(aPol,rRect.TopLeft(),rGeo.nTan);
-    if (rGeo.nDrehWink!=0) RotatePoly(aPol,rRect.TopLeft(),rGeo.nSin,rGeo.nCos);
+    if (rGeo.nRotationAngle!=0) RotatePoly(aPol,rRect.TopLeft(),rGeo.nSin,rGeo.nCos);
     return aPol;
 }
 
 void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
 {
-    rGeo.nDrehWink=GetAngle(rPol[1]-rPol[0]);
-    rGeo.nDrehWink=NormAngle360(rGeo.nDrehWink);
+    rGeo.nRotationAngle=GetAngle(rPol[1]-rPol[0]);
+    rGeo.nRotationAngle=NormAngle360(rGeo.nRotationAngle);
     // rotation successful
     rGeo.RecalcSinCos();
 
     Point aPt1(rPol[1]-rPol[0]);
-    if (rGeo.nDrehWink!=0) RotatePoint(aPt1,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
+    if (rGeo.nRotationAngle!=0) RotatePoint(aPt1,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
     long nWdt=aPt1.X();
 
     Point aPt0(rPol[0]);
     Point aPt3(rPol[3]-rPol[0]);
-    if (rGeo.nDrehWink!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
+    if (rGeo.nRotationAngle!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin to reverse rotation
     long nHgt=aPt3.Y();
 
 

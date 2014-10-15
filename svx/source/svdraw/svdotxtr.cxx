@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
 {
-    if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0) {
+    if (aGeo.nRotationAngle!=0 || aGeo.nShearWink!=0) {
         Rectangle aSR0(GetSnapRect());
         long nWdt0=aSR0.Right()-aSR0.Left();
         long nHgt0=aSR0.Bottom()-aSR0.Top();
@@ -102,7 +102,7 @@ void SdrTextObj::NbcSetLogicRect(const Rectangle& rRect)
 
 long SdrTextObj::GetRotateAngle() const
 {
-    return aGeo.nDrehWink;
+    return aGeo.nRotationAngle;
 }
 
 long SdrTextObj::GetShearAngle(bool /*bVertical*/) const
@@ -121,7 +121,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
 void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     bool bNoShearMerk=aGeo.nShearWink==0;
-    bool bRota90Merk=bNoShearMerk && aGeo.nDrehWink % 9000 ==0;
+    bool bRota90Merk=bNoShearMerk && aGeo.nRotationAngle % 9000 ==0;
     long nHDist=GetTextLeftDistance()+GetTextRightDistance();
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
     long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
@@ -142,12 +142,12 @@ void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact
         }
     }
 
-    if (aGeo.nDrehWink==0 && aGeo.nShearWink==0) {
+    if (aGeo.nRotationAngle==0 && aGeo.nShearWink==0) {
         ResizeRect(aRect,rRef,xFact,yFact);
         if (bYMirr) {
             aRect.Justify();
             aRect.Move(aRect.Right()-aRect.Left(),aRect.Bottom()-aRect.Top());
-            aGeo.nDrehWink=18000;
+            aGeo.nRotationAngle=18000;
             aGeo.RecalcSinCos();
         }
     }
@@ -176,15 +176,15 @@ void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact
     }
 
     if (bRota90Merk) {
-        bool bRota90=aGeo.nDrehWink % 9000 ==0;
+        bool bRota90=aGeo.nRotationAngle % 9000 ==0;
         if (!bRota90) { // there's seems to be a rounding error occurring: correct it
-            long a=NormAngle360(aGeo.nDrehWink);
+            long a=NormAngle360(aGeo.nRotationAngle);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
             else if (a<22500) a=18000;
             else if (a<31500) a=27000;
             else a=0;
-            aGeo.nDrehWink=a;
+            aGeo.nRotationAngle=a;
             aGeo.RecalcSinCos();
         }
         if (bNoShearMerk!=(aGeo.nShearWink==0)) { // correct a rounding error occurring with Shear
@@ -221,12 +221,12 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     aRect.Top()=aP.Y();
     aRect.Right()=aRect.Left()+dx;
     aRect.Bottom()=aRect.Top()+dy;
-    if (aGeo.nDrehWink==0) {
-        aGeo.nDrehWink=NormAngle360(nWink);
+    if (aGeo.nRotationAngle==0) {
+        aGeo.nRotationAngle=NormAngle360(nWink);
         aGeo.nSin=sn;
         aGeo.nCos=cs;
     } else {
-        aGeo.nDrehWink=NormAngle360(aGeo.nDrehWink+nWink);
+        aGeo.nRotationAngle=NormAngle360(aGeo.nRotationAngle+nWink);
         aGeo.RecalcSinCos();
     }
     SetRectsDirty();
@@ -264,7 +264,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     if (bNoShearMerk &&
         (rRef1.X()==rRef2.X() || rRef1.Y()==rRef2.Y() ||
          std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
-        bRota90Merk=aGeo.nDrehWink % 9000 ==0;
+        bRota90Merk=aGeo.nRotationAngle % 9000 ==0;
     }
     Polygon aPol(Rect2Poly(aRect,aGeo));
     sal_uInt16 i;
@@ -282,15 +282,15 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     Poly2Rect(aPol,aRect,aGeo);
 
     if (bRota90Merk) {
-        bool bRota90=aGeo.nDrehWink % 9000 ==0;
+        bool bRota90=aGeo.nRotationAngle % 9000 ==0;
         if (bRota90Merk && !bRota90) { // there's seems to be a rounding error occurring: correct it
-            long a=NormAngle360(aGeo.nDrehWink);
+            long a=NormAngle360(aGeo.nRotationAngle);
             if (a<4500) a=0;
             else if (a<13500) a=9000;
             else if (a<22500) a=18000;
             else if (a<31500) a=27000;
             else a=0;
-            aGeo.nDrehWink=a;
+            aGeo.nRotationAngle=a;
             aGeo.RecalcSinCos();
         }
     }

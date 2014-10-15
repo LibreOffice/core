@@ -1580,10 +1580,10 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
 
                     // if rotated, copy GeoStat, too.
                     const GeoStat& rSourceGeo = pCustomShape->GetGeoStat();
-                    if(rSourceGeo.nDrehWink)
+                    if(rSourceGeo.nRotationAngle)
                     {
                         pTextObj->NbcRotate(
-                            pCustomShape->GetSnapRect().Center(), rSourceGeo.nDrehWink,
+                            pCustomShape->GetSnapRect().Center(), rSourceGeo.nRotationAngle,
                             rSourceGeo.nSin, rSourceGeo.nCos);
                     }
 
@@ -2037,7 +2037,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 aGeoStat.RecalcTan();
             }
 
-            if(aGeoStat.nDrehWink)
+            if(aGeoStat.nRotationAngle)
             {
                 aGeoStat.RecalcSinCos();
             }
@@ -2056,9 +2056,9 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                     pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
                 }
 
-                if(aGeoStat.nDrehWink)
+                if(aGeoStat.nRotationAngle)
                 {
-                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
                 }
 
                 SdrMark aNewMark(pCandidate, pPV);

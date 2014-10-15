@@ -714,8 +714,8 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             aTextPos.Y()-=aTextSize2.Width();
         }
     }
-    if (aMPol.nTextWink!=aGeo.nDrehWink) {
-        ((SdrMeasureObj*)this)->aGeo.nDrehWink=aMPol.nTextWink;
+    if (aMPol.nTextWink!=aGeo.nRotationAngle) {
+        ((SdrMeasureObj*)this)->aGeo.nRotationAngle=aMPol.nTextWink;
         ((SdrMeasureObj*)this)->aGeo.RecalcSinCos();
     }
     RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
@@ -724,8 +724,8 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     rRect.Justify();
     ((SdrMeasureObj*)this)->aRect=rRect;
 
-    if (aMPol.nTextWink!=aGeo.nDrehWink) {
-        ((SdrMeasureObj*)this)->aGeo.nDrehWink=aMPol.nTextWink;
+    if (aMPol.nTextWink!=aGeo.nRotationAngle) {
+        ((SdrMeasureObj*)this)->aGeo.nRotationAngle=aMPol.nTextWink;
         ((SdrMeasureObj*)this)->aGeo.RecalcSinCos();
     }
 }

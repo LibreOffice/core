@@ -137,7 +137,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         {
             const SdrGrafObj* pSGO = (SdrGrafObj*)pObject;
             const SdrGrafObjGeoData* pGeo = (SdrGrafObjGeoData*)pSGO->GetGeoData();
-            sal_uInt16 nMirrorCase = (pGeo->aGeo.nDrehWink == 18000 ?
+            sal_uInt16 nMirrorCase = (pGeo->aGeo.nRotationAngle == 18000 ?
                     ( pGeo->bMirrored ? 3 : 4 ) : ( pGeo->bMirrored ? 2 : 1 ));
             bool bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );
             bool bVMirr = ( ( nMirrorCase == 3 ) || ( nMirrorCase == 4 ) );

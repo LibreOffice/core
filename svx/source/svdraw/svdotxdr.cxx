@@ -53,11 +53,11 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
         case 7: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break;
     }
     if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nDrehWink!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     if (eKind!=HDL_MOVE) {
         pH=new SdrHdl(aPnt,eKind);
         pH->SetObj((SdrObject*)this);
-        pH->SetDrehWink(aGeo.nDrehWink);
+        pH->SetDrehWink(aGeo.nRotationAngle);
     }
     return pH;
 }
@@ -79,7 +79,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
     // Unrotate:
-    if (aGeo.nDrehWink!=0) RotatePoint(aPos,aTmpRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aPos,aTmpRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
     // Unshear:
     if (aGeo.nShearWink!=0) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.nTan);
 
@@ -150,14 +150,14 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
-    if(aNewRect.TopLeft() != aRect.TopLeft() && (aGeo.nDrehWink || aGeo.nShearWink))
+    if(aNewRect.TopLeft() != aRect.TopLeft() && (aGeo.nRotationAngle || aGeo.nShearWink))
     {
         Point aNewPos(aNewRect.TopLeft());
 
         if(aGeo.nShearWink)
             ShearPoint(aNewPos,aRect.TopLeft(),aGeo.nTan);
 
-        if(aGeo.nDrehWink)
+        if(aGeo.nRotationAngle)
             RotatePoint(aNewPos,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
         aNewRect.SetPos(aNewPos);

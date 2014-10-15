@@ -60,7 +60,7 @@ namespace sdr
                 const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                 // only correct when rotation and/or shear is used
-                if(rGeoStat.nShearWink || rGeoStat.nDrehWink )
+                if(rGeoStat.nShearWink || rGeoStat.nRotationAngle )
                 {
                     // text range needs to be corrected by
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
@@ -79,9 +79,9 @@ namespace sdr
                         aRotMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
                     }
 
-                    if(rGeoStat.nDrehWink)
+                    if(rGeoStat.nRotationAngle)
                     {
-                        aRotMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
+                        aRotMatrix.rotate((36000 - rGeoStat.nRotationAngle) * F_PI18000);
                     }
 
                     aRotMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
@@ -177,7 +177,7 @@ namespace sdr
                     const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
                     const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
-                    if(rGeoStat.nShearWink || rGeoStat.nDrehWink || !basegfx::fTools::equalZero(fExtraTextRotation))
+                    if(rGeoStat.nShearWink || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
                     {
                         if(aObjectRange != aTextRange)
                         {
@@ -202,9 +202,9 @@ namespace sdr
                             aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
                         }
 
-                        if(rGeoStat.nDrehWink)
+                        if(rGeoStat.nRotationAngle)
                         {
-                            aTextBoxMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
+                            aTextBoxMatrix.rotate((36000 - rGeoStat.nRotationAngle) * F_PI18000);
                         }
 
                         // give text it's target position

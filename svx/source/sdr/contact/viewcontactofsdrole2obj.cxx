@@ -73,7 +73,7 @@ namespace sdr
             // create object matrix
             const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
             const double fShearX(rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0);
-            const double fRotate(rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0);
+            const double fRotate(rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0);
 
             return basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),

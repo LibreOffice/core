@@ -174,7 +174,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                         rR.Bottom()=rR.Top()+nHgt;
                     }
                 }
-                if (aGeo.nDrehWink!=0) {
+                if (aGeo.nRotationAngle!=0) {
                     Point aD1(rR.TopLeft());
                     aD1-=aR0.TopLeft();
                     Point aD2(aD1);

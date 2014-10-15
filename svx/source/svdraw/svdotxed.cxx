@@ -105,7 +105,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
     if(pOutlinerParaObject)
     {
-        if(aGeo.nDrehWink || IsFontwork())
+        if(aGeo.nRotationAngle || IsFontwork())
         {
             // only repaint here, no real objectchange
             BroadcastObjectChange();
@@ -124,7 +124,7 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
     Size aPaperMin,aPaperMax;
     Rectangle aViewInit;
     TakeTextAnchorRect(aViewInit);
-    if (aGeo.nDrehWink!=0) {
+    if (aGeo.nRotationAngle!=0) {
         Point aCenter(aViewInit.Center());
         aCenter-=aViewInit.TopLeft();
         Point aCenter0(aCenter);

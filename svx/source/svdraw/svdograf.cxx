@@ -482,7 +482,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
     const Size      aDestSize( GetLogicRect().GetSize() );
     const bool      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
     const bool      bRotate = ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
-        ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType );
+        ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GRAPHIC_NONE != eType );
 
     // Need cropping info earlier
     ( (SdrGrafObj*) this )->ImpSetAttrToGrafInfo();
@@ -497,7 +497,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
 
         if( bMirror )
         {
-            sal_uInt16      nMirrorCase = ( aGeo.nDrehWink == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
+            sal_uInt16      nMirrorCase = ( aGeo.nRotationAngle == 18000 ) ? ( bMirrored ? 3 : 4 ) : ( bMirrored ? 2 : 1 );
             bool bHMirr = nMirrorCase == 2 || nMirrorCase == 4;
             bool bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
 
@@ -505,7 +505,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
         }
 
         if( bRotate )
-            aActAttr.SetRotation( sal_uInt16(aGeo.nDrehWink / 10) );
+            aActAttr.SetRotation( sal_uInt16(aGeo.nRotationAngle / 10) );
     }
 
     // Delegate to moved code in GraphicObject
@@ -658,9 +658,9 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
-    rInfo.bResizeFreeAllowed = aGeo.nDrehWink % 9000 == 0 ||
-                               aGeo.nDrehWink % 18000 == 0 ||
-                               aGeo.nDrehWink % 27000 == 0;
+    rInfo.bResizeFreeAllowed = aGeo.nRotationAngle % 9000 == 0 ||
+                               aGeo.nRotationAngle % 18000 == 0 ||
+                               aGeo.nRotationAngle % 27000 == 0;
 
     rInfo.bResizePropAllowed = true;
     rInfo.bRotateFreeAllowed = bNoPresGrf;
@@ -1098,10 +1098,10 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
                         pGrp->NbcShear(aRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
                     }
 
-                    if(aGeoStat.nDrehWink)
+                    if(aGeoStat.nRotationAngle)
                     {
                         aGeoStat.RecalcSinCos();
-                        pGrp->NbcRotate(aRect.TopLeft(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+                        pGrp->NbcRotate(aRect.TopLeft(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
                     }
                 }
 

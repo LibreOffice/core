@@ -274,7 +274,7 @@ SdrHdl::SdrHdl():
     pPV(NULL),
     pHdlList(NULL),
     eKind(HDL_MOVE),
-    nDrehWink(0),
+    nRotationAngle(0),
     nObjHdlNum(0),
     nPolyNum(0),
     nPPntNum(0),
@@ -293,7 +293,7 @@ SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
     pHdlList(NULL),
     aPos(rPnt),
     eKind(eNewKind),
-    nDrehWink(0),
+    nRotationAngle(0),
     nObjHdlNum(0),
     nPolyNum(0),
     nPPntNum(0),
@@ -335,9 +335,9 @@ void SdrHdl::SetMoveOutside( bool bMoveOutside )
 
 void SdrHdl::SetDrehWink(long n)
 {
-    if(nDrehWink != n)
+    if(nRotationAngle != n)
     {
-        nDrehWink = n;
+        nRotationAngle = n;
 
         // create new display
         Touch();
@@ -811,7 +811,7 @@ Pointer SdrHdl::GetPointer() const
         }
     } else {
         // When resizing rotated rectangles, rotate the mouse cursor slightly, too
-        if (bSize && nDrehWink!=0) {
+        if (bSize && nRotationAngle!=0) {
             long nHdlWink=0;
             switch (eKind) {
                 case HDL_LWRGT: nHdlWink=31500; break;
@@ -825,7 +825,7 @@ Pointer SdrHdl::GetPointer() const
                 default:
                     break;
             }
-            nHdlWink+=nDrehWink+2249; // a little bit more (for rounding)
+            nHdlWink+=nRotationAngle+2249; // a little bit more (for rounding)
             while (nHdlWink<0) nHdlWink+=36000;
             while (nHdlWink>=36000) nHdlWink-=36000;
             nHdlWink/=4500;
@@ -1669,7 +1669,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                                 fTransparence,
                                 3.0,
                                 3.0,
-                                nDrehWink * -F_PI18000,
+                                nRotationAngle * -F_PI18000,
                                 500,
                                 true); // allow animation; the Handle is not shown at text edit time
 

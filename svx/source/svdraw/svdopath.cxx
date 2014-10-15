@@ -1712,7 +1712,7 @@ void SdrPathObj::ImpForceLineWink()
         const Point aPoint1(FRound(aB2DPoint1.getX()), FRound(aB2DPoint1.getY()));
         const Point aDelt(aPoint1 - aPoint0);
 
-        aGeo.nDrehWink=GetAngle(aDelt);
+        aGeo.nRotationAngle=GetAngle(aDelt);
         aGeo.nShearWink=0;
         aGeo.RecalcSinCos();
         aGeo.RecalcTan();
@@ -2415,7 +2415,7 @@ void SdrPathObj::NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2)
 
 void SdrPathObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
-    if(!aGeo.nDrehWink)
+    if(!aGeo.nRotationAngle)
     {
         rRect = GetSnapRect();
     }
@@ -2893,17 +2893,17 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
         }
         else
         {
-            if(aGeo.nShearWink || aGeo.nDrehWink)
+            if(aGeo.nShearWink || aGeo.nRotationAngle)
             {
                 // get rotate and shear in drawingLayer notation
-                fRotate = aGeo.nDrehWink * F_PI18000;
+                fRotate = aGeo.nRotationAngle * F_PI18000;
                 fShearX = aGeo.nShearWink * F_PI18000;
 
                 // build mathematically correct (negative shear and rotate) object transform
                 // containing shear and rotate to extract unsheared, unrotated polygon
                 basegfx::B2DHomMatrix aObjectMatrix;
                 aObjectMatrix.shearX(tan((36000 - aGeo.nShearWink) * F_PI18000));
-                aObjectMatrix.rotate((36000 - aGeo.nDrehWink) * F_PI18000);
+                aObjectMatrix.rotate((36000 - aGeo.nRotationAngle) * F_PI18000);
 
                 // create inverse from it and back-transform polygon
                 basegfx::B2DHomMatrix aInvObjectMatrix(aObjectMatrix);
@@ -3017,7 +3017,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     basegfx::B2DPolyPolygon aNewPolyPolygon(rPolyPolygon);
 
     // reset object shear and rotations
-    aGeo.nDrehWink = 0;
+    aGeo.nRotationAngle = 0;
     aGeo.RecalcSinCos();
     aGeo.nShearWink = 0;
     aGeo.RecalcTan();
@@ -3090,9 +3090,9 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         aTransform.rotate(fRotate);
 
         // #i78696#
-        // fRotate is mathematically correct, but aGeoStat.nDrehWink is
+        // fRotate is mathematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeo.nDrehWink = NormAngle360(FRound(-fRotate / F_PI18000));
+        aGeo.nRotationAngle = NormAngle360(FRound(-fRotate / F_PI18000));
         aGeo.RecalcSinCos();
     }
 

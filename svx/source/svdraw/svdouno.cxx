@@ -324,15 +324,15 @@ void SdrUnoObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact,
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
 
-    if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0)
+    if (aGeo.nShearWink!=0 || aGeo.nRotationAngle!=0)
     {
         // small correctures
-        if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000)
+        if (aGeo.nRotationAngle>=9000 && aGeo.nRotationAngle<27000)
         {
             aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
         }
 
-        aGeo.nDrehWink  = 0;
+        aGeo.nRotationAngle  = 0;
         aGeo.nShearWink = 0;
         aGeo.nSin       = 0.0;
         aGeo.nCos       = 1.0;

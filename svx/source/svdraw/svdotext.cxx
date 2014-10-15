@@ -432,7 +432,7 @@ void SdrTextObj::ImpCheckShear()
 void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bNoTextFrame=!IsTextFrame();
-    rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nDrehWink%9000==0;
+    rInfo.bResizeFreeAllowed=bNoTextFrame || aGeo.nRotationAngle%9000==0;
     rInfo.bResizePropAllowed=true;
     rInfo.bRotateFreeAllowed=true;
     rInfo.bRotate90Allowed  =true;
@@ -602,10 +602,10 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
     basegfx::B2DHomMatrix aMatrix(basegfx::tools::createTranslateB2DHomMatrix(
         -rAnchorRect.Left(), -rAnchorRect.Top()));
 
-    if(aGeo.nDrehWink)
+    if(aGeo.nRotationAngle)
     {
         // Unrotate!
-        aMatrix.rotate(-aGeo.nDrehWink * nPi180);
+        aMatrix.rotate(-aGeo.nRotationAngle * nPi180);
     }
 
     aXorPolyPolygon.transform(aMatrix);
@@ -684,7 +684,7 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
         if (aAnkRect.GetWidth()<2) aAnkRect.Right()=aAnkRect.Left()+1; // minimum size h and v: 2 px
         if (aAnkRect.GetHeight()<2) aAnkRect.Bottom()=aAnkRect.Top()+1;
     }
-    if (aGeo.nDrehWink!=0) {
+    if (aGeo.nRotationAngle!=0) {
         Point aTmpPt(aAnkRect.TopLeft());
         RotatePoint(aTmpPt,aRotateRef,aGeo.nSin,aGeo.nCos);
         aTmpPt-=aAnkRect.TopLeft();
@@ -848,7 +848,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
         if (eVAdj==SDRTEXTVERTADJUST_BOTTOM)
             aTextPos.Y()+=nFreeHgt;
     }
-    if (aGeo.nDrehWink!=0)
+    if (aGeo.nRotationAngle!=0)
         RotatePoint(aTextPos,aAnkRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
     if (pAnchorRect)
@@ -1117,7 +1117,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
     Polygon aPol(aRect);
     if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
     basegfx::B2DPolyPolygon aRetval;
     aRetval.append(aPol.getB2DPolygon());
@@ -1143,7 +1143,7 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
         bool bFitToSize(IsFitToSize());
         if (bFitToSize) aR=aAnchor2;
         Polygon aPol(aR);
-        if (aGeo.nDrehWink!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
+        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aR.TopLeft(),aGeo.nSin,aGeo.nCos);
 
         aRetval.append(aPol.getB2DPolygon());
     }
@@ -1153,10 +1153,10 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 
 void SdrTextObj::RecalcSnapRect()
 {
-    if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0) {
+    if (aGeo.nRotationAngle!=0 || aGeo.nShearWink!=0) {
         Polygon aPol(aRect);
         if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
-        if (aGeo.nDrehWink!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         maSnapRect=aPol.GetBoundRect();
     } else {
         maSnapRect=aRect;
@@ -1179,7 +1179,7 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
         default: aP=aRect.Center(); break;
     }
     if (aGeo.nShearWink!=0) ShearPoint(aP,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nDrehWink!=0) RotatePoint(aP,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aP,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     return aP;
 }
 
@@ -1596,7 +1596,7 @@ void SdrTextObj::SetVerticalWriting(bool bVertical)
 bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
-    double fRotate = (aGeo.nDrehWink / 100.0) * F_PI180;
+    double fRotate = (aGeo.nRotationAngle / 100.0) * F_PI180;
     double fShearX = (aGeo.nShearWink / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
@@ -1672,7 +1672,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // reset object shear and rotations
-    aGeo.nDrehWink = 0;
+    aGeo.nRotationAngle = 0;
     aGeo.RecalcSinCos();
     aGeo.nShearWink = 0;
     aGeo.RecalcTan();
@@ -1732,11 +1732,11 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
         GeoStat aGeoStat;
 
         // #i78696#
-        // fRotate is matematically correct, but aGeoStat.nDrehWink is
+        // fRotate is matematically correct, but aGeoStat.nRotationAngle is
         // mirrored -> mirror value here
-        aGeoStat.nDrehWink = NormAngle360(FRound(-fRotate / F_PI18000));
+        aGeoStat.nRotationAngle = NormAngle360(FRound(-fRotate / F_PI18000));
         aGeoStat.RecalcSinCos();
-        Rotate(Point(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+        Rotate(Point(), aGeoStat.nRotationAngle, aGeoStat.nSin, aGeoStat.nCos);
     }
 
     // translate?
@@ -1842,10 +1842,10 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
 
     // get outliner set up. To avoid getting a somehow rotated MetaFile,
     // temporarily disable object rotation.
-    sal_Int32 nAngle(aGeo.nDrehWink);
-    aGeo.nDrehWink = 0L;
+    sal_Int32 nAngle(aGeo.nRotationAngle);
+    aGeo.nRotationAngle = 0L;
     ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
-    aGeo.nDrehWink = nAngle;
+    aGeo.nRotationAngle = nAngle;
 
     Rectangle aScrollFrameRect(aPaintRect);
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -2004,7 +2004,7 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 
 // Every object derived from SdrTextObj must return an "UnrotatedSnapRect"
 // (->TakeUnrotatedSnapRect()) (the reference point for the rotation is the top
-// left of the rectangle (aGeo.nDrehWink)) which is the basis for anchoring
+// left of the rectangle (aGeo.nRotationAngle)) which is the basis for anchoring
 // text. We then subtract the text frame margins from this rectangle, as a re-
 // sult we get the anchoring area (->TakeTextAnchorRect()). Within this area, we
 // calculate the anchoring point and the painting area, depending on the hori-

@@ -3861,7 +3861,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // // core geometry stuff a vertical mirror is expressed as 180 degree rotation. All
     // // this can be removed again when aw080 will have cleaned up the old
     // // (non-)transformation mess in the core.
-    // if(18000 == pObj->GetGeoStat().nDrehWink)
+    // if(18000 == pObj->GetGeoStat().nRotationAngle)
     // {
     //     // old notation of vertical mirror, need to correct diffs since both rects
     //     // are rotated by 180 degrees

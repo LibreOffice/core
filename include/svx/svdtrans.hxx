@@ -197,14 +197,14 @@ long GetLen(const Point& rPnt);
 
 class GeoStat { // Geometrischer Status fuer ein Rect
 public:
-    long     nDrehWink;
+    long     nRotationAngle;
     long     nShearWink;
     double   nTan;      // tan(nShearWink)
-    double   nSin;      // sin(nDrehWink)
-    double   nCos;      // cos(nDrehWink)
+    double   nSin;      // sin(nRotationAngle)
+    double   nCos;      // cos(nRotationAngle)
     bool     bMirrored; // Horizontal gespiegelt? (ni)
 public:
-    GeoStat(): nDrehWink(0),nShearWink(0),nTan(0.0),nSin(0.0),nCos(1.0),bMirrored(false) {}
+    GeoStat(): nRotationAngle(0),nShearWink(0),nTan(0.0),nSin(0.0),nCos(1.0),bMirrored(false) {}
     void RecalcSinCos();
     void RecalcTan();
 };

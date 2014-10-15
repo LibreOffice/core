@@ -486,7 +486,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 }
                 // account for rotation
                 const GeoStat& rGeo=pTextObj->GetGeoStat();
-                if (rGeo.nDrehWink!=0) RotatePoint(aTemporaryTextRelativePosition,Point(),-rGeo.nSin,rGeo.nCos); // -sin for Unrotate
+                if (rGeo.nRotationAngle!=0) RotatePoint(aTemporaryTextRelativePosition,Point(),-rGeo.nSin,rGeo.nCos); // -sin for Unrotate
                 // we currently don't account for ticker text
                 if(pActualOutDev && pActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
                 {

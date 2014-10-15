@@ -1955,7 +1955,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
             const Graphic&      rGraphic = pGrafObj->GetGraphic();
 
             // Drehung rueckgaengig
-            if ( rGeo.nDrehWink )
+            if ( rGeo.nRotationAngle )
                 RotatePoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nSin, rGeo.nCos );
 
             // Spiegelung rueckgaengig

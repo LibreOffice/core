@@ -219,10 +219,10 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
 
             // if rotated, copy GeoStat, too.
             const GeoStat& rSourceGeo = pCustoObj->GetGeoStat();
-            if ( rSourceGeo.nDrehWink )
+            if ( rSourceGeo.nRotationAngle )
             {
                 pTextObj->NbcRotate(
-                    pCustoObj->GetSnapRect().Center(), rSourceGeo.nDrehWink,
+                    pCustoObj->GetSnapRect().Center(), rSourceGeo.nRotationAngle,
                     rSourceGeo.nSin, rSourceGeo.nCos);
             }
 

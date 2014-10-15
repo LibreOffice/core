@@ -156,7 +156,7 @@ protected:
 
     SdrHdlKind                  eKind;
 
-    long                        nDrehWink; // Handles bzw. Mauszeiger drehen
+    long                        nRotationAngle; // Handles bzw. Mauszeiger drehen
     sal_uInt32                  nObjHdlNum; // wird von der MarkView benoetigt
     sal_uInt32                  nPolyNum;  // Polygonpunktes
     sal_uInt32                  nPPntNum;  // Punktnummer des Polygons
