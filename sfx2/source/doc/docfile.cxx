@@ -380,12 +380,10 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
     }
 }
 
-
-bool SfxMedium::DocNeedsFileDateCheck()
+bool SfxMedium::DocNeedsFileDateCheck() const
 {
     return ( !IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
 }
-
 
 util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
 {
@@ -3172,8 +3170,7 @@ bool SfxMedium::SaveVersionList_Impl( bool /*bUseXML*/ )
     return false;
 }
 
-
-bool SfxMedium::IsReadOnly()
+bool SfxMedium::IsReadOnly() const
 {
     // a) ReadOnly filter can't produce read/write contents!
     bool bReadOnly = (

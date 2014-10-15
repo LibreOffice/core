@@ -169,7 +169,6 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 /* testcode
             const OUString aURL( "file:///e:/test.xml" );
             SfxMedium aMedium( aURL, STREAM_READ | STREAM_NOCREATE, sal_True );
-            aMedium.IsRemote();
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
 
             aMedium.GetInStream()->Seek( 0 );

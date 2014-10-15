@@ -127,13 +127,13 @@ public:
     const INetURLObject& GetURLObject() const;
 
     void                CheckFileDate( const css::util::DateTime& aInitDate );
-    bool            DocNeedsFileDateCheck();
+    SAL_WARN_UNUSED_RESULT bool  DocNeedsFileDateCheck() const;
     css::util::DateTime GetInitFileDate( bool bIgnoreOldValue );
 
     css::uno::Reference< css::ucb::XContent > GetContent() const;
     const OUString& GetPhysicalName() const;
-    bool                IsRemote() const;
-    bool                IsOpen() const; // { return aStorage.Is() || pInStream; }
+    SAL_WARN_UNUSED_RESULT bool IsRemote() const;
+    SAL_WARN_UNUSED_RESULT bool IsOpen() const; // { return aStorage.Is() || pInStream; }
     void                Download( const Link& aLink = Link());
     void                SetDoneLink( const Link& rLink );
 
@@ -167,21 +167,21 @@ public:
     css::uno::Reference< css::embed::XStorage > GetStorage( bool bCreateTempIfNo = true );
     css::uno::Reference< css::embed::XStorage > GetOutputStorage();
     void                ResetError();
-    bool                UsesCache() const;
+    SAL_WARN_UNUSED_RESULT bool  UsesCache() const;
     void                SetUsesCache( bool );
-    bool                IsExpired() const;
+    SAL_WARN_UNUSED_RESULT bool  IsExpired() const;
     void                SetName( const OUString& rName, bool bSetOrigURL = false );
-    bool                IsAllowedForExternalBrowser() const;
-    long                GetFileVersion() const;
+    SAL_WARN_UNUSED_RESULT bool  IsAllowedForExternalBrowser() const;
+    SAL_WARN_UNUSED_RESULT long GetFileVersion() const;
 
     const css::uno::Sequence < css::util::RevisionTag >&
                         GetVersionList( bool _bNoReload = false );
-    bool                IsReadOnly();
+    SAL_WARN_UNUSED_RESULT bool  IsReadOnly() const;
 
     // Whether the medium had originally been opened r/o, independent of later
     // changes via SetOpenMode; used to keep track of the "true" state of the
     // medium across toggles via SID_EDITDOC (which do change SetOpenMode):
-    bool                IsOriginallyReadOnly() const;
+    SAL_WARN_UNUSED_RESULT bool  IsOriginallyReadOnly() const;
 
     css::uno::Reference< css::io::XInputStream >  GetInputStream();
 

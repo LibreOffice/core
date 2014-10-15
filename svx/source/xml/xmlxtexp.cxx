@@ -246,7 +246,6 @@ bool SvxXMLXTableExportComponent::save(
             else
             {
                 pMedium = new SfxMedium( rURL, STREAM_WRITE | STREAM_TRUNC );
-                pMedium->IsRemote();
 
                 SvStream* pStream = pMedium->GetOutStream();
                 if( !pStream )
