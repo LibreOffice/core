@@ -189,7 +189,9 @@ AC_MSG_CHECKING([for GNU Make])
 
 # try to use our own make if it is available and GNUMAKE was not already defined
 if test -z "$GNUMAKE"; then
-    if test -x "/opt/lo/bin/make"; then
+    if test -n "$LODE_HOME" -a -e "$LODE_HOME/bin/make" ; then
+        GNUMAKE="$LODE_HOME/opt/bin/make"
+    elif test -x "/opt/lo/bin/make"; then
         GNUMAKE="/opt/lo/bin/make"
     fi
 fi
@@ -4649,6 +4651,9 @@ AC_SUBST([SYSTEM_FONTCONFIG])
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
+if test -z "$TARFILE_LOCATION" -a -n "$LODE_HOME" ; then
+   TARFILE_LOCATION="$LODE_HOME/ext_tar"
+fi
 if test -z "$TARFILE_LOCATION"; then
     if test -d "$SRC_ROOT/src" ; then
         mv "$SRC_ROOT/src" "$SRC_ROOT/external/tarballs"
@@ -11856,6 +11861,9 @@ dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
     ANT_HOME=; export ANT_HOME
     WITH_ANT_HOME=; export WITH_ANT_HOME
+    if test -z "$with_ant_home" -a -n "$LODE_HOME" -a -e "$LODE_HOME/opt/bin/ant" ; then
+        with_ant_home="$LODE_HOME/opt"
+    fi
     if test -z "$with_ant_home"; then
         AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd])
     else
@@ -11997,7 +12005,9 @@ OOO_JUNIT_JAR=
 if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     AC_MSG_CHECKING([for JUnit 4])
     if test "$with_junit" = "yes"; then
-        if test -e /usr/share/java/junit4.jar; then
+        if test -n "$LODE_HOME" -a -e "$LODE_HOME/opt/share/java/junit.jar" ; then
+            OOO_JUNIT_JAR="$LODE_HOME/opt/share/java/junit.jar"
+        elif test -e /usr/share/java/junit4.jar; then
             OOO_JUNIT_JAR=/usr/share/java/junit4.jar
         else
            if test -e /usr/share/lib/java/junit.jar; then
