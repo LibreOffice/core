@@ -38,6 +38,7 @@
 #include <rtl/byteseq.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <dbmgr.hxx>
 #include <unoprnms.hxx>
@@ -193,7 +194,6 @@ protected:
 
     sal_uInt32 mnStartTime;
     utl::TempFile maTempFile;
-    utl::TempFile maTempDir;
     bool mbExported; ///< Does maTempFile already contain something useful?
     sal_Int16 nCurOutputType;
 
@@ -215,7 +215,6 @@ public:
         , mpTestDocumentPath(pTestDocumentPath)
         , mpFilter(pFilter)
         , mnStartTime(0)
-        , maTempDir(NULL, true)
         , mbExported(false)
         , nCurOutputType(0)
     {
@@ -326,7 +325,8 @@ protected:
         load(mpTestDocumentPath, filename);
 
         const OUString aPrefix( "LOMM_" );
-        const OUString aWorkDir = maTempDir.GetURL();
+        utl::TempFile aTempDir(nullptr, true);
+        const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
         OUString aDBName = registerDBsource( aURI, aPrefix, aWorkDir );
         initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir );
@@ -334,6 +334,8 @@ protected:
         postTest(filename);
         verify();
         finish();
+
+        ::utl::removeTree(aWorkDir);
     }
 
     /**
