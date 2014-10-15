@@ -25,9 +25,11 @@
 #include <rtl/strbuf.hxx>
 
 #include <map>
+#include <set>
 
 class RtfExport;
 class RtfAttributeOutput;
+class SwFrmFmt;
 
 /// Handles export of drawings using RTF markup
 class RtfSdrExport : public EscherEx
@@ -52,6 +54,9 @@ class RtfSdrExport : public EscherEx
     /// Remember which shape types we had already written.
     bool* m_pShapeTypeWritten;
 
+    /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
+    std::set<const SwFrmFmt*> m_aTextBoxes;
+
 public:
     RtfSdrExport(RtfExport& rExport);
     virtual             ~RtfSdrExport();
@@ -60,6 +65,9 @@ public:
     ///
     /// Call this when you need to export the object as Sdr in RTF.
     sal_uInt32 AddSdrObject(const SdrObject& rObj);
+
+    /// Is this a standalone TextFrame, or used as a TextBox of a shape?
+    bool isTextBox(const SwFrmFmt& rFrmFmt);
 
 protected:
     /// Start the shape for which we just collected the information.

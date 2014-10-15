@@ -1601,6 +1601,10 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
     {
     case sw::Frame::eTxtBox:
     {
+        // If this is a TextBox of a shape, then ignore: it's handled in RtfSdrExport::StartShape().
+        if (m_rExport.SdrExporter().isTextBox(rFrame.GetFrmFmt()))
+            break;
+
         OSL_ENSURE(m_aRunText.getLength() == 0, "m_aRunText is not empty");
         m_rExport.mpParentFrame = &rFrame;
 

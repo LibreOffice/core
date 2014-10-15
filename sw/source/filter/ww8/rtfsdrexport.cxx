@@ -27,6 +27,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/unoapi.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <textboxhelper.hxx>
 
 #include <algorithm>
 
@@ -41,7 +42,8 @@ RtfSdrExport::RtfSdrExport(RtfExport& rExport)
       m_nShapeType(ESCHER_ShpInst_Nil),
       m_nShapeFlags(0) ,
       m_pShapeStyle(new OStringBuffer(200)),
-      m_pShapeTypeWritten(new bool[ ESCHER_ShpInst_COUNT ])
+      m_pShapeTypeWritten(new bool[ ESCHER_ShpInst_COUNT ]),
+      m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.pDoc))
 {
     mnGroupLevel = 1;
     memset(m_pShapeTypeWritten, 0, ESCHER_ShpInst_COUNT * sizeof(bool));
@@ -594,6 +596,11 @@ sal_uInt32 RtfSdrExport::AddSdrObject(const SdrObject& rObj)
 {
     m_pSdrObject = &rObj;
     return EscherEx::AddSdrObject(rObj);
+}
+
+bool RtfSdrExport::isTextBox(const SwFrmFmt& rFrmFmt)
+{
+    return m_aTextBoxes.find(&rFrmFmt) != m_aTextBoxes.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
