@@ -132,7 +132,7 @@ public:
 
     css::uno::Reference< css::ucb::XContent > GetContent() const;
     const OUString& GetPhysicalName() const;
-    bool                IsRemote();
+    bool                IsRemote() const;
     bool                IsOpen() const; // { return aStorage.Is() || pInStream; }
     void                Download( const Link& aLink = Link());
     void                SetDoneLink( const Link& rLink );

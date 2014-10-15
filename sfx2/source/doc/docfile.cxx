@@ -2352,19 +2352,15 @@ void SfxMedium::GetMedium_Impl()
     }
 }
 
-
-bool SfxMedium::IsRemote()
+bool SfxMedium::IsRemote() const
 {
     return pImp->m_bRemote;
 }
-
-
 
 void SfxMedium::SetUpdatePickList(bool bVal)
 {
     pImp->bUpdatePickList = bVal;
 }
-
 
 bool SfxMedium::IsUpdatePickList() const
 {
