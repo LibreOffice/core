@@ -40,7 +40,7 @@ extern void Java_org_libreoffice_android_Bootstrap_redirect_1stdio(JNIEnv* env, 
 
 extern LibreOfficeKit* libreofficekit_hook(const char* install_path);
 
-static LibreOfficeKit* gpOffice;
+static char *full_program_dir = NULL;
 
 /// Call the same method from Bootstrap.
 __attribute__ ((visibility("default")))
@@ -73,7 +73,6 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
 
     const char program_dir[] = "/program";
     size_t data_dir_len;
-    char *full_program_dir;
 
     (void) clazz;
 
@@ -128,6 +127,7 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     extract_files(UNPACK_TREE_GZ, UNPACK_TREE_GZ, 1);
 
     // LibreOfficeKit expects a path to the program/ directory
+    free(full_program_dir);
     data_dir_len = strlen(data_dir);
     full_program_dir = malloc(data_dir_len + sizeof(program_dir));
 
@@ -135,10 +135,7 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
     strncpy(full_program_dir + data_dir_len, program_dir, sizeof(program_dir));
 
     // Initialize LibreOfficeKit
-    gpOffice = libreofficekit_hook(full_program_dir);
-
-    free(full_program_dir);
-    if (!gpOffice)
+    if (!libreofficekit_hook(full_program_dir))
     {
         LOGE("libreofficekit_hook returned null");
         return JNI_FALSE;
@@ -156,7 +153,7 @@ jlong Java_org_libreoffice_kit_LibreOfficeKit_getLibreOfficeKitHandle
     (void) env;
     (void) clazz;
 
-    return (jlong) (intptr_t) gpOffice;
+    return (jlong) (intptr_t) libreofficekit_hook(full_program_dir);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
