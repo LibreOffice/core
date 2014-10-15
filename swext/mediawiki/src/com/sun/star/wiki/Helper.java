@@ -331,38 +331,38 @@ public class Helper
         //scrape the HTML source and find the EditURL
         // TODO/LATER: Use parser in future
 
-        String sResultURL = "";
         int nInd = sWebPage.indexOf( "http-equiv=\"refresh\"" );
-        if ( nInd != -1 )
-        {
-            int nContent = sWebPage.indexOf( "content=", nInd );
-            if ( nContent > 0 )
-            {
-                int nURL = sWebPage.indexOf( "URL=", nContent );
-                if ( nURL > 0 )
-                {
-                    int nEndURL = sWebPage.indexOf('"', nURL );
-                    if ( nEndURL > 0 )
-                        sResultURL = sWebPage.substring( nURL + 4, nEndURL );
-                }
-            }
+        if ( nInd == -1 )
+            return "";
 
-            try
+        String sResultURL = "";
+        int nContent = sWebPage.indexOf( "content=", nInd );
+        if ( nContent > 0 )
+        {
+            int nURL = sWebPage.indexOf( "URL=", nContent );
+            if ( nURL > 0 )
             {
-                URL aURL = new URL( sURL );
-                if ( !sResultURL.startsWith( aURL.getProtocol() ))
-                {
-                    //if the url is only relative then complete it
-                    if ( sResultURL.startsWith( "/" ) )
-                        sResultURL = aURL.getProtocol() + "://" + aURL.getHost() + sResultURL;
-                    else
-                        sResultURL = aURL.getProtocol() + "://" + aURL.getHost() + aURL.getPath() + sResultURL;
-                }
+                int nEndURL = sWebPage.indexOf('"', nURL );
+                if ( nEndURL > 0 )
+                    sResultURL = sWebPage.substring( nURL + 4, nEndURL );
             }
-            catch ( MalformedURLException ex )
+        }
+
+        try
+        {
+            URL aURL = new URL( sURL );
+            if ( !sResultURL.startsWith( aURL.getProtocol() ))
             {
-                ex.printStackTrace();
+                //if the url is only relative then complete it
+                if ( sResultURL.startsWith( "/" ) )
+                    sResultURL = aURL.getProtocol() + "://" + aURL.getHost() + sResultURL;
+                else
+                    sResultURL = aURL.getProtocol() + "://" + aURL.getHost() + aURL.getPath() + sResultURL;
             }
+        }
+        catch ( MalformedURLException ex )
+        {
+            ex.printStackTrace();
         }
 
         return sResultURL;

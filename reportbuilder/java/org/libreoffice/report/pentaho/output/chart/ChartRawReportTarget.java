@@ -143,37 +143,37 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
             return;
         }
         final String namespace = ReportTargetUtil.getNamespaceFromAttribute(attrs);
-        if (!isFilteredNamespace(namespace))
+        if (isFilteredNamespace(namespace))
+            return;
+
+        final String elementType = ReportTargetUtil.getElemenTypeFromAttribute(attrs);
+        // if this is the report namespace, write out a table definition ..
+        if (OfficeNamespaces.TABLE_NS.equals(namespace))
         {
-            final String elementType = ReportTargetUtil.getElemenTypeFromAttribute(attrs);
-            // if this is the report namespace, write out a table definition ..
-            if (OfficeNamespaces.TABLE_NS.equals(namespace))
+            if (OfficeToken.TABLE.equals(elementType) || OfficeToken.TABLE_ROWS.equals(elementType))
             {
-                if (OfficeToken.TABLE.equals(elementType) || OfficeToken.TABLE_ROWS.equals(elementType))
+                return;
+            }
+            else if (isFiltered(elementType))
+            {
+                inFilterElements = false;
+                if (tableCount > 1)
                 {
                     return;
                 }
-                else if (isFiltered(elementType))
-                {
-                    inFilterElements = false;
-                    if (tableCount > 1)
-                    {
-                        return;
-                    }
-                }
             }
-            else if (OfficeNamespaces.CHART_NS.equals(namespace) && "chart".equals(elementType))
-            {
-                return;
-            }
-            if (inFilterElements && tableCount > 1)
-            {
-                return;
-            }
-            final XmlWriter xmlWriter = getXmlWriter();
-            xmlWriter.writeCloseTag();
-            --closeTags;
         }
+        else if (OfficeNamespaces.CHART_NS.equals(namespace) && "chart".equals(elementType))
+        {
+            return;
+        }
+        if (inFilterElements && tableCount > 1)
+        {
+            return;
+        }
+        final XmlWriter xmlWriter = getXmlWriter();
+        xmlWriter.writeCloseTag();
+        --closeTags;
     }
 
     @Override

@@ -76,22 +76,23 @@ public class TestParameters extends HashMap<String,Object> {
      * @return The value of this key, cast to a boolean type.
      */
     public boolean getBool(Object key) {
-        Object val = super.get(key);
-        if (val != null) {
-            if (val instanceof String) {
-                String sVal = (String)val;
-                if (sVal.equalsIgnoreCase("true") ||
-                                                sVal.equalsIgnoreCase("yes")) {
-                    return true;
-                }
-                else if (sVal.equalsIgnoreCase("false") ||
-                                                sVal.equalsIgnoreCase("no")) {
-                    return false;
-                }
-            }
-            if (val instanceof Boolean)
-                return ((Boolean)val).booleanValue();
+        final Object val = super.get(key);
+        if (val == null) {
+            return false;
         }
+        if (val instanceof String) {
+            String sVal = (String)val;
+            if (sVal.equalsIgnoreCase("true") ||
+                                            sVal.equalsIgnoreCase("yes")) {
+                return true;
+            }
+            else if (sVal.equalsIgnoreCase("false") ||
+                                            sVal.equalsIgnoreCase("no")) {
+                return false;
+            }
+        }
+        else if (val instanceof Boolean)
+            return ((Boolean)val).booleanValue();
         return false;
     }
 

@@ -352,27 +352,29 @@ public class InterfaceContainer implements Cloneable
      */
     synchronized public int indexOf(Object elem)
     {
+        if (elementData == null || elem == null) {
+            return -1;
+        }
+
         int index= -1;
-        if (elementData != null && elem != null)
+
+        for (int i = 0; i < size; i++)
+        {
+            if (elem == elementData[i])
+            {
+                index= i;
+                break;
+            }
+        }
+
+        if (index == -1)
         {
             for (int i = 0; i < size; i++)
             {
-                if (elem == elementData[i])
+                if (UnoRuntime.areSame(elem, elementData[i]))
                 {
                     index= i;
                     break;
-                }
-            }
-
-            if (index == -1)
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    if (UnoRuntime.areSame(elem, elementData[i]))
-                    {
-                        index= i;
-                        break;
-                    }
                 }
             }
         }
@@ -408,26 +410,28 @@ public class InterfaceContainer implements Cloneable
      */
     synchronized public int lastIndexOf(Object elem)
     {
+        if (elementData == null || elem == null) {
+            return -1;
+        }
+
         int index= -1;
-        if (elementData != null && elem != null)
+
+        for (int i = size-1; i >= 0; i--)
+        {
+            if (elem == elementData[i])
+            {
+                index= i;
+                break;
+            }
+        }
+        if (index == -1)
         {
             for (int i = size-1; i >= 0; i--)
             {
-                if (elem == elementData[i])
+                if (UnoRuntime.areSame(elem, elementData[i]))
                 {
                     index= i;
                     break;
-                }
-            }
-            if (index == -1)
-            {
-                for (int i = size-1; i >= 0; i--)
-                {
-                    if (UnoRuntime.areSame(elem, elementData[i]))
-                    {
-                        index= i;
-                        break;
-                    }
                 }
             }
         }
@@ -535,52 +539,53 @@ public class InterfaceContainer implements Cloneable
 
     synchronized public boolean retainAll(Collection collection)
     {
+        if (elementData == null || collection == null) {
+            return false;
+        }
+
         boolean retVal= false;
-        if (elementData != null && collection != null)
+        // iterate over data
+        Object[] arRetained= new Object[size];
+        int indexRetained= 0;
+        for(int i= 0; i < size; i++)
         {
-            // iterate over data
-            Object[] arRetained= new Object[size];
-            int indexRetained= 0;
-            for(int i= 0; i < size; i++)
+            Object curElem= elementData[i];
+            // try to find the element in collection
+            Iterator itColl= collection.iterator();
+            boolean bExists= false;
+            while (itColl.hasNext())
             {
-                Object curElem= elementData[i];
-                // try to find the element in collection
-                Iterator itColl= collection.iterator();
-                boolean bExists= false;
+                if (curElem == itColl.next())
+                {
+                    // current element is in collection
+                    bExists= true;
+                    break;
+                }
+            }
+            if (!bExists)
+            {
+                itColl= collection.iterator();
                 while (itColl.hasNext())
                 {
-                    if (curElem == itColl.next())
+                    Object o= itColl.next();
+                    if (o != null)
                     {
-                        // current element is in collection
-                        bExists= true;
-                        break;
-                    }
-                }
-                if (!bExists)
-                {
-                    itColl= collection.iterator();
-                    while (itColl.hasNext())
-                    {
-                        Object o= itColl.next();
-                        if (o != null)
+                        if (UnoRuntime.areSame(o, curElem))
                         {
-                            if (UnoRuntime.areSame(o, curElem))
-                            {
-                                bExists= true;
-                                break;
-                            }
+                            bExists= true;
+                            break;
                         }
                     }
                 }
-                if (bExists)
-                    arRetained[indexRetained++]= curElem;
             }
-            retVal= size != indexRetained;
-            if (indexRetained > 0)
-            {
-                elementData= arRetained;
-                size= indexRetained;
-            }
+            if (bExists)
+                arRetained[indexRetained++]= curElem;
+        }
+        retVal= size != indexRetained;
+        if (indexRetained > 0)
+        {
+            elementData= arRetained;
+            size= indexRetained;
         }
         return retVal;
     }

@@ -84,49 +84,49 @@ public class JavaLoader implements XImplementationLoader,
      */
     private String expand_url( String url ) throws RuntimeException
     {
-        if (url != null && url.startsWith( EXPAND_PROTOCOL_PREFIX )) {
-            try {
-                if (m_xMacroExpander == null) {
-                    XPropertySet xProps =
-                        UnoRuntime.queryInterface(
-                            XPropertySet.class, multiServiceFactory );
-                    if (xProps == null) {
-                        throw new com.sun.star.uno.RuntimeException(
-                            "service manager does not support XPropertySet!",
-                            this );
-                    }
-                    XComponentContext xContext = (XComponentContext)
-                        AnyConverter.toObject(
-                            new Type( XComponentContext.class ),
-                            xProps.getPropertyValue( "DefaultContext" ) );
-                    m_xMacroExpander = (XMacroExpander)AnyConverter.toObject(
-                        new Type( XMacroExpander.class ),
-                        xContext.getValueByName(
-                            "/singletons/com.sun.star.util.theMacroExpander" )
-                        );
-                }
-                // decode uric class chars
-                String macro = URLDecoder.decode(
-                    StringHelper.replace(
-                        url.substring( EXPAND_PROTOCOL_PREFIX.length() ),
-                        '+', "%2B" ), "UTF-8" );
-                // expand macro string
-                String ret = m_xMacroExpander.expandMacros( macro );
-                if (DEBUG) {
-                    System.err.println(
-                        "JavaLoader.expand_url(): " + url + " => " +
-                        macro + " => " + ret );
-                }
-                return ret;
-            } catch (com.sun.star.uno.Exception exc) {
-                throw new com.sun.star.uno.RuntimeException(
-                    exc.getMessage(), this );
-            } catch (java.lang.Exception exc) {
-                throw new com.sun.star.uno.RuntimeException(
-                    exc.getMessage(), this );
-            }
+        if (url == null || !url.startsWith( EXPAND_PROTOCOL_PREFIX )) {
+            return url;
         }
-        return url;
+        try {
+            if (m_xMacroExpander == null) {
+                XPropertySet xProps =
+                    UnoRuntime.queryInterface(
+                        XPropertySet.class, multiServiceFactory );
+                if (xProps == null) {
+                    throw new com.sun.star.uno.RuntimeException(
+                        "service manager does not support XPropertySet!",
+                        this );
+                }
+                XComponentContext xContext = (XComponentContext)
+                    AnyConverter.toObject(
+                        new Type( XComponentContext.class ),
+                        xProps.getPropertyValue( "DefaultContext" ) );
+                m_xMacroExpander = (XMacroExpander)AnyConverter.toObject(
+                    new Type( XMacroExpander.class ),
+                    xContext.getValueByName(
+                        "/singletons/com.sun.star.util.theMacroExpander" )
+                    );
+            }
+            // decode uric class chars
+            String macro = URLDecoder.decode(
+                StringHelper.replace(
+                    url.substring( EXPAND_PROTOCOL_PREFIX.length() ),
+                    '+', "%2B" ), "UTF-8" );
+            // expand macro string
+            String ret = m_xMacroExpander.expandMacros( macro );
+            if (DEBUG) {
+                System.err.println(
+                    "JavaLoader.expand_url(): " + url + " => " +
+                    macro + " => " + ret );
+            }
+            return ret;
+        } catch (com.sun.star.uno.Exception exc) {
+            throw new com.sun.star.uno.RuntimeException(
+                exc.getMessage(), this );
+        } catch (java.lang.Exception exc) {
+            throw new com.sun.star.uno.RuntimeException(
+                exc.getMessage(), this );
+        }
     }
 
     /**

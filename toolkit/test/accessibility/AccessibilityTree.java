@@ -243,53 +243,53 @@ public class AccessibilityTree
         public boolean popupTrigger( MouseEvent e )
         {
             boolean bIsPopup = e.isPopupTrigger();
-            if( bIsPopup )
+            if( !bIsPopup )
+                return false;
+
+            int selRow = maTree.getComponent().getRowForLocation(e.getX(), e.getY());
+            if (selRow == -1)
+                return bIsPopup;
+
+            TreePath aPath = maTree.getComponent().getPathForLocation(e.getX(), e.getY());
+
+            // check for actions
+            Object aObject = aPath.getLastPathComponent();
+            JPopupMenu aMenu = new JPopupMenu();
+            if( aObject instanceof AccTreeNode )
             {
-                int selRow = maTree.getComponent().getRowForLocation(e.getX(), e.getY());
-                if (selRow != -1)
+                AccTreeNode aNode = (AccTreeNode)aObject;
+
+                ArrayList<String> aActions = new ArrayList<String>();
+                aMenu.add (new AccessibilityTree.ShapeExpandAction(maTree, aNode));
+                aMenu.add (new AccessibilityTree.SubtreeExpandAction(maTree, aNode));
+
+                aNode.getActions(aActions);
+                for( int i = 0; i < aActions.size(); i++ )
                 {
-                    TreePath aPath = maTree.getComponent().getPathForLocation(e.getX(), e.getY());
-
-                    // check for actions
-                    Object aObject = aPath.getLastPathComponent();
-                    JPopupMenu aMenu = new JPopupMenu();
-                    if( aObject instanceof AccTreeNode )
-                    {
-                        AccTreeNode aNode = (AccTreeNode)aObject;
-
-                        ArrayList<String> aActions = new ArrayList<String>();
-                        aMenu.add (new AccessibilityTree.ShapeExpandAction(maTree, aNode));
-                        aMenu.add (new AccessibilityTree.SubtreeExpandAction(maTree, aNode));
-
-                        aNode.getActions(aActions);
-                        for( int i = 0; i < aActions.size(); i++ )
-                        {
-                            aMenu.add( new NodeAction(
-                                           aActions.get(i),
-                                           aNode, i ) );
-                        }
-                    }
-                    else if (aObject instanceof AccessibleTreeNode)
-                    {
-                        AccessibleTreeNode aNode = (AccessibleTreeNode)aObject;
-                        String[] aActionNames = aNode.getActions();
-                        int nCount=aActionNames.length;
-                        if (nCount > 0)
-                        {
-                            for (int i=0; i<nCount; i++)
-                                aMenu.add( new NodeAction(
-                                    aActionNames[i],
-                                    aNode,
-                                    i));
-                        }
-                        else
-                            aMenu = null;
-                    }
-                    if (aMenu != null)
-                        aMenu.show (maTree.getComponent(),
-                            e.getX(), e.getY());
+                    aMenu.add( new NodeAction(
+                                   aActions.get(i),
+                                   aNode, i ) );
                 }
             }
+            else if (aObject instanceof AccessibleTreeNode)
+            {
+                AccessibleTreeNode aNode = (AccessibleTreeNode)aObject;
+                String[] aActionNames = aNode.getActions();
+                int nCount=aActionNames.length;
+                if (nCount > 0)
+                {
+                    for (int i=0; i<nCount; i++)
+                        aMenu.add( new NodeAction(
+                            aActionNames[i],
+                            aNode,
+                            i));
+                }
+                else
+                    aMenu = null;
+            }
+            if (aMenu != null)
+                aMenu.show (maTree.getComponent(),
+                    e.getX(), e.getY());
 
             return bIsPopup;
         }

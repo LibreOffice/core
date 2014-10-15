@@ -82,48 +82,48 @@ public class CommandName
     {
         try
         {
-            if (this.setMetaDataAttributes())
-            {
-                this.DisplayName = _DisplayName;
-                int iIndex;
-                if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation())
-                { // ...dann Catalog mit in TableName
-                    iIndex = _DisplayName.indexOf(sCatalogSep);
-                    if (iIndex >= 0)
-                    {
-                        if (bCatalogAtStart)
-                        {
-                            CatalogName = _DisplayName.substring(0, iIndex);
-                            _DisplayName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
-                        }
-                        else
-                        {
-                            CatalogName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
-                            _DisplayName = _DisplayName.substring(0, iIndex);
-                        }
-                    }
-                }
-                if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation())
+            if (!setMetaDataAttributes())
+                return;
+
+            this.DisplayName = _DisplayName;
+            int iIndex;
+            if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation())
+            { // ...dann Catalog mit in TableName
+                iIndex = _DisplayName.indexOf(sCatalogSep);
+                if (iIndex >= 0)
                 {
-                    String[] NameList;
-                    NameList = new String[0];
-                    NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
-                    if (NameList.length > 1)
+                    if (bCatalogAtStart)
                     {
-                        SchemaName = NameList[0];
-                        TableName = NameList[1];
+                        CatalogName = _DisplayName.substring(0, iIndex);
+                        _DisplayName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
                     }
                     else
                     {
-                        TableName = _DisplayName;
+                        CatalogName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
+                        _DisplayName = _DisplayName.substring(0, iIndex);
                     }
+                }
+            }
+            if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation())
+            {
+                String[] NameList;
+                NameList = new String[0];
+                NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
+                if (NameList.length > 1)
+                {
+                    SchemaName = NameList[0];
+                    TableName = NameList[1];
                 }
                 else
                 {
                     TableName = _DisplayName;
                 }
-                setComposedCommandName();
             }
+            else
+            {
+                TableName = _DisplayName;
+            }
+            setComposedCommandName();
         }
         catch (Exception exception)
         {

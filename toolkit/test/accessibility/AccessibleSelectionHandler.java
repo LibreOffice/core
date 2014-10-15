@@ -51,71 +51,70 @@ class AccessibleSelectionHandler
     public AccessibleTreeNode createChild( AccessibleTreeNode aParent,
                                            int nIndex )
     {
+        if( !(aParent instanceof AccTreeNode) )
+            return null;
+
+        XAccessibleSelection xSelection = ((AccTreeNode)aParent).getSelection();
+        if( xSelection == null )
+            return null;
+
         AccessibleTreeNode aChild = null;
 
-        if( aParent instanceof AccTreeNode )
+        switch( nIndex )
         {
-            XAccessibleSelection xSelection =
-                ((AccTreeNode)aParent).getSelection();
-            if( xSelection != null )
+            case 0:
+                aChild = new StringNode(
+                    "getSelectedAccessibleChildCount: " +
+                    xSelection.getSelectedAccessibleChildCount(),
+                    aParent );
+                break;
+            case 1:
             {
-                switch( nIndex )
+                VectorNode aVNode =
+                    new VectorNode( "Selected Children", aParent);
+                int nSelected = 0;
+                int nCount = ((AccTreeNode)aParent).getContext().
+                    getAccessibleChildCount();
+                try
                 {
-                    case 0:
-                        aChild = new StringNode(
-                            "getSelectedAccessibleChildCount: " +
-                            xSelection.getSelectedAccessibleChildCount(),
-                            aParent );
-                        break;
-                    case 1:
+                    for( int i = 0; i < nCount; i++ )
                     {
-                        VectorNode aVNode =
-                            new VectorNode( "Selected Children", aParent);
-                        int nSelected = 0;
-                        int nCount = ((AccTreeNode)aParent).getContext().
-                            getAccessibleChildCount();
                         try
                         {
-                            for( int i = 0; i < nCount; i++ )
+                            if( xSelection.isAccessibleChildSelected( i ) )
                             {
-                                try
-                                {
-                                    if( xSelection.isAccessibleChildSelected( i ) )
-                                    {
-                                        XAccessible xSelChild = xSelection.
-                                            getSelectedAccessibleChild(nSelected);
-                                        XAccessible xNChild =
-                                            ((AccTreeNode)aParent).
-                                            getContext().getAccessibleChild( i );
-                                        aVNode.addChild( new StringNode(
-                                            i + ": " +
-                                            xNChild.getAccessibleContext().
-                                            getAccessibleDescription() + " (" +
-                                            (xSelChild.equals(xNChild) ? "OK" : "XXX") +
-                                            ")", aParent ) );
-                                    }
-                                }
-                                catch (com.sun.star.lang.DisposedException e)
-                                {
-                                    aVNode.addChild( new StringNode(
-                                        i + ": caught DisposedException while creating",
-                                        aParent ));
-                                }
+                                XAccessible xSelChild = xSelection.
+                                    getSelectedAccessibleChild(nSelected);
+                                XAccessible xNChild =
+                                    ((AccTreeNode)aParent).
+                                    getContext().getAccessibleChild( i );
+                                aVNode.addChild( new StringNode(
+                                    i + ": " +
+                                    xNChild.getAccessibleContext().
+                                    getAccessibleDescription() + " (" +
+                                    (xSelChild.equals(xNChild) ? "OK" : "XXX") +
+                                    ")", aParent ) );
                             }
-                            aChild = aVNode;
                         }
-                        catch( IndexOutOfBoundsException e )
+                        catch (com.sun.star.lang.DisposedException e)
                         {
-                            aChild = new StringNode( "IndexOutOfBounds",
-                                                     aParent );
+                            aVNode.addChild( new StringNode(
+                                i + ": caught DisposedException while creating",
+                                aParent ));
                         }
                     }
-                    break;
-                    default:
-                        aChild = new StringNode( "ERROR", aParent );
-                        break;
+                    aChild = aVNode;
+                }
+                catch( IndexOutOfBoundsException e )
+                {
+                    aChild = new StringNode( "IndexOutOfBounds",
+                                             aParent );
                 }
             }
+            break;
+            default:
+                aChild = new StringNode( "ERROR", aParent );
+                break;
         }
 
         return aChild;

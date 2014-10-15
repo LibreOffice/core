@@ -89,32 +89,33 @@ public final class NativeLibraryLoader {
         // (scheme://auth/dir1/name).  The second step is important in a typical
         // OOo installation, where the JAR files are in the program/classes
         // directory while the shared libraries are in the program directory.
-        if (loader instanceof URLClassLoader) {
-            URL[] urls = ((URLClassLoader) loader).getURLs();
-            for (int i = 0; i < urls.length; ++i) {
-                File path = UrlToFileMapper.mapUrlToFile(urls[i]);
-                if (path != null) {
-                    File dir = path.isDirectory() ? path : path.getParentFile();
+        if (!(loader instanceof URLClassLoader)) {
+            return null;
+        }
+        URL[] urls = ((URLClassLoader) loader).getURLs();
+        for (int i = 0; i < urls.length; ++i) {
+            File path = UrlToFileMapper.mapUrlToFile(urls[i]);
+            if (path != null) {
+                File dir = path.isDirectory() ? path : path.getParentFile();
+                if (dir != null) {
+                    path = new File(dir, name);
+                    if (path.exists()) {
+                        return path;
+                    }
+                    dir = dir.getParentFile();
                     if (dir != null) {
                         path = new File(dir, name);
                         if (path.exists()) {
                             return path;
                         }
-                        dir = dir.getParentFile();
-                        if (dir != null) {
-                            path = new File(dir, name);
+                        // On OS X, dir is now the Resources dir,
+                        // we want to look in Frameworks
+                        if (System.getProperty("os.name").startsWith("Mac")
+                            && dir.getName().equals("Resources")) {
+                            dir = dir.getParentFile();
+                            path = new File(dir, "Frameworks/" + name);
                             if (path.exists()) {
                                 return path;
-                            }
-                            // On OS X, dir is now the Resources dir,
-                            // we want to look in Frameworks
-                            if (System.getProperty("os.name").startsWith("Mac")
-                                && dir.getName().equals("Resources")) {
-                                dir = dir.getParentFile();
-                                path = new File(dir, "Frameworks/" + name);
-                                if (path.exists()) {
-                                    return path;
-                                }
                             }
                         }
                     }

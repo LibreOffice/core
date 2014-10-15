@@ -151,28 +151,20 @@ public final class Record {
      */
     @Override
     public boolean equals(Object obj) {
-
-        boolean bool = false;
-
-        if (obj instanceof Record) {
-
-            Record rec = (Record) obj;
-
-            checkLabel: {
-
-                if (rec.getAttributes() != attributes) {
-                    break checkLabel;
-                }
-                if (rec.getSize() == data.length) {
-                    for (int i = 0; i < data.length; i++) {
-                        if (data[i] != rec.data[i]) {
-                            break checkLabel;
-                        }
-                    }
-                    bool = true;
+        if (!(obj instanceof Record)) {
+            return false;
+        }
+        Record rec = (Record) obj;
+        if (rec.getAttributes() != attributes) {
+            return false;
+        }
+        if (rec.getSize() == data.length) {
+            for (int i = 0; i < data.length; i++) {
+                if (data[i] != rec.data[i]) {
+                    return false;
                 }
             }
         }
-        return bool;
+        return false;
     }
 }

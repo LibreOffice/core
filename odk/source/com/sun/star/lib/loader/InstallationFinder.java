@@ -80,41 +80,46 @@ final class InstallationFinder {
         // com.sun.star.lib.loader.unopath
         // (all platforms)
         path = getPathFromProperty( SYSPROP_NAME );
-        if ( path == null ) {
-            // get the installation path from the UNO_PATH environment variable
-            // (all platforms, not working for Java 1.3.1 and Java 1.4)
-            path = getPathFromEnvVar( ENVVAR_NAME );
+        if ( path != null ) {
+            return path;
+        }
+        // get the installation path from the UNO_PATH environment variable
+        // (all platforms, not working for Java 1.3.1 and Java 1.4)
+        path = getPathFromEnvVar( ENVVAR_NAME );
+        if ( path != null ) {
+            return path;
+        }
+
+        String osname = null;
+        try {
+            osname = System.getProperty( "os.name" );
+        } catch ( SecurityException e ) {
+            // if a SecurityException was thrown,
+            // return <code>null</code>
+            return null;
+        }
+        if ( osname == null ) {
+            return null;
+        }
+
+        if ( osname.startsWith( "Windows" ) ) {
+            // get the installation path from the Windows Registry
+            // (Windows platform only)
+            path = getPathFromWindowsRegistry();
+        } else {
+            // get the installation path from the PATH environment
+            // variable (Unix/Linux platforms only, not working for
+            // Java 1.3.1 and Java 1.4)
+            path = getPathFromPathEnvVar();
             if ( path == null ) {
-                String osname = null;
-                try {
-                    osname = System.getProperty( "os.name" );
-                } catch ( SecurityException e ) {
-                    // if a SecurityException was thrown,
-                    // return <code>null</code>
-                    return null;
-                }
-                if ( osname != null ) {
-                    if ( osname.startsWith( "Windows" ) ) {
-                        // get the installation path from the Windows Registry
-                        // (Windows platform only)
-                        path = getPathFromWindowsRegistry();
-                    } else {
-                        // get the installation path from the PATH environment
-                        // variable (Unix/Linux platforms only, not working for
-                        // Java 1.3.1 and Java 1.4)
-                        path = getPathFromPathEnvVar();
-                        if ( path == null ) {
-                            // get the installation path from the 'which'
-                            // command (Unix/Linux platforms only)
-                            path = getPathFromWhich();
-                            if ( path == null ) {
-                                // get the installation path from the
-                                // .sversionrc file (Unix/Linux platforms only,
-                                // for older versions than OOo 2.0)
-                                path = getPathFromSVersionFile();
-                            }
-                        }
-                    }
+                // get the installation path from the 'which'
+                // command (Unix/Linux platforms only)
+                path = getPathFromWhich();
+                if ( path == null ) {
+                    // get the installation path from the
+                    // .sversionrc file (Unix/Linux platforms only,
+                    // for older versions than OOo 2.0)
+                    path = getPathFromSVersionFile();
                 }
             }
         }
