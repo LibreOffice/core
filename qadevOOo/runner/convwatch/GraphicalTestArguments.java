@@ -218,7 +218,7 @@ public class GraphicalTestArguments
                 // m_tWithBorderMove = TriState.UNSET;
                 m_tWithBorderMove = TriState.FALSE;
             }
-            if (sWithBorderMove.equalsIgnoreCase("yes") ||
+            else if (sWithBorderMove.equalsIgnoreCase("yes") ||
                 sWithBorderMove.equalsIgnoreCase("true"))
             {
                 m_tWithBorderMove = TriState.TRUE;
