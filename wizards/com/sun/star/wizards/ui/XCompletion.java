@@ -20,11 +20,11 @@ package com.sun.star.wizards.ui;
 public interface XCompletion
 {
 
-    public void setcompleted(int _ndialogpage, boolean _biscompleted);
+    void setcompleted(int _ndialogpage, boolean _biscompleted);
 
-    public boolean iscompleted(int _ndialogpage);
+    boolean iscompleted(int _ndialogpage);
 
-    public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue);
+    void setmodified(int _ndialogpage, Object ooldValue, Object onewValue);
 
-    public boolean ismodified(int _ndialogpage);
+    boolean ismodified(int _ndialogpage);
 }

@@ -790,14 +790,14 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 };
     }
 
-    public static interface IImageRenderer extends IRenderer
+    public interface IImageRenderer extends IRenderer
     {
 
         /**
          * @return two resource ids for an image referenced in the imaglist resourcefile of the
          *         wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
-        public Object[] getImageUrls(Object listItem);
+        Object[] getImageUrls(Object listItem);
     }
 
     private static class SimpleCounterRenderer implements IRenderer

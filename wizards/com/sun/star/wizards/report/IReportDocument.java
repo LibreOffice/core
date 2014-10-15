@@ -33,7 +33,7 @@ public interface IReportDocument
 
     // initialisation
 
-    public void initialize(
+    void initialize(
             final XDatabaseDocumentUI i_documentUI,
             final Resource i_resource
         );
@@ -44,22 +44,22 @@ public interface IReportDocument
     /**
      * Gives access to the DB Values
      */
-    public com.sun.star.wizards.db.RecordParser getRecordParser();
+    com.sun.star.wizards.db.RecordParser getRecordParser();
 
     /**
      * Give access to the parent document
      * It is a document in the old Wizard
      * It is a Report Builder in the new Wizard
      */
-    public com.sun.star.awt.XWindowPeer getWizardParent();
+    com.sun.star.awt.XWindowPeer getWizardParent();
 
     /**
      *
      * @return the Frame of the document Window or Report Builder Window
      */
-    public com.sun.star.frame.XFrame getFrame();
+    com.sun.star.frame.XFrame getFrame();
 
-    public XComponent getComponent();
+    XComponent getComponent();
 
 
     // First step: After entering the table name, select fields
@@ -67,17 +67,17 @@ public interface IReportDocument
     /**
      * Is called after first step, set Tablename and the fields, which should occur in the Report.
      */
-    public void initializeFieldColumns(final int _aType, final String TableName, final String[] FieldNames);
+    void initializeFieldColumns(final int _aType, final String TableName, final String[] FieldNames);
 
     /**
      * Empties the report document
      */
-    public void clearDocument();
+    void clearDocument();
 
     /**
      * Empties the report document, if we called back, don't remove Grouping/Sorting
      */
-    public void removeTextTableAndTextSection();
+    void removeTextTableAndTextSection();
 
 
     // Second step: Label field titles
@@ -85,7 +85,7 @@ public interface IReportDocument
     /**
      * Set new names for the titles
      */
-    public void setFieldTitles(final String[] sFieldTitles);
+    void setFieldTitles(final String[] sFieldTitles);
 
     /**
      * Change a the name of the 'title' of one field.
@@ -93,7 +93,7 @@ public interface IReportDocument
      * element title of a given element name.
      * This is only used as a preview
      */
-    public void liveupdate_changeUserFieldContent(final String FieldName, final String TitleName);
+    void liveupdate_changeUserFieldContent(final String FieldName, final String TitleName);
 
     // Third step: Grouping
 
@@ -102,52 +102,52 @@ public interface IReportDocument
     /**
      * Called by press ('greater then') add a group to the group list
      */
-    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount);
+    boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount);
 
-    public void refreshGroupFields(String[] _sNewNames);
+    void refreshGroupFields(String[] _sNewNames);
     /**
      * Called by press ('less then') Removes an already set Groupname out of the list
      */
-    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, java.util.ArrayList<String> GroupFieldVector);
+    void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, java.util.ArrayList<String> GroupFieldVector);
 
     /**
      * set the list how to group
      */
-    public void setGrouping(String[] aGroupList);
+    void setGrouping(String[] aGroupList);
 
     // Fourth step: Sorting
 
     /**
      * Set the list how to sort
      */
-    public void setSorting(String[][] aSort);
+    void setSorting(String[][] aSort);
 
     // Fivth step: Templates / Layout
 
     /* Template Page */
-    public void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException;
+    void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException;
 
-    public int getDefaultPageOrientation();
+    int getDefaultPageOrientation();
 
-    public ArrayList<String> getReportPath();
+    ArrayList<String> getReportPath();
 
-    public String getLayoutPath();
+    String getLayoutPath();
 
-    public String getContentPath();
+    String getContentPath();
 
     /**
      * Called if a new Layout is selected
      */
-    public void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/);
+    void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/);
 
     /**
      * Called if a new Template is selected
      */
-    public void liveupdate_changeContentTemplate(String ContentTemplatePath);
+    void liveupdate_changeContentTemplate(String ContentTemplatePath);
 
-    public void layout_selectFirstPage();
+    void layout_selectFirstPage();
 
-    public void layout_setupRecordSection(String TemplateName);
+    void layout_setupRecordSection(String TemplateName);
 
     // finishing
 
@@ -157,63 +157,63 @@ public interface IReportDocument
      * Set the Title into the document from the 'Create Report Page'
      * BUG: The Title is empty after create Report.
      */
-    public void liveupdate_updateReportTitle(String _sTitleName);
+    void liveupdate_updateReportTitle(String _sTitleName);
 
     /**
      * Store the document by the given name
      */
-    public void store(String Name, int OpenMode) throws com.sun.star.uno.Exception;
+    void store(String Name, int OpenMode) throws com.sun.star.uno.Exception;
 
     /**
      * The current report is added to the DB View under the given name
      *
      * TODO: add Name to this functionality
      */
-    public void addReportToDBView();
+    void addReportToDBView();
 
-    public void importReportData(ReportWizard aWizard);
+    void importReportData(ReportWizard aWizard);
 
     /**
      * Create the final Report document
      */
-    public void createAndOpenReportDocument(
+    void createAndOpenReportDocument(
         final String Name,
         final boolean _bAsTemplate,
         final boolean _bOpenInDesign
     );
 
-    public void dispose();
+    void dispose();
 
     // Garbage dump
 
     /* DataImport */
     // ???
     // ???
-    public boolean reconnectToDatabase(XMultiServiceFactory xMSF, PropertyValue[] Properties);
+    boolean reconnectToDatabase(XMultiServiceFactory xMSF, PropertyValue[] Properties);
     // ???
-    public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF);
+    void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF);
     // ???
     /**
      * set a internal variable to stop a maybe longer DB access.
      */
-    public void StopProcess(); // cancel
+    void StopProcess(); // cancel
 
     /**
      * Returns a string list of layouts.
      */
-    public String[][] getDataLayout();
+    String[][] getDataLayout();
 
     /**
      * Returns a string list of header layouts
      */
-    public String[][] getHeaderLayout();
+    String[][] getHeaderLayout();
 
-    public void setCommandType(int CommandType);
+    void setCommandType(int CommandType);
 
-    public void setCommand(String Command);
+    void setCommand(String Command);
 
     /**
      * check internal invariants
      */
-    public void checkInvariants() throws java.lang.Exception;
+    void checkInvariants() throws java.lang.Exception;
 }

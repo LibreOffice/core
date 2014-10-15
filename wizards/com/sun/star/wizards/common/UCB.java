@@ -240,9 +240,8 @@ public class UCB
           XContentProvider.class,ucb).queryContent(id);
     }
 
-    public static interface Verifier
+    public interface Verifier
     {
-
-        public boolean verify(Object object);
+        boolean verify(Object object);
     }
 }

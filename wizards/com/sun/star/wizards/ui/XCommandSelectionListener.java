@@ -20,5 +20,5 @@ package com.sun.star.wizards.ui;
 
 public interface XCommandSelectionListener
 {
-    public void CommandSelected(String CommandName);
+    void CommandSelected(String CommandName);
 }
