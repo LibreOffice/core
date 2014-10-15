@@ -4173,16 +4173,16 @@ void WW8RStyle::ImportOldFormatStyles()
     rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(
         pIo->pWwFib->chseTables);
 
-    sal_uInt16 cstcStd;
+    sal_uInt16 cstcStd(0);
     rSt.ReadUInt16( cstcStd );
 
-    sal_uInt16 cbName;
+    sal_uInt16 cbName(0);
     rSt.ReadUInt16( cbName );
     sal_uInt16 nByteCount = 2;
     sal_uInt16 stcp=0;
     while (nByteCount < cbName)
     {
-        sal_uInt8 nCount;
+        sal_uInt8 nCount(0);
         rSt.ReadUChar( nCount );
         nByteCount++;
 
@@ -4226,14 +4226,14 @@ void WW8RStyle::ImportOldFormatStyles()
     sal_uInt16 nStyles=stcp;
 
     std::vector<pxoffset> aCHPXOffsets(stcp);
-    sal_uInt16 cbChpx;
+    sal_uInt16 cbChpx(0);
     rSt.ReadUInt16( cbChpx );
     nByteCount = 2;
     stcp=0;
     std::vector< std::vector<sal_uInt8> > aConvertedChpx;
     while (nByteCount < cbChpx)
     {
-        sal_uInt8 cb;
+        sal_uInt8 cb(0);
         rSt.ReadUChar( cb );
         nByteCount++;
 
@@ -4257,20 +4257,20 @@ void WW8RStyle::ImportOldFormatStyles()
 
         stcp++;
         if (stcp == nStyles)
-    {
+        {
             rSt.SeekRel(cbChpx-nByteCount);
             nByteCount += cbChpx-nByteCount;
-    }
+        }
     }
 
     std::vector<pxoffset> aPAPXOffsets(stcp);
-    sal_uInt16 cbPapx;
+    sal_uInt16 cbPapx(0);
     rSt.ReadUInt16( cbPapx );
     nByteCount = 2;
     stcp=0;
     while (nByteCount < cbPapx)
     {
-        sal_uInt8 cb;
+        sal_uInt8 cb(0);
         rSt.ReadUChar( cb );
         nByteCount++;
 
@@ -4278,7 +4278,7 @@ void WW8RStyle::ImportOldFormatStyles()
 
         if (cb != 0xFF)
         {
-            sal_uInt8 stc2;
+            sal_uInt8 stc2(0);
             rSt.ReadUChar( stc2 );
             rSt.SeekRel(6);
             nByteCount+=7;
@@ -4294,20 +4294,20 @@ void WW8RStyle::ImportOldFormatStyles()
         stcp++;
 
         if (stcp == nStyles)
-    {
+        {
             rSt.SeekRel(cbPapx-nByteCount);
             nByteCount += cbPapx-nByteCount;
-    }
+        }
     }
 
-    sal_uInt16 iMac;
+    sal_uInt16 iMac(0);
     rSt.ReadUInt16( iMac );
 
     if (iMac > nStyles) iMac = nStyles;
 
     for (stcp = 0; stcp < iMac; ++stcp)
     {
-        sal_uInt8 stcNext, stcBase;
+        sal_uInt8 stcNext(0), stcBase(0);
         rSt.ReadUChar( stcNext );
         rSt.ReadUChar( stcBase );
 
