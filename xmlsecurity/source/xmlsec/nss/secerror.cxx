@@ -88,7 +88,7 @@ printChainFailure(CERTVerifyLog *log)
             switch (node->error)
             {
             case SEC_ERROR_INADEQUATE_KEY_USAGE:
-                errorFlags = (sal_uIntPtr)node->arg;
+                errorFlags = reinterpret_cast<unsigned long>(node->arg);
                 switch (errorFlags)
                 {
                 case KU_DIGITAL_SIGNATURE:
@@ -106,7 +106,7 @@ printChainFailure(CERTVerifyLog *log)
                 }
                 break;
             case SEC_ERROR_INADEQUATE_CERT_TYPE:
-                errorFlags = (sal_uIntPtr)node->arg;
+                errorFlags = reinterpret_cast<unsigned long>(node->arg);
                 switch (errorFlags)
                 {
                 case NS_CERT_TYPE_SSL_CLIENT:

@@ -720,7 +720,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
              * it is a EC
              */
             {
-                ElementCollector* pElementCollector = (ElementCollector*)pElementMark;
+                ElementCollector* pElementCollector = static_cast<ElementCollector*>(pElementMark);
 
                 cssxc::sax::ElementMarkPriority nPriority = pElementCollector->getPriority();
                 /*
@@ -1093,7 +1093,7 @@ sal_Int32 SAL_CALL SAXEventKeeperImpl::cloneElementCollector(
 {
     sal_Int32 nId = -1;
 
-    ElementCollector* pElementCollector = (ElementCollector*)findElementMarkBuffer(referenceId);
+    ElementCollector* pElementCollector = static_cast<ElementCollector*>(findElementMarkBuffer(referenceId));
     if (pElementCollector != NULL)
     {
         nId = m_nNextElementMarkId;
@@ -1137,7 +1137,7 @@ void SAL_CALL SAXEventKeeperImpl::addReferenceResolvedListener(
     const cssu::Reference< cssxc::sax::XReferenceResolvedListener >& listener )
     throw (cssu::RuntimeException, std::exception)
 {
-    ElementCollector* pElementCollector = (ElementCollector*)findElementMarkBuffer(referenceId);
+    ElementCollector* pElementCollector = static_cast<ElementCollector*>(findElementMarkBuffer(referenceId));
     if (pElementCollector != NULL)
     {
         pElementCollector->setReferenceResolvedListener(listener);

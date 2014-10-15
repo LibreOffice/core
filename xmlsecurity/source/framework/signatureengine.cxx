@@ -176,7 +176,7 @@ void SignatureEngine::clearUp( ) const
         xReferenceResolvedBroadcaster( m_xSAXEventKeeper, cssu::UNO_QUERY );
     xReferenceResolvedBroadcaster->removeReferenceResolvedListener(
         m_nIdOfTemplateEC,
-        (const cssu::Reference < cssxc::sax::XReferenceResolvedListener >)((SecurityEngine *)this));
+        static_cast<const cssu::Reference < cssxc::sax::XReferenceResolvedListener > >((SecurityEngine *)this));
 
     m_xSAXEventKeeper->removeElementCollector(m_nIdOfTemplateEC);
 
@@ -186,7 +186,7 @@ void SignatureEngine::clearUp( ) const
     {
         xReferenceResolvedBroadcaster->removeReferenceResolvedListener(
             *ii,
-            (const cssu::Reference < cssxc::sax::XReferenceResolvedListener >)((SecurityEngine *)this));
+            static_cast<const cssu::Reference < cssxc::sax::XReferenceResolvedListener > >((SecurityEngine *)this));
         m_xSAXEventKeeper->removeElementCollector(*ii);
     }
 
