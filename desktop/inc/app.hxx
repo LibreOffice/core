@@ -96,6 +96,7 @@ class Desktop : public Application
         {
             if ( m_aBootstrapError == BE_OK )
             {
+                SAL_INFO("desktop.app", "SetBootstrapError: " << nError << " '" << aMessage << "'");
                 m_aBootstrapError = nError;
                 m_aBootstrapErrorMessage = aMessage;
             }
