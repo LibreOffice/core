@@ -246,6 +246,7 @@ public:
     SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList );
     ~SeriesPlotterContainer();
 
+    void resetCoordinateSystems();
     void initializeCooSysAndSeriesPlotter( ChartModel& rModel );
     void initAxisUsageList(const Date& rNullDate);
 
@@ -371,6 +372,20 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
         }
     }
     return pVCooSys;
+}
+
+void SeriesPlotterContainer::resetCoordinateSystems()
+{
+    //delete all coordinate systems
+    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
+    ::std::swap( aVectorToDeleteObjects, m_rVCooSysList );//#i109770#
+    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
+    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
+    for( ; aIter != aEnd; ++aIter )
+    {
+        delete *aIter;
+    }
+    aVectorToDeleteObjects.clear();
 }
 
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
@@ -2543,7 +2558,6 @@ void ChartView::createShapes()
         return;
 
     m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle(0,0,0,0);
-    impl_deleteCoordinateSystems();
     if( m_pDrawModelWrapper )
     {
         SolarMutexGuard aSolarGuard;
@@ -3114,6 +3128,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         return;
 
     aParam.mpSeriesPlotterContainer.reset(new SeriesPlotterContainer(m_aVCooSysList));
+    aParam.mpSeriesPlotterContainer->resetCoordinateSystems();
     aParam.mpSeriesPlotterContainer->initializeCooSysAndSeriesPlotter( mrChartModel );
     if(maTimeBased.bTimeBased && maTimeBased.nFrame != 0)
     {
