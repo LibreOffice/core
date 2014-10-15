@@ -710,7 +710,7 @@ bool CGM::Write( SvStream& rIStm )
 
 // GraphicImport - the exported function
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL
-ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, void* pProgressBar )
+ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, css::uno::Reference<css::task::XStatusIndicator> & aXStatInd )
 {
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR
@@ -733,11 +733,8 @@ ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_u
                         sal_uInt64 const nInSize = pIn->remainingSize();
                         pIn->Seek( 0 );
 
-                        uno::Reference< task::XStatusIndicator >  aXStatInd;
                         sal_uInt32  nNext = 0;
                         sal_uInt32  nAdd = nInSize / 20;
-                        if ( pProgressBar )
-                            aXStatInd = *(uno::Reference< task::XStatusIndicator > *)pProgressBar;
                         bProgressBar = aXStatInd.is();
                         if ( bProgressBar )
                             aXStatInd->start( "CGM Import" , nInSize );
