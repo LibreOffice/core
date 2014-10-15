@@ -4340,6 +4340,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
                 rFmt.SetFmtAttr(aSet.Get(RES_BACKGROUND));
             }
         }
+        SdrObject::Free(pObject);
     }
     wwULSpaceData aULData;
     GetPageULData(rSection, aULData);
