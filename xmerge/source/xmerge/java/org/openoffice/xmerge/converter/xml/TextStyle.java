@@ -151,18 +151,17 @@ public class TextStyle extends Style implements Cloneable {
      * @return  The {@code Color} associated the value.
      */
     private Color parseColorString(String value) {
-        // Assume color value is of form #rrggbb
-        String r = value.substring(1, 3);
-        String g = value.substring(3, 5);
-        String b = value.substring(5, 7);
         int red = 0;
         int green = 0;
         int blue = 0;
         try {
-            red = Integer.parseInt(r, 16);
-            green = Integer.parseInt(g, 16);
-            blue = Integer.parseInt(b, 16);
+            // Assume color value is of form #rrggbb
+            red = Integer.parseInt(value.substring(1, 3), 16);
+            green = Integer.parseInt(value.substring(3, 5), 16);
+            blue = Integer.parseInt(value.substring(5, 7), 16);
         } catch (NumberFormatException e) {
+            Debug.log(Debug.ERROR, "Problem parsing a color string", e);
+        } catch (IndexOutOfBoundsException e) {
             Debug.log(Debug.ERROR, "Problem parsing a color string", e);
         }
         return new Color(red, green, blue);
@@ -545,18 +544,7 @@ public class TextStyle extends Style implements Cloneable {
      * @return  The {@code Color} value in the form <i>{@literal #rrggbb}</i>.
      */
     private String buildColorString(Color c) {
-        int v[] = new int[3];
-        v[0] = c.getRed();
-        v[1] = c.getGreen();
-        v[2] = c.getBlue();
-        String colorString = "#";
-        for (int i = 0; i <= 2; i++) {
-            String xx = Integer.toHexString(v[i]);
-            if (xx.length() < 2)
-        xx = "0" + xx;
-            colorString += xx;
-    }
-        return colorString;
+        return String.format("#%06X", c.getRGB() & 0x00FFFFFF);
     }
 
     private static String[] ignored = {
