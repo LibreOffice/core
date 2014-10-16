@@ -14,8 +14,8 @@ import sys
 
 def createInclude(model):
     print("""
-#ifndef OOXML_FACTORY_GENERATED_HXX
-#define OOXML_FACTORY_GENERATED_HXX
+#ifndef INCLUDED_OOXML_FACTORY_GENERATED_HXX
+#define INCLUDED_OOXML_FACTORY_GENERATED_HXX
 
 namespace writerfilter {
 namespace ooxml {
@@ -40,7 +40,7 @@ namespace ooxml {
     print("""/// @endcond
 }}
 
-#endif // OOXML_FACTORY_GENERATED_HXX""")
+#endif // INCLUDED_OOXML_FACTORY_GENERATED_HXX""")
 
 
 modelPath = sys.argv[1]
