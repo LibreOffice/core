@@ -27,101 +27,16 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-SV_IMPL_PERSIST1( SvClassElement, SvPersistBase );
+TYPEINIT1( SvClassElement, SvPersistBase );
 
 SvClassElement::SvClassElement()
 {
 };
 
-void SvClassElement::Load( SvPersistStream & rStm )
-{
-    sal_uInt8 nMask;
-    rStm.ReadUChar( nMask );
-    if( nMask >= 0x08 )
-    {
-        rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        OSL_FAIL( "wrong format" );
-        return;
-    }
-    if( nMask & 0x01 ) rStm >> aAutomation;
-    if( nMask & 0x02 ) aPrefix = read_uInt16_lenPrefixed_uInt8s_ToOString(rStm);
-    if( nMask & 0x04 )
-    {
-        SvMetaClass * p;
-        rStm >> p;
-        xClass = p;
-    }
-}
-
-void SvClassElement::Save( SvPersistStream & rStm )
-{
-    // create mask
-    sal_uInt8 nMask = 0;
-    if( aAutomation.IsSet() )       nMask |= 0x1;
-    if( !aPrefix.isEmpty() )        nMask |= 0x2;
-    if( xClass.Is() )               nMask |= 0x4;
-
-    // write data
-    rStm.WriteUChar( nMask );
-    if( nMask & 0x01 ) rStm.WriteUChar( aAutomation );
-    if( nMask & 0x02 ) write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, aPrefix);
-    if( nMask & 0x04 ) WriteSvPersistBase( rStm, xClass );
-}
-
-SV_IMPL_META_FACTORY1( SvMetaClass, SvMetaType );
+TYPEINIT1( SvMetaClass, SvMetaType );
 SvMetaClass::SvMetaClass()
     : aAutomation( true, false )
 {
-}
-
-void SvMetaClass::Load( SvPersistStream & rStm )
-{
-    SvMetaType::Load( rStm );
-
-    sal_uInt8 nMask;
-    rStm.ReadUChar( nMask );
-    if( nMask >= 0x20 )
-    {
-        rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        OSL_FAIL( "wrong format" );
-        return;
-    }
-    if( nMask & 0x01 ) rStm >> aAttrList;
-    if( nMask & 0x02 )
-    {
-        SvMetaClass * pSuper;
-         rStm >> pSuper;
-        aSuperClass = pSuper;
-    }
-    if( nMask & 0x04 ) rStm >> aClassList;
-    if( nMask & 0x8 )
-    {
-        SvMetaClass * p;
-        rStm >> p;
-        xAutomationInterface = p;
-    }
-    if( nMask & 0x10 ) rStm >> aAutomation;
-}
-
-void SvMetaClass::Save( SvPersistStream & rStm )
-{
-    SvMetaType::Save( rStm );
-
-    // create mask
-    sal_uInt8 nMask = 0;
-    if( !aAttrList.empty() )        nMask |= 0x1;
-    if( aSuperClass.Is() )          nMask |= 0x2;
-    if( !aClassList.empty() )       nMask |= 0x4;
-    if( xAutomationInterface.Is() ) nMask |= 0x8;
-    if( aAutomation.IsSet() )       nMask |= 0x10;
-
-    // write data
-    rStm.WriteUChar( nMask );
-    if( nMask & 0x01 ) WriteSvDeclPersistList( rStm, aAttrList );
-    if( nMask & 0x02 ) WriteSvPersistBase( rStm, aSuperClass );
-    if( nMask & 0x04 ) WriteSvDeclPersistList( rStm, aClassList );
-    if( nMask & 0x08 ) WriteSvPersistBase( rStm, xAutomationInterface );
-    if( nMask & 0x10 ) rStm.WriteUChar( aAutomation );
 }
 
 void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
@@ -129,24 +44,6 @@ void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaType::ReadAttributesSvIdl( rBase, rInStm );
     aAutomation.ReadSvIdl( SvHash_Automation(), rInStm );
-}
-
-void SvMetaClass::WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                 SvStream & rOutStm, sal_uInt16 nTab )
-{
-    SvMetaType::WriteAttributesSvIdl( rBase, rOutStm, nTab );
-
-    if( !aAutomation )
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "//class SvMetaClass" ) << endl;
-        if( !aAutomation )
-        {
-            WriteTab( rOutStm, nTab );
-            aAutomation.WriteSvIdl( SvHash_Automation(), rOutStm );
-            rOutStm.WriteChar( ';' ) << endl;
-        }
-    }
 }
 
 void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
@@ -248,35 +145,6 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
     rInStm.Seek( nTokPos );
 }
 
-void SvMetaClass::WriteContextSvIdl
-(
-    SvIdlDataBase & rBase,
-    SvStream & rOutStm,
-    sal_uInt16 nTab
-)
-{
-    sal_uLong n;
-    for( n = 0; n < aAttrList.size(); n++ )
-    {
-        WriteTab( rOutStm, nTab );
-        aAttrList[n]->WriteSvIdl( rBase, rOutStm, nTab );
-        rOutStm.WriteChar( ';' ) << endl;
-    }
-    for( n = 0; n < aClassList.size(); n++ )
-    {
-        SvClassElement * pEle = aClassList[n];
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( SvHash_import()->GetName().getStr() ).WriteChar( ' ' )
-               .WriteCharPtr( pEle->GetPrefix().getStr() );
-        if( pEle->GetAutomation() )
-            rOutStm.WriteCharPtr( " [ " ).WriteCharPtr( SvHash_Automation()->GetName().getStr() )
-                   .WriteCharPtr( " ]" );
-        if( !pEle->GetPrefix().isEmpty() )
-            rOutStm.WriteChar( ' ' ).WriteCharPtr( pEle->GetPrefix().getStr() );
-        rOutStm.WriteChar( ';' ) << endl;
-    }
-}
-
 bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uLong nTokPos = rInStm.Tell();
@@ -365,60 +233,17 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
     return true;
 }
 
-void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                              sal_uInt16 nTab )
-{
-    WriteHeaderSvIdl( rBase, rOutStm, nTab );
-    if( aSuperClass.Is() )
-        rOutStm.WriteCharPtr( " : " ).WriteCharPtr( aSuperClass->GetName().getString().getStr() );
-    rOutStm << endl;
-    SvMetaName::WriteSvIdl( rBase, rOutStm, nTab );
-    rOutStm << endl;
-}
-
-void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                        sal_uInt16 nTab,
+void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream &,
+                        sal_uInt16,
                          WriteType nT, WriteAttribute )
 {
     rBase.aIFaceName = GetName().getString();
     switch( nT )
     {
-        case WRITE_ODL:
-        {
-            OSL_FAIL( "Not supported anymore!" );
-            break;
-        }
         case WRITE_C_SOURCE:
         case WRITE_C_HEADER:
         {
             OSL_FAIL( "Not supported anymore!" );
-            break;
-        }
-        case WRITE_DOCU:
-        {
-            rOutStm.WriteCharPtr( "<INTERFACE>" ) << endl;
-            rOutStm.WriteCharPtr( GetName().getString().getStr() );
-            if ( GetAutomation() )
-                rOutStm.WriteCharPtr( " ( Automation ) " );
-            rOutStm << endl;
-            WriteDescription( rOutStm );
-            rOutStm.WriteCharPtr( "</INTERFACE>" ) << endl << endl;
-
-            // write all attributes
-            sal_uLong n;
-            for( n = 0; n < aAttrList.size(); n++ )
-            {
-                SvMetaAttribute * pAttr = aAttrList[n];
-                if( !pAttr->GetHidden() )
-                {
-                    if( pAttr->IsMethod() )
-                        pAttr->Write( rBase, rOutStm, nTab, nT, WA_METHOD );
-
-                    if( pAttr->IsVariable() )
-                        pAttr->Write( rBase, rOutStm, nTab, nT, WA_VARIABLE );
-                }
-            }
-
             break;
         }
         default:
@@ -642,16 +467,6 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     for( size_t i = 0, n = aSlotList.size(); i < n; ++i )
         delete aSlotList[ i ];
     aSlotList.clear();
-}
-
-void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            HelpIdTable& rTable )
-{
-    for( sal_uLong n=0; n<aAttrList.size(); n++ )
-    {
-        SvMetaAttribute * pAttr = aAttrList[n];
-        pAttr->WriteHelpId( rBase, rOutStm, rTable );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

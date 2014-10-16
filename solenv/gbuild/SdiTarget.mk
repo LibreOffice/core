@@ -30,9 +30,6 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 		$(gb_SdiTarget_SVIDLCOMMAND) -quiet \
 			$(INCLUDE) \
 			-fs$@.hxx \
-			-fd$@.ilb \
-			-fl$@.lst \
-			-fz$@.sid \
 			-fx$(EXPORTS) \
 			-fm$@ \
 			$(if $(gb_FULLDEPS),-fM$(call gb_SdiTarget_get_dep_target,$*)) \
@@ -60,8 +57,8 @@ endif
 $(call gb_SdiTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),SDI,1)
 	-$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(foreach ext,.hxx .ilb .lst .sid,\
-			$(call gb_SdiTarget_get_target,$*)$(ext)) \
+		rm -f \
+			$(call gb_SdiTarget_get_target,$*).hxx \
 			$(call gb_SdiTarget_get_dep_target,$*) \
 			$(call gb_SdiTarget_get_target,$*))
 

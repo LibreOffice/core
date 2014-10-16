@@ -28,16 +28,8 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-SV_IMPL_META_FACTORY1( SvMetaObject, SvRttiBase )
+TYPEINIT1( SvMetaObject, SvRttiBase )
 SvMetaObject::SvMetaObject()
-{
-}
-
-void SvMetaObject::Load( SvPersistStream & )
-{
-}
-
-void SvMetaObject::Save( SvPersistStream & )
 {
 }
 
@@ -101,55 +93,14 @@ bool SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
     return false;
 }
 
-void SvMetaObject::WriteSvIdl( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
-{
-}
-
 void SvMetaObject::Write( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */,
                              WriteType, WriteAttribute )
 {
 }
 
-SV_IMPL_META_FACTORY1( SvMetaName, SvMetaObject );
+TYPEINIT1( SvMetaName, SvMetaObject );
 SvMetaName::SvMetaName()
 {
-}
-
-void SvMetaName::Load( SvPersistStream & rStm )
-{
-    SvMetaObject::Load( rStm );
-    sal_uInt8 nMask;
-    rStm.ReadUChar( nMask );
-
-    if( nMask >= 0x20 )
-    {
-        rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        OSL_FAIL( "wrong format" );
-        return;
-    }
-    if( nMask & 0x01 )  rStm >> aName;
-    if( nMask & 0x02 )  rStm >> aHelpContext;
-    if( nMask & 0x04 )  rStm >> aHelpText;
-    if( nMask & 0x08 )  rStm >> aConfigName;
-    if( nMask & 0x10 )  rStm >> aDescription;
-}
-
-void SvMetaName::Save( SvPersistStream & rStm )
-{
-    SvMetaObject::Save( rStm );
-    sal_uInt8 nMask = 0;
-    if( aName.IsSet() )         nMask |= 0x01;
-    if( aHelpContext.IsSet() )  nMask |= 0x02;
-    if( aHelpText.IsSet() )     nMask |= 0x04;
-    if( aConfigName.IsSet() )   nMask |= 0x08;
-    if( aDescription.IsSet() )  nMask |= 0x10;
-
-    rStm.WriteUChar( nMask );
-    if( nMask & 0x01 ) WriteSvString( rStm, aName );
-    if( nMask & 0x02 ) WriteSvNumberIdentifier( rStm, aHelpContext );
-    if( nMask & 0x04 ) WriteSvString( rStm, aHelpText );
-    if( nMask & 0x08 ) WriteSvString( rStm, aConfigName );
-    if( nMask & 0x10 ) WriteSvString( rStm, aDescription );
 }
 
 bool SvMetaName::SetName( const OString& rName, SvIdlDataBase * )
@@ -213,10 +164,6 @@ bool SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
     return true;
 }
 
-void SvMetaName::WriteContextSvIdl( SvIdlDataBase &, SvStream &, sal_uInt16 )
-{
-}
-
 void SvMetaName::WriteDescription( SvStream & rOutStm )
 {
     rOutStm.WriteCharPtr( "<DESCRIPTION>" ) << endl;
@@ -232,35 +179,6 @@ void SvMetaName::WriteDescription( SvStream & rOutStm )
 
     rOutStm.WriteCharPtr( aDesc.getStr() ) << endl;
     rOutStm.WriteCharPtr( "</DESCRIPTION>" ) << endl;
-}
-
-void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                       SvStream & rOutStm,
-                                       sal_uInt16 nTab )
-{
-    if( aHelpContext.IsSet() || aHelpText.IsSet() || aConfigName.IsSet() )
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaName" ) << endl;
-    }
-    if( aHelpContext.IsSet() )
-    {
-        WriteTab( rOutStm, nTab );
-        aHelpContext.WriteSvIdl( SvHash_HelpContext(), rOutStm, nTab );
-        rOutStm.WriteChar( ';' ) << endl;
-    }
-    if( aHelpText.IsSet() )
-    {
-        WriteTab( rOutStm, nTab );
-        aHelpText.WriteSvIdl( rBase, rOutStm, nTab );
-        rOutStm.WriteChar( ';' ) << endl;
-    }
-    if( aConfigName.IsSet() )
-    {
-        WriteTab( rOutStm, nTab );
-        aConfigName.WriteSvIdl( SvHash_ConfigName(), rOutStm, nTab );
-        rOutStm.WriteChar( ';' ) << endl;
-    }
 }
 
 bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
@@ -291,43 +209,6 @@ bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     if( !bOk )
         rInStm.Seek( nTokPos );
     return bOk;
-}
-
-void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                             sal_uInt16 nTab )
-{
-    sal_uLong nBeginPos = rOutStm.Tell();
-    WriteTab( rOutStm, nTab );
-    rOutStm.WriteChar( '[' ) << endl;
-    sal_uLong nOldPos = rOutStm.Tell();
-    WriteAttributesSvIdl( rBase, rOutStm, nTab +1 );
-
-    // write no empty brackets
-    if( TestAndSeekSpaceOnly( rOutStm, nOldPos ) )
-        // nothing written
-        rOutStm.Seek( nBeginPos );
-    else
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteChar( ']' );
-        nBeginPos = rOutStm.Tell();
-          rOutStm << endl;
-    }
-
-    WriteTab( rOutStm, nTab );
-    rOutStm.WriteChar( '{' ) << endl;
-    nOldPos = rOutStm.Tell();
-    WriteContextSvIdl( rBase, rOutStm, nTab +1 );
-
-    // write no empty brackets
-    if( TestAndSeekSpaceOnly( rOutStm, nOldPos ) )
-        // nothing written
-        rOutStm.Seek( nBeginPos );
-    else
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteChar( '}' );
-    }
 }
 
 void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
@@ -391,91 +272,19 @@ void SvMetaName::WriteContext( SvIdlDataBase &, SvStream &,
 {
 }
 
-SV_IMPL_META_FACTORY1( SvMetaReference, SvMetaName );
+TYPEINIT1( SvMetaReference, SvMetaName );
 
 SvMetaReference::SvMetaReference()
 {
 }
 
-void SvMetaReference::Load( SvPersistStream & rStm )
-{
-    SvMetaName::Load( rStm );
-
-    sal_uInt8 nMask;
-    rStm.ReadUChar( nMask );
-    if( nMask >= 0x2 )
-    {
-        rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        OSL_FAIL( "wrong format" );
-        return;
-    }
-    if( nMask & 0x01 )
-    {
-        SvMetaReference * pRef;
-        rStm >> pRef;
-        aRef = pRef;
-    }
-}
-
-void SvMetaReference::Save( SvPersistStream & rStm )
-{
-    SvMetaName::Save( rStm );
-
-    // create mask
-    sal_uInt8 nMask = 0;
-    if( aRef.Is() )
-        nMask |= 0x01;
-
-    // write data
-    rStm.WriteUChar( nMask );
-    if( nMask & 0x01 ) WriteSvPersistBase( rStm, aRef );
-}
-
-SV_IMPL_META_FACTORY1( SvMetaExtern, SvMetaReference );
+TYPEINIT1( SvMetaExtern, SvMetaReference );
 
 SvMetaExtern::SvMetaExtern()
     : pModule( NULL )
     , bReadUUId( false )
     , bReadVersion( false )
 {
-}
-
-void SvMetaExtern::Load( SvPersistStream & rStm )
-{
-    SvMetaReference::Load( rStm );
-
-    sal_uInt8 nMask;
-    rStm.ReadUChar( nMask );
-    if( nMask >= 0x20 )
-    {
-        rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        OSL_FAIL( "wrong format" );
-        return;
-    }
-    if( nMask & 0x01 ) rStm >> pModule;
-    if( nMask & 0x02 ) rStm >> aUUId;
-    if( nMask & 0x04 ) rStm >> aVersion;
-    if( nMask & 0x08 ) bReadUUId = true;
-    if( nMask & 0x10 ) bReadVersion = true;
-}
-
-void SvMetaExtern::Save( SvPersistStream & rStm )
-{
-    SvMetaReference::Save( rStm );
-
-    // create mask
-    sal_uInt8 nMask = 0;
-    if( pModule )                   nMask |= 0x01;
-    if( aUUId != SvGlobalName() )   nMask |= 0x02;
-    if( aVersion != SvVersion() )   nMask |= 0x04;
-    if( bReadUUId )                 nMask |= 0x08;
-    if( bReadVersion )              nMask |= 0x10;
-
-    // write data
-    rStm.WriteUChar( nMask );
-    if( nMask & 0x01 ) WriteSvPersistBase( rStm, pModule );
-    if( nMask & 0x02 ) WriteSvGlobalName( rStm, aUUId );
-    if( nMask & 0x04 ) WriteSvVersion( rStm, aVersion );
 }
 
 SvMetaModule * SvMetaExtern::GetModule() const
@@ -506,41 +315,11 @@ void SvMetaExtern::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         bReadVersion = true;
 }
 
-void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                         SvStream & rOutStm, sal_uInt16 nTab )
-{
-    SvMetaReference::WriteAttributesSvIdl( rBase, rOutStm, nTab );
-    if( bReadUUId || bReadVersion )
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaExtern" ) << endl;
-
-        if( bReadUUId )
-        {
-            WriteTab( rOutStm, nTab );
-            aUUId.WriteSvIdl( rOutStm );
-            rOutStm.WriteChar( ';' ) << endl;
-        }
-        if( bReadVersion )
-        {
-            WriteTab( rOutStm, nTab );
-            aVersion.WriteSvIdl( rOutStm );
-            rOutStm.WriteChar( ';' ) << endl;
-        }
-    }
-}
-
 bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     SetModule( rBase );
     GetUUId(); // id gets created
     return SvMetaReference::ReadSvIdl( rBase, rInStm );
-}
-
-void SvMetaExtern::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                               sal_uInt16 nTab )
-{
-    SvMetaReference::WriteSvIdl( rBase, rOutStm, nTab );
 }
 
 void SvMetaExtern::Write( SvIdlDataBase & rBase, SvStream & rOutStm,

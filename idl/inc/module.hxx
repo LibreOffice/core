@@ -51,11 +51,9 @@ class SvMetaModule : public SvMetaExtern
     SvGlobalName            aNextName;
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteContextSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 public:
-                        SV_DECL_META_FACTORY1( SvMetaModule, SvMetaExtern, 13 )
+                        TYPEINFO_OVERRIDE();
                         SvMetaModule();
 
     const OUString &    GetIdlFileName() const { return aIdlFileName; }
@@ -78,7 +76,6 @@ public:
     bool                IsModified() const { return bIsModified; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void        WriteAttributes( SvIdlDataBase & rBase,
                                         SvStream & rOutStm, sal_uInt16 nTab,
@@ -86,12 +83,10 @@ public:
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                     WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
-    virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                    HelpIdTable& rTable );
 };
 typedef tools::SvRef<SvMetaModule> SvMetaModuleRef;
 
-class SvMetaModuleMemberList : public SvDeclPersistList<SvMetaModule *> {};
+class SvMetaModuleMemberList : public SvRefMemberList<SvMetaModule *> {};
 
 
 #endif // INCLUDED_IDL_INC_MODULE_HXX

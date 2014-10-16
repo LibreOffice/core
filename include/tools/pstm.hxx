@@ -98,54 +98,6 @@ public:
     TOOLS_DLLPUBLIC friend SvPersistStream& operator >> ( SvPersistStream & rStm,
                                           SvPersistBase *& rpObj );
 };
-typedef tools::SvRef<SvPersistBase> SvPersistBaseRef;
-
-class SvPersistListWriteable
-{
-public:
-    virtual ~SvPersistListWriteable() {}
-    virtual size_t size() const = 0;
-    virtual SvPersistBase* GetPersistBase(size_t idx) const = 0;
-};
-
-class SvPersistListReadable
-{
-public:
-    virtual ~SvPersistListReadable() {}
-    virtual void push_back(SvPersistBase* p) = 0;
-};
-
-void TOOLS_DLLPUBLIC WritePersistListObjects(const SvPersistListWriteable& rList, SvPersistStream & rStm, bool bOnlyStreamed = false );
-
-void TOOLS_DLLPUBLIC ReadObjects( SvPersistListReadable& rLst, SvPersistStream & rStm);
-
-// <T> has to be a subtype of "SvPersistBase*"
-template<typename T>
-class SvDeclPersistList : public SvRefMemberList<T>,
-                          public SvPersistListWriteable,
-                          public SvPersistListReadable
-{
-public:
-   // implement the reader/writer adapter methods
-    size_t size() const SAL_OVERRIDE { return SvRefMemberList<T>::size(); }
-    SvPersistBase* GetPersistBase(size_t idx) const SAL_OVERRIDE { return SvRefMemberList<T>::operator[](idx); }
-    void push_back(SvPersistBase* p) SAL_OVERRIDE { SvRefMemberList<T>::push_back(static_cast<T>(p)); }
-    void WriteObjects(SvPersistStream & rStm, bool bOnlyStreamed ) const { WritePersistListObjects(*this, rStm, bOnlyStreamed); }
-};
-
-template<typename T>
-SvPersistStream& WriteSvDeclPersistList(SvPersistStream &rStm, const SvDeclPersistList<T> &rLst)
-{
-    WritePersistListObjects( rLst, rStm );
-    return rStm;
-};
-
-template<typename T>
-SvPersistStream& operator >> (SvPersistStream &rStm, SvDeclPersistList<T> &rLst)
-{
-    ReadObjects( rLst, rStm );
-    return rStm;
-};
 
 typedef UniqueIndex<SvPersistBase> SvPersistUIdx;
 typedef std::map<SvPersistBase*, sal_uIntPtr> PersistBaseMap;

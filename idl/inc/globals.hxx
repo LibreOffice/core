@@ -119,7 +119,6 @@ class IdlDll
 {
 public:
     SvStringHashTable * pHashTable;
-    SvClassManager    * pClassMgr;
     SvGlobalHashNames * pGlobalNames;
 
                 IdlDll();

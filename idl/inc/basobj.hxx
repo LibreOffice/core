@@ -38,8 +38,7 @@ typedef SvMetaObject * (*CreateMetaObjectType)();
 
 enum WriteType
 {
-    WRITE_IDL, WRITE_ODL, WRITE_SLOTMAP, WRITE_C_HEADER, WRITE_C_SOURCE,
-    WRITE_CXX_HEADER, WRITE_CXX_SOURCE, WRITE_DOCU
+    WRITE_C_HEADER, WRITE_C_SOURCE
 };
 
 enum
@@ -49,16 +48,10 @@ enum
 };
 typedef int WriteAttribute;
 
-#define SV_DECL_META_FACTORY1( Class, Super1, CLASS_ID )                \
-    SV_DECL_PERSIST1( Class, Super1, CLASS_ID )
-
-#define SV_IMPL_META_FACTORY1( Class, Super1 )                          \
-    SV_IMPL_PERSIST1( Class, Super1 )
-
-class SvMetaObject : public SvPersistBase
+class SvMetaObject : public SvRttiBase
 {
 public:
-            SV_DECL_META_FACTORY1( SvMetaObject, SvPersistBase, 14 )
+            TYPEINFO_OVERRIDE();
             SvMetaObject();
 
     static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
@@ -67,14 +60,16 @@ public:
     static void         WriteStars( SvStream & );
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                 WriteType, WriteAttribute = 0 );
+
+protected:
+    virtual ~SvMetaObject() {}
 };
 typedef tools::SvRef<SvMetaObject> SvMetaObjectRef;
 
-class SvMetaObjectMemberList : public SvDeclPersistList<SvMetaObject *> {};
+class SvMetaObjectMemberList : public SvRefMemberList<SvMetaObject *> {};
 
 class SvMetaObjectMemberStack
 {
@@ -111,18 +106,14 @@ protected:
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
                                      char c = '\0' );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void WriteContextSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab );
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm );
-    virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                       SvStream & rOutStm, sal_uInt16 nTab );
     virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                         WriteType, WriteAttribute = 0);
     virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                         WriteType, WriteAttribute = 0);
 public:
-            SV_DECL_META_FACTORY1( SvMetaName, SvMetaObject, 15 )
+            TYPEINFO_OVERRIDE();
             SvMetaName();
 
     virtual bool                SetName( const OString& rName, SvIdlDataBase * = NULL  );
@@ -136,14 +127,13 @@ public:
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                        WriteType, WriteAttribute = 0) SAL_OVERRIDE;
     void                WriteDescription( SvStream& rOutStm );
 };
 typedef tools::SvRef<SvMetaName> SvMetaNameRef;
 
-class SvMetaNameMemberList : public SvDeclPersistList<SvMetaName *> {};
+class SvMetaNameMemberList : public SvRefMemberList<SvMetaName *> {};
 
 class SvMetaReference;
 typedef tools::SvRef<SvMetaReference> SvMetaReferenceRef;
@@ -152,7 +142,7 @@ class SvMetaReference : public SvMetaName
 protected:
     SvMetaReferenceRef  aRef;
 public:
-            SV_DECL_META_FACTORY1( SvMetaReference, SvMetaName, 17 )
+            TYPEINFO_OVERRIDE();
             SvMetaReference();
 
     const SvString &    GetName() const SAL_OVERRIDE
@@ -191,7 +181,7 @@ public:
                         { aRef = pRef; }
 };
 
-class SvMetaReferenceMemberList : public SvDeclPersistList<SvMetaReference *> {};
+class SvMetaReferenceMemberList : public SvRefMemberList<SvMetaReference *> {};
 
 
 class SvMetaModule;
@@ -204,7 +194,7 @@ class SvMetaExtern : public SvMetaReference
     bool                    bReadUUId;
     bool                    bReadVersion;
 public:
-                        SV_DECL_META_FACTORY1( SvMetaExtern, SvMetaName, 16 )
+                        TYPEINFO_OVERRIDE();
                         SvMetaExtern();
 
     SvMetaModule *      GetModule() const;
@@ -213,20 +203,17 @@ public:
     const SvVersion &   GetVersion() const { return aVersion; }
     void                SetModule( SvIdlDataBase & rBase );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0) SAL_OVERRIDE;
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                              SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                           WriteType, WriteAttribute = 0) SAL_OVERRIDE;
 };
 typedef tools::SvRef<SvMetaExtern> SvMetaExternRef;
 
-class SvMetaExternMemberList : public SvDeclPersistList<SvMetaExtern *> {};
+class SvMetaExternMemberList : public SvRefMemberList<SvMetaExtern *> {};
 
 #endif // INCLUDED_IDL_INC_BASOBJ_HXX
 

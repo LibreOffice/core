@@ -59,7 +59,6 @@ class SvIdlDataBase
     OUString                    aExportFile;
     sal_uInt32                  nUniqueId;
     sal_uInt32                  nVerbosity;
-    SvPersistStream             aPersStream;
     StringList                  aIdFileList;
     SvStringHashTable *         pIdTable;
 
@@ -84,10 +83,6 @@ public:
 
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
-    static bool IsBinaryFormat( SvStream & rInStm );
-
-    void        Load( SvStream & rInStm );
-    void        Save( SvStream & rInStm, sal_uInt32 nContextFlags );
 
     SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
     SvStringHashTable *       GetIdTable() { return pIdTable; }
@@ -152,13 +147,8 @@ public:
                 explicit SvIdlWorkingBase( const SvCommand& rCmd );
 
     bool        ReadSvIdl( SvTokenStream &, bool bImported, const OUString & rPath );
-    bool        WriteSvIdl( SvStream & );
 
     bool        WriteSfx( SvStream & );
-    bool        WriteHelpIds( SvStream & );
-    bool        WriteSfxItem( SvStream & );
-    bool        WriteCSV( SvStream& );
-    bool        WriteDocumentation( SvStream& );
 };
 
 #endif // INCLUDED_IDL_INC_DATABASE_HXX

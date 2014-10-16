@@ -29,20 +29,13 @@ typedef ::std::vector< OString* > ByteStringList;
 class SvCommand
 {
 public:
-    OUString    aDataBaseFile;
     StringList  aInFileList;
-    OUString    aListFile;
     OUString    aSlotMapFile;
-    OUString    aSfxItemFile;
     OUString    aPath;
     OUString    aTargetFile;
-    OUString    aHelpIdFile;
-    OUString    aCSVFile;
     OUString    aExportFile;
-    OUString    aDocuFile;
     OUString    m_DepFile;
     sal_uInt32      nVerbosity;
-    sal_uInt32      nFlags;
 
                 SvCommand( int argc, char ** argv );
                 ~SvCommand();

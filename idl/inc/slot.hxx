@@ -167,7 +167,7 @@ protected:
             { aImageReflection = bSet; }
 
 public:
-            SV_DECL_META_FACTORY1( SvMetaSlot, SvMetaReference, 11 )
+            TYPEINFO_OVERRIDE();
             SvMetaObject *  MakeClone() const;
             SvMetaSlot *Clone() const { return static_cast<SvMetaSlot *>(MakeClone()); }
 
@@ -229,11 +229,7 @@ public:
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                              SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& ) SAL_OVERRIDE;
     void                WriteSlotStubs( const OString& rShellName,
@@ -247,13 +243,10 @@ public:
                                     SvStream & rOutStm );
     sal_uInt16          WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm );
-    virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                  HelpIdTable& rIdTable ) SAL_OVERRIDE;
-    virtual void        WriteCSV( SvIdlDataBase&, SvStream& ) SAL_OVERRIDE;
 };
 typedef tools::SvRef<SvMetaSlot> SvMetaSlotRef;
 
-class SvMetaSlotMemberList : public SvDeclPersistList<SvMetaSlot *> {};
+class SvMetaSlotMemberList : public SvRefMemberList<SvMetaSlot *> {};
 
 #endif // INCLUDED_IDL_INC_SLOT_HXX
 

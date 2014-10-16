@@ -23,13 +23,11 @@
 #include <rtl/strbuf.hxx>
 #include <tools/ref.hxx>
 #include <basobj.hxx>
-#include <map>
 
 struct SvSlotElement;
 typedef std::vector< SvSlotElement* > SvSlotElementList;
 
 class SvMetaSlot;
-typedef std::map<sal_uLong, SvMetaSlot*> HelpIdTable;
 
 class SvMetaType;
 typedef tools::SvRef<SvMetaType> SvMetaTypeRef;
@@ -55,10 +53,8 @@ protected:
                                         WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 public:
-            SV_DECL_META_FACTORY1( SvMetaAttribute, SvMetaReference, 2 )
+            TYPEINFO_OVERRIDE();
                         SvMetaAttribute();
                         SvMetaAttribute( SvMetaType * );
 
@@ -101,7 +97,6 @@ public:
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        WriteParam( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                     WriteType );
     void                WriteRecursiv_Impl( SvIdlDataBase & rBase,
@@ -112,16 +107,12 @@ public:
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& );
-    virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                  HelpIdTable& rIdTable );
-    virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
-    void                FillIDTable(HelpIdTable& rIDTable);
     OString        Compare( SvMetaAttribute *pAttr );
 };
 
 typedef tools::SvRef<SvMetaAttribute> SvMetaAttributeRef;
 
-class SvMetaAttributeMemberList : public SvDeclPersistList<SvMetaAttribute *> {};
+class SvMetaAttributeMemberList : public SvRefMemberList<SvMetaAttribute *> {};
 
 enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
 enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM, TYPE_UNION,
@@ -150,10 +141,7 @@ protected:
     bool        ReadNamesSvIdl( SvIdlDataBase & rBase,
                                          SvTokenStream & rInStm );
     virtual void ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void WriteContextSvIdl( SvIdlDataBase &, SvStream & rOutStm,
-                                   sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
                                       sal_uInt16 nTab,
@@ -161,10 +149,8 @@ protected:
     virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    void    WriteHeaderSvIdl( SvIdlDataBase &, SvStream & rOutStm,
-                              sal_uInt16 nTab );
 public:
-            SV_DECL_META_FACTORY1( SvMetaType, SvMetaExtern, 18 )
+            TYPEINFO_OVERRIDE();
             SvMetaType();
             SvMetaType( const OString& rTypeName, char cParserChar,
                                 const OString& rCName );
@@ -219,8 +205,6 @@ public:
 
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     OString             GetCString() const;
@@ -239,33 +223,31 @@ public:
                                         const OString& rChief );
 };
 
-class SvMetaTypeMemberList : public SvDeclPersistList<SvMetaType *> {};
+class SvMetaTypeMemberList : public SvRefMemberList<SvMetaType *> {};
 
 class SvMetaTypeString : public SvMetaType
 {
 public:
-            SV_DECL_META_FACTORY1( SvMetaTypeString, SvMetaType, 19 )
+            TYPEINFO_OVERRIDE();
             SvMetaTypeString();
 };
 typedef tools::SvRef<SvMetaTypeString> SvMetaTypeStringRef;
 
-class SvMetaTypeStringMemberList : public SvDeclPersistList<SvMetaTypeString *> {};
+class SvMetaTypeStringMemberList : public SvRefMemberList<SvMetaTypeString *> {};
 
 class SvMetaEnumValue : public SvMetaName
 {
-    OString aEnumValue;
 public:
-    SV_DECL_META_FACTORY1( SvMetaEnumValue, SvMetaName, 20 )
+    TYPEINFO_OVERRIDE();
     SvMetaEnumValue();
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 };
 typedef tools::SvRef<SvMetaEnumValue> SvMetaEnumValueRef;
 
-class SvMetaEnumValueMemberList : public SvDeclPersistList<SvMetaEnumValue *> {};
+class SvMetaEnumValueMemberList : public SvRefMemberList<SvMetaEnumValue *> {};
 
 class SvMetaTypeEnum : public SvMetaType
 {
@@ -273,12 +255,10 @@ class SvMetaTypeEnum : public SvMetaType
     OString aPrefix;
 protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void WriteContextSvIdl( SvIdlDataBase &, SvStream & rOutStm,
-                                   sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 public:
-            SV_DECL_META_FACTORY1( SvMetaTypeEnum, SvMetaType, 21 )
+            TYPEINFO_OVERRIDE();
             SvMetaTypeEnum();
 
     sal_uInt16          GetMaxValue() const;
@@ -288,7 +268,6 @@ public:
                         { return aEnumValueList[n]; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                                 sal_uInt16 nTab,
@@ -296,16 +275,16 @@ public:
 };
 typedef tools::SvRef<SvMetaTypeEnum> SvMetaTypeEnumRef;
 
-class SvMetaTypeEnumMemberList : public SvDeclPersistList<SvMetaTypeEnum *> {};
+class SvMetaTypeEnumMemberList : public SvRefMemberList<SvMetaTypeEnum *> {};
 
 class SvMetaTypevoid : public SvMetaType
 {
 public:
-            SV_DECL_META_FACTORY1( SvMetaTypevoid, SvMetaName, 22 )
+            TYPEINFO_OVERRIDE();
             SvMetaTypevoid();
 };
 typedef tools::SvRef<SvMetaTypevoid> SvMetaTypevoidRef;
-class SvMetaTypevoidMemberList : public SvDeclPersistList<SvMetaTypevoid *> {};
+class SvMetaTypevoidMemberList : public SvRefMemberList<SvMetaTypevoid *> {};
 
 
 #endif // INCLUDED_IDL_INC_TYPES_HXX

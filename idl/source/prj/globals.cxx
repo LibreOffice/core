@@ -34,36 +34,13 @@ IdlDll * GetIdlApp()
 
 IdlDll::IdlDll()
     : pHashTable( NULL )
-    , pClassMgr( NULL )
     , pGlobalNames( NULL )
 
-{
-    pClassMgr   = new SvClassManager();
-    // File OBJECT.HXX:
-    pClassMgr->SV_CLASS_REGISTER( SvMetaAttribute );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaClass );
-    //File SLOT.HXX:
-    pClassMgr->SV_CLASS_REGISTER( SvMetaSlot );
-    //File MODULE.HXX:
-    pClassMgr->SV_CLASS_REGISTER( SvMetaModule );
-    //File BASOBJ.HXX:
-    pClassMgr->SV_CLASS_REGISTER( SvMetaObject );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaName );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaExtern );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaReference );
-    //File TYPES.HXX:
-    pClassMgr->SV_CLASS_REGISTER( SvMetaType );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaTypeString );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaEnumValue );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaTypeEnum );
-    pClassMgr->SV_CLASS_REGISTER( SvMetaTypevoid );
-    pClassMgr->SV_CLASS_REGISTER( SvClassElement );
-}
+{}
 
 IdlDll::~IdlDll()
 {
     delete pGlobalNames;
-    delete pClassMgr;
     delete pHashTable;
 }
 

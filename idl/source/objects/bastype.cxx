@@ -157,15 +157,6 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     return false;
 }
 
-bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
-{
-    if( nVal )
-        rOutStm.WriteCharPtr( pName->GetName().getStr() );
-    else
-        rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteCharPtr( "(FALSE)" );
-    return true;
-}
-
 OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
 {
     if( nVal )
@@ -201,15 +192,6 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
     }
     rInStm.Seek( nTokPos );
     return false;
-}
-
-bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
-                               SvStream & rOutStm,
-                               sal_uInt16 /*nTab */ )
-{
-    rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteChar( '(' );
-    rOutStm.WriteCharPtr( getString().getStr() ).WriteChar( ')' );
-    return true;
 }
 
 SvStream& WriteSvIdentifier(SvStream & rStm, const SvIdentifier & r )
@@ -317,14 +299,6 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     return false;
 }
 
-bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
-                           sal_uInt16 /*nTab */ )
-{
-    rOutStm.WriteCharPtr( pName->GetName().getStr() ).WriteCharPtr( "(\"" );
-    rOutStm.WriteCharPtr( m_aStr.getStr() ).WriteCharPtr( "\")" );
-    return true;
-}
-
 SvStream& WriteSvString(SvStream & rStm, const SvString & r )
 {
     write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, r.getString());
@@ -341,11 +315,6 @@ SvStream& operator >> (SvStream & rStm, SvString & r )
 bool SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
     return SvString::ReadSvIdl( SvHash_HelpText(), rInStm );
-}
-
-bool SvHelpText::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 nTab )
-{
-    return SvString::WriteSvIdl( SvHash_HelpText(), rOutStm, nTab );
 }
 
 bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
@@ -375,15 +344,6 @@ bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
     return false;
 }
 
-bool SvUUId::WriteSvIdl( SvStream & rOutStm )
-{
-    // write global id
-    rOutStm.WriteCharPtr( SvHash_uuid()->GetName().getStr() ).WriteCharPtr( "(\"" );
-    rOutStm.WriteCharPtr( OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() ).WriteCharPtr( "\")" );
-    return true;
-}
-
-
 bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 {
     sal_uLong n = 0;
@@ -406,16 +366,6 @@ bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
     }
     rInStm.Seek( nTokPos );
     return false;
-}
-
-bool SvVersion::WriteSvIdl( SvStream & rOutStm )
-{
-    rOutStm.WriteCharPtr( SvHash_Version()->GetName().getStr() ).WriteChar( '(' )
-       .WriteCharPtr( OString::number(nMajorVersion).getStr() )
-       .WriteChar( '.' )
-       .WriteCharPtr( OString::number(nMinorVersion).getStr() )
-       .WriteChar( ')' );
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

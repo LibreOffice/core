@@ -40,13 +40,13 @@ class SvMetaClass;
 typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
 typedef tools::SvRef<SvMetaClass> SvMetaClassRef;
-class SvClassElement : public SvPersistBase
+class SvClassElement : public SvRttiBase
 {
     SvBOOL                      aAutomation;
     OString                aPrefix;
     SvMetaClassRef              xClass;
 public:
-            SV_DECL_PERSIST1( SvClassElement, SvPersistBase, 1 )
+            TYPEINFO_OVERRIDE();
             SvClassElement();
 
     void            SetPrefix( const OString& rPrefix )
@@ -67,9 +67,9 @@ public:
 
 typedef tools::SvRef<SvClassElement> SvClassElementRef;
 
-class SvClassElementMemberList : public SvDeclPersistList<SvClassElement *> {};
+class SvClassElementMemberList : public SvRefMemberList<SvClassElement *> {};
 
-class SvMetaClassMemberList : public SvDeclPersistList<SvMetaClass *> {};
+class SvMetaClassMemberList : public SvRefMemberList<SvMetaClass *> {};
 
 class SvMetaClass : public SvMetaType
 {
@@ -100,18 +100,14 @@ class SvMetaClass : public SvMetaType
 protected:
     virtual void    ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void    WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void    ReadContextSvIdl( SvIdlDataBase &,
                                      SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void    WriteContextSvIdl( SvIdlDataBase & rBase,
-                                     SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     void            WriteOdlMembers( ByteStringList & rSuperList,
                                     bool bVariable, bool bWriteTab,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
 public:
-            SV_DECL_META_FACTORY1( SvMetaClass, SvMetaType, 6 )
+            TYPEINFO_OVERRIDE();
             SvMetaClass();
 
     bool                GetAutomation() const
@@ -126,13 +122,10 @@ public:
                         { return aClassList; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab ) SAL_OVERRIDE;
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                                  sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) SAL_OVERRIDE;
-    virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                HelpIdTable& rTable );
 };
 
 #endif // INCLUDED_IDL_INC_OBJECT_HXX

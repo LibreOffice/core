@@ -31,7 +31,6 @@ SvIdlDataBase::SvIdlDataBase( const SvCommand& rCmd )
     : bExport( false )
     , nUniqueId( 0 )
     , nVerbosity( rCmd.nVerbosity )
-    , aPersStream( *IDLAPP->pClassMgr, NULL )
     , pIdTable( NULL )
 {
     sSlotMapFile = rCmd.aSlotMapFile;
@@ -80,80 +79,6 @@ SvMetaModule * SvIdlDataBase::GetModule( const OString& rName )
         if( aModuleList[n]->GetName().getString().equals(rName) )
             return aModuleList[n];
     return NULL;
-}
-
-#define DATABASE_SIGNATURE  (sal_uInt32)0x13B799F2
-#define DATABASE_VER 0x0006
-bool SvIdlDataBase::IsBinaryFormat( SvStream & rStm )
-{
-    sal_uInt32  nSig = 0;
-    sal_uLong   nPos = rStm.Tell();
-    rStm.ReadUInt32( nSig );
-    rStm.Seek( nPos );
-
-    return nSig == DATABASE_SIGNATURE;
-}
-
-void SvIdlDataBase::Load( SvStream & rStm )
-{
-    DBG_ASSERT( aTypeList.empty(), "type list already initialized" );
-    SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
-
-    sal_uInt16  nVersion = 0;
-    sal_uInt32  nSig = 0;
-
-    aPStm.ReadUInt32( nSig );
-    aPStm.ReadUInt16( nVersion );
-    if( nSig != DATABASE_SIGNATURE )
-    {
-        aPStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        return;
-    }
-    if( nVersion != DATABASE_VER )
-    {
-        aPStm.SetError( SVSTREAM_WRONGVERSION );
-        return;
-    }
-    aPStm >> aClassList;
-    aPStm >> aTypeList;
-    aPStm >> aAttrList;
-    aPStm >> aModuleList;
-    aPStm.ReadUInt32( nUniqueId );
-
-    if( aPStm.IsEof() )
-        aPStm.SetError( SVSTREAM_GENERALERROR );
-}
-
-void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
-{
-    SvPersistStream aPStm( *IDLAPP->pClassMgr, &rStm );
-    aPStm.SetContextFlags( nFlags );
-
-    aPStm.WriteUInt32( DATABASE_SIGNATURE );
-    aPStm.WriteUInt16( DATABASE_VER );
-
-    bool bOnlyStreamedObjs = false;
-    if( nFlags & IDL_WRITE_CALLING )
-        bOnlyStreamedObjs = true;
-
-    if( bOnlyStreamedObjs )
-    {
-        SvMetaClassMemberList aList;
-        for( sal_uLong n = 0; n < GetModuleList().size(); n++ )
-        {
-            SvMetaModule * pModule = GetModuleList()[n];
-            if( !pModule->IsImported() )
-                aList.insert( pModule->GetClassList() );
-        }
-        WriteSvDeclPersistList( aPStm, aList );
-    }
-    else
-        WriteSvDeclPersistList( aPStm, aClassList );
-
-    aTypeList.WriteObjects( aPStm, bOnlyStreamedObjs );
-    aAttrList.WriteObjects( aPStm, bOnlyStreamedObjs );
-    aModuleList.WriteObjects( aPStm, bOnlyStreamedObjs );
-    aPStm.WriteUInt32( nUniqueId );
 }
 
 void SvIdlDataBase::SetError( const OString& rError, SvToken * pTok )
@@ -638,25 +563,8 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
                 osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
                 this->AddDepFile(aFullName);
                 SvFileStream aStm( aFullName, STREAM_STD_READ | STREAM_NOCREATE );
-                Load( aStm );
-                if( aStm.GetError() != SVSTREAM_OK )
-                {
-                    if( aStm.GetError() == SVSTREAM_WRONGVERSION )
-                    {
-                        OStringBuffer aStr("wrong version, file ");
-                        aStr.append(OUStringToOString( aFullName, RTL_TEXTENCODING_UTF8));
-                        SetError(aStr.makeStringAndClear(), pTok);
-                        WriteError( rInStm );
-                        bOk = false;
-                    }
-                    else
-                    {
-                        aStm.Seek( 0 );
-                        aStm.ResetError();
-                        SvTokenStream aTokStm( aStm, aFullName );
-                        bOk = ReadSvIdl( aTokStm, true, rPath );
-                    }
-                }
+                SvTokenStream aTokStm( aStm, aFullName );
+                bOk = ReadSvIdl( aTokStm, true, rPath );
             }
             else
                 bOk = false;
@@ -697,33 +605,6 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
     return true;
 }
 
-bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return false;
-
-    SvStringHashList aList;
-    if( GetIdTable() )
-    {
-        GetIdTable()->FillHashList( &aList );
-        for ( size_t i = 0, n = aList.size(); i < n; ++i )
-        {
-            SvStringHashEntry* pEntry = aList[ i ];
-            rOutStm.WriteCharPtr( "#define " ).WriteCharPtr( pEntry->GetName().getStr() )
-                   .WriteChar( '\t' )
-                   .WriteCharPtr( OString::number(pEntry->GetValue()).getStr() )
-                    << endl;
-        }
-    }
-
-    for( sal_uLong n = 0; n < GetModuleList().size(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList()[n];
-        pModule->WriteSvIdl( *this, rOutStm, 0 );
-    }
-    return true;
-}
-
 bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
 {
     if( rOutStm.GetError() != SVSTREAM_OK )
@@ -750,34 +631,6 @@ bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
     return true;
 }
 
-bool SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return false;
-
-    HelpIdTable aIdTable;
-    sal_uLong n;
-    for( n = 0; n < GetModuleList().size(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList()[n];
-        pModule->WriteHelpIds( *this, rOutStm, aIdTable );
-    }
-
-    const SvMetaAttributeMemberList & rAttrList = GetAttrList();
-    for( n = 0; n < rAttrList.size(); n++ )
-    {
-        SvMetaAttribute * pAttr = rAttrList[n];
-        pAttr->WriteHelpId( *this, rOutStm, aIdTable );
-    }
-
-    return true;
-}
-
-bool SvIdlWorkingBase::WriteSfxItem( SvStream & )
-{
-    return false;
-}
-
 void SvIdlDataBase::StartNewFile( const OUString& rName )
 {
     bExport = ( aExportFile.equalsIgnoreAsciiCase( rName ) );
@@ -788,38 +641,6 @@ void SvIdlDataBase::AppendAttr( SvMetaAttribute *pAttr )
     aAttrList.push_back( pAttr );
     if ( bExport )
         pAttr->SetNewAttribute( true );
-}
-
-bool SvIdlWorkingBase::WriteCSV( SvStream& rStrm )
-{
-    SvMetaAttributeMemberList &rList = GetAttrList();
-    sal_uLong nCount = rList.size();
-    for ( sal_uLong n=0; n<nCount; n++ )
-    {
-        if ( rList[n]->IsNewAttribute() )
-        {
-            rList[n]->WriteCSV( *this, rStrm );
-        }
-    }
-
-    if ( rStrm.GetError() != SVSTREAM_OK )
-        return false;
-    else
-        return true;
-}
-
-bool SvIdlWorkingBase::WriteDocumentation( SvStream & rOutStm )
-{
-    if( rOutStm.GetError() != SVSTREAM_OK )
-        return false;
-
-    for( sal_uLong n = 0; n < GetModuleList().size(); n++ )
-    {
-        SvMetaModule * pModule = GetModuleList()[n];
-        if( !pModule->IsImported() )
-            pModule->Write( *this, rOutStm, 0, WRITE_DOCU );
-    }
-    return true;
 }
 
 void SvIdlDataBase::AddDepFile(OUString const& rFileName)

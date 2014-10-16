@@ -107,13 +107,8 @@ char const * SyntaxStrings[] = {
 NULL };
 
 char CommandLineSyntax[] =
-"-fs<slotmap file>          -fl<listing file>\n"
-"-fo<odl file>              -fd<data base file>\n"
-"-fi<item implementation>   -ft<type library file> (not OLE)\n"
-"-fr<resource file>         -fm<makefile target file>\n"
-"-fC<c++ source file>       -fH<c++ header file>\n"
-"-fc<c source file>         -fh<c header file>\n"
-"-rsc <*.srs header line>\n"
+"-fs<slotmap file>\n"
+"-fm<makefile target file>\n"
 "-help, ?                   @<file> response file\n"
 " <filenames>\n";
 
@@ -139,30 +134,9 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
         if( aStm.GetError() == SVSTREAM_OK )
         {
-            if( SvIdlDataBase::IsBinaryFormat( aStm ) )
-            {
-                pDataBase->Load( aStm );
-                if( aStm.GetError() != SVSTREAM_OK )
-                {
-                    OStringBuffer aStr;
-                    if( aStm.GetError() == SVSTREAM_FILEFORMAT_ERROR )
-                        aStr.append("error: incompatible format, file ");
-                    else if( aStm.GetError() == SVSTREAM_WRONGVERSION )
-                        aStr.append("error: wrong version, file ");
-                    else
-                        aStr.append("error during load, file ");
-                    aStr.append(OUStringToOString(aFileName,
-                        RTL_TEXTENCODING_UTF8));
-                    fprintf( stderr, "%s\n", aStr.getStr() );
-                    return false;
-                }
-            }
-            else
-            {
-                SvTokenStream aTokStm( aStm, aFileName );
-                if( !pDataBase->ReadSvIdl( aTokStm, false, rCommand.aPath ) )
-                    return false;
-            }
+            SvTokenStream aTokStm( aStm, aFileName );
+            if( !pDataBase->ReadSvIdl( aTokStm, false, rCommand.aPath ) )
+                return false;
         }
         else
         {
@@ -211,7 +185,7 @@ static bool ResponseFile( StringList * pList, int argc, char ** argv )
 }
 
 SvCommand::SvCommand( int argc, char ** argv )
-    : nVerbosity(1), nFlags( 0 )
+    : nVerbosity(1)
 {
     StringList aList;
 
@@ -234,52 +208,9 @@ SvCommand::SvCommand( int argc, char ** argv )
                     { // name of slot output
                         aSlotMapFile = aName;
                     }
-                    else if( 'l' == aFirstChar )
-                    { // name of listing
-                        aListFile = aName;
-                    }
-                    else if( 'i' == aFirstChar )
-                    {
-                    }
-                    else if( 'o' == aFirstChar )
-                    {
-                    }
-                    else if( 'd' == aFirstChar )
-                    { // name of data set file
-                        aDataBaseFile = aName;
-                    }
-                    else if( 'D' == aFirstChar )
-                    {
-                    }
-                    else if( 'C' == aFirstChar )
-                    {
-                    }
-                    else if( 'H' == aFirstChar )
-                    {
-                    }
-                    else if( 'c' == aFirstChar )
-                    {
-                    }
-                    else if( 'h' == aFirstChar )
-                    {
-                    }
-                    else if( 't' == aFirstChar )
-                    {
-                    }
                     else if( 'm' == aFirstChar )
                     { // name of info file
                         aTargetFile = aName;
-                    }
-                    else if( 'r' == aFirstChar )
-                    {
-                    }
-                    else if( 'z' == aFirstChar )
-                    { // name of HelpId file
-                        aHelpIdFile = aName;
-                    }
-                    else if( 'y' == aFirstChar )
-                    { // name of CSV file
-                        aCSVFile = aName;
                     }
                     else if( 'x' == aFirstChar )
                     { // name of IDL file for the CSV file

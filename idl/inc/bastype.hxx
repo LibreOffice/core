@@ -90,7 +90,6 @@ public:
     friend SvStream& operator >> (SvStream &, SvBOOL &);
 
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
     OString    GetSvIdlString( SvStringHashEntry * pName );
 };
 
@@ -119,8 +118,6 @@ public:
         return !m_aStr.isEmpty();
     }
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
-                            sal_uInt16 nTab );
 };
 
 
@@ -168,8 +165,6 @@ public:
     friend SvStream& operator >> (SvStream &, SvString &);
 
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
-                            sal_uInt16 nTab );
 };
 
 
@@ -178,8 +173,6 @@ class SvHelpText : public SvString
 public:
                 SvHelpText() {}
     bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    bool        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            sal_uInt16 nTab );
 };
 
 
@@ -192,7 +185,6 @@ class SvUUId : public SvGlobalName
 public:
                 SvUUId() {}
     bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    bool        WriteSvIdl( SvStream & rOutStm );
 };
 
 
@@ -218,7 +210,6 @@ public:
     friend SvStream& WriteSvVersion(SvStream &, const SvVersion &);
     friend SvStream& operator >> (SvStream &, SvVersion &);
     bool        ReadSvIdl( SvTokenStream & rInStm );
-    bool        WriteSvIdl( SvStream & rOutStm );
 };
 
 
