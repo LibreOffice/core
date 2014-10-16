@@ -45,6 +45,9 @@ public:
     /// wait until all queued tasks are completed
     void        waitUntilEmpty();
 
+    /// return the number of live worker threads
+    sal_Int32   getWorkerCount() const { return maWorkers.size(); }
+
 private:
     ThreadPool(const ThreadPool&) SAL_DELETED_FUNCTION;
     ThreadPool& operator=(const ThreadPool&) SAL_DELETED_FUNCTION;
