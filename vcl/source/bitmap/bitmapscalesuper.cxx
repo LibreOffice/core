@@ -20,7 +20,9 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapscalesuper.hxx>
 
+#include <algorithm>
 #include <boost/scoped_array.hpp>
+#include <comphelper/threadpool.hxx>
 
 namespace {
 
@@ -71,11 +73,37 @@ struct ScaleContext {
     }
 };
 
+#define SCALE_THREAD_STRIP 32
+struct ScaleRangeContext {
+    ScaleContext &mrCtx;
+    long mnStartY, mnEndY;
+    ScaleRangeContext( ScaleContext &rCtx, long nStartY )
+        : mrCtx( rCtx ), mnStartY( nStartY ),
+          mnEndY( nStartY + SCALE_THREAD_STRIP ) {}
+};
+
+typedef void (*ScaleRangeFn)(ScaleContext &rCtx, long nStartY, long nEndY);
+
+class ScaleTask : public comphelper::ThreadTask
+{
+    ScaleRangeFn mpFn;
+    std::vector< ScaleRangeContext > maStrips;
+public:
+    ScaleTask( ScaleRangeFn pFn ) : mpFn( pFn ) {}
+    void push( ScaleRangeContext &aRC ) { maStrips.push_back( aRC ); }
+    virtual void doWork() SAL_OVERRIDE
+    {
+        std::vector< ScaleRangeContext >::iterator it;
+        for (it = maStrips.begin(); it != maStrips.end(); ++it)
+            mpFn( it->mrCtx, it->mnStartY, it->mnEndY );
+    }
+};
+
 void scalePallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTempY = rCtx.mpMapIY[ nY ];
         long nTempFY = rCtx.mpMapFY[ nY ];
@@ -103,7 +131,7 @@ void scalePallete8bit(ScaleContext &rCtx, long nStartY, long nEndY)
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -112,7 +140,7 @@ void scalePalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTempY = rCtx.mpMapIY[ nY ];
         long nTempFY = rCtx.mpMapFY[ nY ];
@@ -137,7 +165,7 @@ void scalePalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -146,7 +174,7 @@ void scale24bitBGR(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTempY = rCtx.mpMapIY[ nY ];
         long nTempFY = rCtx.mpMapFY[ nY ];
@@ -176,7 +204,7 @@ void scale24bitBGR(ScaleContext &rCtx, long nStartY, long nEndY)
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -185,7 +213,7 @@ void scale24bitRGB(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTempY = rCtx.mpMapIY[ nY ];
         long nTempFY = rCtx.mpMapFY[ nY ];
@@ -215,7 +243,7 @@ void scale24bitRGB(ScaleContext &rCtx, long nStartY, long nEndY)
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -224,7 +252,7 @@ void scaleNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
 {
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
 
-    for( long nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTempY = rCtx.mpMapIY[ nY ];
         long nTempFY = rCtx.mpMapFY[ nY ];
@@ -249,7 +277,7 @@ void scaleNonPalleteGeneral(ScaleContext &rCtx, long nStartY, long nEndY)
             BitmapColor aColRes( MAP( cR0, cR1, nTempFY ),
                     MAP( cG0, cG1, nTempFY ),
                     MAP( cB0, cB1, nTempFY ) );
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -259,7 +287,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
-    for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
         long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
@@ -374,7 +402,7 @@ void scalePallete8bit2(ScaleContext &rCtx, long nStartY, long nEndY)
             }
 
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -384,7 +412,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
-    for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
         long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
@@ -501,7 +529,7 @@ void scalePalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
             }
 
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -511,7 +539,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
-    for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
         long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
@@ -624,7 +652,7 @@ void scale24bitBGR2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nSumB /= nTotalWeightY;
             }
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -634,7 +662,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
-    for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
         long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
@@ -745,7 +773,7 @@ void scale24bitRGB2(ScaleContext &rCtx, long nStartY, long nEndY)
                 nSumB /= nTotalWeightY;
             }
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -755,7 +783,7 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
     const long nStartX = 0, nEndX = rCtx.mnDestW - 1L;
     const long nMax = 1 << 7L;
 
-    for( long nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+    for( long nY = nStartY; nY <= nEndY; nY++ )
     {
         long nTop = rCtx.mbVMirr ? ( nY + 1 ) : nY;
         long nBottom = rCtx.mbVMirr ? nY : ( nY + 1 ) ;
@@ -871,7 +899,7 @@ void scaleNonPalleteGeneral2(ScaleContext &rCtx, long nStartY, long nEndY)
             }
 
             BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
-            rCtx.mpDest->SetPixel( nYDst, nXDst++, aColRes );
+            rCtx.mpDest->SetPixel( nY, nXDst++, aColRes );
         }
     }
 }
@@ -916,6 +944,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
 
     if (pReadAccess && pWriteAccess)
     {
+        ScaleRangeFn pScaleRangeFn;
         ScaleContext aContext( pReadAccess.get(),
                                pWriteAccess.get(),
                                pReadAccess->Width(),
@@ -923,7 +952,6 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
                                pReadAccess->Height(),
                                pWriteAccess->Height(),
                                bVMirr, bHMirr );
-        void (*scaleRangeFn)(ScaleContext &rCtx, long nStartY, long nEndY);
 
         bool bScaleUp = fScaleX >= fScaleThresh && fScaleY >= fScaleThresh;
         if( pReadAccess->HasPalette() )
@@ -931,10 +959,10 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
             switch( pReadAccess->GetScanlineFormat() )
             {
             case BMP_FORMAT_8BIT_PAL:
-                scaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
+                pScaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
                 break;
             default:
-                scaleRangeFn = bScaleUp ? scalePalleteGeneral
+                pScaleRangeFn = bScaleUp ? scalePalleteGeneral
                                         : scalePalleteGeneral2;
                 break;
             }
@@ -944,18 +972,57 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
             switch( pReadAccess->GetScanlineFormat() )
             {
             case BMP_FORMAT_24BIT_TC_BGR:
-                scaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
+                pScaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
                 break;
             case BMP_FORMAT_24BIT_TC_RGB:
-                scaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
+                pScaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
                 break;
             default:
-                scaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
+                pScaleRangeFn = bScaleUp ? scaleNonPalleteGeneral
                                         : scaleNonPalleteGeneral2;
                 break;
             }
         }
-        scaleRangeFn( aContext, nStartY, nEndY );
+
+        // We want to thread - only if there is a lot of work to do:
+        // We work hard when there is a large destination image, or
+        // A large source image.
+        bool bHorizontalWork = pReadAccess->Width() > 512 || pWriteAccess->Width() > 512;
+
+        static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
+        if ( bDisableThreadedScaling || !bHorizontalWork ||
+             nEndY - nStartY < SCALE_THREAD_STRIP )
+        {
+            SAL_INFO("vcl.gdi", "Scale in main thread");
+            pScaleRangeFn( aContext, nStartY, nEndY );
+        }
+        else
+        {
+            // partition and queue work
+            comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
+            sal_uInt32 nThreads = rShared.getWorkerCount();
+            assert( nThreads > 0 );
+            sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
+            sal_uInt32 nStripsPerThread = nStrips / nThreads;
+            SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread" << " we have " << nThreads << " CPU threads ");
+            long nStripY = nStartY;
+            for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
+            {
+                ScaleTask *pTask = new ScaleTask( pScaleRangeFn );
+                for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
+                {
+                    ScaleRangeContext aRC( aContext, nStripY );
+                    pTask->push( aRC );
+                    nStripY += SCALE_THREAD_STRIP;
+                }
+                rShared.pushTask( pTask );
+            }
+            // finish any remaining bits here
+            pScaleRangeFn( aContext, nStripY, nEndY );
+
+            rShared.waitUntilEmpty();
+            SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
+        }
 
         bRet = true;
     }

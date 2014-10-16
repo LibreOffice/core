@@ -46,6 +46,9 @@ public:
     /// wait until all queued tasks are completed
     void        waitUntilEmpty();
 
+    /// return the number of live worker threads
+    sal_Int32   getWorkerCount() { return maWorkers.size(); }
+
 private:
     class ThreadWorker;
     friend class ThreadWorker;
