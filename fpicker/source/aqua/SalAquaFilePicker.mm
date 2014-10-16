@@ -307,7 +307,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 
     SolarMutexGuard aGuard;
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+#if HAVE_FEATURE_MACOSX_SANDBOX
     static NSUserDefaults *userDefaults;
     static bool triedUserDefaults = false;
 
@@ -341,7 +341,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
     {
         NSURL *url = [files objectAtIndex:nIndex];
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
+#if HAVE_FEATURE_MACOSX_SANDBOX
         if (userDefaults != NULL &&
             [url respondsToSelector:@selector(bookmarkDataWithOptions:includingResourceValuesForKeys:relativeToURL:error:)])
         {

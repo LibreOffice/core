@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(filter IOS MACOSX,$(OS)),,--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out")) \
 			$(if $(filter IOS,$(OS)),--with-darwinssl) \
 			$(if $(filter MACOSX,$(OS)),\
-				$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),,--with-darwinssl)) \
+				--with-darwinssl) \
 			--without-ssl \
 			--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
