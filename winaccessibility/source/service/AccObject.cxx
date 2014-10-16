@@ -392,6 +392,7 @@ void  AccObject::SetValue( Any pAny )
     case TEXT:
     case PARAGRAPH:
     case HEADING:
+    case TABLE_CELL:
 
         if(pRText.get())
         {
@@ -402,7 +403,6 @@ void  AccObject::SetValue( Any pAny )
     case TREE_ITEM:
     //case CHECK_BOX:   //Commented by Li Xing to disable the value for general checkbox
     case COMBO_BOX:
-    case TABLE_CELL:
     case NOTE:
     case SCROLL_BAR:
         m_pIMAcc->Put_XAccValue( GetMAccessibleValueFromAny(pAny).getStr() );
