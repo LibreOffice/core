@@ -385,11 +385,7 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
     }
 
     NSFileManager *manager = [NSFileManager defaultManager];
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
-    NSDictionary* pAttribs = [manager fileAttributesAtPath: sFilename traverseLink: NO];
-#else
     NSDictionary* pAttribs = [manager attributesOfItemAtPath: sFilename error: nil];
-#endif
     if( pAttribs )
     {
         NSObject* pType = [pAttribs objectForKey: NSFileType];

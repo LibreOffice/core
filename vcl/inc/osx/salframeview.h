@@ -22,11 +22,7 @@
 
 #include "osx/a11ywrapper.h"
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
-@interface SalFrameWindow : NSWindow
-#else
 @interface SalFrameWindow : NSWindow<NSWindowDelegate>
-#endif
 {
     AquaSalFrame*       mpFrame;
     id mDraggingDestinationHandler;
@@ -63,11 +59,7 @@
 -(void)unregisterDraggingDestinationHandler:(id)theHandler;
 @end
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
-@interface SalFrameView : AquaA11yWrapper <NSTextInput>
-#else
 @interface SalFrameView : AquaA11yWrapper <NSTextInputClient>
-#endif
 {
     AquaSalFrame*       mpFrame;
 
@@ -121,11 +113,7 @@
 /*
     text action methods
 */
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
--(void)insertText:(id)aString;
-#else
 -(void)insertText:(id)aString replacementRange:(NSRange)replacementRange;
-#endif
 -(void)insertTab: (id)aSender;
 -(void)insertBacktab: (id)aSender;
 -(void)moveLeft: (id)aSender;
