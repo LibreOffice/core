@@ -318,7 +318,7 @@ public class LocalOfficeConnection
                 aSOffice.startupService();
 
                 // wait until soffice is started
-                long nMaxMillis = System.currentTimeMillis() + 1000*aSOffice.getStartupTime();
+                long nMaxMillis = System.currentTimeMillis() + 1000L*aSOffice.getStartupTime();
                 while ( aInitialObject == null )
                 {
                     try

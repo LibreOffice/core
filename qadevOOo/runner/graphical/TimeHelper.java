@@ -31,7 +31,7 @@ public class TimeHelper
         {
             GlobalLogWriter.println("Wait 0.25 * " + _nSeconds + " sec. Reason: " + _sReason);
             try {
-                java.lang.Thread.sleep(_nSeconds * 250);
+                java.lang.Thread.sleep(250L * _nSeconds);
             } catch (InterruptedException e2) {}
         }
 

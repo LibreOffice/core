@@ -446,7 +446,7 @@ public class ProcessHandler
 
             try
             {
-                Thread.sleep(1000 * counter); // 5000
+                Thread.sleep(1000L * counter); // 5000
             }
             catch (InterruptedException e)
             {

@@ -264,7 +264,7 @@ public class OfficeProvider implements AppProvider
                     {
                         try
                         {
-                            Thread.sleep(k * 500);
+                            Thread.sleep(500L * k);
                         }
                         catch (InterruptedException ex)
                         {
