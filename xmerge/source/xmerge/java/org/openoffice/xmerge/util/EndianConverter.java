@@ -18,6 +18,8 @@
 
 package org.openoffice.xmerge.util;
 
+import java.nio.ByteBuffer;
+
 /**
  * Helper class providing static methods to convert data to/from Network Byte
  * Order (Big Endian).
@@ -77,20 +79,8 @@ public class EndianConverter {
      *          IEEE-754 float.
      */
     public static byte[] writeDouble(double value) {
-
-        long myDouble = Double.doubleToLongBits(value);
-        byte[] leDouble = new byte[8];
-
-        leDouble[0] = (byte) (myDouble >>> 0);
-        leDouble[1] = (byte) (myDouble >>> 8);
-        leDouble[2] = (byte) (myDouble >>> 16);
-        leDouble[3] = (byte) (myDouble >>> 24);
-        leDouble[4] = (byte) (myDouble >>> 32);
-        leDouble[5] = (byte) (myDouble >>> 40);
-        leDouble[6] = (byte) (myDouble >>> 48);
-        leDouble[7] = (byte) (myDouble >>> 56);
-
-        return leDouble;
+        return ByteBuffer.allocate(8).putLong(
+            Long.reverseBytes(Double.doubleToLongBits(value))).array();
     }
 
     /**
