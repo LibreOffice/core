@@ -155,9 +155,7 @@ void WrapPolygonHandler::lcl_attribute(Id Name, Value & val)
         mnY = nIntValue;
         break;
     default:
-#ifdef DEBUG_WRAP_POLYGON_HANDLER
-        dmapper_logger->element("unhandled");
-#endif
+        SAL_WARN("writerfilter", "WrapPolygonHandler::lcl_attribute: unhandled token: " << Name);
         break;
     }
 }
@@ -176,9 +174,7 @@ void WrapPolygonHandler::lcl_sprm(Sprm & _sprm)
         }
         break;
     default:
-#ifdef DEBUG_WRAP_POLYGON_HANDLER
-        dmapper_logger->element("unhandled");
-#endif
+        SAL_WARN("writerfilter", "WrapPolygonHandler::lcl_sprm: unhandled token: " << _sprm.getId());
         break;
     }
 }
