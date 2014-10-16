@@ -69,20 +69,22 @@ class AccessibleExtendedComponentHandler
                 {
                     case 0:
                         nColor = xEComponent.getForeground();
-                        aChild = new StringNode ("Deprecated Foreground color: R"
-                            +       (nColor>>16&0xff)
-                            + "G" + (nColor>>8&0xff)
-                            + "B" + (nColor>>0&0xff)
-                            + "A" + (nColor>>24&0xff),
+                        aChild = new StringNode (
+                            String.format("Deprecated Foreground color: R%03dG%03dB%03dA%03d",
+                                nColor >> 16 & 0xff,
+                                nColor >> 8 & 0xff,
+                                nColor & 0xff,
+                                nColor >> 24 & 0xff),
                             aParent);
                         break;
                     case 1:
                         nColor = xEComponent.getBackground();
-                        aChild = new StringNode ("Deprecated Background color: R"
-                            +       (nColor>>16&0xff)
-                            + "G" + (nColor>>8&0xff)
-                            + "B" + (nColor>>0&0xff)
-                            + "A" + (nColor>>24&0xff),
+                        aChild = new StringNode (
+                            String.format("Deprecated Background color: R%03dG%03dB%03dA%03d",
+                                nColor >> 16 & 0xff,
+                                nColor >> 8 & 0xff,
+                                nColor & 0xff,
+                                nColor >> 24 & 0xff),
                             aParent);
                         break;
                 }
