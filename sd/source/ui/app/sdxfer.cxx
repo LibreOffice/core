@@ -118,8 +118,6 @@ SdTransferable::~SdTransferable()
     if( mpSdView )
         EndListening( *const_cast< sd::View *>( mpSdView) );
 
-    SolarMutexGuard aSolarGuard;
-
     ObjectReleased();
 
     if( mbOwnView )
@@ -146,6 +144,8 @@ SdTransferable::~SdTransferable()
     delete mpVDev;
     delete mpObjDesc;
 
+    //call explicitly at end of dtor to be covered by above SolarMutex
+    maUserData.clear();
 }
 
 void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
