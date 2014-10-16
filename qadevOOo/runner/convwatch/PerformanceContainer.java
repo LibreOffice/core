@@ -107,11 +107,11 @@ public class PerformanceContainer /* extends *//* implements */ {
         {
             String ls = System.getProperty("line.separator");
 
-            out.write("loadtime="        + String.valueOf(m_nTime[ Load ]) + ls);
-            out.write("storetime="       + String.valueOf(m_nTime[ Store ]) + ls);
-            out.write("printtime="       + String.valueOf(m_nTime[ Print ]) + ls);
-            out.write("officestarttime=" + String.valueOf(m_nTime[ OfficeStart ]) + ls);
-            out.write("storeaspdftime="  + String.valueOf(m_nTime[ StoreAsPDF ]) + ls);
+            out.write("loadtime="        + (m_nTime[ Load ]) + ls);
+            out.write("storetime="       + (m_nTime[ Store ]) + ls);
+            out.write("printtime="       + (m_nTime[ Print ]) + ls);
+            out.write("officestarttime=" + (m_nTime[ OfficeStart ]) + ls);
+            out.write("storeaspdftime="  + (m_nTime[ StoreAsPDF ]) + ls);
         }
 
     private static double stringToDouble(String _sStr)

@@ -167,7 +167,7 @@ public class PRNCompare
                     "-dNOPROMPT",
                     "-dBATCH",
                     "-sDEVICE=jpeg",
-                    "-r" + String.valueOf(_nResolutionInDPI),
+                    "-r" + _nResolutionInDPI,
                     "-dNOPAUSE",
                     "-sOutputFile=" + sJPGFilename,
                     sOriginalFile
@@ -497,7 +497,7 @@ public class PRNCompare
             }
 
             int nPercent = Math.abs(nNotBlackCount_DiffGraphic * 100 / nMinNotWhiteCount);
-            GlobalLogWriter.get().println( "Graphics check, pixel based:" + String.valueOf(nPercent) + "% pixel differ ");
+            GlobalLogWriter.get().println( "Graphics check, pixel based:" + nPercent + "% pixel differ ");
             return nPercent;
         }
 

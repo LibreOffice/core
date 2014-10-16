@@ -27,7 +27,7 @@ public class TimeHelper
      */
     static void waitInSeconds(int _nSeconds, String _sReason)
         {
-            GlobalLogWriter.get().println("Wait " + String.valueOf(_nSeconds) + " sec. Reason: " + _sReason);
+            GlobalLogWriter.get().println("Wait " + _nSeconds + " sec. Reason: " + _sReason);
             try {
                 java.lang.Thread.sleep(_nSeconds * 1000);
             } catch (InterruptedException e2) {}

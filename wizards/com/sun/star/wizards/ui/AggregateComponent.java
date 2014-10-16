@@ -480,13 +480,13 @@ public class AggregateComponent extends ControlScroller
 
     private String getFunctionControlName(int _index)
     {
-        String namesuffix = "_" + String.valueOf(_index + 1);
+        String namesuffix = "_" + (_index + 1);
         return "lstfunctions" + namesuffix;
     }
 
     private String getFieldsControlName(int _index)
     {
-        String namesuffix = "_" + String.valueOf(_index + 1);
+        String namesuffix = "_" + (_index + 1);
         return "lstFieldnames" + namesuffix;
     }
 

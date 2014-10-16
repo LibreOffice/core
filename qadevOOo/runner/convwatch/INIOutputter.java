@@ -120,7 +120,7 @@ public class INIOutputter
                 m_aOut.write( "newgfx=" + _aStatus.m_sNewGfx + ls);
                 m_aOut.write( "diffgfx=" + _aStatus.m_sDiffGfx + ls);
 
-                String sPercent = String.valueOf(_aStatus.nPercent) + "%";
+                String sPercent = _aStatus.nPercent + "%";
                 if (_aStatus.nPercent > 0 && _aStatus.nPercent < 5)
                 {
                     sPercent += " (less 5% is ok)";
@@ -138,7 +138,7 @@ public class INIOutputter
                     m_aOut.write( "new_BM_gfx=" + _aStatus.m_sNew_BM_Gfx + ls);
                     m_aOut.write( "diff_BM_gfx=" + _aStatus.m_sDiff_BM_Gfx + ls);
 
-                    String sPercent2 = String.valueOf(_aStatus.nPercent2) + "%";
+                    String sPercent2 = _aStatus.nPercent2 + "%";
                     if (_aStatus.nPercent2 > 0 && _aStatus.nPercent2 < 5)
                     {
                         sPercent2 += " (less 5% is ok)";
@@ -175,7 +175,7 @@ public class INIOutputter
                 m_aOut.write( "newgfx=" + _aStatus.m_sNewGfx + ls);
                 m_aOut.write( "diffgfx=" + _aStatus.m_sDiffGfx + ls);
 
-                String sPercent = String.valueOf(_aStatus.nPercent) + "%";
+                String sPercent = _aStatus.nPercent + "%";
                 m_aOut.write("percent=" + sPercent + ls);
 
                 // is the check positiv, in a defined range

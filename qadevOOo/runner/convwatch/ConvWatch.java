@@ -217,7 +217,7 @@ public class ConvWatch
             boolean bResultIsOk = true;          // result over all pages
             for (int i=0;i<aList.length; i++)
             {
-                INIoutput.writeSection("page" + String.valueOf(i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
+                INIoutput.writeSection("page" + (i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
                 aList[i].printStatus();
 
                 boolean bCurrentResult = true;   // result over exact one page
@@ -276,7 +276,7 @@ public class ConvWatch
 
             for (int i=0;i<aDiffDiffList.length; i++)
             {
-                INIoutput.writeSection("page" + String.valueOf(i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
+                INIoutput.writeSection("page" + (i + 1));   // list start at point 0, but this is page 1 and so on... current_page = (i + 1)
                 boolean bCurrentResult = (aDiffDiffList[i].nDiffStatus == StatusHelper.DIFF_NO_DIFFERENCES); // logic: nDiff==0 = true if there is no difference
 
                 INIoutput.checkDiffDiffLine(aDiffDiffList[i], bCurrentResult);

@@ -243,7 +243,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
         int nPages = aResultIniFile.getIntValue("global", "pages", 0);
         for (int i = 0; i < nPages; i++)
         {
-            String sCurrentPage = "page" + String.valueOf(i + 1);
+            String sCurrentPage = "page" + (i + 1);
             int nPercent = aResultIniFile.getIntValue(sCurrentPage, "percent", -1);
             if (nPercent == 0)
             {
@@ -484,7 +484,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
             aResultIni.insertValue("global", "dpi", aNameDPIPage.DPI);
 
             // write down flags for each page
-            String sSection = "page" + String.valueOf(nPage);
+            String sSection = "page" + nPage;
 
             aResultIni.insertValue(sSection, "oldgfx", sSource);
             aResultIni.insertValue(sSection, "newgfx", sDestination);
@@ -548,7 +548,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
         }
 
         int nPercent = Math.abs(nNotBlackCount_DiffGraphic * 100 / nMinNotWhiteCount);
-        GlobalLogWriter.println("Graphics check, pixel based:" + String.valueOf(nPercent) + "% pixel differ ");
+        GlobalLogWriter.println("Graphics check, pixel based:" + nPercent + "% pixel differ ");
         return nPercent;
     }
 

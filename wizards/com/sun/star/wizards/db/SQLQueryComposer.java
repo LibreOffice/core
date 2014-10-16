@@ -389,7 +389,7 @@ public class SQLQueryComposer
             if (bAliasNameexists)
             {
                 a++;
-                locAliasName = _TableName + "_" + String.valueOf(a);
+                locAliasName = _TableName + "_" + a;
             }
             else
             {

@@ -680,8 +680,8 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
             if ( currentValue != requiredValue )
             {
                 log.println( "wrong value of the " + fieldName + " field!" );
-                log.println( "  expected: " + String.valueOf( requiredValue ) );
-                log.println( "  found   : " + String.valueOf( currentValue ) );
+                log.println( "  expected: " + requiredValue );
+                log.println( "  found   : " + currentValue );
             }
             else
                 return true;
@@ -704,8 +704,8 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
             if ( currentValue != requiredValue )
             {
                 log.println( "wrong value of the " + fieldName + " field!" );
-                log.println( "  expected: " + String.valueOf( requiredValue ) );
-                log.println( "  found   : " + String.valueOf( currentValue ) );
+                log.println( "  expected: " + requiredValue );
+                log.println( "  found   : " + currentValue );
             }
             else
                 return true;
@@ -726,8 +726,8 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         if ( currentValue != requiredValue )
         {
             log.println( "wrong value of the " + fieldName + " field!" );
-            log.println( "  expected: " + String.valueOf( requiredValue ) );
-            log.println( "  found   : " + String.valueOf( currentValue ) );
+            log.println( "  expected: " + requiredValue );
+            log.println( "  found   : " + currentValue );
         }
         else
             return true;

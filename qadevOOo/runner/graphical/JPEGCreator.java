@@ -237,7 +237,7 @@ private static void convertToWidth340(String _sFrom, String _To)
 
         private String getJPEGName(String _sOutputPath, String _sBasename, int _nResolutionInDPI, String _sGS_PageOutput)
         {
-            String sName = _sBasename + "_" + String.valueOf(_nResolutionInDPI) + "DPI_" + _sGS_PageOutput + ".jpg";
+            String sName = _sBasename + "_" + _nResolutionInDPI + "DPI_" + _sGS_PageOutput + ".jpg";
             String sJPEGName = FileHelper.appendPath(_sOutputPath, sName);
             return sJPEGName;
         }
@@ -281,7 +281,7 @@ private static void convertToWidth340(String _sFrom, String _To)
                     "-dNOPROMPT",
                     "-dBATCH",
                     "-sDEVICE=jpeg",
-                    "-r" + String.valueOf(_nResolutionInDPI),
+                    "-r" + _nResolutionInDPI,
                     "-dNOPAUSE",
                     "-sOutputFile=" + sJPEGNameSchema,
                     sPostscriptOrPDFFile

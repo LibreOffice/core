@@ -174,7 +174,7 @@ public class XMLStylesImporter extends TestCase {
                         boolean hasStyle =
                             StyleFamilyName.hasByName(impStyleName);
                         logF.println("Does style with name '" + impStyleName
-                            + "' exist? " + String.valueOf(hasStyle) );
+                            + "' exist? " + hasStyle );
                         return hasStyle;
                     } catch (com.sun.star.uno.Exception e) {
                         logF.println("Exception while checking import :") ;

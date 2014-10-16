@@ -49,7 +49,7 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
     {
         com.sun.star.sheet.ResultEvent aEvent =
             new com.sun.star.sheet.ResultEvent();
-        aEvent.Value = aName + " " + String.valueOf( nValue );
+        aEvent.Value = aName + " " + nValue;
         aEvent.Source = this;
         return aEvent;
     }

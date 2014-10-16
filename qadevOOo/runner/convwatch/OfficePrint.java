@@ -545,7 +545,7 @@ public class OfficePrint {
                         String sPages = "";
                         if (_aGTA.getMaxPages() > 0)
                         {
-                            sPages = "1-" + String.valueOf(_aGTA.getMaxPages());
+                            sPages = "1-" + _aGTA.getMaxPages();
                         }
                         if (_aGTA.getOnlyPages().length() != 0)
                         {

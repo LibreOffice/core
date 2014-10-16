@@ -222,8 +222,8 @@ public class NotesAccess implements Runnable {
 
                 // Inserting the total value.
                 insertIntoCell(intColumn + 3, intRow, "=B"
-                               + String.valueOf( intRow + 1 )
-                               + "*C" + String.valueOf(intRow + 1),
+                               + ( intRow + 1 )
+                               + "*C" + (intRow + 1),
                                xSpreadsheet, "");
 
                 // Increasing the current row.
@@ -235,8 +235,8 @@ public class NotesAccess implements Runnable {
 
             // Summing all specific amounts.
             insertIntoCell(intColumn + 3, intRow, "=sum(D"
-                           + String.valueOf( intRowToStart + 1 ) + ":D"
-                           + String.valueOf( intRow ),
+                           + ( intRowToStart + 1 ) + ":D"
+                           + intRow,
                            xSpreadsheet, "");
 
             xContext = null;

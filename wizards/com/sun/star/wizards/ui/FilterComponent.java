@@ -536,7 +536,7 @@ public class FilterComponent
 
             try
             {
-                String sCompSuffix = sIncSuffix + "_" + String.valueOf(Index + 1);
+                String sCompSuffix = sIncSuffix + "_" + (Index + 1);
                 m_bEnabled = _bEnabled;
 
                 // Label Field

@@ -110,13 +110,13 @@ public class PerformanceContainer /* extends *//* implements */ {
 
     public void print(PrintStream out)
         {
-            out.println("loadtime="        + String.valueOf(m_nTime[ Load ]));
-            out.println("storetime="       + String.valueOf(m_nTime[ Store ]));
-            out.println("printtime="       + String.valueOf(m_nTime[ Print ]));
-            out.println("officestarttime=" + String.valueOf(m_nTime[ OfficeStart ]));
-            out.println("officestoptime="  + String.valueOf(m_nTime[ OfficeStop ]));
-            out.println("storeaspdftime="  + String.valueOf(m_nTime[ StoreAsPDF ]));
-            out.println("alltime="         + String.valueOf(m_nTime[ AllTime ]));
+            out.println("loadtime="        + m_nTime[ Load ]);
+            out.println("storetime="       + m_nTime[ Store ]);
+            out.println("printtime="       + m_nTime[ Print ]);
+            out.println("officestarttime=" + m_nTime[ OfficeStart ]);
+            out.println("officestoptime="  + m_nTime[ OfficeStop ]);
+            out.println("storeaspdftime="  + m_nTime[ StoreAsPDF ]);
+            out.println("alltime="         + m_nTime[ AllTime ]);
         }
 
     public void print(IniFile _aIniFile, String _sSection)

@@ -700,7 +700,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
         for (int i = 0; i < sRightPaneHeaders.length; i++)
         {
-            insertLabel("lblQueryTitle" + String.valueOf(i),
+            insertLabel("lblQueryTitle" + i,
                     new String[]
                     {
                         PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

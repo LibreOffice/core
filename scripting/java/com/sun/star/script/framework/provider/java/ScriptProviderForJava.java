@@ -241,8 +241,7 @@ class ScriptImpl implements XScript {
             Class<?> c = scriptLoader.loadClass(className);
             long end = new java.util.Date().getTime();
 
-            LogUtils.DEBUG("loadClass took: " + String.valueOf(end - start)
-                           + "milliseconds");
+            LogUtils.DEBUG("loadClass took: " + (end - start) + "milliseconds");
 
             try {
                 LogUtils.DEBUG("class loaded ... ");
@@ -272,8 +271,7 @@ class ScriptImpl implements XScript {
             long start = new java.util.Date().getTime();
             result = script.invoke(invocationArgs);
             long end = new java.util.Date().getTime();
-            LogUtils.DEBUG("invoke took: " + String.valueOf(end - start)
-                           + "milliseconds");
+            LogUtils.DEBUG("invoke took: " + (end - start) + "milliseconds");
         } catch (java.lang.IllegalArgumentException iae) {
             ScriptFrameworkErrorException e2 = new ScriptFrameworkErrorException(
                 iae.getMessage(), null, metaData.getLanguageName(),

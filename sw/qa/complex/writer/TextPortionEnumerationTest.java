@@ -4107,7 +4107,7 @@ public class TextPortionEnumerationTest
 
     private String mkName(String prefix)
     {
-        return prefix + String.valueOf(m_Count++);
+        return prefix + (m_Count++);
     }
 
     private StringPair mkId(String prefix)

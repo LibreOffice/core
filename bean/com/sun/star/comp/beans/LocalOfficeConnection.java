@@ -445,7 +445,7 @@ public class LocalOfficeConnection
                 // empty string as bridge name into createBridge. Then we should always get
                 // a new bridge. This does not work because of (i51323). Therefore we
                 // create unique bridge names for the current process.
-                String sBridgeName = "OOoBean_private_bridge_" + String.valueOf(m_nBridgeCounter++);
+                String sBridgeName = "OOoBean_private_bridge_" + (m_nBridgeCounter++);
                 try {
                     mBridge = xBridgeFactory.createBridge(sBridgeName, protDcp, xConnection, null);
                 } catch (com.sun.star.bridge.BridgeExistsException e) {

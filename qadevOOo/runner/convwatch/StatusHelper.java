@@ -69,7 +69,7 @@ public class StatusHelper
             }
             else if (nDiffStatus == DIFF_DIFFERENCES_FOUND)
             {
-                GlobalLogWriter.get().println("Files differ by " + String.valueOf(nPercent) + "%");
+                GlobalLogWriter.get().println("Files differ by " + nPercent + "%");
             }
             else if (nDiffStatus == DIFF_AFTER_MOVE_DONE_NO_PROBLEMS)
             {
@@ -77,7 +77,7 @@ public class StatusHelper
             }
             else if (nDiffStatus == DIFF_AFTER_MOVE_DONE_DIFFERENCES_FOUND)
             {
-                GlobalLogWriter.get().println("A picture move is done, the files differ by " + String.valueOf(nPercent2) + " old was " + String.valueOf(nPercent) + "%");
+                GlobalLogWriter.get().println("A picture move is done, the files differ by " + nPercent2 + " old was " + nPercent + "%");
             }
             else
             {
