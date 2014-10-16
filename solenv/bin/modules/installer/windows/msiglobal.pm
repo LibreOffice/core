@@ -625,7 +625,7 @@ sub write_summary_into_msi_database
     my $title = "\"Installation database\"";
     my $author = get_author_for_sis();
     my $subject = get_subject_for_sis($allvariableshashref);
-    my $comment = $allvariableshashref->{'PRODUCTNAME'};
+    my $comment = "\"" . $allvariableshashref->{'PRODUCTNAME'} ."\"";
     my $keywords = "\"Install,MSI\"";
     my $appname = "\"Windows Installer\"";
     my $security = get_security_for_sis();
