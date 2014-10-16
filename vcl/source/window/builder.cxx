@@ -604,6 +604,18 @@ namespace
         return bResizable;
     }
 
+    bool extractDecorated(VclBuilder::stringmap &rMap)
+    {
+        bool bDecorated = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("decorated"));
+        if (aFind != rMap.end())
+        {
+            bDecorated = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bDecorated;
+    }
+
     bool extractCloseable(VclBuilder::stringmap &rMap)
     {
         bool bCloseable = true;
@@ -973,11 +985,13 @@ namespace
         OString sBorder = VclBuilder::extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nBits |= WB_BORDER;
+        if (!extractDecorated(rMap))
+            nBits |= WB_OWNERDRAWDECORATION;
         OString sType(extractTypeHint(rMap));
         if (sType == "utility")
             nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_MOVEABLE;
         else if (sType == "popup-menu")
-            nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_POPUP | WB_OWNERDRAWDECORATION;
+            nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_POPUP;
         else
             nBits |= WB_MOVEABLE;
         return nBits;

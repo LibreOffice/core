@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkWindow" id="palette_popup_window">
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
@@ -12,6 +13,7 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">popup-menu</property>
     <property name="skip_pager_hint">True</property>
+    <property name="decorated">False</property>
     <property name="deletable">False</property>
     <child>
       <object class="GtkBox" id="box1">
