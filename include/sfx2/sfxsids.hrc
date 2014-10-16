@@ -59,7 +59,6 @@
 #define SID_PRINTPREVIEW                    (SID_SFX_START + 325)
 
 #define SID_MAIL_SUBJECT                    (SID_SFX_START + 328)
-#define SID_MAIL_NOTIFY                     (SID_SFX_START + 330)
 #define SID_MAIL_SENDDOC                    (SID_SFX_START + 331)
 #define SID_MAIL_SENDDOCASPDF               (SID_SFX_START + 1672)
 
@@ -185,7 +184,6 @@
 #define SID_DELETE_BASICOBJECT              (SID_SFX_START + 1556)
 
 #define SID_UPDATE_VERSION                  (SID_SFX_START + 1568)
-#define SID_BUILD_VERSION                   (SID_SFX_START + 1569)
 
 #define SID_VERSION                         (SID_SFX_START + 1583)
 
@@ -395,8 +393,6 @@
 #define SID_VIEWSHELL3                      (SID_SFX_START + 633)
 #define SID_VIEWSHELL4                      (SID_SFX_START + 634)
 
-#define SID_CAPTION                         (SID_SFX_START + 641)
-
 // id for thesaurs entry in context menu
 #define SID_THES                            (SID_SFX_START + 698)
 
@@ -463,8 +459,6 @@
 #define SID_CONFIGEVENT                     (SID_SFX_START + 926)
 #define SID_CFGFILE                         (SID_SFX_START + 927)
 #define SID_SHOWPOPUPS                      (SID_SFX_START + 929)
-#define SID_TASKBAR                         (SID_SFX_START + 931)
-#define SID_AUTOHIDE                        (SID_SFX_START + 932)
 
 // Item-Id for the assinged event Tabpage
 #define SID_ATTR_MACROITEM                  (SID_SFX_START + 934)

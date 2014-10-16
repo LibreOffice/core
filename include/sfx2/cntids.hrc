@@ -22,7 +22,6 @@
 
 #include <svl/solar.hrc>
 
-#define SID_TITLE                       (SID_SFX_START + 307)
 #define SID_DELETE                      (SID_SFX_START + 713)
 
 #define SID_DISTRIBUTION                (SID_CHAOS_START + 26)
