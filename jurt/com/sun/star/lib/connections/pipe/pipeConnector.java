@@ -109,7 +109,7 @@ public final class pipeConnector implements XConnector {
             bConnected = true;
             return xConn;
         } catch ( java.io.IOException e ) {
-            throw new NoConnectException();
+            throw new NoConnectException(e);
         }
     }
 

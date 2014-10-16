@@ -144,9 +144,8 @@ public final class Driver {
                 myConvert.addInputStream(f.getName(), fis);
             }
         } catch (Exception addExcept) {
-            System.out.println("\nFile <" + processFile + "> is not in <" +
-                fromMime + "> format");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("\nFile <" + processFile + "> is not in <" +
+                    fromMime + "> format", addExcept);
         }
 
         ConvertData dataOut = null;

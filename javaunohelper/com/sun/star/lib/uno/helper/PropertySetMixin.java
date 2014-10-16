@@ -135,9 +135,7 @@ public final class PropertySetMixin {
                         + "theTypeDescriptionManager")).
                  getByHierarchicalName(type.getTypeName())));
         } catch (NoSuchElementException e) {
-            throw new RuntimeException(
-                "unexpected com.sun.star.container.NoSuchElementException: "
-                + e.getMessage());
+            throw new RuntimeException(e);
         }
         HashMap<String,PropertyData> map = new HashMap<String,PropertyData>();
         ArrayList<String> handleNames = new ArrayList<String>();
@@ -481,7 +479,7 @@ public final class PropertySetMixin {
             } catch (UnknownPropertyException e) {
                 continue;
             } catch (WrappedTargetException e) {
-                throw new WrappedTargetRuntimeException(
+                throw new WrappedTargetRuntimeException(e,
                     e.getMessage(), object, e.TargetException);
             }
             s[n++] = new PropertyValue(handleMap[i], i, value, state[0]);
@@ -715,17 +713,15 @@ public final class PropertySetMixin {
             f.set(o, v);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             if (e.ArgumentPosition == 1) {
-                throw new com.sun.star.lang.IllegalArgumentException(
+                throw new com.sun.star.lang.IllegalArgumentException(e,
                     e.getMessage(), object, illegalArgumentPosition);
             } else {
-                throw new RuntimeException(
-                    "unexpected com.sun.star.lang.IllegalArgumentException: "
-                    + e.getMessage());
+                throw new RuntimeException(e);
             }
         } catch (com.sun.star.lang.IllegalAccessException e) {
             //TODO  Clarify whether PropertyVetoException is the correct
             // exception to throw when trying to set a read-only property:
-            throw new PropertyVetoException(
+            throw new PropertyVetoException(e,
                 "cannot set read-only property " + name, object);
         } catch (WrappedTargetRuntimeException e) {
             //FIXME  A WrappedTargetRuntimeException from XIdlField2.get is not
@@ -736,14 +732,14 @@ public final class PropertySetMixin {
                     AnyConverter.getType(e.TargetException))
                 && (p.property.Attributes & PropertyAttribute.OPTIONAL) != 0)
             {
-                throw new UnknownPropertyException(name, object);
+                throw new UnknownPropertyException(e, name, object);
             } else if (new Type(PropertyVetoException.class).isSupertypeOf(
                            AnyConverter.getType(e.TargetException))
                        && ((p.property.Attributes
                             & PropertyAttribute.CONSTRAINED)
                            != 0))
             {
-                throw new PropertyVetoException(name, object);
+                throw new PropertyVetoException(e, name, object);
             } else {
                 throw new WrappedTargetException(
                     e.getMessage(), object, e.TargetException);
@@ -765,9 +761,7 @@ public final class PropertySetMixin {
             value = field.get(
                 new Any(type, UnoRuntime.queryInterface(type, object)));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            throw new RuntimeException(
-                "unexpected com.sun.star.lang.IllegalArgumentException: "
-                + e.getMessage());
+            throw new RuntimeException(e);
         } catch (WrappedTargetRuntimeException e) {
             //FIXME  A WrappedTargetRuntimeException from XIdlField2.get is not
             // guaranteed to originate directly within XIdlField2.get (and thus
@@ -777,7 +771,7 @@ public final class PropertySetMixin {
                     AnyConverter.getType(e.TargetException))
                 && (p.property.Attributes & PropertyAttribute.OPTIONAL) != 0)
             {
-                throw new UnknownPropertyException(name, object);
+                throw new UnknownPropertyException(e, name, object);
             } else {
                 throw new WrappedTargetException(
                     e.getMessage(), object, e.TargetException);
@@ -806,10 +800,7 @@ public final class PropertySetMixin {
                         XIdlField2.class,
                         ambiguous.getField("Value")).get(value);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    throw new RuntimeException(
-                        "unexpected"
-                        + " com.sun.star.lang.IllegalArgumentException: "
-                        + e.getMessage());
+                    throw new RuntimeException(e);
                 }
                 undoAmbiguous = false;
             } else if (undoDefaulted
@@ -825,10 +816,7 @@ public final class PropertySetMixin {
                         XIdlField2.class,
                         defaulted.getField("Value")).get(value);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    throw new RuntimeException(
-                        "unexpected"
-                        + " com.sun.star.lang.IllegalArgumentException: "
-                        + e.getMessage());
+                    throw new RuntimeException(e);
                 }
                 undoDefaulted = false;
             } else if (undoOptional
@@ -848,10 +836,7 @@ public final class PropertySetMixin {
                         XIdlField2.class,
                         optional.getField("Value")).get(value);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    throw new RuntimeException(
-                        "unexpected"
-                        + " com.sun.star.lang.IllegalArgumentException: "
-                        + e.getMessage());
+                    throw new RuntimeException(e);
                 }
                 undoOptional = false;
             } else {
@@ -892,13 +877,9 @@ public final class PropertySetMixin {
                     XIdlField2.class, type.getField("IsAmbiguous")).set(
                         strct, Boolean.valueOf(isAmbiguous));
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                throw new RuntimeException(
-                    "unexpected com.sun.star.lang.IllegalArgumentException: "
-                    + e.getMessage());
+                throw new RuntimeException(e);
             } catch (com.sun.star.lang.IllegalAccessException e) {
-                throw new RuntimeException(
-                    "unexpected com.sun.star.lang.IllegalAccessException: "
-                    + e.getMessage());
+                throw new RuntimeException(e);
             }
             return strct[0];
         } else if (wrapDefaulted
@@ -919,13 +900,9 @@ public final class PropertySetMixin {
                     XIdlField2.class, type.getField("IsDefaulted")).set(
                         strct, Boolean.valueOf(isDefaulted));
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                throw new RuntimeException(
-                    "unexpected com.sun.star.lang.IllegalArgumentException: "
-                    + e.getMessage());
+                throw new RuntimeException(e);
             } catch (com.sun.star.lang.IllegalAccessException e) {
-                throw new RuntimeException(
-                    "unexpected com.sun.star.lang.IllegalAccessException: "
-                    + e.getMessage());
+                throw new RuntimeException(e);
             }
             return strct[0];
         } else if (wrapOptional
@@ -948,13 +925,9 @@ public final class PropertySetMixin {
                             wrapDefaulted, isDefaulted, false));
                 }
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                throw new RuntimeException(
-                    "unexpected com.sun.star.lang.IllegalArgumentException: "
-                    + e.getMessage());
+                throw new RuntimeException(e);
             } catch (com.sun.star.lang.IllegalAccessException e) {
-                throw new RuntimeException(
-                    "unexpected com.sun.star.lang.IllegalAccessException: "
-                    + e.getMessage());
+                throw new RuntimeException(e);
             }
             return strct[0];
         } else {

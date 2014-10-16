@@ -87,12 +87,10 @@ public final class ByteArrayToXInputStreamAdapter
             System.arraycopy(m_bytes, m_pos, values[0], 0, param);
             m_pos += param;
             return param;
-        } catch (ArrayIndexOutOfBoundsException ae) {
-            ae.printStackTrace();
-            throw new com.sun.star.io.BufferSizeExceededException("buffer overflow");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new com.sun.star.io.IOException("error accessing buffer");
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            throw new com.sun.star.io.BufferSizeExceededException(ex, "buffer overflow");
+        } catch (Exception ex) {
+            throw new com.sun.star.io.IOException(ex, "error accessing buffer");
         }
     }
 

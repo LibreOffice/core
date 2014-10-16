@@ -41,8 +41,10 @@ public class NativeStorageAccess {
                 mode = NativeStorageAccess.READWRITE | NativeStorageAccess.SEEKABLE;
 
             openStream(name, (String)key, mode);
-        } catch(Exception e){
-            throw new java.io.IOException();
+        } catch(Exception ex1){
+            java.io.IOException ex2 = new java.io.IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
     private native void openStream(String name,String key, int mode);

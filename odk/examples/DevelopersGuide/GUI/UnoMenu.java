@@ -84,7 +84,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
 
         xPopupMenu.addMenuListener(this);
     }catch( Exception e ) {
-        throw new java.lang.RuntimeException("cannot happen...");
+        throw new java.lang.RuntimeException("cannot happen...", e);
     }
         return xPopupMenu;
     }
@@ -102,7 +102,7 @@ public UnoMenu(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
         xMenuBar.addMenuListener(_xMenuListener);
         _xTopWindow.setMenuBar(xMenuBar);
     }catch( Exception e ) {
-        throw new java.lang.RuntimeException("cannot happen...");
+        throw new java.lang.RuntimeException("cannot happen...", e);
     }}
 
     protected void closeDialog(){

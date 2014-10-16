@@ -344,7 +344,7 @@ public class Helper  {
             String fileURL = m_hFileURLs.get(fileAlias).toString();
             return utils.getFullURL(ensureEndingFileSep(m_sTestDocPath) + fileURL);
         } catch (NullPointerException e){
-            throw new FileAliasNotFoundException(fileAlias);
+            throw new FileAliasNotFoundException(fileAlias, e);
        }
 
     }
@@ -359,7 +359,7 @@ public class Helper  {
         try{
             return m_hFileTypes.get(fileAlias).toString();
         } catch (NullPointerException e){
-            throw new FileAliasNotFoundException(fileAlias);
+            throw new FileAliasNotFoundException(fileAlias, e);
        }
     }
 
@@ -425,7 +425,7 @@ class FileAliasNotFoundException extends java.lang.Exception{
     /** throws error message with wrong alias name
      * @param fileAlias the alias name
      */
-    public FileAliasNotFoundException(String fileAlias){
-        super("Could not get '"+fileAlias +"'");
+    public FileAliasNotFoundException(String fileAlias, Throwable cause){
+        super("Could not get '"+fileAlias +"'", cause);
     }
 }

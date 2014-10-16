@@ -285,7 +285,7 @@ public class TestComponent {
                 return new Type[]{new Type(XPerformanceTest.class), new Type(XServiceInfo.class), new Type(XTypeProvider.class)};
             }
             catch(Exception exception) {
-                throw new com.sun.star.uno.RuntimeException(exception.getMessage());
+                throw new com.sun.star.uno.RuntimeException(exception);
             }
         }
 
@@ -721,7 +721,7 @@ public class TestComponent {
                 Thread.sleep(nWaitMUSEC / 10000);
             }
             catch(InterruptedException interruptedException) {
-                throw new com.sun.star.uno.RuntimeException(interruptedException.getMessage());
+                throw new com.sun.star.uno.RuntimeException(interruptedException);
             }
 
             if(_bFirstCall)
@@ -738,7 +738,7 @@ public class TestComponent {
                 Thread.sleep(nWaitMUSEC / 10000);
             }
             catch(InterruptedException interruptedException) {
-                throw new com.sun.star.uno.RuntimeException(interruptedException.getMessage());
+                throw new com.sun.star.uno.RuntimeException(interruptedException);
             }
 
             _bSequenceOfCallTestPassed = _bSequenceOfCallTestPassed && (nCallId > _nLastCallId);
@@ -954,7 +954,7 @@ public class TestComponent {
                 return new Type[]{new Type(XBridgeTest.class), new Type(XRecursiveCall.class), new Type(XServiceInfo.class), new Type(XTypeProvider.class)};
             }
             catch(Exception exception) {
-                throw new com.sun.star.uno.RuntimeException(exception.getMessage());
+                throw new com.sun.star.uno.RuntimeException(exception);
             }
         }
 

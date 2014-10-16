@@ -762,7 +762,9 @@ public class InterfaceContainer implements Cloneable
             }
             catch(java.lang.IndexOutOfBoundsException e)
             {
-                throw new java.util.NoSuchElementException();
+                java.util.NoSuchElementException ex2 = new java.util.NoSuchElementException();
+                ex2.initCause(e);
+                throw ex2;
             }
         }
 
@@ -828,7 +830,9 @@ public class InterfaceContainer implements Cloneable
                 return previous;
             } catch(IndexOutOfBoundsException e)
             {
-                throw new NoSuchElementException();
+                java.util.NoSuchElementException ex2 = new java.util.NoSuchElementException();
+                ex2.initCause(e);
+                throw ex2;
             }
         }
 

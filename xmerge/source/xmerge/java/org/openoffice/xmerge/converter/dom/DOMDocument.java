@@ -291,7 +291,9 @@ public class DOMDocument
                     return writer.toString().getBytes();
                 } catch (Exception e) {
                     // We don't have another parser
-                    throw new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                    IOException ex2 = new IOException("No appropriate API (JAXP/Xerces) to serialize XML document: " + domImpl);
+                    ex2.initCause(e);
+                    throw ex2;
                 }
             }
         }

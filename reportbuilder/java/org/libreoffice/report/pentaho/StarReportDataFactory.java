@@ -74,7 +74,7 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
             {
                 message = "Failed to query data";
             }
-            throw new ReportDataFactoryException(message);
+            throw new ReportDataFactoryException(message, e);
         }
     }
 
@@ -99,7 +99,7 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
         }
         catch (CloneNotSupportedException e)
         {
-            throw new IllegalStateException("Clone failed?");
+            throw new IllegalStateException(e);
         }
     }
 

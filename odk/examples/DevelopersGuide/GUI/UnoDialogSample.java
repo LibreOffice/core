@@ -1240,7 +1240,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // finally set the created pointer at the windowpeer of the control
             xControl.getPeer().setPointer(xPointer);
         } catch (com.sun.star.uno.Exception ex) {
-            throw new java.lang.RuntimeException("cannot happen...");
+            throw new java.lang.RuntimeException("cannot happen...", ex);
         }
     }
 

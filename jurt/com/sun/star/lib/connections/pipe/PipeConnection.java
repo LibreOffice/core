@@ -84,12 +84,10 @@ public class PipeConnection implements XConnection, XConnectionBroadcaster {
         // create the pipe
         try {
             createJNI( aPipeName );
-        } catch ( NullPointerException aNPE ) {
-            throw new IOException( aNPE.getMessage() );
-        } catch ( com.sun.star.io.IOException aIOE ) {
-            throw new IOException( aIOE.getMessage() );
-        } catch ( java.lang.Exception aE ) {
-            throw new IOException( aE.getMessage() );
+        } catch ( java.lang.Exception ex1 ) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 

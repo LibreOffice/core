@@ -76,7 +76,7 @@ public class XMLDocument extends integration.forms.DocumentHelper
         }
         catch (WrappedTargetException ex)
         {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException(ex);
         }
     }
 

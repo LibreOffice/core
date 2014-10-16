@@ -146,19 +146,19 @@ public class SOImageService implements ImageService
         }
         catch (UnknownPropertyException ex)
         {
-            throw new ReportExecutionException();
+            throw new ReportExecutionException(ex);
         }
         catch (WrappedTargetException ex)
         {
-            throw new ReportExecutionException();
+            throw new ReportExecutionException(ex);
         }
         catch (com.sun.star.lang.IllegalArgumentException ex)
         {
-            throw new ReportExecutionException();
+            throw new ReportExecutionException(ex);
         }
         catch (IOException ex)
         {
-            throw new ReportExecutionException();
+            throw new ReportExecutionException(ex);
         }
         return null;
     }

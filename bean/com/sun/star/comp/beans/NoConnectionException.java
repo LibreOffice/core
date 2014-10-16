@@ -26,6 +26,11 @@ package com.sun.star.comp.beans;
  */
 public class NoConnectionException extends Exception
 {
+
+    public NoConnectionException() {}
+
+    public NoConnectionException(Throwable cause) { super(cause); }
+
 }
 
 

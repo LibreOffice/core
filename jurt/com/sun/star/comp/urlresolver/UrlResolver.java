@@ -87,7 +87,7 @@ public class UrlResolver {
                 xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class,
                                                                           _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
             } catch (com.sun.star.uno.Exception e) {
-                throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                throw new com.sun.star.uno.RuntimeException(e);
             }
             XBridge xBridge = xBridgeFactory.getBridge(conDcp + ";" + protDcp);
 
@@ -96,7 +96,7 @@ public class UrlResolver {
                 try {
                     connector = _xMultiServiceFactory.createInstance("com.sun.star.connection.Connector");
                 } catch (com.sun.star.uno.Exception e) {
-                        throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                        throw new com.sun.star.uno.RuntimeException(e);
                 }
 
                 XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
@@ -106,7 +106,7 @@ public class UrlResolver {
                 try {
                     xBridge = xBridgeFactory.createBridge(conDcp + ";" + protDcp, protDcp, xConnection, null);
                 } catch (com.sun.star.bridge.BridgeExistsException e) {
-                    throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                    throw new com.sun.star.uno.RuntimeException(e);
                 }
             }
             rootObject = xBridge.getInstance(rootOid);

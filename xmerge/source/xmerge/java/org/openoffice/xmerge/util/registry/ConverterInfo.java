@@ -128,9 +128,8 @@ public class ConverterInfo {
             }
 
         } catch (Exception e) {
-            RegistryException re = new RegistryException(
-                "Class implementation of the plug-in cannot be loaded.");
-            throw re;
+            throw new RegistryException(
+                "Class implementation of the plug-in cannot be loaded.", e);
         }
     }
 
@@ -200,9 +199,8 @@ public class ConverterInfo {
             }
 
         } catch (Exception e) {
-            RegistryException re = new RegistryException(
-                "Class implementation of the plug-in cannot be loaded.");
-            throw re;
+            throw new RegistryException(
+                "Class implementation of the plug-in cannot be loaded.", e);
         }
     }
 

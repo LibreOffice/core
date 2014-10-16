@@ -59,7 +59,7 @@ public class HsqlDriverTest extends ComplexTestCase {
             HsqlDatabase database = new HsqlDatabase( param.getMSF() );
             ds = database.getDataSource().getXDataSource();
         } catch(Exception ex) {
-            throw new RuntimeException("factory: unable to construct data source" );
+            throw new RuntimeException("factory: unable to construct data source", ex );
         }
 
         try{

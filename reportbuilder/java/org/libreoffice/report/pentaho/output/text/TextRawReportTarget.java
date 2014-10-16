@@ -1263,7 +1263,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
         catch (IOException ioe)
         {
-            throw new ReportProcessingException("Failed to write settings document");
+            throw new ReportProcessingException("Failed to write settings document", ioe);
         }
     }
 

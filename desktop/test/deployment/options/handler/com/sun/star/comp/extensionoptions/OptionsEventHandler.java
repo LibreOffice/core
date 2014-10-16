@@ -156,8 +156,8 @@ public class OptionsEventHandler {
                 } else if (sMethod.equals("back") || sMethod.equals("initialize")) {
                     loadData(aWindow);
                 }
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                throw new com.sun.star.lang.IllegalArgumentException(
+            } catch (com.sun.star.lang.IllegalArgumentException ex) {
+                throw new com.sun.star.lang.IllegalArgumentException(ex,
                     "Method external_event requires a string in the event object argument.",
                     this, (short) -1);
             }
@@ -216,8 +216,8 @@ public class OptionsEventHandler {
                 //The value is still contained in a com.sun.star.uno.Any - so convert it.
                 try {
                     sValue = AnyConverter.toString(aText);
-                } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                } catch (com.sun.star.lang.IllegalArgumentException ex) {
+                    throw new com.sun.star.lang.IllegalArgumentException(ex,
                         "Wrong property type.", this, (short) -1);
                 }
 
@@ -350,8 +350,8 @@ public class OptionsEventHandler {
             String sName = null;
             try {
                 sName = AnyConverter.toString(aWindowName);
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                throw new com.sun.star.uno.Exception(
+            } catch (com.sun.star.lang.IllegalArgumentException ex) {
+                throw new com.sun.star.uno.Exception(ex,
                     "Name - property of window is not a string.", this);
             }
 

@@ -134,11 +134,9 @@ public class DialogDocument extends UnoDialogSample {
             aPropertyValues[1] = aPropertyValue;
             xComponentLoader.loadComponentFromURL(_sUrl, "_self", 0, aPropertyValues);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            ex.printStackTrace();
-            throw new java.lang.RuntimeException("cannot happen...");
+            throw new java.lang.RuntimeException("cannot happen...", ex);
         } catch (com.sun.star.uno.Exception ex) {
-            ex.printStackTrace();
-            throw new java.lang.RuntimeException("cannot happen...");
+            throw new java.lang.RuntimeException("cannot happen...", ex);
         }
     }
 

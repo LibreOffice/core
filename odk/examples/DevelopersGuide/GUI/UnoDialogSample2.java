@@ -223,7 +223,7 @@ public class UnoDialogSample2 extends UnoDialogSample {
                 new Object[] {Boolean.FALSE, Integer.valueOf(_nHeight), sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Boolean.TRUE, Integer.valueOf(_nStep), _sStringItemList, Integer.valueOf(_nWidth)});
             m_xDlgModelNameContainer.insertByName(sName, xLBModelMPSet);
         }catch (com.sun.star.uno.Exception ex) {
-            throw new java.lang.RuntimeException("cannot happen...");
+            throw new java.lang.RuntimeException("cannot happen...", ex);
         }
         return xListBox;
     }

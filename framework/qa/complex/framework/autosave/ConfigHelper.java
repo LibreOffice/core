@@ -76,7 +76,7 @@ class ConfigHelper
         }
         catch(com.sun.star.uno.Exception ex)
         {
-            throw new com.sun.star.container.NoSuchElementException(ex.getMessage());
+            throw new com.sun.star.container.NoSuchElementException(ex);
         }
     }
 

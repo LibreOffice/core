@@ -158,6 +158,6 @@ public class ImageControlSample extends UnoDialogSample{
             xGraphic = xGraphicProvider.queryGraphic(aPropertyValues);
             return xGraphic;
         }catch (com.sun.star.uno.Exception ex){
-            throw new java.lang.RuntimeException("cannot happen...");
+            throw new java.lang.RuntimeException("cannot happen...", ex);
         }}
 }

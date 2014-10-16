@@ -167,7 +167,7 @@ XMultiPropertySet
         }
         catch (NoSuchFieldException e)
         {
-            throw new com.sun.star.uno.RuntimeException("there is no member variable: " + memberName);
+            throw new com.sun.star.uno.RuntimeException(e, "there is no member variable: " + memberName);
         }
         Class cl= propField.getType();
         Type t= new Type(cl);

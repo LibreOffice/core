@@ -312,11 +312,11 @@ public class XMergeBridge {
 
         }
         catch (IOException e){
-        throw new com.sun.star.uno.RuntimeException(e.getMessage());
+        throw new com.sun.star.uno.RuntimeException(e);
 
         }
          catch (Exception e){
-        throw new com.sun.star.uno.RuntimeException("Xmerge Exception");
+        throw new com.sun.star.uno.RuntimeException(e);
 
         }
     }
@@ -476,13 +476,10 @@ public class XMergeBridge {
              }
              ConverterInfoMgr.removeByJar(jarName);
          }
-         catch (StackOverflowError sOE){
-             System.out.println("\nERROR : Stack Overflow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
-
-         }
-         catch (Exception e) {
-             System.out.println("Error:"+e);
-              throw new IOException("Xmerge Exception");
+         catch (Exception ex1) {
+             IOException ex2 = new IOException();
+             ex2.initCause(ex1);
+             throw ex2;
              }
          }
          else{
@@ -513,9 +510,10 @@ public class XMergeBridge {
          catch (StackOverflowError sOE){
               System.out.println("\nERROR : Stack Overflow. \n Increase of the JRE by adding the following line to the end of the javarc file \n \"-Xss1m\"\n");
          }
-         catch (Exception e) {
-             System.out.println("Error:"+e);
-             throw new IOException("Xmerge Exception");
+         catch (Exception ex1) {
+             IOException ex2 = new IOException();
+             ex2.initCause(ex1);
+             throw ex2;
          }
 
 

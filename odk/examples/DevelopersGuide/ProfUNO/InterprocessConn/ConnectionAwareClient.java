@@ -122,8 +122,7 @@ public class ConnectionAwareClient extends java.awt.Frame
         catch ( com.sun.star.uno.Exception exc )
         {
             _txtLabel.setText( exc.getMessage() );
-            exc.printStackTrace();
-            throw new java.lang.RuntimeException( exc.getMessage()  );
+            throw new java.lang.RuntimeException( exc );
         }
     }
 

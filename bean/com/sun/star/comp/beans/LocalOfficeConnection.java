@@ -186,10 +186,12 @@ public class LocalOfficeConnection
                 mProtocol = aURL.getProtocol();
                 mInitialObject = aURL.getRootOid();
             }
-            catch ( com.sun.star.lang.IllegalArgumentException eIll )
+            catch ( com.sun.star.lang.IllegalArgumentException ex1 )
             {
-                throw new java.net.MalformedURLException(
+                java.net.MalformedURLException ex2 = new java.net.MalformedURLException(
                     "Invalid UNO connection URL.");
+                ex2.initCause(ex1);
+                throw ex2;
             }
         }
         mURL    = url;
@@ -425,7 +427,7 @@ public class LocalOfficeConnection
                     xLocalServiceManager.createInstanceWithContext(
                         "com.sun.star.bridge.BridgeFactory", xLocalContext));
         } catch (com.sun.star.uno.Exception e) {
-            throw new com.sun.star.uno.RuntimeException(e.getMessage());
+            throw new com.sun.star.uno.RuntimeException(e);
         }
         synchronized(this) {
             if(mBridge == null) {
@@ -434,7 +436,7 @@ public class LocalOfficeConnection
                     connector = xLocalServiceManager.createInstanceWithContext(
                             "com.sun.star.connection.Connector", xLocalContext);
                 } catch (com.sun.star.uno.Exception e) {
-                    throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                    throw new com.sun.star.uno.RuntimeException(e);
                 }
                 XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
                 // connect to the server
@@ -447,7 +449,7 @@ public class LocalOfficeConnection
                 try {
                     mBridge = xBridgeFactory.createBridge(sBridgeName, protDcp, xConnection, null);
                 } catch (com.sun.star.bridge.BridgeExistsException e) {
-                    throw new com.sun.star.uno.RuntimeException(e.getMessage());
+                    throw new com.sun.star.uno.RuntimeException(e);
                 }
             }
             rootObject = mBridge.getInstance(rootOid);

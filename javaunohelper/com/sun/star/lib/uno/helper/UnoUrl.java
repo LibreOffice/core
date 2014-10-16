@@ -241,8 +241,8 @@ public class UnoUrl {
 
             }
         } catch (UnsupportedEncodingException e) {
-            throw new com.sun.star.lang.IllegalArgumentException(
-                "Couldn't convert parameter string to UTF-8 string:" + e.getMessage());
+            throw new com.sun.star.lang.IllegalArgumentException(e,
+                "Couldn't convert parameter string to UTF-8 string");
         }
     }
 

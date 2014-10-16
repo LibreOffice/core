@@ -242,7 +242,7 @@ public class StyleUtilities
         }
         catch (CloneNotSupportedException e)
         {
-            throw new ReportProcessingException("Failed to clone font-face element");
+            throw new ReportProcessingException("Failed to clone font-face element", e);
         }
     }
 
@@ -308,7 +308,7 @@ public class StyleUtilities
                 }
                 catch (CloneNotSupportedException e)
                 {
-                    throw new ReportProcessingException("Failed to copy style. This should not have happened.");
+                    throw new ReportProcessingException("Failed to copy style. This should not have happened.", e);
                 }
             }
             else

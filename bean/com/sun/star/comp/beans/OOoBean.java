@@ -157,26 +157,27 @@ public class OOoBean
 
         @internal
      */
-    private synchronized void setOOoConnection( OfficeConnection iNewConnection )
-        throws  HasConnectionException, NoConnectionException
-    {
+    private synchronized void setOOoConnection(OfficeConnection iNewConnection)
+            throws HasConnectionException, NoConnectionException {
         // the connection cannot be exchanged
-        if ( iConnection != null )
+        if (iConnection != null)
             throw new HasConnectionException();
 
         // is there a real connection, not just the proxy?
         com.sun.star.uno.XComponentContext xComponentContext = null;
-        try { xComponentContext = iNewConnection.getComponentContext(); }
-        catch ( java.lang.Throwable aExc )
-        { throw new NoConnectionException(); }
-        if ( xComponentContext == null )
+        try {
+            xComponentContext = iNewConnection.getComponentContext();
+        } catch (java.lang.Throwable aExc) {
+            throw new NoConnectionException(aExc);
+        }
+        if (xComponentContext == null)
             throw new NoConnectionException();
 
         // set the connection
         iConnection = iNewConnection;
 
         // get notified when connection dies
-        if ( xConnectionListener != null )
+        if (xConnectionListener != null)
             xConnectionListener.end();
         xConnectionListener = this.new EventListener("setOOoConnection");
     }
@@ -300,7 +301,7 @@ public class OOoBean
             aConnectorThread.start();
             try { aConnectorThread.join(nOOoStartTimeOut); }
             catch ( InterruptedException aExc )
-            { throw new NoConnectionException(); }
+            { throw new NoConnectionException(aExc); }
             if ( xServiceFactory == null )
                 throw new NoConnectionException();
         }
@@ -493,13 +494,15 @@ public class OOoBean
 
             // @requirement FUNC.CON.LOST/0.2
             NoConnectionException
-    {
-        if ( iConnection == null )
+ {
+        if (iConnection == null)
             throw new NoConnectionException();
 
-        try { xFrameWindow.getAWTComponent().setVisible(false); }
-        catch ( com.sun.star.lang.DisposedException aExc )
-        { throw new NoConnectionException(); }
+        try {
+            xFrameWindow.getAWTComponent().setVisible(false);
+        } catch (com.sun.star.lang.DisposedException aExc) {
+            throw new NoConnectionException(aExc);
+        }
     }
 
        // @requirement FUNC.BEAN.LOAD/0.4
@@ -675,8 +678,9 @@ public class OOoBean
                 catch ( com.sun.star.uno.Exception aExc )
                 {
                     // TDB: handling failure in createInstance
-                    aExc.printStackTrace();
-                    throw new java.io.IOException();
+                    java.io.IOException ex2 = new java.io.IOException();
+                    ex2.initCause(aExc);
+                    throw ex2;
                 }
 
                 aCallWatchThread.cancel();
@@ -692,7 +696,7 @@ public class OOoBean
         }
         catch ( InterruptedException aExc )
         {
-            throw new NoConnectionException();
+            throw new NoConnectionException(aExc);
         }
     }
 
@@ -808,27 +812,30 @@ public class OOoBean
             java.io.IOException,
             com.sun.star.lang.IllegalArgumentException,
             NoDocumentException
-    {
+ {
         // no document available?
-        if ( aDocument == null )
+        if (aDocument == null)
             throw new NoDocumentException();
 
-        try
-        {
+        try {
             // start runtime timeout
-            CallWatchThread aCallWatchThread =
-                new CallWatchThread( nOOoCallTimeOut, "storeToURL" );
+            CallWatchThread aCallWatchThread = new CallWatchThread(
+                    nOOoCallTimeOut, "storeToURL");
 
             // store the document
-            try { aDocument.storeToURL( aURL, aArguments ); }
-            catch ( com.sun.star.io.IOException aExc )
-            { throw new java.io.IOException(); }
+            try {
+                aDocument.storeToURL(aURL, aArguments);
+            } catch (com.sun.star.io.IOException aExc) {
+                java.io.IOException ex2 = new java.io.IOException();
+                ex2.initCause(aExc);
+                throw ex2;
+            }
 
             // end runtime timeout
             aCallWatchThread.cancel();
+        } catch (java.lang.InterruptedException aExc) {
+            throw new NoConnectionException(aExc);
         }
-        catch ( java.lang.InterruptedException aExc )
-        { throw new NoConnectionException(); }
     }
 
     /** Stores a document to a stream.
@@ -848,26 +855,28 @@ public class OOoBean
 
     {
         // wrap Java stream into UNO stream
-        com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter aStream =
-                new com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter(
-                    aOutStream );
+        com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter aStream = new com.sun.star.lib.uno.adapter.OutputStreamToXOutputStreamAdapter(
+                aOutStream);
 
         // add stream to arguments
-        com.sun.star.beans.PropertyValue[] aExtendedArguments =
-            addArgument( aArguments, new com.sun.star.beans.PropertyValue(
-                "OutputStream", -1, aStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
+        com.sun.star.beans.PropertyValue[] aExtendedArguments = addArgument(
+                aArguments, new com.sun.star.beans.PropertyValue(
+                        "OutputStream", -1, aStream,
+                        com.sun.star.beans.PropertyState.DIRECT_VALUE));
 
         // call normal store method
-        storeToURL( "private:stream", aExtendedArguments );
+        storeToURL("private:stream", aExtendedArguments);
 
         // get byte array from document stream
-        try { aStream.closeOutput(); }
-        catch ( com.sun.star.io.NotConnectedException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.BufferSizeExceededException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.IOException aExc )
-        { throw new java.io.IOException(); }
+        try {
+            aStream.closeOutput();
+        } catch (com.sun.star.io.NotConnectedException aExc) { /* TDB */
+        } catch (com.sun.star.io.BufferSizeExceededException aExc) { /* TDB */
+        } catch (com.sun.star.io.IOException aExc) {
+            java.io.IOException ex2 = new java.io.IOException();
+            ex2.initCause(aExc);
+            throw ex2;
+        }
         return aOutStream;
     }
 
@@ -1081,11 +1090,11 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 }
                 catch (  com.sun.star.beans.UnknownPropertyException aExc )
                 {
-                    throw new RuntimeException( "not layout manager found" );
+                    throw new RuntimeException( "not layout manager found", aExc );
                 }
                 catch (  com.sun.star.lang.WrappedTargetException aExc )
                 {
-                    throw new RuntimeException( "not layout manager found" );
+                    throw new RuntimeException( "not layout manager found", aExc );
                 }
 
                 // notify change

@@ -173,7 +173,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
         try {
             _outputStream.write(aData);
         } catch(IOException ioException) {
-            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException.toString());
+            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException);
             notifyListeners_error(unoIOException);
 
             throw unoIOException;
@@ -192,7 +192,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
         try {
             _outputStream.flush();
         } catch(IOException ioException) {
-            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException.toString());
+            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException);
             notifyListeners_error(unoIOException);
 
             throw unoIOException;
@@ -209,7 +209,7 @@ public class SocketConnection implements XConnection, XConnectionBroadcaster {
         try {
             _socket.close();
         } catch(IOException ioException) {
-            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException.toString());
+            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException);
             notifyListeners_error(unoIOException);
 
             throw unoIOException;

@@ -87,9 +87,11 @@ public class StorageRepository implements InputRepository, OutputRepository
             final XStream xStream = UnoRuntime.queryInterface(XStream.class, input.openStreamElement(name, ElementModes.READ));
             return new BufferedInputStream(new XInputStreamToInputStreamAdapter(xStream.getInputStream()), 102400);
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (com.sun.star.uno.Exception ex1)
         {
-            throw new IOException("createInputStream");
+            java.io.IOException ex2 = new java.io.IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 
@@ -116,9 +118,11 @@ public class StorageRepository implements InputRepository, OutputRepository
             }
             return new BufferedOutputStream(new XOutputStreamToOutputStreamAdapter(stream.getOutputStream()), 204800);
         }
-        catch (com.sun.star.uno.Exception e)
+        catch (com.sun.star.uno.Exception ex1)
         {
-            throw new IOException("createOutputStream");
+            java.io.IOException ex2 = new java.io.IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 

@@ -32,8 +32,10 @@ public class StorageAccess implements org.hsqldb.lib.Storage {
             access = new NativeStorageAccess(name,
                     this.readonly ? "r" : "rw"
                     ,key);
-        } catch(Exception e){
-            throw new java.io.IOException();
+        } catch(Exception ex1){
+            java.io.IOException ex2 = new java.io.IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
     public void close() throws java.io.IOException{

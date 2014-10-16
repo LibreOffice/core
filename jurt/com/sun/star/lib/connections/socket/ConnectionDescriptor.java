@@ -45,8 +45,7 @@ final class ConnectionDescriptor {
                 try {
                     port = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
-                    throw new com.sun.star.lang.IllegalArgumentException(
-                        e.toString());
+                    throw new com.sun.star.lang.IllegalArgumentException(e);
                 }
                 if (port < 0 || port > 65535) {
                     throw new com.sun.star.lang.IllegalArgumentException(
@@ -57,8 +56,7 @@ final class ConnectionDescriptor {
                 try {
                     backlog = Integer.parseInt(value);
                 } catch (NumberFormatException e) {
-                    throw new com.sun.star.lang.IllegalArgumentException(
-                        e.toString());
+                    throw new com.sun.star.lang.IllegalArgumentException(e);
                 }
             } else if (key.equalsIgnoreCase("tcpnodelay")) {
                 if (value.equals("0")) {

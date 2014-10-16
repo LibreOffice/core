@@ -121,10 +121,10 @@ public class JavaLoader implements XImplementationLoader,
             }
             return ret;
         } catch (com.sun.star.uno.Exception exc) {
-            throw new com.sun.star.uno.RuntimeException(
+            throw new com.sun.star.uno.RuntimeException(exc,
                 exc.getMessage(), this );
         } catch (java.lang.Exception exc) {
-            throw new com.sun.star.uno.RuntimeException(
+            throw new com.sun.star.uno.RuntimeException(exc,
                 exc.getMessage(), this );
         }
     }
@@ -174,7 +174,7 @@ public class JavaLoader implements XImplementationLoader,
             multiServiceFactory = (XMultiServiceFactory) AnyConverter.toObject(
                 new Type(XMultiServiceFactory.class), args[0]);
         } catch (ClassCastException castEx) {
-            throw new com.sun.star.lang.IllegalArgumentException(
+            throw new com.sun.star.lang.IllegalArgumentException(castEx,
                 "The argument must be an instance of XMultiServiceFactory");
         }
     }
@@ -330,21 +330,21 @@ public class JavaLoader implements XImplementationLoader,
                     returnObject = oRet;
             }
         } catch ( NoSuchMethodException e) {
-            throw new CannotActivateFactoryException("Can not activate the factory for "
-                        + implementationName + " because " + e.toString() );
+            throw new CannotActivateFactoryException(e, "Can not activate the factory for "
+                        + implementationName);
         } catch ( SecurityException e) {
-            throw new CannotActivateFactoryException("Can not activate the factory for "
-                        + implementationName + " because " + e.toString() );
+            throw new CannotActivateFactoryException(e, "Can not activate the factory for "
+                        + implementationName);
         } catch ( IllegalAccessException e ) {
-            throw new CannotActivateFactoryException("Can not activate the factory for "
-                        + implementationName + " because " + e.toString() );
+            throw new CannotActivateFactoryException(e, "Can not activate the factory for "
+                        + implementationName);
         }
         catch ( IllegalArgumentException e ) {
-            throw new CannotActivateFactoryException("Can not activate the factory for "
-                        + implementationName + " because " + e.toString() );
+            throw new CannotActivateFactoryException(e, "Can not activate the factory for "
+                        + implementationName);
         } catch ( InvocationTargetException e ) {
-            throw new CannotActivateFactoryException("Can not activate the factory for "
-                        + implementationName + " because " + e.getCause().toString() );
+            throw new CannotActivateFactoryException(e, "Can not activate the factory for "
+                        + implementationName);
         }
 
         return returnObject;

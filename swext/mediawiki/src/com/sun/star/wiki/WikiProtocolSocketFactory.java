@@ -62,7 +62,7 @@ class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
                             }
                             catch( Exception e )
                             {
-                                throw new RuntimeException( "No access to the default trust manager!" );
+                                throw new RuntimeException( "No access to the default trust manager!", e );
                             }
                         }
 
