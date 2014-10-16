@@ -40,6 +40,8 @@ public:
     void test();
     void testErrorBarXLSX();
     void testTrendline();
+    void testTrendlineOOXML();
+    void testTrendlineXLS();
     void testStockChart();
     void testBarChart();
     void testCrosses();
@@ -82,6 +84,8 @@ public:
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testErrorBarXLSX);
     CPPUNIT_TEST(testTrendline);
+    CPPUNIT_TEST(testTrendlineOOXML);
+    CPPUNIT_TEST(testTrendlineXLS);
     CPPUNIT_TEST(testStockChart);
     CPPUNIT_TEST(testBarChart);
     CPPUNIT_TEST(testCrosses);
@@ -410,17 +414,22 @@ void Chart2ExportTest::testTrendline()
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     reload("calc8");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+}
 
+void Chart2ExportTest::testTrendlineOOXML()
+{
     load("/chart2/qa/extras/data/ods/", "trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     reload("Calc Office Open XML");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+}
 
+void Chart2ExportTest::testTrendlineXLS()
+{
     load("/chart2/qa/extras/data/ods/", "trendline.ods");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
     reload("MS Excel 97");
     checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
-
 }
 
 void Chart2ExportTest::testStockChart()
