@@ -2515,6 +2515,32 @@ void Test::testFuncCOUNT()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncCOUNTBLANK()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Formula");
+
+    const char* aData[][4] = {
+        { "1", 0, "=B1", "=\"\"" },
+        { "2", 0, "=B2", "=\"\"" },
+        { "A", 0, "=B3", "=\"\"" },
+        { "B", 0, "=B4", "=D3" },
+        {   0, 0, "=B5", "=D4" },
+        { "=COUNTBLANK(A1:A5)", "=COUNTBLANK(B1:B5)", "=COUNTBLANK(C1:C5)", "=COUNTBLANK(D1:D5)" }
+    };
+
+    ScAddress aPos(0,0,0);
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT(aRange.aStart == aPos);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,5,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,5,0)));
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncROW()
 {
     m_pDoc->InsertTab(0, "Formula");

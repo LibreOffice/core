@@ -140,6 +140,7 @@ public:
     void testMultipleOperations();
     void testFuncCOLUMN();
     void testFuncCOUNT();
+    void testFuncCOUNTBLANK();
     void testFuncROW();
     void testFuncSUM();
     void testFuncPRODUCT();
@@ -429,6 +430,7 @@ public:
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
     CPPUNIT_TEST(testFuncCOUNT);
+    CPPUNIT_TEST(testFuncCOUNTBLANK);
     CPPUNIT_TEST(testFuncROW);
     CPPUNIT_TEST(testFuncSUM);
     CPPUNIT_TEST(testFuncPRODUCT);
