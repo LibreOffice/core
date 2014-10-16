@@ -95,7 +95,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     private native void finalize( long bridge_handle );
 
     @Override
-    public void finalize()
+    protected void finalize()
     {
         AsynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
                 public void run() throws Throwable {
