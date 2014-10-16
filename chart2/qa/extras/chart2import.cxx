@@ -71,12 +71,6 @@ public:
     CPPUNIT_TEST(testODTChartSeries);
     CPPUNIT_TEST(testDOCChartSeries);
     CPPUNIT_TEST(testDOCXChartSeries);
-/*
- *  Disabling Impress Uts.
- *  ChartTest::tearDown() calls dispose of mxComponent
- *  this causes the UT to crash in sd.
- *  sd::DrawView::Notify tries to reset by calling sd::DrawViewShell::ResetActualPage
- */
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
     CPPUNIT_TEST(testPPTXHiddenDataSeries);
