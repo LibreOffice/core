@@ -415,7 +415,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
 #ifdef DEBUG_DOMAINMAPPER
                 dmapper_logger->startElement("mergedProps");
-                pMergedProperties->dumpXml( dmapper_logger );
+                if (pMergedProperties)
+                    pMergedProperties->dumpXml( dmapper_logger );
                 dmapper_logger->endElement();
 #endif
 

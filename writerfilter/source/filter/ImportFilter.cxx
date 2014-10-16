@@ -83,7 +83,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
         writerfilter::TagLogger::Pointer_t dmapper_logger
         (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
-        dmapper_logger->setFileName(sURLc);
+        if (getenv("SW_DEBUG_WRITERFILTER"))
+            dmapper_logger->setFileName(sURLc);
         dmapper_logger->startDocument();
 #endif
 

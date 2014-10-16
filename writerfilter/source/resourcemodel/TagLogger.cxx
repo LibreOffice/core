@@ -74,12 +74,16 @@ namespace writerfilter
 
     void TagLogger::startDocument()
     {
+        if (!pWriter)
+            return;
         xmlTextWriterStartDocument( pWriter, NULL, NULL, NULL );
         xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
     }
 
     void TagLogger::endDocument()
     {
+        if (!pWriter)
+            return;
         xmlTextWriterEndDocument( pWriter );
         xmlFreeTextWriter( pWriter );
         pWriter = NULL;
@@ -149,6 +153,8 @@ namespace writerfilter
 
     void TagLogger::startElement(const std::string & name)
     {
+        if (!pWriter)
+            return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlTextWriterStartElement( pWriter, xmlName );
         xmlFree( xmlName );
@@ -157,6 +163,8 @@ namespace writerfilter
 
     void TagLogger::attribute(const std::string & name, const std::string & value)
     {
+        if (!pWriter)
+            return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlChar* xmlValue = xmlCharStrdup( value.c_str() );
         xmlTextWriterWriteAttribute( pWriter, xmlName, xmlValue );
@@ -173,6 +181,8 @@ namespace writerfilter
 
     void TagLogger::attribute(const std::string & name, sal_uInt32 value)
     {
+        if (!pWriter)
+            return;
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
         xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
                "%" SAL_PRIuUINT32, value );
@@ -181,6 +191,8 @@ namespace writerfilter
 
     void TagLogger::attribute(const std::string & name, const uno::Any aAny)
     {
+        if (!pWriter)
+            return;
         std::string aTmpStrInt;
         std::string aTmpStrFloat;
         std::string aTmpStrString;
@@ -209,6 +221,8 @@ namespace writerfilter
 
     void TagLogger::chars(const std::string & rChars)
     {
+        if (!pWriter)
+            return;
         xmlChar* xmlChars = xmlCharStrdup( rChars.c_str() );
         xmlTextWriterWriteString( pWriter, xmlChars );
         xmlFree( xmlChars );
@@ -221,6 +235,8 @@ namespace writerfilter
 
     void TagLogger::endElement()
     {
+        if (!pWriter)
+            return;
         xmlTextWriterEndElement( pWriter );
     }
 
