@@ -212,18 +212,18 @@ public class ConfigHelper
         xProp = UnoRuntime.queryInterface(
                                     XPropertySet.class,
                                     xSetCont.getByName(groupName));
-        } catch (com.sun.star.container.NoSuchElementException e){
-            throw new com.sun.star.uno.Exception(
+        } catch (com.sun.star.container.NoSuchElementException ex){
+            throw new com.sun.star.uno.Exception(ex,
                 "could not get group '" + groupName +
-               "' from set '"+ setName +"':\n" + e.toString());
+               "' from set '"+ setName +"'");
         }
         try{
             xProp.setPropertyValue(propName, propValue);
-        } catch (com.sun.star.uno.Exception e) {
-             throw new com.sun.star.uno.Exception(
+        } catch (com.sun.star.uno.Exception ex) {
+             throw new com.sun.star.uno.Exception(ex,
                 "could not set property '" + propName +
                 "' from group '"+ groupName +
-                "' from set '"+ setName +"':\n" + e.toString());
+                "' from set '"+ setName +"'");
         }
     }
 
@@ -255,28 +255,28 @@ public class ConfigHelper
             Object xGroup=xSetCont.getByName(group);
             xGroupAccess = UnoRuntime.queryInterface(
                             XNameReplace.class,xGroup);
-        } catch(com.sun.star.container.NoSuchElementException e) {
-             throw new com.sun.star.uno.Exception(
+        } catch(com.sun.star.container.NoSuchElementException ex) {
+             throw new com.sun.star.uno.Exception(ex,
                 "could not get group '" + group +
-                "' from set '"+ setName +"':\n" + e.toString());
+                "' from set '"+ setName +"'");
         }
 
         try {
             Object xGroup=xGroupAccess.getByName(extGroup);
             xExtGroupCont = UnoRuntime.queryInterface(
                             XNameContainer.class,xGroup);
-        } catch(com.sun.star.container.NoSuchElementException e) {
-             throw new com.sun.star.uno.Exception(
+        } catch(com.sun.star.container.NoSuchElementException ex) {
+             throw new com.sun.star.uno.Exception(ex,
                 "could not get extensilbe group '"+extGroup+
                 "' from group '"+ group +
-                "' from set '"+ setName +"':\n" + e.toString());
+                "' from set '"+ setName +"'");
         }
 
         try {
             xExtGroupCont.insertByName(propName, propValue);
         }
         catch(com.sun.star.container.ElementExistException e) {
-            xExtGroupCont .replaceByName(propName, propValue);
+            xExtGroupCont.replaceByName(propName, propValue);
         }
 
     }

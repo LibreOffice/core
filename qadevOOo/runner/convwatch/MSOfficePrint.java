@@ -251,7 +251,7 @@ public class MSOfficePrint
             }
             catch (IndexOutOfBoundsException e)
             {
-                throw new ConvWatchCancelException/*WrongEnvironmentException*/("Given list is too short.");
+                throw new ConvWatchCancelException/*WrongEnvironmentException*/("Given list is too short.", e);
             }
 
             // return aHandler.getExitCode();

@@ -65,7 +65,7 @@ public class DrawTools {
 
             oDPn = oDPS.getDrawPages();
         } catch ( Exception e ) {
-            throw new IllegalArgumentException( "Couldn't get drawpages" );
+            throw new IllegalArgumentException( "Couldn't get drawpages", e );
         }
         return oDPn;
     } // finish getDrawPages
@@ -84,7 +84,7 @@ public class DrawTools {
             oDP = (XDrawPage) AnyConverter.toObject(
                 new Type(XDrawPage.class),getDrawPages( aDoc ).getByIndex( nr ));
         } catch ( Exception e ) {
-            throw new IllegalArgumentException( "Couldn't get drawpage" );
+            throw new IllegalArgumentException( "Couldn't get drawpage", e );
         }
         return oDP;
     }

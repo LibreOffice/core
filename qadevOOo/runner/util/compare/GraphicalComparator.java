@@ -150,7 +150,9 @@ class GraphicalComparator implements DocComparator
             catch (ConvWatchException e)
             {
                 // wrap it to IOException
-                throw new java.io.IOException(e.getMessage());
+                java.io.IOException ex2 = new java.io.IOException(e.getMessage());
+                ex2.initCause(e);
+                throw ex2;
             }
         }
 
@@ -181,7 +183,9 @@ class GraphicalComparator implements DocComparator
                     System.err.println("   Outputpath: '" + m_aArguments.getOutputPath() + "'");
                     System.err.println("Referencepath: '" + m_aArguments.getReferencePath() + "'");
                 }
-                throw new java.io.IOException(e.getMessage());
+                java.io.IOException ex2 = new java.io.IOException(e.getMessage());
+                ex2.initCause(e);
+                throw ex2;
             }
         }
 
@@ -223,7 +227,9 @@ class GraphicalComparator implements DocComparator
             catch(ConvWatchException e)
             {
                 // wrap it to IOException
-                throw new java.io.IOException(e.getMessage());
+                java.io.IOException ex2 = new java.io.IOException(e.getMessage());
+                ex2.initCause(e);
+                throw ex2;
             }
         }
 

@@ -265,13 +265,12 @@ public class ORowSet extends TestCase {
             }
             catch(java.sql.SQLException e)
             {
-                e.printStackTrace(log);
-                throw new StatusException(Status.failed("Couldn't " +
+                throw new StatusException(e, Status.failed("Couldn't " +
                     " init test table. SQLException..."));
             }
             catch(java.lang.ClassNotFoundException e)
             {
-                throw new StatusException(Status.failed("Couldn't " +
+                throw new StatusException(e, Status.failed("Couldn't " +
                     "register mysql driver"));
             }
         }

@@ -102,9 +102,7 @@ public class OFileControlModel extends TestCase {
             log.println("creating a draw document");
             xDrawDoc = SOF.createDrawDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't create a document :");
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Can't create a document"));
+            throw new StatusException(e, Status.failed("Can't create a document"));
         }
     }
 
@@ -176,9 +174,7 @@ public class OFileControlModel extends TestCase {
             aShape.setSize(size);
             aShape.setPosition(position);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occurs.FAILED
-            log.println("Couldn't create a component " + e);
-            throw new StatusException(Status.failed("Can't create component"));
+            throw new StatusException(e, Status.failed("Can't create component"));
         }
 
         aShape.setControl(aControl);

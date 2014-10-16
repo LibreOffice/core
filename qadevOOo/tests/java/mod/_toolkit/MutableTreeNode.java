@@ -70,7 +70,7 @@ public class MutableTreeNode extends TestCase {
             mXTreeDataModel = UnoRuntime.queryInterface(XMutableTreeDataModel.class,
                 mxMSF.createInstance("com.sun.star.awt.tree.MutableTreeDataModel"));
         } catch (com.sun.star.uno.Exception ex) {
-            throw new StatusException(Status.failed("ERROR: could not create instance of" +
+            throw new StatusException(ex, Status.failed("ERROR: could not create instance of" +
                 " 'com.sun.star.awt.tree.MutableTreeDataModel'"));
         }
 

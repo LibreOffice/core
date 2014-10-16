@@ -67,8 +67,7 @@ public class ODriver extends TestCase {
             oObj = (XInterface)Param.getMSF().
                 createInstance("com.sun.star.comp.sdbcx.adabas.ODriver");
         } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't create object"));
+            throw new StatusException(e, Status.failed("Couldn't create object"));
         }
 
         log.println("creating a new environment for object");

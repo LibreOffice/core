@@ -106,7 +106,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         }
         catch(com.sun.star.uno.Exception exUno)
         {
-            throw new com.sun.star.io.NotConnectedException("Could not open the file.");
+            throw new com.sun.star.io.NotConnectedException(exUno);
         }
     }
 

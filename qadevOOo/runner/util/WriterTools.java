@@ -70,7 +70,7 @@ public class WriterTools {
                                              XDrawPageSupplier.class, aDoc);
             oDP = oDPS.getDrawPage();
         } catch (Exception e) {
-            throw new IllegalArgumentException("Couldn't get drawpage");
+            throw new IllegalArgumentException("Couldn't get drawpage", e);
         }
 
         return oDP;

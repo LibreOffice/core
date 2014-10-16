@@ -237,8 +237,7 @@ public class DrawController_PresentationView extends TestCase {
             oShapeCol2 = xMSF.
                 createInstance("com.sun.star.drawing.ShapeCollection");
         } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't create instance"));
+            throw new StatusException(e, Status.failed("Couldn't create instance"));
         }
 
         XShapes xShapes1 = UnoRuntime.queryInterface(XShapes.class, oShapeCol1);

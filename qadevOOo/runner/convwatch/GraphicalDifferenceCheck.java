@@ -279,7 +279,7 @@ public class GraphicalDifferenceCheck
         catch (com.sun.star.io.IOException e)
         {
             // wrap IOException
-            throw new ConvWatchCancelException("Wrap IOException caught, " + e.getMessage());
+            throw new ConvWatchCancelException("Wrap IOException caught", e);
         }
 
         GlobalLogWriter.get().println("Saving XComponent as " + resultURL);

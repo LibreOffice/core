@@ -24,5 +24,10 @@ public class ConvWatchException extends Exception
         {
             super(_aMessage);
         }
+
+    public ConvWatchException(String _aMessage, Throwable cause)
+    {
+        super(_aMessage, cause);
+    }
 }
 

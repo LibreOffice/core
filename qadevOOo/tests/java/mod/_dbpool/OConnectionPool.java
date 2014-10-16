@@ -52,8 +52,7 @@ public class OConnectionPool extends TestCase {
             oObj = (XInterface)
                 xMSF.createInstance("com.sun.star.sdbc.ConnectionPool");
         } catch(com.sun.star.uno.Exception e) {
-            throw new StatusException(
-                Status.failed("Couldn't create instance"));
+            throw new StatusException(e, Status.failed("Couldn't create instance"));
         }
 
         log.println("creating a new environment for object");

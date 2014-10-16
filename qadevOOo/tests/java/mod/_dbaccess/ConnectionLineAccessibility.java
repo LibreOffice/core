@@ -115,8 +115,7 @@ public class ConnectionLineAccessibility extends TestCase
         }
         catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't create instance"));
+            throw new StatusException(e, Status.failed("Couldn't create instance"));
         }
 
         String mysqlURL = (String) Param.get("mysql.url");
@@ -154,26 +153,22 @@ public class ConnectionLineAccessibility extends TestCase
         }
         catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
         catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
         catch (com.sun.star.beans.PropertyVetoException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
         catch (com.sun.star.beans.UnknownPropertyException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
 
@@ -192,8 +187,7 @@ public class ConnectionLineAccessibility extends TestCase
         }
         catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't register object"));
+            throw new StatusException(e, Status.failed("Couldn't register object"));
         }
 
         isolConnection = UnoRuntime.queryInterface(
@@ -236,8 +230,7 @@ public class ConnectionLineAccessibility extends TestCase
             }
             catch (com.sun.star.sdbc.SQLException e2)
             {
-                e2.printStackTrace(log);
-                throw new StatusException(Status.failed("SQLException"));
+                throw new StatusException(e2, Status.failed("SQLException"));
             }
         }
 
@@ -260,26 +253,22 @@ public class ConnectionLineAccessibility extends TestCase
         }
         catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
         catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
         catch (com.sun.star.beans.PropertyVetoException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
         catch (com.sun.star.beans.UnknownPropertyException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                     "Couldn't set property value"));
         }
 
@@ -295,28 +284,23 @@ public class ConnectionLineAccessibility extends TestCase
         }
         catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't insert query"));
+            throw new StatusException(e, Status.failed("Couldn't insert query"));
         }
         catch (com.sun.star.container.ElementExistException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't insert query"));
+            throw new StatusException(e, Status.failed("Couldn't insert query"));
         }
         catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't insert query"));
+            throw new StatusException(e, Status.failed("Couldn't insert query"));
         }
         catch (com.sun.star.io.IOException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't insert query"));
+            throw new StatusException(e, Status.failed("Couldn't insert query"));
         }
         catch (com.sun.star.sdbc.SQLException e)
         {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't insert query"));
+            throw new StatusException(e, Status.failed("Couldn't insert query"));
         }
 
         PropertyValue[] loadProps = new PropertyValue[3];

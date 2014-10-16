@@ -24,4 +24,8 @@ public class WrongEnvironmentException extends OfficeException
         {
             super(_aMessage);
         }
+    public WrongEnvironmentException(String _aMessage, Throwable cause)
+    {
+        super(_aMessage, cause);
+    }
 }

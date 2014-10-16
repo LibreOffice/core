@@ -24,4 +24,9 @@ public class ConvWatchCancelException extends ConvWatchException
         {
             super(_aMessage);
         }
+
+    public ConvWatchCancelException(String _aMessage, Throwable cause)
+    {
+        super(_aMessage, cause);
+    }
 }

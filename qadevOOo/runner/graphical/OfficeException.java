@@ -28,4 +28,9 @@ public class OfficeException extends Exception
         {
             super(_aMessage);
         }
+
+    public OfficeException(String _aMessage, Throwable cause)
+    {
+        super(_aMessage, cause);
+    }
 }

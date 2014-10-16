@@ -133,9 +133,7 @@ public class _XMultiPropertyStates extends MultiMethodTest {
                     prop = xPropSetInfo.getPropertyByName(names[i]);
                 }
                 catch(com.sun.star.beans.UnknownPropertyException e) {
-                    log.println("couldn't get property info: " + e.toString());
-                    throw new StatusException(Status.failed
-                        ("couldn't get property info"));
+                    throw new StatusException(e, Status.failed("couldn't get property info"));
                 }
                 if ( (prop.Attributes & PropertyAttribute.MAYBEDEFAULT) != 0){
                     log.println("Property " + names[i] +

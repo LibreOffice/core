@@ -80,7 +80,7 @@ public class _XSheetAuditing extends MultiMethodTest {
             xPrecedentAddress = xSheet.getCellByPosition(precedentAddress.Column, precedentAddress.Row);
         }
         catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            throw new StatusException(Status.failed("Invalid cell addresses in object relations."));
+            throw new StatusException(e, Status.failed("Invalid cell addresses in object relations."));
         }
     }
 

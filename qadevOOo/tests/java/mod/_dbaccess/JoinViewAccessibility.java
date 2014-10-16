@@ -113,8 +113,7 @@ public class JoinViewAccessibility extends TestCase {
             .createInstance ("com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't create instance"));
+            throw new StatusException(e, Status.failed ("Couldn't create instance"));
         }
 
         String mysqlURL = (String) Param.get ("mysql.url");
@@ -151,24 +150,16 @@ public class JoinViewAccessibility extends TestCase {
             propSetDBSource.setPropertyValue ("Info", info);
         } catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         } catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         } catch (com.sun.star.beans.PropertyVetoException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         } catch (com.sun.star.beans.UnknownPropertyException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         }
 
         try
@@ -184,8 +175,7 @@ public class JoinViewAccessibility extends TestCase {
             log.println ("... done");
         } catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't register object"));
+            throw new StatusException(e, Status.failed ("Couldn't register object"));
         }
 
         isolConnection = UnoRuntime.queryInterface (
@@ -226,8 +216,7 @@ public class JoinViewAccessibility extends TestCase {
                 col_name2 + " int)");
             } catch (com.sun.star.sdbc.SQLException e2)
             {
-                e2.printStackTrace (log);
-                throw new StatusException (Status.failed ("SQLException"));
+                throw new StatusException(e, Status.failed ("SQLException"));
             }
         }
 
@@ -249,24 +238,16 @@ public class JoinViewAccessibility extends TestCase {
             queryProp.setPropertyValue ("Command", query);
         } catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         } catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         } catch (com.sun.star.beans.PropertyVetoException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         } catch (com.sun.star.beans.UnknownPropertyException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed (
-            "Couldn't set property value"));
+            throw new StatusException(e, Status.failed("Couldn't set property value"));
         }
 
         XNameContainer queryContainer = UnoRuntime.queryInterface (
@@ -280,24 +261,19 @@ public class JoinViewAccessibility extends TestCase {
             connection.close ();
         } catch (com.sun.star.lang.WrappedTargetException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
+            throw new StatusException(e, Status.failed ("Couldn't insert query"));
         } catch (com.sun.star.container.ElementExistException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
+            throw new StatusException(e, Status.failed ("Couldn't insert query"));
         } catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
+            throw new StatusException(e, Status.failed ("Couldn't insert query"));
         } catch (com.sun.star.io.IOException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
+            throw new StatusException(e, Status.failed ("Couldn't insert query"));
         } catch (com.sun.star.sdbc.SQLException e)
         {
-            e.printStackTrace (log);
-            throw new StatusException (Status.failed ("Couldn't insert query"));
+            throw new StatusException(e, Status.failed ("Couldn't insert query"));
         }
 
         PropertyValue[] loadProps = new PropertyValue[3];

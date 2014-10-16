@@ -83,7 +83,7 @@ public class DesktopTools
         }
         catch (com.sun.star.uno.Exception e)
         {
-            throw new IllegalArgumentException("Desktop Service not available");
+            throw new IllegalArgumentException("Desktop Service not available", e);
         }
 
         return oInterface;
@@ -230,7 +230,7 @@ public class DesktopTools
         }
         catch (com.sun.star.uno.Exception e)
         {
-            throw new IllegalArgumentException("Document could not be opened");
+            throw new IllegalArgumentException("Document could not be opened", e);
         }
 
         return oDoc;
@@ -258,7 +258,7 @@ public class DesktopTools
         }
         catch (com.sun.star.uno.Exception e)
         {
-            throw new IllegalArgumentException("Document could not be loaded");
+            throw new IllegalArgumentException("Document could not be loaded", e);
         }
 
         bringWindowToFront(oDoc);

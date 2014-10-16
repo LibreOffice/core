@@ -189,30 +189,24 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
             xPropSet = UnoRuntime.queryInterface(
                                XPropertySet.class, oDefStyle);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't get element"));
+            throw new StatusException(e, Status.failed("Couldn't get element"));
         } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't get element"));
+            throw new StatusException(e, Status.failed("Couldn't get element"));
         }
 
         try {
             xPropSet.setPropertyValue("PrintHeaders", Boolean.TRUE);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                                               "Couldn't set property 'PrintHeaders'"));
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                                               "Couldn't set property 'PrintHeaders'"));
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                                               "Couldn't set property 'PrintHeaders'"));
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed(
+            throw new StatusException(e, Status.failed(
                                               "Couldn't set property 'PrintHeaders'"));
         }
 
@@ -237,8 +231,7 @@ public class ScAccessiblePreviewHeaderCell extends TestCase {
                 xDispatcher.dispatch(aURL, null);
             }
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't change mode");
-            throw new StatusException(Status.failed("Couldn't change mode"));
+            throw new StatusException(e, Status.failed("Couldn't change mode"));
         }
 
         XInterface oObj = null;

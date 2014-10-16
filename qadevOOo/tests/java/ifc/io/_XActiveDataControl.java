@@ -138,8 +138,7 @@ public class _XActiveDataControl extends MultiMethodTest {
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(Status.failed(e.getMessage()));
+            throw new StatusException(e, Status.failed(e.getMessage()));
         }
     }
 
@@ -177,8 +176,7 @@ public class _XActiveDataControl extends MultiMethodTest {
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(Status.failed(e.getMessage()));
+            throw new StatusException(e, Status.failed(e.getMessage()));
         }
 
         // check that no removed listener's method was called
@@ -203,8 +201,7 @@ public class _XActiveDataControl extends MultiMethodTest {
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException(Status.failed(e.getMessage()));
+            throw new StatusException(e, Status.failed(e.getMessage()));
         }
 
         // check, if any error occurred

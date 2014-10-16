@@ -143,7 +143,7 @@ public class UITools {
             oAction.doAccessibleAction(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
           throw new Exception("Could not do accessible action with '" +
-                               buttonName + "'" + e.toString());
+                               buttonName + "'", e);
         }
      }
 
@@ -193,13 +193,13 @@ public class UITools {
 
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                       throw new Exception("Could not get child form list of '"
-                                         + ListBoxName + "' : " + e.toString());
+                                         + ListBoxName + "'", e);
                 }
             }
 
          } catch (Exception e) {
             throw new Exception("Could not get list of items from '"
-                                         + ListBoxName + "' : " + e.toString());
+                                         + ListBoxName + "'", e);
         }
         String[]ret = new String[Items.size()];
         return Items.toArray(ret);
@@ -227,7 +227,7 @@ public class UITools {
 
          } catch (Exception e) {
             throw new Exception("Could not set value to CheckBox '"
-                                       + CheckBoxName + "' : " + e.toString());
+                                       + CheckBoxName + "'", e);
         }
      }
 

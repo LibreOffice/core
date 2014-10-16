@@ -199,7 +199,7 @@ public class FormTools {
             XForm oForm = UnoRuntime.queryInterface(XForm.class, oControl);
             Forms.insertByName(aName,oForm);
         } catch ( Exception e ) {
-            throw new IllegalArgumentException( "Couldn't insert Form" );
+            throw new IllegalArgumentException( "Couldn't insert Form", e );
         }
     }
 

@@ -330,10 +330,9 @@ public class ODatabaseForm extends TestCase {
             try {
                 dbTools.initTestTableUsingJDBC(tableName, srcInf);
             } catch (java.sql.SQLException e) {
-                e.printStackTrace(log);
-                throw new StatusException(Status.failed("Couldn't " + " init test table. SQLException..."));
+                throw new StatusException(e, Status.failed("Couldn't " + " init test table. SQLException..."));
             } catch (java.lang.ClassNotFoundException e) {
-                throw new StatusException(Status.failed("Couldn't " + "register mysql driver"));
+                throw new StatusException(e, Status.failed("Couldn't " + "register mysql driver"));
             }
         }
 

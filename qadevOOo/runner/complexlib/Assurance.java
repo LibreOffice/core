@@ -173,5 +173,8 @@ public class Assurance
         public AssureException(String msg) {
             super(msg);
         }
+        public AssureException(Throwable cause) {
+            super(cause);
+        }
     }
 }

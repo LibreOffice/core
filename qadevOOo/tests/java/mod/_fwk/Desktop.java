@@ -100,9 +100,7 @@ public class Desktop extends TestCase {
             log.println( "creating a text document" );
             xTextDoc = SOF.createTextDoc(null);
         } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occurs.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            throw new StatusException("Couldn't create document", e);
         }
 
         XInterface oObj = null;
@@ -111,9 +109,7 @@ public class Desktop extends TestCase {
             oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.Desktop");
         } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                Status.failed("Couldn't create instance"));
+            throw new StatusException(e, Status.failed("Couldn't create instance"));
         }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );

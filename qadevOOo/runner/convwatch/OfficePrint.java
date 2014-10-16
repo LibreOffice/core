@@ -767,14 +767,13 @@ public class OfficePrint {
                     }
                     catch(ConvWatchCancelException e)
                     {
-                        e.printStackTrace();
                         GlobalLogWriter.get().println(e.getMessage());
-                        throw new ConvWatchCancelException("Exception caught. Problem with MSOffice printer methods.");
+                        throw new ConvWatchCancelException("Exception caught. Problem with MSOffice printer methods.", e);
                     }
                     catch(java.io.IOException e)
                     {
                         GlobalLogWriter.get().println(e.getMessage());
-                        throw new ConvWatchCancelException("IOException caught. Problem with MSOffice printer methods.");
+                        throw new ConvWatchCancelException("IOException caught. Problem with MSOffice printer methods.", e);
                     }
                     bBack = true;
                 }

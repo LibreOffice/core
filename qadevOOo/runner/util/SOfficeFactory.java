@@ -50,8 +50,7 @@ public class SOfficeFactory {
         try {
             oInterface = xMSF.createInstance("com.sun.star.frame.Desktop");
         } catch (com.sun.star.uno.Exception e) {
-            throw new IllegalArgumentException(
-                "Desktop Service not available");
+            throw new IllegalArgumentException("Desktop Service not available", e);
         }
 
         // query the desktop interface and then it's componentloader

@@ -74,9 +74,7 @@ public class ModuleManager extends TestCase {
             oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.ModuleManager");
         } catch(Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                Status.failed("Couldn't create instance"));
+            throw new StatusException(e, Status.failed("Couldn't create instance"));
         }
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(

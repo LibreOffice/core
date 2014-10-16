@@ -63,8 +63,7 @@ public class _XFormulaQuery extends MultiMethodTest {
             try {
                 mxCell = oSheet.getCellByPosition(15, 15);
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                throw new StatusException(
-                            Status.failed("Couldn't get initial cell"));
+                throw new StatusException(e, Status.failed("Couldn't get initial cell"));
             }
         }
 

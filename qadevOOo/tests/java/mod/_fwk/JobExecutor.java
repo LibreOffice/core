@@ -209,9 +209,7 @@ public class JobExecutor extends TestCase {
                 "com.sun.star.comp.framework.JobExecutor");
             job = Param.getMSF().createInstance("test.Job");
         } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                Status.failed("Couldn't create instance"));
+            throw new StatusException(e, Status.failed("Couldn't create instance"));
         }
 
         xNamed = UnoRuntime.queryInterface(XNamed.class, job);

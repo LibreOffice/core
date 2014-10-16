@@ -285,7 +285,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             catch (AssureException e)
             {
                 stopOffice();
-                throw new AssureException(e.getMessage());
+                throw new AssureException(e);
             }
 
             // ------------------------------ Office shutdown ------------------------------

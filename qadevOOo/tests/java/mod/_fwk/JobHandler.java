@@ -68,9 +68,7 @@ public class JobHandler extends TestCase {
             oObj = (XInterface)Param.getMSF().createInstance(
                 "com.sun.star.comp.framework.jobs.JobDispatch");
         } catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(
-                Status.failed("Couldn't create instance"));
+            throw new StatusException(e, Status.failed("Couldn't create instance"));
         }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );

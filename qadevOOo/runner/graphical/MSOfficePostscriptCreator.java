@@ -89,14 +89,13 @@ public class MSOfficePostscriptCreator implements IOffice
         }
         catch(OfficeException e)
         {
-            e.printStackTrace();
             GlobalLogWriter.println(e.getMessage());
-            throw new OfficeException("Exception caught. Problem with MSOffice printer methods.");
+            throw new OfficeException("Exception caught. Problem with MSOffice printer methods.", e);
         }
         catch(java.io.IOException e)
         {
             GlobalLogWriter.println(e.getMessage());
-            throw new OfficeException("IOException caught. Problem with MSOffice printer methods.");
+            throw new OfficeException("IOException caught. Problem with MSOffice printer methods.", e);
         }
     }
 
@@ -258,7 +257,7 @@ public class MSOfficePostscriptCreator implements IOffice
             }
             catch (IndexOutOfBoundsException e)
             {
-                throw new WrongEnvironmentException("Given list is too short.");
+                throw new WrongEnvironmentException("Given list is too short.", e);
             }
         }
 

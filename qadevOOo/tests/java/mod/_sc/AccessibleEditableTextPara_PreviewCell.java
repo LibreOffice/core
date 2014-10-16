@@ -134,7 +134,7 @@ public class AccessibleEditableTextPara_PreviewCell extends TestCase {
                 xDispatcher.dispatch( aURL, null );
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't change mode");
-            throw new StatusException(Status.failed("Couldn't change mode"));
+            throw new StatusException(e, Status.failed("Couldn't change mode"));
         }
 
         XAccessibleContext oObj = null;

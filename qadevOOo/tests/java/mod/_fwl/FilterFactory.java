@@ -103,11 +103,9 @@ public class FilterFactory extends TestCase {
             getPropertyValue
                     (((PropertyValue[]) instance), "FilterService");
         } catch (com.sun.star.container.NoSuchElementException e){
-            throw new StatusException(
-            Status.failed("Couldn't get elements from object"));
+            throw new StatusException(e, Status.failed("Couldn't get elements from object"));
         } catch (com.sun.star.lang.WrappedTargetException e){
-            throw new StatusException(
-            Status.failed("Couldn't get elements from object"));
+            throw new StatusException(e, Status.failed("Couldn't get elements from object"));
         }
 
         log.println("adding INSTANCE 1 as obj relation to environment");

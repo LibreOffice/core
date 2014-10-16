@@ -218,7 +218,7 @@ public class JavaSystemBackend implements XSingleLayerStratum, XTypeProvider,
                                                  msf.createInstance(
                                                          "com.sun.star.comp.configuration.backend.LayerDescriber"));
             } catch (com.sun.star.uno.Exception e) {
-                throw new com.sun.star.lang.NullPointerException(
+                throw new com.sun.star.lang.NullPointerException(e,
                         "exception while creating LayerDesccriber");
             }
 

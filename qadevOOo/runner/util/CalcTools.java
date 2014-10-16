@@ -34,7 +34,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 /**
- * This class contains some useful mathods to handle Calc documents
+ * This class contains some useful methods to handle Calc documents
  * and its sheets.
  */
 public class CalcTools {
@@ -42,7 +42,7 @@ public class CalcTools {
     /**
      * fills a range of a calc sheet with computed data of type
      * <CODE>Double</CODE>.
-     * @param xSheetDoc the Clac documents which should be filled
+     * @param xSheetDoc the Calc documents which should be filled
      * @param sheetNumber the number of the sheet of <CODE>xSheetDoc</CODE>
      * @param startCellX the cell number of the X start point (row) of the range to fill
      * @param startCellY the cell number of the Y start point (column) of the range to fill
@@ -53,15 +53,9 @@ public class CalcTools {
     public static void fillCalcSheetWithContent(XComponent xSheetDoc, int sheetNumber,
                         int startCellX, int startCellY, int rangeLengthX, int rangeLengthY)
                   throws java.lang.Exception {
-        try{
-            XSpreadsheet xSheet = getSpreadSheetFromSheetDoc(xSheetDoc, sheetNumber);
+        XSpreadsheet xSheet = getSpreadSheetFromSheetDoc(xSheetDoc, sheetNumber);
 
-            fillCalcSheetWithContent(xSheet, startCellX, startCellY, rangeLengthX, rangeLengthY);
-
-        } catch (Exception e){
-                throw new Exception(
-                        "Couldn't fill CalcSheet with content: " + e.toString());
-        }
+        fillCalcSheetWithContent(xSheet, startCellX, startCellY, rangeLengthX, rangeLengthY);
     }
 
     /**
@@ -77,31 +71,24 @@ public class CalcTools {
     public static void fillCalcSheetWithContent(XSpreadsheet xSheet,
                         int startCellX, int startCellY, int rangeLengthX, int rangeLengthY)
                   throws java.lang.Exception {
-
-        try{
-            // create a range with content
-            Object[][] newData = new Object[rangeLengthY][rangeLengthX];
-            for (int i=0; i<rangeLengthY; i++) {
-                for (int j=0; j<rangeLengthX; j++) {
-                    newData[i][j] = new Double(10*i +j);
-                }
+        // create a range with content
+        Object[][] newData = new Object[rangeLengthY][rangeLengthX];
+        for (int i=0; i<rangeLengthY; i++) {
+            for (int j=0; j<rangeLengthX; j++) {
+                newData[i][j] = new Double(10*i +j);
             }
-            XCellRange xRange = null;
-            try {
-                xRange = xSheet.getCellRangeByPosition(startCellX, startCellY,
-                                    startCellX+rangeLengthX-1, startCellY+rangeLengthY-1);
-            } catch ( IndexOutOfBoundsException e){
-                    throw new Exception(
-                            "Couldn't get CellRange from sheett: " + e.toString());
-            }
-
-            XCellRangeData xRangeData = UnoRuntime.queryInterface(XCellRangeData.class, xRange);
-
-            xRangeData.setDataArray(newData);
-        } catch (Exception e){
-                throw new Exception(
-                        "Couldn't fill CalcSheet with content: " + e.toString());
         }
+        XCellRange xRange = null;
+        try {
+            xRange = xSheet.getCellRangeByPosition(startCellX, startCellY,
+                                startCellX+rangeLengthX-1, startCellY+rangeLengthY-1);
+        } catch ( IndexOutOfBoundsException ex){
+            throw new Exception(ex, "Couldn't get CellRange from sheet");
+        }
+
+        XCellRangeData xRangeData = UnoRuntime.queryInterface(XCellRangeData.class, xRange);
+
+        xRangeData.setDataArray(newData);
     }
 
     /**
@@ -125,24 +112,16 @@ public class CalcTools {
 
             XIndexAccess xSheetsIndexArray = UnoRuntime.queryInterface(XIndexAccess.class, xSpreadsheets);
 
-            try{
-                xSheet = (XSpreadsheet) AnyConverter.toObject(
-                        new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(sheetNumber));
+            xSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),xSheetsIndexArray.getByIndex(sheetNumber));
 
-            } catch (IllegalArgumentException e){
-                throw new Exception(
-                        "Couldn't get sheet '" +sheetNumber + "' : " + e.toString());
-            } catch (IndexOutOfBoundsException e){
-                throw new Exception(
-                        "Couldn't get sheet '" +sheetNumber + "' : " + e.toString());
-            } catch (WrappedTargetException e){
-                throw new Exception(
-                        "Couldn't get sheet '" +sheetNumber + "' : " + e.toString());
-            }
-        } catch (Exception e){
-            throw new Exception(
-                "Couldn't get sheet '" +sheetNumber + "' : " + e.toString());
+        } catch (IllegalArgumentException ex){
+            throw new Exception(ex, "Couldn't get sheet '" +sheetNumber + "'");
+        } catch (IndexOutOfBoundsException ex){
+            throw new Exception(ex, "Couldn't get sheet '" +sheetNumber + "'");
+        } catch (WrappedTargetException ex) {
+            throw new Exception(ex, "Couldn't get sheet '" +sheetNumber + "'");
         }
-         return xSheet;
+        return xSheet;
     }
 }

@@ -47,32 +47,26 @@ public class BasicMacroTools {
      */
     public BasicMacroTools(XMultiServiceFactory msf, XModel xModel,
                            XComponent xDoc) throws java.lang.Exception {
+        mMSF = msf;
+        mDispProv = makeDispatchProvider(xModel);
+        mParser = makeParser(mMSF);
+
+        Object DocLibCont = null;
+
         try {
-            mMSF = msf;
-            mDispProv = makeDispatchProvider(xModel);
-            mParser = makeParser(mMSF);
-
-            Object DocLibCont = null;
-
-            try {
-                XPropertySet xDocProps = UnoRuntime.queryInterface(
-                                                 XPropertySet.class, xDoc);
-                DocLibCont = xDocProps.getPropertyValue("BasicLibraries");
-            } catch (com.sun.star.uno.Exception e) {
-                throw new Exception(
-                        "Couldn't get BasicLibraries-Container from document: " + e.toString());
-            }
-
-            mLCxNA = UnoRuntime.queryInterface(XNameAccess.class,
-                                                             DocLibCont);
-
-            mLCxLC = UnoRuntime.queryInterface(
-                             XLibraryContainer.class, DocLibCont);
-
-        } catch (Exception e) {
-            throw new Exception("could not initialize BasicMacros " +
-                                e.toString());
+            XPropertySet xDocProps = UnoRuntime.queryInterface(
+                                             XPropertySet.class, xDoc);
+            DocLibCont = xDocProps.getPropertyValue("BasicLibraries");
+        } catch (com.sun.star.uno.Exception e) {
+            throw new Exception(
+                    "Couldn't get BasicLibraries-Container from document", e);
         }
+
+        mLCxNA = UnoRuntime.queryInterface(XNameAccess.class,
+                                                         DocLibCont);
+
+        mLCxLC = UnoRuntime.queryInterface(
+                         XLibraryContainer.class, DocLibCont);
     }
 
     /*
@@ -80,31 +74,24 @@ public class BasicMacroTools {
     */
     public BasicMacroTools(XMultiServiceFactory msf, XModel xModel)
                     throws java.lang.Exception {
+        mMSF = msf;
+        mDispProv = makeDispatchProvider(xModel);
+        mParser = makeParser(mMSF);
+
+        Object ASLC = null;
+
         try {
-            mMSF = msf;
-            mDispProv = makeDispatchProvider(xModel);
-            mParser = makeParser(mMSF);
-
-            Object ASLC = null;
-
-            try {
-                ASLC = mMSF.createInstance(
-                               "com.sun.star.script.ApplicationScriptLibraryContainer");
-            } catch (com.sun.star.uno.Exception e) {
-                throw new Exception(
-                        "Couldn't create ApplicationScriptLibraryContainer" + e.toString());
-            }
-
-            mLCxNA = UnoRuntime.queryInterface(XNameAccess.class,
-                                                             ASLC);
-
-            mLCxLC = UnoRuntime.queryInterface(
-                             XLibraryContainer.class, ASLC);
-
-        } catch (Exception e) {
-            throw new Exception("could not initialize BasicMacros " +
-                                e.toString());
+            ASLC = mMSF.createInstance(
+                           "com.sun.star.script.ApplicationScriptLibraryContainer");
+        } catch (com.sun.star.uno.Exception e) {
+            throw new Exception("Couldn't create ApplicationScriptLibraryContainer", e);
         }
+
+        mLCxNA = UnoRuntime.queryInterface(XNameAccess.class,
+                                                         ASLC);
+
+        mLCxLC = UnoRuntime.queryInterface(
+                         XLibraryContainer.class, ASLC);
     }
 
     private static XDispatchProvider makeDispatchProvider(XModel aModel)
@@ -137,21 +124,15 @@ public class BasicMacroTools {
         try {
             appendLibrary(LibraryName, LibraryURL);
         } catch (java.lang.Exception e) {
-            e.printStackTrace();
-            throw new Exception("ERROR: Could not append Library " +
-                                LibraryName + e.toString());
+            throw new Exception("Could not append Library " + LibraryName, e);
         }
 
         try {
             mLCxLC.loadLibrary(LibraryName);
         } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace();
-            throw new Exception("ERROR: Could not load Library " +
-                                LibraryName + e.toString());
+            throw new Exception("Could not load Library " + LibraryName, e);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace();
-            throw new Exception("ERROR: Could not load Library " +
-                                LibraryName + e.toString());
+            throw new Exception("Could not load Library " + LibraryName, e);
         }
     }
 
@@ -165,13 +146,9 @@ public class BasicMacroTools {
         try {
             mLCxLC.createLibraryLink(LibraryName, LibraryURL, false);
         } catch (com.sun.star.container.ElementExistException e) {
-            e.printStackTrace();
-            throw new Exception("ERROR: Library " + LibraryName +
-                                "already exist." + e.toString());
+            throw new Exception("Library " + LibraryName + "already exists.", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace();
-            throw new Exception("Could not link Basic library:" +
-                                LibraryName + e.toString());
+            throw new Exception("Could not link Basic library " + LibraryName, e);
         }
     }
 
@@ -180,13 +157,9 @@ public class BasicMacroTools {
             try {
                 mLCxLC.removeLibrary(LibraryName);
             } catch (com.sun.star.container.NoSuchElementException e) {
-                e.printStackTrace();
-                throw new Exception("Could not remove Basic library:" +
-                                    LibraryName + ": Library does not exist" + e.toString());
+                throw new Exception("Could not remove Basic library " + LibraryName + ", Library does not exist", e);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                e.printStackTrace();
-                throw new Exception("Could not remove Basic library:" +
-                                    LibraryName + e.toString());
+                throw new Exception("Could not remove Basic library " + LibraryName, e);
             }
         }
     }
