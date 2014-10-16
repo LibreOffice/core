@@ -339,8 +339,8 @@ public class CalcHelper
 
     // __________ private members and methods __________
 
-    private final String  msDataSheetName  = "Data";
-    private final String  msChartSheetName = "Chart";
+    private static final String  msDataSheetName  = "Data";
+    private static final String  msChartSheetName = "Chart";
 
     private XSpreadsheetDocument   maSpreadSheetDoc;
 

@@ -64,8 +64,8 @@ public class FilterComponent
     private String sIncSuffix;
     private ControlRow[] oControlRows;
     private String sDuplicateCondition;
-    final int SOOPTORMODE = 100;
-    final int SOOPTANDMODE = 101;
+    static final int SOOPTORMODE = 100;
+    static final int SOOPTANDMODE = 101;
     QueryMetaData oQueryMetaData;
     int iDateTimeFormat;
     int iDateFormat;
@@ -73,41 +73,41 @@ public class FilterComponent
     private PropertyValue[][] filterconditions;
     private short curtabindex;
     XMultiServiceFactory xMSF;
-    final int SO_FIRSTFIELDNAME = 1;
-    final int SO_SECONDFIELDNAME = 2;
-    final int SO_THIRDFIELDNAME = 3;
-    final int SO_FOURTHFIELDNAME = 4;
+    static final int SO_FIRSTFIELDNAME = 1;
+    static final int SO_SECONDFIELDNAME = 2;
+    static final int SO_THIRDFIELDNAME = 3;
+    static final int SO_FOURTHFIELDNAME = 4;
     int[] SO_FIELDNAMELIST = new int[]
     {
         SO_FIRSTFIELDNAME, SO_SECONDFIELDNAME, SO_THIRDFIELDNAME, SO_FOURTHFIELDNAME
     };
-    final int SO_FIRSTCONDITION = 5;
-    final int SO_SECONDCONDITION = 6;
-    final int SO_THIRDCONDITION = 7;
-    final int SO_FOURTHCONDITION = 8;
+    static final int SO_FIRSTCONDITION = 5;
+    static final int SO_SECONDCONDITION = 6;
+    static final int SO_THIRDCONDITION = 7;
+    static final int SO_FOURTHCONDITION = 8;
     int[] SO_CONDITIONLIST = new int[]
     {
         SO_FIRSTCONDITION, SO_SECONDCONDITION, SO_THIRDCONDITION, SO_FOURTHCONDITION
     };
-    final int SO_FIRSTTEXTFIELD = 1;
-    final int SO_SECONDTEXTFIELD = 2;
-    final int SO_THIRDTEXTFIELD = 3;
-    final int SO_FOURTHTEXTFIELD = 4;
+    static final int SO_FIRSTTEXTFIELD = 1;
+    static final int SO_SECONDTEXTFIELD = 2;
+    static final int SO_THIRDTEXTFIELD = 3;
+    static final int SO_FOURTHTEXTFIELD = 4;
     int[] SO_TEXTFIELDLIST = new int[]
     {
         SO_FIRSTTEXTFIELD, SO_SECONDTEXTFIELD, SO_THIRDTEXTFIELD, SO_FOURTHTEXTFIELD
     };
-    final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
-    final int SO_SECONDBOOLFIELDNAME = 256 + 2;
-    final int SO_THIRDBOOLFIELDNAME = 256 + 3;
-    final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
+    static final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
+    static final int SO_SECONDBOOLFIELDNAME = 256 + 2;
+    static final int SO_THIRDBOOLFIELDNAME = 256 + 3;
+    static final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
     int SO_BOOLEANLIST[] =
 
 
     {
         SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
     };
-    final int SO_OPTQUERYMODE = 5;
+    static final int SO_OPTQUERYMODE = 5;
     int SOI_MATCHALL = 0;
     int SOI_MATCHANY = 1;
     int curHelpID;

@@ -34,8 +34,8 @@ public final class SOFormulaOpCodeMapper extends WeakBase
     private static final String __serviceName = "org.libreoffice.report.pentaho.SOFormulaOpCodeMapper";
     private final SOFormulaParser parser;
     // attributes
-    final private int m_OpCodeExternal = 0;
-    final private int m_OpCodeUnknown = 0;
+    static final private int m_OpCodeExternal = 0;
+    static final private int m_OpCodeUnknown = 0;
 
     public SOFormulaOpCodeMapper(SOFormulaParser parser)
     {

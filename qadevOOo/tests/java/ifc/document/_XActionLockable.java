@@ -82,7 +82,7 @@ public class _XActionLockable extends MultiMethodTest {
         tRes.tested("setActionLocks()", true);
     }
 
-    final short nLock = 8;
+    static final short nLock = 8;
 
     /**
     * Calls the method and checks returned value.<p>

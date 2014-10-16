@@ -29,10 +29,10 @@ public class WikiPropDialog extends WikiDialog{
 
     private WikiEditorImpl m_aWikiEditor;
 
-    private final String sSendMethod = "Send";
-    private final String sWikiListMethod = "WikiListChange";
-    private final String sArticleTextMethod = "ArticleTextChange";
-    private final String sAddWikiMethod = "AddWiki";
+    private static final String sSendMethod = "Send";
+    private static final String sWikiListMethod = "WikiListChange";
+    private static final String sArticleTextMethod = "ArticleTextChange";
+    private static final String sAddWikiMethod = "AddWiki";
 
     private String[] m_pMethods = {sSendMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 

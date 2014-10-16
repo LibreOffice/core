@@ -81,5 +81,5 @@ public class TextTransferable implements XTransferable
 // members
 
     private final String text;
-    private final String UNICODE_CONTENT_TYPE = "text/plain;charset=utf-16";
+    private static final String UNICODE_CONTENT_TYPE = "text/plain;charset=utf-16";
 }

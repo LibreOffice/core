@@ -45,9 +45,9 @@ public class UIControlArranger
     private String[] HelpTexts = new String[4];
     private ArrangeButtonList[] m_aArrangeList = new ArrangeButtonList[2];
     private Integer IControlStep;
-    private final int SOBASEIMAGEYPOSITION = 66;
-    private final int SOIMAGELISTHEIGHT = 60;
-    private final String SOALIGNMETHOD = "alignLabelControls";
+    private static final int SOBASEIMAGEYPOSITION = 66;
+    private static final int SOIMAGELISTHEIGHT = 60;
+    private static final String SOALIGNMETHOD = "alignLabelControls";
 
     public UIControlArranger(FormWizard _CurUnoDialog, FormDocument _curFormDocument)
     {

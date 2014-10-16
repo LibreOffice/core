@@ -37,7 +37,7 @@ public abstract class DBLimitedFieldSelection
     protected Integer ICompPosX;
     protected Integer ICompPosY;
     protected Integer ICompWidth;
-    protected final int rowcount = 4;
+    protected static final int rowcount = 4;
     protected final int MAXSELINDEX = rowcount - 1;
     protected short curtabindex;
     protected int iCurPosY;

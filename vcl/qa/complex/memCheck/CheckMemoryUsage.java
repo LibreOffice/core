@@ -93,9 +93,9 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
 
 {
 
-    private final String sWriterDoc = "sxw,writer_pdf_Export";
-    private final String sCalcDoc = "sxc,calc_pdf_Export";
-    private final String sImpressDoc = "sxi,impress_pdf_Export";
+    private static final String sWriterDoc = "sxw,writer_pdf_Export";
+    private static final String sCalcDoc = "sxc,calc_pdf_Export";
+    private static final String sImpressDoc = "sxi,impress_pdf_Export";
     TempDir m_aTempDir;
     private String[][] sDocTypeExportFilter;
     private String[][] sDocuments;

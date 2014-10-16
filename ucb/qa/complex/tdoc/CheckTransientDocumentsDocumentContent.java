@@ -51,8 +51,8 @@ import static org.junit.Assert.*;
  */
 public class CheckTransientDocumentsDocumentContent {
     // TODO: document doesn't exists
-    private final String testDocuments = "sForm.sxw";
-    private final String folderName = "TestFolder";
+    private static final String testDocuments = "sForm.sxw";
+    private static final String folderName = "TestFolder";
     private XMultiServiceFactory xMSF = null;
     private XTextDocument xTextDoc = null;
 

@@ -45,7 +45,7 @@ import com.sun.star.uno.AnyConverter;
 public class TestCaseOldAPI extends ComplexTestCase {
 
     // The name of the tested service
-    private final String testedServiceName =
+    private static final String testedServiceName =
           "com.sun.star.chart.ChartDocument";
 
     // The first of the mandatory functions:

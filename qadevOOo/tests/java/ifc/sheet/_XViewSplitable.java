@@ -38,7 +38,7 @@ import com.sun.star.sheet.XViewSplitable;
 public class _XViewSplitable extends MultiMethodTest {
 
     public XViewSplitable oObj = null;
-    protected final int posX = 101, posY = 51;
+    protected static final int posX = 101, posY = 51;
 
     /**
     * Test just calls the method. <p>

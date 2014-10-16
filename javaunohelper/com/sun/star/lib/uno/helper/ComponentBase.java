@@ -27,7 +27,7 @@ import com.sun.star.uno.Type;
  */
 public class ComponentBase extends WeakBase implements XComponent
 {
-    private final boolean DEBUG= false;
+    private static final boolean DEBUG= false;
     protected MultiTypeInterfaceContainer listenerContainer;
     protected boolean bInDispose= false;
     protected boolean bDisposed= false;

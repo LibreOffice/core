@@ -206,9 +206,9 @@ public class _XDatabaseRange extends MultiMethodTest {
             oldVal == valBeforeRefresh);
     }
 
-    final short COL = 0;
-    final short STARTROW = 0;
-    final short ENDROW = 5;
+    static final short COL = 0;
+    static final short STARTROW = 0;
+    static final short ENDROW = 5;
 
     /**
     * Test creates new cell range address and calls the method. <p>

@@ -58,7 +58,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     private String                  m_sImageURL;
     private SQLErrorEvent           m_mostRecentErrorEvent;
 
-    private final String            m_dataSourceName = "integration.forms.FormControlTest";
+    private static final String     m_dataSourceName = "integration.forms.FormControlTest";
 
     /* ------------------------------------------------------------------ */
     @Override

@@ -85,7 +85,7 @@ public class EventTest {
      * define the miliseconds to wait until a <CODE>EventTrigger</CODE> thread should
      * be finished with its work
      */
-    final int m_threadWait = 3000;
+    static final int m_threadWait = 3000;
 
 
     // test environment

@@ -53,9 +53,9 @@ public class AggregateComponent extends ControlScroller
     String sDuplicateAggregateFunction;
     int Count;
     int iQueryType;
-    final int SOADDROW = 1;
-    final int SOREMOVEROW = 2;
-    final int CONTROLROWDIST = 18;
+    static final int SOADDROW = 1;
+    static final int SOREMOVEROW = 2;
+    static final int CONTROLROWDIST = 18;
     ArrayList<ControlRow> ControlRowVector;
     String OPTIONBUTTONDETAILQUERY_ITEM_CHANGED = "toggleComponent";
     String OPTIONBUTTONSUMMARYQUERY_ITEM_CHANGED = "toggleComponent";

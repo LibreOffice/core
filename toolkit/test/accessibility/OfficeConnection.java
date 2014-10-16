@@ -96,7 +96,7 @@ public class OfficeConnection
     }
 
     private int mnDefaultPort = 5678;
-    private final String msDefaultHost = "localhost";
+    private static final String msDefaultHost = "localhost";
     private XMultiServiceFactory  maServiceManager = null;
 
     /** A value of true just indicates that it has been tried to establish a connection,

@@ -44,7 +44,7 @@ import connectivity.tools.sdb.Connection;
 public class ListBox extends TestCase
 {
     HsqlDatabase    m_database = null;
-    private final String    m_foreignKeyTableName = "foreign_keys";
+    private static final String    m_foreignKeyTableName = "foreign_keys";
 
     public ListBox()
     {

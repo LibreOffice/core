@@ -28,7 +28,7 @@ import complex.connectivity.SubTestCase;
 public class DBaseDateFunctions extends SubTestCase
 {
 
-    private final String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
+    private static final String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
     private final XMultiServiceFactory m_xORB;
 
     public DBaseDateFunctions(final XMultiServiceFactory _xORB, final TestCase i_testCase)

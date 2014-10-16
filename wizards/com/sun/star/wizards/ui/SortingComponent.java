@@ -38,11 +38,11 @@ public class SortingComponent
     static String[] sSortDescend = new String[4];
     static short[] bOldSortValues = new short[4];
     public int MAXSORTCRITERIAINDEX = 3;
-    final int SOFIRSTSORTLST = 0;
-    final int SOSECSORTLST = 1;
-    final int SOTHIRDSORTLST = 2;
-    final int SOFOURTHSORTLST = 3;
-    final int[] SOSORTLST = new int[]
+    static final int SOFIRSTSORTLST = 0;
+    static final int SOSECSORTLST = 1;
+    static final int SOTHIRDSORTLST = 2;
+    static final int SOFOURTHSORTLST = 3;
+    static final int[] SOSORTLST = new int[]
     {
         SOFIRSTSORTLST, SOSECSORTLST, SOTHIRDSORTLST, SOFOURTHSORTLST
     };

@@ -35,7 +35,7 @@ import com.sun.star.uno.XComponentContext;
 public class WikiEditSettingDialog extends WikiDialog
 {
 
-    private final String sOKMethod = "OK";
+    private static final String sOKMethod = "OK";
 
     private String[] Methods = {sOKMethod };
     private Map<String,String> setting;

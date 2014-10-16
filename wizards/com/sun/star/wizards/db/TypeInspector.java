@@ -46,7 +46,7 @@ public class TypeInspector
     {
         DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL
     };
-    final int INVALID = 999999;
+    static final int INVALID = 999999;
     XResultSet xResultSet;
 
     public class TypeInfo

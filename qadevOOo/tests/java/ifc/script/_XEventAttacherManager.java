@@ -52,7 +52,7 @@ public class _XEventAttacherManager extends MultiMethodTest {
      */
     public XEventAttacherManager oObj = null;
 
-    private final int index = 0;
+    private static final int index = 0;
 
     /**
     * Test calls the method and stores index of new entry. <p>

@@ -49,7 +49,7 @@ public class FormDocument extends TextDocument
     private ViewHandler oViewHandler;
     private TextStyleHandler oTextStyleHandler;
     private XPropertySet xPropPageStyle;
-    private final int SOFORMGAP = 2000;
+    private static final int SOFORMGAP = 2000;
     private boolean bhasSubForm;
     private UIControlArranger curUIControlArranger;
     private StyleApplier curStyleApplier;

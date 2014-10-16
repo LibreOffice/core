@@ -27,7 +27,7 @@ import complex.connectivity.TestCase;
 
 public class DBaseNumericFunctions extends SubTestCase
 {
-    private final String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
+    private static final String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
     private final XMultiServiceFactory m_xORB;
 
     public DBaseNumericFunctions(final XMultiServiceFactory _xORB, final TestCase i_testCase)

@@ -87,7 +87,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class InterfaceContainer implements Cloneable
 {
-    final boolean DEBUG= false;
+    static final boolean DEBUG= false;
     /**
      * The array buffer into which the elements of the ArrayList are stored.
      * The capacity of the ArrayList is the length of this array buffer.

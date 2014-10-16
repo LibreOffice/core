@@ -30,8 +30,8 @@ public class Test01 implements OLESimpleStorageTest
 {
     XMultiServiceFactory m_xMSF = null;
     TestHelper m_aTestHelper = null;
-    final int pStreamCnt = 5;
-    final int pBytesCnt = 10;
+    static final int pStreamCnt = 5;
+    static final int pBytesCnt = 10;
 
     public Test01 ( XMultiServiceFactory xMSF )
     {

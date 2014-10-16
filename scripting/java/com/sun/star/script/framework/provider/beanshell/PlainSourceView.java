@@ -145,7 +145,7 @@ public class PlainSourceView extends JScrollPane implements
 class GlyphGutter extends JComponent {
 
     private PlainSourceView view;
-    private final String DUMMY_STRING = "99";
+    private static final String DUMMY_STRING = "99";
 
     GlyphGutter(PlainSourceView view) {
         this.view = view;

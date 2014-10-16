@@ -49,10 +49,10 @@ public class Control extends Shape
     GridControl oGridControl;
     String sServiceName;
     XNamed xNamed;
-    final int SOMAXTEXTSIZE = 50;
+    static final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
     protected XNameContainer xFormName;
-    protected final int IIMGFIELDWIDTH = 3000;
+    protected static final int IIMGFIELDWIDTH = 3000;
 
     public Control()
     {

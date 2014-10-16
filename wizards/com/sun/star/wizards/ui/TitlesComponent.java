@@ -30,13 +30,13 @@ public class TitlesComponent extends ControlScroller
 {
 
     int iLabelPosX;
-    final int iRelLabelPosXDist = 6;
+    static final int iRelLabelPosXDist = 6;
     public String[] fieldnames;
     public Map<String, String> fieldtitleset;
     public String[] fieldtitles;
     public XTextListener xTextListener;
-    final String SOLABELPREFIX = "lblColumnName_";
-    final String SOTITLEPREFIX = "lblTitleName_";
+    static final String SOLABELPREFIX = "lblColumnName_";
+    static final String SOTITLEPREFIX = "lblTitleName_";
 
     public TitlesComponent(WizardDialog _CurUnoDialog, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _uitextfieldcount, String _slblColumnNames, String _slblColumnTitles, int _firsthelpindex)
     {

@@ -165,9 +165,9 @@ public class DialogComponent {
                 "Event Object = " + aEventObject );
         }
 
-        private final String aHandlerMethod1 = "doit1";
-        private final String aHandlerMethod2 = "doit2";
-        private final String aHandlerMethod3 = "doit3";
+        private static final String aHandlerMethod1 = "doit1";
+        private static final String aHandlerMethod2 = "doit2";
+        private static final String aHandlerMethod3 = "doit3";
 
         //XDialogEventHandler
         public boolean callHandlerMethod( /*IN*/XDialog xDialog, /*IN*/Object EventObject, /*IN*/String MethodName ) {

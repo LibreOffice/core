@@ -235,7 +235,7 @@ public class ChartHelper
 
     // __________ private members and methods __________
 
-    private final String  msChartClassID   = "12dcae26-281f-416f-a234-c3086127382e";
+    private static final String  msChartClassID   = "12dcae26-281f-416f-a234-c3086127382e";
 
     private XModel maContainerDocument;
 }

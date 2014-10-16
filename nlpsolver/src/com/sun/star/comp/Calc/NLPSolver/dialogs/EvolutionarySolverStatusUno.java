@@ -67,7 +67,7 @@ public class EvolutionarySolverStatusUno extends BaseDialog
 
     private final ResourceManager resourceManager;
 
-    private final int COLOR_RED = 0xFF0000;
+    private static final int COLOR_RED = 0xFF0000;
 
     public EvolutionarySolverStatusUno(XComponentContext xContext) {
         super(xContext, "Solver Status", -1, -1, 170, 95); //center the dialog on the parent

@@ -52,7 +52,7 @@ public class OQueryDesign extends TestCase {
 
     private static XDesktop xDesk;
     private static XFrame xFrame;
-    private final String sDataSourceName = "Bibliography";
+    private static final String sDataSourceName = "Bibliography";
     private static XConnection xConn;
     private static XTextDocument xTextDoc;
 
