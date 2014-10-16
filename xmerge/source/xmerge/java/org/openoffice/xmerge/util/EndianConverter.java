@@ -18,6 +18,9 @@
 
 package org.openoffice.xmerge.util;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+
 /**
  * Helper class providing static methods to convert data to/from Network Byte
  * Order (Big Endian).
@@ -38,12 +41,8 @@ public class EndianConverter {
      * @return  Two element {@code byte} array containing the converted value.
      */
     public static byte[] writeShort (short value) {
-        byte[] leShort = new byte[2];
-
-        leShort[0] = (byte) value;
-        leShort[1] = (byte) (value >>> 8);
-
-        return leShort;
+        return ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
+            .putShort(value).array();
     }
 
     /**
@@ -54,14 +53,8 @@ public class EndianConverter {
      * @return  Four element {@code byte} array containing the converted value.
      */
     public static byte[] writeInt (int value) {
-        byte[] leInt = new byte[4];
-
-        leInt[0] = (byte) value;
-        leInt[1] = (byte) (value >>> 8);
-        leInt[2] = (byte) (value >>> 16);
-        leInt[3] = (byte) (value >>> 24);
-
-        return leInt;
+        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN)
+            .putInt(value).array();
     }
 
     /**
@@ -77,20 +70,8 @@ public class EndianConverter {
      *          IEEE-754 float.
      */
     public static byte[] writeDouble(double value) {
-
-        long myDouble = Double.doubleToLongBits(value);
-        byte[] leDouble = new byte[8];
-
-        leDouble[0] = (byte) (myDouble >>> 0);
-        leDouble[1] = (byte) (myDouble >>> 8);
-        leDouble[2] = (byte) (myDouble >>> 16);
-        leDouble[3] = (byte) (myDouble >>> 24);
-        leDouble[4] = (byte) (myDouble >>> 32);
-        leDouble[5] = (byte) (myDouble >>> 40);
-        leDouble[6] = (byte) (myDouble >>> 48);
-        leDouble[7] = (byte) (myDouble >>> 56);
-
-        return leDouble;
+        return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(
+            Double.doubleToLongBits(value)).array();
     }
 
     /**
@@ -106,12 +87,8 @@ public class EndianConverter {
      * @return  {@code short} containing the converted value.
      */
     public static short readShort (byte[] value) {
-        int high, low;
-
-        high = value[1] & 0xFF;
-        low  = value[0] & 0xFF;
-
-        return (short)(high << 8 | low);
+        return ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
+            .put(value).getShort(0);
     }
 
     /**
@@ -127,13 +104,8 @@ public class EndianConverter {
      * @return  {@code int} containing the converted value.
      */
     public static int readInt(byte[] value) {
-        int number = 0;
-
-        for (int i = 0; i < 4; i++) {
-            number |= (value[i] & 0xFF) << ( i * 8);
-        }
-
-        return number;
+        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN)
+            .put(value).getInt(0);
     }
 
     /**
@@ -149,16 +121,8 @@ public class EndianConverter {
      * @return  {@code double} containing the converted value.
      */
     public static double readDouble(byte[] value) {
-
-        long lvalue = ( ((long)(value[7])       << 56)  +
-                        ((long)(value[6]&0xFF)  << 48)  +
-                        ((long)(value[5]&0xFF)  << 40)  +
-                        ((long)(value[4]&0xFF)  << 32)  +
-                        ((long)(value[3]&0xFF)  << 24)  +
-                        ((long)(value[2]&0xFF)  << 16)  +
-                        ((long)(value[1]&0xFF)  << 8)   +
-                         (value[0]&0xFF));
-
-        return Double.longBitsToDouble(lvalue);
+        return Double.longBitsToDouble(
+            ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).put(value)
+                .getLong(0));
     }
 }
