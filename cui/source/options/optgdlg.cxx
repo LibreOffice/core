@@ -67,6 +67,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/searchopt.hxx>
 #include <sal/macros.h>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -206,6 +207,7 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pYearFrame, "yearframe");
     get(m_pYearValueField, "year");
     get(m_pToYearFT, "toyear");
+    get(m_pCollectUsageInfo, "collectusageinfo");
 
     if (m_pFileDlgCB->IsVisible() && SvtMiscOptions().IsUseSystemFileDialogReadOnly())
     {
@@ -246,6 +248,7 @@ SfxTabPage* OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAtt
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
+    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     SvtHelpOptions aHelpOptions;
     if ( m_pToolTipsCB->IsValueChangedFromSaved() )
@@ -291,6 +294,14 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
+    if (m_pCollectUsageInfo->IsValueChangedFromSaved())
+    {
+        officecfg::Office::Common::Misc::CollectUsageInformation::set(m_pCollectUsageInfo->IsChecked(), batch);
+        bModified = true;
+    }
+
+    batch->commit();
+
     return bModified;
 }
 
@@ -327,6 +338,9 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     {
         m_pYearFrame->Enable(false);
     }
+
+    m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
+    m_pCollectUsageInfo->SaveValue();
 }
 
 

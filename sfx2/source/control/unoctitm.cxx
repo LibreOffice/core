@@ -44,6 +44,7 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <osl/mutex.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
@@ -644,6 +645,9 @@ void UsageInfo::load()
 
 void UsageInfo::save()
 {
+    if (!officecfg::Office::Common::Misc::CollectUsageInformation::get())
+        return;
+
     // TODO - do a real saving here, not only dump to the screen
     std::cerr << "Usage information:" << std::endl;
     for (UsageMap::const_iterator it = maUsage.begin(); it != maUsage.end(); ++it)
@@ -658,7 +662,7 @@ class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
 /// Extracts information about the command + args, and stores that.
 void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::PropertyValue>& rArgs)
 {
-    if (/*TODO disabled now, bind this to a config option instead*/true)
+    if (!officecfg::Office::Common::Misc::CollectUsageInformation::get())
         return;
 
     OUStringBuffer aBuffer;

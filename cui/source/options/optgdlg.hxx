@@ -55,6 +55,8 @@ private:
 
     OUString      m_aStrDateInfo;
 
+    CheckBox*     m_pCollectUsageInfo;
+
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
     DECL_LINK(HelpCheckHdl_Impl, void *);
