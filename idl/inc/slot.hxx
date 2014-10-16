@@ -73,9 +73,6 @@ class SvMetaSlot : public SvMetaAttribute
                             SvSlotElementList &rList,
                             size_t nStart,
                             SvIdlDataBase & rBase, SvStream & rOutStm );
-    virtual void    Write( SvIdlDataBase & rBase,
-                            SvStream & rOutStm, sal_uInt16 nTab,
-                             WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 
     void            SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }

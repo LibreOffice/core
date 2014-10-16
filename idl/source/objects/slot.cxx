@@ -485,30 +485,6 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     return bOk;
 }
 
-void SvMetaSlot::Write( SvIdlDataBase & rBase,
-                        SvStream & rOutStm, sal_uInt16 nTab,
-                        WriteType nT, WriteAttribute nA )
-{
-    // no attribute for Automation
-    if( !GetAutomation() || !GetExport() )
-        return;
-
-    if( !(nA & WA_VARIABLE) )
-    {
-        SvMetaAttributeRef xM = GetMethod();
-        if( xM.Is() )
-        {
-            xM->SetSlotId( GetSlotId() );
-            xM->SetDescription( GetDescription().getString() );
-            xM->Write( rBase, rOutStm, nTab, nT, nA );
-            return;
-        }
-    }
-
-    SvMetaAttribute::Write( rBase, rOutStm, nTab, nT, nA );
-}
-
-
 void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
                         SvIdlDataBase& rBase)
 {

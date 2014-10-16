@@ -29,26 +29,6 @@ class SvStringHashEntry;
 class SvIdlDataBase;
 class SvTokenStream;
 
-class SvUINT32
-{
-    sal_uInt32  nVal;
-public:
-                SvUINT32() { nVal = 0; }
-                SvUINT32( sal_uInt32 n ) : nVal( n ) {}
-    SvUINT32 &  operator = ( sal_uInt32 n ) { nVal = n; return *this; }
-
-    operator    sal_uInt32 &() { return nVal; }
-
-    static sal_uInt32  Read( SvStream & rStm );
-    static void    Write( SvStream & rStm, sal_uInt32 nVal );
-
-    friend SvStream& WriteSvUINT32(SvStream & rStm, const SvUINT32 & r )
-                { SvUINT32::Write( rStm, r.nVal ); return rStm; }
-    friend SvStream& operator >> (SvStream & rStm, SvUINT32 & r )
-                { r.nVal = SvUINT32::Read( rStm ); return rStm; }
-};
-
-
 class Svint
 {
     int     nVal;
@@ -61,11 +41,6 @@ public:
 
     operator    int ()const { return nVal; }
     bool        IsSet() const { return bSet; }
-
-    friend SvStream& WriteSvint(SvStream & rStm, const Svint & r )
-                { SvUINT32::Write( rStm, (sal_uInt32)r.nVal ); rStm.WriteUInt8( r.bSet ); return rStm; }
-    friend SvStream& operator >> (SvStream & rStm, Svint & r )
-                { r.nVal = (int)SvUINT32::Read( rStm ); rStm.ReadCharAsBool( r.bSet ); return rStm; }
 };
 
 
@@ -110,8 +85,6 @@ public:
     {
         return m_aStr;
     }
-    friend SvStream& WriteSvIdentifier(SvStream &, const SvIdentifier &);
-    friend SvStream& operator >> (SvStream &, SvIdentifier &);
 
     bool IsSet() const
     {
@@ -135,8 +108,6 @@ public:
     sal_uInt32      GetValue() const { return nValue; }
     void        SetValue( sal_uInt32 nVal ) { nValue = nVal; }
 
-    friend SvStream& WriteSvNumberIdentifier(SvStream &, const SvNumberIdentifier &);
-    friend SvStream& operator >> (SvStream &, SvNumberIdentifier &);
     bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     bool        ReadSvIdl( SvIdlDataBase &, SvStringHashEntry * pName,
                            SvTokenStream & rInStm );

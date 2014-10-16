@@ -36,18 +36,6 @@ typedef SvMetaObject * (*CreateMetaObjectType)();
 
 #define C_PREF  "C_"
 
-enum WriteType
-{
-    WRITE_C_HEADER, WRITE_C_SOURCE
-};
-
-enum
-{
-    WA_METHOD = 0x1,    WA_VARIABLE = 0x2,  WA_ARGUMENT = 0x4,
-    WA_STRUCT = 0x8,    WA_READONLY = 0x10
-};
-typedef int WriteAttribute;
-
 class SvMetaObject : public SvRttiBase
 {
 public:
@@ -60,9 +48,6 @@ public:
     static void         WriteStars( SvStream & );
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                WriteType, WriteAttribute = 0 );
 
 protected:
     virtual ~SvMetaObject() {}
@@ -108,10 +93,6 @@ protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm );
-    virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                        WriteType, WriteAttribute = 0);
-    virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                        WriteType, WriteAttribute = 0);
 public:
             TYPEINFO_OVERRIDE();
             SvMetaName();
@@ -127,9 +108,6 @@ public:
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                       WriteType, WriteAttribute = 0) SAL_OVERRIDE;
-    void                WriteDescription( SvStream& rOutStm );
 };
 typedef tools::SvRef<SvMetaName> SvMetaNameRef;
 
@@ -204,12 +182,8 @@ public:
     void                SetModule( SvIdlDataBase & rBase );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0) SAL_OVERRIDE;
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                          WriteType, WriteAttribute = 0) SAL_OVERRIDE;
 };
 typedef tools::SvRef<SvMetaExtern> SvMetaExternRef;
 

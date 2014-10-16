@@ -56,16 +56,6 @@ static bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
     return false;
 }
 
-sal_uInt32 SvUINT32::Read( SvStream & rStm )
-{
-    return SvPersistStream::ReadCompressed( rStm );
-}
-
-void SvUINT32::Write( SvStream & rStm, sal_uInt32 nVal )
-{
-    SvPersistStream::WriteCompressed( rStm, nVal );
-}
-
 SvStream& WriteSvBOOL(SvStream & rStm, const SvBOOL & rb )
 {
     sal_uInt8 n = rb.nVal;
@@ -194,19 +184,6 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
     return false;
 }
 
-SvStream& WriteSvIdentifier(SvStream & rStm, const SvIdentifier & r )
-{
-    write_uInt16_lenPrefixed_uInt8s_FromOString(rStm, r.getString());
-    return rStm;
-}
-
-SvStream& operator >> (SvStream & rStm, SvIdentifier & r )
-{
-    r.setString(read_uInt16_lenPrefixed_uInt8s_ToOString(rStm));
-    return rStm;
-}
-
-
 bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvStringHashEntry * pName,
                                     SvTokenStream & rInStm )
@@ -256,21 +233,6 @@ bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
     rInStm.Seek( nTokPos );
     return false;
 }
-
-SvStream& WriteSvNumberIdentifier(SvStream & rStm, const SvNumberIdentifier & r )
-{
-    WriteSvIdentifier( rStm, (SvIdentifier &)r );
-    SvPersistStream::WriteCompressed( rStm, r.nValue );
-    return rStm;
-}
-
-SvStream& operator >> (SvStream & rStm, SvNumberIdentifier & r )
-{
-    rStm >> (SvIdentifier &)r;
-    r.nValue = SvPersistStream::ReadCompressed( rStm );
-    return rStm;
-}
-
 
 bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {

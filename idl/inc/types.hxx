@@ -45,12 +45,7 @@ class SvMetaAttribute : public SvMetaReference
     bool                bNewAttr;
 
 protected:
-    virtual void WriteCSource( SvIdlDataBase & rBase,
-                                 SvStream & rOutStm, bool bSet );
     sal_uLong        MakeSlotValue( SvIdlDataBase & rBase, bool bVariable ) const;
-    virtual void WriteAttributes( SvIdlDataBase & rBase,
-                                      SvStream & rOutStm, sal_uInt16 nTab,
-                                        WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm ) SAL_OVERRIDE;
 public:
@@ -97,13 +92,6 @@ public:
 
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        WriteParam( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                    WriteType );
-    void                WriteRecursiv_Impl( SvIdlDataBase & rBase,
-                                        SvStream & rOutStm, sal_uInt16 nTab,
-                                          WriteType, WriteAttribute );
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& );
@@ -143,11 +131,6 @@ protected:
     virtual void ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 
-    virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                      sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
-    virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
 public:
             TYPEINFO_OVERRIDE();
@@ -205,22 +188,13 @@ public:
 
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     OString             GetCString() const;
-    void                WriteSvIdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
-    void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     bool                ReadMethodArgs( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
-    void                WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
-    void                WriteMethodArgs( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
-    void                WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
     OString             GetParserString() const;
-    void                WriteParamNames( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                        const OString& rChief );
 };
 
 class SvMetaTypeMemberList : public SvRefMemberList<SvMetaType *> {};
@@ -242,8 +216,6 @@ public:
     SvMetaEnumValue();
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 };
 typedef tools::SvRef<SvMetaEnumValue> SvMetaEnumValueRef;
 
@@ -255,8 +227,6 @@ class SvMetaTypeEnum : public SvMetaType
     OString aPrefix;
 protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 public:
             TYPEINFO_OVERRIDE();
             SvMetaTypeEnum();
@@ -268,10 +238,6 @@ public:
                         { return aEnumValueList[n]; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
 };
 typedef tools::SvRef<SvMetaTypeEnum> SvMetaTypeEnumRef;
 

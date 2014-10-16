@@ -250,42 +250,4 @@ void SvMetaModule::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     }
 }
 
-void SvMetaModule::WriteAttributes( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm,
-                                     sal_uInt16 nTab,
-                                     WriteType nT, WriteAttribute nA )
-{
-    SvMetaExtern::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
-    if( !aHelpFileName.getString().isEmpty() )
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaModule" ) << endl;
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "helpfile(\"" ).WriteCharPtr( aHelpFileName.getString().getStr() ).WriteCharPtr( "\");" ) << endl;
-    }
-}
-
-void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                              sal_uInt16 nTab,
-                             WriteType nT, WriteAttribute nA )
-{
-    switch ( nT )
-    {
-    case WRITE_C_SOURCE:
-    case WRITE_C_HEADER:
-    {
-        for( sal_uLong n = 0; n < aClassList.size(); n++ )
-        {
-            SvMetaClass * pClass = aClassList[n];
-            if( !pClass->IsShell() )
-                pClass->Write( rBase, rOutStm, nTab, nT, nA );
-        }
-    }
-    break;
-
-    default:
-        break;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

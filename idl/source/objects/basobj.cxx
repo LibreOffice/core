@@ -93,11 +93,6 @@ bool SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
     return false;
 }
 
-void SvMetaObject::Write( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */,
-                             WriteType, WriteAttribute )
-{
-}
-
 TYPEINIT1( SvMetaName, SvMetaObject );
 SvMetaName::SvMetaName()
 {
@@ -164,23 +159,6 @@ bool SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
     return true;
 }
 
-void SvMetaName::WriteDescription( SvStream & rOutStm )
-{
-    rOutStm.WriteCharPtr( "<DESCRIPTION>" ) << endl;
-
-    OString aDesc( GetDescription().getString() );
-    sal_Int32 nPos = aDesc.indexOf('\n');
-    while ( nPos != -1 )
-    {
-        rOutStm.WriteCharPtr( aDesc.copy( 0, nPos ).getStr() ) << endl;
-        aDesc = aDesc.copy(nPos+1);
-        nPos = aDesc.indexOf('\n');
-    }
-
-    rOutStm.WriteCharPtr( aDesc.getStr() ) << endl;
-    rOutStm.WriteCharPtr( "</DESCRIPTION>" ) << endl;
-}
-
 bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -209,67 +187,6 @@ bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     if( !bOk )
         rInStm.Seek( nTokPos );
     return bOk;
-}
-
-void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                           sal_uInt16 nTab,
-                         WriteType nT, WriteAttribute nA )
-{
-    sal_uLong nBeginPos = rOutStm.Tell();
-    WriteTab( rOutStm, nTab );
-    rOutStm.WriteChar( '[' ) << endl;
-    sal_uLong nOldPos = rOutStm.Tell();
-    WriteAttributes( rBase, rOutStm, nTab +1, nT, nA );
-
-    // write no empty brackets
-    sal_uLong nPos = rOutStm.Tell();
-    rOutStm.Seek( nOldPos );
-    bool bOnlySpace = true;
-    while( bOnlySpace && rOutStm.Tell() < nPos )
-    {
-        char c;
-        rOutStm.ReadChar( c );
-        if( !isspace( c ) )
-            bOnlySpace = false;
-    }
-    if( bOnlySpace )
-        // nothing written
-        rOutStm.Seek( nBeginPos );
-    else
-    {
-        rOutStm.Seek( nPos );
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteChar( ']' ) << endl;
-    }
-}
-
-void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
-                                sal_uInt16 nTab,
-                                 WriteType, WriteAttribute )
-{
-    if( GetHelpText().IsSet() || GetHelpContext().IsSet() )
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaName" ) << endl;
-    }
-    if( GetHelpText().IsSet() )
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "helpstring(\"" ).WriteCharPtr( GetHelpText().getString().getStr() ).WriteCharPtr( "\")," ) << endl;
-    }
-    if( GetHelpContext().IsSet() )
-    {
-        WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "helpcontext(" )
-               .WriteCharPtr( OString::number(GetHelpContext().GetValue()).getStr() )
-               .WriteCharPtr( ")," ) << endl;
-    }
-}
-
-void SvMetaName::WriteContext( SvIdlDataBase &, SvStream &,
-                                sal_uInt16,
-                                 WriteType, WriteAttribute )
-{
 }
 
 TYPEINIT1( SvMetaReference, SvMetaName );
@@ -320,31 +237,6 @@ bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     SetModule( rBase );
     GetUUId(); // id gets created
     return SvMetaReference::ReadSvIdl( rBase, rInStm );
-}
-
-void SvMetaExtern::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                        sal_uInt16 nTab,
-                         WriteType nT, WriteAttribute nA )
-{
-    SvMetaReference::Write( rBase, rOutStm, nTab, nT, nA );
-}
-
-void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                     sal_uInt16 nTab,
-                                     WriteType nT, WriteAttribute nA )
-{
-    SvMetaReference::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
-
-    WriteTab( rOutStm, nTab );
-    rOutStm.WriteCharPtr( "// class SvMetaExtern" ) << endl;
-    WriteTab( rOutStm, nTab );
-    rOutStm.WriteCharPtr( "uuid(" ).WriteCharPtr( OUStringToOString(GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8).getStr() ).WriteCharPtr( ")," ) << endl;
-    WriteTab( rOutStm, nTab );
-    rOutStm.WriteCharPtr( "version(" )
-       .WriteCharPtr( OString::number(aVersion.GetMajorVersion()).getStr() )
-       .WriteChar( '.' )
-       .WriteCharPtr( OString::number(aVersion.GetMinorVersion()).getStr() )
-       .WriteCharPtr( ")," ) << endl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

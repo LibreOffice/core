@@ -102,10 +102,6 @@ protected:
                                       SvTokenStream & rInStm ) SAL_OVERRIDE;
     virtual void    ReadContextSvIdl( SvIdlDataBase &,
                                      SvTokenStream & rInStm ) SAL_OVERRIDE;
-    void            WriteOdlMembers( ByteStringList & rSuperList,
-                                    bool bVariable, bool bWriteTab,
-                                    SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, sal_uInt16 nTab );
 public:
             TYPEINFO_OVERRIDE();
             SvMetaClass();
@@ -122,9 +118,6 @@ public:
                         { return aClassList; }
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                 sal_uInt16 nTab,
-                                  WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) SAL_OVERRIDE;
 };
 

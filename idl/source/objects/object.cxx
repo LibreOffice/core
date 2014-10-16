@@ -233,24 +233,6 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
     return true;
 }
 
-void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream &,
-                        sal_uInt16,
-                         WriteType nT, WriteAttribute )
-{
-    rBase.aIFaceName = GetName().getString();
-    switch( nT )
-    {
-        case WRITE_C_SOURCE:
-        case WRITE_C_HEADER:
-        {
-            OSL_FAIL( "Not supported anymore!" );
-            break;
-        }
-        default:
-            break;
-    }
-}
-
 sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
                                         SvSlotElementList & rSlotList,
                                         SvStream & rOutStm )
