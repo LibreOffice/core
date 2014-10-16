@@ -4630,8 +4630,26 @@ void ScInterpreter::ScCountEmptyCells()
                     ScCellIterator aIter( pDok, aRange, glSubTotal);
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
-                        if (!aIter.hasEmptyData())
-                            ++nCount;
+                        const ScRefCellValue& rCell = aIter.getRefCellValue();
+                        switch (rCell.meType)
+                        {
+                            case CELLTYPE_VALUE:
+                            case CELLTYPE_STRING:
+                            case CELLTYPE_EDIT:
+                                ++nCount;
+                            break;
+                            case CELLTYPE_FORMULA:
+                            {
+                                sc::FormulaResultValue aRes = rCell.mpFormula->GetResult();
+                                if (aRes.meType != sc::FormulaResultValue::String)
+                                    ++nCount;
+                                else if (!aRes.maString.isEmpty())
+                                    ++nCount;
+                            }
+                            break;
+                            default:
+                                ;
+                        }
                     }
                 }
             }
