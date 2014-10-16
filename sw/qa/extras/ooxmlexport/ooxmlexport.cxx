@@ -469,6 +469,14 @@ DECLARE_OOXMLEXPORT_TEST(testEm, "em.docx")
     CPPUNIT_ASSERT_EQUAL(text::FontEmphasis::DOT_BELOW, getProperty<sal_Int16>(getRun(getParagraph(1), 5), "CharEmphasis"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFdo77716, "fdo77716.docx")
+{
+    // The problem was that there should be 200 twips spacing between the two paragraphs, but there wasn't any.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    // This was 0.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(200)), getProperty<sal_Int32>(xStyle, "ParaBottomMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

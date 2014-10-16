@@ -38,6 +38,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <map>
+#include <set>
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
@@ -293,6 +294,8 @@ struct StyleSheetTable_Impl
     PropertyMapPtr                          m_pDefaultParaProps, m_pDefaultCharProps;
     PropertyMapPtr                          m_pCurrentProps;
     StringPairMap_t                         m_aStyleNameMap;
+    /// Style names which should not be used without a " (user)" suffix.
+    std::set<OUString>                      m_aReservedStyleNames;
     ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
     bool                                    m_bIsNewDoc;
 
@@ -1482,14 +1485,31 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     {
         for( sal_uInt32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
         {
-                m_pImpl->m_aStyleNameMap.insert( StringPairMap_t::value_type(
-                    OUString::createFromAscii(aStyleNamePairs[2 * nPair]),
-                    OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]) ));
+            OUString aFrom = OUString::createFromAscii(aStyleNamePairs[2 * nPair]);
+            OUString aTo = OUString::createFromAscii(aStyleNamePairs[2 * nPair + 1]);
+            if (!aTo.isEmpty())
+            {
+                m_pImpl->m_aStyleNameMap.insert( StringPairMap_t::value_type(aFrom, aTo));
+                m_pImpl->m_aReservedStyleNames.insert(aTo);
+            }
         }
     }
     StringPairMap_t::iterator aIt = m_pImpl->m_aStyleNameMap.find( sRet );
-    if(aIt != m_pImpl->m_aStyleNameMap.end() && !aIt->second.isEmpty())
+    bool bConverted = false;
+    if (aIt != m_pImpl->m_aStyleNameMap.end())
+    {
+        bConverted = true;
         sRet = aIt->second;
+    }
+
+    if (!bConverted)
+    {
+        // SwStyleNameMapper doc says: If the UI style name equals a
+        // programmatic name, then it must append " (user)" to the end.
+        std::set<OUString>::iterator aReservedIt = m_pImpl->m_aReservedStyleNames.find(sRet);
+        if (aReservedIt != m_pImpl->m_aReservedStyleNames.end())
+            sRet += " (user)";
+    }
     return sRet;
 }
 
