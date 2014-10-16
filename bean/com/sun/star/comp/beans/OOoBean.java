@@ -894,28 +894,30 @@ public class OOoBean
             NoDocumentException,
             java.io.IOException,
             com.sun.star.lang.IllegalArgumentException
-    {
+ {
         // wrap byte arrray into UNO stream
-        com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter aStream =
-                new com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter(
-                    aOutBuffer );
+        com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter aStream = new com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter(
+                aOutBuffer);
 
         // add stream to arguments
-        com.sun.star.beans.PropertyValue[] aExtendedArguments =
-            addArgument( aArguments, new com.sun.star.beans.PropertyValue(
-                "OutputStream", -1, aStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
+        com.sun.star.beans.PropertyValue[] aExtendedArguments = addArgument(
+                aArguments, new com.sun.star.beans.PropertyValue(
+                        "OutputStream", -1, aStream,
+                        com.sun.star.beans.PropertyState.DIRECT_VALUE));
 
         // call normal store method
-        storeToURL( "private:stream", aExtendedArguments );
+        storeToURL("private:stream", aExtendedArguments);
 
         // get byte array from document stream
-        try { aStream.closeOutput(); }
-        catch ( com.sun.star.io.NotConnectedException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.BufferSizeExceededException aExc )
-        { /* TDB */ }
-        catch ( com.sun.star.io.IOException aExc )
-        { throw new java.io.IOException(); }
+        try {
+            aStream.closeOutput();
+        } catch (com.sun.star.io.NotConnectedException aExc) { /* TDB */
+        } catch (com.sun.star.io.BufferSizeExceededException aExc) { /* TDB */
+        } catch (com.sun.star.io.IOException ex1) {
+            java.io.IOException ex2 = new java.io.IOException();
+            ex2.initCause(ex1);
+            throw ex2;
+        }
         return aStream.getBuffer();
     }
 

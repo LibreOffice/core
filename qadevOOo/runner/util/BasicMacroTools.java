@@ -109,14 +109,9 @@ public class BasicMacroTools {
 
     private static XURLTransformer makeParser(XMultiServiceFactory mMSF)
                                        throws java.lang.Exception {
-        try {
-            return UnoRuntime.queryInterface(
-                           XURLTransformer.class, mMSF.createInstance(
-                                   "com.sun.star.util.URLTransformer"));
-        } catch (Exception e) {
-            throw new Exception("could not create UTL-Transformer " +
-                                e.toString());
-        }
+        return UnoRuntime.queryInterface(
+                       XURLTransformer.class, mMSF.createInstance(
+                               "com.sun.star.util.URLTransformer"));
     }
 
     public void loadLibrary(String LibraryName, String LibraryURL)

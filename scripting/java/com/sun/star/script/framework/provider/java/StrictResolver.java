@@ -57,14 +57,16 @@ public class StrictResolver implements Resolver {
 
         try {
             m = resolveArguments(sd, c);
-        } catch (ClassNotFoundException e) {
-            throw new NoSuchMethodException(
-                "StrictResolver.getProxy: Can't find method: " + sd.getMethodName()
-                + ":" + e.getMessage());
-        } catch (NoSuchMethodException e) {
-            throw new NoSuchMethodException(
-                "StrictResolver.getProxy: Can't find method: " + sd.getMethodName()
-                + ":" + e.getMessage());
+        } catch (ClassNotFoundException ex1) {
+            NoSuchMethodException ex2 = new NoSuchMethodException(
+                "StrictResolver.getProxy: Can't find method: " + sd.getMethodName());
+            ex2.initCause(ex1);
+            throw ex2;
+        } catch (NoSuchMethodException ex1) {
+            NoSuchMethodException ex2 = new NoSuchMethodException(
+                "StrictResolver.getProxy: Can't find method: " + sd.getMethodName());
+            ex2.initCause(ex1);
+            throw ex2;
         }
 
         ScriptProxy sp = new ScriptProxy(m);
@@ -76,12 +78,16 @@ public class StrictResolver implements Resolver {
 
             try {
                 o = c.newInstance();
-            } catch (InstantiationException ie) {
-                throw new NoSuchMethodException(
-                    "getScriptProxy: Can't instantiate: " + c.getName());
-            } catch (IllegalAccessException iae) {
-                throw new NoSuchMethodException(
-                    "getScriptProxy: Can't access: " + c.getName());
+            } catch (InstantiationException ex1) {
+                NoSuchMethodException ex2 = new NoSuchMethodException(
+                        "getScriptProxy: Can't instantiate: " + c.getName());
+                ex2.initCause(ex1);
+                throw ex2;
+            } catch (IllegalAccessException ex1) {
+                NoSuchMethodException ex2 = new NoSuchMethodException(
+                        "getScriptProxy: Can't access: " + c.getName());
+                ex2.initCause(ex1);
+                throw ex2;
             }
 
             sp.setTargetObject(o);

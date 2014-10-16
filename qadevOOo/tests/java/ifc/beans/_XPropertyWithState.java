@@ -56,8 +56,7 @@ public class _XPropertyWithState extends MultiMethodTest {
             oObj.getDefaultAsProperty();
 
         } catch (com.sun.star.lang.WrappedTargetException e){
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("'com.sun.star.lang.WrappedTargetException' was thrown"));
+            throw new StatusException(e, Status.failed("'com.sun.star.lang.WrappedTargetException' was thrown"));
         }
 
         tRes.tested("getDefaultAsProperty()", true);

@@ -164,8 +164,7 @@ public class TableWindowAccessibility extends TestCase {
             store.storeAsURL(aFile,new PropertyValue[]{});
             log.println("... done");
         } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace(log);
-            throw new StatusException(Status.failed("Couldn't register object"));
+            throw new StatusException(e, Status.failed("Couldn't register object"));
         }
 
         isolConnection = UnoRuntime.queryInterface(
