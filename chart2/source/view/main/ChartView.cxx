@@ -356,35 +356,36 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
             , const uno::Reference< XCoordinateSystem >& xCooSys
             , ChartModel& rChartModel )
 {
-    VCoordinateSystem* pVCooSys = findInCooSysList( rVCooSysList, xCooSys );
-    if( !pVCooSys )
+    VCoordinateSystem* pVCooSys = findInCooSysList(rVCooSysList, xCooSys);
+    if (!pVCooSys)
     {
-        pVCooSys = VCoordinateSystem::createCoordinateSystem(xCooSys );
-        if(pVCooSys)
-        {
-            OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, rChartModel ) );
-            pVCooSys->setParticle(aCooSysParticle);
+        // First time being created.  Add it to the list and generate CID for it.
+        pVCooSys = VCoordinateSystem::createCoordinateSystem(xCooSys);
+        rVCooSysList.push_back(pVCooSys);
 
-            pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys, rChartModel) );
+        OUString aCooSysParticle =
+            ObjectIdentifier::createParticleForCoordinateSystem(xCooSys, rChartModel);
 
-            rVCooSysList.push_back( pVCooSys );
-        }
+        pVCooSys->setParticle(aCooSysParticle);
     }
+
+    if (pVCooSys)
+    {
+        pVCooSys->setExplicitCategoriesProvider(
+            new ExplicitCategoriesProvider(xCooSys, rChartModel));
+    }
+
     return pVCooSys;
 }
 
 void SeriesPlotterContainer::resetCoordinateSystems()
 {
-    //delete all coordinate systems
-    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
-    ::std::swap( aVectorToDeleteObjects, m_rVCooSysList );//#i109770#
-    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
-    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
-    for( ; aIter != aEnd; ++aIter )
+    std::vector<VCoordinateSystem*>::iterator it = m_rVCooSysList.begin(), itEnd = m_rVCooSysList.end();
+    for (; it != itEnd; ++it)
     {
-        delete *aIter;
+        VCoordinateSystem* p = *it;
+        p->reset();
     }
-    aVectorToDeleteObjects.clear();
 }
 
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(

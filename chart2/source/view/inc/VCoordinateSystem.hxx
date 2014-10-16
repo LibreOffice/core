@@ -51,6 +51,8 @@ public:
     static VCoordinateSystem* createCoordinateSystem( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
 
+    void reset();
+
     virtual void initPlottingTargets(
                   const ::com::sun::star::uno::Reference<
                         ::com::sun::star::drawing::XShapes >& xLogicTarget
