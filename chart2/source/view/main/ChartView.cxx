@@ -277,7 +277,6 @@ public:
     drawing::Direction3D getPreferredAspectRatio();
 
     SeriesPlottersType& getSeriesPlotterList() { return m_aSeriesPlotterList; }
-    std::vector< VCoordinateSystem* >& getCooSysList() { return m_rVCooSysList; }
     std::vector< LegendEntryProvider* > getLegendEntryProviderList();
 
     void AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel& rModel );
@@ -1526,15 +1525,14 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
     basegfx::B2IRectangle aAvailableOuterRect = BaseGFXHelper::makeRectangle(rParam.maRemainingSpace);
 
-    const std::vector< VCoordinateSystem* >& rVCooSysList( rParam.mpSeriesPlotterContainer->getCooSysList() );
     SeriesPlottersType& rSeriesPlotterList = rParam.mpSeriesPlotterContainer->getSeriesPlotterList();
 
     //create VAxis, so they can give necessary information for automatic scaling
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( static_cast< ::cppu::OWeakObject* >( &mrChartModel ), uno::UNO_QUERY );
     size_t nC = 0;
-    for( nC=0; nC < rVCooSysList.size(); nC++)
+    for( nC=0; nC < m_aVCooSysList.size(); nC++)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+        VCoordinateSystem* pVCooSys = m_aVCooSysList[nC];
         if(3==nDimensionCount)
         {
             uno::Reference<beans::XPropertySet> xSceneProperties( xDiagram, uno::UNO_QUERY );
@@ -1582,9 +1580,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     // - create axis and grids for all coordinate systems
 
     //init all coordinate systems
-    for( nC=0; nC < rVCooSysList.size(); nC++)
+    for( nC=0; nC < m_aVCooSysList.size(); nC++)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+        VCoordinateSystem* pVCooSys = m_aVCooSysList[nC];
         pVCooSys->initPlottingTargets(xSeriesTargetInFrontOfAxis,xTextTargetShapes,m_xShapeFactory,xSeriesTargetBehindAxis);
 
         pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
@@ -1600,9 +1598,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
 
     //use first coosys only so far; todo: calculate for more than one coosys if we have more in future
     //todo: this is just a workaround at the moment for pie and donut labels
-    if( !bIsPieOrDonut && (!rVCooSysList.empty()) )
+    if( !bIsPieOrDonut && (!m_aVCooSysList.empty()) )
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[0];
+        VCoordinateSystem* pVCooSys = m_aVCooSysList[0];
         pVCooSys->createMaximumAxesLabels();
 
         aConsumedOuterRect = AbstractShapeFactory::getRectangleOfShape(xBoundingShape);
@@ -1640,9 +1638,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     }
 
     //create axes and grids for the final size
-    for( nC=0; nC < rVCooSysList.size(); nC++)
+    for( nC=0; nC < m_aVCooSysList.size(); nC++)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+        VCoordinateSystem* pVCooSys = m_aVCooSysList[nC];
 
         pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
             createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
@@ -1669,7 +1667,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         }
         pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,m_xShapeFactory,aCID );
         pSeriesPlotter->setPageReferenceSize( rPageSize );
-        VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, pSeriesPlotter );
+        VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_aVCooSysList, pSeriesPlotter );
         if(2==nDimensionCount)
             pSeriesPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );
         //better performance for big data
@@ -1706,9 +1704,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         AbstractShapeFactory::removeSubShapes( xTextTargetShapes );
 
         //set new transformation
-        for( nC=0; nC < rVCooSysList.size(); nC++)
+        for( nC=0; nC < m_aVCooSysList.size(); nC++)
         {
-            VCoordinateSystem* pVCooSys = rVCooSysList[nC];
+            VCoordinateSystem* pVCooSys = m_aVCooSysList[nC];
             pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
                 createTransformationSceneToScreen( aNewInnerRect ) ));
         }
@@ -1717,7 +1715,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
         {
             VSeriesPlotter* pSeriesPlotter = &(*aPlotterIter);
-            VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, pSeriesPlotter );
+            VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( m_aVCooSysList, pSeriesPlotter );
             if(2==nDimensionCount)
                 pSeriesPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );
             pSeriesPlotter->createShapes();
