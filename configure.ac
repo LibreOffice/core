@@ -7490,7 +7490,7 @@ libo_CHECK_SYSTEM_MODULE([libmspub],[MSPUB],[libmspub-0.1])
 dnl ===================================================================
 dnl Check for system libmwaw
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.3 >= 0.3.1])
+libo_CHECK_SYSTEM_MODULE([libmwaw],[MWAW],[libmwaw-0.3 >= 0.3.3])
 
 dnl ===================================================================
 dnl Check for system libpagemaker
