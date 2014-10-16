@@ -54,6 +54,7 @@ public:
     void testFlatODSStackedColumnChart();
     void testFdo78080();
     void testFdo54361();
+    void testFdo54361_1();
     void testAutoBackgroundXLSX();
     void testTextCanOverlapXLSX();
     void testNumberFormatsXLSX();
@@ -84,6 +85,7 @@ public:
     CPPUNIT_TEST(testFlatODSStackedColumnChart);
     CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST(testFdo54361);
+    CPPUNIT_TEST(testFdo54361_1);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
     CPPUNIT_TEST(testTextCanOverlapXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
@@ -610,9 +612,13 @@ void Chart2ImportTest::testTransparentBackground(OUString const & filename)
 
     CPPUNIT_ASSERT_MESSAGE("Background needs to be with solid fill style", aStyle == 1);
 }
+// 2 test methods here so that tearDown() can dispose the document
 void Chart2ImportTest::testFdo54361()
 {
     testTransparentBackground("fdo54361.xlsx");
+}
+void Chart2ImportTest::testFdo54361_1()
+{
     testTransparentBackground("fdo54361-1.xlsx");
 }
 
