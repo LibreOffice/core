@@ -23,6 +23,8 @@
 #include <tools/rtti.hxx>
 #include <swdllapi.h>
 
+#include <iostream>
+
 class SwIndexReg;
 struct SwPosition;
 
@@ -106,6 +108,8 @@ public:
     const sw::mark::IMark* GetMark() const { return m_pMark; }
     void SetMark(const sw::mark::IMark* pMark);
 };
+
+std::ostream& operator <<(std::ostream& s, const SwIndex& index);
 
 class SwIndexReg
 {

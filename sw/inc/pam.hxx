@@ -28,6 +28,8 @@
 #include <ndindex.hxx>
 #include "swdllapi.h"
 
+#include <iostream>
+
 class SwFmt;
 class SfxPoolItem;
 class SfxItemSet;
@@ -73,6 +75,8 @@ struct SW_DLLPUBLIC SwPosition
     bool operator ==(const SwPosition &) const;
     bool operator !=(const SwPosition &) const;
 };
+
+std::ostream &operator <<(std::ostream& s, const SwPosition& position);
 
 // Result of comparing positions.
 enum SwComparePosition {
@@ -300,6 +304,8 @@ public:
     OUString GetTxt() const;
     void InvalidatePaM();
 };
+
+std::ostream &operator <<(std::ostream& s, const SwPaM& pam);
 
 bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, bool bChkSection );
 

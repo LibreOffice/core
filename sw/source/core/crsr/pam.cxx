@@ -190,6 +190,11 @@ SwDoc * SwPosition::GetDoc() const
     return nNode.GetNode().GetDoc();
 }
 
+std::ostream &operator <<(std::ostream& s, const SwPosition& position)
+{
+    return s << "SwPosition (node " << position.nNode.GetIndex() << ", offset " << position.nContent.GetIndex() << ")";
+}
+
 enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
 
 static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndNd )
@@ -1084,5 +1089,14 @@ void SwPaM::InvalidatePaM()
         _pModify->ModifyNotification( 0, &aHint);
     }
 }
+
+std::ostream &operator <<(std::ostream& s, const SwPaM& pam)
+{
+    if( pam.HasMark())
+        return s << "SwPaM (point " << *pam.GetPoint() << ", mark " << *pam.GetMark() << ")";
+    else
+        return s << "SwPaM (point " << *pam.GetPoint() << ")";
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

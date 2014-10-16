@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_NDINDEX_HXX
 
 #include <limits.h>
+#include <iostream>
 
 #include <tools/solar.h>
 
@@ -91,6 +92,8 @@ public:
 
     SwNode& GetNode() const { return *pNd; }
 };
+
+std::ostream &operator <<(std::ostream& s, const SwNodeIndex& index);
 
 // SwRange
 

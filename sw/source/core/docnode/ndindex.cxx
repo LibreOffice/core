@@ -130,4 +130,9 @@ SwNodeIndex& SwNodeIndex::Assign( const SwNode& rNd, long nOffset )
     return *this;
 }
 
+std::ostream &operator <<(std::ostream& s, const SwNodeIndex& index)
+{
+    return s << "SwNodeIndex (node " << index.GetIndex() << ")";
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
