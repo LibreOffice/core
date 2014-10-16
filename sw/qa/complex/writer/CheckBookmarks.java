@@ -116,7 +116,7 @@ public class CheckBookmarks {
         actualHashes.m_nInsertRandomHash = BookmarkHashes.getBookmarksHash(m_xDoc);
         deleteRandomParts(4711);
         actualHashes.m_nDeleteRandomHash = BookmarkHashes.getBookmarksHash(m_xDoc);
-        insertLinebreaks(007);
+        insertLinebreaks(7);
         actualHashes.m_nLinebreakHash = BookmarkHashes.getBookmarksHash(m_xDoc);
         m_xOdfReloadedDoc = reloadFrom("writer8", "odf");
         actualHashes.m_nOdfReloadHash = BookmarkHashes.getBookmarksHash(m_xOdfReloadedDoc);
