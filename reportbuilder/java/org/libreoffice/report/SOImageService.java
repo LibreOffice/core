@@ -103,7 +103,7 @@ public class SOImageService implements ImageService
                 {
                     final Size imageSize = (Size) xImage.getPropertyValue("SizePixel");
                     final int dpi = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
-                    final double fac = 2540 / dpi;
+                    final double fac = 2540.0 / dpi;
                     dim.Width = (int) (imageSize.Width * fac);
                     dim.Height = (int) (imageSize.Height * fac);
                 }

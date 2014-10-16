@@ -77,7 +77,7 @@ class BorderRemover
             }
 
             // calculate tolerance halve
-            double nTolerable = (_nTolerance * 256 / 100);
+            int nTolerable = (int) (_nTolerance * 256.0 / 100.0);
             if (nTolerable < 0)
             {
                 nTolerable = 0;
