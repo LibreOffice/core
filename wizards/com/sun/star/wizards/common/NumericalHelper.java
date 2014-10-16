@@ -119,7 +119,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to byte: " + aTypeObject.aValue);
                 }
                 break;
@@ -181,7 +181,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to char: " + aTypeObject.aValue);
                 }
                 break;
@@ -234,7 +234,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to short: " + aTypeObject.aValue);
                 }
                 break;
@@ -423,7 +423,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to int: " + aTypeObject.aValue);
                 }
                 break;
@@ -476,7 +476,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to short: " + aTypeObject.aValue);
                 }
                 break;
@@ -529,7 +529,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to short: " + aTypeObject.aValue);
                 }
                 break;
@@ -582,7 +582,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to short: " + aTypeObject.aValue);
                 }
                 break;
@@ -683,7 +683,7 @@ public class NumericalHelper
                 }
                 catch (java.lang.NumberFormatException e)
                 {
-                    throw new com.sun.star.lang.IllegalArgumentException(
+                    throw new com.sun.star.lang.IllegalArgumentException(e,
                             "Cannot convert to short: " + aTypeObject.aValue);
                 }
                 break;
@@ -1314,8 +1314,8 @@ public class NumericalHelper
             catch (java.lang.ClassCastException e)
             {
                 // unknown type cannot be converted
-                throw new com.sun.star.lang.IllegalArgumentException(
-                        "Cannot convert unknown type: '" + e.getMessage() + "'");
+                throw new com.sun.star.lang.IllegalArgumentException(e,
+                        "Cannot convert unknown type " +array.getClass());
             }
         }
         return aShortVal;

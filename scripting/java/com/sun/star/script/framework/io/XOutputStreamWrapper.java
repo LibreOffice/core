@@ -19,6 +19,7 @@ package com.sun.star.script.framework.io;
 
 import com.sun.star.io.XOutputStream;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class XOutputStreamWrapper extends OutputStream {
@@ -40,8 +41,10 @@ public class XOutputStreamWrapper extends OutputStream {
 
         try {
             m_xOutputStream.writeBytes(bytes);
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 
@@ -54,8 +57,10 @@ public class XOutputStreamWrapper extends OutputStream {
 
         try {
             m_xOutputStream.writeBytes(b);
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
     @Override
@@ -69,8 +74,10 @@ public class XOutputStreamWrapper extends OutputStream {
 
         try {
             m_xOutputStream.writeBytes(bytes);
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 
@@ -82,8 +89,10 @@ public class XOutputStreamWrapper extends OutputStream {
 
         try {
             m_xOutputStream.flush();
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 
@@ -95,8 +104,10 @@ public class XOutputStreamWrapper extends OutputStream {
 
         try {
             m_xOutputStream.closeOutput();
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 }

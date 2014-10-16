@@ -621,8 +621,7 @@ public class FileAccess
         }
         catch (com.sun.star.uno.Exception e)
         {
-            e.printStackTrace();
-            throw new NoValidPathException(null, "Internal error.");
+            throw new NoValidPathException(null, "Internal error.", e);
         }
 
         for (int j = 0; j < FolderName.size(); j++)

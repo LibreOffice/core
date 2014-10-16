@@ -79,8 +79,7 @@ public class Resource
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
-            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found");
+            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found", exception);
         }
     }
 
@@ -92,8 +91,7 @@ public class Resource
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
-            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found");
+            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found", exception);
         }
     }
 
@@ -110,8 +108,7 @@ public class Resource
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.err);
-            throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
+            throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found", exception);
         }
     }
 

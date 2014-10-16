@@ -19,6 +19,7 @@ package com.sun.star.script.framework.io;
 
 import com.sun.star.io.XInputStream;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public class XInputStreamWrapper extends InputStream {
@@ -36,8 +37,10 @@ public class XInputStreamWrapper extends InputStream {
 
         try {
             numRead = m_xInputStream.readBytes(byteRet, 1);
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
 
         if (numRead != 1) {
@@ -54,8 +57,10 @@ public class XInputStreamWrapper extends InputStream {
 
         try {
             return m_xInputStream.readBytes(byteRet, b.length);
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 
@@ -64,8 +69,10 @@ public class XInputStreamWrapper extends InputStream {
         try {
             m_xInputStream.skipBytes((int)n);
             return n;
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 
@@ -73,8 +80,10 @@ public class XInputStreamWrapper extends InputStream {
     public int available() throws java.io.IOException {
         try {
             return m_xInputStream.available();
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 
@@ -82,8 +91,10 @@ public class XInputStreamWrapper extends InputStream {
     public void close() throws java.io.IOException {
         try {
             m_xInputStream.closeInput();
-        } catch (com.sun.star.io.IOException ioe) {
-            throw new java.io.IOException(ioe.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 }

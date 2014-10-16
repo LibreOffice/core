@@ -175,8 +175,8 @@ public class Parcel implements XNameContainer {
 
             }
             // TO DO should catch specified exceptions
-            catch (Exception e) {
-                throw new com.sun.star.lang.WrappedTargetException();
+            catch (Exception ex) {
+                throw new com.sun.star.lang.WrappedTargetException(ex);
             }
 
         }

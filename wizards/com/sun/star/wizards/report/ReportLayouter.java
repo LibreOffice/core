@@ -420,8 +420,7 @@ public class ReportLayouter
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            throw new IllegalArgumentException("Fatal Error: Loading template failed: searching fillins failed");
+            throw new IllegalArgumentException("Fatal Error: Loading template failed: searching fillins failed", ex);
         }
     }
 }

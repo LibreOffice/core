@@ -185,16 +185,12 @@ public class ScriptBrowseNode extends PropertySet implements
             try {
                 data = (ScriptMetaData)parent.getByName(name);
             } catch (NoSuchElementException nse) {
-
-                throw new com.sun.star.lang.IllegalArgumentException(
+                throw new com.sun.star.lang.IllegalArgumentException(nse,
                     name + " does not exist or can't be found ");
-
             } catch (com.sun.star.lang.WrappedTargetException wte) {
-
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework editing script ", null, wte.TargetException);
-
             }
 
             provider.getScriptEditor().edit(ctxt, data);
@@ -212,16 +208,12 @@ public class ScriptBrowseNode extends PropertySet implements
                 parent.removeByName(name);
                 result = new Any(new Type(Boolean.class), Boolean.TRUE);
             } catch (NoSuchElementException nse) {
-
-                throw new com.sun.star.lang.IllegalArgumentException(
+                throw new com.sun.star.lang.IllegalArgumentException(nse,
                     name + " does not exist or can't be found ");
-
             } catch (WrappedTargetException wte) {
-
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework deleting script ", null, wte.TargetException);
-
             }
 
         } else if (aFunctionName.equals("Renamable")) {
@@ -263,28 +255,20 @@ public class ScriptBrowseNode extends PropertySet implements
                 name = languageName;
                 result = new Any(new Type(XBrowseNode.class), this);
             } catch (NoSuchElementException nse) {
-
-                throw new com.sun.star.lang.IllegalArgumentException(
+                throw new com.sun.star.lang.IllegalArgumentException(nse,
                     name + " does not exist or can't be found ");
-
             } catch (ElementExistException eee) {
-
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework error renaming script ", null, eee);
-
             } catch (WrappedTargetException wte) {
-
                 // rethrow
                 throw new InvocationTargetException(
                     "Scripting framework rename script ", null, wte.TargetException);
-
             }
         } else {
-
             throw new com.sun.star.lang.IllegalArgumentException(
                 "Function " + aFunctionName + " not supported.");
-
         }
 
         return result;

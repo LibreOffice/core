@@ -153,9 +153,11 @@ public class XStorageHelper implements XEventListener {
             }
         } catch (com.sun.star.io.IOException ioe) {
             disposeObject();
-        } catch (com.sun.star.uno.Exception e) {
+        } catch (com.sun.star.uno.Exception ex1) {
             disposeObject();
-            throw new IOException(e.getMessage());
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         }
     }
 

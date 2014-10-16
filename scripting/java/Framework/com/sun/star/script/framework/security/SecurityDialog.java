@@ -165,7 +165,7 @@ public class SecurityDialog extends WeakBase implements
             try {
                 checkBoxPath = AnyConverter.toString(args[0]);
             } catch (IllegalArgumentException e) {
-                throw new RuntimeException("SecurityDialog::initialize: " + e.getMessage());
+                throw new RuntimeException(e);
             }
 
             LogUtils.DEBUG("path: " + checkBoxPath);
@@ -189,13 +189,9 @@ public class SecurityDialog extends WeakBase implements
         try {
             _xDialog = createDialog();
         } catch (com.sun.star.uno.Exception e) {
-            LogUtils.DEBUG("Couldn't create dialog");
-            LogUtils.DEBUG("uno message: " + e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         } catch (Exception e) {
-            LogUtils.DEBUG("Couldn't create dialog");
-            LogUtils.DEBUG("message: " + e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
 
     }

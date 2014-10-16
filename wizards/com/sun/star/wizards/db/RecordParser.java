@@ -221,8 +221,7 @@ public class RecordParser extends QueryMetaData
         }
         catch (Exception exception)
         {
-            exception.printStackTrace(System.err);
-            throw new InvalidQueryException(xMSF, Command);
+            throw new InvalidQueryException(xMSF, Command, exception);
         }
     }
 

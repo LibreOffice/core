@@ -255,12 +255,14 @@ public class UCBStreamHandler extends URLStreamHandler {
             }
 
             result = new ByteArrayInputStream(inputBytes[0]);
-        } catch (com.sun.star.io.IOException ioe) {
-            LogUtils.DEBUG("caught exception " + ioe);
-            throw new IOException(ioe.getMessage());
-        } catch (com.sun.star.uno.Exception e) {
-            LogUtils.DEBUG("caught exception " + e);
-            throw new IOException(e.getMessage());
+        } catch (com.sun.star.io.IOException ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
+        } catch (com.sun.star.uno.Exception ex1) {
+            IOException ex2 = new IOException();
+            ex2.initCause(ex1);
+            throw ex2;
         } finally {
             if (xInputStream != null) {
                 try {

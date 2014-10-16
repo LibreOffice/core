@@ -153,8 +153,7 @@ public class SystemDialog
         }
         catch (com.sun.star.lang.IllegalArgumentException iae)
         {
-            iae.printStackTrace();
-            throw new IllegalArgumentException(iae.getMessage());
+            throw new IllegalArgumentException(iae);
         }
         xFolderPicker.setTitle(title);
         xFolderPicker.setDescription(description);

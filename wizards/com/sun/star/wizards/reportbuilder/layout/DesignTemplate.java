@@ -276,7 +276,7 @@ public class DesignTemplate
         {
             // this should not happen
             a = null;
-            throw new java.lang.RuntimeException(e.getMessage());
+            throw new java.lang.RuntimeException(e);
         }
         catch (com.sun.star.uno.Exception e)
         {

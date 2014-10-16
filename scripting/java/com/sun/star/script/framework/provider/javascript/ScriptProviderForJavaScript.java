@@ -139,9 +139,7 @@ class ScriptImpl implements XScript {
         try {
             this.m_xMultiComponentFactory = m_xContext.getServiceManager();
         } catch (Exception e) {
-            LogUtils.DEBUG(LogUtils.getTrace(e));
-            throw new com.sun.star.uno.RuntimeException(
-                "Error constructing  ScriptImpl: [javascript]");
+            throw new com.sun.star.uno.RuntimeException(e);
         }
 
         LogUtils.DEBUG("ScriptImpl [javascript] script data = " + metaData);

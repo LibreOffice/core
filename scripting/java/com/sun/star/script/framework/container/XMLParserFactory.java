@@ -73,12 +73,18 @@ public class XMLParserFactory {
                 }
 
                 result = builder.parse(is);
-            } catch (SAXParseException spe) {
-                throw new IOException(spe.getMessage());
-            } catch (SAXException se) {
-                throw new IOException(se.getMessage());
-            } catch (ParserConfigurationException pce) {
-                throw new IOException(pce.getMessage());
+            } catch (SAXParseException ex1) {
+                IOException ex2 = new IOException();
+                ex2.initCause(ex1);
+                throw ex2;
+            } catch (SAXException ex1) {
+                IOException ex2 = new IOException();
+                ex2.initCause(ex1);
+                throw ex2;
+            } catch (ParserConfigurationException ex1) {
+                IOException ex2 = new IOException();
+                ex2.initCause(ex1);
+                throw ex2;
             }
 
             return result;
@@ -169,12 +175,18 @@ public class XMLParserFactory {
 
                     method.invoke(impl, new Object[] {doc});
                 }
-            } catch (NoSuchMethodException ex) {
-                throw new IOException(ex.getMessage());
-            } catch (ClassNotFoundException ex) {
-                throw new IOException(ex.getMessage());
-            } catch (Exception ex) {
-                throw new IOException(ex.getMessage());
+            } catch (NoSuchMethodException ex1) {
+                IOException ex2 = new IOException();
+                ex2.initCause(ex1);
+                throw ex2;
+            } catch (ClassNotFoundException ex1) {
+                IOException ex2 = new IOException();
+                ex2.initCause(ex1);
+                throw ex2;
+            } catch (Exception ex1) {
+                IOException ex2 = new IOException();
+                ex2.initCause(ex1);
+                throw ex2;
             }
         }
     }

@@ -31,4 +31,14 @@ public class NoValidPathException extends Exception
             SystemDialog.showErrorBox(xMSF, "dbwizres", "dbw", 521); // OfficePathnotavailable
         }
     }
+
+    public NoValidPathException(XMultiServiceFactory xMSF, String _sText, Throwable cause)
+    {
+        super(_sText, cause);
+        // TODO: NEVER open a dialog in an exception
+        if (xMSF != null)
+        {
+            SystemDialog.showErrorBox(xMSF, "dbwizres", "dbw", 521); // OfficePathnotavailable
+        }
+    }
 }
