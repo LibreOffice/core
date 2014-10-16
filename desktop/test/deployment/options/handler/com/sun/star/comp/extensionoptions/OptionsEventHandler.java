@@ -317,7 +317,7 @@ public class OptionsEventHandler {
             throws com.sun.star.uno.Exception {
 
             if (aWindow == null)
-                new com.sun.star.lang.IllegalArgumentException(
+                throw new com.sun.star.lang.IllegalArgumentException(
                     "Method external_event requires that a window is passed as argument",
                     this, (short) -1);
 
