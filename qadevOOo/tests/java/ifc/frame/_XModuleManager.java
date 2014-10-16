@@ -128,10 +128,8 @@ public class _XModuleManager extends MultiMethodTest {
         for (int i = 0 ; i < sequenze.length; i++){
             try{
                 log.println("testing '" + sequenze[i].Name + "'");
-                if (oObj.identify(sequenze[i].Value).equals(
-                                                        sequenze[i].Name)){
-                     ok &= ok;
-                }else{
+                if (!oObj.identify(sequenze[i].Value).equals(
+                                                        sequenze[i].Name)) {
                      log.println("failure: returned value: '" +
                                  oObj.identify(sequenze[i].Value) +
                                  "' ,expected value: '" + sequenze[i].Name + "'");
