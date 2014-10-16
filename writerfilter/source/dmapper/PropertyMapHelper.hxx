@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 #include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 
@@ -43,7 +43,7 @@ void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger,
         PropertyValueSeqSeq_t & rPropValSeqSeq);
 }
 }
-#endif // OSL_DEBUG_LEVEL > 1
+#endif // DEBUG_DOMAINMAPPER
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 

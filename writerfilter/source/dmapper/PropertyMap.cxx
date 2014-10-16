@@ -293,7 +293,7 @@ bool PropertyMap::isSet( PropertyIds eId) const
     return m_vMap.find(eId)!=m_vMap.end();
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
 {
     pLogger->startElement("PropertyMap");

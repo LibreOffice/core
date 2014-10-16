@@ -264,7 +264,7 @@ void OOXMLParserState::endTxbxContent()
     inTxbxContent = false;
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
 {
     pLogger->startElement("parserstate");

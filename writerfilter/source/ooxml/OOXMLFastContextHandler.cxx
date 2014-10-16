@@ -57,9 +57,8 @@ using namespace ::com::sun::star;
 using namespace oox;
 using namespace ::std;
 
-#if OSL_DEBUG_LEVEL > 1
-static string resourceToString
-(OOXMLFastContextHandler::ResourceEnum_t eResource)
+#ifdef DEBUG_DOMAINMAPPER
+static string resourceToString(OOXMLFastContextHandler::ResourceEnum_t eResource)
 {
     string sResult;
 

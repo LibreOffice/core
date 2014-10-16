@@ -147,9 +147,6 @@ namespace writerfilter
         endElement( );
     }
 
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
     void TagLogger::startElement(const std::string & name)
     {
         xmlChar* xmlName = xmlCharStrdup( name.c_str() );
@@ -168,7 +165,7 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
     void TagLogger::attribute(const std::string & name, const OUString & value)
     {
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -226,9 +223,7 @@ namespace writerfilter
     {
         xmlTextWriterEndElement( pWriter );
     }
-#endif
 
-#ifdef DEBUG_DOMAINMAPPER
     class PropertySetDumpHandler : public Properties
     {
         IdToString::Pointer_t mpIdToString;

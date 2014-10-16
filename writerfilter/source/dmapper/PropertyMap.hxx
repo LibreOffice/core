@@ -172,9 +172,6 @@ public:
 
 #ifdef DEBUG_DOMAINMAPPER
     void printProperties();
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
     virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
     static com::sun::star::table::ShadowFormat getShadowFromBorder(com::sun::star::table::BorderLine2 aBorder);

@@ -61,26 +61,20 @@ namespace writerfilter
         void setFileName(const std::string & filename);
         void startDocument();
         void endDocument();
-#endif
 
-#ifdef DEBUG_DOMAINMAPPER
         void element(const std::string & name);
         void unoPropertySet(css::uno::Reference<css::beans::XPropertySet> rPropSet);
-#endif
-#if OSL_DEBUG_LEVEL > 1
         void startElement(const std::string & name);
 #endif
         void attribute(const std::string & name, const std::string & value);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
         void attribute(const std::string & name, const OUString & value);
         void attribute(const std::string & name, sal_uInt32 value);
         void attribute(const std::string & name, const css::uno::Any aAny);
         void chars(const std::string & chars);
         void chars(const OUString & chars);
         void endElement();
-#endif
 
-#ifdef DEBUG_DOMAINMAPPER
         void propertySet(writerfilter::Reference<Properties>::Pointer_t props,
                 IdToString::Pointer_t pIdToString);
 #endif

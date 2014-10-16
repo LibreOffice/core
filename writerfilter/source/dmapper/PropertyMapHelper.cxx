@@ -21,7 +21,7 @@
 #include <resourcemodel/TagLogger.hxx>
 #include "PropertyMapHelper.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 namespace writerfilter
 {
 namespace dmapper
@@ -112,6 +112,6 @@ void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger, PropertyVal
 
 }
 }
-#endif // OSL_DEBUG_LEVEL > 1
+#endif // DEBUG_DOMAINMAPPER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

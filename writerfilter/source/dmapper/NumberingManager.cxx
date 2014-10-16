@@ -48,7 +48,7 @@ namespace dmapper {
 
 //---------------------------------------------------  Utility functions
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
 {
     sal_Int32 nLen = aProps.getLength( );
@@ -578,7 +578,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 // Get the merged level properties
                 uno::Sequence< beans::PropertyValue > aLvlProps = aProps[sal_Int32( nLevel )];
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
                 lcl_printProperties( aLvlProps );
 #endif
 
