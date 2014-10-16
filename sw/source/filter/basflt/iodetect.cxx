@@ -184,20 +184,6 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
     return bRet;
 }
 
-void TerminateBuffer(sal_Char *pBuffer, sal_uLong nBytesRead, sal_uLong nBufferLen)
-{
-    OSL_ENSURE(nBytesRead <= nBufferLen - 2,
-            "what you read must be less than the max + null termination");
-    OSL_ENSURE(!(nBufferLen & 0x00000001), "nMaxReadBuf must be an even number");
-    if (nBytesRead <= nBufferLen - 2)
-    {
-        pBuffer[nBytesRead] = '\0';
-        pBuffer[nBytesRead+1] = '\0';
-        if (nBytesRead & 0x00000001)
-            pBuffer[nBytesRead+2] = '\0';
-    }
-}
-
 // Check the type of the stream (file) by searching for corresponding set of bytes.
 // If no known type is found, return ASCII for now!
 // Returns the internal FilterName.
