@@ -413,34 +413,6 @@ SfxStringItem Author SID_DOCINFO_AUTHOR
     GroupId = ;
 ]
 
-
-SfxBoolItem AutoHide SID_AUTOHIDE
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
-
 SfxVoidItem AutoPilotMenu SID_AUTOPILOTMENU
 ()
 [
@@ -781,61 +753,6 @@ SfxBoolItem BrowseView SID_BROWSER_MODE
     GroupId = GID_VIEW;
 ]
 
-
-SfxUInt32Item BuildVersion SID_BUILD_VERSION
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
-SfxStringItem Caption SID_CAPTION
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxTemplateItem CharStyle SID_STYLE_FAMILY1
 
 [
@@ -911,32 +828,6 @@ SfxVoidItem ClearHistory SID_CLEARHISTORY
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
-
-
-SfxBoolItem CloseWins SID_CLOSEWINS
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
 
 SfxVoidItem CloseDocs SID_CLOSEDOCS
 ()
@@ -1297,34 +1188,6 @@ SfxVoidItem CursorTopOfScreen SID_CURSORTOPOFSCREEN
     ToolBoxConfig = FALSE,
     GroupId = GID_INTERN;
 ]
-
-
-SfxStringItem CustomerNumber SID_OFFICE_CUSTOMERNUMBER
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
-]
-
 
 SfxVoidItem Cut SID_CUT
 ()
@@ -1817,34 +1680,6 @@ SfxTemplateItem FrameStyle SID_STYLE_FAMILY3
     GroupId = GID_DOCUMENT;
 ]
 
-
-SfxStringItem FullName SID_PROGFILENAME
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxStringItem FullName SID_DOCFULLNAME
 
 [
@@ -2269,32 +2104,6 @@ SfxVoidItem GoLeft SID_CURSORLEFT
     ToolBoxConfig = FALSE,
     GroupId = GID_NAVIGATOR;
 ]
-
-
-SfxVoidItem GoLeftBlock SID_CURSORPAGELEFT
-(SfxInt16Item By FN_PARAM_1,SfxBoolItem Sel FN_PARAM_2)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_NAVIGATOR;
-]
-
 
 SfxVoidItem GoLeftBlockSel SID_CURSORPAGELEFT_SEL
 (SfxInt16Item By FN_PARAM_1)
@@ -3409,33 +3218,6 @@ SfxVoidItem MacroOrganizer SID_MACROORGANIZER
     GroupId = GID_MACRO;
 ]
 
-
-SfxBoolItem ReccomendReadonly SID_RECOMMENDREADONLY
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
 //----------------------------------------------------FALSE
 SfxBoolItem ShowLines SID_SHOWLINES
 
@@ -3535,34 +3317,6 @@ SfxVoidItem MacroDialog SID_BASICCHOOSER
     GroupId = GID_MACRO;
 ]
 
-
-SfxUInt16Item MailReceipt SID_MAIL_NOTIFY
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-
 SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
 ()
 [
@@ -3586,34 +3340,6 @@ SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
     ToolBoxConfig = TRUE,
     GroupId = GID_MACRO;
 ]
-
-
-SfxBoolItem MenuBarVisible SID_TOGGLE_MENUBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
 
 SfxInt32Item MergeDocuments SID_DOCUMENT_MERGE
 (SfxStringItem URL SID_FILE_NAME,SfxInt16Item Version SID_VERSION)
@@ -3665,34 +3391,6 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
     ToolBoxConfig = FALSE,
     GroupId = ;
 ]
-
-
-SfxBoolItem ApplyCharUnit SID_ATTR_APPLYCHARUNIT
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
 
 SfxBoolItem Modified SID_MODIFIED
 
@@ -6358,34 +6056,6 @@ SfxUInt16Item SwitchViewShell SID_VIEWSHELL
     GroupId = GID_VIEW;
 ]
 
-
-SfxBoolItem TaskBarVisible SID_TASKBAR
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-
 SfxTemplateItem ListStyle SID_STYLE_FAMILY5
 
 [
@@ -6465,32 +6135,6 @@ SfxStringItem Title SID_DOCTITLE
     ToolBoxConfig = FALSE,
     GroupId = ;
 ]
-
-
-SfxVoidItem Title SID_TITLE
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_FORMAT;
-]
-
 
 SfxVoidItem ToggleBreakPoint SID_BASICIDE_TOGGLEBRKPNT
 ()
@@ -6726,34 +6370,6 @@ SfxVoidItem ToggleBreakPointEnabled SID_BASICIDE_TOGGLEBRKPNTENABLED
     GroupId = GID_MACRO;
 ]
 
-
-SfxUInt32Item UpdateVersion SID_UPDATE_VERSION
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = TRUE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_INTERN;
-]
-
-
 SfxVoidItem VersionDialog SID_VERSION
 ()
 [
@@ -6879,34 +6495,6 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
 ]
-
-
-SfxBoolItem WinVisible SID_WIN_VISIBLE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
 
 SfxVoidItem WindowList SID_MDIWINDOWLIST
 ()
@@ -7388,33 +6976,6 @@ SfxVoidItem HelpTutorials SID_HELP_TUTORIALS
     GroupId = GID_APPLICATION;
 ]
 
-
-SfxVoidItem AddonHelp SID_ADDONHELP
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
-
 SfxStringItem FormatMenuState SID_FORMATMENUSTATE
 [
     /* flags: */
@@ -7686,31 +7247,6 @@ SfxBoolItem CheckPLZ SID_OFFICE_CHECK_PLZ
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_SPECIAL;
-]
-
-
-SfxBoolItem Minimized SID_MINIMIZED
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
 ]
 
 SfxVoidItem AutoCorrectDlg SID_AUTO_CORRECT_DLG
