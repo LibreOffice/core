@@ -17,10 +17,11 @@
  */
 
 package com.sun.star.lib.uno.helper;
+
 import java.util.Iterator;
 import java.util.ListIterator;
-import java.util.NoSuchElementException;
 import java.util.Collection;
+
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.uno.UnoRuntime;
