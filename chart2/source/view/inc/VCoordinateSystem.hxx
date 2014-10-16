@@ -98,6 +98,9 @@ public:
         ::com::sun::star::chart2::XCoordinateSystem >
         getModel() const { return m_xCooSysModel;}
 
+    void createMaximumAxesLabels();
+    void createAxesLabels();
+
     /**
      * Create "view" axis obejcts 'VAxis' from the coordinate system model.
      */
@@ -109,8 +112,6 @@ public:
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();
 
-    virtual void createMaximumAxesLabels();
-    virtual void createAxesLabels();
     virtual void updatePositions();
     virtual void createAxesShapes();
 
