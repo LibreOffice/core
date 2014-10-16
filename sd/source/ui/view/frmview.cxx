@@ -202,7 +202,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         maVisibleLayers.SetAll();
         maPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
-        SetSnapGridWidth(boost::rational<long>(1000, 1), boost::rational<long>(1000, 1));
+        SetSnapGridWidth(boost::rational<sal_Int64>(1000, 1), boost::rational<sal_Int64>(1000, 1));
         SetActiveLayer( SD_RESSTR(STR_LAYER_LAYOUT) );
         mbNoColors = true;
         mbNoAttribs = false;
@@ -302,8 +302,8 @@ void FrameView::Update(SdOptions* pOptions)
 
         SetGridCoarse( Size( pOptions->GetFldDrawX(), pOptions->GetFldDrawY() ) );
         SetGridFine( Size( pOptions->GetFldDivisionX(), pOptions->GetFldDivisionY() ) );
-        boost::rational<long> aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
-        boost::rational<long> aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
+        boost::rational<sal_Int64> aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
+        boost::rational<sal_Int64> aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
         SetSnapGridWidth(aFractX, aFractY);
         SetQuickEdit(pOptions->IsQuickEdit());
 
@@ -928,8 +928,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             default: SetViewShEditModeOnLoad(EM_PAGE); break;
         }
 
-        const boost::rational<long> aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
-        const boost::rational<long> aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
+        const boost::rational<sal_Int64> aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
+        const boost::rational<sal_Int64> aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
 
         SetSnapGridWidth( aSnapGridWidthX, aSnapGridWidthY );
     }

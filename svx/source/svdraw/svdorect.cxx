@@ -494,7 +494,7 @@ void SdrRectObj::NbcMove(const Size& rSiz)
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrRectObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     SetXPolyDirty();

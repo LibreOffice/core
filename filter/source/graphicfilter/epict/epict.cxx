@@ -1962,8 +1962,8 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     if( pA->GetMapMode().GetMapUnit() == MAP_RELATIVE )
                     {
                         MapMode aMM = pA->GetMapMode();
-                        boost::rational<long> aScaleX = aMM.GetScaleX();
-                        boost::rational<long> aScaleY = aMM.GetScaleY();
+                        boost::rational<sal_Int64> aScaleX = aMM.GetScaleX();
+                        boost::rational<sal_Int64> aScaleY = aMM.GetScaleY();
 
                         Point aOrigin = aSrcMapMode.GetOrigin();
                         BigInt aX( aOrigin.X() );
@@ -2183,7 +2183,7 @@ bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, F
 {
     PictWriterAttrStackMember*  pAt;
     MapMode                     aMap72( MAP_INCH );
-    boost::rational<long>       aDPIFrac( 1, 72 );
+    boost::rational<sal_Int64>       aDPIFrac( 1, 72 );
 
     bStatus=true;
     nLastPercent=0;

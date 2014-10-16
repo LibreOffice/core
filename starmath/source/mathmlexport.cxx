@@ -1344,7 +1344,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
         case TSIZE:
             {
                 const SmFontNode *pFontNode = static_cast<const SmFontNode *>(pNode);
-                const boost::rational<long>& aFrac = pFontNode->GetSizeParameter();
+                const boost::rational<sal_Int64>& aFrac = pFontNode->GetSizeParameter();
 
                 OUStringBuffer sStrBuf;
                 switch(pFontNode->GetSizeType())
@@ -1373,7 +1373,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                             //value specified in points.
 
                             //Must fix StarMath to retain the original pt values
-                            boost::rational<long> aTemp = Sm100th_mmToPts(pFontNode->GetFont().
+                            boost::rational<sal_Int64> aTemp = Sm100th_mmToPts(pFontNode->GetFont().
                                 GetSize().Height());
 
                             if (pFontNode->GetSizeType() == FNTSIZ_MINUS)

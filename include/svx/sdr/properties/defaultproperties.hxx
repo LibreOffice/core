@@ -94,7 +94,7 @@ namespace sdr
             virtual void ForceDefaultAttributes();
 
             // Scale the included ItemSet.
-            virtual void Scale(const boost::rational<long>& rScale) SAL_OVERRIDE;
+            virtual void Scale(const boost::rational<sal_Int64>& rScale) SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr

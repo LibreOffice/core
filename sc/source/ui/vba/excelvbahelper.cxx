@@ -97,7 +97,7 @@ getUnoSheetModuleObj( const uno::Reference< table::XCellRange >& xRange ) throw 
 void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs )
 {
     ScTabViewShell* pViewSh = excel::getBestViewShell( xModel );
-    boost::rational<long> aFract( nZoom, 100 );
+    boost::rational<sal_Int64> aFract( nZoom, 100 );
     pViewSh->GetViewData().SetZoom( aFract, aFract, nTabs );
     pViewSh->RefreshZoom();
 }

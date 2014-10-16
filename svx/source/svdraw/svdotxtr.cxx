@@ -48,7 +48,7 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         long nHgt0=aSR0.Bottom()-aSR0.Top();
         long nWdt1=rRect.Right()-rRect.Left();
         long nHgt1=rRect.Bottom()-rRect.Top();
-        SdrTextObj::NbcResize(maSnapRect.TopLeft(),boost::rational<long>(nWdt1,nWdt0),boost::rational<long>(nHgt1,nHgt0));
+        SdrTextObj::NbcResize(maSnapRect.TopLeft(),boost::rational<sal_Int64>(nWdt1,nWdt0),boost::rational<sal_Int64>(nHgt1,nHgt0));
         SdrTextObj::NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
         long nHDist=GetTextLeftDistance()+GetTextRightDistance();
@@ -118,7 +118,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
     SetRectsDirty(true);
 }
 
-void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     bool bNoShearMerk=aGeo.nShearWink==0;
     bool bRota90Merk=bNoShearMerk && aGeo.nRotationAngle % 9000 ==0;

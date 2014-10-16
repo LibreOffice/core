@@ -65,7 +65,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
             if( GetWin() && 100 != mpOpt->GetZoom() )
             {
                 MapMode aMode( mpWin->GetMapMode() );
-                const boost::rational<long> aNewFactor( mpOpt->GetZoom(), 100 );
+                const boost::rational<sal_Int64> aNewFactor( mpOpt->GetZoom(), 100 );
                 aMode.SetScaleX( aNewFactor );
                 aMode.SetScaleY( aNewFactor );
                 mpWin->SetMapMode( aMode );

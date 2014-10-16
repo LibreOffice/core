@@ -106,22 +106,22 @@ bool SdrDragStat::CheckMinMoved(const Point& rPnt)
     return bMinMoved;
 }
 
-boost::rational<long> SdrDragStat::GetXFact() const
+boost::rational<sal_Int64> SdrDragStat::GetXFact() const
 {
     long nMul=GetNow().X()-aRef1.X();
     long nDiv=GetPrev().X()-aRef1.X();
     if (nDiv==0) nDiv=1;
     if (bHorFixed) { nMul=1; nDiv=1; }
-    return boost::rational<long>(nMul,nDiv);
+    return boost::rational<sal_Int64>(nMul,nDiv);
 }
 
-boost::rational<long> SdrDragStat::GetYFact() const
+boost::rational<sal_Int64> SdrDragStat::GetYFact() const
 {
     long nMul=GetNow().Y()-aRef1.Y();
     long nDiv=GetPrev().Y()-aRef1.Y();
     if (nDiv==0) nDiv=1;
     if (bVerFixed) { nMul=1; nDiv=1; }
-    return boost::rational<long>(nMul,nDiv);
+    return boost::rational<sal_Int64>(nMul,nDiv);
 }
 
 void SdrDragStat::TakeCreateRect(Rectangle& rRect) const

@@ -1446,7 +1446,7 @@ sal_Int16 ScTabViewObj::GetZoom(void) const
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        const boost::rational<long>& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y wird angezeigt
+        const boost::rational<sal_Int64>& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y wird angezeigt
         return (sal_Int16)(( rZoomY.numerator() * 100 ) / rZoomY.denominator());
     }
     return 0;
@@ -1468,7 +1468,7 @@ void ScTabViewObj::SetZoom(sal_Int16 nZoom)
                 pScMod->SetAppOptions( aNewOpt );
             }
         }
-        boost::rational<long> aFract( nZoom, 100 );
+        boost::rational<sal_Int64> aFract( nZoom, 100 );
         pViewSh->SetZoom( aFract, aFract, true );
         pViewSh->PaintGrid();
         pViewSh->PaintTop();

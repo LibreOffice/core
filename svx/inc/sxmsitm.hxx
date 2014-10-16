@@ -27,8 +27,8 @@
 // Instead, we multiply them with each other.
 class SdrMeasureScaleItem: public SdrScaleItem {
 public:
-    SdrMeasureScaleItem()                   : SdrScaleItem(SDRATTR_MEASURESCALE,boost::rational<long>(1,1)) {}
-    SdrMeasureScaleItem(const boost::rational<long>& rFr): SdrScaleItem(SDRATTR_MEASURESCALE,rFr) {}
+    SdrMeasureScaleItem()                   : SdrScaleItem(SDRATTR_MEASURESCALE,boost::rational<sal_Int64>(1,1)) {}
+    SdrMeasureScaleItem(const boost::rational<sal_Int64>& rFr): SdrScaleItem(SDRATTR_MEASURESCALE,rFr) {}
     SdrMeasureScaleItem(SvStream& rIn)      : SdrScaleItem(SDRATTR_MEASURESCALE,rIn) {}
 };
 

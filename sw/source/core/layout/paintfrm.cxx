@@ -2960,8 +2960,8 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     SwViewShell* pViewShell = mrTabFrm.getRootFrm()->GetCurrShell();
     OutputDevice* pOutDev = pViewShell->GetOut();
     const MapMode& rMapMode = pOutDev->GetMapMode();
-    const boost::rational<long>& rFracX = rMapMode.GetScaleX();
-    const boost::rational<long>& rFracY = rMapMode.GetScaleY();
+    const boost::rational<sal_Int64>& rFracX = rMapMode.GetScaleX();
+    const boost::rational<sal_Int64>& rFracY = rMapMode.GetScaleY();
 
     svx::frame::Style aL(rBoxItem.GetLeft());
     aL.SetPatternScale(boost::rational_cast<double>(rFracY));

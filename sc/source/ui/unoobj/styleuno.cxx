@@ -758,7 +758,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                 Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
-                boost::rational<long> aZoom(1,1);
+                boost::rational<sal_Int64> aZoom(1,1);
                 rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
                 pDocShell->SetDocumentModified();
@@ -1100,7 +1100,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
                 Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
-                boost::rational<long> aZoom(1,1);
+                boost::rational<sal_Int64> aZoom(1,1);
                 rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
@@ -1464,7 +1464,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
-            boost::rational<long> aZoom(1,1);
+            boost::rational<sal_Int64> aZoom(1,1);
             rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
             pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
@@ -1843,7 +1843,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
             Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
-            boost::rational<long> aZoom(1,1);
+            boost::rational<sal_Int64> aZoom(1,1);
             rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
             pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );

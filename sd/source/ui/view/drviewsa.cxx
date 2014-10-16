@@ -644,7 +644,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     {
         Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
         pPageView->LogicToPagePos(aPos);
-        boost::rational<long> aUIScale(GetDoc()->GetUIScale());
+        boost::rational<sal_Int64> aUIScale(GetDoc()->GetUIScale());
         aPos.X() = boost::rational_cast<long>(aPos.X() / aUIScale);
         aPos.Y() = boost::rational_cast<long>(aPos.Y() / aUIScale);
 

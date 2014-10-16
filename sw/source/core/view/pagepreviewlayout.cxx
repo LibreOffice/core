@@ -215,17 +215,17 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
         // calculate scaling
         MapMode aMapMode( MAP_TWIP );
         Size aWinSize = mrParentViewShell.GetOut()->PixelToLogic( _rPxWinSize, aMapMode );
-        boost::rational<long> aXScale( aWinSize.Width(), mnPreviewLayoutWidth );
-        boost::rational<long> aYScale( aWinSize.Height(), mnPreviewLayoutHeight );
+        boost::rational<sal_Int64> aXScale( aWinSize.Width(), mnPreviewLayoutWidth );
+        boost::rational<sal_Int64> aYScale( aWinSize.Height(), mnPreviewLayoutHeight );
         if( aXScale < aYScale )
             aYScale = aXScale;
         {
             // adjust scaling for Drawing layer.
-            aYScale *= boost::rational<long>( 1000, 1 );
+            aYScale *= boost::rational<sal_Int64>( 1000, 1 );
             long nNewNuminator = boost::rational_cast<long>(aYScale);
             if( nNewNuminator < 1 )
                 nNewNuminator = 1;
-            aYScale = boost::rational<long>( nNewNuminator, 1000 );
+            aYScale = boost::rational<sal_Int64>( nNewNuminator, 1000 );
             // propagate scaling as zoom percentage to view options for font cache
             _ApplyNewZoomAtViewShell( static_cast<sal_uInt8>(nNewNuminator/10) );
         }
@@ -740,8 +740,8 @@ bool SwPagePreviewLayout::SetBookPreviewMode( const bool _bEnableBookPreview,
     OD 12.12.2002 #103492#
 */
 Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
-                          const boost::rational<long>& _aNewScale,
-                          const boost::rational<long>& _aOldScale,
+                          const boost::rational<sal_Int64>& _aNewScale,
+                          const boost::rational<sal_Int64>& _aOldScale,
                           const Size&     _aNewWinSize ) const
 {
     Point aNewPaintStartPos = maPaintedPreviewDocRect.TopLeft();

@@ -780,8 +780,8 @@ void SwSidebarWin::DoResize()
     mpVScrollbar->SetRange( Range(0, mpOutliner->GetTextHeight()));
 
     //calculate rects for meta- button
-    const boost::rational<long>& fx( GetMapMode().GetScaleX() );
-    const boost::rational<long>& fy( GetMapMode().GetScaleY() );
+    const boost::rational<sal_Int64>& fx( GetMapMode().GetScaleX() );
+    const boost::rational<sal_Int64>& fy( GetMapMode().GetScaleY() );
 
     const Point aPos( mpMetadataAuthor->GetPosPixel());
     Rectangle aRectMetaButton;
@@ -1208,7 +1208,7 @@ sal_Int32 SwSidebarWin::GetScrollbarWidth()
 
 sal_Int32 SwSidebarWin::GetMetaButtonAreaWidth()
 {
-    const boost::rational<long>& f( GetMapMode().GetScaleX() );
+    const boost::rational<sal_Int64>& f( GetMapMode().GetScaleX() );
     if (IsPreview())
         return 3 * METABUTTON_AREA_WIDTH * f.numerator() / f.denominator();
     else
@@ -1217,7 +1217,7 @@ sal_Int32 SwSidebarWin::GetMetaButtonAreaWidth()
 
 sal_Int32 SwSidebarWin::GetMetaHeight()
 {
-    const boost::rational<long>& f( GetMapMode().GetScaleY() );
+    const boost::rational<sal_Int64>& f( GetMapMode().GetScaleY() );
     return POSTIT_META_HEIGHT * f.numerator() / f.denominator();
 }
 
@@ -1228,7 +1228,7 @@ sal_Int32 SwSidebarWin::GetMinimumSizeWithMeta()
 
 sal_Int32 SwSidebarWin::GetMinimumSizeWithoutMeta()
 {
-    const boost::rational<long>& f( GetMapMode().GetScaleY() );
+    const boost::rational<sal_Int64>& f( GetMapMode().GetScaleY() );
     return POSTIT_MINIMUMSIZE_WITHOUT_META * f.numerator() / f.denominator();
 }
 

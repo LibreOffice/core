@@ -743,8 +743,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     Size _aVisArea( aSize.Width, aSize.Height );
 
-    boost::rational<long> aScaleWidth( 1, 1 );
-    boost::rational<long> aScaleHeight( 1, 1 );
+    boost::rational<sal_Int64> aScaleWidth( 1, 1 );
+    boost::rational<sal_Int64> aScaleHeight( 1, 1 );
 
     bool bUseObjectSize = false;
 
@@ -777,8 +777,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             }
             else
             {
-                aScaleWidth = boost::rational<long>( aObjArea.Width(),   _aVisArea.Width() );
-                aScaleHeight = boost::rational<long>( aObjArea.Height(), _aVisArea.Height());
+                aScaleWidth = boost::rational<sal_Int64>( aObjArea.Width(),   _aVisArea.Width() );
+                aScaleHeight = boost::rational<sal_Int64>( aObjArea.Height(), _aVisArea.Height());
             }
         }
     }

@@ -573,7 +573,7 @@ namespace
     basegfx::B2DHomMatrix getTransformFromMapMode(const MapMode& rMapMode)
     {
         basegfx::B2DHomMatrix aMapping;
-        const boost::rational<long> aNoScale(1, 1);
+        const boost::rational<sal_Int64> aNoScale(1, 1);
         const Point& rOrigin(rMapMode.GetOrigin());
 
         if(0 != rOrigin.X() || 0 != rOrigin.Y())

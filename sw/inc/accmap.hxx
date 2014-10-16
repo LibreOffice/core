@@ -140,7 +140,7 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
                             const std::vector<PreviewPage*>& _rPreviewPages,
-                            const boost::rational<long>&  _rScale,
+                            const boost::rational<sal_Int64>&  _rScale,
                             const SwPageFrm* _pSelectedPageFrm,
                             const Size&      _rPreviewWinSize );
 
@@ -249,7 +249,7 @@ public:
 
     // update preview data (and fire events if necessary)
     void UpdatePreview( const std::vector<PreviewPage*>& _rPreviewPages,
-                        const boost::rational<long>&  _rScale,
+                        const boost::rational<sal_Int64>&  _rScale,
                         const SwPageFrm* _pSelectedPageFrm,
                         const Size&      _rPreviewWinSize );
 

@@ -344,7 +344,7 @@ sal_uInt16 SwWriteTable::GetRelWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
 {
     long nWidth = GetRawWidth( nCol, nColSpan );
 
-    return (sal_uInt16) boost::rational_cast<long>(boost::rational<long>(nWidth * 256 + GetBaseWidth() / 2, GetBaseWidth()));
+    return (sal_uInt16) boost::rational_cast<long>(boost::rational<sal_Int64>(nWidth * 256 + GetBaseWidth() / 2, GetBaseWidth()));
 }
 
 sal_uInt16 SwWriteTable::GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) const
@@ -353,7 +353,7 @@ sal_uInt16 SwWriteTable::GetPrcWidth( sal_uInt16 nCol, sal_uInt16 nColSpan ) con
 
     // Looks funny, but is nothing more than
     // [(100 * nWidth) + .5] without rounding errors
-    return (sal_uInt16) boost::rational_cast<long>(boost::rational<long>(nWidth * 100 + GetBaseWidth() / 2, GetBaseWidth()));
+    return (sal_uInt16) boost::rational_cast<long>(boost::rational<sal_Int64>(nWidth * 100 + GetBaseWidth() / 2, GetBaseWidth()));
 }
 
 long SwWriteTable::GetAbsHeight(long nRawHeight, size_t const nRow,

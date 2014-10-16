@@ -1741,7 +1741,7 @@ void SwPagePreviewWin::AdjustPreviewToNewZoom( const sal_uInt16 _nZoomFactor,
     else if ( _nZoomFactor != 0 )
     {
         // calculate new scaling and set mapping mode appropriately.
-        boost::rational<long> aNewScale( _nZoomFactor, 100 );
+        boost::rational<sal_Int64> aNewScale( _nZoomFactor, 100 );
         MapMode aNewMapMode = GetMapMode();
         aNewMapMode.SetScaleX( aNewScale );
         aNewMapMode.SetScaleY( aNewScale );

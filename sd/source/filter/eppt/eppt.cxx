@@ -1095,7 +1095,7 @@ void ImplExportComments( uno::Reference< drawing::XDrawPage > xPage, SvMemoryStr
                 uno::Reference< office::XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
 
                 geometry::RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
-                MapMode aMapDest( MAP_INCH, Point(), boost::rational<long>( 1, 576 ), boost::rational<long>( 1, 576 ) );
+                MapMode aMapDest( MAP_INCH, Point(), boost::rational<sal_Int64>( 1, 576 ), boost::rational<sal_Int64>( 1, 576 ) );
                 Point aPoint( OutputDevice::LogicToLogic( Point( static_cast< sal_Int32 >( aRealPoint2D.X * 100.0 ),
                     static_cast< sal_Int32 >( aRealPoint2D.Y * 100.0 ) ), MAP_100TH_MM, aMapDest ) );
 

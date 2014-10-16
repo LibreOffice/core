@@ -175,20 +175,20 @@ void SwViewShell::PrintProspect(
     // set the MapMode
     aMapMode.SetOrigin( Point() );
     {
-        boost::rational<long> aScX( aPrtSize.Width(), nMaxColSz );
-        boost::rational<long> aScY( aPrtSize.Height(), nMaxRowSz );
+        boost::rational<sal_Int64> aScX( aPrtSize.Width(), nMaxColSz );
+        boost::rational<sal_Int64> aScY( aPrtSize.Height(), nMaxRowSz );
         if( aScX < aScY )
             aScY = aScX;
 
         {
             // Round percentages for Drawings so that these can paint their objects properly
-            aScY *= boost::rational<long>( 1000, 1 );
+            aScY *= boost::rational<sal_Int64>( 1000, 1 );
             long nTmp = boost::rational_cast<long>(aScY);
             if( 1 < nTmp )
                 --nTmp;
             else
                 nTmp = 1;
-            aScY = boost::rational<long>( nTmp, 1000 );
+            aScY = boost::rational<sal_Int64>( nTmp, 1000 );
         }
 
         aMapMode.SetScaleY( aScY );

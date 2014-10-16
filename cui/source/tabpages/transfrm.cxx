@@ -90,7 +90,7 @@ static void lcl_ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits,
     rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
 }
 
-static void lcl_ScaleRect(basegfx::B2DRange& rRange, const boost::rational<long> aUIScale)
+static void lcl_ScaleRect(basegfx::B2DRange& rRange, const boost::rational<sal_Int64> aUIScale)
 {
     const double fFactor(1.0 / boost::rational_cast<double>(aUIScale));
     rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
@@ -254,7 +254,7 @@ void SvxAngleTabPage::Construct()
     }
 
     // take scale into account
-    const boost::rational<long> aUIScale = pView->GetModel()->GetUIScale();
+    const boost::rational<sal_Int64> aUIScale = pView->GetModel()->GetUIScale();
     lcl_ScaleRect(maRange, aUIScale);
 
     // take UI units into account
@@ -475,7 +475,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
     if( m_pMtrRadius->IsValueChangedFromSaved() )
     {
-        boost::rational<long> aUIScale = pView->GetModel()->GetUIScale();
+        boost::rational<sal_Int64> aUIScale = pView->GetModel()->GetUIScale();
         long nTmp = GetCoreValue( *m_pMtrRadius, ePoolUnit );
         nTmp = boost::rational_cast<long>(nTmp * aUIScale);
 
@@ -758,7 +758,7 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     // take scale into account
-    const boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+    const boost::rational<sal_Int64> aUIScale = mpView->GetModel()->GetUIScale();
     lcl_ScaleRect( maWorkRange, aUIScale );
     lcl_ScaleRect( maRange, aUIScale );
 
@@ -828,7 +828,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if ( m_pMtrWidth->IsValueModified() || m_pMtrHeight->IsValueModified() )
     {
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        boost::rational<sal_Int64> aUIScale = mpView->GetModel()->GetUIScale();
 
         // get Width
         double nWidth = static_cast<double>(m_pMtrWidth->GetValue( meDlgUnit ));

@@ -661,8 +661,8 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
             SwDoc* pDoc = const_cast<SwDoc*>(GetPageFrm()->GetFmt()->GetDoc());
             bool bModified = pDoc->getIDocumentState().IsModified();
             const_cast< SdrObject* >( GetDrawObj() )->Resize( aCurrObjRect.TopLeft(),
-                    boost::rational<long>( nTargetWidth, aCurrObjRect.GetWidth() ),
-                    boost::rational<long>( nTargetHeight, aCurrObjRect.GetHeight() ), false );
+                    boost::rational<sal_Int64>( nTargetWidth, aCurrObjRect.GetWidth() ),
+                    boost::rational<sal_Int64>( nTargetHeight, aCurrObjRect.GetHeight() ), false );
             if (!bModified)
                 pDoc->getIDocumentState().ResetModified();
         }

@@ -336,8 +336,8 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                             {
                                                 MapMode aMap;
                                                 aMap.SetMapUnit( nUnits == 1 ? MAP_INCH : MAP_CM );
-                                                aMap.SetScaleX( boost::rational<long>( 1, nHorizontalResolution ) );
-                                                aMap.SetScaleY( boost::rational<long>( 1, nVerticalResolution ) );
+                                                aMap.SetScaleX( boost::rational<sal_Int64>( 1, nHorizontalResolution ) );
+                                                aMap.SetScaleY( boost::rational<sal_Int64>( 1, nVerticalResolution ) );
                                                 aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap, MapMode( MAP_100TH_MM ) );
                                             }
                                         }
@@ -489,7 +489,7 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
 
                 // set logical size
                 MapMode aMap( MAP_INCH, Point(),
-                              boost::rational<long>( 1, nDPIx ), boost::rational<long>( 1, nDPIy ) );
+                              boost::rational<sal_Int64>( 1, nDPIx ), boost::rational<sal_Int64>( 1, nDPIy ) );
                 aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
                                                        MapMode( MAP_100TH_MM ) );
 

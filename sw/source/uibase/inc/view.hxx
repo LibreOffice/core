@@ -492,7 +492,7 @@ public:
     void            InsFrmMode(sal_uInt16 nCols);
 
     void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, bool bViewOnly = false);
-    virtual void    SetZoomFactor( const boost::rational<long> &rX, const boost::rational<long> & ) SAL_OVERRIDE;
+    virtual void    SetZoomFactor( const boost::rational<sal_Int64> &rX, const boost::rational<sal_Int64> & ) SAL_OVERRIDE;
 
     void            SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly = false );
 

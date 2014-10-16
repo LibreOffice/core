@@ -627,7 +627,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 SvxZoomType eOldZoomType = GetZoomType();
                 SvxZoomType eNewZoomType = eOldZoomType;
-                const boost::rational<long>& rOldY = GetViewData().GetZoomY();  // Y wird angezeigt
+                const boost::rational<sal_Int64>& rOldY = GetViewData().GetZoomY();  // Y wird angezeigt
                 sal_uInt16 nOldZoom = (sal_uInt16)(( rOldY.numerator() * 100 )
                                             / rOldY.denominator());
                 sal_uInt16 nZoom = nOldZoom;
@@ -720,7 +720,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         aNewOpt.SetZoomType( GetZoomType() );
                         pScMod->SetAppOptions( aNewOpt );
                     }
-                    boost::rational<long> aFract( nZoom, 100 );
+                    boost::rational<sal_Int64> aFract( nZoom, 100 );
                     SetZoom( aFract, aFract, bSyncZoom );
                     PaintGrid();
                     PaintTop();
@@ -749,7 +749,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                             aNewOpt.SetZoomType( GetZoomType() );
                             pScMod->SetAppOptions( aNewOpt );
                         }
-                        boost::rational<long> aFract( nCurrentZoom,100 );
+                        boost::rational<sal_Int64> aFract( nCurrentZoom,100 );
                         SetZoom( aFract, aFract, bSyncZoom );
                         PaintGrid();
                         PaintTop();

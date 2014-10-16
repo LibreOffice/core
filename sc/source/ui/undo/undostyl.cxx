@@ -110,7 +110,7 @@ static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, bo
     Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
     double nPPTX = aLogic.X() / 1000.0;
     double nPPTY = aLogic.Y() / 1000.0;
-    boost::rational<long> aZoom(1,1);
+    boost::rational<sal_Int64> aZoom(1,1);
     pDoc->StyleSheetChanged( pStyle, bRemoved, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();

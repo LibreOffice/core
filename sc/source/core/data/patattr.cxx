@@ -216,7 +216,7 @@ SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet* pCondSet
 
 void ScPatternAttr::GetFont(
         vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
-        OutputDevice* pOutDev, const boost::rational<long>* pScale,
+        OutputDevice* pOutDev, const boost::rational<sal_Int64>* pScale,
         const SfxItemSet* pCondSet, sal_uInt8 nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor )
 {
@@ -376,7 +376,7 @@ void ScPatternAttr::GetFont(
     if ( pOutDev != NULL )
     {
         Size aEffSize;
-        boost::rational<long> aFraction( 1,1 );
+        boost::rational<sal_Int64> aFraction( 1,1 );
         if (pScale)
             aFraction = *pScale;
         Size aSize( 0, (long) nFontHeight );
@@ -386,7 +386,7 @@ void ScPatternAttr::GetFont(
             aEffSize = pOutDev->LogicToPixel( aSize, aSrcMode );
         else
         {
-            boost::rational<long> aFractOne(1,1);
+            boost::rational<sal_Int64> aFractOne(1,1);
             aDestMode.SetScaleX( aFractOne );
             aDestMode.SetScaleY( aFractOne );
             aEffSize = OutputDevice::LogicToLogic( aSize, aSrcMode, aDestMode );
@@ -482,7 +482,7 @@ void ScPatternAttr::GetFont(
 
 void ScPatternAttr::GetFont(
         vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
-        OutputDevice* pOutDev, const boost::rational<long>* pScale,
+        OutputDevice* pOutDev, const boost::rational<sal_Int64>* pScale,
         const SfxItemSet* pCondSet, sal_uInt8 nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor ) const
 {

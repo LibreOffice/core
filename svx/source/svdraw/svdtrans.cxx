@@ -32,10 +32,10 @@ void MoveXPoly(XPolygon& rPoly, const Size& S)
     rPoly.Move(S.Width(),S.Height());
 }
 
-void ResizeRect(Rectangle& rRect, const Point& rRef, const boost::rational<long>& rxFact, const boost::rational<long>& ryFact, bool bNoJustify)
+void ResizeRect(Rectangle& rRect, const Point& rRef, const boost::rational<sal_Int64>& rxFact, const boost::rational<sal_Int64>& ryFact, bool bNoJustify)
 {
-    boost::rational<long> xFact(rxFact);
-    boost::rational<long> yFact(ryFact);
+    boost::rational<sal_Int64> xFact(rxFact);
+    boost::rational<sal_Int64> yFact(ryFact);
 
     rRect.Left()  =rRef.X()+Round(((double)(rRect.Left()  -rRef.X())*xFact.numerator())/xFact.denominator());
     rRect.Right() =rRef.X()+Round(((double)(rRect.Right() -rRef.X())*xFact.numerator())/xFact.denominator());
@@ -45,7 +45,7 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const boost::rational<long>
 }
 
 
-void ResizePoly(Polygon& rPoly, const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void ResizePoly(Polygon& rPoly, const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     sal_uInt16 nAnz=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -53,7 +53,7 @@ void ResizePoly(Polygon& rPoly, const Point& rRef, const boost::rational<long>& 
     }
 }
 
-void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     sal_uInt16 nAnz=rPoly.GetPointCount();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -570,7 +570,7 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
     return 0x7fffffff;
 }
 
-void Kuerzen(boost::rational<long>& rF, unsigned nDigits)
+void Kuerzen(boost::rational<sal_Int64>& rF, unsigned nDigits)
 {
     sal_Int32 nMul=rF.numerator();
     sal_Int32 nDiv=rF.denominator();
@@ -599,7 +599,7 @@ void Kuerzen(boost::rational<long>& rF, unsigned nDigits)
         return;
     }
     if (bNeg) nMul=-nMul;
-    rF=boost::rational<long>(nMul,nDiv);
+    rF=boost::rational<sal_Int64>(nMul,nDiv);
 }
 
 
@@ -635,7 +635,7 @@ FrPair GetInchOrMM(MapUnit eU)
         }
         default: break;
     }
-    return boost::rational<long>(1,1);
+    return boost::rational<sal_Int64>(1,1);
 }
 
 FrPair GetInchOrMM(FieldUnit eU)
@@ -654,7 +654,7 @@ FrPair GetInchOrMM(FieldUnit eU)
         case FUNIT_MILE       : return FrPair(   1,63360);
         default: break;
     }
-    return boost::rational<long>(1,1);
+    return boost::rational<sal_Int64>(1,1);
 }
 
 // Calculate the factor that we need to convert units from eS to eD.
@@ -668,8 +668,8 @@ FrPair GetMapFactor(MapUnit eS, MapUnit eD)
     bool bSInch=IsInch(eS);
     bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=boost::rational<long>(127,5); aRet.Y()*=boost::rational<long>(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=boost::rational<long>(5,127); aRet.Y()*=boost::rational<long>(5,127); }
+    if (bSInch && !bDInch) { aRet.X()*=boost::rational<sal_Int64>(127,5); aRet.Y()*=boost::rational<sal_Int64>(127,5); }
+    if (!bSInch && bDInch) { aRet.X()*=boost::rational<sal_Int64>(5,127); aRet.Y()*=boost::rational<sal_Int64>(5,127); }
     return aRet;
 };
 
@@ -681,8 +681,8 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     bool bSInch=IsInch(eS);
     bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=boost::rational<long>(127,5); aRet.Y()*=boost::rational<long>(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=boost::rational<long>(5,127); aRet.Y()*=boost::rational<long>(5,127); }
+    if (bSInch && !bDInch) { aRet.X()*=boost::rational<sal_Int64>(127,5); aRet.Y()*=boost::rational<sal_Int64>(127,5); }
+    if (!bSInch && bDInch) { aRet.X()*=boost::rational<sal_Int64>(5,127); aRet.Y()*=boost::rational<sal_Int64>(5,127); }
     return aRet;
 };
 
@@ -763,7 +763,7 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, boo
 
 void SdrFormatter::Undirty()
 {
-    if (aScale.numerator()==0) aScale=boost::rational<long>(1,1);
+    if (aScale.numerator()==0) aScale=boost::rational<sal_Int64>(1,1);
     bool bSrcMetr,bSrcInch,bDstMetr,bDstInch;
     long nMul1,nDiv1,nMul2,nDiv2;
     short nKomma1,nKomma2;
@@ -792,7 +792,7 @@ void SdrFormatter::Undirty()
     }
 
     // temporary fraction for canceling
-    boost::rational<long> aTempFract(nMul1,nDiv1);
+    boost::rational<sal_Int64> aTempFract(nMul1,nDiv1);
     nMul1=aTempFract.numerator();
     nDiv1=aTempFract.denominator();
 

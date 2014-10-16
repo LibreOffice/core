@@ -88,7 +88,7 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
         case MID_LINE_COLOR        :     rVal <<= (sal_Int32)aFtnInfo.GetLineColor().GetColor();break;
         case MID_LINE_RELWIDTH     :
         {
-            boost::rational<long> aTmp( 100, 1 );
+            boost::rational<sal_Int64> aTmp( 100, 1 );
             aTmp *= aFtnInfo.GetWidth();
             rVal <<= (sal_Int8)boost::rational_cast<long>(aTmp);
         }
@@ -158,7 +158,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             if(nSet < 0)
                 bRet = false;
             else
-                aFtnInfo.SetWidth(boost::rational<long>(nSet, 100));
+                aFtnInfo.SetWidth(boost::rational<sal_Int64>(nSet, 100));
         }
         break;
         case MID_LINE_ADJUST       :

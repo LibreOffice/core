@@ -139,7 +139,7 @@ void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
     rIStm.ReadInt16( nUnit );
     ReadPair( rIStm, aOrg );
     rIStm.ReadInt32( nXNum ).ReadInt32( nXDenom ).ReadInt32( nYNum ).ReadInt32( nYDenom );
-    rMapMode = MapMode( (MapUnit) nUnit, aOrg, boost::rational<long>( nXNum, nXDenom ), boost::rational<long>( nYNum, nYDenom ) );
+    rMapMode = MapMode( (MapUnit) nUnit, aOrg, boost::rational<sal_Int64>( nXNum, nXDenom ), boost::rational<sal_Int64>( nYNum, nYDenom ) );
 }
 
 void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )

@@ -940,7 +940,7 @@ void DlgEdObj::NbcMove( const Size& rSize )
     GetDlgEdForm()->GetDlgEditor().SetDialogModelChanged(true);
 }
 
-void DlgEdObj::NbcResize(const Point& rRef, const boost::rational<long>& xFract, const boost::rational<long>& yFract)
+void DlgEdObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFract, const boost::rational<sal_Int64>& yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
@@ -1590,7 +1590,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     GetDlgEditor().SetDialogModelChanged(true);
 }
 
-void DlgEdForm::NbcResize(const Point& rRef, const boost::rational<long>& xFract, const boost::rational<long>& yFract)
+void DlgEdForm::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFract, const boost::rational<sal_Int64>& yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 

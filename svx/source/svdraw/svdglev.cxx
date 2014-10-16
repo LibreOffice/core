@@ -378,10 +378,10 @@ void SdrGlueEditView::MoveMarkedGluePoints(const Size& rSiz, bool bCopy)
 
 static void ImpResize(Point& rPt, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
-    ResizePoint(rPt,*(const Point*)p1,*(const boost::rational<long>*)p2,*(const boost::rational<long>*)p3);
+    ResizePoint(rPt,*(const Point*)p1,*(const boost::rational<sal_Int64>*)p2,*(const boost::rational<sal_Int64>*)p3);
 }
 
-void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bCopy)
+void SdrGlueEditView::ResizeMarkedGluePoints(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact, bool bCopy)
 {
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));

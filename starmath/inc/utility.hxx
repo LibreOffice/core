@@ -41,27 +41,27 @@ inline long SmPtsTo100th_mm(long nNumPts)
 }
 
 
-inline long SmPtsTo100th_mm(const boost::rational<long> &rNumPts)
-    // as above but with argument 'rNumPts' as 'boost::rational<long>'
+inline long SmPtsTo100th_mm(const boost::rational<sal_Int64> &rNumPts)
+    // as above but with argument 'rNumPts' as 'boost::rational<sal_Int64>'
 {
-    boost::rational<long>  aTmp (254000L, 7227L);
+    boost::rational<sal_Int64>  aTmp (254000L, 7227L);
     return boost::rational_cast<long>(aTmp * rNumPts);
 }
 
 
-inline boost::rational<long> Sm100th_mmToPts(long nNum100th_mm)
+inline boost::rational<sal_Int64> Sm100th_mmToPts(long nNum100th_mm)
     // returns the length (in points) that corresponds to the length
     // 'nNum100th_mm' (in 100th of mm).
 {
     SAL_WARN_IF( nNum100th_mm < 0, "starmath", "Ooops..." );
-    boost::rational<long>  aTmp (7227L, 254000L);
-    return aTmp *= boost::rational<long>(nNum100th_mm);
+    boost::rational<sal_Int64>  aTmp (7227L, 254000L);
+    return aTmp *= boost::rational<sal_Int64>(nNum100th_mm);
 }
 
 
-inline long SmRoundFraction(const boost::rational<long> &rFrac)
+inline long SmRoundFraction(const boost::rational<sal_Int64> &rFrac)
 {
-    SAL_WARN_IF( rFrac <= boost::rational<long>(), "starmath", "Ooops..." );
+    SAL_WARN_IF( rFrac <= boost::rational<sal_Int64>(), "starmath", "Ooops..." );
     return (rFrac.numerator() + rFrac.denominator() / 2) / rFrac.denominator();
 }
 
@@ -109,7 +109,7 @@ public:
     SmFace & operator = (const SmFace &rFace);
 };
 
-SmFace & operator *= (SmFace &rFace, const boost::rational<long> &rFrac);
+SmFace & operator *= (SmFace &rFace, const boost::rational<sal_Int64> &rFrac);
 
 
 

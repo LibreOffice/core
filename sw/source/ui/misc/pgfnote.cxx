@@ -243,7 +243,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     m_pLinePosBox->SelectEntryPos( static_cast< sal_Int32 >(pFtnInfo->GetAdj()) );
 
         // width
-    boost::rational<long> aTmp( 100, 1 );
+    boost::rational<sal_Int64> aTmp( 100, 1 );
     aTmp *= pFtnInfo->GetWidth();
     m_pLineLengthEdit->SetValue( boost::rational_cast<long>(aTmp) );
 
@@ -292,7 +292,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
     rFtnInfo.SetAdj((SwFtnAdj)m_pLinePosBox->GetSelectEntryPos());
 
         // Breite
-    rFtnInfo.SetWidth(boost::rational<long>( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
+    rFtnInfo.SetWidth(boost::rational<sal_Int64>( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
 
     const SfxPoolItem* pOldItem;
     if(0 == (pOldItem = GetOldItem( *rSet, FN_PARAM_FTN_INFO )) ||

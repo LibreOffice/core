@@ -155,12 +155,12 @@ protected:
     Link           aIOProgressLink;
     OUString       aTablePath;
     Size           aMaxObjSize; // e.g. for auto-growing text
-    boost::rational<long>       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
+    boost::rational<sal_Int64>       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
     MapUnit        eObjUnit;   // see above
     FieldUnit      eUIUnit;      // unit, scale (e.g. 1/1000) for the UI (status bar) is set by ImpSetUIUnit()
-    boost::rational<long>       aUIScale;     // see above
+    boost::rational<sal_Int64>       aUIScale;     // see above
     OUString       aUIUnitStr;   // see above
-    boost::rational<long>       aUIUnitFact;  // see above
+    boost::rational<sal_Int64>       aUIUnitFact;  // see above
     int            nUIUnitKomma; // see above
 
     SdrLayerAdmin*  pLayerAdmin;
@@ -374,10 +374,10 @@ public:
     // with the correct sizes.
     MapUnit          GetScaleUnit() const                       { return eObjUnit; }
     void             SetScaleUnit(MapUnit eMap);
-    const boost::rational<long>&  GetScaleFraction() const      { return aObjUnit; }
-    void             SetScaleFraction(const boost::rational<long>& rFrac);
+    const boost::rational<sal_Int64>&  GetScaleFraction() const      { return aObjUnit; }
+    void             SetScaleFraction(const boost::rational<sal_Int64>& rFrac);
     // Setting both simultaneously performs a little better
-    void             SetScaleUnit(MapUnit eMap, const boost::rational<long>& rFrac);
+    void             SetScaleUnit(MapUnit eMap, const boost::rational<sal_Int64>& rFrac);
 
     // maximal size e.g. for auto growing texts
     const Size&      GetMaxObjSize() const                      { return aMaxObjSize; }
@@ -387,12 +387,12 @@ public:
     void             SetUIUnit(FieldUnit eUnit);
     FieldUnit        GetUIUnit() const                          { return eUIUnit; }
     // The scale of the drawing. Default 1/1.
-    void             SetUIScale(const boost::rational<long>& rScale);
-    const boost::rational<long>&  GetUIScale() const            { return aUIScale; }
+    void             SetUIScale(const boost::rational<sal_Int64>& rScale);
+    const boost::rational<sal_Int64>&  GetUIScale() const            { return aUIScale; }
     // Setting both simultaneously performs a little better
-    void             SetUIUnit(FieldUnit eUnit, const boost::rational<long>& rScale);
+    void             SetUIUnit(FieldUnit eUnit, const boost::rational<sal_Int64>& rScale);
 
-    const boost::rational<long>&  GetUIUnitFact() const         { return aUIUnitFact; }
+    const boost::rational<sal_Int64>&  GetUIUnitFact() const         { return aUIUnitFact; }
     const OUString&  GetUIUnitStr() const                       { return aUIUnitStr; }
     int              GetUIUnitKomma() const                     { return nUIUnitKomma; }
     bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
@@ -400,7 +400,7 @@ public:
     static void      TakeUnitStr(FieldUnit eUnit, OUString& rStr);
     void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
     void             TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar = false) const;
-    void             TakePercentStr(const boost::rational<long>& rVal, OUString& rStr, bool bNoPercentChar = false) const;
+    void             TakePercentStr(const boost::rational<sal_Int64>& rVal, OUString& rStr, bool bNoPercentChar = false) const;
 
     // RecalcPageNums is ordinarily only called by the Page.
     bool         IsPagNumsDirty() const                     { return bPagNumsDirty; };

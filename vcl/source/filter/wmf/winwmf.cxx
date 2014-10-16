@@ -1196,7 +1196,7 @@ bool WMFReader::ReadHeader()
     Size aDevExt( 10000, 10000 );
     if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
     {
-        const boost::rational<long>  aFrac( 1, nUnitsPerInch );
+        const boost::rational<sal_Int64>  aFrac( 1, nUnitsPerInch );
         MapMode         aWMFMap( MAP_INCH, Point(), aFrac, aFrac );
         Size            aSize100( OutputDevice::LogicToLogic( aWMFSize, aWMFMap, MAP_100TH_MM ) );
         aDevExt = Size( labs( aSize100.Width() ), labs( aSize100.Height() ) );

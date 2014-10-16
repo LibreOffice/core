@@ -322,7 +322,7 @@ void E3dObject::SetModel(SdrModel* pNewModel)
 
 // resize object, used from old 2d interfaces, e.g. in Move/Scale dialog (F4)
 
-void E3dObject::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void E3dObject::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     // Movement in X, Y in the eye coordinate system
     E3dScene* pScene = GetScene();

@@ -141,10 +141,10 @@ void OReportWindow::showRuler(bool _bShow)
 
 sal_Int32 OReportWindow::getMaxMarkerWidth(bool _bWithEnd) const
 {
-    boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    boost::rational<sal_Int64> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_aViewsWindow.GetMapMode().GetScaleX();
     if ( _bWithEnd )
-        aStartWidth += boost::rational<long>(long(REPORT_ENDMARKER_WIDTH));
+        aStartWidth += boost::rational<sal_Int64>(long(REPORT_ENDMARKER_WIDTH));
     return sal_Int32(boost::rational_cast<long>(aStartWidth));
 }
 
@@ -153,11 +153,11 @@ sal_Int32 OReportWindow::GetTotalWidth() const
     sal_Int32 nWidth = 0;
     if ( !m_aViewsWindow.empty() )
     {
-        boost::rational<long> aStartWidth(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
-        const boost::rational<long> aZoom(m_pView->getController().getZoomValue(),100);
+        boost::rational<sal_Int64> aStartWidth(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
+        const boost::rational<sal_Int64> aZoom(m_pView->getController().getZoomValue(),100);
         aStartWidth *= aZoom;
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
-        boost::rational<long> aPaperWidth(nPaperWidth,1);
+        boost::rational<sal_Int64> aPaperWidth(nPaperWidth,1);
         aPaperWidth *= aZoom;
         const Size aPageSize = LogicToPixel(Size(boost::rational_cast<long>(aPaperWidth),0));
         nWidth = aPageSize.Width() + boost::rational_cast<long>(aStartWidth);
@@ -171,7 +171,7 @@ void OReportWindow::Resize()
     if ( !m_aViewsWindow.empty() )
     {
         const Size aTotalOutputSize = GetOutputSizePixel();
-        boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
+        boost::rational<sal_Int64> aStartWidth(long(REPORT_STARTMARKER_WIDTH)*m_pView->getController().getZoomValue(),100);
 
         const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, 0 ), MAP_APPFONT );
         Point aStartPoint(boost::rational_cast<long>(aStartWidth) + aOffset.X(),0);
@@ -372,7 +372,7 @@ sal_uInt32 OReportWindow::getMarkedObjectCount() const
     return m_aViewsWindow.getMarkedObjectCount();
 }
 
-void OReportWindow::zoom(const boost::rational<long>& _aZoom)
+void OReportWindow::zoom(const boost::rational<sal_Int64>& _aZoom)
 {
     m_aHRuler.SetZoom(_aZoom);
     m_aHRuler.Invalidate();
@@ -414,14 +414,14 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
             break;
         case SVX_ZOOM_WHOLEPAGE:
             {
-                nZoom = (sal_uInt16) boost::rational_cast<long>( boost::rational<long>(aSize.Width() * 100, impl_getRealPixelWidth()) );
+                nZoom = (sal_uInt16) boost::rational_cast<long>( boost::rational<sal_Int64>(aSize.Width() * 100, impl_getRealPixelWidth()) );
                 MapMode aMap( MAP_100TH_MM );
                 const Size aHeight = m_aViewsWindow.LogicToPixel(m_aViewsWindow.PixelToLogic(Size(0,GetTotalHeight() + m_aHRuler.GetSizePixel().Height())),aMap);
-                nZoom = ::std::min(nZoom, (sal_uInt16) boost::rational_cast<long>( boost::rational<long>(aSize.Height() * 100, aHeight.Height()) ));
+                nZoom = ::std::min(nZoom, (sal_uInt16) boost::rational_cast<long>( boost::rational<sal_Int64>(aSize.Height() * 100, aHeight.Height()) ));
             }
             break;
         case SVX_ZOOM_PAGEWIDTH:
-            nZoom = (sal_uInt16)boost::rational_cast<long>( boost::rational<long>(aSize.Width() * 100, this->impl_getRealPixelWidth()) );
+            nZoom = (sal_uInt16)boost::rational_cast<long>( boost::rational<sal_Int64>(aSize.Width() * 100, this->impl_getRealPixelWidth()) );
             break;
         default:
             break;

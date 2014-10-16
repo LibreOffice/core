@@ -43,14 +43,14 @@ Reduces accuracy until it is a fraction (should become
 ctor fraction once); we could also do this with BigInts
 */
 
-static boost::rational<long> ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
+static boost::rational<sal_Int64> ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 {
     if( nD1 == 0 || nD2 == 0 )
     {
         DBG_ASSERT(false,"Invalid parameter for ImplMakeFraction");
-        return boost::rational<long>( 1, 1 );
+        return boost::rational<sal_Int64>( 1, 1 );
     }
-    return boost::rational<long>( nN1, nD1 ) * boost::rational<long>( nN2, nD2 );
+    return boost::rational<sal_Int64>( nN1, nD1 ) * boost::rational<sal_Int64>( nN2, nD2 );
 }
 
 // Fraction.GetNumerator()
@@ -220,8 +220,8 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             break;
     }
 
-    boost::rational<long> aScaleX = rMapMode.GetScaleX();
-    boost::rational<long> aScaleY = rMapMode.GetScaleY();
+    boost::rational<sal_Int64> aScaleX = rMapMode.GetScaleX();
+    boost::rational<sal_Int64> aScaleY = rMapMode.GetScaleY();
 
     // set offset according to MapMode
     Point aOrigin = rMapMode.GetOrigin();
@@ -286,11 +286,11 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
 
     // calculate scaling factor according to MapMode
     // aTemp? = rMapRes.mnMapSc? * aScale?
-    boost::rational<long> aTempX = ImplMakeFraction( rMapRes.mnMapScNumX,
+    boost::rational<sal_Int64> aTempX = ImplMakeFraction( rMapRes.mnMapScNumX,
                                         aScaleX.numerator(),
                                         rMapRes.mnMapScDenomX,
                                         aScaleX.denominator() );
-    boost::rational<long> aTempY = ImplMakeFraction( rMapRes.mnMapScNumY,
+    boost::rational<sal_Int64> aTempY = ImplMakeFraction( rMapRes.mnMapScNumY,
                                         aScaleY.numerator(),
                                         rMapRes.mnMapScDenomY,
                                         aScaleY.denominator() );
@@ -739,11 +739,11 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     {
         Point aOrigin( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
         // aScale? = maMapMode.GetScale?() * rNewMapMode.GetScale?()
-        boost::rational<long> aScaleX = ImplMakeFraction( maMapMode.GetScaleX().numerator(),
+        boost::rational<sal_Int64> aScaleX = ImplMakeFraction( maMapMode.GetScaleX().numerator(),
                                              rNewMapMode.GetScaleX().numerator(),
                                              maMapMode.GetScaleX().denominator(),
                                              rNewMapMode.GetScaleX().denominator() );
-        boost::rational<long> aScaleY = ImplMakeFraction( maMapMode.GetScaleY().numerator(),
+        boost::rational<sal_Int64> aScaleY = ImplMakeFraction( maMapMode.GetScaleY().numerator(),
                                              rNewMapMode.GetScaleY().numerator(),
                                              maMapMode.GetScaleY().denominator(),
                                              rNewMapMode.GetScaleY().denominator() );
@@ -785,11 +785,11 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     MapUnit eNew = rNewMapMode.GetMapUnit();
 
     // a?F = rNewMapMode.GetScale?() / maMapMode.GetScale?()
-    boost::rational<long> aXF = ImplMakeFraction( rNewMapMode.GetScaleX().numerator(),
+    boost::rational<sal_Int64> aXF = ImplMakeFraction( rNewMapMode.GetScaleX().numerator(),
                                      maMapMode.GetScaleX().denominator(),
                                      rNewMapMode.GetScaleX().denominator(),
                                      maMapMode.GetScaleX().numerator() );
-    boost::rational<long> aYF = ImplMakeFraction( rNewMapMode.GetScaleY().numerator(),
+    boost::rational<sal_Int64> aYF = ImplMakeFraction( rNewMapMode.GetScaleY().numerator(),
                                      maMapMode.GetScaleY().denominator(),
                                      rNewMapMode.GetScaleY().denominator(),
                                      maMapMode.GetScaleY().numerator() );
@@ -807,7 +807,7 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         }
         else
         {
-            boost::rational<long> aF( aImplNumeratorAry[eNew] * aImplDenominatorAry[eOld],
+            boost::rational<sal_Int64> aF( aImplNumeratorAry[eNew] * aImplDenominatorAry[eOld],
                          aImplNumeratorAry[eOld] * aImplDenominatorAry[eNew] );
 
             // a?F =  a?F * aF
@@ -817,13 +817,13 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
                                     aYF.denominator(), aF.denominator() );
             if ( eOld == MAP_PIXEL )
             {
-                aXF *= boost::rational<long>( mnDPIX, 1 );
-                aYF *= boost::rational<long>( mnDPIY, 1 );
+                aXF *= boost::rational<sal_Int64>( mnDPIX, 1 );
+                aYF *= boost::rational<sal_Int64>( mnDPIY, 1 );
             }
             else if ( eNew == MAP_PIXEL )
             {
-                aXF *= boost::rational<long>( 1, mnDPIX );
-                aYF *= boost::rational<long>( 1, mnDPIY );
+                aXF *= boost::rational<sal_Int64>( 1, mnDPIX );
+                aYF *= boost::rational<sal_Int64>( 1, mnDPIY );
             }
         }
     }

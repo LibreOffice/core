@@ -1705,7 +1705,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
                                PDFWriter& i_rOuterFace)
         :
         m_pReferenceDevice( NULL ),
-        m_aMapMode( MAP_POINT, Point(), boost::rational<long>( 1L, pointToPixel(1) ), boost::rational<long>( 1L, pointToPixel(1) ) ),
+        m_aMapMode( MAP_POINT, Point(), boost::rational<sal_Int64>( 1L, pointToPixel(1) ), boost::rational<sal_Int64>( 1L, pointToPixel(1) ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_bNewMCID( false ),

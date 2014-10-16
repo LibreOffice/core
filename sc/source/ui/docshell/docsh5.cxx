@@ -368,7 +368,7 @@ void ScDocShell::CancelAutoDBRange()
 bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
 {
     ScSizeDeviceProvider aProv(this);
-    boost::rational<long> aZoom(1,1);
+    boost::rational<sal_Int64> aZoom(1,1);
     sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
     bool bChange = aDocument.SetOptimalHeight(aCxt, nStartRow,nEndRow, nTab);
 
@@ -383,7 +383,7 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
     // update automatic row heights
 
     ScSizeDeviceProvider aProv(this);
-    boost::rational<long> aZoom(1,1);
+    boost::rational<sal_Int64> aZoom(1,1);
     sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, aProv.GetDevice());
     aDocument.UpdateAllRowHeights(aCxt, pTabMark);
 }

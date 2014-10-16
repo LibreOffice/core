@@ -897,7 +897,7 @@ SdrHdl* SdrGrafObj::GetHdl(sal_uInt32 nHdlNum) const
     return SdrRectObj::GetHdl( nHdlNum + 1L );
 }
 
-void SdrGrafObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrGrafObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     SdrRectObj::NbcResize( rRef, xFact, yFact );
 

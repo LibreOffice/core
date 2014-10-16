@@ -128,7 +128,7 @@ void GraphCtrl::InitSdrModel()
     pModel = new SdrModel;
     pModel->GetItemPool().FreezeIdRanges();
     pModel->SetScaleUnit( aMap100.GetMapUnit() );
-    pModel->SetScaleFraction( boost::rational<long>( 1, 1 ) );
+    pModel->SetScaleFraction( boost::rational<sal_Int64>( 1, 1 ) );
     pModel->SetDefaultFontHeight( 500 );
 
     pPage = new SdrPage( *pModel );
@@ -225,8 +225,8 @@ void GraphCtrl::Resize()
         aNewPos.Y() = ( nHeight - aNewSize.Height() ) >> 1;
 
         // Implementing MapMode for Engine
-        aDisplayMap.SetScaleX( boost::rational<long>( aNewSize.Width(), aGraphSize.Width() ) );
-        aDisplayMap.SetScaleY( boost::rational<long>( aNewSize.Height(), aGraphSize.Height() ) );
+        aDisplayMap.SetScaleX( boost::rational<sal_Int64>( aNewSize.Width(), aGraphSize.Width() ) );
+        aDisplayMap.SetScaleY( boost::rational<sal_Int64>( aNewSize.Height(), aGraphSize.Height() ) );
 
         aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMap100, aDisplayMap ) );
         SetMapMode( aDisplayMap );

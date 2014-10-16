@@ -119,7 +119,7 @@ public:
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
     vcl::Window&                 GetWindow() const;
-    virtual void            SetZoomFactor( const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY );
+    virtual void            SetZoomFactor( const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY );
 
     SfxProgress*            GetProgress() const;
 

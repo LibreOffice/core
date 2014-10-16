@@ -1421,19 +1421,19 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     long nWidthDiff = nDestWidth - nSourceWidth;
     long nHeightDiff = nDestHeight - nSourceHeight;
 
-    boost::rational<long> aHorFract(1,1);
-    boost::rational<long> aVerFract(1,1);
+    boost::rational<sal_Int64> aHorFract(1,1);
+    boost::rational<sal_Int64> aVerFract(1,1);
     bool bResize = false;
     // sizes can differ by 1 from twips->1/100mm conversion for equal cell sizes,
     // don't resize to empty size when pasting into hidden columns or rows
     if ( std::abs(nWidthDiff) > 1 && nDestWidth > 1 && nSourceWidth > 1 )
     {
-        aHorFract = boost::rational<long>( nDestWidth, nSourceWidth );
+        aHorFract = boost::rational<sal_Int64>( nDestWidth, nSourceWidth );
         bResize = true;
     }
     if ( std::abs(nHeightDiff) > 1 && nDestHeight > 1 && nSourceHeight > 1 )
     {
-        aVerFract = boost::rational<long>( nDestHeight, nSourceHeight );
+        aVerFract = boost::rational<sal_Int64>( nDestHeight, nSourceHeight );
         bResize = true;
     }
     Point aRefPos = rDestRange.TopLeft();       // for resizing (after moving)

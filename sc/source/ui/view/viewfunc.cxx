@@ -228,15 +228,15 @@ sal_uInt16 ScViewFunc::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, bool bFormula
 
     double nPPTX = GetViewData().GetPPTX();
     double nPPTY = GetViewData().GetPPTY();
-    boost::rational<long> aZoomX = GetViewData().GetZoomX();
-    boost::rational<long> aZoomY = GetViewData().GetZoomY();
+    boost::rational<sal_Int64> aZoomX = GetViewData().GetZoomX();
+    boost::rational<sal_Int64> aZoomY = GetViewData().GetZoomY();
 
     ScSizeDeviceProvider aProv(pDocSh);
     if (aProv.IsPrinter())
     {
         nPPTX = aProv.GetPPTX();
         nPPTY = aProv.GetPPTY();
-        aZoomX = aZoomY = boost::rational<long>( 1, 1 );
+        aZoomX = aZoomY = boost::rational<sal_Int64>( 1, 1 );
     }
 
     sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, aProv.GetDevice(),
@@ -1960,15 +1960,15 @@ void ScViewFunc::SetWidthOrHeight(
 
                     double nPPTX = GetViewData().GetPPTX();
                     double nPPTY = GetViewData().GetPPTY();
-                    boost::rational<long> aZoomX = GetViewData().GetZoomX();
-                    boost::rational<long> aZoomY = GetViewData().GetZoomY();
+                    boost::rational<sal_Int64> aZoomX = GetViewData().GetZoomX();
+                    boost::rational<sal_Int64> aZoomY = GetViewData().GetZoomY();
 
                     ScSizeDeviceProvider aProv(pDocSh);
                     if (aProv.IsPrinter())
                     {
                         nPPTX = aProv.GetPPTX();
                         nPPTY = aProv.GetPPTY();
-                        aZoomX = aZoomY = boost::rational<long>( 1, 1 );
+                        aZoomX = aZoomY = boost::rational<sal_Int64>( 1, 1 );
                     }
 
                     sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
@@ -2194,15 +2194,15 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
             {
                 double nPPTX = GetViewData().GetPPTX();
                 double nPPTY = GetViewData().GetPPTY();
-                boost::rational<long> aZoomX = GetViewData().GetZoomX();
-                boost::rational<long> aZoomY = GetViewData().GetZoomY();
+                boost::rational<sal_Int64> aZoomX = GetViewData().GetZoomX();
+                boost::rational<sal_Int64> aZoomY = GetViewData().GetZoomY();
 
                 ScSizeDeviceProvider aProv(pDocSh);
                 if (aProv.IsPrinter())
                 {
                     nPPTX = aProv.GetPPTX();
                     nPPTY = aProv.GetPPTY();
-                    aZoomX = aZoomY = boost::rational<long>( 1, 1 );
+                    aZoomX = aZoomY = boost::rational<sal_Int64>( 1, 1 );
                 }
 
                 long nPixel = rDoc.GetNeededSize( nCol, nRow, nTab, aProv.GetDevice(),

@@ -502,7 +502,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 
     if(pFrameView)
     {
-        const boost::rational<long>& rFraction =  pDoc->GetUIScale();
+        const boost::rational<sal_Int64>& rFraction =  pDoc->GetUIScale();
         nX=rFraction.numerator();
         nY=rFraction.denominator();
     }
@@ -595,7 +595,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             // Apply to document only if doc type match
             if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
             {
-                pDoc->SetUIScale( boost::rational<long>( nX, nY ) );
+                pDoc->SetUIScale( boost::rational<sal_Int64>( nX, nY ) );
                 if( pViewShell )
                     pViewShell->SetRuler( pViewShell->HasRuler() );
             }

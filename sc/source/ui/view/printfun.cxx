@@ -1593,7 +1593,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     if ( !pPrinter )
     {
         OutputDevice* pRefDev = pDoc->GetPrinter();     // use the printer also for Preview
-        boost::rational<long> aPrintFrac( nZoom, 100 ); // without nManualZoom
+        boost::rational<sal_Int64> aPrintFrac( nZoom, 100 ); // without nManualZoom
         //  MapMode, as it would arrive at the printer:
         pRefDev->SetMapMode( MapMode( MAP_100TH_MM, Point(), aPrintFrac, aPrintFrac ) );
 
@@ -2543,13 +2543,13 @@ void ScPrintFunc::InitModes()               // set MapModes from  nZoom etc.
     long nEffZoom = nZoom * (long) nManualZoom;
     nScaleX = nScaleY = HMM_PER_TWIPS;  // output in 1/100 mm
 
-    boost::rational<long> aZoomFract( nEffZoom,10000 );
-    boost::rational<long> aHorFract = aZoomFract;
+    boost::rational<sal_Int64> aZoomFract( nEffZoom,10000 );
+    boost::rational<sal_Int64> aHorFract = aZoomFract;
 
     if ( !pPrinter && !bIsRender )                          // adjust scale for preview
     {
         double nFact = pDocShell->GetOutputFactor();
-        aHorFract = boost::rational<long>( long( nEffZoom / nFact ), 10000 );
+        aHorFract = boost::rational<sal_Int64>( long( nEffZoom / nFact ), 10000 );
     }
 
     aLogicMode = MapMode( MAP_100TH_MM, Point(), aHorFract, aZoomFract );

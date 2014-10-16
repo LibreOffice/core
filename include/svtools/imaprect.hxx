@@ -58,7 +58,7 @@ public:
     // liefert das BoundRect des Rechteck-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const SAL_OVERRIDE { return aRect; }
 
-    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
+    void                Scale( const boost::rational<sal_Int64>& rFractX, const boost::rational<sal_Int64>& rFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapRectangleObject& rEqObj );

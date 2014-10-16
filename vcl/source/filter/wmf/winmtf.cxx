@@ -1510,8 +1510,8 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         const Size aSizePixel( rBitmap.GetSizePixel() );
         if ( aOutputSizePixel.Width() && aOutputSizePixel.Height() )
         {
-            aMapMode.SetScaleX( boost::rational<long>( aSizePixel.Width(), aOutputSizePixel.Width() ) );
-            aMapMode.SetScaleY( boost::rational<long>( aSizePixel.Height(), aOutputSizePixel.Height() ) );
+            aMapMode.SetScaleX( boost::rational<sal_Int64>( aSizePixel.Width(), aOutputSizePixel.Width() ) );
+            aMapMode.SetScaleY( boost::rational<sal_Int64>( aSizePixel.Height(), aOutputSizePixel.Height() ) );
         }
         aVDev.SetMapMode( aMapMode );
         aVDev.SetOutputSizePixel( aSizePixel );

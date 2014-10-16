@@ -1775,8 +1775,8 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // Scaling. Must convert from pixels to twips. We know
     // that VirtualDevises use a DPI of 96.
-    boost::rational<long> scaleX = boost::rational<long>(contextWidth, 96) * boost::rational<long>(1440L) / boost::rational<long>(tileWidth);
-    boost::rational<long> scaleY = boost::rational<long>(contextHeight, 96) * boost::rational<long>(1440L) / boost::rational<long>(tileHeight);
+    boost::rational<sal_Int64> scaleX = boost::rational<sal_Int64>(contextWidth, 96) * boost::rational<sal_Int64>(1440L) / boost::rational<sal_Int64>(tileWidth);
+    boost::rational<sal_Int64> scaleY = boost::rational<sal_Int64>(contextHeight, 96) * boost::rational<sal_Int64>(1440L) / boost::rational<sal_Int64>(tileHeight);
     aMapMode.SetScaleX(scaleX);
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
@@ -2131,7 +2131,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     if( mpOpt->GetZoom() != rOpt.GetZoom() && !IsPreview() )
     {
         MapMode aMode( pMyWin->GetMapMode() );
-        boost::rational<long> aNewFactor( rOpt.GetZoom(), 100 );
+        boost::rational<sal_Int64> aNewFactor( rOpt.GetZoom(), 100 );
         aMode.SetScaleX( aNewFactor );
         aMode.SetScaleY( aNewFactor );
         pMyWin->SetMapMode( aMode );
@@ -2172,8 +2172,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             ( rSz.Width() ? rSz.Width() / (rOpt.GetDivisionX()+1) : 0,
               rSz.Height()? rSz.Height()/ (rOpt.GetDivisionY()+1) : 0);
         pDView->SetGridFine( aFSize );
-        boost::rational<long> aSnGrWdtX(rSz.Width(), rOpt.GetDivisionX() + 1);
-        boost::rational<long> aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
+        boost::rational<sal_Int64> aSnGrWdtX(rSz.Width(), rOpt.GetDivisionX() + 1);
+        boost::rational<sal_Int64> aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
             // set handle size to 9 pixels, always

@@ -507,7 +507,7 @@ bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
     }
 }
 
-void Window::SetZoom( const boost::rational<long>& rZoom )
+void Window::SetZoom( const boost::rational<sal_Int64>& rZoom )
 {
     if ( mpWindowImpl->maZoom != rZoom )
     {
@@ -523,7 +523,7 @@ inline long WinFloatRound( double fVal )
 
 void Window::SetZoomedPointFont( const vcl::Font& rFont )
 {
-    const boost::rational<long>& rZoom = GetZoom();
+    const boost::rational<sal_Int64>& rZoom = GetZoom();
     if ( rZoom.numerator() != rZoom.denominator() )
     {
         vcl::Font aFont( rFont );
@@ -562,7 +562,7 @@ void Window::SetZoomedPointFont( const vcl::Font& rFont )
 long Window::CalcZoom( long nCalc ) const
 {
 
-    const boost::rational<long>& rZoom = GetZoom();
+    const boost::rational<sal_Int64>& rZoom = GetZoom();
     if ( rZoom.numerator() != rZoom.denominator() )
     {
         double n = (double)nCalc;
@@ -1318,7 +1318,7 @@ vcl::Cursor* Window::GetCursor() const
     return mpWindowImpl->mpCursor;
 }
 
-const boost::rational<long>&  Window::GetZoom() const
+const boost::rational<sal_Int64>&  Window::GetZoom() const
 {
     return mpWindowImpl->maZoom;
 }

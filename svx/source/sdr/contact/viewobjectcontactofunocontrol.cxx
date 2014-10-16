@@ -279,7 +279,7 @@ namespace sdr { namespace contact {
         ::basegfx::B2DVector aZoom( 1, 1 );
         if ( pWindow )
         {
-            const boost::rational<long>& rZoom( pWindow->GetZoom() );
+            const boost::rational<sal_Int64>& rZoom( pWindow->GetZoom() );
             aZoom.setX( boost::rational_cast<double>(rZoom) );
             aZoom.setY( boost::rational_cast<double>(rZoom) );
         }

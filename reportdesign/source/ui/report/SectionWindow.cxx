@@ -220,7 +220,7 @@ void OSectionWindow::Resize()
     Window::Resize();
 
     Size aOutputSize = GetOutputSizePixel();
-    boost::rational<long> aEndWidth(long(REPORT_ENDMARKER_WIDTH));
+    boost::rational<sal_Int64> aEndWidth(long(REPORT_ENDMARKER_WIDTH));
     aEndWidth *= GetMapMode().GetScaleX();
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
@@ -236,7 +236,7 @@ void OSectionWindow::Resize()
     {
         const bool bShowEndMarker = m_pParent->getView()->GetTotalWidth() <= (aThumbPos.X() +  aOutputSize.Width() );
 
-        boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+        boost::rational<sal_Int64> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
         aStartWidth *= GetMapMode().GetScaleX();
 
         // set start marker
@@ -299,7 +299,7 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
     return 0L;
 }
 
-void OSectionWindow::zoom(const boost::rational<long>& _aZoom)
+void OSectionWindow::zoom(const boost::rational<sal_Int64>& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
     m_aStartMarker.zoom(_aZoom);

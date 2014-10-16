@@ -22,8 +22,8 @@ class SC_DLLPUBLIC RowHeightContext
 {
     double mfPPTX;
     double mfPPTY;
-    boost::rational<long> maZoomX;
-    boost::rational<long> maZoomY;
+    boost::rational<sal_Int64> maZoomX;
+    boost::rational<sal_Int64> maZoomY;
     OutputDevice* mpOutDev;
 
     sal_uInt16 mnExtraHeight;
@@ -31,15 +31,15 @@ class SC_DLLPUBLIC RowHeightContext
 
 public:
     RowHeightContext(
-        double fPPTX, double fPPTY, const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+        double fPPTX, double fPPTY, const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
         OutputDevice* pOutDev );
 
     ~RowHeightContext();
 
     double getPPTX() const { return mfPPTX;}
     double getPPTY() const { return mfPPTY;}
-    const boost::rational<long>& getZoomX() const { return maZoomX;}
-    const boost::rational<long>& getZoomY() const { return maZoomY;}
+    const boost::rational<sal_Int64>& getZoomX() const { return maZoomX;}
+    const boost::rational<sal_Int64>& getZoomY() const { return maZoomY;}
 
     OutputDevice* getOutputDevice() { return mpOutDev;}
 

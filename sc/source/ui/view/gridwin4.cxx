@@ -77,7 +77,7 @@ static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 
 static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
                         const OUString& rTitle, const Color& rColor, bool bTextBelow,
-                        double nPPTX, double nPPTY, const boost::rational<long>& rZoomY,
+                        double nPPTX, double nPPTY, const boost::rational<sal_Int64>& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, bool bLayoutRTL )
 {
     //  pButtonViewData wird nur benutzt, um die Button-Groesse zu setzen,
@@ -470,8 +470,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                                         nPPTX, nPPTY, false, bFormulaMode,
                                         &pViewData->GetMarkData() );
 
-    boost::rational<long> aZoomX = pViewData->GetZoomX();
-    boost::rational<long> aZoomY = pViewData->GetZoomY();
+    boost::rational<sal_Int64> aZoomX = pViewData->GetZoomX();
+    boost::rational<sal_Int64> aZoomY = pViewData->GetZoomY();
     ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );

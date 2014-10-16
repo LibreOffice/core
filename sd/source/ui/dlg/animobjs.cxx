@@ -100,7 +100,7 @@ void SdDisplay::Paint( const Rectangle& )
     aBitmapEx.Draw( this, aPt, aBmpSize );
 }
 
-void SdDisplay::SetScale( const boost::rational<long>& rFrac )
+void SdDisplay::SetScale( const boost::rational<sal_Int64>& rFrac )
 {
     aScale = rFrac;
 }
@@ -468,7 +468,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     }
 
     // calculate and set zoom for DisplayWin
-    boost::rational<long> aFrac( GetScale() );
+    boost::rational<sal_Int64> aFrac( GetScale() );
     aCtlDisplay.SetScale( aFrac );
 
     UpdateControl();
@@ -643,9 +643,9 @@ void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
     }
 }
 
-boost::rational<long> AnimationWindow::GetScale()
+boost::rational<sal_Int64> AnimationWindow::GetScale()
 {
-    boost::rational<long> aFrac;
+    boost::rational<sal_Int64> aFrac;
     size_t const nCount = m_FrameList.size();
     if (nCount > 0)
     {
@@ -733,7 +733,7 @@ void AnimationWindow::Resize()
         aGrpAnimation.SetPosPixel( aGrpAnimation.GetPosPixel() + aPt );
 
         // calculate and set zoom for DisplayWin
-        boost::rational<long> aFrac( GetScale() );
+        boost::rational<sal_Int64> aFrac( GetScale() );
         aCtlDisplay.SetScale( aFrac );
 
         aBtnFirst.Show();
@@ -963,7 +963,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         }
 
         // calculate and set zoom for DisplayWin
-        boost::rational<long> aFrac( GetScale() );
+        boost::rational<sal_Int64> aFrac( GetScale() );
         aCtlDisplay.SetScale( aFrac );
 
         UpdateControl();

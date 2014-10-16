@@ -120,7 +120,7 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const boost::rational<long>& _aZoom);
+        void zoom(const boost::rational<sal_Int64>& _aZoom);
 
         void scrollChildren(long _nThumbPosX);
     };

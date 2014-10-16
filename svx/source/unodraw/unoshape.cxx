@@ -1219,10 +1219,10 @@ void SAL_CALL SvxShape::setSize( const awt::Size& rSize )
 
         if(mpObj->GetObjInventor() == SdrInventor && mpObj->GetObjIdentifier() == OBJ_MEASURE )
         {
-            boost::rational<long> aWdt;
+            boost::rational<sal_Int64> aWdt;
             if (aRect.Right()-aRect.Left() > 0)
                 aWdt.assign(aLocalSize.Width(),aRect.Right()-aRect.Left());
-            boost::rational<long> aHgt;
+            boost::rational<sal_Int64> aHgt;
             if (aRect.Bottom()-aRect.Top() > 0)
                 aHgt.assign(aLocalSize.Height(),aRect.Bottom()-aRect.Top());
             Point aPt = mpObj->GetSnapRect().TopLeft();

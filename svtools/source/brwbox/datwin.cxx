@@ -104,7 +104,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
-                              const OUString& rTitle, sal_uLong nWidthPixel, const boost::rational<long>& rCurrentZoom )
+                              const OUString& rTitle, sal_uLong nWidthPixel, const boost::rational<sal_Int64>& rCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
     _aImage( rImage ),
@@ -123,7 +123,7 @@ BrowserColumn::~BrowserColumn()
 
 
 
-void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const boost::rational<long>& rCurrentZoom)
+void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const boost::rational<sal_Int64>& rCurrentZoom)
 {
     _nWidth = nNewWidthPixel;
     double n = (double)_nWidth;
@@ -174,7 +174,7 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
 
 
 
-void BrowserColumn::ZoomChanged(const boost::rational<long>& rNewZoom)
+void BrowserColumn::ZoomChanged(const boost::rational<sal_Int64>& rNewZoom)
 {
     double n = (double)_nOriginalWidth;
     n *= (double)rNewZoom.numerator();

@@ -117,7 +117,7 @@ public:
     void                SetName( const OUString& rName ) { aName = rName; }
 
     // skaliert alle Objekte der ImageMap entpr. dem uebergebenen Faktor
-    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
+    void                Scale( const boost::rational<sal_Int64>& rFractX, const boost::rational<sal_Int64>& rFracY );
 
     // Im-/Export
     void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;

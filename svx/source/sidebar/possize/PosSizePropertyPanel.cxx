@@ -898,7 +898,7 @@ void PosSizePropertyPanel::executeSize()
 {
     if ( mpMtrWidth->IsValueModified() || mpMtrHeight->IsValueModified())
     {
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        boost::rational<sal_Int64> aUIScale = mpView->GetModel()->GetUIScale();
 
         // get Width
         double nWidth = (double)mpMtrWidth->GetValue( meDlgUnit );
@@ -953,7 +953,7 @@ void PosSizePropertyPanel::executePosX()
         maRect = mpView->GetAllMarkedRect();
         aRect = mpView->GetAllMarkedRect();
 
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        boost::rational<sal_Int64> aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
         lX = boost::rational_cast<long>(lX * aUIScale);
         lY += maAnchorPos.Y();
@@ -980,7 +980,7 @@ void PosSizePropertyPanel::executePosY()
         maRect = mpView->GetAllMarkedRect();
         aRect = mpView->GetAllMarkedRect();
 
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        boost::rational<sal_Int64> aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
         lX = boost::rational_cast<long>(lX * aUIScale);
         lY += maAnchorPos.Y();
@@ -1158,7 +1158,7 @@ void PosSizePropertyPanel::DisableControls()
 
 void PosSizePropertyPanel::UpdateUIScale()
 {
-    const boost::rational<long> aUIScale (mpView->GetModel()->GetUIScale());
+    const boost::rational<sal_Int64> aUIScale (mpView->GetModel()->GetUIScale());
     if (maUIScale != aUIScale)
     {
         // UI scale has changed.

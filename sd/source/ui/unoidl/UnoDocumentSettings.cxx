@@ -677,7 +677,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        boost::rational<long> aFract( nValue, pDoc->GetUIScale().denominator() );
+                        boost::rational<sal_Int64> aFract( nValue, pDoc->GetUIScale().denominator() );
                         pDoc->SetUIScale( aFract );
                         bOk = true;
                         bChanged = true;
@@ -689,7 +689,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        boost::rational<long> aFract( pDoc->GetUIScale().numerator(), nValue );
+                        boost::rational<sal_Int64> aFract( pDoc->GetUIScale().numerator(), nValue );
                         pDoc->SetUIScale( aFract );
                         bOk = true;
                         bChanged = true;

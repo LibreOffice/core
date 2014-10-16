@@ -1131,7 +1131,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     if ( bDirectPrint )
     {
-        const boost::rational<long> aTmp( 1, 1 );
+        const boost::rational<sal_Int64> aTmp( 1, 1 );
         bool bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 

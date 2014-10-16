@@ -1401,8 +1401,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                         if( pA->GetMapMode().GetMapUnit() == MAP_RELATIVE )
                         {
                             MapMode aMM = pA->GetMapMode();
-                            boost::rational<long> aScaleX = aMM.GetScaleX();
-                            boost::rational<long> aScaleY = aMM.GetScaleY();
+                            boost::rational<sal_Int64> aScaleX = aMM.GetScaleX();
+                            boost::rational<sal_Int64> aScaleY = aMM.GetScaleY();
 
                             Point aOrigin = aSrcMapMode.GetOrigin();
                             BigInt aX( aOrigin.X() );
@@ -1740,7 +1740,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         aTargetMapMode = MapMode( MAP_INCH );
 
         const long      nUnit = pVirDev->LogicToPixel( Size( 1, 1 ), aTargetMapMode ).Width();
-        const boost::rational<long>  aFrac( 1, nUnit );
+        const boost::rational<sal_Int64>  aFrac( 1, nUnit );
 
         aTargetMapMode.SetScaleX( aFrac );
         aTargetMapMode.SetScaleY( aFrac );
@@ -1824,14 +1824,14 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 sal_uInt16 WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
                                         const Size& rPrefSize)
 {
-    boost::rational<long>    aDivFrac(2, 1);
+    boost::rational<sal_Int64>    aDivFrac(2, 1);
     sal_uInt16      nDivisor = 1;
 
     Size aSize = OutputDevice::LogicToLogic( rPrefSize, aSrcMapMode, rMapMode );
 
     while( nDivisor <= 64 && (aSize.Width() > 32767 || aSize.Height() > 32767) )
     {
-        boost::rational<long> aFrac = rMapMode.GetScaleX();
+        boost::rational<sal_Int64> aFrac = rMapMode.GetScaleX();
 
         aFrac *= aDivFrac;
         rMapMode.SetScaleX(aFrac);

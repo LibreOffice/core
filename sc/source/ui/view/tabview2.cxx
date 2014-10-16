@@ -1111,7 +1111,7 @@ static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         SCCOL nFixPosX, SCROW nFixPosY )
 {
-    double fZoomFactor = boost::rational_cast<double>(boost::rational<long>(nZoom, 100));
+    double fZoomFactor = boost::rational_cast<double>(boost::rational<sal_Int64>(nZoom, 100));
     fScaleX *= fZoomFactor;
     fScaleY *= fZoomFactor;
 

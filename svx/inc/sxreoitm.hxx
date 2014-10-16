@@ -25,15 +25,15 @@
 
 class SdrResizeXOneItem: public SdrFractionItem {
 public:
-    SdrResizeXOneItem(): SdrFractionItem(SDRATTR_RESIZEXONE,boost::rational<long>(1,1)) {}
-    SdrResizeXOneItem(const boost::rational<long>& rFact): SdrFractionItem(SDRATTR_RESIZEXONE,rFact) {}
+    SdrResizeXOneItem(): SdrFractionItem(SDRATTR_RESIZEXONE,boost::rational<sal_Int64>(1,1)) {}
+    SdrResizeXOneItem(const boost::rational<sal_Int64>& rFact): SdrFractionItem(SDRATTR_RESIZEXONE,rFact) {}
     SdrResizeXOneItem(SvStream& rIn): SdrFractionItem(SDRATTR_RESIZEXONE,rIn)    {}
 };
 
 class SdrResizeYOneItem: public SdrFractionItem {
 public:
-    SdrResizeYOneItem(): SdrFractionItem(SDRATTR_RESIZEYONE,boost::rational<long>(1,1)) {}
-    SdrResizeYOneItem(const boost::rational<long>& rFact): SdrFractionItem(SDRATTR_RESIZEYONE,rFact) {}
+    SdrResizeYOneItem(): SdrFractionItem(SDRATTR_RESIZEYONE,boost::rational<sal_Int64>(1,1)) {}
+    SdrResizeYOneItem(const boost::rational<sal_Int64>& rFact): SdrFractionItem(SDRATTR_RESIZEYONE,rFact) {}
     SdrResizeYOneItem(SvStream& rIn): SdrFractionItem(SDRATTR_RESIZEYONE,rIn)    {}
 };
 

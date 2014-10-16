@@ -146,7 +146,7 @@ protected:
 
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void                SetZoomFactor( const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY );
+    virtual void                SetZoomFactor( const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY );
 
     virtual void                Move();
 

@@ -429,7 +429,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
         }
         DELETEZ( pProgress ); // SetOptimalHeight has its own ProgressBar
         // Adjust line height, base is 100% zoom
-        boost::rational<long> aZoom( 1, 1 );
+        boost::rational<sal_Int64> aZoom( 1, 1 );
         // Factor is printer to display ratio
         double nPPTX = ScGlobal::nScreenPPTX * boost::rational_cast<double>(aZoom) / nOutputFactor;
         double nPPTY = ScGlobal::nScreenPPTY * boost::rational_cast<double>(aZoom);

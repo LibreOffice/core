@@ -1389,8 +1389,8 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                 Rectangle aNewRect( pNewObj->GetCurrentBoundRect() );
                 Size aNewSize( aNewRect.GetSize() );
 
-                boost::rational<long> aScaleWidth( aOldObjSize.Width(), aNewSize.Width() );
-                boost::rational<long> aScaleHeight( aOldObjSize.Height(), aNewSize.Height());
+                boost::rational<sal_Int64> aScaleWidth( aOldObjSize.Width(), aNewSize.Width() );
+                boost::rational<sal_Int64> aScaleHeight( aOldObjSize.Height(), aNewSize.Height());
                 pNewObj->NbcResize( aNewRect.TopLeft(), aScaleWidth, aScaleHeight);
 
                 Point aVec = aOldObjRect.TopLeft() - aNewRect.TopLeft();

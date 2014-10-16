@@ -114,22 +114,22 @@ class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper5
     uno::Reference< awt::XWindow > m_xWindow;
     SdrOle2Obj* mpObj;
 
-    boost::rational<long> m_aScaleWidth;
-    boost::rational<long> m_aScaleHeight;
+    boost::rational<sal_Int64> m_aScaleWidth;
+    boost::rational<sal_Int64> m_aScaleHeight;
 
 
 public:
     SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj );
     void Release();
 
-    void SetSizeScale( const boost::rational<long>& aScaleWidth, const boost::rational<long>& aScaleHeight )
+    void SetSizeScale( const boost::rational<sal_Int64>& aScaleWidth, const boost::rational<sal_Int64>& aScaleHeight )
     {
         m_aScaleWidth = aScaleWidth;
         m_aScaleHeight = aScaleHeight;
     }
 
-    boost::rational<long> GetScaleWidth() const { return m_aScaleWidth; }
-    boost::rational<long> GetScaleHeight() const { return m_aScaleHeight; }
+    boost::rational<sal_Int64> GetScaleWidth() const { return m_aScaleWidth; }
+    boost::rational<sal_Int64> GetScaleHeight() const { return m_aScaleHeight; }
 
     void setWindow(const uno::Reference< awt::XWindow >& _xWindow);
 
@@ -1762,8 +1762,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                     || mpImpl->mxObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
                     )
             {
-                boost::rational<long> aScaleWidth;
-                boost::rational<long> aScaleHeight;
+                boost::rational<sal_Int64> aScaleWidth;
+                boost::rational<sal_Int64> aScaleHeight;
                 if ( pClient )
                 {
                     aScaleWidth = pClient->GetScaleWidth();
@@ -1826,8 +1826,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             {
                 // The object isn't active and does not want to resize itself so the changed object area size
                 // will be reflected in a changed object scaling
-                boost::rational<long> aScaleWidth;
-                boost::rational<long> aScaleHeight;
+                boost::rational<sal_Int64> aScaleWidth;
+                boost::rational<sal_Int64> aScaleHeight;
                 Size aObjAreaSize;
                 if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
                 {
@@ -1865,7 +1865,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
 
 
-void SdrOle2Obj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrOle2Obj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     if( pModel && !pModel->isLocked() )
     {
@@ -2211,7 +2211,7 @@ uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
 }
 
 
-bool SdrOle2Obj::CalculateNewScaling( boost::rational<long>& aScaleWidth, boost::rational<long>& aScaleHeight, Size& aObjAreaSize )
+bool SdrOle2Obj::CalculateNewScaling( boost::rational<sal_Int64>& aScaleWidth, boost::rational<sal_Int64>& aScaleHeight, Size& aObjAreaSize )
 {
     // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
     // If we don't cache it for own objects also we must load the object here
@@ -2222,8 +2222,8 @@ bool SdrOle2Obj::CalculateNewScaling( boost::rational<long>& aScaleWidth, boost:
     aObjAreaSize = mpImpl->mxObjRef.GetSize( &aMapMode );
 
     Size aSize = aRect.GetSize();
-    aScaleWidth = boost::rational<long>(aSize.Width(),  aObjAreaSize.Width() );
-    aScaleHeight = boost::rational<long>(aSize.Height(), aObjAreaSize.Height() );
+    aScaleWidth = boost::rational<sal_Int64>(aSize.Width(),  aObjAreaSize.Width() );
+    aScaleHeight = boost::rational<sal_Int64>(aSize.Height(), aObjAreaSize.Height() );
 
     // reduce to 10 binary digits
     Kuerzen(aScaleHeight, 10);
@@ -2243,8 +2243,8 @@ bool SdrOle2Obj::AddOwnLightClient()
 
         if ( mpImpl->mxObjRef.is() && mpImpl->pLightClient )
         {
-            boost::rational<long> aScaleWidth;
-            boost::rational<long> aScaleHeight;
+            boost::rational<sal_Int64> aScaleWidth;
+            boost::rational<sal_Int64> aScaleHeight;
             Size aObjAreaSize;
             if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
             {

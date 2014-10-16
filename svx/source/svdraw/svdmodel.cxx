@@ -113,7 +113,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
     eUIUnit=FUNIT_MM;
-    aUIScale=boost::rational<long>(1,1);
+    aUIScale=boost::rational<sal_Int64>(1,1);
     nUIUnitKomma=0;
     bUIOnlyKomma=false;
     pLayerAdmin=NULL;
@@ -929,7 +929,7 @@ void SdrModel::ImpSetUIUnit()
 {
     if(0 == aUIScale.numerator())
     {
-        aUIScale = boost::rational<long>(1,1);
+        aUIScale = boost::rational<sal_Int64>(1,1);
     }
 
     // set start values
@@ -1015,7 +1015,7 @@ void SdrModel::ImpSetUIUnit()
     // may need to be changed in the future, too
     if(1 != nMul || 1 != nDiv)
     {
-        const boost::rational<long> aTemp(static_cast< long >(nMul), static_cast< long >(nDiv));
+        const boost::rational<sal_Int64> aTemp(static_cast< long >(nMul), static_cast< long >(nDiv));
         nMul = aTemp.numerator();
         nDiv = aTemp.denominator();
     }
@@ -1043,12 +1043,12 @@ void SdrModel::ImpSetUIUnit()
     }
 
     // end preparations, set member values
-    aUIUnitFact = boost::rational<long>(sal_Int32(nMul), sal_Int32(nDiv));
+    aUIUnitFact = boost::rational<sal_Int64>(sal_Int32(nMul), sal_Int32(nDiv));
     bUIOnlyKomma = (nMul == nDiv);
     TakeUnitStr(eUIUnit, aUIUnitStr);
 }
 
-void SdrModel::SetScaleUnit(MapUnit eMap, const boost::rational<long>& rFrac)
+void SdrModel::SetScaleUnit(MapUnit eMap, const boost::rational<sal_Int64>& rFrac)
 {
     if (eObjUnit!=eMap || aObjUnit!=rFrac) {
         eObjUnit=eMap;
@@ -1073,7 +1073,7 @@ void SdrModel::SetScaleUnit(MapUnit eMap)
     }
 }
 
-void SdrModel::SetScaleFraction(const boost::rational<long>& rFrac)
+void SdrModel::SetScaleFraction(const boost::rational<sal_Int64>& rFrac)
 {
     if (aObjUnit!=rFrac) {
         aObjUnit=rFrac;
@@ -1093,7 +1093,7 @@ void SdrModel::SetUIUnit(FieldUnit eUnit)
     }
 }
 
-void SdrModel::SetUIScale(const boost::rational<long>& rScale)
+void SdrModel::SetUIScale(const boost::rational<sal_Int64>& rScale)
 {
     if (aUIScale!=rScale) {
         aUIScale=rScale;
@@ -1102,7 +1102,7 @@ void SdrModel::SetUIScale(const boost::rational<long>& rScale)
     }
 }
 
-void SdrModel::SetUIUnit(FieldUnit eUnit, const boost::rational<long>& rScale)
+void SdrModel::SetUIUnit(FieldUnit eUnit, const boost::rational<sal_Int64>& rScale)
 {
     if (eUIUnit!=eUnit || aUIScale!=rScale) {
         eUIUnit=eUnit;
@@ -1333,7 +1333,7 @@ void SdrModel::TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar) const
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakePercentStr(const boost::rational<long>& rVal, OUString& rStr, bool bNoPercentChar) const
+void SdrModel::TakePercentStr(const boost::rational<sal_Int64>& rVal, OUString& rStr, bool bNoPercentChar) const
 {
     sal_Int32 nMul(rVal.numerator());
     sal_Int32 nDiv(rVal.denominator());

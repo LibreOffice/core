@@ -53,7 +53,7 @@ private:
     long                nXValue;
     long                nYValue;
     FieldUnit           eUIUnit;
-    boost::rational<long>            aUIScale;
+    boost::rational<sal_Int64>            aUIScale;
 
     DECL_LINK( ClickHdl, Button * );
 

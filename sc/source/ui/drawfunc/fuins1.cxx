@@ -131,7 +131,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     MapMode aDestMap( MAP_100TH_MM );
     if ( aSourceMap.GetMapUnit() == MAP_PIXEL && pDrawView )
     {
-        boost::rational<long> aScaleX, aScaleY;
+        boost::rational<sal_Int64> aScaleX, aScaleY;
         pDrawView->CalcNormScale( aScaleX, aScaleY );
         aDestMap.SetScaleX(aScaleX);
         aDestMap.SetScaleY(aScaleY);

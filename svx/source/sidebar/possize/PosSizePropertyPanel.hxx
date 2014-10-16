@@ -102,7 +102,7 @@ private:
     Point                                   maAnchorPos;    //anchor position
     long                                    mlRotX;
     long                                    mlRotY;
-    boost::rational<long>                   maUIScale;
+    boost::rational<sal_Int64>                   maUIScale;
     SfxMapUnit                              mePoolUnit;
     FieldUnit                               meDlgUnit;
 

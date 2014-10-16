@@ -33,17 +33,17 @@ public:
 
     void testReduceInaccurate()
     {
-        const boost::rational<long> aFract(1082130431,1073741824);
+        const boost::rational<sal_Int64> aFract(1082130431,1073741824);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #1 not approximately equal to 1.007812499068677",
                                 rtl::math::approxEqual(boost::rational_cast<double>(aFract),1.007812499068677) );
 
-        boost::rational<long> aFract2( aFract );
+        boost::rational<sal_Int64> aFract2( aFract );
         rational_ReduceInaccurate(aFract2, 8);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #2 not 1",
                                 aFract2.numerator() == 1 &&
                                 aFract2.denominator() == 1 );
 
-        boost::rational<long> aFract3( 0x7AAAAAAA, 0x35555555 );
+        boost::rational<sal_Int64> aFract3( 0x7AAAAAAA, 0x35555555 );
         CPPUNIT_ASSERT_MESSAGE( "Fraction #3 cancellation wrong",
                                 aFract3.numerator() == 0x7AAAAAAA &&
                                 aFract3.denominator() == 0x35555555 );
@@ -73,7 +73,7 @@ public:
                                 aFract3.denominator() == 1 );
 
 #if SAL_TYPES_SIZEOFLONG == 8
-        boost::rational<long> aFract4(0x7AAAAAAAAAAAAAAA, 0x3555555555555555);
+        boost::rational<sal_Int64> aFract4(0x7AAAAAAAAAAAAAAA, 0x3555555555555555);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #4 cancellation wrong",
                                 aFract4.numerator() == 0x7AAAAAAAAAAAAAAA &&
                                 aFract4.denominator() == 0x3555555555555555 );

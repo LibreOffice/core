@@ -991,7 +991,7 @@ void correctOverlapping(SdrObject* _pControl,OReportSection& _aReportSection,boo
         rSectionView.InsertObjectAtView(_pControl,*rSectionView.GetSdrPageView(),SDRINSERT_ADDMARK);
 }
 
-void setZoomFactor(const boost::rational<long>& _aZoom, vcl::Window& _rWindow)
+void setZoomFactor(const boost::rational<sal_Int64>& _aZoom, vcl::Window& _rWindow)
 {
     MapMode aMapMode( _rWindow.GetMapMode() );
     aMapMode.SetScaleX(_aZoom);

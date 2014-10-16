@@ -3986,9 +3986,9 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
     else
     {
         // Calculate as exactly as possible
-        boost::rational<long> aTmp( nMyOldH );
-        aTmp *= boost::rational<long>( nNewHeight, nOldHeight );
-        aTmp += boost::rational<long>( 1, 2 );       // round up if needed
+        boost::rational<sal_Int64> aTmp( nMyOldH );
+        aTmp *= boost::rational<sal_Int64>( nNewHeight, nOldHeight );
+        aTmp += boost::rational<sal_Int64>( 1, 2 );       // round up if needed
         nMyNewH = boost::rational_cast<long>(aTmp);
     }
 

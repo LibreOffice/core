@@ -263,7 +263,7 @@ void OViewsWindow::Paint( const Rectangle& rRect )
     Window::Paint( rRect );
 
     Size aOut = GetOutputSizePixel();
-    boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    boost::rational<sal_Int64> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= GetMapMode().GetScaleX();
 
     aOut.Width() -= boost::rational_cast<long>(aStartWidth);
@@ -1685,11 +1685,11 @@ void OViewsWindow::collapseSections(const uno::Sequence< beans::PropertyValue>& 
     }
 }
 
-void OViewsWindow::zoom(const boost::rational<long>& _aZoom)
+void OViewsWindow::zoom(const boost::rational<sal_Int64>& _aZoom)
 {
     const MapMode& aMapMode = GetMapMode();
 
-    boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    boost::rational<sal_Int64> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     if ( _aZoom < aMapMode.GetScaleX() )
         aStartWidth *= aMapMode.GetScaleX();
     else

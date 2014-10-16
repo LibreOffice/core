@@ -1878,8 +1878,8 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
             aWMF.SetPrefMapMode(MapMode(MAP_100TH_MM));
             Size aOldSiz(aWMF.GetPrefSize());
             Size aNewSiz(pPic->mfp.xExtGet(), pPic->mfp.yExtGet());
-            boost::rational<long> aFracX(aNewSiz.Width(), aOldSiz.Width());
-            boost::rational<long> aFracY(aNewSiz.Height(), aOldSiz.Height());
+            boost::rational<sal_Int64> aFracX(aNewSiz.Width(), aOldSiz.Width());
+            boost::rational<sal_Int64> aFracY(aNewSiz.Height(), aOldSiz.Height());
             aWMF.Scale(aFracX, aFracY);
             aWMF.SetPrefSize(aNewSiz);
             pGraphic = new Graphic(aWMF);

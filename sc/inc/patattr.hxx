@@ -84,14 +84,14 @@ public:
     static void             GetFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,
-                                        const boost::rational<long>* pScale = NULL,
+                                        const boost::rational<sal_Int64>* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
                                         sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL );
     /** Fills a font object from the own item set. */
     void                    GetFont( vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,
-                                        const boost::rational<long>* pScale = NULL,
+                                        const boost::rational<sal_Int64>* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,
                                         sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL ) const;

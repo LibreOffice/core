@@ -45,7 +45,7 @@ OEndMarker::~OEndMarker()
 
 void OEndMarker::Paint( const Rectangle& /*rRect*/ )
 {
-    boost::rational<long> aCornerSpace(long(CORNER_SPACE));
+    boost::rational<sal_Int64> aCornerSpace(long(CORNER_SPACE));
     aCornerSpace *= GetMapMode().GetScaleX();
     const long nCornerSpace = boost::rational_cast<long>(aCornerSpace);
 

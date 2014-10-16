@@ -538,7 +538,7 @@ void OCustomShape::NbcMove( const Size& rSize )
         SdrObjCustomShape::NbcMove( rSize );
 }
 
-void OCustomShape::NbcResize(const Point& rRef, const boost::rational<long>& xFract, const boost::rational<long>& yFract)
+void OCustomShape::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFract, const boost::rational<sal_Int64>& yFract)
 {
     SdrObjCustomShape::NbcResize( rRef, xFract, yFract );
 
@@ -749,7 +749,7 @@ void OUnoObject::NbcMove( const Size& rSize )
 
 
 
-void OUnoObject::NbcResize(const Point& rRef, const boost::rational<long>& xFract, const boost::rational<long>& yFract)
+void OUnoObject::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFract, const boost::rational<sal_Int64>& yFract)
 {
     SdrUnoObj::NbcResize( rRef, xFract, yFract );
 
@@ -1050,7 +1050,7 @@ void OOle2Obj::NbcMove( const Size& rSize )
 
 
 
-void OOle2Obj::NbcResize(const Point& rRef, const boost::rational<long>& xFract, const boost::rational<long>& yFract)
+void OOle2Obj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFract, const boost::rational<sal_Int64>& yFract)
 {
     SdrOle2Obj::NbcResize( rRef, xFract, yFract );
 

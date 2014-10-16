@@ -191,8 +191,8 @@ public:
 
     virtual void    NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void    NbcMove(const Size& rSize) SAL_OVERRIDE;
-    virtual void    NbcResize(const Point& rRef, const boost::rational<long>& rXFact,
-                                                 const boost::rational<long>& rYFact) SAL_OVERRIDE;
+    virtual void    NbcResize(const Point& rRef, const boost::rational<sal_Int64>& rXFact,
+                                                 const boost::rational<sal_Int64>& rYFact) SAL_OVERRIDE;
     virtual void    RecalcSnapRect() SAL_OVERRIDE;
 
     virtual E3dScene* GetScene() const SAL_OVERRIDE;

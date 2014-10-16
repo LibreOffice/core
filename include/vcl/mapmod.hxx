@@ -44,8 +44,8 @@ private:
     sal_uLong           mnRefCount;
     MapUnit         meUnit;
     Point           maOrigin;
-    boost::rational<long>        maScaleX;
-    boost::rational<long>        maScaleY;
+    boost::rational<sal_Int64>        maScaleX;
+    boost::rational<sal_Int64>        maScaleY;
     bool            mbSimple;
 
     friend SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rMapMode );
@@ -75,7 +75,7 @@ public:
                     MapMode( const MapMode& rMapMode );
                     MapMode( MapUnit eUnit );
                     MapMode( MapUnit eUnit, const Point& rLogicOrg,
-                             const boost::rational<long>& rScaleX, const boost::rational<long>& rScaleY );
+                             const boost::rational<sal_Int64>& rScaleX, const boost::rational<sal_Int64>& rScaleY );
                     ~MapMode();
 
     void            SetMapUnit( MapUnit eUnit );
@@ -86,11 +86,11 @@ public:
     const Point&    GetOrigin() const
                         { return mpImplMapMode->maOrigin; }
 
-    void            SetScaleX( const boost::rational<long>& rScaleX );
-    const boost::rational<long>&  GetScaleX() const
+    void            SetScaleX( const boost::rational<sal_Int64>& rScaleX );
+    const boost::rational<sal_Int64>&  GetScaleX() const
                         { return mpImplMapMode->maScaleX; }
-    void            SetScaleY( const boost::rational<long>& rScaleY );
-    const boost::rational<long>&  GetScaleY() const
+    void            SetScaleY( const boost::rational<sal_Int64>& rScaleY );
+    const boost::rational<sal_Int64>&  GetScaleY() const
                         { return mpImplMapMode->maScaleY; }
 
     MapMode&        operator=( const MapMode& rMapMode );

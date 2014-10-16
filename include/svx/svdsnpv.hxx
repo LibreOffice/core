@@ -51,8 +51,8 @@ protected:
     class ImplHelpLineOverlay*              mpHelpLineOverlay;
 
     Size                        aMagnSiz;
-    boost::rational<long>       aSnapWdtX;
-    boost::rational<long>       aSnapWdtY;
+    boost::rational<sal_Int64>       aSnapWdtX;
+    boost::rational<sal_Int64>       aSnapWdtY;
 
     sal_uInt16                  nMagnSizPix;
     long                        nSnapAngle;
@@ -98,9 +98,9 @@ public:
     virtual void BrkAction() SAL_OVERRIDE; // f.abg.Klassen Actions z,B, Draggen abbrechen.
     virtual void TakeActionRect(Rectangle& rRect) const SAL_OVERRIDE;
 
-    void SetSnapGridWidth(const boost::rational<long>& rX, const boost::rational<long>& rY) { aSnapWdtX=rX; aSnapWdtY=rY; }
-    const boost::rational<long>& GetSnapGridWidthX() const { return aSnapWdtX; }
-    const boost::rational<long>& GetSnapGridWidthY() const { return aSnapWdtY; }
+    void SetSnapGridWidth(const boost::rational<sal_Int64>& rX, const boost::rational<sal_Int64>& rY) { aSnapWdtX=rX; aSnapWdtY=rY; }
+    const boost::rational<sal_Int64>& GetSnapGridWidthX() const { return aSnapWdtX; }
+    const boost::rational<sal_Int64>& GetSnapGridWidthY() const { return aSnapWdtY; }
 
     void SetSnapMagnetic(const Size& rSiz) { if (rSiz!=aMagnSiz) { aMagnSiz=rSiz; } }
     const Size& GetSnapMagnetic() const { return aMagnSiz; }

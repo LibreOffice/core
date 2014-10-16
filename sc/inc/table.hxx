@@ -637,7 +637,7 @@ public:
     void        StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY );
+                                    const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY );
 
     bool        IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
 
@@ -672,7 +672,7 @@ public:
 
     sal_uInt16      GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+                                    const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam );
     bool SetOptimalHeight(
@@ -686,7 +686,7 @@ public:
     long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+                                    const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
                                     bool bWidth, bool bTotalSize );
     void        SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth );

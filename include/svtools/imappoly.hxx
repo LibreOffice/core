@@ -66,7 +66,7 @@ public:
     const Rectangle&    GetExtraEllipse() const { return aEllipse; }
     void                SetExtraEllipse( const Rectangle& rEllipse );
 
-    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
+    void                Scale( const boost::rational<sal_Int64>& rFractX, const boost::rational<sal_Int64>& rFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapPolygonObject& rEqObj );

@@ -336,7 +336,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
     ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrmSize.Width());
 
     long nHeight = m_aFrmSize.Height();
-    boost::rational<long> aScale( m_aWinSize.Height(), nHeight );
+    boost::rational<sal_Int64> aScale( m_aWinSize.Height(), nHeight );
     MapMode aMapMode( GetMapMode() );
     aMapMode.SetScaleX( aScale );
     aMapMode.SetScaleY( aScale );

@@ -672,13 +672,13 @@ public:
     // Objekte sollten i.d.R. nur die Nbc-Methoden ueberladen.
     // Nbc bedeutet: 'NoBroadcast'.
     virtual void NbcMove  (const Size& rSiz);
-    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact);
+    virtual void NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact);
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
-    virtual void Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative = true);
+    virtual void Resize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact, bool bUnsetRelative = true);
     virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
     virtual void Shear (const Point& rRef, long nWink, double tn, bool bVShear);

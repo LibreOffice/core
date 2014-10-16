@@ -93,7 +93,7 @@ namespace sdr
 {
     namespace properties
     {
-        void ScaleItemSet(SfxItemSet& rSet, const boost::rational<long>& rScale)
+        void ScaleItemSet(SfxItemSet& rSet, const boost::rational<sal_Int64>& rScale)
         {
             sal_Int32 nMul(rScale.numerator());
             sal_Int32 nDiv(rScale.denominator());

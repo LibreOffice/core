@@ -403,8 +403,8 @@ void SdrObjGroup::NbcSetSnapRect(const Rectangle& rRect)
     if (nDivX==0) { nMulX=1; nDivX=1; }
     if (nDivY==0) { nMulY=1; nDivY=1; }
     if (nMulX!=nDivX || nMulY!=nDivY) {
-        boost::rational<long> aX(nMulX,nDivX);
-        boost::rational<long> aY(nMulY,nDivY);
+        boost::rational<sal_Int64> aX(nMulX,nDivX);
+        boost::rational<sal_Int64> aY(nMulY,nDivY);
         NbcResize(aOld.TopLeft(),aX,aY);
     }
     if (rRect.Left()!=aOld.Left() || rRect.Top()!=aOld.Top()) {
@@ -436,7 +436,7 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
 }
 
 
-void SdrObjGroup::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrObjGroup::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     bool bXMirr = xFact < 0;
     bool bYMirr = yFact < 0;
@@ -538,8 +538,8 @@ void SdrObjGroup::SetSnapRect(const Rectangle& rRect)
     if (nDivX==0) { nMulX=1; nDivX=1; }
     if (nDivY==0) { nMulY=1; nDivY=1; }
     if (nMulX!=nDivX || nMulY!=nDivY) {
-        boost::rational<long> aX(nMulX,nDivX);
-        boost::rational<long> aY(nMulY,nDivY);
+        boost::rational<sal_Int64> aX(nMulX,nDivX);
+        boost::rational<sal_Int64> aY(nMulY,nDivY);
         Resize(aOld.TopLeft(),aX,aY);
     }
     if (rRect.Left()!=aOld.Left() || rRect.Top()!=aOld.Top()) {
@@ -587,7 +587,7 @@ void SdrObjGroup::Move(const Size& rSiz)
 }
 
 
-void SdrObjGroup::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
+void SdrObjGroup::Resize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact, bool bUnsetRelative)
 {
     if (xFact.numerator()!=xFact.denominator() || yFact.numerator()!=yFact.denominator()) {
         bool bXMirr = xFact < 0;

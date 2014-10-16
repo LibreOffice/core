@@ -103,7 +103,7 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     // resource) and will be shown by the sfx framework.
     Hide();
 
-    const boost::rational<long> aFraction (1,1);
+    const boost::rational<sal_Int64> aFraction (1,1);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
 
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
@@ -613,7 +613,7 @@ IMPL_LINK_INLINE_END( SmGraphicWindow, MenuSelectHdl, Menu *, pMenu )
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {
     nZoom = std::min(std::max((sal_uInt16) Factor, (sal_uInt16) MINZOOM), (sal_uInt16) MAXZOOM);
-    boost::rational<long>   aFraction (nZoom, 100);
+    boost::rational<sal_Int64>   aFraction (nZoom, 100);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction) );
     SetTotalSize();
     SmViewShell *pViewSh = GetView();
@@ -960,8 +960,8 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
     if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
     {
         Size aProvidedSize = GetWindow()->PixelToLogic( rSize, MAP_100TH_MM );
-        SfxViewShell::SetZoomFactor( boost::rational<long>( aProvidedSize.Width(), aObjSize.Width() ),
-                        boost::rational<long>( aProvidedSize.Height(), aObjSize.Height() ) );
+        SfxViewShell::SetZoomFactor( boost::rational<sal_Int64>( aProvidedSize.Width(), aObjSize.Width() ),
+                        boost::rational<sal_Int64>( aProvidedSize.Height(), aObjSize.Height() ) );
     }
 
     SetBorderPixel( SvBorder() );
@@ -986,9 +986,9 @@ void SmViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 }
 
 
-void SmViewShell::SetZoomFactor( const boost::rational<long>& rX, const boost::rational<long>& rY )
+void SmViewShell::SetZoomFactor( const boost::rational<sal_Int64>& rX, const boost::rational<sal_Int64>& rY )
 {
-    const boost::rational<long>& rFrac = rX < rY ? rX : rY;
+    const boost::rational<sal_Int64>& rFrac = rX < rY ? rX : rY;
     GetGraphicWindow().SetZoom( (sal_uInt16) boost::rational_cast<long>(rFrac * 100) );
 
     //To avoid rounding errors base class regulates crooked values too
@@ -1284,9 +1284,9 @@ void SmViewShell::Impl_Print(
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MAP_100TH_MM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MAP_100TH_MM)));
-                sal_uInt16   nZ = (sal_uInt16) std::min( boost::rational_cast<long>( boost::rational<long>(OutputSize.Width() * 100L, GraphicSize.Width()) ),
-                                              boost::rational_cast<long>( boost::rational<long>(OutputSize.Height() * 100L, GraphicSize.Height()) ) );
-                boost::rational<long> aFraction ((sal_uInt16) std::max ((sal_uInt16) MINZOOM, std::min((sal_uInt16) MAXZOOM, (sal_uInt16) (nZ - 10))), (sal_uInt16) 100);
+                sal_uInt16   nZ = (sal_uInt16) std::min( boost::rational_cast<long>( boost::rational<sal_Int64>(OutputSize.Width() * 100L, GraphicSize.Width()) ),
+                                              boost::rational_cast<long>( boost::rational<sal_Int64>(OutputSize.Height() * 100L, GraphicSize.Height()) ) );
+                boost::rational<sal_Int64> aFraction ((sal_uInt16) std::max ((sal_uInt16) MINZOOM, std::min((sal_uInt16) MAXZOOM, (sal_uInt16) (nZ - 10))), (sal_uInt16) 100);
 
                 OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             }
@@ -1296,7 +1296,7 @@ void SmViewShell::Impl_Print(
 
         case PRINT_SIZE_ZOOMED:
         {
-            boost::rational<long> aFraction( nZoomFactor, 100 );
+            boost::rational<sal_Int64> aFraction( nZoomFactor, 100 );
 
             OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             break;
@@ -1788,8 +1788,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                                               OutputRect.GetHeight()), aMap));
                             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-                            sal_uInt16     nZ = (sal_uInt16) std::min( boost::rational_cast<long>( boost::rational<long>(OutputSize.Width() * 100L, GraphicSize.Width())),
-                                                         boost::rational_cast<long>( boost::rational<long>(OutputSize.Height() * 100L, GraphicSize.Height()) ) );
+                            sal_uInt16     nZ = (sal_uInt16) std::min( boost::rational_cast<long>( boost::rational<sal_Int64>(OutputSize.Width() * 100L, GraphicSize.Width())),
+                                                         boost::rational_cast<long>( boost::rational<sal_Int64>(OutputSize.Height() * 100L, GraphicSize.Height()) ) );
                             aGraphic.SetZoom (nZ);
                             break;
                         }

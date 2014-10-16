@@ -332,7 +332,7 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
  */
 void ViewShell::SetZoom(long nZoom)
 {
-    boost::rational<long> aUIScale(nZoom, 100);
+    boost::rational<sal_Int64> aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
     if (mpHorizontalRuler.get() != NULL)
@@ -399,7 +399,7 @@ void ViewShell::ScrollCenter()
 void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 {
     long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
-    boost::rational<long> aUIScale(nZoom, 100);
+    boost::rational<sal_Int64> aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
     Point aPos = GetActiveWindow()->GetWinViewPos();
@@ -651,7 +651,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 /**
  * Set zoom factor for InPlace
  */
-void ViewShell::SetZoomFactor(const boost::rational<long>& rZoomX, const boost::rational<long>&)
+void ViewShell::SetZoomFactor(const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>&)
 {
     long nZoom = (long)(boost::rational_cast<double>(rZoomX) * 100);
     SetZoom(nZoom);
@@ -870,8 +870,8 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         if( pObj->IsChart() ) //charts never should be stretched see #i84323# for example
             aObjAreaSize = aDrawSize;
 
-        boost::rational<long> aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-        boost::rational<long> aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
+        boost::rational<sal_Int64> aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
+        boost::rational<sal_Int64> aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
         rational_ReduceInaccurate(aScaleWidth, 10);       // kompatibel zum SdrOle2Obj
         rational_ReduceInaccurate(aScaleHeight, 10);
         pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);

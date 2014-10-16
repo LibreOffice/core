@@ -736,7 +736,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
 
         case StateChangedType::ZOOM:
         {
-            boost::rational<long> aZoom = GetZoom();
+            boost::rational<sal_Int64> aZoom = GetZoom();
 
             // not all of these controls need to know the new zoom, but to be sure ...
             vcl::Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );

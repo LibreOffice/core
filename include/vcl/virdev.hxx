@@ -124,7 +124,7 @@ public:
 
     bool                SetOutputSizePixel( const Size& rNewSize, bool bErase = true );
     bool                SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize,
-                                                                const boost::rational<long>& rScale,
+                                                                const boost::rational<sal_Int64>& rScale,
                                                                 const Point& rNewOffset,
                                                                 const basebmp::RawMemorySharedArray &pBuffer,
                                                                 const bool bTopDown = false );

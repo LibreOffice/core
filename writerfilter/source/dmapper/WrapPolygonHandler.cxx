@@ -83,7 +83,7 @@ WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::scale(const boost::rational<long>& rFractionX, const boost::rational<long>& rFractionY)
+WrapPolygon::Pointer_t WrapPolygon::scale(const boost::rational<sal_Int64>& rFractionX, const boost::rational<sal_Int64>& rFractionY)
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);
 
@@ -106,17 +106,17 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 
     const long nWrap100Percent = 21600;
 
-    boost::rational<long> aMove(nWrap100Percent, rSrcSize.Width);
-    aMove = aMove * boost::rational<long>(15, 1);
+    boost::rational<sal_Int64> aMove(nWrap100Percent, rSrcSize.Width);
+    aMove = aMove * boost::rational<sal_Int64>(15, 1);
     awt::Point aMovePoint(boost::rational_cast<long>(aMove), 0);
     pResult = move(aMovePoint);
 
-    boost::rational<long> aScaleX(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent + aMove));
-    boost::rational<long> aScaleY(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent - aMove));
+    boost::rational<sal_Int64> aScaleX(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent + aMove));
+    boost::rational<sal_Int64> aScaleY(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent - aMove));
     pResult = pResult->scale(aScaleX, aScaleY);
 
-    boost::rational<long> aScaleSrcX(rSrcSize.Width, nWrap100Percent);
-    boost::rational<long> aScaleSrcY(rSrcSize.Height, nWrap100Percent);
+    boost::rational<sal_Int64> aScaleSrcX(rSrcSize.Width, nWrap100Percent);
+    boost::rational<sal_Int64> aScaleSrcY(rSrcSize.Height, nWrap100Percent);
     pResult = pResult->scale(aScaleSrcX, aScaleSrcY);
 
     return pResult;

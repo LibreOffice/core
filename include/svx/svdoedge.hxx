@@ -264,7 +264,7 @@ public:
 
     virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void NbcMove(const Size& aSize) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRefPnt, const boost::rational<long>& aXFact, const boost::rational<long>& aYFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRefPnt, const boost::rational<sal_Int64>& aXFact, const boost::rational<sal_Int64>& aYFact) SAL_OVERRIDE;
 
     // #i54102# added rotate, mirrorn and shear support
     virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;

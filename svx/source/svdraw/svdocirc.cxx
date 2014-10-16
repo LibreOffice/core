@@ -811,7 +811,7 @@ void SdrCircObj::NbcMove(const Size& aSiz)
     SetRectsDirty(true);
 }
 
-void SdrCircObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrCircObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
     long nWink0=aGeo.nRotationAngle;
     bool bNoShearRota=(aGeo.nRotationAngle==0 && aGeo.nShearWink==0);
@@ -1031,7 +1031,7 @@ void SdrCircObj::NbcSetSnapRect(const Rectangle& rRect)
         long nHgt0=aSR0.Bottom()-aSR0.Top();
         long nWdt1=rRect.Right()-rRect.Left();
         long nHgt1=rRect.Bottom()-rRect.Top();
-        NbcResize(maSnapRect.TopLeft(),boost::rational<long>(nWdt1,nWdt0),boost::rational<long>(nHgt1,nHgt0));
+        NbcResize(maSnapRect.TopLeft(),boost::rational<sal_Int64>(nWdt1,nWdt0),boost::rational<sal_Int64>(nHgt1,nHgt0));
         NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
         aRect=rRect;

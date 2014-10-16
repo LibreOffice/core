@@ -104,8 +104,8 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nYMul=std::abs(nYMul);
         nXDiv=std::abs(nXDiv);
         nYDiv=std::abs(nYDiv);
-        boost::rational<long> aXFact(nXMul,nXDiv); // fractions for canceling
-        boost::rational<long> aYFact(nYMul,nYDiv); // and for comparing
+        boost::rational<sal_Int64> aXFact(nXMul,nXDiv); // fractions for canceling
+        boost::rational<sal_Int64> aYFact(nYMul,nYDiv); // and for comparing
         nXMul=aXFact.numerator();
         nYMul=aYFact.numerator();
         nXDiv=aXFact.denominator();
