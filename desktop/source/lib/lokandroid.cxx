@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <unistd.h>
 #include <jni.h>
 
 #include <sal/types.h>
@@ -68,6 +69,9 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy(J
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
     pLibreOfficeKit->pClass->destroy(pLibreOfficeKit);
+    // Stopgap fix: _exit() to force the OS to restart the LO activity.
+    // Better than to hang.
+    _exit(0);
 }
 
 extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Office_documentLoadNative(JNIEnv* pEnv, jobject aObject, jstring documentPath)
