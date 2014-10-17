@@ -32,7 +32,7 @@ class BigIntTest : public CppUnit::TestFixture
 {
 public:
 #if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
-    void testConstructionFromInt64();
+    void testConstructionFromLongLong();
 #endif
 
     CPPUNIT_TEST_SUITE(BigIntTest);
