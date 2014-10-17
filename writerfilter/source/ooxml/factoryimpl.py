@@ -119,8 +119,8 @@ public:
 std::string fastTokenToId(sal_uInt32 nToken)
 {
 
-#ifdef DEBUG_WRITERFILTER
     std::string sResult;
+#ifdef DEBUG_WRITERFILTER
 
     switch (oox::getNamespace(nToken))
     {""")
