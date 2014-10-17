@@ -263,6 +263,7 @@ private:
     XDrawPageSequence                   mMasterPageTargets;
 
     Link                                maOldFieldHdl;
+    Link                                maNewFieldHdl;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 

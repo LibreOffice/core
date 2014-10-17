@@ -233,6 +233,8 @@ public:
     sal_uIntPtr         nSwapGraphicsMode;
 
     SdrOutlinerCache* mpOutlinerCache;
+    //get a vector of all the SdrOutliner belonging to the model
+    std::vector<SdrOutliner*> GetActiveOutliners() const;
     SdrModelImpl*   mpImpl;
     sal_uInt16          mnCharCompressType;
     sal_uInt16          mnHandoutPageCount;
