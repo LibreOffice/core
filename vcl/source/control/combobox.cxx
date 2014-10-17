@@ -1114,7 +1114,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     else
     {
         Size aOutSz = mpSubEdit->GetOutputSizePixel();
-        rnCols = (sal_uInt16)(aOutSz.Width()/nCharWidth);
+        rnCols = (nCharWidth > 0) ? (sal_uInt16)(aOutSz.Width()/nCharWidth) : 1;
         rnLines = 1;
     }
 }
