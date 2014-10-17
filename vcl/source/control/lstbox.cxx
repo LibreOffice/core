@@ -456,7 +456,7 @@ void ListBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sa
     else
     {
         long        nTextHeight = pDev->GetTextHeight();
-        sal_uInt16  nLines = (sal_uInt16)(aSize.Height() / nTextHeight);
+        sal_uInt16  nLines = ( nTextHeight > 0 ) ? (sal_uInt16)(aSize.Height() / nTextHeight) : 1;
         Rectangle   aClip( aPos, aSize );
 
         pDev->IntersectClipRegion( aClip );
