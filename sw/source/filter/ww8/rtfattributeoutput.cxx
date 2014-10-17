@@ -2350,26 +2350,24 @@ void RtfAttributeOutput::CharRotate(const SvxCharRotateItem& rRotate)
 
 void RtfAttributeOutput::CharEmphasisMark(const SvxEmphasisMarkItem& rEmphasisMark)
 {
-    const sal_Char* pStr;
     switch (rEmphasisMark.GetEmphasisMark())
     {
     case EMPHASISMARK_NONE:
-        pStr = OOO_STRING_SVTOOLS_RTF_ACCNONE;
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCNONE);
         break;
     case EMPHASISMARK_DOT | EMPHASISMARK_POS_ABOVE:
-        pStr = OOO_STRING_SVTOOLS_RTF_ACCDOT;
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCDOT);
         break;
     case EMPHASISMARK_ACCENT | EMPHASISMARK_POS_ABOVE:
-        pStr = OOO_STRING_SVTOOLS_RTF_ACCCOMMA;
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCCOMMA);
         break;
     case EMPHASISMARK_CIRCLE | EMPHASISMARK_POS_ABOVE:
-        pStr = OOO_STRING_SVTOOLS_RTF_ACCCIRCLE;
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCCIRCLE);
         break;
     case EMPHASISMARK_DOT|EMPHASISMARK_POS_BELOW:
-        pStr = OOO_STRING_SVTOOLS_RTF_ACCUNDERDOT;
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_ACCUNDERDOT);
         break;
     }
-    m_aStyles.append(pStr);
 }
 
 void RtfAttributeOutput::CharTwoLines(const SvxTwoLinesItem& rTwoLines)
