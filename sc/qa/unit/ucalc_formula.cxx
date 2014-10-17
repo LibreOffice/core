@@ -4001,6 +4001,120 @@ void Test::testFormulaDepTrackingDeleteRow()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaDepTrackingDeleteCol()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    m_pDoc->InsertTab(0, "Formula");
+
+    const char* aData[][3] = {
+        { "2", "=A1", "=B1" }, // not grouped
+        { 0, 0, 0 },           // empty row to separate the formula groups.
+        { "3", "=A3", "=B3" }, // grouped
+        { "4", "=A4", "=B4" }, // grouped
+    };
+
+    ScAddress aPos(0,0,0);
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT(aRange.aStart == aPos);
+
+    // Check the initial values.
+    for (SCCOL i = 0; i <= 2; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(i,0,0)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(i,2,0)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(i,3,0)));
+    }
+
+    // Make sure B3:B4 and C3:C4 are grouped.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,2,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(2,2,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    // Delete column A.  A1, B1, A3:A4 and B3:B4 should all show #REF!.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.DeleteCells(ScRange(0,0,0,0,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "#REF!", "#REF!" },
+            { 0,  0 },
+            { "#REF!", "#REF!" },
+            { "#REF!", "#REF!" },
+        };
+
+        ScRange aCheckRange(0,0,0,1,3,0);
+        bool bSuccess = checkOutput<2>(m_pDoc, aCheckRange, aOutputCheck, "Check after deleting column A");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Undo and check the result.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "2", "2", "2" },
+            { 0,  0, 0 },
+            { "3", "3", "3" },
+            { "4", "4", "4" },
+        };
+
+        ScRange aCheckRange(0,0,0,2,3,0);
+        bool bSuccess = checkOutput<3>(m_pDoc, aCheckRange, aOutputCheck, "Check after undo");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Redo and check.
+    pUndoMgr->Redo();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "#REF!", "#REF!" },
+            { 0, 0 },
+            { "#REF!", "#REF!" },
+            { "#REF!", "#REF!" },
+        };
+
+        ScRange aCheckRange(0,0,0,1,3,0);
+        bool bSuccess = checkOutput<2>(m_pDoc, aCheckRange, aOutputCheck, "Check after redo");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Undo and change the values in column A.
+    pUndoMgr->Undo();
+    m_pDoc->SetValue(ScAddress(0,0,0), 22.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 23.0);
+    m_pDoc->SetValue(ScAddress(0,3,0), 24.0);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "22", "22", "22" },
+            { 0, 0, 0 },
+            { "23", "23", "23" },
+            { "24", "24", "24" },
+        };
+
+        ScRange aCheckRange(0,0,0,2,3,0);
+        bool bSuccess = checkOutput<3>(m_pDoc, aCheckRange, aOutputCheck, "Check after undo & value change in column A");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaMatrixResultUpdate()
 {
     m_pDoc->InsertTab(0, "Test");
