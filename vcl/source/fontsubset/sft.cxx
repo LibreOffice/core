@@ -2045,6 +2045,14 @@ static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     sal_uInt32 locaLen = 0;
     sal_Int16 indexToLocFormat = 0;
 
+    sal_uInt32 nMaxPossibleTables = sfntLen / (3*sizeof(sal_uInt32)); /*the three GetUInt32 calls*/
+    if (numTables > nMaxPossibleTables)
+    {
+        SAL_WARN( "vcl.fonts", "GlyphOffsetsNew claimed to have "
+            << numTables  << " tables, but that's impossibly large");
+        numTables = nMaxPossibleTables;
+    }
+
     for (i = 0; i < numTables; i++) {
         sal_uInt32 nLargestFixedOffsetPos = 12 + 16 * i + 12;
         sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
