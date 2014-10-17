@@ -41,7 +41,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
 typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( OUString const &, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const & );
-typedef sal_Bool ( SAL_CALL *ExportCGMPointer )( OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
 
 #ifdef DISABLE_DYNLOADING
 
@@ -112,29 +111,8 @@ bool SdCGMFilter::Import()
 
 bool SdCGMFilter::Export()
 {
-#ifdef DISABLE_DYNLOADING
     // No ExportCGM function exists(!)
-    return sal_False;
-#else
-    ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-    bool        bRet = false;
-
-    if( pLibrary && mxModel.is() )
-    {
-        ExportCGMPointer FncCGMExport = reinterpret_cast< ExportCGMPointer >( pLibrary->getFunctionSymbol( "ExportCGM" ) );
-
-        if( FncCGMExport )
-        {
-            OUString aPhysicalName( mrMedium.GetPhysicalName() );
-
-            CreateStatusIndicator();
-            bRet = FncCGMExport( aPhysicalName, mxModel, mxStatusIndicator, NULL );
-        }
-    }
-
-    delete pLibrary;
-    return bRet;
-#endif
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
