@@ -710,7 +710,7 @@ bool CGM::Write( SvStream& rIStm )
 
 // GraphicImport - the exported function
 extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL
-ImportCGM( OUString& rFileName, uno::Reference< frame::XModel > & rXModel, sal_uInt32 nMode, css::uno::Reference<css::task::XStatusIndicator> & aXStatInd )
+ImportCGM( OUString const & rFileName, uno::Reference< frame::XModel > const & rXModel, sal_uInt32 nMode, css::uno::Reference<css::task::XStatusIndicator> const & aXStatInd )
 {
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR

@@ -40,12 +40,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( OUString const &, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const & );
 typedef sal_Bool ( SAL_CALL *ExportCGMPointer )( OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_uInt32 ImportCGM( OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+extern "C" sal_uInt32 ImportCGM( OUString const &, Reference< XModel > const &, sal_uInt32, Reference< XStatusIndicator > const & );
 
 #endif
 
