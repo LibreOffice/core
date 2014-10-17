@@ -185,7 +185,7 @@ protected:
 
     virtual ::com::sun::star::awt::Rectangle SAL_CALL
         getBoundsImpl(bool bRelative)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // #i85634#
     inline void NotRegisteredAtAccessibleMap()

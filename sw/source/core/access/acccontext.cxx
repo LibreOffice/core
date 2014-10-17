@@ -841,7 +841,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAtPoint
    false: Use absolute mode.
 */
 awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(bool bRelative)
-        throw (uno::RuntimeException)
+        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
