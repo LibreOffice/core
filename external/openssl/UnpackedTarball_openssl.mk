@@ -77,6 +77,16 @@ $(eval $(call gb_UnpackedTarball_add_patches,openssl,\
 	external/openssl/CVE-2014-0221.patch \
 	external/openssl/CVE-2014-0224.patch \
 	external/openssl/CVE-2014-3470.patch \
+	external/openssl/CVE-2014-3505.patch \
+	external/openssl/CVE-2014-3506.patch \
+	external/openssl/CVE-2014-3507.patch \
+	external/openssl/CVE-2014-3508.patch \
+	external/openssl/CVE-2014-3509.patch \
+	external/openssl/CVE-2014-3510.patch \
+	external/openssl/CVE-2014-3511.patch \
+	external/openssl/CVE-2014-3513.patch \
+	external/openssl/CVE-2014-3567.patch \
+	external/openssl/CVE-2014-3566.patch \
 	$(if $(filter LINUX FREEBSD ANDROID,$(OS)),external/openssl/openssllnx.patch) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/openssl/opensslmingw.patch) \
 	$(if $(filter MSC,$(COM)),external/openssl/opensslwnt.patch) \
