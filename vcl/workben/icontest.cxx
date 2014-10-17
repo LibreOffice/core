@@ -95,8 +95,10 @@ public:
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
-MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
-    WorkWindow( pParent, nWinStyle )
+MyWorkWindow::MyWorkWindow( vcl::Window* pParent, WinBits nWinStyle )
+    : WorkWindow(pParent, nWinStyle)
+    , mpBitmap(NULL)
+    , mpFixedBitmap(NULL)
 {
     mnPaintCount = 0;
     mnStartTime = getTimeNow();
