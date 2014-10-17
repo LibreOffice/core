@@ -208,7 +208,6 @@
     // FREE (was: SID_BACKTOWEBTOP)
 #define SID_SEGMENTSIZE                     (SID_SFX_START + 1659)
 #define SID_VIEW_DATA_SOURCE_BROWSER        (SID_SFX_START + 1660)
-#define SID_TOGGLE_MENUBAR                  (SID_SFX_START + 1661)
 #define SID_UNPACK                          (SID_SFX_START + 1662)
 // (SID_SFX_START + 1663) used further down
 #define SID_MACRO_WARNING                   (SID_SFX_START + 1664)

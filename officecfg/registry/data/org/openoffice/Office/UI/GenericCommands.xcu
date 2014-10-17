@@ -4179,11 +4179,6 @@
           <value>9</value>
         </prop>
       </node>
-      <node oor:name=".uno:MenuBarVisible" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Menu On/Off</value>
-        </prop>
-      </node>
       <node oor:name=".uno:MacroRecorder" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Record Macro</value>
