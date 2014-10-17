@@ -1191,7 +1191,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
 
         Rectangle aClip( aPos, aSize );
         pDev->IntersectClipRegion( aClip );
-        sal_uInt16 nLines = (sal_uInt16) ( (aSize.Height()-nEditHeight) / nTextHeight );
+        sal_uInt16 nLines = (sal_uInt16) ( ( nTextHeight > 0 ) ? ( (aSize.Height()-nEditHeight) / nTextHeight ) : 1 );
         if ( !nLines )
             nLines = 1;
         sal_uInt16 nTEntry = IsReallyVisible() ? mpImplLB->GetTopEntry() : 0;
