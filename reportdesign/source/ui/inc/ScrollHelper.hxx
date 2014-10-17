@@ -70,7 +70,7 @@ namespace rptui
         virtual void            Resize() SAL_OVERRIDE;
         virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         // OPropertyChangeListener
-        virtual void            _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void            _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     public:
         OScrollWindowHelper( ODesignView* _pReportDesignView);
         virtual ~OScrollWindowHelper();
