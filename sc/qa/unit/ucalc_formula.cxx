@@ -2538,6 +2538,27 @@ void Test::testFuncCOUNTBLANK()
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(2,5,0)));
     CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(3,5,0)));
 
+    // Test single cell reference cases.
+
+    clearSheet(m_pDoc, 0);
+
+    const char* aData2[][2] = {
+        { "1",     "=COUNTBLANK(A1)" },
+        { "A",     "=COUNTBLANK(A2)" },
+        {   0,     "=COUNTBLANK(A3)" },
+        { "=\"\"", "=COUNTBLANK(A4)" },
+        { "=A4"  , "=COUNTBLANK(A5)" },
+    };
+
+    aRange = insertRangeData(m_pDoc, aPos, aData2, SAL_N_ELEMENTS(aData2));
+    CPPUNIT_ASSERT(aRange.aStart == aPos);
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,2,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,4,0)));
+
     m_pDoc->DeleteTab(0);
 }
 
