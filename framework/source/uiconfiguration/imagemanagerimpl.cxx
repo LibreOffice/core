@@ -1102,8 +1102,9 @@ throw ( ::com::sun::star::container::ElementExistException,
 
 // XUIConfigurationPersistence
 void ImageManagerImpl::reload()
-throw ( ::com::sun::star::uno::Exception,
-        ::com::sun::star::uno::RuntimeException )
+    throw (css::uno::Exception,
+           css::uno::RuntimeException,
+           std::exception)
 {
     SolarMutexClearableGuard aGuard;
 

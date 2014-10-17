@@ -123,7 +123,7 @@ namespace framework
             void removeConfigurationListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
             // XUIConfigurationPersistence
-            void reload() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+            void reload() throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
             void store()
                 throw (::com::sun::star::uno::Exception,
                        ::com::sun::star::uno::RuntimeException,
