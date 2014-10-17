@@ -40,8 +40,9 @@
 #include <statstr.hrc>
 #include <swerror.h>
 
-// Hash-Code errechnen (muss nicht eindeutig sein)
-
+/**
+ * Calculate hash code (is not guaranteed to be unique)
+ */
 sal_uInt16 SwImpBlocks::Hash( const OUString& r )
 {
     sal_uInt16 n = 0;
@@ -70,8 +71,9 @@ SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const O
     nHashL = SwImpBlocks::Hash( rLong );
 }
 
-// Ist die angegebene Datei ein Storage oder gibt es sie nicht?
-
+/**
+ * Is the provided file a storage or doesn't it exist?
+ */
 short SwImpBlocks::GetFileType( const OUString& rFile )
 {
     if( !FStatHelper::IsDocument( rFile ) )
@@ -104,13 +106,17 @@ SwImpBlocks::~SwImpBlocks()
     aNames.DeleteAndDestroyAll();
 }
 
-// Loeschen des Inhaltes des Dokuments
+/**
+ * Delete the document's content
+ */
 void SwImpBlocks::ClearDoc()
 {
     pDoc->ClearDoc();
 }
 
-// Erzeugen eines PaMs, der das ganze Dokument umfasst
+/**
+ * Creating a PaM, that spans the whole document
+ */
 SwPaM* SwImpBlocks::MakePaM()
 {
     SwPaM* pPam = new SwPaM( pDoc->GetNodes().GetEndOfContent() );
@@ -126,7 +132,9 @@ sal_uInt16 SwImpBlocks::GetCount() const
     return aNames.size();
 }
 
-// Case Insensitive
+/**
+ * Case Insensitive
+ */
 sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
 {
     const OUString s( GetAppCharClass().uppercase( rShort ) );
@@ -194,16 +202,14 @@ bool SwImpBlocks::IsFileChanged() const
 {
     Date aTempDateModified( aDateModified );
     tools::Time aTempTimeModified( aTimeModified );
-    return FStatHelper::GetModifiedDateTimeOfFile( aFile,
-                            &aTempDateModified, &aTempTimeModified ) &&
+    return FStatHelper::GetModifiedDateTimeOfFile( aFile, &aTempDateModified, &aTempTimeModified ) &&
           ( aDateModified != aTempDateModified ||
             aTimeModified != aTempTimeModified );
 }
 
 void SwImpBlocks::Touch()
 {
-    FStatHelper::GetModifiedDateTimeOfFile( aFile,
-                                            &aDateModified, &aTimeModified );
+    FStatHelper::GetModifiedDateTimeOfFile( aFile, &aDateModified, &aTimeModified );
 }
 
 bool SwImpBlocks::IsOnlyTextBlock( const OUString& ) const
@@ -216,8 +222,7 @@ sal_uLong SwImpBlocks::GetMacroTable( sal_uInt16, SvxMacroTableDtor&, bool )
     return 0;
 }
 
-sal_uLong SwImpBlocks::SetMacroTable( sal_uInt16 ,
-                                const SvxMacroTableDtor& , bool )
+sal_uLong SwImpBlocks::SetMacroTable( sal_uInt16 , const SvxMacroTableDtor& , bool )
 {
     return 0;
 }
@@ -338,7 +343,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString
             aLong = *l;
         if( aNew.isEmpty() )
         {
-            OSL_ENSURE( false, "Kein Kurzname in Rename angegeben" );
+            OSL_ENSURE( false, "No short name provided in the rename" );
             nErr = ERR_SWG_INTERNAL_ERROR; return (sal_uInt16) -1;
         }
 
@@ -346,7 +351,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
         else if( 0 == ( nErr = pImp->OpenFile( false )))
         {
-            // Vorher den neuen Eintrag in die Liste setzen!
+            // Set the new entry in the list before we do that!
             aNew = GetAppCharClass().uppercase( aNew );
              nErr = pImp->Rename( n, aNew, aLong );
             if( !nErr )
@@ -389,11 +394,6 @@ bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
 {
     if( pImp && !pImp->bInPutMuchBlocks )
     {
-// diese Optimierierung darf es nicht mehr geben. OLE-Objecte muessen auf
-// ihre SubStorages zugreifem koennen!
-//      if( n == pImp->nCur )
-//          return sal_True;
-
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
         else if( 0 == ( nErr = pImp->OpenFile( true )))
@@ -566,7 +566,7 @@ bool SwTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
         return IsOnlyTextBlock( nIdx );
     }
 
-    OSL_ENSURE( false, "ungueltiger Name" );
+    OSL_ENSURE( false, "Invalid name" );
     return false;
 }
 
@@ -578,8 +578,7 @@ bool SwTextBlocks::GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTbl 
     return bRet;
 }
 
-bool SwTextBlocks::SetMacroTable( sal_uInt16 nIdx,
-                                const SvxMacroTableDtor& rMacroTbl )
+bool SwTextBlocks::SetMacroTable( sal_uInt16 nIdx, const SvxMacroTableDtor& rMacroTbl )
 {
     bool bRet = true;
     if ( pImp && !pImp->bInPutMuchBlocks )
