@@ -56,7 +56,6 @@ private:
     virtual void            ToggleFloatingMode() SAL_OVERRIDE;
 
     MediaWindow*            mpMediaWindow;
-    Size                    maLastSize;
 };
 
 inline MediaFloater * getMediaFloater() {
