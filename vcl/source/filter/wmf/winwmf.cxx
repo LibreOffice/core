@@ -1462,12 +1462,31 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 
                 case W_META_POLYGON:
                 {
-                    sal_uInt16 nPoints;
+                    bool bRecordOk = true;
+
+                    sal_uInt16 nPoints(0);
                     pStm->ReadUInt16( nPoints );
-                    for(sal_uInt16 i = 0; i < nPoints; i++ )
+
+                    if (nPoints > pStm->remainingSize() / (2 * sizeof(sal_uInt16)))
                     {
-                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
-                        bBoundsDetermined = true;
+                        bRecordOk = false;
+                    }
+                    else
+                    {
+                        for(sal_uInt16 i = 0; i < nPoints; i++ )
+                        {
+                            GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                            bBoundsDetermined = true;
+                        }
+                    }
+
+                    SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polyline record claimed more points than the stream can provide");
+
+                    if (!bRecordOk)
+                    {
+                        pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        bRet = false;
+                        break;
                     }
                 }
                 break;
@@ -1507,11 +1526,20 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                         break;
                     }
 
-                    for (sal_uInt16 i = 0; i < nPoints; i++ )
+                    if (nPoints > pStm->remainingSize() / (2 * sizeof(sal_uInt16)))
                     {
-                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
-                        bBoundsDetermined = true;
+                        bRecordOk = false;
                     }
+                    else
+                    {
+                        for (sal_uInt16 i = 0; i < nPoints; i++ )
+                        {
+                            GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                            bBoundsDetermined = true;
+                        }
+                    }
+
+                    SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record claimed more points than the stream can provide");
 
                     bRecordOk &= pStm->good();
 
@@ -1526,12 +1554,30 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
 
                 case W_META_POLYLINE:
                 {
-                    sal_uInt16 nPoints;
-                    pStm->ReadUInt16( nPoints );
-                    for(sal_uInt16 i = 0; i < nPoints; i++ )
+                    bool bRecordOk = true;
+
+                    sal_uInt16 nPoints(0);
+                    pStm->ReadUInt16(nPoints);
+                    if (nPoints > pStm->remainingSize() / (2 * sizeof(sal_uInt16)))
                     {
-                        GetWinExtMax( ReadPoint(), aBound, nMapMode );
-                        bBoundsDetermined = true;
+                        bRecordOk = false;
+                    }
+                    else
+                    {
+                        for (sal_uInt16 i = 0; i < nPoints; ++i)
+                        {
+                            GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                            bBoundsDetermined = true;
+                        }
+                    }
+
+                    SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polyline record claimed more points than the stream can provide");
+
+                    if (!bRecordOk)
+                    {
+                        pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                        bRet = false;
+                        break;
                     }
                 }
                 break;
