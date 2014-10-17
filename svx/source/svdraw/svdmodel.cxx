@@ -1929,6 +1929,17 @@ SdrOutliner* SdrModel::createOutliner( sal_uInt16 nOutlinerMode )
     return mpOutlinerCache->createOutliner( nOutlinerMode );
 }
 
+std::vector<SdrOutliner*> SdrModel::GetActiveOutliners() const
+{
+    std::vector<SdrOutliner*> aRet(mpOutlinerCache ?
+        mpOutlinerCache->GetActiveOutliners() : std::vector<SdrOutliner*>());
+
+    aRet.push_back(pDrawOutliner);
+    aRet.push_back(pHitTestOutliner);
+
+    return aRet;
+}
+
 void SdrModel::disposeOutliner( SdrOutliner* pOutliner )
 {
     if( mpOutlinerCache )
