@@ -52,7 +52,7 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(42L, bi);
+        CPPUNIT_ASSERT_EQUAL(42L, static_cast<long>(bi));
     }
 
     // small negative number
@@ -62,7 +62,7 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(-42L, bi);
+        CPPUNIT_ASSERT_EQUAL(-42L, static_cast<long>(bi));
     }
 
     // positive number just fitting to long
@@ -72,7 +72,7 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(!bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<long>::max(), bi);
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<long>::max(), static_cast<long>(bi));
     }
 
     // negative number just fitting to long
@@ -82,7 +82,7 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(!bi.IsZero());
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsLong());
-        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<long>::min(), bi);
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<long>::min(), static_cast<long>(bi));
     }
 
     // positive number not fitting to long
