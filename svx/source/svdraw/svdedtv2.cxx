@@ -1309,11 +1309,11 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
         ImpCopyAttributes(pAttrObj, pPath);
 
         // If LineStyle of pAttrObj is XLINE_NONE force to XLINE_SOLID to make visible.
-        const XLineStyle eLineStyle = ((const XLineStyleItem&)pAttrObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
-        const drawing::FillStyle eFillStyle = ((const XFillStyleItem&)pAttrObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
+        const XLineStyle eLineStyle = static_cast<const XLineStyleItem&>(pAttrObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
+        const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pAttrObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
         // Take fill style/closed state of pAttrObj in account when deciding to change the line style
-        bool bIsClosedPathObj(pAttrObj->ISA(SdrPathObj) && ((SdrPathObj*)pAttrObj)->IsClosed());
+        bool bIsClosedPathObj(pAttrObj->ISA(SdrPathObj) && static_cast<const SdrPathObj*>(pAttrObj)->IsClosed());
 
         if(XLINE_NONE == eLineStyle && (drawing::FillStyle_NONE == eFillStyle || !bIsClosedPathObj))
         {
@@ -1537,7 +1537,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 DBG_ASSERT(pCandidate, "SdrEditView::ImpDismantleOneObject: Could not clone SdrObject (!)");
                 pCandidate->SetModel(pCustomShape->GetModel());
 
-                if(((SdrOnOffItem&)pCustomShape->GetMergedItem(SDRATTR_SHADOW)).GetValue())
+                if(static_cast<const SdrOnOffItem&>(pCustomShape->GetMergedItem(SDRATTR_SHADOW)).GetValue())
                 {
                     if(pReplacement->ISA(SdrObjGroup))
                     {

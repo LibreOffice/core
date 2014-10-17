@@ -131,7 +131,7 @@ namespace sdr
             // invalidate all new rectangles
             if(GetSdrObject().ISA(SdrObjGroup))
             {
-                SdrObjListIter aIter((SdrObjGroup&)GetSdrObject(), IM_DEEPNOGROUPS);
+                SdrObjListIter aIter(static_cast<SdrObjGroup&>(GetSdrObject()), IM_DEEPNOGROUPS);
 
                 while(aIter.IsMore())
                 {

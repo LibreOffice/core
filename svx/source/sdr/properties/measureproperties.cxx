@@ -78,7 +78,7 @@ namespace sdr
 
         void MeasureProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrMeasureObj& rObj = (SdrMeasureObj&)GetSdrObject();
+            SdrMeasureObj& rObj = static_cast<SdrMeasureObj&>(GetSdrObject());
 
             // call parent
             TextProperties::ItemSetChanged(rSet);
@@ -89,7 +89,7 @@ namespace sdr
 
         void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrMeasureObj& rObj = (SdrMeasureObj&)GetSdrObject();
+            SdrMeasureObj& rObj = static_cast<SdrMeasureObj&>(GetSdrObject());
 
             // local changes
             rObj.SetTextDirty();

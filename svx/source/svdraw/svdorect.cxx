@@ -181,7 +181,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = true;
 
     // gradient depends on fillstyle
-    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
+    drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(GetObjectItem(XATTR_FILLSTYLE)).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
 
     rInfo.bShearAllowed     =bNoTextFrame;

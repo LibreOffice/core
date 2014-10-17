@@ -172,38 +172,38 @@ namespace sdr
                 {
                     case XATTR_FILLBITMAP:
                     {
-                        pResultItem = ((XFillBitmapItem*)pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XFillBitmapItem*>(pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_LINEDASH:
                     {
-                        pResultItem = ((XLineDashItem*)pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XLineDashItem*>(pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_LINESTART:
                     {
-                        pResultItem = ((XLineStartItem*)pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XLineStartItem*>(pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_LINEEND:
                     {
-                        pResultItem = ((XLineEndItem*)pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XLineEndItem*>(pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_FILLGRADIENT:
                     {
-                        pResultItem = ((XFillGradientItem*)pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XFillGradientItem*>(pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_FILLFLOATTRANSPARENCE:
                     {
                         // #85953# allow all kinds of XFillFloatTransparenceItem to be set
-                        pResultItem = ((XFillFloatTransparenceItem*)pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XFillFloatTransparenceItem*>(pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                     case XATTR_FILLHATCH:
                     {
-                        pResultItem = ((XFillHatchItem*)pNewItem)->checkForUniqueItem( pModel );
+                        pResultItem = static_cast<const XFillHatchItem*>(pNewItem)->checkForUniqueItem( pModel );
                         break;
                     }
                 }
@@ -405,7 +405,7 @@ namespace sdr
                             if(GetStyleSheet() != pForThisObject)
                             {
                                 ImpRemoveStyleSheet();
-                                ImpAddStyleSheet((SfxStyleSheet*)pForThisObject, true);
+                                ImpAddStyleSheet(static_cast<SfxStyleSheet*>(pForThisObject), true);
                             }
                         }
                         else
@@ -557,8 +557,8 @@ namespace sdr
                         {
                             if(HAS_BASE(SfxStyleSheet, GetStyleSheet()))
                             {
-                                pNewStSh = (SfxStyleSheet*)pModel->GetStyleSheetPool()->Find(
-                                    GetStyleSheet()->GetParent(), GetStyleSheet()->GetFamily());
+                                pNewStSh = static_cast<SfxStyleSheet*>(pModel->GetStyleSheetPool()->Find(
+                                    GetStyleSheet()->GetParent(), GetStyleSheet()->GetFamily()));
                             }
 
                             if(!pNewStSh)

@@ -201,7 +201,7 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     SetBoundRectDirty();
     bSnapRectDirty=true;
     if (HAS_BASE(SdrRectObj,this)) {
-        ((SdrRectObj*)this)->SetXPolyDirty();
+        static_cast<SdrRectObj*>(this)->SetXPolyDirty();
     }
     return true;
 }
@@ -216,7 +216,7 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
     SetRectsDirty();
     if (HAS_BASE(SdrRectObj,this)) {
-        ((SdrRectObj*)this)->SetXPolyDirty();
+        static_cast<SdrRectObj*>(this)->SetXPolyDirty();
     }
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }

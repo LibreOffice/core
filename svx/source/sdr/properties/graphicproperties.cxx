@@ -72,7 +72,7 @@ namespace sdr
 
         void GraphicProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrGrafObj& rObj = (SdrGrafObj&)GetSdrObject();
+            SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());
 
             // local changes
             rObj.SetXPolyDirty();
@@ -91,7 +91,7 @@ namespace sdr
 
         void GraphicProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrGrafObj& rObj = (SdrGrafObj&)GetSdrObject();
+            SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());
 
             // local changes
             rObj.SetXPolyDirty();

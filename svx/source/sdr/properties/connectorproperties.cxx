@@ -71,7 +71,7 @@ namespace sdr
 
         void ConnectorProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrEdgeObj& rObj = (SdrEdgeObj&)GetSdrObject();
+            SdrEdgeObj& rObj = static_cast<SdrEdgeObj&>(GetSdrObject());
 
             // call parent
             TextProperties::ItemSetChanged(rSet);
@@ -82,7 +82,7 @@ namespace sdr
 
         void ConnectorProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrEdgeObj& rObj = (SdrEdgeObj&)GetSdrObject();
+            SdrEdgeObj& rObj = static_cast<SdrEdgeObj&>(GetSdrObject());
 
             // call parent
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);

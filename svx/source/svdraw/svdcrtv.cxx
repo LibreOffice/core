@@ -502,7 +502,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                 }
 
                 aDragStat.Reset(aPnt);
-                aDragStat.SetView((SdrView*)this);
+                aDragStat.SetView(static_cast<SdrView*>(this));
                 aDragStat.SetPageView(pCreatePV);
                 aDragStat.SetMinMove(ImpGetMinMovLogic(nMinMov,pOut));
                 pDragWin=pOut;
@@ -653,8 +653,8 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     && pCreatePV->GetAktGroup()
                     && pCreatePV->GetAktGroup()->ISA(E3dScene))
                 {
-                    bool bDidInsert = ((E3dView*)this)->ImpCloneAll3DObjectsToDestScene(
-                        (E3dScene*)pObjMerk, (E3dScene*)pCreatePV->GetAktGroup(), Point(0, 0));
+                    bool bDidInsert = static_cast<E3dView*>(this)->ImpCloneAll3DObjectsToDestScene(
+                        static_cast<E3dScene*>(pObjMerk), static_cast<E3dScene*>(pCreatePV->GetAktGroup()), Point(0, 0));
 
                     if(bDidInsert)
                     {
@@ -767,8 +767,8 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             if(bUseSolidDragging)
             {
                 const SfxItemSet& rSet = pAktCreate->GetMergedItemSet();
-                const drawing::FillStyle eFill(((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue());
-                const XLineStyle eLine(((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue());
+                const drawing::FillStyle eFill(static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue());
+                const XLineStyle eLine(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
 
                 if(XLINE_NONE == eLine && drawing::FillStyle_NONE == eFill)
                 {
@@ -821,7 +821,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                 {
                     // The up-to-now created path needs to be set at the object to have something
                     // that can be visualized
-                    SdrPathObj& rPathObj((SdrPathObj&)(*pAktCreate));
+                    SdrPathObj& rPathObj(static_cast<SdrPathObj&>(*pAktCreate));
                     const basegfx::B2DPolyPolygon aCurrentPolyPolygon(rPathObj.getObjectPolyPolygon(aDragStat));
 
                     if(aCurrentPolyPolygon.count())

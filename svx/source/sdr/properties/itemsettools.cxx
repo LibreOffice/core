@@ -36,7 +36,7 @@ namespace sdr
         {
             if(rObj.ISA(SdrObjGroup))
             {
-                SdrObjListIter aIter((const SdrObjGroup&)rObj, IM_DEEPNOGROUPS);
+                SdrObjListIter aIter(static_cast<const SdrObjGroup&>(rObj), IM_DEEPNOGROUPS);
                 mpData = new RectangleVector;
                 DBG_ASSERT(mpData, "ItemChangeBroadcaster: No memory (!)");
                 ((RectangleVector*)mpData)->reserve(aIter.Count());

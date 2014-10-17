@@ -81,7 +81,7 @@ namespace sdr
 
         void TextProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
             const svx::ITextProvider& rTextProvider(getTextProvider());
             sal_Int32 nText = rTextProvider.getTextCount();
 
@@ -150,19 +150,19 @@ namespace sdr
 
         void TextProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
         {
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
             // #i25616#
             sal_Int32 nOldLineWidth(0L);
 
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
             {
-                nOldLineWidth = ((const XLineWidthItem&)GetItem(XATTR_LINEWIDTH)).GetValue();
+                nOldLineWidth = static_cast<const XLineWidthItem&>(GetItem(XATTR_LINEWIDTH)).GetValue();
             }
 
             if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
             {
-                bool bVertical(com::sun::star::text::WritingMode_TB_RL == ((SvxWritingModeItem*)pNewItem)->GetValue());
+                bool bVertical(com::sun::star::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
                 rObj.SetVerticalWriting(bVertical);
             }
 
@@ -202,19 +202,19 @@ namespace sdr
             // #i25616#
             if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
             {
-                const sal_Int32 nNewLineWidth(((const XLineWidthItem&)GetItem(XATTR_LINEWIDTH)).GetValue());
+                const sal_Int32 nNewLineWidth(static_cast<const XLineWidthItem&>(GetItem(XATTR_LINEWIDTH)).GetValue());
                 const sal_Int32 nDifference((nNewLineWidth - nOldLineWidth) / 2);
 
                 if(nDifference)
                 {
-                    const bool bLineVisible(XLINE_NONE != ((const XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue());
+                    const bool bLineVisible(XLINE_NONE != static_cast<const XLineStyleItem&>(GetItem(XATTR_LINESTYLE)).GetValue());
 
                     if(bLineVisible)
                     {
-                        const sal_Int32 nLeftDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
-                        const sal_Int32 nRightDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
-                        const sal_Int32 nUpperDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
-                        const sal_Int32 nLowerDist(((const SdrMetricItem&)GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+                        const sal_Int32 nLeftDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+                        const sal_Int32 nRightDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+                        const sal_Int32 nUpperDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+                        const sal_Int32 nLowerDist(static_cast<const SdrMetricItem&>(GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
 
                         SetObjectItemDirect(makeSdrTextLeftDistItem(nLeftDist + nDifference));
                         SetObjectItemDirect(makeSdrTextRightDistItem(nRightDist + nDifference));
@@ -232,7 +232,7 @@ namespace sdr
 
         void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
             // call parent
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
@@ -283,7 +283,9 @@ namespace sdr
 
                                     SdrModel* pModel = rObj.GetModel();
                                     SfxStyleSheetBasePool* pStylePool = (pModel != NULL) ? pModel->GetStyleSheetPool() : 0L;
-                                    SfxStyleSheet* pNewStyle = pStylePool ? (SfxStyleSheet*)pStylePool->Find(aNewStyleSheetName, GetStyleSheet()->GetFamily()) : NULL;
+                                    SfxStyleSheet* pNewStyle = NULL;
+                                    if(pStylePool)
+                                        pNewStyle = static_cast<SfxStyleSheet*>(pStylePool->Find(aNewStyleSheetName, GetStyleSheet()->GetFamily()));
                                     DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
 
                                     if(pNewStyle)
@@ -357,7 +359,7 @@ namespace sdr
 
         void TextProperties::ForceDefaultAttributes()
         {
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
             if( rObj.GetObjInventor() == SdrInventor )
             {
@@ -397,7 +399,7 @@ namespace sdr
             ItemSetChanged(*mpItemSet);
 
             // now the standard TextProperties stuff
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
             if(rObj.GetModel()
                 && !rObj.IsTextEditActive()
@@ -465,7 +467,7 @@ namespace sdr
                                         {
                                             if(i->pAttr)
                                             {
-                                                SvxFieldItem* pFieldItem = (SvxFieldItem*)(i->pAttr);
+                                                const SvxFieldItem* pFieldItem = static_cast<const SvxFieldItem*>(i->pAttr);
 
                                                 if(pFieldItem)
                                                 {
@@ -548,7 +550,7 @@ namespace sdr
             // call parent
             AttributeProperties::Notify(rBC, rHint);
 
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
             if(rObj.HasText())
             {
                 const svx::ITextProvider& rTextProvider(getTextProvider());

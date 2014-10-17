@@ -235,7 +235,7 @@ static bool ImpSdrMarkListSorter(SdrMark* const& lhs, SdrMark* const& rhs)
     }
     else
     {
-        return (sal_IntPtr)pOL1 < (sal_IntPtr)pOL2;
+        return pOL1 < pOL2;
     }
 }
 

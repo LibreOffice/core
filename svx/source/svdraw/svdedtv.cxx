@@ -522,7 +522,7 @@ void SdrEditView::CheckPossibilities()
                 if(SfxItemState::DONTCARE != eState)
                 {
                     // If state is not DONTCARE, test the item
-                    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+                    drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue();
 
                     if(eFillStyle != drawing::FillStyle_GRADIENT)
                     {
@@ -623,7 +623,7 @@ void SdrEditView::CheckPossibilities()
             bGrpEnterPossible=bUnGroupPossible;
         }
         ImpCheckToTopBtmPossible();
-        ((SdrPolyEditView*)this)->ImpCheckPolyPossibilities();
+        static_cast<SdrPolyEditView*>(this)->ImpCheckPolyPossibilities();
         bPossibilitiesDirty=false;
 
         if (bReadOnly) {

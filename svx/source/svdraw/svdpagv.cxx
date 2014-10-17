@@ -668,7 +668,7 @@ bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
         {
             // If object is a Group object, visibility may depend on
             // multiple layers. If one object is markable, Group is markable.
-            SdrObjList* pObjList = ((SdrObjGroup*)pObj)->GetSubList();
+            SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObj)->GetSubList();
 
             if(pObjList && pObjList->GetObjCount())
             {
@@ -733,7 +733,7 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
                 aR.Right() += aSiz.Width();
                 aR.Top() -= aSiz.Height();
                 aR.Bottom() += aSiz.Height();
-                ((SdrView&)GetView()).InvalidateOneWin((vcl::Window&)rOutDev, aR);
+                ((SdrView&)GetView()).InvalidateOneWin(static_cast<vcl::Window&>(rOutDev), aR);
             }
         }
     }

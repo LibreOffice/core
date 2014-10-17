@@ -71,7 +71,7 @@ namespace sdr
 
         void CaptionProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrCaptionObj& rObj = (SdrCaptionObj&)GetSdrObject();
+            SdrCaptionObj& rObj = static_cast<SdrCaptionObj&>(GetSdrObject());
 
             // local changes
             rObj.ImpRecalcTail();
@@ -82,7 +82,7 @@ namespace sdr
 
         void CaptionProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrCaptionObj& rObj = (SdrCaptionObj&)GetSdrObject();
+            SdrCaptionObj& rObj = static_cast<SdrCaptionObj&>(GetSdrObject());
 
             // call parent
             RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);

@@ -87,11 +87,11 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
     FieldUnit eModUIUnit(FUNIT_NONE);
 
     const SfxItemSet& rSet = GetMergedItemSet();
-    bTextRota90 = ((SdrMeasureTextRota90Item&)rSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue();
-    eMeasureUnit = ((SdrMeasureUnitItem&)rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
-    aMeasureScale = ((SdrMeasureScaleItem&)rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
-    bShowUnit = ((SdrYesNoItem&)rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
-    sal_Int16 nNumDigits = ((SdrMeasureDecimalPlacesItem&)rSet.Get(SDRATTR_MEASUREDECIMALPLACES)).GetValue();
+    bTextRota90 = static_cast<const SdrMeasureTextRota90Item&>(rSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue();
+    eMeasureUnit = static_cast<const SdrMeasureUnitItem&>(rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
+    aMeasureScale = static_cast<const SdrMeasureScaleItem&>(rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
+    bShowUnit = static_cast<const SdrYesNoItem&>(rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
+    sal_Int16 nNumDigits = static_cast<const SdrMeasureDecimalPlacesItem&>(rSet.Get(SDRATTR_MEASUREDECIMALPLACES)).GetValue();
 
     switch(eMeasureFieldKind)
     {
@@ -329,26 +329,26 @@ void SdrMeasureObj::ImpTakeAttr(ImpMeasureRec& rRec) const
     rRec.aPt2 = aPt2;
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    rRec.eKind            =((SdrMeasureKindItem&            )rSet.Get(SDRATTR_MEASUREKIND            )).GetValue();
-    rRec.eWantTextHPos    =((SdrMeasureTextHPosItem&        )rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
-    rRec.eWantTextVPos    =((SdrMeasureTextVPosItem&        )rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
-    rRec.nLineDist        =((SdrMetricItem&        )rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
-    rRec.nHelplineOverhang=((SdrMetricItem&)rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue();
-    rRec.nHelplineDist    =((SdrMetricItem&    )rSet.Get(SDRATTR_MEASUREHELPLINEDIST    )).GetValue();
-    rRec.nHelpline1Len    =((SdrMetricItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    )).GetValue();
-    rRec.nHelpline2Len    =((SdrMetricItem&    )rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    )).GetValue();
-    rRec.bBelowRefEdge    =((SdrMeasureBelowRefEdgeItem&    )rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    )).GetValue();
-    rRec.bTextRota90      =((SdrMeasureTextRota90Item&      )rSet.Get(SDRATTR_MEASURETEXTROTA90      )).GetValue();
-    rRec.bTextUpsideDown  =((SdrMeasureTextUpsideDownItem&  )rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
-    rRec.nMeasureOverhang =((SdrMeasureOverhangItem&        )rSet.Get(SDRATTR_MEASUREOVERHANG        )).GetValue();
-    rRec.eMeasureUnit     =((SdrMeasureUnitItem&            )rSet.Get(SDRATTR_MEASUREUNIT            )).GetValue();
-    rRec.aMeasureScale    =((SdrMeasureScaleItem&           )rSet.Get(SDRATTR_MEASURESCALE           )).GetValue();
-    rRec.bShowUnit        =((SdrYesNoItem&        )rSet.Get(SDRATTR_MEASURESHOWUNIT        )).GetValue();
-    rRec.aFormatString    =((SdrMeasureFormatStringItem&    )rSet.Get(SDRATTR_MEASUREFORMATSTRING    )).GetValue();
-    rRec.bTextAutoAngle    =((SdrMeasureTextAutoAngleItem&    )rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    )).GetValue();
-    rRec.nTextAutoAngleView=((SdrMeasureTextAutoAngleViewItem&)rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
-    rRec.bTextIsFixedAngle =((SdrMeasureTextIsFixedAngleItem& )rSet.Get(SDRATTR_MEASURETEXTISFIXEDANGLE )).GetValue();
-    rRec.nTextFixedAngle   =((SdrMeasureTextFixedAngleItem&   )rSet.Get(SDRATTR_MEASURETEXTFIXEDANGLE   )).GetValue();
+    rRec.eKind             =static_cast<const SdrMeasureKindItem&             >(rSet.Get(SDRATTR_MEASUREKIND            )).GetValue();
+    rRec.eWantTextHPos     =static_cast<const SdrMeasureTextHPosItem&         >(rSet.Get(SDRATTR_MEASURETEXTHPOS        )).GetValue();
+    rRec.eWantTextVPos     =static_cast<const SdrMeasureTextVPosItem&         >(rSet.Get(SDRATTR_MEASURETEXTVPOS        )).GetValue();
+    rRec.nLineDist         =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASURELINEDIST        )).GetValue();
+    rRec.nHelplineOverhang =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue();
+    rRec.nHelplineDist     =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINEDIST    )).GetValue();
+    rRec.nHelpline1Len     =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINE1LEN    )).GetValue();
+    rRec.nHelpline2Len     =static_cast<const SdrMetricItem&                  >(rSet.Get(SDRATTR_MEASUREHELPLINE2LEN    )).GetValue();
+    rRec.bBelowRefEdge     =static_cast<const SdrMeasureBelowRefEdgeItem&     >(rSet.Get(SDRATTR_MEASUREBELOWREFEDGE    )).GetValue();
+    rRec.bTextRota90       =static_cast<const SdrMeasureTextRota90Item&       >(rSet.Get(SDRATTR_MEASURETEXTROTA90      )).GetValue();
+    rRec.bTextUpsideDown   =static_cast<const SdrMeasureTextUpsideDownItem&   >(rSet.Get(SDRATTR_MEASURETEXTUPSIDEDOWN  )).GetValue();
+    rRec.nMeasureOverhang  =static_cast<const SdrMeasureOverhangItem&         >(rSet.Get(SDRATTR_MEASUREOVERHANG        )).GetValue();
+    rRec.eMeasureUnit      =static_cast<const SdrMeasureUnitItem&             >(rSet.Get(SDRATTR_MEASUREUNIT            )).GetValue();
+    rRec.aMeasureScale     =static_cast<const SdrMeasureScaleItem&            >(rSet.Get(SDRATTR_MEASURESCALE           )).GetValue();
+    rRec.bShowUnit         =static_cast<const SdrYesNoItem&                   >(rSet.Get(SDRATTR_MEASURESHOWUNIT        )).GetValue();
+    rRec.aFormatString     =static_cast<const SdrMeasureFormatStringItem&     >(rSet.Get(SDRATTR_MEASUREFORMATSTRING    )).GetValue();
+    rRec.bTextAutoAngle    =static_cast<const SdrMeasureTextAutoAngleItem&    >(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLE    )).GetValue();
+    rRec.nTextAutoAngleView=static_cast<const SdrMeasureTextAutoAngleViewItem&>(rSet.Get(SDRATTR_MEASURETEXTAUTOANGLEVIEW)).GetValue();
+    rRec.bTextIsFixedAngle =static_cast<const SdrMeasureTextIsFixedAngleItem& >(rSet.Get(SDRATTR_MEASURETEXTISFIXEDANGLE )).GetValue();
+    rRec.nTextFixedAngle   =static_cast<const SdrMeasureTextFixedAngleItem&   >(rSet.Get(SDRATTR_MEASURETEXTFIXEDANGLE   )).GetValue();
 }
 
 long impGetLineStartEndDistance(const basegfx::B2DPolyPolygon& rPolyPolygon, long nNewWidth, bool bCenter)
@@ -387,21 +387,21 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     bool bPfeileAussen = false;
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // line width
+    sal_Int32 nLineWdt = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue(); // line width
     rPol.nLineWdt2 = (nLineWdt + 1) / 2;
 
-    nArrow1Wdt = ((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
+    nArrow1Wdt = static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue();
     if(nArrow1Wdt < 0)
         nArrow1Wdt = -nLineWdt * nArrow1Wdt / 100; // <0 = relativ
 
-    nArrow2Wdt = ((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
+    nArrow2Wdt = static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue();
     if(nArrow2Wdt < 0)
         nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; // <0 = relativ
 
-    basegfx::B2DPolyPolygon aPol1(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
-    basegfx::B2DPolyPolygon aPol2(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
-    bArrow1Center = ((const XLineStartCenterItem&)(rSet.Get(XATTR_LINESTARTCENTER))).GetValue();
-    bArrow2Center = ((const XLineEndCenterItem&)(rSet.Get(XATTR_LINEENDCENTER))).GetValue();
+    basegfx::B2DPolyPolygon aPol1(static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue());
+    basegfx::B2DPolyPolygon aPol2(static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue());
+    bArrow1Center = static_cast<const XLineStartCenterItem&>(rSet.Get(XATTR_LINESTARTCENTER)).GetValue();
+    bArrow2Center = static_cast<const XLineEndCenterItem&>(rSet.Get(XATTR_LINEENDCENTER)).GetValue();
     nArrow1Len = impGetLineStartEndDistance(aPol1, nArrow1Wdt, bArrow1Center) - 1;
     nArrow2Len = impGetLineStartEndDistance(aPol2, nArrow2Wdt, bArrow2Center) - 1;
 
@@ -1138,7 +1138,7 @@ SdrObjGeoData* SdrMeasureObj::NewGeoData() const
 void SdrMeasureObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData(rGeo);
-    SdrMeasureObjGeoData& rMGeo=(SdrMeasureObjGeoData&)rGeo;
+    SdrMeasureObjGeoData& rMGeo=static_cast<SdrMeasureObjGeoData&>(rGeo);
     rMGeo.aPt1=aPt1;
     rMGeo.aPt2=aPt2;
 }
@@ -1146,7 +1146,7 @@ void SdrMeasureObj::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestGeoData(rGeo);
-    SdrMeasureObjGeoData& rMGeo=(SdrMeasureObjGeoData&)rGeo;
+    const SdrMeasureObjGeoData& rMGeo=static_cast<const SdrMeasureObjGeoData&>(rGeo);
     aPt1=rMGeo.aPt1;
     aPt2=rMGeo.aPt2;
     SetTextDirty();
@@ -1190,7 +1190,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     {
         // four lines, middle line with gap, so there are two lines used
         // which have one arrow each
-        sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
+        sal_Int32 nEndWidth = static_cast<const XLineEndWidthItem&>(aSet.Get(XATTR_LINEENDWIDTH)).GetValue();
         aSet.Put(XLineEndWidthItem(0L));
 
         aPolyPoly.clear();
@@ -1220,7 +1220,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     else if(nCount == 5)
     {
         // five lines, first two are the outer ones
-        sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
+        sal_Int32 nEndWidth = static_cast<const XLineEndWidthItem&>(aSet.Get(XATTR_LINEENDWIDTH)).GetValue();
 
         aSet.Put(XLineEndWidthItem(0L));
 

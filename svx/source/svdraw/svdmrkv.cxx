@@ -109,7 +109,7 @@ void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition
         // apply to OverlayObjects
         for(sal_uInt32 a(0L); a < maObjects.count(); a++)
         {
-            ::sdr::overlay::OverlayRollingRectangleStriped& rCandidate = (::sdr::overlay::OverlayRollingRectangleStriped&)maObjects.getOverlayObject(a);
+            ::sdr::overlay::OverlayRollingRectangleStriped& rCandidate = static_cast< ::sdr::overlay::OverlayRollingRectangleStriped&>(maObjects.getOverlayObject(a));
             rCandidate.setSecondPosition(rNewPosition);
         }
 
@@ -202,7 +202,7 @@ void SdrMarkView::ModelHasChanged()
     SortMarkedObjects();
     bMrkPntDirty=true;
     UndirtyMrkPnt();
-    SdrView* pV=(SdrView*)this;
+    SdrView* pV=static_cast<SdrView*>(this);
     if (pV!=NULL && !pV->IsDragObj() && !pV->IsInsObjPoint()) {
         AdjustMarkHdl();
     }
@@ -679,7 +679,7 @@ void SdrMarkView::SetMarkHandles()
             // SdrObjEditView::ImpPaintOutlinerView in this case. This needs to be reworked
             // in the future
             // Also formally #122142#: Pretty much the same for SdrCaptionObj's in calc.
-            if(((SdrView*)this)->IsTextEdit())
+            if(static_cast<SdrView*>(this)->IsTextEdit())
             {
                 const SdrTextObj* pSdrTextObj = dynamic_cast< const SdrTextObj* >(pMarkedObj);
 
@@ -932,7 +932,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 {
                     // add this item, it's not yet there
                     XFillFloatTransparenceItem aNewItem(
-                        (const XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE));
+                        static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)));
                     XGradient aGrad = aNewItem.GetGradientValue();
 
                     aNewItem.SetEnabled(true);
@@ -958,7 +958,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 GradTransVector aGradTransVector;
                 GradTransGradient aGradTransGradient;
 
-                aGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
+                aGradTransGradient.aGradient = static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
                 aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                 // build handles
@@ -990,7 +990,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
                 const SfxItemSet& rSet = pObj->GetMergedItemSet();
-                drawing::FillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+                drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue();
 
                 if(eFillStyle == drawing::FillStyle_GRADIENT)
                 {
@@ -1000,7 +1000,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     GradTransGradient aGradTransGradient;
                     Size aHdlSize(15, 15);
 
-                    aGradTransGradient.aGradient = ((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
+                    aGradTransGradient.aGradient = static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
                     aGradTransformer.GradToVec(aGradTransGradient, aGradTransVector, pObj);
 
                     // build handles
@@ -1262,11 +1262,11 @@ void SdrMarkView::SetEditMode(SdrViewEditMode eMode)
 {
     if (eMode!=eEditMode) {
         bool bGlue0=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
-        bool bEdge0=((SdrCreateView*)this)->IsEdgeTool();
+        bool bEdge0=static_cast<SdrCreateView*>(this)->IsEdgeTool();
         eEditMode0=eEditMode;
         eEditMode=eMode;
         bool bGlue1=eEditMode==SDREDITMODE_GLUEPOINTEDIT;
-        bool bEdge1=((SdrCreateView*)this)->IsEdgeTool();
+        bool bEdge1=static_cast<SdrCreateView*>(this)->IsEdgeTool();
         // avoid flickering when switching between GlueEdit and EdgeTool
         if (bGlue1 && !bGlue0) ImpSetGlueVisible2(bGlue1);
         if (bEdge1!=bEdge0) ImpSetGlueVisible3(bEdge1);
@@ -1430,7 +1430,7 @@ bool SdrMarkView::MarkNextObj(const Point& rPnt, short nTol, bool bPrev)
     E3dScene* pScene = NULL;
     SdrObject* pObjHit = (bPrev) ? pBtmObjHit : pTopObjHit;
     bool bRemap = pObjHit->ISA(E3dCompoundObject)
-        ? ((E3dCompoundObject*)pObjHit)->IsAOrdNumRemapCandidate(pScene)
+        ? static_cast<E3dCompoundObject*>(pObjHit)->IsAOrdNumRemapCandidate(pScene)
         : false;
 
     if(bPrev)
@@ -1587,7 +1587,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     const bool bCheckIfMarkable(nOptions & SDRSEARCH_TESTMARKABLE);
     const bool bDeep(nOptions & SDRSEARCH_DEEP);
     const bool bOLE(pObj->ISA(SdrOle2Obj));
-    const bool bTXT(pObj->ISA(SdrTextObj) && ((SdrTextObj*)pObj)->IsTextFrame());
+    const bool bTXT(pObj->ISA(SdrTextObj) && static_cast<SdrTextObj*>(pObj)->IsTextFrame());
     SdrObject* pRet=NULL;
     Rectangle aRect(pObj->GetCurrentBoundRect());
     // hack for calc grid sync
@@ -1596,7 +1596,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 
     // double tolerance for OLE, text frames and objects in
     // active text edit
-    if(bOLE || bTXT || pObj==((SdrObjEditView*)this)->GetTextEditObject())
+    if(bOLE || bTXT || pObj==static_cast<const SdrObjEditView*>(this)->GetTextEditObject())
     {
         nTol2*=2;
     }
@@ -1657,7 +1657,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     if (pOL!=NULL)
     {
         bool bRemap(pOL->GetOwnerObj() && pOL->GetOwnerObj()->ISA(E3dScene));
-        E3dScene* pRemapScene = (bRemap ? (E3dScene*)pOL->GetOwnerObj() : 0L);
+        E3dScene* pRemapScene = (bRemap ? static_cast<E3dScene*>(pOL->GetOwnerObj()) : 0L);
 
         const size_t nObjAnz=pOL->GetObjCount();
         size_t nObjNum=bBack ? 0 : nObjAnz;
@@ -1717,10 +1717,10 @@ bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, SdrP
     SdrObject* pObj=NULL;
     SdrObject* pHitObj=NULL;
     SdrPageView* pPV=NULL;
-    if (!bBack && ((SdrObjEditView*)this)->IsTextEditFrameHit(rPnt)) {
-        pObj=((SdrObjEditView*)this)->GetTextEditObject();
+    if (!bBack && static_cast<const SdrObjEditView*>(this)->IsTextEditFrameHit(rPnt)) {
+        pObj=static_cast<const SdrObjEditView*>(this)->GetTextEditObject();
         pHitObj=pObj;
-        pPV=((SdrObjEditView*)this)->GetTextEditPageView();
+        pPV=static_cast<const SdrObjEditView*>(this)->GetTextEditPageView();
     }
     if (bMarked) {
         const size_t nMrkAnz=GetMarkedObjectCount();

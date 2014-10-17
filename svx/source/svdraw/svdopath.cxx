@@ -936,7 +936,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
     if(bCreateComment && rDrag.GetUser())
     {
         // #i103058# re-add old creation comment mode
-        ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
+        const ImpPathCreateUser* pU = static_cast<const ImpPathCreateUser*>(rDrag.GetUser());
         const SdrObjKind eKindMerk(meObjectKind);
         mrSdrPathObject.meKind = pU->eAktKind;
         OUString aTmp;
@@ -1004,7 +1004,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
         {
             // getSpecialDragComment is also used from create, so fallback to GetUser()
             // when mpSdrPathDragData is not set
-            pDragData = (ImpSdrPathDragData*)rDrag.GetUser();
+            pDragData = static_cast<ImpSdrPathDragData*>(rDrag.GetUser());
         }
 
         if(!pDragData)
@@ -1294,7 +1294,7 @@ bool ImpPathForDragAndCreate::BegCreate(SdrDragStat& rStat)
 
 bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
 {
-    ImpPathCreateUser* pU=(ImpPathCreateUser*)rStat.GetUser();
+    ImpPathCreateUser* pU=static_cast<ImpPathCreateUser*>(rStat.GetUser());
     SdrView* pView=rStat.GetView();
     XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
     if (pView!=NULL && pView->IsCreateMode()) {
@@ -1401,7 +1401,7 @@ bool ImpPathForDragAndCreate::MovCreate(SdrDragStat& rStat)
 
 bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    ImpPathCreateUser* pU=(ImpPathCreateUser*)rStat.GetUser();
+    ImpPathCreateUser* pU=static_cast<ImpPathCreateUser*>(rStat.GetUser());
     bool bRet = false;
     SdrView* pView=rStat.GetView();
     bool bIncomp=pView!=NULL && pView->IsUseIncompatiblePathCreateInterface();
@@ -1516,7 +1516,7 @@ bool ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 bool ImpPathForDragAndCreate::BckCreate(SdrDragStat& rStat)
 {
-    ImpPathCreateUser* pU=(ImpPathCreateUser*)rStat.GetUser();
+    ImpPathCreateUser* pU=static_cast<ImpPathCreateUser*>(rStat.GetUser());
     if (aPathPolygon.Count()>0) {
         XPolygon& rXPoly=aPathPolygon[aPathPolygon.Count()-1];
         sal_uInt16 nActPoint=rXPoly.GetPointCount();
@@ -1556,7 +1556,7 @@ bool ImpPathForDragAndCreate::BckCreate(SdrDragStat& rStat)
 
 void ImpPathForDragAndCreate::BrkCreate(SdrDragStat& rStat)
 {
-    ImpPathCreateUser* pU=(ImpPathCreateUser*)rStat.GetUser();
+    ImpPathCreateUser* pU=static_cast<ImpPathCreateUser*>(rStat.GetUser());
     aPathPolygon.Clear();
     mbCreating=false;
     delete pU;
@@ -1571,7 +1571,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const Sdr
     if(pView && pView->IsUseIncompatiblePathCreateInterface())
         return aRetval;
 
-    ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
+    ImpPathCreateUser* pU = static_cast<ImpPathCreateUser*>(rDrag.GetUser());
     basegfx::B2DPolygon aNewPolygon(aRetval.count() ? aRetval.getB2DPolygon(aRetval.count() - 1L) : basegfx::B2DPolygon());
 
     if(pU->IsFormFlag() && aNewPolygon.count() > 1L)
@@ -1613,7 +1613,7 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeDragPolyPolygon(const SdrDr
     if(pView && pView->IsUseIncompatiblePathCreateInterface())
         return aRetval;
 
-    ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
+    const ImpPathCreateUser* pU = static_cast<const ImpPathCreateUser*>(rDrag.GetUser());
 
     if(pU && pU->bBezier && rDrag.IsMouseDown())
     {
@@ -2780,7 +2780,7 @@ SdrObjGeoData* SdrPathObj::NewGeoData() const
 void SdrPathObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData(rGeo);
-    SdrPathObjGeoData& rPGeo = (SdrPathObjGeoData&) rGeo;
+    SdrPathObjGeoData& rPGeo = static_cast<SdrPathObjGeoData&>( rGeo );
     rPGeo.maPathPolygon=GetPathPoly();
     rPGeo.meKind=meKind;
 }
@@ -2788,7 +2788,7 @@ void SdrPathObj::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrPathObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestGeoData(rGeo);
-    SdrPathObjGeoData& rPGeo=(SdrPathObjGeoData&)rGeo;
+    const SdrPathObjGeoData& rPGeo=static_cast<const SdrPathObjGeoData&>(rGeo);
     maPathPolygon=rPGeo.maPathPolygon;
     meKind=rPGeo.meKind;
     ImpForceKind(); // to set bClosed (among other things)

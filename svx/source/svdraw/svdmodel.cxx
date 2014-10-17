@@ -195,7 +195,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 // using static SdrEngineDefaults only if default SvxFontHeight item is not available
     const SfxPoolItem* pPoolItem = pItemPool->GetPoolDefaultItem( EE_CHAR_FONTHEIGHT );
     if ( pPoolItem )
-        nDefTextHgt = ((SvxFontHeightItem*)pPoolItem)->GetHeight();
+        nDefTextHgt = static_cast<const SvxFontHeightItem*>(pPoolItem)->GetHeight();
     else
         nDefTextHgt = SdrEngineDefaults::GetFontHeight();
 
@@ -1821,26 +1821,26 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
                 switch( nWhich )
                 {
                 case XATTR_FILLBITMAP:
-                    pResultItem = ((XFillBitmapItem*)pPoolItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = static_cast<const XFillBitmapItem*>(pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_LINEDASH:
-                    pResultItem = ((XLineDashItem*)pPoolItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = static_cast<const XLineDashItem*>(pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_LINESTART:
-                    pResultItem = ((XLineStartItem*)pPoolItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = static_cast<const XLineStartItem*>(pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_LINEEND:
-                    pResultItem = ((XLineEndItem*)pPoolItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = static_cast<const XLineEndItem*>(pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_FILLGRADIENT:
-                    pResultItem = ((XFillGradientItem*)pPoolItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = static_cast<const XFillGradientItem*>(pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_FILLFLOATTRANSPARENCE:
                     // allow all kinds of XFillFloatTransparenceItem to be set
-                    pResultItem = ((XFillFloatTransparenceItem*)pPoolItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = static_cast<const XFillFloatTransparenceItem*>(pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 case XATTR_FILLHATCH:
-                    pResultItem = ((XFillHatchItem*)pPoolItem)->checkForUniqueItem( pNewModel );
+                    pResultItem = static_cast<const XFillHatchItem*>(pPoolItem)->checkForUniqueItem( pNewModel );
                     break;
                 }
 

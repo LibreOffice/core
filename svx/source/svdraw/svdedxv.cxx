@@ -449,7 +449,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     if (pText!=NULL)
     {
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
-        pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+        pTextEditOutliner->SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
     // do update before setting output area so that aTextEditArea can be recalculated
     pTextEditOutliner->SetUpdateMode(true);
@@ -557,7 +557,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             if(OUTDEV_WINDOW == pPaintWindow->GetOutputDevice().GetOutDevType())
             {
-                pWin = (vcl::Window*)(&pPaintWindow->GetOutputDevice());
+                pWin = static_cast<vcl::Window*>(&pPaintWindow->GetOutputDevice());
             }
         }
 
@@ -703,7 +703,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
                     if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                     {
-                        OutlinerView* pOutlView = ImpMakeOutlinerView((vcl::Window*)(&rOutDev), !bEmpty, 0L);
+                        OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, 0L);
                         pTextEditOutliner->InsertView(pOutlView, (sal_uInt16)i);
                     }
                 }
@@ -1667,7 +1667,7 @@ void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin)
 
     if(mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType()==OUTDEV_WINDOW)
     {
-        OutlinerView* pOutlView=ImpMakeOutlinerView((vcl::Window*)pNewWin,false,NULL);
+        OutlinerView* pOutlView=ImpMakeOutlinerView(static_cast<vcl::Window*>(pNewWin),false,NULL);
         pTextEditOutliner->InsertView(pOutlView);
     }
 }
@@ -1681,7 +1681,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
         for (sal_uIntPtr i=pTextEditOutliner->GetViewCount(); i>0;) {
             i--;
             OutlinerView* pOLV=pTextEditOutliner->GetView(i);
-            if (pOLV && pOLV->GetWindow()==(vcl::Window*)pOldWin) {
+            if (pOLV && pOLV->GetWindow()==static_cast<vcl::Window*>(pOldWin)) {
                 delete pTextEditOutliner->RemoveView(i);
             }
         }

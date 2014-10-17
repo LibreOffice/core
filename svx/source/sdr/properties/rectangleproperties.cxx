@@ -47,7 +47,7 @@ namespace sdr
 
         void RectangleProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrRectObj& rObj = (SdrRectObj&)GetSdrObject();
+            SdrRectObj& rObj = static_cast<SdrRectObj&>(GetSdrObject());
 
             // call parent
             TextProperties::ItemSetChanged(rSet);
@@ -59,7 +59,7 @@ namespace sdr
         // set a new StyleSheet and broadcast
         void RectangleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrRectObj& rObj = (SdrRectObj&)GetSdrObject();
+            SdrRectObj& rObj = static_cast<SdrRectObj&>(GetSdrObject());
 
             // call parent
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);

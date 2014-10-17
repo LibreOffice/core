@@ -52,7 +52,7 @@ namespace sdr
             E3dCompoundProperties::PostItemChange(nWhich);
 
             // handle value change
-            E3dSphereObj& rObj = (E3dSphereObj&)GetSdrObject();
+            E3dSphereObj& rObj = static_cast<E3dSphereObj&>(GetSdrObject());
 
             switch(nWhich)
             {

@@ -1357,8 +1357,8 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
     // also this (pretty indirect) property change is possible. If it gets
     // changed, it needs to be copied to the original since nothing will
     // happen when it only changes in the drag clone
-    const bool bOldAutoGrowWidth(((SdrOnOffItem&)pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
-    const bool bNewAutoGrowWidth(((SdrOnOffItem&)mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+    const bool bOldAutoGrowWidth(static_cast<const SdrOnOffItem&>(pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
+    const bool bNewAutoGrowWidth(static_cast<const SdrOnOffItem&>(mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
 
     if (bOldAutoGrowWidth != bNewAutoGrowWidth)
     {
@@ -2675,7 +2675,7 @@ bool SdrDragGradient::BeginSdrDrag()
 {
     bool bRetval(false);
 
-    pIAOHandle = (SdrHdlGradient*)GetHdlList().GetHdl(IsGradient() ? HDL_GRAD : HDL_TRNS);
+    pIAOHandle = static_cast<SdrHdlGradient*>(GetHdlList().GetHdl(IsGradient() ? HDL_GRAD : HDL_TRNS));
 
     if(pIAOHandle)
     {
@@ -3675,7 +3675,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     if( aGraphicSize.A() == 0 || aGraphicSize.B() == 0 )
         return false;
 
-    const SdrGrafCropItem& rOldCrop = (const SdrGrafCropItem&)pObj->GetMergedItem(SDRATTR_GRAFCROP);
+    const SdrGrafCropItem& rOldCrop = static_cast<const SdrGrafCropItem&>(pObj->GetMergedItem(SDRATTR_GRAFCROP));
 
     const bool bUndo = getSdrDragView().IsUndoEnabled();
 

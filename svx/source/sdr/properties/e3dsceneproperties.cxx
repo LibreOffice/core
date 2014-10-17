@@ -73,7 +73,7 @@ namespace sdr
             }
 
             // collect all ItemSets of contained 3d objects
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const E3dScene&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -114,7 +114,7 @@ namespace sdr
         void E3dSceneProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // Set SDRATTR_3DOBJ_ range at contained objects.
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const E3dScene&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             if(nCount)
@@ -150,7 +150,7 @@ namespace sdr
 
         void E3dSceneProperties::SetMergedItem(const SfxPoolItem& rItem)
         {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const E3dScene&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -164,7 +164,7 @@ namespace sdr
 
         void E3dSceneProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const E3dScene&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -182,7 +182,7 @@ namespace sdr
             E3dProperties::PostItemChange(nWhich);
 
             // local changes
-            E3dScene& rObj = (E3dScene&)GetSdrObject();
+            E3dScene& rObj = static_cast<E3dScene&>(GetSdrObject());
             rObj.StructureChanged();
 
             switch(nWhich)
@@ -236,7 +236,7 @@ namespace sdr
 
         void E3dSceneProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const E3dScene&>(GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -249,7 +249,7 @@ namespace sdr
         {
             SfxStyleSheet* pRetval = 0L;
 
-            const SdrObjList* pSub = ((const E3dScene&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const E3dScene&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -281,7 +281,7 @@ namespace sdr
                 E3dProperties::MoveToItemPool(pSrcPool, pDestPool, pNewModel);
 
                 // own reaction, but only with outmost scene
-                E3dScene& rObj = (E3dScene&)GetSdrObject();
+                E3dScene& rObj = static_cast<E3dScene&>(GetSdrObject());
                 const SdrObjList* pSubList = rObj.GetSubList();
 
                 if(pSubList && rObj.GetScene() == &rObj)
@@ -290,7 +290,7 @@ namespace sdr
 
                     while(a3DIterator.IsMore())
                     {
-                        E3dObject* pObj = (E3dObject*)a3DIterator.Next();
+                        E3dObject* pObj = static_cast<E3dObject*>(a3DIterator.Next());
                         DBG_ASSERT(pObj->ISA(E3dObject), "In scenes there are only 3D objects allowed (!)");
                         pObj->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
                     }
@@ -303,7 +303,7 @@ namespace sdr
             // force ItemSet
             GetObjectItemSet();
 
-            E3dScene& rObj = (E3dScene&)GetSdrObject();
+            E3dScene& rObj = static_cast<E3dScene&>(GetSdrObject());
             Camera3D aSceneCam(rObj.GetCamera());
 
             // ProjectionType

@@ -56,7 +56,7 @@ namespace sdr
         const SfxItemSet& E3dCompoundProperties::GetMergedItemSet() const
         {
             // include Items of scene this object belongs to
-            E3dCompoundObject& rObj = (E3dCompoundObject&)GetSdrObject();
+            E3dCompoundObject& rObj = static_cast<E3dCompoundObject&>(GetSdrObject());
             E3dScene* pScene = rObj.GetScene();
 
             if(pScene)
@@ -77,7 +77,7 @@ namespace sdr
         void E3dCompoundProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // Set scene specific items at scene
-            E3dCompoundObject& rObj = (E3dCompoundObject&)GetSdrObject();
+            E3dCompoundObject& rObj = static_cast<E3dCompoundObject&>(GetSdrObject());
             E3dScene* pScene = rObj.GetScene();
 
             if(pScene)
@@ -110,7 +110,7 @@ namespace sdr
             E3dProperties::PostItemChange(nWhich);
 
             // handle value change
-            E3dCompoundObject& rObj = (E3dCompoundObject&)GetSdrObject();
+            E3dCompoundObject& rObj = static_cast<E3dCompoundObject&>(GetSdrObject());
 
             switch(nWhich)
             {

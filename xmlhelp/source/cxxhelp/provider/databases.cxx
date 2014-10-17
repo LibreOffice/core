@@ -622,7 +622,7 @@ Databases::getCollator( const OUString& Language,
     osl::MutexGuard aGuard( m_aMutex );
 
     CollatorTable::iterator it =
-        m_aCollatorTable.insert( CollatorTable::value_type( key,(Reference< XCollator >)0 ) ).first;
+        m_aCollatorTable.insert( CollatorTable::value_type( key, Reference< XCollator >() ) ).first;
 
     if( ! it->second.is() )
     {

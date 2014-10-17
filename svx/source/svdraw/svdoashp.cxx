@@ -170,13 +170,13 @@ static MSO_SPT ImpGetCustomShapeType( const SdrObjCustomShape& rCustoShape )
 {
     MSO_SPT eRetValue = mso_sptNil;
 
-    OUString aEngine( ( (SdrCustomShapeEngineItem&)rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
+    OUString aEngine( static_cast<const SdrCustomShapeEngineItem&>( rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
     if ( aEngine.isEmpty() || aEngine == "com.sun.star.drawing.EnhancedCustomShapeEngine" )
     {
         OUString sShapeType;
         const OUString sType( "Type" );
-        SdrCustomShapeGeometryItem& rGeometryItem( (SdrCustomShapeGeometryItem&)rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-        Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+        const SdrCustomShapeGeometryItem& rGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(rCustoShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
+        const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
         if ( pAny && ( *pAny >>= sShapeType ) )
             eRetValue = EnhancedCustomShapeTypeNames::Get( sShapeType );
     }
@@ -206,15 +206,15 @@ static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
 {
     SdrObject* pRetval = 0L;
-    const bool bShadow(((SdrOnOffItem&)rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
+    const bool bShadow(static_cast<const SdrOnOffItem&>(rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
 
     if(bShadow)
     {
         // create a shadow representing object
-        const sal_Int32 nXDist(((SdrMetricItem&)(rOriginalSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
-        const sal_Int32 nYDist(((SdrMetricItem&)(rOriginalSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
-        const ::Color aShadowColor(((XColorItem&)(rOriginalSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
-        const sal_uInt16 nShadowTransparence(((SdrPercentItem&)(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
+        const sal_Int32 nXDist(static_cast<const SdrMetricItem&>(rOriginalSet.Get(SDRATTR_SHADOWXDIST)).GetValue());
+        const sal_Int32 nYDist(static_cast<const SdrMetricItem&>(rOriginalSet.Get(SDRATTR_SHADOWYDIST)).GetValue());
+        const ::Color aShadowColor(static_cast<const XColorItem&>(rOriginalSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue());
+        const sal_uInt16 nShadowTransparence(static_cast<const SdrPercentItem&>(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
         pRetval = rOriginal.Clone();
         DBG_ASSERT(pRetval, "ImpCreateShadowObjectClone: Could not clone object (!)");
 
@@ -230,11 +230,11 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         while(aIterator.IsMore())
         {
             SdrObject* pObj = aIterator.Next();
-            drawing::FillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetMergedItem(XATTR_FILLSTYLE))).GetValue();
+            drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
             if(!bLineUsed)
             {
-                XLineStyle eLineStyle = ((XLineStyleItem&)(pObj->GetMergedItem(XATTR_LINESTYLE))).GetValue();
+                XLineStyle eLineStyle = static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
 
                 if(XLINE_NONE != eLineStyle)
                 {
@@ -301,7 +301,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // gradient and transparency like shadow
         if(bGradientFillUsed)
         {
-            XGradient aGradient(((XFillGradientItem&)(rOriginalSet.Get(XATTR_FILLGRADIENT))).GetGradientValue());
+            XGradient aGradient(static_cast<const XFillGradientItem&>(rOriginalSet.Get(XATTR_FILLGRADIENT)).GetGradientValue());
             sal_uInt8 nStartLuminance(aGradient.GetStartColor().GetLuminance());
             sal_uInt8 nEndLuminance(aGradient.GetEndColor().GetLuminance());
 
@@ -334,7 +334,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // hatch and transparency like shadow
         if(bHatchFillUsed)
         {
-            XHatch aHatch(((XFillHatchItem&)(rOriginalSet.Get(XATTR_FILLHATCH))).GetHatchValue());
+            XHatch aHatch(static_cast<const XFillHatchItem&>(rOriginalSet.Get(XATTR_FILLHATCH)).GetHatchValue());
             aHatch.SetColor(aShadowColor);
             aTempSet.Put(XFillHatchItem(aTempSet.GetPool(), aHatch));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
@@ -343,7 +343,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         // bitmap and transparency like shadow
         if(bBitmapFillUsed)
         {
-            GraphicObject aGraphicObject(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetGraphicObject());
+            GraphicObject aGraphicObject(static_cast<const XFillBitmapItem&>(rOriginalSet.Get(XATTR_FILLBITMAP)).GetGraphicObject());
             const BitmapEx aBitmapEx(aGraphicObject.GetGraphic().GetBitmapEx());
             Bitmap aBitmap(aBitmapEx.GetBitmap());
 
@@ -411,7 +411,7 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine() const
     if (mxCustomShapeEngine.is())
         return mxCustomShapeEngine;
 
-    OUString aEngine(((SdrCustomShapeEngineItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
+    OUString aEngine(static_cast<const SdrCustomShapeEngineItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
     if ( aEngine.isEmpty() )
         aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
 
@@ -456,7 +456,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
         if(pSdrObject)
         {
             const SfxItemSet& rOriginalSet = GetObjectItemSet();
-            const bool bShadow(((SdrOnOffItem&)rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
+            const bool bShadow(static_cast<const SdrOnOffItem&>(rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
 
             if(bShadow)
             {
@@ -475,8 +475,8 @@ bool SdrObjCustomShape::IsTextPath() const
 {
     const OUString sTextPath( "TextPath" );
     bool bTextPathOn = false;
-    SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
     if ( pAny )
         *pAny >>= bTextPathOn;
     return bTextPathOn;
@@ -487,8 +487,8 @@ bool SdrObjCustomShape::UseNoFillStyle() const
     bool bRet = false;
     OUString sShapeType;
     const OUString sType( "Type" );
-    SdrCustomShapeGeometryItem& rGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+    const SdrCustomShapeGeometryItem& rGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+    const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
         *pAny >>= sShapeType;
     bRet = IsCustomShapeFilledByDefault( EnhancedCustomShapeTypeNames::Get( sType ) ) == false;
@@ -499,7 +499,7 @@ bool SdrObjCustomShape::UseNoFillStyle() const
 bool SdrObjCustomShape::IsMirroredX() const
 {
     bool bMirroredX = false;
-    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
     const OUString sMirroredX( "MirroredX" );
     com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredX );
     if ( pAny )
@@ -509,7 +509,7 @@ bool SdrObjCustomShape::IsMirroredX() const
 bool SdrObjCustomShape::IsMirroredY() const
 {
     bool bMirroredY = false;
-    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
     const OUString sMirroredY( "MirroredY" );
     com::sun::star::uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sMirroredY );
     if ( pAny )
@@ -518,7 +518,7 @@ bool SdrObjCustomShape::IsMirroredY() const
 }
 void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 {
-    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
     const OUString sMirroredX( "MirroredX" );
     PropertyValue aPropVal;
     aPropVal.Name = sMirroredX;
@@ -528,7 +528,7 @@ void SdrObjCustomShape::SetMirroredX( const bool bMirrorX )
 }
 void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
 {
-    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
     const OUString sMirroredY( "MirroredY" );
     PropertyValue aPropVal;
     aPropVal.Name = sMirroredY;
@@ -542,7 +542,7 @@ bool SdrObjCustomShape::IsPostRotate() const
 {
     const com::sun::star::uno::Any* pAny;
     bool bPostRotate = false;
-    SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     pAny = rGeometryItem.GetPropertyValueByName( "IsPostRotateAngle" );
     if ( pAny )
         *pAny >>= bPostRotate;
@@ -552,7 +552,7 @@ bool SdrObjCustomShape::IsPostRotate() const
 double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
 {
     const com::sun::star::uno::Any* pAny;
-    SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const OUString sTextRotateAngle( "TextRotateAngle" );
     const OUString sTextPreRotateAngle( "TextPreRotateAngle" );
     pAny = rGeometryItem.GetPropertyValueByName( bPreRotation ? sTextPreRotateAngle : sTextRotateAngle );
@@ -864,7 +864,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     PropertyValue aPropVal;
     OUString sShapeType;
     const OUString sType( "Type" );
-    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
     if ( pType && !pType->isEmpty() )
     {
         sal_Int32 nType = pType->toInt32();
@@ -1108,9 +1108,9 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     PropertyValue aPropVal;
     OUString sShapeType;
     const OUString sType( "Type" );
-    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+    const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
 
-    Any *pAny = aGeometryItem.GetPropertyValueByName( sType );
+    const Any *pAny = aGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
         *pAny >>= sShapeType;
 
@@ -2237,17 +2237,17 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::TakeCreatePoly(const SdrDragStat& /*r
 bool SdrObjCustomShape::IsAutoGrowHeight() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    bool bIsAutoGrowHeight = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    bool bIsAutoGrowHeight = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
     if ( bIsAutoGrowHeight && IsVerticalWriting() )
-        bIsAutoGrowHeight = !((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
+        bIsAutoGrowHeight = !static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_WORDWRAP)).GetValue();
     return bIsAutoGrowHeight;
 }
 bool SdrObjCustomShape::IsAutoGrowWidth() const
 {
     const SfxItemSet& rSet = GetMergedItemSet();
-    bool bIsAutoGrowWidth = ((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
+    bool bIsAutoGrowWidth = static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
     if ( bIsAutoGrowWidth && !IsVerticalWriting() )
-        bIsAutoGrowWidth = !((SdrOnOffItem&)(rSet.Get(SDRATTR_TEXT_WORDWRAP))).GetValue();
+        bIsAutoGrowWidth = !static_cast<const SdrOnOffItem&>(rSet.Get(SDRATTR_TEXT_WORDWRAP)).GetValue();
     return bIsAutoGrowWidth;
 }
 
@@ -2271,8 +2271,8 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
             const SfxItemSet& rSet = GetObjectItemSet();
 
             // Also exchange horizontal and vertical adjust items
-            SdrTextHorzAdjust eHorz = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
-            SdrTextVertAdjust eVert = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
+            SdrTextHorzAdjust eHorz = static_cast<const SdrTextHorzAdjustItem&>(rSet.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
+            SdrTextVertAdjust eVert = static_cast<const SdrTextVertAdjustItem&>(rSet.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
 
             // rescue object size
             Rectangle aObjectRect = GetSnapRect();
@@ -2387,7 +2387,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                     if( pOutlinerParaObject != NULL )
                     {
                         rOutliner.SetText(*pOutlinerParaObject);
-                        rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                        rOutliner.SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
                     }
                     if ( bWdtGrow )
                     {
@@ -2608,7 +2608,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
     if ( nMaxHgt == 0 || nMaxHgt > aMaxSiz.Height() )
         nMaxHgt=aMaxSiz.Height();
 
-    if (((SdrOnOffItem&)(GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue())
+    if (static_cast<const SdrOnOffItem&>(GetMergedItem(SDRATTR_TEXT_WORDWRAP)).GetValue())
     {
         if ( IsVerticalWriting() )
         {
@@ -2710,7 +2710,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     long nAnkWdt=aAnkRect.GetWidth();
     long nAnkHgt=aAnkRect.GetHeight();
 
-    if (((SdrOnOffItem&)(GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue())
+    if (static_cast<const SdrOnOffItem&>(GetMergedItem(SDRATTR_TEXT_WORDWRAP)).GetValue())
     {
         if ( IsVerticalWriting() )
             nMaxAutoPaperHeight = nAnkHgt;
@@ -2905,7 +2905,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(bool bBezier, bool bAddText) co
 
         if(pRetval)
         {
-            const bool bShadow(((SdrOnOffItem&)GetMergedItem(SDRATTR_SHADOW)).GetValue());
+            const bool bShadow(static_cast<const SdrOnOffItem&>(GetMergedItem(SDRATTR_SHADOW)).GetValue());
             if(bShadow)
             {
                 pRetval->SetMergedItem(makeSdrShadowItem(true));
@@ -2950,13 +2950,13 @@ SdrObjGeoData* SdrObjCustomShape::NewGeoData() const
 void SdrObjCustomShape::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData( rGeo );
-    SdrAShapeObjGeoData& rAGeo=(SdrAShapeObjGeoData&)rGeo;
+    SdrAShapeObjGeoData& rAGeo=static_cast<SdrAShapeObjGeoData&>(rGeo);
     rAGeo.fObjectRotation = fObjectRotation;
     rAGeo.bMirroredX = IsMirroredX();
     rAGeo.bMirroredY = IsMirroredY();
 
     const OUString sAdjustmentValues( "AdjustmentValues" );
-    Any* pAny( ( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ).GetPropertyValueByName( sAdjustmentValues ) );
+    const Any* pAny = static_cast<const SdrCustomShapeGeometryItem&>( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ).GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= rAGeo.aAdjustmentSeq;
 }
@@ -2964,12 +2964,12 @@ void SdrObjCustomShape::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestGeoData( rGeo );
-    SdrAShapeObjGeoData& rAGeo=(SdrAShapeObjGeoData&)rGeo;
+    const SdrAShapeObjGeoData& rAGeo=static_cast<const SdrAShapeObjGeoData&>(rGeo);
     fObjectRotation = rAGeo.fObjectRotation;
     SetMirroredX( rAGeo.bMirroredX );
     SetMirroredY( rAGeo.bMirroredY );
 
-    SdrCustomShapeGeometryItem rGeometryItem = (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+    SdrCustomShapeGeometryItem rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
     const OUString sAdjustmentValues( "AdjustmentValues" );
     PropertyValue aPropVal;
     aPropVal.Name = sAdjustmentValues;
@@ -3249,13 +3249,13 @@ void SdrObjCustomShape::impl_setUnoShape(const uno::Reference<uno::XInterface>& 
 OUString SdrObjCustomShape::GetCustomShapeName()
 {
     OUString sShapeName;
-    OUString aEngine( ( (SdrCustomShapeEngineItem&)( *this ).GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ) ).GetValue() );
+    OUString aEngine( static_cast<const SdrCustomShapeEngineItem&>(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue() );
     if ( aEngine.isEmpty() || aEngine.equalsAscii( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) )
     {
         OUString sShapeType;
         const OUString sType("Type");
-        SdrCustomShapeGeometryItem& rGeometryItem( (SdrCustomShapeGeometryItem&)( *this ).GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-        Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
+        const SdrCustomShapeGeometryItem& rGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) ) );
+        const Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
         if ( pAny && ( *pAny >>= sShapeType ) )
             sShapeName = EnhancedCustomShapeTypeNames::GetAccName( sShapeType );
     }

@@ -66,7 +66,7 @@ namespace sdr
 
         void E3dProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            E3dObject& rObj = (E3dObject&)GetSdrObject();
+            E3dObject& rObj = static_cast<E3dObject&>(GetSdrObject());
 
             // call parent
             AttributeProperties::ItemSetChanged(rSet);
@@ -81,7 +81,7 @@ namespace sdr
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
             // propagate call to contained objects
-            const SdrObjList* pSub = ((const E3dObject&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const E3dObject&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)

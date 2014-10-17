@@ -97,6 +97,26 @@ com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( co
     return pRet;
 }
 
+const com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName ) const
+{
+    const com::sun::star::uno::Any* pRet = NULL;
+    const com::sun::star::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
+    if ( pSeqAny )
+    {
+        if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        {
+            PropertyPairHashMap::const_iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropName ) ) );
+            if ( aHashIter != aPropPairHashMap.end() )
+            {
+                ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
+                    *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pSeqAny->getValue());
+                pRet = &rSecSequence[ (*aHashIter).second ].Value;
+            }
+        }
+    }
+    return pRet;
+}
+
 void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal )
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );

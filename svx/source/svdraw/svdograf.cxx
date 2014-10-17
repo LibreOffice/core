@@ -732,7 +732,7 @@ OUString SdrGrafObj::TakeObjNameSingul() const
         {
             case GRAPHIC_BITMAP:
             {
-                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPLNK : STR_ObjNameSingulGRAFBMP ) );
 
@@ -785,7 +785,7 @@ OUString SdrGrafObj::TakeObjNamePlural() const
         {
             case GRAPHIC_BITMAP:
             {
-                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || ( (const SdrGrafTransparenceItem&) GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
+                const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPLNK : STR_ObjNamePluralGRAFBMP ) );
 
@@ -943,14 +943,14 @@ SdrObjGeoData* SdrGrafObj::NewGeoData() const
 void SdrGrafObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrRectObj::SaveGeoData(rGeo);
-    SdrGrafObjGeoData& rGGeo=(SdrGrafObjGeoData&)rGeo;
+    SdrGrafObjGeoData& rGGeo=static_cast<SdrGrafObjGeoData&>(rGeo);
     rGGeo.bMirrored=bMirrored;
 }
 
 void SdrGrafObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::RestGeoData(rGeo);
-    SdrGrafObjGeoData& rGGeo=(SdrGrafObjGeoData&)rGeo;
+    const SdrGrafObjGeoData& rGGeo=static_cast<const SdrGrafObjGeoData&>(rGeo);
     bMirrored=rGGeo.bMirrored;
 }
 
@@ -1213,18 +1213,18 @@ void SdrGrafObj::SetMirrored( bool _bMirrored )
 void SdrGrafObj::ImpSetAttrToGrafInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    const sal_uInt16 nTrans = ( (SdrGrafTransparenceItem&) rSet.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue();
-    const SdrGrafCropItem&  rCrop = (const SdrGrafCropItem&) rSet.Get( SDRATTR_GRAFCROP );
+    const sal_uInt16 nTrans = static_cast<const SdrGrafTransparenceItem&>( rSet.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue();
+    const SdrGrafCropItem&  rCrop = static_cast<const SdrGrafCropItem&>( rSet.Get( SDRATTR_GRAFCROP ) );
 
-    aGrafInfo.SetLuminance( ( (SdrGrafLuminanceItem&) rSet.Get( SDRATTR_GRAFLUMINANCE ) ).GetValue() );
-    aGrafInfo.SetContrast( ( (SdrGrafContrastItem&) rSet.Get( SDRATTR_GRAFCONTRAST ) ).GetValue() );
-    aGrafInfo.SetChannelR( ( (SdrGrafRedItem&) rSet.Get( SDRATTR_GRAFRED ) ).GetValue() );
-    aGrafInfo.SetChannelG( ( (SdrGrafGreenItem&) rSet.Get( SDRATTR_GRAFGREEN ) ).GetValue() );
-    aGrafInfo.SetChannelB( ( (SdrGrafBlueItem&) rSet.Get( SDRATTR_GRAFBLUE ) ).GetValue() );
-    aGrafInfo.SetGamma( ( (SdrGrafGamma100Item&) rSet.Get( SDRATTR_GRAFGAMMA ) ).GetValue() * 0.01 );
+    aGrafInfo.SetLuminance( static_cast<const SdrGrafLuminanceItem&>( rSet.Get( SDRATTR_GRAFLUMINANCE ) ).GetValue() );
+    aGrafInfo.SetContrast( static_cast<const SdrGrafContrastItem&>( rSet.Get( SDRATTR_GRAFCONTRAST ) ).GetValue() );
+    aGrafInfo.SetChannelR( static_cast<const SdrGrafRedItem&>( rSet.Get( SDRATTR_GRAFRED ) ).GetValue() );
+    aGrafInfo.SetChannelG( static_cast<const SdrGrafGreenItem&>( rSet.Get( SDRATTR_GRAFGREEN ) ).GetValue() );
+    aGrafInfo.SetChannelB( static_cast<const SdrGrafBlueItem&>( rSet.Get( SDRATTR_GRAFBLUE ) ).GetValue() );
+    aGrafInfo.SetGamma( static_cast<const SdrGrafGamma100Item&>( rSet.Get( SDRATTR_GRAFGAMMA ) ).GetValue() * 0.01 );
     aGrafInfo.SetTransparency( (sal_uInt8) FRound( std::min( nTrans, (sal_uInt16) 100 )  * 2.55 ) );
-    aGrafInfo.SetInvert( ( (SdrGrafInvertItem&) rSet.Get( SDRATTR_GRAFINVERT ) ).GetValue() );
-    aGrafInfo.SetDrawMode( ( (SdrGrafModeItem&) rSet.Get( SDRATTR_GRAFMODE ) ).GetValue() );
+    aGrafInfo.SetInvert( static_cast<const SdrGrafInvertItem&>( rSet.Get( SDRATTR_GRAFINVERT ) ).GetValue() );
+    aGrafInfo.SetDrawMode( static_cast<const SdrGrafModeItem&>( rSet.Get( SDRATTR_GRAFMODE ) ).GetValue() );
     aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
 
     SetXPolyDirty();
@@ -1387,7 +1387,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
     }
 
-    return (sal_IntPtr)(void*) pRet;
+    return reinterpret_cast<sal_IntPtr>(pRet);
 }
 
 void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)

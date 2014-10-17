@@ -118,7 +118,7 @@ ImpSdrObjTextLinkUserData::~ImpSdrObjTextLinkUserData()
 
 SdrObjUserData* ImpSdrObjTextLinkUserData::Clone(SdrObject* pObj1) const
 {
-    ImpSdrObjTextLinkUserData* pData=new ImpSdrObjTextLinkUserData((SdrTextObj*)pObj1);
+    ImpSdrObjTextLinkUserData* pData=new ImpSdrObjTextLinkUserData(static_cast<SdrTextObj*>(pObj1));
     pData->aFileName  =aFileName;
     pData->aFilterName=aFilterName;
     pData->aFileDate0 =aFileDate0;

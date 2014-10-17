@@ -144,9 +144,9 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 {
     sal_Int32 nRetval(0);
 
-    if(XLINE_NONE != ((XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue())
+    if(XLINE_NONE != static_cast<const XLineStyleItem&>(GetObjectItem(XATTR_LINESTYLE)).GetValue())
     {
-        nRetval = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+        nRetval = static_cast<const XLineWidthItem&>(GetObjectItem(XATTR_LINEWIDTH)).GetValue();
     }
 
     return nRetval;
@@ -154,12 +154,12 @@ sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 
 bool SdrAttrObj::HasFill() const
 {
-    return bClosedObj && ((XFillStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE))).GetValue()!=drawing::FillStyle_NONE;
+    return bClosedObj && static_cast<const XFillStyleItem&>(GetProperties().GetObjectItemSet().Get(XATTR_FILLSTYLE)).GetValue() != drawing::FillStyle_NONE;
 }
 
 bool SdrAttrObj::HasLine() const
 {
-    return ((XLineStyleItem&)(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE))).GetValue()!=XLINE_NONE;
+    return static_cast<const XLineStyleItem&>(GetProperties().GetObjectItemSet().Get(XATTR_LINESTYLE)).GetValue() != XLINE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

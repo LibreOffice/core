@@ -1201,9 +1201,9 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
         aGradTransVector.aCol2 = pColHdl2->GetColor();
 
     if(IsGradient())
-        aOldGradTransGradient.aGradient = ((XFillGradientItem&)rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
+        aOldGradTransGradient.aGradient = static_cast<const XFillGradientItem&>(rSet.Get(XATTR_FILLGRADIENT)).GetGradientValue();
     else
-        aOldGradTransGradient.aGradient = ((XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
+        aOldGradTransGradient.aGradient = static_cast<const XFillFloatTransparenceItem&>(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)).GetGradientValue();
 
     // transform vector data to gradient
     aGradTransformer.VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, _pObj, bMoveSingleHandle, bMoveFirstHandle);
@@ -1447,7 +1447,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
 
             if(pView && !pView->areMarkHandlesHidden())
             {
-                const SdrEdgeObj* pEdge = (SdrEdgeObj*)pObj;
+                const SdrEdgeObj* pEdge = static_cast<SdrEdgeObj*>(pObj);
 
                 if(pEdge->GetConnectedNode(nObjHdlNum == 0) != NULL)
                     eColIndex = LightRed;
@@ -1531,7 +1531,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     if (nObjHdlNum<=1)
         return false;
 
-    SdrEdgeKind eEdgeKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eEdgeKind = static_cast<const SdrEdgeKindItem&>(pEdge->GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
 
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
     if (eEdgeKind==SDREDGE_ORTHOLINES || eEdgeKind==SDREDGE_BEZIER)
@@ -1727,7 +1727,7 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
                 if (nNum1==nNum2)
                 {
                     if (eKind1==eKind2)
-                        return (sal_IntPtr)lhs<(sal_IntPtr)rhs; // Hack, to always get to the same sorting
+                        return lhs<rhs; // Hack, to always get to the same sorting
                     return (sal_uInt16)eKind1<(sal_uInt16)eKind2;
                 }
                 else
@@ -1735,12 +1735,12 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
             }
             else
             {
-                return (sal_IntPtr)pObj1<(sal_IntPtr)pObj2;
+                return pObj1<pObj2;
             }
         }
         else
         {
-            return (sal_IntPtr)pPV1<(sal_IntPtr)pPV2;
+            return pPV1<pPV2;
         }
     }
     else

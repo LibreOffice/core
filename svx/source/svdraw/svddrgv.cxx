@@ -168,7 +168,7 @@ bool SdrDragView::TakeDragObjAnchorPos(Point& rPos, bool bTR ) const
         SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->ISA(SdrCaptionObj))
         {
-            Point aPt(((SdrCaptionObj*)pObj)->GetTailPos());
+            Point aPt(static_cast<SdrCaptionObj*>(pObj)->GetTailPos());
             bool bTail=eDragHdl==HDL_POLY; // drag tail
             bool bOwn=mpCurrentSdrDragMethod->ISA(SdrDragObjOwn); // specific to object
             if (!bTail)
@@ -634,7 +634,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point
 
     if(pMarkedObj && pMarkedObj->ISA(SdrPathObj))
     {
-        SdrPathObj* pMarkedPath = (SdrPathObj*)pMarkedObj;
+        SdrPathObj* pMarkedPath = static_cast<SdrPathObj*>(pMarkedObj);
         BrkAction();
         pInsPointUndo = dynamic_cast< SdrUndoGeoObj* >( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pMarkedObj) );
         DBG_ASSERT( pInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );

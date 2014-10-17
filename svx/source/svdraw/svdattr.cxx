@@ -636,7 +636,7 @@ SdrFractionItem::SdrFractionItem(sal_uInt16 nId, SvStream& rIn):
 bool SdrFractionItem::operator==(const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-           ((SdrFractionItem&)rCmp).GetValue()==nValue;
+           static_cast<const SdrFractionItem&>(rCmp).GetValue()==nValue;
 }
 
 bool SdrFractionItem::GetPresentation(
@@ -1450,12 +1450,12 @@ bool SdrCustomShapeAdjustmentItem::operator==( const SfxPoolItem& rCmp ) const
     bool bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
     {
-        bRet = GetCount() == ((SdrCustomShapeAdjustmentItem&)rCmp).GetCount();
+        bRet = GetCount() == static_cast<const SdrCustomShapeAdjustmentItem&>(rCmp).GetCount();
 
         if (bRet)
         {
             for (sal_uInt32 i = 0; i < GetCount(); ++i)
-                if (aAdjustmentValueList[i].nValue != ((SdrCustomShapeAdjustmentItem&)rCmp).aAdjustmentValueList[i].nValue)
+                if (aAdjustmentValueList[i].nValue != static_cast<const SdrCustomShapeAdjustmentItem&>(rCmp).aAdjustmentValueList[i].nValue)
                     return false;
         }
     }

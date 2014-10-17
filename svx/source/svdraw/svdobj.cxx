@@ -1035,7 +1035,7 @@ bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
 
 bool SdrObject::LineGeometryUsageIsNecessary() const
 {
-    XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)GetMergedItem(XATTR_LINESTYLE)).GetValue();
+    XLineStyle eXLS = (XLineStyle)static_cast<const XLineStyleItem&>(GetMergedItem(XATTR_LINESTYLE)).GetValue();
     return (eXLS != XLINE_NONE);
 }
 
@@ -2125,41 +2125,41 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     Point aRef2(aRef1); aRef2.Y()++;
     const SfxPoolItem *pPoolItem=NULL;
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SfxItemState::SET) {
-        aRef1.X()=((const SdrTransformRef1XItem*)pPoolItem)->GetValue();
+        aRef1.X()=static_cast<const SdrTransformRef1XItem*>(pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,true,&pPoolItem)==SfxItemState::SET) {
-        aRef1.Y()=((const SdrTransformRef1YItem*)pPoolItem)->GetValue();
+        aRef1.Y()=static_cast<const SdrTransformRef1YItem*>(pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,true,&pPoolItem)==SfxItemState::SET) {
-        aRef2.X()=((const SdrTransformRef2XItem*)pPoolItem)->GetValue();
+        aRef2.X()=static_cast<const SdrTransformRef2XItem*>(pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,true,&pPoolItem)==SfxItemState::SET) {
-        aRef2.Y()=((const SdrTransformRef2YItem*)pPoolItem)->GetValue();
+        aRef2.Y()=static_cast<const SdrTransformRef2YItem*>(pPoolItem)->GetValue();
     }
 
     Rectangle aNewSnap(rSnap);
     if (rAttr.GetItemState(SDRATTR_MOVEX,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrMoveXItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrMoveXItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(n,0);
     }
     if (rAttr.GetItemState(SDRATTR_MOVEY,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrMoveYItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrMoveYItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(0,n);
     }
     if (rAttr.GetItemState(SDRATTR_ONEPOSITIONX,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrOnePositionXItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrOnePositionXItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(n-aNewSnap.Left(),0);
     }
     if (rAttr.GetItemState(SDRATTR_ONEPOSITIONY,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrOnePositionYItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrOnePositionYItem*>(pPoolItem)->GetValue();
         aNewSnap.Move(0,n-aNewSnap.Top());
     }
     if (rAttr.GetItemState(SDRATTR_ONESIZEWIDTH,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrOneSizeWidthItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrOneSizeWidthItem*>(pPoolItem)->GetValue();
         aNewSnap.Right()=aNewSnap.Left()+n;
     }
     if (rAttr.GetItemState(SDRATTR_ONESIZEHEIGHT,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrOneSizeHeightItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrOneSizeHeightItem*>(pPoolItem)->GetValue();
         aNewSnap.Bottom()=aNewSnap.Top()+n;
     }
     if (aNewSnap!=rSnap) {
@@ -2171,7 +2171,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_SHEARANGLE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrShearAngleItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrShearAngleItem*>(pPoolItem)->GetValue();
         n-=GetShearAngle();
         if (n!=0) {
             double nTan=tan(n*nPi180);
@@ -2179,7 +2179,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrAngleItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
         n-=GetRotateAngle();
         if (n!=0) {
             double nSin=sin(n*nPi180);
@@ -2188,28 +2188,28 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEONE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrRotateOneItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrRotateOneItem*>(pPoolItem)->GetValue();
         double nSin=sin(n*nPi180);
         double nCos=cos(n*nPi180);
         NbcRotate(aRef1,n,nSin,nCos);
     }
     if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrHorzShearOneItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrHorzShearOneItem*>(pPoolItem)->GetValue();
         double nTan=tan(n*nPi180);
         NbcShear(aRef1,n,nTan,false);
     }
     if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrVertShearOneItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrVertShearOneItem*>(pPoolItem)->GetValue();
         double nTan=tan(n*nPi180);
         NbcShear(aRef1,n,nTan,true);
     }
 
     if (rAttr.GetItemState(SDRATTR_OBJMOVEPROTECT,true,&pPoolItem)==SfxItemState::SET) {
-        bool b=((const SdrYesNoItem*)pPoolItem)->GetValue();
+        bool b=static_cast<const SdrYesNoItem*>(pPoolItem)->GetValue();
         SetMoveProtect(b);
     }
     if (rAttr.GetItemState(SDRATTR_OBJSIZEPROTECT,true,&pPoolItem)==SfxItemState::SET) {
-        bool b=((const SdrYesNoItem*)pPoolItem)->GetValue();
+        bool b=static_cast<const SdrYesNoItem*>(pPoolItem)->GetValue();
         SetResizeProtect(b);
     }
 
@@ -2218,21 +2218,21 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         SetResizeProtect( true );
 
     if (rAttr.GetItemState(SDRATTR_OBJPRINTABLE,true,&pPoolItem)==SfxItemState::SET) {
-        bool b=((const SdrObjPrintableItem*)pPoolItem)->GetValue();
+        bool b=static_cast<const SdrObjPrintableItem*>(pPoolItem)->GetValue();
         SetPrintable(b);
     }
 
     if (rAttr.GetItemState(SDRATTR_OBJVISIBLE,true,&pPoolItem)==SfxItemState::SET) {
-        bool b=((const SdrObjVisibleItem*)pPoolItem)->GetValue();
+        bool b=static_cast<const SdrObjVisibleItem*>(pPoolItem)->GetValue();
         SetVisible(b);
     }
 
     SdrLayerID nLayer=SDRLAYER_NOTFOUND;
     if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
-        nLayer=((const SdrLayerIdItem*)pPoolItem)->GetValue();
+        nLayer=static_cast<const SdrLayerIdItem*>(pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET && pModel!=NULL) {
-        OUString aLayerName=((const SdrLayerNameItem*)pPoolItem)->GetValue();
+        OUString aLayerName=static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
         const SdrLayerAdmin* pLayAd=pPage!=NULL ? &pPage->GetLayerAdmin() : pModel!=NULL ? &pModel->GetLayerAdmin() : NULL;
         if (pLayAd!=NULL) {
             const SdrLayer* pLayer=pLayAd->GetLayer(aLayerName, true);
@@ -2247,16 +2247,16 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_OBJECTNAME,true,&pPoolItem)==SfxItemState::SET) {
-        OUString aName=((const SfxStringItem*)pPoolItem)->GetValue();
+        OUString aName=static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
         SetName(aName);
     }
     Rectangle aNewLogic(rLogic);
     if (rAttr.GetItemState(SDRATTR_LOGICSIZEWIDTH,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrLogicSizeWidthItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrLogicSizeWidthItem*>(pPoolItem)->GetValue();
         aNewLogic.Right()=aNewLogic.Left()+n;
     }
     if (rAttr.GetItemState(SDRATTR_LOGICSIZEHEIGHT,true,&pPoolItem)==SfxItemState::SET) {
-        long n=((const SdrLogicSizeHeightItem*)pPoolItem)->GetValue();
+        long n=static_cast<const SdrLogicSizeHeightItem*>(pPoolItem)->GetValue();
         aNewLogic.Bottom()=aNewLogic.Top()+n;
     }
     if (aNewLogic!=rLogic) {
@@ -2265,10 +2265,10 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     boost::rational<sal_Int64> aResizeX(1,1);
     boost::rational<sal_Int64> aResizeY(1,1);
     if (rAttr.GetItemState(SDRATTR_RESIZEXONE,true,&pPoolItem)==SfxItemState::SET) {
-        aResizeX*=((const SdrResizeXOneItem*)pPoolItem)->GetValue();
+        aResizeX*=static_cast<const SdrResizeXOneItem*>(pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_RESIZEYONE,true,&pPoolItem)==SfxItemState::SET) {
-        aResizeY*=((const SdrResizeYOneItem*)pPoolItem)->GetValue();
+        aResizeY*=static_cast<const SdrResizeYOneItem*>(pPoolItem)->GetValue();
     }
     if (aResizeX!=boost::rational<sal_Int64>(1,1) || aResizeY!=boost::rational<sal_Int64>(1,1)) {
         NbcResize(aRef1,aResizeX,aResizeY);
@@ -2536,7 +2536,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
         if(aMergedLineFillPolyPolygon.count() || (bForceLineDash && aMergedHairlinePolyPolygon.count()))
         {
             SfxItemSet aSet(pRet->GetMergedItemSet());
-            drawing::FillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
+            drawing::FillStyle eOldFillStyle = static_cast<const XFillStyleItem&>(aSet.Get(XATTR_FILLSTYLE)).GetValue();
             SdrPathObj* aLinePolygonPart = NULL;
             SdrPathObj* aLineHairlinePart = NULL;
             bool bBuildGroup(false);
@@ -2550,8 +2550,8 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 // correct item properties
                 aSet.Put(XLineWidthItem(0L));
                 aSet.Put(XLineStyleItem(XLINE_NONE));
-                Color aColorLine = ((const XLineColorItem&)(aSet.Get(XATTR_LINECOLOR))).GetColorValue();
-                sal_uInt16 nTransLine = ((const XLineTransparenceItem&)(aSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
+                Color aColorLine = static_cast<const XLineColorItem&>(aSet.Get(XATTR_LINECOLOR)).GetColorValue();
+                sal_uInt16 nTransLine = static_cast<const XLineTransparenceItem&>(aSet.Get(XATTR_LINETRANSPARENCE)).GetValue();
                 aSet.Put(XFillColorItem(OUString(), aColorLine));
                 aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
                 aSet.Put(XFillTransparenceItem(nTransLine));
@@ -2713,7 +2713,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
     {
         if(pRet && pRet->ISA(SdrPathObj))
         {
-            SdrPathObj* pPathObj = (SdrPathObj*)pRet;
+            SdrPathObj* pPathObj = static_cast<SdrPathObj*>(pRet);
 
             // bezier geometry got created, even for straight edges since the given
             // object is a result of DoConvertToPolyObj. For conversion to contour
@@ -3208,12 +3208,12 @@ bool SdrObject::IsInDestruction() const
 // return if fill is != drawing::FillStyle_NONE
 bool SdrObject::HasFillStyle() const
 {
-    return (((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue() != drawing::FillStyle_NONE);
+    return static_cast<const XFillStyleItem&>(GetObjectItem(XATTR_FILLSTYLE)).GetValue() != drawing::FillStyle_NONE;
 }
 
 bool SdrObject::HasLineStyle() const
 {
-    return (((const XLineStyleItem&)GetObjectItem(XATTR_LINESTYLE)).GetValue() != XLINE_NONE);
+    return static_cast<const XLineStyleItem&>(GetObjectItem(XATTR_LINESTYLE)).GetValue() != XLINE_NONE;
 }
 
 

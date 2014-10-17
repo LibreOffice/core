@@ -192,10 +192,10 @@ SdrEdgeObj::~SdrEdgeObj()
 void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
-    sal_Int32 nVal1 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-    sal_Int32 nVal2 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-    sal_Int32 nVal3 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+    SdrEdgeKind eKind = static_cast<const SdrEdgeKindItem&>(rSet.Get(SDRATTR_EDGEKIND)).GetValue();
+    sal_Int32 nVal1 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
+    sal_Int32 nVal2 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
+    sal_Int32 nVal3 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
 
     if(eKind == SDREDGE_ORTHOLINES || eKind == SDREDGE_BEZIER)
     {
@@ -262,11 +262,11 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 void SdrEdgeObj::ImpSetEdgeInfoToAttr()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    SdrEdgeKind eKind = ((SdrEdgeKindItem&)(rSet.Get(SDRATTR_EDGEKIND))).GetValue();
-    sal_Int32 nValAnz = ((SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
-    sal_Int32 nVal1 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
-    sal_Int32 nVal2 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
-    sal_Int32 nVal3 = ((SdrMetricItem&)rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
+    SdrEdgeKind eKind = static_cast<const SdrEdgeKindItem&>(rSet.Get(SDRATTR_EDGEKIND)).GetValue();
+    sal_Int32 nValAnz = static_cast<const SdrEdgeLineDeltaAnzItem&>(rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
+    sal_Int32 nVal1 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE1DELTA)).GetValue();
+    sal_Int32 nVal2 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE2DELTA)).GetValue();
+    sal_Int32 nVal3 = static_cast<const SdrMetricItem&>(rSet.Get(SDRATTR_EDGELINE3DELTA)).GetValue();
     sal_Int32 nVals[3] = { nVal1, nVal2, nVal3 };
     sal_uInt16 n = 0;
 
@@ -737,8 +737,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBoundRect1.Move(rCon1.aObjOfs.X(),rCon1.aObjOfs.Y());
         aBewareRect1=aBoundRect1;
 
-        sal_Int32 nH = ((SdrEdgeNode1HorzDistItem&)rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue();
-        sal_Int32 nV = ((SdrEdgeNode1VertDistItem&)rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue();
+        sal_Int32 nH = static_cast<const SdrEdgeNode1HorzDistItem&>(rSet.Get(SDRATTR_EDGENODE1HORZDIST)).GetValue();
+        sal_Int32 nV = static_cast<const SdrEdgeNode1VertDistItem&>(rSet.Get(SDRATTR_EDGENODE1VERTDIST)).GetValue();
 
         aBewareRect1.Left()-=nH;
         aBewareRect1.Right()+=nH;
@@ -760,8 +760,8 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection&
         aBoundRect2.Move(rCon2.aObjOfs.X(),rCon2.aObjOfs.Y());
         aBewareRect2=aBoundRect2;
 
-        sal_Int32 nH = ((SdrEdgeNode2HorzDistItem&)rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue();
-        sal_Int32 nV = ((SdrEdgeNode2VertDistItem&)rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue();
+        sal_Int32 nH = static_cast<const SdrEdgeNode2HorzDistItem&>(rSet.Get(SDRATTR_EDGENODE2HORZDIST)).GetValue();
+        sal_Int32 nV = static_cast<const SdrEdgeNode2VertDistItem&>(rSet.Get(SDRATTR_EDGENODE2VERTDIST)).GetValue();
 
         aBewareRect2.Left()-=nH;
         aBewareRect2.Right()+=nH;
@@ -828,7 +828,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
     const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
     sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const
 {
-    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
     bool bRts1=nAngle1==0;
     bool bObn1=nAngle1==9000;
     bool bLks1=nAngle1==18000;
@@ -1717,7 +1717,7 @@ basegfx::B2DPolyPolygon SdrEdgeObj::GetEdgeTrackPath() const
 
 sal_uInt32 SdrEdgeObj::GetHdlCount() const
 {
-    SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
+    SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
     sal_uInt32 nHdlAnz(0L);
     sal_uInt32 nPntAnz(pEdgeTrack->GetPointCount());
 
@@ -1757,7 +1757,7 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
             pHdl=new ImpEdgeHdl((*pEdgeTrack)[sal_uInt16(nPntAnz-1)],HDL_POLY);
             if (aCon2.pObj!=NULL && aCon2.bBestVertex) pHdl->Set1PixMore(true);
         } else {
-            SdrEdgeKind eKind=((SdrEdgeKindItem&)(GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
+            SdrEdgeKind eKind=static_cast<const SdrEdgeKindItem&>(GetObjectItem(SDRATTR_EDGEKIND)).GetValue();
             if (eKind==SDREDGE_ORTHOLINES || eKind==SDREDGE_BEZIER) {
                 sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0L ? aEdgeInfo.nObj1Lines - 1L : 0L);
                 sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0L ? aEdgeInfo.nObj2Lines - 1L : 0L);
@@ -1767,19 +1767,19 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
                 pHdl=new ImpEdgeHdl(Point(),HDL_POLY);
                 if (nNum<nO1) {
                     nPt=nNum+1L;
-                    if (nNum==0) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE2);
-                    if (nNum==1) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE3);
+                    if (nNum==0) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ1LINE2);
+                    if (nNum==1) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ1LINE3);
                 } else {
                     nNum=nNum-nO1;
                     if (nNum<nO2) {
                         nPt=nPntAnz-3-nNum;
-                        if (nNum==0) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE2);
-                        if (nNum==1) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE3);
+                        if (nNum==0) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ2LINE2);
+                        if (nNum==1) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ2LINE3);
                     } else {
                         nNum=nNum-nO2;
                         if (nNum<nM) {
                             nPt=aEdgeInfo.nMiddleLine;
-                            ((ImpEdgeHdl*)pHdl)->SetLineCode(MIDDLELINE);
+                            static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(MIDDLELINE);
                         }
                     }
                 }
@@ -1798,8 +1798,8 @@ SdrHdl* SdrEdgeObj::GetHdl(sal_uInt32 nHdlNum) const
                 if (GetConnectedNode(true)==NULL) nNum++;
                 Point aPos((*pEdgeTrack)[(sal_uInt16)nNum-1]);
                 pHdl=new ImpEdgeHdl(aPos,HDL_POLY);
-                if (nNum==2) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ1LINE2);
-                if (nNum==3) ((ImpEdgeHdl*)pHdl)->SetLineCode(OBJ2LINE2);
+                if (nNum==2) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ1LINE2);
+                if (nNum==3) static_cast<ImpEdgeHdl*>(pHdl)->SetLineCode(OBJ2LINE2);
             }
         }
         if (pHdl!=NULL) {
@@ -1914,7 +1914,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
     else
     {
         // control point connector drag
-        const ImpEdgeHdl* pEdgeHdl = (ImpEdgeHdl*)rDragStat.GetHdl();
+        const ImpEdgeHdl* pEdgeHdl = static_cast<const ImpEdgeHdl*>(rDragStat.GetHdl());
         const SdrEdgeLineCode eLineCode = pEdgeHdl->GetLineCode();
         const Point aDist(rDragStat.GetNow() - rDragStat.GetStart());
         sal_Int32 nDist(pEdgeHdl->IsHorzDrag() ? aDist.X() : aDist.Y());
@@ -2447,7 +2447,7 @@ SdrObjGeoData* SdrEdgeObj::NewGeoData() const
 void SdrEdgeObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData(rGeo);
-    SdrEdgeObjGeoData& rEGeo=(SdrEdgeObjGeoData&)rGeo;
+    SdrEdgeObjGeoData& rEGeo=static_cast<SdrEdgeObjGeoData&>(rGeo);
     rEGeo.aCon1          =aCon1;
     rEGeo.aCon2          =aCon2;
     *rEGeo.pEdgeTrack    =*pEdgeTrack;
@@ -2459,7 +2459,7 @@ void SdrEdgeObj::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrEdgeObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestGeoData(rGeo);
-    SdrEdgeObjGeoData& rEGeo=(SdrEdgeObjGeoData&)rGeo;
+    const SdrEdgeObjGeoData& rEGeo=static_cast<const SdrEdgeObjGeoData&>(rGeo);
     if (aCon1.pObj!=rEGeo.aCon1.pObj) {
         if (aCon1.pObj!=NULL) aCon1.pObj->RemoveListener(*this);
         aCon1=rEGeo.aCon1;

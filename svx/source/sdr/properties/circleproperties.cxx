@@ -73,7 +73,7 @@ namespace sdr
 
         void CircleProperties::ItemSetChanged(const SfxItemSet& rSet)
         {
-            SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
+            SdrCircObj& rObj = static_cast<SdrCircObj&>(GetSdrObject());
 
             // call parent
             RectangleProperties::ItemSetChanged(rSet);
@@ -84,7 +84,7 @@ namespace sdr
 
         void CircleProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
+            SdrCircObj& rObj = static_cast<SdrCircObj&>(GetSdrObject());
 
             // local changes
             rObj.SetXPolyDirty();
@@ -98,7 +98,7 @@ namespace sdr
 
         void CircleProperties::ForceDefaultAttributes()
         {
-            SdrCircObj& rObj = (SdrCircObj&)GetSdrObject();
+            SdrCircObj& rObj = static_cast<SdrCircObj&>(GetSdrObject());
             SdrCircKind eKindA = SDRCIRC_FULL;
             SdrObjKind eKind = rObj.GetCircleKind();
 

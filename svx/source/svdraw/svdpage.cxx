@@ -1755,9 +1755,9 @@ void SdrPage::SetInserted( bool bIns )
             if ( pObj->ISA(SdrOle2Obj) )
             {
                 if( mbInserted )
-                    ( (SdrOle2Obj*) pObj)->Connect();
+                    static_cast<SdrOle2Obj*>(pObj)->Connect();
                 else
-                    ( (SdrOle2Obj*) pObj)->Disconnect();
+                    static_cast<SdrOle2Obj*>(pObj)->Disconnect();
             }
         }
     }
@@ -1811,7 +1811,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
 
     if(!IsMasterPage() && TRG_HasMasterPage())
     {
-        if(drawing::FillStyle_NONE == ((const XFillStyleItem&)pBackgroundFill->Get(XATTR_FILLSTYLE)).GetValue())
+        if(drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(pBackgroundFill->Get(XATTR_FILLSTYLE)).GetValue())
         {
             pBackgroundFill = &TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
         }

@@ -38,7 +38,7 @@ namespace drawinglayer
         {
             // get NormalsKind
             ::com::sun::star::drawing::NormalsKind aNormalsKind(::com::sun::star::drawing::NormalsKind_SPECIFIC);
-            const sal_uInt16 nNormalsValue(((const Svx3DNormalsKindItem&)rSet.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue());
+            const sal_uInt16 nNormalsValue(static_cast<const Svx3DNormalsKindItem&>(rSet.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue());
 
             if(1L == nNormalsValue)
             {
@@ -50,11 +50,11 @@ namespace drawinglayer
             }
 
             // get NoermalsInvert flag
-            const bool bInvertNormals(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
+            const bool bInvertNormals(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
 
             // get TextureProjectionX
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC);
-            const sal_uInt16 nTextureValueX(((const Svx3DTextureProjectionXItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue());
+            const sal_uInt16 nTextureValueX(static_cast<const Svx3DTextureProjectionXItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue());
 
             if(1L == nTextureValueX)
             {
@@ -67,7 +67,7 @@ namespace drawinglayer
 
             // get TextureProjectionY
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC);
-            const sal_uInt16 nTextureValueY(((const Svx3DTextureProjectionYItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue());
+            const sal_uInt16 nTextureValueY(static_cast<const Svx3DTextureProjectionYItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue());
 
             if(1L == nTextureValueY)
             {
@@ -79,18 +79,18 @@ namespace drawinglayer
             }
 
             // get DoubleSided flag
-            const bool bDoubleSided(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue());
+            const bool bDoubleSided(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue());
 
             // get Shadow3D flag
-            const bool bShadow3D(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue());
+            const bool bShadow3D(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue());
 
             // get TextureFilter flag
-            const bool bTextureFilter(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue());
+            const bool bTextureFilter(static_cast<const SfxBoolItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue());
 
             // get texture kind
             // TextureKind: 1 == Base3DTextureLuminance, 2 == Base3DTextureIntensity, 3 == Base3DTextureColor
             ::com::sun::star::drawing::TextureKind2 aTextureKind(::com::sun::star::drawing::TextureKind2_LUMINANCE);
-            const sal_uInt16 nTextureKind(((const Svx3DTextureKindItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue());
+            const sal_uInt16 nTextureKind(static_cast<const Svx3DTextureKindItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue());
 
             if(2 == nTextureKind)
             {
@@ -104,7 +104,7 @@ namespace drawinglayer
             // get texture mode
             // TextureMode: 1 == Base3DTextureReplace, 2 == Base3DTextureModulate, 3 == Base3DTextureBlend
             ::com::sun::star::drawing::TextureMode aTextureMode(::com::sun::star::drawing::TextureMode_REPLACE);
-            const sal_uInt16 nTextureMode(((const Svx3DTextureModeItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue());
+            const sal_uInt16 nTextureMode(static_cast<const Svx3DTextureModeItem&>(rSet.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue());
 
             if(2 == nTextureMode)
             {
@@ -116,16 +116,16 @@ namespace drawinglayer
             }
 
             // get object color
-            const ::basegfx::BColor aObjectColor(((const XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetColorValue().getBColor());
+            const ::basegfx::BColor aObjectColor(static_cast<const XFillColorItem&>(rSet.Get(XATTR_FILLCOLOR)).GetColorValue().getBColor());
 
             // get specular color
-            const ::basegfx::BColor aSpecular(((const SvxColorItem&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue().getBColor());
+            const ::basegfx::BColor aSpecular(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue().getBColor());
 
             // get emissive color
-            const ::basegfx::BColor aEmission(((const SvxColorItem&)rSet.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue().getBColor());
+            const ::basegfx::BColor aEmission(static_cast<const SvxColorItem&>(rSet.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue().getBColor());
 
             // get specular intensity
-            sal_uInt16 nSpecularIntensity(((const SfxUInt16Item&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue());
+            sal_uInt16 nSpecularIntensity(static_cast<const SfxUInt16Item&>(rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue());
 
             if(nSpecularIntensity > 128)
             {
@@ -133,7 +133,7 @@ namespace drawinglayer
             }
 
             // get reduced line geometry
-            const bool bReducedLineGeometry(((const Svx3DReducedLineGeometryItem&)rSet.Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue());
+            const bool bReducedLineGeometry(static_cast<const Svx3DReducedLineGeometryItem&>(rSet.Get(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY)).GetValue());
 
             // prepare material
             attribute::MaterialAttribute3D aMaterial(aObjectColor, aSpecular, aEmission, nSpecularIntensity);

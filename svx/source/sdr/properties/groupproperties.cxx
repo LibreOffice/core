@@ -81,7 +81,7 @@ namespace sdr
             }
 
             // collect all ItemSets in mpItemSet
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -113,7 +113,7 @@ namespace sdr
         void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems)
         {
             // iterate over contained SdrObjects
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -154,7 +154,7 @@ namespace sdr
 
         void GroupProperties::SetMergedItem(const SfxPoolItem& rItem)
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -165,7 +165,7 @@ namespace sdr
 
         void GroupProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -204,7 +204,7 @@ namespace sdr
         {
             SfxStyleSheet* pRetval = 0L;
 
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -230,7 +230,7 @@ namespace sdr
 
         void GroupProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)
@@ -248,7 +248,7 @@ namespace sdr
         {
             if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
             {
-                const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+                const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
                 const size_t nCount(pSub->GetObjCount());
 
                 for(size_t a = 0; a < nCount; ++a)
@@ -273,7 +273,7 @@ namespace sdr
 
         void GroupProperties::ForceStyleToHardAttributes()
         {
-            const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
+            const SdrObjList* pSub = static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList();
             const size_t nCount(pSub->GetObjCount());
 
             for(size_t a = 0; a < nCount; ++a)

@@ -97,6 +97,7 @@ private:
             com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName );
             const com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName ) const;
             com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
+            const com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 ) const;
 
             void SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal );
             void SetPropertyValue( const OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal );

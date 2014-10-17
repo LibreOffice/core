@@ -168,25 +168,25 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     if(!bNeed)
     {
         // XPoly is necessary for everything that isn't LineSolid or LineNone
-        XLineStyle eLine = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+        XLineStyle eLine = static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
         bNeed = eLine != XLINE_NONE && eLine != XLINE_SOLID;
 
         // XPoly is necessary for thick lines
         if(!bNeed && eLine != XLINE_NONE)
-            bNeed = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue() != 0;
+            bNeed = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue() != 0;
 
         // XPoly is necessary for circle arcs with line ends
         if(!bNeed && meCircleKind == OBJ_CARC)
         {
             // start of the line is here if StartPolygon, StartWidth!=0
-            bNeed=((XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue().count() != 0L &&
-                  ((XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue() != 0;
+            bNeed=static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue().count() != 0L &&
+                  static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue() != 0;
 
             if(!bNeed)
             {
                 // end of the line is here if EndPolygon, EndWidth!=0
-                bNeed = ((XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue().count() != 0L &&
-                        ((XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue() != 0;
+                bNeed = static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue().count() != 0L &&
+                        static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue() != 0;
             }
         }
     }
@@ -194,7 +194,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     // XPoly is necessary if Fill !=None and !=Solid
     if(!bNeed && meCircleKind != OBJ_CARC)
     {
-        drawing::FillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+        drawing::FillStyle eFill=static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue();
         bNeed = eFill != drawing::FillStyle_NONE && eFill != drawing::FillStyle_SOLID;
     }
 
@@ -571,7 +571,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
         if(OBJ_CIRC != meCircleKind && nPntAnz > 2)
         {
-            ImpCircUser* pU = (ImpCircUser*)rDrag.GetUser();
+            const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
             sal_Int32 nWink;
 
             aBuf.appendAscii(" (");
@@ -673,7 +673,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
 
 void SdrCircObj::ImpSetCreateParams(SdrDragStat& rStat) const
 {
-    ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
+    ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     if (pU==NULL) {
         pU=new ImpCircUser;
         rStat.SetUser(pU);
@@ -695,7 +695,7 @@ bool SdrCircObj::BegCreate(SdrDragStat& rStat)
 bool SdrCircObj::MovCreate(SdrDragStat& rStat)
 {
     ImpSetCreateParams(rStat);
-    ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
+    ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     rStat.SetActionRect(pU->aR);
     aRect=pU->aR; // for ObjName
     ImpJustifyRect(aRect);
@@ -718,7 +718,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
 bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     ImpSetCreateParams(rStat);
-    ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
+    ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     bool bRet = false;
     if (eCmd==SDRCREATE_FORCEEND && rStat.GetPointAnz()<4) meCircleKind=OBJ_CIRC;
     if (meCircleKind==OBJ_CIRC) {
@@ -751,7 +751,7 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 void SdrCircObj::BrkCreate(SdrDragStat& rStat)
 {
-    ImpCircUser* pU=(ImpCircUser*)rStat.GetUser();
+    ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     delete pU;
     rStat.SetUser(NULL);
 }
@@ -765,7 +765,7 @@ bool SdrCircObj::BckCreate(SdrDragStat& rStat)
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeCreatePoly(const SdrDragStat& rDrag) const
 {
-    ImpCircUser* pU = (ImpCircUser*)rDrag.GetUser();
+    const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
 
     if(rDrag.GetPointAnz() < 4L)
     {
@@ -938,7 +938,7 @@ SdrObjGeoData* SdrCircObj::NewGeoData() const
 void SdrCircObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrRectObj::SaveGeoData(rGeo);
-    SdrCircObjGeoData& rCGeo=(SdrCircObjGeoData&)rGeo;
+    SdrCircObjGeoData& rCGeo=static_cast<SdrCircObjGeoData&>(rGeo);
     rCGeo.nStartWink=nStartWink;
     rCGeo.nEndWink  =nEndWink;
 }
@@ -946,7 +946,7 @@ void SdrCircObj::SaveGeoData(SdrObjGeoData& rGeo) const
 void SdrCircObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::RestGeoData(rGeo);
-    SdrCircObjGeoData& rCGeo=(SdrCircObjGeoData&)rGeo;
+    const SdrCircObjGeoData& rCGeo=static_cast<const SdrCircObjGeoData&>(rGeo);
     nStartWink=rCGeo.nStartWink;
     nEndWink  =rCGeo.nEndWink;
     SetXPolyDirty();
@@ -1072,7 +1072,7 @@ void SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 void SdrCircObj::ImpSetAttrToCircInfo()
 {
     const SfxItemSet& rSet = GetObjectItemSet();
-    SdrCircKind eNewKindA = ((SdrCircKindItem&)rSet.Get(SDRATTR_CIRCKIND)).GetValue();
+    SdrCircKind eNewKindA = static_cast<const SdrCircKindItem&>(rSet.Get(SDRATTR_CIRCKIND)).GetValue();
     SdrObjKind eNewKind = meCircleKind;
 
     if(eNewKindA == SDRCIRC_FULL)
@@ -1084,8 +1084,8 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     else if(eNewKindA == SDRCIRC_CUT)
         eNewKind = OBJ_CCUT;
 
-    sal_Int32 nNewStart = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-    sal_Int32 nNewEnd = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+    sal_Int32 nNewStart = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
+    sal_Int32 nNewEnd = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
     bool bKindChg = meCircleKind != eNewKind;
     bool bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
@@ -1116,9 +1116,9 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     else if(meCircleKind == OBJ_CCUT)
         eNewKindA = SDRCIRC_CUT;
 
-    SdrCircKind eOldKindA = ((SdrCircKindItem&)rSet.Get(SDRATTR_CIRCKIND)).GetValue();
-    sal_Int32 nOldStartWink = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-    sal_Int32 nOldEndWink = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+    SdrCircKind eOldKindA = static_cast<const SdrCircKindItem&>(rSet.Get(SDRATTR_CIRCKIND)).GetValue();
+    sal_Int32 nOldStartWink = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
+    sal_Int32 nOldEndWink = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
     if(eNewKindA != eOldKindA || nStartWink != nOldStartWink || nEndWink != nOldEndWink)
     {

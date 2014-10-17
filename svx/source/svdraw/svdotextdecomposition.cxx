@@ -896,14 +896,14 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     Color aOriginalBackColor(rOutliner.GetBackgroundColor());
     const SfxItemSet* pBackgroundFillSet = &GetObjectItemSet();
 
-    if (drawing::FillStyle_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    if (drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
     {
         SdrPage *pOwnerPage = GetPage();
         if (pOwnerPage)
         {
             pBackgroundFillSet = &pOwnerPage->getSdrPageProperties().GetItemSet();
 
-            if (drawing::FillStyle_NONE == ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+            if (drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
             {
                 if (!pOwnerPage->IsMasterPage() && pOwnerPage->TRG_HasMasterPage())
                 {
@@ -913,7 +913,7 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         }
     }
 
-    if (drawing::FillStyle_NONE != ((const XFillStyleItem&)pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
+    if (drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(pBackgroundFillSet->Get(XATTR_FILLSTYLE)).GetValue())
     {
         Color aColor(rOutliner.GetBackgroundColor());
         GetDraftFillColor(*pBackgroundFillSet, aColor);
@@ -1193,9 +1193,9 @@ void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryLi
     {
         // get values
         const SfxItemSet& rSet = GetObjectItemSet();
-        const sal_uInt32 nRepeat((sal_uInt32)((SdrTextAniCountItem&)rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
-        bool bVisisbleWhenStopped(((SdrTextAniStopInsideItem&)rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
-        double fDelay((double)((SdrTextAniDelayItem&)rSet.Get(SDRATTR_TEXT_ANIDELAY)).GetValue());
+        const sal_uInt32 nRepeat((sal_uInt32)static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
+        bool bVisisbleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
+        double fDelay((double)static_cast<const SdrTextAniDelayItem&>(rSet.Get(SDRATTR_TEXT_ANIDELAY)).GetValue());
 
         if(0.0 == fDelay)
         {
@@ -1222,9 +1222,9 @@ void SdrTextObj::impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryLi
 
 void impCreateScrollTiming(const SfxItemSet& rSet, drawinglayer::animation::AnimationEntryList& rAnimList, bool bForward, double fTimeFullPath, double fFrequency)
 {
-    bool bVisisbleWhenStopped(((SdrTextAniStopInsideItem&)rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
-    bool bVisisbleWhenStarted(((SdrTextAniStartInsideItem&)rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE )).GetValue());
-    const sal_uInt32 nRepeat(((SdrTextAniCountItem&)rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
+    bool bVisisbleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
+    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE )).GetValue());
+    const sal_uInt32 nRepeat(static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
 
     if(bVisisbleWhenStarted)
     {
@@ -1262,9 +1262,9 @@ void impCreateAlternateTiming(const SfxItemSet& rSet, drawinglayer::animation::A
 
     const double fStartPosition(bForward ? fRelativeTextLength : 1.0 - fRelativeTextLength);
     const double fEndPosition(bForward ? 1.0 - fRelativeTextLength : fRelativeTextLength);
-    bool bVisisbleWhenStopped(((SdrTextAniStopInsideItem&)rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
-    bool bVisisbleWhenStarted(((SdrTextAniStartInsideItem&)rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE )).GetValue());
-    const sal_uInt32 nRepeat(((SdrTextAniCountItem&)rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
+    bool bVisisbleWhenStopped(static_cast<const SdrTextAniStopInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE)).GetValue());
+    bool bVisisbleWhenStarted(static_cast<const SdrTextAniStartInsideItem&>(rSet.Get(SDRATTR_TEXT_ANISTOPINSIDE )).GetValue());
+    const sal_uInt32 nRepeat(static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
 
     if(!bVisisbleWhenStarted)
     {
@@ -1323,7 +1323,7 @@ void impCreateSlideTiming(const SfxItemSet& rSet, drawinglayer::animation::Anima
 {
     // move in from outside, start outside
     const double fStartPosition(bForward ? 0.0 : 1.0);
-    const sal_uInt32 nRepeat(((SdrTextAniCountItem&)rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
+    const sal_uInt32 nRepeat(static_cast<const SdrTextAniCountItem&>(rSet.Get(SDRATTR_TEXT_ANICOUNT)).GetValue());
 
     // move from outside to center
     drawinglayer::animation::AnimationEntryLinear aOutIn(fTimeFullPath * 0.5, fFrequency, fStartPosition, 0.5);
@@ -1357,8 +1357,8 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
         // get data. Goal is to calculate fTimeFullPath which is the time needed to
         // move animation from (0.0) to (1.0) state
         const SfxItemSet& rSet = GetObjectItemSet();
-        double fAnimationDelay((double)((SdrTextAniDelayItem&)rSet.Get(SDRATTR_TEXT_ANIDELAY)).GetValue());
-        double fSingleStepWidth((double)((SdrTextAniAmountItem&)rSet.Get(SDRATTR_TEXT_ANIAMOUNT)).GetValue());
+        double fAnimationDelay((double)static_cast<const SdrTextAniDelayItem&>(rSet.Get(SDRATTR_TEXT_ANIDELAY)).GetValue());
+        double fSingleStepWidth((double)static_cast<const SdrTextAniAmountItem&>(rSet.Get(SDRATTR_TEXT_ANIAMOUNT)).GetValue());
         const SdrTextAniDirection eDirection(GetTextAniDirection());
         const bool bForward(SDRTEXTANI_RIGHT == eDirection || SDRTEXTANI_DOWN == eDirection);
 

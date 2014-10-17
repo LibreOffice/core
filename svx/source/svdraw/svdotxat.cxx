@@ -129,7 +129,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                 if ( pOutlinerParaObject != NULL )
                 {
                     rOutliner.SetText(*pOutlinerParaObject);
-                    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+                    rOutliner.SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
                 }
                 if (bWdtGrow)
                 {
@@ -195,10 +195,10 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     if (bRet) {
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // this is a hack
-            ((SdrRectObj*)this)->SetXPolyDirty();
+            static_cast<SdrRectObj*>(this)->SetXPolyDirty();
         }
         if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
-            ((SdrCaptionObj*)this)->ImpRecalcTail();
+            static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
         }
     }
     return bRet;
@@ -213,10 +213,10 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         aRect=aNeuRect;
         SetRectsDirty();
         if (HAS_BASE(SdrRectObj,this)) { // this is a hack
-            ((SdrRectObj*)this)->SetXPolyDirty();
+            static_cast<SdrRectObj*>(this)->SetXPolyDirty();
         }
         if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
-            ((SdrCaptionObj*)this)->ImpRecalcTail();
+            static_cast<SdrCaptionObj*>(this)->ImpRecalcTail();
         }
         SetChanged();
         BroadcastObjectChange();

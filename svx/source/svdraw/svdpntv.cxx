@@ -445,7 +445,7 @@ SdrPageView* SdrPaintView::ShowSdrPage(SdrPage* pPage)
             delete mpPageView;
         }
 
-        mpPageView = new SdrPageView(pPage, *((SdrView*)this));
+        mpPageView = new SdrPageView(pPage, *static_cast<SdrView*>(this));
         mpPageView->Show();
     }
 
@@ -597,7 +597,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const vcl::Region& rReg, s
 
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
     {
-        vcl::Window* pWindow = (vcl::Window*)pOut;
+        vcl::Window* pWindow = static_cast<vcl::Window*>(pOut);
 
         if(pWindow->IsInPaint())
         {
@@ -836,7 +836,7 @@ vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl
     // would be set.
     if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
     {
-        vcl::Window* pWindow = (vcl::Window*)pOut;
+        vcl::Window* pWindow = static_cast<vcl::Window*>(pOut);
 
         if(pWindow->IsInPaint())
         {
@@ -899,7 +899,7 @@ void SdrPaintView::GlueInvalidate() const
                     const SdrObject* pObj=pOL->GetObj(nObjNum);
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     if (pGPL!=NULL && pGPL->GetCount()!=0) {
-                        pGPL->Invalidate((vcl::Window&)rOutDev, pObj);
+                        pGPL->Invalidate(static_cast<vcl::Window&>(rOutDev), pObj);
                     }
                 }
             }
@@ -917,7 +917,7 @@ void SdrPaintView::InvalidateAllWin()
 
         if(pPaintWindow->OutputToWindow())
         {
-            InvalidateOneWin((vcl::Window&)pPaintWindow->GetOutputDevice());
+            InvalidateOneWin(static_cast<vcl::Window&>(pPaintWindow->GetOutputDevice()));
         }
     }
 }
@@ -951,7 +951,7 @@ void SdrPaintView::InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix)
 
             if (aRect.IsOver(aOutRect))
             {
-                InvalidateOneWin((vcl::Window&)rOutDev, aRect);
+                InvalidateOneWin(static_cast<vcl::Window&>(rOutDev), aRect);
             }
         }
     }
@@ -998,10 +998,10 @@ bool SdrPaintView::IsGroupEntered() const
 void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
 {
     // bReplaceAll has no effect here at all.
-    bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
+    bool bMeasure=ISA(SdrView) && static_cast<SdrView*>(this)->IsMeasureTool();
     const SfxPoolItem *pPoolItem=NULL;
     if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
-        SdrLayerID nLayerId=((const SdrLayerIdItem*)pPoolItem)->GetValue();
+        SdrLayerID nLayerId=static_cast<const SdrLayerIdItem*>(pPoolItem)->GetValue();
         const SdrLayer* pLayer=pMod->GetLayerAdmin().GetLayerPerID(nLayerId);
         if (pLayer!=NULL) {
             if (bMeasure) aMeasureLayer=pLayer->GetName();
@@ -1009,15 +1009,15 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bRep
         }
     }
     if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET) {
-        if (bMeasure) aMeasureLayer=((const SdrLayerNameItem*)pPoolItem)->GetValue();
-        else aAktLayer=((const SdrLayerNameItem*)pPoolItem)->GetValue();
+        if (bMeasure) aMeasureLayer=static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
+        else aAktLayer=static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
     }
 }
 
 void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool /*bOnlyHardAttr*/) const
 {
     // bOnlyHardAttr has no effect here at all.
-    bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
+    bool bMeasure=ISA(SdrView) && static_cast<const SdrView*>(this)->IsMeasureTool();
     const OUString& aNam = bMeasure ? aMeasureLayer : aAktLayer;
     rAttr.Put(SdrLayerNameItem(aNam));
     SdrLayerID nLayer=pMod->GetLayerAdmin().GetLayerID(aNam,true);
@@ -1119,7 +1119,7 @@ void SdrPaintView::ShowItemBrowser(bool bShow)
 {
     if (bShow) {
         if (pItemBrowser==NULL) {
-            pItemBrowser=new SdrItemBrowser(*(SdrView*)this);
+            pItemBrowser=new SdrItemBrowser(*static_cast<SdrView*>(this));
             pItemBrowser->SetFloatingMode(true);
         }
         pItemBrowser->Show();
