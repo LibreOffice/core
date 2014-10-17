@@ -586,21 +586,21 @@ BigInt::BigInt( long long nValue )
     bIsNeg = nValue < 0;
     nLen = 0;
 
-    unsigned long long nUValue = static_cast<unsigned long long>(bIsNeg ? -nValue : nValue);
-    if (nUValue >= std::numeric_limits<long>::max())
+    if ((nValue >= std::numeric_limits<long>::min()) && (nValue <= std::numeric_limits<long>::max()))
+    {
+        bIsBig = false;
+        nVal   = static_cast<long>(nValue);
+    }
+    else
     {
         bIsBig  = true;
+        const unsigned long long nUValue = static_cast<unsigned long long>(bIsNeg ? -nValue : nValue);
         for (int i = 0; (i != sizeof(unsigned long long) / 2) && (nUValue != 0); ++i)
         {
             nNum[i] = static_cast<sal_uInt16>(nUValue & 0xffffUL);
             nUValue = nUValue >> 16;
             ++nLen;
         }
-    }
-    else
-    {
-        bIsBig = false;
-        nVal   = static_cast<long>(nValue);
     }
 }
 #endif
