@@ -790,19 +790,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
 
             if (pDrawViewShell != NULL)
             {
-                // Set the edit mode to either the normal edit mode or the
-                // master page mode.
-                EditMode eNewEditMode = EM_PAGE;
-                if (bIsMasterPage)
-                {
-                    eNewEditMode = EM_MASTERPAGE;
-                }
-
-                if (eNewEditMode != pDrawViewShell->GetEditMode())
-                {
-                    // EditMode setzen
-                    pDrawViewShell->ChangeEditMode(eNewEditMode, false);
-                }
+                setEditMode(pDrawViewShell, bIsMasterPage);
 
                 // Make the bookmarked page the current page.  This is done
                 // by using the API because this takes care of all the
@@ -916,18 +904,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
                 pDrViewSh = (DrawViewShell*) mpViewShell;
             }
 
-            EditMode eNewEditMode = EM_PAGE;
-
-            if( bIsMasterPage )
-            {
-                eNewEditMode = EM_MASTERPAGE;
-            }
-
-            if (eNewEditMode != pDrViewSh->GetEditMode())
-            {
-                // set EditMode
-                pDrViewSh->ChangeEditMode(eNewEditMode, false);
-            }
+            setEditMode(pDrViewSh, bIsMasterPage);
 
             // Jump to the page.  This is done by using the API because this
             // takes care of all the little things to be done.  Especially
@@ -1020,18 +997,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
                 pDrViewSh = (DrawViewShell*) mpViewShell;
             }
 
-            EditMode eNewEditMode = EM_PAGE;
-
-            if( bIsMasterPage )
-            {
-                eNewEditMode = EM_MASTERPAGE;
-            }
-
-            if (eNewEditMode != pDrViewSh->GetEditMode())
-            {
-                // set EditMode
-                pDrViewSh->ChangeEditMode(eNewEditMode, false);
-            }
+            setEditMode(pDrViewSh, bIsMasterPage);
 
             // Jump to the page.  This is done by using the API because this
             // takes care of all the little things to be done.  Especially
@@ -1236,6 +1202,23 @@ bool DrawDocShell::getDocReadOnly() const
     }
 
     return false;
+}
+
+void DrawDocShell::setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage)
+{
+    // Set the edit mode to either the normal edit mode or the
+    // master page mode.
+    EditMode eNewEditMode = EM_PAGE;
+    if (isMasterPage)
+    {
+        eNewEditMode = EM_MASTERPAGE;
+    }
+
+    if (eNewEditMode != pDrawViewShell->GetEditMode())
+    {
+        // Set EditMode
+        pDrawViewShell->ChangeEditMode(eNewEditMode, false);
+    }
 }
 } // end of namespace sd
 
