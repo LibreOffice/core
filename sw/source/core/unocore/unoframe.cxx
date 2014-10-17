@@ -2680,7 +2680,7 @@ void SwXFrame::ResetDescriptor()
 }
 
 void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
-            throw( lang::IllegalArgumentException, uno::RuntimeException )
+            throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!IsDescriptor())
