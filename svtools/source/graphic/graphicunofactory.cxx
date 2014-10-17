@@ -39,7 +39,7 @@ class GObjectImpl : public GObjectAccess_BASE
      ::osl::Mutex m_aMutex;
      std::unique_ptr< GraphicObject > mpGObject;
 public:
-    GObjectImpl(uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException);
+    GObjectImpl(uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException, std::exception);
 
      // XGraphicObject
     virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -68,7 +68,7 @@ public:
     }
 };
 
-GObjectImpl::GObjectImpl(const uno::Sequence< uno::Any >& args) throw (uno::RuntimeException)
+GObjectImpl::GObjectImpl(const uno::Sequence< uno::Any >& args) throw (uno::RuntimeException, std::exception)
 {
     if ( args.getLength() == 1 )
     {
