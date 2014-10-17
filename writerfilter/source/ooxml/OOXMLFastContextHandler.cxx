@@ -93,7 +93,7 @@ public:
     OOXMLIdToString() : IdToString() {}
     virtual ~OOXMLIdToString() {}
 
-    virtual string toString(const Id & rId) const
+    virtual string toString(const Id & rId) const SAL_OVERRIDE
     {
         string s((*QNameToString::Instance())(rId));
 

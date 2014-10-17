@@ -49,7 +49,7 @@ namespace dmapper {
 //---------------------------------------------------  Utility functions
 
 #ifdef DEBUG_WRITERFILTER
-void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
+void lcl_printProperties( uno::Sequence< beans::PropertyValue > const & aProps )
 {
     sal_Int32 nLen = aProps.getLength( );
     for ( sal_Int32 i = 0; i < nLen; i++ )

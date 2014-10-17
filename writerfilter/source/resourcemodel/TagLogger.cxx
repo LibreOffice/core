@@ -193,9 +193,6 @@ namespace writerfilter
     {
         if (!pWriter)
             return;
-        std::string aTmpStrInt;
-        std::string aTmpStrFloat;
-        std::string aTmpStrString;
 
         sal_Int32 nInt = 0;
         float nFloat = 0.0;
@@ -252,8 +249,8 @@ namespace writerfilter
 
         void resolve(writerfilter::Reference<Properties>::Pointer_t props);
 
-        virtual void attribute(Id name, Value & val);
-        virtual void sprm(Sprm & sprm);
+        virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
+        virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
     };
 
     PropertySetDumpHandler::PropertySetDumpHandler(TagLogger* pLogger,

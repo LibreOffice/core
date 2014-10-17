@@ -97,20 +97,6 @@ void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger, PropertyValueS
 
     pLogger->endElement();
 }
-
-void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger, PropertyValueSeqSeq_t rPropValSeqSeq)
-{
-    pLogger->startElement("PropertyValueSeq");
-
-    PropertyValueSeq_t * pValues = rPropValSeqSeq.getArray();
-
-    for (sal_Int32 n = 0; n < rPropValSeqSeq.getLength(); ++n)
-    {
-        lcl_DumpPropertyValueSeq(pLogger, pValues[n]);
-    }
-
-    pLogger->endElement();
-}
 #endif // DEBUG_WRITERFILTER
 
 }

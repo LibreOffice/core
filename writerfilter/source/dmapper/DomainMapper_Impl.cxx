@@ -1006,7 +1006,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
 #ifdef DEBUG_WRITERFILTER
-    dmapper_logger->attribute("isTextAppend", xTextAppend.is());
+    dmapper_logger->attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
 
     if (xTextAppend.is() && !getTableManager( ).isIgnore() && pParaContext != NULL)

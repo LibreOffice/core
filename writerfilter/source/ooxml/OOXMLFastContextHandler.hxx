@@ -307,7 +307,7 @@ public:
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const SAL_OVERRIDE;
 
 #ifdef DEBUG_WRITERFILTER
-    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const SAL_OVERRIDE;
 #endif
 
 protected:
