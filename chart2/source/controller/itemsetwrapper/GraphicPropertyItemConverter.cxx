@@ -234,7 +234,7 @@ bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tProp
 
 void GraphicPropertyItemConverter::FillSpecialItem(
     sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-    throw( uno::Exception )
+    throw (uno::Exception, std::exception)
 {
     switch( nWhichId )
     {

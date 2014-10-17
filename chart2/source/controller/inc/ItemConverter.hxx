@@ -148,7 +148,7 @@ protected:
         The default implementation does nothing except showing an assertion
      */
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception );
+        throw (css::uno::Exception, std::exception);
 
     /** for items that can not be mapped directly to a property.
 
