@@ -81,7 +81,7 @@ protected:
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleComponent
-    virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual ::com::sun::star::awt::Rectangle implGetBounds() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL   disposing() SAL_OVERRIDE;

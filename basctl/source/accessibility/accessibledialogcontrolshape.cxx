@@ -238,31 +238,19 @@ void AccessibleDialogControlShape::FillAccessibleStateSet( utl::AccessibleStateS
     rStateSet.AddState( AccessibleStateType::RESIZABLE );
 }
 
-
 // OCommonAccessibleComponent
-
-
-awt::Rectangle AccessibleDialogControlShape::implGetBounds() throw (RuntimeException)
+awt::Rectangle AccessibleDialogControlShape::implGetBounds() throw (RuntimeException, std::exception)
 {
     return GetBounds();
 }
 
-
 // XInterface
-
-
 IMPLEMENT_FORWARD_XINTERFACE2( AccessibleDialogControlShape, AccessibleExtendedComponentHelper_BASE, AccessibleDialogControlShape_BASE )
 
-
 // XTypeProvider
-
-
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( AccessibleDialogControlShape, AccessibleExtendedComponentHelper_BASE, AccessibleDialogControlShape_BASE )
 
-
 // XComponent
-
-
 void AccessibleDialogControlShape::disposing()
 {
     AccessibleExtendedComponentHelper_BASE::disposing();
