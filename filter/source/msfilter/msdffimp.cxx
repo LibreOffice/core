@@ -5318,19 +5318,24 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         {
             delete pTextImpRec->pWrapPolygon;
             pTextImpRec->pWrapPolygon = NULL;
-            sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
+            sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(0);
             rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
+            bool bOk = false;
             if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
+            {
+                bOk = rSt.remainingSize() / nElemSizeVert >= nNumElemVert;
+            }
+            if (bOk)
             {
                 pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
-                    sal_Int32 nX, nY;
+                    sal_Int32 nX(0), nY(0);
                     if (nElemSizeVert == 8)
                         rSt.ReadInt32( nX ).ReadInt32( nY );
                     else
                     {
-                        sal_Int16 nSmallX, nSmallY;
+                        sal_Int16 nSmallX(0), nSmallY(0);
                         rSt.ReadInt16( nSmallX ).ReadInt16( nSmallY );
                         nX = nSmallX;
                         nY = nSmallY;
