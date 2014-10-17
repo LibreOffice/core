@@ -1066,14 +1066,20 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
     sal_uInt32 nPos = rIn.Tell();
     if ( rProperties.IsProperty( DFF_Prop_fillShadeColors ) )
     {
-        if ( rProperties.SeekToContent( DFF_Prop_fillShadeColors, rIn ) )
+        sal_uInt16 i = 0, nNumElem = 0, nNumElemReserved = 0, nSize = 0;
+        bool bOk = false;
+        if (rProperties.SeekToContent(DFF_Prop_fillShadeColors, rIn))
         {
-            sal_uInt16 i = 0, nNumElem = 0, nNumElemReserved = 0, nSize = 0;
             rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemReserved ).ReadUInt16( nSize );
+            //sanity check that the stream is long enough to fulfill nNumElem * 2 sal_Int32s
+            bOk = rIn.remainingSize() / (2*sizeof(sal_Int32)) >= nNumElem;
+        }
+        if (bOk)
+        {
             for ( ; i < nNumElem; i++ )
             {
-                sal_Int32   nColor;
-                sal_Int32   nDist;
+                sal_Int32 nColor(0);
+                sal_Int32 nDist(0);
 
                 rIn.ReadInt32( nColor ).ReadInt32( nDist );
                 rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( nColor, DFF_Prop_fillColor ), 1.0 - ( nDist / 65536.0 ) ) );
