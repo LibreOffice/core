@@ -474,7 +474,7 @@ public:
      */
     OUStringBuffer & append( const sal_Unicode * str, sal_Int32 len)
     {
-        // insert behind the last character
+        assert( len >= 0 );
         rtl_uStringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -553,6 +553,7 @@ public:
      */
     OUStringBuffer & appendAscii( const sal_Char * str, sal_Int32 len)
     {
+        assert( len >= 0 );
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -795,7 +796,8 @@ public:
      */
     OUStringBuffer & insert( sal_Int32 offset, const sal_Unicode * str, sal_Int32 len)
     {
-        // insert behind the last character
+        assert( offset >= 0 && offset <= pData->length );
+        assert( len >= 0 );
         rtl_uStringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }
@@ -1039,6 +1041,8 @@ public:
      */
     OUStringBuffer & remove( sal_Int32 start, sal_Int32 len )
     {
+        assert( start >= 0 && start <= pData->length );
+        assert( len >= 0 );
         rtl_uStringbuffer_remove( &pData, start, len );
         return *this;
     }
@@ -1055,6 +1059,7 @@ public:
      */
     OUStringBuffer & truncate( sal_Int32 start = 0 )
     {
+        assert( start >= 0 && start <= pData->length );
         rtl_uStringbuffer_remove( &pData, start, getLength() - start );
         return *this;
     }
@@ -1119,6 +1124,7 @@ public:
     */
     sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const
     {
+        assert( fromIndex >= 0 && fromIndex <= pData->length );
         sal_Int32 ret = rtl_ustr_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
         return (ret < 0 ? ret : ret+fromIndex);
     }
@@ -1155,6 +1161,7 @@ public:
     */
     sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex ) const
     {
+        assert( fromIndex >= 0 && fromIndex <= pData->length );
         return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
     }
 
@@ -1177,6 +1184,7 @@ public:
     */
     sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const
     {
+        assert( fromIndex >= 0 && fromIndex <= pData->length );
         sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                         str.pData->buffer, str.pData->length );
         return (ret < 0 ? ret : ret+fromIndex);
@@ -1242,6 +1250,7 @@ public:
     */
     sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const
     {
+        assert( fromIndex >= 0 && fromIndex <= pData->length );
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
     }
