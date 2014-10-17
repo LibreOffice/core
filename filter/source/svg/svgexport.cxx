@@ -602,7 +602,8 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                                     SdrOutliner& rOutl = mpSdrModel->GetDrawOutliner(NULL);
 
                                     maOldFieldHdl = rOutl.GetCalcFieldValueHdl();
-                                    rOutl.SetCalcFieldValueHdl( LINK( this, SVGFilter, CalcFieldHdl) );
+                                    maNewFieldHdl = LINK(this, SVGFilter, CalcFieldHdl);
+                                    rOutl.SetCalcFieldValueHdl(maNewFieldHdl);
                                 }
                             }
                             bRet = implExportDocument();
@@ -615,7 +616,20 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     }
 
                     if( mpSdrModel )
-                        mpSdrModel->GetDrawOutliner( NULL ).SetCalcFieldValueHdl( maOldFieldHdl );
+                    {
+                        //fdo#62682 The maNewFieldHdl can end up getting copied
+                        //into various other outliners which live past this
+                        //method, so get the full list of outliners and restore
+                        //the maOldFieldHdl for all that have ended up using
+                        //maNewFieldHdl
+                        std::vector<SdrOutliner*> aOutliners(mpSdrModel->GetActiveOutliners());
+                        for (std::vector<SdrOutliner*>::iterator aIter = aOutliners.begin(); aIter != aOutliners.end(); ++aIter)
+                        {
+                            SdrOutliner* pOutliner = *aIter;
+                            if (maNewFieldHdl == pOutliner->GetCalcFieldValueHdl())
+                                pOutliner->SetCalcFieldValueHdl(maOldFieldHdl);
+                        }
+                    }
 
                     delete mpSVGWriter, mpSVGWriter = NULL;
                     mpSVGExport = NULL; // pointed object is released by xSVGExport dtor at the end of this scope
