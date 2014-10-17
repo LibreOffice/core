@@ -4510,12 +4510,39 @@ void ScInterpreter::ScMatch()
     }
 }
 
+namespace {
+
+bool isCellContentEmpty( const ScRefCellValue& rCell )
+{
+    switch (rCell.meType)
+    {
+        case CELLTYPE_VALUE:
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return false;
+        case CELLTYPE_FORMULA:
+        {
+            sc::FormulaResultValue aRes = rCell.mpFormula->GetResult();
+            if (aRes.meType != sc::FormulaResultValue::String)
+                return false;
+            if (!aRes.maString.isEmpty())
+                return false;
+        }
+        break;
+        default:
+            ;
+    }
+
+    return true;
+}
+
+}
+
 void ScInterpreter::ScCountEmptyCells()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         sal_uLong nMaxCount = 0, nCount = 0;
-        CellType eCellType;
         switch (GetStackType())
         {
             case svSingleRef :
@@ -4523,8 +4550,9 @@ void ScInterpreter::ScCountEmptyCells()
                 nMaxCount = 1;
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
-                eCellType = pDok->GetCellType(aAdr);
-                if (eCellType != CELLTYPE_NONE)
+                ScRefCellValue aCell;
+                aCell.assign(*pDok, aAdr);
+                if (!isCellContentEmpty(aCell))
                     nCount = 1;
             }
             break;
@@ -4546,25 +4574,8 @@ void ScInterpreter::ScCountEmptyCells()
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         const ScRefCellValue& rCell = aIter.getRefCellValue();
-                        switch (rCell.meType)
-                        {
-                            case CELLTYPE_VALUE:
-                            case CELLTYPE_STRING:
-                            case CELLTYPE_EDIT:
-                                ++nCount;
-                            break;
-                            case CELLTYPE_FORMULA:
-                            {
-                                sc::FormulaResultValue aRes = rCell.mpFormula->GetResult();
-                                if (aRes.meType != sc::FormulaResultValue::String)
-                                    ++nCount;
-                                else if (!aRes.maString.isEmpty())
-                                    ++nCount;
-                            }
-                            break;
-                            default:
-                                ;
-                        }
+                        if (!isCellContentEmpty(rCell))
+                            ++nCount;
                     }
                 }
             }
