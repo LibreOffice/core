@@ -9,19 +9,15 @@
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/ucb/XContent.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
+
 #include <iostream>
 #include <libetonyek/libetonyek.h>
 #include <libodfgen/libodfgen.hxx>
@@ -39,24 +35,15 @@
 
 using boost::shared_ptr;
 
-using namespace ::com::sun::star::uno;
-using com::sun::star::uno::Reference;
 using com::sun::star::io::XInputStream;
-using com::sun::star::io::XSeekable;
-using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
+using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XFilter;
-using com::sun::star::document::XExtendedFilterDetection;
-using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::InputSource;
-using com::sun::star::xml::sax::XAttributeList;
-using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
+using com::sun::star::uno::Sequence;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::XComponentContext;
+using com::sun::star::uno::XInterface;
 
 using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
@@ -65,111 +52,13 @@ namespace beans = com::sun::star::beans;
 namespace container = com::sun::star::container;
 namespace ucb = com::sun::star::ucb;
 
-namespace
+bool KeynoteImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGPresentationInterface &rGenerator)
 {
-
-template<class T>
-bool lcl_queryIsPackage(const Sequence<T> &lComponentData)
-{
-    bool bIsPackage = false;
-
-    const sal_Int32 nLength = lComponentData.getLength();
-    const T *pValue = lComponentData.getConstArray();
-    for (sal_Int32 i = 0; i < nLength; ++i)
-    {
-        if (pValue[i].Name == "IsPackage")
-        {
-            pValue[i].Value >>= bIsPackage;
-            break;
-        }
-    }
-
-    return bIsPackage;
-}
-
-bool lcl_isPackage(const Any &rComponentData)
-{
-    Sequence < beans::NamedValue > lComponentDataNV;
-    Sequence < beans::PropertyValue > lComponentDataPV;
-
-    if (rComponentData >>= lComponentDataNV)
-        return lcl_queryIsPackage(lComponentDataNV);
-    else if (rComponentData >>= lComponentDataPV)
-        return lcl_queryIsPackage(lComponentDataPV);
-
-    return false;
-}
-}
-
-sal_Bool SAL_CALL KeynoteImportFilter::filter(const Sequence< ::com::sun::star::beans::PropertyValue > &aDescriptor)
-throw (RuntimeException, std::exception)
-{
-    sal_Int32 nLength = aDescriptor.getLength();
-    const PropertyValue *pValue = aDescriptor.getConstArray();
-    Reference < XInputStream > xInputStream;
-    Reference < ucb::XContent > xContent;
-    bool bIsPackage = false;
-    for (sal_Int32 i = 0 ; i < nLength; i++)
-    {
-        if (pValue[i].Name == "ComponentData")
-            bIsPackage = lcl_isPackage(pValue[i].Value);
-        else if (pValue[i].Name == "InputStream")
-            pValue[i].Value >>= xInputStream;
-        else if (pValue[i].Name == "UCBContent")
-            pValue[i].Value >>= xContent;
-    }
-    if (!xInputStream.is())
-    {
-        OSL_ASSERT(false);
-        return sal_False;
-    }
-
-    if (bIsPackage && !xContent.is())
-    {
-        SAL_WARN("writerperfect", "the input claims to be a package, but does not have UCBContent");
-        bIsPackage = false;
-    }
-
-    // An XML import service: what we push sax messages to..
-    Reference < XDocumentHandler > xInternalHandler(
-        mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.comp.Impress.XMLOasisImporter", mxContext),
-        css::uno::UNO_QUERY_THROW);
-
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
-    Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
-    xImporter->setTargetDocument(mxDoc);
-
-    // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
-    // writes to in-memory target doc
-    DocumentHandler xHandler(xInternalHandler);
-
-    shared_ptr< librevenge::RVNGInputStream > input;
-    if (bIsPackage)
-        input.reset(new writerperfect::DirectoryStream(xContent));
-    else
-        input.reset(new WPXSvInputStream(xInputStream));
-
-    OdpGenerator exporter;
-    exporter.addDocumentHandler(&xHandler, ODF_FLAT_XML);
-    bool tmpParseResult = libetonyek::EtonyekDocument::parse(input.get(), &exporter);
-    return tmpParseResult;
-}
-
-void SAL_CALL KeynoteImportFilter::cancel()
-throw (RuntimeException, std::exception)
-{
-}
-
-// XImporter
-void SAL_CALL KeynoteImportFilter::setTargetDocument(const Reference< ::com::sun::star::lang::XComponent > &xDoc)
-throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
-{
-    mxDoc = xDoc;
+    return libetonyek::EtonyekDocument::parse(&rInput, &rGenerator);
 }
 
 // XExtendedFilterDetection
-OUString SAL_CALL KeynoteImportFilter::detect(com::sun::star::uno::Sequence< PropertyValue > &Descriptor)
+OUString SAL_CALL KeynoteImportFilter::detect(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &Descriptor)
 throw(com::sun::star::uno::RuntimeException, std::exception)
 {
     sal_Int32 nLength = Descriptor.getLength();
@@ -179,7 +68,7 @@ throw(com::sun::star::uno::RuntimeException, std::exception)
     sal_Int32 nUCBContentLocation = -1;
     bool bIsPackage = false;
     bool bUCBContentChanged = false;
-    const PropertyValue *pValue = Descriptor.getConstArray();
+    const beans::PropertyValue *pValue = Descriptor.getConstArray();
     Reference < XInputStream > xInputStream;
     Reference < ucb::XContent > xContent;
     Sequence < beans::NamedValue > lComponentDataNV;
@@ -336,27 +225,6 @@ throw(com::sun::star::uno::RuntimeException, std::exception)
     Descriptor[nTypeNameLocation].Value <<= sTypeName;
 
     return sTypeName;
-}
-
-// XInitialization
-void SAL_CALL KeynoteImportFilter::initialize(const Sequence< Any > &aArguments)
-throw (Exception, RuntimeException, std::exception)
-{
-    Sequence < PropertyValue > aAnySeq;
-    sal_Int32 nLength = aArguments.getLength();
-    if (nLength && (aArguments[0] >>= aAnySeq))
-    {
-        const PropertyValue *pValue = aAnySeq.getConstArray();
-        nLength = aAnySeq.getLength();
-        for (sal_Int32 i = 0 ; i < nLength; i++)
-        {
-            if (pValue[i].Name == "Type")
-            {
-                pValue[i].Value >>= msFilterName;
-                break;
-            }
-        }
-    }
 }
 
 OUString KeynoteImportFilter_getImplementationName()

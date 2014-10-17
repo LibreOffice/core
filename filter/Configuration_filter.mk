@@ -687,6 +687,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filte
 	impress_OOXML_Presentation \
 	impress_OOXML_Presentation_Template \
 	impress_OOXML_Presentation_AutoPlay \
+	impress_ClarisWorks \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,filter/source/config/fragments/filters,\
@@ -709,6 +710,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,f
 	impress_OOXML \
 	impress_OOXML_Template \
 	impress_OOXML_AutoPlay \
+	ClarisWorks_Impress \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
