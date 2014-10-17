@@ -342,7 +342,7 @@ void PNGWriterImpl::ImplWritepHYs( const BitmapEx& rBmpEx )
     if ( rBmpEx.GetPrefMapMode() == MAP_100TH_MM )
     {
         Size aPrefSize( rBmpEx.GetPrefSize() );
-        if ( aPrefSize.Width() && aPrefSize.Height() )
+        if ( aPrefSize.Width() && aPrefSize.Height() && mnWidth && mnHeight )
         {
             ImplOpenChunk( PNGCHUNK_pHYs );
             sal_uInt8 nMapUnit = 1;
