@@ -376,7 +376,7 @@ Private Function _setProperty(pvItem As Variant, ByVal psProperty As String, ByV
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 &apos;pvItem must be an object and have the requested property
-	If Not Utils._CheckArgument(pvIndex, 1, vbObject) Then Goto Exit_Function
+	If Not Utils._CheckArgument(pvItem, 1, vbObject) Then Goto Exit_Function
 &apos;Check Index argument
 	If Not IsMissing(pvIndex) Then
 		If Not Utils._CheckArgument(pvIndex, 4, Utils._AddNumeric()) Then Goto Exit_Function

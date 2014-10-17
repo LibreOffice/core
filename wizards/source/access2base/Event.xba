@@ -319,9 +319,9 @@ Const cstDatabaseForm = &quot;com.sun.star.comp.forms.ODatabaseForm&quot;
 		Case Else
 	End Select
 	
-	iCurrentDoc = Application._CurrentDoc(, False)
+	iCurrentDoc = _A2B_.CurrentDocIndex(, False)
 	If iCurrentDoc &lt; 0 Then Goto Exit_Function
-	Set oDoc = _A2B_.CurrentDoc(iCurrentDoc)
+	Set oDoc = _A2B_.CurrentDocument(iCurrentDoc)
 
 	&apos;	To manage 2x triggers of &quot;Before record action&quot; form event
 	If _EventType = &quot;ROWCHANGEEVENT&quot; And sImplementation &lt;&gt; &quot;com.sun.star.comp.forms.ODatabaseForm&quot; Then _Recommendation = &quot;IGNORE&quot;

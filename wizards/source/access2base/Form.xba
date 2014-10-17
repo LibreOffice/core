@@ -157,7 +157,7 @@ Function IsLoaded(ByVal Optional pbForce As Boolean) As Boolean
 	
 Dim oDoc As Object, oDatabase As Object, oEnum As Object, oDesk As Object, oComp As Object, bFound As Boolean
 Dim i As Integer
-	Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+	Set oDoc = _A2B_.CurrentDocument()
 	Select Case oDoc.DbConnect
 		Case DBCONNECTBASE
 			Set oDesk = CreateUnoService(&quot;com.sun.star.frame.Desktop&quot;)
@@ -608,7 +608,7 @@ Dim oDoc As Object, oFormsCollection As Object, oDatabase As Object
 	_Name = psName
 	_Shortcut = &quot;Forms!&quot; &amp; Utils._Surround(psName)
 	If IsLoaded Then
-		Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+		Set oDoc = _A2B_.CurrentDocument()
 		Select Case oDoc.DbConnect
 			Case DBCONNECTBASE
 				If Not IsNull(Component.CurrentController) Then		&apos;	A form opened then closed afterwards keeps a Component attribute

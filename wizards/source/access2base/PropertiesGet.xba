@@ -407,7 +407,7 @@ Dim oDoc As Object
 	If UBound(sComponents) = 0 Then Goto Trace_Error
 	If Not Utils._InList(UCase(sComponents(0)), Array(&quot;FORMS&quot;, &quot;DIALOGS&quot;, &quot;TEMPVARS&quot;)) Then Goto Trace_Error
 	If sComponents(1) = &quot;0&quot; Or Left(sComponents(1), 2) = &quot;0.&quot; Then
-		Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+		Set oDoc = _A2B_.CurrentDocument()
 		If oDoc.DbConnect = DBCONNECTFORM Then sComponents(1) = oDoc.DbContainers(0).FormName Else Goto Trace_Error
 	End If
 

@@ -187,7 +187,7 @@ Dim vObject As Variant, oTempVar As Object
 
 	Select Case _CollType
 		Case COLLTABLEDEFS
-			If Not Utils._CheckArgument(pvObject, 1, vbObject) Then Goto Exit_Function
+			If Not Utils._CheckArgument(pvNew, 1, vbObject) Then Goto Exit_Function
 			Set vObject = pvNew
 			With vObject
 				Set odbDatabase = ._ParentDatabase
@@ -206,7 +206,7 @@ Dim vObject As Variant, oTempVar As Object
 			If Not Utils._CheckArgument(pvNew, 1, vbString) Then Goto Exit_Function
 			If pvNew = &quot;&quot; Then Goto Error_Name
 			If IsMissing(pvValue) Then Call _TraceArguments()
-			If Application._hasItem(COLLTEMPVARS, pvNew) Then Goto Error_Name
+			If _A2B_.hasItem(COLLTEMPVARS, pvNew) Then Goto Error_Name
 			Set oTempVar = New TempVar
 			oTempVar._Name = pvNew
 			oTempVar._Value = pvValue
@@ -252,7 +252,7 @@ Dim odbDatabase As Object, oColl As Object, vName As Variant
 
 	Select Case _CollType
 		Case COLLTABLEDEFS, COLLQUERYDEFS
-			If Application._CurrentDoc &lt;&gt; 0 Then Goto Error_NotApplicable 
+			If _A2B_.CurrentDocIndex() &lt;&gt; 0 Then Goto Error_NotApplicable 
 			Set odbDatabase = Application._CurrentDb()
 			If odbDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 			If _CollType = COLLTABLEDEFS Then Set oColl = odbDatabase.Connection.getTables() Else Set oColl = odbDatabase.Connection.getQueries()
@@ -319,7 +319,7 @@ Dim oColl As Object, vName As Variant
 
 	Select Case _CollType
 		Case COLLTEMPVARS
-			If Not _hasItem(COLLTEMPVARS, pvName) Then Goto Error_Name
+			If Not _A2B_.hasItem(COLLTEMPVARS, pvName) Then Goto Error_Name
 			_A2B_.TempVars.Remove(UCase(pvName))
 		Case Else
 			Goto Error_NotApplicable

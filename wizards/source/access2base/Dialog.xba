@@ -487,7 +487,7 @@ Dim oStart As Object
 		Start = True
 		Set UnoDialog = oStart
 		With _A2B_
-			If Application._hasItem(COLLALLDIALOGS, _Name) Then .Dialogs.Remove(_Name)		&apos;	Inserted to solve errors, when aborts between start and terminate
+			If .hasItem(COLLALLDIALOGS, _Name) Then .Dialogs.Remove(_Name)		&apos;	Inserted to solve errors, when aborts between start and terminate
 			.Dialogs.Add(UnoDialog, UCase(_Name))
 		End With
 	End If
@@ -574,7 +574,7 @@ Dim vEMPTY As Variant
 		Case UCase(&quot;Height&quot;)
 			_PropertyGet = UnoDialog.getPosSize().Height
 		Case UCase(&quot;IsLoaded&quot;)
-			_PropertyGet = Application._hasItem(COLLALLDIALOGS, _Name)
+			_PropertyGet = _A2B_.hasItem(COLLALLDIALOGS, _Name)
 		Case UCase(&quot;Name&quot;)
 			_PropertyGet = _Name
 		Case UCase(&quot;ObjectType&quot;)

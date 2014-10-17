@@ -26,4 +26,5 @@
  <library:element library:name="DataDef"/>
  <library:element library:name="Recordset"/>
  <library:element library:name="TempVar"/>
+ <library:element library:name="Root_"/>
 </library:library>

@@ -163,29 +163,6 @@ Public Function _DecimalPoint() As String
 End Function
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _Dump_A2B() As Variant
-&apos;	For debugging purposes
-Dim i As Integer, j As Integer, vCurrentDoc As Variant
-	On Local Error Resume Next
-		With _A2B_
-			DebugPrint &quot;Version&quot;, .VersionNumber
-			DebugPrint &quot;TraceLevel&quot;, .MinimalTraceLevel
-			DebugPrint &quot;TraceCount&quot;, .TraceLogCount
-			DebugPrint &quot;CalledSub&quot;, .CalledSub
-			If IsArray(.CurrentDoc) Then
-				For i = 0 To UBound(.CurrentDoc)
-					vCurrentDoc = .CurrentDoc(i)
-					DebugPrint i, &quot;URL&quot;, vCurrentDoc.URL
-					For j = 0 To UBound(vCurrentDoc.DbContainers)
-						DebugPrint i, j, &quot;Form&quot;, vCurrentDoc.DbContainers(j).FormName
-						DebugPrint i, j, &quot;Database&quot;, vCurrentDoc.DbContainers(j).Database.Title
-					Next j
-				Next i
-			End If
-		End With
-End Function
-
-REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _ExtensionLocation() As String
 &apos;	Return the URL pointing to the location where OO installed the Access2Base extension
 &apos;	Adapted from http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Extensions/Location_of_Installed_Extensions
@@ -491,7 +468,7 @@ Dim oDoc As Object, oForms As Variant
 		Select Case ._Type
 			Case OBJFORM
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of form name
-					Set oDoc = _A2B_.CurrentDoc(Application._CurrentDoc())
+					Set oDoc = _A2B_.CurrentDocument()
 					If oDoc.DbConnect = DBCONNECTFORM Then
 						bPseudoExists = True
 					Else
@@ -503,7 +480,7 @@ Dim oDoc As Object, oForms As Variant
 				If ._DbConnect = DBCONNECTFORM Then bPseudoExists = True Else bPseudoExists = .Document.CurrentController.IsConnected
 			Case OBJDIALOG
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of dialog name
-					bPseudoExists = ( Application._hasItem(COLLALLDIALOGS, ._Name) )
+					bPseudoExists = ( _A2B_.hasItem(COLLALLDIALOGS, ._Name) )
 				End If
 			Case OBJCOLLECTION
 				bPseudoExists = True
@@ -535,7 +512,7 @@ Dim oDoc As Object, oForms As Variant
 				bPseudoExists = ( ._Name &lt;&gt; &quot;&quot; And Not IsNull(.Column) )
 			Case OBJTEMPVAR
 				If ._Name &lt;&gt; &quot;&quot; Then		&apos;	Check validity of tempvar name
-					bPseudoExists = ( Application._hasItem(COLLTEMPVARS, ._Name) )
+					bPseudoExists = ( _A2B_.hasItem(COLLTEMPVARS, ._Name) )
 				End If
 			Case Else
 		End Select
