@@ -97,7 +97,7 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
             {
                 // we want to keep the current collection, just reset the model
                 // with which it's associated.
-                FmFormModel* pDrawModel = (FmFormModel*) GetModel();
+                FmFormModel* pDrawModel = static_cast<FmFormModel*>( GetModel() );
                 SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
                 if ( pObjShell )
                     xForms->setParent( pObjShell->GetModel() );
@@ -123,7 +123,7 @@ void FmFormPage::InsertObject(SdrObject* pObj, size_t nPos,
 {
     SdrPage::InsertObject( pObj, nPos, pReason );
     if (GetModel() && (!pReason || pReason->GetReason() != SDRREASON_STREAMING))
-        ((FmFormModel*)GetModel())->GetUndoEnv().Inserted(pObj);
+        static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Inserted(pObj);
 }
 
 
@@ -209,7 +209,7 @@ SdrObject* FmFormPage::RemoveObject(size_t nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
     if (pObj && GetModel())
-        ((FmFormModel*)GetModel())->GetUndoEnv().Removed(pObj);
+        static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Removed(pObj);
     return pObj;
 }
 

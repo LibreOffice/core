@@ -106,7 +106,7 @@ NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
 bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
 {
     return ( SfxStringItem::operator==(rItem) &&
-            ((const NameOrIndex&) rItem).nPalIndex == nPalIndex );
+            static_cast<const NameOrIndex&>(rItem).nPalIndex == nPalIndex );
 }
 
 SfxPoolItem* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
@@ -148,7 +148,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
         const NameOrIndex *pItem;
         for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
         {
-            pItem = (NameOrIndex*)pPool1->GetItem2( nWhich, nSurrogate );
+            pItem = static_cast<const NameOrIndex*>(pPool1->GetItem2( nWhich, nSurrogate ));
 
             if( pItem && ( pItem->GetName() == pCheckItem->GetName() ) )
             {
@@ -189,26 +189,26 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                     {
                     case XATTR_FILLBITMAP:
                     {
-                        const GraphicObject& rGraphicObjectA(((XFillBitmapItem*)pCheckItem)->GetGraphicObject());
-                        const GraphicObject& rGraphicObjectB(((XBitmapEntry*)pEntry)->GetGraphicObject());
+                        const GraphicObject& rGraphicObjectA(static_cast<const XFillBitmapItem*>(pCheckItem)->GetGraphicObject());
+                        const GraphicObject& rGraphicObjectB(static_cast<XBitmapEntry*>(pEntry)->GetGraphicObject());
 
                         bFound = (rGraphicObjectA == rGraphicObjectB);
                         break;
                     }
                     case XATTR_LINEDASH:
-                        bFound = (((XLineDashItem*)pCheckItem)->GetDashValue() == ((XDashEntry*)pEntry) ->GetDash());
+                        bFound = static_cast<const XLineDashItem*>(pCheckItem)->GetDashValue() == static_cast<XDashEntry*>(pEntry)->GetDash();
                         break;
                     case XATTR_LINESTART:
-                        bFound = (((XLineStartItem*)pCheckItem)->GetLineStartValue() == ((XLineEndEntry*)pEntry)->GetLineEnd());
+                        bFound = static_cast<const XLineStartItem*>(pCheckItem)->GetLineStartValue() == static_cast<XLineEndEntry*>(pEntry)->GetLineEnd();
                         break;
                     case XATTR_LINEEND:
-                        bFound = (((XLineEndItem*)pCheckItem)->GetLineEndValue() == ((XLineEndEntry*)pEntry)->GetLineEnd());
+                        bFound = static_cast<const XLineEndItem*>(pCheckItem)->GetLineEndValue() == static_cast<XLineEndEntry*>(pEntry)->GetLineEnd();
                         break;
                     case XATTR_FILLGRADIENT:
-                        bFound = (((XFillGradientItem*)pCheckItem)->GetGradientValue() == ((XGradientEntry*)pEntry)->GetGradient());
+                        bFound = static_cast<const XFillGradientItem*>(pCheckItem)->GetGradientValue() == static_cast<XGradientEntry*>(pEntry)->GetGradient();
                         break;
                     case XATTR_FILLHATCH:
-                        bFound = (((XFillHatchItem*)pCheckItem)->GetHatchValue() == ((XHatchEntry*)pEntry)->GetHatch());
+                        bFound = static_cast<const XFillHatchItem*>(pCheckItem)->GetHatchValue() == static_cast<XHatchEntry*>(pEntry)->GetHatch();
                         break;
                     }
 
@@ -237,7 +237,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
             const NameOrIndex *pItem;
             for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                pItem = (NameOrIndex*)pPool1->GetItem2( nWhich, nSurrogate );
+                pItem = static_cast<const NameOrIndex*>(pPool1->GetItem2( nWhich, nSurrogate ));
 
                 if( pItem && !pItem->GetName().isEmpty() )
                 {
@@ -303,7 +303,7 @@ SfxPoolItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
 bool XColorItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-            ((const XColorItem&) rItem).aColor == aColor );
+            static_cast<const XColorItem&>(rItem).aColor == aColor );
 }
 
 SfxPoolItem* XColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
@@ -686,7 +686,7 @@ SfxPoolItem* XLineDashItem::Clone(SfxItemPool* /*pPool*/) const
 bool XLineDashItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-             aDash == ((const XLineDashItem&) rItem).aDash );
+             aDash == static_cast<const XLineDashItem&>(rItem).aDash );
 }
 
 SfxPoolItem* XLineDashItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
@@ -985,7 +985,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
 bool XLineDashItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    return ((XLineDashItem*)p1)->GetDashValue() == ((XLineDashItem*)p2)->GetDashValue();
+    return static_cast<const XLineDashItem*>(p1)->GetDashValue() == static_cast<const XLineDashItem*>(p2)->GetDashValue();
 }
 
 XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
@@ -1255,7 +1255,7 @@ SfxPoolItem* XLineStartItem::Clone(SfxItemPool* /*pPool*/) const
 
 bool XLineStartItem::operator==(const SfxPoolItem& rItem) const
 {
-    return ( NameOrIndex::operator==(rItem) && ((const XLineStartItem&) rItem).maPolyPolygon == maPolyPolygon );
+    return ( NameOrIndex::operator==(rItem) && static_cast<const XLineStartItem&>(rItem).maPolyPolygon == maPolyPolygon );
 }
 
 SfxPoolItem* XLineStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
@@ -1384,7 +1384,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate ));
 
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
@@ -1406,7 +1406,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate ));
 
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
@@ -1430,7 +1430,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             nCount = pPool2->GetItemCount2( XATTR_LINESTART );
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool2->GetItem2( XATTR_LINESTART, nSurrogate ));
 
                 if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                 {
@@ -1451,7 +1451,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool2->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool2->GetItem2( XATTR_LINEEND, nSurrogate ));
 
                     if( pItem && ( pItem->GetName() == pLineStartItem->GetName() ) )
                     {
@@ -1486,7 +1486,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
+                    const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 ));
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
@@ -1509,7 +1509,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool1->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
+                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 ));
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
@@ -1597,7 +1597,7 @@ SfxPoolItem* XLineEndItem::Clone(SfxItemPool* /*pPool*/) const
 
 bool XLineEndItem::operator==(const SfxPoolItem& rItem) const
 {
-    return ( NameOrIndex::operator==(rItem) && ((const XLineEndItem&) rItem).maPolyPolygon == maPolyPolygon );
+    return ( NameOrIndex::operator==(rItem) && static_cast<const XLineEndItem&>(rItem).maPolyPolygon == maPolyPolygon );
 }
 
 SfxPoolItem* XLineEndItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
@@ -1667,7 +1667,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate ));
 
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
@@ -1689,7 +1689,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate ));
 
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
@@ -1713,7 +1713,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             nCount = pPool2->GetItemCount2( XATTR_LINESTART );
             for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
             {
-                const XLineStartItem* pItem = (const XLineStartItem*)pPool2->GetItem2( XATTR_LINESTART, nSurrogate );
+                const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool2->GetItem2( XATTR_LINESTART, nSurrogate ));
 
                 if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                 {
@@ -1734,7 +1734,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool2->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool2->GetItem2( XATTR_LINEEND, nSurrogate );
+                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool2->GetItem2( XATTR_LINEEND, nSurrogate ));
 
                     if( pItem && ( pItem->GetName() == pLineEndItem->GetName() ) )
                     {
@@ -1769,7 +1769,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
 
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineStartItem* pItem = (const XLineStartItem*)pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 );
+                    const XLineStartItem* pItem = static_cast<const XLineStartItem*>(pPool1->GetItem2( XATTR_LINESTART, nSurrogate2 ));
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
@@ -1792,7 +1792,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
                 nCount = pPool1->GetItemCount2( XATTR_LINEEND );
                 for( nSurrogate2 = 0; nSurrogate2 < nCount; nSurrogate2++ )
                 {
-                    const XLineEndItem* pItem = (const XLineEndItem*)pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 );
+                    const XLineEndItem* pItem = static_cast<const XLineEndItem*>(pPool1->GetItem2( XATTR_LINEEND, nSurrogate2 ));
 
                     if( pItem && !pItem->GetName().isEmpty() )
                     {
@@ -2411,7 +2411,7 @@ SfxPoolItem* XFillGradientItem::Clone(SfxItemPool* /*pPool*/) const
 bool XFillGradientItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-             aGradient == ((const XFillGradientItem&) rItem).aGradient );
+             aGradient == static_cast<const XFillGradientItem&>(rItem).aGradient );
 }
 
 SfxPoolItem* XFillGradientItem::Create(SvStream& rIn, sal_uInt16 nVer) const
@@ -2698,7 +2698,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
 
 bool XFillGradientItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    return ((XFillGradientItem*)p1)->GetGradientValue() == ((XFillGradientItem*)p2)->GetGradientValue();
+    return static_cast<const XFillGradientItem*>(p1)->GetGradientValue() == static_cast<const XFillGradientItem*>(p2)->GetGradientValue();
 }
 
 XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) const
@@ -2751,8 +2751,8 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, c
 bool XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
 {
     return ( NameOrIndex::operator==(rItem) ) &&
-            ( GetGradientValue() == ((const XFillGradientItem&)rItem).GetGradientValue() ) &&
-             ( bEnabled == ( (XFillFloatTransparenceItem&) rItem ).bEnabled );
+           ( GetGradientValue() == static_cast<const XFillGradientItem&>(rItem).GetGradientValue() ) &&
+           ( bEnabled == static_cast<const XFillFloatTransparenceItem&>(rItem).bEnabled );
 }
 
 SfxPoolItem* XFillFloatTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
@@ -2787,8 +2787,8 @@ bool XFillFloatTransparenceItem::GetPresentation(    SfxItemPresentation ePres,
 
 bool XFillFloatTransparenceItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    return  ((XFillFloatTransparenceItem*)p1)->IsEnabled() == ((XFillFloatTransparenceItem*)p2)->IsEnabled() &&
-            ((XFillFloatTransparenceItem*)p1)->GetGradientValue()  == ((XFillFloatTransparenceItem*)p2)->GetGradientValue();
+    return  static_cast<const XFillFloatTransparenceItem*>(p1)->IsEnabled() == static_cast<const XFillFloatTransparenceItem*>(p2)->IsEnabled() &&
+            static_cast<const XFillFloatTransparenceItem*>(p1)->GetGradientValue()  == static_cast<const XFillFloatTransparenceItem*>(p2)->GetGradientValue();
 }
 
 XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrModel* pModel ) const
@@ -2896,7 +2896,7 @@ SfxPoolItem* XFillHatchItem::Clone(SfxItemPool* /*pPool*/) const
 bool XFillHatchItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-             aHatch == ((const XFillHatchItem&) rItem).aHatch );
+             aHatch == static_cast<const XFillHatchItem&>(rItem).aHatch );
 }
 
 SfxPoolItem* XFillHatchItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
@@ -3105,7 +3105,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 
 bool XFillHatchItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    return ((XFillHatchItem*)p1)->GetHatchValue() == ((XFillHatchItem*)p2)->GetHatchValue();
+    return static_cast<const XFillHatchItem*>(p1)->GetHatchValue() == static_cast<const XFillHatchItem*>(p2)->GetHatchValue();
 }
 
 XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const

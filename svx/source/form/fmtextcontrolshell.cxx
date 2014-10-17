@@ -1046,7 +1046,7 @@ namespace svx
     {
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::formActivated: 0x" );
-        sTrace += OString::number( (sal_IntPtr)_rxController.get(), 16 );
+        sTrace += OString::number( reinterpret_cast<sal_IntPtr>(_rxController.get()), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
@@ -1074,7 +1074,7 @@ namespace svx
     {
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
-        sTrace += OString::number( (sal_IntPtr)_rxController.get(), 16 );
+        sTrace += OString::number( reinterpret_cast<sal_IntPtr>(_rxController.get()), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
         (void)_rxController;
@@ -1327,7 +1327,7 @@ namespace svx
 
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::focusGained: 0x" );
-        sTrace += OString::number( (sal_IntPtr)xControl.get(), 16 );
+        sTrace += OString::number( reinterpret_cast<sal_IntPtr>(xControl.get()), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
@@ -1343,7 +1343,7 @@ namespace svx
 
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::focusLost: 0x" );
-        sTrace += OString::number( (sal_IntPtr)xControl.get(), 16 );
+        sTrace += OString::number( reinterpret_cast<sal_IntPtr>(xControl.get()), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 

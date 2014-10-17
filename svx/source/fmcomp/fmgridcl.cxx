@@ -145,7 +145,7 @@ sal_uInt16 FmGridHeader::GetModelColumnPos(sal_uInt16 nId) const
 void FmGridHeader::notifyColumnSelect(sal_uInt16 nColumnId)
 {
     sal_uInt16 nPos = GetModelColumnPos(nColumnId);
-    Reference< XIndexAccess >  xColumns(((FmGridControl*)GetParent())->GetPeer()->getColumns(), UNO_QUERY);
+    Reference< XIndexAccess >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns(), UNO_QUERY);
     if ( nPos < xColumns->getCount() )
     {
         Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
@@ -761,7 +761,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
 
             if (eState >= SfxItemState::DEFAULT && pItem )
             {
-                bChecked = pItem->ISA(SfxBoolItem) && ((SfxBoolItem*)pItem)->GetValue();
+                bChecked = pItem->ISA(SfxBoolItem) && static_cast<SfxBoolItem*>(pItem)->GetValue();
                 rMenu.CheckItem(SID_FM_SHOW_PROPERTY_BROWSER,bChecked);
             }
             delete pItem;
@@ -1138,7 +1138,7 @@ void FmGridControl::DeleteSelectedRows()
         if (xConfirm.is())
         {
             ::com::sun::star::sdb::RowChangeEvent aEvent;
-            aEvent.Source = (Reference< XInterface > )(*getDataSource());
+            aEvent.Source = Reference< XInterface >(*getDataSource());
             aEvent.Rows = nSelectedRows;
             aEvent.Action = ::com::sun::star::sdb::RowChangeAction::DELETE;
             if (!xConfirm->confirmDelete(aEvent))
@@ -1151,7 +1151,7 @@ void FmGridControl::DeleteSelectedRows()
     {
         BeginCursorAction();
         CursorWrapper* pCursor = getDataSource();
-        Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*pCursor, UNO_QUERY);
+        Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*pCursor), UNO_QUERY);
         try
         {
             pCursor->beforeFirst();
@@ -1174,7 +1174,7 @@ void FmGridControl::DeleteSelectedRows()
     }
     else
     {
-        Reference< ::com::sun::star::sdbcx::XDeleteRows >  xDeleteThem((Reference< XInterface >)*getDataSource(), UNO_QUERY);
+        Reference< ::com::sun::star::sdbcx::XDeleteRows >  xDeleteThem(Reference< XInterface >(*getDataSource()), UNO_QUERY);
 
         // collect the bookmarks of the selected rows
         Sequence < Any> aBookmarks = getSelectionBookmarks();
@@ -1267,13 +1267,13 @@ void FmGridControl::DeleteSelectedRows()
                         // no valid bookmark so move to the insert row
                         else
                         {
-                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                            Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
                             xUpdateCursor->moveToInsertRow();
                         }
                     }
                     else
                     {
-                        Reference< ::com::sun::star::beans::XPropertySet >  xSet((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                        Reference< ::com::sun::star::beans::XPropertySet >  xSet(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
 
                         sal_Int32 nRecordCount(0);
                         xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
@@ -1283,7 +1283,7 @@ void FmGridControl::DeleteSelectedRows()
                         // there are no rows left and we have an insert row
                         if (!nRecordCount && GetEmptyRow().Is())
                         {
-                            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                            Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
                             xUpdateCursor->moveToInsertRow();
                         }
                         else if (nRecordCount)

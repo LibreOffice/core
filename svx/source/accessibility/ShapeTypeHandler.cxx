@@ -308,7 +308,7 @@ OUString
                     {
                         if(pSdrObj->ISA(SdrObjCustomShape))
                         {
-                            SdrObjCustomShape* pCustomShape = (SdrObjCustomShape*)pSdrObj;
+                            SdrObjCustomShape* pCustomShape = static_cast<SdrObjCustomShape*>(pSdrObj);
                             if(pCustomShape)
                             {
                                 if (pCustomShape->IsTextPath())

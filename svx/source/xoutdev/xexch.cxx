@@ -39,7 +39,7 @@ XFillExchangeData::XFillExchangeData() :
 }
 
 XFillExchangeData::XFillExchangeData( const XFillAttrSetItem rXFillAttrSetItem ) :
-    pXFillAttrSetItem( (XFillAttrSetItem*) rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ),
+    pXFillAttrSetItem( static_cast<XFillAttrSetItem*>( rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ) ),
     pPool( rXFillAttrSetItem.GetItemSet().GetPool() )
 {
 }
@@ -130,7 +130,7 @@ XFillExchangeData& XFillExchangeData::operator=( const XFillExchangeData& rData 
     delete pXFillAttrSetItem;
 
     if( rData.pXFillAttrSetItem )
-        pXFillAttrSetItem = (XFillAttrSetItem*) rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() );
+        pXFillAttrSetItem = static_cast<XFillAttrSetItem*>( rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() ) );
     else
     {
         pPool = NULL;

@@ -976,7 +976,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
 
 void FmUndoPropertyAction::Undo()
 {
-    FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
 
     if (xObj.is() && !rEnv.IsLocked())
     {
@@ -996,7 +996,7 @@ void FmUndoPropertyAction::Undo()
 
 void FmUndoPropertyAction::Redo()
 {
-    FmXUndoEnvironment& rEnv = ((FmFormModel&)rMod).GetUndoEnv();
+    FmXUndoEnvironment& rEnv = static_cast<FmFormModel&>(rMod).GetUndoEnv();
 
     if (xObj.is() && !rEnv.IsLocked())
     {

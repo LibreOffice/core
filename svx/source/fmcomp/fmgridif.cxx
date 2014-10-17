@@ -1250,7 +1250,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
     Reference< XIndexContainer >  xColumns = getColumns();
 
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
     sal_Int32 nColumns = pGrid->GetViewColCount();
 
     DbGridColumns aColumns = pGrid->GetColumns();
@@ -1304,7 +1304,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
 Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type& xType ) throw(RuntimeException, std::exception)
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
     DBG_ASSERT(pGrid && pGrid->IsOpen(), "FmXGridPeer::queryFieldData : have no valid grid window !");
     if (!pGrid || !pGrid->IsOpen())
         return Sequence< Any>();
@@ -1398,7 +1398,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
         // this should not be (deadlock) critical, as by definition, every component should release
         // any own mutexes before notifying
 
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     if (!pGrid)
         return;
 
@@ -1518,7 +1518,7 @@ void FmXGridPeer::removeUpdateListener(const Reference< XUpdateListener >& l) th
 
 sal_Bool FmXGridPeer::commit() throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     if (!m_xCursor.is() || !pGrid)
         return sal_True;
 
@@ -1541,7 +1541,7 @@ sal_Bool FmXGridPeer::commit() throw( RuntimeException, std::exception )
 
 void FmXGridPeer::cursorMoved(const EventObject& _rEvent) throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     // we are not interested in move to insert row only in the resetted event
     // which is fired after positioning an the insert row
     if (pGrid && pGrid->IsOpen() && !::comphelper::getBOOL(Reference< XPropertySet > (_rEvent.Source, UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
@@ -1551,7 +1551,7 @@ void FmXGridPeer::cursorMoved(const EventObject& _rEvent) throw( RuntimeExceptio
 
 void FmXGridPeer::rowChanged(const EventObject& _rEvent) throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     if (pGrid && pGrid->IsOpen())
     {
         if (m_xCursor->rowUpdated() && !pGrid->IsCurrentAppending())
@@ -1713,7 +1713,7 @@ void FmXGridPeer::setDesignMode(sal_Bool bOn) throw( RuntimeException, std::exce
     {
         vcl::Window* pWin = GetWindow();
         if (pWin)
-            ((FmGridControl*) pWin)->SetDesignMode(bOn);
+            static_cast<FmGridControl*>(pWin)->SetDesignMode(bOn);
     }
 
     if (bOn)
@@ -1727,7 +1727,7 @@ sal_Bool FmXGridPeer::isDesignMode() throw( RuntimeException, std::exception )
 {
     vcl::Window* pWin = GetWindow();
     if (pWin)
-        return ((FmGridControl*) pWin)->IsDesignMode();
+        return static_cast<FmGridControl*>(pWin)->IsDesignMode();
     else
         return sal_False;
 }
@@ -1737,7 +1737,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
     // Handle Column beruecksichtigen
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
         return;
@@ -1770,7 +1770,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
 {
     SolarMutexGuard aGuard;
 
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
 
     // Handle Column beruecksichtigen
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove())
@@ -1804,7 +1804,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     Reference< XColumnsSupplier > xSuppColumns;
     CursorWrapper* pGridDataSource = pGrid->getDataSource();
     if ( pGridDataSource )
-        xSuppColumns.set((Reference< XInterface >)( *pGridDataSource ), css::uno::UNO_QUERY);
+        xSuppColumns.set(Reference< XInterface >( *pGridDataSource ), css::uno::UNO_QUERY);
     Reference< XNameAccess > xColumnsByName;
     if ( xSuppColumns.is() )
         xColumnsByName = xSuppColumns->getColumns();
@@ -1825,7 +1825,7 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeExcept
 {
     SolarMutexGuard aGuard;
 
-    FmGridControl* pGrid    = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid    = static_cast<FmGridControl*>(GetWindow());
 
     // Handle Column beruecksichtigen
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == ((sal_Int32)pGrid->GetModelColCount()))
@@ -1842,7 +1842,7 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
 {
     SolarMutexGuard aGuard;
 
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
 
     bool bVoid = !Value.hasValue();
 
@@ -2056,7 +2056,7 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
     Any aProp;
     if (GetWindow())
     {
-        FmGridControl* pGrid = (FmGridControl*) GetWindow();
+        FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
         vcl::Window* pDataWindow  = &pGrid->GetDataWindow();
 
         if ( _rPropertyName == FM_PROP_NAME )
@@ -2192,7 +2192,7 @@ void FmXGridPeer::stopCursorListening()
 
 void FmXGridPeer::updateGrid(const Reference< XRowSet >& _rxCursor)
 {
-    FmGridControl* pGrid = (FmGridControl*)GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
     if (pGrid)
         pGrid->setDataSource(_rxCursor);
 }
@@ -2206,7 +2206,7 @@ Reference< XRowSet >  FmXGridPeer::getRowSet() throw( RuntimeException, std::exc
 
 void FmXGridPeer::setRowSet(const Reference< XRowSet >& _rDatabaseCursor) throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
     if (!pGrid || !m_xColumns.is() || !m_xColumns->getCount())
         return;
     // unregister all listeners
@@ -2255,14 +2255,14 @@ void SAL_CALL FmXGridPeer::removeGridControlListener( const Reference< XGridCont
 
 sal_Int16 FmXGridPeer::getCurrentColumnPosition() throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     return pGrid ? pGrid->GetViewColumnPos(pGrid->GetCurColumnId()) : -1;
 }
 
 
 void FmXGridPeer::setCurrentColumnPosition(sal_Int16 nPos) throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     if (pGrid)
         pGrid->GoToColumnId(pGrid->GetColumnIdFromViewPos(nPos));
 }
@@ -2272,7 +2272,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt) throw( RuntimeExcepti
 {
     SolarMutexGuard aGuard;
 
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     if (pGrid)
     {
         Reference< ::com::sun::star::view::XSelectionSupplier >  xSelSupplier(evt.Source, UNO_QUERY);
@@ -2340,7 +2340,7 @@ Reference< XEnumeration >  FmXGridPeer::createEnumeration() throw( RuntimeExcept
 
 sal_Int32 FmXGridPeer::getCount() throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     if (pGrid)
         return pGrid->GetViewColCount();
     else
@@ -2350,7 +2350,7 @@ sal_Int32 FmXGridPeer::getCount() throw( RuntimeException, std::exception )
 
 Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
     if (_nIndex < 0 ||
         _nIndex >= getCount() || !pGrid)
         throw IndexOutOfBoundsException();
@@ -2383,7 +2383,7 @@ void FmXGridPeer::setMode(const OUString& Mode) throw( NoSupportException, Runti
 
     m_aMode = Mode;
 
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
     if ( Mode == "FilterMode" )
         pGrid->SetFilterMode(true);
     else
@@ -2429,7 +2429,7 @@ sal_Bool FmXGridPeer::supportsMode(const OUString& Mode) throw( RuntimeException
 
 void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
 
     sal_Int32 _nIndex = pGrid->GetModelColumnPos(pColumn->GetId());
     Reference< ::com::sun::star::awt::XControl >  xControl(pColumn->GetCell());
@@ -2444,7 +2444,7 @@ void FmXGridPeer::columnVisible(DbGridColumn* pColumn)
 
 void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
 
     sal_Int32 _nIndex = pGrid->GetModelColumnPos(pColumn->GetId());
     Reference< ::com::sun::star::awt::XControl >  xControl(pColumn->GetCell());
@@ -2459,7 +2459,7 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
 
 void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException, std::exception )
 {
-    FmGridControl* pGrid = (FmGridControl*) GetWindow();
+    FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
     sal_Int32 nOldFlags = pGrid->GetBrowserFlags();
     pGrid->SetBrowserFlags(nOldFlags | EBBF_NOROWPICTURE);
 
@@ -2599,7 +2599,7 @@ void FmXGridPeer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent
         {
             DBG_ASSERT(m_pDispatchers[i] == Event.Source, "FmXGridPeer::statusChanged : the event source is a little bit suspect !");
             m_pStateCache[i] = Event.IsEnabled;
-            FmGridControl* pGrid = (FmGridControl*) GetWindow();
+            FmGridControl* pGrid = static_cast<FmGridControl*>( GetWindow() );
             if (*pSlots != SID_FM_RECORD_UNDO)
                 pGrid->GetNavigationBar().InvalidateState(*pSlots);
             break;
@@ -2657,7 +2657,7 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException, s
 {
     if (m_xColumns == rEvent.Source)
     {   // my model was reset -> refresh the grid content
-        FmGridControl* pGrid = (FmGridControl*)GetWindow();
+        FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
         if (!pGrid)
             return;
         SolarMutexGuard aGuard;
@@ -2667,7 +2667,7 @@ void FmXGridPeer::resetted(const EventObject& rEvent) throw( RuntimeException, s
     else if (m_xCursor == rEvent.Source)
     {
         SolarMutexGuard aGuard;
-        FmGridControl* pGrid = (FmGridControl*) GetWindow();
+        FmGridControl* pGrid = static_cast<FmGridControl*>(GetWindow());
         if (pGrid && pGrid->IsOpen())
             pGrid->positioned(rEvent);
     }
@@ -2829,7 +2829,7 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
     if (!m_pStateCache)
         return -1;  // unspecified
 
-    sal_uInt16 nSlot = (sal_uInt16)(sal_uIntPtr)pSlot;
+    sal_uInt16 nSlot = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(pSlot);
 
     // search the given slot with our supported sequence
     Sequence<sal_uInt16>& aSupported = getSupportedGridSlots();
@@ -2862,7 +2862,7 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
 
     DBG_ASSERT(aSlots.getLength() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconstent data returned by getSupportedURLs/getSupportedGridSlots !");
 
-    sal_uInt16 nSlot = (sal_uInt16)(sal_uIntPtr)pSlot;
+    sal_uInt16 nSlot = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(pSlot);
     for (sal_uInt16 i=0; i<aSlots.getLength(); ++i, ++pUrls, ++pSlots)
     {
         if (*pSlots == nSlot)

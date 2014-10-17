@@ -31,7 +31,7 @@ TYPEINIT1(FmInterfaceItem, SfxPoolItem);
 bool FmInterfaceItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
-    return( xInterface == ((FmInterfaceItem&)rAttr).GetInterface() );
+    return( xInterface == static_cast<const FmInterfaceItem&>(rAttr).GetInterface() );
 }
 
 

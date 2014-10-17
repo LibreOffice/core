@@ -32,12 +32,12 @@ using namespace com::sun::star;
 
 XBitmapEntry* XBitmapList::Remove(long nIndex)
 {
-    return (XBitmapEntry*) XPropertyList::Remove(nIndex);
+    return static_cast<XBitmapEntry*>( XPropertyList::Remove(nIndex) );
 }
 
 XBitmapEntry* XBitmapList::GetBitmap(long nIndex) const
 {
-    return (XBitmapEntry*) XPropertyList::Get(nIndex);
+    return static_cast<XBitmapEntry*>( XPropertyList::Get(nIndex) );
 }
 
 uno::Reference< container::XNameContainer > XBitmapList::createInstance()

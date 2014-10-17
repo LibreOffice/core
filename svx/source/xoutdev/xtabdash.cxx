@@ -49,17 +49,17 @@ XDashList::~XDashList()
 
 XDashEntry* XDashList::Replace(XDashEntry* pEntry, long nIndex )
 {
-    return (XDashEntry*) XPropertyList::Replace(pEntry, nIndex);
+    return static_cast<XDashEntry*>( XPropertyList::Replace(pEntry, nIndex) );
 }
 
 XDashEntry* XDashList::Remove(long nIndex)
 {
-    return (XDashEntry*) XPropertyList::Remove(nIndex);
+    return static_cast<XDashEntry*>( XPropertyList::Remove(nIndex) );
 }
 
 XDashEntry* XDashList::GetDash(long nIndex) const
 {
-    return (XDashEntry*) XPropertyList::Get(nIndex);
+    return static_cast<XDashEntry*>( XPropertyList::Get(nIndex) );
 }
 
 uno::Reference< container::XNameContainer > XDashList::createInstance()

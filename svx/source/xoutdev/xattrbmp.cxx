@@ -348,7 +348,7 @@ SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
 bool XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 {
     return (NameOrIndex::operator==(rItem)
-        && maGraphicObject == ((const XFillBitmapItem&)rItem).maGraphicObject);
+        && maGraphicObject == static_cast<const XFillBitmapItem&>(rItem).maGraphicObject);
 }
 
 SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, sal_uInt16 nVer) const
@@ -524,8 +524,8 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
 
 bool XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
 {
-    const GraphicObject& aGraphicObjectA(((XFillBitmapItem*)p1)->GetGraphicObject());
-    const GraphicObject& aGraphicObjectB(((XFillBitmapItem*)p2)->GetGraphicObject());
+    const GraphicObject& aGraphicObjectA(static_cast<const XFillBitmapItem*>(p1)->GetGraphicObject());
+    const GraphicObject& aGraphicObjectB(static_cast<const XFillBitmapItem*>(p2)->GetGraphicObject());
 
     return aGraphicObjectA == aGraphicObjectB;
 }

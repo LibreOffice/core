@@ -102,7 +102,7 @@ void FmFormView::Init()
 
     DBG_ASSERT( pModel->ISA(FmFormModel), "Falsches Model" );
     if( !pModel->ISA(FmFormModel) ) return;
-    FmFormModel* pFormModel = (FmFormModel*)pModel;
+    FmFormModel* pFormModel = static_cast<FmFormModel*>(pModel);
 
 
     // DesignMode vom Model holen
@@ -125,7 +125,7 @@ void FmFormView::Init()
         const SfxPoolItem *pItem=0;
         if ( pObjShell->GetMedium()->GetItemSet()->GetItemState( SID_COMPONENTDATA, false, &pItem ) == SfxItemState::SET )
         {
-            ::comphelper::NamedValueCollection aComponentData( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            ::comphelper::NamedValueCollection aComponentData( static_cast<const SfxUnoAnyItem*>(pItem)->GetValue() );
             bInitDesignMode = aComponentData.getOrDefault( "ApplyFormDesignMode", bInitDesignMode );
         }
     }

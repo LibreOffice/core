@@ -140,7 +140,7 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
             m_pImpl->pUndoEnv->RemoveForms( xForms );
     }
 
-    FmFormPage* pRemovedPage = (FmFormPage*)SdrModel::RemovePage(nPgNum);
+    FmFormPage* pRemovedPage = static_cast<FmFormPage*>(SdrModel::RemovePage(nPgNum));
     OSL_ENSURE( pRemovedPage == pToBeRemovedPage, "FmFormModel::RemovePage: inconsistency!" );
     return pRemovedPage;
 }
@@ -156,7 +156,7 @@ void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 
 SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 {
-    FmFormPage* pPage = (FmFormPage*)SdrModel::RemoveMasterPage(nPgNum);
+    FmFormPage* pPage = static_cast<FmFormPage*>(SdrModel::RemoveMasterPage(nPgNum));
 
     if ( pPage )
     {

@@ -180,9 +180,9 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 {
                     SdrObject* pTmp = pRenderedShape;
                     pRenderedShape = new SdrObjGroup();
-                    ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                    static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
-                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pShadowGeometry->Clone(), 0 );
+                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pShadowGeometry->Clone(), 0 );
             }
             else
                 pRenderedShape = pShadowGeometry->Clone();
@@ -235,9 +235,9 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 {
                     SdrObject* pTmp = pRenderedShape;
                     pRenderedShape = new SdrObjGroup();
-                    ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                    static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
                 }
-                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj );
+                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj );
             }
             else
                 pRenderedShape = pTextObj;
@@ -250,7 +250,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             {
                 SdrObject* pTmp = pRenderedShape;
                 pRenderedShape = new SdrObjGroup();
-                ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
             }
             pRenderedShape->SetPage( pCustoObj->GetPage() );
             pRenderedShape->SetModel( pCustoObj->GetModel() );
@@ -277,10 +277,10 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     if ( pSdrObjCustomShape )
     {
         // retrieving the TextPath property to check if feature is enabled
-        SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
-            pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+        const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
+            pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
         bool bTextPathOn = false;
-        uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "TextPath" );
+        const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "TextPath" );
         if ( pAny )
             *pAny >>= bTextPathOn;
 
@@ -314,7 +314,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             }
             Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
 
-            const GeoStat& rGeoStat = ((SdrObjCustomShape*)pSdrObjCustomShape)->GetGeoStat();
+            const GeoStat& rGeoStat = static_cast<SdrObjCustomShape*>(pSdrObjCustomShape)->GetGeoStat();
             if ( rGeoStat.nShearWink )
             {
                 long nShearWink = rGeoStat.nShearWink;
@@ -354,7 +354,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         }
 
         if ( mbForceGroupWithText )
-            pRenderedShape = ImplForceGroupWithText( (SdrObjCustomShape*)pSdrObjCustomShape, pRenderedShape );
+            pRenderedShape = ImplForceGroupWithText( static_cast<SdrObjCustomShape*>(pSdrObjCustomShape), pRenderedShape );
 
         if ( pRenderedShape )
         {
@@ -403,7 +403,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
             bool bFlipV = aCustomShape2d.IsFlipVert();
             bool bFlipH = aCustomShape2d.IsFlipHorz();
 
-            const GeoStat& rGeoStat = ((SdrObjCustomShape*)pSdrObjCustomShape)->GetGeoStat();
+            const GeoStat& rGeoStat = static_cast<SdrObjCustomShape*>(pSdrObjCustomShape)->GetGeoStat();
             if ( rGeoStat.nShearWink )
             {
                 long nShearWink = rGeoStat.nShearWink;
@@ -445,7 +445,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
 
                 if ( pNext->ISA( SdrPathObj ) )
                 {
-                    aPP = ((SdrPathObj*)pNext)->GetPathPoly();
+                    aPP = static_cast<const SdrPathObj*>(pNext)->GetPathPoly();
                 }
                 else
                 {

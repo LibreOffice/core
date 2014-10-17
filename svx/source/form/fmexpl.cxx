@@ -309,7 +309,7 @@ bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
         return true;
     if( !pEntryData->ISA(FmFormData) )
         return false;
-    FmFormData* pFormData = (FmFormData*)pEntryData;
+    FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
     if( (XForm*)m_xForm.get() != (XForm*)pFormData->GetFormIface().get() )
         return false;
 
@@ -473,7 +473,7 @@ bool FmControlData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 
     if( !pEntryData->ISA(FmControlData) )
         return false;
-    FmControlData* pControlData = (FmControlData*)pEntryData;
+    FmControlData* pControlData = static_cast<FmControlData*>(pEntryData);
 
     if( (XFormComponent*)m_xFormComponent.get() != (XFormComponent*)pControlData->GetFormComponent().get() )
         return false;
@@ -531,7 +531,7 @@ namespace svxform
 
         if( eState >= SfxItemState::DEFAULT )
         {
-            FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
+            FmFormShell* pShell = PTR_CAST( FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell() );
             UpdateContent( pShell );
         }
         else
@@ -609,7 +609,7 @@ namespace svxform
     {
         pWindow = new NavigatorFrame( _pBindings, this, _pParent );
         eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-        ((SfxDockingWindow*)pWindow)->Initialize( _pInfo );
+        static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
     }
 
 

@@ -47,17 +47,17 @@ XGradientList::~XGradientList()
 
 XGradientEntry* XGradientList::Replace(XGradientEntry* pEntry, long nIndex )
 {
-    return( (XGradientEntry*) XPropertyList::Replace( pEntry, nIndex ) );
+    return static_cast<XGradientEntry*>( XPropertyList::Replace( pEntry, nIndex ) );
 }
 
 XGradientEntry* XGradientList::Remove(long nIndex)
 {
-    return( (XGradientEntry*) XPropertyList::Remove( nIndex ) );
+    return static_cast<XGradientEntry*>( XPropertyList::Remove( nIndex ) );
 }
 
 XGradientEntry* XGradientList::GetGradient(long nIndex) const
 {
-    return( (XGradientEntry*) XPropertyList::Get( nIndex ) );
+    return static_cast<XGradientEntry*>( XPropertyList::Get( nIndex ) );
 }
 
 uno::Reference< container::XNameContainer > XGradientList::createInstance()

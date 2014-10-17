@@ -98,7 +98,7 @@ static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uIn
         rFWData.bSingleLineMode = bSingleLineMode;
 
         // setting the strings
-        OutlinerParaObject* pParaObj = ((SdrObjCustomShape*)pCustomShape)->GetOutlinerParaObject();
+        OutlinerParaObject* pParaObj = static_cast<const SdrObjCustomShape*>(pCustomShape)->GetOutlinerParaObject();
         if ( pParaObj )
         {
             const EditTextObject& rTextObj = pParaObj->GetTextObject();
@@ -116,7 +116,7 @@ static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uIn
                     aParagraphData.aString = rTextObj.GetText( j );
 
                     const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  // retrieving some paragraph attributes
-                    aParagraphData.nFrameDirection = ((SvxFrameDirectionItem&)rParaSet.Get( EE_PARA_WRITINGDIR )).GetValue();
+                    aParagraphData.nFrameDirection = static_cast<const SvxFrameDirectionItem&>(rParaSet.Get( EE_PARA_WRITINGDIR )).GetValue();
                     aTextArea.vParagraphs.push_back( aParagraphData );
                 }
                 rFWData.vTextAreas.push_back( aTextArea );
@@ -155,7 +155,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     sal_uInt16 nOutlinesCount2d = rOutline2d.Count();
 
     vcl::Font aFont;
-    SvxFontItem& rFontItem = (SvxFontItem&)pCustomShape->GetMergedItem( EE_CHAR_FONTINFO );
+    const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTINFO ));
     aFont.SetHeight( pCustomShape->GetLogicRect().GetHeight() / rFWData.nMaxParagraphsPerTextArea );
     aFont.SetAlign( ALIGN_TOP );
     aFont.SetName( rFontItem.GetFamilyName() );
@@ -210,7 +210,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
 
 void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, FWTextArea& rTextArea, bool bSameLetterHeights )
 {
-    bool bIsVertical = ((SdrObjCustomShape*)pCustomShape)->IsVerticalWriting();
+    bool bIsVertical = static_cast<const SdrObjCustomShape*>(pCustomShape)->IsVerticalWriting();
     sal_Int32 nVerticalOffset = rFWData.nMaxParagraphsPerTextArea > rTextArea.vParagraphs.size()
                                     ? rFWData.nSingleLineHeight / 2 : 0;
 
@@ -241,7 +241,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 nFntItm = EE_CHAR_FONTINFO_CTL;
             else if ( nScriptType == i18n::ScriptType::ASIAN )
                 nFntItm = EE_CHAR_FONTINFO_CJK;
-            SvxFontItem& rFontItem = (SvxFontItem&)pCustomShape->GetMergedItem( nFntItm );
+            const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>(pCustomShape->GetMergedItem( nFntItm ));
             vcl::Font aFont;
             aFont.SetHeight( rFWData.nSingleLineHeight );
             aFont.SetAlign( ALIGN_TOP );
@@ -251,10 +251,10 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             aFont.SetStyleName( rFontItem.GetStyleName() );
             aFont.SetOrientation( 0 );
 
-            SvxPostureItem& rPostureItem = (SvxPostureItem&)pCustomShape->GetMergedItem( EE_CHAR_ITALIC );
+            const SvxPostureItem& rPostureItem = static_cast<const SvxPostureItem&>(pCustomShape->GetMergedItem( EE_CHAR_ITALIC ));
             aFont.SetItalic( rPostureItem.GetPosture() );
 
-            SvxWeightItem& rWeightItem = (SvxWeightItem&)pCustomShape->GetMergedItem( EE_CHAR_WEIGHT );
+            const SvxWeightItem& rWeightItem = static_cast<const SvxWeightItem&>(pCustomShape->GetMergedItem( EE_CHAR_WEIGHT ));
             aFont.SetWeight( rWeightItem.GetWeight() );
 
             // initializing virtual device
@@ -265,7 +265,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             if ( aParagraphIter->nFrameDirection == FRMDIR_HORI_RIGHT_TOP )
                 aVirDev.SetLayoutMode( TEXT_LAYOUT_BIDI_RTL );
 
-            SvxCharScaleWidthItem& rCharScaleWidthItem = (SvxCharScaleWidthItem&)pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH );
+            const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH ));
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
             long* pDXArry = NULL;
             sal_Int32 nWidth = 0;
@@ -414,8 +414,8 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
 
 void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
 {
-    SdrTextHorzAdjust eHorzAdjust( ((SdrTextHorzAdjustItem&)pCustomShape->GetMergedItem( SDRATTR_TEXT_HORZADJUST )).GetValue() );
-    SdrFitToSizeType  eFTS( ((SdrTextFitToSizeTypeItem&)pCustomShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
+    SdrTextHorzAdjust eHorzAdjust( static_cast<const SdrTextHorzAdjustItem&>(pCustomShape->GetMergedItem( SDRATTR_TEXT_HORZADJUST )).GetValue() );
+    SdrFitToSizeType  eFTS( static_cast<const SdrTextFitToSizeTypeItem&>(pCustomShape->GetMergedItem( SDRATTR_TEXT_FITTOSIZE )).GetValue() );
 
     std::vector< FWTextArea >::iterator aTextAreaIter = rFWData.vTextAreas.begin();
     std::vector< FWTextArea >::iterator aTextAreaIEnd = rFWData.vTextAreas.end();
@@ -424,8 +424,8 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
                                                 / rFWData.nMaxParagraphsPerTextArea ) * rFWData.fHorizontalTextScaling );
 
     bool bSameLetterHeights = false;
-    SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "SameLetterHeights" );
+    const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+    const com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( "TextPath", "SameLetterHeights" );
     if ( pAny )
         *pAny >>= bSameLetterHeights;
 
@@ -515,7 +515,7 @@ basegfx::B2DPolyPolygon GetOutlinesFromShape2d( const SdrObject* pShape2d )
         SdrObject* pPartObj = aObjListIter.Next();
         if ( pPartObj->ISA( SdrPathObj ) )
         {
-            basegfx::B2DPolyPolygon aCandidate(((SdrPathObj*)pPartObj)->GetPathPoly());
+            basegfx::B2DPolyPolygon aCandidate(static_cast<SdrPathObj*>(pPartObj)->GetPathPoly());
             if(aCandidate.areControlPointsUsed())
             {
                 aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);

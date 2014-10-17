@@ -208,7 +208,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
     }
     Reference< XRowSet >  xCur;
     if (m_rParent.getDataSource())
-        xCur = Reference< XRowSet > ((Reference< XInterface >)*m_rParent.getDataSource(), UNO_QUERY);
+        xCur = Reference< XRowSet > (Reference< XInterface >(*m_rParent.getDataSource()), UNO_QUERY);
         // TODO : the cursor wrapper should use an XRowSet interface, too
 
     pCellControl->Init( m_rParent.GetDataWindow(), xCur );
@@ -1348,7 +1348,7 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
     // einen Standard-Formatter ...
     if (pFormatterUsed == NULL)
     {
-        pFormatterUsed = ((FormattedField*)m_pWindow)->StandardFormatter();
+        pFormatterUsed = static_cast<FormattedField*>(m_pWindow)->StandardFormatter();
         DBG_ASSERT(pFormatterUsed != NULL, "DbFormattedField::Init : no standard formatter given by the numeric field !");
     }
     // ... und einen Standard-Key
@@ -1357,14 +1357,14 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
 
     m_nKeyType  = comphelper::getNumberFormatType(m_xSupplier->getNumberFormats(), nFormatKey);
 
-    ((FormattedField*)m_pWindow)->SetFormatter(pFormatterUsed);
-    ((FormattedField*)m_pPainter)->SetFormatter(pFormatterUsed);
+    static_cast<FormattedField*>(m_pWindow)->SetFormatter(pFormatterUsed);
+    static_cast<FormattedField*>(m_pPainter)->SetFormatter(pFormatterUsed);
 
-    ((FormattedField*)m_pWindow)->SetFormatKey(nFormatKey);
-    ((FormattedField*)m_pPainter)->SetFormatKey(nFormatKey);
+    static_cast<FormattedField*>(m_pWindow)->SetFormatKey(nFormatKey);
+    static_cast<FormattedField*>(m_pPainter)->SetFormatKey(nFormatKey);
 
-    ((FormattedField*)m_pWindow)->TreatAsNumber(m_rColumn.IsNumeric());
-    ((FormattedField*)m_pPainter)->TreatAsNumber(m_rColumn.IsNumeric());
+    static_cast<FormattedField*>(m_pWindow)->TreatAsNumber(m_rColumn.IsNumeric());
+    static_cast<FormattedField*>(m_pPainter)->TreatAsNumber(m_rColumn.IsNumeric());
 
     // Min- und Max-Werte
     if (m_rColumn.IsNumeric())
@@ -1377,15 +1377,15 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             {
                 DBG_ASSERT(aMin.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid min value !");
                 double dMin = ::comphelper::getDouble(aMin);
-                ((FormattedField*)m_pWindow)->SetMinValue(dMin);
-                ((FormattedField*)m_pPainter)->SetMinValue(dMin);
+                static_cast<FormattedField*>(m_pWindow)->SetMinValue(dMin);
+                static_cast<FormattedField*>(m_pPainter)->SetMinValue(dMin);
                 bClearMin = false;
             }
         }
         if (bClearMin)
         {
-            ((FormattedField*)m_pWindow)->ClearMinValue();
-            ((FormattedField*)m_pPainter)->ClearMinValue();
+            static_cast<FormattedField*>(m_pWindow)->ClearMinValue();
+            static_cast<FormattedField*>(m_pPainter)->ClearMinValue();
         }
         bool bClearMax = true;
         if (::comphelper::hasProperty(FM_PROP_EFFECTIVE_MAX, xUnoModel))
@@ -1395,15 +1395,15 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             {
                 DBG_ASSERT(aMin.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid max value !");
                 double dMin = ::comphelper::getDouble(aMin);
-                ((FormattedField*)m_pWindow)->SetMaxValue(dMin);
-                ((FormattedField*)m_pPainter)->SetMaxValue(dMin);
+                static_cast<FormattedField*>(m_pWindow)->SetMaxValue(dMin);
+                static_cast<FormattedField*>(m_pPainter)->SetMaxValue(dMin);
                 bClearMax = false;
             }
         }
         if (bClearMax)
         {
-            ((FormattedField*)m_pWindow)->ClearMaxValue();
-            ((FormattedField*)m_pPainter)->ClearMaxValue();
+            static_cast<FormattedField*>(m_pWindow)->ClearMaxValue();
+            static_cast<FormattedField*>(m_pPainter)->ClearMaxValue();
         }
     }
 
@@ -1416,16 +1416,16 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
             case TypeClass_DOUBLE:
                 if (m_rColumn.IsNumeric())
                 {
-                    ((FormattedField*)m_pWindow)->SetDefaultValue(::comphelper::getDouble(aDefault));
-                    ((FormattedField*)m_pPainter)->SetDefaultValue(::comphelper::getDouble(aDefault));
+                    static_cast<FormattedField*>(m_pWindow)->SetDefaultValue(::comphelper::getDouble(aDefault));
+                    static_cast<FormattedField*>(m_pPainter)->SetDefaultValue(::comphelper::getDouble(aDefault));
                 }
                 else
                 {
                     OUString sConverted;
                     Color* pDummy;
                     pFormatterUsed->GetOutputString(::comphelper::getDouble(aDefault), 0, sConverted, &pDummy);
-                    ((FormattedField*)m_pWindow)->SetDefaultText(sConverted);
-                    ((FormattedField*)m_pPainter)->SetDefaultText(sConverted);
+                    static_cast<FormattedField*>(m_pWindow)->SetDefaultText(sConverted);
+                    static_cast<FormattedField*>(m_pPainter)->SetDefaultText(sConverted);
                 }
                 break;
             case TypeClass_STRING:
@@ -1437,14 +1437,14 @@ void DbFormattedField::Init( vcl::Window& rParent, const Reference< XRowSet >& x
                     sal_uInt32 nTestFormat(0);
                     if (pFormatterUsed->IsNumberFormat(sDefault, nTestFormat, dVal))
                     {
-                        ((FormattedField*)m_pWindow)->SetDefaultValue(dVal);
-                        ((FormattedField*)m_pPainter)->SetDefaultValue(dVal);
+                        static_cast<FormattedField*>(m_pWindow)->SetDefaultValue(dVal);
+                        static_cast<FormattedField*>(m_pPainter)->SetDefaultValue(dVal);
                     }
                 }
                 else
                 {
-                    ((FormattedField*)m_pWindow)->SetDefaultText(sDefault);
-                    ((FormattedField*)m_pPainter)->SetDefaultText(sDefault);
+                    static_cast<FormattedField*>(m_pWindow)->SetDefaultText(sDefault);
+                    static_cast<FormattedField*>(m_pPainter)->SetDefaultText(sDefault);
                 }
             }
             break;
@@ -1506,7 +1506,7 @@ OUString DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb:
             double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 return aText;
-            ((FormattedField*)m_pPainter)->SetValue(dValue);
+            static_cast<FormattedField*>(m_pPainter)->SetValue(dValue);
         }
         else
         {
@@ -1515,7 +1515,7 @@ OUString DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb:
             aText = _rxField->getString();
             if (_rxField->wasNull())
                 return aText;
-            ((FormattedField*)m_pPainter)->SetTextFormatted(aText);
+            static_cast<FormattedField*>(m_pPainter)->SetTextFormatted(aText);
         }
     }
     catch( const Exception& )
@@ -1525,7 +1525,7 @@ OUString DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb:
 
     aText = m_pPainter->GetText();
     if (ppColor != NULL)
-        *ppColor = ((FormattedField*)m_pPainter)->GetLastOutputColor();
+        *ppColor = static_cast<FormattedField*>(m_pPainter)->GetLastOutputColor();
 
     return aText;
 }
@@ -1595,7 +1595,7 @@ void DbFormattedField::updateFromModel( Reference< XPropertySet > _rxModel )
 bool DbFormattedField::commitControl()
 {
     Any aNewVal;
-    FormattedField& rField = *(FormattedField*)m_pWindow;
+    FormattedField& rField = *static_cast<FormattedField*>(m_pWindow);
     DBG_ASSERT(&rField == m_pWindow, "DbFormattedField::commitControl : can't work with a window other than my own !");
     if (m_rColumn.IsNumeric())
     {
@@ -1670,7 +1670,7 @@ void DbCheckBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
 
 CellControllerRef DbCheckBox::CreateController() const
 {
-    return new CheckBoxCellController((CheckBoxControl*)m_pWindow);
+    return new CheckBoxCellController(static_cast<CheckBoxControl*>(m_pWindow));
 }
 
 static void lcl_setCheckBoxState(   const Reference< ::com::sun::star::sdb::XColumn >& _rxField,
@@ -1918,7 +1918,7 @@ void DbNumericField::implAdjustGenericFieldSetting( const Reference< XPropertySe
         Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier;
         Reference< XRowSet > xForm;
         if ( m_rColumn.GetParent().getDataSource() )
-            xForm = Reference< XRowSet >( ( Reference< XInterface > )*m_rColumn.GetParent().getDataSource(), UNO_QUERY );
+            xForm = Reference< XRowSet >( Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY );
         if ( xForm.is() )
             xSupplier = getNumberFormats( getConnection( xForm ), true );
         SvNumberFormatter* pFormatterUsed = NULL;
@@ -2009,7 +2009,7 @@ bool DbNumericField::commitControl()
 
     if (!aText.isEmpty())   // not empty
     {
-        double fValue = ((DoubleNumericField*)m_pWindow)->GetValue();
+        double fValue = static_cast<DoubleNumericField*>(m_pWindow)->GetValue();
         aVal <<= (double)fValue;
     }
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
@@ -2157,7 +2157,7 @@ bool DbCurrencyField::commitControl()
     Any aVal;
     if (!aText.isEmpty())   // not empty
     {
-        double fValue = ((LongCurrencyField*)m_pWindow)->GetValue();
+        double fValue = static_cast<LongCurrencyField*>(m_pWindow)->GetValue();
         if (m_nScale)
         {
             fValue /= ::rtl::math::pow10Exp(1.0, m_nScale);
@@ -2431,7 +2431,7 @@ void DbComboBox::_propertyChanged( const PropertyChangeEvent& _rEvent ) throw( R
 
 void DbComboBox::SetList(const Any& rItems)
 {
-    ComboBoxControl* pField = (ComboBoxControl*)m_pWindow;
+    ComboBoxControl* pField = static_cast<ComboBoxControl*>(m_pWindow);
     pField->Clear();
 
     ::comphelper::StringSequence aTest;
@@ -2488,7 +2488,7 @@ void DbComboBox::Init( vcl::Window& rParent, const Reference< XRowSet >& xCursor
 
 CellControllerRef DbComboBox::CreateController() const
 {
-    return new ComboBoxCellController((ComboBoxControl*)m_pWindow);
+    return new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow));
 }
 
 
@@ -2560,7 +2560,7 @@ void DbListBox::_propertyChanged( const ::com::sun::star::beans::PropertyChangeE
 
 void DbListBox::SetList(const Any& rItems)
 {
-    ListBoxControl* pField = (ListBoxControl*)m_pWindow;
+    ListBoxControl* pField = static_cast<ListBoxControl*>(m_pWindow);
 
     pField->Clear();
     m_bBound = false;
@@ -2614,7 +2614,7 @@ void DbListBox::implAdjustGenericFieldSetting( const Reference< XPropertySet >& 
 
 CellControllerRef DbListBox::CreateController() const
 {
-    return new ListBoxCellController((ListBoxControl*)m_pWindow);
+    return new ListBoxCellController(static_cast<ListBoxControl*>(m_pWindow));
 }
 
 
@@ -2704,7 +2704,7 @@ DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbG
 DbFilterField::~DbFilterField()
 {
     if (m_nControlClass == ::com::sun::star::form::FormComponentType::CHECKBOX)
-        ((CheckBoxControl*)m_pWindow)->SetClickHdl( Link() );
+        static_cast<CheckBoxControl*>(m_pWindow)->SetClickHdl( Link() );
 
 }
 
@@ -2736,13 +2736,13 @@ void DbFilterField::SetList(const Any& rItems, bool bComboBox)
     {
         if (bComboBox)
         {
-            ComboBox* pField = (ComboBox*)m_pWindow;
+            ComboBox* pField = static_cast<ComboBox*>(m_pWindow);
             for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
                 pField->InsertEntry(*pStrings, LISTBOX_APPEND);
         }
         else
         {
-            ListBox* pField = (ListBox*)m_pWindow;
+            ListBox* pField = static_cast<ListBox*>(m_pWindow);
             for (sal_Int32 i = 0; i < nItems; ++i, ++pStrings )
                 pField->InsertEntry(*pStrings, LISTBOX_APPEND);
 
@@ -2760,7 +2760,7 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
             m_pWindow = new CheckBoxControl(pParent);
             m_pWindow->SetPaintTransparent( true );
-            ((CheckBoxControl*)m_pWindow)->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
+            static_cast<CheckBoxControl*>(m_pWindow)->SetClickHdl( LINK( this, DbFilterField, OnClick ) );
 
             m_pPainter = new CheckBoxControl(pParent);
             m_pPainter->SetPaintTransparent( true );
@@ -2790,10 +2790,10 @@ void DbFilterField::CreateControl(vcl::Window* pParent, const Reference< ::com::
                 sal_Int16  nLines       = ::comphelper::getINT16(xModel->getPropertyValue(FM_PROP_LINECOUNT));
                 Any  aItems      = xModel->getPropertyValue(FM_PROP_STRINGITEMLIST);
                 SetList(aItems, m_nControlClass == ::com::sun::star::form::FormComponentType::COMBOBOX);
-                ((ComboBox*)m_pWindow)->SetDropDownLineCount(nLines);
+                static_cast<ComboBox*>(m_pWindow)->SetDropDownLineCount(nLines);
             }
             else
-                ((ComboBox*)m_pWindow)->SetDropDownLineCount(5);
+                static_cast<ComboBox*>(m_pWindow)->SetDropDownLineCount(5);
 
         }   break;
         default:
@@ -2855,19 +2855,19 @@ CellControllerRef DbFilterField::CreateController() const
     switch (m_nControlClass)
     {
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
-            xController = new CheckBoxCellController((CheckBoxControl*)m_pWindow);
+            xController = new CheckBoxCellController(static_cast<CheckBoxControl*>(m_pWindow));
             break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
-            xController = new ListBoxCellController((ListBoxControl*)m_pWindow);
+            xController = new ListBoxCellController(static_cast<ListBoxControl*>(m_pWindow));
             break;
         case ::com::sun::star::form::FormComponentType::COMBOBOX:
-            xController = new ComboBoxCellController((ComboBoxControl*)m_pWindow);
+            xController = new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow));
             break;
         default:
             if (m_bFilterList)
-                xController = new ComboBoxCellController((ComboBoxControl*)m_pWindow);
+                xController = new ComboBoxCellController(static_cast<ComboBoxControl*>(m_pWindow));
             else
-                xController = new EditCellController((Edit*)m_pWindow);
+                xController = new EditCellController(static_cast<Edit*>(m_pWindow));
     }
     return xController;
 }
@@ -2927,7 +2927,7 @@ bool DbFilterField::commitControl()
                 ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
 
                 Reference< XRowSet > xDataSourceRowSet(
-                    (Reference< XInterface >)*m_rColumn.GetParent().getDataSource(), UNO_QUERY);
+                    Reference< XInterface >(*m_rColumn.GetParent().getDataSource()), UNO_QUERY);
                 Reference< XConnection >  xConnection(getConnection(xDataSourceRowSet));
 
                 xParseNode->parseNodeToPredicateStr(aPreparedText,
@@ -2976,8 +2976,8 @@ void DbFilterField::SetText(const OUString& rText)
             else
                 eState = TRISTATE_INDET;
 
-            ((CheckBoxControl*)m_pWindow)->GetBox().SetState(eState);
-            ((CheckBoxControl*)m_pPainter)->GetBox().SetState(eState);
+            static_cast<CheckBoxControl*>(m_pWindow)->GetBox().SetState(eState);
+            static_cast<CheckBoxControl*>(m_pPainter)->GetBox().SetState(eState);
         }   break;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
@@ -3108,7 +3108,7 @@ void DbFilterField::Update()
             // filling the entries for the combobox
             for (::std::vector< OUString >::const_iterator iter = aStringList.begin();
                  iter != aStringList.end(); ++iter)
-                ((ComboBox*)m_pWindow)->InsertEntry(*iter, LISTBOX_APPEND);
+                static_cast<ComboBox*>(m_pWindow)->InsertEntry(*iter, LISTBOX_APPEND);
         }
     }
 }
@@ -3128,7 +3128,7 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
 
 IMPL_LINK_NOARG(DbFilterField, OnClick)
 {
-    TriState eState = ((CheckBoxControl*)m_pWindow)->GetBox().GetState();
+    TriState eState = static_cast<CheckBoxControl*>(m_pWindow)->GetBox().GetState();
     OUString aText;
 
     switch (eState)
@@ -4348,7 +4348,7 @@ IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick)
         aEvent.ActionCommand = m_pBox->GetSelectEntry();
 
         while( aIt.hasMoreElements() )
-            ((::com::sun::star::awt::XActionListener *)aIt.next())->actionPerformed( aEvent );
+            static_cast< ::com::sun::star::awt::XActionListener *>(aIt.next())->actionPerformed( aEvent );
     }
     return 1;
 }
@@ -4601,7 +4601,7 @@ void FmXFilterCell::disposing()
     ::com::sun::star::lang::EventObject aEvt(*this);
     m_aTextListeners.disposeAndClear(aEvt);
 
-    ((DbFilterField*)m_pCellControl)->SetCommitHdl(Link());
+    static_cast<DbFilterField*>(m_pCellControl)->SetCommitHdl(Link());
 
     FmXGridCell::disposing();
 }
@@ -4646,7 +4646,7 @@ void SAL_CALL FmXFilterCell::removeTextListener(const Reference< ::com::sun::sta
 void SAL_CALL FmXFilterCell::setText( const OUString& aText ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    ((DbFilterField*)m_pCellControl)->SetText(aText);
+    static_cast<DbFilterField*>(m_pCellControl)->SetText(aText);
 }
 
 
@@ -4658,7 +4658,7 @@ void SAL_CALL FmXFilterCell::insertText( const ::com::sun::star::awt::Selection&
 OUString SAL_CALL FmXFilterCell::getText() throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return ((DbFilterField*)m_pCellControl)->GetText();
+    return static_cast<DbFilterField*>(m_pCellControl)->GetText();
 }
 
 
@@ -4707,7 +4707,7 @@ IMPL_LINK_NOARG(FmXFilterCell, OnCommit)
     ::com::sun::star::awt::TextEvent aEvt;
     aEvt.Source = *this;
     while( aIt.hasMoreElements() )
-        ((::com::sun::star::awt::XTextListener *)aIt.next())->textChanged( aEvt );
+        static_cast< ::com::sun::star::awt::XTextListener *>(aIt.next())->textChanged( aEvt );
     return 1;
 }
 

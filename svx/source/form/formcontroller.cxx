@@ -3684,7 +3684,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
     {
         RowChangeEvent aEvt( _rEvent );
         aEvt.Source = *this;
-        bValid = ((XRowSetApproveListener*)aIter.next())->approveRowChange(aEvt);
+        bValid = static_cast<XRowSetApproveListener*>(aIter.next())->approveRowChange(aEvt);
     }
 
     if ( !bValid )
@@ -3771,7 +3771,7 @@ sal_Bool SAL_CALL FormController::approveCursorMove(const EventObject& event) th
     {
         EventObject aEvt(event);
         aEvt.Source = *this;
-        return ((XRowSetApproveListener*)aIter.next())->approveCursorMove(aEvt);
+        return static_cast<XRowSetApproveListener*>(aIter.next())->approveCursorMove(aEvt);
     }
 
     return sal_True;
@@ -3788,7 +3788,7 @@ sal_Bool SAL_CALL FormController::approveRowSetChange(const EventObject& event) 
     {
         EventObject aEvt(event);
         aEvt.Source = *this;
-        return ((XRowSetApproveListener*)aIter.next())->approveRowSetChange(aEvt);
+        return static_cast<XRowSetApproveListener*>(aIter.next())->approveRowSetChange(aEvt);
     }
 
     return sal_True;
@@ -3825,7 +3825,7 @@ void SAL_CALL FormController::errorOccured(const SQLErrorEvent& aEvent) throw( R
     {
         SQLErrorEvent aEvt(aEvent);
         aEvt.Source = *this;
-        ((XSQLErrorListener*)aIter.next())->errorOccured(aEvt);
+        static_cast<XSQLErrorListener*>(aIter.next())->errorOccured(aEvt);
     }
     else
     {
@@ -3898,7 +3898,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
     {
         DatabaseParameterEvent aEvt(aEvent);
         aEvt.Source = *this;
-        return ((XDatabaseParameterListener*)aIter.next())->approveParameter(aEvt);
+        return static_cast<XDatabaseParameterListener*>(aIter.next())->approveParameter(aEvt);
     }
     else
     {
@@ -3994,7 +3994,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     {
         RowChangeEvent aEvt(aEvent);
         aEvt.Source = *this;
-        return ((XConfirmDeleteListener*)aIter.next())->confirmDelete(aEvt);
+        return static_cast<XConfirmDeleteListener*>(aIter.next())->confirmDelete(aEvt);
     }
     // default handling: instantiate an interaction handler and let it handle the request
 

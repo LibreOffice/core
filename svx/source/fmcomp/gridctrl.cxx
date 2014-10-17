@@ -298,7 +298,7 @@ void DbGridControl::NavigationBar::AbsolutePos::KeyInput(const KeyEvent& rEvt)
         if (nRecord < GetMin() || nRecord > GetMax())
             return;
         else
-            ((NavigationBar*)GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
+            static_cast<NavigationBar*>(GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
     }
     else if (rEvt.GetKeyCode() == KEY_TAB)
         GetParent()->GetParent()->GrabFocus();
@@ -314,8 +314,8 @@ void DbGridControl::NavigationBar::AbsolutePos::LoseFocus()
         return;
     else
     {
-        ((NavigationBar*)GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
-        ((NavigationBar*)GetParent())->InvalidateState(NavigationBar::RECORD_ABSOLUTE);
+        static_cast<NavigationBar*>(GetParent())->PositionDataSource(static_cast<sal_Int32>(nRecord));
+        static_cast<NavigationBar*>(GetParent())->InvalidateState(NavigationBar::RECORD_ABSOLUTE);
     }
 }
 
@@ -326,7 +326,7 @@ void DbGridControl::NavigationBar::PositionDataSource(sal_Int32 nRecord)
     // the MoveToPosition may cause a LoseFocus which would lead to a second MoveToPosition,
     // so protect against this recursion
     m_bPositioning = true;
-    ((DbGridControl*)GetParent())->MoveToPosition(nRecord - 1);
+    static_cast<DbGridControl*>(GetParent())->MoveToPosition(nRecord - 1);
     m_bPositioning = false;
 }
 
@@ -349,7 +349,7 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent, WinBits nStyle
     m_aPrevBtn.SetSymbol(SymbolType::PREV);
     m_aNextBtn.SetSymbol(SymbolType::NEXT);
     m_aLastBtn.SetSymbol(SymbolType::LAST);
-    m_aNewBtn.SetModeImage(((DbGridControl*)pParent)->GetImage(DbGridControl_Base::NEW));
+    m_aNewBtn.SetModeImage(static_cast<DbGridControl*>(pParent)->GetImage(DbGridControl_Base::NEW));
 
     m_aFirstBtn.SetHelpId(HID_GRID_TRAVEL_FIRST);
     m_aPrevBtn.SetHelpId(HID_GRID_TRAVEL_PREV);
@@ -414,7 +414,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 {
     // positioning of the controls
     // calculate base size
-    Rectangle   aRect(((DbGridControl*)GetParent())->GetControlArea());
+    Rectangle   aRect(static_cast<DbGridControl*>(GetParent())->GetControlArea());
     const long  nH      = aRect.GetSize().Height();
     Size        aBorder = LogicToPixel(Size(2, 2),MAP_APPFONT);
     aBorder = Size(CalcZoom(aBorder.Width()), CalcZoom(aBorder.Height()));
@@ -480,21 +480,21 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
 
 IMPL_LINK(DbGridControl::NavigationBar, OnClick, Button *, pButton )
 {
-    DbGridControl* pParent = (DbGridControl*)GetParent();
+    DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
     if (pParent->m_aMasterSlotExecutor.IsSet())
     {
         long lResult = 0;
         if (pButton == &m_aFirstBtn)
-            lResult = pParent->m_aMasterSlotExecutor.Call((void*)RECORD_FIRST);
+            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_FIRST));
         else if( pButton == &m_aPrevBtn )
-            lResult = pParent->m_aMasterSlotExecutor.Call((void*)RECORD_PREV);
+            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_PREV));
         else if( pButton == &m_aNextBtn )
-            lResult = pParent->m_aMasterSlotExecutor.Call((void*)RECORD_NEXT);
+            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_NEXT));
         else if( pButton == &m_aLastBtn )
-            lResult = pParent->m_aMasterSlotExecutor.Call((void*)RECORD_LAST);
+            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_LAST));
         else if( pButton == &m_aNewBtn )
-            lResult = pParent->m_aMasterSlotExecutor.Call((void*)RECORD_NEW);
+            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_NEW));
 
         if (lResult)
             // the link already handled it
@@ -518,7 +518,7 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, bool bAl
 {
     if (m_nCurrentPos != nCurrentPos || nCurrentPos < 0 || bAll)
     {
-        DbGridControl* pParent = (DbGridControl*)GetParent();
+        DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
         sal_Int32 nAdjustedRowCount = pParent->GetRowCount() - ((pParent->GetOptions() & DbGridControl::OPT_INSERT) ? 2 : 1);
 
@@ -546,7 +546,7 @@ void DbGridControl::NavigationBar::InvalidateAll(sal_Int32 nCurrentPos, bool bAl
 
 bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
 {
-    DbGridControl* pParent = (DbGridControl*)GetParent();
+    DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
 
     if (!pParent->IsOpen() || pParent->IsDesignMode() || !pParent->IsEnabled()
         || pParent->IsFilterMode() )
@@ -601,7 +601,7 @@ bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
 void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
 {
     bool bAvailable = GetState(nWhich);
-    DbGridControl* pParent = (DbGridControl*)GetParent();
+    DbGridControl* pParent = static_cast<DbGridControl*>(GetParent());
     vcl::Window* pWnd = NULL;
     switch (nWhich)
     {
@@ -1565,7 +1565,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
 
     // start listening on the seek cursor
     if (m_pSeekCursor)
-        m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, Reference< XComponent > ((Reference< XInterface >)*m_pSeekCursor, UNO_QUERY), 0);
+        m_pCursorDisposeListener = new DisposeListenerGridBridge(*this, Reference< XComponent > (Reference< XInterface >(*m_pSeekCursor), UNO_QUERY), 0);
 }
 
 void DbGridControl::RemoveColumns()
@@ -2028,7 +2028,7 @@ bool DbGridControl::SetCurrent(long nNewRow)
                     Reference< XPropertySet > xCursorProps = m_pDataCursor->getPropertySet();
                     if ( !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)) )
                     {
-                        Reference< XResultSetUpdate > xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+                        Reference< XResultSetUpdate > xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
                         xUpdateCursor->moveToInsertRow();
                     }
                     bNewRowInserted = true;
@@ -2633,7 +2633,7 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
     bool bCanUndo = IsModified();
     long nState = -1;
     if (m_aMasterStateProvider.IsSet())
-        nState = m_aMasterStateProvider.Call((void*)SID_FM_RECORD_UNDO);
+        nState = m_aMasterStateProvider.Call(reinterpret_cast<void*>(SID_FM_RECORD_UNDO));
     bCanUndo &= ( 0 != nState );
 
     rMenu.EnableItem(SID_FM_RECORD_UNDO, bCanUndo);
@@ -2949,11 +2949,11 @@ void DbGridControl::Undo()
         // check if we have somebody doin' the UNDO for us
         long nState = -1;
         if (m_aMasterStateProvider.IsSet())
-            nState = m_aMasterStateProvider.Call((void*)SID_FM_RECORD_UNDO);
+            nState = m_aMasterStateProvider.Call(reinterpret_cast<void*>(SID_FM_RECORD_UNDO));
         if (nState>0)
         {   // yes, we have, and the slot is enabled
             DBG_ASSERT(m_aMasterSlotExecutor.IsSet(), "DbGridControl::Undo : a state, but no execute link ?");
-            long lResult = m_aMasterSlotExecutor.Call((void*)SID_FM_RECORD_UNDO);
+            long lResult = m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(SID_FM_RECORD_UNDO));
             if (lResult)
                 // handled
                 return;
@@ -2970,7 +2970,7 @@ void DbGridControl::Undo()
         try
         {
             // cancel editing
-            Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+            Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
             // no effects if we're not updating currently
             if (bAppending)
                 // just refresh the row
@@ -3135,7 +3135,7 @@ bool DbGridControl::SaveRow()
     bool bSuccess = false;
     try
     {
-        Reference< XResultSetUpdate >  xUpdateCursor((Reference< XInterface >)*m_pDataCursor, UNO_QUERY);
+        Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
         if (bAppending)
             xUpdateCursor->insertRow();
         else

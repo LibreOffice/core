@@ -161,7 +161,7 @@ void SvxXConnectionPreview::Construct()
             if( nInv == SdrInventor && nId == OBJ_EDGE )
             {
                 bFound = true;
-                SdrEdgeObj* pTmpEdgeObj = (SdrEdgeObj*) pObj;
+                const SdrEdgeObj* pTmpEdgeObj = static_cast<const SdrEdgeObj*>(pObj);
                 pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
 
                 SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( true );
@@ -249,7 +249,7 @@ sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
     sal_uInt16 nCount(0);
 
     if(SfxItemState::DONTCARE != rSet.GetItemState(SDRATTR_EDGELINEDELTAANZ))
-        nCount = ((const SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
+        nCount = static_cast<const SdrEdgeLineDeltaAnzItem&>(rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
 
     return nCount;
 }

@@ -865,7 +865,7 @@ static void SetPrevFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFon
     sal_uInt16 nWhich;
     if (GetWhich ( rSet, nSlot, nWhich ) )
     {
-        const SvxFontItem& rFontItem = ( SvxFontItem& ) rSet.Get( nWhich );
+        const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>( rSet.Get( nWhich ) );
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetName( rFontItem.GetFamilyName() );
         rFont.SetPitch( rFontItem.GetPitch() );
@@ -879,13 +879,13 @@ static void SetPrevFontStyle( const SfxItemSet& rSet, sal_uInt16 nPosture, sal_u
     sal_uInt16 nWhich;
     if( GetWhich( rSet, nPosture, nWhich ) )
     {
-        const SvxPostureItem& rItem = ( const SvxPostureItem& ) rSet.Get( nWhich );
+        const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>( rSet.Get( nWhich ) );
         rFont.SetItalic( ( FontItalic ) rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
     }
 
     if( GetWhich( rSet, nWeight, nWhich ) )
     {
-        const SvxWeightItem& rItem = ( const SvxWeightItem& ) rSet.Get( nWhich );
+        const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>( rSet.Get( nWhich ) );
         rFont.SetWeight( ( FontWeight ) rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
     }
 }
@@ -896,7 +896,7 @@ void SvxFontPrevWindow::SetFontSize( const SfxItemSet& rSet, sal_uInt16 nSlot, S
     long nH;
     if( GetWhich( rSet, nSlot, nWhich ) )
     {
-        nH = LogicToLogic( ( ( SvxFontHeightItem& ) rSet.Get( nWhich ) ).GetHeight(),
+        nH = LogicToLogic( static_cast<const SvxFontHeightItem&>( rSet.Get( nWhich ) ).GetHeight(),
                             ( MapUnit ) rSet.GetPool()->GetMetric( nWhich ),
                             MAP_TWIP );
     }
@@ -935,7 +935,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Preview string
     if( GetWhich( rSet, SID_CHAR_DLG_PREVIEW_STRING, nWhich ) )
     {
-        const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
+        const SfxStringItem& rItem = static_cast<const SfxStringItem&>( rSet.Get( nWhich ) );
         OUString aString = rItem.GetValue();
         if( !aString.isEmpty() )
             SetPreviewText( aString );
@@ -947,7 +947,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     FontUnderline eUnderline;
     if( GetWhich( rSet, SID_ATTR_CHAR_UNDERLINE, nWhich ) )
     {
-        const SvxUnderlineItem& rItem = ( SvxUnderlineItem& ) rSet.Get( nWhich );
+        const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>( rSet.Get( nWhich ) );
         eUnderline = ( FontUnderline ) rItem.GetValue();
         SetTextLineColor( rItem.GetColor() );
     }
@@ -962,7 +962,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     FontUnderline eOverline;
     if( GetWhich( rSet, SID_ATTR_CHAR_OVERLINE, nWhich ) )
     {
-        const SvxOverlineItem& rItem = ( SvxOverlineItem& ) rSet.Get( nWhich );
+        const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>( rSet.Get( nWhich ) );
         eOverline = ( FontUnderline ) rItem.GetValue();
         SetOverlineColor( rItem.GetColor() );
     }
@@ -977,7 +977,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     FontStrikeout eStrikeout;
     if( GetWhich( rSet, SID_ATTR_CHAR_STRIKEOUT, nWhich ) )
     {
-        const SvxCrossedOutItem& rItem = ( SvxCrossedOutItem& ) rSet.Get( nWhich );
+        const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>( rSet.Get( nWhich ) );
         eStrikeout = ( FontStrikeout ) rItem.GetValue();
     }
     else
@@ -990,7 +990,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // WordLineMode
     if( GetWhich( rSet, SID_ATTR_CHAR_WORDLINEMODE, nWhich ) )
     {
-        const SvxWordLineModeItem& rItem = ( SvxWordLineModeItem& ) rSet.Get( nWhich );
+        const SvxWordLineModeItem& rItem = static_cast<const SvxWordLineModeItem&>( rSet.Get( nWhich ) );
         rFont.SetWordLineMode( rItem.GetValue() );
         rCJKFont.SetWordLineMode( rItem.GetValue() );
         rCTLFont.SetWordLineMode( rItem.GetValue() );
@@ -999,7 +999,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Emphasis
     if( GetWhich( rSet, SID_ATTR_CHAR_EMPHASISMARK, nWhich ) )
     {
-        const SvxEmphasisMarkItem& rItem = ( SvxEmphasisMarkItem& ) rSet.Get( nWhich );
+        const SvxEmphasisMarkItem& rItem = static_cast<const SvxEmphasisMarkItem&>( rSet.Get( nWhich ) );
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
         rFont.SetEmphasisMark( eMark );
         rCJKFont.SetEmphasisMark( eMark );
@@ -1009,7 +1009,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Relief
     if( GetWhich( rSet, SID_ATTR_CHAR_RELIEF, nWhich ) )
     {
-        const SvxCharReliefItem& rItem = ( SvxCharReliefItem& ) rSet.Get( nWhich );
+        const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>( rSet.Get( nWhich ) );
         FontRelief eFontRelief = ( FontRelief ) rItem.GetValue();
         rFont.SetRelief( eFontRelief );
         rCJKFont.SetRelief( eFontRelief );
@@ -1019,7 +1019,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Effects
     if( GetWhich( rSet, SID_ATTR_CHAR_CASEMAP, nWhich ) )
     {
-        const SvxCaseMapItem& rItem = ( SvxCaseMapItem& ) rSet.Get( nWhich );
+        const SvxCaseMapItem& rItem = static_cast<const SvxCaseMapItem&>( rSet.Get( nWhich ) );
         SvxCaseMap eCaseMap = ( SvxCaseMap ) rItem.GetValue();
         rFont.SetCaseMap( eCaseMap );
         rCJKFont.SetCaseMap( eCaseMap );
@@ -1030,7 +1030,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Outline
     if( GetWhich( rSet, SID_ATTR_CHAR_CONTOUR, nWhich ) )
     {
-        const SvxContourItem& rItem = ( SvxContourItem& ) rSet.Get( nWhich );
+        const SvxContourItem& rItem = static_cast<const  SvxContourItem&>( rSet.Get( nWhich ) );
         bool bOutline = rItem.GetValue();
         rFont.SetOutline( bOutline );
         rCJKFont.SetOutline( bOutline );
@@ -1040,7 +1040,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Shadow
     if( GetWhich( rSet, SID_ATTR_CHAR_SHADOWED, nWhich ) )
     {
-        const SvxShadowedItem& rItem = ( SvxShadowedItem& ) rSet.Get( nWhich );
+        const SvxShadowedItem& rItem = static_cast<const  SvxShadowedItem&>( rSet.Get( nWhich ) );
         bool bShadow = rItem.GetValue();
         rFont.SetShadow( bShadow );
         rCJKFont.SetShadow( bShadow );
@@ -1051,7 +1051,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     bool bTransparent;
     if( GetWhich( rSet, bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR, nWhich ) )
     {
-         const SvxBrushItem& rBrush = ( SvxBrushItem& ) rSet.Get( nWhich );
+         const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>( rSet.Get( nWhich ) );
          const Color& rColor = rBrush.GetColor();
          bTransparent = rColor.GetTransparency() > 0;
          rFont.SetFillColor( rColor );
@@ -1070,7 +1070,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     {
         if( GetWhich( rSet, SID_ATTR_BRUSH, nWhich ) )
         {
-            const SvxBrushItem& rBrush = ( SvxBrushItem& ) rSet.Get( nWhich );
+            const SvxBrushItem& rBrush = static_cast<const  SvxBrushItem&>( rSet.Get( nWhich ) );
             if( GPOS_NONE == rBrush.GetGraphicPos() )
                 aBackCol = rBrush.GetColor();
         }
@@ -1100,7 +1100,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Color
     if( GetWhich( rSet, SID_ATTR_CHAR_COLOR, nWhich ) )
     {
-        const SvxColorItem& rItem = ( SvxColorItem& ) rSet.Get( nWhich );
+        const SvxColorItem& rItem = static_cast<const SvxColorItem&>( rSet.Get( nWhich ) );
         Color aCol( rItem.GetValue() );
         rFont.SetColor( aCol );
 
@@ -1113,7 +1113,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Kerning
     if( GetWhich( rSet, SID_ATTR_CHAR_KERNING, nWhich ) )
     {
-        const SvxKerningItem& rItem = ( SvxKerningItem& ) rSet.Get( nWhich );
+        const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>( rSet.Get( nWhich ) );
         short nKern = ( short )
                         LogicToLogic( rItem.GetValue(), ( MapUnit ) rSet.GetPool()->GetMetric( nWhich ), MAP_TWIP );
         rFont.SetFixKerning( nKern );
@@ -1127,7 +1127,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     sal_uInt8 nEscProp;
     if( GetWhich( rSet, SID_ATTR_CHAR_ESCAPEMENT, nWhich ) )
     {
-        const SvxEscapementItem& rItem = ( SvxEscapementItem& ) rSet.Get( nWhich );
+        const SvxEscapementItem& rItem = static_cast<const SvxEscapementItem&>( rSet.Get( nWhich ) );
         nEsc = rItem.GetEsc();
         nEscProp = rItem.GetProp();
 
@@ -1148,7 +1148,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     // Font width scale
     if( GetWhich( rSet, SID_ATTR_CHAR_SCALEWIDTH, nWhich ) )
     {
-        const SvxCharScaleWidthItem&rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
+        const SvxCharScaleWidthItem&rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
         SetFontWidthScale( rItem.GetValue() );
     }
 
@@ -1172,7 +1172,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_CHAR_DLG_PREVIEW_STRING );
     if( ISITEMSET )
     {
-        const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
+        const SfxStringItem& rItem = static_cast<const SfxStringItem&>( rSet.Get( nWhich ) );
         OUString aString = rItem.GetValue();
         if( !aString.isEmpty() )
             SetPreviewText( aString );
@@ -1185,7 +1185,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_UNDERLINE );
     if( ISITEMSET )
     {
-        const SvxUnderlineItem& rItem = ( SvxUnderlineItem& ) rSet.Get( nWhich );
+        const SvxUnderlineItem& rItem = static_cast<const SvxUnderlineItem&>( rSet.Get( nWhich ) );
         eUnderline = ( FontUnderline ) rItem.GetValue();
         SetTextLineColor( rItem.GetColor() );
     }
@@ -1201,7 +1201,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_OVERLINE );
     if( ISITEMSET )
     {
-        const SvxOverlineItem& rItem = ( SvxOverlineItem& ) rSet.Get( nWhich );
+        const SvxOverlineItem& rItem = static_cast<const SvxOverlineItem&>( rSet.Get( nWhich ) );
         eOverline = ( FontUnderline ) rItem.GetValue();
         SetOverlineColor( rItem.GetColor() );
     }
@@ -1217,7 +1217,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_STRIKEOUT );
     if( ISITEMSET )
     {
-        const SvxCrossedOutItem& rItem = ( SvxCrossedOutItem& ) rSet.Get( nWhich );
+        const SvxCrossedOutItem& rItem = static_cast<const SvxCrossedOutItem&>( rSet.Get( nWhich ) );
         eStrikeout = ( FontStrikeout ) rItem.GetValue();
     }
     else
@@ -1231,7 +1231,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
     if( ISITEMSET )
     {
-        const SvxWordLineModeItem& rItem = ( SvxWordLineModeItem& ) rSet.Get( nWhich );
+        const SvxWordLineModeItem& rItem = static_cast<const SvxWordLineModeItem&>( rSet.Get( nWhich ) );
         rFont.SetWordLineMode( rItem.GetValue() );
         rCJKFont.SetWordLineMode( rItem.GetValue() );
         rCTLFont.SetWordLineMode( rItem.GetValue() );
@@ -1241,7 +1241,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
     if( ISITEMSET )
     {
-        const SvxEmphasisMarkItem& rItem = ( SvxEmphasisMarkItem& ) rSet.Get( nWhich );
+        const SvxEmphasisMarkItem& rItem = static_cast<const SvxEmphasisMarkItem&>( rSet.Get( nWhich ) );
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
         rFont.SetEmphasisMark( eMark );
         rCJKFont.SetEmphasisMark( eMark );
@@ -1252,7 +1252,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_RELIEF );
     if( ISITEMSET )
     {
-        const SvxCharReliefItem& rItem = ( SvxCharReliefItem& ) rSet.Get( nWhich );
+        const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>( rSet.Get( nWhich ) );
         FontRelief eFontRelief = ( FontRelief ) rItem.GetValue();
         rFont.SetRelief( eFontRelief );
         rCJKFont.SetRelief( eFontRelief );
@@ -1263,7 +1263,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_CASEMAP );
     if( ISITEMSET )
     {
-        const SvxCaseMapItem& rItem = ( SvxCaseMapItem& ) rSet.Get( nWhich );
+        const SvxCaseMapItem& rItem = static_cast<const SvxCaseMapItem&>( rSet.Get( nWhich ) );
         SvxCaseMap eCaseMap = ( SvxCaseMap ) rItem.GetValue();
         rFont.SetCaseMap( eCaseMap );
         rCJKFont.SetCaseMap( eCaseMap );
@@ -1275,7 +1275,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_CONTOUR );
     if( ISITEMSET )
     {
-        const SvxContourItem& rItem = ( SvxContourItem& ) rSet.Get( nWhich );
+        const SvxContourItem& rItem = static_cast<const SvxContourItem&>( rSet.Get( nWhich ) );
         bool bOutline = rItem.GetValue();
         rFont.SetOutline( bOutline );
         rCJKFont.SetOutline( bOutline );
@@ -1286,7 +1286,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_SHADOWED );
     if( ISITEMSET )
     {
-        const SvxShadowedItem& rItem = ( SvxShadowedItem& ) rSet.Get( nWhich );
+        const SvxShadowedItem& rItem = static_cast<const SvxShadowedItem&>( rSet.Get( nWhich ) );
         bool bShadow = rItem.GetValue();
         rFont.SetShadow( bShadow );
         rCJKFont.SetShadow( bShadow );
@@ -1298,7 +1298,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( pImpl->bPreviewBackgroundToCharacter ? SID_ATTR_BRUSH : SID_ATTR_BRUSH_CHAR );
     if( ISITEMSET )
     {
-         const SvxBrushItem& rBrush = ( SvxBrushItem& ) rSet.Get( nWhich );
+         const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>( rSet.Get( nWhich ) );
          const Color& rColor = rBrush.GetColor();
          bTransparent = rColor.GetTransparency() > 0;
          rFont.SetFillColor( rColor );
@@ -1318,7 +1318,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
         nWhich = rSet.GetPool()->GetWhich( SID_ATTR_BRUSH );
         if( ISITEMSET )
         {
-            const SvxBrushItem& rBrush = ( SvxBrushItem& ) rSet.Get( nWhich );
+            const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>( rSet.Get( nWhich ) );
             if( GPOS_NONE == rBrush.GetGraphicPos() )
                 aBackCol = rBrush.GetColor();
         }
@@ -1349,7 +1349,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_COLOR );
     if( ISITEMSET )
     {
-        const SvxColorItem& rItem = ( SvxColorItem& ) rSet.Get( nWhich );
+        const SvxColorItem& rItem = static_cast<const SvxColorItem&>( rSet.Get( nWhich ) );
         Color aCol( rItem.GetValue() );
         rFont.SetColor( aCol );
         rCJKFont.SetColor( aCol );
@@ -1362,7 +1362,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_KERNING );
     if( ISITEMSET )
     {
-        const SvxKerningItem& rItem = ( SvxKerningItem& ) rSet.Get( nWhich );
+        const SvxKerningItem& rItem = static_cast<const SvxKerningItem&>( rSet.Get( nWhich ) );
         short nKern = ( short )
                         LogicToLogic( rItem.GetValue(), ( MapUnit ) rSet.GetPool()->GetMetric( nWhich ), MAP_TWIP );
         rFont.SetFixKerning( nKern );
@@ -1377,7 +1377,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     sal_uInt8 nEscProp;
     if( ISITEMSET )
     {
-        const SvxEscapementItem& rItem = ( SvxEscapementItem& ) rSet.Get( nWhich );
+        const SvxEscapementItem& rItem = static_cast<const SvxEscapementItem&>( rSet.Get( nWhich ) );
         nEsc = rItem.GetEsc();
         nEscProp = rItem.GetProp();
 
@@ -1410,7 +1410,7 @@ void SvxFontPrevWindow::SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFo
     sal_uInt16 nWhich = rSet.GetPool()->GetWhich( nSlot );
     if( ISITEMSET )
     {
-        const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get(nWhich);
+        const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>( rSet.Get(nWhich) );
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetName( rFontItem.GetFamilyName() );
         rFont.SetPitch( rFontItem.GetPitch() );
@@ -1426,14 +1426,14 @@ void SvxFontPrevWindow::SetFontStyle( const SfxItemSet& rSet, sal_uInt16 nPostur
     sal_uInt16 nWhich = rSet.GetPool()->GetWhich( nPosture );
     if( ISITEMSET )
     {
-        const SvxPostureItem& rItem = ( SvxPostureItem& ) rSet.Get( nWhich );
+        const SvxPostureItem& rItem = static_cast<const SvxPostureItem&>( rSet.Get( nWhich ) );
         rFont.SetItalic( ( FontItalic ) rItem.GetValue() != ITALIC_NONE ? ITALIC_NORMAL : ITALIC_NONE );
     }
 
     nWhich = rSet.GetPool()->GetWhich( nWeight );
     if( ISITEMSET )
     {
-        SvxWeightItem& rItem = ( SvxWeightItem& ) rSet.Get( nWhich );
+        const SvxWeightItem& rItem = static_cast<const SvxWeightItem&>( rSet.Get( nWhich ) );
         rFont.SetWeight( ( FontWeight ) rItem.GetValue() != WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL );
     }
 }
@@ -1445,7 +1445,7 @@ void SvxFontPrevWindow::SetFontWidthScale( const SfxItemSet& rSet )
     sal_uInt16  nWhich = rSet.GetPool()->GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if( ISITEMSET )
     {
-        const SvxCharScaleWidthItem&    rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
+        const SvxCharScaleWidthItem&    rItem = static_cast<const SvxCharScaleWidthItem&>( rSet.Get( nWhich ) );
 
         SetFontWidthScale( rItem.GetValue() );
     }

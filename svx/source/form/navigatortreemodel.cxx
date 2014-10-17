@@ -261,7 +261,7 @@ namespace svxform
             EndListening(*m_pFormModel);
 
         m_pPropChangeList->Lock();
-        FmFormData* pFolder     = (FmFormData*) pEntry->GetParent();
+        FmFormData* pFolder     = static_cast<FmFormData*>( pEntry->GetParent() );
         Reference< XChild > xElement( pEntry->GetChildIFace() );
         if (bAlterModel)
         {
@@ -367,7 +367,7 @@ namespace svxform
         const bool bUndo = m_pFormModel->IsUndoEnabled();
 
         m_pPropChangeList->Lock();
-        FmFormData*     pFolder     = (FmFormData*) pEntry->GetParent();
+        FmFormData*     pFolder     = static_cast<FmFormData*>( pEntry->GetParent() );
         Reference< XChild > xElement ( pEntry->GetChildIFace() );
         if (bAlterModel)
         {
@@ -387,9 +387,9 @@ namespace svxform
 
         // jetzt die eigentliche Entfernung der Daten aus dem Model
         if (pEntry->ISA(FmFormData))
-            RemoveForm((FmFormData*)pEntry);
+            RemoveForm(static_cast<FmFormData*>(pEntry));
         else
-            RemoveFormComponent((FmControlData*)pEntry);
+            RemoveFormComponent(static_cast<FmControlData*>(pEntry));
 
 
         if (bAlterModel)
@@ -459,9 +459,9 @@ namespace svxform
 
             // Child ist Form -> rekursiver Aufruf
             if( pEntryData->ISA(FmFormData) )
-                RemoveForm( (FmFormData*)pEntryData);
+                RemoveForm( static_cast<FmFormData*>(pEntryData));
             else if( pEntryData->ISA(FmControlData) )
-                RemoveFormComponent((FmControlData*) pEntryData);
+                RemoveFormComponent(static_cast<FmControlData*>(pEntryData));
         }
 
 
@@ -501,7 +501,7 @@ namespace svxform
         {
             FmEntryData* pChildData = pChildList->at( --i );
             if( pChildData->ISA(FmFormData) )
-                ClearBranch( (FmFormData*)pChildData );
+                ClearBranch( static_cast<FmFormData*>(pChildData) );
 
             pChildList->remove( pChildData );
         }
@@ -574,7 +574,7 @@ namespace svxform
 
     void NavigatorTreeModel::InsertForm(const Reference< XForm > & xForm, sal_uInt32 nRelPos)
     {
-        FmFormData* pFormData = (FmFormData*)FindData( xForm, GetRootList() );
+        FmFormData* pFormData = static_cast<FmFormData*>(FindData( xForm, GetRootList() ));
         if (pFormData)
             return;
 
@@ -584,7 +584,7 @@ namespace svxform
         Reference< XForm >  xParentForm(xIFace, UNO_QUERY);
         FmFormData* pParentData = NULL;
         if (xParentForm.is())
-            pParentData = (FmFormData*)FindData( xParentForm, GetRootList() );
+            pParentData = static_cast<FmFormData*>(FindData( xParentForm, GetRootList() ));
 
         pFormData = new FmFormData( xForm, m_aNormalImages, pParentData );
         Insert( pFormData, nRelPos );
@@ -600,7 +600,7 @@ namespace svxform
         if (!xForm.is())
             return;
 
-        FmFormData* pParentData = (FmFormData*)FindData( xForm, GetRootList() );
+        FmFormData* pParentData = static_cast<FmFormData*>(FindData( xForm, GetRootList() ));
         if( !pParentData )
         {
             pParentData = new FmFormData( xForm, m_aNormalImages, NULL );
@@ -629,7 +629,7 @@ namespace svxform
         assert(pData && pData->ISA(FmControlData)); //NavigatorTreeModel::ReplaceFormComponent : invalid argument
         if (!pData || !pData->ISA(FmControlData))
             return;
-        ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages );
+        static_cast<FmControlData*>(pData)->ModelReplaced( xNew, m_aNormalImages );
 
         FmNavModelReplacedHint aReplacedHint( pData );
         Broadcast( aReplacedHint );
@@ -679,7 +679,7 @@ namespace svxform
 
             if( bRecurs && pEntryData->ISA(FmFormData) )
             {
-                pChildData = FindData( rText, (FmFormData*)pEntryData );
+                pChildData = FindData( rText, static_cast<FmFormData*>(pEntryData) );
                 if( pChildData )
                     return pChildData;
             }
@@ -775,7 +775,7 @@ namespace svxform
     {
         if ( pObject->ISA(SdrObjGroup) )
         {   // rekursiv absteigen
-            const SdrObjList *pChildren = ((SdrObjGroup*)pObject)->GetSubList();
+            const SdrObjList *pChildren = static_cast<SdrObjGroup*>(pObject)->GetSubList();
             for ( size_t i=0; i<pChildren->GetObjCount(); ++i )
             {
                 SdrObject* pCurrent = pChildren->GetObj(i);
@@ -917,14 +917,14 @@ namespace svxform
 
         if( pEntryData->ISA(FmFormData) )
         {
-            FmFormData* pFormData = (FmFormData*)pEntryData;
+            FmFormData* pFormData = static_cast<FmFormData*>(pEntryData);
             Reference< XForm >  xForm( pFormData->GetFormIface());
             xFormComponent = xForm;
         }
 
         if( pEntryData->ISA(FmControlData) )
         {
-            FmControlData* pControlData = (FmControlData*)pEntryData;
+            FmControlData* pControlData = static_cast<FmControlData*>(pEntryData);
             xFormComponent = pControlData->GetFormComponent();
         }
 

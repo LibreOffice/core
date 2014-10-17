@@ -1063,7 +1063,7 @@ namespace svxform
             Reference< XChild >  xCurrentChild(pCurrentUserData->GetChildIFace(), UNO_QUERY);
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
-            FmFormData* pCurrentParentUserData = (FmFormData*)pCurrentUserData->GetParent();
+            FmFormData* pCurrentParentUserData = static_cast<FmFormData*>(pCurrentUserData->GetParent());
             DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "NavigatorTree::implExecuteDataTransfer: ungueltiges Parent");
 
             // beim Vater austragen
@@ -1403,7 +1403,7 @@ namespace svxform
         // Namen setzen
         FmFormView*     pFormView       = GetNavModel()->GetFormShell()->GetFormView();
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
-        FmFormPage*     pPage           = (FmFormPage*)pPageView->GetPage();
+        FmFormPage*     pPage           = static_cast<FmFormPage*>(pPageView->GetPage());
 
         OUString sName = pPage->GetImpl().setUniqueName( xNewComponent, xParentForm );
 
@@ -1442,7 +1442,7 @@ namespace svxform
 
 
         // Neuen Namen erstellen
-        FmFormData* pFormParentData = (FmFormData*)pEntryData->GetParent();
+        FmFormData* pFormParentData = static_cast<FmFormData*>(pEntryData->GetParent());
 
         for( sal_Int32 i=0; i<nMaxCount; i++ )
         {
@@ -1716,7 +1716,7 @@ namespace svxform
         for (SvLBoxEntrySortedArray::reverse_iterator it = m_arrCurrentSelection.rbegin();
              it != m_arrCurrentSelection.rend(); )
         {
-            FmEntryData* pCurrent = (FmEntryData*)((*it)->GetUserData());
+            FmEntryData* pCurrent = static_cast<FmEntryData*>((*it)->GetUserData());
 
             // eine Form ?
             bool bIsForm = pCurrent->ISA(FmFormData);
@@ -1725,7 +1725,7 @@ namespace svxform
             // einem makierten Formular nur die direkt, nicht die indirekt abhaengigen Controls markiert werden, muss ich das hier
             // noch nachholen
             if (bIsForm)
-                MarkViewObj((FmFormData*)pCurrent, true, true);     // das zweite sal_True heisst "deep"
+                MarkViewObj(static_cast<FmFormData*>(pCurrent), true, true);     // das zweite sal_True heisst "deep"
 
             // ein hidden control ?
             bool bIsHidden = IsHiddenControl(pCurrent);
@@ -2102,7 +2102,7 @@ namespace svxform
                 OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
                 if ( ( OUTDEV_WINDOW == rOutDev.GetOutDevType() ) && !aMarkRect.IsEmpty() )
                 {
-                    pFormView->MakeVisible( aMarkRect, (vcl::Window&)rOutDev );
+                    pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
                 }
             } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         }
@@ -2118,11 +2118,11 @@ namespace svxform
             pEntryData = pChildList->at( i );
             if( pEntryData->ISA(FmControlData) )
             {
-                pControlData = (FmControlData*)pEntryData;
+                pControlData = static_cast<FmControlData*>(pEntryData);
                 _rObjects.insert(pControlData->GetFormComponent());
             } // if( pEntryData->ISA(FmControlData) )
             else if (bDeep && (pEntryData->ISA(FmFormData)))
-                CollectObjects((FmFormData*)pEntryData,bDeep,_rObjects);
+                CollectObjects(static_cast<FmFormData*>(pEntryData), bDeep, _rObjects);
         } // for( sal_uInt32 i=0; i<pChildList->Count(); i++ )
     }
 
@@ -2175,7 +2175,7 @@ namespace svxform
                 OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
                 if ( OUTDEV_WINDOW == rOutDev.GetOutDevType() )
                 {
-                    pFormView->MakeVisible( aMarkRect, (vcl::Window&)rOutDev );
+                    pFormView->MakeVisible( aMarkRect, static_cast<vcl::Window&>(rOutDev) );
                 }
             } // for ( sal_uInt32 i = 0; i < pFormView->PaintWindowCount(); ++i )
         }

@@ -167,7 +167,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 {
     pWindow = new SvxFontWorkDialog( pBindings, this, _pParent,
                                      SVX_RES( RID_SVXDLG_FONTWORK ) );
-    SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*) pWindow;
+    SvxFontWorkDialog* pDlg = static_cast<SvxFontWorkDialog*>(pWindow);
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 

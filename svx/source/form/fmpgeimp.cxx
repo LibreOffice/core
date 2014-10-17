@@ -431,7 +431,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
 
             if( pModel->IsUndoEnabled() )
             {
-                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                pModel->AddUndo(new FmUndoContainerAction(*static_cast<FmFormModel*>(pModel),
                                                            FmUndoContainerAction::Inserted,
                                                            xForms,
                                                            xForm,
@@ -528,7 +528,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             if( bUndo )
             {
                 Reference< ::com::sun::star::container::XIndexContainer >  xContainer( getForms(), UNO_QUERY );
-                pModel->AddUndo(new FmUndoContainerAction(*(FmFormModel*)pModel,
+                pModel->AddUndo(new FmUndoContainerAction(*static_cast<FmFormModel*>(pModel),
                                                          FmUndoContainerAction::Inserted,
                                                          xContainer,
                                                          xForm,

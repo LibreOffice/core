@@ -42,17 +42,17 @@ XColorListRef XColorList::GetStdColorList()
 
 XColorEntry* XColorList::Replace(long nIndex, XColorEntry* pEntry )
 {
-    return (XColorEntry*)XPropertyList::Replace( pEntry, nIndex );
+    return static_cast<XColorEntry*>(XPropertyList::Replace( pEntry, nIndex ));
 }
 
 XColorEntry* XColorList::Remove(long nIndex)
 {
-    return (XColorEntry*) XPropertyList::Remove(nIndex);
+    return static_cast<XColorEntry*>(XPropertyList::Remove(nIndex));
 }
 
 XColorEntry* XColorList::GetColor(long nIndex) const
 {
-    return (XColorEntry*) XPropertyList::Get(nIndex);
+    return static_cast<XColorEntry*>( XPropertyList::Get(nIndex) );
 }
 
 uno::Reference< container::XNameContainer > XColorList::createInstance()

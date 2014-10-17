@@ -46,12 +46,12 @@ XLineEndList::~XLineEndList()
 
 XLineEndEntry* XLineEndList::Remove(long nIndex)
 {
-    return (XLineEndEntry*) XPropertyList::Remove(nIndex);
+    return static_cast<XLineEndEntry*>( XPropertyList::Remove(nIndex) );
 }
 
 XLineEndEntry* XLineEndList::GetLineEnd(long nIndex) const
 {
-    return (XLineEndEntry*) XPropertyList::Get(nIndex);
+    return static_cast<XLineEndEntry*>( XPropertyList::Get(nIndex) );
 }
 
 uno::Reference< container::XNameContainer > XLineEndList::createInstance()

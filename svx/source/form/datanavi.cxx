@@ -293,7 +293,7 @@ namespace svxform
 
     extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeDataTreeListBox(vcl::Window *pParent, VclBuilder::stringmap &)
     {
-        return new DataTreeListBox((XFormsPage*)pParent, WB_BORDER);
+        return new DataTreeListBox(static_cast<XFormsPage*>(pParent), WB_BORDER);
     }
 
     XFormsPage::XFormsPage( vcl::Window* pParent, DataNavigatorWindow* _pNaviWin, DataGroupType _eGroup ) :
@@ -2164,7 +2164,7 @@ namespace svxform
 
         if ( eState >= SfxItemState::DEFAULT )
         {
-            FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
+            FmFormShell* pShell = PTR_CAST( FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell() );
             Update( pShell );
         }
         else
@@ -2242,7 +2242,7 @@ namespace svxform
         pWindow = new DataNavigator( _pBindings, this, _pParent );
         eChildAlignment = SFX_ALIGN_RIGHT;
         pWindow->SetSizePixel( Size( 250, 400 ) );
-        ( (SfxDockingWindow*)pWindow )->Initialize( _pInfo );
+        static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
     }
 
     AddDataItemDialog::AddDataItemDialog(vcl::Window* pParent, ItemNode* _pNode,

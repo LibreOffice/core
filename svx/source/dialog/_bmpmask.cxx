@@ -373,7 +373,7 @@ SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( vcl::Window* pParent_, sal_uInt16 
 {
     pWindow = new SvxBmpMask( pBindings, this, pParent_,
                               BMP_RESID( RID_SVXDLG_BMPMASK ) );
-    SvxBmpMask* pDlg = (SvxBmpMask*) pWindow;
+    SvxBmpMask* pDlg = static_cast<SvxBmpMask*>(pWindow);
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 
@@ -816,7 +816,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
             {
                 case( META_PIXEL_ACTION ):
                 {
-                    MetaPixelAction* pAct = (MetaPixelAction*) pAction;
+                    MetaPixelAction* pAct = static_cast<MetaPixelAction*>(pAction);
 
                     aCol = pAct->GetColor();
                     TEST_COLS();
@@ -832,7 +832,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_LINECOLOR_ACTION ):
                 {
-                    MetaLineColorAction* pAct = (MetaLineColorAction*) pAction;
+                    MetaLineColorAction* pAct = static_cast<MetaLineColorAction*>(pAction);
 
                     aCol = pAct->GetColor();
                     TEST_COLS();
@@ -848,7 +848,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_FILLCOLOR_ACTION ):
                 {
-                    MetaFillColorAction* pAct = (MetaFillColorAction*) pAction;
+                    MetaFillColorAction* pAct = static_cast<MetaFillColorAction*>(pAction);
 
                     aCol = pAct->GetColor();
                     TEST_COLS();
@@ -864,7 +864,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_TEXTCOLOR_ACTION ):
                 {
-                    MetaTextColorAction* pAct = (MetaTextColorAction*) pAction;
+                    MetaTextColorAction* pAct = static_cast<MetaTextColorAction*>(pAction);
 
                     aCol = pAct->GetColor();
                     TEST_COLS();
@@ -880,7 +880,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_TEXTFILLCOLOR_ACTION ):
                 {
-                    MetaTextFillColorAction* pAct = (MetaTextFillColorAction*) pAction;
+                    MetaTextFillColorAction* pAct = static_cast<MetaTextFillColorAction*>(pAction);
 
                     aCol = pAct->GetColor();
                     TEST_COLS();
@@ -896,7 +896,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_FONT_ACTION ):
                 {
-                    MetaFontAction* pAct = (MetaFontAction*) pAction;
+                    MetaFontAction* pAct = static_cast<MetaFontAction*>(pAction);
                     vcl::Font       aFont( pAct->GetFont() );
 
                     aCol = aFont.GetColor();
@@ -916,7 +916,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_WALLPAPER_ACTION ):
                 {
-                    MetaWallpaperAction*    pAct = (MetaWallpaperAction*) pAction;
+                    MetaWallpaperAction*    pAct = static_cast<MetaWallpaperAction*>(pAction);
                     Wallpaper               aWall( pAct->GetWallpaper() );
 
                     aCol = aWall.GetColor();
@@ -936,7 +936,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_BMP_ACTION ):
                 {
-                    MetaBmpAction*  pAct = (MetaBmpAction*) pAction;
+                    MetaBmpAction*  pAct = static_cast<MetaBmpAction*>(pAction);
                     const Bitmap    aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
 
                     pAct = new MetaBmpAction( pAct->GetPoint(), aBmp );
@@ -946,7 +946,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_BMPSCALE_ACTION ):
                 {
-                    MetaBmpScaleAction* pAct = (MetaBmpScaleAction*) pAction;
+                    MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
                     const Bitmap        aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
 
                     pAct = new MetaBmpScaleAction( pAct->GetPoint(), pAct->GetSize(), aBmp );
@@ -956,7 +956,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_BMPSCALEPART_ACTION ):
                 {
-                    MetaBmpScalePartAction* pAct = (MetaBmpScalePartAction*) pAction;
+                    MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
                     const Bitmap            aBmp( Mask( pAct->GetBitmap() ).GetBitmap() );
 
                     pAct = new MetaBmpScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),
@@ -967,7 +967,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_BMPEX_ACTION ):
                 {
-                    MetaBmpExAction*    pAct = (MetaBmpExAction*) pAction;
+                    MetaBmpExAction*    pAct = static_cast<MetaBmpExAction*>(pAction);
                     const BitmapEx      aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
 
                     pAct = new MetaBmpExAction( pAct->GetPoint(), aBmpEx );
@@ -977,7 +977,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_BMPEXSCALE_ACTION ):
                 {
-                    MetaBmpExScaleAction*   pAct = (MetaBmpExScaleAction*) pAction;
+                    MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
                     const BitmapEx          aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
 
                     pAct = new MetaBmpExScaleAction( pAct->GetPoint(), pAct->GetSize(), aBmpEx );
@@ -987,7 +987,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 case( META_BMPEXSCALEPART_ACTION ):
                 {
-                    MetaBmpExScalePartAction*   pAct = (MetaBmpExScalePartAction*) pAction;
+                    MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
                     const BitmapEx              aBmpEx( Mask( pAct->GetBitmapEx() ).GetBitmapEx() );
 
                     pAct = new MetaBmpExScalePartAction( pAct->GetDestPoint(), pAct->GetDestSize(),

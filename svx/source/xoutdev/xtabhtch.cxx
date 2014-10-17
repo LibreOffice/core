@@ -47,17 +47,17 @@ XHatchList::~XHatchList()
 
 XHatchEntry* XHatchList::Replace(XHatchEntry* pEntry, long nIndex )
 {
-    return (XHatchEntry*) XPropertyList::Replace(pEntry, nIndex);
+    return static_cast<XHatchEntry*>( XPropertyList::Replace(pEntry, nIndex) );
 }
 
 XHatchEntry* XHatchList::Remove(long nIndex)
 {
-    return (XHatchEntry*) XPropertyList::Remove(nIndex);
+    return static_cast<XHatchEntry*>( XPropertyList::Remove(nIndex) );
 }
 
 XHatchEntry* XHatchList::GetHatch(long nIndex) const
 {
-    return (XHatchEntry*) XPropertyList::Get(nIndex);
+    return static_cast<XHatchEntry*>( XPropertyList::Get(nIndex) );
 }
 
 uno::Reference< container::XNameContainer > XHatchList::createInstance()
