@@ -148,11 +148,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
          << endl;
 #endif
 
-    if ( mpStream == 0 && mpDocument == 0 )
+    if ( mpStream == nullptr && mpDocument == nullptr )
     {
         // document handler has been created as unknown child - see <OOXMLFastDocumentHandler::createUnknownChildContext(..)>
         // --> do not provide a child context
-        return NULL;
+        return nullptr;
     }
 
     return OOXMLFactory::getInstance()->createFastChildContextFromStart(getContextHandler().get(), Element);
@@ -181,7 +181,7 @@ Name
 #endif
 
     return uno::Reference< xml::sax::XFastContextHandler >
-        ( new OOXMLFastDocumentHandler( m_xContext, 0, 0, 0 ) );
+        ( new OOXMLFastDocumentHandler( m_xContext, nullptr, nullptr, 0 ) );
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::characters(const OUString & /*aChars*/)
@@ -208,7 +208,7 @@ void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
 
 void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
 {
-    if ( mpStream != 0 && mpDocument != 0 )
+    if ( mpStream != nullptr && mpDocument != nullptr )
     {
         getContextHandler( )->getParserState( )->setInSectionGroup( bSubstream );
     }

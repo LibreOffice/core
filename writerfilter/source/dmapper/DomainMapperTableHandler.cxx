@@ -74,7 +74,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
     dmapper_logger->startElement("tablehandler.table");
     dmapper_logger->attribute("rows", nRows);
 
-    if (pProps.get() != NULL)
+    if (pProps.get() != nullptr)
         pProps->dumpXml( dmapper_logger );
 #endif
 }
@@ -255,7 +255,7 @@ struct TableInfo
     , nNestLevel(0)
     , pTableDefaults(new PropertyMap)
     , pTableBorders(new PropertyMap)
-    , pTableStyle(NULL)
+    , pTableStyle(nullptr)
     {
     }
 
@@ -318,7 +318,7 @@ void lcl_DecrementHoriOrientPosition(comphelper::SequenceAsVector<beans::Propert
 TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, comphelper::SequenceAsVector<beans::PropertyValue>& rFrameProperties)
 {
     // will receive the table style if any
-    TableStyleSheetEntry* pTableStyle = NULL;
+    TableStyleSheetEntry* pTableStyle = nullptr;
 
     if( m_aTableProperties.get() )
     {
@@ -332,7 +332,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         comphelper::SequenceAsHashMap aGrabBag;
 
-        if (0 != m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition())
+        if (nullptr != m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition())
         {
             TablePositionHandler *pTablePositions = m_rDMapper_Impl.getTableManager().getCurrentTableRealPosition();
 
@@ -1138,7 +1138,7 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
 #ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("table.row");
     dmapper_logger->attribute("cells", nCells);
-    if (pProps != NULL)
+    if (pProps != nullptr)
         pProps->dumpXml(dmapper_logger);
 #endif
 

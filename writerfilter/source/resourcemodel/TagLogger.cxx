@@ -29,14 +29,14 @@ using namespace css;
 namespace writerfilter
 {
     TagLogger::TagLogger(const char* name)
-        : pWriter( NULL ), pName( name )
+        : pWriter( nullptr ), pName( name )
     {
     }
 
     TagLogger::~TagLogger()
     {
-        pWriter = NULL;
-        pName = NULL;
+        pWriter = nullptr;
+        pName = nullptr;
     }
 
 #ifdef DEBUG_WRITERFILTER
@@ -48,7 +48,7 @@ namespace writerfilter
         std::string fileName;
         char * temp = getenv("TAGLOGGERTMP");
 
-        if (temp != NULL)
+        if (temp != nullptr)
             fileName += temp;
         else
             fileName += "/tmp";
@@ -76,7 +76,7 @@ namespace writerfilter
     {
         if (!pWriter)
             return;
-        xmlTextWriterStartDocument( pWriter, NULL, NULL, NULL );
+        xmlTextWriterStartDocument( pWriter, nullptr, nullptr, nullptr );
         xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
     }
 
@@ -86,7 +86,7 @@ namespace writerfilter
             return;
         xmlTextWriterEndDocument( pWriter );
         xmlFreeTextWriter( pWriter );
-        pWriter = NULL;
+        pWriter = nullptr;
     }
 
 #endif
@@ -267,7 +267,7 @@ namespace writerfilter
     void PropertySetDumpHandler::resolve(
             writerfilter::Reference<Properties>::Pointer_t pProps)
     {
-        if (pProps.get() != NULL)
+        if (pProps.get() != nullptr)
             pProps->resolve( *this );
     }
 

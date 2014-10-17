@@ -52,7 +52,7 @@ OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::
     , mxStatusIndicator(xStatusIndicator)
     , mnXNoteId(0)
     , mXNoteType(0)
-    , mxThemeDom(0)
+    , mxThemeDom(nullptr)
     , mbIsSubstream(false)
     , mnPercentSize(0)
     , mnProgressLastPos(0)

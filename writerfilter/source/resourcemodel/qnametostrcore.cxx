@@ -26,7 +26,7 @@ QNameToString::Pointer_t QNameToString::pInstance;
 
 QNameToString::Pointer_t QNameToString::Instance()
 {
-    if (pInstance.get() == NULL)
+    if (pInstance.get() == nullptr)
         pInstance = QNameToString::Pointer_t(new QNameToString());
 
     return pInstance;

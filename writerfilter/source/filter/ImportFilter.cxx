@@ -147,7 +147,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             if ( !xFrame.is() )
             {
                 uno::Reference< frame::XController > xController =  xModel->getCurrentController();
-                xFrame =  xController.is() ? xController->getFrame() : NULL;
+                xFrame =  xController.is() ? xController->getFrame() : nullptr;
             }
 
             oox::GraphicHelper gHelper( m_xContext, xFrame, xVbaPrjStrg );

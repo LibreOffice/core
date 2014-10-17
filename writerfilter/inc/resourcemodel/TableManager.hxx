@@ -643,7 +643,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellDepth(sal_uInt32 nDepth)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
     {
         mpTableLogger->startElement("tablemanager.cellDepth");
         mpTableLogger->attribute("depth", nDepth);
@@ -658,7 +658,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::inCell()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->element("tablemanager.inCell");
 #endif
     setInCell(true);
@@ -671,7 +671,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endCell()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->element("tablemanager.endCell");
 #endif
 
@@ -682,7 +682,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endRow()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->element("tablemanager.endRow");
 #endif
 
@@ -724,7 +724,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startLevel()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
     {
         typename TableData<T, PropertiesPointer>::Pointer_t pTableData;
 
@@ -734,7 +734,7 @@ void TableManager<T, PropertiesPointer>::startLevel()
         mpTableLogger->startElement("tablemanager.startLevel");
         mpTableLogger->attribute("level", mTableDataStack.size());
 
-        if (pTableData.get() != NULL)
+        if (pTableData.get() != nullptr)
             mpTableLogger->attribute("openCell",
                                      pTableData->isCellOpen() ? "yes" : "no");
 
@@ -764,7 +764,7 @@ void TableManager<T, PropertiesPointer>::startLevel()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endLevel()
 {
-    if (mpTableDataHandler.get() != NULL)
+    if (mpTableDataHandler.get() != nullptr)
         resolveCurrentTable();
 
     // Store the unfinished row as it will be used for the next table
@@ -774,7 +774,7 @@ void TableManager<T, PropertiesPointer>::endLevel()
     mTableDataStack.pop();
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
     {
         typename TableData<T, PropertiesPointer>::Pointer_t pTableData;
 
@@ -784,7 +784,7 @@ void TableManager<T, PropertiesPointer>::endLevel()
         mpTableLogger->startElement("tablemanager.endLevel");
         mpTableLogger->attribute("level", mTableDataStack.size());
 
-        if (pTableData.get() != NULL)
+        if (pTableData.get() != nullptr)
             mpTableLogger->attribute("openCell",
                                      pTableData->isCellOpen() ? "yes" : "no");
 
@@ -886,7 +886,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::handle0x7()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->startElement("tablemanager.handle0x7");
 #endif
 
@@ -899,7 +899,7 @@ void TableManager<T, PropertiesPointer>::handle0x7()
         endRow();
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->endElement();
 #endif
 }
@@ -932,7 +932,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->startElement("tablemanager.cellProps");
 #endif
 
@@ -942,7 +942,7 @@ void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
         setCellProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->endElement();
 #endif
 }
@@ -952,14 +952,14 @@ void TableManager<T, PropertiesPointer>::cellPropsByCell
 (unsigned int i, PropertiesPointer pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->startElement("tablemanager.cellPropsByCell");
 #endif
 
     mTableDataStack.top()->insertCellProperties(i, pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->endElement();
 #endif
 }
@@ -968,7 +968,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->startElement("tablemanager.insertRowProps");
 #endif
 
@@ -978,7 +978,7 @@ void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps
         setRowProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->endElement();
 #endif
 }
@@ -987,7 +987,7 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pProps)
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->startElement("tablemanager.insertTableProps");
 #endif
 
@@ -997,7 +997,7 @@ void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pPro
         setTableProps(pProps);
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->endElement();
 #endif
 }
@@ -1006,11 +1006,11 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 {
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->startElement("tablemanager.resolveCurrentTable");
 #endif
 
-    if (mpTableDataHandler.get() != NULL)
+    if (mpTableDataHandler.get() != nullptr)
     {
         try
         {
@@ -1052,7 +1052,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
     clearData();
 
 #ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != NULL)
+    if (mpTableLogger != nullptr)
         mpTableLogger->endElement();
 #endif
 }
@@ -1128,7 +1128,7 @@ void  TableManager<T, PropertiesPointer>::ensureOpenCell(PropertiesPointer pProp
         typename TableData<T, PropertiesPointer>::Pointer_t
         pTableData = mTableDataStack.top();
 
-        if (pTableData.get() != NULL)
+        if (pTableData.get() != nullptr)
         {
             if (!pTableData->isCellOpen())
                 openCell(getHandle(), pProps);

@@ -115,11 +115,11 @@ sal_uInt32 OOXMLFastContextHandler::mnInstanceCount = 0;
 
 OOXMLFastContextHandler::OOXMLFastContextHandler
 (uno::Reference< uno::XComponentContext > const & context)
-: mpParent(NULL),
+: mpParent(nullptr),
   mId(0),
   mnDefine(0),
   mnToken(oox::XML_TOKEN_COUNT),
-  mpStream(NULL),
+  mpStream(nullptr),
   mnTableDepth(0),
   mnInstanceNumber(mnInstanceCount),
   inPositionV(false),
@@ -130,7 +130,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
     mnInstanceCount++;
     aSetContexts.insert(this);
 
-    if (mpParserState.get() == NULL)
+    if (mpParserState.get() == nullptr)
         mpParserState.reset(new OOXMLParserState());
 
     mpParserState->incContextCount();
@@ -153,7 +153,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 {
     mpParserState = pContext->mpParserState;
 
-    if (mpParserState.get() == NULL)
+    if (mpParserState.get() == nullptr)
         mpParserState.reset(new OOXMLParserState());
 
     mnInstanceCount++;
@@ -391,7 +391,7 @@ void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) cons
 
     OOXMLValue::Pointer_t pVal(getValue());
 
-    if (pVal.get() != NULL)
+    if (pVal.get() != nullptr)
         pLogger->attribute("value", pVal->toString());
     else
         pLogger->attribute("value", std::string("(null)"));
@@ -957,11 +957,11 @@ void OOXMLFastContextHandler::resolvePropertySetAttrs()
 
 void OOXMLFastContextHandler::sendPropertyToParent()
 {
-    if (mpParent != NULL)
+    if (mpParent != nullptr)
     {
         OOXMLPropertySet::Pointer_t pProps(mpParent->getPropertySet());
 
-        if (pProps.get() != NULL)
+        if (pProps.get() != nullptr)
         {
             OOXMLProperty::Pointer_t
                 pProp(new OOXMLPropertyImpl(mId, getValue(),
@@ -973,15 +973,15 @@ void OOXMLFastContextHandler::sendPropertyToParent()
 
 void OOXMLFastContextHandler::sendPropertiesToParent()
 {
-    if (mpParent != NULL)
+    if (mpParent != nullptr)
     {
         OOXMLPropertySet::Pointer_t pParentProps(mpParent->getPropertySet());
 
-        if (pParentProps.get() != NULL)
+        if (pParentProps.get() != nullptr)
         {
             OOXMLPropertySet::Pointer_t pProps(getPropertySet());
 
-            if (pProps.get() != NULL)
+            if (pProps.get() != nullptr)
             {
                 OOXMLValue::Pointer_t pValue
                 (new OOXMLPropertySetValue(getPropertySet()));
@@ -1109,7 +1109,7 @@ void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLog
 
     OOXMLValue::Pointer_t pVal(getValue());
 
-    if (pVal.get() != NULL)
+    if (pVal.get() != nullptr)
         pLogger->attribute("value", pVal->toString());
     else
         pLogger->attribute("value", std::string("(null)"));
@@ -1221,7 +1221,7 @@ void OOXMLFastContextHandlerProperties::setParent
 void OOXMLFastContextHandlerProperties::setPropertySet
 (OOXMLPropertySet::Pointer_t pPropertySet)
 {
-    if (pPropertySet.get() != NULL)
+    if (pPropertySet.get() != nullptr)
         mpPropertySet = pPropertySet;
 }
 
@@ -1297,7 +1297,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 
 void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 {
-    if (mpValue.get() == NULL)
+    if (mpValue.get() == nullptr)
     {
         OOXMLValue::Pointer_t pValue = OOXMLBooleanValue::Create(true);
         setValue(pValue);
@@ -1306,7 +1306,7 @@ void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 
 void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 {
-    if (mpValue.get() == NULL)
+    if (mpValue.get() == nullptr)
     {
         OOXMLValue::Pointer_t pValue = OOXMLIntegerValue::Create(0);
         setValue(pValue);
@@ -1315,7 +1315,7 @@ void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 
 void OOXMLFastContextHandlerValue::setDefaultHexValue()
 {
-    if (mpValue.get() == NULL)
+    if (mpValue.get() == nullptr)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLHexValue(sal_uInt32(0)));
         setValue(pValue);
@@ -1324,7 +1324,7 @@ void OOXMLFastContextHandlerValue::setDefaultHexValue()
 
 void OOXMLFastContextHandlerValue::setDefaultStringValue()
 {
-    if (mpValue.get() == NULL)
+    if (mpValue.get() == nullptr)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLStringValue(OUString()));
         setValue(pValue);
@@ -1373,11 +1373,11 @@ void OOXMLFastContextHandlerTable::lcl_endFastElement
 void OOXMLFastContextHandlerTable::addCurrentChild()
 {
     OOXMLFastContextHandler * pHandler = dynamic_cast<OOXMLFastContextHandler*>(mCurrentChild.get());
-    if (pHandler != NULL)
+    if (pHandler != nullptr)
     {
         OOXMLValue::Pointer_t pValue(pHandler->getValue());
 
-        if (pValue.get() != NULL)
+        if (pValue.get() != nullptr)
         {
             OOXMLTableImpl::ValuePointer_t pTmpVal(pValue->clone());
             mTable.add(pTmpVal);
@@ -1929,7 +1929,7 @@ throw (uno::RuntimeException, xml::sax::SAXException)
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             pHandler->attributes(Attribs);
     }
 }
@@ -2017,7 +2017,7 @@ OOXMLFastContextHandlerWrapper::getFastContextHandler() const
     if (mxContext.is())
         return dynamic_cast<OOXMLFastContextHandler *>(mxContext.get());
 
-    return NULL;
+    return nullptr;
 }
 
 void OOXMLFastContextHandlerWrapper::newProperty
@@ -2026,7 +2026,7 @@ void OOXMLFastContextHandlerWrapper::newProperty
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             pHandler->newProperty(rId, pVal);
     }
 }
@@ -2037,7 +2037,7 @@ void OOXMLFastContextHandlerWrapper::setPropertySet
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             pHandler->setPropertySet(pPropertySet);
     }
 
@@ -2052,7 +2052,7 @@ OOXMLPropertySet::Pointer_t OOXMLFastContextHandlerWrapper::getPropertySet()
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             pResult = pHandler->getPropertySet();
     }
 
@@ -2066,7 +2066,7 @@ string OOXMLFastContextHandlerWrapper::getType() const
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             sResult += pHandler->getType();
     }
 
@@ -2082,7 +2082,7 @@ void OOXMLFastContextHandlerWrapper::setId(Id rId)
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             pHandler->setId(rId);
     }
 }
@@ -2094,7 +2094,7 @@ Id OOXMLFastContextHandlerWrapper::getId() const
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL && pHandler->getId() != 0)
+        if (pHandler != nullptr && pHandler->getId() != 0)
             nResult = pHandler->getId();
     }
 
@@ -2108,7 +2108,7 @@ void OOXMLFastContextHandlerWrapper::setToken(Token_t nToken)
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             pHandler->setToken(nToken);
     }
 }
@@ -2120,7 +2120,7 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
     if (mxContext.is())
     {
         OOXMLFastContextHandler * pHandler = getFastContextHandler();
-        if (pHandler != NULL)
+        if (pHandler != nullptr)
             nResult = pHandler->getToken();
     }
 
@@ -2193,7 +2193,7 @@ void OOXMLFastContextHandlerMath::process()
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
 // to RTLD_GLOBAL, so most probably a gcc bug.
     oox::FormulaImportBase* import = dynamic_cast< oox::FormulaImportBase* >( dynamic_cast< SfxBaseModel* >(component.get()));
-    assert( import != NULL );
+    assert( import != nullptr );
     if (!import)
         return;
     import->readFormulaOoxml( buffer );

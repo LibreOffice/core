@@ -1009,7 +1009,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     dmapper_logger->attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
 #endif
 
-    if (xTextAppend.is() && !getTableManager( ).isIgnore() && pParaContext != NULL)
+    if (xTextAppend.is() && !getTableManager( ).isIgnore() && pParaContext != nullptr)
     {
         try
         {
@@ -1237,7 +1237,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
                             xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
                             SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
                             if (!xTextRange.is())
-                                throw uno::Exception("insertTextPortion failed", NULL);
+                                throw uno::Exception("insertTextPortion failed", nullptr);
                             m_bTextInserted = true;
                             xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                             mxTOCTextCursor = xTOCTextCursor;
@@ -1614,7 +1614,7 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
                 sType = rPropNameSupplier.GetName( PROP_PARAGRAPH_FORMAT );
                 break;
             default:
-                throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);
+                throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
             }
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
             beans::PropertyValues aRedlineProperties( 3 );
@@ -2833,7 +2833,7 @@ void DomainMapper_Impl::handleFieldAsk
     {
         //don't insert the field
         //todo: maybe import a 'normal' input field here?
-        xFieldInterface = 0;
+        xFieldInterface = nullptr;
     }
 }
 
@@ -4280,7 +4280,7 @@ void DomainMapper_Impl::PopFieldContext()
                     else
                     {
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
-                        if (pFormControlHelper.get() != NULL && pFormControlHelper->hasFFDataHandler() )
+                        if (pFormControlHelper.get() != nullptr && pFormControlHelper->hasFFDataHandler() )
                         {
                             uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
                             xToInsert.set(xFormField, uno::UNO_QUERY);
@@ -4629,8 +4629,8 @@ bool DomainMapper_Impl::ExecuteFrameConversion()
             bRet = false;
         }
     }
-    m_xFrameStartRange = 0;
-    m_xFrameEndRange = 0;
+    m_xFrameStartRange = nullptr;
+    m_xFrameEndRange = nullptr;
     m_aFrameProperties.realloc( 0 );
     return bRet;
 }
@@ -4899,7 +4899,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
 
 SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
 {
-    SectionPropertyMap* pSectionContext = 0;
+    SectionPropertyMap* pSectionContext = nullptr;
     //the section context is not available before the first call of startSectionGroup()
     if( !IsAnyTableImport() )
     {

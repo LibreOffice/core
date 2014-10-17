@@ -39,7 +39,7 @@ public:
 
     bool insertControl(css::uno::Reference<css::text::XTextRange> const& xTextRange);
     bool processField(css::uno::Reference<css::text::XFormField> const& xFormField);
-    bool hasFFDataHandler() const { return (m_pFFData != 0); }
+    bool hasFFDataHandler() const { return (m_pFFData != nullptr); }
 private:
     FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;

@@ -42,8 +42,8 @@ namespace writerfilter {
 namespace dmapper {
 
     TablePropertiesHandler::TablePropertiesHandler( bool bOOXML ) :
-        m_pCurrentInteropGrabBag(0),
-        m_pTableManager( NULL ),
+        m_pCurrentInteropGrabBag(nullptr),
+        m_pTableManager( nullptr ),
         m_bOOXML( bOOXML )
     {
     }
@@ -52,7 +52,7 @@ namespace dmapper {
     TablePropertiesHandler::~TablePropertiesHandler( )
     {
         // Do not delete the table manager... this will be done somewhere else
-        m_pTableManager = NULL;
+        m_pTableManager = nullptr;
     }
 
     bool TablePropertiesHandler::sprm(Sprm & rSprm)
@@ -65,7 +65,7 @@ namespace dmapper {
         bool bRet = true;
         sal_uInt32 nSprmId = rSprm.getId();
         Value::Pointer_t pValue = rSprm.getValue();
-        sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
+        sal_Int32 nIntValue = ((pValue.get() != nullptr) ? pValue->getInt() : 0);
         switch( nSprmId )
         {
             case NS_ooxml::LN_CT_TrPrBase_jc: //90706
@@ -159,7 +159,7 @@ namespace dmapper {
                             nToken = XML_tableCellDelete;
                             break;
                         default:
-                            throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", NULL, 0);
+                            throw ::com::sun::star::lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
                             break;
                     };
                     TrackChangesHandlerPtr pTrackChangesHandler( new TrackChangesHandler( nToken ) );

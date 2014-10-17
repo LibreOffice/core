@@ -72,7 +72,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
 DomainMapperTableManager::~DomainMapperTableManager()
 {
     if ( m_pTablePropsHandler )
-        delete m_pTablePropsHandler, m_pTablePropsHandler = NULL;
+        delete m_pTablePropsHandler, m_pTablePropsHandler = nullptr;
 }
 
 bool DomainMapperTableManager::attribute(Id nName, Value& rValue)
@@ -141,7 +141,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
         bRet = true;
         sal_uInt32 nSprmId = rSprm.getId();
         Value::Pointer_t pValue = rSprm.getValue();
-        sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
+        sal_Int32 nIntValue = ((pValue.get() != nullptr) ? pValue->getInt() : 0);
         switch ( nSprmId )
         {
             case 0xf661: //sprmTTRLeft left table indent
@@ -509,7 +509,7 @@ TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
     if ( !m_aTablePositions.empty( ) && m_aTablePositions.back() )
         return (m_aTablePositions.back( )).get();
     else
-        return 0;
+        return nullptr;
 }
 
 void DomainMapperTableManager::startLevel( )
@@ -573,7 +573,7 @@ void DomainMapperTableManager::endLevel( )
 #ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("dmappertablemanager.endLevel");
     PropertyMapPtr pProps = getTableProps();
-    if (pProps.get() != NULL)
+    if (pProps.get() != nullptr)
         getTableProps()->dumpXml( dmapper_logger );
 
     dmapper_logger->endElement();

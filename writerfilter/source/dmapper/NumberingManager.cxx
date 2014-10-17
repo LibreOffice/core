@@ -917,7 +917,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             {
                 sal_Int32 nAbstractNumId = rSprm.getValue()->getInt();
                 ListDef* pListDef = dynamic_cast< ListDef* >( m_pCurrentDefinition.get( ) );
-                if ( pListDef != NULL )
+                if ( pListDef != nullptr )
                 {
                     // The current def should be a ListDef
                     pListDef->SetAbstractDefinition(
@@ -1122,12 +1122,12 @@ AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
                     pStylesTable->FindStyleSheetByISTD( m_aAbstractLists[i]->GetNumStyleLink() );
 
                 const StyleSheetPropertyMap* pStyleSheetProperties =
-                    dynamic_cast<const StyleSheetPropertyMap*>(pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : 0);
+                    dynamic_cast<const StyleSheetPropertyMap*>(pStyleSheetEntry ? pStyleSheetEntry->pProperties.get() : nullptr);
 
                 if( pStyleSheetProperties && pStyleSheetProperties->GetNumId() >= 0 )
                 {
                     ListDef::Pointer pList = GetList( pStyleSheetProperties->GetNumId() );
-                    if ( pList!=0 )
+                    if ( pList!=nullptr )
                         return pList->GetAbstractDefinition();
                     else
                         pAbstractList = m_aAbstractLists[i];

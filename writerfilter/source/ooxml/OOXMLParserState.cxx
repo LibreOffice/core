@@ -36,7 +36,7 @@ OOXMLParserState::OOXMLParserState() :
     mbForwardEvents(true),
     mnContexts(0),
     mnHandle(0),
-    mpDocument(NULL),
+    mpDocument(nullptr),
     inTxbxContent(false),
     savedInParagraphGroup(false),
     savedInCharacterGroup(false),
@@ -115,7 +115,7 @@ const OUString & OOXMLParserState::getTarget() const
 
 void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
 {
-    if (mpCharacterProps.get() != NULL)
+    if (mpCharacterProps.get() != nullptr)
     {
         rStream.props(mpCharacterProps);
         mpCharacterProps.reset(new OOXMLPropertySetImpl());
@@ -124,7 +124,7 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
 
 void OOXMLParserState::setCharacterProperties(OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mpCharacterProps.get() == NULL)
+    if (mpCharacterProps.get() == nullptr)
         mpCharacterProps = pProps;
     else
         mpCharacterProps->add(pProps);
@@ -136,7 +136,7 @@ void OOXMLParserState::setCellProperties(OOXMLPropertySet::Pointer_t pProps)
     {
         OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
 
-        if (rCellProps.get() == NULL)
+        if (rCellProps.get() == nullptr)
             rCellProps = pProps;
         else
             rCellProps->add(pProps);
@@ -149,7 +149,7 @@ void OOXMLParserState::setRowProperties(OOXMLPropertySet::Pointer_t pProps)
     {
         OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
 
-        if (rRowProps.get() == NULL)
+        if (rRowProps.get() == nullptr)
             rRowProps = pProps;
         else
             rRowProps->add(pProps);
@@ -162,7 +162,7 @@ void OOXMLParserState::resolveCellProperties(Stream & rStream)
     {
         OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
 
-        if (rCellProps.get() != NULL)
+        if (rCellProps.get() != nullptr)
         {
             rStream.props(rCellProps);
             rCellProps.reset(new OOXMLPropertySetImpl());
@@ -176,7 +176,7 @@ void OOXMLParserState::resolveRowProperties(Stream & rStream)
     {
         OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
 
-        if (rRowProps.get() != NULL)
+        if (rRowProps.get() != nullptr)
         {
             rStream.props(rRowProps);
             rRowProps.reset(new OOXMLPropertySetImpl());
@@ -190,7 +190,7 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
     {
         OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
 
-        if (rTableProps.get() != NULL)
+        if (rTableProps.get() != nullptr)
         {
             rStream.props(rTableProps);
             // Don't clean the table props to send them again for each row
@@ -204,7 +204,7 @@ void OOXMLParserState::setTableProperties(OOXMLPropertySet::Pointer_t pProps)
     if (!mTableProps.empty())
     {
         OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
-        if (rTableProps.get() == NULL)
+        if (rTableProps.get() == nullptr)
             rTableProps = pProps;
         else
             rTableProps->add(pProps);

@@ -913,7 +913,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         break;
         case NS_ooxml::LN_CT_DocGrid_type:
         {
-            if (pSectionContext != NULL)
+            if (pSectionContext != nullptr)
             {
                 switch( nIntValue )
                 {
@@ -965,7 +965,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             m_pImpl->m_oBackgroundColor.reset(nIntValue);
         break;
         case NS_ooxml::LN_CT_PageNumber_start:
-            if (pSectionContext != NULL)
+            if (pSectionContext != nullptr)
                 pSectionContext->SetPageNumber(nIntValue);
         break;
         case NS_ooxml::LN_CT_FtnEdn_type:
@@ -1368,7 +1368,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
         break;
     case NS_ooxml::LN_EG_SectPrContents_bidi:
-        if (pSectionContext != NULL)
+        if (pSectionContext != nullptr)
             pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB));
         break;
     case NS_ooxml::LN_EG_RPrBase_highlight:
@@ -1681,7 +1681,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
         PropertyMap * pTargetContext = rContext.get();
 
-        if (pSectionContext != NULL &&
+        if (pSectionContext != nullptr &&
             nSprmId == NS_ooxml::LN_EG_SectPrContents_textDirection)
         {
             pTargetContext = pSectionContext;
@@ -1977,7 +1977,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         {
             const StyleSheetEntryPtr pEntry = pStyleTable->FindStyleSheetByISTD(sStringValue);
             OSL_ENSURE( pEntry.get(), "no style sheet found" );
-            const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
+            const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
 
             if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
             {
@@ -1989,7 +1989,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 if (!pEntry->sBaseStyleIdentifier.isEmpty())
                 {
                     const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
-                    const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : 0);
+                    const StyleSheetPropertyMap* pParentProperties = dynamic_cast<const StyleSheetPropertyMap*>(pParent ? pParent->pProperties.get() : nullptr);
                     boost::optional<PropertyMap::Property> pPropMargin;
                     if (pParentProperties && (pPropMargin = pParentProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) )
                         nParaRightMargin = pPropMargin->second.get<sal_Int32>();
@@ -2257,7 +2257,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_ffdata:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != NULL)
+        if (pProperties.get() != nullptr)
         {
             FFDataHandler::Pointer_t pFFDataHandler(new FFDataHandler());
 
@@ -2270,14 +2270,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_CT_SdtPr_comboBox:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != NULL)
+        if (pProperties.get() != nullptr)
             pProperties->resolve(*this);
     }
     break;
     case NS_ooxml::LN_CT_SdtDropDownList_listItem:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != NULL)
+        if (pProperties.get() != nullptr)
             pProperties->resolve(*this);
     }
     break;
@@ -2356,7 +2356,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
         // process subitems
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != NULL)
+        if (pProperties.get() != nullptr)
             pProperties->resolve(*this);
 
         if (nSprmId == NS_ooxml::LN_CT_SdtPr_alias)
@@ -2843,7 +2843,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             m_pImpl->AppendFieldResult(sText);
         else
         {
-            if (pContext == 0)
+            if (pContext == nullptr)
                 pContext.reset(new PropertyMap());
 
             m_pImpl->appendTextPortion( sText, pContext );
@@ -3020,7 +3020,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->AppendFieldResult(sText);
             else
             {
-                if (pContext == 0)
+                if (pContext == nullptr)
                     pContext.reset(new PropertyMap());
 
                 m_pImpl->appendTextPortion( sText, pContext );
@@ -3346,7 +3346,7 @@ StyleSheetTablePtr DomainMapper::GetStyleSheetTable( )
 
 GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
 {
-    if( zOrderHelper.get() == NULL )
+    if( zOrderHelper.get() == nullptr )
         zOrderHelper.reset( new GraphicZOrderHelper );
     return zOrderHelper.get();
 }

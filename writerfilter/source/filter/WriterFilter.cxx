@@ -39,10 +39,10 @@ extern "C"
 /* shared lib exports implemented with helpers */
 static const struct ::cppu::ImplementationEntry s_component_entries [] =
 {
-    { WriterFilter_createInstance, WriterFilter_getImplementationName, WriterFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 },
-    { WriterFilterDetection_createInstance, WriterFilterDetection_getImplementationName, WriterFilterDetection_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0} ,
-    { RtfFilter_createInstance, RtfFilter_getImplementationName, RtfFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 } // terminate with NULL
+    { WriterFilter_createInstance, WriterFilter_getImplementationName, WriterFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, nullptr, 0 },
+    { WriterFilterDetection_createInstance, WriterFilterDetection_getImplementationName, WriterFilterDetection_getSupportedServiceNames, ::cppu::createSingleComponentFactory, nullptr, 0} ,
+    { RtfFilter_createInstance, RtfFilter_getImplementationName, RtfFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, nullptr, 0 },
+    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 } // terminate with NULL
 };
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL writerfilter_component_getFactory(sal_Char const * implName, void * xMgr, void * xRegistry )

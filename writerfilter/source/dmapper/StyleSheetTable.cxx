@@ -95,7 +95,7 @@ TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetT
 
 TableStyleSheetEntry::~TableStyleSheetEntry( )
 {
-    m_pStyleSheet = NULL;
+    m_pStyleSheet = nullptr;
 }
 
 void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps )
@@ -150,7 +150,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
 
     if ( pEntry.get( ) )
     {
-        if (pStack.get() == NULL)
+        if (pStack.get() == nullptr)
             pStack.reset(new StyleSheetEntryDeque());
 
         StyleSheetEntryDeque::const_iterator aIt = find(pStack->begin(), pStack->end(), pEntry);
@@ -661,19 +661,19 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 }
                 else
                 {
-                    if (pTableEntry != NULL)
+                    if (pTableEntry != nullptr)
                         pTableEntry->AddTblStylePr( nType, pProps );
                 }
 
                 if (nSprmId == NS_ooxml::LN_CT_Style_tblPr)
                 {
-                    if (pTableEntry != NULL)
+                    if (pTableEntry != nullptr)
                         pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblPr"));
                 }
                 else if (nSprmId == NS_ooxml::LN_CT_Style_tblStylePr)
                 {
                     pTblStylePrHandler->appendInteropGrabBag("type", pTblStylePrHandler->getTypeString());
-                    if (pTableEntry != NULL)
+                    if (pTableEntry != nullptr)
                         pTableEntry->AppendInteropGrabBag(pTblStylePrHandler->getInteropGrabBag("tblStylePr"));
                 }
             }
@@ -1030,7 +1030,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             //TODO: Handle cases where a paragraph <> character style relation is needed
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
                             // Writer core doesn't support numbering styles having a parent style, it seems
-                            if (pParent.get() != NULL && !bListStyle)
+                            if (pParent.get() != nullptr && !bListStyle)
                                 xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
                         }
                         catch( const uno::RuntimeException& )
@@ -1094,7 +1094,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     if( bParaStyle )
                     {
                         // Set the outline levels
-                        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
+                        const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
                         if ( pStyleSheetProperties )
                         {
                             aPropValues.realloc( aPropValues.getLength( ) + 1 );

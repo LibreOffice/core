@@ -137,7 +137,7 @@ static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
 static void
 lcl_putBorderProperty(RTFStack& aStates, Id nId, RTFValue::Pointer_t pValue)
 {
-    RTFSprms* pAttributes = 0;
+    RTFSprms* pAttributes = nullptr;
     if (aStates.top().nBorderState == BORDER_PARAGRAPH_BOX)
         for (int i = 0; i < 4; i++)
         {
@@ -200,7 +200,7 @@ static const char* lcl_RtfToString(RTFKeyword nKeyword)
         if (nKeyword == aRTFControlWords[i].nIndex)
             return aRTFControlWords[i].sKeyword;
     }
-    return NULL;
+    return nullptr;
 }
 
 static util::DateTime lcl_getDateTime(RTFParserState& aState)
@@ -241,7 +241,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_xDstDoc(xDstDoc),
       m_xFrame(xFrame),
       m_xStatusIndicator(xStatusIndicator),
-      m_pMapperStream(NULL),
+      m_pMapperStream(nullptr),
       m_aDefaultState(this),
       m_bSkipUnknown(false),
       m_aFontIndexes(),
@@ -265,7 +265,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_aTableBufferStack(1), // create top-level buffer already
       m_aSuperBuffer(),
       m_bHasFootnote(false),
-      m_pSuperstream(0),
+      m_pSuperstream(nullptr),
       m_nStreamType(0),
       m_nHeaderFooterPositions(),
       m_nGroupStartPos(0),
@@ -344,7 +344,7 @@ void RTFDocumentImpl::setAuthorInitials(OUString& rAuthorInitials)
 
 bool RTFDocumentImpl::isSubstream() const
 {
-    return m_pSuperstream != 0;
+    return m_pSuperstream != nullptr;
 }
 
 void RTFDocumentImpl::finishSubstream()
@@ -741,7 +741,7 @@ void RTFDocumentImpl::resolve(Stream& rMapper)
 int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XShape> const& i_xShape)
 {
     SvMemoryStream aStream;
-    SvStream* pStream = 0;
+    SvStream* pStream = nullptr;
     if (!m_pBinaryData.get())
     {
         pStream = &aStream;
@@ -787,7 +787,7 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
     WMF_EXTERNALHEADER* pExtHeader = &aExtHeader;
     uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
     if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-        pExtHeader = 0;
+        pExtHeader = nullptr;
     OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, pExtHeader);
 
     if (m_aStates.top().aPicture.nStyle != BMPSTYLE_NONE)
@@ -1691,7 +1691,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 
                 m_bHasFootnote = true;
                 if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
-                    m_aStates.top().pCurrentBuffer = 0;
+                    m_aStates.top().pCurrentBuffer = nullptr;
                 bool bCustomMark = false;
                 OUString aCustomMark;
                 while (m_aSuperBuffer.size())
@@ -2207,7 +2207,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         if (m_aTableBufferStack.size() == 1)
         {
             throw io::WrongFormatException(
-                "mismatch between \\itap and number of \\nestrow", 0);
+                "mismatch between \\itap and number of \\nestrow", nullptr);
         }
         // note: there may be several states pointing to table buffer!
         for (size_t i = 0; i < m_aStates.size(); ++i)
@@ -2862,7 +2862,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         if (m_nTopLevelCells == 0 && m_nNestedCells == 0)
         {
             // Reset that we're in a table.
-            m_aStates.top().pCurrentBuffer = 0;
+            m_aStates.top().pCurrentBuffer = nullptr;
         }
         else
         {
@@ -3151,8 +3151,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         if (m_aStates.top().pCurrentBuffer == &m_aSuperBuffer)
         {
-            replayBuffer(m_aSuperBuffer, 0, 0);
-            m_aStates.top().pCurrentBuffer = 0;
+            replayBuffer(m_aSuperBuffer, nullptr, nullptr);
+            m_aStates.top().pCurrentBuffer = nullptr;
         }
         m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_EG_RPrBase_vertAlign);
     }
@@ -5449,7 +5449,7 @@ int RTFDocumentImpl::popState()
         // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
         // to RTLD_GLOBAL, so most probably a gcc bug.
         oox::FormulaImportBase* pImport = dynamic_cast<oox::FormulaImportBase*>(dynamic_cast<SfxBaseModel*>(xComponent.get()));
-        assert(pImport != NULL);
+        assert(pImport != nullptr);
         if (pImport)
             pImport->readFormulaOoxml(m_aMathBuffer);
         RTFValue::Pointer_t pValue(new RTFValue(xObject));
@@ -5914,10 +5914,10 @@ int RTFDocumentImpl::popState()
 
     if (aState.pCurrentBuffer == &m_aSuperBuffer)
     {
-        OSL_ASSERT(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == 0);
+        OSL_ASSERT(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == nullptr);
 
         if (!m_bHasFootnote)
-            replayBuffer(m_aSuperBuffer, 0, 0);
+            replayBuffer(m_aSuperBuffer, nullptr, nullptr);
 
         m_bHasFootnote = false;
     }
@@ -6026,10 +6026,10 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       nDay(0),
       nHour(0),
       nMinute(0),
-      pDestinationText(0),
+      pDestinationText(nullptr),
       nCurrentStyleIndex(-1),
       nCurrentCharacterStyleIndex(-1),
-      pCurrentBuffer(0),
+      pCurrentBuffer(nullptr),
       bInListpicture(false),
       bInBackground(false),
       bHadShapeText(false),

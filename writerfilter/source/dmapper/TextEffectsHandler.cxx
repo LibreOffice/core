@@ -484,7 +484,7 @@ void TextEffectsHandler::convertElementIdToPropertyId(sal_Int32 aElementId)
 
 TextEffectsHandler::TextEffectsHandler(sal_uInt32 aElementId) :
     LoggedProperties(dmapper_logger, "TextEffectsHandler"),
-    mpGrabBagStack(NULL)
+    mpGrabBagStack(nullptr)
 {
     convertElementIdToPropertyId(aElementId);
     mpGrabBagStack.reset(new GrabBagStack(maElementName));

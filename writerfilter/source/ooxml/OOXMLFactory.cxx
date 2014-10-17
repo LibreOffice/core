@@ -55,7 +55,7 @@ OOXMLFactory::~OOXMLFactory()
 
 OOXMLFactory::Pointer_t OOXMLFactory::getInstance()
 {
-    if (m_Instance.get() == NULL)
+    if (m_Instance.get() == nullptr)
         m_Instance.reset(new OOXMLFactory());
 
     return m_Instance;
@@ -67,10 +67,10 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() == NULL)
+    if (pFactory.get() == nullptr)
         return;
 
-    assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != NULL );
+    assert( dynamic_cast< sax_fastparser::FastAttributeList *>( Attribs.get() ) != nullptr );
     sax_fastparser::FastAttributeList *pAttribs;
     pAttribs = static_cast< sax_fastparser::FastAttributeList *>( Attribs.get() );
 
@@ -172,7 +172,7 @@ void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() != NULL)
+    if (pFactory.get() != nullptr)
     {
         pFactory->charactersAction(pHandler, rString);
     }
@@ -183,7 +183,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nTo
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() != NULL)
+    if (pFactory.get() != nullptr)
     {
         pFactory->startAction(pHandler);
     }
@@ -194,7 +194,7 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToke
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
-    if (pFactory.get() != NULL)
+    if (pFactory.get() != nullptr)
     {
         pFactory->endAction(pHandler);
     }
