@@ -594,7 +594,7 @@ BigInt::BigInt( long long nValue )
     else
     {
         bIsBig  = true;
-        const unsigned long long nUValue = static_cast<unsigned long long>(bIsNeg ? -nValue : nValue);
+        unsigned long long nUValue = static_cast<unsigned long long>(bIsNeg ? -nValue : nValue);
         for (int i = 0; (i != sizeof(unsigned long long) / 2) && (nUValue != 0); ++i)
         {
             nNum[i] = static_cast<sal_uInt16>(nUValue & 0xffffUL);
