@@ -477,6 +477,12 @@ DECLARE_OOXMLEXPORT_TEST(testFdo77716, "fdo77716.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(200)), getProperty<sal_Int32>(xStyle, "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testAfterlines, "afterlines.docx")
+{
+    // This was 353, i.e. the value of <w:spacing w:after="200"> from <w:pPrDefault>, instead of <w:spacing w:afterLines="100"/> from <w:pPr>.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(423), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
