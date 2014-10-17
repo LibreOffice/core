@@ -1589,7 +1589,7 @@ static PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rProp
 void SwXNumberingRules::SetNumberingRuleByIndex(
             SwNumRule& rNumRule,
             const uno::Sequence<beans::PropertyValue>& rProperties, sal_Int32 nIndex)
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
+    throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     SolarMutexGuard aGuard;
     OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );

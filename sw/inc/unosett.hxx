@@ -195,7 +195,7 @@ public:
             GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
     void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
-                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
 
     const OUString*         GetNewCharStyleNames() const {return m_sNewCharStyleNames;}
     const OUString*         GetBulletFontNames() const {return m_sNewBulletFontNames;}
