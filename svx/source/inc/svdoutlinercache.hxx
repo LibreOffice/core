@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_INC_SVDOUTLINERCACHE_HXX
 
 #include <sal/types.h>
+#include <vector>
 
 class SdrModel;
 class SdrOutliner;
@@ -33,12 +34,18 @@ private:
 
     SdrOutliner*    mpModeOutline;
     SdrOutliner*    mpModeText;
+
+    std::vector<SdrOutliner*> maActiveOutliners;
 public:
     SdrOutlinerCache( SdrModel* pModel );
     ~SdrOutlinerCache();
 
     SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
+    std::vector<SdrOutliner*> GetActiveOutliners() const
+    {
+        return maActiveOutliners;
+    }
 };
 
 #endif
