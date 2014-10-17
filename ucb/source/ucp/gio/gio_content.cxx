@@ -33,7 +33,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
-#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
@@ -303,7 +303,7 @@ void convertToIOException(GError *pError, const uno::Reference< uno::XInterface 
     catch (const uno::Exception& e)
     {
         css::uno::Any a(cppu::getCaughtException());
-        throw css::lang::WrappedTargetException(
+        throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
             css::uno::Reference<css::uno::XInterface>(), a);
     }
