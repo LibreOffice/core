@@ -433,7 +433,7 @@ uno::Sequence< OUString > SmModel::getSupportedServiceNames_Static(void)
 }
 
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
-    throw( RuntimeException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException)
+    throw (RuntimeException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, std::exception)
 {
     SolarMutexGuard aGuard;
 
