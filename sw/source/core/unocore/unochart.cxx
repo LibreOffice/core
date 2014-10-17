@@ -186,9 +186,11 @@ static void LaunchModifiedEvent(
     }
 }
 
-// rCellRangeName needs to be of one of the following formats:
-// - e.g. "A2:E5" or
-// - e.g. "Table1.A2:E5"
+/**
+ * rCellRangeName needs to be of one of the following formats:
+ * - e.g. "A2:E5" or
+ *   - e.g. "Table1.A2:E5"
+ */
 bool FillRangeDescriptor(
         SwRangeDescriptor &rDesc,
         const OUString &rCellRangeName )
@@ -243,6 +245,7 @@ static OUString GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
         }
         OSL_ENSURE( pStartBox, "start box not found" );
         OSL_ENSURE( pEndBox, "end box not found" );
+
         // need to switch start and end?
         if (*pUnoTblCrsr->GetPoint() < *pUnoTblCrsr->GetMark())
         {
@@ -365,8 +368,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
         const SwDoc    *pDoc,
         const OUString &rRangeRepresentation,   // must be a single range (i.e. so called sub-range)
         SwFrmFmt    **ppTblFmt,     // will be set to the table format of the table used in the range representation
-        SwUnoCrsr   **ppUnoCrsr )   // will be set to cursor spanning the cell range
-                                    // (cursor will be created!)
+        SwUnoCrsr   **ppUnoCrsr )   // will be set to cursor spanning the cell range (cursor will be created!)
 {
     OUString aTblName;    // table name
     OUString aStartCell;  // name of top left cell
@@ -406,14 +408,16 @@ static void GetFormatAndCreateCursorFromRangeRep(
                             pTable ? pTable->GetTblBox( aStartCell, true ) : 0;
             if(pTLBox)
             {
-                // hier muessen die Actions aufgehoben werden
+                // The Actions need to be removed here
                 UnoActionRemoveContext aRemoveContext(pTblFmt->GetDoc());
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
+
                 // set cursor to top left box of range
                 SwUnoCrsr* pUnoCrsr = pTblFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( false );
+
                 // #i80314#
                 // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
                 const SwTableBox* pBRBox = pTable->GetTblBox( aEndCell, true );
@@ -562,8 +566,9 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     uno::Sequence< sal_Int32 > aSequenceMapping;
     bool bFirstIsLabel      = false;
     bool bDtaSrcIsColumns   = true; // true : DataSource will be sequence of columns
-                                            // false: DataSource will be sequence of rows
-    OUString aChartOleObjectName;//work around wrong writer ranges ( see Issue 58464 )
+                                    // false: DataSource will be sequence of rows
+
+    OUString aChartOleObjectName; //work around wrong writer ranges ( see Issue 58464 )
     sal_Int32 nArgs = rArguments.getLength();
     OSL_ENSURE( nArgs != 0, "no properties provided" );
     if (nArgs == 0)
@@ -640,11 +645,14 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             SwRangeDescriptor aDesc;
             if (aRangeRepresentation.isEmpty())
                 return xRes;        // we can't handle this thus returning an empty references
-            aRangeRepresentation = aRangeRepresentation.copy( 1 );    // get rid of '.' to have only the cell range left
+
+            aRangeRepresentation = aRangeRepresentation.copy( 1 ); // get rid of '.' to have only the cell range left
             FillRangeDescriptor( aDesc, aRangeRepresentation );
             aDesc.Normalize();
+
             if (aDesc.nTop <= 0)    // no chance to shift the range one row up?
                 return xRes;        // we can't handle this thus returning an empty references
+
             aDesc.nTop      -= 1;
             aDesc.nBottom   -= 1;
 
@@ -655,7 +663,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
         }
     }
-    if (!bOk)    // different tables used, or incorrect range specifiers
+    if (!bOk) // different tables used, or incorrect range specifiers
         throw lang::IllegalArgumentException();
 
     SortSubranges( aSubRanges, bDtaSrcIsColumns );
@@ -677,6 +685,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     SwUnoCrsr   *pUnoCrsr = 0;      // here required to check if the cells in the range do actually exist
     if (aSubRanges.getLength() > 0)
         GetFormatAndCreateCursorFromRangeRep( pDoc, pSubRanges[0], &pTblFmt, &pUnoCrsr );
+
     boost::scoped_ptr< SwUnoCrsr > pAuto( pUnoCrsr );  // to end lifetime of object pointed to by pUnoCrsr
     if (!pTblFmt || !pUnoCrsr)
         throw lang::IllegalArgumentException();
@@ -902,8 +911,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 if (pLabelUnoCrsr || pDataUnoCrsr)
                     ++nSeqsIdx;
             }
-            OSL_ENSURE( nSeqsIdx == nNumLDS,
-                    "mismatch between sequence size and num,ber of entries" );
+            OSL_ENSURE( nSeqsIdx == nNumLDS, "mismatch between sequence size and num,ber of entries" );
 
             // build data source from data and label sequences
             uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLDS( nNumLDS );
@@ -985,15 +993,15 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
     return Impl_createDataSource( rArguments );
 }
 
-// SwChartDataProvider::GetBrokenCellRangeForExport
-
-// fix for #i79009
-// we need to return a property that has the same value as the property
-// 'CellRangeRepresentation' but for all rows which are increased by one.
-// E.g. Table1:A1:D5 -> Table1:A2:D6
-// Since the problem is only for old charts which did not support multiple
-// we do not need to provide that property/string if the 'CellRangeRepresentation'
-// contains multiple ranges.
+/**
+ * Fix for #i79009
+ * we need to return a property that has the same value as the property
+ * 'CellRangeRepresentation' but for all rows which are increased by one.
+ * E.g. Table1:A1:D5 -> Table1:A2:D6
+ * Since the problem is only for old charts which did not support multiple
+ * we do not need to provide that property/string if the 'CellRangeRepresentation'
+ * contains multiple ranges.
+ */
 OUString SwChartDataProvider::GetBrokenCellRangeForExport(
     const OUString &rCellRangeRepresentation )
 {
@@ -1627,26 +1635,27 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
     }
 }
 
-// SwChartDataProvider::AddRowCols tries to notify charts of added columns
-// or rows and extends the value sequence respectively (if possible).
-// If those can be added to the end of existing value data-sequences those
-// sequences get mofdified accordingly and will send a modification
-// notification (calling 'setModified').
-
-// Since this function is a work-around for non existent Writer core functionality
-// (no arbitrary multi-selection in tables that can be used to define a
-// data-sequence) this function will be somewhat unreliable.
-// For example we will only try to adapt value sequences. For this we assume
-// that a sequence of length 1 is a label sequence and those with length >= 2
-// we presume to be value sequences. Also new cells can only be added in the
-// direction the value sequence is already pointing (rows / cols) and at the
-// start or end of the values data-sequence.
-// Nothing needs to be done if the new cells are in between the table cursors
-// point and mark since data-sequence are considered to consist of all cells
-// between those.
-// New rows/cols need to be added already to the table before calling
-// this function.
-
+/**
+ * SwChartDataProvider::AddRowCols tries to notify charts of added columns
+ * or rows and extends the value sequence respectively (if possible).
+ * If those can be added to the end of existing value data-sequences those
+ * sequences get mofdified accordingly and will send a modification
+ * notification (calling 'setModified
+ *
+ * Since this function is a work-around for non existent Writer core functionality
+ * (no arbitrary multi-selection in tables that can be used to define a
+ * data-sequence) this function will be somewhat unreliable.
+ * For example we will only try to adapt value sequences. For this we assume
+ * that a sequence of length 1 is a label sequence and those with length >= 2
+ * we presume to be value sequences. Also new cells can only be added in the
+ * direction the value sequence is already pointing (rows / cols) and at the
+ * start or end of the values data-sequence.
+ * Nothing needs to be done if the new cells are in between the table cursors
+ * point and mark since data-sequence are considered to consist of all cells
+ * between those.
+ * New rows/cols need to be added already to the table before calling
+ * this function.
+ */
 void SwChartDataProvider::AddRowCols(
         const SwTable &rTable,
         const SwSelBoxes& rBoxes,
@@ -1751,7 +1760,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
     for (sal_Int32 i = 0;  i < nNumRanges;  ++i)
     {
         const OUString aRange( rRangeRepresentation.getToken(0, ';', nPos) );
-        SwFrmFmt    *pTblFmt  = 0;      // pointer to table format
+        SwFrmFmt    *pTblFmt  = 0; // pointer to table format
         GetFormatAndCreateCursorFromRangeRep( pDoc, aRange, &pTblFmt, NULL );
         if (!pTblFmt)
             throw lang::IllegalArgumentException();
@@ -2094,7 +2103,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
             OSL_ENSURE( nColSpan == 1 || nRowSpan == 1,
                     "unexpected range of selected cells" );
 
-            OUString aTxt;    // label text to be returned
+            OUString aTxt; // label text to be returned
             bool bReturnEmptyTxt = false;
             bool bUseCol = true;
             if (eLabelOrigin == chart2::data::LabelOrigin_COLUMN)
@@ -2607,24 +2616,19 @@ void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
 }
 
 /**
-SwChartDataSequence::ExtendTo
-
-extends the data-sequence by new cells added at the end of the direction
-the data-sequence points to.
-If the cells are already within the range of the sequence nothing needs
-to be done.
-If the cells are beyond the end of the sequence (are not adjacent to the
-current last cell) nothing can be done. Only if the cells are adjacent to
-the last cell they can be added.
-
-@returns     true if the data-sequence was changed.
-@param       bExtendCols
-             specifies if columns or rows are to be extended
-@param       nFirstNew
-             index of first new row/col to be included in data-sequence
-@param       nLastNew
-             index of last new row/col to be included in data-sequence
-*/
+ * Extends the data-sequence by new cells added at the end of the direction
+ * the data-sequence points to.
+ * If the cells are already within the range of the sequence nothing needs
+ * to be done.
+ * If the cells are beyond the end of the sequence (are not adjacent to the
+ * current last cell) nothing can be done. Only if the cells are adjacent to
+ * the last cell they can be added.
+ *
+ * @returns true if the data-sequence was changed.
+ * @param   bExtendCols - specifies if columns or rows are to be extended
+ * @param   nFirstNew - index of first new row/col to be included in data-sequence
+ * @param   nLastNew - index of last new row/col to be included in data-sequence
+ */
 bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         sal_Int32 nFirstNew, sal_Int32 nCount )
 {

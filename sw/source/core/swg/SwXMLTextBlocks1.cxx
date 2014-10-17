@@ -62,8 +62,8 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             ReadXML->SetBlockMode( true );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( false );
-            // Ole objects fails to display when inserted into document
-            // because the ObjectReplacement folder ( and contents are missing )
+            // Ole objects fail to display when inserted into the document, as
+            // the ObjectReplacement folder and contents are missing
             OUString sObjReplacements( "ObjectReplacements" );
             if ( xRoot->hasByName( sObjReplacements ) )
             {
@@ -152,7 +152,6 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                                       bool bFileAlreadyOpen )
 {
     // set current auto text
-
     aShort = aNames[nIdx]->aShort;
     aLong = aNames[nIdx]->aLong;
     aPackageName = aNames[nIdx]->aPackageName;
@@ -218,8 +217,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                     xParser->setDocumentHandler( xFilter );
 
                     // connect model and filter
-                    uno::Reference<document::XImporter> xImporter( xFilter,
-                                                            UNO_QUERY );
+                    uno::Reference<document::XImporter> xImporter( xFilter, UNO_QUERY );
 
                     // we don't need a model
                     // xImporter->setTargetDocument( xModelComponent );
@@ -397,7 +395,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
     else if( nErr != SVSTREAM_OK )
         nRes = ERR_SWG_WRITE_ERROR;
     */
-    if( !nRes )         // damit ueber GetText & nCur aufs Doc zugegriffen
+    if( !nRes ) // So that we can access the Doc via GetText & nCur
         MakeBlockText( rText );
 
     return nRes;
@@ -527,7 +525,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     // open stream in proper sub-storage
     if( !bFileAlreadyOpen )
     {
-        CloseFile();    // close (it may be open in read-only-mode)
+        CloseFile(); // close (it may be open in read-only-mode)
         nRes = OpenFile ( false );
     }
 

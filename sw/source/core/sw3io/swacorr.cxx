@@ -29,10 +29,14 @@ using namespace ::com::sun::star;
 
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
 
-    //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
-    //      koennen aus der Wortliste herausgeholt werden!)
-    //      rShort ist der Stream-Name - gecryptet!
 
+/**
+ * Returns the replacement text
+ *
+ * Only for the SWG format, all others can be extracted from the word list
+ *
+ * @param rShort - the stream name (encrypted)
+ */
 bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
                                  const OUString& rShort, OUString& rLong )
 {
@@ -51,6 +55,13 @@ bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
+/**
+ * Text with attributes
+ *
+ * Only for SWG format
+ *
+ * @param rShort - the stream name (encrypted)
+ */
 bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
                                  const OUString& rFileName, const OUString& rShort,
                                  SfxObjectShell& rObjSh, OUString& rLong )

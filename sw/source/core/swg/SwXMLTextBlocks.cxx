@@ -73,7 +73,8 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     pDoc->acquire();
     uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
-        Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
+        Touch(); // If it's created anew -> get a new timestamp
+
     try
     {
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
@@ -81,7 +82,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     }
     catch(const uno::Exception&)
     {
-        //couldn't open the file - maybe it's readonly
+        //FIXME: couldn't open the file - maybe it's readonly
     }
     if( !refStg.is())
     {
@@ -269,7 +270,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     while ( xAccess->hasByName( sDestShortName ) )
     {
         ++nIdx;
-        //falls wirklich mal einer so verrueckt ist
+        // If someone is that crazy ...
         if(USHRT_MAX == nIdx)
         {
             CloseFile();
@@ -324,7 +325,7 @@ sal_uLong SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString
 
 sal_uLong SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& rLong )
 {
-    // In der Basisklasse ablegen!
+    // Store in base class
     aShort = rShort;
     aLong = rLong;
     aPackageName = GeneratePackageName( rShort );
@@ -355,7 +356,6 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
         // we have to write to the temporary storage first, since the used below functions are optimized
         // TODO/LATER: it is only a temporary solution, that should be changed soon, the used methods should be
         // called without optimization
-
         bool bOK = false;
 
         if ( xRoot.is() )
@@ -442,7 +442,7 @@ bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
     {
         if( bInPutMuchBlocks )
         {
-            OSL_ENSURE( false, "verschachtelte Aufrufe sind nicht erlaubt" );
+            OSL_ENSURE( false, "Nested calls are not allowed");
         }
         else if( !IsFileChanged() )
         {
