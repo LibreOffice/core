@@ -425,13 +425,18 @@ PrinterGfx::DrawText (
              );
 }
 
-void PrinterGfx::drawVerticalizedText(
+bool PrinterGfx::drawVerticalizedText(
                                       const Point& rPoint,
                                       const sal_Unicode* pStr,
                                       sal_Int16 nLen,
                                       const sal_Int32* pDeltaArray
                                       )
 {
+    PrintFontManager &rMgr = PrintFontManager::get();
+    PrintFontInfo aInfo;
+    if (!rMgr.getFontInfo(mnFontID, aInfo))
+        return false;
+
     sal_Int32* pDelta = (sal_Int32*)alloca( nLen * sizeof(sal_Int32) );
 
     int nTextScale   = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
@@ -440,10 +445,6 @@ void PrinterGfx::drawVerticalizedText(
 
     double fSin = sin( -2.0*M_PI*nNormalAngle/3600 );
     double fCos = cos( -2.0*M_PI*nNormalAngle/3600 );
-
-    PrintFontManager &rMgr = PrintFontManager::get();
-    PrintFontInfo aInfo;
-    rMgr.getFontInfo( mnFontID, aInfo );
 
     bool* pGsubFlags = (bool*)alloca( nLen * sizeof(bool) );
     rMgr.hasVerticalSubstitutions( mnFontID, pStr, nLen, pGsubFlags );
@@ -518,6 +519,7 @@ void PrinterGfx::drawVerticalizedText(
         nLastPos = i;
     }
     mnTextAngle = nNormalAngle;
+    return true;
 }
 
 void

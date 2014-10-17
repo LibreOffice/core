@@ -304,7 +304,7 @@ public:
     void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
-    void            drawVerticalizedText (const Point& rPoint,
+    bool            drawVerticalizedText (const Point& rPoint,
                                           const sal_Unicode* pStr,
                                           sal_Int16 nLen,
                                           const sal_Int32* pDeltaArray );
