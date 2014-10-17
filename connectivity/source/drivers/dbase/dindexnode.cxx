@@ -69,7 +69,9 @@ ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
 // index page
 
 ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
-           :nPagePos(nPos)
+           :bNoDelete(1)
+           ,nRefCount(0)
+           ,nPagePos(nPos)
            ,bModified(false)
            ,nCount(0)
            ,aParent(pParent)
