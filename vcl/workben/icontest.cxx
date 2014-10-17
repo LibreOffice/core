@@ -145,8 +145,10 @@ void MyWorkWindow::Paint( const Rectangle& rRect )
     Invalidate( INVALIDATE_CHILDREN );
 }
 
-MyOpenGLWorkWindow::MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle ) :
-    MyWorkWindow( pParent, nWinStyle )
+MyOpenGLWorkWindow::MyOpenGLWorkWindow( vcl::Window* pParent, WinBits nWinStyle )
+    : MyWorkWindow(pParent, nWinStyle)
+    , mnTextureName(0)
+    , mnTextureAspect(0)
 {
     mbHaveTexture = false;
     mpOpenGLWindow = new OpenGLWindow( this );
