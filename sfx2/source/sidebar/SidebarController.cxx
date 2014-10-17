@@ -525,13 +525,6 @@ void SidebarController::UpdateConfigurations (void)
 void SidebarController::OpenThenSwitchToDeck (
     const ::rtl::OUString& rsDeckId)
 {
-    // fdo#67627 Clicking a second time on a Deck icon will close the Deck
-    if (mbIsDeckOpen && mbIsDeckOpen.get() && msCurrentDeckId == rsDeckId)
-    {
-        RequestCloseDeck();
-        return;
-    }
-
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
     mpTabBar->Invalidate();
