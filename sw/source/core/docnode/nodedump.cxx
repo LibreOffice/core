@@ -35,6 +35,7 @@
 #include "fmtclds.hxx"
 #include "fmtpdsc.hxx"
 #include "pagedesc.hxx"
+#include "fchrfmt.hxx"
 #include <swmodule.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/intitem.hxx>
@@ -766,6 +767,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
             writer.writeFormatAttribute("whichId", TMP_FORMAT, pHint->Which());
 
             const char* pWhich = 0;
+            boost::optional<OString> oValue;
             switch (pHint->Which())
             {
                 case RES_TXTATR_AUTOFMT:
@@ -777,11 +779,20 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
                 case RES_TXTATR_FLYCNT:
                     pWhich = "fly content";
                     break;
+                case RES_TXTATR_CHARFMT:
+                {
+                    pWhich = "character format";
+                    if (SwCharFmt* pCharFmt = pHint->GetCharFmt().GetCharFmt())
+                        oValue = "name: " + OUStringToOString(pCharFmt->GetName(), RTL_TEXTENCODING_UTF8);
+                    break;
+                }
                 default:
                     break;
             }
             if (pWhich)
                 writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
+            if (oValue)
+                writer.writeFormatAttribute("value", "%s", BAD_CAST(oValue->getStr()));
 
             if (pHint->Which() == RES_TXTATR_AUTOFMT)
             {
