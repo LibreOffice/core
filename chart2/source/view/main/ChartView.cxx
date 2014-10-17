@@ -378,14 +378,31 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
     return pVCooSys;
 }
 
+void deleteCoordinateSystems( std::vector<VCoordinateSystem*>& rVCooSysList )
+{
+    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
+    aVectorToDeleteObjects.swap(rVCooSysList); //#i109770#
+    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
+    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
+    for( ; aIter != aEnd; ++aIter )
+    {
+        delete *aIter;
+    }
+    aVectorToDeleteObjects.clear();
+}
+
 void SeriesPlotterContainer::resetCoordinateSystems()
 {
+#if ENABLE_AXIS_SHAPE_CACHE
     std::vector<VCoordinateSystem*>::iterator it = m_rVCooSysList.begin(), itEnd = m_rVCooSysList.end();
     for (; it != itEnd; ++it)
     {
         VCoordinateSystem* p = *it;
         p->reset();
     }
+#else
+    deleteCoordinateSystems(m_rVCooSysList);
+#endif
 }
 
 void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
@@ -1184,21 +1201,7 @@ ChartView::~ChartView()
         m_pDrawModelWrapper.reset();
     }
     m_xDrawPage = NULL;
-    impl_deleteCoordinateSystems();
-}
-
-void ChartView::impl_deleteCoordinateSystems()
-{
-    //delete all coordinate systems
-    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
-    ::std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
-    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
-    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
-    for( ; aIter != aEnd; ++aIter )
-    {
-        delete *aIter;
-    }
-    aVectorToDeleteObjects.clear();
+    deleteCoordinateSystems(m_aVCooSysList);
 }
 
 // datatransfer::XTransferable

@@ -31,6 +31,7 @@
     ex.Message )
 
 #define ENABLE_GL3D_BARCHART 1
+#define ENABLE_AXIS_SHAPE_CACHE 0
 
 #endif
 

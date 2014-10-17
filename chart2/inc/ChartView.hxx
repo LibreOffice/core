@@ -211,7 +211,6 @@ private: //methods
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
 
-    void impl_deleteCoordinateSystems();
     void impl_notifyModeChangeListener( const OUString& rNewMode );
 
     void impl_refreshAddIn();
