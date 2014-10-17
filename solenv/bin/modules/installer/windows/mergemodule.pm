@@ -75,7 +75,7 @@ sub merge_mergemodules_into_msi_database
             foreach $mergemodule ( @{$mergemodules} )
             {
                 my $filename = $mergemodule->{'Name'};
-                my $mergefile = $ENV{'MSM_PATH'} . $filename;
+                my $mergefile = $ENV{'MSM_PATH'} . $installer::globals::separator . $filename;
 
                 if ( ! -f $mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $filename ($mergefile)!", "merge_mergemodules_into_msi_database"); }
                 my $completesource = $mergefile;
