@@ -1641,7 +1641,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
 }
 
 void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
-    throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
