@@ -32,17 +32,17 @@ QNameToString::Pointer_t QNameToString::Instance()
     return pInstance;
 }
 
-#ifdef DEBUG_DOMAINMAPPER
 std::string QNameToString::operator()(Id qName)
 {
+#ifdef DEBUG_DOMAINMAPPER
     Map::const_iterator aIt = mMap.find(qName);
 
     if (aIt != mMap.end())
         return aIt->second;
 
+#endif
     return std::string();
 }
-#endif
 
 QNameToString::QNameToString()
 {

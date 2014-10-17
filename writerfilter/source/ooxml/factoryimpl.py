@@ -116,10 +116,10 @@ public:
 };
 }
 
-#ifdef DEBUG_DOMAINMAPPER
 std::string fastTokenToId(sal_uInt32 nToken)
 {
 
+#ifdef DEBUG_DOMAINMAPPER
     std::string sResult;
 
     switch (oox::getNamespace(nToken))
@@ -147,9 +147,9 @@ std::string fastTokenToId(sal_uInt32 nToken)
 
     print("""    }
 
+#endif
     return sResult;
 }
-#endif
 """)
 
 

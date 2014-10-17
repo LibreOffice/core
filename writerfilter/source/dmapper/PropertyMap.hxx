@@ -170,8 +170,8 @@ public:
     const std::vector< RedlineParamsPtr >& Redlines() const { return m_aRedlines; }
     std::vector< RedlineParamsPtr >& Redlines() { return m_aRedlines; }
 
-#ifdef DEBUG_DOMAINMAPPER
     void printProperties();
+#ifdef DEBUG_DOMAINMAPPER
     virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
     static com::sun::star::table::ShadowFormat getShadowFromBorder(com::sun::star::table::BorderLine2 aBorder);

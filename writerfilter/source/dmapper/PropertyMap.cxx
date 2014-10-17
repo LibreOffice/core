@@ -368,9 +368,9 @@ void PropertyMap::insertTableProperties( const PropertyMap* )
 #endif
 }
 
-#ifdef DEBUG_DOMAINMAPPER
 void PropertyMap::printProperties()
 {
+#ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("properties");
 
     MapIterator aMapIter = m_vMap.begin();
@@ -399,8 +399,8 @@ void PropertyMap::printProperties()
     }
 
     dmapper_logger->endElement();
-}
 #endif
+}
 
 SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     m_bIsFirstSection( bIsFirstSection )

@@ -26,9 +26,7 @@
 
 namespace writerfilter
 {
-#ifdef DEBUG_DOMAINMAPPER
     std::string toString(css::uno::Reference< css::text::XTextRange > textRange);
-#endif
 }
 
 #endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_UTIL_HXX

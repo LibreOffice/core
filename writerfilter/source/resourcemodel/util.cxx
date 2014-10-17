@@ -36,11 +36,11 @@ namespace writerfilter
 using namespace com::sun::star;
 using namespace std;
 
-#ifdef DEBUG_DOMAINMAPPER
 string toString(uno::Reference< text::XTextRange > textRange)
 {
     string result;
 
+#ifdef DEBUG_DOMAINMAPPER
     if (textRange.get())
     {
         OUString aOUStr = textRange->getString();
@@ -52,10 +52,10 @@ string toString(uno::Reference< text::XTextRange > textRange)
     {
         result="(nil)";
     }
+#endif
 
     return result;
 }
-#endif
 
 }
 

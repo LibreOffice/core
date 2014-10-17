@@ -21,7 +21,6 @@
 #include <resourcemodel/TagLogger.hxx>
 #include "PropertyMapHelper.hxx"
 
-#ifdef DEBUG_DOMAINMAPPER
 namespace writerfilter
 {
 namespace dmapper
@@ -31,6 +30,7 @@ using namespace ::com::sun::star;
 
 void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger, const uno::Any & rTableColumnSeparators)
 {
+#ifdef DEBUG_DOMAINMAPPER
     uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;
 
@@ -48,8 +48,10 @@ void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger, const uno
     }
 
     pLogger->endElement();
+#endif // DEBUG_DOMAINMAPPER
 }
 
+#ifdef DEBUG_DOMAINMAPPER
 void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger, beans::PropertyValues & rValues)
 {
     pLogger->startElement("propertyValues");
@@ -109,9 +111,9 @@ void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger, PropertyVal
 
     pLogger->endElement();
 }
+#endif // DEBUG_DOMAINMAPPER
 
 }
 }
-#endif // DEBUG_DOMAINMAPPER
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 
-#ifdef DEBUG_DOMAINMAPPER
 #include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 
@@ -31,6 +30,7 @@ namespace dmapper
 
 void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger,
         const css::uno::Any & rTableColumnSeparators);
+#ifdef DEBUG_DOMAINMAPPER
 void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger,
         css::beans::PropertyValues & rValues);
 
@@ -41,9 +41,9 @@ void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger,
 typedef css::uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
 void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger,
         PropertyValueSeqSeq_t & rPropValSeqSeq);
-}
-}
 #endif // DEBUG_DOMAINMAPPER
+}
+}
 
 #endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 
