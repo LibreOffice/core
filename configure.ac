@@ -189,7 +189,7 @@ AC_MSG_CHECKING([for GNU Make])
 
 # try to use our own make if it is available and GNUMAKE was not already defined
 if test -z "$GNUMAKE"; then
-    if test -n "$LODE_HOME" -a -e "$LODE_HOME/bin/make" ; then
+    if test -n "$LODE_HOME" -a -x "$LODE_HOME/opt/bin/make" ; then
         GNUMAKE="$LODE_HOME/opt/bin/make"
     elif test -x "/opt/lo/bin/make"; then
         GNUMAKE="/opt/lo/bin/make"
@@ -3407,7 +3407,6 @@ find_msvc()
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$ver/Setup/VC/ProductDir
         if test -n "$regvalue"; then
             vctest=$regvalue
-            vcexpress="yes"
             break
         fi
     done
@@ -3423,6 +3422,10 @@ find_msvc()
             vcnum=120
             ;;
         esac
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VCExpress/$vcnumwithdot/Setup/VC/ProductDir
+        if test -n "$regvalue" -a "$regvalue" = "$vctest" ; then
+            vcexpress=Express
+        fi
     fi
 }
 
@@ -3457,6 +3460,13 @@ if test "$_os" = "WINNT"; then
 
         VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
         AC_MSG_RESULT([$VC_PRODUCT_DIR])
+
+        AC_MSG_CHECKING([Is Visual C++ Express])
+        if test "$vcexpress" = "Express" ; then
+            AC_MSG_RESULT([Yes])
+        else
+            AC_MSG_RESULT([No])
+        fi
 
         dnl ===========================================================
         dnl  Check for the corresponding mspdb*.dll
@@ -3510,7 +3520,7 @@ if test "$_os" = "WINNT"; then
 
         if test -n "$CC"; then
             # Remove /cl.exe from CC case insensitive
-            AC_MSG_RESULT([found Visual C++ $vcyear ($CC)])
+            AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
             if test "$BITNESS_OVERRIDE" = ""; then
                 COMPATH=`echo $CC | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
             else
@@ -3643,7 +3653,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     fi
 
     AC_MSG_CHECKING([whether to use ActiveX])
-    if test "$enable_activex" = "yes" -o "$enable_activex" = "" -a "$vcexpress" != yes; then
+    if test "$enable_activex" = "yes" -o "$enable_activex" = "" -a "$vcexpress" != Express; then
         DISABLE_ACTIVEX=""
         AC_MSG_RESULT([yes])
     else
@@ -3652,14 +3662,9 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     fi
 
     AC_MSG_CHECKING([whether to use ATL])
-    if test "$enable_atl" = "yes" -o "$enable_atl" = ""; then
-        if test "$vcexpress" != yes; then
-            DISABLE_ATL=""
-            AC_MSG_RESULT([yes])
-        else
-            DISABLE_ATL="TRUE"
-            AC_MSG_RESULT([no])
-        fi
+    if test "$enable_atl" = "yes" -o "$enable_atl" = "" -a "$vcexpress" != Express; then
+        DISABLE_ATL=""
+        AC_MSG_RESULT([yes])
     else
         DISABLE_ATL="TRUE"
         AC_MSG_RESULT([no])
@@ -4658,7 +4663,11 @@ AC_SUBST([SYSTEM_FONTCONFIG])
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
 if test -z "$TARFILE_LOCATION" -a -n "$LODE_HOME" ; then
-   TARFILE_LOCATION="$LODE_HOME/ext_tar"
+   if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
+       TARFILE_LOCATION="`cypath -m $LODE_HOME/ext_tar`"
+   else
+       TARFILE_LOCATION="$LODE_HOME/ext_tar"
+   fi
 fi
 if test -z "$TARFILE_LOCATION"; then
     if test -d "$SRC_ROOT/src" ; then
@@ -11867,8 +11876,16 @@ dnl ===================================================================
 if test "$ENABLE_JAVA" != ""; then
     ANT_HOME=; export ANT_HOME
     WITH_ANT_HOME=; export WITH_ANT_HOME
-    if test -z "$with_ant_home" -a -n "$LODE_HOME" -a -e "$LODE_HOME/opt/bin/ant" ; then
-        with_ant_home="$LODE_HOME/opt"
+    if test -z "$with_ant_home" -a -n "$LODE_HOME" ; then
+        if test -x "$LODE_HOME/opt/ant/bin/ant" ; then
+            if test "$_os" = "WINNT"; then
+                with_ant_home="`cygpath -m $LODE_HOME/opt/ant`"
+            else
+                with_ant_home="$LODE_HOME/opt/ant"
+            fi
+        elif test -x  "$LODE_HOME/opt/bin/ant" ; then
+            with_ant_home="$LODE_HOME/opt/ant"
+        fi
     fi
     if test -z "$with_ant_home"; then
         AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd])
