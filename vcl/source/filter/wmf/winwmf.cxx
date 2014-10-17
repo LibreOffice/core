@@ -1475,18 +1475,25 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                 case W_META_POLYPOLYGON:
                 {
                     bool bRecordOk = true;
-                    sal_uInt16 nPoly, nPoints = 0;
-                    pStm->ReadUInt16( nPoly );
-                    for(sal_uInt16 i = 0; i < nPoly; i++ )
+                    sal_uInt16 nPoly(0), nPoints(0);
+                    pStm->ReadUInt16(nPoly);
+                    if (nPoly > pStm->remainingSize() / sizeof(sal_uInt16))
                     {
-                        sal_uInt16 nP = 0;
-                        pStm->ReadUInt16( nP );
-                        if (nP > SAL_MAX_UINT16 - nPoints)
+                        bRecordOk = false;
+                    }
+                    else
+                    {
+                        for(sal_uInt16 i = 0; i < nPoly; i++ )
                         {
-                            bRecordOk = false;
-                            break;
+                            sal_uInt16 nP = 0;
+                            pStm->ReadUInt16( nP );
+                            if (nP > SAL_MAX_UINT16 - nPoints)
+                            {
+                                bRecordOk = false;
+                                break;
+                            }
+                            nPoints += nP;
                         }
-                        nPoints += nP;
                     }
 
                     SAL_WARN_IF(!bRecordOk, "vcl.wmf", "polypolygon record has more polygons than we can handle");
