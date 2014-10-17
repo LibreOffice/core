@@ -29,6 +29,7 @@
 #include <docpool.hxx>
 
 #include <formula/vectortoken.hxx>
+#include <svl/broadcast.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -3811,6 +3812,219 @@ void Test::testFuncINDIRECT()
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaDepTracking()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    // B2 listens on D2.
+    m_pDoc->SetString(1, 1, 0, "=D2");
+    double val = -999.0; // dummy initial value
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Referencing an empty cell should yield zero.", val == 0.0);
+
+    // Changing the value of D2 should trigger recalculation of B2.
+    m_pDoc->SetValue(3, 1, 0, 1.1);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on value change.", val == 1.1);
+
+    // And again.
+    m_pDoc->SetValue(3, 1, 0, 2.2);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on value change.", val == 2.2);
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
+
+    // Now, let's test the range dependency tracking.
+
+    // B2 listens on D2:E6.
+    m_pDoc->SetString(1, 1, 0, "=SUM(D2:E6)");
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Summing an empty range should yield zero.", val == 0.0);
+
+    // Set value to E3. This should trigger recalc on B2.
+    m_pDoc->SetValue(4, 2, 0, 2.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", val == 2.4);
+
+    // Set value to D5 to trigger recalc again.  Note that this causes an
+    // addition of 1.2 + 2.4 which is subject to binary floating point
+    // rounding error.  We need to use approxEqual to assess its value.
+
+    m_pDoc->SetValue(3, 4, 0, 1.2);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 3.6));
+
+    // Change the value of D2 (boundary case).
+    m_pDoc->SetValue(3, 1, 0, 1.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 4.6));
+
+    // Change the value of E6 (another boundary case).
+    m_pDoc->SetValue(4, 5, 0, 2.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 6.6));
+
+    // Change the value of D6 (another boundary case).
+    m_pDoc->SetValue(3, 5, 0, 3.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 9.6));
+
+    // Change the value of E2 (another boundary case).
+    m_pDoc->SetValue(4, 1, 0, 0.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 10.0));
+
+    // Change the existing non-empty value cell (E2).
+    m_pDoc->SetValue(4, 1, 0, 2.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 12.0));
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
+
+    // Now, column-based dependency tracking.  We now switch to the R1C1
+    // syntax which is easier to use for repeated relative references.
+
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    val = 0.0;
+    for (SCROW nRow = 1; nRow <= 9; ++nRow)
+    {
+        // Static value in column 1.
+        m_pDoc->SetValue(0, nRow, 0, ++val);
+
+        // Formula in column 2 that references cell to the left.
+        m_pDoc->SetString(1, nRow, 0, "=RC[-1]");
+
+        // Formula in column 3 that references cell to the left.
+        m_pDoc->SetString(2, nRow, 0, "=RC[-1]*2");
+    }
+
+    // Check formula values.
+    val = 0.0;
+    for (SCROW nRow = 1; nRow <= 9; ++nRow)
+    {
+        ++val;
+        CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(1, nRow, 0) == val);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, nRow, 0) == val*2.0);
+    }
+
+    // Intentionally insert a formula in column 1. This will break column 1's
+    // uniformity of consisting only of static value cells.
+    m_pDoc->SetString(0, 4, 0, "=R2C3");
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(0, 4, 0) == 2.0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(1, 4, 0) == 2.0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, 4, 0) == 4.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaDepTracking2()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    double val = 2.0;
+    m_pDoc->SetValue(0, 0, 0, val);
+    val = 4.0;
+    m_pDoc->SetValue(1, 0, 0, val);
+    val = 5.0;
+    m_pDoc->SetValue(0, 1, 0, val);
+    m_pDoc->SetString(2, 0, 0, "=A1/B1");
+    m_pDoc->SetString(1, 1, 0, "=B1*C1");
+
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1, 1, 0)); // B2 should equal 2.
+
+    clearRange(m_pDoc, ScAddress(2, 0, 0)); // Delete C1.
+
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(1, 1, 0)); // B2 should now equal 0.
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaDepTrackingDeleteRow()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Values in A1:A3.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(0,1,0), 3.0);
+    m_pDoc->SetValue(ScAddress(0,2,0), 5.0);
+
+    // SUM(A1:A3) in A5.
+    m_pDoc->SetString(ScAddress(0,4,0), "=SUM(A1:A3)");
+
+    // A6 to reference A5.
+    m_pDoc->SetString(ScAddress(0,5,0), "=A5*10");
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,5,0));
+    CPPUNIT_ASSERT(pFC);
+
+    // A4 should have a broadcaster with A5 listening to it.
+    SvtBroadcaster* pBC = m_pDoc->GetBroadcaster(ScAddress(0,4,0));
+    CPPUNIT_ASSERT(pBC);
+    SvtBroadcaster::ListenersType* pListeners = &pBC->GetAllListeners();
+    CPPUNIT_ASSERT_MESSAGE("A5 should have one listener.", pListeners->size() == 1);
+    SvtListener* pListener = pListeners->at(0);
+    CPPUNIT_ASSERT_MESSAGE("A6 should be listening to A5.", pListener == pFC);
+
+    // Check initial values.
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+    CPPUNIT_ASSERT_EQUAL(90.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+
+    // Delete row 2.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DEL_CELLSUP, true, true);
+
+    pBC = m_pDoc->GetBroadcaster(ScAddress(0,3,0));
+    CPPUNIT_ASSERT_MESSAGE("Broadcaster at A5 should have shifted to A4.", pBC);
+    pListeners = &pBC->GetAllListeners();
+    CPPUNIT_ASSERT_MESSAGE("A3 should have one listener.", pListeners->size() == 1);
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,4,0));
+    CPPUNIT_ASSERT(pFC);
+    pListener = pListeners->at(0);
+    CPPUNIT_ASSERT_MESSAGE("A5 should be listening to A4.", pFC == pListener);
+
+    // Check values after row deletion.
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+    CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(ScAddress(0,4,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaMatrixResultUpdate()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    // Set a numeric value to A1.
+    m_pDoc->SetValue(ScAddress(0,0,0), 11.0);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(1, 0, 1, 0, aMark, "=A1", NULL);
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get formula cell.", pFC);
+    pFC->SetChanged(false); // Clear this flag to simulate displaying of formula cell value on screen.
+
+    m_pDoc->SetString(ScAddress(0,0,0), "ABC");
+    CPPUNIT_ASSERT_EQUAL(OUString("ABC"), m_pDoc->GetString(ScAddress(1,0,0)));
+    pFC->SetChanged(false);
+
+    // Put a new value into A1. The formula should update.
+    m_pDoc->SetValue(ScAddress(0,0,0), 13.0);
+    CPPUNIT_ASSERT_EQUAL(13.0, m_pDoc->GetValue(ScAddress(1,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
