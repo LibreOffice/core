@@ -33,8 +33,6 @@
 #include <vcl/virdev.hxx>
 #include <svtools/grfmgr.hxx>
 
-#include <vcl/pdfextoutdevdata.hxx>
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -70,7 +68,7 @@ void GraphicObject::ImplAfterDataChange()
 
     // check memory footprint of all GraphicObjects managed and evtl. take action
     if (mpMgr)
-        mpMgr->ImplCheckSizeOfSwappedInGraphics();
+        mpMgr->ImplCheckSizeOfSwappedInGraphics(this);
 }
 
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
@@ -102,6 +100,8 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
     ImplConstruct();
     ImplAssignGraphicData();
     ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
+    if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
+        SetSwapState();
 }
 
 GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
@@ -160,6 +160,9 @@ void GraphicObject::ImplAssignGraphicData()
     mbAnimated = maGraphic.IsAnimated();
     mbEPS = maGraphic.IsEPS();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
+
+    // Handle evtl. needed AfterDataChanges
+    ImplAfterDataChange();
 }
 
 void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OString* pID, const GraphicObject* pCopyObj )
@@ -260,9 +263,7 @@ void GraphicObject::ImplAutoSwapIn()
             if( !mbAutoSwapped && mpMgr )
                 mpMgr->ImplGraphicObjectWasSwappedIn( *this );
         }
-
-        // Handle evtl. needed AfterDataChanges
-        ImplAfterDataChange();
+        ImplAssignGraphicData();
     }
 }
 
@@ -351,8 +352,9 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         ImplAssignGraphicData();
         mbAutoSwapped = false;
         mpMgr = rGraphicObj.mpMgr;
-
         mpMgr->ImplRegisterObj( *this, maGraphic, NULL, &rGraphicObj );
+        if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
+            SetSwapState();
     }
 
     return *this;
@@ -427,6 +429,7 @@ void GraphicObject::SetUserData()
 void GraphicObject::SetUserData( const OUString& rUserData )
 {
     maUserData = rUserData;
+    SetSwapState();
 }
 
 void GraphicObject::SetSwapStreamHdl()
@@ -438,43 +441,13 @@ void GraphicObject::SetSwapStreamHdl()
     }
 }
 
-#define SWAPGRAPHIC_TIMEOUT     5000
-
-// #i122985# it is not correct to set the swap-timeout to a hard-coded 5000ms
-// as it was before.  Added code and experimented what to do as a good
-// compromise, see description.
 static sal_uInt32 GetCacheTimeInMs()
 {
-    static bool bSetAtAll(true);
+    const sal_uInt32 nSeconds =
+        officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
+            comphelper::getProcessComponentContext());
 
-    if (bSetAtAll)
-    {
-        static bool bSetToPreferenceTime(true);
-
-        if (bSetToPreferenceTime)
-        {
-            const sal_uInt32 nSeconds =
-                officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
-                    comphelper::getProcessComponentContext());
-
-
-            // The default is 10 minutes. The minimum is one minute, thus 60
-            // seconds. When the minimum should match to the former hard-coded
-            // 5 seconds, we have a divisor of 12 to use. For the default of 10
-            // minutes this would mean 50 seconds. Compared to before this is
-            // ten times more (would allow better navigation by switching
-            // through pages) and is controllable by the user by setting the
-            // tools/options/memory/Remove_from_memory_after setting. Seems to
-            // be a good compromise to me.
-            return nSeconds * 1000 / 12;
-        }
-        else
-        {
-            return SWAPGRAPHIC_TIMEOUT;
-        }
-    }
-
-    return 0;
+    return nSeconds * 1000;
 }
 
 void GraphicObject::SetSwapStreamHdl(const Link& rHdl)
@@ -620,67 +593,6 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     return bRet;
 }
 
-// #i105243#
-bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
-                                         const Point& rPt, const Size& rSz,
-                                         const GraphicAttr* pGrfAttr,
-                                         const sal_uLong nFlags )
-{
-    const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
-
-    // Notify PDF writer about linked graphic (if any)
-    bool bWritingPdfLinkedGraphic( false );
-    Point aPt( rPt );
-    Size aSz( rSz );
-    Rectangle aCropRect;
-    vcl::PDFExtOutDevData* pPDFExtOutDevData =
-            dynamic_cast<vcl::PDFExtOutDevData*>(rOutDev.GetExtOutDevData());
-    if( pPDFExtOutDevData )
-    {
-        // only delegate image handling to PDF, if no special treatment is necessary
-        if( GetGraphic().IsLink() &&
-            rSz.Width() > 0L &&
-            rSz.Height() > 0L &&
-            !aGrfAttr.IsSpecialDrawMode() &&
-            !aGrfAttr.IsMirrored() &&
-            !aGrfAttr.IsRotated() &&
-            !aGrfAttr.IsAdjusted() )
-        {
-            bWritingPdfLinkedGraphic = true;
-
-            if( aGrfAttr.IsCropped() )
-            {
-                tools::PolyPolygon aClipPolyPoly;
-                bool bRectClip;
-                const bool bCrop = ImplGetCropParams( &rOutDev,
-                                                      aPt, aSz,
-                                                      &aGrfAttr,
-                                                      aClipPolyPoly,
-                                                      bRectClip );
-                if ( bCrop && bRectClip )
-                {
-                    aCropRect = aClipPolyPoly.GetBoundRect();
-                }
-            }
-
-            pPDFExtOutDevData->BeginGroup();
-        }
-    }
-
-    bool bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
-
-    // Notify PDF writer about linked graphic (if any)
-    if( bWritingPdfLinkedGraphic )
-    {
-        pPDFExtOutDevData->EndGroup( const_cast< Graphic& >(GetGraphic()),
-                                     aGrfAttr.GetTransparency(),
-                                     Rectangle( aPt, aSz ),
-                                     aCropRect );
-    }
-
-    return bRet;
-}
-
 bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D )
 {
@@ -770,9 +682,7 @@ void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
 const Graphic& GraphicObject::GetGraphic() const
 {
     GraphicObject *pThis = const_cast<GraphicObject*>(this);
-
-    if (mbAutoSwapped)
-        pThis->ImplAutoSwapIn();
+    pThis->SwapIn();
 
     //fdo#50697 If we've been asked to provide the graphic, then reset
     //the cache timeout to start from now and not remain at the
@@ -800,8 +710,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();
 
-    // Handle evtl. needed AfterDataChanges
-    ImplAfterDataChange();
+
 }
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
@@ -813,7 +722,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
 {
     // #104550# Extracted from svx/source/svdraw/svdograf.cxx
-    Graphic             aTransGraphic( maGraphic );
+    Graphic             aTransGraphic( GetGraphic() );
     const GraphicType   eType = GetType();
     const Size          aSrcSize( aTransGraphic.GetPrefSize() );
 
@@ -1100,7 +1009,16 @@ bool GraphicObject::SwapOut()
 
 bool GraphicObject::SwapOut( SvStream* pOStm )
 {
-    const bool bRet = !mbAutoSwapped && maGraphic.SwapOut( pOStm );
+    bool bRet = !mbAutoSwapped;
+    // swap out as a link
+    if( pOStm == GRFMGR_AUTOSWAPSTREAM_LINK )
+    {
+        maGraphic.SwapOutAsLink();
+    }
+    else
+    {
+        bRet = bRet && maGraphic.SwapOut( pOStm );
+    }
 
     if( bRet && mpMgr )
         mpMgr->ImplGraphicObjectWasSwappedOut( *this );
@@ -1132,9 +1050,6 @@ bool GraphicObject::SwapIn()
     if( bRet )
     {
         ImplAssignGraphicData();
-
-        // Handle evtl. needed AfterDataChanges
-        ImplAfterDataChange();
     }
 
     return bRet;
@@ -1162,7 +1077,7 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
         if( GRFMGR_AUTOSWAPSTREAM_NONE != pStream )
         {
             if( GRFMGR_AUTOSWAPSTREAM_LINK == pStream )
-                mbAutoSwapped = SwapOut( NULL );
+                mbAutoSwapped = SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
             else
             {
                 if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )

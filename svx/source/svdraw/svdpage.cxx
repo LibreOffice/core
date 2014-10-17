@@ -735,37 +735,6 @@ size_t SdrObjList::CountAllObjects() const
     return nCnt;
 }
 
-void SdrObjList::ForceSwapInObjects() const
-{
-    for (size_t nObjNum=GetObjCount(); nObjNum>0;) {
-        SdrObject* pObj=GetObj(--nObjNum);
-        SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
-        if (pGrafObj!=NULL) {
-            pGrafObj->ForceSwapIn();
-        }
-        SdrObjList* pOL=pObj->GetSubList();
-        if (pOL!=NULL) {
-            pOL->ForceSwapInObjects();
-        }
-    }
-}
-
-void SdrObjList::ForceSwapOutObjects() const
-{
-    const size_t nObjAnz = GetObjCount();
-    for (size_t nObjNum=nObjAnz; nObjNum>0;) {
-        SdrObject* pObj=GetObj(--nObjNum);
-        SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
-        if (pGrafObj!=NULL) {
-            pGrafObj->ForceSwapOut();
-        }
-        SdrObjList* pOL=pObj->GetSubList();
-        if (pOL!=NULL) {
-            pOL->ForceSwapOutObjects();
-        }
-    }
-}
-
 void SdrObjList::FlattenGroups()
 {
     const size_t nObj = GetObjCount();
@@ -1248,7 +1217,6 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     mbMaster(bMasterPage),
     mbInserted(false),
     mbObjectsNotPersistent(false),
-    mbSwappingLocked(false),
     mbPageBorderOnlyLeftRight(false)
 {
     aPrefVisiLayers.SetAll();
@@ -1274,7 +1242,6 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     mbMaster(rSrcPage.mbMaster),
     mbInserted(false),
     mbObjectsNotPersistent(rSrcPage.mbObjectsNotPersistent),
-    mbSwappingLocked(rSrcPage.mbSwappingLocked),
     mbPageBorderOnlyLeftRight(rSrcPage.mbPageBorderOnlyLeftRight)
 {
     aPrefVisiLayers.SetAll();
@@ -1370,7 +1337,6 @@ SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)
     // a valid copy of source page before copying and inserting
     // the contained objects
     mbMaster = rSrcPage.mbMaster;
-    mbSwappingLocked = rSrcPage.mbSwappingLocked;
     mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
     aPrefVisiLayers = rSrcPage.aPrefVisiLayers;
     nWdt = rSrcPage.nWdt;

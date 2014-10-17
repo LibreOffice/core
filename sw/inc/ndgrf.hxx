@@ -123,8 +123,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
 public:
     virtual ~SwGrfNode();
-    const Graphic&          GetGrf() const      { return maGrfObj.GetGraphic(); }
-    const GraphicObject&    GetGrfObj() const   { return maGrfObj; }
+    const Graphic&          GetGrf(bool bWait = false) const;
+    const GraphicObject&    GetGrfObj(bool bWait = false) const;
     const GraphicObject* GetReplacementGrfObj() const;
     virtual SwCntntNode *SplitCntntNode( const SwPosition & ) SAL_OVERRIDE;
 
@@ -169,16 +169,15 @@ public:
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
                  bool bModify = true );
+private:
     /// Loading of graphic immediately before displaying.
     bool SwapIn( bool bWaitForData = false );
     /// Remove graphic in order to free memory.
     bool SwapOut();
+
+public:
     bool HasEmbeddedStreamName() const { return maGrfObj.HasUserData(); }
-    /// applying new stream name for embedded graphic - needed as saving the document might change this stream name
-    void ApplyNewEmbeddedStreamName(const OUString& r)
-    {
-        maGrfObj.SetUserData(r);
-    }
+
     /// Is this node selected by any shell?
     bool IsSelected() const;
 

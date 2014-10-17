@@ -1558,7 +1558,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 {
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sTmp );
-                    pGrfObj->SetSwapState();
                     sGrfName = "";
                 }
                 else if( sTmp.startsWith(sGraphicObjectProtocol) )
@@ -2131,22 +2130,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-                // --> OD #i85105#
-                Size aActSize;
-                {
-                    SwGrfNode* pGrfNode = dynamic_cast<SwGrfNode*>(aIdx.GetNode().GetNoTxtNode());
-                    if ( pGrfNode )
-                    {
-                        aActSize = pGrfNode->GetTwipSize();
-                        if ( aActSize.Width() == 0 && aActSize.Height() == 0 &&
-                             pGrfNode->IsLinkedFile() )
-                        {
-                            pGrfNode->SwapIn( true );
-                            aActSize = pGrfNode->GetTwipSize();
-                        }
-                    }
-                }
-                // <--
+                Size aActSize = aIdx.GetNode().GetNoTxtNode()->GetTwipSize();
                 awt::Size aTmp;
                 aTmp.Width = convertTwipToMm100(aActSize.Width());
                 aTmp.Height = convertTwipToMm100(aActSize.Height());
@@ -2822,7 +2806,6 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 {
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sGraphicURL );
-                    pGrfObj->SetSwapState();
                     sGraphicURL = "";
                 }
                 else if( sGraphicURL.startsWith(sGraphicObjectProtocol) )

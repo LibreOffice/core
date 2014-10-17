@@ -889,34 +889,10 @@ void SdrUndoInsertObj::Redo()
     ImpShowPageOfThisObject();
 }
 
-
-
-void SdrUndoDelObj::TryToFlushGraphicContent()
-{
-    SdrGrafObj* pSdrGrafObj = dynamic_cast< SdrGrafObj* >(pObj);
-
-    if(pSdrGrafObj)
-    {
-        sdr::contact::ViewContactOfGraphic* pVC = dynamic_cast< sdr::contact::ViewContactOfGraphic* >(&pSdrGrafObj->GetViewContact());
-
-        if(pVC)
-        {
-            pVC->flushViewObjectContacts();
-            pVC->flushGraphicObjects();
-        }
-
-        pSdrGrafObj->ForceSwapOut();
-    }
-}
-
 SdrUndoDelObj::SdrUndoDelObj(SdrObject& rNewObj, bool bOrdNumDirect)
 :   SdrUndoRemoveObj(rNewObj,bOrdNumDirect)
 {
     SetOwner(true);
-
-    // #i122985# if graphic object is deleted (but goes to undo) flush it's graphic content
-    // since it is potentially no longer needed
-    TryToFlushGraphicContent();
 }
 
 void SdrUndoDelObj::Undo()
@@ -931,10 +907,6 @@ void SdrUndoDelObj::Redo()
     SdrUndoRemoveObj::Redo();
     DBG_ASSERT(!IsOwner(),"RedoDeleteObj: pObj already belongs to UndoAction");
     SetOwner(true);
-
-    // #i122985# if graphic object is deleted (but goes to undo) flush it's graphic content
-    // since it is potentially no longer needed
-    TryToFlushGraphicContent();
 }
 
 OUString SdrUndoDelObj::GetComment() const

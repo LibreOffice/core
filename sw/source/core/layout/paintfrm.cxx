@@ -1824,15 +1824,8 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     // used, these coordinates have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
 
-    if (pGrf->GetGraphic().getSvgData().get())
-    {   // fdo#68927 - SVGs are rasterized badly by DrawWithPDFHandling
-        paintGraphicUsingPrimitivesHelper(*pOut,
-                *pGrf, pGrf->GetAttr(), aAlignedGrfRect);
-    }
-    else
-    {
-        pGrf->DrawWithPDFHandling( *pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
-    }
+    paintGraphicUsingPrimitivesHelper(*pOut,
+        *pGrf, pGrf->GetAttr(), aAlignedGrfRect);
 
     if ( bNotInside )
         pOut->Pop();
@@ -1844,10 +1837,7 @@ bool DrawFillAttributes(
     const SwRect& rPaintRect,
     OutputDevice& rOut)
 {
-    static bool bUseNew(true);
-    static bool bReturnWhenNew(true);
-
-    if(bUseNew && rFillAttributes.get() && rFillAttributes->isUsed())
+    if(rFillAttributes.get() && rFillAttributes->isUsed())
     {
         basegfx::B2DRange aPaintRange(
             rPaintRect.Left(),
@@ -1917,10 +1907,7 @@ bool DrawFillAttributes(
 
                     delete pProcessor;
 
-                    if(bReturnWhenNew)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }

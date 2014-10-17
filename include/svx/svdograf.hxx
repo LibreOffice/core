@@ -69,6 +69,7 @@ private:
 
     // to allow sdr::contact::ViewObjectContactOfGraphic access to ImpUpdateGraphicLink()
     friend class sdr::contact::ViewObjectContactOfGraphic;
+    friend class SdrExchangeView; // Only for a ForceSwapIn() call.
     friend class SdrGraphicLink;
 
 private:
@@ -135,9 +136,11 @@ public:
     void                    SetGrafStreamURL( const OUString& rGraphicStreamURL );
     OUString                GetGrafStreamURL() const;
 
+private:
     void                    ForceSwapIn() const;
     void                    ForceSwapOut() const;
 
+public:
     void                    SetGraphicLink(const OUString& rFileName, const OUString& rReferer, const OUString& rFilterName);
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;

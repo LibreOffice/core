@@ -251,8 +251,7 @@ Graphic SwNoTxtNode::GetGraphic() const
     Graphic aRet;
     if ( GetGrfNode() )
     {
-        ((SwGrfNode*)this)->SwapIn( true );
-        aRet = ((SwGrfNode*)this)->GetGrf();
+        aRet = ((SwGrfNode*)this)->GetGrf(true);
     }
     else
     {

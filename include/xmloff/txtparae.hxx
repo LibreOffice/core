@@ -380,10 +380,6 @@ protected:
         bool bAutoStyles,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > *pRangePropSet = 0  );
-    virtual void setTextEmbeddedGraphicURL(
-        const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet >& rPropSet,
-        OUString& rStreamName ) const;
 
     /// export a footnote and styles
     void exportTextFootnote(

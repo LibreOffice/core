@@ -71,7 +71,6 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
 {
     friend class SwNodes;
     mutable SwOLEObj aOLEObj;
-    Graphic*    pGraphic;
     OUString sChartTblName;     ///< with chart objects: name of referenced table.
     bool   bOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
                                    (e.g. copied). Is not persistent. */

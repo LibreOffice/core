@@ -1537,7 +1537,6 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             if( mpObj.is() )
             {
                 static_cast<SdrGrafObj*>(mpObj.get())->SetGrafStreamURL( aStreamURL );
-                static_cast<SdrGrafObj*>(mpObj.get())->ForceSwapOut();
             }
             bOk = true;
         }
@@ -1575,7 +1574,6 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
-        bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         const Graphic& rGraphic = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic();
 
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
@@ -1594,8 +1592,6 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
                 aDestStrm.GetEndOfData());
             rValue <<= aSeq;
         }
-        if ( bSwapped )
-            static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         break;
     }
 
@@ -1607,13 +1603,10 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         }
         else
         {
-            bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
             const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
             OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
             aURL += OStringToOUString(rGrafObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
             rValue <<= aURL;
-            if ( bSwapped )
-                static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         }
         break;
     }
@@ -1642,11 +1635,8 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_VALUE_GRAPHIC:
     {
-        bool bSwapped = static_cast< SdrGrafObj* >( mpObj.get() )->IsSwappedOut();
         Reference< graphic::XGraphic > xGraphic( static_cast< SdrGrafObj* >( mpObj.get() )->GetGraphic().GetXGraphic() );
         rValue <<= xGraphic;
-        if ( bSwapped )
-            static_cast< SdrGrafObj* >( mpObj.get() )->ForceSwapOut();
         break;
     }
 

@@ -238,28 +238,7 @@ const Graphic* SwEditShell::GetGraphic( bool bWait ) const
     const Graphic* pGrf( 0L );
     if ( pGrfNode )
     {
-        pGrf = &(pGrfNode->GetGrf());
-        // --> #i73788#
-        // no load of linked graphic, if its not needed now (bWait = sal_False).
-        if ( bWait )
-        {
-            if( pGrf->IsSwapOut() ||
-                ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
-            {
-                bool const bResult = pGrfNode->SwapIn(bWait);
-                OSL_ENSURE(bResult || !bWait, "Graphic could not be loaded" );
-                (void) bResult; // unused in non-debug
-            }
-        }
-        else
-        {
-            if ( pGrf->IsSwapOut() && !pGrfNode->IsLinkedFile() )
-            {
-                bool const bResult = pGrfNode->SwapIn(bWait);
-                OSL_ENSURE(bResult || !bWait, "Graphic could not be loaded" );
-                (void) bResult; // unused in non-debug
-            }
-        }
+        pGrf = &(pGrfNode->GetGrf(bWait && GRAPHIC_DEFAULT == pGrfNode->GetGrf().GetType()));
     }
     return pGrf;
 }
@@ -611,15 +590,7 @@ Graphic SwEditShell::GetIMapGraphic() const
         if( rNd.IsGrfNode() )
         {
             SwGrfNode & rGrfNode(static_cast<SwGrfNode&>(rNd));
-            const Graphic& rGrf = rGrfNode.GetGrf();
-            if( rGrf.IsSwapOut() || ( rGrfNode.IsLinkedFile() &&
-                                    GRAPHIC_DEFAULT == rGrf.GetType() ) )
-            {
-                bool const bResult = rGrfNode.SwapIn(true);
-                OSL_ENSURE(bResult, "Graphic could not be loaded" );
-                (void) bResult; // unused in non-debug
-            }
-            aRet = rGrf;
+            aRet = rGrfNode.GetGrf(GRAPHIC_DEFAULT == rGrfNode.GetGrf().GetType());
         }
         else if ( rNd.IsOLENode() )
         {

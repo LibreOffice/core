@@ -552,10 +552,6 @@ void SdrGrafObj::SetGrafStreamURL( const OUString& rGraphicStreamURL )
     else if( pModel->IsSwapGraphics() )
     {
         pGraphic->SetUserData( rGraphicStreamURL );
-
-        // set state of graphic object to 'swapped out'
-        if( pGraphic->GetType() == GRAPHIC_NONE )
-            pGraphic->SetSwapState();
     }
 }
 
@@ -574,7 +570,6 @@ void SdrGrafObj::ForceSwapIn() const
         Graphic aEmpty;
         pGraphic->SetGraphic( aEmpty );
         pGraphic->SetUserData( aUserData );
-        pGraphic->SetSwapState();
 
         const_cast< SdrGrafObj* >( this )->mbIsPreview = false;
     }
@@ -634,9 +629,6 @@ void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rRefe
     aFilterName = rFilterName;
     ImpLinkAnmeldung();
     pGraphic->SetUserData();
-
-    // A linked graphic is per definition swapped out (has to be loaded)
-    pGraphic->SetSwapState();
 }
 
 void SdrGrafObj::ReleaseGraphicLink()
@@ -1004,7 +996,6 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
         if( pGraphic->HasUserData() )
         {
             ForceSwapIn();
-            pGraphic->SetUserData();
         }
 
         if( pGraphicLink != NULL )
@@ -1295,7 +1286,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             {
                 const sal_uIntPtr   nSwapMode = pModel->GetSwapGraphicsMode();
 
-                if( ( pGraphic->HasUserData() || pGraphicLink ) &&
+                if( ( pGraphicLink ) &&
                     ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
                 {
                     pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
@@ -1405,22 +1396,7 @@ Reference< XInputStream > SdrGrafObj::getInputStream()
 
     if( pModel )
     {
-        // can be loaded from the original document stream later
-        if( pGraphic && pGraphic->HasUserData() )
-        {
-            ::comphelper::LifecycleProxy proxy;
-            xStream.set(
-                pModel->GetDocumentStream(pGraphic->GetUserData(), proxy));
-            // fdo#46340: this may look completely insane, and it is,
-            // but it also prevents a crash: the LifecycleProxy will go out
-            // of scope, but the xStream must be returned; the UcbStreamHelper
-            // will actually copy the xStream to a temp file (because it is
-            // not seekable), which makes it not crash...
-            SvStream *const pStream =
-                utl::UcbStreamHelper::CreateStream(xStream);
-            xStream.set(new utl::OInputStreamWrapper(pStream, true));
-        }
-        else if( pGraphic && GetGraphic().IsLink() )
+        if( pGraphic && GetGraphic().IsLink() )
         {
             Graphic aGraphic( GetGraphic() );
             GfxLink aLink( aGraphic.GetLink() );

@@ -91,8 +91,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
-    if( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
-        maGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
         bFrameInPaint = bScaleImageMap = false;
     bGraphicArrived = true;
@@ -194,8 +192,6 @@ bool SwGrfNode::ReRead(
         else if( pGrfObj )
         {
             maGrfObj = *pGrfObj;
-            if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
-                maGrfObj.SetSwapState();
             maGrfObj.SetLink( rGrfName );
             onGraphicChanged();
             bReadGrf = true;
@@ -226,24 +222,14 @@ bool SwGrfNode::ReRead(
     }
     else if( pGraphic && rGrfName.isEmpty() )
     {
-        // Old stream must be deleted before the new one is set.
-        if( HasEmbeddedStreamName() )
-            DelStreamName();
-
         maGrfObj.SetGraphic( *pGraphic );
         onGraphicChanged();
         bReadGrf = true;
     }
     else if( pGrfObj && rGrfName.isEmpty() )
     {
-        // Old stream must be deleted before the new one is set.
-        if( HasEmbeddedStreamName() )
-            DelStreamName();
-
         maGrfObj = *pGrfObj;
         onGraphicChanged();
-        if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
-            maGrfObj.SetSwapState();
         bReadGrf = true;
     }
     // Was the graphic already loaded?
@@ -251,9 +237,6 @@ bool SwGrfNode::ReRead(
         return true;
     else
     {
-        if( HasEmbeddedStreamName() )
-            DelStreamName();
-
         // create new link for the graphic object
         InsertLink( rGrfName, rFltName );
 
@@ -347,7 +330,6 @@ void SwGrfNode::onGraphicChanged()
 
     if(pFlyFmt)
     {
-        const bool bWasSwappedOut = GetGrfObj().IsSwappedOut();
         OUString aName;
         OUString aTitle;
         OUString aDesc;
@@ -388,11 +370,6 @@ void SwGrfNode::onGraphicChanged()
         {
             SetDescription(aDesc);
         }
-
-        if (bWasSwappedOut)
-        {
-            SwapOut();
-        }
     }
 }
 
@@ -400,6 +377,18 @@ void SwGrfNode::SetGraphic(const Graphic& rGraphic, const OUString& rLink)
 {
     maGrfObj.SetGraphic(rGraphic, rLink);
     onGraphicChanged();
+}
+
+const Graphic& SwGrfNode::GetGrf(bool bWait) const
+{
+    const_cast<SwGrfNode*>(this)->SwapIn(bWait);
+    return maGrfObj.GetGraphic();
+}
+
+const GraphicObject& SwGrfNode::GetGrfObj(bool bWait) const
+{
+    const_cast<SwGrfNode*>(this)->SwapIn(bWait);
+    return maGrfObj;
 }
 
 const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
@@ -453,6 +442,10 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
 
 Size SwGrfNode::GetTwipSize() const
 {
+    if( !nGrfSize.Width() && !nGrfSize.Height() )
+    {
+        const_cast<SwGrfNode*>(this)->SwapIn();
+    }
     return nGrfSize;
 }
 
@@ -467,7 +460,6 @@ bool SwGrfNode::ImportGraphic( SvStream& rStrm )
         mpReplacementGraphic = 0;
 
         maGrfObj.SetGraphic( aGraphic );
-        maGrfObj.SetUserData( aURL );
         onGraphicChanged();
         return true;
     }
@@ -615,17 +607,16 @@ bool SwGrfNode::SwapOut()
         maGrfObj.GetType() != GRAPHIC_NONE &&
         !maGrfObj.IsSwappedOut() && !bInSwapIn )
     {
-        if( !refLink.Is() )
+        if( refLink.Is() )
         {
-            // Swapping is only needed for embedded pictures.
-            // The graphic will be written into a temp file if it is new, i.e.
-            // if there is no stream name in the storage yet
-            if( !HasEmbeddedStreamName() )
-                if( !maGrfObj.SwapOut() )
-                    return false;
+            // written graphics and links are removed here
+            return maGrfObj.SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
         }
-        // written graphics and links are removed here
-        return maGrfObj.SwapOut( NULL );
+        else
+        {
+            return maGrfObj.SwapOut();
+        }
+
     }
     return true;
 }
@@ -671,7 +662,7 @@ bool SwGrfNode::SavePersistentData()
         return true;
     }
 
-    // swap in first if already in storage
+    // swap in first if in storage
     if( HasEmbeddedStreamName() && !SwapIn() )
         return false;
 
@@ -860,36 +851,6 @@ void SwGrfNode::ScaleImageMap()
     }
 }
 
-void SwGrfNode::DelStreamName()
-{
-    if( HasEmbeddedStreamName() )
-    {
-        // then remove graphic from storage
-        uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
-        if( xDocStg.is() )
-        {
-            try
-            {
-                const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
-                uno::Reference < embed::XStorage > refPics = xDocStg;
-                if ( !aNames.sStorage.isEmpty() )
-                    refPics = xDocStg->openStorageElement( aNames.sStorage, embed::ElementModes::READWRITE );
-                refPics->removeElement( aNames.sStream );
-                uno::Reference < embed::XTransactedObject > xTrans( refPics, uno::UNO_QUERY );
-                if ( xTrans.is() )
-                    xTrans->commit();
-            }
-            catch (const uno::Exception&)
-            {
-                // #i48434#
-                OSL_FAIL( "<SwGrfNode::DelStreamName()> - unhandled exception!" );
-            }
-        }
-
-        maGrfObj.SetUserData();
-    }
-}
-
 /** helper method to get a substorage of the document storage for readonly access.
 
     OD, MAV 2005-08-17 #i53025#
@@ -969,34 +930,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // copy formats into the other document
     SwGrfFmtColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );
 
-    Graphic aTmpGrf;
-    SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
-    if( !pLink && HasEmbeddedStreamName() )
-    {
-        try
-        {
-            const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
-            uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
-            SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
-            if ( pStrm )
-            {
-                const OUString aURL(maGrfObj.GetUserData());
-                GraphicFilter::GetGraphicFilter().ImportGraphic(aTmpGrf, aURL, *pStrm);
-                delete pStrm;
-            }
-        }
-        catch (const uno::Exception& e)
-        {
-            // #i48434#
-            SAL_WARN("sw.core", "<SwGrfNode::MakeCopy(..)> - unhandled exception!" << e.Message);
-        }
-    }
-    else
-    {
-        if( maGrfObj.IsSwappedOut() )
-            const_cast<SwGrfNode*>(this)->SwapIn();
-        aTmpGrf = maGrfObj.GetGraphic();
-    }
+    Graphic aTmpGrf = GetGrf();
 
     const sfx2::LinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
     OUString sFile, sFilter;
@@ -1049,34 +983,6 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     else
     {
         pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
-
-        if( HasEmbeddedStreamName() )
-        {
-            try
-            {
-                const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
-                uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
-                SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
-                if ( pStrm )
-                {
-                    if( pGrfObj->IsInSwapOut() )
-                    {
-                        pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
-                    }
-                    else
-                    {
-                        ImportGraphic( *pStrm );
-                        pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
-                    }
-                    delete pStrm;
-                }
-            }
-            catch (const uno::Exception&)
-            {
-                // #i48434#
-                OSL_FAIL( "<SwapGraphic> - unhandled exception!" );
-            }
-        }
     }
 
     return (sal_IntPtr)pRet;

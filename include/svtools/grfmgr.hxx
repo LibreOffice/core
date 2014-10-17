@@ -313,6 +313,7 @@ protected:
 
     virtual void            GraphicManagerDestroyed();
     virtual SvStream*       GetSwapStream() const;
+    void                    SetSwapState();
 
     virtual void            Load( SvStream& ) SAL_OVERRIDE;
     virtual void            Save( SvStream& ) SAL_OVERRIDE;
@@ -411,7 +412,7 @@ public:
     bool                    IsAnimated() const { return mbAnimated; }
     bool                    IsEPS() const { return mbEPS; }
 
-    Link                    GetAnimationNotifyHdl() const { return maGraphic.GetAnimationNotifyHdl(); }
+    Link                    GetAnimationNotifyHdl() const { return GetGraphic().GetAnimationNotifyHdl(); }
 
     bool                    SwapOut();
     bool                    SwapOut( SvStream* pOStm );
@@ -419,9 +420,7 @@ public:
 
     bool                    IsInSwapIn() const { return mbIsInSwapIn; }
     bool                    IsInSwapOut() const { return mbIsInSwapOut; }
-    bool                    IsInSwap() const { return( mbIsInSwapOut || mbIsInSwapOut ); }
     bool                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
-    void                    SetSwapState();
 
     bool                    Draw(
                                 OutputDevice* pOut,
@@ -429,14 +428,6 @@ public:
                                 const Size& rSz,
                                 const GraphicAttr* pAttr = NULL,
                                 sal_uLong nFlags = GRFMGR_DRAW_STANDARD
-                            );
-
-    bool                    DrawWithPDFHandling(
-                                OutputDevice& rOutDev,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicAttr* pGrfAttr = NULL,
-                                const sal_uLong nFlags = GRFMGR_DRAW_STANDARD
                             );
 
     /** Draw the graphic repeatedly into the given output rectangle
@@ -529,6 +520,7 @@ class SVT_DLLPUBLIC GraphicManager
 private:
 
     GraphicObjectList_impl  maObjList;
+    sal_uLong               mnUsedSize; // currently used memory footprint of all swapped in graphics
     GraphicCache*           mpCache;
 
                         GraphicManager( const GraphicManager& ) {}
@@ -615,7 +607,7 @@ private:
     // For 32Bit systems this leads to situations where graphics will be missing. This method will actively swap out
     // the longest swapped in graphics until a maximum memory boundary (derived from user settings in tools/options/memory)
     // is no longer exceeded
-    void SVT_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics();
+    void SVT_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore);
 public:
 
                         GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );

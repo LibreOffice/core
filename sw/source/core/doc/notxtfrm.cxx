@@ -599,8 +599,6 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         }
                     } while( pVSh != (pSh = (SwViewShell*)pSh->GetNext() ));
                 }
-                else
-                    pNd->SwapIn();
             }
         }
         break;
@@ -878,8 +876,8 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW );
         }
 
-        bool bForceSwap = false, bContinue = true;
-        const GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
+        bool bContinue = true;
+        const GraphicObject& rGrfObj = pGrfNd->GetGrfObj(bPrn);
 
         GraphicAttr aGrfAttr;
         pGrfNd->GetGraphicAttr( aGrfAttr, this );
@@ -917,9 +915,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( bContinue )
         {
-            const bool bSwapped = rGrfObj.IsSwappedOut();
-            const bool bSwappedIn = pGrfNd->SwapIn( bPrn );
-            if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
+            if( rGrfObj.GetGraphic().IsSupportedGraphic())
             {
                 const bool bAnimate = rGrfObj.IsAnimated() &&
                                          !pShell->IsPreview() &&
@@ -956,13 +952,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             else
             {
                 sal_uInt16 nResId = 0;
-                if( bSwappedIn )
-                {
-                    if( GRAPHIC_NONE == rGrfObj.GetType() )
-                        nResId = STR_COMCORE_READERROR;
-                    else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
-                        nResId = STR_COMCORE_CANT_SHOW;
-                }
+
+                if( GRAPHIC_NONE == rGrfObj.GetType() )
+                    nResId = STR_COMCORE_READERROR;
+                else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
+                    nResId = STR_COMCORE_CANT_SHOW;
+
                 ((SwNoTxtFrm*)this)->nWeight = -1;
                 OUString aText;
                 if ( !nResId &&
@@ -976,14 +971,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
                 ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, true );
             }
-
-            // When printing, we must not collect the graphics
-            if( bSwapped && bPrn )
-                bForceSwap = true;
         }
-
-        if( bForceSwap )
-            pGrfNd->SwapOut();
 
         if ( pShell->Imp()->GetDrawView()->IsAntiAliasing() )
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );

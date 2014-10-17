@@ -69,11 +69,6 @@ public:
         SwXMLExport& rExp,
          SvXMLAutoStylePoolP& rAutoStylePool );
     virtual ~SwXMLTextParagraphExport();
-
-    virtual void setTextEmbeddedGraphicURL(
-        const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet >& rPropSet,
-        OUString& rStreamName ) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTE_HXX
