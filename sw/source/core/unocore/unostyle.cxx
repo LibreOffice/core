@@ -1652,7 +1652,8 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         SwDoc* pDoc,
                         SfxStyleFamily eFamily)
                             throw(beans::PropertyVetoException, lang::IllegalArgumentException,
-                                lang::WrappedTargetException, uno::RuntimeException)
+                                  lang::WrappedTargetException, uno::RuntimeException,
+                                  std::exception)
 
 {
     //UUUU adapted switch logic to a more readable state; removed goto's and made
