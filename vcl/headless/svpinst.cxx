@@ -334,7 +334,7 @@ void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
     // release yield mutex
     sal_uLong nAcquireCount = ReleaseYieldMutex();
 
-    poll( &aPoll, 1, nTimeoutMS );
+    (void)poll( &aPoll, 1, nTimeoutMS );
 
     // acquire yield mutex again
     AcquireYieldMutex( nAcquireCount );
