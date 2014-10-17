@@ -570,6 +570,9 @@ void PixmapHolder::setBitmapDataTC( const sal_uInt8* pData, XImage* pImage )
     sal_uInt32 nWidth   = readLE32( pData+4 );
     sal_uInt32 nHeight  = readLE32( pData+8 );
 
+    if (!nWidth || !nHeight)
+        return;
+
     const sal_uInt8* pBMData = pData + readLE32( pData );
     sal_uInt32 nScanlineSize = nWidth*3;
     // adjust scan lines to begin on %4 boundaries
