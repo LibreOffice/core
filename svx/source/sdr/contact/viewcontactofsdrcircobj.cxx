@@ -86,8 +86,8 @@ namespace sdr
             }
             else
             {
-                const sal_Int32 nNewStart(static_cast<const SdrCircStartAngleItem&>(rItemSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue());
-                const sal_Int32 nNewEnd(static_cast<const SdrCircEndAngleItem&>(rItemSet.Get(SDRATTR_CIRCENDANGLE)).GetValue());
+                const sal_Int32 nNewStart(static_cast<const SdrAngleItem&>(rItemSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue());
+                const sal_Int32 nNewEnd(static_cast<const SdrAngleItem&>(rItemSet.Get(SDRATTR_CIRCENDANGLE)).GetValue());
                 const double fStart(((36000 - nNewEnd) % 36000) * F_PI18000);
                 const double fEnd(((36000 - nNewStart) % 36000) * F_PI18000);
                 const bool bCloseSegment(OBJ_CARC != nIdentifier);

@@ -245,8 +245,8 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
             pObj->SetLogicRect(aRect);
 
             SfxItemSet aAttr(mpDoc->GetPool());
-            aAttr.Put(SdrCircStartAngleItem(9000));
-            aAttr.Put(SdrCircEndAngleItem(0));
+            aAttr.Put(makeSdrCircStartAngleItem(9000));
+            aAttr.Put(makeSdrCircEndAngleItem(0));
 
             if(SID_DRAW_PIE_NOFILL == nID ||
                 SID_DRAW_CIRCLEPIE_NOFILL == nID ||

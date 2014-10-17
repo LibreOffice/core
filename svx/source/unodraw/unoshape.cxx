@@ -1971,7 +1971,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
         const SfxPoolItem* pPoolItem=NULL;
         if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
-            sal_Int32 nAngle = ((SdrCircStartAngleItem*)pPoolItem)->GetValue();
+            sal_Int32 nAngle = ((SdrAngleItem*)pPoolItem)->GetValue();
             aAny <<= nAngle;
         }
         break;
@@ -1982,7 +1982,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
         const SfxPoolItem* pPoolItem=NULL;
         if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
-            sal_Int32 nAngle = ((SdrCircEndAngleItem*)pPoolItem)->GetValue();
+            sal_Int32 nAngle = ((SdrAngleItem*)pPoolItem)->GetValue();
             aAny <<= nAngle;
         }
         break;

@@ -2658,8 +2658,8 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
         if(pObj->ISA(SdrCircObj))
         {
             SfxItemSet aAttr(pDrawModel->GetItemPool());
-            aAttr.Put(SdrCircStartAngleItem(9000));
-            aAttr.Put(SdrCircEndAngleItem(0));
+            aAttr.Put(makeSdrCircStartAngleItem(9000));
+            aAttr.Put(makeSdrCircEndAngleItem(0));
             pObj->SetMergedItemSet(aAttr);
         }
         else if(pObj->ISA(SdrPathObj))

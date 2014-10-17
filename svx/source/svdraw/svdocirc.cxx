@@ -1084,8 +1084,8 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     else if(eNewKindA == SDRCIRC_CUT)
         eNewKind = OBJ_CCUT;
 
-    sal_Int32 nNewStart = ((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-    sal_Int32 nNewEnd = ((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+    sal_Int32 nNewStart = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
+    sal_Int32 nNewEnd = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
     bool bKindChg = meCircleKind != eNewKind;
     bool bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
@@ -1117,8 +1117,8 @@ void SdrCircObj::ImpSetCircInfoToAttr()
         eNewKindA = SDRCIRC_CUT;
 
     SdrCircKind eOldKindA = ((SdrCircKindItem&)rSet.Get(SDRATTR_CIRCKIND)).GetValue();
-    sal_Int32 nOldStartWink = ((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-    sal_Int32 nOldEndWink = ((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+    sal_Int32 nOldStartWink = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
+    sal_Int32 nOldEndWink = ((SdrAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
     if(eNewKindA != eOldKindA || nStartWink != nOldStartWink || nEndWink != nOldEndWink)
     {
@@ -1131,12 +1131,12 @@ void SdrCircObj::ImpSetCircInfoToAttr()
 
         if(nStartWink != nOldStartWink)
         {
-            GetProperties().SetObjectItemDirect(SdrCircStartAngleItem(nStartWink));
+            GetProperties().SetObjectItemDirect(makeSdrCircStartAngleItem(nStartWink));
         }
 
         if(nEndWink != nOldEndWink)
         {
-            GetProperties().SetObjectItemDirect(SdrCircEndAngleItem(nEndWink));
+            GetProperties().SetObjectItemDirect(makeSdrCircEndAngleItem(nEndWink));
         }
 
         SetXPolyDirty();
