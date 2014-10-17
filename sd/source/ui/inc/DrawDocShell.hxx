@@ -230,6 +230,8 @@ public:
     virtual const OUString getDocAccTitle() const;
     virtual void setDocReadOnly( bool bReadOnly);
     virtual bool getDocReadOnly() const;
+private:
+    void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
 };
 
 #ifndef SV_DECL_DRAW_DOC_SHELL_DEFINED
