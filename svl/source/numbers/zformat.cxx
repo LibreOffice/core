@@ -528,8 +528,10 @@ void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
 void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
 {
     sal_uInt16 nCnt;
-    rStream.ReadUInt16( nCnt );
-    for ( sal_uInt16 j=0; j<nCnt; j++ )
+    rStream.ReadUInt16(nCnt);
+    if (!nCnt)
+        return;
+    for (sal_uInt16 j=0; j < nCnt; ++j)
     {
         sal_uInt16 nPos;
         short nType;
