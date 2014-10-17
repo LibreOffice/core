@@ -53,7 +53,6 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 endif
 
 ifeq ($(ENABLE_COLLADA),TRUE)
-$(eval $(call gb_Library_set_warnings_not_errors,avmedia))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,avmedia,\

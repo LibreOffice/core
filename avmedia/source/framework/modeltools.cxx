@@ -32,7 +32,7 @@
 #include <config_features.h>
 
 #if HAVE_FEATURE_COLLADA
-#include <COLLADA2GLTFWriter.h>
+#include <collada_headers.hxx>
 #include <GLTFAsset.h>
 #endif
 
