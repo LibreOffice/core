@@ -1242,7 +1242,7 @@ void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(
     ::SolarMutexGuard aGuard;
 
     if(mpObj.is())
-        ((SdrPathObj*)mpObj.get())->SetPathPoly(rNew);
+        static_cast<SdrPathObj*>(mpObj.get())->SetPathPoly(rNew);
 }
 
 
@@ -1252,7 +1252,7 @@ basegfx::B2DPolyPolygon SvxShapePolyPolygon::GetPolygon() const throw()
 
     if(mpObj.is())
     {
-        return ((SdrPathObj*)mpObj.get())->GetPathPoly();
+        return static_cast<SdrPathObj*>(mpObj.get())->GetPathPoly();
     }
     else
     {
@@ -1443,7 +1443,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             Reference< graphic::XGraphic> xGraphic( rValue, UNO_QUERY );
             if( xGraphic.is() )
             {
-                ((SdrGrafObj*)mpObj.get())->SetGraphic(Graphic(xGraphic));
+                static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(Graphic(xGraphic));
                 bOk = true;
             }
             else
@@ -1454,7 +1454,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 {
                     // Bitmap einsetzen
                     Graphic aGraphic(VCLUnoHelper::GetBitmap( xBmp ));
-                    ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
+                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(aGraphic);
                     bOk = true;
                 }
             }
@@ -1634,7 +1634,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
     case OWN_ATTR_GRAFSTREAMURL:
     {
-        const OUString  aStreamURL( ( (SdrGrafObj*) mpObj.get() )->GetGrafStreamURL() );
+        const OUString  aStreamURL( static_cast<SdrGrafObj*>( mpObj.get() )->GetGrafStreamURL() );
         if( !aStreamURL.isEmpty() )
             rValue <<= aStreamURL;
         break;
@@ -1746,18 +1746,18 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
     if ( mpModel && mpObj.is() )
     {
         SdrAShapeObjGeoData aCustomShapeGeoData;
-        ((SdrObjCustomShape*)mpObj.get())->SaveGeoData( aCustomShapeGeoData );
+        static_cast<SdrObjCustomShape*>(mpObj.get())->SaveGeoData( aCustomShapeGeoData );
 
         bool bMirroredX = false;
         bool bMirroredY = false;
 
         if ( mpObj.is() )
         {
-            bMirroredX = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredX() );
-            bMirroredY = ( ((SdrObjCustomShape*)mpObj.get())->IsMirroredY() );
+            bMirroredX = static_cast<SdrObjCustomShape*>(mpObj.get())->IsMirroredX();
+            bMirroredY = static_cast<SdrObjCustomShape*>(mpObj.get())->IsMirroredY();
         }
         // get aRect, this is the unrotated snaprect
-        Rectangle aRect(((SdrObjCustomShape*)mpObj.get())->GetLogicRect());
+        Rectangle aRect(static_cast<SdrObjCustomShape*>(mpObj.get())->GetLogicRect());
         Rectangle aRectangle( aRect );
 
         if ( bMirroredX || bMirroredY )
@@ -1857,20 +1857,20 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
 
     if ( bCustomShapeGeometry )
     {
-        bMirroredX = ((SdrObjCustomShape*)pObject)->IsMirroredX();
-        bMirroredY = ((SdrObjCustomShape*)pObject)->IsMirroredY();
+        bMirroredX = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredX();
+        bMirroredY = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredY();
     }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
 
     if ( bCustomShapeGeometry )
     {
-        ((SdrObjCustomShape*)pObject)->MergeDefaultAttributes(0);
+        static_cast<SdrObjCustomShape*>(pObject)->MergeDefaultAttributes(0);
         Rectangle aRect( pObject->GetSnapRect() );
 
         // #i38892#
-        bool bNeedsMirrorX = ((SdrObjCustomShape*)pObject)->IsMirroredX() != bMirroredX;
-        bool bNeedsMirrorY = ((SdrObjCustomShape*)pObject)->IsMirroredY() != bMirroredY;
+        bool bNeedsMirrorX = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredX() != bMirroredX;
+        bool bNeedsMirrorY = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredY() != bMirroredY;
 
         boost::scoped_ptr< SdrGluePointList > pListCopy;
         if( bNeedsMirrorX || bNeedsMirrorY )
@@ -1887,7 +1887,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             pObject->NbcMirror( aTop, aBottom );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
+            static_cast<SdrObjCustomShape*>(pObject)->SetMirroredX( bMirroredX ? sal_False : sal_True );
         }
         if ( bNeedsMirrorY )
         {
@@ -1896,7 +1896,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             pObject->NbcMirror( aLeft, aRight );
             // NbcMirroring is flipping the current mirror state,
             // so we have to set the correct state again
-            ((SdrObjCustomShape*)pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
+            static_cast<SdrObjCustomShape*>(pObject)->SetMirroredY( bMirroredY ? sal_False : sal_True );
         }
 
         if( pListCopy )
@@ -1927,7 +1927,7 @@ bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
 
 void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    ((SdrObjCustomShape*)mpObj.get())->MergeDefaultAttributes( &rValueType );
+    static_cast<SdrObjCustomShape*>(mpObj.get())->MergeDefaultAttributes( &rValueType );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

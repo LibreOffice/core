@@ -540,7 +540,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
     if( pNewObj->ISA(E3dPolyScene))
     {
         // Szene initialisieren
-        E3dScene* pScene = (E3dScene*)pNewObj;
+        E3dScene* pScene = static_cast<E3dScene*>(pNewObj);
 
         double fW = (double)aSize.Width;
         double fH = (double)aSize.Height;
@@ -559,7 +559,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
     }
     else if(pNewObj->ISA(E3dExtrudeObj))
     {
-        E3dExtrudeObj* pObj = (E3dExtrudeObj*)pNewObj;
+        E3dExtrudeObj* pObj = static_cast<E3dExtrudeObj*>(pNewObj);
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));
@@ -572,7 +572,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
     }
     else if(pNewObj->ISA(E3dLatheObj))
     {
-        E3dLatheObj* pObj = (E3dLatheObj*)pNewObj;
+        E3dLatheObj* pObj = static_cast<E3dLatheObj*>(pNewObj);
         basegfx::B2DPolygon aNewPolygon;
         aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
         aNewPolygon.append(basegfx::B2DPoint(0.0, 1.0));

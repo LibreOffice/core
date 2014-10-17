@@ -1361,7 +1361,7 @@ void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = true;
 
     // gradient depends on fillstyle
-    drawing::FillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
+    drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(GetObjectItem(XATTR_FILLSTYLE)).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == drawing::FillStyle_GRADIENT);
     rInfo.bShearAllowed     =false;
     rInfo.bEdgeRadiusAllowed=false;
@@ -2467,7 +2467,7 @@ void SdrTableObj::SaveGeoData(SdrObjGeoData& rGeo) const
     DBG_ASSERT( dynamic_cast< TableObjectGeoData* >( &rGeo ), "svx::SdrTableObj::SaveGeoData(), illegal geo data!" );
     SdrTextObj::SaveGeoData (rGeo);
 
-    ((TableObjectGeoData &) rGeo).maLogicRect = maLogicRect;
+    static_cast<TableObjectGeoData &>(rGeo).maLogicRect = maLogicRect;
 }
 
 
@@ -2476,7 +2476,7 @@ void SdrTableObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     DBG_ASSERT( dynamic_cast< const TableObjectGeoData* >( &rGeo ), "svx::SdrTableObj::SaveGeoData(), illegal geo data!" );
 
-    maLogicRect = ((TableObjectGeoData &) rGeo).maLogicRect;
+    maLogicRect = static_cast<const TableObjectGeoData &>(rGeo).maLogicRect;
 
     SdrTextObj::RestGeoData (rGeo);
 

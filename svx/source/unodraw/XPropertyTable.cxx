@@ -275,7 +275,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXColorTable_createInstance( XPr
 uno::Any SvxUnoXColorTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     uno::Any aAny;
-    aAny <<= (sal_Int32)((XColorEntry*)pEntry)->GetColor().GetColor();
+    aAny <<= (sal_Int32)static_cast<const XColorEntry*>(pEntry)->GetColor().GetColor();
     return aAny;
 }
 
@@ -339,7 +339,7 @@ uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw
 
     uno::Any aAny;
     drawing::PolyPolygonBezierCoords aBezier;
-    basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( ((XLineEndEntry*)pEntry)->GetLineEnd(),
+    basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier( static_cast<const XLineEndEntry*>(pEntry)->GetLineEnd(),
                                                           aBezier );
     aAny <<= aBezier;
     return aAny;
@@ -409,7 +409,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXDashTable_createInstance( XPro
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    const XDash& rXD = ((XDashEntry*)pEntry)->GetDash();
+    const XDash& rXD = static_cast<const XDashEntry*>(pEntry)->GetDash();
 
     drawing::LineDash aLineDash;
 
@@ -490,7 +490,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXHatchTable_createInstance( XPr
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXHatchTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    const XHatch& aHatch = ((XHatchEntry*)pEntry)->GetHatch();
+    const XHatch& aHatch = static_cast<const XHatchEntry*>(pEntry)->GetHatch();
 
     drawing::Hatch aUnoHatch;
 
@@ -566,7 +566,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( 
 // SvxUnoXPropertyTable
 uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
-    const XGradient& aXGradient = ((XGradientEntry*)pEntry)->GetGradient();
+    const XGradient& aXGradient = static_cast<const XGradientEntry*>(pEntry)->GetGradient();
     awt::Gradient aGradient;
 
     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
@@ -655,7 +655,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XP
 uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw(uno::RuntimeException)
 {
     OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
-    const GraphicObject& rGraphicObject(((XBitmapEntry*)pEntry)->GetGraphicObject());
+    const GraphicObject& rGraphicObject(static_cast<const XBitmapEntry*>(pEntry)->GetGraphicObject());
     aURL += OStringToOUString(rGraphicObject.GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
 
     uno::Any aAny;

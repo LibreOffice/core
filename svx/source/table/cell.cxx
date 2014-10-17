@@ -233,7 +233,7 @@ namespace sdr
 
         void CellProperties::ItemSetChanged(const SfxItemSet& rSet )
         {
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
             if( mxCell.is() )
             {
@@ -303,9 +303,9 @@ namespace sdr
         {
             if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
             {
-                bool bVertical(com::sun::star::text::WritingMode_TB_RL == ((SvxWritingModeItem*)pNewItem)->GetValue());
+                bool bVertical(com::sun::star::text::WritingMode_TB_RL == static_cast<const SvxWritingModeItem*>(pNewItem)->GetValue());
 
-                sdr::table::SdrTableObj& rObj = (sdr::table::SdrTableObj&)GetSdrObject();
+                sdr::table::SdrTableObj& rObj = static_cast<sdr::table::SdrTableObj&>(GetSdrObject());
                 if( rObj.IsVerticalWriting() != bVertical )
                     rObj.SetVerticalWriting(bVertical);
 
@@ -740,42 +740,42 @@ sal_Int32 Cell::getMinimumHeight()
 
 long Cell::GetTextLeftDistance() const
 {
-    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
+    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_LEFTDIST)).GetValue();
 }
 
 
 
 long Cell::GetTextRightDistance() const
 {
-    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
+    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_RIGHTDIST)).GetValue();
 }
 
 
 
 long Cell::GetTextUpperDistance() const
 {
-    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
+    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_UPPERDIST)).GetValue();
 }
 
 
 
 long Cell::GetTextLowerDistance() const
 {
-    return ((SdrMetricItem&)(GetItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
+    return static_cast<const SdrMetricItem&>(GetItemSet().Get(SDRATTR_TEXT_LOWERDIST)).GetValue();
 }
 
 
 
 SdrTextVertAdjust Cell::GetTextVerticalAdjust() const
 {
-    return ((SdrTextVertAdjustItem&)(GetItemSet().Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
+    return static_cast<const SdrTextVertAdjustItem&>(GetItemSet().Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
 }
 
 
 
 SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 {
-    return ((SdrTextHorzAdjustItem&)(GetItemSet().Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
+    return static_cast<const SdrTextHorzAdjustItem&>(GetItemSet().Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
 }
 
 
@@ -1423,7 +1423,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_FILLHATCH:
                 case XATTR_LINEDASH:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                        const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rSet.GetItem((sal_uInt16)pMap->nWID));
                         if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1438,7 +1438,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_LINESTART:
                 case XATTR_FILLFLOATTRANSPARENCE:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                        const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rSet.GetItem((sal_uInt16)pMap->nWID));
                         if( pItem == NULL )
                             eState = PropertyState_DEFAULT_VALUE;
                     }

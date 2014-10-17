@@ -1614,7 +1614,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
 
     for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)pPool->GetItem2((sal_uInt16)nWID, nSurrogate);
+        pItem = static_cast<const NameOrIndex*>(pPool->GetItem2((sal_uInt16)nWID, nSurrogate));
         if( pItem && ( pItem->GetName() == aSearchName ) )
         {
             rSet.Put( *pItem );
@@ -1971,7 +1971,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
         const SfxPoolItem* pPoolItem=NULL;
         if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
-            sal_Int32 nAngle = ((SdrAngleItem*)pPoolItem)->GetValue();
+            sal_Int32 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
             aAny <<= nAngle;
         }
         break;
@@ -1982,7 +1982,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
         const SfxPoolItem* pPoolItem=NULL;
         if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
-            sal_Int32 nAngle = ((SdrAngleItem*)pPoolItem)->GetValue();
+            sal_Int32 nAngle = static_cast<const SdrAngleItem*>(pPoolItem)->GetValue();
             aAny <<= nAngle;
         }
         break;
@@ -2096,7 +2096,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_FILLHATCH:
             case XATTR_LINEDASH:
                 {
-                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                    const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rSet.GetItem((sal_uInt16)pMap->nWID));
                     if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
@@ -2111,7 +2111,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_LINESTART:
             case XATTR_FILLFLOATTRANSPARENCE:
                 {
-                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
+                    const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rSet.GetItem((sal_uInt16)pMap->nWID));
                     if ( pItem == NULL )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
@@ -2150,7 +2150,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                 aVclPoint += mpObj->GetAnchorPos();
             }
 
-            ((SdrCaptionObj*)mpObj.get())->SetTailPos(aVclPoint);
+            static_cast<SdrCaptionObj*>(mpObj.get())->SetTailPos(aVclPoint);
 
             return true;
         }
@@ -2574,7 +2574,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     {
     case OWN_ATTR_CAPTION_POINT:
     {
-        Point aVclPoint = ((SdrCaptionObj*)mpObj.get())->GetTailPos();
+        Point aVclPoint = static_cast<SdrCaptionObj*>(mpObj.get())->GetTailPos();
 
         // #88491# make pos relative to anchor
         if( mpModel->IsWriter() )
@@ -2637,7 +2637,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
 
     case OWN_ATTR_ISFONTWORK:
     {
-        rValue <<= mpObj->ISA(SdrTextObj) && ((SdrTextObj*)mpObj.get())->IsFontwork();
+        rValue <<= mpObj->ISA(SdrTextObj) && static_cast<SdrTextObj*>(mpObj.get())->IsFontwork();
         break;
     }
 
@@ -2703,7 +2703,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     {
         bool bMirror = false;
         if( mpObj.is() && mpObj->ISA(SdrGrafObj) )
-            bMirror = ((SdrGrafObj*)mpObj.get())->IsMirrored();
+            bMirror = static_cast<SdrGrafObj*>(mpObj.get())->IsMirrored();
 
         rValue <<= bMirror;
         break;
@@ -2799,8 +2799,8 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     {
         const SfxItemSet& rObjItemSet = mpObj->GetMergedItemSet();
 
-        XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&rObjItemSet.Get(XATTR_FILLBMP_STRETCH);
-        XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&rObjItemSet.Get(XATTR_FILLBMP_TILE);
+        const XFillBmpStretchItem* pStretchItem = static_cast<const XFillBmpStretchItem*>(&rObjItemSet.Get(XATTR_FILLBMP_STRETCH));
+        const XFillBmpTileItem* pTileItem = static_cast<const XFillBmpTileItem*>(&rObjItemSet.Get(XATTR_FILLBMP_TILE));
 
         if( pTileItem && pTileItem->GetValue() )
         {
@@ -4059,7 +4059,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeText::getImplementationId()
 /** called from the XActionLockable interface methods on initial locking */
 void SvxShapeText::lock()
 {
-    SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
+    SvxTextEditSource* pEditSource = static_cast<SvxTextEditSource*>(GetEditSource());
     if( pEditSource )
         pEditSource->lock();
 }
@@ -4069,7 +4069,7 @@ void SvxShapeText::lock()
 /** called from the XActionLockable interface methods on final unlock */
 void SvxShapeText::unlock()
 {
-    SvxTextEditSource* pEditSource = (SvxTextEditSource*)GetEditSource();
+    SvxTextEditSource* pEditSource = static_cast<SvxTextEditSource*>(GetEditSource());
     if( pEditSource )
         pEditSource->unlock();
 }

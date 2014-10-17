@@ -337,7 +337,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             std::vector<basegfx::B3DHomMatrix*> aObjTrans;
             while(aIter.IsMore())
             {
-                E3dObject* p3DObj = (E3dObject*)aIter.Next();
+                E3dObject* p3DObj = static_cast<E3dObject*>(aIter.Next());
                 basegfx::B3DHomMatrix* pNew = new basegfx::B3DHomMatrix;
                 *pNew = p3DObj->GetTransform();
                 aObjTrans.push_back(pNew);
@@ -347,7 +347,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             aIter.Reset();
             while(aIter.IsMore())
             {
-                E3dObject* p3DObj = (E3dObject*)aIter.Next();
+                E3dObject* p3DObj = static_cast<E3dObject*>(aIter.Next());
                 p3DObj->NbcSetTransform(basegfx::B3DHomMatrix());
             }
 
@@ -362,9 +362,9 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
 
             const SfxItemSet& rSceneSet = pScene->GetMergedItemSet();
             double fCamPosZ =
-                (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+                (double)static_cast<const SfxUInt32Item&>(rSceneSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
             double fCamFocal =
-                (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+                (double)static_cast<const SfxUInt32Item&>(rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 
             aCam.SetAutoAdjustProjection(false);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
@@ -393,7 +393,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             sal_uInt32 nIndex(0L);
             while(aIter.IsMore())
             {
-                E3dObject* p3DObj = (E3dObject*)aIter.Next();
+                E3dObject* p3DObj = static_cast<E3dObject*>(aIter.Next());
                 basegfx::B3DHomMatrix* pMat = aObjTrans[nIndex++];
                 p3DObj->NbcSetTransform(*pMat);
                 delete pMat;
@@ -553,7 +553,7 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
     case OWN_ATTR_3D_VALUE_POSITION:
     {
         // Position packen
-        const basegfx::B3DPoint& rPos = ((E3dCubeObj*)mpObj.get())->GetCubePos();
+        const basegfx::B3DPoint& rPos = static_cast<E3dCubeObj*>(mpObj.get())->GetCubePos();
         drawing::Position3D aPos;
 
         aPos.PositionX = rPos.getX();
@@ -668,7 +668,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
     case OWN_ATTR_3D_VALUE_POSITION:
     {
         // Position packen
-        const basegfx::B3DPoint& rPos = ((E3dSphereObj*)mpObj.get())->Center();
+        const basegfx::B3DPoint& rPos = static_cast<E3dSphereObj*>(mpObj.get())->Center();
         drawing::Position3D aPos;
 
         aPos.PositionX = rPos.getX();
@@ -681,7 +681,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
     case OWN_ATTR_3D_VALUE_SIZE:
     {
         // Groesse packen
-        const basegfx::B3DVector& rSize = ((E3dSphereObj*)mpObj.get())->Size();
+        const basegfx::B3DVector& rSize = static_cast<E3dSphereObj*>(mpObj.get())->Size();
         drawing::Direction3D aDir;
 
         aDir.DirectionX = rSize.getX();
@@ -966,7 +966,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
     {
         // Transformation in eine homogene Matrix packen
         drawing::HomogenMatrix aHomMat;
-        basegfx::B3DHomMatrix aMat = ((E3dObject*)mpObj.get())->GetTransform();
+        basegfx::B3DHomMatrix aMat = static_cast<E3dObject*>(mpObj.get())->GetTransform();
 
         // pack evtl. transformed matrix to output
         aHomMat.Line1.Column1 = aMat.get(0, 0);

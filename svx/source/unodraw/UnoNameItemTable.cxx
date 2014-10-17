@@ -128,11 +128,11 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
-    NameOrIndex *pItem;
+    const NameOrIndex *pItem;
 
     while( aIter != aEnd )
     {
-        pItem = (NameOrIndex *)&((*aIter)->Get( mnWhich ) );
+        pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
         if (sName.equals(pItem->GetName()))
         {
             delete (*aIter);
@@ -157,11 +157,9 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
 
-    NameOrIndex *pItem;
-
     while( aIter != aEnd )
     {
-        pItem = (NameOrIndex *)&((*aIter)->Get( mnWhich ) );
+        const NameOrIndex *pItem = static_cast<const NameOrIndex *>(&((*aIter)->Get( mnWhich ) ));
         if (aName.equals(pItem->GetName()))
         {
             NameOrIndex* pNewItem = createItem();
@@ -182,7 +180,7 @@ void SAL_CALL SvxUnoNameItemTable::replaceByName( const OUString& aApiName, cons
     sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate);
+        NameOrIndex *pItem = const_cast<NameOrIndex*>(static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate)));
         if (pItem && aName.equals(pItem->GetName()))
         {
             pItem->PutValue( aElement, mnMemberId );
@@ -212,13 +210,13 @@ uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName )
 
     if (mpModelPool && !aName.isEmpty())
     {
-        NameOrIndex *pItem;
+        const NameOrIndex *pItem;
         sal_uInt32 nSurrogate;
 
         sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
         for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
         {
-            pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+            pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
             if (isValid(pItem) && aName.equals(pItem->GetName()))
             {
@@ -238,13 +236,13 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
 
     std::set< OUString > aNameSet;
 
-    NameOrIndex *pItem;
+    const NameOrIndex *pItem;
 
     const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     sal_uInt32 nSurrogate;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
         if( !isValid( pItem ) )
             continue;
@@ -284,7 +282,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasByName( const OUString& aApiName )
     sal_uInt32 nCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
         if (isValid(pItem) && aName.equals(pItem->GetName()))
             return sal_True;
     }
@@ -303,7 +301,7 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::hasElements(  )
     const sal_uInt32 nSurrogateCount = mpModelPool ? mpModelPool->GetItemCount2( mnWhich ) : 0;
     for( nSurrogate = 0; nSurrogate < nSurrogateCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)mpModelPool->GetItem2( mnWhich, nSurrogate );
+        pItem = static_cast<const NameOrIndex*>(mpModelPool->GetItem2( mnWhich, nSurrogate ));
 
         if( isValid( pItem ) )
             return sal_True;

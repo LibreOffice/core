@@ -74,7 +74,7 @@ FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pP
         ModalDialog(pParent, "FontworkGalleryDialog", "svx/ui/fontworkgallerydialog.ui" ),
         mnThemeId           ( 0xffff ),
         mpSdrView           ( pSdrView ),
-        mpModel             ( (FmFormModel*)pSdrView->GetModel() ),
+        mpModel             ( static_cast<FmFormModel*>(pSdrView->GetModel()) ),
         mppSdrObject        ( NULL ),
         mpDestModel         ( NULL )
 {

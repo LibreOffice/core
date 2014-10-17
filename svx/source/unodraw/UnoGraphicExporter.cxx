@@ -832,9 +832,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             if( !bVectorType )
             {
                 SdrObject* pObj = aShapes.front();
-                if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->HasText() )
+                if( pObj && pObj->ISA( SdrGrafObj ) && !static_cast<SdrGrafObj*>(pObj)->HasText() )
                 {
-                    aGraphic = ( (SdrGrafObj*) pObj )->GetTransformedGraphic();
+                    aGraphic = static_cast<SdrGrafObj*>(pObj)->GetTransformedGraphic();
                     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
                     {
                         Size aSizePixel( aGraphic.GetSizePixel() );
@@ -859,14 +859,14 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             {
                 SdrObject* pObj = aShapes.front();
                 if( pObj && pObj->ISA( SdrTextObj )
-                    && ( (SdrTextObj*) pObj )->HasText() )
+                    && static_cast<SdrTextObj*>(pObj)->HasText() )
                 {
                     Rectangle aScrollRectangle;
                     Rectangle aPaintRectangle;
 
                     const boost::scoped_ptr< GDIMetaFile > pMtf(
-                        ( (SdrTextObj*) pObj )->GetTextScrollMetaFileAndRectangle(
-                        aScrollRectangle, aPaintRectangle ) );
+                        static_cast<SdrTextObj*>(pObj)->GetTextScrollMetaFileAndRectangle(
+                           aScrollRectangle, aPaintRectangle ) );
 
                     // take the larger one of the two rectangles (that
                     // should be the bound rect of the retrieved

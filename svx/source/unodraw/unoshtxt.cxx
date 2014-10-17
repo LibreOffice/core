@@ -659,7 +659,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
 
             // set objects style sheet on empty outliner
-            SfxStyleSheetPool* pPool = (SfxStyleSheetPool*)mpObject->GetModel()->GetStyleSheetPool();
+            SfxStyleSheetPool* pPool = static_cast<SfxStyleSheetPool*>(mpObject->GetModel()->GetStyleSheetPool());
             if( pPool )
                 mpOutliner->SetStyleSheetPool( pPool );
 

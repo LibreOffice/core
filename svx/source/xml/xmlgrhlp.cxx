@@ -66,8 +66,8 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
     if ( ( rMtf.GetActionSize() >= 2 )
             && ( rMtf.FirstAction()->GetType() == META_EPS_ACTION )
             && ( ((const MetaAction*)rMtf.GetAction( 1 ))->GetType() == META_COMMENT_ACTION )
-            && ( ((const MetaCommentAction*)rMtf.GetAction( 1 ))->GetComment() == "EPSReplacementGraphic" ) )
-        pComment = (const MetaCommentAction*)rMtf.GetAction( 1 );
+            && ( static_cast<const MetaCommentAction*>(rMtf.GetAction( 1 ))->GetComment() == "EPSReplacementGraphic" ) )
+        pComment = static_cast<const MetaCommentAction*>(rMtf.GetAction( 1 ));
 
     return pComment;
 }
@@ -566,7 +566,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                         if ( nSize && pData )
                             pStream->Write( pData, nSize );
 
-                        const MetaEPSAction* pAct = ( (const MetaEPSAction*)rMtf.FirstAction() );
+                        const MetaEPSAction* pAct = static_cast<const MetaEPSAction*>(rMtf.FirstAction());
                         const GfxLink&       rLink = pAct->GetLink();
 
                         pStream->Write( rLink.GetData(), rLink.GetDataSize() );

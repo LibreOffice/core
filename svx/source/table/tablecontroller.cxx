@@ -423,7 +423,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                         SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_BLOCK;
 
                         if( pSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE )
-                            eAdj = ((SdrTextVertAdjustItem&)(pSet->Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
+                            eAdj = static_cast<const SdrTextVertAdjustItem&>(pSet->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
 
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_BOTTOM, eAdj == SDRTEXTVERTADJUST_BOTTOM));
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_CENTER, eAdj == SDRTEXTVERTADJUST_CENTER));
@@ -504,9 +504,9 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
             pArgs->GetItemState(nSId, false, &pItem);
             if (pItem)
             {
-                nCount = ((const SfxInt16Item* )pItem)->GetValue();
+                nCount = static_cast<const SfxInt16Item*>(pItem)->GetValue();
                 if(SfxItemState::SET == pArgs->GetItemState(SID_TABLE_PARAM_INSERT_AFTER, true, &pItem))
-                    bInsertAfter = ((const SfxBoolItem* )pItem)->GetValue();
+                    bInsertAfter = static_cast<const SfxBoolItem*>(pItem)->GetValue();
             }
         }
 
@@ -868,10 +868,10 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER ) ) );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST))).GetValue()), BOX_LINE_LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrMetricItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST)).GetValue()), BOX_LINE_LEFT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST)).GetValue()), BOX_LINE_RIGHT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST)).GetValue()), BOX_LINE_TOP );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST)).GetValue()), BOX_LINE_BOTTOM );
 
         SvxBoxInfoItem aBoxInfoItem( static_cast< const SvxBoxInfoItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) ) );
 
@@ -2346,7 +2346,7 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
 
             const SvxBorderLine* pBorderLineItem = 0;
             if(SfxItemState::SET == rAttr.GetItemState(SID_FRAME_LINESTYLE, false) )
-                pBorderLineItem = ((const SvxLineItem&)rAttr.Get( SID_FRAME_LINESTYLE )).GetLine();
+                pBorderLineItem = static_cast<const SvxLineItem&>(rAttr.Get( SID_FRAME_LINESTYLE )).GetLine();
 
             if( pBoxInfoItem && !pBoxItem )
             {
@@ -2380,7 +2380,7 @@ void SvxTableController::ApplyBorderAttr( const SfxItemSet& rAttr )
                         continue;
 
                     const SfxItemSet& rSet = xCell->GetItemSet();
-                    const SvxBoxItem* pOldOuter = (const SvxBoxItem*)     &rSet.Get( SDRATTR_TABLE_BORDER );
+                    const SvxBoxItem* pOldOuter = static_cast<const SvxBoxItem*>(&rSet.Get( SDRATTR_TABLE_BORDER ));
 
                     SvxBoxItem aNewFrame( *pOldOuter );
 

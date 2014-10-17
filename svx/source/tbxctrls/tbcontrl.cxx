@@ -711,7 +711,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     {
                         if(m_pButtons[nId] == NULL)
                         {
-                            m_pButtons[nId] = new MenuButton((Window*)pDevice, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
+                            m_pButtons[nId] = new MenuButton(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
                             m_pButtons[nId]->SetSizePixel(Size(20, aRect.GetSize().Height()));
                             m_pButtons[nId]->SetPopupMenu(&m_aMenu);
                         }
@@ -786,11 +786,11 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
 {
     bool bChanged = false;
     const SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    SvxFontListItem* pFontListItem = NULL;
+    const SvxFontListItem* pFontListItem = NULL;
 
     if ( pDocSh )
         pFontListItem =
-            (SvxFontListItem*)pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+            static_cast<const SvxFontListItem*>(pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
     else
     {
         ::std::unique_ptr<FontList> aFontList(new FontList( pBox ));
@@ -1334,9 +1334,9 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 
             Color aColor;
             if ( pState->ISA( SvxColorItem ) )
-                aColor = ((const SvxColorItem*)pState)->GetValue();
+                aColor = static_cast<const SvxColorItem*>(pState)->GetValue();
             else if ( pState->ISA( XLineColorItem ) )
-                aColor = ((const XLineColorItem*)pState)->GetColorValue();
+                aColor = static_cast<const XLineColorItem*>(pState)->GetColorValue();
 
             for ( size_t i = 1; i <= mpColorSet->GetItemCount(); ++i )
             {
@@ -1963,7 +1963,7 @@ void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException, std::exc
 {
     // Do nothing, we will start binding our listener when we are visible.
     // See link SvxStyleToolBoxControl::VisibilityNotification.
-    SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)GetToolBox().GetItemWindow( GetId() );
+    SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>(GetToolBox().GetItemWindow( GetId() ));
     if ( pBox->IsVisible() )
     {
         for ( int i=0; i<MAX_FAMILIES; i++ )
@@ -1991,7 +1991,7 @@ SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
 
 void SvxStyleToolBoxControl::FillStyleBox()
 {
-    SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)GetToolBox().GetItemWindow( GetId() );
+    SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>(GetToolBox().GetItemWindow( GetId() ));
 
     DBG_ASSERT( pStyleSheetPool, "StyleSheetPool not found!" );
     DBG_ASSERT( pBox,            "Control not found!" );
@@ -2106,7 +2106,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
 void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 {
-    SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)GetToolBox().GetItemWindow( GetId() );
+    SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>(GetToolBox().GetItemWindow( GetId() ));
     DBG_ASSERT( pBox, "Control not found!" );
 
     if ( pBox )
@@ -2190,7 +2190,7 @@ IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
     sal_uInt16 i;
 
     // Call ReBind() && UnBind() according to visibility
-    SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)( GetToolBox().GetItemWindow( GetId() ));
+    SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>( GetToolBox().GetItemWindow( GetId() ));
     if ( pBox->IsVisible() && !isBound() )
     {
         for ( i=0; i<MAX_FAMILIES; i++ )
@@ -2213,7 +2213,7 @@ void SvxStyleToolBoxControl::StateChanged(
 {
     sal_uInt16       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
-    SvxStyleBox_Impl* pBox   = (SvxStyleBox_Impl*)(rTbx.GetItemWindow( nId ));
+    SvxStyleBox_Impl* pBox   = static_cast<SvxStyleBox_Impl*>(rTbx.GetItemWindow( nId ));
     TriState     eTri   = TRISTATE_FALSE;
 
     DBG_ASSERT( pBox, "Control not found!" );
@@ -2228,7 +2228,7 @@ void SvxStyleToolBoxControl::StateChanged(
     switch ( eState )
     {
         case SfxItemState::DEFAULT:
-            eTri = ((const SfxTemplateItem*)pState)->GetValue()
+            eTri = static_cast<const SfxTemplateItem*>(pState)->GetValue()
                         ? TRISTATE_TRUE
                         : TRISTATE_FALSE;
             break;
@@ -2278,7 +2278,7 @@ void SvxFontNameToolBoxControl::StateChanged(
 {
     sal_uInt16               nId    = GetId();
     ToolBox&             rTbx   = GetToolBox();
-    SvxFontNameBox_Impl* pBox   = (SvxFontNameBox_Impl*)(rTbx.GetItemWindow( nId ));
+    SvxFontNameBox_Impl* pBox   = static_cast<SvxFontNameBox_Impl*>(rTbx.GetItemWindow( nId ));
 
     DBG_ASSERT( pBox, "Control not found!" );
 

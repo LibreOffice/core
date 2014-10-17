@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_TABLE_VIEWCONTACTOFTABLEOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
+#include <svx/svdotable.hxx>
 
 
 // predeclarations
@@ -29,20 +30,15 @@
 
 namespace sdr
 {
-    namespace table
-    {
-        class SdrTableObj;
-    }
-
     namespace contact
     {
         class ViewContactOfTableObj : public ViewContactOfSdrObj
         {
         protected:
             // internal access to SdrTextObj
-            ::sdr::table::SdrTableObj& GetTableObj() const
+            const ::sdr::table::SdrTableObj& GetTableObj() const
             {
-                return (::sdr::table::SdrTableObj&)GetSdrObject();
+                return static_cast<const ::sdr::table::SdrTableObj&>(GetSdrObject());
             }
 
             // This method is responsible for creating the graphical visualisation data derived ONLY from

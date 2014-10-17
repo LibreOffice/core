@@ -664,7 +664,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewBy
         SdrPage* pPage;
 
         if( PTR_CAST( FmFormModel, mrModel.mpDoc ) )
-            pPage = new FmFormPage(*(FmFormModel*)mrModel.mpDoc);
+            pPage = new FmFormPage(*static_cast<FmFormModel*>(mrModel.mpDoc));
         else
             pPage = new SdrPage(*mrModel.mpDoc);
 
@@ -719,10 +719,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNam
 
 com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( SdrModel* pModel ) throw()
 {
-    SvxNumRule* pDefaultRule = NULL;
+    const SvxNumRule* pDefaultRule = NULL;
     if( pModel )
     {
-        SvxNumBulletItem* pItem = (SvxNumBulletItem*) pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+        const SvxNumBulletItem* pItem = static_cast<const SvxNumBulletItem*>( pModel->GetItemPool().GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
         if( pItem )
         {
             pDefaultRule = pItem->GetNumRule();

@@ -99,7 +99,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
         if( (rValue >>= aVisArea) && mpObj->ISA(SdrOle2Obj))
         {
             Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
-            uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)mpObj.get())->GetObjRef();
+            uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(mpObj.get())->GetObjRef();
             if( xObj.is() )
             {
                 try
@@ -269,7 +269,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
         if( mpObj->ISA(SdrOle2Obj))
         {
             MapMode aMapMode( MAP_100TH_MM ); // the API uses this map mode
-            Size aTmp = ((SdrOle2Obj*)mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
+            Size aTmp = static_cast<SdrOle2Obj*>(mpObj.get())->GetOrigObjSize( &aMapMode ); // get the size in the requested map mode
             aVisArea = awt::Rectangle( 0, 0, aTmp.Width(), aTmp.Height() );
         }
 

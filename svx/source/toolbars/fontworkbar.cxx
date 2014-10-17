@@ -60,8 +60,8 @@ void SetAlignmentState( SdrView* pSdrView, SfxItemSet& rSet )
         if( pObj->ISA(SdrObjCustomShape) )
         {
             sal_Int32 nOldAlignment = nAlignment;
-            SdrTextHorzAdjustItem&      rTextHorzAdjustItem    = (SdrTextHorzAdjustItem&)pObj->GetMergedItem( SDRATTR_TEXT_HORZADJUST );
-            SdrTextFitToSizeTypeItem&   rTextFitToSizeTypeItem = (SdrTextFitToSizeTypeItem&)pObj->GetMergedItem( SDRATTR_TEXT_FITTOSIZE );
+            const SdrTextHorzAdjustItem&      rTextHorzAdjustItem    = static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem( SDRATTR_TEXT_HORZADJUST ));
+            const SdrTextFitToSizeTypeItem&   rTextFitToSizeTypeItem = static_cast<const SdrTextFitToSizeTypeItem&>(pObj->GetMergedItem( SDRATTR_TEXT_FITTOSIZE ));
             switch ( rTextHorzAdjustItem.GetValue() )
             {
                 case SDRTEXTHORZADJUST_LEFT   : nAlignment = 0; break;
@@ -97,7 +97,7 @@ void SetCharacterSpacingState( SdrView* pSdrView, SfxItemSet& rSet )
         if( pObj->ISA(SdrObjCustomShape) )
         {
             sal_Int32 nOldCharacterSpacing = nCharacterSpacing;
-            SvxCharScaleWidthItem& rCharScaleWidthItem = (SvxCharScaleWidthItem&)pObj->GetMergedItem( EE_CHAR_FONTWIDTH );
+            const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pObj->GetMergedItem( EE_CHAR_FONTWIDTH ));
             nCharacterSpacing = rCharScaleWidthItem.GetValue();
             if ( ( nOldCharacterSpacing != -1 ) && ( nOldCharacterSpacing != nCharacterSpacing ) )
             {
@@ -121,7 +121,7 @@ void SetKernCharacterPairsState( SdrView* pSdrView, SfxItemSet& rSet )
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
-            SvxKerningItem& rKerningItem = (SvxKerningItem&)pObj->GetMergedItem( EE_CHAR_KERNING );
+            const SvxKerningItem& rKerningItem = static_cast<const SvxKerningItem&>(pObj->GetMergedItem( EE_CHAR_KERNING ));
             if ( rKerningItem.GetValue() )
                 bChecked = true;
         }
@@ -142,8 +142,8 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
         if( pObj->ISA( SdrObjCustomShape ) )
         {
             const OUString sType( "Type" );
-            SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-            Any* pAny = aGeometryItem.GetPropertyValueByName( sType );
+            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
+            const Any* pAny = aGeometryItem.GetPropertyValueByName( sType );
             if( pAny )
             {
                 OUString aType;
@@ -208,7 +208,7 @@ static vcl::Window* ImpGetViewWin(SdrView* pView)
 
             if(OUTDEV_WINDOW == pOut->GetOutDevType())
             {
-                return (vcl::Window*)pOut;
+                return static_cast<vcl::Window*>(pOut);
             }
         }
     }
@@ -232,8 +232,8 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
         SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
         if( pObj->ISA(SdrObjCustomShape) )
         {
-            SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-            Any* pAny = aGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
+            const SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )));
+            const Any* pAny = aGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
             if( pAny )
                 *pAny >>= bFound;
         }
@@ -270,7 +270,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         {
             if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_FONTWORK_ALIGNMENT ) == SfxItemState::SET )
             {
-                sal_Int32 nValue = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_ALIGNMENT))->GetValue();
+                sal_Int32 nValue = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_FONTWORK_ALIGNMENT))->GetValue();
                 if ( ( nValue >= 0 ) && ( nValue < 5 ) )
                 {
                     SdrFitToSizeType eFTS = SDRTEXTFIT_NONE;
@@ -295,7 +295,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         {
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
-                sal_Int32 nCharSpacing = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
+                sal_Int32 nCharSpacing = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
                 pObj->SetMergedItem( SvxCharScaleWidthItem( (sal_uInt16)nCharSpacing, EE_CHAR_FONTWIDTH ) );
                 pObj->BroadcastObjectChange();
             }
@@ -364,8 +364,8 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
                         if( pSourceObj )
                         {
                             PropertyValue aPropVal_;
-                            SdrCustomShapeGeometryItem& rSourceGeometry = (SdrCustomShapeGeometryItem&)pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-                            com::sun::star::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
+                            const SdrCustomShapeGeometryItem& rSourceGeometry = static_cast<const SdrCustomShapeGeometryItem&>(pSourceObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+                            const com::sun::star::uno::Any* pAny = rSourceGeometry.GetPropertyValueByName( sType );
                             if ( pAny )
                             {
                                 aPropVal_.Name = sType;
@@ -443,7 +443,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
             const SfxItemSet* pArgs = rReq.GetArgs();
             if ( pArgs )
             {
-                const SfxStringItem& rItm = (const SfxStringItem&)pArgs->Get( rReq.GetSlot() );
+                const SfxStringItem& rItm = static_cast<const SfxStringItem&>(pArgs->Get( rReq.GetSlot() ));
                 aCustomShape = rItm.GetValue();
             }
             if ( !aCustomShape.isEmpty() )
@@ -463,11 +463,11 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                             pSdrView->BegUndo( aStr );
                             pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         }
-                        SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                        SdrCustomShapeGeometryItem aGeometryItem( const_cast<SdrCustomShapeGeometryItem&>(static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ))));
                         GetGeometryForCustomShape( aGeometryItem, aCustomShape );
                         pObj->SetMergedItem( aGeometryItem );
 
-                        Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( (SdrObjCustomShape*)pObj );
+                        Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( static_cast<SdrObjCustomShape*>(pObj) );
                         if ( aXShape.is() )
                         {
                             Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( aXShape, UNO_QUERY );
@@ -490,7 +490,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
         {
             if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
-                sal_Int32 nCharSpacing = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
+                sal_Int32 nCharSpacing = static_cast<const SfxInt32Item*>(rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
                 FontworkCharacterSpacingDialog aDlg( 0L, nCharSpacing );
                 sal_uInt16 nRet = aDlg.Execute();
                 if( nRet != 0 )
@@ -538,7 +538,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                         pSdrView->BegUndo( aStr );
                         pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                     }
-                    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                    SdrCustomShapeGeometryItem aGeometryItem( const_cast<SdrCustomShapeGeometryItem&>(static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ))));
                     impl_execute( pSdrView, rReq, aGeometryItem, pObj );
                     pObj->SetMergedItem( aGeometryItem );
                     pObj->BroadcastObjectChange();

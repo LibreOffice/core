@@ -88,7 +88,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         if ( pDocSh )
         {
             if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-                pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+                pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
         }
 
         if ( !pColorList.is() )

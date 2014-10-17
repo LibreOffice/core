@@ -132,7 +132,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SdrCellPrimitive2D& rCompare = (SdrCellPrimitive2D&)rPrimitive;
+                const SdrCellPrimitive2D& rCompare = static_cast<const SdrCellPrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
                     && getSdrFTAttribute() == rCompare.getSdrFTAttribute());
@@ -439,7 +439,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SdrBorderlinePrimitive2D& rCompare = (SdrBorderlinePrimitive2D&)rPrimitive;
+                const SdrBorderlinePrimitive2D& rCompare = static_cast<const SdrBorderlinePrimitive2D&>(rPrimitive);
 
                 return (getTransform() == rCompare.getTransform()
                     && getLeftLine() == rCompare.getLeftLine()
