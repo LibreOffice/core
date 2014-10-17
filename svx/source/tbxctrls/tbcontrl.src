@@ -95,7 +95,7 @@ Menu RID_SVX_STYLE_MENU
         MenuItem
         {
             Identifier = RID_SVX_UPDATE_STYLE ;
-            Text [ en-US ] = "Update Style Based on Selection" ;
+            Text [ en-US ] = "Update to Match Selection" ;
         };
         MenuItem
         {
