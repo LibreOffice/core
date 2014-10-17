@@ -49,6 +49,31 @@ VAxisBase::~VAxisBase()
 {
 }
 
+#if ENABLE_AXIS_SHAPE_CACHE
+void VAxisBase::reset()
+{
+}
+
+void VAxisBase::copyShapes( const VAxisBase& r )
+{
+    TickLabelArraysType aNewTickLabels;
+    TickInfoArraysType::const_iterator it = r.m_aAllTickInfos.begin(), itEnd = r.m_aAllTickInfos.end();
+    for (; it != itEnd; ++it)
+    {
+        aNewTickLabels.push_back(TickLabelArrayType());
+        TickLabelArrayType& rLabelArray = aNewTickLabels.back();
+        TickInfoArrayType::const_iterator it2 = it->begin(), it2End = it->end();
+        for (; it2 != it2End; ++it2)
+        {
+            const TickInfo& rOldTick = *it2;
+            rLabelArray.push_back(rOldTick.xTextShape);
+        }
+    }
+
+    m_aAllTickLabels.swap(aNewTickLabels);
+}
+#endif
+
 void VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )
 {

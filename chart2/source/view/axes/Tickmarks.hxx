@@ -56,24 +56,30 @@ private:
 typedef std::vector<TickInfo>           TickInfoArrayType;
 typedef std::vector<TickInfoArrayType>  TickInfoArraysType;
 
+typedef std::vector<css::uno::Reference<css::drawing::XShape> > TickLabelArrayType;
+typedef std::vector<TickLabelArrayType> TickLabelArraysType;
+
 class TickIter
 {
 public:
     virtual ~TickIter() {}
     virtual TickInfo* firstInfo() = 0;
     virtual TickInfo* nextInfo() = 0;
+    virtual css::uno::Reference<css::drawing::XShape> getTextShape();
 };
 
 class PureTickIter : public TickIter
 {
 public:
-    PureTickIter( TickInfoArrayType& rTickInfoVector );
+    PureTickIter( TickInfoArrayType& rTickInfoVector, const TickLabelArrayType* pLabels );
     virtual ~PureTickIter();
     virtual TickInfo* firstInfo() SAL_OVERRIDE;
     virtual TickInfo* nextInfo() SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XShape> getTextShape() SAL_OVERRIDE;
 
 private:
     TickInfoArrayType& m_rTickVector;
+    const TickLabelArrayType* mpLabels;
     TickInfoArrayType::iterator m_aTickIter;
 };
 

@@ -58,11 +58,18 @@ sal_Int32 TickInfo::getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo
     return nRet;
 }
 
-PureTickIter::PureTickIter( TickInfoArrayType& rTickInfoVector )
-            : m_rTickVector(rTickInfoVector)
-            , m_aTickIter(m_rTickVector.begin())
+uno::Reference<drawing::XShape> TickIter::getTextShape()
+{
+    return uno::Reference<drawing::XShape>();
+}
+
+PureTickIter::PureTickIter( TickInfoArrayType& rTickInfoVector, const TickLabelArrayType* pLabels ) :
+    m_rTickVector(rTickInfoVector),
+    mpLabels(pLabels),
+    m_aTickIter(m_rTickVector.begin())
 {
 }
+
 PureTickIter::~PureTickIter()
 {
 }
@@ -82,6 +89,22 @@ TickInfo* PureTickIter::nextInfo()
             return &*m_aTickIter;
     }
     return 0;
+}
+
+uno::Reference<drawing::XShape> PureTickIter::getTextShape()
+{
+    uno::Reference<drawing::XShape> xShape;
+    if (!mpLabels)
+        return xShape;
+
+    if (m_aTickIter == m_rTickVector.end())
+        return xShape;
+
+    size_t nPos = std::distance(m_rTickVector.begin(), m_aTickIter);
+    if (nPos >= mpLabels->size())
+        return xShape;
+
+    return (*mpLabels)[nPos];
 }
 
 TickFactory::TickFactory(

@@ -22,6 +22,8 @@
 #include "VAxisOrGridBase.hxx"
 #include "VAxisProperties.hxx"
 #include "Tickmarks.hxx"
+#include <macros.hxx>
+
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 namespace chart
@@ -38,6 +40,11 @@ public:
            , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~VAxisBase();
+
+#if ENABLE_AXIS_SHAPE_CACHE
+    void reset();
+    void copyShapes( const VAxisBase& r );
+#endif
 
     /**
      * Return the number of dimensions the diagram has.  2 for x and y, and 3
@@ -97,6 +104,8 @@ protected: //member
      * which has multi-level axis labels.
      */
     TickInfoArraysType m_aAllTickInfos;
+    TickLabelArraysType m_aAllTickLabels;
+
     bool m_bReCreateAllTickInfos;
 
     bool m_bRecordMaximumTextSize;
