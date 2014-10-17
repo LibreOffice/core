@@ -231,16 +231,22 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 {
     try {
         sal_Int32 aInt = 0;
-        rAny >>= aInt;
-        dmapper_logger->attribute("value", aInt);
+        if (rAny >>= aInt) {
+            dmapper_logger->attribute("value", rAny);
+        } else {
+            dmapper_logger->attribute("unsignedValue", 0);
+        }
 
         sal_uInt32 auInt = 0;
         rAny >>= auInt;
         dmapper_logger->attribute("unsignedValue", auInt);
 
         float aFloat = 0.0f;
-        rAny >>= aFloat;
-        dmapper_logger->attribute("floatValue", aFloat);
+        if (rAny >>= aFloat) {
+            dmapper_logger->attribute("floatValue", rAny);
+        } else {
+            dmapper_logger->attribute("unsignedValue", 0);
+        }
 
         OUString aStr;
         rAny >>= aStr;
