@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > & rModel )
+CGM::CGM( sal_uInt32 nMode, uno::Reference< frame::XModel > const & rModel )
     : mnOutdx(28000)
     , mnOutdy(21000)
     , mnVDCXadd(0)
