@@ -491,7 +491,7 @@ public:
      */
     OStringBuffer & append( const sal_Char * str, sal_Int32 len)
     {
-        // insert behind the last character
+        assert( len >= 0 );
         rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -729,7 +729,8 @@ public:
      */
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str, sal_Int32 len)
     {
-        // insert behind the last character
+        assert( offset >= 0 && offset <= pData->length );
+        assert( len >= 0 );
         rtl_stringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }
@@ -911,6 +912,8 @@ public:
      */
     OStringBuffer & remove( sal_Int32 start, sal_Int32 len )
     {
+        assert( start >= 0 && start <= pData->length );
+        assert( len >= 0 );
         rtl_stringbuffer_remove( &pData, start, len );
         return *this;
     }
