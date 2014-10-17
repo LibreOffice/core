@@ -483,6 +483,16 @@ DECLARE_OOXMLEXPORT_TEST(testAfterlines, "afterlines.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(423), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
+{
+    // The problem was that we didn't handle the situation when an empty paragraph's marker had both a char style and some direct formatting.
+
+    // This was 11.
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getParagraph(1), "CharHeight"));
+    // This was empty.
+    CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharStyleName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

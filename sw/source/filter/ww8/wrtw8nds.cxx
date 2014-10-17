@@ -2705,7 +2705,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         }
     }
 
-    const SfxItemSet* sfxItemSet = NULL;
+    SfxItemSet aParagraphMarkerProperties(pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_TXTATR_END);
     if(const SwpHints* pTxtAttrs = rNode.GetpSwpHints())
     {
         for( size_t i = 0; i < pTxtAttrs->Count(); ++i )
@@ -2721,22 +2721,19 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 SAL_INFO( "sw.ww8", startPos << "startPos == endPos" << *endPos);
                 sal_uInt16 nWhich = pHt->GetAttr().Which();
                 SAL_INFO( "sw.ww8", "nWhich" << nWhich);
-                if (nWhich == RES_TXTATR_AUTOFMT)
-                {
-                    const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(pHt->GetAttr());
-                    sfxItemSet = rAutoFmt.GetStyleHandle().get();
-                }
+                if (nWhich == RES_TXTATR_AUTOFMT || nWhich == RES_TXTATR_CHARFMT)
+                    aParagraphMarkerProperties.Put(pHt->GetAttr());
             }
         }
     }
-    else
+    if (rNode.GetpSwAttrSet())
     {
-        sfxItemSet = rNode.GetpSwAttrSet();
+        aParagraphMarkerProperties.Put(*rNode.GetpSwAttrSet());
     }
     const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
     const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
     const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
-    AttrOutput().EndParagraphProperties( sfxItemSet, pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert);
+    AttrOutput().EndParagraphProperties(&aParagraphMarkerProperties, pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert);
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 

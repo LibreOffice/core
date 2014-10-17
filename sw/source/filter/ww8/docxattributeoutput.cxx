@@ -872,6 +872,37 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     }
 }
 
+/// Outputs an item set, that contains the formatting of the paragraph marker.
+void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, const SfxItemSet& rParagraphMarkerProperties)
+{
+    SfxWhichIter aIter(rParagraphMarkerProperties);
+    sal_uInt16 nWhichId = aIter.FirstWhich();
+    const SfxPoolItem* pItem = 0;
+    // Did we already produce a <w:sz> element?
+    bool bFontSizeWritten = false;
+    while (nWhichId)
+    {
+        if (rParagraphMarkerProperties.GetItemState(nWhichId, true, &pItem) == SfxItemState::SET)
+        {
+            if (isCHRATR(nWhichId) || nWhichId == RES_TXTATR_CHARFMT)
+            {
+                // Will this item produce a <w:sz> element?
+                bool bFontSizeItem = nWhichId == RES_CHRATR_FONTSIZE || nWhichId == RES_CHRATR_CJK_FONTSIZE;
+                if (!bFontSizeWritten || !bFontSizeItem)
+                    rAttributeOutput.OutputItem(*pItem);
+                if (bFontSizeItem)
+                    bFontSizeWritten = true;
+            }
+            else if (nWhichId == RES_TXTATR_AUTOFMT)
+            {
+                const SwFmtAutoFmt* pAutoFmt = static_cast<const SwFmtAutoFmt*>(pItem);
+                lcl_writeParagraphMarkerProperties(rAttributeOutput, *pAutoFmt->GetStyleHandle());
+            }
+        }
+        nWhichId = aIter.NextWhich();
+    }
+}
+
 void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted)
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
@@ -909,28 +940,7 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
             m_pEastAsianLayoutAttrList = NULL;
             m_pCharLangAttrList        = NULL;
 
-            SfxWhichIter aIter( *pParagraphMarkerProperties );
-            sal_uInt16 nWhichId = aIter.FirstWhich();
-            const SfxPoolItem* pItem = 0;
-            // Did we already produce a <w:sz> element?
-            bool bFontSizeWritten = false;
-            while( nWhichId )
-            {
-                if( SfxItemState::SET == pParagraphMarkerProperties->GetItemState( nWhichId, true, &pItem ))
-                {
-                    SAL_INFO( "sw.ww8", "nWhichId " << nWhichId);
-                    if (isCHRATR( nWhichId ))
-                    {
-                        // Will this item produce a <w:sz> element?
-                        bool bFontSizeItem = nWhichId == RES_CHRATR_FONTSIZE || nWhichId == RES_CHRATR_CJK_FONTSIZE;
-                        if (!bFontSizeWritten || !bFontSizeItem)
-                            OutputItem( *pItem );
-                        if (bFontSizeItem)
-                            bFontSizeWritten = true;
-                    }
-                }
-                nWhichId = aIter.NextWhich();
-            }
+            lcl_writeParagraphMarkerProperties(*this, *pParagraphMarkerProperties);
 
             // Write the collected run properties that are stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
             WriteCollectedRunProperties();
