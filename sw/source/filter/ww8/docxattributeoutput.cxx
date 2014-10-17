@@ -903,7 +903,7 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
     }
 }
 
-void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted)
+void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted)
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
@@ -920,51 +920,46 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
     m_pSerializer->mergeTopMarks( );
 
     // Write 'Paragraph Mark' properties
-    if ( pRedlineParagraphMarkerDeleted || pRedlineParagraphMarkerInserted || pParagraphMarkerProperties)
+    m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+    // mark() before paragraph mark properties child elements.
+    InitCollectedRunProperties();
+
+    // The 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList' are used to hold information
+    // that should be collected by different properties in the core, and are all flushed together
+    // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
+    // So we need to store the current status of these lists, so that we can revert back to them when
+    // we are done exporting the redline attributes.
+    ::sax_fastparser::FastAttributeList *pFontsAttrList_Original           = m_pFontsAttrList;
+    ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
+    ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
+    m_pFontsAttrList           = NULL;
+    m_pEastAsianLayoutAttrList = NULL;
+    m_pCharLangAttrList        = NULL;
+
+    lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
+
+    // Write the collected run properties that are stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
+    WriteCollectedRunProperties();
+
+    // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
+    m_pFontsAttrList           = pFontsAttrList_Original;
+    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
+    m_pCharLangAttrList        = pCharLangAttrList_Original;
+
+    if ( pRedlineParagraphMarkerDeleted )
     {
-        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
-        // mark() before paragraph mark properties child elements.
-        InitCollectedRunProperties();
-
-        if(pParagraphMarkerProperties)
-        {
-            // The 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList' are used to hold information
-            // that should be collected by different properties in the core, and are all flushed together
-            // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
-            // So we need to store the current status of these lists, so that we can revert back to them when
-            // we are done exporting the redline attributes.
-            ::sax_fastparser::FastAttributeList *pFontsAttrList_Original           = m_pFontsAttrList;
-            ::sax_fastparser::FastAttributeList *pEastAsianLayoutAttrList_Original = m_pEastAsianLayoutAttrList;
-            ::sax_fastparser::FastAttributeList *pCharLangAttrList_Original        = m_pCharLangAttrList;
-            m_pFontsAttrList           = NULL;
-            m_pEastAsianLayoutAttrList = NULL;
-            m_pCharLangAttrList        = NULL;
-
-            lcl_writeParagraphMarkerProperties(*this, *pParagraphMarkerProperties);
-
-            // Write the collected run properties that are stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-            WriteCollectedRunProperties();
-
-            // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-            m_pFontsAttrList           = pFontsAttrList_Original;
-            m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
-            m_pCharLangAttrList        = pCharLangAttrList_Original;
-        }
-        if ( pRedlineParagraphMarkerDeleted )
-        {
-            StartRedline( pRedlineParagraphMarkerDeleted );
-            EndRedline( pRedlineParagraphMarkerDeleted );
-        }
-        if ( pRedlineParagraphMarkerInserted )
-        {
-            StartRedline( pRedlineParagraphMarkerInserted );
-            EndRedline( pRedlineParagraphMarkerInserted );
-        }
-
-        // mergeTopMarks() after paragraph mark properties child elements.
-        m_pSerializer->mergeTopMarks();
-        m_pSerializer->endElementNS( XML_w, XML_rPr );
+        StartRedline( pRedlineParagraphMarkerDeleted );
+        EndRedline( pRedlineParagraphMarkerDeleted );
     }
+    if ( pRedlineParagraphMarkerInserted )
+    {
+        StartRedline( pRedlineParagraphMarkerInserted );
+        EndRedline( pRedlineParagraphMarkerInserted );
+    }
+
+    // mergeTopMarks() after paragraph mark properties child elements.
+    m_pSerializer->mergeTopMarks();
+    m_pSerializer->endElementNS( XML_w, XML_rPr );
 
     if (!m_bWritingHeaderFooter && m_pCurrentFrame)
     {
@@ -5067,7 +5062,8 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         // Write paragraph properties.
         StartParagraphProperties();
         aAttrIter.OutParaAttr(false);
-        EndParagraphProperties(0, 0, 0, 0);
+        SfxItemSet aParagraphMarkerProperties(m_rExport.pDoc->GetAttrPool());
+        EndParagraphProperties(aParagraphMarkerProperties, 0, 0, 0);
 
         do {
             const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);

@@ -2733,7 +2733,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
     const SwRedlineData* pRedlineParagraphMarkerDelete = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_DELETE );
     const SwRedlineData* pRedlineParagraphMarkerInsert = AttrOutput().GetParagraphMarkerRedline( rNode, nsRedlineType_t::REDLINE_INSERT );
     const SwRedlineData* pParagraphRedlineData = aAttrIter.GetParagraphLevelRedline( );
-    AttrOutput().EndParagraphProperties(&aParagraphMarkerProperties, pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert);
+    AttrOutput().EndParagraphProperties(aParagraphMarkerProperties, pParagraphRedlineData, pRedlineParagraphMarkerDelete, pRedlineParagraphMarkerInsert);
 
     AttrOutput().EndParagraph( pTextNodeInfoInner );
 

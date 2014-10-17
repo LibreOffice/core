@@ -42,7 +42,7 @@ public:
     virtual void StartParagraphProperties() SAL_OVERRIDE {}
 
     /// Called after we end outputting the attributes.
-    virtual void EndParagraphProperties( const SfxItemSet* /*pParagraphMarkerProperties*/, const SwRedlineData* /*pRedlineData*/, const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/, const SwRedlineData* /*pRedlineParagraphMarkerInserted*/) SAL_OVERRIDE {}
+    virtual void EndParagraphProperties(const SfxItemSet& /*rParagraphMarkerProperties*/, const SwRedlineData* /*pRedlineData*/, const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/, const SwRedlineData* /*pRedlineParagraphMarkerInserted*/) SAL_OVERRIDE {}
 
     /// Empty paragraph.
     virtual void EmptyParagraph() SAL_OVERRIDE;

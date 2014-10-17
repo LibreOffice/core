@@ -385,7 +385,7 @@ void RtfAttributeOutput::StartParagraphProperties()
         m_aSectionHeaders.append(aPar.makeStringAndClear());
 }
 
-void RtfAttributeOutput::EndParagraphProperties(const SfxItemSet* /*pParagraphMarkerProperties*/, const SwRedlineData* /*pRedlineData*/, const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/, const SwRedlineData* /*pRedlineParagraphMarkerInserted*/)
+void RtfAttributeOutput::EndParagraphProperties(const SfxItemSet& /*rParagraphMarkerProperties*/, const SwRedlineData* /*pRedlineData*/, const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/, const SwRedlineData* /*pRedlineParagraphMarkerInserted*/)
 {
     m_aStyles.append(m_aStylesEnd.makeStringAndClear());
     m_rExport.Strm().WriteCharPtr(m_aStyles.makeStringAndClear().getStr());
