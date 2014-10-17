@@ -17,6 +17,8 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -399,6 +401,42 @@ DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1, xText), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xCell->getString());
+}
+
+DECLARE_ODFEXPORT_TEST(testSomeImage, "some_images.odt")
+{
+    // Check whether all of the image are imported / exported well
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), xDraws->getCount());
+
+    // Check more info about some of the imported images
+    // First image
+    uno::Reference<drawing::XShape> xImage = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(OUString("vnd.sun.star.GraphicObject:10000000000002620000017D9A839ABB"),
+                                  getProperty< OUString >(xImage, "GraphicURL"));
+    uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(610), xBitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+
+    // Fourth image
+    xImage = getShape(4);
+    CPPUNIT_ASSERT_EQUAL(OUString("vnd.sun.star.GraphicObject:100000000000026200000157866F4A80"),
+                                  getProperty< OUString >(xImage, "GraphicURL"));
+    xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    xBitmap.set(xGraphic, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(610), xBitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(343), xBitmap->getSize().Height );
+
+    // Eigth image
+    xImage = getShape(8);
+    CPPUNIT_ASSERT_EQUAL(OUString("vnd.sun.star.GraphicObject:10000000000002620000017DF31E19E0"),
+                                  getProperty< OUString >(xImage, "GraphicURL"));
+    xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
+    xBitmap.set(xGraphic, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(610), xBitmap->getSize().Width );
+    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(381), xBitmap->getSize().Height );
 }
 
 #endif
