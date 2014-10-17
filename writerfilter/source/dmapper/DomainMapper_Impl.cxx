@@ -68,7 +68,7 @@
 #include <oox/mathml/import.hxx>
 #include <GraphicHelpers.hxx>
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/util.hxx>
 #include <dmapperLoggers.hxx>
@@ -992,7 +992,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("finishParagraph");
 #endif
 
@@ -1005,7 +1005,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
         xTextAppend = rAppendContext.xTextAppend;
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->attribute("isTextAppend", xTextAppend.is());
 #endif
 
@@ -1178,7 +1178,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
     SetIsOutsideAParagraph(true);
     m_bParaHadField = false;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->endElement();
 #endif
 }
@@ -1837,7 +1837,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
             uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
             dmapper_logger->unoPropertySet(xProps);
 #endif
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
@@ -2542,7 +2542,7 @@ void DomainMapper_Impl::PushFieldContext()
     m_bParaHadField = true;
     if(m_bDiscardHeaderFooter)
         return;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->element("pushFieldContext");
 #endif
 
@@ -2657,7 +2657,7 @@ void FieldContext::AppendCommand(const OUString& rPart)
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::AppendFieldCommand(OUString& rPartOfCommand)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("appendFieldCommand");
     dmapper_logger->chars(rPartOfCommand);
     dmapper_logger->endElement();
@@ -3371,7 +3371,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 {
     if(m_bDiscardHeaderFooter)
         return;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->element("closeFieldCommand");
 #endif
 
@@ -3458,7 +3458,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         sServiceName += OUString::createFromAscii(aIt->second.cFieldServiceName );
                     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
                     dmapper_logger->startElement("fieldService");
                     dmapper_logger->chars(sServiceName);
                     dmapper_logger->endElement();
@@ -4061,7 +4061,7 @@ void DomainMapper_Impl::AppendFieldResult(OUString const& rString)
 
 void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("setFieldResult");
     dmapper_logger->chars(rResult);
 #endif
@@ -4169,7 +4169,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
 
 void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("setFieldFFData");
 #endif
 
@@ -4182,7 +4182,7 @@ void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
         }
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->endElement();
 #endif
 }
@@ -4194,7 +4194,7 @@ void DomainMapper_Impl::PopFieldContext()
 {
     if(m_bDiscardHeaderFooter)
         return;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->element("popFieldContext");
 #endif
 

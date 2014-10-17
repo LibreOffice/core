@@ -203,7 +203,7 @@ public:
 
     void sendPropertyToParent();
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 
@@ -306,7 +306,7 @@ public:
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet) SAL_OVERRIDE;
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const SAL_OVERRIDE;
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 

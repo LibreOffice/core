@@ -23,7 +23,7 @@
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLPropertySetImpl.hxx"
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 #include <resourcemodel/TagLogger.hxx>
 #endif
 
@@ -115,7 +115,7 @@ public:
     void startTxbxContent();
     void endTxbxContent();
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 public:
     void dumpXml( const TagLogger::Pointer_t& pLogger );
 #endif

@@ -80,7 +80,7 @@ void TablePositionHandler::lcl_attribute(Id rName, Value& rVal)
         m_nBottomFromText = rVal.getInt();
         break;
     default:
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         dmapper_logger->element("unhandled");
 #endif
         break;

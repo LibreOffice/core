@@ -30,7 +30,7 @@ namespace dmapper
 
 void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger,
         const css::uno::Any & rTableColumnSeparators);
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger,
         css::beans::PropertyValues & rValues);
 
@@ -41,7 +41,7 @@ void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger,
 typedef css::uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
 void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger,
         PropertyValueSeqSeq_t & rPropValSeqSeq);
-#endif // DEBUG_DOMAINMAPPER
+#endif // DEBUG_WRITERFILTER
 }
 }
 

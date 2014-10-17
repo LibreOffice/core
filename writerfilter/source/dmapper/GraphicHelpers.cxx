@@ -123,7 +123,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
             }
             break;
         default:
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
             dmapper_logger->element("unhandled");
 #endif
             break;

@@ -104,7 +104,7 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
     return pResult;
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLPropertyImpl::getName() const
 {
     string sResult;
@@ -126,7 +126,7 @@ string OOXMLPropertyImpl::getName() const
 }
 #endif
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLPropertyImpl::toString() const
 {
     string sResult = "(";
@@ -212,7 +212,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t OOXMLValue::getBinary()
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLValue::toString() const
 {
     return "OOXMLValue";
@@ -243,7 +243,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t OOXMLBinaryValue::getBinary()
     return mpBinaryObj;
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLBinaryValue::toString() const
 {
     return "BinaryObj";
@@ -307,7 +307,7 @@ uno::Any OOXMLBooleanValue::getAny() const
     return aResult;
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLBooleanValue::toString() const
 {
     return mbValue ? "true" : "false";
@@ -344,7 +344,7 @@ OUString OOXMLStringValue::getString() const
     return mStr;
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLStringValue::toString() const
 {
     return OUStringToOString(mStr, RTL_TEXTENCODING_ASCII_US).getStr();
@@ -375,7 +375,7 @@ uno::Any OOXMLInputStreamValue::getAny() const
     return aAny;
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLInputStreamValue::toString() const
 {
     return "InputStream";
@@ -495,7 +495,7 @@ void OOXMLPropertySetImpl::setType(const string & rsType)
     maType = OString(rsType.c_str(), rsType.size());
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLPropertySetImpl::toString()
 {
     string sResult = "[";
@@ -544,7 +544,7 @@ writerfilter::Reference<Properties>::Pointer_t OOXMLPropertySetValue::getPropert
         (mpPropertySet->clone());
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLPropertySetValue::toString() const
 {
     char sBuffer[256];
@@ -622,7 +622,7 @@ OOXMLValue * OOXMLIntegerValue::clone() const
     return new OOXMLIntegerValue(*this);
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLIntegerValue::toString() const
 {
     char buffer[256];
@@ -660,7 +660,7 @@ OOXMLValue * OOXMLHexValue::clone() const
     return new OOXMLHexValue(*this);
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLHexValue::toString() const
 {
     char buffer[256];
@@ -699,7 +699,7 @@ OOXMLValue* OOXMLUniversalMeasureValue::clone() const
     return new OOXMLUniversalMeasureValue(*this);
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLUniversalMeasureValue::toString() const
 {
     return OString::number(mnValue).getStr();
@@ -725,7 +725,7 @@ uno::Any OOXMLShapeValue::getAny() const
     return uno::Any(mrShape);
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLShapeValue::toString() const
 {
     return "Shape";
@@ -756,7 +756,7 @@ uno::Any OOXMLStarMathValue::getAny() const
     return uno::Any(component);
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 string OOXMLStarMathValue::toString() const
 {
     return "StarMath";

@@ -68,7 +68,7 @@ OUString TblStylePrHandler::getTypeString()
 
 void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("TblStylePrHandler.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(rName));
     dmapper_logger->chars(rVal.toString());
@@ -128,7 +128,7 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
 
 void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("TblStylePrHandler.sprm");
     dmapper_logger->attribute("sprm", rSprm.toString());
 #endif
@@ -187,7 +187,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             }
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->endElement();
 #endif
 }

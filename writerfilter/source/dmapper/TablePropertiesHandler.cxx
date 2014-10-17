@@ -57,7 +57,7 @@ namespace dmapper {
 
     bool TablePropertiesHandler::sprm(Sprm & rSprm)
     {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         dmapper_logger->startElement("TablePropertiesHandler.sprm");
         dmapper_logger->attribute("sprm", rSprm.toString());
 #endif
@@ -245,7 +245,7 @@ namespace dmapper {
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
                     pTablePropMap->InsertProps(pBorderHandler->getProperties());
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
                     pTablePropMap->dumpXml( dmapper_logger );
 #endif
                     insertTableProps( pTablePropMap );
@@ -411,7 +411,7 @@ namespace dmapper {
             break;
         }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         dmapper_logger->endElement();
 #endif
 

@@ -39,7 +39,7 @@ namespace writerfilter
         pName = NULL;
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     void TagLogger::setFileName( const std::string & filename )
     {
         if ( pWriter )
@@ -112,7 +112,7 @@ namespace writerfilter
         return aIt->second;
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     void TagLogger::element(const std::string & name)
     {
         startElement(name);
@@ -173,7 +173,7 @@ namespace writerfilter
         xmlFree( xmlName );
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     void TagLogger::attribute(const std::string & name, const OUString & value)
     {
         attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );

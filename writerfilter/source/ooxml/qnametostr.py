@@ -26,7 +26,7 @@ namespace writerfilter
 
 void QNameToString::init_ooxml()
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     /* ooxml */
 """)
 

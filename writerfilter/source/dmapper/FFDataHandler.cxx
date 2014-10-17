@@ -130,7 +130,7 @@ void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
         }
         break;
     default:
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         dmapper_logger->element("unhandled");
 #endif
         break;
@@ -159,7 +159,7 @@ void FFDataHandler::lcl_attribute(Id name, Value & val)
         }
         break;
     default:
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         dmapper_logger->element("unhandled");
 #endif
         break;

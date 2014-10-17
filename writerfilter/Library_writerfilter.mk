@@ -29,7 +29,7 @@ $(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writer
 
 $(eval $(call gb_Library_add_defs,writerfilter,\
 	$(if $(filter-out 0,$(gb_DEBUGLEVEL)), \
-		-DDEBUG_DOMAINMAPPER \
+		-DDEBUG_WRITERFILTER \
 	) \
 ))
 

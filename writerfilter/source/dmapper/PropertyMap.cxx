@@ -226,7 +226,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
     return m_aValues;
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 static void lcl_AnyToTag(const uno::Any & rAny)
 {
     try {
@@ -253,7 +253,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 
 void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType i_GrabBagType )
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     const OUString& rInsert = PropertyNameSupplier::
         GetPropertyNameSupplier().GetName(eId);
 
@@ -293,7 +293,7 @@ bool PropertyMap::isSet( PropertyIds eId) const
     return m_vMap.find(eId)!=m_vMap.end();
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
 {
     pLogger->startElement("PropertyMap");
@@ -363,14 +363,14 @@ void PropertyMap::InsertProps(const PropertyMapPtr pMap)
 
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->element("PropertyMap.insertTableProperties");
 #endif
 }
 
 void PropertyMap::printProperties()
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("properties");
 
     MapIterator aMapIter = m_vMap.begin();
@@ -1590,7 +1590,7 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
 
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
     pMap->dumpXml(dmapper_logger);
 #endif
@@ -1608,7 +1608,7 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
             }
         }
     }
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dumpXml( dmapper_logger );
     dmapper_logger->endElement();
 #endif

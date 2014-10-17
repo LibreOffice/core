@@ -29,7 +29,7 @@
 #include <dmapper/DomainMapper.hxx>
 #include <WriterFilter.hxx>
 #include <ooxml/OOXMLDocument.hxx>
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 #include <iostream>
 #include <osl/process.h>
 #endif
@@ -77,7 +77,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         if ( !xInputStream.is() )
             return sal_False;
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
@@ -164,7 +164,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
         pStream.reset();
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         dmapper_logger->endDocument();
 #endif
 

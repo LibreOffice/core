@@ -29,7 +29,7 @@
 
 namespace writerfilter
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     class IdToString
     {
     public:
@@ -57,7 +57,7 @@ namespace writerfilter
 
         static Pointer_t getInstance(const char * name);
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         void setFileName(const std::string & filename);
         void startDocument();
         void endDocument();
@@ -67,7 +67,7 @@ namespace writerfilter
         void startElement(const std::string & name);
 #endif
         void attribute(const std::string & name, const std::string & value);
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         void attribute(const std::string & name, const OUString & value);
         void attribute(const std::string & name, sal_uInt32 value);
         void attribute(const std::string & name, const css::uno::Any aAny);

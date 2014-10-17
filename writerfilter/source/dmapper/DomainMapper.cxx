@@ -2491,7 +2491,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     break;
     default:
         {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
             dmapper_logger->startElement("unhandled");
             dmapper_logger->attribute("id", nSprmId);
             dmapper_logger->attribute("name", rSprm.getName());
@@ -2774,7 +2774,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
     OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("text");
     dmapper_logger->chars(sText);
     dmapper_logger->endElement();

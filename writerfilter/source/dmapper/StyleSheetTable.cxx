@@ -513,7 +513,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         break;
         default:
         {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
             dmapper_logger->element("unhandled");
 #endif
         }
@@ -1177,7 +1177,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
                             (void) rWrapped;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
                             OUString aMessage("StyleSheetTable::ApplyStyleSheets: Some style properties could not be set");
                             beans::UnknownPropertyException aUnknownPropertyException;
 

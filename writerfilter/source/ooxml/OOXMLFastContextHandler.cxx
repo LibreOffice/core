@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 using namespace oox;
 using namespace ::std;
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 static string resourceToString(OOXMLFastContextHandler::ResourceEnum_t eResource)
 {
     string sResult;
@@ -86,7 +86,7 @@ static string resourceToString(OOXMLFastContextHandler::ResourceEnum_t eResource
 
 set<OOXMLFastContextHandler *> aSetContexts;
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 class OOXMLIdToString : public IdToString
 {
 public:
@@ -375,7 +375,7 @@ void OOXMLFastContextHandler::endAction(Token_t Element)
     OOXMLFactory::getInstance()->endAction(this, Element);
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) const
 {
     pLogger->startElement("context");
@@ -1093,7 +1093,7 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
     return OOXMLValue::Pointer_t(new OOXMLPropertySetValue(mpPropertySet));
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLogger) const
 {
     pLogger->startElement("context");

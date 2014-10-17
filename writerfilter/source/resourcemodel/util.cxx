@@ -40,7 +40,7 @@ string toString(uno::Reference< text::XTextRange > textRange)
 {
     string result;
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     if (textRange.get())
     {
         OUString aOUStr = textRange->getString();

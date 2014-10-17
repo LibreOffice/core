@@ -52,7 +52,7 @@ void LatentStyleHandler::lcl_attribute(Id rName, Value& rVal)
         break;
     default:
         bFound = false;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
         dmapper_logger->element("unhandled");
 #endif
         break;

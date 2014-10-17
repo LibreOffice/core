@@ -213,7 +213,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
 std::string RTFValue::toString() const
 {
     if (!m_sValue.isEmpty() || m_bForceString)

@@ -119,7 +119,7 @@ public:
 std::string fastTokenToId(sal_uInt32 nToken)
 {
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_WRITERFILTER
     std::string sResult;
 
     switch (oox::getNamespace(nToken))
