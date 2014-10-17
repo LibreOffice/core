@@ -99,6 +99,9 @@ public:
     }
 
     BigInt( sal_uInt32 nVal );
+#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
+    BigInt( long long nVal );
+#endif
     BigInt( const BigInt& rBigInt );
     BigInt( const OUString& rString );
 

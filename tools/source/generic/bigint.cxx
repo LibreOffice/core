@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <limits>
 #include <math.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -576,6 +577,33 @@ BigInt::BigInt( sal_uInt32 nValue )
         nLen   = 0;
     }
 }
+
+#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
+BigInt::BigInt( long long nValue )
+    : nVal(0)
+{
+    bIsSet = true;
+    bIsNeg = nValue < 0;
+    nLen = 0;
+
+    unsigned long long nUValue = static_cast<unsigned long long>(bIsNeg ? -nValue : nValue);
+    if (nUValue >= std::numeric_limits<long>::max())
+    {
+        bIsBig  = true;
+        for (int i = 0; (i != sizeof(unsigned long long) / 2) && (nUValue != 0); ++i)
+        {
+            nNum[i] = static_cast<sal_uInt16>(nUValue & 0xffffUL);
+            nUValue = nUValue >> 16;
+            ++nLen;
+        }
+    }
+    else
+    {
+        bIsBig = false;
+        nVal   = static_cast<long>(nValue);
+    }
+}
+#endif
 
 BigInt::operator sal_uIntPtr() const
 {
