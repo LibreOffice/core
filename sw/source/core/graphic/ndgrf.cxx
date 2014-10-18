@@ -461,7 +461,6 @@ bool SwGrfNode::ImportGraphic( SvStream& rStrm )
         mpReplacementGraphic = 0;
 
         maGrfObj.SetGraphic( aGraphic );
-        maGrfObj.SetUserData( aURL );
         onGraphicChanged();
         return true;
     }
