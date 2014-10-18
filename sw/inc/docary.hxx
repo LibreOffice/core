@@ -238,7 +238,7 @@ public:
     ~SwUnoCrsrTbl();
 };
 
-class SwOLENodes : public std::vector<SwOLENode*> {};
+typedef std::vector<SwOLENode*> SwOLENodes;
 
 #endif // INCLUDED_SW_INC_DOCARY_HXX
 

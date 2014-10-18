@@ -33,6 +33,7 @@
 #include <ndtyp.hxx>
 #include <index.hxx>
 #include <fmtcol.hxx>
+#include "docary.hxx"
 
 // forward declarations
 
@@ -71,7 +72,6 @@ class IDocumentLinksAdministration;
 class IDocumentFieldsAccess;
 class IDocumentContentOperations;
 class IDocumentListItems;
-class SwOLENodes;
 class Point;
 
 //UUUU
