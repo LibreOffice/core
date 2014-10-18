@@ -29,15 +29,14 @@ PathFormat()
 {
     formatted_path="$1"
     if test "$build_os" = "cygwin"; then
-        pf_part1=
         pf_conv_to_dos=
-        for pf_part in $formatted_path; do
-            if test -z "$pf_part1"; then
-                pf_part1="$pf_part"
-            else
+        # spaces,parentheses,brackets,braces are problematic in pathname
+        # so are backslashes
+        case "$formatted_path" in
+            *\ * | *\)* | *\(* | *\{* | *\}* | *\[* | *\]* | *\\* )
                 pf_conv_to_dos="yes"
-            fi
-        done
+            ;;
+        esac
         if test "$pf_conv_to_dos" = "yes"; then
             if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
                 formatted_path=`cygpath -sm "$formatted_path"`
