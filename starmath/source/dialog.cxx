@@ -169,6 +169,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(vcl::Window *pParent, const SfxItem
     get( m_pZoom,                "zoom");
     get( m_pNoRightSpaces,       "norightspaces");
     get( m_pSaveOnlyUsedSymbols, "saveonlyusedsymbols");
+    get( m_pAutoCloseBrackets,   "autoclosebrackets");
 
     m_pSizeNormal->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
     m_pSizeScaled->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
