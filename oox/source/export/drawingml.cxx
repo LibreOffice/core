@@ -891,9 +891,6 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
                     sMediaType = "image/x-emf";
                     pExtension = ".emf";
                 }
-
-                if (bSwapped)
-                    const_cast<Graphic&>(rGraphic).SwapOut();
             }
             else
             {

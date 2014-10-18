@@ -3641,8 +3641,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     if (rGraphic.GetType()==GRAPHIC_NONE)
         return;
 
-    bool bSwapped = rGraphic.IsSwapOut();
-    if (bSwapped)
+    if (rGraphic.IsSwapOut())
     {
         // always swapin via the Node
         const_cast<SwGrfNode*>(pGrfNode)->SwapIn();
@@ -3817,9 +3816,6 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     }
     else
         m_rExport.Strm().WriteCharPtr("}}}}"); // Close SV, SP, SHPINST and SHP.
-
-    if (bSwapped)
-        const_cast<Graphic&>(rGraphic).SwapOut();
 
     m_rExport.Strm().WriteCharPtr(SAL_NEWLINE_STRING);
 }

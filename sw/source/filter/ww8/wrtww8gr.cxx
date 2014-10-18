@@ -725,7 +725,6 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         else
         {
             Graphic& rGrf = const_cast<Graphic&>(rGrfNd.GetGrf());
-            bool bSwapped = rGrf.IsSwapOut();
             // always swapin via the Node
             const_cast<SwGrfNode&>(rGrfNd).SwapIn();
 
@@ -753,9 +752,6 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
             WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
                 rGrfNd.GetpSwAttrSet());
             WriteWindowMetafileBits(rStrm, aMeta);
-
-            if (bSwapped)
-                rGrf.SwapOut();
         }
     }
 }
