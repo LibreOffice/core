@@ -431,6 +431,11 @@ typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
 extern SwDfltAttrTab aAttrTab;
 extern SfxItemInfo   aSlotTab[];
 
+/** Get the default attribute from corresponding default attribute table.
+
+    @param[in] nWhich Position in table
+    @return Attribute if found, null pointer otherwise
+*/
 SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich );
 
 SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript );

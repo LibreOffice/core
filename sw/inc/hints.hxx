@@ -132,6 +132,11 @@ class SwRefMarkFldUpdate : public SwMsgPoolItem
 {
 public:
     const OutputDevice* pOut; ///< pointer to the current output device
+    /** Is sent if reference marks should be updated.
+
+        To get the page/chapter number, the frame has to be asked. For that we need
+        the current OutputDevice.
+    */
     SwRefMarkFldUpdate( const OutputDevice* );
 };
 
@@ -166,6 +171,7 @@ public:
     bool bModified : 1;
     bool bBehindSplitLine : 1;
 
+    /** Is sent if a table should be recalculated */
     SwTableFmlUpdate( const SwTable* );
 };
 

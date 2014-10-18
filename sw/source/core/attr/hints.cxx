@@ -49,11 +49,6 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
 {
 }
 
-/** Is sent if reference marks should be updated.
-
-    To get the page/chapter number, the frame has to be asked. For that we need
-    the current OutputDevice.
-*/
 SwRefMarkFldUpdate::SwRefMarkFldUpdate( const OutputDevice* pOutput )
     : SwMsgPoolItem( RES_REFMARKFLD_UPDATE ),
     pOut( pOutput )
@@ -66,7 +61,6 @@ SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
 {
 }
 
-/** Is sent if a table should be recalculated */
 SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
     : SwMsgPoolItem( RES_TABLEFML_UPDATE ),
     pTbl( pNewTbl ), pHistory( 0 ), nSplitLine( USHRT_MAX ),
@@ -117,7 +111,6 @@ SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
 {
 }
 
-// "Overhead" of SfxPoolItem
 bool SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
     OSL_FAIL( "SwMsgPoolItem knows no ==" );
@@ -131,11 +124,6 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 }
 
 #if OSL_DEBUG_LEVEL > 0
-/** Get the default attribute from corresponding default attribute table.
-
-    @param[in] nWhich Position in table
-    @return Attribute if found, null pointer otherwise
-*/
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
     OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
@@ -145,10 +133,6 @@ const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
     return pHt;
 }
 #else
-/** Get the default attribute from corresponding default attribute table.
-
-    @param[in] nWhich Position in table
-*/
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
     return aAttrTab[ nWhich - POOLATTR_BEGIN ];
