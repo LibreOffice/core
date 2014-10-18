@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//  Bemerkung:  Variablen nicht ueber Headerfile, Module muessen sich
-//              selbst per extern ihre Sachen besorgen!
+//  Remark:  Variables are not declared in header file! Modules have to declare
+//              their variables via extern!
 
 #include "scitems.hxx"
 #include "scmem.h"

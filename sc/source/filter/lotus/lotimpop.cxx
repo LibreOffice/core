@@ -147,7 +147,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
         {
             Read( nCol );
             Read( nSpaces );
-            // ACHTUNG: Korrekturfaktor nach 'Augenmass' ermittelt!
+            // Attention: ambiguous Correction factor!
             pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), ( sal_uInt16 ) ( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
 
             nCnt--;
@@ -157,7 +157,7 @@ void ImportLotus::Columnwidth( sal_uInt16 nRecLen )
 
 void ImportLotus::Hiddencolumn( sal_uInt16 nRecLen )
 {
-    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record too short!" );
 
     sal_uInt8    nLTab, nWindow2;
     sal_uInt16    nCnt = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 2;
@@ -265,7 +265,7 @@ void ImportLotus::Smallnumcell( void )
 
 ScFormulaCell *ImportLotus::Formulacell( sal_uInt16 n )
 {
-    OSL_ENSURE( pIn, "-ImportLotus::Formulacell(): Null-Stream -> Rums!" );
+    OSL_ENSURE( pIn, "-ImportLotus::Formulacell(): Null-Stream!" );
 
     ScAddress           aAddr;
 
@@ -296,7 +296,7 @@ void ImportLotus::Read( OUString &r )
 
 void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 {
-    OSL_ENSURE( nRecLen > 4, "*ImportLotus::RowPresentation(): Record zu kurz!" );
+    OSL_ENSURE( nRecLen > 4, "*ImportLotus::RowPresentation(): Record too short!" );
 
     sal_uInt8    nLTab, nFlags;
     sal_uInt16  nRow, nHeight;
@@ -382,7 +382,7 @@ void ImportLotus::Font_Ysize( void )
 
 void ImportLotus::_Row( const sal_uInt16 nRecLen )
 {
-    OSL_ENSURE( nExtTab >= 0, "*ImportLotus::_Row(): Kann hier nicht sein!" );
+    OSL_ENSURE( nExtTab >= 0, "*ImportLotus::_Row(): not possible!" );
 
     sal_uInt16          nRow;
     sal_uInt16          nHeight;
@@ -413,21 +413,21 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
             rContext.pLotusRoot->pAttrTable->SetAttr(
                 nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), static_cast<SCROW> (nRow), aAttr );
 
-        // hier und NICHT in class LotAttrTable, weil nur Attributiert wird,
-        // wenn die anderen Attribute gesetzt sind
-        //  -> bei Center-Attribute wird generell zentriert gesetzt
+        // Do this here and NOT in class LotAttrTable, as we only add attributes if the other
+        // attributes are set
+        //  -> for Center-Attribute default is centered
         if( aAttr.IsCentered() )
             {
             if( bCenter )
                 {
                 if( pD->HasData( nColCnt, static_cast<SCROW> (nRow), static_cast<SCTAB> (nExtTab) ) )
-                    {// neue Center nach vorheriger Center
+                    {// new Center after previous Center
                     pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
                     nCenterStart = nColCnt;
                     }
                 }
             else
-                {// ganz neue Center
+                {// fully new Center
                 bCenter = true;
                 nCenterStart = nColCnt;
                 }
@@ -436,7 +436,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
         else
             {
             if( bCenter )
-                {// evtl. alte Center bemachen
+                {// possibly reset old Center
                 pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
                 bCenter = false;
                 }
@@ -449,7 +449,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
     }
 
     if( bCenter )
-        // evtl. alte Center bemachen
+        // possibly reset old Center
         pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

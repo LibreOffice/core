@@ -34,16 +34,16 @@ class FormCache;
 struct LotusContext
 {
     const sal_uInt16 nBOF;
-    WKTYP            eTyp;   // Typ der gerade in bearbeitung befindlichen Datei
-    bool             bEOF;           // zeigt Ende der Datei
+    WKTYP            eTyp;          // type of file being processed
+    bool             bEOF;          // shows end of file
     rtl_TextEncoding eCharVon;
-    ScDocument*      pDoc;           // Aufhaenger zum Dokumentzugriff
+    ScDocument*      pDoc;          // pointer to access document
     static OPCODE_FKT pOpFkt[ FKT_LIMIT ];
-    static OPCODE_FKT pOpFkt123[ FKT_LIMIT123 ]; // -> optab.cxx, Table of possible Opcodes
+    static OPCODE_FKT pOpFkt123[ FKT_LIMIT123 ]; // -> optab.cxx, table of possible Opcodes
     LOTUS_ROOT*      pLotusRoot;
     std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
 
-    sal_uInt8        nDefaultFormat; // -> op.cpp, Standard-Zellenformat
+    sal_uInt8        nDefaultFormat; // -> op.cpp, standard cell format
 
     SvxHorJustifyItem *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
     ScProtectionAttr* pAttrUnprot;

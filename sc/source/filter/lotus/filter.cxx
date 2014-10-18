@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//  Das geht:   Versionserkennung WKS, WK1 und WK3
-//              ...Rest steht in op.cpp
+//  Discover WKS, WK1 und WK3; s.a op.cpp
 
 #include <string.h>
 #include <map>
@@ -109,11 +108,11 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
 
 WKTYP ScanVersion(LotusContext &rContext, SvStream& aStream)
 {
-    // PREC:    pWKDatei:   Zeiger auf offene Datei
-    // POST:    return:     Typ der Datei
+    // PREC:    pWKDatei:   pointer to open file
+    // POST:    return:     type of file
     sal_uInt16 nOpcode(0), nVersNr(0), nRecLen(0);
 
-    // erstes Byte muss wegen BOF zwingend 0 sein!
+    // first byte has to be 0 because of BOF!
     aStream.ReadUInt16( nOpcode );
     if (nOpcode != rContext.nBOF)
         return eWK_UNKNOWN;
@@ -166,21 +165,21 @@ FltError ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocume
 {
     aStream.Seek( 0UL );
 
-    // Zeiger auf Dokument global machen
+    // make document pointer global
     rContext.pDoc = pDocument;
     rContext.bEOF = false;
     rContext.eCharVon = eSrc;
 
-    // Speicher besorgen
+    // allocate memory
     if( !MemNew(rContext) )
         return eERR_NOMEM;
 
-    InitPage(); // Seitenformat initialisieren (nur Tab 0!)
+    InitPage(); // initialize page format (only Tab 0!)
 
-        // Progressbar starten
+        // start progressbar
     ScfStreamProgressBar aPrgrsBar( aStream, pDocument->GetDocumentShell() );
 
-    // Datei-Typ ermitteln
+    // detect file type
     rContext.eTyp = ScanVersion(rContext, aStream);
     rContext.aLotusPatternPool.clear();
 

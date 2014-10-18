@@ -48,9 +48,9 @@ ScRTFImport::ScRTFImport( ScDocument* pDocP, const ScRange& rRange ) :
 
 ScRTFImport::~ScRTFImport()
 {
-    // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
-    // Ist gewaehrleistet, da ScEEImport Basisklasse ist
-    delete (ScRTFParser*) mpParser;     // vor EditEngine!
+    // ordering is important; get error in some other Dtor otherwise!
+    // Is correct, as ScEEImport is Base Class
+    delete (ScRTFParser*) mpParser;     // before EditEngine!
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
