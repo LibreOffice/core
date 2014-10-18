@@ -1618,9 +1618,9 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
 
             sal_uInt16 nItemId = 0;
-            ToolBoxItemBits nBits = 0;
+            ToolBoxItemBits nBits = ToolBoxItemBits::NONE;
             if (name == "GtkMenuToolButton")
-                nBits |= TIB_DROPDOWN;
+                nBits |= ToolBoxItemBits::DROPDOWN;
 
             if (!aCommand.isEmpty() && m_xFrame.is())
             {

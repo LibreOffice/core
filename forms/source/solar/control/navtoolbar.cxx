@@ -124,7 +124,7 @@ namespace frm
         if ( m_pDispatcher )
         {
             if ( !m_pDispatcher->isEnabled( GetCurItemId() ) )
-                // the toolbox is a little bit buggy: With TIB_REPEAT, it sometimes
+                // the toolbox is a little bit buggy: With ToolBoxItemBits::REPEAT, it sometimes
                 // happens that a select is reported, even though the respective
                 // item has just been disabled.
                 return;
@@ -283,7 +283,7 @@ namespace frm
             {   // it's _not_ a separator
 
                 // insert the entry
-                m_pToolbar->InsertItem( pSupportedFeatures->nId, OUString(), pSupportedFeatures->bRepeat ? TIB_REPEAT : 0 );
+                m_pToolbar->InsertItem( pSupportedFeatures->nId, OUString(), pSupportedFeatures->bRepeat ? ToolBoxItemBits::REPEAT : ToolBoxItemBits::NONE );
                 m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, OUString() );  // TODO
 
                 if ( !isArtificialItem( pSupportedFeatures->nId ) )

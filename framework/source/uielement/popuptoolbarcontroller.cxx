@@ -70,7 +70,7 @@ protected:
     PopupMenuToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                 const OUString &rPopupCommand = OUString() );
     virtual void functionExecuted( const OUString &rCommand );
-    virtual sal_uInt16 getDropDownStyle() const;
+    virtual ToolBoxItemBits getDropDownStyle() const;
     void createPopupMenuController();
 
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;
@@ -205,9 +205,9 @@ void PopupMenuToolbarController::functionExecuted( const OUString &/*rCommand*/)
 {
 }
 
-sal_uInt16 PopupMenuToolbarController::getDropDownStyle() const
+ToolBoxItemBits PopupMenuToolbarController::getDropDownStyle() const
 {
-    return TIB_DROPDOWN;
+    return ToolBoxItemBits::DROPDOWN;
 }
 
 void PopupMenuToolbarController::createPopupMenuController()
@@ -260,7 +260,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    sal_uInt16 getDropDownStyle() const SAL_OVERRIDE;
+    ToolBoxItemBits getDropDownStyle() const SAL_OVERRIDE;
 };
 
 WizardsToolbarController::WizardsToolbarController(
@@ -290,9 +290,9 @@ css::uno::Sequence<OUString> WizardsToolbarController::getSupportedServiceNames(
     return aRet;
 }
 
-sal_uInt16 WizardsToolbarController::getDropDownStyle() const
+ToolBoxItemBits WizardsToolbarController::getDropDownStyle() const
 {
-    return TIB_DROPDOWNONLY;
+    return ToolBoxItemBits::DROPDOWNONLY;
 }
 
 class OpenToolbarController : public PopupMenuToolbarController

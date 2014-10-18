@@ -83,7 +83,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     pView = ::GetActiveView();
     pWrtShell = pView ? pView->GetWrtShellPtr() : 0;
 
-    InsertWindow( ED_POS, &aPos, 0, 0);
+    InsertWindow( ED_POS, &aPos, ToolBoxItemBits::NONE, 0);
     SetItemText(ED_POS, SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
     aPos.SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
     SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TOOLBAR));
@@ -98,7 +98,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL ));
     SetItemImage( FN_FORMULA_APPLY,  pManager->GetImage(FN_FORMULA_APPLY  ));
 
-    SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | TIB_DROPDOWNONLY );
+    SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | ToolBoxItemBits::DROPDOWNONLY );
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
 
     Size    aSizeTbx = CalcWindowSizePixel();

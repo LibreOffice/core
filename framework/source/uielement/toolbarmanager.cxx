@@ -947,7 +947,7 @@ void ToolBarManager::CreateControllers()
                         // Accessibility support: Set toggle button role for specific commands
                         sal_Int32 nProps = RetrievePropertiesFromCommand( aCommandURL );
                         if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
-                            m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | TIB_CHECKABLE );
+                            m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                     }
                     else
                         xController = Reference< XStatusListener >(
@@ -1110,25 +1110,25 @@ void ToolBarManager::AddImageOrientationListener()
     }
 }
 
-sal_uInt16 ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
+ToolBoxItemBits ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
 {
-    sal_uInt16 nItemBits( 0 );
+    ToolBoxItemBits nItemBits( ToolBoxItemBits::NONE );
     if ( nStyle & ::com::sun::star::ui::ItemStyle::RADIO_CHECK )
-        nItemBits |= TIB_RADIOCHECK;
+        nItemBits |= ToolBoxItemBits::RADIOCHECK;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::ALIGN_LEFT )
-        nItemBits |= TIB_LEFT;
+        nItemBits |= ToolBoxItemBits::LEFT;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::AUTO_SIZE )
-        nItemBits |= TIB_AUTOSIZE;
+        nItemBits |= ToolBoxItemBits::AUTOSIZE;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::DROP_DOWN )
-        nItemBits |= TIB_DROPDOWN;
+        nItemBits |= ToolBoxItemBits::DROPDOWN;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::REPEAT )
-        nItemBits |= TIB_REPEAT;
+        nItemBits |= ToolBoxItemBits::REPEAT;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY )
-        nItemBits |= TIB_DROPDOWNONLY;
+        nItemBits |= ToolBoxItemBits::DROPDOWNONLY;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::TEXT )
-        nItemBits |= TIB_TEXT_ONLY;
+        nItemBits |= ToolBoxItemBits::TEXT_ONLY;
     if ( nStyle & ::com::sun::star::ui::ItemStyle::ICON )
-        nItemBits |= TIB_ICON_ONLY;
+        nItemBits |= ToolBoxItemBits::ICON_ONLY;
 
     return nItemBits;
 }
@@ -1268,11 +1268,11 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 {
                     OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
-                    sal_uInt16 nItemBits = ConvertStyleToToolboxItemBits( nStyle );
+                    ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
                     {
                         m_aMenuMap[ nId ] = aMenuDesc;
-                        nItemBits |= TIB_DROPDOWNONLY;
+                        nItemBits |= ToolBoxItemBits::DROPDOWNONLY;
                     }
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );

@@ -910,8 +910,8 @@ void SfxToolBoxControl::StateChanged
     // enabled/disabled-Flag correcting the lump sum
     pImpl->pBox->EnableItem( GetId(), eState != SfxItemState::DISABLED );
 
-    sal_uInt16 nItemBits = pImpl->pBox->GetItemBits( GetId() );
-    nItemBits &= ~TIB_CHECKABLE;
+    ToolBoxItemBits nItemBits = pImpl->pBox->GetItemBits( GetId() );
+    nItemBits &= ~ToolBoxItemBits::CHECKABLE;
     ::TriState eTri = TRISTATE_FALSE;
     switch ( eState )
     {
@@ -923,7 +923,7 @@ void SfxToolBoxControl::StateChanged
                 // BoolItem for checking
                 if ( static_cast<const SfxBoolItem*>(pState)->GetValue() )
                     eTri = TRISTATE_TRUE;
-                nItemBits |= TIB_CHECKABLE;
+                nItemBits |= ToolBoxItemBits::CHECKABLE;
             }
             else if ( pState->ISA(SfxEnumItemInterface) &&
                 static_cast<const SfxEnumItemInterface *>(pState)->HasBoolValue())
@@ -931,7 +931,7 @@ void SfxToolBoxControl::StateChanged
                 // EnumItem is handled as Bool
                 if ( static_cast<const SfxEnumItemInterface *>(pState)->GetBoolValue() )
                     eTri = TRISTATE_TRUE;
-                nItemBits |= TIB_CHECKABLE;
+                nItemBits |= ToolBoxItemBits::CHECKABLE;
             }
             else if ( pImpl->bShowString && pState->ISA(SfxStringItem) )
                 pImpl->pBox->SetItemText(nId, static_cast<const SfxStringItem*>(pState)->GetValue() );
@@ -941,7 +941,7 @@ void SfxToolBoxControl::StateChanged
         case SfxItemState::DONTCARE:
         {
             eTri = TRISTATE_INDET;
-            nItemBits |= TIB_CHECKABLE;
+            nItemBits |= ToolBoxItemBits::CHECKABLE;
         }
         break;
 
@@ -1389,7 +1389,7 @@ void SfxPopupWindow::Delete()
 SfxRecentFilesToolBoxControl::SfxRecentFilesToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox )
 {
-    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | TIB_DROPDOWN);
+    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN);
 }
 
 SfxRecentFilesToolBoxControl::~SfxRecentFilesToolBoxControl()

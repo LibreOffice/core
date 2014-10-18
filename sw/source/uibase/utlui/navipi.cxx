@@ -717,7 +717,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                        aFirstRect.Bottom() - aFirstRect.Top() );
     pEdit->SetSizePixel(aItemWinSize);
     aContentToolBox.InsertSeparator(4);
-    aContentToolBox.InsertWindow( FN_PAGENUMBER, pEdit, 0, 4);
+    aContentToolBox.InsertWindow( FN_PAGENUMBER, pEdit, ToolBoxItemBits::NONE, 4);
     aContentToolBox.InsertSeparator(4);
     aContentToolBox.SetHelpId(FN_PAGENUMBER, HID_NAVI_TBX16);
     aContentToolBox.ShowItem( FN_PAGENUMBER );
@@ -817,9 +817,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
 
-    aContentToolBox.SetItemBits( FN_CREATE_NAVIGATION, aContentToolBox.GetItemBits( FN_CREATE_NAVIGATION ) | TIB_DROPDOWNONLY );
-    aContentToolBox.SetItemBits( FN_DROP_REGION, aContentToolBox.GetItemBits( FN_DROP_REGION ) | TIB_DROPDOWNONLY );
-    aContentToolBox.SetItemBits( FN_OUTLINE_LEVEL, aContentToolBox.GetItemBits( FN_OUTLINE_LEVEL ) | TIB_DROPDOWNONLY );
+    aContentToolBox.SetItemBits( FN_CREATE_NAVIGATION, aContentToolBox.GetItemBits( FN_CREATE_NAVIGATION ) | ToolBoxItemBits::DROPDOWNONLY );
+    aContentToolBox.SetItemBits( FN_DROP_REGION, aContentToolBox.GetItemBits( FN_DROP_REGION ) | ToolBoxItemBits::DROPDOWNONLY );
+    aContentToolBox.SetItemBits( FN_OUTLINE_LEVEL, aContentToolBox.GetItemBits( FN_OUTLINE_LEVEL ) | ToolBoxItemBits::DROPDOWNONLY );
 
     if(IsGlobalDoc())
     {

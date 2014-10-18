@@ -328,21 +328,21 @@ public:
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                    ToolBoxItemBits nBits = 0,
+                                    ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     const Size& rRequestedSize = Size(),
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                                    ToolBoxItemBits nBits = 0,
+                                    ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                     const OUString& rText,
-                                    ToolBoxItemBits nBits = 0,
+                                    ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const OUString& rText,
-                                    ToolBoxItemBits nBits = 0,
+                                    ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
-                                      ToolBoxItemBits nBits = 0,
+                                      ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
                                       sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertSpace( sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertSeparator( sal_uInt16 nPos = TOOLBOX_APPEND,

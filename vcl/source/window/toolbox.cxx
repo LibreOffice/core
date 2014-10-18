@@ -167,13 +167,12 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
 ButtonType determineButtonType( ImplToolItem* pItem, ButtonType defaultType )
 {
     ButtonType tmpButtonType = defaultType;
-    ToolBoxItemBits nBits( pItem->mnBits & 0x300 );
-    if ( nBits & TIB_TEXTICON ) // item has custom setting
+    if ( pItem->mnBits & (ToolBoxItemBits::TEXT_ONLY | ToolBoxItemBits::ICON_ONLY) ) // item has custom setting
     {
         tmpButtonType = BUTTON_SYMBOLTEXT;
-        if ( nBits == TIB_TEXT_ONLY )
+        if ( pItem->mnBits & ToolBoxItemBits::TEXT_ONLY )
             tmpButtonType = BUTTON_TEXT;
-        else if ( nBits == TIB_ICON_ONLY )
+        else if ( pItem->mnBits & ToolBoxItemBits::ICON_ONLY )
             tmpButtonType = BUTTON_SYMBOL;
     }
     return tmpButtonType;
@@ -1820,7 +1819,7 @@ bool ToolBox::ImplCalcItem()
                 }
 
                 // add in drop down arrow
-                if( it->mnBits & TIB_DROPDOWN )
+                if( it->mnBits & ToolBoxItemBits::DROPDOWN )
                 {
                     it->maItemSize.Width() += nDropDownArrowWidth;
                     it->mnDropDownArrowWidth = nDropDownArrowWidth;
@@ -2620,7 +2619,7 @@ void ToolBox::ImplFormat( bool bResize )
 IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 {
     if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
-        (mpData->m_aItems[ mnCurPos ].mnBits & TIB_DROPDOWN)
+        (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN)
         )
     {
         mpData->mbDropDownByKeyboard = false;
@@ -2963,8 +2962,8 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
     {
         // separate button not for dropdown only where the whole button is painted
-        if ( pItem->mnBits & TIB_DROPDOWN &&
-            ((pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY) )
+        if ( pItem->mnBits & ToolBoxItemBits::DROPDOWN &&
+            ((pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY) )
         {
             Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
             if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
@@ -3126,7 +3125,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         // draw the image
         nImageOffX = nOffX;
         nImageOffY = nOffY;
-        if ( (pItem->mnBits & (TIB_LEFT|TIB_DROPDOWN)) || bText )
+        if ( (pItem->mnBits & (ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN)) || bText )
         {
             // left align also to leave space for drop down arrow
             // and when drawing text+image
@@ -3220,7 +3219,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         return;
 
     // paint optional drop down arrow
-    if ( pItem->mnBits & TIB_DROPDOWN )
+    if ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
     {
         Rectangle aDropDownRect( pItem->GetDropDownRect( mbHorz ) );
         bool bSetColor = true;
@@ -3231,7 +3230,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         }
 
         // dropdown only will be painted without inner border
-        if( (pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY )
+        if( (pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY )
         {
             ImplErase( this, aDropDownRect, nHighlight != 0, bHasOpenPopup );
 
@@ -3374,7 +3373,7 @@ bool ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat )
                 Highlight();
             }
 
-            if ( (pItem->mnBits & TIB_REPEAT) && bRepeat )
+            if ( (pItem->mnBits & ToolBoxItemBits::REPEAT) && bRepeat )
                 Select();
         }
         else
@@ -3422,7 +3421,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
 
     // stop eventual running dropdown timer
     if( mnCurPos < mpData->m_aItems.size() &&
-        (mpData->m_aItems[mnCurPos].mnBits & TIB_DROPDOWN ) )
+        (mpData->m_aItems[mnCurPos].mnBits & ToolBoxItemBits::DROPDOWN ) )
     {
         mpData->maDropdownTimer.Stop();
     }
@@ -3458,9 +3457,9 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
                 if ( !bCancel )
                 {
                     // execute AutoCheck if required
-                    if ( pItem->mnBits & TIB_AUTOCHECK )
+                    if ( pItem->mnBits & ToolBoxItemBits::AUTOCHECK )
                     {
-                        if ( pItem->mnBits & TIB_RADIOCHECK )
+                        if ( pItem->mnBits & ToolBoxItemBits::RADIOCHECK )
                         {
                             if ( pItem->meState != TRISTATE_TRUE )
                                 SetItemState( pItem->mnId, TRISTATE_TRUE );
@@ -3476,7 +3475,7 @@ bool ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel )
 
                     // do not call Select when Repeat is active, as in this
                     // case that was triggered already in MouseButtonDown
-                    if ( !(pItem->mnBits & TIB_REPEAT) )
+                    if ( !(pItem->mnBits & ToolBoxItemBits::REPEAT) )
                     {
                         // prevent from being destroyed in the select handler
                         ImplDelData aDelData;
@@ -3829,7 +3828,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             mnDownItemId     = mnCurItemId;
             mnMouseClicks    = rMEvt.GetClicks();
             mnMouseModifier  = rMEvt.GetModifier();
-            if ( it->mnBits & TIB_REPEAT )
+            if ( it->mnBits & ToolBoxItemBits::REPEAT )
                 nTrackFlags |= STARTTRACK_BUTTONREPEAT;
 
             if ( mbSelection )
@@ -3855,9 +3854,9 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                 }
 
                 // was dropdown arrow pressed
-                if( (it->mnBits & TIB_DROPDOWN) )
+                if( (it->mnBits & ToolBoxItemBits::DROPDOWN) )
                 {
-                    if( ( (it->mnBits & TIB_DROPDOWNONLY) == TIB_DROPDOWNONLY) || it->GetDropDownRect( mbHorz ).IsInside( aMousePos ))
+                    if( ( (it->mnBits & ToolBoxItemBits::DROPDOWNONLY) == ToolBoxItemBits::DROPDOWNONLY) || it->GetDropDownRect( mbHorz ).IsInside( aMousePos ))
                     {
                         // dropdownonly always triggers the dropdown handler, over the whole button area
 
@@ -4923,9 +4922,9 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
         {
             mnDownItemId = mnCurItemId = mnHighItemId;
             ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-            if ( pItem->mnBits & TIB_AUTOCHECK )
+            if ( pItem->mnBits & ToolBoxItemBits::AUTOCHECK )
             {
-                if ( pItem->mnBits & TIB_RADIOCHECK )
+                if ( pItem->mnBits & ToolBoxItemBits::RADIOCHECK )
                 {
                     if ( pItem->meState != TRISTATE_TRUE )
                         SetItemState( pItem->mnId, TRISTATE_TRUE );
@@ -5000,7 +4999,7 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
         mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ) );
     }
     else if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
-        (ImplGetItem( mnHighItemId )->mnBits & TIB_DROPDOWN) )
+        (ImplGetItem( mnHighItemId )->mnBits & ToolBoxItemBits::DROPDOWN) )
     {
         if( ImplCloseLastPopup( GetParent() ) )
             return bRet;

@@ -146,7 +146,7 @@ namespace dbaui
             }
 
             // check if paste special is allowed, when not don't add DROPDOWN
-            pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | TIB_DROPDOWN);
+            pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | ToolBoxItemBits::DROPDOWN);
         }
     }
     void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )

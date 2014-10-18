@@ -49,7 +49,7 @@ SvxClipBoardControl::SvxClipBoardControl(
 {
     addStatusListener( OUString( ".uno:ClipboardFormatItems" ));
     ToolBox& rBox = GetToolBox();
-    rBox.SetItemBits( nId, TIB_DROPDOWN | rBox.GetItemBits( nId ) );
+    rBox.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rBox.GetItemBits( nId ) );
     rBox.Invalidate();
 }
 
@@ -122,10 +122,10 @@ void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
         if ( eState >= SfxItemState::DEFAULT )
         {
             pClipboardFmtItem = pState->Clone();
-            GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | TIB_DROPDOWN );
+            GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | ToolBoxItemBits::DROPDOWN );
         }
         else if ( !bDisabled )
-            GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) & ~TIB_DROPDOWN );
+            GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) & ~ToolBoxItemBits::DROPDOWN );
         GetToolBox().Invalidate( GetToolBox().GetItemRect( GetId() ) );
     }
     else

@@ -158,7 +158,7 @@ class ToolBarManager : public ToolbarManager_Base
         void UpdateImageOrientation();
         void ImplClearPopupMenu( ToolBox *pToolBar );
         void RequestImages();
-        sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
+        ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
         bool IsPluginMode() const;
         Image QueryAddonsImage( const OUString& aCommandURL, bool bBigImages );

@@ -285,7 +285,7 @@ void ParaPropertyPanel::InitToolBoxBGColor()
     const sal_uInt16 nIdBackColor = mpTBxBackColor->GetItemId(UNO_PARABACKCOLOR);
 
     mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(0 /* not defined, default is transparent */, nIdBackColor, mpTBxBackColor));
-    mpTBxBackColor->SetItemBits( nIdBackColor, mpTBxBackColor->GetItemBits( nIdBackColor ) | TIB_DROPDOWNONLY );
+    mpTBxBackColor->SetItemBits( nIdBackColor, mpTBxBackColor->GetItemBits( nIdBackColor ) | ToolBoxItemBits::DROPDOWNONLY );
 
     Link aLink = LINK(this, ParaPropertyPanel, ToolBoxBackColorDDHandler);
     mpTBxBackColor->SetDropdownClickHdl ( aLink );
@@ -339,7 +339,7 @@ void ParaPropertyPanel::InitToolBoxLineSpacing()
     mpLineSPTbx->SetSelectHdl( aLink );     //support keyinput "ENTER"
 
     const sal_uInt16 nIdSpacing = mpLineSPTbx->GetItemId(UNO_LINESPACING);
-    mpLineSPTbx->SetItemBits( nIdSpacing, mpLineSPTbx->GetItemBits( nIdSpacing ) | TIB_DROPDOWNONLY );
+    mpLineSPTbx->SetItemBits( nIdSpacing, mpLineSPTbx->GetItemBits( nIdSpacing ) | ToolBoxItemBits::DROPDOWNONLY );
     mpLineSPTbx->SetItemImage(nIdSpacing, maSpace3);
 }
 

@@ -170,7 +170,7 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
         }
 
         // check if paste special is allowed, when not don't add DROPDOWN
-        pToolBox->SetItemBits( m_nToolBoxId, pToolBox->GetItemBits( m_nToolBoxId ) | TIB_DROPDOWN );
+        pToolBox->SetItemBits( m_nToolBoxId, pToolBox->GetItemBits( m_nToolBoxId ) | ToolBoxItemBits::DROPDOWN );
     }
 }
 

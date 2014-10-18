@@ -1308,18 +1308,18 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
         aBaseLst.push_back( pFlag = new RscFlag( pHS->getID( "FlagToolBoxState" ), RSC_NOTYPE ) );
 
         // Konstanten in Tabelle stellen
-        l_nCheckableId = pHS->getID( "TIB_CHECKABLE" );
-        SETCONST( pFlag, l_nCheckableId, TIB_CHECKABLE );
-        l_nAutoCheckId = pHS->getID( "TIB_AUTOCHECK" );
-        SETCONST( pFlag, l_nAutoCheckId, TIB_AUTOCHECK );
-        l_nRadioCheckId = pHS->getID( "TIB_RADIOCHECK" );
-        SETCONST( pFlag, l_nRadioCheckId, TIB_RADIOCHECK );
-        l_nLeftId = pHS->getID( "TIB_LEFT" );
-        SETCONST( pFlag, l_nLeftId, TIB_LEFT );
-        l_nAutoSizeId = pHS->getID( "TIB_AUTOSIZE" );
-        SETCONST( pFlag, l_nAutoSizeId, TIB_AUTOSIZE );
-        l_nDropDownId = pHS->getID( "TIB_DROPDOWN" );
-        SETCONST( pFlag, l_nDropDownId, TIB_DROPDOWN );
+        l_nCheckableId = pHS->getID( "ToolBoxItemBits::CHECKABLE" );
+        SETCONST( pFlag, l_nCheckableId, ToolBoxItemBits::CHECKABLE );
+        l_nAutoCheckId = pHS->getID( "ToolBoxItemBits::AUTOCHECK" );
+        SETCONST( pFlag, l_nAutoCheckId, ToolBoxItemBits::AUTOCHECK );
+        l_nRadioCheckId = pHS->getID( "ToolBoxItemBits::RADIOCHECK" );
+        SETCONST( pFlag, l_nRadioCheckId, ToolBoxItemBits::RADIOCHECK );
+        l_nLeftId = pHS->getID( "ToolBoxItemBits::LEFT" );
+        SETCONST( pFlag, l_nLeftId, ToolBoxItemBits::LEFT );
+        l_nAutoSizeId = pHS->getID( "ToolBoxItemBits::AUTOSIZE" );
+        SETCONST( pFlag, l_nAutoSizeId, ToolBoxItemBits::AUTOSIZE );
+        l_nDropDownId = pHS->getID( "ToolBoxItemBits::DROPDOWN" );
+        SETCONST( pFlag, l_nDropDownId, ToolBoxItemBits::DROPDOWN );
 
         // Variable einfuegen
         l_nVarId = aNmTb.Put( "_ToolBoxItemFlags", VARNAME );

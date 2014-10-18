@@ -443,12 +443,12 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, const ResId& rResId, Gal
     maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
     maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
-    maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
+    maViewBox.SetItemBits( TBX_ID_ICON, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
     maViewBox.SetQuickHelpText( TBX_ID_ICON, GAL_RESSTR(RID_SVXSTR_GALLERY_ICONVIEW) );
 
     maViewBox.InsertItem( TBX_ID_LIST, aDummyImage );
-    maViewBox.SetItemBits( TBX_ID_LIST, TIB_RADIOCHECK | TIB_AUTOCHECK );
+    maViewBox.SetItemBits( TBX_ID_LIST, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
     maViewBox.SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
     maViewBox.SetQuickHelpText( TBX_ID_LIST, GAL_RESSTR(RID_SVXSTR_GALLERY_LISTVIEW) );
 

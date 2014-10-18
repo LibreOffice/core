@@ -168,7 +168,7 @@ void AreaPropertyPanel::Initialize()
     mpLbFillAttr->Hide();
     const sal_uInt16 nIdColor = mpToolBoxColor->GetItemId(UNO_SIDEBARCOLOR);
     mpToolBoxColor->SetItemImage(nIdColor, maImgColor);
-    mpToolBoxColor->SetItemBits( nIdColor, mpToolBoxColor->GetItemBits( nIdColor ) | TIB_DROPDOWNONLY );
+    mpToolBoxColor->SetItemBits( nIdColor, mpToolBoxColor->GetItemBits( nIdColor ) | ToolBoxItemBits::DROPDOWNONLY );
     mpToolBoxColor->SetItemText(nIdColor, msHelpFillAttr);
 
     aLink = LINK(this, AreaPropertyPanel, ToolBoxColorDropHdl);
@@ -184,7 +184,7 @@ void AreaPropertyPanel::Initialize()
     mpMTRTransparent->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
     const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
-    mpBTNGradient->SetItemBits( nIdGradient, mpBTNGradient->GetItemBits( nIdGradient ) | TIB_DROPDOWNONLY );
+    mpBTNGradient->SetItemBits( nIdGradient, mpBTNGradient->GetItemBits( nIdGradient ) | ToolBoxItemBits::DROPDOWNONLY );
     aLink = LINK( this, AreaPropertyPanel, ClickTrGrHdl_Impl );
     mpBTNGradient->SetDropdownClickHdl( aLink );
     mpBTNGradient->SetSelectHdl( aLink );

@@ -187,7 +187,7 @@ void TextPropertyPanel::InitToolBoxFont()
 void TextPropertyPanel::InitToolBoxSpacing()
 {
     const sal_uInt16 nId = mpToolBoxSpacing->GetItemId(UNO_SPACING);
-    mpToolBoxSpacing->SetItemBits(nId, mpToolBoxSpacing->GetItemBits(nId) | TIB_DROPDOWNONLY);
+    mpToolBoxSpacing->SetItemBits(nId, mpToolBoxSpacing->GetItemBits(nId) | ToolBoxItemBits::DROPDOWNONLY);
 
     Link aLink = LINK(this, TextPropertyPanel, SpacingClickHdl);
     mpToolBoxSpacing->SetDropdownClickHdl ( aLink );

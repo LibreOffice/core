@@ -109,7 +109,7 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
 
 ImplToolItem::ImplToolItem()
 {
-    init(0, 0, true);
+    init(0, ToolBoxItemBits::NONE, true);
 }
 
 ImplToolItem::ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
@@ -318,7 +318,7 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbIma
 Rectangle ImplToolItem::GetDropDownRect( bool bHorz ) const
 {
     Rectangle aRect;
-    if( (mnBits & TIB_DROPDOWN) && !maRect.IsEmpty() )
+    if( (mnBits & ToolBoxItemBits::DROPDOWN) && !maRect.IsEmpty() )
     {
         aRect = maRect;
         if( mbVisibleText && !bHorz )
@@ -1069,10 +1069,10 @@ void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
     {
         ToolBoxItemBits nOldBits = mpData->m_aItems[nPos].mnBits;
         mpData->m_aItems[nPos].mnBits = nBits;
-        nBits &= TIB_LEFT | TIB_AUTOSIZE | TIB_DROPDOWN;
-        nOldBits &= TIB_LEFT | TIB_AUTOSIZE | TIB_DROPDOWN;
+        nBits &= ToolBoxItemBits::LEFT | ToolBoxItemBits::AUTOSIZE | ToolBoxItemBits::DROPDOWN;
+        nOldBits &= ToolBoxItemBits::LEFT | ToolBoxItemBits::AUTOSIZE | ToolBoxItemBits::DROPDOWN;
         // trigger reformat when the item width has changed (dropdown arrow)
-        bool bFormat = (nBits & TIB_DROPDOWN) != (nOldBits & TIB_DROPDOWN);
+        bool bFormat = (nBits & ToolBoxItemBits::DROPDOWN) != (nOldBits & ToolBoxItemBits::DROPDOWN);
         if ( nBits != nOldBits )
             ImplInvalidate( true, bFormat );
     }
@@ -1085,7 +1085,7 @@ ToolBoxItemBits ToolBox::GetItemBits( sal_uInt16 nItemId ) const
     if ( pItem )
         return pItem->mnBits;
     else
-        return 0;
+        return ToolBoxItemBits::NONE;
 }
 
 void ToolBox::SetItemExpand( sal_uInt16 nItemId, bool bExpand )
@@ -1419,8 +1419,8 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
         if ( pItem->meState != eState )
         {
             // if RadioCheck, un-check the previous
-            if ( (eState == TRISTATE_TRUE) && (pItem->mnBits & TIB_AUTOCHECK) &&
-                 (pItem->mnBits & TIB_RADIOCHECK) )
+            if ( (eState == TRISTATE_TRUE) && (pItem->mnBits & ToolBoxItemBits::AUTOCHECK) &&
+                 (pItem->mnBits & ToolBoxItemBits::RADIOCHECK) )
             {
                 ImplToolItem*    pGroupItem;
                 sal_uInt16          nGroupPos;
@@ -1430,7 +1430,7 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
                 while ( nGroupPos )
                 {
                     pGroupItem = &mpData->m_aItems[nGroupPos-1];
-                    if ( pGroupItem->mnBits & TIB_RADIOCHECK )
+                    if ( pGroupItem->mnBits & ToolBoxItemBits::RADIOCHECK )
                     {
                         if ( pGroupItem->meState != TRISTATE_FALSE )
                             SetItemState( pGroupItem->mnId, TRISTATE_FALSE );
@@ -1444,7 +1444,7 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
                 while ( nGroupPos < nItemCount )
                 {
                     pGroupItem = &mpData->m_aItems[nGroupPos];
-                    if ( pGroupItem->mnBits & TIB_RADIOCHECK )
+                    if ( pGroupItem->mnBits & ToolBoxItemBits::RADIOCHECK )
                     {
                         if ( pGroupItem->meState != TRISTATE_FALSE )
                             SetItemState( pGroupItem->mnId, TRISTATE_FALSE );

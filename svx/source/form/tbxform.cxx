@@ -147,7 +147,7 @@ SvxFmTbxCtlConfig::SvxFmTbxCtlConfig( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBo
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     ,nLastSlot( 0 )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 
@@ -387,7 +387,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxNextRec, SfxBoolItem );
 SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | TIB_REPEAT);
+    rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | ToolBoxItemBits::REPEAT);
 
     AllSettings aSettings = rTbx.GetSettings();
     MouseSettings aMouseSettings = aSettings.GetMouseSettings();
@@ -402,7 +402,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxPrevRec, SfxBoolItem );
 SvxFmTbxPrevRec::SvxFmTbxPrevRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | TIB_REPEAT);
+    rTbx.SetItemBits(nId, rTbx.GetItemBits(nId) | ToolBoxItemBits::REPEAT);
 }
 
 

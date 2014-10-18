@@ -232,7 +232,7 @@ void LinePropertyPanel::Initialize()
     const sal_uInt16 nIdColor = mpTBColor->GetItemId(UNO_SELECTCOLOR);
 
     mpTBColor->SetItemImage(nIdColor, maIMGColor);
-    mpTBColor->SetItemBits( nIdColor, mpTBColor->GetItemBits( nIdColor ) | TIB_DROPDOWNONLY );
+    mpTBColor->SetItemBits( nIdColor, mpTBColor->GetItemBits( nIdColor ) | ToolBoxItemBits::DROPDOWNONLY );
     Link aLink = LINK(this, LinePropertyPanel, ToolboxColorSelectHdl);
     mpTBColor->SetDropdownClickHdl ( aLink );
     mpTBColor->SetSelectHdl ( aLink );
@@ -246,7 +246,7 @@ void LinePropertyPanel::Initialize()
 
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
     mpTBWidth->SetItemImage(nIdWidth, mpIMGWidthIcon[0]);
-    mpTBWidth->SetItemBits( nIdWidth, mpTBWidth->GetItemBits( nIdWidth ) | TIB_DROPDOWNONLY );
+    mpTBWidth->SetItemBits( nIdWidth, mpTBWidth->GetItemBits( nIdWidth ) | ToolBoxItemBits::DROPDOWNONLY );
     aLink = LINK(this, LinePropertyPanel, ToolboxWidthSelectHdl);
     mpTBWidth->SetDropdownClickHdl ( aLink );
     mpTBWidth->SetSelectHdl ( aLink );
