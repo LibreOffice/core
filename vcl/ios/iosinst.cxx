@@ -22,7 +22,6 @@
 #include <postmac.h>
 
 #include <basebmp/scanlineformats.hxx>
-#include <vcl/layout.hxx>
 #include <touch/touch.h>
 #include <touch/touch-impl.h>
 

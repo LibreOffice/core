@@ -19,7 +19,6 @@
 
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 #include <tools/stream.hxx>
