@@ -91,8 +91,6 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
-    if( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
-        maGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
         bFrameInPaint = bScaleImageMap = false;
     bGraphicArrived = true;
@@ -194,8 +192,6 @@ bool SwGrfNode::ReRead(
         else if( pGrfObj )
         {
             maGrfObj = *pGrfObj;
-            if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
-                maGrfObj.SetSwapState();
             maGrfObj.SetLink( rGrfName );
             onGraphicChanged();
             bReadGrf = true;
@@ -242,8 +238,6 @@ bool SwGrfNode::ReRead(
 
         maGrfObj = *pGrfObj;
         onGraphicChanged();
-        if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
-            maGrfObj.SetSwapState();
         bReadGrf = true;
     }
     // Was the graphic already loaded?

@@ -102,6 +102,8 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
     ImplConstruct();
     ImplAssignGraphicData();
     ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
+    if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
+        SetSwapState();
 }
 
 GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
@@ -351,8 +353,9 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
         ImplAssignGraphicData();
         mbAutoSwapped = false;
         mpMgr = rGraphicObj.mpMgr;
-
         mpMgr->ImplRegisterObj( *this, maGraphic, NULL, &rGraphicObj );
+        if( rGraphicObj.HasUserData() && rGraphicObj.IsSwappedOut() )
+            SetSwapState();
     }
 
     return *this;
@@ -427,6 +430,7 @@ void GraphicObject::SetUserData()
 void GraphicObject::SetUserData( const OUString& rUserData )
 {
     maUserData = rUserData;
+    SetSwapState();
 }
 
 void GraphicObject::SetSwapStreamHdl()
