@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="HyperlinkInternetPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -52,8 +52,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -72,16 +70,12 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -90,15 +84,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Tar_get</property>
+                    <property name="label" translatable="yes">Tar_get:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">target</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -111,8 +103,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -127,8 +117,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -137,15 +125,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Login name</property>
+                    <property name="label" translatable="yes">_Login name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">login</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -154,15 +140,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Password</property>
+                    <property name="label" translatable="yes">_Password:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">password</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -175,8 +159,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -189,8 +171,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -207,8 +187,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">4</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -237,7 +215,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Hyperlink type</property>
+            <property name="label" translatable="yes">Hyperlink Type</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -276,15 +254,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">F_rame</property>
+                    <property name="label" translatable="yes">F_rame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">frame</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -293,15 +269,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Te_xt</property>
+                    <property name="label" translatable="yes">Te_xt:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">indication</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -310,15 +284,13 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">N_ame</property>
+                    <property name="label" translatable="yes">N_ame:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">name</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -330,8 +302,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -343,8 +313,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -359,15 +327,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">F_orm</property>
+                        <property name="label" translatable="yes">F_orm:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">form</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -379,8 +345,6 @@
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -394,8 +358,6 @@
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -413,16 +375,12 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -433,7 +391,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Further settings</property>
+            <property name="label" translatable="yes">Further Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

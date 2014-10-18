@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="CharNamePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -27,7 +28,6 @@
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
             <property name="width">3</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -43,7 +43,7 @@
                 <property name="halign">start</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Language</property>
+                <property name="label" translatable="yes">Language:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">westlanglb-nocjk</property>
               </object>
@@ -71,7 +71,6 @@
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
             <property name="width">3</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -104,18 +103,13 @@
               <object class="GtkLabel" id="westfontnameft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Family</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <property name="label" translatable="yes">Family:</property>
               </object>
             </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -148,18 +142,13 @@
               <object class="GtkLabel" id="weststyleft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Style</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <property name="label" translatable="yes">Style:</property>
               </object>
             </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -193,18 +182,13 @@
               <object class="GtkLabel" id="westsizeft-nocjk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Size</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <property name="label" translatable="yes">Size:</property>
               </object>
             </child>
           </object>
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
@@ -240,15 +224,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Family </property>
+                    <property name="label" translatable="yes">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westfontnamelb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -257,15 +239,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Style</property>
+                    <property name="label" translatable="yes">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">weststylelb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -274,15 +254,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Size</property>
+                    <property name="label" translatable="yes">Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westsizelb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -291,15 +269,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Language</property>
+                    <property name="label" translatable="yes">Language:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">westlanglb-cjk</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -311,8 +287,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -324,8 +298,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -337,8 +309,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -350,8 +320,6 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -365,7 +333,6 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
                     <property name="width">4</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -415,15 +382,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Family </property>
+                    <property name="label" translatable="yes">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastfontnamelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -432,15 +397,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Style</property>
+                    <property name="label" translatable="yes">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eaststylelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -449,15 +412,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Size</property>
+                    <property name="label" translatable="yes">Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastsizelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -466,15 +427,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Language</property>
+                    <property name="label" translatable="yes">Language:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">eastlanglb</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -486,8 +445,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -499,8 +456,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -512,8 +467,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -525,8 +478,6 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -539,7 +490,6 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
                     <property name="width">4</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -589,15 +539,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Family </property>
+                    <property name="label" translatable="yes">Family:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlfontnamelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -606,15 +554,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Style</property>
+                    <property name="label" translatable="yes">Style:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlstylelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -623,15 +569,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Size</property>
+                    <property name="label" translatable="yes">Size:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctlsizelb</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -640,15 +584,13 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Language</property>
+                    <property name="label" translatable="yes">Language:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">ctllanglb</property>
                   </object>
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -660,8 +602,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -673,8 +613,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -686,8 +624,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -699,8 +635,6 @@
                   <packing>
                     <property name="left_attach">3</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -714,7 +648,6 @@
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
                     <property name="width">4</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>

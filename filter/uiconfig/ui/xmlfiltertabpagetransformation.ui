@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="XmlFilterTabPageTransformation">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -21,15 +22,13 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">_DocType</property>
+            <property name="label" translatable="yes">_DocType:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">doc</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -43,8 +42,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -52,15 +49,13 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">_XSLT for export</property>
+            <property name="label" translatable="yes">_XSLT for export:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltexport</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -74,8 +69,6 @@
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -83,15 +76,13 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">XSLT _for import</property>
+            <property name="label" translatable="yes">XSLT _for import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltimport</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -105,8 +96,6 @@
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -114,15 +103,13 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Template for _import</property>
+            <property name="label" translatable="yes">Template for _import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">tempimport</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -135,8 +122,6 @@
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -144,15 +129,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="entry_text_column">0</property>
-            <property name="id_column">1</property>
             <property name="max_width_chars">2</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -160,15 +141,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="entry_text_column">0</property>
-            <property name="id_column">1</property>
             <property name="max_width_chars">2</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -176,15 +153,11 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="entry_text_column">0</property>
-            <property name="id_column">1</property>
             <property name="max_width_chars">2</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
