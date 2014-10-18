@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">256</property>
@@ -12,6 +13,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Insert Sheet</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -229,8 +231,6 @@
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -245,8 +245,6 @@
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -260,8 +258,6 @@
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -276,8 +272,6 @@
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                   </object>
@@ -344,7 +338,6 @@
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">1</property>
                                         <property name="width">2</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -360,14 +353,14 @@
                                             <property name="can_focus">True</property>
                                             <property name="hexpand">True</property>
                                             <property name="vexpand">True</property>
-                                            <child internal-child="accessible">
-                                              <object class="AtkObject" id="tables-atkobject">
-                                                <property name="AtkObject::accessible-name" translatable="yes">Tables in file</property>
-                                              </object>
-                                            </child>
                                             <child internal-child="selection">
                                               <object class="GtkTreeSelection" id="treeview-selection1">
                                                 <property name="mode">multiple</property>
+                                              </object>
+                                            </child>
+                                            <child internal-child="accessible">
+                                              <object class="AtkObject" id="tables-atkobject">
+                                                <property name="AtkObject::accessible-name" translatable="yes">Tables in file</property>
                                               </object>
                                             </child>
                                           </object>
@@ -376,8 +369,6 @@
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -396,8 +387,6 @@
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">0</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -415,16 +404,12 @@
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">1</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                   </object>

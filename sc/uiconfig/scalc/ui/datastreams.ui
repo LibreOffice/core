@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="DataStreamDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Live Data Streams</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -63,8 +65,6 @@
                                 <property name="tooltip_text" translatable="yes">Enter the URL of the source document in the local file system or Internet here.</property>
                                 <property name="hexpand">True</property>
                                 <property name="has_entry">True</property>
-                                <property name="entry_text_column">0</property>
-                                <property name="id_column">1</property>
                                 <property name="max_width_chars">48</property>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="URLBox-entry">
@@ -164,9 +164,6 @@
                                     <property name="row_spacing">6</property>
                                     <property name="column_spacing">6</property>
                                     <child>
-                                      <placeholder/>
-                                    </child>
-                                    <child>
                                       <object class="GtkRadioButton" id="valuesinline">
                                         <property name="label" translatable="yes">value1,value2,...,valueN, and fill into range:</property>
                                         <property name="visible">True</property>
@@ -181,8 +178,6 @@
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -199,8 +194,6 @@
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -209,14 +202,14 @@
                                         <property name="can_focus">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="invisible_char">●</property>
-                                        <property name="invisible_char_set">True</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
                                     </child>
                                   </object>
                                 </child>
@@ -324,8 +317,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <property name="active">True</property>
                                 <property name="xalign">0</property>
+                                <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">datadown</property>
                               </object>
@@ -393,9 +386,6 @@
                             <property name="row_spacing">6</property>
                             <property name="column_spacing">6</property>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
                               <object class="GtkRadioButton" id="maxlimit">
                                 <property name="label" translatable="yes">Limit to:</property>
                                 <property name="visible">True</property>
@@ -410,8 +400,6 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -421,13 +409,10 @@
                                 <property name="hexpand">True</property>
                                 <property name="invisible_char">●</property>
                                 <property name="text" translatable="no">1000</property>
-                                <property name="invisible_char_set">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -445,9 +430,10 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </object>
                         </child>
@@ -530,6 +516,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
