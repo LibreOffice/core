@@ -317,7 +317,7 @@ namespace svgio
 
                     if(aCaseLindependentSVGTokenMapperList.empty())
                     {
-                        for(SVGTokenMapper::const_iterator aCurrent(aSVGTokenMapperList.begin()); aCurrent != aSVGTokenMapperList.end(); aCurrent++)
+                        for(SVGTokenMapper::const_iterator aCurrent(aSVGTokenMapperList.begin()); aCurrent != aSVGTokenMapperList.end(); ++aCurrent)
                         {
                             aCaseLindependentSVGTokenMapperList.insert(
                                 SVGTokenValueType(
