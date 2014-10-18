@@ -700,11 +700,8 @@ namespace sw
                 SwGrfNode *pGrfNode = const_cast<SwGrfNode*>(rNd.GetGrfNode());
                 if (pGrfNode && (GRAPHIC_NONE != pGrfNode->GetGrf().GetType()))
                 {
-                    bool bWasSwappedOut = pGrfNode->GetGrfObj().IsSwappedOut();
                     pGrfNode->SwapIn();
                     aGrTwipSz = pGrfNode->GetTwipSize();
-                    if (bWasSwappedOut)
-                        pGrfNode->SwapOut();
                 }
             }
 
