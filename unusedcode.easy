@@ -48,9 +48,6 @@ SvtListener::IsListening(SvtBroadcaster&) const
 SvxFontListBox::GetSelectEntry() const
 SvxOpenGLObject::getRenderer()
 SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
-SwLayHelper::CheckPageFlyCache(SwPageFrm*&, SwFlyFrm*)
-SwTxtPaintInfo::DrawSpecial(SwLinePortion const&, unsigned short, Color const&) const
-SwUpdateAttr::SwUpdateAttr(int, int, unsigned short, std::__debug::vector<unsigned short, std::allocator<unsigned short> >)
 Test::testCopyPasteSkipEmptyConditionalFormatting()
 Test::testPerf()
 Test::testSharedFormulaMoveBlock()

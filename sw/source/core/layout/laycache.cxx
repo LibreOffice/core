@@ -992,69 +992,6 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     }
 }
 
-/**
- * looks for the given text frame in the fly cache and sets
- * the position and size, if possible.
- * The fly cache is sorted by pages and we start searching with the given page.
- * If we found the page number in the fly cache, we set
- * the rpPage parameter to the right page, if possible.
- */
-bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
-{
-    if( !pFly->GetAnchorFrm() || !pFly->GetVirtDrawObj() ||
-        pFly->GetAnchorFrm()->FindFooterOrHeader() )
-        return false;
-    bool bRet = false;
-    SwDoc* pDoc = rpPage->GetFmt()->GetDoc();
-    SwLayCacheImpl *pCache = pDoc->GetLayoutCache() ?
-                             pDoc->GetLayoutCache()->LockImpl() : NULL;
-    if( pCache )
-    {
-        sal_uInt16 nPgNum = rpPage->GetPhyPageNum();
-        sal_uInt16 nIdx = 0;
-        sal_uInt16 nCnt = pCache->GetFlyCount();
-        sal_uLong nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
-        SwFlyCache* pFlyC = 0;
-
-        // skip fly frames from pages before the current page
-        while( nIdx < nCnt &&
-               nPgNum > (pFlyC = &pCache->GetFlyCache( nIdx ))->nPageNum )
-            ++nIdx;
-
-        while( nIdx < nCnt &&
-               nOrdNum != (pFlyC = &pCache->GetFlyCache( nIdx ))->nOrdNum )
-            ++nIdx;
-        if( nIdx < nCnt )
-        {
-            SwPageFrm *pPage = rpPage;
-            while( pPage && pPage->GetPhyPageNum() < pFlyC->nPageNum )
-                pPage = (SwPageFrm*)pPage->GetNext();
-            // #i43266# - if the found page is an empty page,
-            // take the previous one (take next one, if previous one doesn't exists)
-            if ( pPage && pPage->IsEmptyPage() )
-            {
-                pPage = static_cast<SwPageFrm*>( pPage->GetPrev()
-                                                 ? pPage->GetPrev()
-                                                 : pPage->GetNext() );
-            }
-            if( pPage )
-            {
-                rpPage = pPage;
-                pFly->Frm().Pos().X() = pFlyC->Left() + pPage->Frm().Left();
-                pFly->Frm().Pos().Y() = pFlyC->Top() + pPage->Frm().Top();
-                if ( pCache->IsUseFlyCache() )
-                {
-                    pFly->Frm().Width( pFlyC->Width() );
-                    pFly->Frm().Height( pFlyC->Height() );
-                }
-                bRet = true;
-            }
-        }
-        pDoc->GetLayoutCache()->UnlockImpl();
-    }
-    return bRet;
-}
-
 SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     pStream( &rStrm ),
     nFlagRecEnd ( 0 ),

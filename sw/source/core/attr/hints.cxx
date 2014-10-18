@@ -49,11 +49,6 @@ SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
 {
 }
 
-SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vector<sal_uInt16> aW )
-    : SwMsgPoolItem( RES_UPDATE_ATTR ), nStart( nS ), nEnd( nE ), nWhichAttr( nW ), aWhichFmtAttr( aW )
-{
-}
-
 /** Is sent if reference marks should be updated.
 
     To get the page/chapter number, the frame has to be asked. For that we need

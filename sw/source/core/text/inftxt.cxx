@@ -915,29 +915,6 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
     }
 }
 
-void SwTxtPaintInfo::DrawSpecial(const SwLinePortion &rPor, sal_Unicode cChar, const Color& rColor) const
-{
-    if( OnWin() )
-    {
-        sal_uInt16 nOldWidth = rPor.Width();
-        OUString sChar( cChar );
-        SwPosSize aSize( GetTxtSize( sChar ) );
-
-        ((SwLinePortion&)rPor).Width( aSize.Width() );
-
-        SwRect aRect;
-        CalcRect( rPor, &aRect );
-
-        if( aRect.HasArea() )
-        {
-            const sal_uInt8 nOptions = 0;
-            lcl_DrawSpecial( *this, rPor, aRect, rColor, cChar, nOptions );
-        }
-
-        ((SwLinePortion&)rPor).Width( nOldWidth );
-    }
-}
-
 void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
 {
     if( OnWin() )

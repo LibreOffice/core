@@ -126,10 +126,6 @@ public:
     /// position, if they are in the fly cache.
     void CheckFlyCache( SwPageFrm* pPage )
     { if( pImpl && nFlyIdx < pImpl->GetFlyCount() ) _CheckFlyCache( pPage ); }
-
-    /// Look for this text frame and set it to the right position,
-    /// if it's in the fly cache.
-    static bool CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly );
 };
 
 // Contains the data structures that are required to read and write a layout cache.

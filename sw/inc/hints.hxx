@@ -103,7 +103,6 @@ private:
 
 public:
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
-    SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vector<sal_uInt16> aW );
 
     sal_Int32 getStart() const
     {
