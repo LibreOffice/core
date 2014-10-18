@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="AlignmentPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -214,7 +214,6 @@
                     <property name="tooltip_markup" translatable="yes">Indents from the left edge.</property>
                     <property name="tooltip_text" translatable="yes">Indents from the left edge.</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -237,7 +236,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="mergecells">
-                    <property name="label" translatable="yes">Merge Cells</property>
+                    <property name="label" translatable="yes">Merge cells</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -330,7 +329,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="verticallystacked">
-                    <property name="label" translatable="yes">Vertically Stacked</property>
+                    <property name="label" translatable="yes">Vertically stacked</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -380,8 +379,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
