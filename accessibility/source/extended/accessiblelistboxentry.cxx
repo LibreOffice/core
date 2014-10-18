@@ -790,9 +790,9 @@ namespace accessibility
                 SvTreeListEntry* pEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
                 SvButtonState state = getListBox()->GetCheckButtonState( pEntry );
                 if ( state == SV_BUTTON_CHECKED )
-                    getListBox()->SetCheckButtonState(pEntry, (SvButtonState)SV_BMP_UNCHECKED);
-                else if (state == SV_BMP_UNCHECKED)
-                    getListBox()->SetCheckButtonState(pEntry, (SvButtonState)SV_BUTTON_CHECKED);
+                    getListBox()->SetCheckButtonState(pEntry, SV_BUTTON_UNCHECKED);
+                else if (state == SV_BUTTON_UNCHECKED)
+                    getListBox()->SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
             }
         }
         else if( (nIndex == 1 && (treeFlag & TREEFLAG_CHKBTN) ) || (nIndex == 0) )
@@ -831,7 +831,7 @@ namespace accessibility
             {
                 if ( state == SV_BUTTON_CHECKED )
                     return sActionDesc2;
-                else if (state == SV_BMP_UNCHECKED)
+                else if (state == SV_BUTTON_UNCHECKED)
                     return sActionDesc1;
             }
             else

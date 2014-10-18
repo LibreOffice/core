@@ -76,33 +76,33 @@ void SvLBoxButtonData::CallLink()
     aLink.Call( this );
 }
 
-sal_uInt16 SvLBoxButtonData::GetIndex( sal_uInt16 nItemState )
+SvBmp SvLBoxButtonData::GetIndex( sal_uInt16 nItemState )
 {
     nItemState &= 0x000F;
-    sal_uInt16 nIdx;
+    SvBmp nIdx;
     switch( nItemState )
     {
         case SV_ITEMSTATE_UNCHECKED:
-                nIdx = SV_BMP_UNCHECKED; break;
+                nIdx = SvBmp::UNCHECKED; break;
         case SV_ITEMSTATE_CHECKED:
-                nIdx = SV_BMP_CHECKED; break;
+                nIdx = SvBmp::CHECKED; break;
         case SV_ITEMSTATE_TRISTATE:
-                nIdx = SV_BMP_TRISTATE; break;
+                nIdx = SvBmp::TRISTATE; break;
         case SV_ITEMSTATE_UNCHECKED | SV_ITEMSTATE_HILIGHTED:
-                nIdx = SV_BMP_HIUNCHECKED; break;
+                nIdx = SvBmp::HIUNCHECKED; break;
         case SV_ITEMSTATE_CHECKED | SV_ITEMSTATE_HILIGHTED:
-                nIdx = SV_BMP_HICHECKED; break;
+                nIdx = SvBmp::HICHECKED; break;
         case SV_ITEMSTATE_TRISTATE | SV_ITEMSTATE_HILIGHTED:
-                nIdx = SV_BMP_HITRISTATE; break;
+                nIdx = SvBmp::HITRISTATE; break;
         default:
-                nIdx = SV_BMP_UNCHECKED;
+                nIdx = SvBmp::UNCHECKED;
     }
     return nIdx;
 }
 
 void SvLBoxButtonData::SetWidthAndHeight()
 {
-    Size aSize = aBmps[0].GetSizePixel();
+    Size aSize = aBmps[(int)SvBmp::UNCHECKED].GetSizePixel();
     nWidth = aSize.Width();
     nHeight = aSize.Height();
     bDataOk = true;
@@ -147,21 +147,21 @@ void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
 
     if ( pImpl->bShowRadioButton )
     {
-        aBmps[ SV_BMP_UNCHECKED ]   = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT );
-        aBmps[ SV_BMP_CHECKED ]     = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED );
-        aBmps[ SV_BMP_HICHECKED ]   = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_HIUNCHECKED ] = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_TRISTATE ]    = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW );
-        aBmps[ SV_BMP_HITRISTATE ]  = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+        SetImage(SvBmp::UNCHECKED,   RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT ) );
+        SetImage(SvBmp::CHECKED,     RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED ) );
+        SetImage(SvBmp::HICHECKED,   RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED ) );
+        SetImage(SvBmp::HIUNCHECKED, RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED ) );
+        SetImage(SvBmp::TRISTATE,    RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW ) );
+        SetImage(SvBmp::HITRISTATE,  RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED ) );
     }
     else
     {
-        aBmps[ SV_BMP_UNCHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT );
-        aBmps[ SV_BMP_CHECKED ]     = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED );
-        aBmps[ SV_BMP_HICHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_HIUNCHECKED ] = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
-        aBmps[ SV_BMP_TRISTATE ]    = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW );
-        aBmps[ SV_BMP_HITRISTATE ]  = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+        SetImage(SvBmp::UNCHECKED,   CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT ) );
+        SetImage(SvBmp::CHECKED,     CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED ) );
+        SetImage(SvBmp::HICHECKED,   CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED ) );
+        SetImage(SvBmp::HIUNCHECKED, CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED ) );
+        SetImage(SvBmp::TRISTATE,    CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW ) );
+        SetImage(SvBmp::HITRISTATE,  CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED ) );
     }
 }
 
@@ -306,7 +306,6 @@ SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
     , pData(pBData)
     , eKind(eTheKind)
     , nItemFlags(0)
-    , nBaseOffs(0)
 {
     SetStateUnchecked();
 }
@@ -317,7 +316,6 @@ SvLBoxButton::SvLBoxButton()
     , pData(0)
     , eKind(SvLBoxButtonKind_enabledCheckbox)
     , nItemFlags(0)
-    , nBaseOffs(0)
 {
     SetStateUnchecked();
 }
@@ -349,15 +347,15 @@ void SvLBoxButton::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* /*pEntry*/)
 {
-    sal_uInt16 nIndex = eKind == SvLBoxButtonKind_staticImage
-        ? SV_BMP_STATICIMAGE : pData->GetIndex( nItemFlags );
+    SvBmp nIndex = eKind == SvLBoxButtonKind_staticImage
+        ? SvBmp::STATICIMAGE : pData->GetIndex( nItemFlags );
     sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
 
     //Native drawing
     bool bNativeOK = false;
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
-    if ( nIndex != SV_BMP_STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
+    if ( nIndex != SvBmp::STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
 
     {
         Size aSize(pData->Width(), pData->Height());
@@ -383,7 +381,7 @@ void SvLBoxButton::Paint(
     }
 
     if( !bNativeOK && isVis )
-        rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] ,nStyle);
+        rDev.DrawImage( rPos, pData->GetImage(nIndex), nStyle);
 }
 
 SvLBoxItem* SvLBoxButton::Create() const

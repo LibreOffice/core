@@ -45,7 +45,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxCheckListBox(vcl::W
 
 void SvxCheckListBox::SetNormalStaticImage(const Image& rNormalStaticImage)
 {
-    pCheckButton->aBmps[SV_BMP_STATICIMAGE] = rNormalStaticImage;
+    pCheckButton->SetImage(SvBmp::STATICIMAGE, rNormalStaticImage);
 }
 
 SvxCheckListBox::~SvxCheckListBox()
