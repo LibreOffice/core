@@ -349,11 +349,14 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont( FontSelectPatt
 
 void PhysicalFontCollection::Add( PhysicalFontFace* pNewData )
 {
-    OUString aSearchName = GetEnglishSearchFontName( pNewData->GetFamilyName() );
-
-    PhysicalFontFamily* pFoundData = FindOrCreateFamily( aSearchName );
-
-    bool bKeepNewData = pFoundData->AddFontFace( pNewData );
+    OUString aFamilyName = pNewData->GetFamilyName();
+    bool bKeepNewData = false;
+    // Ignore rare fonts ending with ")". The assumption that they do not is widespread (fdo#85006)
+    if (!aFamilyName.endsWith(")")) {
+        OUString aSearchName = GetEnglishSearchFontName( aFamilyName );
+        PhysicalFontFamily* pFoundData = FindOrCreateFamily( aSearchName );
+        bKeepNewData = pFoundData->AddFontFace( pNewData );
+    }
 
     if( !bKeepNewData )
         delete pNewData;
