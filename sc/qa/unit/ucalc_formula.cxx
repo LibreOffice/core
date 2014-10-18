@@ -1944,7 +1944,7 @@ void Test::testFormulaRefUpdateDeleteContent()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNamedExpression()
+void Test::testFormulaRefUpdateName()
 {
     m_pDoc->InsertTab(0, "Formula");
 
@@ -2075,7 +2075,7 @@ void Test::testFormulaRefUpdateNamedExpression()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNamedExpressionMove()
+void Test::testFormulaRefUpdateNameMove()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
@@ -2177,7 +2177,7 @@ void Test::testFormulaRefUpdateNamedExpressionMove()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testFormulaRefUpdateNamedExpressionExpandRef()
+void Test::testFormulaRefUpdateNameExpandRef()
 {
     setExpandRefs(true);
 
