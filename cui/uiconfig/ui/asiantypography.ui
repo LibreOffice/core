@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkFrame" id="AsianTypography">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -53,7 +54,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkApplySpacing">
-                <property name="label" translatable="yes">Apply spacing between Asian, Latin and Complex text</property>
+                <property name="label" translatable="yes">Apply spacing between Asian, Latin and complex text</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
