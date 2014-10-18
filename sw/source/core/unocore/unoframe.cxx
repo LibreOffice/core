@@ -1558,7 +1558,6 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 {
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sTmp );
-                    pGrfObj->SetSwapState();
                     sGrfName = "";
                 }
                 else if( sTmp.startsWith(sGraphicObjectProtocol) )
@@ -2822,7 +2821,6 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 {
                     pGrfObj = new GraphicObject;
                     pGrfObj->SetUserData( sGraphicURL );
-                    pGrfObj->SetSwapState();
                     sGraphicURL = "";
                 }
                 else if( sGraphicURL.startsWith(sGraphicObjectProtocol) )

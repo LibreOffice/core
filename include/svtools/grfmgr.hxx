@@ -313,6 +313,7 @@ protected:
 
     virtual void            GraphicManagerDestroyed();
     virtual SvStream*       GetSwapStream() const;
+    void                    SetSwapState();
 
     virtual void            Load( SvStream& ) SAL_OVERRIDE;
     virtual void            Save( SvStream& ) SAL_OVERRIDE;
@@ -421,7 +422,6 @@ public:
     bool                    IsInSwapOut() const { return mbIsInSwapOut; }
     bool                    IsInSwap() const { return( mbIsInSwapOut || mbIsInSwapOut ); }
     bool                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
-    void                    SetSwapState();
 
     bool                    Draw(
                                 OutputDevice* pOut,

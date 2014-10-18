@@ -552,10 +552,6 @@ void SdrGrafObj::SetGrafStreamURL( const OUString& rGraphicStreamURL )
     else if( pModel->IsSwapGraphics() )
     {
         pGraphic->SetUserData( rGraphicStreamURL );
-
-        // set state of graphic object to 'swapped out'
-        if( pGraphic->GetType() == GRAPHIC_NONE )
-            pGraphic->SetSwapState();
     }
 }
 
@@ -574,7 +570,6 @@ void SdrGrafObj::ForceSwapIn() const
         Graphic aEmpty;
         pGraphic->SetGraphic( aEmpty );
         pGraphic->SetUserData( aUserData );
-        pGraphic->SetSwapState();
 
         const_cast< SdrGrafObj* >( this )->mbIsPreview = false;
     }
@@ -634,9 +629,6 @@ void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rRefe
     aFilterName = rFilterName;
     ImpLinkAnmeldung();
     pGraphic->SetUserData();
-
-    // A linked graphic is per definition swapped out (has to be loaded)
-    pGraphic->SetSwapState();
 }
 
 void SdrGrafObj::ReleaseGraphicLink()
