@@ -527,7 +527,6 @@ public:
     IDocumentFieldsAccess const & getIDocumentFieldsAccess() const;
     IDocumentFieldsAccess & getIDocumentFieldsAccess();
 
-    ::sw::DocumentFieldsManager const & GetDocumentFieldsMAnager() const;
     ::sw::DocumentFieldsManager & GetDocumentFieldsManager();
 
     // IDocumentContentOperations
@@ -558,9 +557,6 @@ public:
     // IDocumentState
     IDocumentState const & getIDocumentState() const;
     IDocumentState & getIDocumentState();
-
-    ::sw::DocumentStateManager const & GetDocumentStateManager() const;
-    ::sw::DocumentStateManager & GetDocumentStateManager();
 
     // IDocumentDrawModelAccess
     DECL_LINK( AddDrawUndo, SdrUndoAction * );

@@ -402,11 +402,6 @@ IDocumentFieldsAccess & SwDoc::getIDocumentFieldsAccess()
     return *m_pDocumentFieldsManager;
 }
 
-::sw::DocumentFieldsManager const & SwDoc::GetDocumentFieldsMAnager() const
-{
-    return *m_pDocumentFieldsManager;
-}
-
 ::sw::DocumentFieldsManager & SwDoc::GetDocumentFieldsManager()
 {
     return *m_pDocumentFieldsManager;
@@ -440,16 +435,6 @@ IDocumentState const & SwDoc::getIDocumentState() const
 }
 
 IDocumentState & SwDoc::getIDocumentState()
-{
-    return *m_pDocumentStateManager;
-}
-
-::sw::DocumentStateManager const & SwDoc::GetDocumentStateManager() const
-{
-    return *m_pDocumentStateManager;
-}
-
-::sw::DocumentStateManager & SwDoc::GetDocumentStateManager()
 {
     return *m_pDocumentStateManager;
 }
