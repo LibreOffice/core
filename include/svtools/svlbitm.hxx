@@ -22,22 +22,23 @@
 #define INCLUDED_SVTOOLS_SVLBITM_HXX
 
 #include <svtools/svtdllapi.h>
-
 #include <tools/link.hxx>
-
 #include <vcl/image.hxx>
 #include <svtools/treelistbox.hxx>
 
 class SvTreeListEntry;
 
 
-#define SV_BMP_UNCHECKED        0
-#define SV_BMP_CHECKED          1
-#define SV_BMP_TRISTATE         2
-#define SV_BMP_HIUNCHECKED      3
-#define SV_BMP_HICHECKED        4
-#define SV_BMP_HITRISTATE       5
-#define SV_BMP_STATICIMAGE      6
+enum class SvBmp
+{
+    UNCHECKED        = 0,
+    CHECKED          = 1,
+    TRISTATE         = 2,
+    HIUNCHECKED      = 3,
+    HICHECKED        = 4,
+    HITRISTATE       = 5,
+    STATICIMAGE      = 6
+};
 
 struct SvLBoxButtonData_Impl;
 
@@ -50,9 +51,10 @@ private:
     SvLBoxButtonData_Impl*  pImpl;
     bool                    bDataOk;
     SvButtonState           eState;
+    std::vector<Image>      aBmps;  // Indizes siehe Konstanten BMP_ ....
 
-    SVT_DLLPRIVATE void                     SetWidthAndHeight();
-    SVT_DLLPRIVATE void                 InitData( bool bImagesFromDefault,
+    SVT_DLLPRIVATE void     SetWidthAndHeight();
+    SVT_DLLPRIVATE void     InitData( bool bImagesFromDefault,
                                       bool _bRadioBtn, const Control* pControlForSettings = NULL );
 public:
                             // include creating default images (CheckBox or RadioButton)
@@ -61,7 +63,7 @@ public:
 
                             ~SvLBoxButtonData();
 
-    sal_uInt16                  GetIndex( sal_uInt16 nItemState );
+    SvBmp                   GetIndex( sal_uInt16 nItemState );
     long                    Width();
     long                    Height();
     void                    SetLink( const Link& rLink) { aLink=rLink; }
@@ -73,14 +75,12 @@ public:
     void                    StoreButtonState( SvTreeListEntry* pEntry, sal_uInt16 nItemFlags );
     SvButtonState           ConvertToButtonState( sal_uInt16 nItemFlags ) const;
 
-    SvButtonState GetActButtonState() const
-    {
-        return eState;
-    }
+    SvButtonState           GetActButtonState() const { return eState; }
 
-    SvTreeListEntry*            GetActEntry() const;
+    SvTreeListEntry*        GetActEntry() const;
 
-    Image aBmps[24];  // Indizes siehe Konstanten BMP_ ....
+    void                    SetImage(SvBmp nIndex, const Image& aImage) { aBmps[(int)nIndex] = aImage; }
+    Image&                  GetImage(SvBmp nIndex) { return aBmps[(int)nIndex]; }
 
     void                    SetDefaultImages( const Control* pControlForSettings = NULL );
                                 // set images acording to the color scheeme of the Control
@@ -138,7 +138,6 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
     SvLBoxButtonData*   pData;
     SvLBoxButtonKind eKind;
     sal_uInt16 nItemFlags;
-    sal_uInt16 nBaseOffs;
 
     void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::Window* pParent );
 public:
@@ -171,9 +170,6 @@ public:
     void            SetStateInvisible();
 
     SvLBoxButtonKind GetKind() const { return eKind; }
-
-    void            SetBaseOffs( sal_uInt16 nOffs ) { nBaseOffs = nOffs; }
-    sal_uInt16          GetBaseOffs() const { return nBaseOffs; }
 
     // Check whether this button can be modified via UI
     bool            CheckModification() const;
