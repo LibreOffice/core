@@ -5671,8 +5671,13 @@ int RTFDocumentImpl::popState()
         RTFSprms aTCSprms;
         RTFValue::Pointer_t pValue(new RTFValue(0));
         aTCSprms.set(NS_ooxml::LN_endtrackchange, pValue);
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(RTFSprms(), aTCSprms));
-        Mapper().props(pProperties);
+        if (!m_aStates.top().pCurrentBuffer)
+        {
+            writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(RTFSprms(), aTCSprms));
+            Mapper().props(pProperties);
+        }
+        else
+            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aTCSprms))));
     }
 
     // This is the end of the doc, see if we need to close the last section.
