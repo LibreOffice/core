@@ -105,13 +105,13 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
     }
 
-    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, implGetImage( AVMEDIA_IMG_PLAY ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), TIB_CHECKABLE );
+    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, implGetImage( AVMEDIA_IMG_PLAY ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), ToolBoxItemBits::CHECKABLE );
        maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_PLAY, HID_AVMEDIA_TOOLBOXITEM_PLAY );
 
-    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, implGetImage( AVMEDIA_IMG_PAUSE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PAUSE ) ), TIB_CHECKABLE );
+    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, implGetImage( AVMEDIA_IMG_PAUSE ), OUString( AVMEDIA_RESID( AVMEDIA_STR_PAUSE ) ), ToolBoxItemBits::CHECKABLE );
        maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_PAUSE, HID_AVMEDIA_TOOLBOXITEM_PAUSE );
 
-    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_STOP, implGetImage( AVMEDIA_IMG_STOP ), OUString( AVMEDIA_RESID( AVMEDIA_STR_STOP ) ), TIB_CHECKABLE );
+    maPlayToolBox.InsertItem( AVMEDIA_TOOLBOXITEM_STOP, implGetImage( AVMEDIA_IMG_STOP ), OUString( AVMEDIA_RESID( AVMEDIA_STR_STOP ) ), ToolBoxItemBits::CHECKABLE );
        maPlayToolBox.SetHelpId( AVMEDIA_TOOLBOXITEM_STOP, HID_AVMEDIA_TOOLBOXITEM_STOP );
 
     maPlayToolBox.InsertSeparator();

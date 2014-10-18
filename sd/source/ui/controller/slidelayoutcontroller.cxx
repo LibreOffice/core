@@ -349,9 +349,9 @@ void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::
     if ( getToolboxId( nId, &pToolBox ) )
     {
         if ( mbInsertPage )
-            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | TIB_DROPDOWN );
+            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN );
         else
-            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | TIB_DROPDOWNONLY );
+            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
     }
 }
 

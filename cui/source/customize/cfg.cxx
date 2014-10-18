@@ -5093,7 +5093,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                     BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, m_nExpectedSize);
                     aImage = Image( aBitmapex);
                 }
-                pTbSymbol->InsertItem( nId,aImage, aURL, 0, 0 ); //modify
+                pTbSymbol->InsertItem( nId,aImage, aURL, ToolBoxItemBits::NONE, 0 ); //modify
 
                 xGraphic = aImage.GetXGraphic();
 
@@ -5257,7 +5257,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 }
                 if ( bOK && !!aImage )
                 {
-                    pTbSymbol->InsertItem( nId, aImage, aURL, 0, 0 );
+                    pTbSymbol->InsertItem( nId, aImage, aURL, ToolBoxItemBits::NONE, 0 );
 
                     xGraphic = aImage.GetXGraphic();
                     xGraphic->acquire();

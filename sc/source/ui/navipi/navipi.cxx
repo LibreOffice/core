@@ -325,7 +325,7 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
 
     SetSizePixel( CalcWindowSizePixel() );
     SetDropdownClickHdl( LINK(this, CommandToolBox, ToolBoxDropdownClickHdl) );
-    SetItemBits( IID_DROPMODE, GetItemBits( IID_DROPMODE ) | TIB_DROPDOWNONLY );
+    SetItemBits( IID_DROPMODE, GetItemBits( IID_DROPMODE ) | ToolBoxItemBits::DROPDOWNONLY );
 }
 
 CommandToolBox::~CommandToolBox()

@@ -212,7 +212,7 @@ void PagePropertyPanel::Initialize()
     mpToolBoxOrientation->SetDropdownClickHdl( aLink );
     mpToolBoxOrientation->SetSelectHdl( aLink );
     mpToolBoxOrientation->SetItemImage( nIdOrientation, mImgPortrait);
-    mpToolBoxOrientation->SetItemBits( nIdOrientation, mpToolBoxOrientation->GetItemBits( nIdOrientation ) | TIB_DROPDOWNONLY );
+    mpToolBoxOrientation->SetItemBits( nIdOrientation, mpToolBoxOrientation->GetItemBits( nIdOrientation ) | ToolBoxItemBits::DROPDOWNONLY );
 
     // popup for page margins
     const sal_uInt16 nIdMargin = mpToolBoxMargin->GetItemId(UNO_MARGIN);
@@ -220,7 +220,7 @@ void PagePropertyPanel::Initialize()
     mpToolBoxMargin->SetDropdownClickHdl( aLink );
     mpToolBoxMargin->SetSelectHdl( aLink );
     mpToolBoxMargin->SetItemImage(nIdMargin, mImgNormal);
-    mpToolBoxMargin->SetItemBits( nIdMargin, mpToolBoxMargin->GetItemBits( nIdMargin ) | TIB_DROPDOWNONLY );
+    mpToolBoxMargin->SetItemBits( nIdMargin, mpToolBoxMargin->GetItemBits( nIdMargin ) | ToolBoxItemBits::DROPDOWNONLY );
 
     // popup for page size
     const sal_uInt16 nIdSize = mpToolBoxSize->GetItemId(UNO_SIZE);
@@ -228,7 +228,7 @@ void PagePropertyPanel::Initialize()
     mpToolBoxSize->SetDropdownClickHdl( aLink );
     mpToolBoxSize->SetSelectHdl( aLink );
     mpToolBoxSize->SetItemImage(nIdSize, mImgLetter);
-    mpToolBoxSize->SetItemBits( nIdSize, mpToolBoxSize->GetItemBits( nIdSize ) | TIB_DROPDOWNONLY );
+    mpToolBoxSize->SetItemBits( nIdSize, mpToolBoxSize->GetItemBits( nIdSize ) | ToolBoxItemBits::DROPDOWNONLY );
     maImgSize = new Image[8];
     maImgSize[0] = mImgA3;
     maImgSize[1] = mImgA4;
@@ -254,7 +254,7 @@ void PagePropertyPanel::Initialize()
     mpToolBoxColumn->SetDropdownClickHdl( aLink );
     mpToolBoxColumn->SetSelectHdl( aLink );
     mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn1);
-    mpToolBoxColumn->SetItemBits( nIdColumn, mpToolBoxColumn->GetItemBits( nIdColumn ) | TIB_DROPDOWNONLY );
+    mpToolBoxColumn->SetItemBits( nIdColumn, mpToolBoxColumn->GetItemBits( nIdColumn ) | ToolBoxItemBits::DROPDOWNONLY );
 
     meFUnit = GetModuleFieldUnit();
     meUnit  = m_aSwPagePgSizeControl.GetCoreMetric();

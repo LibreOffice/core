@@ -2330,7 +2330,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 
     // The following commands are available at the various modules
     switch( nSlotId )
@@ -2518,7 +2518,7 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl(
     ToolBox&    rTbx )
     :   SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
@@ -2560,7 +2560,7 @@ SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
 
     :    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const

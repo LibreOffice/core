@@ -40,7 +40,7 @@ SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTb
     ,   m_aSubTbName( "alignmentbar" )
     ,   m_aSubTbResName( "private:resource/toolbar/alignmentbar" )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 
     m_aCommand = m_aCommandURL;

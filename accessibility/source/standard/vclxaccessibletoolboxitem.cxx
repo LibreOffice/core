@@ -84,14 +84,14 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
         {
             ToolBoxItemBits nBits = m_pToolBox->GetItemBits( m_nItemId );
             if (
-                 (( nBits & TIB_DROPDOWN ) == TIB_DROPDOWN) ||
-                 (( nBits & TIB_DROPDOWNONLY ) == TIB_DROPDOWNONLY)
+                 (( nBits & ToolBoxItemBits::DROPDOWN ) == ToolBoxItemBits::DROPDOWN) ||
+                 (( nBits & ToolBoxItemBits::DROPDOWNONLY ) == ToolBoxItemBits::DROPDOWNONLY)
                )
                 m_nRole = AccessibleRole::BUTTON_DROPDOWN;
             else if (
-                ( ( nBits & TIB_CHECKABLE ) == TIB_CHECKABLE ) ||
-                ( ( nBits & TIB_RADIOCHECK ) == TIB_RADIOCHECK ) ||
-                ( ( nBits & TIB_AUTOCHECK ) == TIB_AUTOCHECK )
+                ( ( nBits & ToolBoxItemBits::CHECKABLE ) == ToolBoxItemBits::CHECKABLE ) ||
+                ( ( nBits & ToolBoxItemBits::RADIOCHECK ) == ToolBoxItemBits::RADIOCHECK ) ||
+                ( ( nBits & ToolBoxItemBits::AUTOCHECK ) == ToolBoxItemBits::AUTOCHECK )
                )
                 m_nRole = AccessibleRole::TOGGLE_BUTTON;
             else if ( m_pToolBox->GetItemWindow( m_nItemId ) )

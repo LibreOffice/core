@@ -224,9 +224,9 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
 
     // Set toolbox button bits
-    mpViewBar->SetItemBits(mpViewBar->GetItemId(VIEWBAR_REPOSITORY), TIB_DROPDOWNONLY);
-    mpActionBar->SetItemBits(mpActionBar->GetItemId(ACTIONBAR_ACTION), TIB_DROPDOWNONLY);
-    mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), TIB_DROPDOWNONLY);
+    mpViewBar->SetItemBits(mpViewBar->GetItemId(VIEWBAR_REPOSITORY), ToolBoxItemBits::DROPDOWNONLY);
+    mpActionBar->SetItemBits(mpActionBar->GetItemId(ACTIONBAR_ACTION), ToolBoxItemBits::DROPDOWNONLY);
+    mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), ToolBoxItemBits::DROPDOWNONLY);
 
     // Set toolbox handlers
     mpViewBar->SetClickHdl(LINK(this,SfxTemplateManagerDlg,TBXViewHdl));

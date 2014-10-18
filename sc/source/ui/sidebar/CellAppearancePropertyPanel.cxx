@@ -225,28 +225,28 @@ CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 void CellAppearancePropertyPanel::Initialize()
 {
     const sal_uInt16 nIdBkColor = mpTBFillColor->GetItemId( UNO_BACKGROUNDCOLOR );
-    mpTBFillColor->SetItemBits( nIdBkColor, mpTBFillColor->GetItemBits( nIdBkColor ) | TIB_DROPDOWNONLY );
+    mpTBFillColor->SetItemBits( nIdBkColor, mpTBFillColor->GetItemBits( nIdBkColor ) | ToolBoxItemBits::DROPDOWNONLY );
     Link aLink = LINK(this, CellAppearancePropertyPanel, TbxBKColorSelectHdl);
     mpTBFillColor->SetDropdownClickHdl ( aLink );
     mpTBFillColor->SetSelectHdl ( aLink );
 
     const sal_uInt16 nIdBorderType  = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
     mpTBCellBorder->SetItemImage( nIdBorderType, maIMGCellBorder );
-    mpTBCellBorder->SetItemBits( nIdBorderType, mpTBCellBorder->GetItemBits( nIdBorderType ) | TIB_DROPDOWNONLY );
+    mpTBCellBorder->SetItemBits( nIdBorderType, mpTBCellBorder->GetItemBits( nIdBorderType ) | ToolBoxItemBits::DROPDOWNONLY );
     aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
     mpTBCellBorder->SetDropdownClickHdl ( aLink );
     mpTBCellBorder->SetSelectHdl ( aLink );
 
     const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
     mpTBLineStyle->SetItemImage( nIdBorderLineStyle, maIMGLineStyle1 );
-    mpTBLineStyle->SetItemBits( nIdBorderLineStyle, mpTBLineStyle->GetItemBits( nIdBorderLineStyle ) | TIB_DROPDOWNONLY );
+    mpTBLineStyle->SetItemBits( nIdBorderLineStyle, mpTBLineStyle->GetItemBits( nIdBorderLineStyle ) | ToolBoxItemBits::DROPDOWNONLY );
     aLink = LINK(this, CellAppearancePropertyPanel, TbxLineStyleSelectHdl);
     mpTBLineStyle->SetDropdownClickHdl ( aLink );
     mpTBLineStyle->SetSelectHdl ( aLink );
     mpTBLineStyle->Disable();
 
     const sal_uInt16 nIdBorderLinecolor = mpTBLineColor->GetItemId( UNO_FRAMELINECOLOR );
-    mpTBLineColor->SetItemBits( nIdBorderLinecolor, mpTBLineColor->GetItemBits( nIdBorderLinecolor ) | TIB_DROPDOWNONLY );
+    mpTBLineColor->SetItemBits( nIdBorderLinecolor, mpTBLineColor->GetItemBits( nIdBorderLinecolor ) | ToolBoxItemBits::DROPDOWNONLY );
     aLink = LINK(this, CellAppearancePropertyPanel, TbxLineColorSelectHdl);
     mpTBLineColor->SetDropdownClickHdl ( aLink );
     mpTBLineColor->SetSelectHdl ( aLink );

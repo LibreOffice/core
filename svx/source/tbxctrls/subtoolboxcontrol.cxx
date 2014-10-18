@@ -30,7 +30,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxSubToolBoxControl, SfxUInt16Item );
 SvxSubToolBoxControl::SvxSubToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
 : SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 SvxSubToolBoxControl::~SvxSubToolBoxControl()

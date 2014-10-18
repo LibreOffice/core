@@ -2391,7 +2391,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamil
         case SFX_STYLE_FAMILY_PSEUDO:   sHelpId = ".uno:ListStyle"; break;
         default: OSL_FAIL("unknown StyleFamily"); break;
     }
-    m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
+    m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), ToolBoxItemBits::NONE, 0);
     m_aActionTbL.SetHelpId( nId, sHelpId );
 }
 
@@ -2401,7 +2401,7 @@ void SfxTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
 {
     m_aActionTbR.HideItem(SID_STYLE_UPDATE_BY_EXAMPLE);
     m_aActionTbR.SetItemBits( SID_STYLE_NEW_BY_EXAMPLE,
-            TIB_DROPDOWNONLY|m_aActionTbR.GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
+            ToolBoxItemBits::DROPDOWNONLY|m_aActionTbR.GetItemBits( SID_STYLE_NEW_BY_EXAMPLE ));
 }
 
 
@@ -2652,7 +2652,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRSelect, ToolBox *, pBox )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     if(nEntry != SID_STYLE_NEW_BY_EXAMPLE ||
-            TIB_DROPDOWN != (pBox->GetItemBits(nEntry)&TIB_DROPDOWN))
+            ToolBoxItemBits::DROPDOWN != (pBox->GetItemBits(nEntry)&ToolBoxItemBits::DROPDOWN))
         ActionSelect(nEntry);
     return 0;
 }
@@ -2661,7 +2661,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
 {
     const sal_uInt16 nEntry = pBox->GetCurItemId();
     if(nEntry == SID_STYLE_NEW_BY_EXAMPLE &&
-            TIB_DROPDOWN == (pBox->GetItemBits(nEntry)&TIB_DROPDOWN))
+            ToolBoxItemBits::DROPDOWN == (pBox->GetItemBits(nEntry)&ToolBoxItemBits::DROPDOWN))
     {
         //create a popup menu in Writer
         boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);

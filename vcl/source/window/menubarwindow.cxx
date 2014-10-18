@@ -144,7 +144,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
         aCloseBtn.SetPaintTransparent(true);
         aCloseBtn.SetParentClipMode(PARENTCLIPMODE_NOCLIP);
 
-        aCloseBtn.InsertItem(IID_DOCUMENTCLOSE, aCloseBtn.maImage, 0);
+        aCloseBtn.InsertItem(IID_DOCUMENTCLOSE, aCloseBtn.maImage, ToolBoxItemBits::NONE);
         aCloseBtn.SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
         aCloseBtn.AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
         aCloseBtn.SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());
@@ -1086,7 +1086,7 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link& i
     AddButtonEntry& rNewEntry = m_aAddButtons[nId];
     rNewEntry.m_nId = nId;
     rNewEntry.m_aSelectLink = i_rLink;
-    aCloseBtn.InsertItem(nId, i_rImage, 0, 0);
+    aCloseBtn.InsertItem(nId, i_rImage, ToolBoxItemBits::NONE, 0);
     aCloseBtn.calcMinSize();
     ShowButtons(aCloseBtn.IsItemVisible(IID_DOCUMENTCLOSE), aFloatBtn.IsVisible(), aHideBtn.IsVisible());
     LayoutChanged();

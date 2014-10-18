@@ -64,9 +64,9 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
     m_eStyle( eStyle )
 {
     if ( eStyle == STYLE_DROPDOWNBUTTON )
-        m_pToolbar->SetItemBits( m_nID, TIB_DROPDOWNONLY | m_pToolbar->GetItemBits( m_nID ) );
+        m_pToolbar->SetItemBits( m_nID, ToolBoxItemBits::DROPDOWNONLY | m_pToolbar->GetItemBits( m_nID ) );
     else if ( eStyle == STYLE_TOGGLE_DROPDOWNBUTTON )
-        m_pToolbar->SetItemBits( m_nID, TIB_DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
+        m_pToolbar->SetItemBits( m_nID, ToolBoxItemBits::DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
 }
 
 ToggleButtonToolbarController::~ToggleButtonToolbarController()

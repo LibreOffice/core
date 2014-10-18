@@ -69,7 +69,7 @@ SwTbxInsertCtrl::SwTbxInsertCtrl(
         SfxToolBoxControl( nSlotId, nId, rTbx ),
         nLastSlotId(FN_INSERT_CTRL == nSlotId ? FN_INSERT_TABLE : SID_INSERT_DIAGRAM)
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 SwTbxInsertCtrl::~SwTbxInsertCtrl()
@@ -163,7 +163,7 @@ SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     pPopup(0),
     pView(0)
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
@@ -286,7 +286,7 @@ SwTbxFieldCtrl::SwTbxFieldCtrl(
     pPopup(0),
     pView(0)
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 SwTbxFieldCtrl::~SwTbxFieldCtrl()
@@ -467,13 +467,13 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     {
         sal_uInt16 nNaviId = aNavigationInsertIds[i];
         OUString sText;
-        ToolBoxItemBits  nTbxBits = 0;
+        ToolBoxItemBits  nTbxBits = ToolBoxItemBits::NONE;
         if((NID_PREV != nNaviId) && (NID_NEXT != nNaviId))
         {
             // -2, there's no string for Next/Prev
             sal_uInt16 nResStr = ST_TBL - 2 + nNaviId - NID_START;
             sText = SW_RESSTR(nResStr);
-            nTbxBits = TIB_CHECKABLE;
+            nTbxBits = ToolBoxItemBits::CHECKABLE;
         }
         else
         {

@@ -202,7 +202,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_aMenu.reset(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
     m_aTBPreview.SetOutStyle(TOOLBOX_STYLE_FLAT);
-    m_aTBPreview.InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),TIB_LEFT|TIB_DROPDOWN|TIB_AUTOSIZE|TIB_RADIOCHECK);
+    m_aTBPreview.InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
     m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview.EnableMenuStrings();

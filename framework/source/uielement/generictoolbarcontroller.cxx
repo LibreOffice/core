@@ -188,8 +188,8 @@ throw ( RuntimeException, std::exception )
     {
         m_pToolbar->EnableItem( m_nID, Event.IsEnabled );
 
-        sal_uInt16 nItemBits = m_pToolbar->GetItemBits( m_nID );
-        nItemBits &= ~TIB_CHECKABLE;
+        ToolBoxItemBits nItemBits = m_pToolbar->GetItemBits( m_nID );
+        nItemBits &= ~ToolBoxItemBits::CHECKABLE;
         TriState eTri = TRISTATE_FALSE;
 
         bool            bValue;
@@ -205,7 +205,7 @@ throw ( RuntimeException, std::exception )
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = TRISTATE_TRUE;
-            nItemBits |= TIB_CHECKABLE;
+            nItemBits |= ToolBoxItemBits::CHECKABLE;
         }
         else if ( Event.State >>= aStrValue )
         {
@@ -219,7 +219,7 @@ throw ( RuntimeException, std::exception )
                 m_pToolbar->CheckItem( m_nID, bValue );
                 if ( bValue )
                     eTri = TRISTATE_TRUE;
-                nItemBits |= TIB_CHECKABLE;
+                nItemBits |= ToolBoxItemBits::CHECKABLE;
             }
             else
             {
@@ -252,7 +252,7 @@ throw ( RuntimeException, std::exception )
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = TRISTATE_INDET;
-            nItemBits |= TIB_CHECKABLE;
+            nItemBits |= ToolBoxItemBits::CHECKABLE;
             if ( m_bMadeInvisible )
                 m_pToolbar->ShowItem( m_nID, true );
         }

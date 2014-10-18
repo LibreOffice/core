@@ -45,7 +45,7 @@ public:
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,
             const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
-            ToolBoxItemBits nBits = 0,
+            ToolBoxItemBits nBits = ToolBoxItemBits::NONE,
             const Size& rRequestedSize = Size(),
             sal_uInt16 nPos = TOOLBOX_APPEND) SAL_OVERRIDE;
 

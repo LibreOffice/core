@@ -94,12 +94,12 @@ SdNavigatorWin::SdNavigatorWin(
     maToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     maToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
     maToolbox.SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
-    maToolbox.SetItemBits( TBI_DRAGTYPE, maToolbox.GetItemBits( TBI_DRAGTYPE ) | TIB_DROPDOWNONLY );
+    maToolbox.SetItemBits( TBI_DRAGTYPE, maToolbox.GetItemBits( TBI_DRAGTYPE ) | ToolBoxItemBits::DROPDOWNONLY );
 
     // Shape filter drop down menu.
     maToolbox.SetItemBits(
         TBI_SHAPE_FILTER,
-        maToolbox.GetItemBits(TBI_SHAPE_FILTER) | TIB_DROPDOWNONLY);
+        maToolbox.GetItemBits(TBI_SHAPE_FILTER) | ToolBoxItemBits::DROPDOWNONLY);
 
     // TreeListBox
     // set position below toolbox

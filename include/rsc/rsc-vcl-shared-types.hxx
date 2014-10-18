@@ -21,6 +21,7 @@
 #define INCLUDED_RSC_RSC_VCL_SHARED_TYPES_HXX
 
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 enum TimeFieldFormat {TIMEF_NONE, TIMEF_SEC, TIMEF_100TH_SEC, TIMEF_SEC_CS, TimeFieldFormat_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
@@ -48,19 +49,25 @@ typedef sal_uInt16 MenuItemBits;
 #define MIB_ICON            ((MenuItemBits)0x0080)
 #define MIB_TEXT            ((MenuItemBits)0x0100)
 
-typedef sal_uInt16 ToolBoxItemBits;
-
-#define TIB_CHECKABLE           ((ToolBoxItemBits)0x0001)
-#define TIB_RADIOCHECK          ((ToolBoxItemBits)0x0002)
-#define TIB_AUTOCHECK           ((ToolBoxItemBits)0x0004)
-#define TIB_LEFT                ((ToolBoxItemBits)0x0008)
-#define TIB_AUTOSIZE            ((ToolBoxItemBits)0x0010)
-#define TIB_DROPDOWN            ((ToolBoxItemBits)0x0020)
-#define TIB_REPEAT              ((ToolBoxItemBits)0x0040)
-#define TIB_DROPDOWNONLY        ((ToolBoxItemBits)0x0080 | TIB_DROPDOWN)
-#define TIB_TEXT_ONLY           ((ToolBoxItemBits)0x0100)
-#define TIB_ICON_ONLY           ((ToolBoxItemBits)0x0200)
-#define TIB_TEXTICON            ((ToolBoxItemBits) TIB_TEXT_ONLY | TIB_ICON_ONLY )
+enum class ToolBoxItemBits : sal_uInt16
+{
+    NONE                = 0x0000,
+    CHECKABLE           = 0x0001,
+    RADIOCHECK          = 0x0002,
+    AUTOCHECK           = 0x0004,
+    LEFT                = 0x0008,
+    AUTOSIZE            = 0x0010,
+    DROPDOWN            = 0x0020,
+    REPEAT              = 0x0040,
+    DROPDOWNONLY        = 0x00a0, // 0x0080 | TIB_DROPDOWN
+    TEXT_ONLY           = 0x0100,
+    ICON_ONLY           = 0x0200,
+    TEXTICON            = 0x0300 // TIB_TEXT_ONLY | TIB_ICON_ONLY
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ToolBoxItemBits> : is_typed_flags<ToolBoxItemBits, 0x3ff> {};
+}
 
 enum ToolBoxItemType { TOOLBOXITEM_DONTKNOW, TOOLBOXITEM_BUTTON,
                        TOOLBOXITEM_SPACE, TOOLBOXITEM_SEPARATOR,

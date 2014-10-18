@@ -34,7 +34,7 @@ SwTableOptimizeCtrl::SwTableOptimizeCtrl(
     ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 SwTableOptimizeCtrl::~SwTableOptimizeCtrl()

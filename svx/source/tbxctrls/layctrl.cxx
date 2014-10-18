@@ -704,7 +704,7 @@ SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 n
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     bEnabled( true )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
 
@@ -769,7 +769,7 @@ SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt
     : SfxToolBoxControl(nSlotId, nId, rTbx)
     , bEnabled(false)
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
 

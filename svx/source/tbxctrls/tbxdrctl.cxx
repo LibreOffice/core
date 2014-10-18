@@ -48,7 +48,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
     m_sToolboxName( "private:resource/toolbar/drawbar" )
 
 {
-    rTbx.SetItemBits( nId, TIB_CHECKABLE | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, ToolBoxItemBits::CHECKABLE | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
 }
 
