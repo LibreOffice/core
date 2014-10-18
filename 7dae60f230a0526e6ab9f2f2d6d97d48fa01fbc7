@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_312092f7",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/EndianConverter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-10-18T08:22:54Z",
+      "side": 1,
+      "message": "on a little endian machine your new code will return the big endian representation",
+      "revId": "7dae60f230a0526e6ab9f2f2d6d97d48fa01fbc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
