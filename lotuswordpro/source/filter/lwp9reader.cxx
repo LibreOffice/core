@@ -53,9 +53,9 @@
  *
  *
  ************************************************************************/
+
 #include "lwp9reader.hxx"
 #include "lwpglobalmgr.hxx"
-#include "lwpunoheader.hxx"
 #include "lwparrowstyles.hxx"
 #include "lwpobjhdr.hxx"
 #include "lwpdoc.hxx"

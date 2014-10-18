@@ -73,7 +73,6 @@
 
 #include "lwpobjhdr.hxx"
 #include "lwpobjstrm.hxx"
-#include "lwpunoheader.hxx"
 #include "xfilter/ixfstream.hxx"
 #include "xfilter/xfcontentcontainer.hxx"
 

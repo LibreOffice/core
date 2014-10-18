@@ -57,7 +57,7 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSVSTREAM_HXX
 
 #include "lwpheader.hxx"
-#include "lwpunoheader.hxx"
+#include "xfilter/xfglobal.hxx"
 #include <tools/stream.hxx>
 
 /**
