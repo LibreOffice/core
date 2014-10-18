@@ -3430,6 +3430,7 @@ find_msvc()
 }
 
 SHOWINCLUDES_PREFIX=
+MSBUILD_PATH=
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([Visual C++])
@@ -3466,6 +3467,12 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([Yes])
         else
             AC_MSG_RESULT([No])
+        fi
+
+        # Find the proper version of MSBuild.exe to use based on the VS version
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
+        if test -n "$regvalue" ; then
+            MSBUILD_PATH="$regvalue"
         fi
 
         dnl ===========================================================
@@ -12750,6 +12757,9 @@ else
         pathmunge "$MIDL_PATH" "before"
         pathmunge "$AL_PATH" "before"
         pathmunge "$MSPDB_PATH" "before"
+        if test -n "$MSBUILD_PATH" ; then
+            pathmunge "$MSBUILD_PATH" "before"
+        fi
         if test "$BITNESS_OVERRIDE" = 64; then
             pathmunge "$COMPATH/bin/amd64" "before"
             pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
