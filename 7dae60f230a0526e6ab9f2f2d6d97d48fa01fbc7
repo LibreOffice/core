@@ -16,6 +16,24 @@
       "revId": "7dae60f230a0526e6ab9f2f2d6d97d48fa01fbc7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_11746efb",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/util/EndianConverter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-10-18T09:44:13Z",
+      "side": 1,
+      "message": "The initial order of a byte buffer is always BIG_ENDIAN.\n\nhttp://docs.oracle.com/javase/1.5.0/docs/api/java/nio/ByteBuffer.html",
+      "parentUuid": "ba076199_312092f7",
+      "revId": "7dae60f230a0526e6ab9f2f2d6d97d48fa01fbc7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
