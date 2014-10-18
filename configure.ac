@@ -4671,7 +4671,7 @@ dnl whether to find & fetch external tarballs?
 dnl ===================================================================
 if test -z "$TARFILE_LOCATION" -a -n "$LODE_HOME" ; then
    if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
-       TARFILE_LOCATION="`cypath -m $LODE_HOME/ext_tar`"
+       TARFILE_LOCATION="`cygpath -m $LODE_HOME/ext_tar`"
    else
        TARFILE_LOCATION="$LODE_HOME/ext_tar"
    fi
