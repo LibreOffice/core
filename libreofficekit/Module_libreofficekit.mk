@@ -20,11 +20,11 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
     Library_libreofficekitgtk \
     Executable_gtktiledviewer \
 ))
-endif # ($(ENABLE_GTK),)
 
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     Executable_tilebench \
 ))
+endif # ($(ENABLE_GTK),)
 
 endif # ($(OS),LINUX)
 
