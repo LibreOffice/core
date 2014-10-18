@@ -62,7 +62,7 @@ void NI(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
 
 void OP_BOF(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 /*n*/)
 {
-    r.SeekRel( 2 );        // Versionsnummer ueberlesen
+    r.SeekRel( 2 );        // skip version number
 }
 
 void OP_EOF(LotusContext& rContext, SvStream& /*r*/, sal_uInt16 /*n*/)
@@ -84,7 +84,7 @@ void OP_Integer(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
         rContext.pDoc->EnsureTable(nTab);
         rContext.pDoc->SetValue(ScAddress(nCol,nRow,nTab), static_cast<double>(nValue));
 
-        // 0 Stellen nach'm Komma!
+        // 0 decimal places!
         SetFormat(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, 0);
     }
 }
@@ -124,8 +124,8 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
-        nFormat &= 0x80;    // Bit 7 belassen
-        nFormat |= 0x75;    // protected egal, special-text gesetzt
+        nFormat &= 0x80;    // don't change Bit 7
+        nFormat |= 0x75;    // protected does not matter, special-text is set
 
         PutFormString(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pText.get());
 
@@ -140,7 +140,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
     SCTAB                   nTab = 0;
 
     r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
-    r.SeekRel( 8 );    // Ergebnis ueberspringen
+    r.SeekRel( 8 );    // skip result
     r.ReadUInt16( nFormulaSize );
 
     const ScTokenArray* pErg;
@@ -159,7 +159,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
         rContext.pDoc->EnsureTable(nTab);
         rContext.pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
 
-        // nFormat = Standard -> Nachkommastellen wie Float
+        // nFormat = Default -> decimal places like Float
         SetFormat(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat);
     }
 }
@@ -175,7 +175,7 @@ void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     if (ValidCol( static_cast<SCCOL>(nCol)))
     {
         if( nWidthSpaces )
-            // Annahme: 10cpi-Zeichensatz
+            // assuming 10cpi character set
             nBreite = ( sal_uInt16 ) ( TWIPS_PER_CHAR * nWidthSpaces );
         else
         {
@@ -189,7 +189,7 @@ void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
 void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
+    // POST: don't save for invalid coordinates
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
 
     sal_Char cPuffer[ 16+1 ];
@@ -210,7 +210,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
         sal_Char cBuf[sizeof(cPuffer)+1];
         if( isdigit( *cPuffer ) )
-        {  // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
+        {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
             strcpy( cBuf + 1, cPuffer );       // #100211# - checked
         }
@@ -227,7 +227,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
 void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
+    // POST:don't save for invalid coordinates
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
     sal_uInt8               nType;
 
@@ -249,7 +249,7 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
         sal_Char cBuf[sizeof(cPuffer)+1];
         if( isdigit( *cPuffer ) )
-        {  // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
+        {  // first char in name is a number -> prepend 'A'
             cBuf[0] = 'A';
             strcpy( cBuf + 1, cPuffer );       // #100211# - checked
         }
@@ -285,38 +285,38 @@ void OP_HiddenCols(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     sal_uInt8       nAkt;
     nCount = 0;
 
-    for( nByte = 0 ; nByte < 32 ; nByte++ ) // 32 Bytes mit ...
+    for( nByte = 0 ; nByte < 32 ; nByte++ ) // 32 Bytes with ...
     {
         r.ReadUChar( nAkt );
-        for( nBit = 0 ; nBit < 8 ; nBit++ ) // ...jeweils 8 Bits = 256 Bits
+        for( nBit = 0 ; nBit < 8 ; nBit++ ) // ...each 8 Bits = 256 Bits
         {
-            if( nAkt & 0x01 )   // unterstes Bit gesetzt?
+            if( nAkt & 0x01 )   // is lowest Bit set?
             {
                 // -> Hidden Col
                 rContext.pDoc->SetColHidden(nCount, nCount, 0, true);
             }
 
             nCount++;
-            nAkt = nAkt / 2;    // der Naechste bitte...
+            nAkt = nAkt / 2;    // the next please...
         }
     }
 }
 
 void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
-    r.SeekRel( 4 );    // Cursor Pos ueberspringen
+    r.SeekRel( 4 );    // skip Cursor Pos
 
     r.ReadUChar(rContext.nDefaultFormat);
 
-    r.SeekRel( 1 );    // 'unused' ueberspringen
+    r.SeekRel( 1 );    // skip 'unused'
 
     r.ReadUInt16( nDefWidth );
 
-    r.SeekRel( n - 8 );  // und den Rest ueberspringen
+    r.SeekRel( n - 8 );  // skip the rest
 
     nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * nDefWidth );
 
-    // statt Defaulteinstellung in SC alle Cols zu Fuss setzen
+    // instead of default, set all Cols in SC by hand
     for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         rContext.pDoc->SetColWidth( nCol, 0, nDefWidth );
 }
@@ -376,7 +376,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     sal_uInt16 nRow(0);
 
     r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
-    r.SeekRel( 8 );    // Result- jump over
+    r.SeekRel( 8 );    // skip Result
 
     const ScTokenArray* pErg;
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;

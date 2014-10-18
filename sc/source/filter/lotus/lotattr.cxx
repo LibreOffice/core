@@ -95,7 +95,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     if (iter != aEntries.end())
         return *(iter->pPattAttr);
 
-    // neues PatternAttribute erzeugen
+    // generate new Pattern Attribute
     ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
 
     SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
@@ -180,7 +180,7 @@ const SvxColorItem& LotAttrCache::GetColorItem( const sal_uInt8 nLotIndex ) cons
 
 const Color& LotAttrCache::GetColor( const sal_uInt8 nLotIndex ) const
 {
-    // Farbe <-> Index passt fuer Background, nicht aber fuer Fonts (0 <-> 7)!
+    // color <-> index fits background, but not for fonts (0 <-> 7)!
 	OSL_ENSURE( nLotIndex < 8, "*LotAttrCache::GetColor(): Index > 7, caller hast to check index!" );
 
     return pColTab[ nLotIndex ];
@@ -209,7 +209,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
         }
     }
     else
-    {   // erster Eintrag
+    {   // first entry
         ENTRY *pAkt = new ENTRY;
         pAkt->pPattAttr = &rAttr;
         pAkt->nFirstRow = pAkt->nLastRow = nRow;
@@ -252,7 +252,7 @@ void LotAttrTable::Apply(LOTUS_ROOT* pLotusRoot, const SCTAB nTabNum)
 {
     SCCOL nColCnt;
     for( nColCnt = 0 ; nColCnt <= MAXCOL ; nColCnt++ )
-        pCols[ nColCnt ].Apply(pLotusRoot, nColCnt, nTabNum);     // macht auch gleich ein Clear() am Ende
+        pCols[ nColCnt ].Apply(pLotusRoot, nColCnt, nTabNum);     // does a Clear() at end
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
