@@ -602,8 +602,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if ( ! isVendorSupported(pInfo->sVendor))
         return JFW_PLUGIN_E_WRONG_VENDOR;
     OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
-    JFW_TRACE2("[Java framework] Using Java runtime library: "
-              + sRuntimeLib + ".\n");
+    JFW_TRACE2("Using Java runtime library: " << sRuntimeLib);
 
 #ifndef ANDROID
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
@@ -624,9 +623,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
                     "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                        " could not load Java runtime library: \n"
                     + sRuntimeLib + "\n");
-         JFW_TRACE0("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
-                    " could not load Java runtime library: \n"
-                    + sRuntimeLib +  "\n");
+         JFW_TRACE0("Could not load Java runtime library: " << sRuntimeLib);
          return JFW_PLUGIN_E_VM_CREATION_FAILED;
      }
 
@@ -704,7 +701,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         }
 #endif
 #if OSL_DEBUG_LEVEL >= 2
-        JFW_TRACE2("VM option: " << options[n].optionString << "\n");
+        JFW_TRACE2("VM option: " << options[n].optionString);
 #endif
         ++n;
     }
@@ -765,7 +762,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     else
     {
         *ppVm = pJavaVM;
-        JFW_TRACE2("[Java framework] sunjavaplugin" SAL_DLLEXTENSION " has created a VM.\n");
+        JFW_TRACE2("JVM created");
     }
 #else
     (void) arOptions;
@@ -809,28 +806,25 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     if (ret == JFW_PLUGIN_E_NONE && *exist == sal_True)
     {
         OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
-        JFW_TRACE2("[Java framework] Checking existence of Java runtime library.\n");
+        JFW_TRACE2("Checking existence of Java runtime library");
 
         ::osl::DirectoryItem itemRt;
         ::osl::File::RC rc_itemRt = ::osl::DirectoryItem::get(sRuntimeLib, itemRt);
         if (::osl::File::E_None == rc_itemRt)
         {
             *exist = sal_True;
-            JFW_TRACE2("[Java framework] Java runtime library exist: "
-              + sRuntimeLib + "\n");
+            JFW_TRACE2("Java runtime library exist: " << sRuntimeLib);
 
         }
         else if (::osl::File::E_NOENT == rc_itemRt)
         {
             *exist = sal_False;
-            JFW_TRACE2("[Java framework] Java runtime library does not exist: "
-                       + sRuntimeLib + "\n");
+            JFW_TRACE2("Java runtime library does not exist: " << sRuntimeLib);
         }
         else
         {
             ret = JFW_PLUGIN_E_ERROR;
-            JFW_TRACE2("[Java framework] Error while looking for Java runtime library: "
-                       + sRuntimeLib + " \n");
+            JFW_TRACE2("Error while looking for Java runtime library: " << sRuntimeLib);
         }
     }
     return ret;

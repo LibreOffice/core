@@ -165,8 +165,7 @@ namespace
 #endif
             buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
             sIni = buf.makeStringAndClear();
-            JFW_TRACE2("[Java framework] sunjavaplugin: "
-                       "Using configuration file \n" +  sIni);
+            JFW_TRACE2("Using configuration file " << sIni);
             return sIni;
         }
    };
@@ -441,7 +440,7 @@ bool getJavaProps(const OUString & exePath,
     FileHandleReader stdoutReader(fileOut);
     rtl::Reference< AsynchReader > stderrReader(new AsynchReader(fileErr));
 
-    JFW_TRACE2("\n[Java framework] Executing: " + exePath + ".\n");
+    JFW_TRACE2("Executing: " + exePath);
     oslProcessError procErr =
         osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
                                              args,
@@ -458,7 +457,7 @@ bool getJavaProps(const OUString & exePath,
 
     if( procErr != osl_Process_E_None)
     {
-        JFW_TRACE2("[Java framework] Execution failed. \n");
+        JFW_TRACE2("Execution failed");
         *bProcessRun = false;
         SAL_WARN("jfw",
             "osl_executeProcess failed (" << ret << "): \"" << exePath << "\"");
@@ -466,7 +465,7 @@ bool getJavaProps(const OUString & exePath,
     }
     else
     {
-        JFW_TRACE2("[Java framework] Java executed successfully.\n");
+        JFW_TRACE2("Java executed successfully");
         *bProcessRun = true;
     }
 
@@ -484,7 +483,7 @@ bool getJavaProps(const OUString & exePath,
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
-        JFW_TRACE2("[Java framework]:\" " << sLine << " \".\n");
+        JFW_TRACE2(" \"" << sLine << " \"");
         sLine = sLine.trim();
         if (sLine.isEmpty())
             continue;
@@ -511,8 +510,8 @@ bool getJavaProps(const OUString & exePath,
 
     //process error stream data
     stderrReader->join();
-    JFW_TRACE2("[Java framework]  Java wrote to stderr:\" "
-               << stderrReader->getData().getStr() << " \".\n");
+    JFW_TRACE2("Java wrote to stderr:\" "
+               << stderrReader->getData().getStr() << " \"");
 
     TimeValue waitMax= {5 ,0};
     procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
@@ -904,9 +903,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
     {
-        JFW_TRACE2(OUString("[Java framework] sunjavaplugin")
-                   + SAL_DLLEXTENSION ": JRE found again (detected before): "
-                   + sResolvedDir + ".\n");
+        JFW_TRACE2("JRE found again (detected before): " << sResolvedDir);
         return entry2->second;
     }
 
@@ -936,7 +933,6 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                 sFullPath = sResolvedDir +
                 OUString("/") + (*i);
 
-
             sFilePath = resolveFilePath(sFullPath);
 
             if (sFilePath.isEmpty())
@@ -959,9 +955,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             MapIt entry =  mapJREs.find(sFilePath);
             if (entry != mapJREs.end())
             {
-                JFW_TRACE2(OUString("[Java framework] sunjavaplugin")
-                   + SAL_DLLEXTENSION ": JRE found again (detected before): "
-                   + sFilePath + ".\n");
+                JFW_TRACE2("JRE found again (detected before): " << sFilePath);
 
                 return entry->second;
             }
@@ -1059,9 +1053,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     }
     else
     {
-        JFW_TRACE2(OUString("[Java framework] sunjavaplugin")
-                   + SAL_DLLEXTENSION ": Found JRE: " + sResolvedDir
-                   + " \n at: " + path + ".\n");
+        JFW_TRACE2("Found JRE: " << sResolvedDir << " at: " << path);
 
         mapJREs.insert(MAPJRE::value_type(sResolvedDir, ret));
         mapJREs.insert(MAPJRE::value_type(sFilePath, ret));
@@ -1140,6 +1132,11 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
 void createJavaInfoFromJavaHome(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
     // Get Java from JAVA_HOME environment
+
+    // Note that on OS X is it not normal at all to have a JAVA_HOME environment
+    // variable. We set it in our build environment for build-time programs, though,
+    // so it is set when running unit tests that involve Java functionality. (Which affects
+    // at least CppunitTest_dbaccess_dialog_save, too, and not only the JunitTest ones.)
     char *szJavaHome= getenv("JAVA_HOME");
     if(szJavaHome)
     {
@@ -1173,7 +1170,7 @@ bool makeDriveLetterSame(OUString * fileURL)
 
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
-    JFW_TRACE2("\n[Java framework] Checking \"/usr/jdk/latest\"\n");
+    JFW_TRACE2("Checking /usr/jdk/latest");
     getJREInfoByPath("file:////usr/jdk/latest", vecInfos);
 }
 
@@ -1239,15 +1236,10 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                     case File::E_NOTDIR:
                         continue;
                     case File::E_ACCES:
-                        JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ")
-                                   + "Could not read directory " + usDir2
-                                   + " because of missing access rights.");
+                        JFW_TRACE2("Could not read directory " << usDir2 << " because of missing access rights");
                         continue;
                     default:
-                        JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ")
-                                   + "Could not read directory "
-                                   + usDir2 + ". Osl file error: "
-                                   + OUString::number(openErr));
+                        JFW_TRACE2("Could not read directory << usDir2 << ". Osl file error: " << openErr);
                         continue;
                     }
 
@@ -1259,13 +1251,10 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         File::RC errStatus = File::E_None;
                         if ((errStatus = curIt.getFileStatus(aStatus)) != File::E_None)
                         {
-                            JFW_TRACE2(excMessage + "getFileStatus failed with error "
-                                + OUString::number(errStatus));
+                            JFW_TRACE2(excMessage + "getFileStatus failed with error " << errStatus);
                             continue;
                         }
-                        JFW_TRACE2(OUString("[Java framework] sunjavaplugin: ") +
-                                   "Checking if directory: " + aStatus.getFileURL() +
-                                   " is a Java. \n");
+                        JFW_TRACE2("Checking if directory: " << aStatus.getFileURL() << " is a Java");
 
                         getJREInfoByPath(aStatus.getFileURL(),vecInfos);
                     }
