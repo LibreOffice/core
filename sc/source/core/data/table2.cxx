@@ -391,11 +391,8 @@ void ScTable::DeleteCol(
         }
     }
 
-    {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
-        for (SCSIZE i = 0; i < nSize; i++)
-            aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, IDF_ALL);
-    }
+    for (SCSIZE i = 0; i < nSize; i++)
+        aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, IDF_ALL, false);
 
     if ((nStartRow == 0) && (nEndRow == MAXROW))
     {
