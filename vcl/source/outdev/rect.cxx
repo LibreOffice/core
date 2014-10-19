@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
 /*
  * This file is part of the LibreOffice project.
  *
@@ -56,10 +56,21 @@ void OutputDevice::DrawRect( const Rectangle& rRect )
     if ( mbInitFillColor )
         InitFillColor();
 
-    mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
+    drawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawRect( rRect );
+}
+
+void OutputDevice::drawRect( long nX, long nY, long nWidth, long nHeight )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
+
+    if ( (mpGraphics->GetLayout() && SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+        mirror( nX, nWidth );
+
+    mpGraphics->DrawRect( nX, nY, nWidth, nHeight );
 }
 
 void OutputDevice::DrawRect( const Rectangle& rRect,
@@ -100,7 +111,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
     if ( !nHorzRound && !nVertRound )
     {
-        mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), this );
+       drawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
     }
     else
     {
