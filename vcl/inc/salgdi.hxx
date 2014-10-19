@@ -242,7 +242,7 @@ public:
     void                        DrawPixel( long nX, long nY );
     void                        DrawPixel( long nX, long nY, SalColor nSalColor );
 
-    void                        DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev );
+    void                        DrawLine( long nX1, long nY1, long nX2, long nY2 );
 
     void                        DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
 

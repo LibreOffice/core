@@ -224,7 +224,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
             for( long i = 0L; i < nVertCount; i++ )
             {
                 nY = aVertBuf[ i ];
-                mpGraphics->DrawLine( nStartX, nY, nEndX, nY, this );
+                drawLine( nStartX, nY, nEndX, nY );
             }
         }
 
@@ -233,7 +233,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
             for( long i = 0L; i < nHorzCount; i++ )
             {
                 nX = aHorzBuf[ i ];
-                mpGraphics->DrawLine( nX, nStartY, nX, nEndY, this );
+                drawLine( nX, nStartY, nX, nEndY );
             }
         }
     }
