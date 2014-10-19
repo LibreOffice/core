@@ -248,7 +248,7 @@ public:
 
     void                        DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry );
 
-    void                        DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
 
     void                        DrawPolyPolygon(
                                     sal_uInt32 nPoly,

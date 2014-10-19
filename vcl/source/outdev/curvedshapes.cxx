@@ -59,7 +59,8 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
         {
             if ( mbInitFillColor )
                 InitFillColor();
-            mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, this );
+
+            drawPolygon( aRectPoly.GetSize(), pPtAry );
         }
     }
 
@@ -150,7 +151,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
         {
             if ( mbInitFillColor )
                 InitFillColor();
-            mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry, this );
+            drawPolygon( aPiePoly.GetSize(), pPtAry );
         }
     }
 
@@ -199,7 +200,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
         {
             if ( mbInitFillColor )
                 InitFillColor();
-            mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, this );
+            drawPolygon( aChordPoly.GetSize(), pPtAry );
         }
     }
 
