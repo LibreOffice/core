@@ -260,7 +260,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const ::basegfx::B2DPolygon aOnePoly = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                mpGraphics->DrawPolyLine( aOnePoly, fTransparency, aHairlineWidth, ::basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this );
+                drawPolyLine( aOnePoly, fTransparency, aHairlineWidth, ::basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT );
             }
         }
 
@@ -352,8 +352,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const ::basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                bDrawn = mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths,
-                                                   ::basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this );
+                bDrawn = drawPolyLine( rPolygon, fTransparency, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT );
             }
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;

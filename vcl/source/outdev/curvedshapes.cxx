@@ -54,7 +54,7 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
     {
         const SalPoint* pPtAry = (const SalPoint*)aRectPoly.GetConstPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolyLine( aRectPoly.GetSize(), pPtAry );
         else
         {
             if ( mbInitFillColor )
@@ -102,7 +102,7 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
     if ( aArcPoly.GetSize() >= 2 )
     {
         const SalPoint* pPtAry = (const SalPoint*)aArcPoly.GetConstPointAry();
-        mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, this );
+        mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry );
     }
 
     if( mpAlphaVDev )
@@ -145,7 +145,7 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
     {
         const SalPoint* pPtAry = (const SalPoint*)aPiePoly.GetConstPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolyLine( aPiePoly.GetSize(), pPtAry );
         else
         {
             if ( mbInitFillColor )
@@ -194,7 +194,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
     {
         const SalPoint* pPtAry = (const SalPoint*)aChordPoly.GetConstPointAry();
         if ( !mbFillColor )
-            mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolyLine( aChordPoly.GetSize(), pPtAry );
         else
         {
             if ( mbInitFillColor )
