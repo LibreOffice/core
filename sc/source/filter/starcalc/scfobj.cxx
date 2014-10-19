@@ -44,7 +44,7 @@ using namespace com::sun::star;
 void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 )
 {
-    //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
+    //  if Chart is not installed, SCH_MOD cannot be used!
     if ( !SvtModuleOptions().IsChart() )
         return;
 
@@ -67,7 +67,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         OSL_ENSURE(pPage,"Page ?");
         pPage->InsertObject(pSdrOle2Obj);
 
-        pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!
+        pSdrOle2Obj->SetLogicRect(rRect);               // only after InsertObject !!!
         awt::Size aSz;
         aSz.Width = rRect.GetSize().Width();
         aSz.Height = rRect.GetSize().Height();
@@ -77,10 +77,8 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         // Add here again if this is wanted (see task description for details)
         // ChartHelper::AdaptDefaultsForChart( xObj );
 
-            // hier kann das Chart noch nicht mit Daten gefuettert werden,
-            // weil die Formeln noch nicht berechnet sind.
-            // Deshalb in die ChartCollection, die Daten werden dann im
-            // Sc10Import dtor geholt.
+        // Cannot set source of chart here yet as formulas are not calculated yet.
+        // Thus push into ChartCollection; the data is set in Sc10Import dtor.
 
         ScChartCollection* pColl = pDoc->GetChartCollection();
         pColl->push_back( new ScChartArray( pDoc, nSrcTab, static_cast<SCCOL>(nX1), static_cast<SCROW>(nY1), static_cast<SCCOL>(nX2), static_cast<SCROW>(nY2), aName ) );

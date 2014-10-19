@@ -54,7 +54,7 @@ FltError ImportLotus::Read()
 
     pIn->Seek( nNextRec );
 
-    // Progressbar starten
+    // start progressbar
     ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
     LotusContext &rContext = aConv.getContext();
     while( eAkt != S_END )
@@ -93,17 +93,17 @@ FltError ImportLotus::Read()
                 }
                 else
                 {
-                    eAkt = S_END;   // hier kommt wat fuer <= WK1 hinne!
+                    eAkt = S_END;                       // TODO: add here something for <= WK1!
                     eRet = 0xFFFFFFFF;
                 }
             }
             break;
 
-            case S_WK1:                                             // S_WK1
+            case S_WK1:                                 // S_WK1
             break;
 
-            case S_WK3:                                             // S_WK3
-            case S_WK4:                                             // S_WK4
+            case S_WK3:                                 // S_WK3
+            case S_WK4:                                 // S_WK4
             switch( nOp )
             {
                 case 0x0001:                            // EOF
@@ -180,21 +180,21 @@ FltError ImportLotus::Read()
 
             break;
 
-            case S_FM3:                                             // S_FM3
+            case S_FM3:                                 // S_FM3
             break;
 
-            case S_END:                                             // S_END
+            case S_END:                                 // S_END
             break;
         }
 
         OSL_ENSURE( nNextRec >= pIn->Tell(),
-            "*ImportLotus::Read(): Etwas zu gierig..." );
+            "*ImportLotus::Read(): Read too much..." );
 
         pIn->Seek( nNextRec );
         aPrgrsBar.Progress();
     }
 
-    // duemmliche Namen eliminieren
+    // TODO: eliminate stupid names
     SCTAB       nTabs = pD->GetTableCount();
     SCTAB       nCnt;
     OUString aTabName;
@@ -210,7 +210,7 @@ FltError ImportLotus::Read()
         for( nCnt = 1 ; nCnt < nTabs ; nCnt++ )
         {
             OSL_ENSURE( pD->HasTable( nCnt ),
-                "-ImportLotus::Read(): Wo ist meine Tabelle?!" );
+                "-ImportLotus::Read(): Where is my table?!" );
             pD->GetName( nCnt, aTabName );
             if( aTabName.equals(aRef) )
             {
@@ -241,7 +241,7 @@ FltError ImportLotus::Read(SvStream& rIn)
 
     pIn->Seek( nNextRec );
 
-    // Progressbar starten
+    // start progressbar
     ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
     LotusContext &rContext = aConv.getContext();
     while( bRead )
@@ -267,7 +267,7 @@ FltError ImportLotus::Read(SvStream& rIn)
                 case 0x0001:                            // EOF
                     bRead = false;
                     OSL_ENSURE( nTab == 0,
-                        "-ImportLotus::Read( SvStream& ): Zweimal EOF nicht erlaubt" );
+                        "-ImportLotus::Read( SvStream& ): EOF twice!" );
                     nTab++;
                 break;
 
@@ -294,7 +294,7 @@ FltError ImportLotus::Read(SvStream& rIn)
             }
 
             OSL_ENSURE( nNextRec >= pIn->Tell(),
-                "*ImportLotus::Read(): Etwas zu gierig..." );
+                "*ImportLotus::Read(): Read too much..." );
             pIn->Seek( nNextRec );
             aPrgrsBar.Progress();
         }
