@@ -273,7 +273,7 @@ void OutputDevice::PaintLineGeometryWithEvtlExpand(
 
         if(bTryAA)
         {
-            bDone = mpGraphics->DrawPolyPolygon(aFillPolyPolygon, 0.0, this);
+            bDone = drawPolyPolygon(aFillPolyPolygon, 0.0);
         }
 
         if(!bDone)
