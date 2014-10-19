@@ -111,7 +111,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if( aPoly.HasFlags() )
     {
         const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
-        if( !mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry, this ) )
+        if( !DrawPolyLineBezier( nPoints, pPtAry, pFlgAry ) )
         {
             aPoly = Polygon::SubdivideBezier(aPoly);
             pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
@@ -127,8 +127,31 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         mpAlphaVDev->DrawPolyLine( rPoly );
 }
 
+bool OutputDevice::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    bool bResult = false;
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+    {
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get() );
+        bResult = mpGraphics->DrawPolyLineBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
+    }
+    else
+    {
+        bResult = mpGraphics->DrawPolyLineBezier( nPoints, pPtAry, pFlgAry );
+    }
+
+    return bResult;
+}
+
 void OutputDevice::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
+
     if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
     {
         boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
@@ -170,7 +193,6 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                                  basegfx::B2DLineJoin eLineJoin,
                                  css::drawing::LineCap eLineCap)
 {
-
     if( mpMetaFile )
     {
         LineInfo aLineInfo;
