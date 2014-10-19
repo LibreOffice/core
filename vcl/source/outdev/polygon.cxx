@@ -74,7 +74,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
         if(IsFillColor())
         {
-            bSuccess = mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, 0.0, this);
+            bSuccess = drawPolyPolygon(aB2DPolyPolygon, 0.0);
         }
 
         if(bSuccess && IsLineColor())
@@ -125,6 +125,55 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     }
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
+}
+
+void OutputDevice::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
+
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) ||  IsRTLEnabled() )
+    {
+        // TODO: optimize, reduce new/delete calls
+        SalPoint **pPtAry2 = new SalPoint*[nPoly];
+        sal_uLong i;
+        for(i=0; i<nPoly; i++)
+        {
+            sal_uLong nPoints = pPoints[i];
+            pPtAry2[i] = new SalPoint[ nPoints ];
+            mirror( nPoints, pPtAry[i], pPtAry2[i] );
+        }
+
+        mpGraphics->DrawPolyPolygon( nPoly, pPoints, (PCONSTSALPOINT*)pPtAry2 );
+
+        for(i=0; i<nPoly; i++)
+            delete [] pPtAry2[i];
+        delete [] pPtAry2;
+    }
+    else
+    {
+        mpGraphics->DrawPolyPolygon( nPoly, pPoints, pPtAry );
+    }
+}
+
+bool OutputDevice::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    bool bRet = false;
+
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) ||  IsRTLEnabled() )
+    {
+        basegfx::B2DPolyPolygon aMirror( mirror( rPolyPolygon ) );
+        bRet = mpGraphics->DrawPolyPolygon( aMirror, fTransparency );
+    }
+    else
+    {
+        bRet = mpGraphics->DrawPolyPolygon( rPolyPolygon, fTransparency );
+    }
+
+    return bRet;
 }
 
 void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
@@ -180,7 +229,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
         if(IsFillColor())
         {
-            bSuccess = mpGraphics->DrawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0, this);
+            bSuccess = drawPolyPolygon(basegfx::B2DPolyPolygon(aB2DPolygon), 0.0);
         }
 
         if(bSuccess && IsLineColor())
@@ -293,7 +342,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
         if(IsFillColor())
         {
-            bSuccess = mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, 0.0, this);
+            bSuccess = drawPolyPolygon(aB2DPolyPolygon, 0.0);
         }
 
         if(bSuccess && IsLineColor())
@@ -406,7 +455,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
         }
         else
         {
-            mpGraphics->DrawPolyPolygon( j, pPointAry, pPointAryAry, this );
+            drawPolyPolygon( j, pPointAry, pPointAryAry );
         }
     }
 
@@ -484,7 +533,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
         if( nCount == 1 )
             drawPolygon( pPointAry[0], pPointAryAry[0] );
         else
-            mpGraphics->DrawPolyPolygon( nCount, pPointAry.get(), pPointAryAry.get(), this );
+            drawPolyPolygon( nCount, pPointAry.get(), pPointAryAry.get() );
     }
 
     if( pClipPolyPoly )

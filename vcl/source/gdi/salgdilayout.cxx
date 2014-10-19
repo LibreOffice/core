@@ -398,41 +398,14 @@ void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
     drawPolygon( nPoints, pPtAry );
 }
 
-void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry, const OutputDevice *pOutDev )
+void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        // TODO: optimize, reduce new/delete calls
-        SalPoint **pPtAry2 = new SalPoint*[nPoly];
-        sal_uLong i;
-        for(i=0; i<nPoly; i++)
-        {
-            sal_uLong nPoints = pPoints[i];
-            pPtAry2[i] = new SalPoint[ nPoints ];
-            mirror( nPoints, pPtAry[i], pPtAry2[i], pOutDev );
-        }
-
-        drawPolyPolygon( nPoly, pPoints, (PCONSTSALPOINT*)pPtAry2 );
-
-        for(i=0; i<nPoly; i++)
-            delete [] pPtAry2[i];
-        delete [] pPtAry2;
-    }
-    else
-        drawPolyPolygon( nPoly, pPoints, pPtAry );
+    drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
-bool SalGraphics::DrawPolyPolygon( const basegfx::B2DPolyPolygon& i_rPolyPolygon, double i_fTransparency, const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
 {
-    bool bRet = false;
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
-    {
-        basegfx::B2DPolyPolygon aMirror( mirror( i_rPolyPolygon, i_pOutDev ) );
-        bRet = drawPolyPolygon( aMirror, i_fTransparency );
-    }
-    else
-        bRet = drawPolyPolygon( i_rPolyPolygon, i_fTransparency );
-    return bRet;
+    return drawPolyPolygon( rPolyPolygon, fTransparency );
 }
 
 bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry, const OutputDevice* pOutDev )

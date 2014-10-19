@@ -251,7 +251,7 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
         bool bDrawnOk = true;
         if( IsFillColor() )
-            bDrawnOk = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+            bDrawnOk = drawPolyPolygon( aB2DPolyPolygon, fTransparency );
 
         if( bDrawnOk && IsLineColor() )
         {
@@ -339,7 +339,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             // functionality and we use the fallback some lines below (which is not very good,
             // though. For now, WinSalGraphics::drawPolyPolygon will detect printer usage and
             // correct the wrong mapping (see there for details)
-            bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+            bDrawn = drawPolyPolygon( aB2DPolyPolygon, fTransparency );
         }
 
         if( mbLineColor )
