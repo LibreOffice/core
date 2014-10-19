@@ -7,6 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+# for VERSION
+include $(SRCDIR)/external/coinmp/version.mk
+
 $(eval $(call gb_ExternalProject_ExternalProject,coinmp))
 
 $(eval $(call gb_ExternalProject_register_targets,coinmp,\
@@ -28,9 +31,20 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 	+$(call gb_ExternalProject_run,build,\
 		./configure COIN_SKIP_PROJECTS="Data/Sample" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(DISABLE_DYNLOADING),--disable-shared) \
+			$(if $(DISABLE_DYNLOADING),--disable-shared,$(if $(filter MACOSX,$(OS)),--libdir=/@__________________________________________________OOO)) \
 			--enable-dependency-linking F77=unavailable \
 		&& $(MAKE) \
+		$(if $(filter MACOSX,$(OS)),\
+			&& $(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl app OOO \
+				$(gb_Package_SOURCEDIR_coinmp)/Cbc/src/.libs/libCbc.$(CBC_VERSION).dylib \
+				$(gb_Package_SOURCEDIR_coinmp)/Cbc/src/.libs/libCbcSolver.$(CBCSOLVER_VERSION).dylib \
+				$(gb_Package_SOURCEDIR_coinmp)/Cgl/src/.libs/libCgl.$(CGL_VERSION).dylib \
+				$(gb_Package_SOURCEDIR_coinmp)/Clp/src/.libs/libClp.$(CLP_VERSION).dylib \
+				$(gb_Package_SOURCEDIR_coinmp)/Clp/src/OsiClp/.libs/libOsiClp.$(OSICLP_VERSION).dylib \
+				$(gb_Package_SOURCEDIR_coinmp)/CoinMP/src/.libs/libCoinMP.$(COINMP_VERSION).dylib \
+				$(gb_Package_SOURCEDIR_coinmp)/CoinUtils/src/.libs/libCoinUtils.$(COINUTILS_VERSION).dylib \
+				$(gb_Package_SOURCEDIR_coinmp)/Osi/src/Osi/.libs/libOsi.$(OSI_VERSION).dylib \
+		) \
 	)
 
 endif
