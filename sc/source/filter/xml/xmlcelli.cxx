@@ -1298,8 +1298,8 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
             return OUString();
         case CELLTYPE_EDIT:
         {
-            //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-            //  hier werden die Umbrueche aber gebraucht
+            //  GetString on EditCell replaces linebreaks with spaces;
+            //  however here we need line breaks
             const EditTextObject* pData = pDoc->GetEditText(aCellPos);
             if (pData)
             {
@@ -1307,13 +1307,12 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
                 rEngine.SetText(*pData);
                 return rEngine.GetText(LINEEND_LF);
             }
-            //  Edit-Zellen auch nicht per NumberFormatter formatieren
-            //  (passend zur Ausgabe)
+            //  also don't format EditCells per NumberFormatter
         }
         break;
         default:
         {
-            //  wie in GetString am Dokument (column)
+            //  like in GetString for document (column)
             Color* pColor;
             sal_uLong nNumFmt = pDoc->GetNumberFormat(aCellPos);
             return ScCellFormat::GetString(

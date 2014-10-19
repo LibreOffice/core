@@ -424,7 +424,7 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
   }
 }
 
-// Benannte-Bereiche
+// named regions
 
 Sc10NameData::Sc10NameData(SvStream& rStream)
 {
@@ -465,7 +465,7 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
   }
 }
 
-// Vorlagen
+// templates
 Sc10PatternData::Sc10PatternData(SvStream& rStream)
     : Attr(0)
     , Justify(0)
@@ -515,7 +515,7 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   }
 }
 
-// Datenbank
+// database
 
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
@@ -887,7 +887,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             if ( pRepeatRow || pRepeatCol )
             {
 
-                // an allen Tabellen setzen
+                // set for all tables
 
                 for ( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
                 {
@@ -959,7 +959,7 @@ sal_uLong Sc10Import::Import()
 
     ScDocOptions aOpt = pDoc->GetDocOptions();
     aOpt.SetDate( 1, 1, 1900 );
-    aOpt.SetYear2000( 18 + 1901 );      // ab SO51 src513e vierstellig
+    aOpt.SetYear2000( 18 + 1901 );      // 4-digit since SO51 src513e
     pDoc->SetDocOptions( aOpt );
     pDoc->GetFormatTable()->ChangeNullDate( 1, 1, 1900 );
 
@@ -1020,7 +1020,7 @@ void Sc10Import::LoadFileInfo()
     rStream.Read(&FileInfo, sizeof(FileInfo));
 
     nError = rStream.GetError();
-    // Achtung Info Uebertragen
+    // TODO: ? copy info
 }
 
 void Sc10Import::LoadEditStateInfo()
@@ -1030,7 +1030,8 @@ void Sc10Import::LoadEditStateInfo()
 
     nError = rStream.GetError();
     nShowTab = static_cast<SCTAB>(EditStateInfo.DeltaZ);
-    // Achtung Cursorposition und Offset der Tabelle Uebertragen (soll man das machen??)
+    // TODO: ? copy cursor position and offset of the table (shall we do that??)
+
 }
 
 void Sc10Import::LoadProtect()
@@ -1054,7 +1055,7 @@ void Sc10Import::LoadViewColRowBar()
 
 void Sc10Import::LoadScrZoom()
 {
-    // Achtung Zoom ist leider eine 6Byte TP real Zahl (keine Ahnung wie die Umzusetzen ist)
+    // TODO: unfortunately Zoom is a 6-byte TP real number (don't know how to translate that)
     sal_Char cZoom[6];
     rStream.Read(cZoom, sizeof(cZoom));
     nError = rStream.GetError();
@@ -1153,7 +1154,7 @@ void Sc10Import::LoadPatternCollection()
                 if( pPattern->LogFont.lfStrikeOut != 0 )
                     rItemSet.Put( SvxCrossedOutItem( STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT ) );
             }
-            // Ausrichtung
+            // alignment
             if( ( pPattern->FormatFlags & pfJustify ) == pfJustify )
             {
                 sal_uInt16 HorJustify = ( pPattern->Justify & 0x000F );
@@ -1268,7 +1269,7 @@ void Sc10Import::LoadPatternCollection()
                     rItemSet.Put( aBox );
                 }
             }
-            // Raster
+            // grid
             if( ( pPattern->FormatFlags & pfRaster ) == pfRaster )
             {
                 if( pPattern->Raster != 0 )
@@ -1307,7 +1308,7 @@ void Sc10Import::LoadPatternCollection()
                     }
                 }
             }
-            // ZahlenFormate
+            // number formats
             if( ( pPattern->ValueFormat.Format != 0 ) &&
                 ( ( pPattern->FormatFlags & pfValue ) == pfValue ) )
             {
@@ -1316,7 +1317,7 @@ void Sc10Import::LoadPatternCollection()
                 rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, ( sal_uInt32 ) nKey ) );
             }
 
-            // Zellattribute (Schutz, Versteckt...)
+            // cell attributes (protected, hidden...)
             if( ( pPattern->Flags != 0 ) &&
                 ( ( pPattern->FormatFlags & pfProtection ) == pfProtection ) )
             {
@@ -1418,13 +1419,13 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetOption( VOPT_OUTLINER,    true );
             aSc30ViewOpt.SetOption( VOPT_GRID,        IS_SET(dfGrid,Display) );
 
-            // VOPT_HEADER wird in LoadViewColRowBar() gesetzt
+            // VOPT_HEADER is set in LoadViewColRowBar()
 
-            if ( IS_SET(dfObjectAll,Display) )          // Objekte anzeigen
+            if ( IS_SET(dfObjectAll,Display) )          // show objects
                 eObjMode = VOBJ_MODE_SHOW;
-            else if ( IS_SET(dfObjectFrame,Display) )   // Objekte als Platzhalter
+            else if ( IS_SET(dfObjectFrame,Display) )   // object as placeholder
                 eObjMode = VOBJ_MODE_SHOW;
-            else if ( IS_SET(dfObjectNone,Display) )    // Objekte nicht anzeigen
+            else if ( IS_SET(dfObjectNone,Display) )    // don't show objects
                 eObjMode = VOBJ_MODE_HIDE;
 
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_OLE,   eObjMode );
@@ -1545,7 +1546,7 @@ void Sc10Import::LoadTables()
         }
         pPrgrsBar->Progress();
 
-        // DataTable
+        // Data table
         rStream.ReadUInt16( ID );
         if (ID != TableID)
         {
@@ -1593,8 +1594,8 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     double Value = ScfTools::ReadLongDouble(rStream);
                     //rStream.Read(&Value, sizeof(Value));
 
-                    // Achtung hier ist eine Anpassung Notwendig wenn Ihr das Basisdatum aendert
-                    // In StarCalc 1.0 entspricht 0 dem 01.01.1900
+                    // TODO: adjustment is needed if we change the Basis Date
+                    // StarCalc 1.0: 01.01.1900
                     // if ((nFormat >= 30) && (nFormat <= 35))
                     // Value += 0;
                     if ((nFormat >= 40) && (nFormat <= 45))
@@ -1948,7 +1949,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         pColData++;
     }
 
-    // ATTENTION: Code up to here works more or less ... from here I've had enough ! (GT)
+    // TODO: Code up to here works more or less ... from here I've had enough ! (GT)
 
     // Background (Color, Raster)
     sal_uInt16      nRasterIndex = 0;
@@ -2060,7 +2061,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Cell attributes (Protected, hidden...)
+    // Cell attributes (protected, hidden...)
     nStart = 0;
     nEnd = 0;
     for (i=0; i<aFlag.Count; i++)
@@ -2135,8 +2136,8 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
 
 void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey)
 {
-  // Achtung: Die Formate werden nur auf die StarCalc 3.0 internen Formate gemappt
-  //          Korrekterweise muessten zum Teil neue Formate erzeugt werden (sollte Stephan sich ansehen)
+  // TODO: formats are mapped only for StarCalc 3.0 internal formats
+  //       more correctly, at times new formats need to be created (Stephan: please check!)
   nKey = 0;
   switch (nFormat)
   {
@@ -2166,7 +2167,7 @@ void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& n
      nKey = 60;
      break;
     case vfZerro :
-     // Achtung kein Aequivalent
+     // TODO: no equivalent
      break;
     case vfDate :
       switch (nInfo)
@@ -2291,7 +2292,7 @@ void Sc10Import::LoadObjects()
     {
       sal_uInt8 ObjectType;
       Sc10GraphHeader GraphHeader;
-      bool IsOleObject = false; // Achtung dies ist nur ein Notnagel
+      bool IsOleObject = false; // TODO: this is only a bandaid
       for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
       {
         rStream.ReadUChar( ObjectType );
@@ -2316,7 +2317,7 @@ void Sc10Import::LoadObjects()
         switch (ObjectType)
         {
           case otOle :
-           // Achtung hier muss sowas wie OleLoadFromStream passieren
+           // TODO: here we need to do something like OleLoadFromStream
            IsOleObject = true;
            break;
           case otImage :
@@ -2324,8 +2325,8 @@ void Sc10Import::LoadObjects()
            Sc10ImageHeader ImageHeader;
            lcl_ReadImageHeaer(rStream, ImageHeader);
 
-           // Achtung nun kommen die Daten (Bitmap oder Metafile)
-           // Typ = 1 Device Dependend Bitmap DIB
+           // Attention: here come the data (Bitmap oder Metafile)
+           // Typ = 1 Device-dependend Bitmap DIB
            // Typ = 2 MetaFile
            rStream.SeekRel(ImageHeader.Size);
 
@@ -2344,7 +2345,7 @@ void Sc10Import::LoadObjects()
             {
                 lcl_ReadChartHeader(rStream, ChartHeader);
 
-                //! altes Metafile verwenden ??
+                // TODO: use old Metafile ??
                 rStream.SeekRel(ChartHeader.Size);
 
                 lcl_ReadChartSheetData(rStream, ChartSheetData);
