@@ -88,12 +88,11 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 
             for(sal_uInt32 a(0); bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
-                                                     0.0,
-                                                     aB2DLineWidth,
-                                                     basegfx::B2DLINEJOIN_NONE,
-                                                     css::drawing::LineCap_BUTT,
-                                                     this);
+                bSuccess = drawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
+                                         0.0,
+                                         aB2DLineWidth,
+                                         basegfx::B2DLINEJOIN_NONE,
+                                         css::drawing::LineCap_BUTT );
             }
         }
 
@@ -193,12 +192,11 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
                 aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
             }
 
-            bSuccess = mpGraphics->DrawPolyLine( aB2DPolygon,
-                                                 0.0,
-                                                 aB2DLineWidth,
-                                                 basegfx::B2DLINEJOIN_NONE,
-                                                 css::drawing::LineCap_BUTT,
-                                                 this);
+            bSuccess = drawPolyLine( aB2DPolygon,
+                                     0.0,
+                                     aB2DLineWidth,
+                                     basegfx::B2DLINEJOIN_NONE,
+                                     css::drawing::LineCap_BUTT );
         }
 
         if(bSuccess)
@@ -294,12 +292,11 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
             for(sal_uInt32 a(0);bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
-                                                     0.0,
-                                                     aB2DLineWidth,
-                                                     basegfx::B2DLINEJOIN_NONE,
-                                                     css::drawing::LineCap_BUTT,
-                                                     this);
+                bSuccess = drawPolyLine( aB2DPolyPolygon.getB2DPolygon(a),
+                                         0.0,
+                                         aB2DLineWidth,
+                                         basegfx::B2DLINEJOIN_NONE,
+                                         css::drawing::LineCap_BUTT );
             }
         }
 

@@ -122,7 +122,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
             const SalPoint* pPtAry = (const SalPoint*) aRoundRectPoly.GetConstPointAry();
 
             if ( !mbFillColor )
-                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );
+                mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry );
             else
                 mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, this );
         }

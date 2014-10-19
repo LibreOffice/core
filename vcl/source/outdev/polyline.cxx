@@ -28,6 +28,29 @@
 
 #include "salgdi.hxx"
 
+bool OutputDevice::drawPolyLine( const basegfx::B2DPolygon& rPolygon,
+                                 double fTransparency,
+                                 const basegfx::B2DVector& rLineWidth,
+                                 basegfx::B2DLineJoin eLineJoin,
+                                 com::sun::star::drawing::LineCap eLineCap )
+{
+
+    if ( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    bool bRet = false;
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+    {
+        basegfx::B2DPolygon aMirror( mirror( rPolygon ) );
+        bRet = mpGraphics->DrawPolyLine( aMirror, fTransparency, rLineWidth, eLineJoin, eLineCap );
+    }
+    else
+        bRet = mpGraphics->DrawPolyLine( rPolygon, fTransparency, rLineWidth, eLineJoin, eLineCap );
+
+    return bRet;
+}
+
+
 void OutputDevice::DrawPolyLine( const Polygon& rPoly )
 {
 
@@ -74,8 +97,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
                 aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
             }
 
-            if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth,
-                                         basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
+            if(drawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT))
             {
                 return;
             }
@@ -93,16 +115,30 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         {
             aPoly = Polygon::SubdivideBezier(aPoly);
             pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
-            mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry, this );
+            mpGraphics->DrawPolyLine( aPoly.GetSize(), pPtAry );
         }
     }
     else
     {
-        mpGraphics->DrawPolyLine( nPoints, pPtAry, this );
+        mpGraphics->DrawPolyLine( nPoints, pPtAry );
     }
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyLine( rPoly );
+}
+
+void OutputDevice::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+{
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+    {
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get() );
+        mpGraphics->DrawPolyLine( nPoints, bCopied ? pPtAry2.get() : pPtAry );
+    }
+    else
+    {
+        mpGraphics->DrawPolyLine( nPoints, pPtAry );
+    }
 }
 
 void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo )
@@ -271,7 +307,7 @@ void OutputDevice::DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo
             nPoints = aPoly.GetSize();
         }
 
-        mpGraphics->DrawPolyLine(nPoints, (const SalPoint*)aPoly.GetConstPointAry(), this);
+        mpGraphics->DrawPolyLine(nPoints, (const SalPoint*)aPoly.GetConstPointAry() );
     }
 
     if( mpAlphaVDev )
@@ -308,12 +344,7 @@ bool OutputDevice::TryDrawPolyLineDirectNoAACheck( const basegfx::B2DPolygon& rB
     }
 
     // draw the polyline
-    return mpGraphics->DrawPolyLine( aB2DPolygon,
-                                     fTransparency,
-                                     aB2DLineWidth,
-                                     eLineJoin,
-                                     eLineCap,
-                                     this);
+    return drawPolyLine( aB2DPolygon, fTransparency, aB2DLineWidth, eLineJoin, eLineCap );
 }
 
 bool OutputDevice::TryDrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,

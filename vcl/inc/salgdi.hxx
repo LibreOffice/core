@@ -246,7 +246,7 @@ public:
 
     void                        DrawRect( long nX, long nY, long nWidth, long nHeight );
 
-    void                        DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
+    void                        DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry );
 
     void                        DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
 
@@ -266,8 +266,7 @@ public:
                                     double i_fTransparency,
                                     const basegfx::B2DVector& i_rLineWidth,
                                     basegfx::B2DLineJoin i_eLineJoin,
-                                    com::sun::star::drawing::LineCap i_eLineCap,
-                                    const OutputDevice* i_pOutDev);
+                                    com::sun::star::drawing::LineCap i_eLineCap );
 
     bool                        DrawPolyLineBezier(
                                     sal_uInt32 nPoints,
