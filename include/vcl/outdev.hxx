@@ -37,6 +37,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
+#include <vcl/salgtype.hxx>
 
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -313,7 +314,7 @@ private:
     ImplThresholdRes                maThresRes;
     OutDevType                      meOutDevType;
     OutDevViewType                  meOutDevViewType;
-    vcl::Region                          maRegion;           // contains the clip region, see SetClipRegion(...)
+    vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
     Color                           maFillColor;
     vcl::Font                       maFont;
@@ -1257,6 +1258,19 @@ public:
     bool                        IsRTLEnabled() const { return mbEnableRTL; }
 
     bool                        GetTextIsRTL( const OUString&, sal_Int32 nIndex, sal_Int32 nLen ) const;
+
+
+private:
+
+    void                        mirror( long& nX, bool bBack = false ) const;
+    void                        mirror( long& nX, long& nWidth, bool bBack = false ) const;
+    bool                        mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, bool bBack = false ) const;
+    void                        mirror( Rectangle& rRect, bool bBack = false ) const;
+    void                        mirror( vcl::Region& rRgn, bool bBack = false ) const;
+    void                        mirror( ImplControlValue&, bool bBack = false ) const;
+    basegfx::B2DPoint           mirror( const basegfx::B2DPoint& rPoint, bool bBack = false ) const;
+    basegfx::B2DPolygon         mirror( const basegfx::B2DPolygon& rPoly, bool bBack = false ) const;
+    basegfx::B2DPolyPolygon     mirror( const basegfx::B2DPolyPolygon& rPoly, bool bBack = false ) const;
 
     ///@}
 
