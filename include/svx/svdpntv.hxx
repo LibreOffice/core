@@ -76,7 +76,7 @@ enum SdrAnimationMode
 //   Typedef's und defines
 
 
-typedef unsigned char TRISTATE;
+typedef unsigned char SDR_TRISTATE;
 #define FUZZY                   (2)
 #define SDR_ANYFORMAT           (0xFFFFFFFF)
 #define SDR_ANYITEM             (0xFFFF)

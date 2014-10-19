@@ -50,13 +50,13 @@ public:
     // checken bzw. setzen/loeschen will.
     // Moegliche Werte fuer nThisEsc sind z.Zt.
     // SDRESC_LEFT, SDRESC_RIGHT, SDRESC_TOP und SDRESC_BOTTOM
-    TRISTATE IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const;
+    SDR_TRISTATE IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const;
     void SetMarkedGluePointsEscDir(sal_uInt16 nThisEsc, bool bOn);
     bool IsSetMarkedGluePointsEscDirPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 
     // Checken/setzen, ob die Klebepunktpositionen relativ zur
     // Objektgroesse sind (Percent=sal_True) oder nicht (Percent=sal_False)
-    TRISTATE IsMarkedGluePointsPercent() const;
+    SDR_TRISTATE IsMarkedGluePointsPercent() const;
     void SetMarkedGluePointsPercent(bool bOn);
     bool IsSetMarkedGluePointsPercentPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 

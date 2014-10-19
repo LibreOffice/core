@@ -106,13 +106,13 @@ static void ImpGetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const voi
     }
 }
 
-TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const
+SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const
 {
     ForceUndirtyMrkPnt();
     bool bFirst=true;
     sal_uInt16 nRet=0;
     ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetEscDir,true,&bFirst,&nThisEsc,&nRet);
-    return (TRISTATE)nRet;
+    return (SDR_TRISTATE)nRet;
 }
 
 static void ImpSetEscDir(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const void* pnThisEsc, const void* pbOn, const void*, const void*, const void*)
@@ -144,13 +144,13 @@ static void ImpGetPercent(SdrGluePoint& rGP, const SdrObject* /*pObj*/, const vo
     }
 }
 
-TRISTATE SdrGlueEditView::IsMarkedGluePointsPercent() const
+SDR_TRISTATE SdrGlueEditView::IsMarkedGluePointsPercent() const
 {
     ForceUndirtyMrkPnt();
     bool bFirst=true;
     sal_uInt16 nRet=sal_True;
     ((SdrGlueEditView*)this)->ImpDoMarkedGluePoints(ImpGetPercent,true,&bFirst,&nRet);
-    return (TRISTATE)nRet;
+    return (SDR_TRISTATE)nRet;
 }
 
 static void ImpSetPercent(SdrGluePoint& rGP, const SdrObject* pObj, const void* pbOn, const void*, const void*, const void*, const void*)
