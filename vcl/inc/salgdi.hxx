@@ -239,8 +239,8 @@ public:
     bool                        SetClipRegion( const vcl::Region&, const OutputDevice *pOutDev );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    void                        DrawPixel( long nX, long nY, const OutputDevice *pOutDev );
-    void                        DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev );
+    void                        DrawPixel( long nX, long nY );
+    void                        DrawPixel( long nX, long nY, SalColor nSalColor );
 
     void                        DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev );
 
