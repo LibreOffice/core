@@ -408,18 +408,9 @@ bool SalGraphics::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, 
     return drawPolyPolygon( rPolyPolygon, fTransparency );
 }
 
-bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry, const OutputDevice* pOutDev )
+bool SalGraphics::DrawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
-    bool bResult = false;
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
-        bResult = drawPolyLineBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
-    }
-    else
-        bResult = drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
-    return bResult;
+    return drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry, const OutputDevice* pOutDev )
