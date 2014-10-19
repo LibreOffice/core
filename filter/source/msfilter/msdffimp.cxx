@@ -3944,7 +3944,6 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             Graphic aGraf(static_cast<SdrGrafObj*>(pRet)->GetGraphic());
             lcl_ApplyCropping( *this, &rSet, aGraf );
         }
-        static_cast<SdrGrafObj*>(pRet)->ForceSwapOut();
     }
 
     return pRet;
