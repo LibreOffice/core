@@ -751,6 +751,8 @@ private:
 
     void                        drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry );
 
+    void                        drawPolygon( sal_uInt16 nPoints, const SalPoint* pPtAry  );
+
     // #i101491#
     // Helper which holds the old line geometry creation and is extended to use AA when
     // switched on. Advantage is that line geometry is only temporarily used for paint

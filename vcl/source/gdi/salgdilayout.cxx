@@ -393,16 +393,9 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
     drawRect( nX, nY, nWidth, nHeight );
 }
 
-void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
+void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
-        drawPolygon( nPoints, bCopied ? pPtAry2.get() : pPtAry );
-    }
-    else
-        drawPolygon( nPoints, pPtAry );
+    drawPolygon( nPoints, pPtAry );
 }
 
 void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry, const OutputDevice *pOutDev )
