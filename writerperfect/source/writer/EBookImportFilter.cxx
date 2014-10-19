@@ -26,7 +26,7 @@ using com::sun::star::uno::XComponentContext;
 
 using libebook::EBOOKDocument;
 
-bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGTextInterface &rGenerator, utl::MediaDescriptor &rDescriptor)
+bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &rDescriptor)
 {
     EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
 
