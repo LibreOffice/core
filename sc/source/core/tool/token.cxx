@@ -3170,6 +3170,53 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                     if (adjustDoubleRefInName(rRef, rCxt, rPos))
                         aRes.mbReferenceModified = true;
                 }
+                else if (rCxt.mnRowDelta < 0)
+                {
+                    // row(s) deleted.
+                    if (rRef.Ref1.IsRowRel() || rRef.Ref2.IsRowRel())
+                        // Don't modify relative references in names.
+                        break;
+
+                    if (aAbs.aStart.Col() < rCxt.maRange.aStart.Col() || rCxt.maRange.aEnd.Col() < aAbs.aEnd.Col())
+                        // column range of the reference is not entirely in the deleted column range.
+                        break;
+
+                    ScRange aDeleted = rCxt.maRange;
+                    aDeleted.aStart.IncRow(rCxt.mnRowDelta);
+                    aDeleted.aEnd.SetRow(aDeleted.aStart.Row()-rCxt.mnRowDelta-1);
+
+                    if (aAbs.aEnd.Row() < aDeleted.aStart.Row() || aDeleted.aEnd.Row() < aAbs.aStart.Row())
+                        // reference range doesn't intersect with the deleted range.
+                        break;
+
+                    if (aDeleted.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= aDeleted.aEnd.Row())
+                    {
+                        // This reference is entirely deleted.
+                        rRef.Ref1.SetRowDeleted(true);
+                        rRef.Ref2.SetRowDeleted(true);
+                        aRes.mbReferenceModified = true;
+                        break;
+                    }
+
+                    if (aAbs.aStart.Row() < aDeleted.aStart.Row())
+                    {
+                        if (aDeleted.aEnd.Row() < aAbs.aEnd.Row())
+                            // Deleted in the middle.  Make the reference shorter.
+                            rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                        else
+                            // Deleted at tail end.  Cut off the lower part.
+                            rRef.Ref2.SetAbsRow(aDeleted.aStart.Row()-1);
+                    }
+                    else
+                    {
+                        // Deleted at the top.  Cut the top off and shift up.
+                        rRef.Ref1.SetAbsRow(aDeleted.aEnd.Row()+1);
+                        rRef.Ref1.IncRow(rCxt.mnRowDelta);
+                        rRef.Ref2.IncRow(rCxt.mnRowDelta);
+                    }
+
+                    aRes.mbReferenceModified = true;
+                }
                 else if (rCxt.maRange.Intersects(aAbs))
                 {
                     if (rCxt.mnColDelta && rCxt.maRange.aStart.Row() <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= rCxt.maRange.aEnd.Row())
