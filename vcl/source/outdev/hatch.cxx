@@ -396,7 +396,7 @@ void OutputDevice::DrawHatchLine( const Line& rLine, const tools::PolyPolygon& r
                 {
                     const Point aPt1( ImplLogicToDevicePixel( pPtBuffer[ i ] ) );
                     const Point aPt2( ImplLogicToDevicePixel( pPtBuffer[ i + 1 ] ) );
-                    mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this );
+                    drawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y() );
                 }
             }
         }
