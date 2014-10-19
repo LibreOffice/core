@@ -128,10 +128,11 @@ void rational_ReduceInaccurate(boost::rational<sal_Int64>& rRational, unsigned n
     DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
 
     // How much bits can we lose?
-    const int nMulBitsToLose = std::max( ( impl_NumberOfBits( nMul ) - int( nSignificantBits ) ), 0 );
-    const int nDivBitsToLose = std::max( ( impl_NumberOfBits( nDiv ) - int( nSignificantBits ) ), 0 );
+    const int nMulBitsToLose = impl_NumberOfBits( nMul ) - int( nSignificantBits );
+    const int nDivBitsToLose = impl_NumberOfBits( nDiv ) - int( nSignificantBits );
 
-    const int nToLose = std::min( nMulBitsToLose, nDivBitsToLose );
+    int nToLose = nMulBitsToLose < nDivBitsToLose ? nMulBitsToLose : nDivBitsToLose;
+    nToLose = nToLose < 0 ? 0 : nToLose;
 
     // Remove the bits
     nMul >>= nToLose;
