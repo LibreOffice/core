@@ -45,7 +45,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/ClarisWksDbaseContent \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksDocument \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksGraph \
-	UnpackedTarball/libmwaw/src/lib/ClarisWksPRPArser \
+	UnpackedTarball/libmwaw/src/lib/ClarisWksPRParser \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksParser \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksPresentation \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksSSParser \
