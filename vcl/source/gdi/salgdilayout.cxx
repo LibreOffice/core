@@ -388,10 +388,8 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
     drawLine( nX1, nY1, nX2, nY2 );
 }
 
-void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev )
+void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-        mirror( nX, nWidth, pOutDev );
     drawRect( nX, nY, nWidth, nHeight );
 }
 
