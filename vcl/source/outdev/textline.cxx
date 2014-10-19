@@ -107,7 +107,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             ImplRotatePos( nBaseX, nBaseY, nStartX, nStartY, nOrientation );
             ImplRotatePos( nBaseX, nBaseY, nEndX, nEndY, nOrientation );
         }
-        mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY, this );
+        drawLine( nStartX, nStartY, nEndX, nEndY );
     }
     else
     {
