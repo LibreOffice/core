@@ -66,7 +66,7 @@ public:
     void        AddRecentColor(const Color& rRecentColor);
 
     void        SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater);
-    void        PopupColorPicker(const OUString& aCommand);
+    void        PopupColorPicker(const OUString aCommand);
     static void DispatchColorCommand(const OUString& aCommand, const Color aColor);
 };
 

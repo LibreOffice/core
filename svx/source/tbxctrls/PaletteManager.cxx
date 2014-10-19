@@ -195,7 +195,9 @@ void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
     mpBtnUpdater = pBtnUpdater;
 }
 
-void PaletteManager::PopupColorPicker(const OUString& aCommand)
+// Do not change the aCommand argument to OUString&. The calling object is destroyed
+// during the call to aColorDlg.Execute(), so this must be passed by value
+void PaletteManager::PopupColorPicker(const OUString aCommand)
 {
     SvColorDialog aColorDlg( 0 );
     aColorDlg.SetColor ( mLastColor );
