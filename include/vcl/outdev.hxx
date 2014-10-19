@@ -805,6 +805,8 @@ public:
     void                        DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
 
+    bool                        DrawPolyLineBezier(sal_uInt32, const SalPoint*, const sal_uInt8*);
+
 private:
 
     SAL_DLLPRIVATE void         ImplDrawPolygon( const Polygon& rPoly, const tools::PolyPolygon* pClipPolyPoly = NULL );
