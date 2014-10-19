@@ -393,18 +393,6 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
     drawRect( nX, nY, nWidth, nHeight );
 }
 
-void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
-{
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
-        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get(), pOutDev );
-        drawPolyLine( nPoints, bCopied ? pPtAry2.get() : pPtAry );
-    }
-    else
-        drawPolyLine( nPoints, pPtAry );
-}
-
 void SalGraphics::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev )
 {
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
@@ -509,22 +497,18 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
     return bRet;
 }
 
-bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
-                                double i_fTransparency,
-                                const basegfx::B2DVector& i_rLineWidth,
-                                basegfx::B2DLineJoin i_eLineJoin,
-                                com::sun::star::drawing::LineCap i_eLineCap,
-                                const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& rPolygon,
+                                double fTransparency,
+                                const basegfx::B2DVector& rLineWidth,
+                                basegfx::B2DLineJoin eLineJoin,
+                                com::sun::star::drawing::LineCap eLineCap )
 {
-    bool bRet = false;
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
-    {
-        basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
-        bRet = drawPolyLine( aMirror, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap );
-    }
-    else
-        bRet = drawPolyLine( i_rPolygon, i_fTransparency, i_rLineWidth, i_eLineJoin, i_eLineCap );
-    return bRet;
+    return drawPolyLine( rPolygon, fTransparency, rLineWidth, eLineJoin, eLineCap );
+}
+
+void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
+{
+    drawPolyLine( nPoints, pPtAry );
 }
 
 void SalGraphics::CopyArea( long nDestX, long nDestY,
