@@ -244,7 +244,7 @@ public:
 
     void                        DrawLine( long nX1, long nY1, long nX2, long nY2 );
 
-    void                        DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
+    void                        DrawRect( long nX, long nY, long nWidth, long nHeight );
 
     void                        DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, const OutputDevice *pOutDev );
 
