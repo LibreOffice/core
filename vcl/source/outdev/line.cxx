@@ -130,7 +130,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if( mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
+        if( drawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT ))
         {
             return;
         }
@@ -248,13 +248,13 @@ void OutputDevice::PaintLineGeometryWithEvtlExpand(
 
             if(bTryAA)
             {
-                bDone = mpGraphics->DrawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this);
+                bDone = drawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT );
             }
 
             if(!bDone)
             {
                 const Polygon aPolygon(aCandidate);
-                mpGraphics->DrawPolyLine(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
+                drawPolyLine(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry() );
             }
         }
     }
