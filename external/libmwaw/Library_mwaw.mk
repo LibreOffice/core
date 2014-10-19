@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/ClarisWksDbaseContent \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksDocument \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksGraph \
+	UnpackedTarball/libmwaw/src/lib/ClarisWksPRPArser \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksParser \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksPresentation \
 	UnpackedTarball/libmwaw/src/lib/ClarisWksSSParser \
@@ -99,6 +100,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MWAWPictBitmap \
 	UnpackedTarball/libmwaw/src/lib/MWAWPictData \
 	UnpackedTarball/libmwaw/src/lib/MWAWPictMac \
+	UnpackedTarball/libmwaw/src/lib/MWAWPresentationListener \
 	UnpackedTarball/libmwaw/src/lib/MWAWPrinter \
 	UnpackedTarball/libmwaw/src/lib/MWAWPropertyHandler \
 	UnpackedTarball/libmwaw/src/lib/MWAWRSRCParser \
@@ -111,6 +113,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/MWAWTable \
 	UnpackedTarball/libmwaw/src/lib/MWAWTextListener \
 	UnpackedTarball/libmwaw/src/lib/MacDocParser \
+	UnpackedTarball/libmwaw/src/lib/MacDrawParser \
+	UnpackedTarball/libmwaw/src/lib/MacDrawProParser \
+	UnpackedTarball/libmwaw/src/lib/MacDrawProStyleManager \
 	UnpackedTarball/libmwaw/src/lib/MacPaintParser \
 	UnpackedTarball/libmwaw/src/lib/MacWrtParser \
 	UnpackedTarball/libmwaw/src/lib/MacWrtProParser \
@@ -142,6 +147,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/NisusWrtText \
 	UnpackedTarball/libmwaw/src/lib/RagTimeParser \
 	UnpackedTarball/libmwaw/src/lib/RagTimeSpreadsheet \
+	UnpackedTarball/libmwaw/src/lib/RagTimeStruct \
 	UnpackedTarball/libmwaw/src/lib/RagTimeText \
 	UnpackedTarball/libmwaw/src/lib/SuperPaintParser \
 	UnpackedTarball/libmwaw/src/lib/TeachTxtParser \
