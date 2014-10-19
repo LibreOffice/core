@@ -24,6 +24,12 @@ $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libOsiClp.1.
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libCoinMP.1.dylib,CoinMP/src/.libs/libCoinMP.1.7.6.dylib))
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libCoinUtils.3.dylib,CoinUtils/src/.libs/libCoinUtils.3.9.11.dylib))
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libOsi.1.dylib,Osi/src/Osi/.libs/libOsi.1.11.5.dylib))
+for coinmp_dylib_name in libCbc.3 libCbcSolver.3 libCgl.1 libClp.1 libOsiClp.1 libCoinMP.1 libCoinUtils.3 libOsi.1 ; do \
+    $(INSTALL_NAME_TOOL) -id @__________________________________________________OOO/$(coinmp_dylib_name).dylib $(LIBO_LIB_FOLDER)/$(coinmp_dylib_name).dylib
+    for dependency in `otool -L $(LIBO_LIB_FOLDER)/$(coinmp_dylib_name).dylib | grep coinmp | sed 's/\([^ ]*\).*/\1/‘` ; do \
+        $(INSTALL_NAME_TOOL) -change $dependency @__________________________________________________OOO/`echo $dependency | sed 's/.*\///g'` $(LIBO_LIB_FOLDER)/$(coinmp_dylib_name).dylib
+    done
+done
 else
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libCbc.so.3,Cbc/src/.libs/libCbc.so.3.8.8))
 $(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/libCbcSolver.so.3,Cbc/src/.libs/libCbcSolver.so.3.8.8))
