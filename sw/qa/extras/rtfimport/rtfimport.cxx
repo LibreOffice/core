@@ -1974,6 +1974,15 @@ DECLARE_RTFIMPORT_TEST(testFdo82071, "fdo82071.rtf")
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE, getProperty<sal_Int16>(xRun, "CharUnderline"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo83464, "fdo83464.rtf")
+{
+    // Problem was that the text in the textfrme had wrong font.
+    uno::Reference<text::XTextRange> xFrameText(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello"), xFrameText->getString());
+    // This was Times New Roman.
+    CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(getRun(getParagraphOfText(1, xFrameText->getText()), 1), "CharFontName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
