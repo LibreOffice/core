@@ -548,8 +548,8 @@ long SwWrtShell::DelPrvWord()
         {
             if ( _PrvWrdForDelete() ) // --> OD 2008-08-06 #i92468#
             {
-                // skip over all-1 spaces
-                short n = -1;
+                // skip over all spaces
+                short n = 0;
                 while( ' ' == GetChar( sal_False, n ))
                     --n;
 
