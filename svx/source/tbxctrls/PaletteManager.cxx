@@ -197,6 +197,8 @@ void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
 
 void PaletteManager::PopupColorPicker(const OUString& aCommand)
 {
+    // The calling object goes away during aColorDlg.Execute(), so we must copy this
+    OUString aCommandCopy = aCommand;
     SvColorDialog aColorDlg( 0 );
     aColorDlg.SetColor ( mLastColor );
     aColorDlg.SetMode( svtools::ColorPickerMode_MODIFY );
@@ -206,7 +208,7 @@ void PaletteManager::PopupColorPicker(const OUString& aCommand)
             mpBtnUpdater->Update( aColorDlg.GetColor() );
         mLastColor = aColorDlg.GetColor();
         AddRecentColor( mLastColor );
-        DispatchColorCommand(aCommand, mLastColor);
+        DispatchColorCommand(aCommandCopy, mLastColor);
     }
 }
 
