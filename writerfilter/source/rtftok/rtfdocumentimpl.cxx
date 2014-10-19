@@ -2812,6 +2812,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
         m_aStates.top().nCurrentEncoding = getEncoding(getFontIndex(m_nDefaultFontIndex));
         m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
+        m_aStates.top().isRightToLeft = false;
+        m_aStates.top().eRunType = RTFParserState::LOCH;
     }
     break;
     case RTF_PARD:
