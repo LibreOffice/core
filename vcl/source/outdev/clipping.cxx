@@ -81,7 +81,7 @@ bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pG
         pGraphics = mpGraphics;
     }
 
-    bool bClipRegion;
+    bool bClipRegion=false;
 
     if ( (pGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
     {

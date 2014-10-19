@@ -383,13 +383,8 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
     drawPixel( nX, nY, nSalColor );
 }
 
-void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice *pOutDev )
+void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        mirror( nX1, pOutDev );
-        mirror( nX2, pOutDev );
-    }
     drawLine( nX1, nY1, nX2, nY2 );
 }
 
