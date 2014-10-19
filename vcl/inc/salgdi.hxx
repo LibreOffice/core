@@ -236,7 +236,7 @@ public:
 
     // non virtual methods; these do possible coordinate mirroring and
     // then delegate to protected virtual methods
-    bool                        SetClipRegion( const vcl::Region&, const OutputDevice *pOutDev );
+    bool                        SetClipRegion( const vcl::Region& );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     void                        DrawPixel( long nX, long nY );
