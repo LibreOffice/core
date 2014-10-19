@@ -78,7 +78,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     }
     else
     {
-        mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
+        drawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y() );
     }
 
     if( mpAlphaVDev )
@@ -139,10 +139,24 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     const Point aStartPt(ImplLogicToDevicePixel(rStartPt));
     const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
 
-    mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), this );
+    drawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y() );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );
+}
+
+void OutputDevice::drawLine( long nX1, long nY1, long nX2, long nY2 )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
+
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+    {
+        mirror( nX1 );
+        mirror( nX2 );
+    }
+
+    mpGraphics->DrawLine (nX1, nY1, nX2, nY2 );
 }
 
 void OutputDevice::PaintLineGeometryWithEvtlExpand(
