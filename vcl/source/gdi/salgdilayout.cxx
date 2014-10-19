@@ -368,15 +368,9 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     return aRet;
 }
 
-bool SalGraphics::SetClipRegion( const vcl::Region& i_rClip, const OutputDevice *pOutDev )
+bool SalGraphics::SetClipRegion( const vcl::Region& rClip )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        vcl::Region aMirror( i_rClip );
-        mirror( aMirror, pOutDev );
-        return setClipRegion( aMirror );
-    }
-    return setClipRegion( i_rClip );
+    return setClipRegion( rClip );
 }
 
 void SalGraphics::DrawPixel( long nX, long nY )
