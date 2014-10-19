@@ -78,7 +78,10 @@ void OutputDevice::DrawPixel( const Point& rPt )
     if ( mbInitLineColor )
         InitLineColor();
 
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), this );
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+        mirror( aPt.X() );
+
+    mpGraphics->DrawPixel( aPt.X(), aPt.Y() );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPixel( rPt );
@@ -106,7 +109,10 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mbOutputClipped )
         return;
 
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( aColor ), this );
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+        mirror( aPt.X() );
+
+    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( aColor ) );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPixel( rPt );
@@ -144,10 +150,16 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
                 if ( mbOutputClipped )
                     return;
 
+                bool bMirror = ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() );
+
                 for ( sal_uInt16 i = 0; i < nSize; i++ )
                 {
-                    const Point aPt( ImplLogicToDevicePixel( rPts[ i ] ) );
-                    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( pColors[ i ] ), this );
+                    Point aPt( ImplLogicToDevicePixel( rPts[ i ] ) );
+
+                    if( bMirror )
+                        mirror( aPt.X() );
+
+                    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( pColors[ i ] ) );
                 }
             }
         }
@@ -168,6 +180,7 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
         {
             pColArray[ i ] = rColor;
         }
+
         DrawPixel( rPts, pColArray.get() );
     }
 

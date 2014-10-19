@@ -379,17 +379,13 @@ bool SalGraphics::SetClipRegion( const vcl::Region& i_rClip, const OutputDevice 
     return setClipRegion( i_rClip );
 }
 
-void SalGraphics::DrawPixel( long nX, long nY, const OutputDevice *pOutDev )
+void SalGraphics::DrawPixel( long nX, long nY )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-        mirror( nX, pOutDev );
     drawPixel( nX, nY );
 }
 
-void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice *pOutDev )
+void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-        mirror( nX, pOutDev );
     drawPixel( nX, nY, nSalColor );
 }
 
