@@ -284,7 +284,7 @@ void OutputDevice::PaintLineGeometryWithEvtlExpand(
 
                 // need to subdivide, mpGraphics->DrawPolygon ignores curves
                 aPolygon.AdaptiveSubdivide(aPolygon);
-                mpGraphics->DrawPolygon(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
+                drawPolygon(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry() );
             }
         }
 
