@@ -144,24 +144,13 @@ void SwXMLTextBlocks::ClearDoc()
     pDoc->ClearDoc();
     pDocShell->ClearEmbeddedObjects();
 }
+
 void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong, bool bOnlyTxt )
 {
-    sal_uInt16 nIdx = GetIndex( rShort );
-    SwBlockName* pNew = NULL;
-    if( nIdx != (sal_uInt16) -1 )
-    {
-        delete aNames[nIdx];
-        aNames.erase( aNames.begin() + nIdx );
-    }
-
     aPackageName = GeneratePackageName( rShort );
-    pNew = new SwBlockName( rShort, rLong, aPackageName );
-
-    pNew->bIsOnlyTxtFlagInit = true;
-    pNew->bIsOnlyTxt = bOnlyTxt;
-    aNames.insert( pNew );
-    bInfoChanged = true;
+    AddName(rShort, rLong, aPackageName, bOnlyTxt);
 }
+
 void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
                                const OUString& rPackageName, bool bOnlyTxt )
 {
