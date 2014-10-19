@@ -253,13 +253,11 @@ public:
     void                        DrawPolyPolygon(
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
-                                    PCONSTSALPOINT* pPtAry,
-                                    const OutputDevice *pOutDev );
+                                    PCONSTSALPOINT* pPtAry );
 
     bool                        DrawPolyPolygon(
-                                    const basegfx::B2DPolyPolygon &i_rPolyPolygon,
-                                    double i_fTransparency,
-                                    const OutputDevice *i_pOutDev);
+                                    const basegfx::B2DPolyPolygon &rPolyPolygon,
+                                    double fTransparency );
 
     bool                        DrawPolyLine(
                                     const basegfx::B2DPolygon& i_rPolygon,
