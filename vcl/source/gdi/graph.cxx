@@ -522,6 +522,12 @@ bool Graphic::SwapOut()
     return mpImpGraphic->ImplSwapOut();
 }
 
+void Graphic::SwapOutAsLink()
+{
+    ImplTestRefCount();
+    mpImpGraphic->ImplSwapOutAsLink();
+}
+
 bool Graphic::SwapOut( SvStream* pOStream )
 {
     ImplTestRefCount();

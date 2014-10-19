@@ -1349,6 +1349,12 @@ bool ImpGraphic::ImplSwapOut()
     return bRet;
 }
 
+void ImpGraphic::ImplSwapOutAsLink()
+{
+    ImplClearGraphics( true );
+    mbSwapOut = true;
+}
+
 bool ImpGraphic::ImplSwapOut( SvStream* pOStm )
 {
     bool bRet = false;
@@ -1370,8 +1376,7 @@ bool ImpGraphic::ImplSwapOut( SvStream* pOStm )
     }
     else
     {
-        ImplClearGraphics( true );
-        bRet = mbSwapOut = true;
+        SAL_WARN("vcl.gdi", "Graphic SwapOut: No stream for swap out!");
     }
 
     return bRet;

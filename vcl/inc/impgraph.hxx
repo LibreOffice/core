@@ -143,6 +143,7 @@ private:
     bool                ImplSwapIn( SvStream* pIStm );
 
     bool                ImplSwapOut();
+    void                ImplSwapOutAsLink();
     bool                ImplSwapOut( SvStream* pOStm );
 
     bool                ImplIsSwapOut() const { return mbSwapOut;}
