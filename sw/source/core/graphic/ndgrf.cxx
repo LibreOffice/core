@@ -621,7 +621,7 @@ bool SwGrfNode::SwapOut()
                     return false;
         }
         // written graphics and links are removed here
-        return maGrfObj.SwapOut( NULL );
+        return maGrfObj.SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
     }
     return true;
 }

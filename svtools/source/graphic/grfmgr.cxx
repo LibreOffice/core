@@ -1099,7 +1099,16 @@ bool GraphicObject::SwapOut()
 
 bool GraphicObject::SwapOut( SvStream* pOStm )
 {
-    const bool bRet = !mbAutoSwapped && maGraphic.SwapOut( pOStm );
+    bool bRet = !mbAutoSwapped;
+    // swap out as a link
+    if( pOStm == GRFMGR_AUTOSWAPSTREAM_LINK )
+    {
+        maGraphic.SwapOutAsLink();
+    }
+    else
+    {
+        bRet = bRet && maGraphic.SwapOut( pOStm );
+    }
 
     if( bRet && mpMgr )
         mpMgr->ImplGraphicObjectWasSwappedOut( *this );
@@ -1158,7 +1167,7 @@ IMPL_LINK_NOARG(GraphicObject, ImplAutoSwapOutHdl)
         if( GRFMGR_AUTOSWAPSTREAM_NONE != pStream )
         {
             if( GRFMGR_AUTOSWAPSTREAM_LINK == pStream )
-                mbAutoSwapped = SwapOut( NULL );
+                mbAutoSwapped = SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
             else
             {
                 if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )

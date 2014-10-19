@@ -177,6 +177,7 @@ public:
     sal_uLong               GetDocFilePos() const;
 
     bool                SwapOut();
+    void                SwapOutAsLink();
     bool                SwapOut( SvStream* pOStm );
     bool                SwapIn();
     bool                SwapIn( SvStream* pIStm );
