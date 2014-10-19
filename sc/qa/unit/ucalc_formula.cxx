@@ -2285,6 +2285,80 @@ void Test::testFormulaRefUpdateNameExpandRef()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateNameDeleteRow()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert a new name 'MyRange' to reference B2:B4.
+    bool bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$B$2:$B$4");
+    CPPUNIT_ASSERT(bInserted);
+
+    const ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+
+    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    const ScTokenArray* pCode = pName->GetCode();
+    OUString aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
+
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+
+    // Delete row 3.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
+
+    // The reference in the name should get updated to B2:B3.
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$3"), aExpr);
+
+    // Delete row 3 again.
+    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$2"), aExpr);
+
+    // Undo and check.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    pUndoMgr->Undo();
+
+    pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+    pCode = pName->GetCode();
+
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$3"), aExpr);
+
+    // Undo again and check.
+    pUndoMgr->Undo();
+
+    pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+    pCode = pName->GetCode();
+
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
+
+    // Delete row 2-3.
+    rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,2,0), &aMark, DEL_CELLSUP, true, true);
+
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$2"), aExpr);
+
+    // Undo and check.
+    pUndoMgr->Undo();
+
+    pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+    pCode = pName->GetCode();
+
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateValidity()
 {
     struct {
