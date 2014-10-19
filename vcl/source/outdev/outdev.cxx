@@ -897,4 +897,281 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
+void OutputDevice::mirror( long& x, bool bBack ) const
+{
+    long w;
+    if( GetOutDevType() == OUTDEV_VIRDEV )
+        w = GetOutputWidthPixel();
+    else
+    {
+        if ( mpGraphics || AcquireGraphics() )
+            w = mpGraphics->GetGraphicsWidth();
+        else
+            return;
+    }
+
+    if( w )
+    {
+        if( ImplIsAntiparallel() )
+        {
+            // mirror this window back
+            if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            {
+                long devX = w-GetOutputWidthPixel()-GetOutOffXPixel();   // re-mirrored mnOutOffX
+                if( bBack )
+                    x = x - devX + GetOutOffXPixel();
+                else
+                    x = devX + (x - GetOutOffXPixel());
+            }
+            else
+            {
+                long devX = GetOutOffXPixel();   // re-mirrored mnOutOffX
+                if( bBack )
+                    x = devX + (GetOutputWidthPixel() + devX) - (x + 1);
+                else
+                    x = GetOutputWidthPixel() - (x - devX) + GetOutOffXPixel() - 1;
+            }
+        }
+        else if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            x = w-1-x;
+    }
+}
+
+void OutputDevice::mirror( long& x, long& nWidth, bool bBack ) const
+{
+    long w;
+    if( GetOutDevType() == OUTDEV_VIRDEV )
+        w = GetOutputWidthPixel();
+    else
+    {
+        if ( mpGraphics || AcquireGraphics() )
+            w = mpGraphics->GetGraphicsWidth();
+        else
+            return;
+    }
+
+    if( w )
+    {
+        if( ImplIsAntiparallel() )
+        {
+            // mirror this window back
+            if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            {
+                long devX = w-GetOutputWidthPixel()-GetOutOffXPixel();   // re-mirrored mnOutOffX
+                if( bBack )
+                    x = x - devX + GetOutOffXPixel();
+                else
+                    x = devX + (x - GetOutOffXPixel());
+            }
+            else
+            {
+                long devX = GetOutOffXPixel();   // re-mirrored mnOutOffX
+                if( bBack )
+                    x = devX + (GetOutputWidthPixel() + devX) - (x + nWidth);
+                else
+                    x = GetOutputWidthPixel() - (x - devX) + GetOutOffXPixel() - nWidth;
+            }
+        }
+        else if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            x = w-nWidth-x;
+
+    }
+}
+
+bool OutputDevice::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoint *pPtAry2, bool bBack ) const
+{
+    long w;
+    if( GetOutDevType() == OUTDEV_VIRDEV )
+        w = GetOutputWidthPixel();
+    else
+    {
+        if ( mpGraphics || AcquireGraphics() )
+            w = mpGraphics->GetGraphicsWidth();
+        else
+            return false;
+    }
+
+    if( w )
+    {
+        sal_uInt32 i, j;
+
+        if( ImplIsAntiparallel() )
+        {
+            // mirror this window back
+            if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            {
+                long devX = w-GetOutputWidthPixel()-GetOutOffXPixel();   // re-mirrored mnOutOffX
+                if( bBack )
+                {
+                    for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
+                    {
+                        pPtAry2[j].mnX = GetOutOffXPixel() + (pPtAry[i].mnX - devX);
+                        pPtAry2[j].mnY = pPtAry[i].mnY;
+                    }
+                }
+                else
+                {
+                    for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
+                    {
+                        pPtAry2[j].mnX = devX + (pPtAry[i].mnX - GetOutOffXPixel());
+                        pPtAry2[j].mnY = pPtAry[i].mnY;
+                    }
+                }
+            }
+            else
+            {
+                long devX = GetOutOffXPixel();   // re-mirrored mnOutOffX
+                if( bBack )
+                {
+                    for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
+                    {
+                        pPtAry2[j].mnX = pPtAry[i].mnX - GetOutputWidthPixel() + devX - GetOutOffXPixel() + 1;
+                        pPtAry2[j].mnY = pPtAry[i].mnY;
+                    }
+                }
+            }
+        }
+        else if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        {
+            for( i=0, j=nPoints-1; i<nPoints; i++,j-- )
+            {
+                pPtAry2[j].mnX = w-1-pPtAry[i].mnX;
+                pPtAry2[j].mnY = pPtAry[i].mnY;
+            }
+        }
+        return true;
+    }
+    else
+        return false;
+}
+
+void OutputDevice::mirror( vcl::Region& rRgn, bool bBack ) const
+{
+    if( rRgn.HasPolyPolygonOrB2DPolyPolygon() )
+    {
+        const basegfx::B2DPolyPolygon aPolyPoly(mirror(rRgn.GetAsB2DPolyPolygon(), bBack));
+
+        rRgn = vcl::Region(aPolyPoly);
+    }
+    else
+    {
+        RectangleVector aRectangles;
+        rRgn.GetRegionRectangles(aRectangles);
+        rRgn.SetEmpty();
+
+        for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        {
+            mirror(*aRectIter, bBack);
+            rRgn.Union(*aRectIter);
+        }
+    }
+}
+
+void OutputDevice::mirror( Rectangle& rRect, bool bBack ) const
+{
+    long nWidth = rRect.GetWidth();
+    long x      = rRect.Left();
+    long x_org = x;
+
+    mirror( x, nWidth, bBack );
+    rRect.Move( x - x_org, 0 );
+}
+
+basegfx::B2DPoint OutputDevice::mirror( const basegfx::B2DPoint& rPoint, bool bBack ) const
+{
+    long w;
+    if( GetOutDevType() == OUTDEV_VIRDEV )
+        w = GetOutputWidthPixel();
+    else
+    {
+        if ( mpGraphics || AcquireGraphics() )
+            w = mpGraphics->GetGraphicsWidth();
+        else
+            DBG_ASSERT( mpGraphics, "cannot acquire graphics instance");
+    }
+
+    DBG_ASSERT( w, "missing graphics width" );
+
+    basegfx::B2DPoint aRet( rPoint );
+    if( w )
+    {
+        if( IsRTLEnabled() )
+        {
+            // mirror this window back
+            double devX = w-GetOutputWidthPixel()-GetOutOffXPixel();   // re-mirrored mnOutOffX
+            if( bBack )
+                aRet.setX( rPoint.getX() - devX + GetOutOffXPixel() );
+            else
+                aRet.setX( devX + (rPoint.getX() - GetOutOffXPixel()) );
+        }
+        else
+            aRet.setX( w-1-rPoint.getX() );
+    }
+    return aRet;
+}
+
+basegfx::B2DPolygon OutputDevice::mirror( const basegfx::B2DPolygon& rPoly, bool bBack ) const
+{
+    long w;
+    if( GetOutDevType() == OUTDEV_VIRDEV )
+        w = GetOutputWidthPixel();
+    else
+    {
+        if ( mpGraphics || AcquireGraphics() )
+            w = mpGraphics->GetGraphicsWidth();
+        else
+            DBG_ASSERT( mpGraphics, "cannot acquire graphics instance");
+    }
+
+    DBG_ASSERT( w, "missing graphics width" );
+
+    basegfx::B2DPolygon aRet;
+    if( w )
+    {
+        sal_Int32 nPoints = rPoly.count();
+        for( sal_Int32 i = 0; i < nPoints; i++ )
+        {
+            aRet.append( mirror( rPoly.getB2DPoint( i ), bBack ) );
+            if( rPoly.isPrevControlPointUsed( i ) )
+                aRet.setPrevControlPoint( i, mirror( rPoly.getPrevControlPoint( i ), bBack ) );
+            if( rPoly.isNextControlPointUsed( i ) )
+                aRet.setNextControlPoint( i, mirror( rPoly.getNextControlPoint( i ), bBack ) );
+        }
+        aRet.setClosed( rPoly.isClosed() );
+        aRet.flip();
+    }
+    else
+        aRet = rPoly;
+    return aRet;
+}
+
+basegfx::B2DPolyPolygon OutputDevice::mirror( const basegfx::B2DPolyPolygon& rPoly, bool bBack ) const
+{
+    long w;
+    if( GetOutDevType() == OUTDEV_VIRDEV )
+        w = GetOutputWidthPixel();
+    else
+    {
+        if ( mpGraphics || AcquireGraphics() )
+            w = mpGraphics->GetGraphicsWidth();
+        else
+            DBG_ASSERT( mpGraphics, "cannot acquire graphics instance");
+    }
+
+    DBG_ASSERT( w, "missing graphics width" );
+
+    basegfx::B2DPolyPolygon aRet;
+    if( w )
+    {
+        sal_Int32 nPoly = rPoly.count();
+        for( sal_Int32 i = 0; i < nPoly; i++ )
+            aRet.append( mirror( rPoly.getB2DPolygon( i ), bBack ) );
+        aRet.setClosed( rPoly.isClosed() );
+        aRet.flip();
+    }
+    else
+        aRet = rPoly;
+    return aRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
