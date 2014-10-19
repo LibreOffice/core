@@ -78,7 +78,7 @@ void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
     }
     else
     {
-        pGraphics->DrawPixel( nCurX, nCurY, pOutDev );
+        DrawPixel( Point(nCurX, nCurY) );
     }
 }
 

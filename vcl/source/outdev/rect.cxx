@@ -213,7 +213,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLon
         {
             for( long j = 0L, Y = aVertBuf[ i ]; j < nHorzCount; j++ )
             {
-                mpGraphics->DrawPixel( aHorzBuf[ j ], Y, this );
+                DrawPixel( aHorzBuf[ j ], Y );
             }
         }
     }
