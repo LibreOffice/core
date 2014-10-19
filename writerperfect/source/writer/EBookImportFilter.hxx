@@ -13,16 +13,18 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "ImportFilterBase.hxx"
+#include "writerperfect/ImportFilter.hxx"
+
+#include "DocumentHandlerForOdt.hxx"
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class EBookImportFilter : public writerperfect::writer::ImportFilterBase
+class EBookImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
     EBookImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
-        : writerperfect::writer::ImportFilterBase(rxContext) {}
+        : writerperfect::ImportFilter<OdtGenerator>(rxContext) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -34,7 +36,7 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGTextInterface &rGenerator, utl::MediaDescriptor &rDescriptor) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) SAL_OVERRIDE;
 };
 
 OUString EBookImportFilter_getImplementationName()
