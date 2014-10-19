@@ -81,7 +81,19 @@ bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pG
         pGraphics = mpGraphics;
     }
 
-    bool bClipRegion = pGraphics->SetClipRegion( rRegion, this );
+    bool bClipRegion;
+
+    if ( (pGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+    {
+        vcl::Region aMirror( rRegion );
+        mirror( aMirror );
+        bClipRegion = pGraphics->SetClipRegion( aMirror );
+    }
+    else
+
+        bClipRegion = pGraphics->SetClipRegion( rRegion );
+    }
+
     OSL_ENSURE( bClipRegion, "OutputDevice::SelectClipRegion() - can't create region" );
     return bClipRegion;
 }
