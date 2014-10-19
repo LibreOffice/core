@@ -693,6 +693,7 @@ private:
     /** Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
      */
     SAL_DLLPRIVATE void         PaintLineGeometryWithEvtlExpand( const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon );
+    SAL_DLLPRIVATE void         drawLine( long nX1, long nY1, long nX2, long nY2 );
     ///@}
 
 
