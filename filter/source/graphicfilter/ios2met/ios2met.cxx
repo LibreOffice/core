@@ -1010,6 +1010,8 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
         else
             nLen = nOrderLen-4;
     }
+    if (nLen > pOS2MET->remainingSize())
+        throw css::uno::Exception("attempt to read past end of input", 0);
     boost::scoped_array<char> pChr(new char[nLen+1]);
     for (i=0; i<nLen; i++)
         pOS2MET->ReadChar( pChr[i] );
@@ -2750,12 +2752,18 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     GDIMetaFile     aMTF;
     bool            bRet = false;
 
-    aOS2METReader.ReadOS2MET( rStream, aMTF );
-
-    if ( !rStream.GetError() )
+    try
     {
-        rGraphic=Graphic( aMTF );
-        bRet = true;
+        aOS2METReader.ReadOS2MET( rStream, aMTF );
+
+        if ( !rStream.GetError() )
+        {
+            rGraphic=Graphic( aMTF );
+            bRet = true;
+        }
+    }
+    catch (const css::uno::Exception&)
+    {
     }
 
     return bRet;

@@ -1064,14 +1064,20 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
     sal_uInt32 nPos = rIn.Tell();
     if ( rProperties.IsProperty( DFF_Prop_fillShadeColors ) )
     {
-        if ( rProperties.SeekToContent( DFF_Prop_fillShadeColors, rIn ) )
+        sal_uInt16 i = 0, nNumElem = 0, nNumElemReserved = 0, nSize = 0;
+        bool bOk = false;
+        if (rProperties.SeekToContent(DFF_Prop_fillShadeColors, rIn))
         {
-            sal_uInt16 i = 0, nNumElem = 0, nNumElemReserved = 0, nSize = 0;
             rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemReserved ).ReadUInt16( nSize );
+            //sanity check that the stream is long enough to fulfill nNumElem * 2 sal_Int32s
+            bOk = rIn.remainingSize() / (2*sizeof(sal_Int32)) >= nNumElem;
+        }
+        if (bOk)
+        {
             for ( ; i < nNumElem; i++ )
             {
-                sal_Int32   nColor;
-                sal_Int32   nDist;
+                sal_Int32 nColor(0);
+                sal_Int32 nDist(0);
 
                 rIn.ReadInt32( nColor ).ReadInt32( nDist );
                 rShadeColors.push_back( ShadeColor( rManager.MSO_CLR_ToColor( nColor, DFF_Prop_fillColor ), 1.0 - ( nDist / 65536.0 ) ) );
@@ -1897,7 +1903,13 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             sal_uInt16 nNumElemMem = 0;
             rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemMem ).ReadUInt16( nElemSize );
         }
-        if ( nElemSize == 36 )
+        bool bImport = false;
+        if (nElemSize == 36)
+        {
+            //sanity check that the stream is long enough to fulfill nNumElem * nElemSize;
+            bImport = rIn.remainingSize() / nElemSize >= nNumElem;
+        }
+        if (bImport)
         {
             uno::Sequence< beans::PropertyValues > aHandles( nNumElem );
             for ( sal_uInt16 i = 0; i < nNumElem; i++ )
@@ -2309,12 +2321,19 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 sal_uInt16 nNumElemMem = 0;
                 rIn.ReadUInt16( nNumElem ).ReadUInt16( nNumElemMem ).ReadUInt16( nElemSize );
             }
-            if ( nElemSize == 16 )
+            bool bImport = false;
+            if (nElemSize == 16)
             {
-                sal_Int32 nLeft, nTop, nRight, nBottom;
+                //sanity check that the stream is long enough to fulfill nNumElem * nElemSize;
+                bImport = rIn.remainingSize() / nElemSize >= nNumElem;
+            }
+            if (bImport)
+            {
                 com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
-                for ( sal_uInt16 i = 0; i < nNumElem; i++ )
+                for (sal_uInt16 i = 0; i < nNumElem; ++i)
                 {
+                    sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
+
                     rIn.ReadInt32( nLeft )
                        .ReadInt32( nTop )
                        .ReadInt32( nRight )
@@ -2342,26 +2361,37 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             if ( SeekToContent( DFF_Prop_connectorPoints, rIn ) )
                 rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
 
-            sal_Int32 nX, nY;
-            sal_Int16 nTmpA, nTmpB;
-            aGluePoints.realloc( nNumElemVert );
-            for ( sal_uInt16 i = 0; i < nNumElemVert; i++ )
+            bool bImport = false;
+            if (nNumElemVert)
             {
-                if ( nElemSizeVert == 8 )
-                {
-                    rIn.ReadInt32( nX )
-                       .ReadInt32( nY );
-                }
-                else
-                {
-                    rIn.ReadInt16( nTmpA )
-                       .ReadInt16( nTmpB );
+                //sanity check that the stream is long enough to fulfill nNumElemVert * nElemSizeVert;
+                bImport = rIn.remainingSize() / nElemSizeVert >= nNumElemVert;
+            }
 
-                    nX = nTmpA;
-                    nY = nTmpB;
+            if (bImport)
+            {
+                aGluePoints.realloc( nNumElemVert );
+                for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
+                {
+                    sal_Int32 nX(0), nY(0);
+                    if ( nElemSizeVert == 8 )
+                    {
+                        rIn.ReadInt32( nX )
+                           .ReadInt32( nY );
+                    }
+                    else
+                    {
+                        sal_Int16 nTmpA(0), nTmpB(0);
+
+                        rIn.ReadInt16( nTmpA )
+                           .ReadInt16( nTmpB );
+
+                        nX = nTmpA;
+                        nY = nTmpB;
+                    }
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].First,  nX );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].Second, nY );
                 }
-                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].First,  nX );
-                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].Second, nY );
             }
             const OUString sGluePoints( "GluePoints" );
             aProp.Name = sGluePoints;
@@ -5319,19 +5349,24 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
         {
             delete pTextImpRec->pWrapPolygon;
             pTextImpRec->pWrapPolygon = NULL;
-            sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
+            sal_uInt16 nNumElemVert(0), nNumElemMemVert(0), nElemSizeVert(0);
             rSt.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
+            bool bOk = false;
             if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
+            {
+                bOk = rSt.remainingSize() / nElemSizeVert >= nNumElemVert;
+            }
+            if (bOk)
             {
                 pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
                 for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
-                    sal_Int32 nX, nY;
+                    sal_Int32 nX(0), nY(0);
                     if (nElemSizeVert == 8)
                         rSt.ReadInt32( nX ).ReadInt32( nY );
                     else
                     {
-                        sal_Int16 nSmallX, nSmallY;
+                        sal_Int16 nSmallX(0), nSmallY(0);
                         rSt.ReadInt16( nSmallX ).ReadInt16( nSmallY );
                         nX = nSmallX;
                         nY = nSmallY;
