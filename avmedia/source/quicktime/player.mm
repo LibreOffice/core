@@ -40,8 +40,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mnUnmutedVolume( 0 ),
     mnStopTime( DBL_MAX ),  //max double
     mbMuted( false ),
-    mbInitialized( false ),
-    maSizeCondition( osl_createCondition() )
+    mbInitialized( false )
 {
     NSApplicationLoad();
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];

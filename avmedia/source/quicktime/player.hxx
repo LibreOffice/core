@@ -20,7 +20,6 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_QUICKTIME_PLAYER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_QUICKTIME_PLAYER_HXX
 
-#include <osl/conditn.h>
 #include "quicktimecommon.hxx"
 
 #include "com/sun/star/media/XPlayer.hpp"
@@ -78,8 +77,6 @@ private:
 
     bool                mbMuted;
     bool                mbInitialized;
-
-    oslCondition            maSizeCondition;
 };
 
 } // namespace quicktime
