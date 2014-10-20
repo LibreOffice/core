@@ -1072,7 +1072,7 @@ void ToolBox::SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits )
         nBits &= ToolBoxItemBits::LEFT | ToolBoxItemBits::AUTOSIZE | ToolBoxItemBits::DROPDOWN;
         nOldBits &= ToolBoxItemBits::LEFT | ToolBoxItemBits::AUTOSIZE | ToolBoxItemBits::DROPDOWN;
         // trigger reformat when the item width has changed (dropdown arrow)
-        bool bFormat = (nBits & ToolBoxItemBits::DROPDOWN) != (nOldBits & ToolBoxItemBits::DROPDOWN);
+        bool bFormat = ToolBoxItemBits(nBits & ToolBoxItemBits::DROPDOWN) != ToolBoxItemBits(nOldBits & ToolBoxItemBits::DROPDOWN);
         if ( nBits != nOldBits )
             ImplInvalidate( true, bFormat );
     }
