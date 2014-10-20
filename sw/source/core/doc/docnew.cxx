@@ -1157,7 +1157,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
 // appends all pages of source SwDoc - based on SwFEShell::Paste( SwDoc* )
 SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNumber,
-            SwPageDesc *const pTargetPageDesc, bool const bDeletePrevious)
+            SwPageDesc *const pTargetPageDesc, bool const bDeletePrevious, int pageOffset)
 {
     // GetEndOfExtras + 1 = StartOfContent == no content node!
     // @see IDocumentContentOperations::CopyRange
@@ -1198,7 +1198,6 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
 #endif
 
     SwWrtShell* pTargetShell = GetDocShell()->GetWrtShell();
-    sal_uInt16 nPhysPageNumber = 0;
     if ( pTargetShell ) {
 #ifdef DBG_UTIL
         SAL_INFO( "sw.docappend", "Has target write shell" );
@@ -1210,18 +1209,6 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             String name = pTargetPageDesc->GetName();
             pTargetShell->InsertPageBreak( &name, nStartPageNumber );
         }
-
-        // -1 for the page break + -1, becauce it's an offset
-        nPhysPageNumber = pTargetShell->GetPhyPageNum() - 2;
-        if (bDeletePrevious)
-            nPhysPageNumber--;
-
-        // We always start on an odd physical page number
-        if (1 == nPhysPageNumber % 2)
-            nPhysPageNumber++;
-#ifdef DBG_UTIL
-    SAL_INFO( "sw.docappend", "PPNo " << nPhysPageNumber );
-#endif
     }
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "Nd: " << CNTNT_DOC( this ) );
@@ -1379,10 +1366,10 @@ else
                 continue;
 #ifdef DBG_UTIL
     SAL_INFO( "sw.docappend", "PaAn: " << aAnchor.GetPageNum()
-                              << " => " << aAnchor.GetPageNum() + nPhysPageNumber );
+                              << " => " << aAnchor.GetPageNum() + pageOffset );
 #endif
-            if ( nPhysPageNumber )
-                aAnchor.SetPageNum( aAnchor.GetPageNum() + nPhysPageNumber );
+            if ( pageOffset != 0 )
+                aAnchor.SetPageNum( aAnchor.GetPageNum() + pageOffset );
             this->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
         }
     }
