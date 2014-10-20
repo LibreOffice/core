@@ -36,40 +36,6 @@
 
 #include "PhysicalFontCollection.hxx"
 
-static OUString lcl_stripCharSetFromName(const OUString& _aName)
-{
-    // I worry that someone will have a font which *does* have
-    // e.g. "Greek" legitimately at the end of its name :-(
-    const char*suffixes[] = { " baltic",
-                              " ce",
-                              " cyr",
-                              " greek",
-                              " tur",
-                              " (arabic)",
-                              " (hebrew)",
-                              " (thai)",
-                              " (vietnamese)"
-                            };
-
-    OUString aName = _aName;
-    // These can be crazily piled up, e.g. Times New Roman CYR Greek
-    bool bFinished = false;
-    while (!bFinished)
-    {
-        bFinished = true;
-        for (size_t i = 0; i < SAL_N_ELEMENTS(suffixes); ++i)
-        {
-            size_t nLen = strlen(suffixes[i]);
-            if (aName.endsWithIgnoreAsciiCaseAsciiL(suffixes[i], nLen))
-            {
-                bFinished = false;
-                aName = aName.copy(0, aName.getLength() - nLen);
-            }
-        }
-    }
-    return aName;
-}
-
 static unsigned lcl_IsCJKFont( const OUString& rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
@@ -1113,7 +1079,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
         // Win 3.1/Win95 style fontnames which attempt to put the
         // charset encoding into the filename
         // http://www.webcenter.ru/~kazarn/eng/fonts_ttf.htm
-        OUString sStrippedName = lcl_stripCharSetFromName(rFSD.maTargetName);
+        OUString sStrippedName = StripScriptFromName(rFSD.maTargetName);
         if (sStrippedName != rFSD.maTargetName)
         {
             rFSD.maTargetName = sStrippedName;

@@ -320,9 +320,43 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   NULL,                   NULL },
 };
 
-OUString GetEnglishSearchFontName( const OUString& rInName )
+OUString StripScriptFromName(const OUString& _aName)
 {
-    OUStringBuffer rName( rInName.getStr());
+    // I worry that someone will have a font which *does* have
+    // e.g. "Greek" legitimately at the end of its name :-(
+    const char*suffixes[] = { " baltic",
+                              " ce",
+                              " cyr",
+                              " greek",
+                              " tur",
+                              " (arabic)",
+                              " (hebrew)",
+                              " (thai)",
+                              " (vietnamese)"
+                            };
+
+    OUString aName = _aName;
+    // These can be crazily piled up, e.g. Times New Roman CYR Greek
+    bool bFinished = false;
+    while (!bFinished)
+    {
+        bFinished = true;
+        for (size_t i = 0; i < SAL_N_ELEMENTS(suffixes); ++i)
+        {
+            size_t nLen = strlen(suffixes[i]);
+            if (aName.endsWithIgnoreAsciiCaseAsciiL(suffixes[i], nLen))
+            {
+                bFinished = false;
+                aName = aName.copy(0, aName.getLength() - nLen);
+            }
+        }
+    }
+    return aName;
+}
+
+OUString GetEnglishSearchFontName(const OUString& rInName)
+{
+    OUStringBuffer rName(rInName);
     bool        bNeedTranslation = false;
     sal_Int32  nLen = rName.getLength();
 
@@ -334,33 +368,8 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
          rName.truncate(i);
 
     // Remove Script at the end
-    // Scriptname must be the last part of the fontname and
-    // looks like "fontname (scriptname)". So there can only be a
-    // script name at the end of the fontname, when the last char is ')'
-    if ( (nLen >= 3) && rName[ nLen-1 ] == ')' )
-    {
-        int nOpen = 1;
-        sal_Int32 nTempLen = nLen-2;
-        while ( nTempLen )
-        {
-            if ( rName[ nTempLen ] == '(' )
-            {
-                nOpen--;
-                if ( !nOpen )
-                {
-                    // Remove Space at the end
-                    if ( nTempLen && (rName[ nTempLen-1 ] == ' ') )
-                        nTempLen--;
-                    rName.truncate(nTempLen);
-                    nLen = nTempLen;
-                    break;
-                }
-            }
-            if ( rName[ nTempLen ] == ')' )
-                nOpen++;
-            nTempLen--;
-        }
-    }
+    rName = StripScriptFromName(rName.toString());
+    nLen = rName.getLength();
 
     // remove all whitespaces and converts to lower case ASCII
     // TODO: better transliteration to ASCII e.g. all digits

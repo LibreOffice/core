@@ -83,6 +83,15 @@ UNOTOOLS_DLLPUBLIC OUString GetNextFontToken( const OUString& rTokenStr, sal_Int
 
 UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( const OUString& rName );
 
+/** Strip any "script font suffix" from the font name
+
+    Related: fdo#49271 RTF files often contain weird-ass
+    Win 3.1/Win95 style fontnames which attempt to put the
+    charset encoding into the filename
+    http://www.webcenter.ru/~kazarn/eng/fonts_ttf.htm
+*/
+UNOTOOLS_DLLPUBLIC OUString StripScriptFromName(const OUString& rName);
+
 /** Determine if the font is the special Star|Open Symbol font
 
     @param rFontName
