@@ -1239,7 +1239,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         JFW_TRACE2("Could not read directory " << usDir2 << " because of missing access rights");
                         continue;
                     default:
-                        JFW_TRACE2("Could not read directory << usDir2 << ". Osl file error: " << openErr);
+                        JFW_TRACE2("Could not read directory " << usDir2 << ". Osl file error: " << openErr);
                         continue;
                     }
 
