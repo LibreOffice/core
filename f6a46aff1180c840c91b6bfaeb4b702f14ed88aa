@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba076199_7cd141fb",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-10-20T22:12:51Z",
+      "side": 1,
+      "message": "Actually this is named ranges instead.",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba076199_5c48bd2d",
         "filename": "sc/source/filter/starcalc/scflt.cxx",
         "patchSetId": 1
@@ -36,6 +53,58 @@
     },
     {
       "key": {
+        "uuid": "ba076199_bce699e6",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-10-20T22:12:51Z",
+      "side": 1,
+      "message": "And this is not a TODO, it\u0027s a remark that IF the base date is changed THEN the code needs to be adapted",
+      "parentUuid": "ba076199_3c5509c6",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_9cebd5b0",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-10-20T22:12:51Z",
+      "side": 1,
+      "message": "This loses the meaning.\n\n In StarCalc 1.0 the value 0 equals 1900-01-01",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_dce14dd2",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1949,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-10-20T22:12:51Z",
+      "side": 1,
+      "message": "Just keep the ATTENTION here.",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba076199_1c5245de",
         "filename": "sc/source/filter/starcalc/scflt.cxx",
         "patchSetId": 1
@@ -47,6 +116,24 @@
       "writtenOn": "2014-10-20T10:20:02Z",
       "side": 1,
       "message": "Not sure this is a TODO.",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_fcdc111a",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-10-20T22:12:51Z",
+      "side": 1,
+      "message": "it\u0027s a remark, question to self, ...",
+      "parentUuid": "ba076199_1c5245de",
       "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
