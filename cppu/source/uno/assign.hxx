@@ -26,6 +26,7 @@
 #include "constr.hxx"
 #include "copy.hxx"
 
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace cppu
 {
@@ -43,7 +44,9 @@ inline void _assignInterface(
 {
     _acquire( pSource, acquire );
     void * const pToBeReleased = *ppDest;
+    if (*ppDest) hack_release(reinterpret_cast<com::sun::star::uno::BaseReference*>(ppDest));
     *ppDest = pSource;
+    if (*ppDest) hack_acquire(reinterpret_cast<com::sun::star::uno::BaseReference*>(ppDest));
     _release( pToBeReleased, release );
 }
 
@@ -418,6 +421,7 @@ inline bool _assignData(
             // A null reference of any interface type can be converted to a null
             // reference of any other interface type:
             void * const pToBeReleased = *static_cast< void ** >(pDest);
+            if (*reinterpret_cast<com::sun::star::uno::XInterface**>(pDest)) hack_release(reinterpret_cast<com::sun::star::uno::BaseReference*>(pDest));
             *static_cast< void ** >(pDest) = 0;
             _release( pToBeReleased, release );
             return true;
@@ -444,7 +448,9 @@ inline bool _assignData(
                                                pDestType, queryInterface );
             if (pQueried != 0) {
                 void * const pToBeReleased = *static_cast<void **>(pDest);
+                if (*reinterpret_cast<com::sun::star::uno::XInterface**>(pDest)) hack_release(reinterpret_cast<com::sun::star::uno::BaseReference*>(pDest));
                 *static_cast<void **>(pDest) = pQueried;
+                if (*reinterpret_cast<com::sun::star::uno::XInterface**>(pDest)) hack_acquire(reinterpret_cast<com::sun::star::uno::BaseReference*>(pDest));
                 _release( pToBeReleased, release );
             }
             return (pQueried != 0);

@@ -23,9 +23,59 @@
 
 using namespace cppu;
 
+#include <map>
+#include <memory>
+#include <osl/mutex.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 extern "C"
 {
+static struct bar {
+    osl::Mutex mutex;
+    bool bAvoidReenter = false;
+    com::sun::star::uno::XInterface * pTracked = 0;
+    int nAcquire = 0;
+    int nRelease = 0;
+    std::map<com::sun::star::uno::BaseReference const*, short const*> tracking;
+    ~bar()
+    {
+        SAL_DEBUG(" ££££££££££££ tracking leaks: " << tracking.size() );
+        SAL_DEBUG(" ££££££££££££ nAcquire " << nAcquire << " nRelease " << nRelease);
+    }
+} g_bar;
+    struct ReenterGuard {
+        ReenterGuard() {g_bar.bAvoidReenter = true;}
+        ~ReenterGuard() {g_bar.bAvoidReenter = false;}
+    };
+CPPU_DLLPUBLIC void hack_acquire(com::sun::star::uno::BaseReference const* pRef)
+{
+    osl::MutexGuard mg(g_bar.mutex);
+    if (g_bar.bAvoidReenter || !g_bar.pTracked) return;
+    ReenterGuard g;
+    if (*pRef != g_bar.pTracked) return;
+    short const *pTracking = new short;
+    assert(g_bar.tracking.insert(std::make_pair(pRef, pTracking)).second);
+    g_bar.nAcquire++;
+}
+CPPU_DLLPUBLIC void hack_release(com::sun::star::uno::BaseReference const* pRef)
+{
+    osl::MutexGuard mg(g_bar.mutex);
+    if (g_bar.bAvoidReenter || !g_bar.pTracked) return;
+    ReenterGuard g;
+    if (*pRef != g_bar.pTracked) return;
+    auto iter = g_bar.tracking.find(pRef);
+    assert(iter != g_bar.tracking.end());
+    delete iter->second;
+    g_bar.tracking.erase(iter);
+    g_bar.nRelease++;
+
+}
+CPPU_DLLPUBLIC void hack_track(com::sun::star::uno::XInterface * pIfc)
+{
+    osl::MutexGuard mg(g_bar.mutex);
+    g_bar.pTracked = pIfc;
+    SAL_DEBUG(" ££££££££££££ pTracked " << g_bar.pTracked);
+}
 
 CPPU_DLLPUBLIC void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,

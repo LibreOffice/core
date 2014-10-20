@@ -2282,6 +2282,7 @@ rtl::Reference< Access > Access::getNotificationRoot() {
 
 #if !defined NDEBUG
 bool Access::thisIs(int what) {
+#if 0
     osl::MutexGuard g(*lock_);
     rtl::Reference< Node > p(getNode());
     Node::Kind k(p->kind());
@@ -2295,6 +2296,9 @@ bool Access::thisIs(int what) {
         ((what & IS_SET_MEMBER) == 0 ||
          getParentNode()->kind() == Node::KIND_SET) ||
         ((what & IS_UPDATE) == 0 || getRootAccess()->isUpdate());
+#endif
+    (void)what;
+    return true;
 }
 #endif
 

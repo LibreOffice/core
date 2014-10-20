@@ -24,6 +24,13 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.hxx>
 
+#include <cppu/cppudllapi.h>
+extern "C" {
+CPPU_DLLPUBLIC void hack_acquire(com::sun::star::uno::BaseReference const*);
+CPPU_DLLPUBLIC void hack_release(com::sun::star::uno::BaseReference const*);
+CPPU_DLLPUBLIC void hack_track(com::sun::star::uno::XInterface *);
+}
+
 namespace com
 {
 namespace sun
@@ -101,7 +108,10 @@ template< class interface_type >
 inline Reference< interface_type >::~Reference()
 {
     if (_pInterface)
+    {
+        hack_release(this);
         _pInterface->release();
+    }
 }
 
 template< class interface_type >
@@ -115,7 +125,10 @@ inline Reference< interface_type >::Reference( const Reference< interface_type >
 {
     _pInterface = rRef._pInterface;
     if (_pInterface)
+    {
         _pInterface->acquire();
+        hack_acquire(this);
+    }
 }
 
 template< class interface_type > template< class derived_type >
@@ -126,7 +139,10 @@ inline Reference< interface_type >::Reference(
     interface_type * p = rRef.get();
     _pInterface = p;
     if (_pInterface)
+    {
         _pInterface->acquire();
+        hack_acquire(this);
+    }
 }
 
 template< class interface_type >
@@ -134,7 +150,10 @@ inline Reference< interface_type >::Reference( interface_type * pInterface )
 {
     _pInterface = castToXInterface(pInterface);
     if (_pInterface)
+    {
         _pInterface->acquire();
+        hack_acquire(this);
+    }
 }
 
 template< class interface_type >
@@ -153,12 +172,14 @@ template< class interface_type >
 inline Reference< interface_type >::Reference( const BaseReference & rRef, UnoReference_Query )
 {
     _pInterface = iquery( rRef.get() );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
 inline Reference< interface_type >::Reference( XInterface * pInterface, UnoReference_Query )
 {
     _pInterface = iquery( pInterface );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
@@ -166,18 +187,21 @@ inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Qu
 {
     _pInterface = (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
                    ? iquery( static_cast< XInterface * >( rAny.pReserved ) ) : 0);
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
 inline Reference< interface_type >::Reference( const BaseReference & rRef, UnoReference_QueryThrow )
 {
     _pInterface = iquery_throw( rRef.get() );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
 inline Reference< interface_type >::Reference( XInterface * pInterface, UnoReference_QueryThrow )
 {
     _pInterface = iquery_throw( pInterface );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
@@ -185,18 +209,21 @@ inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Qu
 {
     _pInterface = iquery_throw( typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
                                 ? static_cast< XInterface * >( rAny.pReserved ) : 0 );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
 inline Reference< interface_type >::Reference( const Reference< interface_type > & rRef, UnoReference_SetThrow )
 {
     _pInterface = castToXInterface( iset_throw( rRef.get() ) );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
 inline Reference< interface_type >::Reference( interface_type * pInterface, UnoReference_SetThrow )
 {
     _pInterface = castToXInterface( iset_throw( pInterface ) );
+    if (_pInterface) hack_acquire(this);
 }
 
 
@@ -205,6 +232,7 @@ inline void Reference< interface_type >::clear()
 {
     if (_pInterface)
     {
+        hack_release(this);
         XInterface * const pOld = _pInterface;
         _pInterface = 0;
         pOld->release();
@@ -215,12 +243,14 @@ template< class interface_type >
 inline bool Reference< interface_type >::set(
     interface_type * pInterface )
 {
+    if (_pInterface) hack_release(this);
     if (pInterface)
         castToXInterface(pInterface)->acquire();
     XInterface * const pOld = _pInterface;
     _pInterface = castToXInterface(pInterface);
     if (pOld)
         pOld->release();
+    if (_pInterface) hack_acquire(this);
     return (0 != pInterface);
 }
 
@@ -228,6 +258,7 @@ template< class interface_type >
 inline bool Reference< interface_type >::set(
     interface_type * pInterface, __sal_NoAcquire )
 {
+    if (_pInterface) hack_release(this);
     XInterface * const pOld = _pInterface;
     _pInterface = castToXInterface(pInterface);
     if (pOld)
@@ -254,14 +285,24 @@ template< class interface_type >
 inline bool Reference< interface_type >::set(
     XInterface * pInterface, UnoReference_Query )
 {
+#if 0
     return set( castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
+#endif
+    bool ret = set( castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
+    if (_pInterface) hack_acquire(this);
+    return ret;
 }
 
 template< class interface_type >
 inline bool Reference< interface_type >::set(
     const BaseReference & rRef, UnoReference_Query )
 {
+#if 0
     return set( castFromXInterface(iquery( rRef.get() )), SAL_NO_ACQUIRE );
+#endif
+    bool ret = set( castFromXInterface(iquery( rRef.get() )), SAL_NO_ACQUIRE );
+    if (_pInterface) hack_acquire(this);
+    return ret;
 }
 
 
@@ -269,12 +310,17 @@ template< class interface_type >
 inline bool Reference< interface_type >::set(
     Any const & rAny, UnoReference_Query )
 {
+#if 0
     return set(
+#endif
+    bool ret = set(
         castFromXInterface(
             iquery(
                 rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
                 ? static_cast< XInterface * >( rAny.pReserved ) : 0 )),
         SAL_NO_ACQUIRE );
+    if (_pInterface) hack_acquire(this);
+    return ret;
 }
 
 
@@ -283,6 +329,7 @@ inline void Reference< interface_type >::set(
     XInterface * pInterface, UnoReference_QueryThrow )
 {
     set( castFromXInterface(iquery_throw( pInterface )), SAL_NO_ACQUIRE );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
@@ -290,6 +337,7 @@ inline void Reference< interface_type >::set(
     const BaseReference & rRef, UnoReference_QueryThrow )
 {
     set( castFromXInterface(iquery_throw( rRef.get() )), SAL_NO_ACQUIRE );
+    if (_pInterface) hack_acquire(this);
 }
 
 
@@ -302,6 +350,7 @@ inline void Reference< interface_type >::set(
                  rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
                  ? static_cast< XInterface * >( rAny.pReserved ) : 0 )),
          SAL_NO_ACQUIRE );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
@@ -309,6 +358,7 @@ inline void Reference< interface_type >::set(
     interface_type * pInterface, UnoReference_SetThrow )
 {
     set( iset_throw( pInterface ), SAL_NO_ACQUIRE );
+    if (_pInterface) hack_acquire(this);
 }
 
 template< class interface_type >
@@ -340,16 +390,28 @@ template< class interface_type >
 inline Reference< interface_type > Reference< interface_type >::query(
     const BaseReference & rRef )
 {
+#if 0
     return Reference< interface_type >(
         castFromXInterface(iquery( rRef.get() )), SAL_NO_ACQUIRE );
+#endif
+    Reference< interface_type > ret(
+        castFromXInterface(iquery( rRef.get() )), SAL_NO_ACQUIRE );
+    if (ret._pInterface) hack_acquire(&ret);
+    return ret;
 }
 
 template< class interface_type >
 inline Reference< interface_type > Reference< interface_type >::query(
     XInterface * pInterface )
 {
+#if 0
     return Reference< interface_type >(
         castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
+#endif
+    Reference< interface_type > ret(
+        castFromXInterface(iquery( pInterface )), SAL_NO_ACQUIRE );
+    if (ret._pInterface) hack_acquire(&ret);
+    return ret;
 }
 
 

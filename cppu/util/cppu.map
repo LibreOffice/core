@@ -150,6 +150,13 @@ LIBO_UDK_4.4 { # symbols available in >= LibO 4.4
         uno_type_sequence_destroy;
 } UDK_3.3;
 
+LIBO_PRIVATE {
+    global:
+        hack_acquire;
+        hack_release;
+        hack_track;
+};
+
 # Unique libstdc++ symbols:
 GLIBCXX_3.4 {
     global:

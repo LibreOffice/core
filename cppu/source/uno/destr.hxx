@@ -25,6 +25,7 @@
 
 #include "prim.hxx"
 
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace cppu
 {
@@ -236,6 +237,7 @@ inline sal_Int32 idestructElements(
                 void * p = ((void **)pElements)[nPos];
                 if (p)
                 {
+                    if (reinterpret_cast<com::sun::star::uno::XInterface*>(p)) hack_release(reinterpret_cast<com::sun::star::uno::BaseReference*>(&((void**)pElements)[nPos]));
                     (*release)( p );
                 }
             }

@@ -88,6 +88,39 @@ const OUString lcl_aGDIMetaFileMIMETypeHighContrast(
 namespace chart
 {
 
+static struct foo {
+    int nInst = 0;
+    ChartModel * pHack = 0;
+    int nAcquire = 0;
+    int nRelease = 0;
+    void inst(ChartModel* pModel)
+    {
+        ++nInst;
+        if (false && 2 == nInst)
+        {
+            pHack = pModel;
+            hack_track(static_cast<cppu::OWeakObject*>(pModel));
+        }
+    }
+    ~foo()
+    {
+        SAL_DEBUG(" ££££££££££££ nAcquire " << nAcquire << " nRelease " << nRelease);
+    }
+} g_foo;
+
+void SAL_CALL ChartModel::acquire() throw()
+{
+    if (g_foo.pHack == this)
+        g_foo.nAcquire++;
+    impl::ChartModel_Base::acquire();
+}
+void SAL_CALL ChartModel::release() throw()
+{
+    if (g_foo.pHack == this)
+        g_foo.nRelease++;
+    impl::ChartModel_Base::release();
+}
+
 ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     : m_aLifeTimeManager( this, this )
     , m_bReadOnly( false )
@@ -111,6 +144,8 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     ,bSet(false)
     , mpOpenGLWindow(NULL)
 {
+    g_foo.inst(this);
+SAL_DEBUG("ChartModel::ChartModel " << this);
     OSL_TRACE( "ChartModel: CTOR called" );
 
     osl_atomic_increment(&m_refCount);
@@ -157,6 +192,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , bSet(false)
     , mpOpenGLWindow(NULL)
 {
+    g_foo.inst(this);
+SAL_DEBUG("ChartModel::ChartModel " << this);
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
     osl_atomic_increment(&m_refCount);
@@ -194,6 +231,8 @@ ChartModel::ChartModel( const ChartModel & rOther )
 
 ChartModel::~ChartModel()
 {
+SAL_DEBUG("ChartModel::~ChartModel " << this);
+    hack_track(0); // avoid crashing
     OSL_TRACE( "ChartModel: DTOR called" );
     if( m_xOldModelAgg.is())
         m_xOldModelAgg->setDelegator( NULL );
