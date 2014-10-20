@@ -11,6 +11,7 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">popup-menu</property>
     <property name="skip_pager_hint">True</property>
+    <property name="decorated">False</property>
     <property name="deletable">False</property>
     <child>
       <object class="GtkBox" id="box">
