@@ -25,4 +25,6 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater" toolbar:style="dropdownonly"/>
  <toolbar:toolbaritem xlink:href=".uno:FontworkCharacterSpacingFloater" toolbar:style="dropdownonly"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
 </toolbar:toolbar>
