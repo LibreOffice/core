@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_fccf71b1",
+        "filename": "external/coinmp/UnpackedTarball_coinmp.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-20T08:48:35Z",
+      "side": 1,
+      "message": "what does it hurt to apply that patch unconditionally?",
+      "revId": "c48a9f58ceac0c6351b7dc86397d74afb222b797",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
