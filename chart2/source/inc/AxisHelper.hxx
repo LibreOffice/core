@@ -57,7 +57,7 @@ public:
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
                   const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >& xCorrespondingCoordinateSystem
-                , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+                , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument>& xChartDoc
                 , bool bSearchForParallelAxisIfNothingIsFound );
 
     static ::com::sun::star::uno::Reference<

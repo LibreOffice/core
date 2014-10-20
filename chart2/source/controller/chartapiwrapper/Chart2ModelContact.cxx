@@ -158,7 +158,7 @@ sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForAxis(
               xAxis, ChartModelHelper::findDiagram( m_xChartModel ) ) );
 
     return ExplicitValueProvider::getExplicitNumberFormatKeyForAxis( xAxis, xCooSys
-              , Reference< util::XNumberFormatsSupplier >( m_xChartModel.get(), uno::UNO_QUERY ) );
+              , getChart2Document());
 }
 
 sal_Int32 Chart2ModelContact::getExplicitNumberFormatKeyForSeries(

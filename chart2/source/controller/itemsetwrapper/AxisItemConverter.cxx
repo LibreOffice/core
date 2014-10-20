@@ -363,7 +363,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
 
             sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
-                xCrossingMainAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+                xCrossingMainAxis, xCooSys, m_xChartDoc);
 
             rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
         }
@@ -407,7 +407,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                               m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
                 sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
-                    m_xAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+                    m_xAxis, xCooSys, m_xChartDoc);
 
                 rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
             }
@@ -948,7 +948,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                               m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
                         sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
-                            m_xAxis, xCooSys, Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY ) );
+                            m_xAxis, xCooSys, m_xChartDoc);
 
                         aValue <<= nFormatKey;
                     }

@@ -94,11 +94,16 @@ void VCartesianCoordinateSystem::createGridShapes()
 }
 
 void VCartesianCoordinateSystem::createVAxisList(
-              const uno::Reference< util::XNumberFormatsSupplier > & xNumberFormatsSupplier
+              const uno::Reference<chart2::XChartDocument> & xChartDoc
             , const awt::Size& rFontReferenceSize
             , const awt::Rectangle& rMaximumSpaceForLabels
             )
 {
+    // note: using xChartDoc itself as XNumberFormatsSupplier would cause
+    // a leak from VCartesianAxis due to cyclic reference
+    uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
+        dynamic_cast<ChartModel*>(xChartDoc.get())->getNumberFormatsSupplier());
+
     m_aAxisMap.clear();
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
@@ -144,7 +149,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             }
             aAxisProperties.init(true);
             if(aAxisProperties.m_bDisplayLabels)
-                aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis( xAxis, xNumberFormatsSupplier );
+                aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis(xAxis, xChartDoc);
 
             ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );

@@ -132,7 +132,7 @@ void AxisHelper::checkDateAxis( chart2::ScaleData& rScale, ExplicitCategoriesPro
 sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+                , const Reference<chart2::XChartDocument>& xChartDoc
                 , bool bSearchForParallelAxisIfNothingIsFound )
 {
     sal_Int32 nNumberFormatKey(0);
@@ -140,7 +140,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     sal_Int32 nAxisIndex = 0;
     sal_Int32 nDimensionIndex = 1;
     AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
-    Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
+    Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(xChartDoc, uno::UNO_QUERY);
 
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
     if (!xProp.is())
@@ -321,7 +321,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 {
                     sal_Int32 nParallelAxisIndex = (nAxisIndex==1) ?0 :1;
                     Reference< XAxis > xParallelAxis( AxisHelper::getAxis( 1, nParallelAxisIndex, xCorrespondingCoordinateSystem ) );
-                    nNumberFormatKey = AxisHelper::getExplicitNumberFormatKeyForAxis( xParallelAxis, xCorrespondingCoordinateSystem, xNumberFormatsSupplier, false );
+                    nNumberFormatKey = AxisHelper::getExplicitNumberFormatKeyForAxis(xParallelAxis, xCorrespondingCoordinateSystem, xChartDoc, false);
                 }
             }
         }

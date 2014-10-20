@@ -38,7 +38,7 @@ public:
                                     , const ::com::sun::star::awt::Size& rPageResolution ) SAL_OVERRIDE;
 
     virtual void createVAxisList(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument> & xChartDoc
             , const ::com::sun::star::awt::Size& rFontReferenceSize
             , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels ) SAL_OVERRIDE;
 
