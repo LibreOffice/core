@@ -30,6 +30,7 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdb/XRowSetChangeBroadcaster.hpp>
 #include <com/sun/star/sdb/XRowSetSupplier.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -647,7 +648,18 @@ OUString SAL_CALL OControlModel::getName() throw(RuntimeException, std::exceptio
 
 void SAL_CALL OControlModel::setName(const OUString& _rName) throw(RuntimeException, std::exception)
 {
+    try
+    {
         setFastPropertyValue(PROPERTY_ID_NAME, makeAny(_rName));
+    }
+    catch (const css::beans::UnknownPropertyException&)
+    {
+        throw WrappedTargetRuntimeException(
+            "OControlModel::setName",
+            *const_cast< OControlModel* >( this ),
+            ::cppu::getCaughtException()
+        );
+    }
 }
 
 // XServiceInfo
