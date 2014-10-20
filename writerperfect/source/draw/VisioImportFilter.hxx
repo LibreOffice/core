@@ -8,16 +8,18 @@
 #ifndef _VISIOIMPORTFILTER_HXX
 #define _VISIOIMPORTFILTER_HXX
 
-#include "ImportFilterBase.hxx"
+#include "writerperfect/ImportFilter.hxx"
+
+#include "DocumentHandlerForOdg.hxx"
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class VisioImportFilter : public writerperfect::draw::ImportFilterBase
+class VisioImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
     VisioImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
-        : writerperfect::draw::ImportFilterBase(rxContext)
+        : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }
 
@@ -31,7 +33,7 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
 };
 
 OUString VisioImportFilter_getImplementationName()

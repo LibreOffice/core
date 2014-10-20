@@ -13,16 +13,18 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "ImportFilterBase.hxx"
+#include "writerperfect/ImportFilter.hxx"
+
+#include "DocumentHandlerForOdg.hxx"
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class MWAWDrawImportFilter : public writerperfect::draw::ImportFilterBase
+class MWAWDrawImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
     MWAWDrawImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
-        : writerperfect::draw::ImportFilterBase(rxContext) {}
+        : writerperfect::ImportFilter<OdgGenerator>(rxContext) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -34,7 +36,7 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
     virtual void doRegisterHandlers(OdgGenerator &rGenerator) SAL_OVERRIDE;
 };
 
