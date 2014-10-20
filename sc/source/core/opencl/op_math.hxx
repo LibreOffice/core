@@ -62,6 +62,7 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "SumIfs"; }
     bool NeedReductionKernel(void) const { return mNeedReductionKernel; }
+    virtual bool takeString() const SAL_OVERRIDE { return true; }
 protected:
     bool mNeedReductionKernel;
 };

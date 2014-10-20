@@ -139,8 +139,10 @@ std::string VectorRef::GenSlidingWindowDeclRef( bool nested ) const
     if (pSVR && !nested)
         ss << "(gid0 < " << pSVR->GetArrayLength() << "?";
     ss << mSymName << "[gid0]";
-    if (pSVR && !nested)
+    if (pSVR&&!nested&&!IsString())
         ss << ":NAN)";
+    if (pSVR&&!nested&&IsString())
+        ss << ":0)";
     return ss.str();
 }
 
@@ -243,6 +245,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << ";\n";
     }
     if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble ||
+        vSubArguments[i]->GetFormulaToken()->GetType() == formula::svString ||
         vSubArguments[i]->GetFormulaToken()->GetOpCode() != ocPush)
     {
         ss << "    if(";
@@ -276,32 +279,46 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
         return;
     }
 
-#ifdef ISNAN
     ss << "    tmp";
     ss << i;
-    ss << "= fsum(";
-    vSubArguments[i]->GenDeclRef(ss);
-    if (vSubArguments[i]->GetFormulaToken()->GetType() ==
+    if (!(vSubArguments[i]->IsMixedArgument()))
+    {
+        ss<< "= legalize(";
+        vSubArguments[i]->GenDeclRef(ss);
+        if(vSubArguments[i]->GetFormulaToken()->GetType() ==
             formula::svDoubleVectorRef)
         ss << "[" << p.c_str() << "]";
     else  if (vSubArguments[i]->GetFormulaToken()->GetType() ==
             formula::svSingleVectorRef)
         ss << "[get_group_id(1)]";
     ss << ", 0);\n";
-#else
-    ss << "    tmp";
-    ss << i;
-    ss << "=";
-    vSubArguments[i]->GenDeclRef(ss);
-    if (vSubArguments[i]->GetFormulaToken()->GetType() ==
+    }
+    else
+    {
+         ss<< "=";
+         if(vSubArguments[i]->GetFormulaToken()->GetType() ==
             formula::svDoubleVectorRef)
-        ss << "[" << p.c_str() << "]";
-    else  if (vSubArguments[i]->GetFormulaToken()->GetType() ==
+            {
+                vSubArguments[i]->GenNumDeclRef(ss);
+                ss<<"["<< p.c_str()<< "]?";
+                vSubArguments[i]->GenNumDeclRef(ss);
+                ss << "["<< p.c_str()<< "]:";
+                vSubArguments[i]->GenStringDeclRef(ss);
+                ss << "["<< p.c_str()<< "];"<<"\n";
+            }
+         if(vSubArguments[i]->GetFormulaToken()->GetType() ==
             formula::svSingleVectorRef)
-        ss << "[get_group_id(1)]";
+            {
+                ss << "!isNan(";
+                vSubArguments[i]->GenNumDeclRef(ss);
+                ss<<"[get_group_id(1)])?";
+                vSubArguments[i]->GenNumDeclRef(ss);
+                ss << "[get_group_id(1)]:";
+                vSubArguments[i]->GenStringDeclRef(ss);
+                ss << "[get_group_id(1)];"<<"\n";
+            }
+     }
 
-    ss << ";\n";
-#endif
 }
 
 void CheckVariables::CheckAllSubArgumentIsNan(

@@ -134,10 +134,9 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
             for(int j =0;j < unrollSize;j++)
             {
                 CheckSubArgumentIsNan(ss,vSubArguments,1+i);
-
-                ss << "            if(tmp0 == tmp";
+                ss << "            if(fabs(tmp0 - tmp";
                 ss << 1+i;
-                ss << " && rowNum == -1)\n";
+                ss << " )<1e-9&& rowNum == -1)\n";
                 ss << "            {\n";
                 ss << "                rowNum = doubleIndex;\n";
                 ss << "            }\n";
@@ -170,7 +169,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 {
                                     ss << "{";
 
-                    ss << "            tmp = isNan(";
+                    ss << "            tmp = !isNan(";
                     vSubArguments[1+j]->GenNumDeclRef(ss);
                     ss << "[rowNum])?";
                     vSubArguments[1+j]->GenNumDeclRef(ss);
@@ -220,9 +219,9 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "            }\n";
             ss << "        }else\n";
             ss << "        {\n";
-            ss << "            if(tmp0 == tmp";
-            ss << 1+i;
-            ss << " && rowNum == -1)\n";
+                ss << "            if(fabs(tmp0 - tmp";
+                ss << 1+i;
+                ss << " )<1e-9&& rowNum == -1)\n";
             ss << "            {\n";
             ss << "                rowNum = doubleIndex;\n";
             ss << "            }\n";

@@ -362,6 +362,7 @@ public:
         DynamicKernelStringArgument::GenDecl(ss);
     }
     virtual size_t Marshal( cl_kernel, int, int, cl_program ) SAL_OVERRIDE;
+    virtual bool IsString(void) const {return true;}
 };
 
 /// Marshal a string vector reference
@@ -480,11 +481,19 @@ public:
     }
     virtual void GenNumDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
     {
-        VectorRef::GenSlidingWindowDecl(ss);
+        VectorRef::GenDeclRef(ss);
     }
     virtual void GenStringDeclRef( std::stringstream& ss ) const SAL_OVERRIDE
     {
-        mStringArgument.GenSlidingWindowDecl(ss);
+        mStringArgument.GenDeclRef(ss);
+    }
+    virtual cl_mem GetNumCLBuffer() const
+    {
+        return VectorRef::GetCLBuffer();
+    }
+    virtual cl_mem GetStringCLBuffer() const
+    {
+        return mStringArgument.GetCLBuffer();
     }
     virtual std::string GenSlidingWindowDeclRef( bool nested ) const SAL_OVERRIDE
     {
@@ -562,16 +571,21 @@ public:
             if (nested)
                 ss << "((i+gid0) <" << nArrayLength << "?";
             ss << Base::GetName() << "[i + gid0]";
-            if (nested)
+            if (nested&&!Base::IsString())
                 ss << ":NAN)";
+            if (nested&&Base::IsString())
+                ss << ":0)";
         }
         else
         {
             if (nested)
-                ss << "(i <" << nArrayLength << "?";
+                ss << "(i <" << nArrayLength <<"?";
             ss << Base::GetName() << "[i]";
-            if (nested)
+            if (nested&&!Base::IsString())
                 ss << ":NAN)";
+            if (nested&&Base::IsString())
+                ss << ":0)";
+
         }
         return ss.str();
     }
@@ -1367,6 +1381,15 @@ public:
                     ss << "        return 0;\n";
                     ss << "    }\n";
                 }
+                if ( vSubArguments[i]->GetFormulaToken()->GetType()==
+                formula::svSingleVectorRef&&!ZeroReturnZero() )
+                {
+                    ss << "else{\n";
+                    ss << "        tmp = ";
+                    ss << Gen2(GetBottom(), "tmp");
+                    ss << ";\n";
+                    ss << "    }\n";
+                }
             }
             else
             {
@@ -1824,9 +1847,29 @@ public:
     virtual std::string GetBottom() SAL_OVERRIDE { return "1.0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
-        return "(" + lhs + "/" + rhs + ")";
+        return "("+rhs+"==0||isNan("+rhs+"))?NAN:(("+lhs+"==0||isNan("+lhs+
+            "))?0:("+ lhs +"*pow(" + rhs +",-1.0)))";
     }
-    virtual std::string BinFuncName() const SAL_OVERRIDE { return "fdiv"; }
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "fdiv"; }
+     virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE
+    {
+        ss << "\ndouble " << sSymName;
+        ss << "_"<< BinFuncName() <<"(";
+        assert(vSubArguments.size() == 2);
+        for (unsigned i = 0; i < vSubArguments.size(); i++)
+        {
+            if (i)
+                ss << ", ";
+            vSubArguments[i]->GenSlidingWindowDecl(ss);
+        }
+        ss << ") {\n\t";
+        ss << "int gid0 = get_global_id(0), i = 0;\n\t";
+        ss << "double tmp = ";
+        ss << Gen2(vSubArguments[0]->GenSlidingWindowDeclRef(),
+                vSubArguments[1]->GenSlidingWindowDeclRef()) << ";\n\t";
+        ss << "return tmp;\n}";
+    }
 };
 
 class OpMin : public Reduction
@@ -1968,11 +2011,24 @@ public:
                 for (SubArgumentsType::iterator it = mvSubArguments.begin(),
                     e = mvSubArguments.end(); it != e; ++it)
                 {
-                    if (VectorRef* VR = dynamic_cast<VectorRef*>(it->get()))
-                        vclmem.push_back(SumIfsArgs(VR->GetCLBuffer()));
-                    else if (DynamicKernelConstantArgument* CA =
-                        dynamic_cast<
-                                         DynamicKernelConstantArgument*>(it->get()))
+                    if (VectorRef *VR = dynamic_cast<VectorRef *>(it->get()))
+                        {
+                            if(DynamicKernelMixedArgument *pDA =
+                                dynamic_cast<DynamicKernelMixedArgument *>(it->get()))
+                                {
+                                    //when argument is Mixed,need push num and
+                                    // string toghter for marshal.
+                                    vclmem.push_back(SumIfsArgs(
+                                        pDA->GetNumCLBuffer()));
+                                    vclmem.push_back(SumIfsArgs(
+                                        pDA->GetStringCLBuffer()));
+                                }
+                             else
+                                vclmem.push_back(SumIfsArgs(VR->GetCLBuffer()));
+                        }
+                    else if (DynamicKernelConstantArgument *CA =
+                            dynamic_cast<
+                            DynamicKernelConstantArgument *>(it->get()))
                         vclmem.push_back(SumIfsArgs(CA->GetDouble()));
                     else
                         vclmem.push_back(SumIfsArgs((cl_mem)NULL));
@@ -2156,20 +2212,10 @@ DynamicKernelArgument* VectorRefFactory( const std::string& s,
 {
     //Black lists ineligible classes here ..
     // SUMIFS does not perform parallel reduction at DoubleVectorRef level
-    if (dynamic_cast<OpSumIfs*>(pCodeGen.get()))
-    {
-        if (index == 0) // the first argument of OpSumIfs cannot be strings anyway
-            return new DynamicKernelSlidingArgument<VectorRef>(s, ft, pCodeGen, index);
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
-    }
     // AVERAGE is not supported yet
     //Average has been supported by reduction kernel
-    /*else if (dynamic_cast<OpAverage*>(pCodeGen.get()))
-    {
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
-    }*/
     // MUL is not supported yet
-    else if (dynamic_cast<OpMul*>(pCodeGen.get()))
+    if (dynamic_cast<OpMul*>(pCodeGen.get()))
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }

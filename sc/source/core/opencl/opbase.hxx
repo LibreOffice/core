@@ -129,6 +129,7 @@ public:
         std::set<std::string>& ) const { }
     const std::string& GetName( void ) const { return mSymName; }
     virtual bool NeedParallelReduction( void ) const { return false; }
+    virtual bool IsString(void) const {return false;}
 
 protected:
     std::string mSymName;
