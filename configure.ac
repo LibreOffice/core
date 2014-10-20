@@ -2725,7 +2725,7 @@ if test $_os = Darwin; then
     # SDK will be found automatically without any configure options.
 
     # For developers with a current Xcode, the lowest-numbered SDK
-    # higher than the minimum required should be found.
+    # higher than or equal to the minimum required should be found.
 
     AC_MSG_CHECKING([what Mac OS X SDK to use])
 
