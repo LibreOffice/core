@@ -148,9 +148,8 @@ private:
     typedef std::set< RootAccess * > WeakRootSet;
 
     typedef
-        config_map<
-            com::sun::star::uno::Reference<
-                com::sun::star::beans::XPropertySet > >
+        std::map< OUString, com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet >, LengthContentsCompare >
         ExternalServices;
 
     class WriteThread;
