@@ -176,7 +176,7 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
     ,m_pParent(_pParentDialog)
     ,m_bIgnoreEvent(false)
 {
-    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetBorderStyle(WindowBorderStyle::MONO);
 }
 
 

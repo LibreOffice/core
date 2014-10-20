@@ -86,7 +86,7 @@ SvxNumberPreview::SvxNumberPreview(vcl::Window* pParent, WinBits nStyle)
     aFont.SetColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
     SetFont( aFont );
     InitSettings( true, true );
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumberPreview(vcl::Window *pParent, VclBuilder::stringmap &)

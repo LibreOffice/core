@@ -63,8 +63,8 @@ SdVectorizeDlg::SdVectorizeDlg(vcl::Window* pParent, const Bitmap& rBmp, ::sd::D
     m_pCbFillHoles->SetToggleHdl( LINK( this, SdVectorizeDlg, ToggleHdl ) );
 
     // disable 3D border
-    m_pBmpWin->SetBorderStyle(WINDOW_BORDER_MONO);
-    m_pMtfWin->SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pBmpWin->SetBorderStyle(WindowBorderStyle::MONO);
+    m_pMtfWin->SetBorderStyle(WindowBorderStyle::MONO);
 
     LoadSettings();
     InitPreviewBmp();

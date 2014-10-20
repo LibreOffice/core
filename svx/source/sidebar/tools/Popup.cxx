@@ -124,7 +124,7 @@ void Popup::CreateContainerAndControl (void)
     mpContainer.reset(new PopupContainer(mpParent));
     mpContainer->SetAccessibleName(msAccessibleName);
     mpContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
-    mpContainer->SetBorderStyle(mpContainer->GetBorderStyle() | WINDOW_BORDER_MENU);
+    mpContainer->SetBorderStyle(mpContainer->GetBorderStyle() | WindowBorderStyle::MENU);
 
     mpControl.reset(maControlCreator(mpContainer.get()));
 }

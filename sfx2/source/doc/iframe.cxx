@@ -119,9 +119,9 @@ IFrameWindow_Impl::IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder, Win
     : Window( pParent, nWinBits | WB_CLIPCHILDREN | WB_NODIALOGCONTROL | WB_DOCKBORDER )
 {
     if ( !bHasBorder )
-        SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        SetBorderStyle( WindowBorderStyle::NOBORDER );
     else
-        SetBorderStyle( WINDOW_BORDER_NORMAL );
+        SetBorderStyle( WindowBorderStyle::NORMAL );
 }
 
 #define PROPERTY_UNBOUND 0

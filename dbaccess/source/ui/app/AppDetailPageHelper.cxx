@@ -197,7 +197,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     ,m_ePreviewMode(_ePreviewMode)
 {
 
-    m_aBorder.SetBorderStyle(WINDOW_BORDER_MONO);
+    m_aBorder.SetBorderStyle(WindowBorderStyle::MONO);
 
     m_aMenu.reset(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 

@@ -419,14 +419,14 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
     pPage1_DelDesign->SetClickHdl(LINK(this,SdPublishingDlg,DesignDeleteHdl));
 
     pPage2_Standard->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_Standard_FB->SetBorderStyle(WINDOW_BORDER_MONO);
+    pPage2_Standard_FB->SetBorderStyle(WindowBorderStyle::MONO);
     pPage2_Frames->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_Frames_FB->SetBorderStyle(WINDOW_BORDER_MONO);
+    pPage2_Frames_FB->SetBorderStyle(WindowBorderStyle::MONO);
     pPage2_SingleDocument->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
     pPage2_Kiosk->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_Kiosk_FB->SetBorderStyle(WINDOW_BORDER_MONO);
+    pPage2_Kiosk_FB->SetBorderStyle(WindowBorderStyle::MONO);
     pPage2_WebCast->SetClickHdl(LINK(this,SdPublishingDlg,BaseHdl));
-    pPage2_WebCast_FB->SetBorderStyle(WINDOW_BORDER_MONO);
+    pPage2_WebCast_FB->SetBorderStyle(WindowBorderStyle::MONO);
 
     pPage2_Content->SetClickHdl(LINK(this,SdPublishingDlg,ContentHdl));
 
@@ -472,7 +472,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
     for( it = m_aDesignList.begin(); it != m_aDesignList.end(); ++it )
         pPage1_Designs->InsertEntry(it->m_aDesignName);
 
-    pPage6_Preview->SetBorderStyle(WINDOW_BORDER_MONO);
+    pPage6_Preview->SetBorderStyle(WindowBorderStyle::MONO);
 
     SetDefaults();
 

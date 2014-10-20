@@ -4395,7 +4395,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
                 {
                     sal_uInt16 nBorder = sal_uInt16();
                     if ( (Value >>= nBorder) && nBorder != 0 )
-                        pComboBox->SetBorderStyle( nBorder );
+                        pComboBox->SetBorderStyle( static_cast<WindowBorderStyle>(nBorder) );
                 }
             }
         }

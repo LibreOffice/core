@@ -654,7 +654,7 @@ namespace frm
         SetSpinSize( 1 );
         SetDecimalDigits( 0 );
         SetStrictFormat( true );
-        SetBorderStyle( WINDOW_BORDER_MONO );
+        SetBorderStyle( WindowBorderStyle::MONO );
     }
 
 

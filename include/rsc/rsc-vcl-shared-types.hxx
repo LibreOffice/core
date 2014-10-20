@@ -21,6 +21,7 @@
 #define INCLUDED_RSC_RSC_VCL_SHARED_TYPES_HXX
 
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 
 enum TimeFieldFormat {TIMEF_NONE, TIMEF_SEC, TIMEF_100TH_SEC, TIMEF_SEC_CS, TimeFieldFormat_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
@@ -111,14 +112,20 @@ enum class SymbolType : sal_uInt16
 
 
 // Border-Styles fuer SetBorder()
-typedef sal_uInt16 WindowBorderStyle;
-
-#define WINDOW_BORDER_NORMAL            ((WindowBorderStyle)0x0001)
-#define WINDOW_BORDER_MONO              ((WindowBorderStyle)0x0002)
-#define WINDOW_BORDER_MENU              ((WindowBorderStyle)0x0010)
-#define WINDOW_BORDER_NWF               ((WindowBorderStyle)0x0020)
-#define WINDOW_BORDER_NOBORDER          ((WindowBorderStyle)0x1000)
-#define WINDOW_BORDER_REMOVEBORDER      ((WindowBorderStyle)0x2000)
+enum class WindowBorderStyle : sal_uInt16
+{
+    NONE              = 0x0000,
+    NORMAL            = 0x0001,
+    MONO              = 0x0002,
+    MENU              = 0x0010,
+    NWF               = 0x0020,
+    NOBORDER          = 0x1000,
+    REMOVEBORDER      = 0x2000
+};
+namespace o3tl
+{
+    template<> struct typed_flags<WindowBorderStyle> : is_typed_flags<WindowBorderStyle, 0x3033> {};
+}
 
 #define KEY_CODE        ((sal_uInt16)0x0FFF)
 

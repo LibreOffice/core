@@ -1697,9 +1697,10 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
         case BASEPROPERTY_BORDER:
         {
             WinBits nStyle = pWindow->GetStyle();
-            sal_uInt16 nBorder = 0;
-            Value >>= nBorder;
-            if ( !nBorder )
+            sal_uInt16 nTmp = 0;
+            Value >>= nTmp;
+            WindowBorderStyle nBorder = static_cast<WindowBorderStyle>(nTmp);
+            if ( !bool(nBorder) )
             {
                 pWindow->SetStyle( nStyle & ~WB_BORDER );
             }
@@ -2029,10 +2030,10 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             break;
             case BASEPROPERTY_BORDER:
             {
-                sal_Int16 nBorder = 0;
+                WindowBorderStyle nBorder = WindowBorderStyle::NONE;
                 if ( GetWindow()->GetStyle() & WB_BORDER )
                     nBorder = GetWindow()->GetBorderStyle();
-                aProp <<= nBorder;
+                aProp <<= static_cast<sal_uInt16>(nBorder);
             }
             break;
             case BASEPROPERTY_TABSTOP:

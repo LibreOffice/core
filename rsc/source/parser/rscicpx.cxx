@@ -289,10 +289,10 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     aBaseLst.push_back( pBorderStyleEnum );
 
     // Konstanten in Tabelle stellen
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NORMAL" ),    WINDOW_BORDER_NORMAL );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MONO" ),      WINDOW_BORDER_MONO );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MENU" ),      WINDOW_BORDER_MENU );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NOBORDER" ),  WINDOW_BORDER_NOBORDER );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NORMAL" ),    WindowBorderStyle::NORMAL );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MONO" ),      WindowBorderStyle::MONO );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MENU" ),      WindowBorderStyle::MENU );
+    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NOBORDER" ),  WindowBorderStyle::NOBORDER );
 
     // Variable einfuegen
     nId = aNmTb.Put( "BorderStyle", VARNAME );

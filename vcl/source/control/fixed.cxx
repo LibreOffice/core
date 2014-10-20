@@ -467,7 +467,7 @@ SelectableFixedText::SelectableFixedText(vcl::Window* pParent, WinBits nStyle)
     : Edit(pParent, nStyle)
 {
     // no border
-    SetBorderStyle( WINDOW_BORDER_NOBORDER );
+    SetBorderStyle( WindowBorderStyle::NOBORDER );
     // read-only
     SetReadOnly();
     // make it transparent

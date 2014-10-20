@@ -384,7 +384,7 @@ void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& 
 {
     SetStyle( WB_VSCROLL | WB_TABSTOP );
     SetSelectionMode( SINGLE_SELECTION );
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
     SetHighlightRange();
 
     if (m_xDictionary.is())

@@ -221,7 +221,7 @@ SwEnvPage::SwEnvPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pTableLB->SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     m_pInsertBT->SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));
     m_pSenderBox->SetClickHdl (LINK(this, SwEnvPage, SenderHdl       ));
-    m_pPreview->SetBorderStyle( WINDOW_BORDER_MONO );
+    m_pPreview->SetBorderStyle( WindowBorderStyle::MONO );
 
     SwDBData aData = pSh->GetDBData();
     sActDBName = aData.sDataSource + OUString(DB_DELIM) + aData.sCommand;

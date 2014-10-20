@@ -1362,7 +1362,7 @@ Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
     return aRect;
 }
 
-void ComboBox::SetBorderStyle( sal_uInt16 nBorderStyle )
+void ComboBox::SetBorderStyle( WindowBorderStyle nBorderStyle )
 {
     Window::SetBorderStyle( nBorderStyle );
     if ( !IsDropDownBox() )

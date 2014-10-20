@@ -128,7 +128,7 @@ SvxConnectionPage::SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rI
     }
 
     // disable 3D border
-    m_pCtlPreview->SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pCtlPreview->SetBorderStyle(WindowBorderStyle::MONO);
 
     Link aLink( LINK( this, SvxConnectionPage, ChangeAttrHdl_Impl ) );
     m_pMtrFldHorz1->SetModifyHdl( aLink );

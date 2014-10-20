@@ -348,7 +348,7 @@ SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, 
         InitColor_Impl();
 
         // preview like controls should have a 2D look
-        m_pShowFont->SetBorderStyle( WINDOW_BORDER_MONO );
+        m_pShowFont->SetBorderStyle( WindowBorderStyle::MONO );
     }
 
     m_pFontBox->SetSelectHdl(LINK(this, SmFontDialog, FontSelectHdl));
@@ -876,7 +876,7 @@ SmDistanceDialog::SmDistanceDialog(vcl::Window *pParent)
     bScaleAllBrackets = false;
 
     // preview like controls should have a 2D look
-    m_pBitmap->SetBorderStyle( WINDOW_BORDER_MONO );
+    m_pBitmap->SetBorderStyle( WindowBorderStyle::MONO );
 
     m_pMetricField1->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
     m_pMetricField2->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
@@ -1475,7 +1475,7 @@ SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevic
     InitColor_Impl();
 
     // preview like controls should have a 2D look
-    m_pSymbolDisplay->SetBorderStyle( WINDOW_BORDER_MONO );
+    m_pSymbolDisplay->SetBorderStyle( WindowBorderStyle::MONO );
 
     m_pSymbolSets->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
     m_pSymbolSetDisplay->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolChangeHdl));
@@ -2028,8 +2028,8 @@ SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
     pCharsetDisplay ->SetHighlightHdl( LINK( this, SmSymDefineDialog, CharHighlightHdl ) );
 
     // preview like controls should have a 2D look
-    pOldSymbolDisplay->SetBorderStyle( WINDOW_BORDER_MONO );
-    pSymbolDisplay   ->SetBorderStyle( WINDOW_BORDER_MONO );
+    pOldSymbolDisplay->SetBorderStyle( WindowBorderStyle::MONO );
+    pSymbolDisplay   ->SetBorderStyle( WindowBorderStyle::MONO );
 }
 
 
