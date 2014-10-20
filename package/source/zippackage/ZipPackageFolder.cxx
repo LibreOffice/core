@@ -392,35 +392,6 @@ void ZipPackageFolder::saveContents(
         throw uno::RuntimeException(THROW_WHERE );
 }
 
-void ZipPackageFolder::releaseUpwardRef( void )
-{
-    // Now it is possible that a package folder is disconnected from the package before removing of the folder.
-    // Such a scenario is used in storage implementation. When a new version of a folder is provided the old
-    // one is retrieved, removed from the package but preserved for the error handling.
-    // In this scenario the referencing to the parent is not really useful, since it requires disposing.
-
-    // Actually there is no need in having a reference to the parent, it even make things more complicated and
-    // requires disposing mechanics. Using of a simple pointer seems to be easier solution and also a safe enough.
-
-    clearParent();
-
-#if 0
-    for ( ContentHash::const_iterator aCI = maContents.begin();
-          aCI!=maContents.end();
-          aCI++)
-    {
-        ContentInfo &rInfo = * (*aCI).second;
-        if ( rInfo.bFolder )// && ! rInfo.pFolder->HasReleased () )
-            rInfo.pFolder->releaseUpwardRef();
-        else //if ( !rInfo.bFolder && !rInfo.pStream->HasReleased() )
-            rInfo.pStream->clearParent();
-    }
-    clearParent();
-
-    OSL_ENSURE ( m_refCount == 1, "Ref-count is not 1!" );
-#endif
-}
-
 sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
     throw(uno::RuntimeException, std::exception)
 {
