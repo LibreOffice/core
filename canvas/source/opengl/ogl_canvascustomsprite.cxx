@@ -142,6 +142,8 @@ namespace oglcanvas
         m_simpleTexUnf = glGetUniformLocation(m_simpleProgID, "TextTex");
         m_manCordUnf = glGetUniformLocation(m_texManProgID, "texCord");
         m_texColorUnf = glGetUniformLocation(m_texProgID, "constantColor");
+        m_manColorUnf = glGetUniformLocation(m_texManProgID,"colorTex");
+        m_simpleColorUnf = glGetUniformLocation(m_simpleProgID,"colorTex");
         //Gen Buffers for texturecoordinates/vertices
         glGenBuffers(1, &m_vertexBuffer);
         glGenBuffers(1, &m_uvBuffer);
@@ -212,8 +214,6 @@ namespace oglcanvas
                             GL_ONE_MINUS_SRC_ALPHA);
 
                 // blend against fixed vertex color; texture alpha is multiplied in
-                glColor4f(1,1,1,mfAlpha);
-
                 if( mxClip.is() )
                 {
                     const double fWidth=maSize.Width;
@@ -243,10 +243,14 @@ namespace oglcanvas
                     //Bind Buffers
                     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
                     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
                     glUseProgram(m_texManProgID);
+
                     //Set Uniforms
                     glUniform1i(m_manTexUnf, 0);
                     glUniform2f(m_manCordUnf,fWidth,fHeight);
+                    glUniform4f(m_manColorUnf, 1, 1, 1, mfAlpha);
+
                     glEnableVertexAttribArray(m_manPosAttrb);
                     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
                     glVertexAttribPointer(
@@ -257,7 +261,9 @@ namespace oglcanvas
                         0,                            // stride
                         (void*)0                      // array buffer offset
                     );
+
                     glDrawArrays(GL_TRIANGLES, 0, rTriangulatedPolygon.count());
+
                     glDisableVertexAttribArray(m_manPosAttrb);
                     glUseProgram(0);
                 }
@@ -265,6 +271,7 @@ namespace oglcanvas
                 {
                     const double fWidth=maSize.Width/aSpriteSizePixel.getX();
                     const double fHeight=maSize.Height/aSpriteSizePixel.getY();
+
                     GLfloat vertices[] = {0, 0,
                                           0, (float) aSpriteSizePixel.getY(),
                                           (float) aSpriteSizePixel.getX(), 0,
@@ -273,13 +280,17 @@ namespace oglcanvas
                                                0, (float) fHeight,
                                                (float) fWidth, 0,
                                                (float) fWidth, (float) fHeight };
+
                     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
                     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
                     glBindBuffer(GL_ARRAY_BUFFER, m_uvBuffer);
                     glBufferData(GL_ARRAY_BUFFER, sizeof(uvCoordinates), uvCoordinates, GL_STATIC_DRAW);
 
                     glUseProgram(m_simpleProgID);
+
                     glUniform1i(m_simpleTexUnf, 0);
+                    glUniform4f(m_simpleColorUnf, 1, 1, 1, mfAlpha);
 
                     glEnableVertexAttribArray(m_simplePosAttrb); //richtige ID herausfinden
                     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
@@ -302,7 +313,9 @@ namespace oglcanvas
                         0,                            // stride
                         (void*)0                      // array buffer offset
                     );
+
                     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
                     glDisableVertexAttribArray(m_simplePosAttrb);
                     glDisableVertexAttribArray(m_simpleUvAttrb);
                     glUseProgram(0);
@@ -318,11 +331,15 @@ namespace oglcanvas
                               (float) maSize.Width+4, -2,
                               -2, -2,
                               (float) maSize.Width+4, (float) maSize.Height+4 };
+
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
         glUseProgram(m_texProgID);
+
         glUniform4f(m_texColorUnf, 1, 0, 0, 1);
         glEnableVertexAttribArray(m_texPosAttrb); //richtige ID herausfinden
+
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
         glVertexAttribPointer(
                         m_texPosAttrb,
@@ -332,7 +349,9 @@ namespace oglcanvas
                         0,                            // stride
                         (void*)0                      // array buffer offset
         );
+
         glDrawArrays(GL_LINE_STRIP, 0, 6);
+
         glDisableVertexAttribArray(m_texPosAttrb);
         glUseProgram(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -9,13 +9,14 @@
 
 #version 120 core
 
-uniform sampler2D TextTex;
+uniform sampler2D TextTex;	
+uniform vec4 colorTex;
 //Texture Coordinates
 varying vec2 textC	oords;
 
 void main()
 {
-        gl_FragColor = texture2D( TextTex, textCoords );
+        gl_FragColor = texture2D( TextTex, textCoords )*colorTex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
