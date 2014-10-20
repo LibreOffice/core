@@ -280,8 +280,7 @@ public:
                                     sal_uInt32 nPoly,
                                     const sal_uInt32* pPoints,
                                     const SalPoint* const* pPtAry,
-                                    const sal_uInt8* const* pFlgAry,
-                                    const OutputDevice *pOutDev );
+                                    const sal_uInt8* const* pFlgAry );
 
     // CopyArea --> No RasterOp, but ClipRegion
     void                        CopyArea(

@@ -418,31 +418,9 @@ bool SalGraphics::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry,
     return drawPolygonBezier( nPoints, pPtAry, pFlgAry );
 }
 
-bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i_pPoints,
-                                         const SalPoint* const* i_pPtAry, const sal_uInt8* const* i_pFlgAry, const OutputDevice* i_pOutDev )
+bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry )
 {
-    bool bRet = false;
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
-    {
-        // TODO: optimize, reduce new/delete calls
-        SalPoint **pPtAry2 = new SalPoint*[i_nPoly];
-        sal_uLong i;
-        for(i=0; i<i_nPoly; i++)
-        {
-            sal_uLong nPoints = i_pPoints[i];
-            pPtAry2[i] = new SalPoint[ nPoints ];
-            mirror( nPoints, i_pPtAry[i], pPtAry2[i], i_pOutDev );
-        }
-
-        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, (PCONSTSALPOINT*)pPtAry2, i_pFlgAry );
-
-        for(i=0; i<i_nPoly; i++)
-            delete [] pPtAry2[i];
-        delete [] pPtAry2;
-    }
-    else
-        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, i_pPtAry, i_pFlgAry );
-    return bRet;
+    return drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
 }
 
 bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& rPolygon,
