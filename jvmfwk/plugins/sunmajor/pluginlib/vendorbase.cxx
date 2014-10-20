@@ -54,12 +54,6 @@ VendorBase::VendorBase(): m_bAccessibility(false)
 {
 }
 
-rtl::Reference<VendorBase> VendorBase::createInstance()
-{
-    VendorBase *pBase = new VendorBase();
-    return rtl::Reference<VendorBase>(pBase);
-}
-
 bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
 {
     //get java.vendor, java.version, java.home,
@@ -209,7 +203,7 @@ const OUString & VendorBase::getHome() const
     return m_sHome;
 }
 
-const OUString & VendorBase::getLibraryPaths() const
+const OUString & VendorBase::getLibraryPath() const
 {
     return m_sLD_LIBRARY_PATH;
 }
@@ -225,20 +219,10 @@ bool VendorBase::supportsAccessibility() const
 
 bool VendorBase::needsRestart() const
 {
-    if (!getLibraryPaths().isEmpty())
+    if (!getLibraryPath().isEmpty())
         return true;
     return false;
 }
-
-int VendorBase::compareVersions(const OUString& /*sSecond*/) const
-{
-    OSL_FAIL("[Java framework] VendorBase::compareVersions must be "
-               "overridden in derived class.");
-    return 0;
-}
-
-
-
 
 }
 

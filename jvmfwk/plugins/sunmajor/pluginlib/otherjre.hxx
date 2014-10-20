@@ -34,7 +34,6 @@ public:
 
     static rtl::Reference<VendorBase> createInstance();
 
-    using VendorBase::getLibraryPaths;
     virtual char const* const* getRuntimePaths(int * size) SAL_OVERRIDE;
     virtual char const* const* getLibraryPaths(int* size) SAL_OVERRIDE;
     virtual int compareVersions(const OUString& sSecond) const SAL_OVERRIDE;

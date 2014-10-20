@@ -88,7 +88,9 @@ class VendorBase: public salhelper::SimpleReferenceObject
 {
 public:
     VendorBase();
-    /* returns relative paths to the java executable as
+    /* static char const* const *  getJavaExePaths(int* size);
+
+       returns relative paths to the java executable as
        file URLs.
 
        For example "bin/java.exe". You need
@@ -103,9 +105,10 @@ public:
        The signature of this function must correspond to
        getJavaExePaths_func.
      */
-    static char const* const *  getJavaExePaths(int* size);
 
-    /* creates an instance of this class. MUST be overridden
+    /* static rtl::Reference<VendorBase> createInstance();
+
+       creates an instance of this class. MUST be overridden
        in a derived class.
        ####################################################
        OVERRIDE in derived class
@@ -113,7 +116,6 @@ public:
        @param
        Key - value pairs of the system properties of the JRE.
      */
-    static rtl::Reference<VendorBase> createInstance();
 
     /* called automatically on the instance created by createInstance.
 
@@ -132,18 +134,18 @@ public:
 
     virtual char const* const* getLibraryPaths(int* size);
 
-    virtual const OUString & getVendor() const;
-    virtual const OUString & getVersion() const;
-    virtual const OUString & getHome() const;
-    virtual const OUString & getRuntimeLibrary() const;
-    virtual const OUString & getLibraryPaths() const;
-    virtual bool supportsAccessibility() const;
-    /* determines if prior to running java something has to be done,
-       like setting the LD_LIBRARY_PATH. This implementation checks
-       if an LD_LIBRARY_PATH (getLD_LIBRARY_PATH) needs to be set and
-       if so, needsRestart returns true.
-     */
-    virtual bool needsRestart() const;
+    const OUString & getVendor() const;
+    const OUString & getVersion() const;
+    const OUString & getHome() const;
+    const OUString & getRuntimeLibrary() const;
+    const OUString & getLibraryPath() const;
+    bool supportsAccessibility() const;
+     /* determines if prior to running java something has to be done,
+        like setting the LD_LIBRARY_PATH. This implementation checks
+        if an LD_LIBRARY_PATH (getLD_LIBRARY_PATH) needs to be set and
+        if so, needsRestart returns true.
+      */
+     bool needsRestart() const;
 
     /* compares versions of this vendor. MUST be overridden
        in a derived class.
@@ -158,7 +160,7 @@ public:
       @throw
       MalformedVersionException if the version string was not recognized.
      */
-    virtual int compareVersions(const OUString& sSecond) const;
+    virtual int compareVersions(const OUString& sSecond) const = 0;
 
 protected:
 

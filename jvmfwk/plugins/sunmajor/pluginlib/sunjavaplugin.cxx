@@ -157,10 +157,10 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
     pInfo->nRequirements = info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0;
     OUStringBuffer buf(1024);
     buf.append(info->getRuntimeLibrary());
-    if (!info->getLibraryPaths().isEmpty())
+    if (!info->getLibraryPath().isEmpty())
     {
         buf.appendAscii("\n");
-        buf.append(info->getLibraryPaths());
+        buf.append(info->getLibraryPath());
         buf.appendAscii("\n");
     }
 
