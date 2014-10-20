@@ -72,7 +72,11 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			$(if $(filter IOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 AR="$(AR)" RANLIB="$(RANLIB)" NMEDIT="$(NM)edit" nss_build_all \
+		$(MAKE) -j1 AR="$(AR)" \
+			RANLIB="$(RANLIB)" \
+			NMEDIT="$(NM)edit" \
+			$(if $(CROSS_COMPILING),NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
+			nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\
 			&& chmod u+w $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dylib \
