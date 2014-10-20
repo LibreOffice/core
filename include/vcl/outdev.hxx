@@ -809,6 +809,8 @@ public:
     void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
 
     bool                        DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    bool                        DrawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
+                                              const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
 
 private:
 
