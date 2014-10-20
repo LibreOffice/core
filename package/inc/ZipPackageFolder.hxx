@@ -82,7 +82,6 @@ public:
             const com::sun::star::uno::Sequence< sal_Int8 > &rEncryptionKey,
             const rtlRandomPool & rRandomPool) const
         throw(::com::sun::star::uno::RuntimeException);
-    void  releaseUpwardRef();
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
