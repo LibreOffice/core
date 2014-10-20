@@ -42,6 +42,7 @@
 #include <comphelper/listenernotification.hxx>
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
@@ -654,10 +655,11 @@ void SAL_CALL OControlModel::setName(const OUString& _rName) throw(RuntimeExcept
     }
     catch (const css::beans::UnknownPropertyException&)
     {
+        css::uno::Any a(cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
             "OControlModel::setName",
             *const_cast< OControlModel* >( this ),
-            ::cppu::getCaughtException()
+            a
         );
     }
 }
