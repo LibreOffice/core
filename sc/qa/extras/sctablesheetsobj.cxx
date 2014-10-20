@@ -19,7 +19,7 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 13
+#define NUMBER_OF_TESTS 11
 
 class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets2, apitest::XNameContainer
 {
@@ -30,8 +30,6 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScTableSheetsObj);
-    CPPUNIT_TEST(testImportValue);
-    CPPUNIT_TEST(testImportString);
     CPPUNIT_TEST(testImportedSheetNameAndIndex);
     CPPUNIT_TEST(testImportString);
     CPPUNIT_TEST(testImportValue);
