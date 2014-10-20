@@ -30,6 +30,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <rtl/ustring.hxx>
 #include "cppunit/extensions/HelperMacros.h"
@@ -48,6 +49,11 @@ XSpreadsheets2::XSpreadsheets2():
 
 XSpreadsheets2::~XSpreadsheets2()
 {
+    if (xDestDoc.is())
+    {
+        uno::Reference<util::XCloseable> xCloseable(xDestDoc, UNO_QUERY_THROW);
+        xCloseable->close(true);
+    }
 }
 
 void XSpreadsheets2::testImportedSheetNameAndIndex()
@@ -302,7 +308,7 @@ void XSpreadsheets2::importSheetToCopy()
     uno::Reference< container::XNameAccess> xSrcNameAccess(init(),UNO_QUERY_THROW);
     xSrcSheet = uno::Reference< sheet::XSpreadsheet >( xSrcNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
 
-    static uno::Reference< lang::XComponent > xDestComponent;
+    uno::Reference< lang::XComponent > xDestComponent;
     if (!xDestComponent.is())
     {
         xDestDoc = getDoc(aDestFileBase, xDestComponent);
