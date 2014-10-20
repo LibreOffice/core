@@ -85,9 +85,9 @@
  #define _PR_SI_ARCHITECTURE "arm"
 +#elif defined(__arm64__)
 +#define _PR_SI_ARCHITECTURE "arm64"
+ #elif defined(__aarch64__)
+ #define _PR_SI_ARCHITECTURE "aarch64"
  #else
- #error "Unknown CPU architecture"
- #endif
 --- a/a/nspr/pr/src/Makefile.in
 +++ a/a/nspr/pr/src/Makefile.in
 @@ -180,7 +180,7 @@
