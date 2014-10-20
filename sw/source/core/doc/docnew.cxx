@@ -1156,7 +1156,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 }
 
 // appends all pages of source SwDoc - based on SwFEShell::Paste( SwDoc* )
-void SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNumber,
+SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNumber,
             SwPageDesc *const pTargetPageDesc, bool const bDeletePrevious)
 {
     // GetEndOfExtras + 1 = StartOfContent == no content node!
@@ -1244,6 +1244,9 @@ void SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNumber,
 
     this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
     this->LockExpFlds();
+
+    // Position where the appended doc starts. Will be filled in later (uses GetEndOfContent() because SwNodeIndex has no default ctor).
+    SwNodeIndex aStartAppendIndex( GetNodes().GetEndOfContent() );
 
     {
         // **
@@ -1357,6 +1360,12 @@ else
                               << "  EOE: " << GetNodes().GetEndOfExtras().GetIndex() );
 #endif
                 GetNodes().Delete( aDelIdx, iDelNodes );
+                aStartAppendIndex = aFixupIdx;
+            }
+            else
+            {
+                aStartAppendIndex = aFixupIdx;
+                ++aStartAppendIndex;
             }
         }
 
@@ -1385,6 +1394,8 @@ else
 
     if ( pTargetShell )
         pTargetShell->EndAllAction();
+
+    return aStartAppendIndex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
