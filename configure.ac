@@ -1641,6 +1641,11 @@ AC_ARG_WITH(system-ucpp,
         [Use ucpp already on system.]),,
     [])
 
+AC_ARG_WITH(system-opencollada,
+    AS_HELP_STRING([--with-system-opencollada],
+        [Use openCOLLADA already on system.]),,
+    [with_system_opencollada=no])
+
 AC_ARG_WITH(system-openldap,
     AS_HELP_STRING([--with-system-openldap],
         [Use the OpenLDAP LDAP SDK already on system.]),,
@@ -10342,11 +10347,41 @@ if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE"; then
     AC_MSG_RESULT([yes])
     ENABLE_COLLADA=TRUE
     AC_DEFINE(HAVE_FEATURE_COLLADA,1)
+    AC_MSG_CHECKING([which OPENCOLLADA to use])
+    if test "$with_system_opencollada" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_OPENCOLLADA=TRUE
+        AS_IF([test -n "$OPENCOLLADA_CFLAGS"],[],[AC_MSG_ERROR([export OPENCOLLADA_CFLAGS])])
+        AS_IF([test -n "$OPENCOLLADA_LIBS"],[],[AC_MSG_ERROR([export OPENCOLLADA_LIBS])])
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        save_CPPFLAGS=$CPPFLAGS
+        CXXFLAGS="$CXXFLAGS $OPENCOLLADA_CFLAGS"
+        CPPFLAGS="$CPPFLAGS $OPENCOLLADA_CFLAGS"
+        AC_CHECK_HEADERS(
+                COLLADABU.h \
+                COLLADAFW.h \
+                COLLADASaxFWLLoader.h \
+                GeneratedSaxParser.h,
+            [],
+            [AC_MSG_ERROR([openCOLLADA headers not found. Install openCOLLADA])],
+            [])
+        CXXFLAGS=$save_CXXFLAGS
+        CPPFLAGS=$save_CPPFLAGS
+        AC_LANG_POP([C++])
+        OPENCOLLADA_CFLAGS=$(printf '%s' "$OPENCOLLADA_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    else
+        AC_MSG_RESULT([internal])
+        BUILD_TYPE="$BUILD_TYPE OPENCOLLADA"
+    fi
     BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
 else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_COLLADA)
+AC_SUBST([OPENCOLLADA_CFLAGS])
+AC_SUBST([OPENCOLLADA_LIBS])
+AC_SUBST([SYSTEM_OPENCOLLADA])
 
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])

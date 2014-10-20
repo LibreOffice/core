@@ -3371,6 +3371,20 @@ endif # SYSTEN_LIBGLTF
 
 ifeq ($(ENABLE_COLLADA),TRUE)
 
+ifeq ($(SYSTEM_OPENCOLLADA),TRUE)
+
+define gb_LinkTarget__use_opencollada_parser
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(OPENCOLLADA_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(OPENCOLLADA_LIBS))
+
+endef
+
+else # !SYSTEM_OPENCOLLADA
+
 define gb_LinkTarget__use_opencollada_parser
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,opencollada)/COLLADABaseUtils/include \
@@ -3384,6 +3398,8 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	opencollada_parser \
 )
 endef
+
+endif # SYSTEM_OPENCOLLADA
 
 define gb_LinkTarget__use_collada2gltf
 $(call gb_LinkTarget_set_include,$(1),\
