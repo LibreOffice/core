@@ -261,7 +261,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     if( aPoly.HasFlags() )
     {
         const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
-        if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
+        if( !DrawPolygonBezier( nPoints, pPtAry, pFlgAry ) )
         {
             aPoly = Polygon::SubdivideBezier(aPoly);
             pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
@@ -290,6 +290,26 @@ void OutputDevice::drawPolygon( sal_uInt16 nPoints, const SalPoint* pPtAry  )
     }
 }
 
+bool OutputDevice::DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    bool bResult = false;
+
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+    {
+        boost::scoped_array<SalPoint> pPtAry2(new SalPoint[nPoints]);
+        bool bCopied = mirror( nPoints, pPtAry, pPtAry2.get() );
+        bResult = mpGraphics->DrawPolygonBezier( nPoints, bCopied ? pPtAry2.get() : pPtAry, pFlgAry );
+    }
+    else
+    {
+        bResult = mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry );
+    }
+
+    return bResult;
+}
 
 // Caution: This method is nearly the same as
 // OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
@@ -431,7 +451,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
         // #100127# Forward beziers to sal, if any
         if( bHaveBezier )
         {
-            if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
+            if( !DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry ) )
             {
                 Polygon aPoly = Polygon::SubdivideBezier( rPolyPoly.GetObject( last ) );
                 drawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.GetConstPointAry() );

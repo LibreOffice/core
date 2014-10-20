@@ -274,8 +274,7 @@ public:
     bool                        DrawPolygonBezier(
                                     sal_uInt32 nPoints,
                                     const SalPoint* pPtAry,
-                                    const sal_uInt8* pFlgAry,
-                                    const OutputDevice *pOutDev );
+                                    const sal_uInt8* pFlgAry );
 
     bool                        DrawPolyPolygonBezier(
                                     sal_uInt32 nPoly,
