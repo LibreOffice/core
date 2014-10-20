@@ -375,7 +375,7 @@ extern "C" void nsscrypto_finalize()
         SAL_INFO("xmlsecurity.xmlsec", "Unloading module \"" ROOT_CERTS "\" failed because it was not found.");
     }
     PK11_LogoutAll();
-    NSS_Shutdown();
+    (void)NSS_Shutdown();
 }
 
 ONSSInitializer::ONSSInitializer(
