@@ -179,16 +179,6 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
     return true;
 }
 
-char const* const* VendorBase::getRuntimePaths(int* /*size*/)
-{
-    return NULL;
-}
-
-char const* const* VendorBase::getLibraryPaths(int* /*size*/)
-{
-    return NULL;
-}
-
 const OUString & VendorBase::getVendor() const
 {
     return m_sVendor;

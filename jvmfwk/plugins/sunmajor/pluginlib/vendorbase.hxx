@@ -117,23 +117,6 @@ public:
        Key - value pairs of the system properties of the JRE.
      */
 
-    /* called automatically on the instance created by createInstance.
-
-       @return
-       true - the object could completely initialize.
-       false - the object could not completely initialize. In this case
-       it will be discarded by the caller.
-    */
-    virtual bool initialize(
-        std::vector<std::pair<OUString, OUString> > props);
-
-    /* returns relative file URLs to the runtime library.
-       For example         "/bin/client/jvm.dll"
-    */
-    virtual char const* const* getRuntimePaths(int* size);
-
-    virtual char const* const* getLibraryPaths(int* size);
-
     const OUString & getVendor() const;
     const OUString & getVersion() const;
     const OUString & getHome() const;
@@ -163,6 +146,22 @@ public:
     virtual int compareVersions(const OUString& sSecond) const = 0;
 
 protected:
+    /* called automatically on the instance created by createInstance.
+
+       @return
+       true - the object could completely initialize.
+       false - the object could not completely initialize. In this case
+       it will be discarded by the caller.
+    */
+    virtual bool initialize(
+        std::vector<std::pair<OUString, OUString> > props);
+
+    /* returns relative file URLs to the runtime library.
+       For example         "/bin/client/jvm.dll"
+    */
+    virtual char const* const* getRuntimePaths(int* size) = 0;
+
+    virtual char const* const* getLibraryPaths(int* size) = 0;
 
     OUString m_sVendor;
     OUString m_sVersion;

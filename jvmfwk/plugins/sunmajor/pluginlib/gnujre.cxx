@@ -84,6 +84,11 @@ char const* const* GnuInfo::getRuntimePaths(int * size)
     return ar;
 }
 
+char const* const* GnuInfo::getLibraryPaths(int* /*size*/)
+{
+    return NULL;
+}
+
 bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 {
     //get java.vendor, java.version, java.home,
