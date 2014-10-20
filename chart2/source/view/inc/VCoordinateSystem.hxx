@@ -102,7 +102,7 @@ public:
      * Create "view" axis obejcts 'VAxis' from the coordinate system model.
      */
     virtual void createVAxisList(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument> & xChartDoc
             , const ::com::sun::star::awt::Size& rFontReferenceSize
             , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
 
@@ -144,7 +144,7 @@ protected: //methods
     sal_Int32 getNumberFormatKeyForAxis( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::chart2::XAxis >& xAxis
                      , const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+                     ::com::sun::star::chart2::XChartDocument>& xChartDoc);
 
 private: //methods
     void impl_adjustDimension( sal_Int32& rDimensionIndex ) const;

@@ -1515,7 +1515,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     SeriesPlottersType& rSeriesPlotterList = rParam.mpSeriesPlotterContainer->getSeriesPlotterList();
 
     //create VAxis, so they can give necessary information for automatic scaling
-    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( static_cast< ::cppu::OWeakObject* >( &mrChartModel ), uno::UNO_QUERY );
+    uno::Reference<chart2::XChartDocument> const xChartDoc(&mrChartModel);
+    uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
+            mrChartModel.getNumberFormatsSupplier());
     size_t nC = 0;
     for( nC=0; nC < rVCooSysList.size(); nC++)
     {
@@ -1529,7 +1531,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
 
-        pVCooSys->createVAxisList(xNumberFormatsSupplier, rPageSize, rParam.maRemainingSpace);
+        pVCooSys->createVAxisList(xChartDoc, rPageSize, rParam.maRemainingSpace);
     }
 
     // - prepare list of all axis and how they are used
@@ -1946,9 +1948,9 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+                , const Reference<chart2::XChartDocument>& xChartDoc)
 {
-    return AxisHelper::getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, xNumberFormatsSupplier
+    return AxisHelper::getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, xChartDoc
         , true /*bSearchForParallelAxisIfNothingIsFound*/ );
 }
 

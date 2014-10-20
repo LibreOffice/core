@@ -342,7 +342,7 @@ sal_Int32 VCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensio
 }
 
 void VCoordinateSystem::createVAxisList(
-              const uno::Reference< util::XNumberFormatsSupplier > & /* xNumberFormatsSupplier */
+              const uno::Reference<chart2::XChartDocument> & /* xChartDoc */
             , const awt::Size& /* rFontReferenceSize */
             , const awt::Rectangle& /* rMaximumSpaceForLabels */
             )
@@ -573,10 +573,10 @@ void VCoordinateSystem::setSeriesNamesForAxis( const Sequence< OUString >& rSeri
 
 sal_Int32 VCoordinateSystem::getNumberFormatKeyForAxis(
         const Reference< chart2::XAxis >& xAxis
-        , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+        , const Reference<chart2::XChartDocument>& xChartDoc)
 {
     return ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
-                xAxis, m_xCooSysModel, xNumberFormatsSupplier );
+                xAxis, m_xCooSysModel, xChartDoc);
 }
 
 } //namespace chart
