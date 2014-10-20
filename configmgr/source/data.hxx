@@ -86,7 +86,7 @@ struct Data: private boost::noncopyable {
         OUString const & url);
 
 private:
-    typedef config_map< rtl::Reference< ExtensionXcu > >
+    typedef std::map< OUString, rtl::Reference< ExtensionXcu >, LengthContentsCompare >
         ExtensionXcuAdditions;
 
     rtl::Reference< Node > root_;

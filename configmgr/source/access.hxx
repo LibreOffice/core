@@ -487,7 +487,7 @@ private:
             bool theDirectlyModified);
     };
 
-    typedef config_map< ModifiedChild > ModifiedChildren;
+    typedef std::map< OUString, ModifiedChild, LengthContentsCompare > ModifiedChildren;
 
     rtl::Reference< ChildAccess > getModifiedChild(
         ModifiedChildren::iterator const & childIterator);
@@ -516,7 +516,7 @@ private:
 
     rtl::Reference< Access > getNotificationRoot();
 
-    typedef config_map< ChildAccess * > WeakChildMap;
+    typedef std::map< OUString, ChildAccess *, LengthContentsCompare > WeakChildMap;
 
     typedef
         std::multiset<
@@ -536,7 +536,7 @@ private:
                 com::sun::star::beans::XPropertyChangeListener > >
         PropertyChangeListenersElement;
 
-    typedef config_map< PropertyChangeListenersElement >
+    typedef std::map< OUString, PropertyChangeListenersElement, LengthContentsCompare >
         PropertyChangeListeners;
 
     typedef
@@ -545,7 +545,7 @@ private:
                 com::sun::star::beans::XVetoableChangeListener > >
         VetoableChangeListenersElement;
 
-    typedef config_map< VetoableChangeListenersElement >
+    typedef std::map< OUString, VetoableChangeListenersElement, LengthContentsCompare >
         VetoableChangeListeners;
 
     typedef
