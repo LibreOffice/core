@@ -47,8 +47,8 @@ public:
     virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos ) SAL_OVERRIDE;
     void createAllTickInfosFromComplexCategories( TickInfoArraysType& rAllTickInfos, bool bShiftedPosition );
 
-    TickIter* createLabelTickIterator( size_t nTextLevel );
-    TickIter* createMaximumLabelTickIterator( size_t nTextLevel );
+    TickIter* createLabelTickIterator( sal_Int32 nTextLevel );
+    TickIter* createMaximumLabelTickIterator( sal_Int32 nTextLevel );
     sal_Int32 getTextLevelCount() const;
 
     virtual TickFactory* createTickFactory() SAL_OVERRIDE;

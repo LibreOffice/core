@@ -218,7 +218,7 @@ private: //member
 LabelIterator::LabelIterator( TickInfoArrayType& rTickInfoVector
             , const AxisLabelStaggering eAxisLabelStaggering
             , bool bInnerLine )
-            : m_aPureTickIter(rTickInfoVector, NULL)
+            : m_aPureTickIter( rTickInfoVector )
             , m_eAxisLabelStaggering(eAxisLabelStaggering)
             , m_bInnerLine(bInnerLine)
 {
@@ -375,25 +375,23 @@ bool lcl_hasWordBreak( const Reference< drawing::XShape >& rxShape )
 class MaxLabelTickIter : public TickIter
 {
 public:
-    MaxLabelTickIter( TickInfoArrayType& rTickInfoVector, sal_Int32 nLongestLabelIndex, const TickLabelArrayType* pLabels );
+    MaxLabelTickIter( TickInfoArrayType& rTickInfoVector
+            , sal_Int32 nLongestLabelIndex );
     virtual ~MaxLabelTickIter();
 
     virtual TickInfo* firstInfo() SAL_OVERRIDE;
     virtual TickInfo* nextInfo() SAL_OVERRIDE;
-    virtual uno::Reference<drawing::XShape> getTextShape() SAL_OVERRIDE;
 
 private:
     TickInfoArrayType& m_rTickInfoVector;
-    const TickLabelArrayType* mpTickLabels;
     ::std::vector< sal_Int32 > m_aValidIndices;
-    size_t m_nCurrentIndex;
+    sal_Int32 m_nCurrentIndex;
 };
 
-MaxLabelTickIter::MaxLabelTickIter(
-    TickInfoArrayType& rTickInfoVector, sal_Int32 nLongestLabelIndex, const TickLabelArrayType* pLabels ) :
-    m_rTickInfoVector(rTickInfoVector),
-    mpTickLabels(pLabels),
-    m_nCurrentIndex(0)
+MaxLabelTickIter::MaxLabelTickIter( TickInfoArrayType& rTickInfoVector
+            , sal_Int32 nLongestLabelIndex )
+            : m_rTickInfoVector(rTickInfoVector)
+            , m_nCurrentIndex(0)
 {
     sal_Int32 nMaxIndex = m_rTickInfoVector.size()-1;
     if( nLongestLabelIndex<0 || nLongestLabelIndex>=nMaxIndex-1 )
@@ -417,7 +415,7 @@ MaxLabelTickIter::~MaxLabelTickIter()
 TickInfo* MaxLabelTickIter::firstInfo()
 {
     m_nCurrentIndex = 0;
-    if (m_nCurrentIndex < m_aValidIndices.size())
+    if( m_nCurrentIndex < static_cast<sal_Int32>(m_aValidIndices.size()) )
         return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
     return 0;
 }
@@ -425,21 +423,9 @@ TickInfo* MaxLabelTickIter::firstInfo()
 TickInfo* MaxLabelTickIter::nextInfo()
 {
     m_nCurrentIndex++;
-    if (m_nCurrentIndex < m_aValidIndices.size())
+    if( m_nCurrentIndex>=0 && m_nCurrentIndex<static_cast<sal_Int32>(m_aValidIndices.size()) )
         return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
     return 0;
-}
-
-uno::Reference<drawing::XShape> MaxLabelTickIter::getTextShape()
-{
-    uno::Reference<drawing::XShape> xShape;
-    if (!mpTickLabels)
-        return xShape;
-
-    if (m_nCurrentIndex >= mpTickLabels->size())
-        return xShape;
-
-    return (*mpTickLabels)[m_nCurrentIndex];
 }
 
 bool VCartesianAxis::isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
@@ -580,19 +566,14 @@ void VCartesianAxis::createAllTickInfos( TickInfoArraysType& rAllTickInfos )
         VAxisBase::createAllTickInfos(rAllTickInfos);
 }
 
-TickIter* VCartesianAxis::createLabelTickIterator( size_t nTextLevel )
+TickIter* VCartesianAxis::createLabelTickIterator( sal_Int32 nTextLevel )
 {
-    if (nTextLevel >= m_aAllTickInfos.size())
-        return NULL;
-
-    const TickLabelArrayType* pLabels = NULL;
-    if (nTextLevel < m_aAllTickLabels.size())
-        pLabels = &m_aAllTickLabels[nTextLevel];
-
-    return new PureTickIter(m_aAllTickInfos[nTextLevel], pLabels);
+    if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
+        return new PureTickIter( m_aAllTickInfos[nTextLevel] );
+    return NULL;
 }
 
-TickIter* VCartesianAxis::createMaximumLabelTickIterator( size_t nTextLevel )
+TickIter* VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
 {
     if( isComplexCategoryAxis() || isDateAxis() )
     {
@@ -605,8 +586,7 @@ TickIter* VCartesianAxis::createMaximumLabelTickIterator( size_t nTextLevel )
             if( !m_aAllTickInfos.empty() )
             {
                 sal_Int32 nLongestLabelIndex = m_bUseTextLabels ? this->getIndexOfLongestLabel( m_aTextLabels ) : 0;
-                const TickLabelArrayType* pLabels = m_aAllTickLabels.empty() ? NULL : &m_aAllTickLabels[0];
-                return new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex, pLabels );
+                return new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex );
             }
         }
     }
@@ -759,21 +739,10 @@ bool VCartesianAxis::createTextShapes(
 
         //create single label
         if(!pTickInfo->xTextShape.is())
-        {
-            uno::Reference<drawing::XShape> xCached = rTickIter.getTextShape();
-            if (xCached.is())
-            {
-                xTarget->add(xCached);
-                pTickInfo->xTextShape = xCached;
-            }
-            else
-            {
-                pTickInfo->xTextShape = createSingleLabel(
-                    m_xShapeFactory, xTarget, aAnchorScreenPosition2D, aLabel,
-                    rAxisLabelProperties, m_aAxisProperties, aPropNames, aPropValues);
-            }
-        }
-
+            pTickInfo->xTextShape = createSingleLabel( m_xShapeFactory, xTarget
+                                    , aAnchorScreenPosition2D, aLabel
+                                    , rAxisLabelProperties, m_aAxisProperties
+                                    , aPropNames, aPropValues );
         if(!pTickInfo->xTextShape.is())
             continue;
 
@@ -1312,7 +1281,7 @@ void VCartesianAxis::hideIdenticalScreenValues( TickInfoArraysType& rTickInfos )
         sal_Int32 nCount = rTickInfos.size();
         for( sal_Int32 nN=0; nN<nCount; nN++ )
         {
-            PureTickIter aTickIter(rTickInfos[nN], NULL);
+            PureTickIter aTickIter( rTickInfos[nN] );
             lcl_hideIdenticalScreenValues( aTickIter );
         }
     }

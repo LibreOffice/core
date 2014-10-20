@@ -119,12 +119,7 @@ void VCoordinateSystem::reset()
 
     m_apExplicitCategoriesProvider.reset();
 
-    tVAxisMap::iterator it = m_aAxisMap.begin(), itEnd = m_aAxisMap.end();
-    for (; it != itEnd; ++it)
-    {
-        VAxisBase& rAxis = *it->second;
-        rAxis.reset();
-    }
+    m_aAxisMap.clear(); // TODO : switch to reset() later.
 }
 #endif
 

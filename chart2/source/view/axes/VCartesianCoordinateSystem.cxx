@@ -99,8 +99,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             , const awt::Rectangle& rMaximumSpaceForLabels
             )
 {
-    tVAxisMap aOldAxisMap;
-    aOldAxisMap.swap(m_aAxisMap);
+    m_aAxisMap.clear();
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
@@ -149,16 +148,6 @@ void VCartesianCoordinateSystem::createVAxisList(
 
             ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
-
-#if ENABLE_AXIS_SHAPE_CACHE
-            tVAxisMap::iterator it = aOldAxisMap.find(aFullAxisIndex);
-            if (it != aOldAxisMap.end())
-            {
-                // Copy the text objects over.
-                apVAxis->copyShapes(*it->second);
-            }
-#endif
-
             m_aAxisMap[aFullAxisIndex] = apVAxis;
             apVAxis->set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
