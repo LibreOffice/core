@@ -282,7 +282,7 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
 
     if (eState >= SfxItemState::DEFAULT)
     {
-        FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
+        FmFormShell* pShell = PTR_CAST(FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell());
         UpdateContent(pShell);
     }
     else
@@ -418,7 +418,7 @@ FmFieldWinMgr::FmFieldWinMgr(vcl::Window* _pParent, sal_uInt16 _nId,
     pWindow = new FmFieldWin(_pBindings, this, _pParent);
     SetHideNotDelete(true);
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
+    static_cast<SfxFloatingWindow*>(pWindow)->Initialize( _pInfo );
 }
 
 

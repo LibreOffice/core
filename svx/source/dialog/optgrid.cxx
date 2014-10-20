@@ -88,7 +88,7 @@ bool SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "different types ");
 
-    const SvxGridItem& rItem = (const SvxGridItem&) rAttr;
+    const SvxGridItem& rItem = static_cast<const SvxGridItem&>(rAttr);
 
     return (    bUseGridsnap == rItem.bUseGridsnap &&
                 bSynchronize == rItem.bSynchronize &&
@@ -214,7 +214,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
     if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_GRID_OPTIONS , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
-        const SvxGridItem* pGridAttr = (SvxGridItem*)pAttr;
+        const SvxGridItem* pGridAttr = static_cast<const SvxGridItem*>(pAttr);
         pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap );
         pCbxSynchronize->Check( pGridAttr->bSynchronize );
         pCbxGridVisible->Check( pGridAttr->bGridVisible );
@@ -240,7 +240,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
-        const SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
+        const SvxGridItem* pGridAttr = static_cast<const SvxGridItem*>(pAttr);
         pCbxUseGridsnap->Check( pGridAttr->bUseGridsnap );
 
         ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
@@ -251,7 +251,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
-        const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
+        const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
         FieldUnit eFUnit = (FieldUnit)(long)pItem->GetValue();
 

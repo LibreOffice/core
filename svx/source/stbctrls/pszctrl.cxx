@@ -239,7 +239,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         {
             pImp->bHasMenu = true;
             if ( pState && pState->ISA(SfxUInt16Item) )
-                pImp->nFunction = ((const SfxUInt16Item*)pState)->GetValue();
+                pImp->nFunction = static_cast<const SfxUInt16Item*>(pState)->GetValue();
         }
         else
             pImp->bHasMenu = false;
@@ -263,21 +263,21 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     else if ( pState->ISA( SfxPointItem ) )
     {
         // show position
-        pImp->aPos = ( (SfxPointItem*)pState )->GetValue();
+        pImp->aPos = static_cast<const SfxPointItem*>(pState)->GetValue();
         pImp->bPos = true;
         pImp->bTable = false;
     }
     else if ( pState->ISA( SvxSizeItem ) )
     {
         // show size
-        pImp->aSize = ( (SvxSizeItem*)pState )->GetSize();
+        pImp->aSize = static_cast<const SvxSizeItem*>(pState)->GetSize();
         pImp->bSize = true;
         pImp->bTable = false;
     }
     else if ( pState->ISA( SfxStringItem ) )
     {
         // show string (table cel or different)
-        pImp->aStr = ( (SfxStringItem*)pState )->GetValue();
+        pImp->aStr = static_cast<const SfxStringItem*>(pState)->GetValue();
         pImp->bTable = true;
         pImp->bPos = false;
         pImp->bSize = false;

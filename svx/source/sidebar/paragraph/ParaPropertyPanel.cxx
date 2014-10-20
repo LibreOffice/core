@@ -415,7 +415,7 @@ void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /*nSID*/, SfxItemState eS
 {
     if( eState >= SfxItemState::DEFAULT && pState->ISA(SvxColorItem))
     {
-        const SvxColorItem* pItem =  (const SvxColorItem*)pState;
+        const SvxColorItem* pItem = static_cast<const SvxColorItem*>(pState);
         maColor = pItem->GetValue();
         mbColorAvailable = true;
         mpColorUpdater->Update(maColor);
@@ -746,7 +746,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     const sal_uInt16 nIdHangingIndent2  = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT2);
     if( pState && eState >= SfxItemState::DEFAULT )
     {
-        SvxLRSpaceItem* pSpace = ( SvxLRSpaceItem*)pState;
+        const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
         maTxtLeft = pSpace->GetTxtLeft();
         maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)m_eLRSpaceUnit, MAP_100TH_MM );
         maTxtLeft = OutputDevice::LogicToLogic( maTxtLeft, MAP_100TH_MM, (MapUnit)(SFX_MAPUNIT_TWIP) );
@@ -858,7 +858,7 @@ void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 /*nSID*/, SfxItemState 
     {
         if(mpLnSPItem)
             delete mpLnSPItem;
-        mpLnSPItem = ( SvxLineSpacingItem *)pState->Clone();
+        mpLnSPItem = static_cast<SvxLineSpacingItem *>(pState->Clone());
     }
 }
 
@@ -869,7 +869,7 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
 
     if( pState && eState >= SfxItemState::DEFAULT )
     {
-        SvxULSpaceItem* pOldItem = (SvxULSpaceItem*)pState;
+        const SvxULSpaceItem* pOldItem = static_cast<const SvxULSpaceItem*>(pState);
 
         maUpper = pOldItem->GetUpper();
         maUpper = OutputDevice::LogicToLogic( maUpper, (MapUnit)m_eULSpaceUnit, MAP_100TH_MM );
@@ -957,7 +957,7 @@ void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState 
 {
     if ( (eState >= SfxItemState::DEFAULT) && (pState->ISA(SfxBoolItem)) )
     {
-        const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
+        const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
         const bool aBool = pItem->GetValue();
 
         const sal_uInt16 nIdNumber = mpTBxNumBullet->GetItemId(UNO_DEFAULTNUMBERING);
@@ -985,7 +985,7 @@ void ParaPropertyPanel::StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemSt
     {
         sal_uInt16 nValue = (sal_uInt16)0xFFFF;
         {
-            const SfxUInt16Item* pIt = (const SfxUInt16Item*)pState;
+            const SfxUInt16Item* pIt = static_cast<const SfxUInt16Item*>(pState);
             if ( pIt )
                 nValue = pIt->GetValue();
         }
@@ -1007,7 +1007,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     FieldUnit eUnit = FUNIT_NONE;
 
     if ( pState && eState >= SfxItemState::DEFAULT )
-        eUnit = (FieldUnit)( (const SfxUInt16Item*)pState )->GetValue();
+        eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pState)->GetValue();
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
@@ -1021,7 +1021,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
             {
                 const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
                 if ( pItem )
-                    eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+                    eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             }
             else
             {

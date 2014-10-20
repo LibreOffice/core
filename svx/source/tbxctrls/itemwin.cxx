@@ -119,7 +119,7 @@ void SvxLineBox::Select()
                 {
                     // LineDashItem will only be sent if it also has a dash.
                     // Notify cares!
-                    SvxDashListItem aItem( *(const SvxDashListItem*)(
+                    SvxDashListItem aItem( *static_cast<const SvxDashListItem*>(
                         SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
                     XLineDashItem aLineDashItem( GetSelectEntry(),
                         aItem.GetDashList()->GetDash( nPos - 2 )->GetDash() );
@@ -248,7 +248,7 @@ void SvxLineBox::FillControl()
 
     if( mpSh )
     {
-        const SvxDashListItem* pItem = (const SvxDashListItem*)( mpSh->GetItem( SID_DASH_LIST ) );
+        const SvxDashListItem* pItem = static_cast<const SvxDashListItem*>( mpSh->GetItem( SID_DASH_LIST ) );
         if ( pItem )
             Fill( pItem->GetDashList() );
     }

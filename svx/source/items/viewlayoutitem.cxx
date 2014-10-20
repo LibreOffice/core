@@ -85,7 +85,7 @@ bool SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    SvxViewLayoutItem& rItem = (SvxViewLayoutItem&)rAttr;
+    const SvxViewLayoutItem& rItem = static_cast<const SvxViewLayoutItem&>(rAttr);
 
     return ( GetValue() == rItem.GetValue()     &&
              mbBookMode == rItem.IsBookMode() );

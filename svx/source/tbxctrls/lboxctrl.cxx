@@ -248,7 +248,7 @@ void SvxUndoRedoControl::StateChanged(
         }
         else if ( pState && pState->ISA( SfxStringItem ) )
         {
-            SfxStringItem& rItem = *(SfxStringItem *)pState;
+            const SfxStringItem& rItem = *static_cast<const SfxStringItem *>(pState);
             ToolBox& rBox = GetToolBox();
             OUString aQuickHelpText = MnemonicGenerator::EraseAllMnemonicChars( rItem.GetValue() );
             rBox.SetQuickHelpText( GetId(), aQuickHelpText );
@@ -261,7 +261,7 @@ void SvxUndoRedoControl::StateChanged(
 
         if ( pState && pState->ISA( SfxStringListItem ) )
         {
-            SfxStringListItem &rItem = *(SfxStringListItem *)pState;
+            const SfxStringListItem &rItem = *static_cast<const SfxStringListItem *>(pState);
 
             const std::vector<OUString> &aLst = rItem.GetList();
             for( long nI = 0, nEnd = aLst.size(); nI < nEnd; ++nI )

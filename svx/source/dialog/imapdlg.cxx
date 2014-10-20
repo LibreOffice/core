@@ -99,7 +99,7 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 
             SfxChildWindow( _pParent, nId )
 {
     pWindow = new SvxIMapDlg( pBindings, this, _pParent );
-    SvxIMapDlg* pDlg = (SvxIMapDlg*) pWindow;
+    SvxIMapDlg* pDlg = static_cast<SvxIMapDlg*>(pWindow);
 
     if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
         pDlg->RollUp();

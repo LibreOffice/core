@@ -69,7 +69,7 @@ void SvxFontMenuControl::FillMenu()
     if ( pDoc )
     {
         const SvxFontListItem* pFonts =
-            (const SvxFontListItem*)pDoc->GetItem( SID_ATTR_CHAR_FONTLIST );
+            static_cast<const SvxFontListItem*>(pDoc->GetItem( SID_ATTR_CHAR_FONTLIST ));
         const FontList* pList = pFonts ? pFonts->GetFontList(): 0;
         DBG_ASSERT( pList, "Kein Fonts gefunden" );
         pMenu->Fill( pList );

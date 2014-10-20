@@ -223,7 +223,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if( pItem )
         {
-            pColorList = ( (SvxColorListItem*) pItem )->GetColorList();
+            pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
             FillValueSet();
         }
     }
@@ -252,7 +252,7 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
          && ( pPoolItemHint->GetObject()->ISA( SvxColorListItem ) ) )
     {
         // Die Liste der Farben hat sich geaendert
-        pColorList = ( (SvxColorListItem*) pPoolItemHint->GetObject() )->GetColorList();
+        pColorList = static_cast<SvxColorListItem*>( pPoolItemHint->GetObject() )->GetColorList();
         FillValueSet();
     }
 }
@@ -406,7 +406,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
                         if ( aAttrSet.GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
                         {
                             XLineStyle eXLS = (XLineStyle)
-                                ( (const XLineStyleItem&)aAttrSet.Get( XATTR_LINESTYLE ) ).GetValue();
+                                static_cast<const XLineStyleItem&>(aAttrSet.Get( XATTR_LINESTYLE ) ).GetValue();
                             if ( eXLS == XLINE_NONE )
                             {
                                 XLineStyleItem aXLineStyleItem( XLINE_SOLID );

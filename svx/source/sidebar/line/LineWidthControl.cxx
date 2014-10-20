@@ -160,14 +160,14 @@ void LineWidthControl::Initialize()
         maVSWidth.SetItemText(i, rStr[i-1]);
     }
     maVSWidth.SetUnit(rStr);
-    maVSWidth.SetItemData(1,(void*)5);
-    maVSWidth.SetItemData(2,(void*)8);
-    maVSWidth.SetItemData(3,(void*)10);
-    maVSWidth.SetItemData(4,(void*)15);
-    maVSWidth.SetItemData(5,(void*)23);
-    maVSWidth.SetItemData(6,(void*)30);
-    maVSWidth.SetItemData(7,(void*)45);
-    maVSWidth.SetItemData(8,(void*)60);
+    maVSWidth.SetItemData(1, reinterpret_cast<void*>(5));
+    maVSWidth.SetItemData(2, reinterpret_cast<void*>(8));
+    maVSWidth.SetItemData(3, reinterpret_cast<void*>(10));
+    maVSWidth.SetItemData(4, reinterpret_cast<void*>(15));
+    maVSWidth.SetItemData(5, reinterpret_cast<void*>(23));
+    maVSWidth.SetItemData(6, reinterpret_cast<void*>(30));
+    maVSWidth.SetItemData(7, reinterpret_cast<void*>(45));
+    maVSWidth.SetItemData(8, reinterpret_cast<void*>(60));
     maVSWidth.SetImage(maIMGCusGray);
 
     maVSWidth.SetSelItem(0);
@@ -271,7 +271,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
         sal_uInt16 iPos = maVSWidth.GetSelectItemId();
         if(iPos >= 1 && iPos <= 8)
         {
-            sal_IntPtr nVal = LogicToLogic((sal_IntPtr)maVSWidth.GetItemData( iPos ) , MAP_POINT, (MapUnit)meMapUnit);
+            sal_IntPtr nVal = LogicToLogic(reinterpret_cast<sal_IntPtr>(maVSWidth.GetItemData( iPos )), MAP_POINT, (MapUnit)meMapUnit);
             nVal = maMFWidth.Denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
             mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SfxCallMode::RECORD, &aWidthItem, 0L);

@@ -145,7 +145,7 @@ void FmRecordCountListener::NotifyCurrentCount()
     if (m_lnkWhoWantsToKnow.IsSet())
     {
         DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::NotifyCurrentCount : I have no propset ... !?");
-        void* pTheCount = (void*)(sal_IntPtr)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
+        void* pTheCount = reinterpret_cast<void*>(::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT)));
         m_lnkWhoWantsToKnow.Call(pTheCount);
     }
 }
@@ -1111,7 +1111,7 @@ IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
         return 0L;
 
     FmSearchProgress aProgress;
-    aProgress.nCurrentRecord = (sal_uIntPtr)pCounterAsVoid;
+    aProgress.nCurrentRecord = reinterpret_cast<sal_uIntPtr>(pCounterAsVoid);
     aProgress.aSearchState = FmSearchProgress::STATE_PROGRESS_COUNTING;
     m_aProgressHandler.Call(&aProgress);
 

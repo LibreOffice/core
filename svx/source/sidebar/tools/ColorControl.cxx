@@ -68,7 +68,7 @@ namespace {
             const SfxPoolItem* pItem = pDocSh->GetItem(SID_COLOR_TABLE);
             if (pItem != NULL)
             {
-                XColorListRef xTable = ((SvxColorListItem*)pItem)->GetColorList();
+                XColorListRef xTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
                 if (xTable.is())
                     return xTable;
             }

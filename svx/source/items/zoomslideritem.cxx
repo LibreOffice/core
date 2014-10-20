@@ -82,7 +82,7 @@ bool SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    SvxZoomSliderItem& rItem = (SvxZoomSliderItem&)rAttr;
+    const SvxZoomSliderItem& rItem = static_cast<const SvxZoomSliderItem&>(rAttr);
 
     return ( GetValue() == rItem.GetValue() && maValues == rItem.maValues &&
              mnMinZoom == rItem.mnMinZoom && mnMaxZoom == rItem.mnMaxZoom );

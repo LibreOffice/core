@@ -54,7 +54,7 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
     else
     {
         DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
-        SfxBoolItem* pItem = (SfxBoolItem*)pState;
+        const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
         bInsert = pItem->GetValue();
 
         if ( bInsert )

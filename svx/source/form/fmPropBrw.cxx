@@ -85,7 +85,7 @@ FmPropBrwMgr::FmPropBrwMgr( vcl::Window* _pParent, sal_uInt16 _nId,
 {
     pWindow = new FmPropBrw( ::comphelper::getProcessComponentContext(), _pBindings, this, _pParent, _pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxFloatingWindow*)pWindow)->Initialize( _pInfo );
+    static_cast<SfxFloatingWindow*>(pWindow)->Initialize( _pInfo );
 }
 
 
@@ -629,7 +629,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     {
         if (eState >= SfxItemState::DEFAULT)
         {
-            FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
+            FmFormShell* pShell = PTR_CAST(FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell());
             InterfaceBag aSelection;
             if ( pShell )
                 pShell->GetImpl()->getCurrentSelection( aSelection );

@@ -162,7 +162,7 @@ public:
 |*
 \************************************************************************/
 
-#define SVXIMAPDLG() ( (SvxIMapDlg*) ( SfxViewFrame::Current()->GetChildWindow(         \
+#define SVXIMAPDLG() ( static_cast<SvxIMapDlg*>( SfxViewFrame::Current()->GetChildWindow(         \
                         SvxIMapDlgChildWindow::GetChildWindowId() )->   \
                         GetWindow() ) )
 

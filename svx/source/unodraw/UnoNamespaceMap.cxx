@@ -170,7 +170,7 @@ bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
         mnItem++;
 
         // get that item and see if there namespaces inside
-        const SvXMLAttrContainerItem *pUnknown = (const SvXMLAttrContainerItem *)pItem;
+        const SvXMLAttrContainerItem *pUnknown = static_cast<const SvXMLAttrContainerItem *>(pItem);
         if( (pUnknown->GetAttrCount() > 0) )
         {
             mpCurrentAttr = pUnknown;

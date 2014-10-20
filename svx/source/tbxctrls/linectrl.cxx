@@ -76,7 +76,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
+    SvxLineBox* pBox = static_cast<SvxLineBox*>( GetToolBox().GetItemWindow( GetId() ) );
     DBG_ASSERT( pBox, "Window not found!" );
 
     if( eState == SfxItemState::DISABLED )
@@ -93,12 +93,12 @@ void SvxLineStyleToolBoxControl::StateChanged (
             if( nSID == SID_ATTR_LINE_STYLE )
             {
                 delete pStyleItem;
-                pStyleItem = (XLineStyleItem*)pState->Clone();
+                pStyleItem = static_cast<XLineStyleItem*>(pState->Clone());
             }
             else if( nSID == SID_ATTR_LINE_DASH )
             {
                 delete pDashItem;
-                pDashItem = (XLineDashItem*)pState->Clone();
+                pDashItem = static_cast<XLineDashItem*>(pState->Clone());
             }
 
             bUpdate = true;
@@ -120,7 +120,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
     {
         bUpdate = false;
 
-        SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
+        SvxLineBox* pBox = static_cast<SvxLineBox*>(GetToolBox().GetItemWindow( GetId() ));
         DBG_ASSERT( pBox, "Window not found!" );
 
         // Since the timer can strike unexpectedly, it may happen that
@@ -168,14 +168,14 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
     if ( pState && ( pState->ISA( SvxDashListItem ) ) )
     {
         // The list of line styles has changed
-        SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
+        SvxLineBox* pBox = static_cast<SvxLineBox*>(GetToolBox().GetItemWindow( GetId() ));
         DBG_ASSERT( pBox, "Window not found!" );
 
         OUString aString( pBox->GetSelectEntry() );
         pBox->Clear();
         pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
         pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID) );
-        pBox->Fill( ((SvxDashListItem*)pState )->GetDashList() );
+        pBox->Fill( static_cast<const SvxDashListItem*>(pState)->GetDashList() );
         pBox->SelectEntry( aString );
     }
 }
@@ -205,8 +205,8 @@ SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 void SvxLineWidthToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    SvxMetricField* pFld = (SvxMetricField*)
-                           GetToolBox().GetItemWindow( GetId() );
+    SvxMetricField* pFld = static_cast<SvxMetricField*>(
+                           GetToolBox().GetItemWindow( GetId() ));
     DBG_ASSERT( pFld, "Window not found" );
 
     if ( nSID == SID_ATTR_METRIC )
@@ -233,7 +233,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
                 SfxMapUnit eUnit = SFX_MAPUNIT_100TH_MM; // CD!!! GetCoreMetric();
                 pFld->SetCoreUnit( eUnit );
 
-                pFld->Update( (const XLineWidthItem*)pState );
+                pFld->Update( static_cast<const XLineWidthItem*>(pState) );
             }
             else
                 pFld->Update( NULL );
@@ -300,11 +300,11 @@ void SvxLineEndWindow::implInit()
     {
         pItem = pDocSh->GetItem( SID_LINEEND_LIST );
         if( pItem )
-            pLineEndList = ( (SvxLineEndListItem*) pItem )->GetLineEndList();
+            pLineEndList = static_cast<const SvxLineEndListItem*>( pItem )->GetLineEndList();
 
         pItem = pDocSh->GetItem( SID_ATTR_LINEEND_WIDTH_DEFAULT );
         if( pItem )
-            nLineEndWidth = ( (SfxUInt16Item*) pItem )->GetValue();
+            nLineEndWidth = static_cast<const SfxUInt16Item*>( pItem )->GetValue();
     }
     DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 
@@ -537,7 +537,7 @@ void SvxLineEndWindow::StateChanged(
         // The list of line ends (LineEndList) has changed
         if ( pState && pState->ISA( SvxLineEndListItem ))
         {
-            pLineEndList = ((SvxLineEndListItem*)pState)->GetLineEndList();
+            pLineEndList = static_cast<const SvxLineEndListItem*>(pState)->GetLineEndList();
             DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 
             aLineEndSet.Clear();

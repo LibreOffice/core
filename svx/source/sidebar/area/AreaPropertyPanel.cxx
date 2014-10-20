@@ -254,7 +254,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                 {
                     if(!mpLbFillAttr->GetEntryCount())
                     {
-                        const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+                        const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
                         mpLbFillAttr->Enable();
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Fill(aItem.GetGradientList());
@@ -264,7 +264,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                     if(LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
                     {
-                        const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+                        const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
 
                         if(mnLastPosGradient < aItem.GetGradientList()->Count())
                         {
@@ -293,7 +293,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                 {
                     if(!mpLbFillAttr->GetEntryCount())
                     {
-                        const SvxHatchListItem aItem( *(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+                        const SvxHatchListItem aItem( *static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
                         mpLbFillAttr->Enable();
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Fill(aItem.GetHatchList());
@@ -303,7 +303,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                     if(LISTBOX_ENTRY_NOTFOUND != mnLastPosHatch)
                     {
-                        const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+                        const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
 
                         if(mnLastPosHatch < aItem.GetHatchList()->Count())
                         {
@@ -332,7 +332,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                 {
                     if(!mpLbFillAttr->GetEntryCount())
                     {
-                        const SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+                        const SvxBitmapListItem aItem( *static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
                         mpLbFillAttr->Enable();
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Fill(aItem.GetBitmapList());
@@ -342,7 +342,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
 
                     if(LISTBOX_ENTRY_NOTFOUND != mnLastPosBitmap)
                     {
-                        const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
 
                         if(mnLastPosBitmap < aItem.GetBitmapList()->Count())
                         {
@@ -414,7 +414,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 
                 if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
 
                     if(nPos < aItem.GetGradientList()->Count())
                     {
@@ -445,7 +445,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 
                 if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_HATCH_LIST))
                 {
-                    const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+                    const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
 
                     if(nPos < aItem.GetHatchList()->Count())
                     {
@@ -476,7 +476,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 
                 if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_BITMAP_LIST))
                 {
-                    const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+                    const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
 
                     if(nPos < aItem.GetBitmapList()->Count())
                     {
@@ -755,7 +755,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
 
                     if(pItem && (!mpTransparanceItem || *pItem != *mpTransparanceItem))
                     {
-                        mpTransparanceItem.reset((SfxUInt16Item*)pItem->Clone());
+                        mpTransparanceItem.reset(static_cast<SfxUInt16Item*>(pItem->Clone()));
                     }
                     else
                     {
@@ -777,7 +777,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
 
                     if(pItem && (!mpFloatTransparenceItem || *pItem != *mpFloatTransparenceItem))
                     {
-                        mpFloatTransparenceItem.reset((XFillFloatTransparenceItem*)pItem->Clone());
+                        mpFloatTransparenceItem.reset(static_cast<XFillFloatTransparenceItem*>(pItem->Clone()));
                     }
                     else
                     {
@@ -849,7 +849,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpColorItem.reset(pState ? (XFillColorItem*)pState->Clone() : 0);
+                mpColorItem.reset(pState ? static_cast<XFillColorItem*>(pState->Clone()) : 0);
             }
 
             if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -882,7 +882,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpFillGradientItem.reset(pState ? (XFillGradientItem*)pState->Clone() : 0);
+                mpFillGradientItem.reset(pState ? static_cast<XFillGradientItem*>(pState->Clone()) : 0);
             }
 
             if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -911,7 +911,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpHatchItem.reset(pState ? (XFillHatchItem*)pState->Clone() : 0);
+                mpHatchItem.reset(pState ? static_cast<XFillHatchItem*>(pState->Clone()) : 0);
             }
 
             if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -940,7 +940,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         {
             if(SfxItemState::DEFAULT == eState)
             {
-                mpBitmapItem.reset(pState ? (XFillBitmapItem*)pState->Clone() : 0);
+                mpBitmapItem.reset(pState ? static_cast<XFillBitmapItem*>(pState->Clone()) : 0);
             }
 
             if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
@@ -975,7 +975,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                     {
                         const Color aColor = mpColorItem->GetColorValue();
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxColorListItem aItem(*(const SvxColorListItem*)(pSh->GetItem(SID_COLOR_TABLE)));
+                        const SvxColorListItem aItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
@@ -1000,7 +1000,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                     {
                         const OUString aString( mpFillGradientItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxGradientListItem aItem( *(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+                        const SvxGradientListItem aItem( *static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
@@ -1025,7 +1025,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                     {
                         const OUString aString( mpHatchItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+                        const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
@@ -1050,7 +1050,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                     {
                         const OUString aString( mpBitmapItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
 
                         mpLbFillAttr->Clear();
                         mpLbFillAttr->Enable();
@@ -1109,7 +1109,7 @@ void AreaPropertyPanel::Update()
 
                 if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    const SvxGradientListItem aItem(*(const SvxGradientListItem*)(pSh->GetItem(SID_GRADIENT_LIST)));
+                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
                     mpLbFillAttr->Fill(aItem.GetGradientList());
@@ -1138,7 +1138,7 @@ void AreaPropertyPanel::Update()
 
                 if(pSh && pSh->GetItem(SID_HATCH_LIST))
                 {
-                    const SvxHatchListItem aItem(*(const SvxHatchListItem*)(pSh->GetItem(SID_HATCH_LIST)));
+                    const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
                     mpLbFillAttr->Fill(aItem.GetHatchList());
@@ -1167,7 +1167,7 @@ void AreaPropertyPanel::Update()
 
                 if(pSh && pSh->GetItem(SID_BITMAP_LIST))
                 {
-                    const SvxBitmapListItem aItem(*(const SvxBitmapListItem*)(pSh->GetItem(SID_BITMAP_LIST)));
+                    const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
                     mpLbFillAttr->Enable();
                     mpLbFillAttr->Clear();
                     mpLbFillAttr->Fill(aItem.GetBitmapList());

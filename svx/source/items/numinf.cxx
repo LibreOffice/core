@@ -133,7 +133,7 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
 
-    SvxNumberInfoItem& rOther = (SvxNumberInfoItem&)rItem;
+    const SvxNumberInfoItem& rOther = static_cast<const SvxNumberInfoItem&>(rItem);
 
     bool bEqual = false;
 

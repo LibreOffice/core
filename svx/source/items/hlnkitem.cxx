@@ -231,7 +231,7 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
 
-    const SvxHyperlinkItem& rItem = (const SvxHyperlinkItem&) rAttr;
+    const SvxHyperlinkItem& rItem = static_cast<const SvxHyperlinkItem&>(rAttr);
 
     bool bRet = ( sName   == rItem.sName   &&
                   sURL    == rItem.sURL    &&
@@ -242,7 +242,7 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
     if (!bRet)
         return false;
 
-    const SvxMacroTableDtor* pOther = ((SvxHyperlinkItem&)rAttr).pMacroTable;
+    const SvxMacroTableDtor* pOther = static_cast<const SvxHyperlinkItem&>(rAttr).pMacroTable;
     if( !pMacroTable )
         return ( !pOther || pOther->empty() );
     if( !pOther )

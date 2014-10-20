@@ -792,7 +792,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     sal_Int32 nPos = i - rItems.begin();
     if (pData->ISA(FmFilterItems))
     {
-        FmFormItem* pFormItem = (FmFormItem*)pParent;
+        FmFormItem* pFormItem = static_cast<FmFormItem*>(pParent);
 
         try
         {
@@ -802,7 +802,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
             if ( bEmptyLastTerm )
             {
                 // remove all children (by setting an empty predicate expression)
-                ::std::vector< FmFilterData* >& rChildren = ((FmFilterItems*)pData)->GetChildren();
+                ::std::vector< FmFilterData* >& rChildren = static_cast<FmFilterItems*>(pData)->GetChildren();
                 while ( !rChildren.empty() )
                 {
                     ::std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
@@ -937,7 +937,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
     // search for the condition
     if (pCurrent)
     {
-        FmFormItem* pFormItem = (FmFormItem*)pCurrent->GetParent();
+        FmFormItem* pFormItem = static_cast<FmFormItem*>(pCurrent->GetParent());
         ::std::vector<FmFilterData*>& rItems = pFormItem->GetChildren();
         ::std::vector<FmFilterData*>::const_iterator i = ::std::find(rItems.begin(), rItems.end(), pCurrent);
 
@@ -1025,7 +1025,7 @@ void FmFilterItemsString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* pEntry)
 {
     FmFilterItems* pRow = (FmFilterItems*)pEntry->GetUserData();
-    FmFormItem* pForm = (FmFormItem*)pRow->GetParent();
+    FmFormItem* pForm = static_cast<FmFormItem*>(pRow->GetParent());
 
     // current filter is significant painted
     const bool bIsCurrentFilter = pForm->GetChildren()[ pForm->GetFilterController()->getActiveTerm() ] == pRow;
@@ -1443,21 +1443,21 @@ bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
         {
             FmFormItem* pFormItem = NULL;
             if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
-                pFormItem = (FmFormItem*)((FmFilterItem*)pEntry->GetUserData())->GetParent()->GetParent();
+                pFormItem = static_cast<FmFormItem*>(static_cast<FmFilterItem*>(pEntry->GetUserData())->GetParent()->GetParent());
             else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItems))
-                pFormItem = (FmFormItem*)((FmFilterItem*)pEntry->GetUserData())->GetParent()->GetParent();
+                pFormItem = static_cast<FmFormItem*>(static_cast<FmFilterItem*>(pEntry->GetUserData())->GetParent()->GetParent());
             else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFormItem))
                 pFormItem = (FmFormItem*)pEntry->GetUserData();
 
             if (pFormItem)
             {
                 // will the controller be exchanged?
-                if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItem))
-                    m_pModel->SetCurrentItems((FmFilterItems*)((FmFilterItem*)pEntry->GetUserData())->GetParent());
-                else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFilterItems))
+                if (static_cast<FmFilterData*>(pEntry->GetUserData())->ISA(FmFilterItem))
+                    m_pModel->SetCurrentItems(static_cast<FmFilterItems*>(static_cast<FmFilterItem*>(pEntry->GetUserData())->GetParent()));
+                else if (static_cast<FmFilterData*>(pEntry->GetUserData())->ISA(FmFilterItems))
                     m_pModel->SetCurrentItems((FmFilterItems*)pEntry->GetUserData());
-                else if (((FmFilterData*)pEntry->GetUserData())->ISA(FmFormItem))
-                    m_pModel->SetCurrentController(((FmFormItem*)pEntry->GetUserData())->GetController());
+                else if (static_cast<FmFilterData*>(pEntry->GetUserData())->ISA(FmFormItem))
+                    m_pModel->SetCurrentController(static_cast<FmFormItem*>(pEntry->GetUserData())->GetController());
             }
         }
         return true;
@@ -1912,7 +1912,7 @@ void FmFilterNavigatorWin::StateChanged( sal_uInt16 nSID, SfxItemState eState, c
 
     if( eState >= SfxItemState::DEFAULT )
     {
-        FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
+        FmFormShell* pShell = PTR_CAST( FmFormShell, static_cast<const SfxObjectItem*>(pState)->GetShell() );
         UpdateContent( pShell );
     }
     else
@@ -1997,7 +1997,7 @@ FmFilterNavigatorWinMgr::FmFilterNavigatorWinMgr( vcl::Window *_pParent, sal_uIn
 {
     pWindow = new FmFilterNavigatorWin( _pBindings, this, _pParent );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ((SfxDockingWindow*)pWindow)->Initialize( _pInfo );
+    static_cast<SfxDockingWindow*>(pWindow)->Initialize( _pInfo );
 }
 
 

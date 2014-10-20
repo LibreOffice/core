@@ -174,7 +174,7 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo*, pInfo )
             break;
         case RTFIMP_START:
         {
-            SvxRTFParser* pParser = (SvxRTFParser*) pInfo->pParser;
+            SvxRTFParser* pParser = static_cast<SvxRTFParser*>(pInfo->pParser);
             pParser->SetAttrPool( &mrItemPool );
             RTFPardAttrMapIds& rMap = pParser->GetPardMap();
             rMap.nBox = SDRATTR_TABLE_BORDER;
@@ -415,7 +415,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
 //                  ((SvxRTFParser*)pInfo->pParser)->ReadBackgroundAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
                 break;
                 case RTF_BRDRDEF:
-                    ((SvxRTFParser*)pInfo->pParser)->ReadBorderAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
+                    static_cast<SvxRTFParser*>(pInfo->pParser)->ReadBorderAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
                 break;
             }
         }

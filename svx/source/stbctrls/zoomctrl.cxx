@@ -115,7 +115,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     }
     else if ( pState->ISA( SfxUInt16Item) )
     {
-        const SfxUInt16Item* pItem = (const SfxUInt16Item*)pState;
+        const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pState);
         nZoom = pItem->GetValue();
 
         OUString aStr(unicode::formatPercent(nZoom, Application::GetSettings().GetUILanguageTag()));
@@ -123,7 +123,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
 
         if ( pState->ISA(SvxZoomItem) )
         {
-            nValueSet = ((const SvxZoomItem*)pState)->GetValueSet();
+            nValueSet = static_cast<const SvxZoomItem*>(pState)->GetValueSet();
         }
         else
         {

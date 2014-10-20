@@ -241,7 +241,7 @@ void TextPropertyPanel::NotifyItemUpdate (
     case SID_ATTR_CHAR_FONTHEIGHT:
         {
             if (  eState >= SfxItemState::DEFAULT && pState->ISA(SvxFontHeightItem) )
-                mpHeightItem = (SvxFontHeightItem*)pState;
+                mpHeightItem = const_cast<SvxFontHeightItem*>(static_cast<const SvxFontHeightItem*>(pState));
             else
                 mpHeightItem = NULL;
         }
@@ -250,7 +250,7 @@ void TextPropertyPanel::NotifyItemUpdate (
         {
             if( eState >= SfxItemState::DEFAULT && pState->ISA(SvxUnderlineItem) )
             {
-                const SvxUnderlineItem* pItem = (const SvxUnderlineItem*)pState;
+                const SvxUnderlineItem* pItem = static_cast<const SvxUnderlineItem*>(pState);
                 meUnderline = (FontUnderline)pItem->GetValue();
                 meUnderlineColor = pItem->GetColor();
             }
@@ -266,7 +266,7 @@ void TextPropertyPanel::NotifyItemUpdate (
 
                 if(pState->ISA(SvxKerningItem))
                 {
-                    const SvxKerningItem* pKerningItem  = (const SvxKerningItem*)pState;
+                    const SvxKerningItem* pKerningItem = static_cast<const SvxKerningItem*>(pState);
                     mlKerning = (long)pKerningItem->GetValue();
                     mbKernAvailable = true;
                 }

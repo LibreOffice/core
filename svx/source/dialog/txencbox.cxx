@@ -69,7 +69,7 @@ sal_Int32 SvxTextEncodingBox::EncodingToPos_Impl( rtl_TextEncoding nEnc ) const
     sal_Int32 nCount = GetEntryCount();
     for ( sal_Int32 i=0; i<nCount; i++ )
     {
-        if ( nEnc == rtl_TextEncoding( (sal_uIntPtr)GetEntryData(i) ) )
+        if ( nEnc == rtl_TextEncoding( reinterpret_cast<sal_uIntPtr>(GetEntryData(i)) ) )
             return i;
     }
     return LISTBOX_ENTRY_NOTFOUND;
@@ -201,7 +201,7 @@ void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc,
             const OUString& rEntry, sal_Int32 nPos )
 {
     sal_Int32 nAt = InsertEntry( rEntry, nPos );
-    SetEntryData( nAt, (void*)(sal_uIntPtr)nEnc );
+    SetEntryData( nAt, reinterpret_cast<void*>(nEnc) );
 }
 
 
@@ -222,7 +222,7 @@ rtl_TextEncoding SvxTextEncodingBox::GetSelectTextEncoding() const
     sal_Int32 nPos = GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        return rtl_TextEncoding( (sal_uIntPtr)GetEntryData(nPos) );
+        return rtl_TextEncoding( reinterpret_cast<sal_uIntPtr>(GetEntryData(nPos)) );
     else
         return RTL_TEXTENCODING_DONTKNOW;
 }

@@ -176,7 +176,7 @@ public:
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
     void SetTextForItem(FmFilterItem* pItem, const OUString& rText);
 
-    FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? (FmFormItem*)m_pCurrentItems->GetParent() : NULL;}
+    FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? static_cast<FmFormItem*>(m_pCurrentItems->GetParent()) : NULL;}
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
     void SetCurrentItems(FmFilterItems* pCurrent);
 

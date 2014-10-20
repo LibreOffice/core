@@ -396,7 +396,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                     if(pItem)
                     {
-                        mpStyleItem.reset(pState ? (XLineStyleItem*)pItem->Clone() : 0);
+                        mpStyleItem.reset(pState ? static_cast<XLineStyleItem*>(pItem->Clone()) : 0);
                     }
                 }
                 else // if(nSID == SID_ATTR_LINE_DASH)
@@ -405,7 +405,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                     if(pItem)
                     {
-                        mpDashItem.reset(pState ? (XLineDashItem*)pItem->Clone() : 0);
+                        mpDashItem.reset(pState ? static_cast<XLineDashItem*>(pItem->Clone()) : 0);
                     }
                 }
             }
@@ -502,7 +502,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    mpStartItem.reset((XLineStartItem*)pItem->Clone());
+                    mpStartItem.reset(static_cast<XLineStartItem*>(pItem->Clone()));
                     SelectEndStyle(true);
                     break;
                 }
@@ -531,7 +531,7 @@ void LinePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    mpEndItem.reset((XLineEndItem*)pItem->Clone());
+                    mpEndItem.reset(static_cast<XLineEndItem*>(pItem->Clone()));
                     SelectEndStyle(false);
                     break;
                 }
@@ -977,7 +977,7 @@ void  LinePropertyPanel::FillLineEndList()
     if ( pSh && pSh->GetItem( SID_LINEEND_LIST ) )
     {
         mpLBStart->Enable();
-        SvxLineEndListItem aItem( *(const SvxLineEndListItem*)(pSh->GetItem( SID_LINEEND_LIST ) ) );
+        SvxLineEndListItem aItem( *static_cast<const SvxLineEndListItem*>(pSh->GetItem( SID_LINEEND_LIST ) ) );
         mxLineEndList = aItem.GetLineEndList();
 
         if (mxLineEndList.is())
@@ -1003,7 +1003,7 @@ void  LinePropertyPanel::FillLineStyleList()
     if ( pSh && pSh->GetItem( SID_DASH_LIST ) )
     {
         mpLBStyle->Enable();
-        SvxDashListItem aItem( *(const SvxDashListItem*)(pSh->GetItem( SID_DASH_LIST ) ) );
+        SvxDashListItem aItem( *static_cast<const SvxDashListItem*>(pSh->GetItem( SID_DASH_LIST ) ) );
         mxLineStyleList = aItem.GetDashList();
 
         if (mxLineStyleList.is())

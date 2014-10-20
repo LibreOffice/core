@@ -94,7 +94,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
         return;
 
     DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
-    SfxBoolItem* pItem = (SfxBoolItem*)pState;
+    const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
     mpImpl->maTimer.Stop();
 
     bool modified = pItem->GetValue();

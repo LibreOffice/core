@@ -291,7 +291,7 @@ void SvxRubyDialog::Activate()
     SfxModelessDialog::Activate();
     SfxPoolItem* pState = 0;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    bool bEnable = (eState < SfxItemState::DEFAULT) || !pState || !((SfxBoolItem*)pState)->GetValue();
+    bool bEnable = (eState < SfxItemState::DEFAULT) || !pState || !static_cast<SfxBoolItem*>(pState)->GetValue();
     delete pState;
     m_pStylistPB->Enable(bEnable);
     //get selection from current view frame
@@ -565,7 +565,7 @@ IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
 {
     SfxPoolItem* pState = 0;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    if(eState <= SfxItemState::SET || !pState || !((SfxBoolItem*)pState)->GetValue())
+    if(eState <= SfxItemState::SET || !pState || !static_cast<SfxBoolItem*>(pState)->GetValue())
     {
         pBindings->GetDispatcher()->Execute( SID_STYLE_DESIGNER,
                               SfxCallMode::ASYNCHRON |

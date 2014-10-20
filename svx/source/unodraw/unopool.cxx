@@ -100,8 +100,8 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
     {
     case OWN_ATTR_FILLBMP_MODE:
         {
-            XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)&pPool->GetDefaultItem(XATTR_FILLBMP_STRETCH);
-            XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)&pPool->GetDefaultItem(XATTR_FILLBMP_TILE);
+            const XFillBmpStretchItem* pStretchItem = static_cast<const XFillBmpStretchItem*>(&pPool->GetDefaultItem(XATTR_FILLBMP_STRETCH));
+            const XFillBmpTileItem* pTileItem = static_cast<const XFillBmpTileItem*>(&pPool->GetDefaultItem(XATTR_FILLBMP_TILE));
             if( pTileItem && pTileItem->GetValue() )
             {
                 rValue <<= drawing::BitmapMode_REPEAT;

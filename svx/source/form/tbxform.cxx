@@ -157,7 +157,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
     {
         sal_uInt16 nSlot   = 0;
         if (eState >= SfxItemState::DEFAULT)
-            nSlot = ((SfxUInt16Item*)pState)->GetValue();
+            nSlot = static_cast<const SfxUInt16Item*>(pState)->GetValue();
 
         switch( nSlot )
         {
@@ -253,7 +253,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
 {
     sal_uInt16              nId = GetId();
     ToolBox*            pToolBox = &GetToolBox();
-    SvxFmAbsRecWin*     pWin = (SvxFmAbsRecWin*)( pToolBox->GetItemWindow(nId) );
+    SvxFmAbsRecWin*     pWin = static_cast<SvxFmAbsRecWin*>( pToolBox->GetItemWindow(nId) );
 
     assert(pWin && "Control not found!");
 
@@ -370,7 +370,7 @@ void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
 
     OUString aText;
     if (pState)
-        aText = ((SfxStringItem*)pState)->GetValue();
+        aText = static_cast<const SfxStringItem*>(pState)->GetValue();
     else
         aText = "?";
 

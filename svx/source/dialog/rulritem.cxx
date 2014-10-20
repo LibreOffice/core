@@ -35,8 +35,8 @@ TYPEINIT1(SvxObjectItem, SfxPoolItem);
 bool SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-        mlLeft  == ((const SvxLongLRSpaceItem &)rCmp).mlLeft &&
-        mlRight == ((const SvxLongLRSpaceItem &)rCmp).mlRight;
+        mlLeft  == static_cast<const SvxLongLRSpaceItem &>(rCmp).mlLeft &&
+        mlRight == static_cast<const SvxLongLRSpaceItem &>(rCmp).mlRight;
 }
 
 OUString SvxLongLRSpaceItem::GetValueText() const
@@ -169,8 +169,8 @@ void SvxLongLRSpaceItem::SetRight(long lArgRight)
 bool SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-        mlLeft == ((const SvxLongULSpaceItem&)rCmp).mlLeft &&
-        mlRight == ((const SvxLongULSpaceItem&)rCmp).mlRight;
+        mlLeft == static_cast<const SvxLongULSpaceItem&>(rCmp).mlLeft &&
+        mlRight == static_cast<const SvxLongULSpaceItem&>(rCmp).mlRight;
 }
 
 
@@ -302,9 +302,9 @@ void SvxLongULSpaceItem::SetLower(long lArgRight)
 bool SvxPagePosSizeItem::operator==( const SfxPoolItem& rCmp) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-        aPos == ((const SvxPagePosSizeItem &)rCmp).aPos &&
-            lWidth == ((const SvxPagePosSizeItem &)rCmp).lWidth  &&
-            lHeight == ((const SvxPagePosSizeItem &)rCmp).lHeight;
+        aPos == static_cast<const SvxPagePosSizeItem &>(rCmp).aPos &&
+            lWidth == static_cast<const SvxPagePosSizeItem &>(rCmp).lWidth  &&
+            lHeight == static_cast<const SvxPagePosSizeItem &>(rCmp).lHeight;
 }
 
 bool SvxPagePosSizeItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -420,17 +420,17 @@ SvxPagePosSizeItem::SvxPagePosSizeItem() :
 bool SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 {
     if(!SfxPoolItem::operator==(rCmp) ||
-       nActColumn != ((const SvxColumnItem&)rCmp).nActColumn ||
-       nLeft != ((const SvxColumnItem&)rCmp).nLeft ||
-       nRight != ((const SvxColumnItem&)rCmp).nRight ||
-       bTable != ((const SvxColumnItem&)rCmp).bTable ||
-       Count() != ((const SvxColumnItem&)rCmp).Count())
+       nActColumn != static_cast<const SvxColumnItem&>(rCmp).nActColumn ||
+       nLeft != static_cast<const SvxColumnItem&>(rCmp).nLeft ||
+       nRight != static_cast<const SvxColumnItem&>(rCmp).nRight ||
+       bTable != static_cast<const SvxColumnItem&>(rCmp).bTable ||
+       Count() != static_cast<const SvxColumnItem&>(rCmp).Count())
         return false;
 
-    const sal_uInt16 nCount = ((const SvxColumnItem&)rCmp).Count();
+    const sal_uInt16 nCount = static_cast<const SvxColumnItem&>(rCmp).Count();
     for(sal_uInt16 i = 0; i < nCount;++i)
     {
-        if( (*this)[i] != ((const SvxColumnItem&)rCmp)[i] )
+        if( (*this)[i] != static_cast<const SvxColumnItem&>(rCmp)[i] )
             return false;
     }
     return true;
@@ -706,11 +706,11 @@ bool SvxColumnItem::IsConsistent() const
 bool SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==(rCmp) &&
-       nStartX == ((const SvxObjectItem&)rCmp).nStartX &&
-       nEndX == ((const SvxObjectItem&)rCmp).nEndX &&
-       nStartY == ((const SvxObjectItem&)rCmp).nStartY &&
-       nEndY == ((const SvxObjectItem&)rCmp).nEndY &&
-       bLimits == ((const SvxObjectItem&)rCmp).bLimits;
+       nStartX == static_cast<const SvxObjectItem&>(rCmp).nStartX &&
+       nEndX == static_cast<const SvxObjectItem&>(rCmp).nEndX &&
+       nStartY == static_cast<const SvxObjectItem&>(rCmp).nStartY &&
+       nEndY == static_cast<const SvxObjectItem&>(rCmp).nEndY &&
+       bLimits == static_cast<const SvxObjectItem&>(rCmp).bLimits;
 }
 
 OUString SvxObjectItem::GetValueText() const

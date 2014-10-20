@@ -134,8 +134,8 @@ struct SearchDlg_Impl
 
 void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox& rCBox )
 {
-    SfxStringListItem* pSrchItem =
-        (SfxStringListItem*)SfxGetpApp()->GetItem( nId );
+    const SfxStringListItem* pSrchItem =
+        static_cast<const SfxStringListItem*>(SfxGetpApp()->GetItem( nId ));
 
     if (pSrchItem)
     {
@@ -389,13 +389,13 @@ void SvxSearchDialog::Construct_Impl()
     // Get attribute sets only once in construtor()
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     const SvxSetItem* pSrchSetItem =
-        (const SvxSetItem*) rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs );
+        static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs ) );
 
     if ( pSrchSetItem )
         InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
     const SvxSetItem* pReplSetItem =
-        (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs );
+        static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs ) );
 
     if ( pReplSetItem )
         InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -822,13 +822,13 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
                 // Get attribute sets, if it not has been done already
                 const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
                 const SvxSetItem* pSrchSetItem =
-                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs );
+                    static_cast<const SvxSetItem*>(rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SfxCallMode::SLOT, ppArgs ));
 
                 if ( pSrchSetItem )
                     InitAttrList_Impl( &pSrchSetItem->GetItemSet(), 0 );
 
                 const SvxSetItem* pReplSetItem =
-                (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs );
+                    static_cast<const SvxSetItem*>( rBindings.GetDispatcher()->Execute( FID_SEARCH_REPLACESET, SfxCallMode::SLOT, ppArgs ) );
 
                 if ( pReplSetItem )
                     InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
@@ -1753,7 +1753,7 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
     if ( pItem )
     {
         delete pSearchItem;
-        pSearchItem = (SvxSearchItem*)pItem->Clone();
+        pSearchItem = static_cast<SvxSearchItem*>(pItem->Clone());
         Init_Impl( pSearchItem->GetPattern() &&
                    ( !pSearchList || !pSearchList->Count() ) );
     }
@@ -1792,9 +1792,9 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     }
     bSet = true;
 
-    ( (ComboBox*)pCtrl )->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+    static_cast<ComboBox*>(pCtrl)->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
-    ModifyHdl_Impl( (ComboBox*)pCtrl );
+    ModifyHdl_Impl( static_cast<ComboBox*>(pCtrl) );
 
     if (bFormat && nTxtLen)
         m_pLayoutBtn->SetText(aLayoutStr);
@@ -2098,37 +2098,37 @@ void SvxSearchDialog::PaintAttrText_Impl()
 
 void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
 {
-    if ( m_pSearchLB == (ComboBox*)pCtrl )
+    if ( m_pSearchLB == static_cast<const ComboBox*>(pCtrl) )
         nModifyFlag |= MODIFY_SEARCH;
-    else if ( m_pReplaceLB == (ComboBox*)pCtrl )
+    else if ( m_pReplaceLB == static_cast<const ComboBox*>(pCtrl) )
         nModifyFlag |= MODIFY_REPLACE;
-    else if ( m_pWordBtn == (CheckBox*)pCtrl )
+    else if ( m_pWordBtn == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_WORD;
-    else if ( m_pMatchCaseCB == (CheckBox*)pCtrl )
+    else if ( m_pMatchCaseCB == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_EXACT;
-    else if ( m_pBackwardsBtn == (CheckBox*)pCtrl )
+    else if ( m_pBackwardsBtn == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_BACKWARDS;
-    else if ( m_pNotesBtn == (CheckBox*)pCtrl )
+    else if ( m_pNotesBtn == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_NOTES;
-    else if ( m_pSelectionBtn == (CheckBox*)pCtrl )
+    else if ( m_pSelectionBtn == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_SELECTION;
-    else if ( m_pRegExpBtn == (CheckBox*)pCtrl )
+    else if ( m_pRegExpBtn == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_REGEXP;
-    else if ( m_pLayoutBtn == (CheckBox*)pCtrl )
+    else if ( m_pLayoutBtn == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_LAYOUT;
-    else if ( m_pSimilarityBox == (CheckBox*)pCtrl )
+    else if ( m_pSimilarityBox == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_SIMILARITY;
-    else if ( m_pCalcSearchInLB == (ListBox*)pCtrl )
+    else if ( m_pCalcSearchInLB == static_cast<const ListBox*>(pCtrl) )
     {
         nModifyFlag |= MODIFY_FORMULAS;
         nModifyFlag |= MODIFY_VALUES;
         nModifyFlag |= MODIFY_CALC_NOTES;
     }
-    else if ( m_pRowsBtn == (RadioButton*)pCtrl )
+    else if ( m_pRowsBtn == static_cast<const RadioButton*>(pCtrl) )
         nModifyFlag |= MODIFY_ROWS;
-    else if ( m_pColumnsBtn == (RadioButton*)pCtrl )
+    else if ( m_pColumnsBtn == static_cast<const RadioButton*>(pCtrl) )
         nModifyFlag |= MODIFY_COLUMNS;
-    else if ( m_pAllSheetsCB == (CheckBox*)pCtrl )
+    else if ( m_pAllSheetsCB == static_cast<const CheckBox*>(pCtrl) )
         nModifyFlag |= MODIFY_ALLTABLES;
 }
 
@@ -2257,7 +2257,7 @@ static vcl::Window* lcl_GetSearchLabelWindow()
         return 0;
     css::uno::Reference< css::awt::XWindow > xWindow(
             xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
-    ToolBox* pToolBox = (ToolBox*) VCLUnoHelper::GetWindow(xWindow);
+    ToolBox* pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
     for (size_t i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
         if (pToolBox->GetItemCommand(i) == ".uno:SearchLabel")
             return pToolBox->GetItemWindow(i);
@@ -2284,8 +2284,8 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
             pSearchLabel->Show();
         }
     }
-    if (SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*) SfxViewFrame::Current()->
-            GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() ))
+    if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
+            GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() )))
         pWrp->getDialog()->SetSearchLabel(sStr);
 }
 

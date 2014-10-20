@@ -91,7 +91,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     }
     else if( pState->ISA( SfxUInt16Item ) )
     {
-        mpImpl->mnState = ( ( SfxUInt16Item* ) pState )->GetValue();
+        mpImpl->mnState = static_cast<const SfxUInt16Item*>(pState)->GetValue();
     }
     else
     {

@@ -117,8 +117,8 @@ void SvxFontSizeMenuControl::StateChanged(
 
                 if ( pDoc )
                 {
-                    const SvxFontListItem* pFonts = (const SvxFontListItem*)
-                        pDoc->GetItem( SID_ATTR_CHAR_FONTLIST );
+                    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
+                        pDoc->GetItem( SID_ATTR_CHAR_FONTLIST ));
                     const FontList* pList = pFonts ? pFonts->GetFontList(): 0;
 
                     if ( pList )
@@ -141,7 +141,7 @@ void SvxFontSizeMenuControl::StateChanged(
         {
             // daf"ur von der Shell eine Fontliste besorgen
             const SvxFontListItem* pFonts =
-                (const SvxFontListItem*)pSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+                static_cast<const SvxFontListItem*>(pSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
             const FontList* pList = pFonts ? pFonts->GetFontList(): NULL;
             if ( pList )
                 pMenu->Fill( pList->GetFontName(0), pList );

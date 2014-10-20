@@ -1040,7 +1040,7 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
 
     if ( pState && eState >= SfxItemState::DEFAULT )
     {
-        eUnit = (FieldUnit)( (const SfxUInt16Item*)pState )->GetValue();
+        eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pState)->GetValue();
     }
     else
     {
@@ -1055,7 +1055,7 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
             {
                 const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
                 if ( pItem )
-                    eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+                    eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             }
             else
             {

@@ -267,10 +267,10 @@ bool SvxMarginItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
 
-    return ( ( nLeftMargin == ( (SvxMarginItem&)rItem ).nLeftMargin )   &&
-             ( nTopMargin == ( (SvxMarginItem&)rItem ).nTopMargin )     &&
-             ( nRightMargin == ( (SvxMarginItem&)rItem ).nRightMargin ) &&
-             ( nBottomMargin == ( (SvxMarginItem&)rItem ).nBottomMargin ) );
+    return ( ( nLeftMargin == static_cast<const SvxMarginItem&>(rItem).nLeftMargin )   &&
+             ( nTopMargin == static_cast<const SvxMarginItem&>(rItem).nTopMargin )     &&
+             ( nRightMargin == static_cast<const SvxMarginItem&>(rItem).nRightMargin ) &&
+             ( nBottomMargin == static_cast<const SvxMarginItem&>(rItem).nBottomMargin ) );
 }
 
 

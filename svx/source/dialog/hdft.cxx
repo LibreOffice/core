@@ -280,13 +280,13 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
         aSet.Put( SfxBoolItem( nWSharedFirst,  m_pCntSharedFirstBox->IsChecked() ) );
     if(m_pDynSpacingCB->IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
     {
-        boost::scoped_ptr<SfxBoolItem> pBoolItem((SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone());
+        boost::scoped_ptr<SfxBoolItem> pBoolItem(static_cast<SfxBoolItem*>(pPool->GetDefaultItem(nWDynSpacing).Clone()));
         pBoolItem->SetValue(m_pDynSpacingCB->IsChecked());
         aSet.Put(*pBoolItem);
     }
 
     // Size
-    SvxSizeItem aSizeItem( (const SvxSizeItem&)rOldSet.Get( nWSize ) );
+    SvxSizeItem aSizeItem( const_cast<SvxSizeItem&>( static_cast<const SvxSizeItem&>(rOldSet.Get( nWSize )) ));
     Size        aSize( aSizeItem.GetSize() );
     long        nDist = GetCoreValue( *m_pDistEdit, eUnit );
     long        nH    = GetCoreValue( *m_pHeightEdit, eUnit );
@@ -386,29 +386,29 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            (const SfxBoolItem&)rHeaderSet.Get(GetWhich(SID_ATTR_PAGE_ON));
+            static_cast<const SfxBoolItem&>(rHeaderSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
 
         m_pTurnOnBox->Check(rHeaderOn.GetValue());
 
         if ( rHeaderOn.GetValue() )
         {
             const SfxBoolItem& rDynamic =
-                (const SfxBoolItem&)rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_DYNAMIC ) );
+                static_cast<const SfxBoolItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_DYNAMIC ) ));
             const SfxBoolItem& rShared =
-                (const SfxBoolItem&)rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED ) );
+                static_cast<const SfxBoolItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED ) ));
             const SfxBoolItem* pSharedFirst = 0;
             if (rHeaderSet.HasItem(GetWhich(SID_ATTR_PAGE_SHARED_FIRST)))
-                pSharedFirst = (const SfxBoolItem*)&rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED_FIRST ) );
+                pSharedFirst = static_cast<const SfxBoolItem*>(&rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED_FIRST ) ));
             const SvxSizeItem& rSize =
-                (const SvxSizeItem&)rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
+                static_cast<const SvxSizeItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
             const SvxULSpaceItem& rUL =
-                (const SvxULSpaceItem&)rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) );
+                static_cast<const SvxULSpaceItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
             const SvxLRSpaceItem& rLR =
-                (const SvxLRSpaceItem&)rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
+                static_cast<const SvxLRSpaceItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
             if(m_pDynSpacingCB->IsVisible())
             {
                 const SfxBoolItem& rDynSpacing =
-                    (const SfxBoolItem&)rHeaderSet.Get(GetWhich(SID_ATTR_HDFT_DYNAMIC_SPACING));
+                    static_cast<const SfxBoolItem&>(rHeaderSet.Get(GetWhich(SID_ATTR_HDFT_DYNAMIC_SPACING)));
                 m_pDynSpacingCB->Check(rDynSpacing.GetValue());
             }
 
@@ -470,7 +470,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
         sal_uInt16 nHtmlMode = 0;
-        nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
+        nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         if(nHtmlMode & HTMLMODE_ON)
         {
             m_pCntSharedBox->Hide();
@@ -646,7 +646,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
         {
             // If a SfxItemSet from the SetItem for SID_ATTR_PAGE_HEADERSET or
             // SID_ATTR_PAGE_FOOTERSET exists, use it's content
-            pBBSet->Put(((SvxSetItem*)pItem)->GetItemSet());
+            pBBSet->Put(static_cast<const SvxSetItem*>(pItem)->GetItemSet());
         }
         else
         {
@@ -734,7 +734,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 
                 if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
                 {
-                    const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get(nWhich);
+                    const SvxBoxItem& rItem = static_cast<const SvxBoxItem&>(pBBSet->Get(nWhich));
 
                     if(nId == SID_ATTR_PAGE_HEADERSET)
                         m_pBspWin->SetHdBorder(rItem);
@@ -812,7 +812,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
             {
                 const SvxBoxItem& rItem =
-                    (const SvxBoxItem&)rTmpSet.Get(nWhich);
+                    static_cast<const SvxBoxItem&>(rTmpSet.Get(nWhich));
                 m_pBspWin->SetHdBorder(rItem);
             }
         }
@@ -900,7 +900,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     if ( pItem )
     {
         // Set left and right margins
-        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)*pItem;
+        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
 
         m_pBspWin->SetLeft( rLRSpace.GetLeft() );
         m_pBspWin->SetRight( rLRSpace.GetRight() );
@@ -916,7 +916,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     if ( pItem )
     {
         // Set top and bottom margins
-        const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)*pItem;
+        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(*pItem);
 
         m_pBspWin->SetTop( rULSpace.GetUpper() );
         m_pBspWin->SetBottom( rULSpace.GetLower() );
@@ -931,7 +931,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     pItem = GetItem( rSet, SID_ATTR_PAGE );
 
     if ( pItem )
-        nUsage = ( (const SvxPageItem*)pItem )->GetPageUsage();
+        nUsage = static_cast<const SvxPageItem*>(pItem)->GetPageUsage();
 
     m_pBspWin->SetUsage( nUsage );
 
@@ -947,7 +947,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     if ( pItem )
     {
         // Orientation and Size from the PageItem
-        const SvxSizeItem& rSize = (const SvxSizeItem&)*pItem;
+        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(*pItem);
         // if the size is already swapped (Landscape)
         m_pBspWin->SetSize( rSize.GetSize() );
     }
@@ -961,16 +961,16 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            (const SfxBoolItem&)rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
+            static_cast<const SfxBoolItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_ON ) ));
 
         if ( rHeaderOn.GetValue() )
         {
-            const SvxSizeItem& rSize = (const SvxSizeItem&)
-                rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
-            const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)
-                rHeaderSet.Get( GetWhich(SID_ATTR_ULSPACE ) );
-            const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)
-                rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
+            const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(
+                rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
+            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
+                rHeaderSet.Get( GetWhich(SID_ATTR_ULSPACE ) ));
+            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
+                rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
             long nDist = rUL.GetLower();
 
             m_pBspWin->SetHdHeight( rSize.GetSize().Height() - nDist );
@@ -1001,16 +1001,16 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     {
         const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
         const SfxBoolItem& rFooterOn =
-            (const SfxBoolItem&)rFooterSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
+            static_cast<const SfxBoolItem&>(rFooterSet.Get( GetWhich( SID_ATTR_PAGE_ON ) ));
 
         if ( rFooterOn.GetValue() )
         {
-            const SvxSizeItem& rSize = (const SvxSizeItem&)
-                rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
-            const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)
-                rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) );
-            const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)
-                rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
+            const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(
+                rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
+            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
+                rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
+            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(
+                rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) ));
             long nDist = rUL.GetUpper();
 
             m_pBspWin->SetFtHeight( rSize.GetSize().Height() - nDist );
@@ -1039,7 +1039,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
         m_pBspWin->SetTable( true );
-        m_pBspWin->SetHorz( ( (SfxBoolItem*)pItem )->GetValue() );
+        m_pBspWin->SetHorz( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
     }
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
@@ -1047,7 +1047,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     if ( pItem && pItem->ISA(SfxBoolItem) )
     {
         m_pBspWin->SetTable( true );
-        m_pBspWin->SetVert( ( (SfxBoolItem*)pItem )->GetValue() );
+        m_pBspWin->SetVert( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
     }
     ResetBackground_Impl( rSet );
     RangeHdl( 0 );

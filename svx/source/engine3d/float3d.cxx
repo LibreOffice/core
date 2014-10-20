@@ -520,7 +520,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     SfxItemState eState = rAttrs.GetItemState( SID_ATTR_3D_INTERN, false, &pItem );
     if( SfxItemState::SET == eState )
     {
-        sal_uInt32 nState = ( ( const SfxUInt32Item* )pItem )->GetValue();
+        sal_uInt32 nState = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
         bool bExtrude = ( nState & 2 );
         bool bSphere  = ( nState & 4 );
         bool bCube    = ( nState & 8 );
@@ -601,7 +601,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(XATTR_FILLSTYLE);
     if(eState != SfxItemState::DONTCARE)
     {
-        drawing::FillStyle eXFS = (drawing::FillStyle)((const XFillStyleItem&)rAttrs.Get(XATTR_FILLSTYLE)).GetValue();
+        drawing::FillStyle eXFS = (drawing::FillStyle)static_cast<const XFillStyleItem&>(rAttrs.Get(XATTR_FILLSTYLE)).GetValue();
         bBitmap = (eXFS == drawing::FillStyle_BITMAP || eXFS == drawing::FillStyle_GRADIENT || eXFS == drawing::FillStyle_HATCH);
     }
 
@@ -632,7 +632,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_HORZ_SEGS);
         if(eState != SfxItemState::DONTCARE)
         {
-            sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
+            sal_uInt32 nValue = static_cast<const SfxUInt32Item&>(rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
             if(nValue != (sal_uInt32 )aNumHorizontal.GetValue())
             {
                 aNumHorizontal.SetValue( nValue );
@@ -657,7 +657,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_VERT_SEGS);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue();
+            sal_uInt32 nValue = static_cast<const SfxUInt32Item&>(rAttrs.Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue();
             if( nValue != (sal_uInt32) aNumVertical.GetValue() )
             {
                 aNumVertical.SetValue( nValue );
@@ -682,7 +682,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_DEPTH);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_DEPTH)).GetValue();
+            sal_uInt32 nValue = static_cast<const SfxUInt32Item&>(rAttrs.Get(SDRATTR_3DOBJ_DEPTH)).GetValue();
             sal_uInt32 nValue2 = GetCoreValue( aMtrDepth, ePoolUnit );
             if( nValue != nValue2 )
             {
@@ -709,7 +709,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_DOUBLE_SIDED);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue();
+        bool bValue = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue();
         if( bValue != aBtnDoubleSided.IsChecked() )
         {
             aBtnDoubleSided.Check( bValue );
@@ -733,7 +733,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_PERCENT_DIAGONAL);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue();
+            sal_uInt16 nValue = static_cast<const SfxUInt16Item&>(rAttrs.Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue();
             if( nValue != aMtrPercentDiagonal.GetValue() )
             {
                 aMtrPercentDiagonal.SetValue( nValue );
@@ -758,7 +758,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_BACKSCALE);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue();
+            sal_uInt16 nValue = static_cast<const SfxUInt16Item&>(rAttrs.Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue();
             if( nValue != aMtrBackscale.GetValue() )
             {
                 aMtrBackscale.SetValue( nValue );
@@ -783,7 +783,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_END_ANGLE);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_Int32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
+            sal_Int32 nValue = static_cast<const SfxUInt32Item&>(rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
             if( nValue != aMtrEndAngle.GetValue() )
             {
                 aMtrEndAngle.SetValue( nValue );
@@ -804,7 +804,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_NORMALS_KIND);
     if( eState != SfxItemState::DONTCARE )
     {
-        sal_uInt16 nValue = ((const Svx3DNormalsKindItem&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue();
+        sal_uInt16 nValue = static_cast<const Svx3DNormalsKindItem&>(rAttrs.Get(SDRATTR_3DOBJ_NORMALS_KIND)).GetValue();
 
         if( ( !aBtnNormalsObj.IsChecked() && nValue == 0 ) ||
             ( !aBtnNormalsFlat.IsChecked() && nValue == 1 ) ||
@@ -833,7 +833,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_NORMALS_INVERT);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue();
+        bool bValue = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue();
         if( bValue != aBtnNormalsInvert.IsChecked() )
         {
             aBtnNormalsInvert.Check( bValue );
@@ -855,7 +855,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue();
+        bool bValue = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue();
         if( bValue != aBtnTwoSidedLighting.IsChecked() )
         {
             aBtnTwoSidedLighting.Check( bValue );
@@ -878,7 +878,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_SHADE_MODE);
     if( eState != SfxItemState::DONTCARE )
     {
-        sal_uInt16 nValue = ((const Svx3DShadeModeItem&)rAttrs.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue();
+        sal_uInt16 nValue = static_cast<const Svx3DShadeModeItem&>(rAttrs.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue();
         if( nValue != aLbShademode.GetSelectEntryPos() )
         {
             aLbShademode.SelectEntryPos( nValue );
@@ -898,7 +898,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_SHADOW_3D);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue();
+        bool bValue = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue();
         if( bValue != aBtnShadow3d.IsChecked() )
         {
             aBtnShadow3d.Check( bValue );
@@ -922,7 +922,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_SHADOW_SLANT);
     if( eState != SfxItemState::DONTCARE )
     {
-        sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue();
+        sal_uInt16 nValue = static_cast<const SfxUInt16Item&>(rAttrs.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue();
         if( nValue != aMtrSlant.GetValue() )
         {
             aMtrSlant.SetValue( nValue );
@@ -942,7 +942,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_DISTANCE);
     if( eState != SfxItemState::DONTCARE )
     {
-        sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+        sal_uInt32 nValue = static_cast<const SfxUInt32Item&>(rAttrs.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
         sal_uInt32 nValue2 = GetCoreValue( aMtrDistance, ePoolUnit );
         if( nValue != nValue2 )
         {
@@ -966,7 +966,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_FOCAL_LENGTH);
     if( eState != SfxItemState::DONTCARE )
     {
-        sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+        sal_uInt32 nValue = static_cast<const SfxUInt32Item&>(rAttrs.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
         sal_uInt32 nValue2 = GetCoreValue( aMtrFocalLength, ePoolUnit );
         if( nValue != nValue2 )
         {
@@ -993,7 +993,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_1);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
         ColorLB* pLb = &aLbLight1;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1013,7 +1013,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_1);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight1 )) ||
             ( !bOn && GetUILightState( aBtnLight1 )) )
         {
@@ -1042,7 +1042,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_2);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
         ColorLB* pLb = &aLbLight2;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1062,7 +1062,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_2);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight2 )) ||
             ( !bOn && GetUILightState( aBtnLight2 )) )
         {
@@ -1091,7 +1091,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_3);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
         ColorLB* pLb = &aLbLight3;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1111,7 +1111,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_3);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight3)) ||
             ( !bOn && GetUILightState( aBtnLight3)) )
         {
@@ -1140,7 +1140,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_4);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
         ColorLB* pLb = &aLbLight4;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1160,7 +1160,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_4);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight4 )) ||
             ( !bOn && GetUILightState( aBtnLight4 )) )
         {
@@ -1189,7 +1189,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_5);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
         ColorLB* pLb = &aLbLight5;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1209,7 +1209,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_5);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight5 )) ||
             ( !bOn && GetUILightState( aBtnLight5 )) )
         {
@@ -1238,7 +1238,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_6);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
         ColorLB* pLb = &aLbLight6;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1258,7 +1258,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_6);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight6 )) ||
             ( !bOn && GetUILightState( aBtnLight6 )) )
         {
@@ -1287,7 +1287,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_7);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
         ColorLB* pLb = &aLbLight7;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1307,7 +1307,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_7);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight7 )) ||
             ( !bOn && GetUILightState( aBtnLight7 )) )
         {
@@ -1336,7 +1336,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_8);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
         ColorLB* pLb = &aLbLight8;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1356,7 +1356,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_8);
     if( eState != SfxItemState::DONTCARE )
     {
-        bool bOn = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
+        bool bOn = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
         if( ( bOn && !GetUILightState( aBtnLight8 )) ||
             ( !bOn && GetUILightState( aBtnLight8 )) )
         {
@@ -1385,7 +1385,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_AMBIENTCOLOR);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue();
         ColorLB* pLb = &aLbAmbientlight;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1410,7 +1410,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_KIND);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt16 nValue = ((const Svx3DTextureKindItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue();
+            sal_uInt16 nValue = static_cast<const Svx3DTextureKindItem&>(rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_KIND)).GetValue();
 
             if( ( !aBtnTexLuminance.IsChecked() && nValue == 1 ) ||
                 ( !aBtnTexColor.IsChecked() && nValue == 3 ) )
@@ -1435,7 +1435,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_MODE);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt16 nValue = ((const Svx3DTextureModeItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue();
+            sal_uInt16 nValue = static_cast<const Svx3DTextureModeItem&>(rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_MODE)).GetValue();
 
             if( ( !aBtnTexReplace.IsChecked() && nValue == 1 ) ||
                 ( !aBtnTexModulate.IsChecked() && nValue == 2 ) )
@@ -1460,7 +1460,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_PROJ_X);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt16 nValue = ((const Svx3DTextureProjectionXItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue();
+            sal_uInt16 nValue = static_cast<const Svx3DTextureProjectionXItem&>(rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_X)).GetValue();
 
             if( ( !aBtnTexObjectX.IsChecked() && nValue == 0 ) ||
                 ( !aBtnTexParallelX.IsChecked() && nValue == 1 ) ||
@@ -1489,7 +1489,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_PROJ_Y);
         if( eState != SfxItemState::DONTCARE )
         {
-            sal_uInt16 nValue = ((const Svx3DTextureProjectionYItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue();
+            sal_uInt16 nValue = static_cast<const Svx3DTextureProjectionYItem&>(rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_PROJ_Y)).GetValue();
 
             if( ( !aBtnTexObjectY.IsChecked() && nValue == 0 ) ||
                 ( !aBtnTexParallelY.IsChecked() && nValue == 1 ) ||
@@ -1518,7 +1518,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_TEXTURE_FILTER);
         if( eState != SfxItemState::DONTCARE )
         {
-            bool bValue = ((const SfxBoolItem&)rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue();
+            bool bValue = static_cast<const SfxBoolItem&>(rAttrs.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue();
             if( bValue != aBtnTexFilter.IsChecked() )
             {
                 aBtnTexFilter.Check( bValue );
@@ -1545,7 +1545,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(XATTR_FILLCOLOR);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const XFillColorItem&)rAttrs.Get(XATTR_FILLCOLOR)).GetColorValue();
+        aColor = static_cast<const XFillColorItem&>(rAttrs.Get(XATTR_FILLCOLOR)).GetColorValue();
         ColorLB* pLb = &aLbMatColor;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1566,7 +1566,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_EMISSION);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue();
         ColorLB* pLb = &aLbMatEmission;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1587,7 +1587,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_SPECULAR);
     if( eState != SfxItemState::DONTCARE )
     {
-        aColor = ((const SvxColorItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue();
+        aColor = static_cast<const SvxColorItem&>(rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue();
         ColorLB* pLb = &aLbMatSpecular;
         if( aColor != pLb->GetSelectEntryColor() )
         {
@@ -1608,7 +1608,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY);
     if( eState != SfxItemState::DONTCARE )
     {
-        sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue();
+        sal_uInt16 nValue = static_cast<const SfxUInt16Item&>(rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue();
         if( nValue != aMtrMatSpecularIntensity.GetValue() )
         {
             aMtrMatSpecularIntensity.SetValue( nValue );
@@ -1630,7 +1630,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_PERSPECTIVE);
     if( eState != SfxItemState::DONTCARE )
     {
-        ProjectionType ePT = (ProjectionType)((const Svx3DPerspectiveItem&)rAttrs.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue();
+        ProjectionType ePT = (ProjectionType)static_cast<const Svx3DPerspectiveItem&>(rAttrs.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue();
         if( ( !aBtnPerspective.IsChecked() && ePT == PR_PERSPECTIVE ) ||
             ( aBtnPerspective.IsChecked() && ePT == PR_PARALLEL ) )
         {
@@ -2651,7 +2651,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
 
             if( pBtn->IsChecked() )
             {
-                SetUILightState( *(ImageButton*)pBtn, !GetUILightState( *(ImageButton*)pBtn ) );
+                SetUILightState( *static_cast<ImageButton*>(pBtn), !GetUILightState( *static_cast<ImageButton*>(pBtn) ) );
             }
             else
             {
@@ -2698,7 +2698,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
                     aLbLight8.Hide();
                 }
             }
-            bool bEnable = GetUILightState( *(ImageButton*)pBtn );
+            bool bEnable = GetUILightState( *static_cast<ImageButton*>(pBtn) );
             aBtnLightColor.Enable( bEnable );
             pLb->Enable( bEnable );
 
@@ -2939,7 +2939,7 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
     ColorLB* pLb = GetLbByButton( &rBtn );
     Color aColor( pLb->GetSelectEntryColor() );
     SfxItemSet aLightItemSet(aCtlLightPreview.GetSvx3DLightControl().Get3DAttributes());
-    const bool bOnOff(GetUILightState( (const ImageButton&)rBtn ));
+    const bool bOnOff(GetUILightState( static_cast<const ImageButton&>(rBtn) ));
 
     switch(nLightSource)
     {
