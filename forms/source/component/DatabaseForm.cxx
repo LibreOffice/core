@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -4077,7 +4078,6 @@ void ODatabaseForm::implRemoved(const InterfaceRef& _rxObject)
     }
 }
 
-
 void SAL_CALL ODatabaseForm::errorOccured(const SQLErrorEvent& _rEvent) throw( RuntimeException, std::exception )
 {
     // give it to my own error listener
@@ -4087,20 +4087,28 @@ void SAL_CALL ODatabaseForm::errorOccured(const SQLErrorEvent& _rEvent) throw( R
 }
 
 // com::sun::star::container::XNamed
-
 OUString SAL_CALL ODatabaseForm::getName() throw( RuntimeException, std::exception )
 {
     OUString sReturn;
-    OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= sReturn;
+    try
+    {
+        OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= sReturn;
+    }
+    catch (const css::beans::UnknownPropertyException&)
+    {
+        throw WrappedTargetRuntimeException(
+            "ODatabaseForm::getName",
+            *const_cast< ODatabaseForm* >( this ),
+            ::cppu::getCaughtException()
+        );
+    }
     return sReturn;
 }
-
 
 void SAL_CALL ODatabaseForm::setName(const OUString& aName) throw( RuntimeException, std::exception )
 {
     setFastPropertyValue(PROPERTY_ID_NAME, makeAny(aName));
 }
-
 
 }   // namespace frm
 
