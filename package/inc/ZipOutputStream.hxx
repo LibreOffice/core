@@ -27,6 +27,7 @@
 #include <vector>
 
 struct ZipEntry;
+class ZipPackageStream;
 
 class ZipOutputStream
 {
@@ -35,21 +36,35 @@ class ZipOutputStream
 
     ByteChucker         m_aChucker;
     bool                m_bFinished;
+    ZipEntry            *m_pCurrentEntry;
 
 public:
     ZipOutputStream(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
-    void addEntry( ZipEntry *pZipEntry );
+    // rawWrite to support a direct write to the output stream
+    void rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void rawCloseEntry()
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+    void putNextEntry( ZipEntry& rEntry, bool bEncrypt = false )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void finish()
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     ByteChucker& getChucker();
+
+    static sal_uInt32 getCurrentDosTime();
 
 private:
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void writeCEN( const ZipEntry &rEntry )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    sal_Int32 writeLOC( const ZipEntry &rEntry )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void writeEXT( const ZipEntry &rEntry )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 };
 

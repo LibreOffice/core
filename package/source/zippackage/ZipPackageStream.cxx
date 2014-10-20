@@ -674,7 +674,7 @@ bool ZipPackageStream::saveChild(
             if ( bRawStream )
                 xStream->skipBytes( m_nMagicalHackPos );
 
-            ZipOutputEntry aZipEntry(m_xContext, rZipOut.getChucker(), *pTempEntry, this, false);
+            rZipOut.putNextEntry(*pTempEntry);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
 
@@ -684,12 +684,11 @@ bool ZipPackageStream::saveChild(
             do
             {
                 nLength = xStream->readBytes( aSeq, n_ConstBufferSize );
-                aZipEntry.rawWrite(aSeq, 0, nLength);
+                rZipOut.rawWrite(aSeq, 0, nLength);
             }
             while ( nLength == n_ConstBufferSize );
 
-            aZipEntry.rawCloseEntry();
-            rZipOut.addEntry(pTempEntry);
+            rZipOut.rawCloseEntry();
         }
         catch ( ZipException& )
         {
@@ -732,7 +731,8 @@ bool ZipPackageStream::saveChild(
 
         try
         {
-            ZipOutputEntry aZipEntry(m_xContext, rZipOut.getChucker(), *pTempEntry, this, bToBeEncrypted);
+            rZipOut.putNextEntry(*pTempEntry, bToBeEncrypted);
+            ZipOutputEntry aZipEntry(m_xContext, &rZipOut, *pTempEntry, this, bToBeEncrypted);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
 
@@ -746,7 +746,7 @@ bool ZipPackageStream::saveChild(
             while ( nLength == n_ConstBufferSize );
 
             aZipEntry.closeEntry();
-            rZipOut.addEntry(pTempEntry);
+            rZipOut.rawCloseEntry();
         }
         catch ( ZipException& )
         {
