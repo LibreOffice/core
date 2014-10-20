@@ -54,6 +54,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <tools/errcode.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -796,12 +797,9 @@ Reference< XSingleServiceFactory > ODatabaseModelImpl::createStorageFactory() co
 void ODatabaseModelImpl::commitRootStorage()
 {
     Reference< XStorage > xStorage( getOrCreateRootStorage() );
-#if OSL_DEBUG_LEVEL > 0
-    bool bSuccess =
-#endif
-    commitStorageIfWriteable_ignoreErrors( xStorage );
-    OSL_ENSURE( bSuccess || !xStorage.is(),
-        "ODatabaseModelImpl::commitRootStorage: could commit the storage!" );
+    bool bSuccess = commitStorageIfWriteable_ignoreErrors( xStorage );
+    SAL_WARN_IF(!bSuccess && xStorage.is(), "dbaccess",
+        "ODatabaseModelImpl::commitRootStorage: could not commit the storage!");
 }
 
 Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
