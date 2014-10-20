@@ -553,6 +553,50 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, SaveCancelHdl_Impl)
     return 0;
 }
 
+int SwMailMergeOutputPage::documentStartPageNumber( int document ) const
+{
+    SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
+    SwView* pTargetView = rConfigItem.GetTargetView();
+    assert( pTargetView );
+    SwCrsrShell& shell = pTargetView->GetWrtShell();
+    const SwDocMergeInfo& info = rConfigItem.GetDocumentMergeInfo( document );
+    sal_uInt16 page, dummy;
+    shell.Push();
+    shell.GotoMark( info.startPageInTarget );
+    shell.GetPageNum( page, dummy );
+    shell.Pop(false);
+    return page;
+}
+
+int SwMailMergeOutputPage::documentEndPageNumber( int document ) const
+{
+    SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
+    SwView* pTargetView = rConfigItem.GetTargetView();
+    assert( pTargetView );
+    SwWrtShell& shell = pTargetView->GetWrtShell();
+    if( document < int( rConfigItem.GetMergedDocumentCount()) - 1 )
+    {
+        // Go to the page before the starting page of the next merged document.
+        const SwDocMergeInfo& info = rConfigItem.GetDocumentMergeInfo( document + 1 );
+        sal_uInt16 page, dummy;
+        shell.Push();
+        shell.GotoMark( info.startPageInTarget );
+        shell.EndPrvPg();
+        shell.GetPageNum( page, dummy );
+        shell.Pop(false);
+        return page;
+    }
+    else
+    {   // This is the last merged document, so it ends on the page at which the document ends.
+        sal_uInt16 page, dummy;
+        shell.Push();
+        shell.SttEndDoc( false ); // go to doc end
+        shell.GetPageNum( page, dummy );
+        shell.Pop(false);
+        return page;
+    }
+}
+
 IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
@@ -655,7 +699,6 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
         for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
         {
-            SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
             INetURLObject aURL(sPath);
             OUString sExtension = aURL.getExtension();
             if (sExtension.isEmpty())
@@ -686,7 +729,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
 
             pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
-                    (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
+                documentStartPageNumber( nDoc ), documentEndPageNumber( nDoc ));
             pTargetView->GetWrtShell().EndAction();
             //then save it
             OUString sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
@@ -801,12 +844,10 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
     rConfigItem.SetPrintRange( (sal_uInt16)nBegin, (sal_uInt16)nEnd );
-    SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
-    SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
 
-    OUString sPages(OUString::number( rStartInfo.nStartPageInTarget ));
+    OUString sPages(OUString::number( documentStartPageNumber( nBegin )));
     sPages += " - ";
-    sPages += OUString::number(  rEndInfo.nEndPageInTarget );
+    sPages += OUString::number( documentEndPageNumber( nEnd - 1 ));
 
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, false);
     if(m_pTempPrinter)
@@ -1092,7 +1133,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
         pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
         pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
-                (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
+            documentStartPageNumber( nDoc ), documentEndPageNumber( nDoc ));
         pTargetView->GetWrtShell().EndAction();
 
         //then save it

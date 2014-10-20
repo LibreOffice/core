@@ -116,6 +116,10 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     DECL_LINK(SendDocumentsHdl_Impl, PushButton*);
     DECL_LINK(DocumentSelectionHdl_Impl, RadioButton*);
     DECL_LINK(SaveCancelHdl_Impl, void *);
+
+    int documentStartPageNumber( int document ) const;
+    int documentEndPageNumber( int document ) const;
+
 protected:
         virtual bool    canAdvance() const SAL_OVERRIDE;
         virtual void    ActivatePage() SAL_OVERRIDE;

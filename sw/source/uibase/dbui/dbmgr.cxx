@@ -1123,12 +1123,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             else
                                 pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
-                            sal_uInt16 nStartPage = pTargetShell->GetPageCnt();
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
-                            pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
+                            SwNodeIndex appendedDocStart = pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
                                 nStartingPageNo, pTargetPageDesc, nDocNo == 1);
-
                             // #i72820# calculate layout to be able to find the correct page index
                             pTargetShell->CalcLayout();
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
@@ -1136,9 +1134,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             if (bMergeShell)
                             {
                                 SwDocMergeInfo aMergeInfo;
-                                aMergeInfo.nStartPageInTarget = nStartPage;
-                                aMergeInfo.nEndPageInTarget =
-                                    nStartPage + pSourceShell->GetPageCnt() - 1;
+                                aMergeInfo.startPageInTarget = pTargetDoc->getIDocumentMarkAccess()->makeMark( appendedDocStart, "MailMergeInternalStart" + OUString::number( nStartRow ),
+                                    IDocumentMarkAccess::UNO_BOOKMARK );
                                 aMergeInfo.nDBRow = nStartRow;
                                 rMergeDescriptor.pMailMergeConfigItem->AddMergedDocument( aMergeInfo );
                             }
