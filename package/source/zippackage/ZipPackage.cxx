@@ -998,9 +998,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     try
     {
         aZipOut.putNextEntry(*pEntry);
-        ZipOutputEntry aZipEntry(m_xContext, &aZipOut, *pEntry, NULL);
-        aZipEntry.write(aType, 0, nBufferLength);
-        aZipEntry.closeEntry();
+        aZipOut.rawWrite(aType, 0, nBufferLength);
         aZipOut.rawCloseEntry();
     }
     catch ( const ::com::sun::star::io::IOException & r )

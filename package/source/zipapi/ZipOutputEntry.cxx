@@ -51,6 +51,7 @@ ZipOutputEntry::ZipOutputEntry( const uno::Reference< uno::XComponentContext >& 
 , m_bEncryptCurrentEntry(bEncrypt)
 , m_pCurrentStream(NULL)
 {
+    assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     if (m_bEncryptCurrentEntry)
     {
         m_xCipherContext = ZipFile::StaticGetCipher( rxContext, pStream->GetEncryptionData(), true );
@@ -69,49 +70,37 @@ void SAL_CALL ZipOutputEntry::closeEntry(  )
     ZipEntry *pEntry = m_pCurrentEntry;
     if (pEntry)
     {
-        switch (pEntry->nMethod)
+        m_aDeflater.finish();
+        while (!m_aDeflater.finished())
+            doDeflate();
+        if ((pEntry->nFlag & 8) == 0)
         {
-            case DEFLATED:
-                m_aDeflater.finish();
-                while (!m_aDeflater.finished())
-                    doDeflate();
-                if ((pEntry->nFlag & 8) == 0)
-                {
-                    if (pEntry->nSize != m_aDeflater.getTotalIn())
-                    {
-                        OSL_FAIL("Invalid entry size");
-                    }
-                    if (pEntry->nCompressedSize != m_aDeflater.getTotalOut())
-                    {
-                        // Different compression strategies make the merit of this
-                        // test somewhat dubious
-                        pEntry->nCompressedSize = m_aDeflater.getTotalOut();
-                    }
-                    if (pEntry->nCrc != m_aCRC.getValue())
-                    {
-                        OSL_FAIL("Invalid entry CRC-32");
-                    }
-                }
-                else
-                {
-                    if ( !m_bEncryptCurrentEntry )
-                    {
-                        pEntry->nSize = m_aDeflater.getTotalIn();
-                        pEntry->nCompressedSize = m_aDeflater.getTotalOut();
-                    }
-                    pEntry->nCrc = m_aCRC.getValue();
-                }
-                m_aDeflater.reset();
-                m_aCRC.reset();
-                break;
-            case STORED:
-                if (!((pEntry->nFlag & 8) == 0))
-                    OSL_FAIL( "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
-                break;
-            default:
-                OSL_FAIL("Invalid compression method");
-                break;
+            if (pEntry->nSize != m_aDeflater.getTotalIn())
+            {
+                OSL_FAIL("Invalid entry size");
+            }
+            if (pEntry->nCompressedSize != m_aDeflater.getTotalOut())
+            {
+                // Different compression strategies make the merit of this
+                // test somewhat dubious
+                pEntry->nCompressedSize = m_aDeflater.getTotalOut();
+            }
+            if (pEntry->nCrc != m_aCRC.getValue())
+            {
+                OSL_FAIL("Invalid entry CRC-32");
+            }
         }
+        else
+        {
+            if ( !m_bEncryptCurrentEntry )
+            {
+                pEntry->nSize = m_aDeflater.getTotalIn();
+                pEntry->nCompressedSize = m_aDeflater.getTotalOut();
+            }
+            pEntry->nCrc = m_aCRC.getValue();
+        }
+        m_aDeflater.reset();
+        m_aCRC.reset();
 
         if (m_bEncryptCurrentEntry)
         {
@@ -137,24 +126,13 @@ void SAL_CALL ZipOutputEntry::closeEntry(  )
 void SAL_CALL ZipOutputEntry::write( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
     throw(IOException, RuntimeException)
 {
-    switch (m_pCurrentEntry->nMethod)
+    if (!m_aDeflater.finished())
     {
-        case DEFLATED:
-            if (!m_aDeflater.finished())
-            {
-                m_aDeflater.setInputSegment(rBuffer, nNewOffset, nNewLength);
-                 while (!m_aDeflater.needsInput())
-                    doDeflate();
-                if (!m_bEncryptCurrentEntry)
-                    m_aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
-            }
-            break;
-        case STORED:
-            {
-                Sequence < sal_Int8 > aTmpBuffer ( rBuffer.getConstArray(), nNewLength );
-                m_pZipOutputStream->getChucker().WriteBytes( aTmpBuffer );
-            }
-            break;
+        m_aDeflater.setInputSegment(rBuffer, nNewOffset, nNewLength);
+         while (!m_aDeflater.needsInput())
+            doDeflate();
+        if (!m_bEncryptCurrentEntry)
+            m_aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
     }
 }
 
