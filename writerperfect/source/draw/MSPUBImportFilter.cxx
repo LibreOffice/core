@@ -25,7 +25,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool MSPUBImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator, utl::MediaDescriptor &)
+bool MSPUBImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &)
 {
     return libmspub::MSPUBDocument::parse(&rInput, &rGenerator);
 }
