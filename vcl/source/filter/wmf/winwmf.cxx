@@ -328,12 +328,32 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_POLYGON:
         {
-            sal_uInt16 nPoints = 0;
-            pWMF->ReadUInt16( nPoints );
-            Polygon aPoly( nPoints );
-            for( sal_uInt16 i = 0; i < nPoints; i++ )
-                aPoly[ i ] = ReadPoint();
-            pOut->DrawPolygon( aPoly );
+            bool bRecordOk = true;
+
+            sal_uInt16 nPoints(0);
+            pWMF->ReadUInt16(nPoints);
+
+            if (nPoints > pWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
+            {
+                bRecordOk = false;
+            }
+            else
+            {
+                Polygon aPoly(nPoints);
+                for (sal_uInt16 i(0); i < nPoints && pWMF->good(); ++i)
+                    aPoly[ i ] = ReadPoint();
+                pOut->DrawPolygon(aPoly);
+            }
+
+            SAL_WARN_IF(!bRecordOk, "vcl.filter", "polygon record has more points than we can handle");
+
+            bRecordOk &= pWMF->good();
+
+            if (!bRecordOk)
+            {
+                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                break;
+            }
         }
         break;
 
@@ -403,12 +423,32 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_POLYLINE:
         {
-            sal_uInt16 nPoints = 0;
-            pWMF->ReadUInt16( nPoints );
-            Polygon aPoly( nPoints );
-            for(sal_uInt16 i = 0; i < nPoints; i++ )
-                aPoly[ i ] = ReadPoint();
-            pOut->DrawPolyLine( aPoly );
+            bool bRecordOk = true;
+
+            sal_uInt16 nPoints(0);
+            pWMF->ReadUInt16(nPoints);
+
+            if (nPoints > pWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
+            {
+                bRecordOk = false;
+            }
+            else
+            {
+                Polygon aPoly(nPoints);
+                for (sal_uInt16 i(0); i < nPoints && pWMF->good(); ++i)
+                    aPoly[ i ] = ReadPoint();
+                pOut->DrawPolyLine( aPoly );
+            }
+
+            SAL_WARN_IF(!bRecordOk, "vcl.filter", "polyline record has more points than we can handle");
+
+            bRecordOk &= pWMF->good();
+
+            if (!bRecordOk)
+            {
+                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                break;
+            }
         }
         break;
 
