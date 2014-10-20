@@ -64,62 +64,55 @@ ZipOutputEntry::~ZipOutputEntry( void )
 {
 }
 
-void SAL_CALL ZipOutputEntry::closeEntry(  )
+void SAL_CALL ZipOutputEntry::closeEntry()
     throw(IOException, RuntimeException)
 {
-    ZipEntry *pEntry = m_pCurrentEntry;
-    if (pEntry)
+    m_aDeflater.finish();
+    while (!m_aDeflater.finished())
+        doDeflate();
+
+    if ((m_pCurrentEntry->nFlag & 8) == 0)
     {
-        m_aDeflater.finish();
-        while (!m_aDeflater.finished())
-            doDeflate();
-        if ((pEntry->nFlag & 8) == 0)
+        if (m_pCurrentEntry->nSize != m_aDeflater.getTotalIn())
         {
-            if (pEntry->nSize != m_aDeflater.getTotalIn())
-            {
-                OSL_FAIL("Invalid entry size");
-            }
-            if (pEntry->nCompressedSize != m_aDeflater.getTotalOut())
-            {
-                // Different compression strategies make the merit of this
-                // test somewhat dubious
-                pEntry->nCompressedSize = m_aDeflater.getTotalOut();
-            }
-            if (pEntry->nCrc != m_aCRC.getValue())
-            {
-                OSL_FAIL("Invalid entry CRC-32");
-            }
+            OSL_FAIL("Invalid entry size");
         }
-        else
+        if (m_pCurrentEntry->nCompressedSize != m_aDeflater.getTotalOut())
         {
-            if ( !m_bEncryptCurrentEntry )
-            {
-                pEntry->nSize = m_aDeflater.getTotalIn();
-                pEntry->nCompressedSize = m_aDeflater.getTotalOut();
-            }
-            pEntry->nCrc = m_aCRC.getValue();
+            // Different compression strategies make the merit of this
+            // test somewhat dubious
+            m_pCurrentEntry->nCompressedSize = m_aDeflater.getTotalOut();
         }
-        m_aDeflater.reset();
-        m_aCRC.reset();
-
-        if (m_bEncryptCurrentEntry)
+        if (m_pCurrentEntry->nCrc != m_aCRC.getValue())
         {
-            m_bEncryptCurrentEntry = false;
-
-            m_xCipherContext.clear();
-
-            uno::Sequence< sal_Int8 > aDigestSeq;
-            if ( m_xDigestContext.is() )
-            {
-                aDigestSeq = m_xDigestContext->finalizeDigestAndDispose();
-                m_xDigestContext.clear();
-            }
-
-            if ( m_pCurrentStream )
-                m_pCurrentStream->setDigest( aDigestSeq );
+            OSL_FAIL("Invalid entry CRC-32");
         }
-        m_pCurrentEntry = NULL;
-        m_pCurrentStream = NULL;
+    }
+    else
+    {
+        if ( !m_bEncryptCurrentEntry )
+        {
+            m_pCurrentEntry->nSize = m_aDeflater.getTotalIn();
+            m_pCurrentEntry->nCompressedSize = m_aDeflater.getTotalOut();
+        }
+        m_pCurrentEntry->nCrc = m_aCRC.getValue();
+    }
+    m_aDeflater.reset();
+    m_aCRC.reset();
+
+    if (m_bEncryptCurrentEntry)
+    {
+        m_xCipherContext.clear();
+
+        uno::Sequence< sal_Int8 > aDigestSeq;
+        if ( m_xDigestContext.is() )
+        {
+            aDigestSeq = m_xDigestContext->finalizeDigestAndDispose();
+            m_xDigestContext.clear();
+        }
+
+        if ( m_pCurrentStream )
+            m_pCurrentStream->setDigest( aDigestSeq );
     }
 }
 
