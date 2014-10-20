@@ -108,6 +108,9 @@ class ChartView;
 
 class OOO_DLLPUBLIC_CHARTTOOLS ChartModel final : public impl::ChartModel_Base, public sfx2::XmlDump
 {
+public:
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
 private:
     mutable ::apphelper::CloseableLifeTimeManager   m_aLifeTimeManager;
