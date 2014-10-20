@@ -3846,7 +3846,7 @@ PPTParaSheet::PPTParaSheet( const PPTParaSheet& rSheet )
     *this = rSheet;
 }
 
-void PPTParaSheet::Read( SdrPowerPointImport&
+bool PPTParaSheet::Read( SdrPowerPointImport&
 #ifdef DBG_UTIL
                     rManager
 #endif
@@ -3903,6 +3903,8 @@ void PPTParaSheet::Read( SdrPowerPointImport&
         {
             // number of tabulators
             rIn.ReadUInt16( nVal16 );
+            if (rIn.remainingSize() / sizeof(nVal32) < nVal16)
+                return false;
             for ( i = 0; i < nVal16; i++ )
                 rIn.ReadUInt32( nVal32 );      // reading the tabulators
         }
@@ -3973,6 +3975,7 @@ void PPTParaSheet::Read( SdrPowerPointImport&
         }
         nPMask >>= 1;
     }
+    return false;
 }
 
 void PPTParaSheet::UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeight )
