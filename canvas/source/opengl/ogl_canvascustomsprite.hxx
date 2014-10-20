@@ -25,7 +25,7 @@
 
 #include "ogl_spritecanvas.hxx"
 #include "ogl_canvashelper.hxx"
-
+#include <GL/glew.h>
 
 namespace oglcanvas
 {
@@ -85,13 +85,27 @@ namespace oglcanvas
         */
         SpriteCanvasRef                              mpSpriteCanvas;
         const ::com::sun::star::geometry::RealSize2D maSize;
-
+        void  InitOpenGL();
         ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XPolyPolygon2D > mxClip;
         ::com::sun::star::geometry::AffineMatrix2D        maTransformation;
         ::basegfx::B2DPoint                               maPosition;
         double                                            mfAlpha;
         double                                            mfPriority;
+        GLuint                                            m_vertexBuffer;
+        GLuint                                            m_uvBuffer;
+        GLuint                                            m_texManProgID;
+        GLuint                                            m_texProgID;
+        GLuint                                            m_simpleProgID;
+        GLuint                                            m_manTexUnf;
+        GLuint                                            m_manPosAttrb;
+        GLuint                                            m_simpleUvAttrb;
+        GLuint                                            m_simplePosAttrb;
+        GLuint                                            m_texPosAttrb;
+        GLuint                                            m_manCordUnf;
+        GLuint                                            m_texColorUnf;
+        GLuint                                            m_simpleTexUnf;
+
     };
 }
 
