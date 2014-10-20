@@ -2281,7 +2281,7 @@ SvxNumberingPreview::SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits)
     , bPosition(false)
     , nActLevel(SAL_MAX_UINT16)
 {
-    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetBorderStyle(WindowBorderStyle::MONO);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxNumberingPreview(vcl::Window *pParent, VclBuilder::stringmap &)

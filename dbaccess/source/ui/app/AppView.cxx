@@ -66,10 +66,10 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
     ,m_pView(_pParent)
 {
 
-    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetBorderStyle(WindowBorderStyle::MONO);
 
     m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL, false);
-    m_pPanel->SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pPanel->SetBorderStyle(WindowBorderStyle::MONO);
     OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
     pSwap->Show();
     pSwap->SetUniqueId(UID_APP_SWAP_VIEW);

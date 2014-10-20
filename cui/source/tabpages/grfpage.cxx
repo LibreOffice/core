@@ -757,7 +757,7 @@ SvxCropExample::SvxCropExample( vcl::Window* pPar, WinBits nStyle )
     , aTopLeft(0,0)
     , aBottomRight(0,0)
 {
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
 }
 
 Size SvxCropExample::GetOptimalSize() const

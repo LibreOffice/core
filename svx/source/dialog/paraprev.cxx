@@ -42,7 +42,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
 
     aSize = Size( 11905, 16837 );
 
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxParaPrevWindow(vcl::Window *pParent, VclBuilder::stringmap &)

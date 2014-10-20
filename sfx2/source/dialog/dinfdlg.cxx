@@ -1232,7 +1232,7 @@ CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( vcl::Window* pParent, 
     FreeResource();
     Wallpaper aWall( Color( COL_TRANSPARENT ) );
     SetBackground( aWall );
-    SetBorderStyle( WINDOW_BORDER_MONO  );
+    SetBorderStyle( WindowBorderStyle::MONO  );
     CheckNo();
     m_aYesButton.SetBackground( aWall );
     m_aNoButton.SetBackground( aWall );

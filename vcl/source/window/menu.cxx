@@ -2880,9 +2880,9 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
 
     MenuFloatingWindow* pWin = new MenuFloatingWindow( this, pW, nStyle | WB_SYSTEMWINDOW );
     if( pSVData->maNWFData.mbFlatMenu )
-        pWin->SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
     else
-        pWin->SetBorderStyle( pWin->GetBorderStyle() | WINDOW_BORDER_MENU );
+        pWin->SetBorderStyle( pWin->GetBorderStyle() | WindowBorderStyle::MENU );
     pWindow = pWin;
 
     Size aSz = ImplCalcSize( pWin );

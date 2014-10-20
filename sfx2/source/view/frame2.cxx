@@ -320,7 +320,7 @@ SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow, bool i_bHidden )
 void SfxFrame::SetPresentationMode( bool bSet )
 {
     if ( GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
+        GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WindowBorderStyle::NOBORDER : WindowBorderStyle::NORMAL );
 
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;

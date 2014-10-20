@@ -63,7 +63,7 @@ FullScreenPane::FullScreenPane (
     mpWorkWindow->ShowFullScreenMode(true, nScreenNumber);
     // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
     mpWorkWindow->SetMenuBarMode(MENUBAR_MODE_HIDE);
-    mpWorkWindow->SetBorderStyle(WINDOW_BORDER_REMOVEBORDER);
+    mpWorkWindow->SetBorderStyle(WindowBorderStyle::REMOVEBORDER);
     mpWorkWindow->SetBackground(Wallpaper());
     // Don't show the window right now in order to allow the setting of an
     // accessibility object: accessibility objects are typically

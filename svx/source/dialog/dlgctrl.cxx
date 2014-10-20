@@ -1830,7 +1830,7 @@ SvxPreviewBase::SvxPreviewBase(vcl::Window* pParent)
     , mpBufferDevice(new VirtualDevice(*this))
 {
     //  Draw the control's border as a flat thin black line.
-    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetBorderStyle(WindowBorderStyle::MONO);
     SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
     SetMapMode(MAP_100TH_MM);
 

@@ -168,7 +168,7 @@ SwEnvFmtPage::SwEnvFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pAddrEditButton->SetSelectHdl( aLk );
     m_pSendEditButton->SetSelectHdl( aLk );
 
-    m_pPreview->SetBorderStyle( WINDOW_BORDER_MONO );
+    m_pPreview->SetBorderStyle( WindowBorderStyle::MONO );
 
     m_pSizeFormatBox->SetSelectHdl(LINK(this, SwEnvFmtPage, FormatHdl));
 

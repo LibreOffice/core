@@ -139,7 +139,7 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
     {
         vcl::Window *pWin = GetWindow( WINDOW_BORDER );
 
-        bool bFlat = (GetBorderStyle() == 2);
+        bool bFlat = (GetBorderStyle() == WindowBorderStyle::MONO);
         Rectangle aRect( Point(0,0), pWin->GetOutputSizePixel() );
         Color oldLineCol = pWin->GetLineColor();
         Color oldFillCol = pWin->GetFillColor();

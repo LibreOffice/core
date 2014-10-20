@@ -155,7 +155,7 @@ public:
     void            EnableUserDraw( bool bUserDraw );
 
     void            DrawEntry( const UserDrawEvent& rEvt, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos = false );
-    void            SetBorderStyle( sal_uInt16 nBorderStyle );
+    void            SetBorderStyle( WindowBorderStyle nBorderStyle );
 
     void            SetSeparatorPos( sal_Int32  n = COMBOBOX_ENTRY_NOTFOUND );
 

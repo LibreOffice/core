@@ -88,7 +88,7 @@ public:
                             Window( &rParent, nBits | WB_CLIPCHILDREN ),
                             pFrame( p )
                         {
-                            p->GetFrame().GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+                            p->GetFrame().GetWindow().SetBorderStyle( WindowBorderStyle::NOBORDER );
                         }
 
     virtual void        Resize() SAL_OVERRIDE;

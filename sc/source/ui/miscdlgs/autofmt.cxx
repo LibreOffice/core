@@ -404,7 +404,7 @@ void ScAutoFmtPreview::PaintCells()
 
 void ScAutoFmtPreview::Init()
 {
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
     CalcCellArray( false );

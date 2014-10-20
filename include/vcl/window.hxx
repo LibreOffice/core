@@ -743,8 +743,8 @@ public:
 
     void                                EnableAllResize( bool bEnable = true );
 
-    void                                SetBorderStyle( sal_uInt16 nBorderStyle );
-    sal_uInt16                          GetBorderStyle() const;
+    void                                SetBorderStyle( WindowBorderStyle nBorderStyle );
+    WindowBorderStyle                   GetBorderStyle() const;
     void                                GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                                    sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     Size                                CalcWindowSize( const Size& rOutSz ) const;

@@ -133,7 +133,7 @@ SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs
     // set background and border of iconchoicectrl
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     m_pCtlPreview->SetBackground ( rStyles.GetWindowColor() );
-    m_pCtlPreview->SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pCtlPreview->SetBorderStyle(WindowBorderStyle::MONO);
 
     Link aLink( LINK( this, SvxMeasurePage, ChangeAttrHdl_Impl ) );
     m_pMtrFldLineDist->SetModifyHdl( aLink );

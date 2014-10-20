@@ -1023,8 +1023,8 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     long nOrigRightBorder = mnRightBorder;
     long nOrigBottomBorder = mnBottomBorder;
 
-    sal_uInt16 nBorderStyle = mpBorderWindow->GetBorderStyle();
-    if ( nBorderStyle & WINDOW_BORDER_NOBORDER )
+    WindowBorderStyle nBorderStyle = mpBorderWindow->GetBorderStyle();
+    if ( nBorderStyle & WindowBorderStyle::NOBORDER )
     {
         mnLeftBorder    = 0;
         mnTopBorder     = 0;
@@ -1035,7 +1035,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     {
         // FIXME: this is currently only on OS X, check with other
         // platforms
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects && !( nBorderStyle & WINDOW_BORDER_NWF ) )
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects && !( nBorderStyle & WindowBorderStyle::NWF ) )
         {
             // for native widget drawing we must find out what
             // control this border belongs to
@@ -1132,11 +1132,11 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             // move border outside if border was converted or if the BorderWindow is a frame window,
             if ( mpBorderWindow->mbSmallOutBorder )
                 nStyle |= FRAME_DRAW_DOUBLEOUT;
-            else if ( nBorderStyle & WINDOW_BORDER_NWF )
+            else if ( nBorderStyle & WindowBorderStyle::NWF )
                 nStyle |= FRAME_DRAW_NWF;
             else
                 nStyle |= FRAME_DRAW_DOUBLEIN;
-            if ( nBorderStyle & WINDOW_BORDER_MONO )
+            if ( nBorderStyle & WindowBorderStyle::MONO )
                 nStyle |= FRAME_DRAW_MONO;
 
             DecorationView  aDecoView( mpOutDev );
@@ -1179,8 +1179,8 @@ long ImplSmallBorderWindowView::CalcTitleWidth() const
 
 void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*, const Point* )
 {
-    sal_uInt16 nBorderStyle = mpBorderWindow->GetBorderStyle();
-    if ( nBorderStyle & WINDOW_BORDER_NOBORDER )
+    WindowBorderStyle nBorderStyle = mpBorderWindow->GetBorderStyle();
+    if ( nBorderStyle & WindowBorderStyle::NOBORDER )
         return;
 
     bool bNativeOK = false;
@@ -1318,13 +1318,13 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
         // move border outside if border was converted or if the border window is a frame window,
         if ( mpBorderWindow->mbSmallOutBorder )
             nStyle |= FRAME_DRAW_DOUBLEOUT;
-        else if ( nBorderStyle & WINDOW_BORDER_NWF )
+        else if ( nBorderStyle & WindowBorderStyle::NWF )
             nStyle |= FRAME_DRAW_NWF;
         else
             nStyle |= FRAME_DRAW_DOUBLEIN;
-        if ( nBorderStyle & WINDOW_BORDER_MONO )
+        if ( nBorderStyle & WindowBorderStyle::MONO )
             nStyle |= FRAME_DRAW_MONO;
-        if ( nBorderStyle & WINDOW_BORDER_MENU )
+        if ( nBorderStyle & WindowBorderStyle::MENU )
             nStyle |= FRAME_DRAW_MENU;
         // tell DrawFrame that we're drawing a window border of a frame window to avoid round corners
         if( pWin && pWin == pWin->ImplGetFrameWindow() )
@@ -1825,7 +1825,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
         mnTitleType = BORDERWINDOW_TITLE_SMALL;
     else
         mnTitleType = BORDERWINDOW_TITLE_NORMAL;
-    mnBorderStyle   = WINDOW_BORDER_NORMAL;
+    mnBorderStyle   = WindowBorderStyle::NORMAL;
     InitView();
 }
 
@@ -2104,7 +2104,7 @@ void ImplBorderWindow::SetTitleType( sal_uInt16 nTitleType, const Size& rSize )
     UpdateView( false, rSize );
 }
 
-void ImplBorderWindow::SetBorderStyle( sal_uInt16 nStyle )
+void ImplBorderWindow::SetBorderStyle( WindowBorderStyle nStyle )
 {
     if ( !mbFrameBorder && (mnBorderStyle != nStyle) )
     {

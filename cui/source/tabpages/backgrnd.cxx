@@ -210,7 +210,7 @@ BackgroundPreviewImpl::BackgroundPreviewImpl(vcl::Window* pParent)
     , aDrawRect(Point(0,0), GetOutputSizePixel())
     , nTransparency(0)
 {
-    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetBorderStyle(WindowBorderStyle::MONO);
     Paint(aDrawRect);
 }
 

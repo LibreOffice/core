@@ -91,7 +91,7 @@ private:
     long                    mnRollHeight;
     long                    mnOrgMenuHeight;
     sal_uInt16                  mnTitleType;
-    sal_uInt16                  mnBorderStyle;
+    WindowBorderStyle       mnBorderStyle;
     bool                    mbFloatWindow;
     bool                    mbSmallOutBorder;
     bool                    mbFrameBorder;
@@ -145,8 +145,8 @@ public:
     void                    SetDisplayActive( bool bActive );
     bool                    IsDisplayActive() const { return mbDisplayActive; }
     void                    SetTitleType( sal_uInt16 nTitleType, const Size& rSize );
-    void                    SetBorderStyle( sal_uInt16 nStyle );
-    sal_uInt16                  GetBorderStyle() const { return mnBorderStyle; }
+    void                    SetBorderStyle( WindowBorderStyle nStyle );
+    WindowBorderStyle       GetBorderStyle() const { return mnBorderStyle; }
     void                    SetPin( bool bPin );
     void                    SetRollUp( bool bRollUp, const Size& rSize );
     void                    SetCloseButton();
