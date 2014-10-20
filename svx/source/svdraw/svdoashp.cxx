@@ -2484,7 +2484,8 @@ Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool 
     Rectangle aAdjustedTextRect( aNewTextRect );                            // <- new text rectangle is being tested by AdjustTextFrameWidthAndHeight to ensure
     if ( AdjustTextFrameWidthAndHeight( aAdjustedTextRect, bHgt, bWdt ) )   //    that the new text rectangle is matching the current text size from the outliner
     {
-        if ( ( aAdjustedTextRect != aNewTextRect ) && ( aOldTextRect != aAdjustedTextRect ) )
+        if (aAdjustedTextRect != aNewTextRect && aOldTextRect != aAdjustedTextRect &&
+            aNewTextRect.GetWidth() && aNewTextRect.GetHeight())
         {
             aReturnValue = aRect;
             double fXScale = (double)aOldTextRect.GetWidth() / (double)aNewTextRect.GetWidth();
