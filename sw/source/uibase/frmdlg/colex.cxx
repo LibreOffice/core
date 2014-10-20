@@ -330,7 +330,7 @@ SwColumnOnlyExample::SwColumnOnlyExample(vcl::Window* pParent)
 
     m_aWinSize = PixelToLogic( m_aWinSize );
 
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
 
     m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
     ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrmSize.Width());

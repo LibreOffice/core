@@ -128,7 +128,7 @@ void ScColRowNameRangesDlg::Init()
         pEdAssign2->SetText( EMPTY_OUSTRING );
     }
 
-    pLbRange->SetBorderStyle( WINDOW_BORDER_MONO );
+    pLbRange->SetBorderStyle( WindowBorderStyle::MONO );
     pBtnColHead->Enable();
     pBtnRowHead->Enable();
     pEdAssign->Enable();

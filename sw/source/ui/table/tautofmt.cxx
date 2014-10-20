@@ -783,7 +783,7 @@ void AutoFmtPreview::PaintCells()
 
 void AutoFmtPreview::Init()
 {
-    SetBorderStyle( GetBorderStyle() | WINDOW_BORDER_MONO );
+    SetBorderStyle( GetBorderStyle() | WindowBorderStyle::MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
     CalcCellArray( false );

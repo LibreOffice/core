@@ -757,7 +757,7 @@ RubyPreview::RubyPreview(vcl::Window *pParent)
     , m_pParentDlg(NULL)
 {
     SetMapMode(MAP_TWIP);
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRubyPreview(vcl::Window *pParent, VclBuilder::stringmap &)

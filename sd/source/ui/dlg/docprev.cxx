@@ -75,7 +75,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSdDocPreviewWin(vcl::W
 SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
 : Control(pParent, nStyle), pMetaFile( 0 ), bInEffect(false), mpObj(NULL), mnShowPage(0)
 {
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
     svtools::ColorConfig aColorConfig;
     Wallpaper aEmpty;
     SetBackground( aEmpty );

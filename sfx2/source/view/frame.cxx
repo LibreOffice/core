@@ -782,7 +782,7 @@ void SfxFrame::SetToolSpaceBorderPixel_Impl( const SvBorder& rBorder )
         if ( GetParentFrame() )
         {
             bool bHasTools = rBorder.Left() != rBorder.Right() || rBorder.Top() != rBorder.Bottom();
-            pF->GetWindow().SetBorderStyle( bHasTools ? WINDOW_BORDER_NORMAL : WINDOW_BORDER_NOBORDER );
+            pF->GetWindow().SetBorderStyle( bHasTools ? WindowBorderStyle::NORMAL : WindowBorderStyle::NOBORDER );
         }
 
         pF->GetWindow().SetPosSizePixel( aPos, aSize );

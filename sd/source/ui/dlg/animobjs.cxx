@@ -190,7 +190,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
     aTimeField.SetModifyHdl( LINK( this, AnimationWindow, ModifyTimeHdl ) );
 
     // disable 3D border
-    aCtlDisplay.SetBorderStyle(WINDOW_BORDER_MONO);
+    aCtlDisplay.SetBorderStyle(WindowBorderStyle::MONO);
     aDisplaySize = aCtlDisplay.GetOutputSize();
 
     aSize = GetOutputSizePixel();

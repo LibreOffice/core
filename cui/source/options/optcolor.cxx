@@ -403,7 +403,7 @@ void ColorConfigWindow_Impl::Entry::SetAppearance(
     // text (and optionally checkbox)
     m_pText->SetBackground(aTextWall);
     // preview
-    m_pPreview->SetBorderStyle(WINDOW_BORDER_MONO);
+    m_pPreview->SetBorderStyle(WindowBorderStyle::MONO);
     // color list
     m_pColorList->CopyEntries(aSampleList);
     m_pColorList->InsertAutomaticEntryColor(m_aDefaultColor);

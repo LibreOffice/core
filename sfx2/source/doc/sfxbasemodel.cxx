@@ -4325,8 +4325,8 @@ Reference< frame::XController2 > SAL_CALL SfxBaseModel::createViewController(
         rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( false );
         rFrame.GetWorkWindow_Impl()->Lock_Impl( true );
 
-        rFrame.GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
-        pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        rFrame.GetWindow().SetBorderStyle( WindowBorderStyle::NOBORDER );
+        pViewFrame->GetWindow().SetBorderStyle( WindowBorderStyle::NOBORDER );
     }
 
     // tell the guard we were successful
