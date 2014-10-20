@@ -24,7 +24,6 @@
 #include "ThreeDHelper.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 #include "chartview/ExplicitScaleValues.hxx"
-#include <macros.hxx>
 
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -52,9 +51,7 @@ public:
     static VCoordinateSystem* createCoordinateSystem( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
 
-#if ENABLE_AXIS_SHAPE_CACHE
     void reset();
-#endif
 
     virtual void initPlottingTargets(
                   const ::com::sun::star::uno::Reference<

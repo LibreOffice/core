@@ -94,7 +94,6 @@ VCoordinateSystem::~VCoordinateSystem()
 {
 }
 
-#if ENABLE_AXIS_SHAPE_CACHE
 void VCoordinateSystem::reset()
 {
     m_xLogicTargetForGrids.clear();
@@ -121,7 +120,6 @@ void VCoordinateSystem::reset()
 
     m_aAxisMap.clear(); // TODO : switch to reset() later.
 }
-#endif
 
 void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes >& xLogicTarget
        , const Reference< drawing::XShapes >& xFinalTarget
