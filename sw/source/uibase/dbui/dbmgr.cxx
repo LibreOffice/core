@@ -979,6 +979,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             sal_Int32 nDocNo = 1;
             sal_Int32 nDocCount = 0;
+            // For single file mode, the number of pages in the target document so far, which is used
+            // by AppendDoc() to adjust position of page-bound objects. Getting this information directly
+            // from the target doc would require repeated layouts of the doc, which is expensive, but
+            // it can be manually computed from the source documents (for which we do layouts, so the page
+            // count is known, and there is a blank page between each of them in the target document).
+            int targetDocPageCount = 0;
             if( !IsMergeSilent() && bMergeShell &&
                     lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
                 static_cast<CreateMonitor*>( pProgressDlg )->SetTotalCount( nDocCount );
@@ -1125,10 +1131,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+                            if( targetDocPageCount % 2 == 1 )
+                                ++targetDocPageCount; // Docs always start on odd pages (so offset must be even).
                             SwNodeIndex appendedDocStart = pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
-                                nStartingPageNo, pTargetPageDesc, nDocNo == 1);
+                                nStartingPageNo, pTargetPageDesc, nDocNo == 1, targetDocPageCount);
                             // #i72820# calculate layout to be able to find the correct page index
                             pTargetShell->CalcLayout();
+                            targetDocPageCount += rWorkShell.GetPageCnt();
                             if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                 lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
                             if (bMergeShell)
