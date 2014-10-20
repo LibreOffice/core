@@ -1439,7 +1439,7 @@ SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
 SfxCurrencyToolBoxControl::SfxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox )
 {
-    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | TIB_DROPDOWN);
+    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | ToolBoxItemBits::DROPDOWN);
 }
 
 SfxCurrencyToolBoxControl::~SfxCurrencyToolBoxControl()
