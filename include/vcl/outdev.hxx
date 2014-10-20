@@ -740,6 +740,9 @@ public:
                                     double fTransparency = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+
+    bool                        DrawPolyLineBezier(sal_uInt32, const SalPoint*, const sal_uInt8*);
+
 private:
 
     bool                        drawPolyLine(
@@ -805,7 +808,7 @@ public:
     void                        DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly );
     void                        DrawPolyPolygon( const basegfx::B2DPolyPolygon& );
 
-    bool                        DrawPolyLineBezier(sal_uInt32, const SalPoint*, const sal_uInt8*);
+    bool                        DrawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
 
 private:
 
