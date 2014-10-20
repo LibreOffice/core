@@ -406,7 +406,7 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
                 c += 'a' - 'A';
                 rName[ i ] = c;
             }
-            else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
+            else if( ((c < '0') || (c > '9')) && (c != ';') && (c != '(') && (c != ')') ) // not 0-9, semicolon, or brackets
             {
                 // Remove white spaces and special characters
                 rName.remove(i,1);

@@ -40,10 +40,10 @@ void Test::testSingleElement()
         test1 = GetEnglishSearchFontName( "Symbol    " );
         CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
         //removing Skripts
-        test1 = GetEnglishSearchFontName( "Symbol(skript)" );
-        CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
+        test1 = GetEnglishSearchFontName( "Symbol(SIP)" );
+        CPPUNIT_ASSERT_EQUAL(OUString("symbol(sip)"),test1);
         //remove Whitespaces between
-        test1 = GetEnglishSearchFontName( "Symbol (skript)" );
+        test1 = GetEnglishSearchFontName( "Symbol (thai)" );
         CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
         //remove special characters; leave semicolon, numbers
         test1 = GetEnglishSearchFontName( "sy;mb?=ol129" );
