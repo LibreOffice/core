@@ -26,6 +26,9 @@ class ScTableSheetObj : public CalcUnoApiTest, apitest::XSearchable, apitest::XR
 public:
     ScTableSheetObj();
 
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+
     virtual uno::Reference< uno::XInterface > init() SAL_OVERRIDE;
 
     CPPUNIT_TEST_SUITE(ScTableSheetObj);
@@ -40,12 +43,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static sal_Int32 nTest;
-    static uno::Reference< lang::XComponent > mxComponent;
+    uno::Reference< lang::XComponent > mxComponent;
 };
-
-sal_Int32 ScTableSheetObj::nTest = 0;
-uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
 
 ScTableSheetObj::ScTableSheetObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
@@ -67,6 +66,19 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
     return xSheet;
+}
+
+void ScTableSheetObj::setUp()
+{
+    CalcUnoApiTest::setUp();
+}
+
+void ScTableSheetObj::tearDown()
+{
+    closeDocument(mxComponent);
+    mxComponent.clear();
+
+    CalcUnoApiTest::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableSheetObj);
