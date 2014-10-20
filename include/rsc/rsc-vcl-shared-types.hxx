@@ -49,7 +49,7 @@ typedef sal_uInt16 MenuItemBits;
 #define MIB_ICON            ((MenuItemBits)0x0080)
 #define MIB_TEXT            ((MenuItemBits)0x0100)
 
-enum class ToolBoxItemBits : sal_uInt16
+enum class ToolBoxItemBits
 {
     NONE                = 0x0000,
     CHECKABLE           = 0x0001,
