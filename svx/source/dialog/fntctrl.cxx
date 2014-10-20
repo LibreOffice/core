@@ -475,7 +475,7 @@ void SvxFontPrevWindow::Init()
     initFont(pImpl->aCJKFont);
     initFont(pImpl->aCTLFont);
     InitSettings( true, true );
-    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetBorderStyle( WindowBorderStyle::MONO );
 }
 
 SvxFontPrevWindow::SvxFontPrevWindow( vcl::Window* pParent, const ResId& rId ) :

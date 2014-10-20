@@ -141,6 +141,7 @@ class RscTypCont
     void        SETCONST( RscConst *, const char *, sal_uInt32 );
     inline void SETCONST( RscConst *p1, const char * p2, SymbolType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, ToolBoxItemBits p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
+    inline void SETCONST( RscConst *p1, Atom p2, WindowBorderStyle p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     void        SETCONST( RscConst *, Atom, sal_uInt32 );
     RscEnum *   InitLangType();
     RscEnum *   InitFieldUnitsType();

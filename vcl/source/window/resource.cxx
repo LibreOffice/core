@@ -153,7 +153,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_BORDER_STYLE )
     {
         sal_uInt16 nBorderStyle = (sal_uInt16)ReadLongRes();
-        SetBorderStyle( nBorderStyle );
+        SetBorderStyle( static_cast<WindowBorderStyle>(nBorderStyle) );
     }
 }
 

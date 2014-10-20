@@ -37,7 +37,7 @@ OTitleWindow::OTitleWindow(vcl::Window* _pParent,sal_uInt16 _nTitleId,WinBits _n
 {
 
     setTitle(_nTitleId);
-    SetBorderStyle(WINDOW_BORDER_MONO);
+    SetBorderStyle(WindowBorderStyle::MONO);
     ImplInitSettings( true, true, true );
 
     vcl::Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle };

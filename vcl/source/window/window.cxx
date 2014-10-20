@@ -2053,12 +2053,12 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
     }
 }
 
-void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
+void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
 {
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        if( nBorderStyle == WINDOW_BORDER_REMOVEBORDER &&
+        if( nBorderStyle == WindowBorderStyle::REMOVEBORDER &&
             ! mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame &&
             mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent
             )
@@ -2093,7 +2093,7 @@ void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
     }
 }
 
-sal_uInt16 Window::GetBorderStyle() const
+WindowBorderStyle Window::GetBorderStyle() const
 {
 
     if ( mpWindowImpl->mpBorderWindow )
@@ -2104,7 +2104,7 @@ sal_uInt16 Window::GetBorderStyle() const
             return mpWindowImpl->mpBorderWindow->GetBorderStyle();
     }
 
-    return 0;
+    return WindowBorderStyle::NONE;
 }
 
 long Window::CalcTitleWidth() const
