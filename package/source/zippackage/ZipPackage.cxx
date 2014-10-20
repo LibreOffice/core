@@ -976,7 +976,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     pEntry->sPath = sMime;
     pEntry->nMethod = STORED;
     pEntry->nSize = pEntry->nCompressedSize = nBufferLength;
-    pEntry->nTime = ZipOutputEntry::getCurrentDosTime();
+    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     CRC32 aCRC32;
     aCRC32.update( aType );
@@ -984,10 +984,11 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 
     try
     {
-        ZipOutputEntry aZipEntry(m_xContext, aZipOut.getChucker(), *pEntry, NULL);
+        aZipOut.putNextEntry(*pEntry);
+        ZipOutputEntry aZipEntry(m_xContext, &aZipOut, *pEntry, NULL);
         aZipEntry.write(aType, 0, nBufferLength);
         aZipEntry.closeEntry();
-        aZipOut.addEntry(pEntry);
+        aZipOut.rawCloseEntry();
     }
     catch ( const ::com::sun::star::io::IOException & r )
     {
@@ -1010,7 +1011,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
     pEntry->nSize = pEntry->nCompressedSize = -1;
-    pEntry->nTime = ZipOutputEntry::getCurrentDosTime();
+    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     // Convert vector into a uno::Sequence
     uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
@@ -1027,10 +1028,11 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     pBuffer->realloc( nBufferLength );
 
     // the manifest.xml is never encrypted - so pass an empty reference
-    ZipOutputEntry aZipEntry(m_xContext, aZipOut.getChucker(), *pEntry, NULL);
+    aZipOut.putNextEntry(*pEntry);
+    ZipOutputEntry aZipEntry(m_xContext, &aZipOut, *pEntry, NULL);
     aZipEntry.write(pBuffer->getSequence(), 0, nBufferLength);
     aZipEntry.closeEntry();
-    aZipOut.addEntry(pEntry);
+    aZipOut.rawCloseEntry();
 }
 
 void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
@@ -1043,7 +1045,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     pEntry->nMethod = DEFLATED;
     pEntry->nCrc = -1;
     pEntry->nSize = pEntry->nCompressedSize = -1;
-    pEntry->nTime = ZipOutputEntry::getCurrentDosTime();
+    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     // Convert vector into a uno::Sequence
     // TODO/LATER: use Defaulst entries in future
@@ -1078,10 +1080,11 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     pBuffer->realloc( nBufferLength );
 
     // there is no encryption in this format currently
-    ZipOutputEntry aZipEntry(m_xContext, aZipOut.getChucker(), *pEntry, NULL);
+    aZipOut.putNextEntry(*pEntry);
+    ZipOutputEntry aZipEntry(m_xContext, &aZipOut, *pEntry, NULL);
     aZipEntry.write(pBuffer->getSequence(), 0, nBufferLength);
     aZipEntry.closeEntry();
-    aZipOut.addEntry(pEntry);
+    aZipOut.rawCloseEntry();
 }
 
 void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream )

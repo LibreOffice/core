@@ -21,7 +21,6 @@
 
 #include <ZipPackageFolder.hxx>
 #include <ZipFile.hxx>
-#include <ZipOutputEntry.hxx>
 #include <ZipOutputStream.hxx>
 #include <ZipPackageStream.hxx>
 #include <PackageConstants.hxx>
@@ -338,9 +337,8 @@ void ZipPackageFolder::saveContents(
 
         try
         {
-            ZipOutputEntry aZipEntry(m_xContext, rZipOut.getChucker(), *pTempEntry, NULL, false);
-            aZipEntry.rawCloseEntry();
-            rZipOut.addEntry(pTempEntry);
+            rZipOut.putNextEntry( *pTempEntry );
+            rZipOut.rawCloseEntry();
         }
         catch ( ZipException& )
         {
