@@ -9,6 +9,7 @@
 #ifndef CONFIG_MAP_HXX
 #define CONFIG_MAP_HXX
 
+#include <map>
 #include <rtl/ustring.hxx>
 
 // The realisation here is that while a map is a reasonably compact
@@ -26,6 +27,8 @@ struct LengthContentsCompare
             return a.getLength() < b.getLength();
     }
 };
+
+template< class T > struct config_map : public std::map< OUString, T, LengthContentsCompare > { };
 
 #endif // CONFIG_MAP_HXX
 
