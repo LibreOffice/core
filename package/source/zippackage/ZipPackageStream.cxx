@@ -485,8 +485,8 @@ bool ZipPackageStream::saveChild(
     pTempEntry->sPath = rPath;
     pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
 
-    bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.getLength() || m_bHaveOwnKey);
-    bool bToBeCompressed = bToBeEncrypted ? sal_True : m_bToBeCompressed;
+    const bool bToBeEncrypted = m_bToBeEncrypted && (rEncryptionKey.getLength() || m_bHaveOwnKey);
+    const bool bToBeCompressed = bToBeEncrypted ? sal_True : m_bToBeCompressed;
 
     aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
     aPropSet[PKG_MNFST_MEDIATYPE].Value <<= GetMediaType( );
@@ -732,20 +732,31 @@ bool ZipPackageStream::saveChild(
         try
         {
             rZipOut.putNextEntry(*pTempEntry, bToBeEncrypted);
-            ZipOutputEntry aZipEntry(m_xContext, &rZipOut, *pTempEntry, this, bToBeEncrypted);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
-
             sal_Int32 nLength;
             uno::Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
-            do
-            {
-                nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
-                aZipEntry.write(aSeq, 0, nLength);
-            }
-            while ( nLength == n_ConstBufferSize );
 
-            aZipEntry.closeEntry();
+            if (pTempEntry->nMethod == STORED)
+            {
+                do
+                {
+                    nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
+                    rZipOut.rawWrite(aSeq, 0, nLength);
+                }
+                while ( nLength == n_ConstBufferSize );
+            }
+            else
+            {
+                ZipOutputEntry aZipEntry(m_xContext, &rZipOut, *pTempEntry, this, bToBeEncrypted);
+                do
+                {
+                    nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
+                    aZipEntry.write(aSeq, 0, nLength);
+                }
+                while ( nLength == n_ConstBufferSize );
+                aZipEntry.closeEntry();
+            }
             rZipOut.rawCloseEntry();
         }
         catch ( ZipException& )
