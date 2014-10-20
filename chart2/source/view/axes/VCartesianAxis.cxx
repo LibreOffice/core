@@ -428,8 +428,8 @@ TickInfo* MaxLabelTickIter::nextInfo()
     return 0;
 }
 
-bool VCartesianAxis::isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
-                                                     , bool bIsHorizontalAxis )
+bool VCartesianAxis::isBreakOfLabelsAllowed(
+    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis ) const
 {
     if( m_aTextLabels.getLength() > 100 )
         return false;
@@ -446,8 +446,8 @@ bool VCartesianAxis::isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLab
     return bIsHorizontalAxis;
 }
 
-bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
-                                                     , bool bIsHorizontalAxis, bool bIsVerticalAxis )
+bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed(
+    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis ) const
 {
     if( rAxisLabelProperties.eStaggering != STAGGER_AUTO )
         return false;
