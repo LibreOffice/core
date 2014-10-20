@@ -1135,10 +1135,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         rContext->Insert(PROP_PARA_KEEP_TOGETHER, uno::makeAny( nIntValue ? true : false) );
         break;
     case NS_ooxml::LN_CT_PPrBase_pageBreakBefore:
-        if ( nIntValue == 1 )
-        {
-            rContext->Insert(PROP_BREAK_TYPE, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE ) );
-        }
+        rContext->Insert(PROP_BREAK_TYPE, uno::makeAny(nIntValue ? style::BreakType_PAGE_BEFORE : style::BreakType_NONE));
     break;
     case NS_ooxml::LN_CT_NumPr_ilvl:
             if (nIntValue < 0 || 10 <= nIntValue) // Writer can't do everything

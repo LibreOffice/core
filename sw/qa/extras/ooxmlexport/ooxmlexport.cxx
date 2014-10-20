@@ -11,9 +11,10 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
-#include <com/sun/star/text/FontEmphasis.hpp>
 
 #include <string>
 
@@ -491,6 +492,12 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getParagraph(1), "CharHeight"));
     // This was empty.
     CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharStyleName"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testPageBreakBefore, "page-break-before.docx")
+{
+    // This was style::BreakType_PAGE_BEFORE, i.e. page break wasn't ignored, as it should have been.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
