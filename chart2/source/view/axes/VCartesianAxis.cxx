@@ -103,39 +103,6 @@ Reference< drawing::XShape > createSingleLabel(
     return xShape2DText;
 }
 
-void adjustSingleLabel(
-    const Reference<drawing::XShape>& xShape, const awt::Point& rAnchorPos,
-    const AxisLabelProperties& rAxisLabelProps, const AxisProperties& rAxisProps,
-    const tNameSequence& rPropNames, const tAnySequence& rPropValues )
-{
-    if (!xShape.is())
-        return;
-
-    uno::Reference<beans::XPropertySet> xProp(xShape, uno::UNO_QUERY);
-    if (xProp.is())
-    {
-        //set properties
-        PropertyMapper::setMultiProperties(rPropNames, rPropValues, xProp);
-
-        //set position matrix
-        //the matrix needs to be set at the end behind autogrow and such position influencing properties
-        double fRotationAnglePi = rAxisLabelProps.fRotationAngleDegree * (F_PI / -180.0);
-        uno::Any aATransformation = AbstractShapeFactory::makeTransformation(rAnchorPos, fRotationAnglePi);
-        try
-        {
-            xProp->setPropertyValue("Transformation", aATransformation);
-        }
-        catch( const uno::Exception& e )
-        {
-            ASSERT_EXCEPTION( e );
-        }
-    }
-
-    LabelPositionHelper::correctPositionForRotation(
-        xShape, rAxisProps.maLabelAlignment.meAlignment,
-        rAxisLabelProps.fRotationAngleDegree, rAxisProps.m_bComplexCategories);
-}
-
 bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShape
                        , double fRotationAngleDegree
                        , const basegfx::B2DVector& rTickScreenPosition
@@ -796,12 +763,8 @@ bool VCartesianAxis::createTextShapes(
             uno::Reference<drawing::XShape> xCached = rTickIter.getTextShape();
             if (xCached.is())
             {
-                pTickInfo->xTextShape = xCached;
                 xTarget->add(xCached);
-                adjustSingleLabel(
-                    pTickInfo->xTextShape, aAnchorScreenPosition2D,
-                    rAxisLabelProperties, m_aAxisProperties,
-                    aPropNames, aPropValues);
+                pTickInfo->xTextShape = xCached;
             }
             else
             {
