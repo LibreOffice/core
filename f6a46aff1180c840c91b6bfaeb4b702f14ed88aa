@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_5c48bd2d",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1058,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-10-20T10:20:02Z",
+      "side": 1,
+      "message": "\"how to implement that\" would be a better translation",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_3c5509c6",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1597,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-10-20T10:20:02Z",
+      "side": 1,
+      "message": "base date",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_1c5245de",
+        "filename": "sc/source/filter/starcalc/scflt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2340,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-10-20T10:20:02Z",
+      "side": 1,
+      "message": "Not sure this is a TODO.",
+      "revId": "f6a46aff1180c840c91b6bfaeb4b702f14ed88aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
