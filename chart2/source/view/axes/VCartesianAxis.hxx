@@ -121,9 +121,9 @@ protected: //methods
 
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
                             , TickFactory2D* pTickFactory2D );
-    bool    isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
-                            , bool bIsHorizontalAxis, bool bIsVerticalAxis );
-    bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis );
+    bool isAutoStaggeringOfLabelsAllowed(
+        const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis ) const;
+    bool isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis ) const;
 
     ::basegfx::B2DVector getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const;
     ScreenPosAndLogicPos getScreenPosAndLogicPos( double fLogicX, double fLogicY, double fLogicZ ) const;
