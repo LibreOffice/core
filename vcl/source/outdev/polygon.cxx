@@ -176,6 +176,40 @@ bool OutputDevice::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon,
     return bRet;
 }
 
+bool OutputDevice::DrawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
+                                          const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return false;
+
+    bool bRet = false;
+
+    if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) ||  IsRTLEnabled() )
+    {
+        // TODO: optimize, reduce new/delete calls
+        SalPoint **pPtAry2 = new SalPoint*[nPoly];
+        sal_uLong i;
+        for(i=0; i<nPoly; i++)
+        {
+            sal_uLong nPoints = pPoints[i];
+            pPtAry2[i] = new SalPoint[ nPoints ];
+            mirror( nPoints, pPtAry[i], pPtAry2[i] );
+        }
+
+        bRet = mpGraphics->DrawPolyPolygonBezier( nPoly, pPoints, (PCONSTSALPOINT*)pPtAry2, pFlgAry );
+
+        for(i=0; i<nPoly; i++)
+            delete [] pPtAry2[i];
+        delete [] pPtAry2;
+    }
+    else
+    {
+        bRet = mpGraphics->DrawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
+    }
+
+    return bRet;
+}
+
 void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
 {
     // AW: Do NOT paint empty polygons
@@ -467,7 +501,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
         // #100127# Forward beziers to sal, if any
         if( bHaveBezier )
         {
-            if( !mpGraphics->DrawPolyPolygonBezier( j, pPointAry, pPointAryAry, pFlagAryAry, this ) )
+            if( !DrawPolyPolygonBezier( j, pPointAry, pPointAryAry, pFlagAryAry ) )
             {
                 tools::PolyPolygon aPolyPoly = tools::PolyPolygon::SubdivideBezier( rPolyPoly );
                 ImplDrawPolyPolygon( aPolyPoly.Count(), aPolyPoly );
