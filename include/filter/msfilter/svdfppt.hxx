@@ -791,7 +791,7 @@ public:
                     explicit PPTParaSheet( sal_uInt32 nInstance );
                     PPTParaSheet( const PPTParaSheet& rParaSheet );
 
-    void            Read(
+    bool            Read(
                         SdrPowerPointImport& rMan,
                         SvStream& rIn,
                         bool bMasterStyle,
