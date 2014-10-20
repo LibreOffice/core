@@ -390,10 +390,11 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
         }
         catch(const Exception&)
         {
+            css::uno::Any a(cppu::getCaughtException());
             throw WrappedTargetException(
                 "Could not clone the given database form.",
                 *const_cast< ODatabaseForm* >( &_cloneSource ),
-                ::cppu::getCaughtException()
+                a
             );
         }
     }
