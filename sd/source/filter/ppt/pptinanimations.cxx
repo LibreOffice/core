@@ -3062,7 +3062,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
             if( pChildAtom->getType() == DFF_msofbtAnimAttributeValue )
             {
                 Any aAny;
-                importAttributeValue( pChildAtom, aAny );
+                (void)importAttributeValue( pChildAtom, aAny );
                 rSet.maProperties[ pChildAtom->getInstance() ] = aAny;
             }
             else
