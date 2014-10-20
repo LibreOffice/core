@@ -167,12 +167,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="valign">start</property>
             <property name="hexpand">True</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="vexpand">True</property>
+            <property name="row_spacing">6</property>
             <child>
               <object class="GtkLabel" id="FT_ROLE">
                 <property name="visible">True</property>
@@ -183,9 +184,10 @@
                 <property name="mnemonic_widget">LB_ROLE:border</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -193,16 +195,18 @@
                 <property name="width_request">440</property>
                 <property name="height_request">100</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Tab List-selection1"/>
+                  <object class="GtkTreeSelection" id="Tab List-selection"/>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -215,9 +219,10 @@
                 <property name="mnemonic_widget">EDT_RANGE</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -229,7 +234,7 @@
                 <child>
                   <object class="GtkEntry" id="EDT_RANGE">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                   </object>
@@ -243,7 +248,7 @@
                   <object class="GtkButton" id="IMB_RANGE_MAIN">
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imageIMB_RANGE_MAIN</property>
                   </object>
@@ -255,9 +260,10 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -296,9 +302,10 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -310,7 +317,7 @@
                 <child>
                   <object class="GtkEntry" id="EDT_CATEGORIES">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
                   </object>
@@ -324,7 +331,7 @@
                   <object class="GtkButton" id="IMB_RANGE_CAT">
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="image">imageIMB_RANGE_CAT</property>
                   </object>
@@ -336,9 +343,10 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
               </packing>
             </child>
           </object>
