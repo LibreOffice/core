@@ -2081,7 +2081,7 @@ public:
     ::sw::UndoManager const& GetUndoManager() const;
 
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
-    void AppendDoc(const SwDoc& rSource, sal_uInt16 nStartPageNumber,
+    SwNodeIndex AppendDoc(const SwDoc& rSource, sal_uInt16 nStartPageNumber,
                  SwPageDesc* pTargetPageDesc, bool bDeletePrevious = false );
 
     /**
