@@ -89,36 +89,8 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
         m_aExplicitScales[2].Orientation = AxisOrientation_MATHEMATICAL;
     }
 }
-
 VCoordinateSystem::~VCoordinateSystem()
 {
-}
-
-void VCoordinateSystem::reset()
-{
-    m_xLogicTargetForGrids.clear();
-    m_xLogicTargetForAxes.clear();
-    m_xFinalTarget.clear();
-    m_xShapeFactory.clear();
-    m_aMatrixSceneToScreen = drawing::HomogenMatrix();
-    m_eLeftWallPos = CuboidPlanePosition_Left;
-    m_eBackWallPos = CuboidPlanePosition_Back;
-    m_eBottomPos = CuboidPlanePosition_Bottom;
-    m_aMergedMinMaxSupplier.clearMinimumAndMaximumSupplierList();
-    m_aSeriesNamesForZAxis.realloc(0);
-
-    m_aExplicitScales.clear();
-    m_aExplicitScales.resize(3);
-
-    m_aExplicitIncrements.clear();
-    m_aExplicitIncrements.resize(3);
-
-    m_aSecondaryExplicitScales.clear();
-    m_aSecondaryExplicitIncrements.clear();
-
-    m_apExplicitCategoriesProvider.reset();
-
-    m_aAxisMap.clear(); // TODO : switch to reset() later.
 }
 
 void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes >& xLogicTarget
