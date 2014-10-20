@@ -494,11 +494,12 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
 
         BitmapReadAccess* pAcc = aWorkBmp.AcquireReadAccess();
 
-        if( pAcc )
+        const long nWidth = pAcc ? pAcc->Width() : 0;
+        const long nHeight = pAcc ? pAcc->Height() : 0;
+
+        if (pAcc && nWidth && nHeight)
         {
             const Size&         rPrefSize = aWorkBmp.GetPrefSize();
-            const long          nWidth = pAcc->Width();
-            const long          nHeight = pAcc->Height();
             const double        fFactorX = (double) rPrefSize.Width() / nWidth;
             const double        fFactorY = (double) rPrefSize.Height() / nHeight;
             const long          nStartX1 = aWorkRect.Left() + 1L;
