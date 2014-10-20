@@ -50,7 +50,7 @@ public:
     virtual ~ContentInfo ()
     {
         if ( bFolder )
-            pFolder->releaseUpwardRef();
+            pFolder->clearParent();
         else
             pStream->clearParent();
     }
