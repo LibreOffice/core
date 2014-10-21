@@ -29,19 +29,19 @@
 #include <CRC32.hxx>
 
 struct ZipEntry;
-class ZipOutputStream;
+class ZipPackageBuffer;
 class ZipPackageStream;
 
 class ZipOutputEntry
 {
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
-    ZipUtils::Deflater  m_aDeflater;
+    ZipUtils::Deflater m_aDeflater;
+    css::uno::Reference< ZipPackageBuffer > m_pBuffer;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > m_xDigestContext;
 
     CRC32               m_aCRC;
-    ZipOutputStream*    m_pZipOutputStream;
     ZipEntry            *m_pCurrentEntry;
     sal_Int16           m_nDigested;
     bool                m_bEncryptCurrentEntry;
@@ -50,9 +50,11 @@ class ZipOutputEntry
 public:
     ZipOutputEntry(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-        ZipOutputStream *pZipOutputStream, ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt = false);
+        ZipEntry& rEntry, ZipPackageStream* pStream, bool bEncrypt = false);
 
     ~ZipOutputEntry();
+
+    css::uno::Sequence< sal_Int8 > getData();
 
     // XZipOutputEntry interfaces
     void SAL_CALL closeEntry(  )
