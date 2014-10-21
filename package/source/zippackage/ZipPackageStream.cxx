@@ -809,13 +809,6 @@ bool ZipPackageStream::saveChild(
         // Then copy it back afterwards...
         ZipPackageFolder::copyZipEntry ( aEntry, *pTempEntry );
 
-        // Remove hacky bit from entry flags
-        if ( aEntry.nFlag & ( 1 << 4 ) )
-        {
-            aEntry.nFlag &= ~( 1 << 4 );
-            aEntry.nMethod = STORED;
-        }
-
         // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
         if ( IsEncrypted() )
             setSize( nOwnStreamOrigSize );

@@ -66,10 +66,7 @@ void ZipOutputStream::putNextEntry( ZipEntry& rEntry, bool bEncrypt )
         rEntry.nSize = rEntry.nCompressedSize = 0;
         rEntry.nFlag |= 8;
     }
-    if (bEncrypt)
-    {
-        rEntry.nFlag |= 1 << 4;
-    }
+    m_bEncrypt = bEncrypt;
 
     sal_Int32 nLOCLength = writeLOC(rEntry);
     rEntry.nOffset = m_aChucker.GetPosition() - nLOCLength;
@@ -88,6 +85,10 @@ void ZipOutputStream::rawCloseEntry()
 {
     if ( m_pCurrentEntry->nMethod == DEFLATED && ( m_pCurrentEntry->nFlag & 8 ) )
         writeEXT(*m_pCurrentEntry);
+
+    if (m_bEncrypt)
+        m_pCurrentEntry->nMethod = STORED;
+
     m_pCurrentEntry = NULL;
 }
 
@@ -144,19 +145,8 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
     m_aChucker << CENSIG;
     m_aChucker << rEntry.nVersion;
     m_aChucker << rEntry.nVersion;
-    if (rEntry.nFlag & (1 << 4) )
-    {
-        // If it's an encrypted entry, we pretend its stored plain text
-        ZipEntry *pEntry = const_cast < ZipEntry * > ( &rEntry );
-        pEntry->nFlag &= ~(1 <<4 );
-        m_aChucker << rEntry.nFlag;
-        m_aChucker << static_cast < sal_Int16 > ( STORED );
-    }
-    else
-    {
-        m_aChucker << rEntry.nFlag;
-        m_aChucker << rEntry.nMethod;
-    }
+    m_aChucker << rEntry.nFlag;
+    m_aChucker << rEntry.nMethod;
     bool bWrite64Header = false;
 
     m_aChucker << static_cast < sal_uInt32> ( rEntry.nTime );
@@ -214,19 +204,12 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     m_aChucker << LOCSIG;
     m_aChucker << rEntry.nVersion;
 
-    if (rEntry.nFlag & (1 << 4) )
-    {
-        // If it's an encrypted entry, we pretend its stored plain text
-        sal_Int16 nTmpFlag = rEntry.nFlag;
-        nTmpFlag &= ~(1 <<4 );
-        m_aChucker << nTmpFlag;
+    m_aChucker << rEntry.nFlag;
+    // If it's an encrypted entry, we pretend its stored plain text
+    if (m_bEncrypt)
         m_aChucker << static_cast < sal_Int16 > ( STORED );
-    }
     else
-    {
-        m_aChucker << rEntry.nFlag;
         m_aChucker << rEntry.nMethod;
-    }
 
     bool bWrite64Header = false;
 
