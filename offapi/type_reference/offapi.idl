@@ -383,6 +383,10 @@ module com {
      SQUARE = 4,
      RECT = 5
     };
+    published struct GradientStop {
+     short StopPosition;
+     com::sun::star::util::Color StopColor;
+    };
     published struct Gradient {
      ::com::sun::star::awt::GradientStyle Style;
      ::com::sun::star::util::Color StartColor;
@@ -394,6 +398,9 @@ module com {
      short StartIntensity;
      short EndIntensity;
      short StepCount;
+    };
+    published struct Gradient2 : ::com::sun::star::awt::Gradient {
+     sequence< com::sun::star::awt::GradientStop> GradStops;
     };
     published constants ImageAlign {
      const short BOTTOM = 3;
@@ -2055,7 +2062,7 @@ module com {
      void drawArc([in] long X, [in] long Y, [in] long Width, [in] long Height, [in] long X1, [in] long Y1, [in] long X2, [in] long Y2);
      void drawPie([in] long X, [in] long Y, [in] long Width, [in] long Height, [in] long X1, [in] long Y1, [in] long X2, [in] long Y2);
      void drawChord([in] long nX, [in] long nY, [in] long nWidth, [in] long nHeight, [in] long nX1, [in] long nY1, [in] long nX2, [in] long nY2);
-     void drawGradient([in] long nX, [in] long nY, [in] long nWidth, [in] long Height, [in] ::com::sun::star::awt::Gradient aGradient);
+     void drawGradient([in] long nX, [in] long nY, [in] long nWidth, [in] long Height, [in] ::com::sun::star::awt::Gradient2 aGradient);
      void drawText([in] long X, [in] long Y, [in] string Text);
      void drawTextArray([in] long X, [in] long Y, [in] string Text, [in] sequence< long > Longs);
     };
@@ -2790,9 +2797,9 @@ module com {
      [property] ::com::sun::star::util::Color FillColor;
      [property] short FillTransparence;
      [property] string FillTransparenceGradientName;
-     [property, optional] ::com::sun::star::awt::Gradient FillTransparenceGradient;
+     [property, optional] ::com::sun::star::awt::Gradient2 FillTransparenceGradient;
      [property] string FillGradientName;
-     [property, optional] ::com::sun::star::awt::Gradient FillGradient;
+     [property, optional] ::com::sun::star::awt::Gradient2 FillGradient;
      [property] string FillHatchName;
      [property, optional] ::com::sun::star::drawing::Hatch FillHatch;
      [property] boolean FillBackground;
@@ -13923,7 +13930,7 @@ module com {
      [property, optional] string Title;
      [property, optional] string Description;
      [property, optional] ::com::sun::star::drawing::FillStyle FillStyle;
-     [property, optional] ::com::sun::star::awt::Gradient FillGradient;
+     [property, optional] ::com::sun::star::awt::Gradient2 FillGradient;
      [property, optional] string FillGradientName;
      [property, optional] short ShadowTransparence;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > FrameInteropGrabBag;

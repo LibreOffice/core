@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/SimpleFontMetric.idl>
 #include <com/sun/star/awt/FontDescriptor.idl>
 #include <com/sun/star/awt/RasterOperation.idl>
-#include <com/sun/star/awt/Gradient.idl>
+#include <com/sun/star/awt/Gradient2.idl>
 
 
 module com {  module sun {  module star {  module awt {
@@ -212,7 +212,7 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long nY,
              [in] long nWidth,
              [in] long Height,
-             [in] Gradient aGradient );
+             [in] Gradient2 aGradient );
 
     /** draws text in the output device.
      */

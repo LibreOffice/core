@@ -7288,7 +7288,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     eFS = com::sun::star::drawing::FillStyle_GRADIENT;
                     XGradient aXGradient(static_cast<const XFillGradientItem&>(pObj->GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
 
-                    com::sun::star::awt::Gradient aGradient;
+                    com::sun::star::awt::Gradient2 aGradient;
                     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
                     aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
                     aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();

@@ -21,12 +21,12 @@
 
 #include <com/sun/star/drawing/FillStyle.idl>
 #include <com/sun/star/util/Color.idl>
-#include <com/sun/star/awt/Gradient.idl>
+#include <com/sun/star/awt/Gradient2.idl>
 #include <com/sun/star/drawing/Hatch.idl>
 #include <com/sun/star/drawing/BitmapMode.idl>
 #include <com/sun/star/awt/XBitmap.idl>
 #include <com/sun/star/drawing/RectanglePoint.idl>
-
+#include <com/sun/star/awt/GradientStop.idl>
 
 
 module com { module sun { module star { module drawing {
@@ -62,7 +62,7 @@ published service FillProperties
 
     /** This describes the transparency of the fill area as a gradient.
     */
-    [optional, property] com::sun::star::awt::Gradient FillTransparenceGradient;
+    [optional, property] com::sun::star::awt::Gradient2 FillTransparenceGradient;
 
     /** If the property #FillStyle is set to
         FillStyle::GRADIENT, this is the name of the used fill
@@ -73,7 +73,7 @@ published service FillProperties
     /** If the property #FillStyle is set to
         FillStyle::GRADIENT, this describes the gradient used.
     */
-    [optional, property] com::sun::star::awt::Gradient FillGradient;
+    [optional, property] com::sun::star::awt::Gradient2 FillGradient;
 
     /** If the property #FillStyle is set to
         FillStyle::HATCH, this is the name of the used fill hatch
