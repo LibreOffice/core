@@ -63,10 +63,9 @@ public class JREProperties
 
 
             Properties p = System.getProperties();
-            Enumeration e = p.propertyNames();
-            while (e.hasMoreElements()) {
-                String sProp = (String) e.nextElement();
-                String sCompleteProp = sProp + "=" + p.getProperty(sProp);
+            Set<Map.Entry<Object,Object>> es = p.entrySet();
+            for (Map.Entry<Object,Object> e : es) {
+                String sCompleteProp = e.getKey() + "=" + e.getValue();
                 char[] arChars = new char[sCompleteProp.length()];
                 sCompleteProp.getChars(0, sCompleteProp.length(), arChars, 0);
                 for (int c = 0; c < arChars.length; c++) {
