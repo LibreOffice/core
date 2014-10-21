@@ -45,9 +45,6 @@ VendorSupportMapEntry gVendorMap[] ={
 #define END_VENDOR_MAP() \
     {NULL, NULL, NULL} };
 
-
-com::sun::star::uno::Sequence<OUString> getVendorNames();
-
 /* Examines if the vendor supplied in parameter sVendor is part of the
    list of supported vendors. That is the arry of VendorSupportMapEntry
    is search for an respective entry.

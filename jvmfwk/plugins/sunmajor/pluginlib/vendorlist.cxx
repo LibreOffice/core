@@ -53,27 +53,12 @@ BEGIN_VENDOR_MAP()
 END_VENDOR_MAP()
 
 
-Sequence<OUString> getVendorNames()
-{
-    const size_t count = sizeof(gVendorMap) / sizeof (VendorSupportMapEntry) - 1;
-    OUString arNames[count];
-    for ( size_t pos = 0; pos < count; ++pos )
-    {
-        OString sVendor(gVendorMap[pos].sVendorName);
-        arNames[pos] = OStringToOUString(sVendor, RTL_TEXTENCODING_UTF8);
-    }
-    return Sequence<OUString>(arNames, count);
-}
-
 bool isVendorSupported(const OUString& sVendor)
 {
-    Sequence<OUString> seqNames = getVendorNames();
-    const OUString * arNames = seqNames.getConstArray();
-    sal_Int32 count = seqNames.getLength();
-
-    for (int i = 0; i < count; i++)
+    const size_t count = sizeof(gVendorMap) / sizeof (VendorSupportMapEntry) - 1;
+    for ( size_t pos = 0; pos < count; ++pos )
     {
-        if (sVendor.equals(arNames[i]))
+        if (sVendor.equalsAscii(gVendorMap[pos].sVendorName))
             return true;
     }
 #if OSL_DEBUG_LEVEL >= 2
