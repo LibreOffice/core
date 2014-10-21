@@ -346,7 +346,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
             for ( sal_uInt16 nSVPos = 0; nSVPos < nCount; nSVPos++ )
             {
                 sal_uInt16 nItemId = pActMenu->GetItemId( nSVPos );
-                if ( pActMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
+                if ( pActMenu->GetItemType( nSVPos ) != MenuItemType::SEPARATOR )
                 {
                     if ( bShowMenuImages )
                     {

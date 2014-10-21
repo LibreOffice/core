@@ -59,7 +59,7 @@ struct MenuItemData
 
     MenuItemData()
         : nId(0)
-        , eType(MENUITEM_DONTKNOW)
+        , eType(MenuItemType::DONTKNOW)
         , nBits(0)
         , pSubMenu(NULL)
         , pAutoSubMenu(NULL)
@@ -75,7 +75,7 @@ struct MenuItemData
     }
     MenuItemData( const OUString& rStr, const Image& rImage )
         : nId(0)
-        , eType(MENUITEM_DONTKNOW)
+        , eType(MenuItemType::DONTKNOW)
         , nBits(0)
         , pSubMenu(NULL)
         , pAutoSubMenu(NULL)

@@ -345,7 +345,7 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int32 i )
             // create a new child
             OAccessibleMenuBaseComponent* pChild;
 
-            if ( m_pMenu->GetItemType( (sal_uInt16)i ) == MENUITEM_SEPARATOR )
+            if ( m_pMenu->GetItemType( (sal_uInt16)i ) == MenuItemType::SEPARATOR )
             {
                 pChild = new VCLXAccessibleMenuSeparator( m_pMenu, (sal_uInt16)i );
             }

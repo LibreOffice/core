@@ -28,7 +28,6 @@
 #include <rscstr.hxx>
 #include <rscarray.hxx>
 #include <rscdef.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
 
 #include <vector>
 #include <map>
@@ -37,6 +36,9 @@ class RscError;
 class RscTupel;
 class RscCont;
 class RscCmdLine;
+enum class SymbolType : sal_uInt16;
+enum class ToolBoxItemBits;
+enum class WindowBorderStyle : sal_uInt16;
 
 struct WriteRcContext
 {

@@ -501,7 +501,7 @@ void MenuFloatingWindow::MouseButtonUp( const MouseEvent& rMEvt )
     // as it will be too late after EndExecute
     sal_uInt16 _nMBDownPos = nMBDownPos;
     nMBDownPos = ITEMPOS_INVALID;
-    if ( pData && pData->bEnabled && ( pData->eType != MENUITEM_SEPARATOR ) )
+    if ( pData && pData->bEnabled && ( pData->eType != MenuItemType::SEPARATOR ) )
     {
         if ( !pData->pSubMenu )
         {
@@ -731,7 +731,7 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
         if ( n == nPos )
         {
             DBG_ASSERT( pMenu->ImplIsVisible( n ), "Highlight: Item not visible!" );
-            if ( pData->eType != MENUITEM_SEPARATOR )
+            if ( pData->eType != MenuItemType::SEPARATOR )
             {
                 bool bRestoreLineColor = false;
                 Color oldLineColor;
@@ -824,7 +824,7 @@ Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
         if ( n == nPos )
         {
             DBG_ASSERT( pMenu->ImplIsVisible( n ), "ImplGetItemRect: Item not visible!" );
-            if ( pData->eType != MENUITEM_SEPARATOR )
+            if ( pData->eType != MenuItemType::SEPARATOR )
             {
                 aRect = Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) );
                 if ( pData->nBits & MIB_POPUPSELECT )
@@ -899,7 +899,7 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
 
         MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
         if ( ( pData->bEnabled || !rSettings.GetSkipDisabledInMenus() )
-              && ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) && pMenu->ImplIsSelectable( n ) )
+              && ( pData->eType != MenuItemType::SEPARATOR ) && pMenu->ImplIsVisible( n ) && pMenu->ImplIsSelectable( n ) )
         {
             // Is selection in visible area?
             if ( IsScrollMenu() )
