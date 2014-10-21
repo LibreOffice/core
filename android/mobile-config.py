@@ -14,7 +14,6 @@
 import sys
 import xml.etree.ElementTree as ET
 
-
 main_xcd_discard = [
     'org.openoffice.Office/TableWizard', # huge
 
@@ -75,12 +74,10 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/Category',
     ]
 
-
 if __name__ == '__main__':
     tree = ET.parse(sys.argv[1])
     root = tree.getroot()
 
-    print "Foo\n"
     saved = 0
     total = 0
     for child in root:
@@ -96,4 +93,3 @@ if __name__ == '__main__':
 
     print "saved %d of %d bytes: %2.f%%" % (saved, total, saved*100.0/total)
     tree.write(sys.argv[2], 'UTF-8', True)
-
