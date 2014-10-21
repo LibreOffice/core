@@ -152,7 +152,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     ensurePrepared();
 
     if(!m_xMetaData.is())
-        m_xMetaData = new OResultSetMetaData(m_pConnection, m_pOutSqlda);
+        m_xMetaData = new OResultSetMetaData(m_pConnection.get(), m_pOutSqlda);
 
     return m_xMetaData;
 }
@@ -239,7 +239,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
     MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-    return Reference< XConnection >(m_pConnection);
+    return Reference<XConnection>(m_pConnection.get());
 }
 
 sal_Bool SAL_CALL OPreparedStatement::execute()
@@ -282,7 +282,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
         evaluateStatusVector(m_statusVector, "isc_dsql_execute", *this);
     }
 
-    m_xResultSet = new OResultSet(m_pConnection,
+    m_xResultSet = new OResultSet(m_pConnection.get(),
                                   m_aMutex,
                                   uno::Reference< XInterface >(*this),
                                   m_aStatementHandle,

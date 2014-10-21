@@ -60,7 +60,7 @@ namespace connectivity
 
             ::std::list< ::rtl::OUString>               m_aBatchList;
 
-            Connection*                                 m_pConnection;
+            ::rtl::Reference<Connection>                m_pConnection;
 
             ISC_STATUS_ARRAY                            m_statusVector;
             isc_stmt_handle                             m_aStatementHandle;
@@ -135,9 +135,6 @@ namespace connectivity
             virtual void SAL_CALL cancel(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XCloseable
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-            // other methods
-            Connection* getOwnConnection() const { return m_pConnection;}
 
         };
     }

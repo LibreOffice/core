@@ -79,6 +79,7 @@ namespace connectivity
             sal_Int32 m_nResultSetConcurrency;
 
         protected:
+            // Connection kept alive by m_xStatement
             Connection* m_pConnection;
             ::osl::Mutex& m_rMutex;
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& m_xStatement;

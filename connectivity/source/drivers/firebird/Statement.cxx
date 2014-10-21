@@ -125,7 +125,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
     if (aErr)
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed");
 
-    m_xResultSet = new OResultSet(m_pConnection,
+    m_xResultSet = new OResultSet(m_pConnection.get(),
                                   m_aMutex,
                                   uno::Reference< XInterface >(*this),
                                   m_aStatementHandle,
@@ -162,7 +162,7 @@ uno::Reference< XConnection > SAL_CALL OStatement::getConnection()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-    return uno::Reference< XConnection >(m_pConnection);
+    return uno::Reference<XConnection>(m_pConnection.get());
 }
 
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)

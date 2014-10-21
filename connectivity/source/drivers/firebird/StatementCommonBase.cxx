@@ -51,7 +51,6 @@ OStatementCommonBase::OStatementCommonBase(Connection* _pConnection)
       m_aStatementHandle( 0 ),
       rBHelper(OStatementCommonBase_Base::rBHelper)
 {
-    m_pConnection->acquire();
 }
 
 OStatementCommonBase::~OStatementCommonBase()
