@@ -471,7 +471,7 @@ PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
     if( nOffset >= 0 && nOffset < EPP_LAYOUT_SIZE )
         return pPHLayout[ nOffset ];
 
-    DBG(printf("asked %" SAL_PRIdINT32 " for layout outside of 0,%d array scope\n", nOffset, EppLayout::SIZE ));
+    DBG(printf("asked %" SAL_PRIdINT32 " for layout outside of 0,%d array scope\n", nOffset, EPP_LAYOUT_SIZE ));
 
     return pPHLayout[ 0 ];
 }
