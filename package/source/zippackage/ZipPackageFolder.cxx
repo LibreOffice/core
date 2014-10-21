@@ -337,7 +337,8 @@ void ZipPackageFolder::saveContents(
 
         try
         {
-            rZipOut.putNextEntry( *pTempEntry );
+            ZipOutputStream::setEntry(pTempEntry);
+            rZipOut.writeLOC(pTempEntry);
             rZipOut.rawCloseEntry();
         }
         catch ( ZipException& )
