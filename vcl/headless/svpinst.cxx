@@ -240,12 +240,18 @@ SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics
 
 #else
 #if HAVE_VCL_OPEN_GL_BACKEND
-SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* /* pGraphics */,
-                                                      long /* nDX */, long /*nDY*/,
-                                                      sal_uInt16 /* nBitCount */,
-                                                      const SystemGraphicsData* /* pData */ )
+SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+                                                      long nDX, long nDY,
+                                                      sal_uInt16 nBitCount,
+                                                      const SystemGraphicsData* pData )
 {
-    return nullptr;
+    OpenGLSalVirtualDevice * pNew = new OpenGLSalVirtualDevice(pGraphics,
+                                                               nDX,
+                                                               nDY,
+                                                               nBitCount,
+                                                               pData);
+    pNew->SetSize( nDX, nDY );
+    return pNew;
 }
 #endif
 #endif

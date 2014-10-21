@@ -37,7 +37,7 @@ class OpenGLSalGraphics;
 class OpenGLSalVirtualDevice : public SalVirtualDevice
 {
 public:
-    OpenGLSalVirtualDevice( OpenGLSalGraphics* /* pGraphic */, long /* nDX */, long /* nDY */, sal_uInt16 /* nBitCount */, const SystemGraphicsData * /* pData */ ){}
+    OpenGLSalVirtualDevice( SalGraphics* /* pGraphic */, long /* nDX */, long /* nDY */, sal_uInt16 /* nBitCount */, const SystemGraphicsData * /* pData */ ){}
     virtual ~OpenGLSalVirtualDevice() {}
 
     virtual SalGraphics*            AcquireGraphics() SAL_OVERRIDE

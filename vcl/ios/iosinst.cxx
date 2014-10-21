@@ -35,6 +35,16 @@
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
+#if HAVE_VCL_OPEN_GL_BACKEND
+#include "headless/svpinst.hxx"
+#include "opengl/saldata.hxx"
+#define SAL_INST OpenGLSalInstance
+#define SAL_DATA OpenGLSalData
+#else
+#define SAL_INST IosSalInstance
+#define SAL_DATA IosSalData
+#endif
+
 // Horrible hack
 static int viewWidth = 1, viewHeight = 1;
 
@@ -217,8 +227,8 @@ SalData::~SalData()
 // This is our main entry point:
 SalInstance *CreateSalInstance()
 {
-    IosSalInstance* pInstance = new IosSalInstance( new SalYieldMutex() );
-    new IosSalData( pInstance );
+    SAL_INST* pInstance = new SAL_INST( new SalYieldMutex() );
+    new SAL_DATA( pInstance );
     pInstance->AcquireYieldMutex(1);
     ImplGetSVData()->maWinData.mbNoSaveBackground = true;
     return pInstance;

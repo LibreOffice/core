@@ -20,9 +20,49 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_SALGDI_H
 #define INCLUDED_VCL_INC_OPENGL_SALGDI_H
 
+#include "PhysicalFontCollection.hxx"
 
 #include "salgdi.hxx"
 #include <vcl/sysdata.hxx>
+
+static ImplDevFontAttributes & lcl_getImplDevFontAttributes()
+{
+    static ImplDevFontAttributes rDFA;
+    rDFA.mbOrientation = true;
+    rDFA.mbDevice      = true;
+    rDFA.mnQuality     = 0;
+    rDFA.SetFamilyType( FAMILY_DONTKNOW );
+    rDFA.SetPitch( PITCH_VARIABLE );
+    rDFA.SetWidthType( WIDTH_NORMAL );
+    rDFA.SetWeight( WEIGHT_NORMAL );
+    rDFA.SetItalic( ITALIC_NORMAL );
+    rDFA.SetSymbolFlag( false );
+    rDFA.mbEmbeddable = false;
+    rDFA.mbSubsettable = true;
+    rDFA.SetFamilyName("openGLFamily");
+    rDFA.SetStyleName("openGLStyle");
+    return rDFA;
+}
+
+class OpenGLFont : public PhysicalFontFace
+{
+public:
+    OpenGLFont() : PhysicalFontFace(lcl_getImplDevFontAttributes(),
+                                    1) {}
+    virtual ~OpenGLFont() {}
+    PhysicalFontFace*               Clone() const SAL_OVERRIDE
+    {
+        return new OpenGLFont;
+    }
+    ImplFontEntry*                  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE
+    {
+        return nullptr;
+    }
+    sal_IntPtr                      GetFontId() const SAL_OVERRIDE
+    {
+        return 1;
+    }
+};
 
 class OpenGLSalGraphics : public SalGraphics
 {
@@ -195,7 +235,11 @@ public:
         return false;
     }
     // graphics must fill supplied font list
-    virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE {}
+    virtual void            GetDevFontList( PhysicalFontCollection* pFontCollection) SAL_OVERRIDE
+    {
+        pFontCollection->Add(new OpenGLFont);
+
+    }
     // graphics must drop any cached font info
     virtual void            ClearDevFontCache() SAL_OVERRIDE {}
     virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& /* rFileURL */, const OUString& /* rFontName */ ) SAL_OVERRIDE

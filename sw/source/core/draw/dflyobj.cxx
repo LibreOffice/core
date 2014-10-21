@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "hintids.hxx"
 #include <svx/svdtrans.hxx>
 #include <editeng/protitem.hxx>
@@ -469,7 +471,9 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
             // if there's no viewport set, all fly-frames will be painted,
             // which is slow, wastes memory, and can cause other trouble.
             (void) rViewInformation; // suppress "unused parameter" warning
+#if !HAVE_VCL_OPEN_GL_BACKEND
             assert(!rViewInformation.getViewport().isEmpty());
+#endif
             if ( !pFlyFrm->IsFlyInCntFrm() )
             {
                 // it is also necessary to restore the VCL MapMode from ViewInformation since e.g.
