@@ -445,21 +445,9 @@ void SalGraphics::CopyArea( long nDestX, long nDestY,
     copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
 }
 
-void SalGraphics::CopyBits( const SalTwoRect& rPosAry,
-                            SalGraphics* pSrcGraphics, const OutputDevice *pOutDev, const OutputDevice *pSrcOutDev )
+void SalGraphics::CopyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
-    if( ( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) ) ||
-        (pSrcGraphics && ( (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)  || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) ) ) )
-    {
-        SalTwoRect aPosAry2 = rPosAry;
-        if( (pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)) || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) )
-            mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcOutDev );
-        if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-            mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
-        copyBits( aPosAry2, pSrcGraphics );
-    }
-    else
-        copyBits( rPosAry, pSrcGraphics );
+    copyBits( rPosAry, pSrcGraphics );
 }
 
 void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,

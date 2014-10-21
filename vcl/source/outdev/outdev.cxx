@@ -563,7 +563,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         AdjustTwoRect( aPosAry, aSrcOutRect );
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
-            mpGraphics->CopyBits( aPosAry, NULL, this, NULL );
+            CopyBits( aPosAry, NULL, NULL );
     }
 
     if( mpAlphaVDev )
@@ -709,6 +709,27 @@ void OutputDevice::CopyArea( long nDestX, long nDestY,
     mpGraphics->CopyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
 }
 
+void OutputDevice::CopyBits( const SalTwoRect& rPosAry,
+                             SalGraphics* pSrcGraphics, const OutputDevice *pSrcOutDev )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
+
+    if( ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() ) ||
+        (pSrcGraphics && ( (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)  || (pSrcOutDev && pSrcOutDev->IsRTLEnabled()) ) ) )
+    {
+        SalTwoRect aPosAry2 = rPosAry;
+        if( (pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL)) || pSrcOutDev->IsRTLEnabled() )
+            pSrcOutDev->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth );
+        if( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+            mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth );
+        mpGraphics->CopyBits( aPosAry2, pSrcGraphics );
+    }
+    else
+    {
+        mpGraphics->CopyBits( rPosAry, pSrcGraphics );
+    }
+}
 
 // Direct OutputDevice drawing protected function
 
@@ -719,7 +740,7 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
 
     aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
     aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
-    mpGraphics->CopyBits(aPosAry, NULL, this, NULL);
+    CopyBits(aPosAry, NULL, NULL);
 }
 
 // Direct OutputDevice drawing private function
@@ -782,10 +803,10 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect
         {
             SalTwoRect aPosAry2 = rPosAry;
             pGraphics2->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
-            mpGraphics->CopyBits( aPosAry2, pGraphics2, this, pSrcDev );
+            CopyBits( aPosAry2, pGraphics2, pSrcDev );
         }
         else
-            mpGraphics->CopyBits( rPosAry, pGraphics2, this, pSrcDev );
+            CopyBits( rPosAry, pGraphics2, pSrcDev );
     }
 }
 

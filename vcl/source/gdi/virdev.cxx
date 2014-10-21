@@ -358,7 +358,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                 aPosAry.mnDestWidth  = nWidth;
                 aPosAry.mnDestHeight = nHeight;
 
-                pGraphics->CopyBits( aPosAry, mpGraphics, this, this );
+                CopyBits( aPosAry, pGraphics, this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ReleaseGraphics();
                 delete mpVirDev;
