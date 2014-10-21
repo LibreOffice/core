@@ -40,7 +40,7 @@ enum SvxGradientStyle
 struct XFillGradient
 {
     String              Name            MID_NAME;
-    //  com::sun::star::awt::Gradient
+    //  com::sun::star::awt::Gradient2
     SvxGradientStyle    Style           MID_GRADIENT_STYLE;
     INT32               StartColor      MID_GRADIENT_STARTCOLOR;
     INT32               EndColor        MID_GRADIENT_ENDCOLOR;

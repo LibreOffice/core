@@ -22,6 +22,8 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/tools/gradienttools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vector>
+#include <tuple>
 
 namespace drawinglayer
 {
@@ -80,6 +82,23 @@ namespace drawinglayer
         {
         }
 
+        GeoTexSvxGradient::GeoTexSvxGradient(
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::BColor& rStart,
+            const basegfx::BColor& rEnd,
+            sal_uInt32 /* nSteps */,
+            double fBorder,
+            std::vector< std::tuple< double, Color > > aGradStops)
+        :   GeoTexSvx(),
+            maGradientInfo(),
+            maDefinitionRange(rDefinitionRange),
+            maStart(rStart),
+            maEnd(rEnd),
+            mfBorder(fBorder),
+            maGradientStops(aGradStops)
+        {
+        }
+
         GeoTexSvxGradient::~GeoTexSvxGradient()
         {
         }
@@ -132,6 +151,37 @@ namespace drawinglayer
             }
         }
 
+        GeoTexSvxGradientLinear::GeoTexSvxGradientLinear(
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::B2DRange& rOutputRange,
+            const basegfx::BColor& rStart,
+            const basegfx::BColor& rEnd,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle,
+            std::vector< std::tuple< double, Color > > aGradStops)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder, aGradStops),
+            mfUnitMinX(0.0),
+            mfUnitWidth(1.0),
+            mfUnitMaxY(1.0)
+        {
+            maGradientInfo = basegfx::tools::createLinearODFGradientInfo(
+                rDefinitionRange,
+                nSteps,
+                fBorder,
+                fAngle);
+
+            if(rDefinitionRange != rOutputRange)
+            {
+                basegfx::B2DRange aInvOutputRange(rOutputRange);
+
+                aInvOutputRange.transform(maGradientInfo.getBackTextureTransform());
+                mfUnitMinX = aInvOutputRange.getMinX();
+                mfUnitWidth = aInvOutputRange.getWidth();
+                mfUnitMaxY = aInvOutputRange.getMaxY();
+            }
+        }
+
         GeoTexSvxGradientLinear::~GeoTexSvxGradientLinear()
         {
         }
@@ -156,29 +206,63 @@ namespace drawinglayer
                 aPattern.scale(mfUnitWidth, 1.0);
                 aPattern.translate(mfUnitMinX, 0.0);
 
-                for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
+                std::vector< std::tuple< double, Color > > aGradStops =  maGradientStops;
+
+                if(0 == maGradientStops.size())
                 {
-                    const double fPos(fStripeWidth * a);
-                    basegfx::B2DHomMatrix aNew(aPattern);
-
-                    // scale and translate in Y
-                    double fHeight(1.0 - fPos);
-
-                    if(a + 1 == maGradientInfo.getSteps() && mfUnitMaxY > 1.0)
+                    for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                     {
-                        fHeight += mfUnitMaxY - 1.0;
+                        const double fPos(fStripeWidth * a);
+                        basegfx::B2DHomMatrix aNew(aPattern);
+
+                        // scale and translate in Y
+                        double fHeight(1.0 - fPos);
+
+                        if(a + 1 == maGradientInfo.getSteps() && mfUnitMaxY > 1.0)
+                        {
+                            fHeight += mfUnitMaxY - 1.0;
+                        }
+
+                        aNew.scale(1.0, fHeight);
+                        aNew.translate(0.0, fPos);
+
+                        // set at target
+                        aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+
+                        // interpolate and set color
+                        aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+
+                        rEntries.push_back(aB2DHomMatrixAndBColor);
                     }
+                }
 
-                    aNew.scale(1.0, fHeight);
-                    aNew.translate(0.0, fPos);
+                else
+                {
+                    // MultiStop Gradient
+                    double allStripes = 0;
+                    for(sal_uInt32 i(1); i < aGradStops.size(); i++)
+                    {
+                        basegfx::BColor aStart = std::get<1>(aGradStops[i-1]).getBColor();
+                        basegfx::BColor aEnd = std::get<1>(aGradStops[i]).getBColor();
 
-                    // set at target
-                    aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+                        sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
+                        double fStopPos = (100 - std::get<0>(aGradStops[i-1])) - (100 - std::get<0>(aGradStops[i]));
 
-                    // interpolate and set color
-                    aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
+                        const double fStripeWidthGrad ( (1.0*fStopPos) / (nMaxSteps * 100.0) );
 
-                    rEntries.push_back(aB2DHomMatrixAndBColor);
+                        for(sal_uInt32 a(1); a < nMaxSteps; a++)
+                        {
+                            allStripes += fStripeWidthGrad;
+                            basegfx::B2DHomMatrix aNew(aPattern);
+                            double fHeight(1.0 - allStripes);
+                            aNew.scale(1.0, fHeight);
+                            aNew.translate(0.0, allStripes);
+
+                            aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * aNew;
+                            aB2DHomMatrixAndBColor.maBColor = interpolate(aStart, aEnd, double(a) / double(nMaxSteps - 1));
+                            rEntries.push_back(aB2DHomMatrixAndBColor);
+                        }
+                    }
                 }
             }
         }

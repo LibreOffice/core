@@ -25,7 +25,8 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
+#include <com/sun/star/awt/GradientStop.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -338,7 +339,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 {
                     sal_Int32 nEndTrans     = 0;
                     sal_Int32 nStartTrans   = 0;
-                    awt::Gradient aGradient;
+                    awt::Gradient2 aGradient;
                     aGradient.Angle = 900;
                     aGradient.StartIntensity = 100;
                     aGradient.EndIntensity = 100;
@@ -437,13 +438,22 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
                         SAL_INFO("oox.drawingml.gradient", "symmetric: " << (bSymmetric ? "YES" : "NO") <<
                                  ", number of stops: " << aGradientStops.size());
+
+                        uno::Sequence<css::awt::GradientStop> aAwtGradStops(aGradientStops.size());
                         for (GradientFillProperties::GradientStopMap::iterator p(aGradientStops.begin());
                              p != aGradientStops.end();
                              ++p)
+                        {
                             SAL_INFO("oox.drawingml.gradient", "  " << std::distance(aGradientStops.begin(), p) << ": " <<
                                      p->first << ": " <<
                                      std::hex << p->second.getColor( rGraphicHelper, nPhClr ) << std::dec <<
                                      "@" << (100-p->second.getTransparency()) << "%");
+
+
+                            css::awt::GradientStop aGradStop(p->first*100,p->second.getColor( rGraphicHelper, nPhClr ));
+                            aAwtGradStops[std::distance(aGradientStops.begin(), p)] = aGradStop;
+
+                        }
 
                         // Now estimate the simple LO style gradient (only two stops, at n% and 100%, where n ==
                         // the "border") that best emulates the gradient between begin() and prior(end()).
@@ -568,6 +578,8 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                             nEndTrans = aEndColor.getTransparency()*255/100;
 
                         aGradient.Border = rtl::math::round(100*nBorder);
+
+                        aGradient.GradientStops = aAwtGradStops;
                     }
 
                     // push gradient or named gradient to property map
@@ -577,7 +589,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     // push gradient transparency to property map
                     if( nStartTrans != 0 || nEndTrans != 0 )
                     {
-                        awt::Gradient aGrad(aGradient);
+                        awt::Gradient2 aGrad(aGradient);
                         uno::Any aVal;
                         aGrad.EndColor = (sal_Int32)( nEndTrans | nEndTrans << 8 | nEndTrans << 16 );
                         aGrad.StartColor = (sal_Int32)( nStartTrans | nStartTrans << 8 | nStartTrans << 16 );

@@ -19,7 +19,7 @@
 
 #include "oox/drawingml/shapepropertymap.hxx"
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -164,9 +164,9 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
         return setAnyProperty( nPropId, rValue );
 
     // create named gradient and push its name
-    if( rValue.has< awt::Gradient >() )
+    if( rValue.has< awt::Gradient2 >() )
     {
-        OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< awt::Gradient >() );
+        OUString aGradientName = mrModelObjHelper.insertFillGradient( rValue.get< awt::Gradient2 >() );
         return !aGradientName.isEmpty() && setProperty( nPropId, aGradientName );
     }
 
@@ -176,9 +176,9 @@ bool ShapePropertyMap::setFillGradient( sal_Int32 nPropId, const Any& rValue )
 bool ShapePropertyMap::setGradientTrans( sal_Int32 nPropId, const Any& rValue )
 {
     // create named gradient and push its name
-    if( rValue.has< awt::Gradient >() )
+    if( rValue.has< awt::Gradient2 >() )
     {
-        OUString aGradientName = mrModelObjHelper.insertTransGrandient( rValue.get< awt::Gradient >() );
+        OUString aGradientName = mrModelObjHelper.insertTransGrandient( rValue.get< awt::Gradient2 >() );
         return !aGradientName.isEmpty()  && setProperty( nPropId, aGradientName );
     }
 

@@ -20,7 +20,7 @@
 #define com_sun_star_chart2_DataPointProperties_idl
 
 #include <com/sun/star/beans/PropertySet.idl>
-#include <com/sun/star/awt/Gradient.idl>
+#include <com/sun/star/awt/Gradient2.idl>
 #include <com/sun/star/style/XStyle.idl>
 #include <com/sun/star/drawing/Hatch.idl>
 #include <com/sun/star/drawing/LineDash.idl>
@@ -89,8 +89,8 @@ service DataPointProperties
 
     /** This describes the transparency of the fill area as a gradient.
     */
-    [optional, property] ::com::sun::star::awt::Gradient        TransparencyGradient;
-    [optional, property] ::com::sun::star::awt::Gradient        Gradient;
+    [optional, property] ::com::sun::star::awt::Gradient2        TransparencyGradient;
+    [optional, property] ::com::sun::star::awt::Gradient2        Gradient;
     [optional, property] ::com::sun::star::drawing::Hatch       Hatch;
 
     [property] string TransparencyGradientName;

@@ -98,9 +98,19 @@ Image Tools::GetImage (
 
 
 
-css::awt::Gradient Tools::VclToAwtGradient (const Gradient aVclGradient)
+css::awt::Gradient2 Tools::VclToAwtGradient (const Gradient aVclGradient)
 {
-    css::awt::Gradient aAwtGradient (
+
+    std::vector< std::tuple< double, Color >> aVclGradStops = aVclGradient.GetGradientStops();
+    uno::Sequence<css::awt::GradientStop> aAwtGradStops(aVclGradStops.size());
+
+    for (sal_uInt32 i(0); i < aVclGradStops.size(); i++)
+    {
+        css::awt::GradientStop aGS(std::get<0>(aVclGradStops[i]), std::get<1>(aVclGradStops[i]).GetRGBColor());
+        aAwtGradStops[i] = aGS;
+    }
+
+    css::awt::Gradient2 aAwtGradient (
         awt::GradientStyle(aVclGradient.GetStyle()),
         aVclGradient.GetStartColor().GetRGBColor(),
         aVclGradient.GetEndColor().GetRGBColor(),
@@ -110,15 +120,24 @@ css::awt::Gradient Tools::VclToAwtGradient (const Gradient aVclGradient)
         aVclGradient.GetOfsY(),
         aVclGradient.GetStartIntensity(),
         aVclGradient.GetEndIntensity(),
-        aVclGradient.GetSteps());
+        aVclGradient.GetSteps(),
+        aAwtGradStops);
     return aAwtGradient;
 }
 
 
 
 
-Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
+Gradient Tools::AwtToVclGradient (const css::awt::Gradient2 aAwtGradient)
 {
+    std::vector< std::tuple< double, Color >> aVclGradStops;
+    uno::Sequence<css::awt::GradientStop> aAwtGradStop = aAwtGradient.GradientStops;
+    for (sal_Int32 i(0); i < aAwtGradStop.getLength();i++)
+    {
+        aVclGradStops.push_back(std::make_tuple(aAwtGradStop[i].RelativePosition,aAwtGradStop[i].Color));
+    }
+
+
     Gradient aVclGradient (
         GradientStyle(aAwtGradient.Style),
         aAwtGradient.StartColor,
@@ -130,6 +149,7 @@ Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
     aVclGradient.SetStartIntensity(aAwtGradient.StartIntensity);
     aVclGradient.SetEndIntensity(aAwtGradient.EndIntensity);
     aVclGradient.SetSteps(aAwtGradient.StepCount);
+    aVclGradient.SetGradientStops(aVclGradStops);
 
     return aVclGradient;
 }

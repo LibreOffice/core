@@ -444,6 +444,7 @@ namespace drawinglayer
                             const sal_uInt16 nEndIntens(aXGradient.GetEndIntens());
                             basegfx::BColor aEnd(aEndColor.getBColor());
 
+
                             if(nEndIntens != 100)
                             {
                                 const basegfx::BColor aBlack;
@@ -458,7 +459,8 @@ namespace drawinglayer
                                 (double)aXGradient.GetAngle() * F_PI1800,
                                 aStart,
                                 aEnd,
-                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue());
+                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue(),
+                                aXGradient.GetGradientStops());
 
                             break;
                         }

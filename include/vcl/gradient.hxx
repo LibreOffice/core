@@ -25,7 +25,8 @@
 #include <tools/color.hxx>
 
 #include <vcl/vclenum.hxx>
-
+#include <vector>
+#include <tuple>
 
 // - Impl_Gradient -
 
@@ -48,6 +49,7 @@ public:
     sal_uInt16          mnIntensityStart;
     sal_uInt16          mnIntensityEnd;
     sal_uInt16          mnStepCount;
+    std::vector< std::tuple< double, Color > > maGradStops;
 
     friend SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImplGradient );
     friend SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImplGradient );
@@ -99,6 +101,9 @@ public:
 
     void            SetSteps( sal_uInt16 nSteps );
     sal_uInt16          GetSteps() const { return mpImplGradient->mnStepCount; }
+
+    void SetGradientStops(std::vector< std::tuple< double, Color > > aGradientStops)   { mpImplGradient->maGradStops = aGradientStops; }
+    std::vector< std::tuple< double, Color >>  GetGradientStops() const  { return mpImplGradient->maGradStops; }
 
     void            GetBoundRect( const Rectangle& rRect, Rectangle &rBoundRect, Point& rCenter ) const;
 

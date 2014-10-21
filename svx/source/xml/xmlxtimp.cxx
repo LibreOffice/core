@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -488,7 +488,7 @@ SvXMLImportContext *SvxXMLXTableImport::CreateContext( sal_uInt16 nPrefix, const
         }
         else if ( rLocalName == "gradient-table" )
         {
-            if( aType == cppu::UnoType<awt::Gradient>::get())
+            if( aType == cppu::UnoType<awt::Gradient2>::get())
                 return new SvxXMLTableImportContext( *this, nPrefix, rLocalName, xAttrList, stice_gradient, mrTable, bOOoFormat );
         }
         else if ( rLocalName == "bitmap-table" )

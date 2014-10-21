@@ -19,7 +19,7 @@
 
 #include "WrappedIgnoreProperty.hxx"
 #include "macros.hxx"
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -99,9 +99,9 @@ void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( 
     rList.push_back( new WrappedIgnoreProperty( "FillColor", uno::makeAny( sal_Int32(-1) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillTransparence", uno::makeAny( sal_Int16(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradientName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradient", uno::makeAny( awt::Gradient() ) ) );
+//    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradient", uno::makeAny( awt::Gradient2() ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillGradientName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillGradient", uno::makeAny( awt::Gradient() ) ) );
+//    rList.push_back( new WrappedIgnoreProperty( "FillGradient", uno::makeAny( awt::Gradient2() ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillHatchName", uno::makeAny( OUString() ) ) );
 //    rList.push_back( new WrappedIgnoreProperty( "FillHatch", uno::makeAny( drawing::Hatch() ) ) );
     rList.push_back( new WrappedIgnoreProperty( "FillBackground", uno::makeAny( false ) ) );

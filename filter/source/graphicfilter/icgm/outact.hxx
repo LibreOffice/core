@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_OUTACT_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_ICGM_OUTACT_HXX
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -56,7 +56,7 @@ class CGMOutAct
         sal_uInt8*                  mpFlags;
         Point*                  mpPoints;
         tools::PolyPolygon             maPolyPolygon;
-        ::com::sun::star::awt::Gradient*            mpGradient;
+        ::com::sun::star::awt::Gradient2*            mpGradient;
 
         CGM*                    mpCGM;
 

@@ -34,7 +34,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -320,7 +320,7 @@ sal_uInt32 DrawingML::ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensi
         | ( ( ( ( ( nColor & 0xff0000 ) >> 8 ) * nIntensity ) / 100 ) << 8 );
 }
 
-bool DrawingML::EqualGradients( awt::Gradient aGradient1, awt::Gradient aGradient2 )
+bool DrawingML::EqualGradients( awt::Gradient2 aGradient1, awt::Gradient2 aGradient2 )
 {
     return aGradient1.Style == aGradient2.Style &&
             aGradient1.StartColor == aGradient2.StartColor &&
@@ -336,13 +336,13 @@ bool DrawingML::EqualGradients( awt::Gradient aGradient1, awt::Gradient aGradien
 
 void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
 {
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     if( GETA( FillGradient ) )
     {
-        aGradient = *static_cast< const awt::Gradient* >( mAny.getValue() );
+        aGradient = *static_cast< const awt::Gradient2* >( mAny.getValue() );
 
         // get InteropGrabBag and search the relevant attributes
-        awt::Gradient aOriginalGradient;
+        awt::Gradient2 aOriginalGradient;
         Sequence< PropertyValue > aGradientStops;
         if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
         {
@@ -375,7 +375,7 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
     }
 }
 
-void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGradientStops, awt::Gradient rGradient )
+void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGradientStops, awt::Gradient2 rGradient )
 {
     // write back the original gradient
     mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
@@ -428,7 +428,7 @@ void DrawingML::WriteGrabBagGradientFill( const Sequence< PropertyValue >& aGrad
                            FSEND );
 }
 
-void DrawingML::WriteGradientFill( awt::Gradient rGradient )
+void DrawingML::WriteGradientFill( awt::Gradient2 rGradient )
 {
     switch( rGradient.Style )
     {

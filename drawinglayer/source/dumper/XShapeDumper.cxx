@@ -34,7 +34,7 @@ namespace {
 // FUNCTION DECLARATIONS
 
 // auxiliary functions
-void dumpGradientProperty(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
+void dumpGradientProperty(com::sun::star::awt::Gradient2 aGradient, xmlTextWriterPtr xmlWriter);
 void dumpPolyPolygonBezierCoords(com::sun::star::drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
 void dumpPointSequenceSequence(const com::sun::star::drawing::PointSequenceSequence& aPointSequenceSequence, uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
 void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter);
@@ -44,9 +44,9 @@ void dumpFillStyleAsAttribute(com::sun::star::drawing::FillStyle eFillStyle, xml
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceGradientNameAsAttribute(const OUString& sTranspGradName, xmlTextWriterPtr xmlWriter);
-void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter);
+void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient2 aTranspGrad, xmlTextWriterPtr xmlWriter);
 void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr xmlWriter);
-void dumpFillGradientAsElement(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
+void dumpFillGradientAsElement(com::sun::star::awt::Gradient2 aGradient, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(com::sun::star::drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapAsElement(com::sun::star::uno::Reference<com::sun::star::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
@@ -217,8 +217,8 @@ void dumpFillTransparenceGradientNameAsAttribute(const OUString& sTranspGradName
         OUStringToOString(sTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-//because there's more awt::Gradient properties to dump
-void dumpGradientProperty(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
+//because there's more awt::Gradient2 properties to dump
+void dumpGradientProperty(awt::Gradient2 aGradient, xmlTextWriterPtr xmlWriter)
 {
     switch(aGradient.Style)   //enum GradientStyle
     {
@@ -254,7 +254,7 @@ void dumpGradientProperty(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stepCount"), "%" SAL_PRIdINT32, (sal_Int32) aGradient.StepCount);
 }
 
-void dumpFillTransparenceGradientAsElement(awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter)
+void dumpFillTransparenceGradientAsElement(awt::Gradient2 aTranspGrad, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillTransparenceGradient" ));
     dumpGradientProperty(aTranspGrad, xmlWriter);
@@ -267,7 +267,7 @@ void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr
         OUStringToOString(sGradName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpFillGradientAsElement(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
+void dumpFillGradientAsElement(awt::Gradient2 aGradient, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "FillGradient" ));
     dumpGradientProperty(aGradient, xmlWriter);
@@ -1404,7 +1404,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparenceGradient");
-        awt::Gradient aTranspGrad;
+        awt::Gradient2 aTranspGrad;
         if(anotherAny >>= aTranspGrad)
             dumpFillTransparenceGradientAsElement(aTranspGrad, xmlWriter);
     }
@@ -1416,7 +1416,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillGradient");
-        awt::Gradient aGradient;
+        awt::Gradient2 aGradient;
         if(anotherAny >>= aGradient)
             dumpFillGradientAsElement(aGradient, xmlWriter);
     }
