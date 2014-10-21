@@ -446,6 +446,16 @@ namespace drawinglayer
                             const sal_uInt16 nEndIntens(aXGradient.GetEndIntens());
                             basegfx::BColor aEnd(aEndColor.getBColor());
 
+                            std::vector< std::tuple< double, Color > > aXGradStops = aXGradient.GetGradStops();
+                            std::vector< std::tuple< double,basegfx::BColor > > aGradStops;
+
+                            for (sal_uInt32 i(0); i < aXGradStops.size(); i++)
+                            {
+                                aGradStops.push_back(std::make_tuple(std::get<0>(aXGradStops[i]), std::get<1>(aXGradStops[i]).getBColor()));
+                            }
+
+
+
                             if(nEndIntens != 100)
                             {
                                 const basegfx::BColor aBlack;
@@ -460,7 +470,8 @@ namespace drawinglayer
                                 (double)aXGradient.GetAngle() * F_PI1800,
                                 aStart,
                                 aEnd,
-                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue());
+                                static_cast<const XGradientStepCountItem&>(rSet.Get(XATTR_GRADIENTSTEPCOUNT)).GetValue(),
+                                aGradStops);
 
                             break;
                         }
