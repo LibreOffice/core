@@ -80,6 +80,7 @@ namespace drawinglayer
             basegfx::BColor                     maStart;
             basegfx::BColor                     maEnd;
             double                              mfBorder;
+            std::vector< std::tuple< double,basegfx::BColor > > maGradStops;
 
         public:
             GeoTexSvxGradient(
@@ -88,6 +89,13 @@ namespace drawinglayer
                 const basegfx::BColor& rEnd,
                 sal_uInt32 nSteps,
                 double fBorder);
+            GeoTexSvxGradient(
+                const basegfx::B2DRange& rDefinitionRange,
+                const basegfx::BColor& rStart,
+                const basegfx::BColor& rEnd,
+                sal_uInt32 nSteps,
+                double fBorder,
+                std::vector< std::tuple< double,basegfx::BColor > > aGradStops);
             virtual ~GeoTexSvxGradient();
 
             // compare operator
@@ -101,6 +109,7 @@ namespace drawinglayer
             // data access
             const basegfx::BColor& getStart() const { return maStart; }
             const basegfx::BColor& getEnd() const { return maEnd; }
+            const std::vector< std::tuple< double,basegfx::BColor > > getGradStops() const { return maGradStops;}
         };
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -127,6 +136,15 @@ namespace drawinglayer
                 sal_uInt32 nSteps,
                 double fBorder,
                 double fAngle);
+            GeoTexSvxGradientLinear(
+                const basegfx::B2DRange& rDefinitionRange,
+                const basegfx::B2DRange& rOutputRange,
+                const basegfx::BColor& rStart,
+                const basegfx::BColor& rEnd,
+                sal_uInt32 nSteps,
+                double fBorder,
+                double fAngle,
+                std::vector< std::tuple< double,basegfx::BColor > > aGradStops);
             virtual ~GeoTexSvxGradientLinear();
 
             virtual void appendTransformationsAndColors(

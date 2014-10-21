@@ -75,7 +75,8 @@ namespace drawinglayer
                         aEnd,
                         nSteps,
                         getFillGradient().getBorder(),
-                        getFillGradient().getAngle());
+                        getFillGradient().getAngle(),
+                        getFillGradient().getGradStops());
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }

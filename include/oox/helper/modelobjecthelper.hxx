@@ -24,7 +24,7 @@
 #include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
-    namespace awt { struct Gradient; }
+    namespace awt { struct Gradient2; }
     namespace container { class XNameContainer; }
     namespace drawing { struct LineDash; }
     namespace drawing { struct PolyPolygonBezierCoords; }
@@ -98,9 +98,9 @@ public:
 
     /** Inserts a new named fill gradient, returns the gradient name, based on
         an internal constant name with a new unused index appended. */
-    OUString     insertFillGradient( const ::com::sun::star::awt::Gradient& rGradient );
+    OUString     insertFillGradient( const ::com::sun::star::awt::Gradient2& rGradient );
 
-    OUString     insertTransGrandient( const ::com::sun::star::awt::Gradient& rGradient );
+    OUString     insertTransGrandient( const ::com::sun::star::awt::Gradient2& rGradient );
 
     /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
         an internal constant name with a new unused index appended. */
