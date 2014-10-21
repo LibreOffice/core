@@ -56,7 +56,7 @@ AddonMenu::~AddonMenu()
 {
     for ( sal_uInt16 i = 0; i < GetItemCount(); i++ )
     {
-        if ( GetItemType( i ) != MENUITEM_SEPARATOR )
+        if ( GetItemType( i ) != MenuItemType::SEPARATOR )
         {
             // delete user attributes created with new!
             sal_uInt16 nId = GetItemId( i );
@@ -193,7 +193,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
 
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
 
-            if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MENUITEM_SEPARATOR )
+            if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MenuItemType::SEPARATOR )
                 nInsSepAfterPos = nInsPos;
 
             ::rtl::OUString aModuleIdentifier = GetModuleIdentifier(rContext, rFrame);
@@ -204,7 +204,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
                 if ( nInsSepAfterPos < MENU_APPEND )
                 {
                     nInsSepAfterPos += ( pHelpMenu->GetItemCount() - nItemCount );
-                    if ( pHelpMenu->GetItemType( nInsSepAfterPos ) != MENUITEM_SEPARATOR )
+                    if ( pHelpMenu->GetItemType( nInsSepAfterPos ) != MenuItemType::SEPARATOR )
                         pHelpMenu->InsertSeparator(OString(), nInsSepAfterPos);
                 }
                 pHelpMenu->InsertSeparator(OString(), nItemCount);

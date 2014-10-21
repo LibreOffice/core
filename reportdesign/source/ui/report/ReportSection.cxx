@@ -437,7 +437,7 @@ void lcl_insertMenuItemImages(
     const sal_uInt16 nCount = rContextMenu.GetItemCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        if ( MENUITEM_SEPARATOR != rContextMenu.GetItemType(i))
+        if ( MenuItemType::SEPARATOR != rContextMenu.GetItemType(i))
         {
             const sal_uInt16 nId = rContextMenu.GetItemId(i);
             PopupMenu* pPopupMenu = rContextMenu.GetPopupMenu( nId );

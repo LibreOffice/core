@@ -309,12 +309,12 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
     for ( sal_uInt16 nId = START_ITEMID_PICKLIST; nId <= END_ITEMID_PICKLIST; ++nId )
         pMenu->RemoveItem( pMenu->GetItemPos( nId ) );
 
-    if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
+    if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
         pMenu->RemoveItem( pMenu->GetItemCount()-1 );
 
     if ( m_aPicklistVector.size() > 0 &&
          pMenu->GetItemType( pMenu->GetItemCount()-1 )
-            != MENUITEM_SEPARATOR && m_nAllowedMenuSize )
+            != MenuItemType::SEPARATOR && m_nAllowedMenuSize )
         pMenu->InsertSeparator();
 
     OUString aEmptyString;

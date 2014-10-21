@@ -306,7 +306,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
             sal_uInt16 nCount = aContextMenu.GetItemCount();
             for (sal_uInt16 i = 0; i < nCount; ++i)
             {
-                if ( MENUITEM_SEPARATOR != aContextMenu.GetItemType(i))
+                if ( MenuItemType::SEPARATOR != aContextMenu.GetItemType(i))
                 {
                     sal_uInt16 nId = aContextMenu.GetItemId(i);
 
