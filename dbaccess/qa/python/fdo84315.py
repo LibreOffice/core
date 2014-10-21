@@ -7,8 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import os
 import unittest
 from collections import deque
+import unohelper
 from org.libreoffice.unotest import UnoInProcess
 
 class Fdo84315(unittest.TestCase):
@@ -23,7 +25,10 @@ class Fdo84315(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        # Closing the connection properly would modify the source document for some reason.
+        lock = unohelper.fileUrlToSystemPath(cls._xDoc.URL) + ".lck"
         cls._uno.tearDown()
+        os.remove(lock)
 
     def test_fdo84315(self):
         xDoc = self.__class__._xDoc
@@ -66,7 +71,6 @@ class Fdo84315(unittest.TestCase):
         while xResultset.next():
             self.assertEqual(xResultset.getInt(1), expected_values.popleft())
         self.assertEqual(len(expected_values), 0)
-        xCon.dispose()
 
 if __name__ == '__main__':
     unittest.main()
