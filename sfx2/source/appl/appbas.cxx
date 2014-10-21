@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <config_options.h>
 
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -40,10 +44,6 @@
 #include <basic/sbuno.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-
-#include <unotools/pathoptions.hxx>
-#include <unotools/useroptions.hxx>
-#include <unotools/bootstrap.hxx>
 
 #include <sfx2/module.hxx>
 #include "arrdecl.hxx"
@@ -142,30 +142,10 @@ StarBASIC* SfxApplication::GetBasic()
 
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
-#ifdef DISABLE_SCRIPTING
-    (void) rReq;
-#else
     rReq.GetArgs();
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )
     {
-        case SID_CREATE_BASICOBJECT:
-        {
-            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, nSID, false);
-            if ( pItem )
-            {
-                SbxObject* pObject = SbxBase::CreateObject( pItem->GetValue() );
-                pObject->AddFirstRef();
-                rReq.Done();
-            }
-            break;
-        }
-
-        case SID_DELETE_BASICOBJECT:
-        {
-            break;
-        }
-
         case SID_ATTR_UNDO_COUNT:
         {
             SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, false);
@@ -177,50 +157,19 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_WIN_VISIBLE:
-        {
-            break;
-        }
-
-        case SID_OFFICE_CUSTOMERNUMBER:
-        {
-            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, false);
-
-            if ( pStringItem )
-                SvtUserOptions().SetCustomerNumber( pStringItem->GetValue() );
-            break;
-        }
+        default:
+            assert(false);
     }
-#endif
 }
 
 
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
-#ifdef DISABLE_SCRIPTING
-    (void) rSet;
-#else
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
         switch ( nSID )
         {
-            case SID_PROGNAME:
-                rSet.Put( SfxStringItem( SID_PROGNAME, GetName() ) );
-                break;
-
-            case SID_ACTIVEDOCUMENT:
-                rSet.Put( SfxObjectItem( SID_ACTIVEDOCUMENT, SfxObjectShell::Current() ) );
-                break;
-
-            case SID_APPLICATION:
-                rSet.Put( SfxObjectItem( SID_APPLICATION, this ) );
-                break;
-
-            case SID_PROGFILENAME:
-                rSet.Put( SfxStringItem( SID_PROGFILENAME, Application::GetAppFileName() ) );
-                break;
-
             case SID_ATTR_UNDO_COUNT:
                 rSet.Put(
                     SfxUInt16Item(
@@ -228,18 +177,10 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                         officecfg::Office::Common::Undo::Steps::get()));
                 break;
 
-            case SID_UPDATE_VERSION:
-                rSet.Put( SfxUInt32Item( SID_UPDATE_VERSION, SUPD ) );
-                break;
-
-            case SID_OFFICE_CUSTOMERNUMBER:
-            {
-                rSet.Put( SfxStringItem( nSID, SvtUserOptions().GetCustomerNumber() ) );
-                break;
-            }
+            default:
+                assert(false);
         }
     }
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

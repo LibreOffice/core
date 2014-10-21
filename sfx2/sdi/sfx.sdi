@@ -3651,32 +3651,6 @@ SfxVoidItem NewModule SID_BASICIDE_NEWMODULE
     GroupId = GID_MACRO;
 ]
 
-
-SfxObjectItem NewObject SID_CREATE_BASICOBJECT
-(SfxStringItem ClassName SID_CREATE_BASICOBJECT)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
-
 SfxUInt16Item NewStyle SID_STYLE_NEW
 (SfxStringItem Param SID_STYLE_NEW,SfxUInt16Item Family SID_STYLE_FAMILY)
 [
@@ -4728,32 +4702,6 @@ SfxVoidItem Redo SID_REDO
     ToolBoxConfig = TRUE,
     GroupId = GID_EDIT;
 ]
-
-
-SfxVoidItem ReleaseObject SID_DELETE_BASICOBJECT
-(SfxObjectItem Object SID_DELETE_BASICOBJECT)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
-]
-
 
 SfxBoolItem Reload SID_RELOAD
 ()

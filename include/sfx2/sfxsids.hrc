@@ -76,9 +76,6 @@
 
 #define SID_PROGRESS_STATUSBAR_CONTROL      (SID_SFX_START + 1597)
 
-#define SID_APPLICATION                     (SID_SFX_START + 340)
-#define SID_PROGNAME                        (SID_SFX_START + 341)
-#define SID_PROGFILENAME                    (SID_SFX_START + 342)
 #define SID_SELECTION                       (SID_SFX_START + 346)
 
 // 360-400 see SID_MAIL_...
@@ -180,17 +177,11 @@
 
 #define SID_SAVETO                          (SID_SFX_START + 1546)
 
-#define SID_CREATE_BASICOBJECT              (SID_SFX_START + 1555)
-#define SID_DELETE_BASICOBJECT              (SID_SFX_START + 1556)
-
-#define SID_UPDATE_VERSION                  (SID_SFX_START + 1568)
-
 #define SID_VERSION                         (SID_SFX_START + 1583)
 
 #define SID_DOCUMENT_COMPARE                (SID_SFX_START + 1586)
 #define SID_DOCUMENT_MERGE                  (SID_SFX_START + 1587)
 
-#define SID_OFFICE_CUSTOMERNUMBER               (SID_SFX_START + 1608)
 #define SID_OFFICE_CHECK_PLZ                (SID_SFX_START + 1610)
 #define SID_CURRENT_URL                     (SID_SFX_START + 1613)
 
@@ -364,7 +355,6 @@
 
 #define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
 
-#define SID_ACTIVEDOCUMENT                  (SID_SFX_START + 570)
 #define SID_DEFAULTFILEPATH                 (SID_SFX_START + 571)
 #define SID_OBJECT                          (SID_SFX_START + 575)
 
@@ -383,8 +373,6 @@
 #define SID_CLOSEWIN                        (SID_SFX_START + 621)
 #define SID_VIEWSHELL                       (SID_SFX_START + 623)
 #define SID_WIN_FULLSCREEN                  (SID_SFX_START + 627)
-    // FREE, was SID_WIN_POSSIZE
-#define SID_WIN_VISIBLE                     (SID_SFX_START + 629)
 
 #define SID_VIEWSHELL0                      (SID_SFX_START + 630)
 #define SID_VIEWSHELL1                      (SID_SFX_START + 631)
