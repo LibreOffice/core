@@ -1971,7 +1971,8 @@ void SalGtkFilePicker::SetFilters()
         }
     }
 
-    if (gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pFilterStore), NULL)) //If m_pFilterStore is not empty
+    // Hide the expander if there's no choice to be made there
+    if (gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pFilterStore), NULL) > 1)
         gtk_widget_show( m_pFilterExpander );
     else
         gtk_widget_hide( m_pFilterExpander );
