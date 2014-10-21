@@ -284,7 +284,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         GtkSalMenuItem *pSalMenuItem = GetItemAtPos( nItem );
         sal_uInt16 nId = pSalMenuItem->mnId;
 
-        if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
+        if ( pSalMenuItem->mnType == MenuItemType::SEPARATOR )
         {
             // Delete extra items from current section.
             RemoveSpareItemsFromNativeMenu( pLOMenu, &pOldCommandList, nSection, validItems );

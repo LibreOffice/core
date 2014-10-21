@@ -398,8 +398,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
         {
             switch ( pSVMenu->GetItemType(nSVPos) )
             {
-                case MENUITEM_STRING:
-                case MENUITEM_STRINGIMAGE:
+                case MenuItemType::STRING:
+                case MenuItemType::STRINGIMAGE:
                 {
                     SfxMenuControl *pMnuCtrl=0;
                     OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
@@ -465,11 +465,11 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     break;
                 }
 
-                case MENUITEM_IMAGE:
+                case MenuItemType::IMAGE:
                     //! not implemented
                     break;
 
-                case MENUITEM_SEPARATOR:
+                case MenuItemType::SEPARATOR:
                     //! not implemented
                     break;
                 default:
@@ -501,9 +501,9 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
     {
         for ( sal_uInt16 nSVPos=0; nSVPos<nItemCount; ++nSVPos )
         {
-            sal_uInt16          nSlotId = pSVMenu->GetItemId( nSVPos );
+            sal_uInt16      nSlotId = pSVMenu->GetItemId( nSVPos );
             MenuItemType    nType   = pSVMenu->GetItemType( nSVPos );
-            if ( nType == MENUITEM_STRING && bIcons )
+            if ( nType == MenuItemType::STRING && bIcons )
             {
                 if ( framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
                 {
@@ -526,7 +526,7 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
                     pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, false ));
                 }
             }
-            else if( nType == MENUITEM_STRINGIMAGE && !bIcons )
+            else if( nType == MenuItemType::STRINGIMAGE && !bIcons )
             {
                 pSVMenu->SetItemImage( nSlotId, Image() );
             }
@@ -575,7 +575,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
         {
             sal_uInt16 nSlotId = pMenu->GetItemId( nPos );
             PopupMenu* pPopup = pMenu->GetPopupMenu( nSlotId );
-            if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
+            if ( pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR )
             {
                 OUString aImageId;
 
@@ -609,7 +609,7 @@ void SfxVirtualMenu::RemoveMenuImages( Menu* pMenu )
     {
         sal_uInt16 nSlotId = pMenu->GetItemId( nPos );
         PopupMenu* pPopup = pMenu->GetPopupMenu( nSlotId );
-        if ( pMenu->GetItemType( nPos ) == MENUITEM_STRINGIMAGE )
+        if ( pMenu->GetItemType( nPos ) == MenuItemType::STRINGIMAGE )
             pMenu->SetItemImage( nSlotId, Image() );
         if ( pPopup )
             RemoveMenuImages( pPopup );
@@ -756,7 +756,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     {
         sal_uInt16 nItemCount = pMenu->GetItemCount();
         OUString aAddonsTitle(SfxResId(STR_MENU_ADDONS).toString());
-        if ( nItemCount > 0 && pMenu->GetItemType( nItemCount-1 ) != MENUITEM_SEPARATOR )
+        if ( nItemCount > 0 && pMenu->GetItemType( nItemCount-1 ) != MenuItemType::SEPARATOR )
             pMenu->InsertSeparator();
         pMenu->InsertItem( SID_ADDONS, aAddonsTitle );
         pMenu->SetPopupMenu( SID_ADDONS, pAddonMenu );
@@ -851,7 +851,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                 for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
                     pMenu->RemoveItem( n );
 
-                if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
+                if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
                     pMenu->RemoveItem( pMenu->GetItemCount()-1 );
             }
 

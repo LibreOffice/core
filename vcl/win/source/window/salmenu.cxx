@@ -79,7 +79,7 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
     memset( &pSalMenuItem->mInfo, 0, sizeof( MENUITEMINFOW ) );
     pSalMenuItem->mInfo.cbSize = sizeof( MENUITEMINFOW );
 
-    if( pItemData->eType == MENUITEM_SEPARATOR )
+    if( pItemData->eType == MenuItemType::SEPARATOR )
     {
         // separator
         pSalMenuItem->mInfo.fMask = MIIM_TYPE;

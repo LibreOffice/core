@@ -59,7 +59,7 @@ namespace dbaui
     {
         void lcl_copy(Menu* _pMenu,sal_uInt16 _nMenuId,sal_uInt16 _nMenuPos,ToolBox* _pToolBox,sal_uInt16 _nToolId,const OUString& _sCommand)
         {
-            if ( _pMenu->GetItemType(_nMenuPos) != MENUITEM_STRING )
+            if ( _pMenu->GetItemType(_nMenuPos) != MenuItemType::STRING )
                 _pToolBox->SetItemImage(_nToolId, _pMenu->GetItemImage(_nMenuId));
             _pToolBox->SetItemCommand( _nToolId, _sCommand);
             _pToolBox->SetHelpId(_nToolId, _pMenu->GetHelpId(_nMenuId));
@@ -194,7 +194,7 @@ namespace dbaui
                 sal_uInt16 nCount = pMenu->GetItemCount();
                 for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
                 {
-                    if ( pMenu->GetItemType( nPos ) == MENUITEM_SEPARATOR )
+                    if ( pMenu->GetItemType( nPos ) == MenuItemType::SEPARATOR )
                         continue;
 
                     sal_uInt16 nItemId = pMenu->GetItemId(nPos);

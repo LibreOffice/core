@@ -906,7 +906,7 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     // Delete mnemonics
     OUString aText( comphelper::string::remove(pItemData->aText, '~') );
 
-    if (pItemData->eType == MENUITEM_SEPARATOR)
+    if (pItemData->eType == MenuItemType::SEPARATOR)
     {
         mpMenuItem = [NSMenuItem separatorItem];
         // these can go occasionally go in and out of a menu, ensure their lifecycle

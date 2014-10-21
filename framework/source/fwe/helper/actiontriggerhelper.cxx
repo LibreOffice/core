@@ -323,7 +323,7 @@ void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexCon
             Any a;
             Reference< XPropertySet > xPropSet;
 
-            if ( nType == MENUITEM_SEPARATOR )
+            if ( nType == MenuItemType::SEPARATOR )
             {
                 xPropSet = CreateActionTriggerSeparator( rActionTriggerContainer );
 

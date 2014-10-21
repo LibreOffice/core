@@ -813,7 +813,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( nPos );
-            if (( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR ) &&
+            if (( pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR ) &&
                 ( pMenu->GetItemText( nItemId ).isEmpty() ))
             {
                 OUString aCommand = pMenu->GetItemCommand( nItemId );
@@ -1008,7 +1008,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
         sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         sal_uInt16 nCurPos    = pMenu->GetItemPos( nCurItemId );
         if ( pMenu == m_pVCLMenu &&
-             pMenu->GetItemType( nCurPos ) != MENUITEM_SEPARATOR )
+             pMenu->GetItemType( nCurPos ) != MenuItemType::SEPARATOR )
         {
             if ( nCurItemId >= START_ITEMID_WINDOWLIST &&
                  nCurItemId <= END_ITEMID_WINDOWLIST )
@@ -1294,7 +1294,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         sal_uInt16 nCount = 0;
-                        if ( pPopup->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
+                        if ( pPopup->GetItemType( nCount-1 ) != MenuItemType::SEPARATOR )
                             pPopup->InsertSeparator();
 
                         // Use resource to load popup menu title
@@ -1336,7 +1336,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 }
             }
         }
-        else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
+        else if ( pMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
         {
             if ( bItemShowMenuImages )
             {
@@ -1963,7 +1963,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
         }
         else
         {
-            if ( pAddonMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
+            if ( pAddonMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
             {
                 MenuConfiguration::Attributes* pAddonAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pAddonMenu->GetUserValue( nItemId ));
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
