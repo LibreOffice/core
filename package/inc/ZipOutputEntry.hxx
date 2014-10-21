@@ -54,6 +54,9 @@ public:
     ~ZipOutputEntry();
 
     css::uno::Sequence< sal_Int8 > getData();
+    ZipEntry* getZipEntry() { return m_pCurrentEntry; }
+    ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
+    bool isEncrypt() { return m_bEncryptCurrentEntry; }
 
     void closeEntry();
     void write(const css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);

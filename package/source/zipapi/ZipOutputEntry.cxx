@@ -47,14 +47,13 @@ ZipOutputEntry::ZipOutputEntry( const uno::Reference< uno::XComponentContext >& 
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
 , m_bEncryptCurrentEntry(bEncrypt)
-, m_pCurrentStream(NULL)
+, m_pCurrentStream(pStream)
 {
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     if (m_bEncryptCurrentEntry)
     {
         m_xCipherContext = ZipFile::StaticGetCipher( rxContext, pStream->GetEncryptionData(), true );
         m_xDigestContext = ZipFile::StaticGetDigestContextForChecksum( rxContext, pStream->GetEncryptionData() );
-        m_pCurrentStream = pStream;
     }
 }
 

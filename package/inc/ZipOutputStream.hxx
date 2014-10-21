@@ -23,10 +23,12 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <ByteChucker.hxx>
+#include <comphelper/threadpool.hxx>
 
 #include <vector>
 
 struct ZipEntry;
+class ZipOutputEntry;
 class ZipPackageStream;
 
 class ZipOutputStream
@@ -35,13 +37,16 @@ class ZipOutputStream
     ::std::vector < ZipEntry * > m_aZipList;
 
     ByteChucker         m_aChucker;
-    bool                m_bFinished;
     ZipEntry            *m_pCurrentEntry;
+    comphelper::ThreadPool &m_rSharedThreadPool;
+    std::vector< ZipOutputEntry* > m_aEntries;
 
 public:
     ZipOutputStream(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
+
+    void addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThreadTask );
 
     void writeLOC( ZipEntry *pEntry, bool bEncrypt = false )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
