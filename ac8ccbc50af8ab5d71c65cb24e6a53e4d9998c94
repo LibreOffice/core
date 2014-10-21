@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ba076199_7c26e117",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/otherjre.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-10-21T09:48:54Z",
+      "side": 1,
+      "message": "mbp17:Library robert$ /usr/libexec/java_home -V\nMatching Java Virtual Machines (4):\n    1.8.0_25, x86_64:\t\"Java SE 8\"\t/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home\n    1.7.0_71, x86_64:\t\"Java SE 7\"\t/Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home\n    1.6.0_65-b14-466.1, x86_64:\t\"Java SE 6\"\t/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home\n    1.6.0_65-b14-466.1, i386:\t\"Java SE 6\"\t/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home\n\n/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home\nmbp17:Library robert$ ls /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/../../../../../Frameworks/JavaVM.framework/JavaVM\nls: /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/../../../../../Frameworks/JavaVM.framework/JavaVM: No such file or directory\nmbp17:Library robert$ ls /Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/../../../../../Frameworks/JavaVM.framework/JavaVM\nls: /Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/../../../../../Frameworks/JavaVM.framework/JavaVM: No such file or directory\nmbp17:Library robert$ ls /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/../../../../../Frameworks/JavaVM.framework/JavaVM\n/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/../../../../../Frameworks/JavaVM.framework/JavaVM",
+      "parentUuid": "ba076199_dc16eda6",
+      "revId": "ac8ccbc50af8ab5d71c65cb24e6a53e4d9998c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba076199_bc0b397d",
         "filename": "jvmfwk/plugins/sunmajor/pluginlib/util.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-10-21T09:13:45Z",
       "side": 1,
       "message": "exactly what problem does this fix?",
+      "revId": "ac8ccbc50af8ab5d71c65cb24e6a53e4d9998c94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_5c231d06",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/util.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-10-21T09:48:54Z",
+      "side": 1,
+      "message": "JRE versions prior to 1.6 aren\u0027t available for OS X 10.8+ and we use Java Applet Plugins by default because the user can configure it using \"System Settings\".",
+      "parentUuid": "ba076199_bc0b397d",
       "revId": "ac8ccbc50af8ab5d71c65cb24e6a53e4d9998c94",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
