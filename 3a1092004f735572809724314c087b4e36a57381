@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_bc34594a",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-10-21T08:00:24Z",
+      "side": 1,
+      "message": "Changes to this file are not allowed, sorry. If you want to extend a published struct, then you need to add a new one, like awt::Gradient2. table::BorderLine2 is an example.",
+      "revId": "3a1092004f735572809724314c087b4e36a57381",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
