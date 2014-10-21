@@ -93,8 +93,6 @@ public:
 
     SAL_DLLPRIVATE bool     ContainsSlot_Impl( const SfxSlot *pSlot ) const
                             { return pSlot >= pSlots && pSlot < pSlots + Count(); }
-    SAL_DLLPRIVATE ResMgr*  GetResManager_Impl() const
-                            { return aNameResId.GetResMgr(); }
 };
 
 
