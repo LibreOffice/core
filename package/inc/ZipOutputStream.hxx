@@ -37,6 +37,7 @@ class ZipOutputStream
     ByteChucker         m_aChucker;
     bool                m_bFinished;
     ZipEntry            *m_pCurrentEntry;
+    bool                m_bEncrypt;
 
 public:
     ZipOutputStream(
