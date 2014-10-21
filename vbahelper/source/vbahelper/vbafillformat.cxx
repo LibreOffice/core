@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <ooo/vba/office/MsoGradientStyle.hpp>
 #include "vbafillformat.hxx"
@@ -42,7 +42,7 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle ) throw (uno::Runti
     if( m_nFillStyle == drawing::FillStyle_GRADIENT )
     {
         m_xPropertySet->setPropertyValue( "FillStyle" , uno::makeAny( drawing::FillStyle_GRADIENT ) );
-        awt::Gradient aGradient;
+        awt::Gradient2 aGradient;
         // AXIAL
         // RADIAL
         // ELLIPTICAL

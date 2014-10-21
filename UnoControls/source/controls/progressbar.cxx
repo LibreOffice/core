@@ -21,7 +21,7 @@
 
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/RasterOperation.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <tools/debug.hxx>
 #include <cppuhelper/queryinterface.hxx>

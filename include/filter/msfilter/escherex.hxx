@@ -548,7 +548,7 @@ const sal_uInt32 DFF_DGG_CLUSTER_SIZE       = 0x00000400;   /// Shape IDs per cl
 
 namespace com { namespace sun { namespace star {
     namespace awt {
-        struct Gradient;
+        struct Gradient2;
     }
     namespace drawing {
         struct EnhancedCustomShapeAdjustmentValue;
@@ -876,11 +876,11 @@ public:
                 );
 
     static sal_uInt32 GetGradientColor(
-                    const ::com::sun::star::awt::Gradient* pGradient,
+                    const ::com::sun::star::awt::Gradient2* pGradient,
                     sal_uInt32 nStartColor
                 );
 
-    void        CreateGradientProperties( const ::com::sun::star::awt::Gradient & rGradient );
+    void        CreateGradientProperties( const ::com::sun::star::awt::Gradient2 & rGradient );
     void        CreateGradientProperties(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > &,
                     bool bTransparentGradient = false

@@ -91,9 +91,20 @@ Image Tools::GetImage (
     return Image();
 }
 
-css::awt::Gradient Tools::VclToAwtGradient (const Gradient& rVclGradient)
+css::awt::Gradient2 Tools::VclToAwtGradient (const Gradient& rVclGradient)
 {
-    css::awt::Gradient aAwtGradient (
+
+
+    std::vector< std::tuple< double, Color >> aVclGradStops = rVclGradient.GetGradientStops();
+    uno::Sequence<css::awt::GradientStop> aAwtGradStops(aVclGradStops.size());
+
+    for (sal_uInt32 i(0); i < aVclGradStops.size(); i++)
+    {
+        css::awt::GradientStop aGS(std::get<0>(aVclGradStops[i]), std::get<1>(aVclGradStops[i]).GetRGBColor());
+        aAwtGradStops[i] = aGS;
+    }
+
+    css::awt::Gradient2 aAwtGradient (
         awt::GradientStyle(rVclGradient.GetStyle()),
         rVclGradient.GetStartColor().GetRGBColor(),
         rVclGradient.GetEndColor().GetRGBColor(),
@@ -103,23 +114,35 @@ css::awt::Gradient Tools::VclToAwtGradient (const Gradient& rVclGradient)
         rVclGradient.GetOfsY(),
         rVclGradient.GetStartIntensity(),
         rVclGradient.GetEndIntensity(),
-        rVclGradient.GetSteps());
+        rVclGradient.GetSteps(),
+        aAwtGradStops);
     return aAwtGradient;
 }
 
-Gradient Tools::AwtToVclGradient (const css::awt::Gradient& rAwtGradient)
+
+
+
+Gradient Tools::AwtToVclGradient (const css::awt::Gradient2& aAwtGradient)
 {
+    std::vector< std::tuple< double, Color >> aVclGradStops;
+    uno::Sequence<css::awt::GradientStop> aAwtGradStop = aAwtGradient.GradientStops;
+    for (sal_Int32 i(0); i < aAwtGradStop.getLength();i++)
+    {
+        aVclGradStops.push_back(std::make_tuple(aAwtGradStop[i].RelativePosition,aAwtGradStop[i].Color));
+    }
+
+
     Gradient aVclGradient (
-        GradientStyle(rAwtGradient.Style),
-        rAwtGradient.StartColor,
-        rAwtGradient.EndColor);
-    aVclGradient.SetAngle(rAwtGradient.Angle);
-    aVclGradient.SetBorder(rAwtGradient.Border);
-    aVclGradient.SetOfsX(rAwtGradient.XOffset);
-    aVclGradient.SetOfsY(rAwtGradient.YOffset);
-    aVclGradient.SetStartIntensity(rAwtGradient.StartIntensity);
-    aVclGradient.SetEndIntensity(rAwtGradient.EndIntensity);
-    aVclGradient.SetSteps(rAwtGradient.StepCount);
+        GradientStyle(aAwtGradient.Style),
+        aAwtGradient.StartColor,
+        aAwtGradient.EndColor);
+    aVclGradient.SetAngle(aAwtGradient.Angle);
+    aVclGradient.SetBorder(aAwtGradient.Border);
+    aVclGradient.SetOfsX(aAwtGradient.XOffset);
+    aVclGradient.SetOfsY(aAwtGradient.YOffset);
+    aVclGradient.SetStartIntensity(aAwtGradient.StartIntensity);
+    aVclGradient.SetEndIntensity(aAwtGradient.EndIntensity);
+    aVclGradient.SetSteps(aAwtGradient.StepCount);
 
     return aVclGradient;
 }

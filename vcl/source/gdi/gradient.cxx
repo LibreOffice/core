@@ -51,6 +51,7 @@ Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
     mnIntensityStart    = rImplGradient.mnIntensityStart;
     mnIntensityEnd      = rImplGradient.mnIntensityEnd;
     mnStepCount         = rImplGradient.mnStepCount;
+    maGradStops         = rImplGradient.maGradStops;
 }
 
 void Gradient::MakeUnique()
@@ -279,7 +280,8 @@ bool Gradient::operator==( const Gradient& rGradient ) const
          (mpImplGradient->mnIntensityStart  == rGradient.mpImplGradient->mnIntensityStart)  &&
          (mpImplGradient->mnIntensityEnd    == rGradient.mpImplGradient->mnIntensityEnd)    &&
          (mpImplGradient->maStartColor      == rGradient.mpImplGradient->maStartColor)      &&
-         (mpImplGradient->maEndColor        == rGradient.mpImplGradient->maEndColor) )
+         (mpImplGradient->maEndColor        == rGradient.mpImplGradient->maEndColor)        &&
+         (mpImplGradient->maGradStops       == rGradient.mpImplGradient->maGradStops))
          return true;
     else
         return false;

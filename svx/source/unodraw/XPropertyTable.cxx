@@ -21,7 +21,7 @@
 #include "svx/XPropertyTable.hxx"
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -561,7 +561,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXGradientTable_createInstance( 
 uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const throw()
 {
     const XGradient& aXGradient = static_cast<const XGradientEntry*>(pEntry)->GetGradient();
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
 
     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
     aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
@@ -581,7 +581,7 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
 
 XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
 {
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     if(!(rAny >>= aGradient))
         return NULL;
 
@@ -605,7 +605,7 @@ XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno
 uno::Type SAL_CALL SvxUnoXGradientTable::getElementType()
     throw( uno::RuntimeException, std::exception )
 {
-    return cppu::UnoType<awt::Gradient>::get();
+    return cppu::UnoType<awt::Gradient2>::get();
 }
 
 // XServiceInfo

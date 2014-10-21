@@ -24,7 +24,7 @@
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/uno/XReference.hpp>
 #include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -113,7 +113,7 @@ protected:
     const char* GetComponentDir();
     const char* GetRelationCompPrefix();
 
-    bool EqualGradients( ::com::sun::star::awt::Gradient aGradient1, ::com::sun::star::awt::Gradient aGradient2 );
+    bool EqualGradients( ::com::sun::star::awt::Gradient2 aGradient1, ::com::sun::star::awt::Gradient2 aGradient2 );
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB = NULL, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = 0 )
@@ -139,8 +139,8 @@ public:
     void WriteSolidFill( const OUString& sSchemeName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aTransformations );
     void WriteSolidFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
     void WriteGradientFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
-    void WriteGradientFill( ::com::sun::star::awt::Gradient rGradient );
-    void WriteGrabBagGradientFill( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aGradientStops, ::com::sun::star::awt::Gradient rGradient);
+    void WriteGradientFill( ::com::sun::star::awt::Gradient2 rGradient );
+    void WriteGrabBagGradientFill( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aGradientStops, ::com::sun::star::awt::Gradient2 rGradient);
 
     void WriteBlipOrNormalFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
             const OUString& rURLPropName );

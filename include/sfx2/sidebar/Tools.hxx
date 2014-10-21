@@ -25,7 +25,7 @@
 
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -45,8 +45,8 @@ public:
         const ::rtl::OUString& rsURL,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    static css::awt::Gradient VclToAwtGradient (const Gradient& rGradient);
-    static Gradient AwtToVclGradient (const css::awt::Gradient& rGradient);
+    static css::awt::Gradient2 VclToAwtGradient (const Gradient& rGradient);
+    static Gradient AwtToVclGradient (const css::awt::Gradient2& rGradient);
 
     static css::util::URL GetURL (const ::rtl::OUString& rsCommand);
     static css::uno::Reference<css::frame::XDispatch> GetDispatch (

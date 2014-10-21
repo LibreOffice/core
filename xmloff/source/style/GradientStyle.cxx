@@ -19,7 +19,7 @@
 
 #include <xmloff/GradientStyle.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -104,7 +104,7 @@ bool XMLGradientStyleImport::importXML(
     bool bHasEndColor   = false;
     OUString aDisplayName;
 
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     aGradient.XOffset = 0;
     aGradient.YOffset = 0;
     aGradient.StartIntensity = 100;
@@ -224,7 +224,7 @@ bool XMLGradientStyleExport::exportXML(
     const uno::Any& rValue )
 {
     bool bRet = false;
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
 
     if( !rStrName.isEmpty() )
     {

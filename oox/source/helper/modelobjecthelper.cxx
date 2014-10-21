@@ -19,7 +19,7 @@
 
 #include "oox/helper/modelobjecthelper.hxx"
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -117,12 +117,12 @@ OUString ModelObjectHelper::insertLineDash( const LineDash& rDash )
     return maDashContainer.insertObject( maDashNameBase, Any( rDash ), true );
 }
 
-OUString ModelObjectHelper::insertFillGradient( const awt::Gradient& rGradient )
+OUString ModelObjectHelper::insertFillGradient( const awt::Gradient2& rGradient )
 {
     return maGradientContainer.insertObject( maGradientNameBase, Any( rGradient ), true );
 }
 
-OUString ModelObjectHelper::insertTransGrandient( const awt::Gradient& rGradient )
+OUString ModelObjectHelper::insertTransGrandient( const awt::Gradient2& rGradient )
 {
     return maTransGradContainer.insertObject( maTransGradNameBase, Any( rGradient ), true );
 }

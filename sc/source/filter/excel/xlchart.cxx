@@ -21,7 +21,7 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -805,7 +805,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
             rGradHlp.ReadFromPropertySet( rPropSet );
             rGradHlp >> eApiStyle >> aGradientName;
-            cssa::Gradient aGradient;
+            cssa::Gradient2 aGradient;
             if( rGradientTable.GetObject( aGradientName ) >>= aGradient )
             {
                 // convert to Escher properties

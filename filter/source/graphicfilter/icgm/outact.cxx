@@ -110,7 +110,7 @@ void CGMOutAct::RegPolyLine( Polygon& rPolygon, bool bReverse )
 void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nType*/ )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient = new awt::Gradient2;
     mpGradient->XOffset = ( (sal_uInt16)nHorzOfs & 0x7f );
     mpGradient->YOffset = ( (sal_uInt16)nVertOfs & 0x7f );
 }
@@ -118,14 +118,14 @@ void CGMOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nT
 void CGMOutAct::SetGradientAngle( long nAngle )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient = new awt::Gradient2;
     mpGradient->Angle = sal::static_int_cast< sal_Int16 >(nAngle);
 }
 
 void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient = new awt::Gradient2;
     mpGradient->StartColor = nColorFrom;
     mpGradient->EndColor = nColorTo;
 }
@@ -133,7 +133,7 @@ void CGMOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorT
 void CGMOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
 {
     if ( !mpGradient )
-        mpGradient = new awt::Gradient;
+        mpGradient = new awt::Gradient2;
     switch ( nStyle )
     {
         case 0xff :
