@@ -631,13 +631,13 @@ bool VCartesianAxis::createTextShapes(
         }
     }
 
-    uno::Sequence< OUString >* pCategories = 0;
+    const uno::Sequence<OUString>* pCategories = NULL;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
-    TickInfo* pPreviousVisibleTickInfo = NULL;
-    TickInfo* pPREPreviousVisibleTickInfo = NULL;
-    TickInfo* pLastVisibleNeighbourTickInfo = NULL;
+    const TickInfo* pPreviousVisibleTickInfo = NULL;
+    const TickInfo* pPREPreviousVisibleTickInfo = NULL;
+    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
 
     //prepare properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
