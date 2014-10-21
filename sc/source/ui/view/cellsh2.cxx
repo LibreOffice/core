@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
@@ -667,7 +669,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
                     rReq.Done();
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 else if (rReq.IsAPI())
                     SbxBase::SetError(SbxERR_BAD_PARAMETER);
 #endif

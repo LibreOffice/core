@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "validat.hxx"
 
 #include <sfx2/app.hxx>
@@ -280,7 +282,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     //  the Sbx-Objekt may not be created (?)
 //  pDocSh->GetSbxObject();
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     //  no security check ahead (only CheckMacroWarn), that happens in CallBasic
 
     //  Function search by their simple name,

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "DrawViewShell.hxx"
 #include <vcl/wrkwin.hxx>
 #include <svx/xgrad.hxx>
@@ -218,12 +220,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->Put (XFillStyleItem ((drawing::FillStyle) pFillStyle->GetValue ()), XATTR_FILLSTYLE);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 #endif
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -240,12 +242,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->Put (XLineStyleItem ((XLineStyle) pLineStyle->GetValue ()), XATTR_LINESTYLE);
                         rBindings.Invalidate (SID_ATTR_LINE_STYLE);
                     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 #endif
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -261,7 +263,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_LINE_WIDTH);
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -285,7 +287,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -306,7 +308,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_LINE_COLOR);
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -368,7 +370,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -422,7 +424,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -467,12 +469,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         rBindings.Invalidate (SID_ATTR_LINE_DASH);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 #endif
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -544,12 +546,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 #endif
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -606,12 +608,12 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         rBindings.Invalidate (SID_ATTR_FILL_HATCH);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 #endif
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -646,7 +648,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -681,7 +683,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;
@@ -696,7 +698,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             break;

@@ -113,7 +113,7 @@ namespace {
 
 class theCurrentComponent : public rtl::Static< WeakReference< XInterface >, theCurrentComponent > {};
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 // remember all registered components for VBA compatibility, to be able to remove them on disposing the model
 typedef ::std::map< XInterface*, OString > VBAConstantNameMap;
@@ -179,7 +179,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     /*  Remove VBA component from AppBasic. As every application registers its
         own current component, the disposed component may not be the "current
         component" of the SfxObjectShell. */
@@ -677,7 +677,7 @@ bool SfxObjectShell::PrepareClose
 }
 
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 namespace
 {
     static BasicManager* lcl_getBasicManagerForDocument( const SfxObjectShell& _rDocument )
@@ -716,7 +716,7 @@ namespace
 BasicManager* SfxObjectShell::GetBasicManager() const
 {
     BasicManager* pBasMgr = NULL;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     try
     {
         pBasMgr = lcl_getBasicManagerForDocument( *this );
@@ -738,7 +738,7 @@ void SfxObjectShell::SetHasNoBasic()
 
 bool SfxObjectShell::HasBasic() const
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     return false;
 #else
     if ( pImp->m_bNoBasicCapabilities )
@@ -752,7 +752,7 @@ bool SfxObjectShell::HasBasic() const
 }
 
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 namespace
 {
     const Reference< XLibraryContainer >&
@@ -785,7 +785,7 @@ namespace
 
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     try
     {
         if ( !pImp->m_bNoBasicCapabilities )
@@ -807,7 +807,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     try
     {
         if ( !pImp->m_bNoBasicCapabilities )
@@ -828,7 +828,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 
 StarBASIC* SfxObjectShell::GetBasic() const
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     return NULL;
 #else
     BasicManager * pMan = GetBasicManager();
@@ -873,7 +873,7 @@ void SfxObjectShell::InitBasicManager_Impl()
         does not take ownership but stores only the raw pointer. Owner of all
         Basic managers is the global BasicManagerRepository instance.
      */
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->aBasicManager.isValid(), "Lokaler BasicManager bereits vorhanden");
     try
     {
@@ -969,7 +969,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     // In other words, it's still possible that we here do something which is not necessary,
     // but we should have filtered quite some unnecessary calls already.
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     BasicManager* pAppMgr = SfxGetpApp()->GetBasicManager();
     rTheCurrentComponent = _rxComponent;
     if ( pAppMgr )
@@ -1063,7 +1063,7 @@ OUString SfxObjectShell::GetServiceNameFromFactory( const OUString& rFact )
     {
         aServiceName = "com.sun.star.formula.FormulaProperties";
     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     else if ( aFact == "sbasic" )
     {
         aServiceName = "com.sun.star.script.BasicIDE";

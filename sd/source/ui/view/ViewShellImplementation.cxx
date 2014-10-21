@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "ViewShellImplementation.hxx"
 
 #include "sdpage.hxx"
@@ -141,7 +143,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             }
             else
             {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 #endif
                 rRequest.Ignore ();
@@ -155,7 +157,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         }
         else
         {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             rRequest.Ignore ();

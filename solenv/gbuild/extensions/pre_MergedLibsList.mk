@@ -92,7 +92,7 @@ gb_EXTRAMERGEDLIBS := \
 	$(call gb_Helper_optional,DESKTOP,unopkgapp) \
 	unotest \
 	$(call gb_Helper_optional,DESKTOP,updatefeed) \
-	$(if $(DISABLE_SCRIPTING),,vbahelper) \
+	$(call gb_Helper_optional,SCRIPTING,vbahelper) \
 	xmlfa \
 	xmlfd \
 	xmlsecurity \

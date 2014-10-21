@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/errcode.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
@@ -260,7 +262,7 @@ SbxArray* StringToByteArray(const OUString& rStr)
     sal_Int32 nArraySize = rStr.getLength() * 2;
     const sal_Unicode* pSrc = rStr.getStr();
     SbxDimArray* pArray = new SbxDimArray(SbxBYTE);
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     bool bIncIndex = false;
 #else
     bool bIncIndex = ( IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );

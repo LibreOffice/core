@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <filter/msfilter/msvbahelper.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
@@ -172,7 +174,7 @@ bool hasMacro( SfxObjectShell* pShell, const OUString& sLibrary, OUString& sMod,
 {
     bool bFound = false;
 
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
     (void) sLibrary;
     (void) sMod;
@@ -264,7 +266,7 @@ void parseMacro( const OUString& sMacro, OUString& sContainer, OUString& sModule
 
 OUString resolveVBAMacro( SfxObjectShell* pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
     (void) rLibName;
     (void) rModuleName;
@@ -283,7 +285,7 @@ OUString resolveVBAMacro( SfxObjectShell* pShell, const OUString& rLibName, cons
 
 MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& MacroName, bool bSearchGlobalTemplates )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
     (void) MacroName;
     (void) bSearchGlobalTemplates;
@@ -458,7 +460,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 // Treat the args as possible inouts ( conversion at bottom of method )
 bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
     (void) sMacroName;
     (void) aArgs;

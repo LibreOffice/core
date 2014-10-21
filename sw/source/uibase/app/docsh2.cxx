@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
@@ -1288,7 +1290,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     // there are some from Meta-Tags dublicated or triplicated afterwards.
     ClearHeaderAttributesForSourceViewHack();
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     // The Document-Basic also bites the dust ...
     // A EnterBasicCall is not needed here, because nothing is called and
     // there can't be any Dok-Basic, that has not yet been loaded inside

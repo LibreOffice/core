@@ -42,7 +42,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 
 endif
 
-ifneq ($(DISABLE_SCRIPTING),TRUE)
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_vbaobj \

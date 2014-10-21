@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "excimp8.hxx"
 
 #include <boost/bind.hpp>
@@ -433,7 +435,7 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     // reading basic has been delayed until sheet objects (codenames etc.) are read
     if( HasBasic() )
         ReadBasic();

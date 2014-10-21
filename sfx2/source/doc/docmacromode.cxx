@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <sfx2/docmacromode.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -365,7 +366,7 @@ namespace sfx2
     bool DocumentMacroMode::hasMacroLibrary() const
     {
         bool bHasMacroLib = false;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         try
         {
             Reference< XEmbeddedScripts > xScripts( m_pData->m_rDocumentAccess.getEmbeddedDocumentScripts() );

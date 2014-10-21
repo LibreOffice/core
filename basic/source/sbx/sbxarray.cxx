@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
@@ -731,7 +733,7 @@ void SbxDimArray::Put32( SbxVariable* p, const sal_Int32* pIdx  )
 // Element-Number with the help of Parameter-Array
 sal_uInt32 SbxDimArray::Offset32( SbxArray* pPar )
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     if (m_vDimensions.empty() || !pPar ||
         ((m_vDimensions.size() != sal::static_int_cast<size_t>(pPar->Count() - 1))
             && SbiRuntime::isVBAEnabled()))

@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,scripting))
 
-ifneq ($(DISABLE_SCRIPTING),TRUE)
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 $(eval $(call gb_Module_add_targets,scripting,\
 	$(if $(ENABLE_JAVA),\

@@ -85,7 +85,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
     tl \
     ucbhelper \
     utl \
-    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+    $(call gb_Helper_optional,SCRIPTING, \
         vbahelper) \
     vcl \
 	vclopengl \

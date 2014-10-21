@@ -84,13 +84,13 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , pFactArr(0)
     , pTopFrames( new SfxFrameArr_Impl )
     , pMatcher( 0 )
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     , pBasicResMgr( 0 )
 #endif
     , pSvtResMgr( 0 )
     , m_pToolsErrorHdl(0)
     , m_pSoErrorHdl(0)
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     , m_pSbxErrorHdl(0)
 #endif
     , pAppDispatch(NULL)
@@ -127,7 +127,7 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , bODFVersionWarningLater( false )
 
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::registerCreationListener( *pBasMgrListener );
 #endif
 }
@@ -138,7 +138,7 @@ SfxAppData_Impl::~SfxAppData_Impl()
     delete pTopFrames;
     delete pBasicManager;
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::revokeCreationListener( *pBasMgrListener );
     delete pBasMgrListener;
 #endif
@@ -155,7 +155,7 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 
 void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicManager )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) _rBasicManager;
 #else
     pBasicManager->reset( &_rBasicManager );

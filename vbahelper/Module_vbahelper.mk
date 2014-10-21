@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Module_Module,vbahelper))
 
-ifneq ($(DISABLE_SCRIPTING),TRUE)
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 # the targets to be inserted are their file names without .mk extension
 $(eval $(call gb_Module_add_targets,vbahelper,\

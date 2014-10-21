@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
@@ -1807,7 +1809,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     rReq.Done();
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 else if (rReq.IsAPI())
                     SbxBase::SetError(SbxERR_BAD_PARAMETER);
 #endif
@@ -1854,7 +1856,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     if (pTabViewShell->InsertName( aName, aSymbol, aAttrib ))
                         rReq.Done();
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     else
                         SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-error
 #endif

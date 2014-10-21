@@ -161,7 +161,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(WITH_WEBDAV), \
 		ucb/source/ucp/webdav-neon/ucpdav1 \
 	) \
-	$(if $(DISABLE_SCRIPTING),, \
+	$(call gb_Helper_optional,SCRIPTING, \
 		basctl/util/basctl \
 		basic/util/sb \
 		sc/util/vbaobj \

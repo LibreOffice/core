@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sot/storage.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -805,7 +807,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     if ( !pNameItem )
                     {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                         SbxBase::SetError( SbxERR_WRONG_ARGS );
 #endif
                         rReq.Ignore();

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <avmedia/mediaplayer.hxx>
 
 #include <basic/sberrors.hxx>
@@ -510,7 +512,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     rReq.Ignore ();
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             rReq.Ignore ();
@@ -538,7 +540,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     rReq.Ignore ();
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             rReq.Ignore ();
@@ -587,13 +589,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         rBindings.Invalidate( SID_ZOOM_OUT );
                         rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
                     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
 #endif
                     rReq.Ignore ();
                     break;
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
             rReq.Ignore ();
@@ -1484,7 +1486,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else if (pArgs->Count () != 4)
                  {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                      StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
                      Cancel();
@@ -1666,7 +1668,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 StarBASIC::FatalError (SbERR_WRONG_ARGS);
 #endif
                 Cancel ();

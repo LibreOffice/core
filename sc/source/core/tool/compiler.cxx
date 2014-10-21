@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "compiler.hxx"
 
 #include <sfx2/app.hxx>
@@ -2807,7 +2809,7 @@ bool ScCompiler::IsReference( const OUString& rName )
 
 bool ScCompiler::IsMacro( const OUString& rName )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) rName;
 
     return false;

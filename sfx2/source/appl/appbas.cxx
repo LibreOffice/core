@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+#include <config_options.h>
+
 #include <sal/config.h>
 
 #include <cassert>
-
-#include <config_options.h>
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
@@ -95,7 +96,7 @@ sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
 
 BasicManager* SfxApplication::GetBasicManager()
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     return 0;
 #else
     return BasicManagerRepository::getApplicationBasicManager( true );
@@ -106,7 +107,7 @@ BasicManager* SfxApplication::GetBasicManager()
 
 XLibraryContainer * SfxApplication::GetDialogContainer()
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     return NULL;
 #else
     if ( !pAppData_Impl->pBasicManager->isValid() )
@@ -119,7 +120,7 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 
 XLibraryContainer * SfxApplication::GetBasicContainer()
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     return NULL;
 #else
     if ( !pAppData_Impl->pBasicManager->isValid() )
@@ -132,7 +133,7 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 
 StarBASIC* SfxApplication::GetBasic()
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     return 0;
 #else
     return GetBasicManager()->GetLib(0);

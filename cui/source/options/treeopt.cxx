@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "cuires.hrc"
 #include "helpid.hrc"
 
@@ -320,7 +322,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, const Sf
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         case RID_SVXPAGE_BASICIDE_OPTIONS:          fnCreate = &SvxBasicIDEOptionsPage::Create; break;
 #endif
     }

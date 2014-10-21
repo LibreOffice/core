@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <math.h>
 #include <tools/debug.hxx>
@@ -259,7 +260,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
                     ((SbxValue*) pObj)->aData.eType == SbxOBJECT &&
                     ((SbxValue*) pObj)->aData.pObj == pObj )
                 {
-#ifdef DISABLE_SCRIPTING // No sbunoobj
+#if !HAVE_FEATURE_SCRIPTING
                     const bool bSuccess = false;
 #else
                     bool bSuccess = handleToStringForCOMObjects( pObj, p );
@@ -871,8 +872,8 @@ bool SbxValue::Convert( SbxDataType eTo )
 
 bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 {
-#ifdef DISABLE_SCRIPTING
-    bool bVBAInterop = false;
+#if !HAVE_FEATURE_SCRIPTING
+    const bool bVBAInterop = false;
 #else
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
 #endif
@@ -1243,8 +1244,8 @@ Lbl_OpIsEmpty:
 
 bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 {
-#ifdef DISABLE_SCRIPTING
-    bool bVBAInterop = false;
+#if !HAVE_FEATURE_SCRIPTING
+    const bool bVBAInterop = false;
 #else
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
 #endif

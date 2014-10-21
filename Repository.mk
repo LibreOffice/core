@@ -173,7 +173,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	wpftcalc \
 	$(if $(ENABLE_OPENCL),scopencl) \
 	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
-	$(if $(DISABLE_SCRIPTING),,vbaobj) \
+	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
@@ -244,8 +244,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		$(if $(filter-out 1050 1060,$(MACOSX_SDK_VERSION)),avmediaMacAVF) \
 		$(if $(ENABLE_MACOSX_SANDBOX),,avmediaQuickTime) \
 	) \
-	$(if $(DISABLE_SCRIPTING),,basctl) \
-	$(if $(DISABLE_SCRIPTING),,basprov) \
+	$(call gb_Helper_optional,SCRIPTING, \
+		basctl \
+		basprov \
+	) \
 	$(if $(filter $(OS),ANDROID),, \
 		basebmp \
 	) \
@@ -271,7 +273,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
-	$(if $(DISABLE_SCRIPTING),,dlgprov) \
+	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
 	$(if $(ENABLE_DIRECTX),directx9canvas) \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
 	drawinglayer \
@@ -335,7 +337,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	migrationoo2 \
 	migrationoo3 \
 	msfilter \
-	$(if $(DISABLE_SCRIPTING),,msforms) \
+	$(call gb_Helper_optional,SCRIPTING,msforms) \
 	mtfrenderer \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mysql) \
 	odbc \
@@ -346,7 +348,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	pcr \
 	$(if $(ENABLE_NPAPI_FROM_BROWSER),pl) \
 	pdffilter \
-	$(if $(DISABLE_SCRIPTING),,protocolhandler) \
+	$(call gb_Helper_optional,SCRIPTING,protocolhandler) \
 	res \
 	sax \
 	sb \
@@ -363,7 +365,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
 	storagefd \
-	$(if $(DISABLE_SCRIPTING),,stringresource) \
+	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
 	svl \
 	svt \
@@ -387,8 +389,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	updatefeed \
 	utl \
 	uui \
-	$(if $(DISABLE_SCRIPTING),,vbaevents) \
-	$(if $(DISABLE_SCRIPTING),,vbahelper) \
+	$(call gb_Helper_optional,SCRIPTING, \
+		vbaevents \
+		vbahelper \
+	) \
 	vcl \
 	vclcanvas \
 	vclopengl \
@@ -461,7 +465,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	swd \
 	swui \
 	t602filter \
-	$(if $(DISABLE_SCRIPTING),,vbaswobj) \
+	$(call gb_Helper_optional,SCRIPTING,vbaswobj) \
 	wpftwriter \
 	writerfilter \
 ))
@@ -560,7 +564,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
 	package2 \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),recentfile) \
-	$(if $(DISABLE_SCRIPTING),,scriptframe) \
+	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	sdbc2 \
 	sofficeapp \
 	srtrs1 \

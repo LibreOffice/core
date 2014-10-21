@@ -64,6 +64,16 @@
 
 #define HAVE_FEATURE_EXTENSIONS 0
 
+/* SCRIPTING - Whether we have any mechanism to execute user-provided scripts
+ *
+ * Primarily intended for the iOS App Store where the
+ * rules prohibit user-accessible scripting features.
+ * Sure, it would be nice to still be able to have internal features
+ * implemented in some scripting language. Later, if necessary.
+ */
+
+#define HAVE_FEATURE_SCRIPTING 0
+
 /* MULTIUSER_ENVIRONMENT - Wheter running on a "normal" multi-user
  * desktop (or server) OS
  *

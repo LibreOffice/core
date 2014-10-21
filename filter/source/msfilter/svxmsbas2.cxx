@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include <basic/basmgr.hxx>
 #include <sfx2/objsh.hxx>
@@ -38,7 +39,7 @@ sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
         xVBAStg = 0;
         if( bSaveInto )
         {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             BasicManager *pBasicMan = rDocSh.GetBasicManager();
             if( pBasicMan && pBasicMan->IsBasicModified() )
                 nRet = ERRCODE_SVX_MODIFIED_VBASIC_STORAGE;

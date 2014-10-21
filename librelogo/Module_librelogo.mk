@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,librelogo))
 
-ifneq ($(DISABLE_SCRIPTING),TRUE)
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 ifneq ($(DISABLE_PYTHON),TRUE)
 
 $(eval $(call gb_Module_add_targets,librelogo,\

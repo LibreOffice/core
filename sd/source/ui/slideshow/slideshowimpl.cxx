@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -664,7 +666,7 @@ void SAL_CALL SlideshowImpl::disposing()
 
     if( maPresSettings.mbFullScreen )
     {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         // restore StarBASICErrorHdl
         StarBASIC::SetGlobalErrorHdl(maStarBASICGlobalErrorHdl);
         maStarBASICGlobalErrorHdl = Link();
@@ -995,7 +997,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             if( maPresSettings.mbFullScreen )
             {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 // disable basic ide error handling
                 maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
                 StarBASIC::SetGlobalErrorHdl( Link() );

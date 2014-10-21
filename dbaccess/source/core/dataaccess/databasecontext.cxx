@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "apitools.hxx"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
@@ -172,7 +174,7 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
 {
     m_pDatabaseDocumentLoader = new DatabaseDocumentLoader( _rxContext );
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     ::basic::BasicManagerRepository::registerCreationListener( *this );
 #endif
 
@@ -188,7 +190,7 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
 
 ODatabaseContext::~ODatabaseContext()
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     ::basic::BasicManagerRepository::revokeCreationListener( *this );
 #endif
 
@@ -739,7 +741,7 @@ Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId()
 
 void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) _rxForDocument;
     (void) _rBasicManager;
 #else

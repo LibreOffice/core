@@ -2594,7 +2594,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
  */
 void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) sMacro;
 #else
     if ( sMacro.isEmpty() )

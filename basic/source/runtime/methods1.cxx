@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <cstddef>
@@ -96,7 +98,7 @@ static Reference< XCalendar3 > getLocaleCalendar( void )
     return xCalendar;
 }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 RTLFUNC(CallByName)
 {
@@ -3316,7 +3318,7 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay
     {
         if( nFirstDay < 0 || nFirstDay > 7 )
         {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
 #endif
             return 0;
@@ -3326,7 +3328,7 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay
             Reference< XCalendar3 > xCalendar = getLocaleCalendar();
             if( !xCalendar.is() )
             {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 StarBASIC::Error( SbERR_INTERNAL_ERROR );
 #endif
                 return 0;

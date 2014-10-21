@@ -122,7 +122,7 @@ using namespace ::com::sun::star;
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 static BasicDLL*       pBasic   = NULL;
 #endif
 
@@ -209,7 +209,7 @@ SfxApplication::SfxApplication()
     pSfxHelp = new SfxHelp;
 #endif
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     pBasic   = new BasicDLL;
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
 #endif
@@ -232,7 +232,7 @@ SfxApplication::~SfxApplication()
     // delete global options
     SvtViewOptions::ReleaseOptions();
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     delete pBasic;
 #endif
     if ( !pAppData_Impl->bDowning )
@@ -461,7 +461,7 @@ void SfxApplication::Invalidate( sal_uInt16 nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 #ifndef DISABLE_DYNLOADING
 
@@ -481,7 +481,7 @@ extern "C" void *basicide_macro_organizer(sal_Int16);
 
 IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) pStarBasic;
     return 0;
 #else
@@ -514,7 +514,7 @@ bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
 {
     bool result = false;
 
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) rScriptURL;
 #else
     ::com::sun::star::uno::Reference
@@ -550,7 +550,7 @@ SfxApplication::ChooseScript()
 {
     OUString aScriptURL;
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     if ( pFact )
     {
@@ -580,7 +580,7 @@ SfxApplication::ChooseScript()
 
 void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) nTabId;
 #else
 
@@ -610,7 +610,7 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 
 ErrCode SfxApplication::CallBasic( const OUString& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) rCode;
     (void) pMgr;
     (void) pArgs;

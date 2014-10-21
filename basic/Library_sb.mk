@@ -59,7 +59,7 @@ $(eval $(call gb_Library_use_libraries,sb,\
 	$(gb_UWINAPI) \
 ))
 
-ifneq ($(DISABLE_SCRIPTING),TRUE)
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/basmgr/basicmanagerrepository \

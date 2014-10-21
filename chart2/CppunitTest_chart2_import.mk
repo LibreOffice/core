@@ -103,7 +103,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_import,\
     sd/util/sd \
     sd/util/sdfilt \
     sd/util/sdd \
-    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+    $(call gb_Helper_optional,SCRIPTING, \
 	    sc/util/vbaobj) \
     scaddins/source/analysis/analysis \
     scaddins/source/datefunc/date \

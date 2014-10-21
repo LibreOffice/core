@@ -1037,7 +1037,7 @@ bool SfxObjectShell::DoSave()
             }
             else
                 bOk = true;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             if ( HasBasic() )
             {
                 try
@@ -3095,7 +3095,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             bChart = true;
 
         SetupStorage( xStorage, nVersion, bTemplate, bChart );
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         if ( HasBasic() )
         {
             // Initialize Basic
@@ -3624,7 +3624,7 @@ void SfxObjectShell::SetConfigOptionsChecked( bool bChecked )
 
 bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) xHandler;
 #else
     if ( !HasBasic() )

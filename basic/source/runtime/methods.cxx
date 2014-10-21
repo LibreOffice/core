@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/date.hxx>
 #include <basic/sbxvar.hxx>
 #include <basic/sbuno.hxx>
@@ -94,7 +96,7 @@ using namespace com::sun::star::uno;
 #include <postwin.h>
 #endif
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 static void FilterWhiteSpace( OUString& rStr )
 {
@@ -4876,7 +4878,7 @@ sal_Int16 implGetDateYear( double aDate )
 
 bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet )
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     if ( nYear < 30 && SbiRuntime::isVBAEnabled() )
     {
         nYear += 2000;
@@ -4892,26 +4894,26 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& 
     Date aCurDate( nDay, nMonth, nYear );
     if ((nYear < 100 || nYear > 9999) )
     {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 #endif
         return false;
     }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     if ( !SbiRuntime::isVBAEnabled() )
 #endif
     {
         if ( (nMonth < 1 || nMonth > 12 )||
              (nDay < 1 || nDay > 31 ) )
         {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
 #endif
             return false;
         }
     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     else
     {
         // grab the year & month

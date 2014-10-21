@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/errcode.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
@@ -69,7 +71,7 @@ double ImpGetDouble( const SbxValues* p )
             if( !p->pOUString )
             {
                 nRes = 0;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
                     SbxBase::SetError( SbxERR_CONVERSION );
 #endif
@@ -81,7 +83,7 @@ double ImpGetDouble( const SbxValues* p )
                 if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                 {
                     nRes = 0;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
                         SbxBase::SetError( SbxERR_CONVERSION );
 #endif

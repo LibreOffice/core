@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <macroloader.hxx>
 
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -190,7 +192,7 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
     throw ( ucb::ContentCreationException, uno::RuntimeException )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) rURL;
     (void) rRetval;
     (void) pSh;

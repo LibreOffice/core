@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
@@ -582,7 +584,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     if( pFlt->GetUserData() == "HTML" )
     {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
         if( !rHtmlOpt.IsStarBasic() && rHtmlOpt.IsStarBasicWarning() && HasBasic() )
         {

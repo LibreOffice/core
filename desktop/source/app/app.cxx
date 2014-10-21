@@ -1723,7 +1723,7 @@ int Desktop::doShutdown()
     // with the solar mutex unlocked, to avoid deadlock:
     sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     StarBASIC::DetachAllDocBasicItems();
 #endif
     Application::AcquireSolarMutex(nAcquireCount);

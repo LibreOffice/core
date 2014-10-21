@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -89,7 +91,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
 {
@@ -562,7 +564,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         }
         break;
         case  SW_SERVICE_VBAOBJECTPROVIDER :
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         {
             SwVbaObjectForCodeNameProvider* pObjProv =
                 new SwVbaObjectForCodeNameProvider(rDoc.GetDocShell());
@@ -571,7 +573,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
 #endif
         break;
         case  SW_SERVICE_VBACODENAMEPROVIDER :
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         {
             if (rDoc.GetDocShell() && ooo::vba::isAlienWordDoc(*rDoc.GetDocShell()))
             {
@@ -582,7 +584,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
 #endif
         break;
         case  SW_SERVICE_VBAPROJECTNAMEPROVIDER :
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         {
                         uno::Reference< container::XNameContainer > xProjProv = rDoc.GetVBATemplateToProjectCache();
                         if (!xProjProv.is() && rDoc.GetDocShell()
@@ -596,7 +598,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
 #endif
         break;
         case  SW_SERVICE_VBAGLOBALS :
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         {
             uno::Any aGlobs;
             BasicManager *pBasicMan = rDoc.GetDocShell()->GetBasicManager();

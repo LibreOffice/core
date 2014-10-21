@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <doc.hxx>
 #include <DocumentFieldsManager.hxx>
 #include <DocumentSettingManager.hxx>
@@ -1706,7 +1708,7 @@ void SwDoc::ChkCondColls()
 uno::Reference< script::vba::XVBAEventProcessor >
 SwDoc::GetVbaEventProcessor()
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     if( !mxVbaEvents.is() && mpDocShell && ooo::vba::isAlienWordDoc( *mpDocShell ) )
     {
         try

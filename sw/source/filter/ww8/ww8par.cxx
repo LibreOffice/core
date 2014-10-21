@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
@@ -5175,7 +5177,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             aArgs[ 0 ] <<= mpDocShell->GetModel();
             aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             BasicManager *pBasicMan = mpDocShell->GetBasicManager();
             if (pBasicMan)
                 pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );

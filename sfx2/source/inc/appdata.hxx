@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_APPDATA_HXX
 #define INCLUDED_SFX2_SOURCE_INC_APPDATA_HXX
 
+#include <config_features.h>
+
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/lstner.hxx>
@@ -83,13 +85,13 @@ public:
 
     // application members
     SfxFilterMatcher*                   pMatcher;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     ResMgr*                             pBasicResMgr;
 #endif
     ResMgr*                             pSvtResMgr;
     SfxErrorHandler *m_pToolsErrorHdl;
     SfxErrorHandler *m_pSoErrorHdl;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     SfxErrorHandler *m_pSbxErrorHdl;
 #endif
     SfxStatusDispatcher*                pAppDispatch;

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <boost/scoped_ptr.hpp>
 
 #include "scitems.hxx"
@@ -404,7 +406,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 if( rReq.IsAPI() )
                                 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                                     StarBASIC::Error( SbERR_SETPROP_FAILED ); // XXX Fehlerbehandlung???
 #endif
                                 }
@@ -736,7 +738,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 {
                                     if( rReq.IsAPI() )
                                     {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                                         StarBASIC::Error( SbERR_SETPROP_FAILED );
 #endif
                                     }

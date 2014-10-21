@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/errcode.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
@@ -250,7 +252,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         if( l >= SbxMININT && l <= SbxMAXINT )
             eScanType = SbxINTEGER;
     }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     else if ( SbiRuntime::isVBAEnabled() )
     {
         OSL_TRACE("Reporting error converting");

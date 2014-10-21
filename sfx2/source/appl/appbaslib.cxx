@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 
 #include "appbaslib.hxx"
 
@@ -46,7 +47,7 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 {
     impl_releaseContainers();
 
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) _pBasicManager;
 #else
     // Note: we do not delete the old BasicManager. BasicManager instances are
@@ -73,7 +74,7 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 
 void SfxBasicManagerHolder::storeAllLibraries()
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeAllLibraries: not initialized!" );
     try
     {
@@ -91,7 +92,7 @@ void SfxBasicManagerHolder::storeAllLibraries()
 
 void SfxBasicManagerHolder::setStorage( const Reference< XStorage >& _rxStorage )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) _rxStorage;
 #else
     try
@@ -110,7 +111,7 @@ void SfxBasicManagerHolder::setStorage( const Reference< XStorage >& _rxStorage 
 
 void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >& _rxStorage )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) _rxStorage;
 #else
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeLibrariesToStorage: not initialized!" );
@@ -143,7 +144,7 @@ void SfxBasicManagerHolder::impl_releaseContainers()
 
 bool SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sModules )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) sModules;
 #else
     if ( mpBasicManager )

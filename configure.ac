@@ -2512,11 +2512,11 @@ fi
 DISABLE_SCRIPTING=''
 if test "$enable_scripting" = yes; then
     BUILD_TYPE="$BUILD_TYPE SCRIPTING"
+    AC_DEFINE(HAVE_FEATURE_SCRIPTING)
 else
     DISABLE_SCRIPTING='TRUE'
     SCPDEFS="$SCPDEFS -DDISABLE_SCRIPTING"
 fi
-AC_SUBST(DISABLE_SCRIPTING)
 
 if test $_os = iOS -o $_os = Android; then
     # Disable dynamic_loading always for iOS and Android

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "interpre.hxx"
 
 #include <rangelst.hxx>
@@ -3030,7 +3032,7 @@ void ScInterpreter::ScMissing()
     PushTempToken( new FormulaMissingToken );
 }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, ScDocument* pDok )
 {
@@ -3096,7 +3098,7 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
 void ScInterpreter::ScMacro()
 {
 
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     PushNoValue();      // ohne DocShell kein CallBasic
     return;
 #else
@@ -3396,7 +3398,7 @@ void ScInterpreter::ScMacro()
 #endif
 }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {

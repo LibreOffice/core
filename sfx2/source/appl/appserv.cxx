@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/drawing/ModuleDispatcher.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -551,7 +553,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         case SID_BASICSTOP:
             StarBASIC::Stop();
             break;
@@ -725,7 +727,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 case SID_BASICSTOP:
                     if ( !StarBASIC::IsRunning() )
                         rSet.DisableItem(nWhich);
@@ -826,7 +828,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
     }
 }
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
 
 #ifndef DISABLE_DYNLOADING
 
@@ -882,7 +884,7 @@ ResMgr* SfxApplication::GetOffResManager_Impl()
 
 namespace
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     vcl::Window* lcl_getDialogParent( const Reference< XFrame >& _rxFrame, vcl::Window* _pFallback )
     {
         if ( !_rxFrame.is() )
@@ -957,7 +959,7 @@ namespace
         }
         return NULL;
     }
-#endif // !DISABLE_SCRIPTING
+#endif // HAVE_FEATURE_SCRIPTING
 }
 
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
@@ -1036,7 +1038,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             break;
         }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         case SID_BASICIDE_APPEAR:
         {
             SfxViewFrame* pView = lcl_getBasicIDEViewFrame( NULL );
@@ -1220,7 +1222,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             rReq.Done();
         }
         break;
-#endif // !DISABLE_SCRIPTING
+#endif // HAVE_FEATURE_SCRIPTING
 
         case SID_OFFICE_CHECK_PLZ:
         {
@@ -1231,7 +1233,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 bRet = true /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
             }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
             else
                 SbxBase::SetError( SbxERR_WRONG_ARGS );
 #endif

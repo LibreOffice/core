@@ -38,7 +38,7 @@ $(eval $(call gb_Module_add_l10n_targets,sw,\
 	UIConfig_qa \
 ))
 
-ifneq ($(DISABLE_SCRIPTING),TRUE)
+ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 $(eval $(call gb_Module_add_targets,sw,\
     Library_vbaswobj \

@@ -611,7 +611,7 @@ Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell* pO
 {
     Reference< script::XStarBasicAccess > xRet;
 
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) pObjectShell;
 #else
     if( pObjectShell )
@@ -625,7 +625,7 @@ Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell* pO
 
 Reference< container::XNameContainer > SAL_CALL SfxBaseModel::getLibraryContainer() throw( RuntimeException, std::exception )
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     Reference< container::XNameContainer > dummy;
 
     return dummy;
@@ -650,7 +650,7 @@ void SAL_CALL SfxBaseModel::createLibrary( const OUString& LibName, const OUStri
     const OUString& ExternalSourceURL, const OUString& LinkTargetURL )
         throw(container::ElementExistException, RuntimeException, std::exception)
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) LibName;
     (void) Password;
     (void) ExternalSourceURL;
@@ -674,7 +674,7 @@ void SAL_CALL SfxBaseModel::addModule( const OUString& LibraryName, const OUStri
     const OUString& Language, const OUString& Source )
         throw( container::NoSuchElementException, RuntimeException, std::exception)
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) LibraryName;
     (void) ModuleName;
     (void) Language;
@@ -698,7 +698,7 @@ void SAL_CALL SfxBaseModel::addDialog( const OUString& LibraryName, const OUStri
     const Sequence< sal_Int8 >& Data )
         throw(container::NoSuchElementException, RuntimeException, std::exception)
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) LibraryName;
     (void) DialogName;
     (void) Data;

@@ -93,7 +93,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
-    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+    $(call gb_Helper_optional,SCRIPTING, \
 	    sc/util/vbaobj) \
     sfx2/util/sfx \
     sot/util/sot \

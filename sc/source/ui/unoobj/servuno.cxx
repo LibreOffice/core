@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/macros.h>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
@@ -587,7 +589,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::unique_ptr<formula::FormulaCompiler> (pComp))));
                 break;
             }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         case SC_SERVICE_VBAOBJECTPROVIDER:
             if (pDocShell && pDocShell->GetDocument().IsInVBAMode())
             {

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/strbuf.hxx>
@@ -254,7 +256,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
 
 void SwHTMLWriter::OutBasic()
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     if( !bCfgStarBasic )
         return;
 

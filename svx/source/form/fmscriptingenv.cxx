@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "fmscriptingenv.hxx"
 #include "svx/fmmodel.hxx"
 
@@ -898,7 +900,7 @@ namespace svxform
 
     void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
         (void) _rEvent;
         (void) _pSyncronousResult;
         (void) m_rFormModel;

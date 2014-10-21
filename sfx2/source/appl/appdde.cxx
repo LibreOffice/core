@@ -349,7 +349,7 @@ long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 */
 long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
 {
-#ifdef DISABLE_SCRIPTING
+#if !HAVE_FEATURE_SCRIPTING
     (void) rCmd;
 #else
     StarBASIC* pBasic = GetBasic();

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <svx/svdmark.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
@@ -131,7 +133,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                         }
                     }
                 }
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                 if (!bDone)
                     SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-Fehler
 #endif

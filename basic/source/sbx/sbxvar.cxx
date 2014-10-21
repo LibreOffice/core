@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -78,7 +80,7 @@ SbxVariable::SbxVariable( const SbxVariable& r )
     if( r.mpSbxVariableImpl != NULL )
     {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         if( mpSbxVariableImpl->m_xComListener.is() )
         {
             registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
@@ -112,7 +114,7 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 
 SbxVariable::~SbxVariable()
 {
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     if( IsSet( SBX_DIM_AS_NEW ))
     {
         removeDimAsNewRecoverItem( this );
@@ -347,7 +349,7 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     if( r.mpSbxVariableImpl != NULL )
     {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
         if( mpSbxVariableImpl->m_xComListener.is() )
         {
             registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
@@ -450,7 +452,7 @@ void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::
     SbxVariableImpl* pImpl = getImpl();
     pImpl->m_xComListener = xComListener;
     pImpl->m_pComListenerParentBasic = pParentBasic;
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     registerComListenerVariableForBasic( this, pParentBasic );
 #endif
 }

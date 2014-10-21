@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/imapobj.hxx>
@@ -1032,7 +1034,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     }
                     //Set distance only if the request is received from the controller.
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
                     if(!StarBASIC::IsRunning())
 #endif
                     {

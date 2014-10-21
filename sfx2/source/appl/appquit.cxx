@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>
 
@@ -61,7 +63,7 @@ void SfxApplication::Deinitialize()
     if ( pAppData_Impl->bDowning )
         return;
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     StarBASIC::Stop();
 
     SaveBasicAndDialogContainer();
@@ -91,7 +93,7 @@ void SfxApplication::Deinitialize()
     // Release Controller and others
     // then the remaining components should alse disapear ( Beamer! )
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::resetApplicationBasicManager();
     pAppData_Impl->pBasicManager->reset( NULL );
         // this will also delete pBasMgr
@@ -125,12 +127,12 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->pPool = NULL;
     NoChaos::ReleaseItemPool();
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     DELETEZ(pAppData_Impl->pBasicResMgr);
 #endif
     DELETEZ(pAppData_Impl->pSvtResMgr);
 
-#ifndef DISABLE_SCRIPTING
+#if HAVE_FEATURE_SCRIPTING
     delete pAppData_Impl->m_pSbxErrorHdl;
 #endif
     delete pAppData_Impl->m_pSoErrorHdl;
