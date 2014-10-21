@@ -423,8 +423,8 @@ void SdrTextObj::ImpJustifyRect(Rectangle& rRect) const
 
 void SdrTextObj::ImpCheckShear()
 {
-    if (bNoShear && aGeo.nShearWink!=0) {
-        aGeo.nShearWink=0;
+    if (bNoShear && aGeo.nShearAngle!=0) {
+        aGeo.nShearAngle=0;
         aGeo.nTan=0;
     }
 }
@@ -1116,7 +1116,7 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
     Polygon aPol(aRect);
-    if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nShearAngle!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
     basegfx::B2DPolyPolygon aRetval;
@@ -1153,9 +1153,9 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 
 void SdrTextObj::RecalcSnapRect()
 {
-    if (aGeo.nRotationAngle!=0 || aGeo.nShearWink!=0) {
+    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0) {
         Polygon aPol(aRect);
-        if (aGeo.nShearWink!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
+        if (aGeo.nShearAngle!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
         if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         maSnapRect=aPol.GetBoundRect();
     } else {
@@ -1178,7 +1178,7 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
         case 3: aP=aRect.BottomRight(); break;
         default: aP=aRect.Center(); break;
     }
-    if (aGeo.nShearWink!=0) ShearPoint(aP,aRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nShearAngle!=0) ShearPoint(aP,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoint(aP,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     return aP;
 }
@@ -1597,7 +1597,7 @@ bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
 {
     // get turn and shear
     double fRotate = (aGeo.nRotationAngle / 100.0) * F_PI180;
-    double fShearX = (aGeo.nShearWink / 100.0) * F_PI180;
+    double fShearX = (aGeo.nShearAngle / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
     Rectangle aRectangle(aRect);
@@ -1674,7 +1674,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // reset object shear and rotations
     aGeo.nRotationAngle = 0;
     aGeo.RecalcSinCos();
-    aGeo.nShearWink = 0;
+    aGeo.nShearAngle = 0;
     aGeo.RecalcTan();
 
     // force metric to pool metric
@@ -1721,9 +1721,9 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
-        aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
+        aGeoStat.nShearAngle = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+        Shear(Point(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
     }
 
     // rotation?

@@ -1177,7 +1177,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
                 rReturnPosition = GetPoint( aHandle.aPosition, true, false );
             }
             const GeoStat aGeoStat( static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetGeoStat() );
-            if ( aGeoStat.nShearWink )
+            if ( aGeoStat.nShearAngle )
             {
                 double nTan = aGeoStat.nTan;
                 if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
@@ -1222,7 +1222,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                 RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
             }
             const GeoStat aGeoStat( static_cast<SdrObjCustomShape*>(pCustomShapeObj)->GetGeoStat() );
-            if ( aGeoStat.nShearWink )
+            if ( aGeoStat.nShearAngle )
             {
                 double nTan = -aGeoStat.nTan;
                 if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))

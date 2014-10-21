@@ -52,7 +52,7 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
         case 6: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break;
         case 7: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break;
     }
-    if (aGeo.nShearWink!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     if (eKind!=HDL_MOVE) {
         pH=new SdrHdl(aPnt,eKind);
@@ -81,7 +81,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     // Unrotate:
     if (aGeo.nRotationAngle!=0) RotatePoint(aPos,aTmpRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
     // Unshear:
-    if (aGeo.nShearWink!=0) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.nTan);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.nTan);
 
     bool bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
     bool bRgt=(eHdl==HDL_UPRGT || eHdl==HDL_RIGHT || eHdl==HDL_LWRGT);
@@ -150,11 +150,11 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
-    if(aNewRect.TopLeft() != aRect.TopLeft() && (aGeo.nRotationAngle || aGeo.nShearWink))
+    if(aNewRect.TopLeft() != aRect.TopLeft() && (aGeo.nRotationAngle || aGeo.nShearAngle))
     {
         Point aNewPos(aNewRect.TopLeft());
 
-        if(aGeo.nShearWink)
+        if(aGeo.nShearAngle)
             ShearPoint(aNewPos,aRect.TopLeft(),aGeo.nTan);
 
         if(aGeo.nRotationAngle)

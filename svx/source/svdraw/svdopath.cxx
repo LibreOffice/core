@@ -1713,7 +1713,7 @@ void SdrPathObj::ImpForceLineWink()
         const Point aDelt(aPoint1 - aPoint0);
 
         aGeo.nRotationAngle=GetAngle(aDelt);
-        aGeo.nShearWink=0;
+        aGeo.nShearAngle=0;
         aGeo.RecalcSinCos();
         aGeo.RecalcTan();
 
@@ -2893,16 +2893,16 @@ bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
         }
         else
         {
-            if(aGeo.nShearWink || aGeo.nRotationAngle)
+            if(aGeo.nShearAngle || aGeo.nRotationAngle)
             {
                 // get rotate and shear in drawingLayer notation
                 fRotate = aGeo.nRotationAngle * F_PI18000;
-                fShearX = aGeo.nShearWink * F_PI18000;
+                fShearX = aGeo.nShearAngle * F_PI18000;
 
                 // build mathematically correct (negative shear and rotate) object transform
                 // containing shear and rotate to extract unsheared, unrotated polygon
                 basegfx::B2DHomMatrix aObjectMatrix;
-                aObjectMatrix.shearX(tan((36000 - aGeo.nShearWink) * F_PI18000));
+                aObjectMatrix.shearX(tan((36000 - aGeo.nShearAngle) * F_PI18000));
                 aObjectMatrix.rotate((36000 - aGeo.nRotationAngle) * F_PI18000);
 
                 // create inverse from it and back-transform polygon
@@ -3019,7 +3019,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // reset object shear and rotations
     aGeo.nRotationAngle = 0;
     aGeo.RecalcSinCos();
-    aGeo.nShearWink = 0;
+    aGeo.nShearAngle = 0;
     aGeo.RecalcTan();
 
     // force metric to pool metric
@@ -3078,7 +3078,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     if(!basegfx::fTools::equalZero(fShearX))
     {
         aTransform.shearX(tan(-atan(fShearX)));
-        aGeo.nShearWink = FRound(atan(fShearX) / F_PI18000);
+        aGeo.nShearAngle = FRound(atan(fShearX) / F_PI18000);
         aGeo.RecalcTan();
     }
 

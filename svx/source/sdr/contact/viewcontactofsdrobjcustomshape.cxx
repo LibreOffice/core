@@ -60,7 +60,7 @@ namespace sdr
                 const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                 // only correct when rotation and/or shear is used
-                if(rGeoStat.nShearWink || rGeoStat.nRotationAngle )
+                if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle )
                 {
                     // text range needs to be corrected by
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
@@ -74,9 +74,9 @@ namespace sdr
 
                     aRotMatrix.translate(-aObjectRange.getMinimum().getX(), -aObjectRange.getMinimum().getY());
 
-                    if(rGeoStat.nShearWink)
+                    if(rGeoStat.nShearAngle)
                     {
-                        aRotMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
+                        aRotMatrix.shearX(tan((36000 - rGeoStat.nShearAngle) * F_PI18000));
                     }
 
                     if(rGeoStat.nRotationAngle)
@@ -177,7 +177,7 @@ namespace sdr
                     const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
                     const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
-                    if(rGeoStat.nShearWink || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
+                    if(rGeoStat.nShearAngle || rGeoStat.nRotationAngle || !basegfx::fTools::equalZero(fExtraTextRotation))
                     {
                         if(aObjectRange != aTextRange)
                         {
@@ -197,9 +197,9 @@ namespace sdr
                             aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
                         }
 
-                        if(rGeoStat.nShearWink)
+                        if(rGeoStat.nShearAngle)
                         {
-                            aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
+                            aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearAngle) * F_PI18000));
                         }
 
                         if(rGeoStat.nRotationAngle)

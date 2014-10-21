@@ -116,7 +116,7 @@ void Client::ObjectAreaChanged()
             // #i118524# if sheared/rotated, center to non-rotated LogicRect
             pObj->setSuppressSetVisAreaSize(true);
 
-            if(pObj->GetGeoStat().nRotationAngle || pObj->GetGeoStat().nShearWink)
+            if(pObj->GetGeoStat().nRotationAngle || pObj->GetGeoStat().nShearAngle)
             {
                 pObj->SetLogicRect( aNewRectangle );
 

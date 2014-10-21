@@ -2032,7 +2032,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             GeoStat aGeoStat(pGraf ? pGraf->GetGeoStat() : pOle2->GetGeoStat());
             size_t nObj=nInsPos;
 
-            if(aGeoStat.nShearWink)
+            if(aGeoStat.nShearAngle)
             {
                 aGeoStat.RecalcTan();
             }
@@ -2051,9 +2051,9 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
                 SdrObject* pCandidate = pOL->GetObj(nObj);
 
                 // apply original transformation
-                if(aGeoStat.nShearWink)
+                if(aGeoStat.nShearAngle)
                 {
-                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
                 }
 
                 if(aGeoStat.nRotationAngle)

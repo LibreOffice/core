@@ -456,10 +456,10 @@ void GeoStat::RecalcSinCos()
 
 void GeoStat::RecalcTan()
 {
-    if (nShearWink==0) {
+    if (nShearAngle==0) {
         nTan=0.0;
     } else {
-        double a=nShearWink*nPi180;
+        double a=nShearAngle*nPi180;
         nTan=tan(a);
     }
 }
@@ -474,7 +474,7 @@ Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo)
     aPol[2]=rRect.BottomRight();
     aPol[3]=rRect.BottomLeft();
     aPol[4]=rRect.TopLeft();
-    if (rGeo.nShearWink!=0) ShearPoly(aPol,rRect.TopLeft(),rGeo.nTan);
+    if (rGeo.nShearAngle!=0) ShearPoly(aPol,rRect.TopLeft(),rGeo.nTan);
     if (rGeo.nRotationAngle!=0) RotatePoly(aPol,rRect.TopLeft(),rGeo.nSin,rGeo.nCos);
     return aPol;
 }
@@ -512,7 +512,7 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
     }
     if (nShW<-SDRMAXSHEAR) nShW=-SDRMAXSHEAR; // limit ShearWinkel (shear angle) to +/- 89.00 deg
     if (nShW>SDRMAXSHEAR)  nShW=SDRMAXSHEAR;
-    rGeo.nShearWink=nShW;
+    rGeo.nShearAngle=nShW;
     rGeo.RecalcTan();
     Point aRU(aPt0);
     aRU.X()+=nWdt;

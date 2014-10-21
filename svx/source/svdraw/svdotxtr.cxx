@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
 {
-    if (aGeo.nRotationAngle!=0 || aGeo.nShearWink!=0) {
+    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0) {
         Rectangle aSR0(GetSnapRect());
         long nWdt0=aSR0.Right()-aSR0.Left();
         long nHgt0=aSR0.Bottom()-aSR0.Top();
@@ -107,7 +107,7 @@ long SdrTextObj::GetRotateAngle() const
 
 long SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 {
-    return aGeo.nShearWink;
+    return aGeo.nShearAngle;
 }
 
 void SdrTextObj::NbcMove(const Size& rSiz)
@@ -120,7 +120,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
 
 void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
 {
-    bool bNoShearMerk=aGeo.nShearWink==0;
+    bool bNoShearMerk=aGeo.nShearAngle==0;
     bool bRota90Merk=bNoShearMerk && aGeo.nRotationAngle % 9000 ==0;
     long nHDist=GetTextLeftDistance()+GetTextRightDistance();
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
@@ -142,7 +142,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& 
         }
     }
 
-    if (aGeo.nRotationAngle==0 && aGeo.nShearWink==0) {
+    if (aGeo.nRotationAngle==0 && aGeo.nShearAngle==0) {
         ResizeRect(aRect,rRef,xFact,yFact);
         if (bYMirr) {
             aRect.Justify();
@@ -187,8 +187,8 @@ void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& 
             aGeo.nRotationAngle=a;
             aGeo.RecalcSinCos();
         }
-        if (bNoShearMerk!=(aGeo.nShearWink==0)) { // correct a rounding error occurring with Shear
-            aGeo.nShearWink=0;
+        if (bNoShearMerk!=(aGeo.nShearAngle==0)) { // correct a rounding error occurring with Shear
+            aGeo.nShearAngle=0;
             aGeo.RecalcTan();
         }
     }
@@ -259,7 +259,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
 void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    bool bNoShearMerk=aGeo.nShearWink==0;
+    bool bNoShearMerk=aGeo.nShearAngle==0;
     bool bRota90Merk = false;
     if (bNoShearMerk &&
         (rRef1.X()==rRef2.X() || rRef1.Y()==rRef2.Y() ||
@@ -294,8 +294,8 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
             aGeo.RecalcSinCos();
         }
     }
-    if (bNoShearMerk!=(aGeo.nShearWink==0)) { // correct a rounding error occurring with Shear
-        aGeo.nShearWink=0;
+    if (bNoShearMerk!=(aGeo.nShearAngle==0)) { // correct a rounding error occurring with Shear
+        aGeo.nShearAngle=0;
         aGeo.RecalcTan();
     }
 

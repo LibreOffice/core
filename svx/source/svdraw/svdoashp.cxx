@@ -1757,7 +1757,7 @@ SdrGluePoint SdrObjCustomShape::GetVertexGluePoint(sal_uInt16 nPosNum) const
         case 2: aPt=aRect.BottomCenter(); aPt.Y()+=nWdt; break;
         case 3: aPt=aRect.LeftCenter();   aPt.X()-=nWdt; break;
     }
-    if (aGeo.nShearWink!=0) ShearPoint(aPt,aRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPt,aRect.TopLeft(),aGeo.nTan);
     if (aGeo.nRotationAngle!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
@@ -1800,13 +1800,13 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                 bool bMirroredX = IsMirroredX();
                 bool bMirroredY = IsMirroredY();
 
-                long nShearWink = aGeo.nShearWink;
+                long nShearAngle = aGeo.nShearAngle;
                 double fTan = aGeo.nTan;
 
-                if ( aGeo.nRotationAngle || nShearWink || bMirroredX || bMirroredY )
+                if ( aGeo.nRotationAngle || nShearAngle || bMirroredX || bMirroredY )
                 {
                     Polygon aPoly( aRect );
-                    if( nShearWink )
+                    if( nShearAngle )
                     {
                         sal_uInt16 nPointCount=aPoly.GetSize();
                         for (sal_uInt16 i=0; i<nPointCount; i++)
@@ -1819,9 +1819,9 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     sal_Int32 nXDiff = aBoundRect.Left() - aRect.Left();
                     sal_Int32 nYDiff = aBoundRect.Top() - aRect.Top();
 
-                    if (nShearWink&&((bMirroredX&&!bMirroredY)||(bMirroredY&&!bMirroredX)))
+                    if (nShearAngle&&((bMirroredX&&!bMirroredY)||(bMirroredY&&!bMirroredX)))
                     {
-                        nShearWink = -nShearWink;
+                        nShearAngle = -nShearAngle;
                         fTan = -fTan;
                     }
 
@@ -1830,7 +1830,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     {
                         SdrGluePoint& rPoint = aNewList[ a ];
                         Point aGlue( rPoint.GetPos() );
-                        if ( nShearWink )
+                        if ( nShearAngle )
                             ShearPoint( aGlue, aRef, fTan );
 
                         RotatePoint( aGlue, aRef, sin( fObjectRotation * F_PI180 ), cos( fObjectRotation * F_PI180 ) );
@@ -1987,10 +1987,10 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect )
 
     GeoStat aGeoStat( GetGeoStat() );
     if ( aNewRect.TopLeft()!= aRect.TopLeft() &&
-        ( aGeo.nRotationAngle || aGeo.nShearWink ) )
+        ( aGeo.nRotationAngle || aGeo.nShearAngle ) )
     {
         Point aNewPos( aNewRect.TopLeft() );
-        if ( aGeo.nShearWink ) ShearPoint( aNewPos, aOld.TopLeft(), aGeoStat.nTan );
+        if ( aGeo.nShearAngle ) ShearPoint( aNewPos, aOld.TopLeft(), aGeoStat.nTan );
         if ( aGeo.nRotationAngle )  RotatePoint(aNewPos, aOld.TopLeft(), aGeoStat.nSin, aGeoStat.nCos );
         aNewRect.SetPos( aNewPos );
     }
@@ -3000,7 +3000,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     // reset object shear and rotations
     aGeo.nRotationAngle = 0;
     aGeo.RecalcSinCos();
-    aGeo.nShearWink = 0;
+    aGeo.nShearAngle = 0;
     aGeo.RecalcTan();
 
     // force metric to pool metric
@@ -3054,9 +3054,9 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
         // #i123181# The fix for #121932# here was wrong, the trunk version does not correct the
         // mirrored shear values, neither at the object level, nor on the API or XML level. Taking
         // back the mirroring of the shear angle
-        aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
+        aGeoStat.nShearAngle = FRound((atan(fShearX) / F_PI180) * 100.0);
         aGeoStat.RecalcTan();
-        Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+        Shear(Point(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
     }
 
     // rotation?
@@ -3084,7 +3084,7 @@ bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
 {
     // get turn and shear
     double fRotate = fObjectRotation * F_PI180;
-    double fShearX = (aGeo.nShearWink / 100.0) * F_PI180;
+    double fShearX = (aGeo.nShearAngle / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
     Rectangle aRectangle(aRect);

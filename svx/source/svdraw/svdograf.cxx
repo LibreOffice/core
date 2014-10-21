@@ -1092,10 +1092,10 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
                         // copy transformation
                     GeoStat aGeoStat(GetGeoStat());
 
-                    if(aGeoStat.nShearWink)
+                    if(aGeoStat.nShearAngle)
                     {
                         aGeoStat.RecalcTan();
-                        pGrp->NbcShear(aRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+                        pGrp->NbcShear(aRect.TopLeft(), aGeoStat.nShearAngle, aGeoStat.nTan, false);
                     }
 
                     if(aGeoStat.nRotationAngle)

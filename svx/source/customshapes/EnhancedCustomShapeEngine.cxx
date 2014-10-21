@@ -315,16 +315,16 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
             Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
 
             const GeoStat& rGeoStat = static_cast<SdrObjCustomShape*>(pSdrObjCustomShape)->GetGeoStat();
-            if ( rGeoStat.nShearWink )
+            if ( rGeoStat.nShearAngle )
             {
-                long nShearWink = rGeoStat.nShearWink;
+                long nShearAngle = rGeoStat.nShearAngle;
                 double nTan = rGeoStat.nTan;
                 if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
                 {
-                    nShearWink = -nShearWink;
+                    nShearAngle = -nShearAngle;
                     nTan = -nTan;
                 }
-                pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, false);
+                pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearAngle, nTan, false);
             }
             if( !bPostRotateAngle && nRotateAngle )
             {
@@ -404,16 +404,16 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
             bool bFlipH = aCustomShape2d.IsFlipHorz();
 
             const GeoStat& rGeoStat = static_cast<SdrObjCustomShape*>(pSdrObjCustomShape)->GetGeoStat();
-            if ( rGeoStat.nShearWink )
+            if ( rGeoStat.nShearAngle )
             {
-                long nShearWink = rGeoStat.nShearWink;
+                long nShearAngle = rGeoStat.nShearAngle;
                 double nTan = rGeoStat.nTan;
                 if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
                 {
-                    nShearWink = -nShearWink;
+                    nShearAngle = -nShearAngle;
                     nTan = -nTan;
                 }
-                pObj->Shear( aRect.Center(), nShearWink, nTan, false);
+                pObj->Shear( aRect.Center(), nShearAngle, nTan, false);
             }
             sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
             if( nRotateAngle )

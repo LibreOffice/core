@@ -998,7 +998,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
                 aRelPoint.X() = rRect.Right() + rRect.Left() - aRelPoint.X();
 
             // Undo shearing
-            if ( rGeo.nShearWink )
+            if ( rGeo.nShearAngle )
                 ShearPoint( aRelPoint, rRect.TopLeft(), -rGeo.nTan );
 
             if ( pGrafObj->GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )

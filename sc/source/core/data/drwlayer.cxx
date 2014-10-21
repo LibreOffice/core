@@ -1963,7 +1963,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                 aRelPoint.X() = aLogRect.Right() + aLogRect.Left() - aRelPoint.X();
 
             // ggf. Unshear:
-            if ( rGeo.nShearWink )
+            if ( rGeo.nShearAngle )
                 ShearPoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nTan );
 
             if ( rGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
