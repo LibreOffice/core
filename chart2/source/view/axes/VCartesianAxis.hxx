@@ -102,6 +102,16 @@ public:
 
 protected: //methods
     /**
+     * Go through all tick label positions and decide which labels to display
+     * based on the text shape geometry, overlap setting, tick interval,
+     * auto-stagger setting etc.
+     *
+     * When the auto-stagger setting is on, try to avoid overlaps by
+     * staggering labels or set the labels at an angle.  This method may
+     * change the axis label properties especially when the auto staggering is
+     * performed.  But the screen label positions will not be shifted in this
+     * method; it will be done in the doStaggeringOfLabels method.
+     *
      * @return true if the text shapes have been successfully created,
      *         otherwise false.  Returning false means the AxisLabelProperties
      *         have changed during the call, and the caller needs to call this
@@ -119,6 +129,12 @@ protected: //methods
     TickFactory2D* createTickFactory2D();
     void hideIdenticalScreenValues( TickInfoArraysType& rTickInfos ) const;
 
+    /**
+     * Shift the screen positions of the tick labels according to the stagger
+     * settings.  Stagger setting is finalized during the createTextShapes
+     * call, but this method does the physical shifting of the label
+     * positions.
+     */
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
                             , TickFactory2D* pTickFactory2D );
     bool isAutoStaggeringOfLabelsAllowed(
