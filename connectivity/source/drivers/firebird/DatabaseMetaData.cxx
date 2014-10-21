@@ -46,7 +46,8 @@ using namespace com::sun::star::sdbc;
 ODatabaseMetaData::ODatabaseMetaData(Connection* _pCon)
 : m_pConnection(_pCon)
 {
-    OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
+    SAL_WARN_IF(!m_pConnection.is(), "connectivity.firebird",
+            "ODatabaseMetaData::ODatabaseMetaData: No connection set!");
 }
 
 ODatabaseMetaData::~ODatabaseMetaData()
@@ -832,7 +833,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates()
 uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
     throw(SQLException, RuntimeException, std::exception)
 {
-    return uno::Reference< XConnection >(m_pConnection);
+    return uno::Reference<XConnection>(m_pConnection.get());
 }
 
 // here follow all methods which return a resultset

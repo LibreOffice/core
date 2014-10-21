@@ -38,7 +38,7 @@ namespace connectivity
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
         protected:
-            Connection*     m_pConnection;
+            ::rtl::Reference<Connection> m_pConnection;
             XSQLDA*         m_pSqlda;
 
             virtual ~OResultSetMetaData();

@@ -37,10 +37,8 @@ namespace connectivity
 
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
-            Connection*    m_pConnection;
+            ::rtl::Reference<Connection> m_pConnection;
         public:
-
-            inline Connection* getOwnConnection() const { return m_pConnection; }
 
             ODatabaseMetaData(Connection* _pCon);
             virtual ~ODatabaseMetaData();
