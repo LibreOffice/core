@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/byteseq.hxx>
 

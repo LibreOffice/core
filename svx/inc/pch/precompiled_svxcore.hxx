@@ -105,7 +105,7 @@
 #include <com/sun/star/awt/FocusChangeReason.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>

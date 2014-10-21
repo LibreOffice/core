@@ -25,7 +25,7 @@
 
 #include <cstdio>
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
@@ -1412,7 +1412,7 @@ void ChartExport::exportGradientFill( Reference< XPropertySet > xPropSet )
         OUString sFillGradientName;
         xPropSet->getPropertyValue("FillGradientName") >>= sFillGradientName;
 
-        awt::Gradient aGradient;
+        awt::Gradient2 aGradient;
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         try
         {

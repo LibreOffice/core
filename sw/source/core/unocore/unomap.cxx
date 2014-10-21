@@ -21,7 +21,7 @@
 
 #include <svx/svxids.hrc>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -594,13 +594,13 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { OUString(UNO_NAME_SW_FILLBITMAPNAME),                 XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),    0,  MID_NAME }, \
     { OUString(UNO_NAME_SW_FILLBITMAPURL),                  XATTR_FILLBITMAP,               cppu::UnoType<OUString>::get(),    0,  MID_GRAFURL }, \
     { OUString(UNO_NAME_SW_FILLGRADIENTSTEPCOUNT),          XATTR_GRADIENTSTEPCOUNT,        cppu::UnoType<sal_Int16>::get(),   0,  0}, \
-    { OUString(UNO_NAME_SW_FILLGRADIENT),                   XATTR_FILLGRADIENT,             cppu::UnoType<css::awt::Gradient>::get(), 0, MID_FILLGRADIENT}, \
+    { OUString(UNO_NAME_SW_FILLGRADIENT),                   XATTR_FILLGRADIENT,             cppu::UnoType<css::awt::Gradient2>::get(), 0, MID_FILLGRADIENT}, \
     { OUString(UNO_NAME_SW_FILLGRADIENTNAME),               XATTR_FILLGRADIENT,             cppu::UnoType<OUString>::get(),    0, MID_NAME }, \
     { OUString(UNO_NAME_SW_FILLHATCH),                      XATTR_FILLHATCH,                cppu::UnoType<css::drawing::Hatch>::get(), 0, MID_FILLHATCH}, \
     { OUString(UNO_NAME_SW_FILLHATCHNAME),                  XATTR_FILLHATCH,                cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
     { OUString(UNO_NAME_SW_FILLSTYLE),                      XATTR_FILLSTYLE,                cppu::UnoType<css::drawing::FillStyle>::get(), 0, 0}, \
-    { OUString(UNO_NAME_SW_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int16>::get(), 0, 0}, \
-    { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient>::get(), 0,  MID_FILLGRADIENT}, \
+    { OUString(UNO_NAME_SW_FILL_TRANSPARENCE),              XATTR_FILLTRANSPARENCE,         cppu::UnoType<sal_Int32>::get(), 0, 0}, \
+    { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENT),       XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<css::awt::Gradient2>::get(), 0,  MID_FILLGRADIENT}, \
     { OUString(UNO_NAME_SW_FILLTRANSPARENCEGRADIENTNAME),   XATTR_FILLFLOATTRANSPARENCE,    cppu::UnoType<OUString>::get(),  0,  MID_NAME }, \
     { OUString(UNO_NAME_SW_FILLCOLOR_2),                    XATTR_SECONDARYFILLCOLOR,       cppu::UnoType<sal_Int32>::get(), 0,  0}, \
 

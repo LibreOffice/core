@@ -19,7 +19,7 @@
 
 #include "TransGradientStyle.hxx"
 
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -85,7 +85,7 @@ bool XMLTransGradientStyleImport::importXML(
     bool bHasStyle      = false;
     OUString aDisplayName;
 
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
     aGradient.XOffset = 0;
     aGradient.YOffset = 0;
     aGradient.StartIntensity = 100;
@@ -225,7 +225,7 @@ bool XMLTransGradientStyleExport::exportXML(
     const uno::Any& rValue )
 {
     bool bRet = false;
-    awt::Gradient aGradient;
+    awt::Gradient2 aGradient;
 
     if( !rStrName.isEmpty() )
     {

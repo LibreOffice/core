@@ -124,7 +124,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                         case XATTR_FILLFLOATTRANSPARENCE :
                         case XATTR_FILLGRADIENT :
                         {
-                            if ( ( pAny->getValueType() == ::cppu::UnoType< ::com::sun::star::awt::Gradient>::get() )
+                            if ( ( pAny->getValueType() == ::cppu::UnoType< ::com::sun::star::awt::Gradient2>::get() )
                                 && ( aIt->nMemberId == MID_FILLGRADIENT ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );

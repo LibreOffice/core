@@ -22,7 +22,7 @@
 #include <tools/color.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/wall.hxx>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 
 #include <boost/variant.hpp>
 
@@ -45,7 +45,7 @@ public:
     };
 
     // Create a Paint object for an Any that may contain a color, a
-    // awt::Gradient, or nothing.
+    // awt::Gradient2, or nothing.
     static Paint Create (const css::uno::Any& rValue);
 
     // Create paint with type NoPaint.
