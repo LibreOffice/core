@@ -1311,10 +1311,10 @@ void Window::ImplScroll( const Rectangle& rRect,
             }
 
             pOutDev->SelectClipRegion( aRegion, pGraphics );
-            pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
-                                 rRect.Left(), rRect.Top(),
-                                 rRect.GetWidth(), rRect.GetHeight(),
-                                 SAL_COPYAREA_WINDOWINVALIDATE, this );
+            CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
+                      rRect.Left(), rRect.Top(),
+                      rRect.GetWidth(), rRect.GetHeight(),
+                      SAL_COPYAREA_WINDOWINVALIDATE );
         }
 #endif
         if ( mpWindowImpl->mpWinData )

@@ -440,13 +440,8 @@ void SalGraphics::DrawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 void SalGraphics::CopyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            sal_uInt16 nFlags, const OutputDevice *pOutDev )
+                            sal_uInt16 nFlags )
 {
-    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
-    {
-        mirror( nDestX, nSrcWidth, pOutDev );
-        mirror( nSrcX, nSrcWidth, pOutDev );
-    }
     copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
 }
 
