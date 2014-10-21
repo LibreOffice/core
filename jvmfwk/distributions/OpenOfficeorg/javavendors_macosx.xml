@@ -20,14 +20,14 @@
 <javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
- <updated>2013-04-09</updated>
+ <updated>2014-10-20</updated>
 
  <vendorInfos>
   <vendor name="Apple Computer, Inc.">
-    <minVersion>1.5.0</minVersion>
+    <minVersion>1.6.0</minVersion>
   </vendor>
  <vendor name="Apple Inc.">
-  <minVersion>1.5.0</minVersion>
+  <minVersion>1.6.0</minVersion>
  </vendor>
  <vendor name="Oracle Corporation">
   <minVersion>1.7.0</minVersion>
