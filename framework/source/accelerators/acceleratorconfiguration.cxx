@@ -48,6 +48,9 @@
 #include <unotools/configpaths.hxx>
 #include <svtools/acceleratorexecute.hxx>
 
+#define PRESET_DEFAULT "default"
+#define TARGET_CURRENT "current"
+
 namespace framework
 {
     const char CFG_ENTRY_SECONDARY[] = "SecondaryKeys";
@@ -228,10 +231,10 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
     css::uno::Reference< css::io::XStream > xStreamNoLang;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), true); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT, true); // sal_True => open or create!
         try
         {
-            xStreamNoLang = m_aPresetHandler.openPreset(PresetHandler::PRESET_DEFAULT(), true);
+            xStreamNoLang = m_aPresetHandler.openPreset(PRESET_DEFAULT, true);
         }
         catch(const css::io::IOException&) {} // does not have to exist
     }
@@ -269,7 +272,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), true); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT, true); // sal_True => open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
@@ -295,7 +298,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 {
     css::uno::Reference< css::io::XStream > xStream = StorageHolder::openSubStreamWithFallback(
                                                             xStorage,
-                                                            PresetHandler::TARGET_CURRENT(),
+                                                            TARGET_CURRENT,
                                                             css::embed::ElementModes::READWRITE,
                                                             false); // False => no fallback from read/write to readonly!
     css::uno::Reference< css::io::XOutputStream > xOut;
@@ -325,7 +328,7 @@ sal_Bool SAL_CALL XMLBasedAcceleratorConfiguration::isReadOnly()
     css::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
-        xStream = m_aPresetHandler.openTarget(PresetHandler::TARGET_CURRENT(), true); // sal_True => open or create!
+        xStream = m_aPresetHandler.openTarget(TARGET_CURRENT, true); // sal_True => open or create!
     }
 
     css::uno::Reference< css::io::XOutputStream > xOut;
@@ -364,7 +367,7 @@ throw(css::uno::RuntimeException, std::exception)
 {
     {
         SolarMutexGuard g;
-        m_aPresetHandler.copyPresetToTarget(PresetHandler::PRESET_DEFAULT(), PresetHandler::TARGET_CURRENT());
+        m_aPresetHandler.copyPresetToTarget(PRESET_DEFAULT, TARGET_CURRENT);
     }
 
     reload();

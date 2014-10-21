@@ -46,36 +46,6 @@ static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 namespace framework
 {
 
-OUString PresetHandler::PRESET_DEFAULT()
-{
-    return OUString("default");
-}
-
-OUString PresetHandler::TARGET_CURRENT()
-{
-    return OUString("current");
-}
-
-OUString PresetHandler::RESOURCETYPE_MENUBAR()
-{
-    return OUString("menubar");
-}
-
-OUString PresetHandler::RESOURCETYPE_TOOLBAR()
-{
-    return OUString("toolbar");
-}
-
-OUString PresetHandler::RESOURCETYPE_ACCELERATOR()
-{
-    return OUString("accelerator");
-}
-
-OUString PresetHandler::RESOURCETYPE_STATUSBAR()
-{
-    return OUString("statusbar");
-}
-
 PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext(xContext)
     , m_eConfigType(E_GLOBAL)

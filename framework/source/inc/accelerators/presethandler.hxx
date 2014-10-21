@@ -51,19 +51,6 @@ namespace framework
  */
 class PresetHandler
 {
-
-    public:
-
-        static OUString PRESET_DEFAULT();
-        static OUString TARGET_CURRENT();
-
-        static OUString RESOURCETYPE_MENUBAR();
-        static OUString RESOURCETYPE_TOOLBAR();
-        static OUString RESOURCETYPE_ACCELERATOR();
-        static OUString RESOURCETYPE_STATUSBAR();
-
-    // types
-
     public:
 
         /** @short  this handler can provide different

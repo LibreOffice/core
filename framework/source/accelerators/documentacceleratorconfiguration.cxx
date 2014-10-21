@@ -39,6 +39,8 @@
 
 using namespace framework;
 
+#define RESOURCETYPE_ACCELERATOR "accelerator"
+
 namespace {
 
 /**
@@ -189,7 +191,7 @@ void DocumentAcceleratorConfiguration::fillCache()
         // open the folder, where the configuration exists
         m_aPresetHandler.connectToResource(
             PresetHandler::E_DOCUMENT,
-            PresetHandler::RESOURCETYPE_ACCELERATOR(),
+            RESOURCETYPE_ACCELERATOR,
             OUString(),
             xDocumentRoot,
             aLanguageTag);

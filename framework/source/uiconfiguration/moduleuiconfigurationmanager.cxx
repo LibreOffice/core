@@ -61,6 +61,10 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace framework;
 
+#define RESOURCETYPE_MENUBAR   "menubar"
+#define RESOURCETYPE_TOOLBAR   "toolbar"
+#define RESOURCETYPE_STATUSBAR "statusbar"
+
 namespace {
 
 class ModuleUIConfigurationManager : public cppu::WeakImplHelper3<
@@ -882,11 +886,11 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
     {
         OUString aResourceType;
         if ( i == ::com::sun::star::ui::UIElementType::MENUBAR )
-            aResourceType = PresetHandler::RESOURCETYPE_MENUBAR();
+            aResourceType = RESOURCETYPE_MENUBAR;
         else if ( i == ::com::sun::star::ui::UIElementType::TOOLBAR )
-            aResourceType = PresetHandler::RESOURCETYPE_TOOLBAR();
+            aResourceType = RESOURCETYPE_TOOLBAR;
         else if ( i == ::com::sun::star::ui::UIElementType::STATUSBAR )
-            aResourceType = PresetHandler::RESOURCETYPE_STATUSBAR();
+            aResourceType = RESOURCETYPE_STATUSBAR;
 
         if ( !aResourceType.isEmpty() )
         {
