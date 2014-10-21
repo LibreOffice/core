@@ -41,7 +41,7 @@ class SalColormap;
 class SalDisplay;
 class SalFrame;
 class X11SalVirtualDevice;
-class SalPolyLine;
+class X11SalGraphicsImpl;
 class PspSalPrinter;
 class PspSalInfoPrinter;
 class ServerFont;
@@ -49,6 +49,7 @@ class ImplLayoutArgs;
 class ServerFontLayout;
 class PhysicalFontCollection;
 class PhysicalFontFace;
+class SalGraphicsImpl;
 
 namespace basegfx {
     class B2DTrapezoid;
@@ -86,7 +87,12 @@ public:
 
 class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 {
-    friend class            ServerFontLayout;
+    friend class ServerFontLayout;
+    friend class X11SalGraphicsImpl;
+
+private:
+    SalGraphicsImpl* mpImpl;
+
 protected:
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
     X11SalVirtualDevice*    m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
@@ -102,10 +108,6 @@ protected:
     Region          pPaintRegion_;
     Region          mpClipRegion;
 
-    GC              pPenGC_;        // Pen attributes
-    SalColor        nPenColor_;
-    Pixel           nPenPixel_;
-
     GC              pFontGC_;       // Font attributes
     ServerFont*             mpServerFont[ MAX_FALLBACK ];
 
@@ -114,55 +116,19 @@ protected:
 
     bool            bDisableGraphite_;
 
-    GC              pBrushGC_;      // Brush attributes
-    SalColor        nBrushColor_;
-    Pixel           nBrushPixel_;
     Pixmap          hBrush_;        // Dither
-
-    GC              pMonoGC_;
-    GC              pCopyGC_;
-    GC              pMaskGC_;
-    GC              pInvertGC_;
-    GC              pInvert50GC_;
-    GC              pStippleGC_;
-    GC              pTrackingGC_;
 
     bool            bWindow_ : 1;       // is Window
     bool            bPrinter_ : 1;      // is Printer
     bool            bVirDev_ : 1;       // is VirDev
-    bool            bPenGC_ : 1;        // is Pen GC valid
-    bool            bFontGC_ : 1;       // is Font GC valid
-    bool            bBrushGC_ : 1;      // is Brush GC valid
-    bool            bMonoGC_ : 1;       // is Mono GC valid
-    bool            bCopyGC_ : 1;       // is Copy GC valid
-    bool            bInvertGC_ : 1;     // is Invert GC valid
-    bool            bInvert50GC_ : 1;   // is Invert50 GC valid
-    bool            bStippleGC_ : 1;    // is Stipple GC valid
-    bool            bTrackingGC_ : 1;   // is Tracking GC valid
-    bool            bXORMode_ : 1;      // is ROP XOR Mode set
-    bool            bDitherBrush_ : 1;  // is solid or tile
+    bool bFontGC_ : 1;       // is Font GC valid
 
     using SalGraphics::SetClipRegion;
     void            SetClipRegion( GC          pGC,
                                    Region      pXReg = NULL ) const;
 
-    GC              GetTrackingGC();
-    GC              GetInvertGC();
-    GC              GetInvert50GC();
-    GC              CreateGC( Drawable      hDrawable,
-                              unsigned long nMask = GCGraphicsExposures );
-    GC              SelectPen();
-    GC              SelectBrush();
-    void            DrawLines( sal_uIntPtr              nPoints,
-                               const SalPolyLine &rPoints,
-                               GC                 pGC,
-                               bool bClose
-                               );
     bool            GetDitherPixmap ( SalColor nSalColor );
 
-    inline  GC              GetMonoGC( Pixmap hPixmap );
-    inline  GC              GetCopyGC();
-    inline  GC              GetStippleGC();
 
     using SalGraphics::DrawBitmap;
     void            DrawBitmap( const SalTwoRect& rPosAry,
@@ -173,10 +139,6 @@ protected:
 
     GC                      GetFontGC();
     bool                    setFont( const FontSelectPattern* pEntry, int nFallbackLevel );
-
-    void                    drawMaskedBitmap( const SalTwoRect& rPosAry,
-                                              const SalBitmap& rSalBitmap,
-                                              const SalBitmap& rTransparentBitmap );
 
 protected:
     void                    DrawPrinterString( const SalLayout& );
@@ -198,12 +160,11 @@ public:
     inline  const SalVisual&    GetVisual() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     void                    SetDrawable( Drawable d, SalX11Screen nXScreen );
-    XID                     GetXRenderPicture();
     XRenderPictFormat*      GetXRenderFormat() const;
     inline  void            SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
     inline  const SalColormap&    GetColormap() const { return *m_pColormap; }
     using SalGraphics::GetPixel;
-    inline  Pixel           GetPixel( SalColor nSalColor ) const;
+    inline  Pixel GetPixel( SalColor nSalColor ) const;
 
     SalX11Screen            GetScreenNumber() const { return m_nXScreen; }
 
@@ -211,7 +172,6 @@ public:
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
     virtual sal_uInt16          GetBitCount() const SAL_OVERRIDE;
     virtual long            GetGraphicsWidth() const SAL_OVERRIDE;
-    virtual long            GetGraphicsHeight() const;
 
     virtual void            ResetClipRegion() SAL_OVERRIDE;
     virtual bool            setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
@@ -263,7 +223,6 @@ public:
     virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) SAL_OVERRIDE;
     virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) SAL_OVERRIDE;
     virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    void                    drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
     virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
@@ -276,9 +235,7 @@ public:
         const ::basegfx::B2DVector& rLineWidth,
         basegfx::B2DLineJoin,
         com::sun::star::drawing::LineCap) SAL_OVERRIDE;
-    virtual bool            drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
     virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE { return false; };
-
 
 #if 1 // TODO: remove these obselete methods
     virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,

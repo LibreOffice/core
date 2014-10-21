@@ -36,39 +36,41 @@ public:
 
     virtual ~SalGraphicsImpl();
 
+    virtual void freeResources() = 0;
+
     virtual bool setClipRegion( const vcl::Region& ) = 0;
     //
     // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const = 0;
+    virtual sal_uInt16 GetBitCount() const = 0;
 
     // get the width of the device
-    virtual long                GetGraphicsWidth() const = 0;
+    virtual long GetGraphicsWidth() const = 0;
 
     // set the clip region to empty
-    virtual void                ResetClipRegion() = 0;
+    virtual void ResetClipRegion() = 0;
 
     // set the line color to transparent (= don't draw lines)
 
-    virtual void                SetLineColor() = 0;
+    virtual void SetLineColor() = 0;
 
     // set the line color to a specific color
-    virtual void                SetLineColor( SalColor nSalColor ) = 0;
+    virtual void SetLineColor( SalColor nSalColor ) = 0;
 
     // set the fill color to transparent (= don't fill)
-    virtual void                SetFillColor() = 0;
+    virtual void SetFillColor() = 0;
 
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void                SetFillColor( SalColor nSalColor ) = 0;
+    virtual void SetFillColor( SalColor nSalColor ) = 0;
 
     // enable/disable XOR drawing
-    virtual void                SetXORMode( bool bSet, bool bInvertOnly ) = 0;
+    virtual void SetXORMode( bool bSet, bool bInvertOnly ) = 0;
 
     // set line color for raster operations
-    virtual void                SetROPLineColor( SalROPColor nROPColor ) = 0;
+    virtual void SetROPLineColor( SalROPColor nROPColor ) = 0;
 
     // set fill color for raster operations
-    virtual void                SetROPFillColor( SalROPColor nROPColor ) = 0;
+    virtual void SetROPFillColor( SalROPColor nROPColor ) = 0;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void drawPixel( long nX, long nY ) = 0;
