@@ -1081,9 +1081,9 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
 
 static bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
 {
-    SwIterator<SwFlyFrm,SwFmt> aIter( *pFmt );
     if ( RES_FLYFRMFMT == pFmt->Which() )
     {
+        SwIterator<SwFlyFrm,SwFmt> aIter( *pFmt );
         const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
         const SwFlyFrm* pTmpFrm;
         for( pTmpFrm = aIter.First(); pTmpFrm; pTmpFrm = aIter.Next() )
