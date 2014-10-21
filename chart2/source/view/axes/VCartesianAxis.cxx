@@ -188,19 +188,17 @@ void removeShapesAtWrongRhythm( TickIter& rIter
     }
 }
 
+/**
+ * If the labels are staggered and bInnerLine is true we iterate through
+ * only those labels that are closer to the diagram.
+ *
+ * If the labels are staggered and bInnerLine is false we iterate through
+ * only those that are farther from the diagram.
+ *
+ * If the labels are not staggered we iterate through all labels.
+ */
 class LabelIterator : public TickIter
 {
-    //this Iterator iterates over existing text labels
-
-    //if the labels are staggered and bInnerLine is true
-    //we iterate only through the labels which are lying more inside the diagram
-
-    //if the labels are staggered and bInnerLine is false
-    //we iterate only through the labels which are lying more outside the diagram
-
-    //if the labels are not staggered
-    //we iterate through all labels
-
 public:
     LabelIterator( TickInfoArrayType& rTickInfoVector
             , const AxisLabelStaggering eAxisLabelStaggering
