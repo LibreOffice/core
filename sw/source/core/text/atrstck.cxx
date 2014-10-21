@@ -56,8 +56,8 @@
 
 #define STACK_INCREMENT 4
 
-/*
- *                      Attribute to Stack Mapping
+/**
+ * Attribute to Stack Mapping
  *
  * Attributes applied to a text are pushed on different stacks. For each
  * stack, the top most attribute on the stack is valid. Because some
@@ -131,7 +131,7 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
 namespace CharFmt
 {
 
-// Returns the item set associated with an character/inet/auto style
+/// Returns the item set associated with an character/inet/auto style
 const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
 {
     const SfxItemSet* pSet = 0;
@@ -155,7 +155,7 @@ const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
     return pSet;
 }
 
-// Extracts pool item of type nWhich from rAttr
+/// Extracts pool item of type nWhich from rAttr
 const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
 {
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
@@ -175,7 +175,7 @@ const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
     return ( nWhich == rAttr.Which() ) ? &rAttr.GetAttr() : 0;
 }
 
-// checks if item is included in character/inet/auto style
+/// Checks if item is included in character/inet/auto style
 bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 {
     bool bRet = false;
@@ -188,11 +188,13 @@ bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 }
 }
 
-// The color of hyperlinks is taken from the associated character attribute,
-// depending on its 'visited' state. There are actually two cases, which
-// should override the colors from the character attribute:
-// 1. We never take the 'visited' color during printing/pdf export/preview
-// 2. The user has chosen to override these colors in the view options
+/**
+ * The color of hyperlinks is taken from the associated character attribute,
+ * depending on its 'visited' state. There are actually two cases, which
+ * should override the colors from the character attribute:
+ *     1. We never take the 'visited' color during printing/pdf export/preview
+ *     2. The user has chosen to override these colors in the view options
+ */
 static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                             const SfxPoolItem& rItem,
                             const SwViewShell* pShell,
@@ -526,7 +528,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     }
 }
 
-// only used during redlining
+/// Only used during redlining
 void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 {
     OSL_ENSURE( rAttr.Which() < RES_TXTATR_WITHEND_END,
@@ -625,9 +627,11 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         rFnt.GetInputField()--;
 }
 
-// When popping an attribute from the stack, the top mose remaining
-// attribute in the stack becomes valid. The following function change
-// a font depending on the stack id.
+/**
+ * When popping an attribute from the stack, the top mose remaining
+ * attribute in the stack becomes valid. The following function change
+ * a font depending on the stack id.
+ */
 void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 {
     switch ( rItem.Which() )
@@ -893,7 +897,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
     }
 }
 
-// Takes the default font and calculated the ascent and height
+/// Takes the default font and calculated the ascent and height
 void SwAttrHandler::GetDefaultAscentAndHeight( SwViewShell* pShell, OutputDevice& rOut,
                                                sal_uInt16& nAscent, sal_uInt16& nHeight ) const
 {

@@ -51,35 +51,40 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
 }
 
-// Wir formatieren eine Zeile fuer die interaktive Trennung
+/**
+ * We format a row for interactive hyphenation
+ */
 bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
 
     if( !g_pBreakIt->GetBreakIter().is() )
         return false;
-    // Wir machen den Laden erstmal dicht:
+
+    // We lock it, to start with
     OSL_ENSURE( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
-    // 4935: Der frame::Frame muss eine gueltige SSize haben!
+
+    // The frame::Frame must have a valid SSize!
     Calc();
     GetFormatted();
 
     bool bRet = false;
     if( !IsEmpty() )
     {
-        // Wir muessen die Trennung immer einschalten.
-        // Keine Angst, der SwTxtIter sichert im Hyphenate die alte Zeile.
+        // We always need to enable hyphenation
+        // Don't be afraid: the SwTxtIter saves the old row in the hyphenate
         SwTxtFrmLocker aLock( this );
 
         if ( IsVertical() )
             SwapWidthAndHeight();
 
-        SwTxtFormatInfo aInf( this, true );     // true for interactive hyph!
+        SwTxtFormatInfo aInf( this, true ); // true for interactive hyph!
         SwTxtFormatter aLine( this, &aInf );
         aLine.CharToLine( rHyphInf.nStart );
-        // Wenn wir innerhalb des ersten Wortes einer Zeile stehen, so koennte
-        // dieses in der vorherigen getrennt werden, deshalb gehen wir ein Zeile
-        // zurueck.
+
+        // If we're within the first word of a row, it could've been hyphenated
+        // in the row earlier.
+        // That's why we go one row back.
         if( aLine.Prev() )
         {
             SwLinePortion *pPor = aLine.GetCurr()->GetFirstPortion();
@@ -104,14 +109,13 @@ bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
     return bRet;
 }
 
-// Wir formatieren eine Zeile fuer die interaktive Trennung
-//
-// Wir koennen davon ausgehen, dass bereits formatiert wurde.
-// Fuer die CeBIT'93 gehen wir den einfachen, sicheren Weg:
-// Die Zeile wird einfach neu formatiert, der Hyphenator wird dann
-// so vorbereitet, wie ihn die UI erwartet.
-// Hier stehen natuerlich enorme Optimierungsmoeglichkeiten offen.
-
+/**
+ * We format a row for interactive hyphenation
+ * We can assume that we've already formatted.
+ * We just reformat the row, the hyphenator will be prepared like
+ * the UI expects it to be.
+ * TODO: We can of course optimize this a lot.
+ */
 void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot )
 {
     OSL_ENSURE( pRoot, "SetParaPortion: no root anymore" );
@@ -122,18 +126,18 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     SwTxtFormatInfo &rInf = GetInfo();
 
-    // In der letzten Zeile gibt es nie etwas zu trennen.
-    // Es sei denn, es befindet sich eine FlyPortion darin,
-    // oder es ist die letzte Zeile des Masters
+    // We never need to hyphenate anything in the last row
+    // Except for, if it contains a FlyPortion or if it's the
+    // last row of the Master
     if( !GetNext() && !rInf.GetTxtFly().IsOn() && !pFrm->GetFollow() )
         return false;
 
     sal_Int32 nWrdStart = nStart;
 
-    // Wir muessen die alte Zeile erhalten. Ein Beispiel:
-    // Das Attribut fuer Trennung wurde nicht gesetzt,
-    // in SwTxtFrm::Hyphenate wird es jedoch immer gesetzt,
-    // weil wir Trennpositionen im Hyphenator einstellen wollen.
+    // We need to retain the old row
+    // E.g.: The attribute for hyphenation was not set, but
+    // it's always set in SwTxtFrm::Hyphenate, because we want
+    // to set breakpoints.
     SwLineLayout *pOldCurr = pCurr;
 
     InitCntHyph();

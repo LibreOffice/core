@@ -24,12 +24,13 @@
 #include "porlin.hxx"
 #include "porlay.hxx"
 
-// Sichtbare Zeit:
+// Visible time
 #define BLINK_ON_TIME       2400L
-// Nihct sichtbare Zeit:
+// Invisible time
 #define BLINK_OFF_TIME      800L
 
-/* pBlink points to the instance where blinking portions need to register.
+/**
+ * pBlink points to the instance where blinking portions need to register.
  * If necessary, it needs to be created by SwBlink.
  * They are then triggered rhythimcally for a repaint. They can query
  * for being visible or invisible with IsVisible().
@@ -49,7 +50,7 @@ SwBlink::~SwBlink( )
     aTimer.Stop();
 }
 
-/*
+/**
  * SwBlink::Blinker (timer):
  * Toggle visibility flag
  * Determine the repaint rectangle and invalidate them in their OleShells.

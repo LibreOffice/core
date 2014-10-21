@@ -80,7 +80,8 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
     UNDO_SWAP( pFrm )
 }
 
-/* BP 18.6.93: Widows.
+/**
+ * BP 18.6.93: Widows.
  * In contrast to the first implementation the Widows are not calculated
  * in advance but detected when formatting the split Follow.
  * In Master the Widows-calculation is dropped completely
@@ -89,9 +90,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  * A special problem is when the Widow rule applies but in Master
  * there are some lines available.
  *
- */
-
-/* BP(22.07.92): Calculation of Widows and Orphans.
+ * BP(22.07.92): Calculation of Widows and Orphans.
  * The method returns true if one of the rules matches.
  *
  * One difficulty with Widows and different formats between
@@ -101,7 +100,6 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
  * be done until the Follow is formated. Unfortunately this is crucial
  * to decide if the whole paragraph goes to the next page or not.
  */
-
 bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 {
     bool bFit = false;
@@ -203,7 +201,7 @@ bool SwTxtFrmBreak::IsBreakNow( SwTxtMargin &rLine )
     return bBreak;
 }
 
-// OD 2004-02-27 #106629# - no longer inline
+/// OD 2004-02-27 #106629# - no longer inline
 void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
 {
     // OD, FME 2004-02-27 #106629# - consider bottom margin
@@ -298,11 +296,11 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
     UNDO_SWAP( pFrm )
 }
 
-/* The Find*-Methodes do not only search, but adjust the SwTxtMargin to the
+/**
+ * The Find*-Methodes do not only search, but adjust the SwTxtMargin to the
  * line where the paragraph should have a break and truncate the paragraph there.
  * FindBreak()
  */
-
 bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     bool bHasToFit )
 {
@@ -350,12 +348,12 @@ bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
     return bRet;
 }
 
-/*  FindWidows positions the SwTxtMargin of the Master to the line where to
- *  break by examining and formatting the Follow.
- *  Returns true if the Widows-rule matches, that means that the
- *  paragraph should not be split (keep) !
+/**
+ * FindWidows positions the SwTxtMargin of the Master to the line where to
+ * break by examining and formatting the Follow.
+ * Returns true if the Widows-rule matches, that means that the
+ * paragraph should not be split (keep) !
  */
-
 bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 {
     OSL_ENSURE( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
@@ -366,7 +364,7 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 
     rLine.Bottom();
 
-    // Wir koennen noch was abzwacken
+    // We can still cut something off
     SwTxtFrm *pMaster = pFrame->FindMaster();
     OSL_ENSURE(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
     if( !pMaster )
@@ -445,21 +443,21 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     }
 
     // Master to Follow
-    // Wenn der Follow nach seiner Formatierung weniger Zeilen enthaelt
-    // als Widows, so besteht noch die Chance, einige Zeilen des Masters
-    // abzuzwacken. Wenn dadurch die Orphans-Regel des Masters in Kraft
-    // tritt muss im CalcPrep() des Master-Frame der Frame so vergroessert
-    // werden, dass er nicht mehr auf seine urspruengliche Seite passt.
-    // Wenn er noch ein paar Zeilen entbehren kann, dann muss im CalcPrep()
-    // ein Shrink() erfolgen, der Follow mit dem Widows rutscht dann auf
-    // die Seite des Masters, haelt sich aber zusammen, so dass er (endlich)
-    // auf die naechste Seite rutscht. - So die Theorie!
-
-    // Wir fordern nur noch ein Zeile zur Zeit an, weil eine Zeile des Masters
-    // bei uns durchaus mehrere Zeilen ergeben koennten.
-    // Dafuer behaelt CalcFollow solange die Kontrolle, bis der Follow alle
-    // notwendigen Zeilen bekommen hat.
-    sal_uInt16 nNeed = 1; // frueher: nWidLines - rLine.GetLineNr();
+    // If the Follow contains fewer rows than Widows after formatting,
+    // we still can cut off some rows from the Master. If the Orphans
+    // rule of the Master hereby comes into effect, we need to enlarge
+    // the Frame in CalcPrep() of the Master Frame, as it won't fit into
+    // the original page anymore.
+    // If the Master Frame can still miss a few more rows, we need to
+    // do a Shrink() in the CalcPrep(): the Follow with the Widows then
+    // moves onto the page of the Master, but remains unsplit, so that
+    // it (finally) moves onto the next page. So much for the theory!
+    //
+    // We only request one row at a time for now, because a Master's row could
+    // result in multiple lines for us.
+    // Therefore, the CalcFollow() remains in control until the Follow got all
+    // necessary rows.
+    sal_uInt16 nNeed = 1; // was: nWidLines - rLine.GetLineNr();
 
     // Special case: Master cannot give lines to follow
     // #i91421#
@@ -483,7 +481,7 @@ bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, bool bTst )
 {
     // Here it does not matter, if pFrm is swapped or not.
-    // IsInside() takes care for itself
+    // IsInside() takes care of itself
 
     // We expect that rLine is set to the last line
     OSL_ENSURE( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
