@@ -90,10 +90,12 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_nStreamMode( PACKAGE_STREAM_NOTSET )
 , m_nMagicalHackPos( 0 )
 , m_nMagicalHackSize( 0 )
+, m_nOwnStreamOrigSize( 0 )
 , m_bHasSeekable( false )
 , m_bCompressedIsSetFromOutside( false )
 , m_bFromManifest( false )
 , m_bUseWinEncoding( false )
+, m_bRawStream( false )
 {
     m_xContext = xContext;
     m_nFormat = nFormat;
@@ -437,6 +439,35 @@ bool ZipPackageStream::ParsePackageRawStream()
     return true;
 }
 
+class DeflateThread: public comphelper::ThreadTask
+{
+    ZipOutputEntry *mpEntry;
+    uno::Reference< io::XInputStream > mxInStream;
+
+public:
+    DeflateThread( ZipOutputEntry *pEntry,
+                   const uno::Reference< io::XInputStream >& xInStream )
+        : mpEntry(pEntry)
+        , mxInStream(xInStream)
+    {}
+
+private:
+    virtual void doWork() SAL_OVERRIDE
+    {
+        sal_Int32 nLength = 0;
+        uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
+        do
+        {
+            nLength = mxInStream->readBytes(aSeq, n_ConstBufferSize);
+            mpEntry->write(aSeq, 0, nLength);
+        }
+        while (nLength == n_ConstBufferSize);
+        mpEntry->closeEntry();
+
+        mxInStream.clear();
+    }
+};
+
 static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< io::XInputStream> & rStream )
 {
     // It's very annoying that we have to do this, but lots of zip packages
@@ -497,20 +528,21 @@ bool ZipPackageStream::saveChild(
 
     OSL_ENSURE( m_nStreamMode != PACKAGE_STREAM_NOTSET, "Unacceptable ZipPackageStream mode!" );
 
-    bool bRawStream = false;
+    m_bRawStream = false;
     if ( m_nStreamMode == PACKAGE_STREAM_DETECT )
-        bRawStream = ParsePackageRawStream();
+        m_bRawStream = ParsePackageRawStream();
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
-        bRawStream = true;
+        m_bRawStream = true;
 
+    bool bParallelDeflate = false;
     bool bTransportOwnEncrStreamAsRaw = false;
     // During the storing the original size of the stream can be changed
     // TODO/LATER: get rid of this hack
-    sal_Int64 nOwnStreamOrigSize = bRawStream ? m_nMagicalHackSize : aEntry.nSize;
+    m_nOwnStreamOrigSize = m_bRawStream ? m_nMagicalHackSize : aEntry.nSize;
 
     bool bUseNonSeekableAccess = false;
     uno::Reference < io::XInputStream > xStream;
-    if ( !IsPackageMember() && !bRawStream && !bToBeEncrypted && bToBeCompressed )
+    if ( !IsPackageMember() && !m_bRawStream && !bToBeEncrypted && bToBeCompressed )
     {
         // the stream is not a package member, not a raw stream,
         // it should not be encrypted and it should be compressed,
@@ -540,11 +572,11 @@ bool ZipPackageStream::saveChild(
             {
                 // If the stream is a raw one, then we should be positioned
                 // at the beginning of the actual data
-                if ( !bToBeCompressed || bRawStream )
+                if ( !bToBeCompressed || m_bRawStream )
                 {
                     // The raw stream can neither be encrypted nor connected
-                    OSL_ENSURE( !bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
-                    xSeek->seek ( bRawStream ? m_nMagicalHackPos : 0 );
+                    OSL_ENSURE( !m_bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
+                    xSeek->seek ( m_bRawStream ? m_nMagicalHackPos : 0 );
                     ImplSetStoredData ( *pTempEntry, xStream );
 
                     // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
@@ -553,7 +585,7 @@ bool ZipPackageStream::saveChild(
                 {
                     // this is the correct original size
                     pTempEntry->nSize = xSeek->getLength();
-                    nOwnStreamOrigSize = pTempEntry->nSize;
+                    m_nOwnStreamOrigSize = pTempEntry->nSize;
                 }
 
                 xSeek->seek ( 0 );
@@ -592,7 +624,7 @@ bool ZipPackageStream::saveChild(
             return bSuccess;
         }
 
-        if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
+        if ( bToBeEncrypted || m_bRawStream || bTransportOwnEncrStreamAsRaw )
         {
             if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
             {
@@ -624,11 +656,11 @@ bool ZipPackageStream::saveChild(
             aPropSet[PKG_MNFST_ITERATION].Value <<= m_xBaseEncryptionData->m_nIterationCount;
 
             // Need to store the uncompressed size in the manifest
-            OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
+            OSL_ENSURE( m_nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
             aPropSet[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
-            aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= nOwnStreamOrigSize;
+            aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= m_nOwnStreamOrigSize;
 
-            if ( bRawStream || bTransportOwnEncrStreamAsRaw )
+            if ( m_bRawStream || bTransportOwnEncrStreamAsRaw )
             {
                 ::rtl::Reference< EncryptionData > xEncData = GetEncryptionData();
                 if ( !xEncData.is() )
@@ -651,7 +683,7 @@ bool ZipPackageStream::saveChild(
     // If the entry is already stored in the zip file in the format we
     // want for this write...copy it raw
     if ( !bUseNonSeekableAccess
-      && ( bRawStream || bTransportOwnEncrStreamAsRaw
+      && ( m_bRawStream || bTransportOwnEncrStreamAsRaw
         || ( IsPackageMember() && !bToBeEncrypted
           && ( ( aEntry.nMethod == DEFLATED && bToBeCompressed )
             || ( aEntry.nMethod == STORED && !bToBeCompressed ) ) ) ) )
@@ -671,7 +703,7 @@ bool ZipPackageStream::saveChild(
 
         try
         {
-            if ( bRawStream )
+            if ( m_bRawStream )
                 xStream->skipBytes( m_nMagicalHackPos );
 
             ZipOutputStream::setEntry(pTempEntry);
@@ -733,35 +765,29 @@ bool ZipPackageStream::saveChild(
         try
         {
             ZipOutputStream::setEntry(pTempEntry);
-            rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
-            sal_Int32 nLength;
-            uno::Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
 
             if (pTempEntry->nMethod == STORED)
             {
+                sal_Int32 nLength;
+                uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
+                rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
                 do
                 {
                     nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
                     rZipOut.rawWrite(aSeq, 0, nLength);
                 }
                 while ( nLength == n_ConstBufferSize );
+                rZipOut.rawCloseEntry(bToBeEncrypted);
             }
             else
             {
-                ZipOutputEntry aZipEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
-                do
-                {
-                    nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
-                    aZipEntry.write(aSeq, 0, nLength);
-                }
-                while ( nLength == n_ConstBufferSize );
-                aZipEntry.closeEntry();
-                uno::Sequence< sal_Int8 > aCompressedData = aZipEntry.getData();
-                rZipOut.rawWrite(aCompressedData, 0, aCompressedData.getLength());
+                bParallelDeflate = true;
+                // Start a new thread deflating this zip entry
+                ZipOutputEntry *pZipEntry = new ZipOutputEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
+                rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(pZipEntry, xStream) );
             }
-            rZipOut.rawCloseEntry(bToBeEncrypted);
         }
         catch ( ZipException& )
         {
@@ -793,36 +819,39 @@ bool ZipPackageStream::saveChild(
         }
     }
 
-    if( bSuccess )
-    {
-        if ( !IsPackageMember() )
-        {
-            CloseOwnStreamIfAny();
-            SetPackageMember ( true );
-        }
-
-        if ( bRawStream )
-        {
-            // the raw stream was integrated and now behaves
-            // as usual encrypted stream
-            SetToBeEncrypted( true );
-        }
-
-        // Then copy it back afterwards...
-        ZipPackageFolder::copyZipEntry ( aEntry, *pTempEntry );
-
-        // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
-        if ( IsEncrypted() )
-            setSize( nOwnStreamOrigSize );
-
-        aEntry.nOffset *= -1;
-    }
+    if (bSuccess && !bParallelDeflate)
+        successfullyWritten(pTempEntry);
 
     if ( aPropSet.getLength()
       && ( m_nFormat == embed::StorageFormats::PACKAGE || m_nFormat == embed::StorageFormats::OFOPXML ) )
         rManList.push_back( aPropSet );
 
     return bSuccess;
+}
+
+void ZipPackageStream::successfullyWritten( ZipEntry *pEntry )
+{
+    if ( !IsPackageMember() )
+    {
+        CloseOwnStreamIfAny();
+        SetPackageMember ( true );
+    }
+
+    if ( m_bRawStream )
+    {
+        // the raw stream was integrated and now behaves
+        // as usual encrypted stream
+        SetToBeEncrypted( true );
+    }
+
+    // Then copy it back afterwards...
+    ZipPackageFolder::copyZipEntry( aEntry, *pEntry );
+
+    // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
+    if ( IsEncrypted() )
+        setSize( m_nOwnStreamOrigSize );
+
+    aEntry.nOffset *= -1;
 }
 
 void ZipPackageStream::SetPackageMember( bool bNewValue )

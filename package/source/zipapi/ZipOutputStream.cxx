@@ -27,6 +27,7 @@
 
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
+#include <ZipOutputEntry.hxx>
 #include <ZipPackageStream.hxx>
 
 using namespace com::sun::star;
@@ -39,15 +40,13 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 ZipOutputStream::ZipOutputStream( const uno::Reference < io::XOutputStream > &xOStream )
 : m_xStream(xOStream)
 , m_aChucker(xOStream)
-, m_bFinished(false)
 , m_pCurrentEntry(NULL)
+, m_rSharedThreadPool(comphelper::ThreadPool::getSharedOptimalPool())
 {
 }
 
 ZipOutputStream::~ZipOutputStream( void )
 {
-    for (sal_Int32 i = 0, nEnd = m_aZipList.size(); i < nEnd; i++)
-        delete m_aZipList[i];
 }
 
 void ZipOutputStream::setEntry( ZipEntry *pEntry )
@@ -64,6 +63,12 @@ void ZipOutputStream::setEntry( ZipEntry *pEntry )
         pEntry->nSize = pEntry->nCompressedSize = 0;
         pEntry->nFlag |= 8;
     }
+}
+
+void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThread )
+{
+    m_rSharedThreadPool.pushTask(pThread);
+    m_aEntries.push_back(pEntry);
 }
 
 void ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 /*nNewOffset*/, sal_Int32 nNewLength )
@@ -85,21 +90,33 @@ void ZipOutputStream::rawCloseEntry( bool bEncrypt )
     m_pCurrentEntry = NULL;
 }
 
-void ZipOutputStream::finish(  )
+void ZipOutputStream::finish()
     throw(IOException, RuntimeException)
 {
-    if (m_bFinished)
-        return;
+    assert(!m_aZipList.empty() && "Zip file must have at least one entry!");
 
-    if (m_aZipList.size() < 1)
-        OSL_FAIL("Zip file must have at least one entry!\n");
+    // Wait for all threads to finish & write
+    m_rSharedThreadPool.waitUntilEmpty();
+    for (size_t i = 0; i < m_aEntries.size(); i++)
+    {
+        writeLOC(m_aEntries[i]->getZipEntry(), m_aEntries[i]->isEncrypt());
+        uno::Sequence< sal_Int8 > aCompressedData = m_aEntries[i]->getData();
+        rawWrite(aCompressedData, 0, aCompressedData.getLength());
+        rawCloseEntry(m_aEntries[i]->isEncrypt());
+
+        m_aEntries[i]->getZipPackageStream()->successfullyWritten(m_aEntries[i]->getZipEntry());
+        delete m_aEntries[i];
+    }
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
-    for (sal_Int32 i =0, nEnd = m_aZipList.size(); i < nEnd; i++)
+    for (size_t i = 0; i < m_aZipList.size(); i++)
+    {
         writeCEN( *m_aZipList[i] );
+        delete m_aZipList[i];
+    }
     writeEND( nOffset, static_cast < sal_Int32 > (m_aChucker.GetPosition()) - nOffset);
-    m_bFinished = true;
     m_xStream->flush();
+    m_aZipList.clear();
 }
 
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)

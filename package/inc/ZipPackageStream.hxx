@@ -63,14 +63,13 @@ private:
     sal_uInt8   m_nStreamMode;
     sal_uInt32  m_nMagicalHackPos;
     sal_uInt32  m_nMagicalHackSize;
+    sal_Int64   m_nOwnStreamOrigSize;
 
     bool m_bHasSeekable;
-
     bool m_bCompressedIsSetFromOutside;
-
     bool m_bFromManifest;
-
     bool m_bUseWinEncoding;
+    bool m_bRawStream;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnSeekStream();
 
@@ -138,6 +137,7 @@ public:
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
         throw(::com::sun::star::uno::RuntimeException);
+    void successfullyWritten( ZipEntry *pEntry );
 
     static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId();
 
