@@ -2149,19 +2149,22 @@ Image VclBuilder::getCommandImage(const OUString& rCommand, bool bLarge,
         uno::Reference<frame::XModel> xModel(xController->getModel());
 
         uno::Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, uno::UNO_QUERY);
-        uno::Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), uno::UNO_QUERY);
-        uno::Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), uno::UNO_QUERY);
+        if (xSupplier.is())
+        {
+            uno::Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), uno::UNO_QUERY);
+            uno::Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), uno::UNO_QUERY);
 
-        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
-        uno::Sequence<OUString> aImageCmdSeq(1);
-        aImageCmdSeq[0] = rCommand;
+            uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
+            uno::Sequence<OUString> aImageCmdSeq(1);
+            aImageCmdSeq[0] = rCommand;
 
-        aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
-        uno::Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-        Image aImage(xGraphic);
+            aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
+            uno::Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
+            Image aImage(xGraphic);
 
-        if (!!aImage)
-            return aImage;
+            if (!!aImage)
+                return aImage;
+        }
     }
     catch (uno::Exception&)
     {
