@@ -47,6 +47,11 @@ struct TickInfo
 //methods:
     TickInfo( const css::uno::Reference<css::chart2::XScaling>& xInverse );
 
+    /**
+     * Return a value associated with the tick mark. It's normally an original
+     * value from the data source, or 1-based integer index in case the axis
+     * is a category axis.
+     */
     double getUnscaledTickValue() const;
     sal_Int32 getScreenDistanceBetweenTicks( const TickInfo& rOherTickInfo ) const;
 private:
