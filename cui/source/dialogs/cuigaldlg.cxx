@@ -363,7 +363,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     if (maTakeThread.is())
         maTakeThread->join();
 
-    TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
+    TPGalleryThemeProperties*   mpBrowser = static_cast<TPGalleryThemeProperties*>( GetParent() );
     ::std::vector<bool, std::allocator<bool> >           aRemoveEntries( mpBrowser->aFoundList.size(), false );
     ::std::vector< OUString >   aRemainingVector;
     sal_uInt32                  i, nCount;
@@ -602,9 +602,9 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
 void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nGeneralPageId)
-        ( (TPGalleryThemeGeneral&) rPage ).SetXChgData( pData );
+        static_cast<TPGalleryThemeGeneral&>( rPage ).SetXChgData( pData );
     else
-        ( (TPGalleryThemeProperties&) rPage ).SetXChgData( pData );
+        static_cast<TPGalleryThemeProperties&>( rPage ).SetXChgData( pData );
 }
 
 // - TPGalleryThemeGeneral -

@@ -412,8 +412,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if(eState==SfxItemState::SET)
     {
-        const SfxBoolItem* pBoolLangItem = (const SfxBoolItem*)
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE);
+        const SfxBoolItem* pBoolLangItem = static_cast<const SfxBoolItem*>(
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE));
 
         if(pBoolLangItem!=NULL && pBoolLangItem->GetValue())
         {
@@ -433,7 +433,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         if(pNumItem==NULL)
         {
             bNumItemFlag=true;
-            pNumItem= (SvxNumberInfoItem *) pItem->Clone();
+            pNumItem= static_cast<SvxNumberInfoItem *>(pItem->Clone());
         }
         else
         {
@@ -450,8 +450,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if(eState==SfxItemState::SET)
     {
-        const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA);
+        const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA));
 
         if(pBoolItem!=NULL)
         {
@@ -463,8 +463,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if ( eState == SfxItemState::SET )
     {
-        const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE );
+        const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE ));
         if ( pBoolItem )
             m_pCbSourceFormat->Check( pBoolItem->GetValue() );
         else
@@ -486,8 +486,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
 
     if ( SfxItemState::DONTCARE != eState )
-        pValFmtAttr = (const SfxUInt32Item*)
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_VALUE );
+        pValFmtAttr = static_cast<const SfxUInt32Item*>(
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_VALUE ));
 
     eValType = pNumItem->GetValueType();
 
@@ -571,8 +571,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     }
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ADD_AUTO ) );
     if(SfxItemState::SET == eState)
-         pAutoEntryAttr = (const SfxBoolItem*)
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
+         pAutoEntryAttr = static_cast<const SfxBoolItem*>(
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO ));
     // no_NO is an alias for nb_NO and normally isn't listed, we need it for
     // backwards compatibility, but only if the format passed is of
     // LanguageType no_NO.
@@ -789,8 +789,8 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         {
             sal_uInt16 _nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
             SfxItemState _eItemState = rMyItemSet.GetItemState( _nWhich, false );
-            const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
-                        GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE );
+            const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
+                        GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE ));
             bool bOld = pBoolItem && pBoolItem->GetValue();
             rCoreAttrs->Put( SfxBoolItem( _nWhich, m_pCbSourceFormat->IsChecked() ) );
             if ( !bDataChanged )
@@ -822,7 +822,7 @@ void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )
 {
     if(pNumItem==NULL)
     {
-        pNumItem = (SvxNumberInfoItem*)rItem.Clone();
+        pNumItem = static_cast<SvxNumberInfoItem*>(rItem.Clone());
     }
 }
 
@@ -1740,7 +1740,7 @@ void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, b
 {
     m_pLbLanguage->RemoveLanguage(LANGUAGE_SYSTEM);
     sal_uInt16 nPos = m_pLbLanguage->InsertEntry(sAutomaticEntry);
-    m_pLbLanguage->SetEntryData(nPos, (void*)(sal_uLong)eAutoLang);
+    m_pLbLanguage->SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)eAutoLang));
     if(bSelect)
         m_pLbLanguage->SelectEntryPos(nPos);
 }

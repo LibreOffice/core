@@ -327,7 +327,7 @@ void SvxCharacterMap::init()
         {
             aLastName = aFontName;
             sal_uInt16 nPos = m_pFontLB->InsertEntry( aFontName );
-            m_pFontLB->SetEntryData( nPos, (void*)(sal_uLong)i );
+            m_pFontLB->SetEntryData( nPos, reinterpret_cast<void*>(i) );
         }
     }
     // the font may not be in the list =>
@@ -423,7 +423,7 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
 {
     sal_uInt16 nPos = m_pFontLB->GetSelectEntryPos(),
-        nFont = (sal_uInt16)(sal_uLong)m_pFontLB->GetEntryData( nPos );
+               nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
     aFont = GetDevFont( nFont );
     aFont.SetWeight( WEIGHT_DONTKNOW );
     aFont.SetItalic( ITALIC_NONE );

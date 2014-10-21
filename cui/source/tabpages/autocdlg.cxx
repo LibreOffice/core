@@ -120,14 +120,14 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
     m_pLanguageLB->SelectLanguage( LANGUAGE_NONE );
     sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
     DBG_ASSERT( LISTBOX_ENTRY_NOTFOUND != nPos, "listbox entry missing" );
-    m_pLanguageLB->SetEntryData( nPos, (void*)(long) LANGUAGE_UNDETERMINED );
+    m_pLanguageLB->SetEntryData( nPos, reinterpret_cast<void*>(LANGUAGE_UNDETERMINED) );
 
     // Initializing doesn't work for static on linux - therefore here
     if( LANGUAGE_SYSTEM == eLastDialogLanguage )
         eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     LanguageType nSelectLang = LANGUAGE_UNDETERMINED;
-    nPos = m_pLanguageLB->GetEntryPos( (void*)(sal_IntPtr) eLastDialogLanguage );
+    nPos = m_pLanguageLB->GetEntryPos( reinterpret_cast<void*>(eLastDialogLanguage) );
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
         nSelectLang = eLastDialogLanguage;
     m_pLanguageLB->SelectLanguage( nSelectLang );
@@ -166,15 +166,15 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
 {
     sal_Int32 nPos = pBox->GetSelectEntryPos();
     void* pVoid = pBox->GetEntryData(nPos);
-    LanguageType eNewLang = (LanguageType)(sal_IntPtr)pVoid;
+    LanguageType eNewLang = (LanguageType)reinterpret_cast<sal_IntPtr>(pVoid);
     // save old settings and fill anew
     if(eNewLang != eLastDialogLanguage)
     {
         sal_uInt16  nPageId = GetCurPageId();
         if (m_nReplacePageId == nPageId)
-            ((OfaAutocorrReplacePage*)GetTabPage( nPageId ))->SetLanguage(eNewLang);
+            static_cast<OfaAutocorrReplacePage*>(GetTabPage( nPageId ))->SetLanguage(eNewLang);
         else if (m_nExceptionsPageId == nPageId)
-            ((OfaAutocorrExceptPage*)GetTabPage( nPageId ))->SetLanguage(eNewLang);
+            static_cast<OfaAutocorrExceptPage*>(GetTabPage( nPageId ))->SetLanguage(eNewLang);
     }
     return 0;
 }
@@ -226,7 +226,7 @@ bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
 
 void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
+    static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(false);
 }
 
 void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
@@ -601,7 +601,7 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
 
 void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
+    static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(false);
 }
 
 void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
@@ -761,7 +761,7 @@ bool OfaACorrCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
 
 void OfaACorrCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
-    SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -787,7 +787,7 @@ void OfaACorrCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal_uIn
 SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
     DBG_ASSERT(pItem,"GetChButnState:Item not found");
 
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -914,7 +914,7 @@ void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(true);
+    static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(true);
 }
 
 int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
@@ -1415,7 +1415,7 @@ void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
 {
     if(eLang != eLastDialogLanguage)
         SetLanguage(eLastDialogLanguage);
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(true);
+    static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(true);
 }
 
 int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
@@ -1898,7 +1898,7 @@ bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
 
 void OfaQuoteTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
+    static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(false);
 }
 
 void OfaQuoteTabPage::Reset( const SfxItemSet* )
@@ -2132,7 +2132,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(vcl::Window* pParent,
     {
         vcl::KeyCode aKCode( *pKeys );
         sal_Int32 nPos = m_pDCBExpandKey->InsertEntry( aKCode.GetName() );
-        m_pDCBExpandKey->SetEntryData( nPos, (void*)(sal_uLong)*pKeys );
+        m_pDCBExpandKey->SetEntryData( nPos, reinterpret_cast<void*>(*pKeys) );
         if( KEY_RETURN == *pKeys )      // default to RETURN
             m_pDCBExpandKey->SelectEntryPos( nPos );
     }
@@ -2186,7 +2186,7 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     nVal = m_pDCBExpandKey->GetSelectEntryPos();
     if( nVal < m_pDCBExpandKey->GetEntryCount() )
     {
-        sal_uLong nKey = (sal_uLong)m_pDCBExpandKey->GetEntryData( nVal );
+        sal_uLong nKey = reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( nVal ));
         bModified |= nKey != pOpt->nAutoCmpltExpandKey;
         pOpt->nAutoCmpltExpandKey = (sal_uInt16)nKey;
    }
@@ -2223,7 +2223,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
     {
         sal_uLong nKey = pOpt->nAutoCmpltExpandKey;
         for( sal_Int32 n = 0, nCnt = m_pDCBExpandKey->GetEntryCount(); n < nCnt; ++n )
-            if( nKey == (sal_uLong)m_pDCBExpandKey->GetEntryData( n ))
+            if( nKey == reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( n )))
             {
                 m_pDCBExpandKey->SelectEntryPos( n );
                 break;
@@ -2256,7 +2256,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
 
 void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( false );
+    static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage( false );
 }
 
 IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
@@ -2584,7 +2584,7 @@ void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet*  )
 
 void OfaSmartTagOptionsTabPage::ActivatePage( const SfxItemSet& )
 {
-    ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( false );
+    static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage( false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

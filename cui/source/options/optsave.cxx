@@ -105,10 +105,10 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
     get(aODFWarningFT, "odfwarning_label");
 
 
-    aODFVersionLB->SetEntryData(0, (void*)2         ); // 1.0/1.1
-    aODFVersionLB->SetEntryData(1, (void*)4         ); // 1.2
-    aODFVersionLB->SetEntryData(2, (void*)8         ); // 1.2 Extended (compatibility mode)
-    aODFVersionLB->SetEntryData(3, (void*)0x7fffffff); // 1.2 Extended (recommended)
+    aODFVersionLB->SetEntryData(0, reinterpret_cast<void*>(2         )); // 1.0/1.1
+    aODFVersionLB->SetEntryData(1, reinterpret_cast<void*>(4         )); // 1.2
+    aODFVersionLB->SetEntryData(2, reinterpret_cast<void*>(8         )); // 1.2 Extended (compatibility mode)
+    aODFVersionLB->SetEntryData(3, reinterpret_cast<void*>(0x7fffffff)); // 1.2 Extended (recommended)
 
     aDocTypeLB->SetEntryData(0, reinterpret_cast<void*>(APP_WRITER)       );
     aDocTypeLB->SetEntryData(1, reinterpret_cast<void*>(APP_WRITER_WEB)   );
@@ -125,8 +125,8 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
     SvtModuleOptions aModuleOpt;
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
     {
-        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( (void*) APP_MATH ));
-        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( (void*) APP_MATH ));
+        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_MATH) ));
+        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_MATH) ));
     }
     else
     {
@@ -136,8 +136,8 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
     {
-        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( (void*) APP_DRAW ));
-        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( (void*) APP_DRAW ));
+        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_DRAW) ));
+        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_DRAW) ));
     }
     else
     {
@@ -147,8 +147,8 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
-        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( (void*) APP_IMPRESS ));
-        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( (void*) APP_IMPRESS ));
+        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_IMPRESS) ));
+        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_IMPRESS) ));
     }
     else
     {
@@ -158,8 +158,8 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
-        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( (void*) APP_CALC ));
-        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( (void*) APP_CALC ));
+        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_CALC) ));
+        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_CALC) ));
     }
     else
     {
@@ -400,7 +400,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
             {
                 for(sal_uInt16 n = 0; n < aDocTypeLB->GetEntryCount(); n++)
                 {
-                    sal_IntPtr nData = (sal_IntPtr) aDocTypeLB->GetEntryData(n);
+                    sal_IntPtr nData = reinterpret_cast<sal_IntPtr>(aDocTypeLB->GetEntryData(n));
                     OUString sCommand;
                     sCommand = "matchByDocumentService=%1:iflags=" +
                                OUString::number(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT) +
@@ -477,7 +477,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
 
     aRelativeInetCB->Check( aSaveOpt.IsSaveRelINet() );
 
-    void* pDefaultVersion = (void*)sal_IntPtr( aSaveOpt.GetODFDefaultVersion() );
+    void* pDefaultVersion = reinterpret_cast<void*>( aSaveOpt.GetODFDefaultVersion() );
     aODFVersionLB->SelectEntryPos( aODFVersionLB->GetEntryPos( pDefaultVersion ) );
 
     AutoClickHdl_Impl( aAutoSaveCB );
@@ -549,7 +549,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 
     sal_IntPtr nData = -1;
     if(nCurPos < APP_COUNT)
-        nData = (sal_IntPtr) aDocTypeLB->GetEntryData(nCurPos);
+        nData = reinterpret_cast<sal_IntPtr>( aDocTypeLB->GetEntryData(nCurPos) );
 
     if ( nData >= 0 && nData < APP_COUNT )
     {

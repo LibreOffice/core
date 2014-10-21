@@ -62,7 +62,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     pPolyObj            ( NULL ),
     bObjSelected        ( false ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
     aXLStyle            ( XLINE_SOLID ),
     aXWidth             ( XOUT_WIDTH ),
     aXColor             ( OUString(), COL_BLACK ),
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
             else return( 0L ); // cancel
         }
 
-        basegfx::B2DPolyPolygon aNewPolyPolygon(((SdrPathObj*)pNewObj)->GetPathPoly());
+        basegfx::B2DPolyPolygon aNewPolyPolygon(static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly());
         basegfx::B2DRange aNewRange(basegfx::tools::getRange(aNewPolyPolygon));
 
         // normalize
@@ -581,7 +581,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
             if( pLeList->Load() )
             {
                 pLineEndList = pLeList;
-                ( (SvxLineTabDialog*) GetParentDialog() )->SetNewLineEndList( pLineEndList );
+                static_cast<SvxLineTabDialog*>( GetParentDialog() )->SetNewLineEndList( pLineEndList );
                 m_pLbLineEnds->Clear();
                 m_pLbLineEnds->Fill( pLineEndList );
                 Reset( &rOutAttrs );

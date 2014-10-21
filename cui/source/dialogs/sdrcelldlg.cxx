@@ -46,7 +46,7 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nAreaPageId)
     {
-        SvxAreaTabPage& rAreaPage = ((SvxAreaTabPage&)rPage);
+        SvxAreaTabPage& rAreaPage = static_cast<SvxAreaTabPage&>(rPage);
         rAreaPage.SetColorList( mpColorTab );
         rAreaPage.SetGradientList( mpGradientList );
         rAreaPage.SetHatchingList( mpHatchingList );
@@ -59,7 +59,7 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nBorderPageId)
     {
-        SvxBorderTabPage& rBorderPage = ((SvxBorderTabPage&)rPage);
+        SvxBorderTabPage& rBorderPage = static_cast<SvxBorderTabPage&>(rPage);
         rBorderPage.SetTableMode();
     }
     else

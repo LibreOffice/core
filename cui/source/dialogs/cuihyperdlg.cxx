@@ -51,12 +51,12 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
         {
             case SID_HYPERLINK_GETLINK :
             {
-                pParent->SetPage ( (SvxHyperlinkItem*)pState);
+                pParent->SetPage( const_cast<SvxHyperlinkItem*>(static_cast<const SvxHyperlinkItem*>(pState)) );
             }
             break;
             case SID_READONLY_MODE :
             {
-                pParent->SetReadOnlyMode( ( (SfxBoolItem*)pState)->GetValue() );
+                pParent->SetReadOnlyMode( static_cast<const SfxBoolItem*>(pState)->GetValue() );
             }
             break;
         }
@@ -183,21 +183,21 @@ void SvxHpLinkDlg::Apply()
     SfxItemSet aItemSet( SfxGetpApp()->GetPool(), SID_HYPERLINK_GETLINK,
                          SID_HYPERLINK_SETLINK );
 
-    SvxHyperlinkTabPageBase* pCurrentPage = (SvxHyperlinkTabPageBase*)
-                                            GetTabPage ( GetCurPageId() );
+    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(
+                                                GetTabPage( GetCurPageId() ) );
 
     if ( pCurrentPage->AskApply() )
     {
         pCurrentPage->FillItemSet( &aItemSet );
 
-        SvxHyperlinkItem *aItem = (SvxHyperlinkItem *)
-                                  aItemSet.GetItem (SID_HYPERLINK_SETLINK);
+        const SvxHyperlinkItem *aItem = static_cast<const SvxHyperlinkItem *>(
+                                      aItemSet.GetItem (SID_HYPERLINK_SETLINK));
         OUString aStrEmpty;
         if ( aItem->GetURL() != aStrEmpty )
             GetDispatcher()->Execute( SID_HYPERLINK_SETLINK, SfxCallMode::ASYNCHRON |
                                       SfxCallMode::RECORD, aItem, 0L);
 
-        ( (SvxHyperlinkTabPageBase*)GetTabPage ( GetCurPageId() ) )->DoApply();
+        static_cast<SvxHyperlinkTabPageBase*>( GetTabPage( GetCurPageId() ) )->DoApply();
     }
 }
 
@@ -210,8 +210,8 @@ void SvxHpLinkDlg::Apply()
 
 void SvxHpLinkDlg::Move()
 {
-    SvxHyperlinkTabPageBase* pCurrentPage = ( SvxHyperlinkTabPageBase* )
-                                            GetTabPage ( GetCurPageId() );
+    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(
+                                              GetTabPage ( GetCurPageId() ) );
 
     if( pCurrentPage->IsMarkWndVisible () )
     {
@@ -331,7 +331,7 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 
     ShowPage (nPageId);
 
-    SvxHyperlinkTabPageBase* pCurrentPage = (SvxHyperlinkTabPageBase*)GetTabPage( nPageId );
+    SvxHyperlinkTabPageBase* pCurrentPage = static_cast<SvxHyperlinkTabPageBase*>(GetTabPage( nPageId ));
 
     mbIsHTMLDoc = (pItem->GetInsertMode() & HLINK_HTMLMODE) ? true : false;
 

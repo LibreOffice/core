@@ -67,7 +67,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rIn
 
     bBmpChanged         ( false ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    pXPool              ( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() )),
     aXFStyleItem        ( drawing::FillStyle_BITMAP ),
     aXBitmapItem        ( OUString(), Graphic() ),
     aXFillAttr          ( pXPool ),
@@ -153,7 +153,7 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
+                    pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
 
                 // LbColor
                 nPos = m_pLbColor->GetSelectEntryPos();
@@ -315,11 +315,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 
         if(SfxItemState::SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLSTYLE), true, &pPoolItem))
         {
-            const drawing::FillStyle eXFS((drawing::FillStyle)((const XFillStyleItem*)pPoolItem)->GetValue());
+            const drawing::FillStyle eXFS((drawing::FillStyle)static_cast<const XFillStyleItem*>(pPoolItem)->GetValue());
 
             if((drawing::FillStyle_BITMAP == eXFS) && (SfxItemState::SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
             {
-                pGraphicObject.reset(new GraphicObject(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject()));
+                pGraphicObject.reset(new GraphicObject(static_cast<const XFillBitmapItem*>(pPoolItem)->GetGraphicObject()));
             }
         }
 
@@ -798,7 +798,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
             if( pBmpList->Load() )
             {
                 pBitmapList = pBmpList;
-                ( (SvxAreaTabDialog*) GetParentDialog() )->SetNewBitmapList( pBitmapList );
+                static_cast<SvxAreaTabDialog*>( GetParentDialog() )->SetNewBitmapList( pBitmapList );
 
                 m_pLbBitmaps->Clear();
                 m_pLbBitmaps->Fill( pBitmapList );

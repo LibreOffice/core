@@ -226,7 +226,7 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
         if ( SfxItemState::SET != rSet->GetItemState( GetWhich( SID_ATTR_LRSPACE ), true, &pLRSpace ) )
             pLRSpace = GetOldItem( *rSet, SID_ATTR_LRSPACE );
 
-        if ( pLRSpace && ( (SvxLRSpaceItem*)pLRSpace )->GetTxtFirstLineOfst() < 0 )
+        if ( pLRSpace && static_cast<const SvxLRSpaceItem*>(pLRSpace)->GetTxtFirstLineOfst() < 0 )
         {
             SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
             aNewTabs.Insert( aNull );
@@ -243,13 +243,13 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
             aTmp.Insert( aTmpStop );
         }
 
-        if ( !pOld || !( *( (SvxTabStopItem*)pOld ) == aTmp ) )
+        if ( !pOld || !( *static_cast<const SvxTabStopItem*>(pOld) == aTmp ) )
         {
             rSet->Put( aTmp );
             bModified = true;
         }
     }
-    else if ( !pOld || !( *( (SvxTabStopItem*)pOld ) == aNewTabs ) )
+    else if ( !pOld || !( *static_cast<const SvxTabStopItem*>(pOld) == aNewTabs ) )
     {
         rSet->Put( aNewTabs );
         bModified = true;
@@ -279,7 +279,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet* rSet )
     {
         if ( MAP_100TH_MM != eUnit )
         {
-            SvxTabStopItem aTmp( *( (const SvxTabStopItem*)pItem ) );
+            SvxTabStopItem aTmp( *static_cast<const SvxTabStopItem*>(pItem) );
             aNewTabs.Remove( 0, aNewTabs.Count() );
 
             for ( sal_uInt16 i = 0; i < aTmp.Count(); ++i )
@@ -290,7 +290,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet* rSet )
             }
         }
         else
-            aNewTabs = *( (const SvxTabStopItem*)pItem );
+            aNewTabs = *static_cast<const SvxTabStopItem*>(pItem);
     }
     else
         aNewTabs.Remove( 0, aNewTabs.Count() );
@@ -301,14 +301,14 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet* rSet )
 
     if ( pItem )
         nDefDist = LogicToLogic(
-            (long)((const SfxUInt16Item*)pItem)->GetValue(), eUnit, MAP_100TH_MM );
+            (long)static_cast<const SfxUInt16Item*>(pItem)->GetValue(), eUnit, MAP_100TH_MM );
 
     // Tab pos currently selected
     sal_uInt16 nTabPos = 0;
     pItem = GetItem( *rSet, SID_ATTR_TABSTOP_POS );
 
     if ( pItem )
-        nTabPos = ( (const SfxUInt16Item*)pItem )->GetValue();
+        nTabPos = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
     InitTabPos_Impl( nTabPos );
 }
@@ -378,7 +378,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem )
             == SfxItemState::SET )
     {
-        nOffset = ( (const SfxInt32Item*)pItem )->GetValue();
+        nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
         MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
     }
@@ -488,7 +488,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem ) ==
          SfxItemState::SET )
     {
-        nOffset = ( (const SfxInt32Item*)pItem )->GetValue();
+        nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
         MapUnit eUnit = (MapUnit)GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
     }

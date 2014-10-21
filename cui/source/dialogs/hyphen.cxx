@@ -53,11 +53,11 @@ void HyphenEdit::KeyInput( const KeyEvent& rKEvt )
     switch ( nCode )
     {
         case KEY_LEFT:
-            ( (SvxHyphenWordDialog*)GetParentDialog() )->SelLeft();
+            static_cast<SvxHyphenWordDialog*>( GetParentDialog() )->SelLeft();
             break;
 
         case KEY_RIGHT:
-            ( (SvxHyphenWordDialog*)GetParentDialog() )->SelRight();
+            static_cast<SvxHyphenWordDialog*>( GetParentDialog() )->SelRight();
             break;
 
         case KEY_TAB:

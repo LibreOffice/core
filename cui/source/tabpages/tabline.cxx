@@ -198,50 +198,50 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if( nId ==  m_nLineTabPage)
     {
-        ( (SvxLineTabPage&) rPage ).SetColorList( pColorList );
-        ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
-        ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
-        ( (SvxLineTabPage&) rPage ).SetDlgType( 0 );
-        ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );
-        ( (SvxLineTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
-        ( (SvxLineTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
-        ( (SvxLineTabPage&) rPage ).SetDashChgd( &nDashListState );
-        ( (SvxLineTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
-        ( (SvxLineTabPage&) rPage ).SetObjSelected( bObjSelected );
-        ( (SvxLineTabPage&) rPage ).Construct();
-        ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorListState );
+        static_cast<SvxLineTabPage&>(rPage).SetColorList( pColorList );
+        static_cast<SvxLineTabPage&>(rPage).SetDashList( pDashList );
+        static_cast<SvxLineTabPage&>(rPage).SetLineEndList( pLineEndList );
+        static_cast<SvxLineTabPage&>(rPage).SetDlgType( 0 );
+        static_cast<SvxLineTabPage&>(rPage).SetPageType( nPageType );
+        static_cast<SvxLineTabPage&>(rPage).SetPosDashLb( &nPosDashLb );
+        static_cast<SvxLineTabPage&>(rPage).SetPosLineEndLb( &nPosLineEndLb );
+        static_cast<SvxLineTabPage&>(rPage).SetDashChgd( &nDashListState );
+        static_cast<SvxLineTabPage&>(rPage).SetLineEndChgd( &nLineEndListState );
+        static_cast<SvxLineTabPage&>(rPage).SetObjSelected( bObjSelected );
+        static_cast<SvxLineTabPage&>(rPage).Construct();
+        static_cast<SvxLineTabPage&>(rPage).SetColorChgd( &mnColorListState );
         // ActivatePage() is not called the first time
-        ( (SvxLineTabPage&) rPage ).ActivatePage( rOutAttrs );
+        static_cast<SvxLineTabPage&>(rPage).ActivatePage( rOutAttrs );
     }
     else if(nId == m_nStyleTabPage)
     {
-        ( (SvxLineDefTabPage&) rPage ).SetDashList( pDashList );
-        ( (SvxLineDefTabPage&) rPage ).SetDlgType( 0 );
-        ( (SvxLineDefTabPage&) rPage ).SetPageType( &nPageType );
-        ( (SvxLineDefTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
-        ( (SvxLineDefTabPage&) rPage ).SetDashChgd( &nDashListState );
-        ( (SvxLineDefTabPage&) rPage ).SetObjSelected( bObjSelected );
-        ( (SvxLineDefTabPage&) rPage ).Construct();
+        static_cast<SvxLineDefTabPage&>(rPage).SetDashList( pDashList );
+        static_cast<SvxLineDefTabPage&>(rPage).SetDlgType( 0 );
+        static_cast<SvxLineDefTabPage&>(rPage).SetPageType( &nPageType );
+        static_cast<SvxLineDefTabPage&>(rPage).SetPosDashLb( &nPosDashLb );
+        static_cast<SvxLineDefTabPage&>(rPage).SetDashChgd( &nDashListState );
+        static_cast<SvxLineDefTabPage&>(rPage).SetObjSelected( bObjSelected );
+        static_cast<SvxLineDefTabPage&>(rPage).Construct();
     }
     else if(nId == m_nEndTabPage)
     {
-        ( (SvxLineEndDefTabPage&) rPage ).SetLineEndList( pLineEndList );
-        ( (SvxLineEndDefTabPage&) rPage ).SetPolyObj( pObj );
-        ( (SvxLineEndDefTabPage&) rPage ).SetDlgType( 0 );
-        ( (SvxLineEndDefTabPage&) rPage ).SetPageType( &nPageType );
-        ( (SvxLineEndDefTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
-        ( (SvxLineEndDefTabPage&) rPage ).SetLineEndChgd( &nLineEndListState );
-        ( (SvxLineEndDefTabPage&) rPage ).SetObjSelected( bObjSelected );
-        ( (SvxLineEndDefTabPage&) rPage ).Construct();
+        static_cast<SvxLineEndDefTabPage&>(rPage).SetLineEndList( pLineEndList );
+        static_cast<SvxLineEndDefTabPage&>(rPage).SetPolyObj( pObj );
+        static_cast<SvxLineEndDefTabPage&>(rPage).SetDlgType( 0 );
+        static_cast<SvxLineEndDefTabPage&>(rPage).SetPageType( &nPageType );
+        static_cast<SvxLineEndDefTabPage&>(rPage).SetPosLineEndLb( &nPosLineEndLb );
+        static_cast<SvxLineEndDefTabPage&>(rPage).SetLineEndChgd( &nLineEndListState );
+        static_cast<SvxLineEndDefTabPage&>(rPage).SetObjSelected( bObjSelected );
+        static_cast<SvxLineEndDefTabPage&>(rPage).Construct();
     }
     else if (nId == m_nShadowTabPage)
     {
-        ( (SvxShadowTabPage&) rPage ).SetColorList( pColorList );
-        ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );
-        ( (SvxShadowTabPage&) rPage ).SetDlgType( 0 );
-        ( (SvxShadowTabPage&) rPage ).SetAreaTP( &mbAreaTP );
-        ( (SvxShadowTabPage&) rPage ).SetColorChgd( &mnColorListState );
-        ( (SvxShadowTabPage&) rPage ).Construct();
+        static_cast<SvxShadowTabPage&>(rPage).SetColorList( pColorList );
+        static_cast<SvxShadowTabPage&>(rPage).SetPageType( nPageType );
+        static_cast<SvxShadowTabPage&>(rPage).SetDlgType( 0 );
+        static_cast<SvxShadowTabPage&>(rPage).SetAreaTP( &mbAreaTP );
+        static_cast<SvxShadowTabPage&>(rPage).SetColorChgd( &mnColorListState );
+        static_cast<SvxShadowTabPage&>(rPage).Construct();
     }
 }
 

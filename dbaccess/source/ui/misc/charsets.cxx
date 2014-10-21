@@ -116,7 +116,7 @@ namespace dbaui
         rtl_TextEncoding eEncoding = (*m_aPosition).getEncoding();
         return CharsetDisplayDerefHelper(
             *m_aPosition,
-            RTL_TEXTENCODING_DONTKNOW == eEncoding ? m_pContainer->m_aSystemDisplayName : (OUString)m_pContainer->GetTextString( eEncoding )
+            RTL_TEXTENCODING_DONTKNOW == eEncoding ? m_pContainer->m_aSystemDisplayName : m_pContainer->GetTextString( eEncoding )
         );
     }
 

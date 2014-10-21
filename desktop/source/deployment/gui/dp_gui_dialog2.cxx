@@ -996,7 +996,7 @@ void ExtMgrDialog::showProgress( bool _bStart )
         OSL_TRACE( "showProgress stop!" );
     }
 
-    DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), (void*) bStart );
+    DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), reinterpret_cast<void*>(bStart) );
 }
 
 
@@ -1307,7 +1307,7 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
         OSL_TRACE( "showProgress stop!" );
     }
 
-    DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), (void*) bStart );
+    DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), reinterpret_cast<void*>(bStart) );
 }
 
 

@@ -64,8 +64,8 @@ void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nTextId)
         {
-            ( (SvxTextAttrPage&) rPage ).SetView( pView );
-            ( (SvxTextAttrPage&) rPage ).Construct();
+            static_cast<SvxTextAttrPage&>(rPage).SetView( pView );
+            static_cast<SvxTextAttrPage&>(rPage).Construct();
         }
 }
 
@@ -149,7 +149,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIKIND );
     if( pItem )
     {
-        eAniKind = ( ( const SdrTextAniKindItem* )pItem )->GetValue();
+        eAniKind = static_cast<const SdrTextAniKindItem*>(pItem)->GetValue();
         m_pLbEffect->SelectEntryPos( sal::static_int_cast< sal_Int32 >(eAniKind) );
     }
     else
@@ -162,7 +162,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDIRECTION );
     if( pItem )
     {
-        SdrTextAniDirection eValue = ( ( const SdrTextAniDirectionItem* )pItem )->GetValue();
+        SdrTextAniDirection eValue = static_cast<const SdrTextAniDirectionItem*>(pItem)->GetValue();
         SelectDirection( eValue );
     }
     else
@@ -184,7 +184,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbStartInside->EnableTriState( false );
-        bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
+        bool bValue = static_cast<const SdrTextAniStartInsideItem*>(pItem)->GetValue();
         if( bValue )
             m_pTsbStartInside->SetState( TRISTATE_TRUE );
         else
@@ -201,7 +201,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbStopInside->EnableTriState( false );
-        bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
+        bool bValue = static_cast<const SdrTextAniStopInsideItem*>(pItem)->GetValue();
         if( bValue )
             m_pTsbStopInside->SetState( TRISTATE_TRUE );
         else
@@ -218,7 +218,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbEndless->EnableTriState( false );
-        long nValue = (long) ( ( const SdrTextAniCountItem* )pItem )->GetValue();
+        long nValue = (long) static_cast<const SdrTextAniCountItem*>(pItem)->GetValue();
         m_pNumFldCount->SetValue( nValue );
         if( nValue == 0 )
         {
@@ -251,7 +251,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbAuto->EnableTriState( false );
-        long nValue = (long) ( ( const SdrTextAniDelayItem* )pItem )->GetValue();
+        long nValue = (long) static_cast<const SdrTextAniDelayItem*>(pItem)->GetValue();
         m_pMtrFldDelay->SetValue( nValue );
         if( nValue == 0 )
         {
@@ -276,7 +276,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         m_pTsbPixel->EnableTriState( false );
-        long nValue = (long) ( ( const SdrTextAniAmountItem* )pItem )->GetValue();
+        long nValue = (long) static_cast<const SdrTextAniAmountItem*>(pItem)->GetValue();
         if( nValue <= 0 )
         {
             m_pTsbPixel->SetState( TRISTATE_TRUE );

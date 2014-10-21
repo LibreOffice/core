@@ -134,14 +134,14 @@ static void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
 /// Returns the fill style of the currently selected entry.
 static drawing::FillStyle lcl_getFillStyle(ListBox* pLbSelect)
 {
-    return (drawing::FillStyle)(sal_uLong)pLbSelect->GetEntryData(pLbSelect->GetSelectEntryPos());
+    return (drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetEntryData(pLbSelect->GetSelectEntryPos()));
 }
 
 // Selects the entry matching the specified fill style.
 static void lcl_setFillStyle(ListBox* pLbSelect, drawing::FillStyle eStyle)
 {
     for (int i = 0; i < pLbSelect->GetEntryCount(); ++i)
-        if ((drawing::FillStyle)(sal_uLong)pLbSelect->GetEntryData(i) == eStyle)
+        if ((drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetEntryData(i)) == eStyle)
         {
             pLbSelect->SelectEntryPos(i);
             return;
@@ -241,7 +241,7 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 
         nTransparency = lcl_TransparencyToPercent( rColor.GetTransparency() );
 
-        SetFillColor( rColor == aTranspCol ? GetSettings().GetStyleSettings().GetFieldColor() : (Color) rColor.GetRGBColor() );
+        SetFillColor( rColor == aTranspCol ? GetSettings().GetStyleSettings().GetFieldColor() : Color(rColor.GetRGBColor()) );
         Paint( aDrawRect );
     }
 }
@@ -407,7 +407,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
          || ( 0 != ( pShell = SfxObjectShell::Current()) &&
               0 != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
     {
-        nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
+        nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
 
     FillColorValueSets_Impl();
@@ -499,7 +499,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     if ( SfxItemState::SET == rSet->GetItemState( SID_BACKGRND_DESTINATION,
                                             false, &pItem ) )
     {
-        nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
+        nDestValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         m_pTblLBox->SelectEntryPos(nDestValue);
 
         switch ( nDestValue )
@@ -518,7 +518,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     else if( SfxItemState::SET == rSet->GetItemState(
                 SID_PARA_BACKGRND_DESTINATION, false, &pItem ) )
     {
-        nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
+        nDestValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         // character activated?
         sal_Int32 nParaSel  = m_pParaLBox->GetSelectEntryPos();
         if(1 == nParaSel)
@@ -544,7 +544,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 nWhich = GetWhich( nSlot );
 
     if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
-        pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
+        pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
 
     m_pBtnTile->Check();
 
@@ -563,7 +563,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
         const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_BRUSH );
 
         if ( pOld )
-            aBgdColor = ( (SvxBrushItem*)pOld )->GetColor();
+            aBgdColor = static_cast<const SvxBrushItem*>(pOld)->GetColor();
     }
 
     if ( nDestValue != USHRT_MAX )
@@ -586,21 +586,21 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich( SID_ATTR_BRUSH );
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
+                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
                 pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nCellWhich = nWhich;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( SID_ATTR_BRUSH_ROW ) );
+                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( SID_ATTR_BRUSH_ROW ) ));
                 pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( SID_ATTR_BRUSH_TABLE ) );
+                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( SID_ATTR_BRUSH_TABLE ) ));
                 pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
@@ -625,7 +625,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich( SID_ATTR_BRUSH );
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
+                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
                 pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
             }
 
@@ -634,7 +634,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             rSet->GetItemState( nWhich, false );
             if ( rSet->GetItemState( nWhich, true ) > SfxItemState::DEFAULT )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
+                pBgdAttr = static_cast<const SvxBrushItem*>(&( rSet->Get( nWhich ) ));
                 pParaBck_Impl->pCharBrush = new SvxBrushItem(*pBgdAttr);
             }
             else
@@ -662,7 +662,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
     if ( rSet.GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
     {
-        const CntWallpaperItem* pItem = (const CntWallpaperItem*)&rSet.Get( nWhich );
+        const CntWallpaperItem* pItem = static_cast<const CntWallpaperItem*>(&rSet.Get( nWhich ));
         pTemp.reset(new SvxBrushItem( *pItem, nWhich ));
         pBgdAttr = pTemp.get();
     }
@@ -688,7 +688,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
         const SfxPoolItem* pOld = GetOldItem( rSet, SID_VIEW_FLD_PIC );
         if ( pOld )
-            aBgdColor = Color( ((CntWallpaperItem*)pOld)->GetColor() );
+            aBgdColor = Color( static_cast<const CntWallpaperItem*>(pOld)->GetColor() );
     }
 
     // We now have always a link to the background
@@ -771,7 +771,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     bool bGraphTransparencyChanged = bGraphTransparency && m_pGraphTransMF->IsValueChangedFromSaved();
     if ( pOld )
     {
-        const SvxBrushItem& rOldItem    = (const SvxBrushItem&)*pOld;
+        const SvxBrushItem& rOldItem    = static_cast<const SvxBrushItem&>(*pOld);
         SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
         const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
 
@@ -978,7 +978,7 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
         return false;
     const SfxItemSet& rOldSet = GetItemSet();
 
-    SvxBrushItem        rOldItem( (const CntWallpaperItem&)*pOld, nWhich );
+    SvxBrushItem        rOldItem( static_cast<const CntWallpaperItem&>(*pOld), nWhich );
     SvxGraphicPosition  eOldPos     = rOldItem.GetGraphicPos();
     const bool          bIsBrush    = ( drawing::FillStyle_SOLID == lcl_getFillStyle(m_pLbSelect) );
     bool                bModified = false;
@@ -1142,7 +1142,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     XColorListRef pColorTable = NULL;
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
     {
-        pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+        pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
 
     if ( !pColorTable.is() )

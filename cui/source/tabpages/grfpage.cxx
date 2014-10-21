@@ -142,7 +142,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     if(SfxItemState::SET == rSet->GetItemState( rPool.GetWhich(
                                     SID_ATTR_GRAF_KEEP_ZOOM ), true, &pItem ))
     {
-        if( ((const SfxBoolItem*)pItem)->GetValue() )
+        if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
             m_pZoomConstRB->Check();
         else
             m_pSizeConstRB->Check();
@@ -154,7 +154,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     {
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
-        SvxGrfCrop* pCrop =  (SvxGrfCrop*)pItem;
+        const SvxGrfCrop* pCrop = static_cast<const SvxGrfCrop*>(pItem);
 
         m_pExampleWN->SetLeft(     pCrop->GetLeft());
         m_pExampleWN->SetRight(    pCrop->GetRight());
@@ -180,7 +180,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
         // orientation and size from the PageItem
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
-        aPageSize = ((const SvxSizeItem*)pItem)->GetSize();
+        aPageSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
 
         sal_Int64 nTmp = m_pHeightMF->Normalize(aPageSize.Height());
         m_pHeightMF->SetMax( nTmp, eUnit );
@@ -207,7 +207,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
         if (it != 0) {
             referer = it->GetValue();
         }
-        const Graphic* pGrf = ((SvxBrushItem*)pItem)->GetGraphic(referer);
+        const Graphic* pGrf = static_cast<const SvxBrushItem*>(pItem)->GetGraphic(referer);
         if( pGrf )
         {
             aOrigSize = GetGrfOrigSize( *pGrf );
@@ -224,8 +224,8 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
                 m_pExampleWN->SetFrameSize( aOrigSize );
 
                 bFound = true;
-                if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
-                    aGraphicName = ((SvxBrushItem*)pItem)->GetGraphicLink();
+                if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink().isEmpty() )
+                    aGraphicName = static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink();
             }
         }
     }
@@ -254,9 +254,9 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         const SfxPoolItem* pItem = 0;
         if( pExSet && SfxItemState::SET ==
                 pExSet->GetItemState( nW, false, &pItem ) )
-            aSz = *(const SvxSizeItem*)pItem;
+            aSz = *static_cast<const SvxSizeItem*>(pItem);
         else
-            aSz = (const SvxSizeItem&)GetItemSet().Get( nW );
+            aSz = static_cast<const SvxSizeItem&>(GetItemSet().Get( nW ));
 
         Size aTmpSz( aSz.GetSize() );
         if( m_pWidthMF->IsValueChangedFromSaved() )
@@ -280,7 +280,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
-        boost::scoped_ptr<SvxGrfCrop> pNew((SvxGrfCrop*)rSet->Get( nW ).Clone());
+        boost::scoped_ptr<SvxGrfCrop> pNew(static_cast<SvxGrfCrop*>(rSet->Get( nW ).Clone()));
 
         pNew->SetLeft( lcl_GetValue( *m_pLeftMF, eUnit ) );
         pNew->SetRight( lcl_GetValue( *m_pRightMF, eUnit ) );
@@ -313,7 +313,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     Size aSize;
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, false, &pItem ) )
-        aSize = ((const SvxSizeItem*)pItem)->GetSize();
+        aSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
 
     nOldWidth = aSize.Width();
     nOldHeight = aSize.Height();
@@ -350,7 +350,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
-        const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
+        const SvxBrushItem& rBrush = *static_cast<const SvxBrushItem*>(pItem);
         if( !rBrush.GetGraphicLink().isEmpty() &&
             aGraphicName != rBrush.GetGraphicLink() )
             aGraphicName = rBrush.GetGraphicLink();

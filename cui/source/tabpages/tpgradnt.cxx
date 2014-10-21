@@ -60,7 +60,7 @@ SvxGradientTabPage::SvxGradientTabPage
     pPos                ( 0 ),
     pbAreaTP            ( 0 ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    pXPool              ( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() )),
     aXFStyleItem        ( drawing::FillStyle_GRADIENT ),
     aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
     aXFillAttr          ( pXPool ),
@@ -167,7 +167,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
+                    pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
 
                 // LbColorFrom
                 nPos = m_pLbColorFrom->GetSelectEntryPos();
@@ -651,7 +651,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
             if ( pGrdList->Load() )
             {
                 pGradientList = pGrdList;
-                ( (SvxAreaTabDialog*) GetParentDialog() )->
+                static_cast<SvxAreaTabDialog*>( GetParentDialog() )->
                     SetNewGradientList( pGradientList );
 
                 m_pLbGradients->Clear();
@@ -778,10 +778,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
         const SfxPoolItem* pPoolItem = NULL;
         if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
-            if( ( drawing::FillStyle_GRADIENT == (drawing::FillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
+            if( ( drawing::FillStyle_GRADIENT == (drawing::FillStyle) static_cast<const XFillStyleItem*>( pPoolItem )->GetValue() ) &&
                 ( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true, &pPoolItem ) ) )
             {
-                pGradient.reset(new XGradient( ( ( const XFillGradientItem* ) pPoolItem )->GetGradientValue() ));
+                pGradient.reset(new XGradient( static_cast<const XFillGradientItem*>( pPoolItem )->GetGradientValue() ));
             }
         }
         if( !pGradient )

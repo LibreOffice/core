@@ -331,7 +331,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
     const SfxPoolItem* pItem = NULL;
     if ( SfxItemState::SET == rSet->GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
     {
-        m_pYearValueField->SetValue( ((SfxUInt16Item*)pItem)->GetValue() );
+        m_pYearValueField->SetValue( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
         TwoFigureConfigHdl(m_pYearValueField);
     }
     else
@@ -1072,7 +1072,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
                 //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
                 OUString aLangStr( SvtLanguageTable::GetLanguageString( aLang, true ) );
                 sal_uInt16 p = m_pUserInterfaceLB->InsertEntry(aLangStr);
-                m_pUserInterfaceLB->SetEntryData(p, (void*)(i+1));
+                m_pUserInterfaceLB->SetEntryData(p, reinterpret_cast<void*>(i+1));
             }
         }
 
@@ -1089,7 +1089,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
             sal_Int32 d = 0;
             for (sal_uInt16 i=0; i < m_pUserInterfaceLB->GetEntryCount(); i++)
             {
-                d = (sal_Int32)(sal_IntPtr)m_pUserInterfaceLB->GetEntryData(i);
+                d = (sal_Int32)reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetEntryData(i));
                 if ( d > 0 && seqInstalledLanguages.getLength() > d-1 && seqInstalledLanguages[d-1].equals(m_sUserLocaleValue))
                     m_pUserInterfaceLB->SelectEntryPos(i);
             }
@@ -1224,7 +1224,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         // handle settings for UI Language
         // a change of setting needs to bring up a warning message
         OUString aLangString;
-        sal_Int32 d = (sal_Int32)(sal_IntPtr)m_pUserInterfaceLB->GetEntryData(m_pUserInterfaceLB->GetSelectEntryPos());
+        sal_Int32 d = (sal_Int32)reinterpret_cast<sal_IntPtr>(m_pUserInterfaceLB->GetEntryData(m_pUserInterfaceLB->GetSelectEntryPos()));
         if( d > 0 && seqInstalledLanguages.getLength() > d-1)
             aLangString = seqInstalledLanguages[d-1];
 
@@ -1526,21 +1526,21 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         const SfxPoolItem* pLang;
         if( SfxItemState::SET == rSet->GetItemState(SID_ATTR_LANGUAGE, false, &pLang))
         {
-            LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
+            LanguageType eTempCurLang = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
             if (MsLangId::resolveSystemLanguageByScriptType(eCurLang, ::com::sun::star::i18n::ScriptType::LATIN) != eTempCurLang)
                 eCurLang = eTempCurLang;
         }
 
         if( SfxItemState::SET == rSet->GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, false, &pLang))
         {
-            LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
+            LanguageType eTempCurLang = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
             if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCJK, ::com::sun::star::i18n::ScriptType::ASIAN) != eTempCurLang)
                 eCurLangCJK = eTempCurLang;
         }
 
         if( SfxItemState::SET == rSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, false, &pLang))
         {
-            LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
+            LanguageType eTempCurLang = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
             if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCTL, ::com::sun::star::i18n::ScriptType::COMPLEX) != eTempCurLang)
                 eCurLangCTL = eTempCurLang;
         }
@@ -1583,7 +1583,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     // check the box "For the current document only"
     // set the focus to the Western Language box
     const SfxPoolItem* pLang = 0;
-    if ( SfxItemState::SET == rSet->GetItemState(SID_SET_DOCUMENT_LANGUAGE, false, &pLang ) && ((const SfxBoolItem*)pLang)->GetValue() )
+    if ( SfxItemState::SET == rSet->GetItemState(SID_SET_DOCUMENT_LANGUAGE, false, &pLang ) && static_cast<const SfxBoolItem*>(pLang)->GetValue() )
     {
         m_pWesternLanguageLB->GrabFocus();
         m_pCurrentDocCB->Enable(true);

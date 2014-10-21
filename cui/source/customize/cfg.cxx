@@ -800,7 +800,7 @@ SvxConfigDialog::SvxConfigDialog(vcl::Window * pParent, const SfxItemSet* pInSet
 
     if ( pItem )
     {
-        OUString text = ((const SfxStringItem*)pItem)->GetValue();
+        OUString text = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
         if (text.startsWith( ITEM_TOOLBAR_URL ) )
         {
@@ -2908,7 +2908,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
 
     if ( pItem )
     {
-        OUString text = ((const SfxStringItem*)pItem)->GetValue();
+        OUString text = static_cast<const SfxStringItem*>(pItem)->GetValue();
         if (text.startsWith( ITEM_TOOLBAR_URL ))
         {
             m_aURLToSelect = text.copy( 0 );
@@ -2938,7 +2938,7 @@ SvxToolbarConfigPage::~SvxToolbarConfigPage()
 void SvxToolbarConfigPage::DeleteSelectedTopLevel()
 {
     sal_uInt16 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
-    ToolbarSaveInData* pSaveInData = (ToolbarSaveInData*) GetSaveInData();
+    ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
     pSaveInData->RemoveToolbar( GetTopLevelSelection() );
 
     if ( m_pTopLevelListBox->GetEntryCount() > 1 )
@@ -2986,7 +2986,7 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
         // delete data for toolbar entry
         delete pEntry;
 
-        (( ToolbarSaveInData* ) GetSaveInData())->ApplyToolbar( pToolbar );
+        static_cast<ToolbarSaveInData*>(GetSaveInData())->ApplyToolbar( pToolbar );
         UpdateButtonStates();
 
         // if this is the last entry in the toolbar and it is a user
@@ -3023,7 +3023,7 @@ void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
     // Apply change to currently selected toolbar
     SvxConfigEntry* pToolbar = GetTopLevelSelection();
     if ( pToolbar )
-        ((ToolbarSaveInData*)GetSaveInData())->ApplyToolbar( pToolbar );
+        static_cast<ToolbarSaveInData*>(GetSaveInData())->ApplyToolbar( pToolbar );
     else
     {
         SAL_WARN( "cui.customize", "SvxToolbarConfigPage::MoveEntry(): no entry" );
@@ -3038,7 +3038,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
     SvxConfigEntry* pToolbar =
         (SvxConfigEntry*)m_pTopLevelListBox->GetEntryData( nSelectionPos );
 
-    ToolbarSaveInData* pSaveInData = (ToolbarSaveInData*) GetSaveInData();
+    ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
 
     switch( pButton->GetCurItemId() )
     {
@@ -3081,7 +3081,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
             if ( qbox.Execute() == RET_YES )
             {
                 ToolbarSaveInData* pSaveInData_ =
-                    (ToolbarSaveInData*) GetSaveInData();
+                    static_cast<ToolbarSaveInData*>(GetSaveInData());
 
                 pSaveInData_->RestoreToolbar( pToolbar );
 
@@ -3172,7 +3172,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             }
 
             ToolbarSaveInData* pSaveInData =
-                (ToolbarSaveInData*) GetSaveInData();
+                static_cast<ToolbarSaveInData*>( GetSaveInData() );
 
             OUString aSystemName =
                 pSaveInData->GetSystemUIName( pEntry->GetCommand() );
@@ -3392,7 +3392,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
 
     if ( bNeedsApply )
     {
-        (( ToolbarSaveInData* ) GetSaveInData())->ApplyToolbar( pToolbar );
+        static_cast<ToolbarSaveInData*>( GetSaveInData())->ApplyToolbar( pToolbar );
         UpdateButtonStates();
     }
 
@@ -3504,7 +3504,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
     if ( window != NULL && window->GetType() == WINDOW_TOOLBOX )
     {
-        ToolBox* toolbox = (ToolBox*)window;
+        ToolBox* toolbox = static_cast<ToolBox*>(window);
 
         if ( nStyle == 0 )
         {
@@ -4509,7 +4509,7 @@ SvTreeListEntry* SvxToolbarConfigPage::AddFunction(
 
     if ( pToolbar != NULL )
     {
-        ( ( ToolbarSaveInData* ) GetSaveInData() )->ApplyToolbar( pToolbar );
+        static_cast<ToolbarSaveInData*>( GetSaveInData() )->ApplyToolbar( pToolbar );
     }
 
     return pNewLBEntry;
@@ -4612,8 +4612,8 @@ void SvxToolbarEntriesListBox::ChangeVisibility( SvTreeListEntry* pEntry )
 
             SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
 
-            ToolbarSaveInData* pToolbarSaveInData = ( ToolbarSaveInData* )
-                pPage->GetSaveInData();
+            ToolbarSaveInData* pToolbarSaveInData = static_cast<ToolbarSaveInData*>(
+                pPage->GetSaveInData() );
 
                pToolbarSaveInData->ApplyToolbar( pToolbar );
 
@@ -4656,7 +4656,7 @@ TriState SvxToolbarEntriesListBox::NotifyMoving(
         if ( pToolbar != NULL )
         {
             ToolbarSaveInData* pSaveInData =
-                ( ToolbarSaveInData*) pPage->GetSaveInData();
+                static_cast<ToolbarSaveInData*>( pPage->GetSaveInData() );
             pSaveInData->ApplyToolbar( pToolbar );
         }
     }
@@ -4677,14 +4677,14 @@ TriState SvxToolbarEntriesListBox::NotifyCopying(
     if ( !m_bIsInternalDrag )
     {
         // if the target is NULL then add function to the start of the list
-        ((SvxToolbarConfigPage*)pPage)->AddFunction( pTarget, pTarget == NULL );
+        static_cast<SvxToolbarConfigPage*>(pPage)->AddFunction( pTarget, pTarget == NULL );
 
         // Instant Apply changes to UI
         SvxConfigEntry* pToolbar = pPage->GetTopLevelSelection();
         if ( pToolbar != NULL )
         {
             ToolbarSaveInData* pSaveInData =
-                ( ToolbarSaveInData*) pPage->GetSaveInData();
+                static_cast<ToolbarSaveInData*>( pPage->GetSaveInData() );
             pSaveInData->ApplyToolbar( pToolbar );
         }
 

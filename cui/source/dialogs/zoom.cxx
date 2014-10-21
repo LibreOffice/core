@@ -177,7 +177,7 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     if ( pSh )
-        pOldUserItem = (const SfxUInt16Item*)pSh->GetItem( SID_ATTR_ZOOM_USER );
+        pOldUserItem = static_cast<const SfxUInt16Item*>(pSh->GetItem( SID_ATTR_ZOOM_USER ));
 
     if ( pOldUserItem )
         nValue = pOldUserItem->GetValue();
@@ -202,7 +202,7 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
 
     if ( rItem.ISA(SvxZoomItem) )
     {
-        const SvxZoomItem& rZoomItem = (const SvxZoomItem&)rItem;
+        const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(rItem);
         const sal_uInt16 nZoom = rZoomItem.GetValue();
         const SvxZoomType eType = rZoomItem.GetType();
         const sal_uInt16 nValSet = rZoomItem.GetValueSet();
@@ -237,7 +237,7 @@ SvxZoomDialog::SvxZoomDialog( vcl::Window* pParent, const SfxItemSet& rCoreSet )
     }
     else
     {
-        const sal_uInt16 nZoom = ( (const SfxUInt16Item&)rItem ).GetValue();
+        const sal_uInt16 nZoom = static_cast<const SfxUInt16Item&>(rItem).GetValue();
         SetFactor( nZoom );
     }
 

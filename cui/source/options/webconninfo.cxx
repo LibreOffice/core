@@ -176,7 +176,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                     aUIEntry += OUString( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
                     SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
-                    pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
+                    pEntry->SetUserData( reinterpret_cast<void*>(nCount++) );
                 }
             }
 
@@ -192,7 +192,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 aUIEntry += OUString( (sal_Unicode)'\t' );
                 aUIEntry += OUString( "*" );
                 SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
-                pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
+                pEntry->SetUserData( reinterpret_cast<void*>(nCount++) );
             }
         }
     }
@@ -214,7 +214,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
             uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                 task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-            sal_Int32 nPos = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
+            sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
             if ( nPos < m_nPos )
             {
                 xPasswdContainer->removePersistent( aURL, aUserName );
@@ -310,7 +310,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
 
         // url container entries (-> use system credentials) have
         // no password
-        sal_Int32 nPos = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
+        sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
         m_pChangeBtn->Enable( nPos < m_nPos );
     }
 

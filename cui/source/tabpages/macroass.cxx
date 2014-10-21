@@ -122,11 +122,10 @@ void _SfxMacroTabPage::EnableButtons()
     if ( pE )
     {
         // get bound macro
-        const SvxMacro* pM = aTbl.Get( (sal_uInt16)(sal_uLong) pE->GetUserData() );
+        const SvxMacro* pM = aTbl.Get( (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData()) );
         mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
 
-        OUString sEventMacro;
-        sEventMacro = ((SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
+        OUString sEventMacro = static_cast<const SvLBoxString*>(pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
 
         OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.equalsIgnoreAsciiCase( sEventMacro ) );
@@ -179,7 +178,7 @@ bool _SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET != GetItemSet().GetItemState( aItem.Which(), true, &pItem )
-        || aItem != *(SvxMacroItem*)pItem )
+        || aItem != *static_cast<const SvxMacroItem*>(pItem) )
     {
         rSet->Put( aItem );
         return true;
@@ -215,7 +214,7 @@ void _SfxMacroTabPage::PageCreated(const SfxAllItemSet& aSet)
     if( !mpImpl->bGotEvents && SfxItemState::SET == aSet.GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
     {
         mpImpl->bGotEvents = true;
-        const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
+        const SfxEventNamesList& rList = static_cast<const SfxEventNamesItem*>(pEventsItem)->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
             const SfxEventName *pOwn = rList.at(nNo);
@@ -228,13 +227,13 @@ void _SfxMacroTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet->GetItemState( GetWhich( aPageRg[0] ), true, &pItem ))
-        aTbl = ((SvxMacroItem*)pItem)->GetMacroTable();
+        aTbl = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable();
 
     const SfxPoolItem* pEventsItem;
     if( !mpImpl->bGotEvents && SfxItemState::SET == rSet->GetItemState( SID_EVENTCONFIG, true, &pEventsItem ) )
     {
         mpImpl->bGotEvents = true;
-        const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
+        const SfxEventNamesList& rList = static_cast<const SfxEventNamesItem*>(pEventsItem)->GetEvents();
         for ( size_t nNo = 0, nCnt = rList.size(); nNo < nCnt; ++nNo )
         {
             const SfxEventName *pOwn = rList.at(nNo);
@@ -311,7 +310,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     const bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
     // remove from the table
-    sal_uInt16 nEvent = (sal_uInt16)(sal_uLong)pE->GetUserData();
+    sal_uInt16 nEvent = (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData());
     pThis->aTbl.Erase( nEvent );
 
     OUString sScriptURI;
@@ -415,12 +414,12 @@ void _SfxMacroTabPage::FillEvents()
         SvTreeListEntry*    pE = rListBox.GetEntry( n );
         if( pE )
         {
-            SvLBoxString*   pLItem = ( SvLBoxString* ) pE->GetItem( LB_MACROS_ITEMPOS );
+            SvLBoxString*   pLItem = static_cast<SvLBoxString*>( pE->GetItem( LB_MACROS_ITEMPOS ) );
             DBG_ASSERT( pLItem && SV_ITEM_ID_LBOXSTRING == pLItem->GetType(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
 
             OUString          sOld( pLItem->GetText() );
             OUString          sNew;
-            sal_uInt16          nEventId = ( sal_uInt16 ) ( sal_uLong ) pE->GetUserData();
+            sal_uInt16        nEventId = ( sal_uInt16 ) reinterpret_cast<sal_uLong>( pE->GetUserData() );
             if( aTbl.IsKeyValid( nEventId ) )
                 sNew = ConvertToUIName_Impl( aTbl.Get( nEventId ) );
 

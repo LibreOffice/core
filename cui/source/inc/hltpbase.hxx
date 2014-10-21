@@ -90,7 +90,7 @@ protected:
     SvxHlinkDlgMarkWnd* mpMarkWnd;
 
     void InitStdControls ();
-    virtual void FillStandardDlgFields ( SvxHyperlinkItem* pHyperlinkItem );
+    virtual void FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem );
     virtual void FillDlgFields(const OUString& rStrURL) = 0;
     virtual void GetCurentItemData     ( OUString& rStrURL, OUString& aStrName,
                                          OUString& aStrIntName, OUString& aStrFrame,

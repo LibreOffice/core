@@ -917,7 +917,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
     if ( pItem )
     {
-        bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
+        bool bProtected = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         m_pPositionCB->SetState( bProtected ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pPositionCB->EnableTriState( false );
         m_pSizeCB->Enable( !bProtected );
@@ -933,7 +933,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
 
     if ( pItem )
     {
-        m_pSizeCB->SetState( ( (const SfxBoolItem*)pItem )->GetValue()
+        m_pSizeCB->SetState( static_cast<const SfxBoolItem*>(pItem)->GetValue()
                               ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pSizeCB->EnableTriState( false );
     }

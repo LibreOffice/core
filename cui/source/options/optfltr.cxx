@@ -207,7 +207,7 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
         SvTreeListEntry* pEntry = GetEntry4Type( pArr->eType );
         if( pEntry )
         {
-            SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
+            SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem( nCol ));
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 sal_uInt16 nButtonFlags = pItem->GetButtonFlags();
@@ -267,7 +267,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         SvTreeListEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
         if( pEntry )
         {
-            SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
+            SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem( nCol ));
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 if( (rOpt.*pArr->FnIs)() )
@@ -303,7 +303,7 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
                                        0, pCheckButtonData ) );
     pEntry->AddItem( new SvLBoxString( pEntry, 0, _rTxt ) );
 
-    pEntry->SetUserData( (void*)_nType );
+    pEntry->SetUserData( reinterpret_cast<void*>(_nType) );
     m_pCheckLB->Insert( pEntry );
 }
 
@@ -346,7 +346,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::HBarClick()
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
                             SvTreeListEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
-    SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -373,7 +373,7 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
                                     SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
     DBG_ASSERT(pItem,"GetChButnState:Item not found");
 
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)

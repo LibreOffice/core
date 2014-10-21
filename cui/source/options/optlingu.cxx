@@ -251,7 +251,7 @@ DicUserData::DicUserData(
 
 static void lcl_SetCheckButton( SvTreeListEntry* pEntry, bool bCheck )
 {
-    SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
 
     DBG_ASSERT(pItem,"SetCheckButton:Item not found");
     if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
@@ -460,7 +460,7 @@ void BrwString_Impl::Paint(
         aFont.SetWeight( WEIGHT_BOLD );
 
         //??? convert the lower byte from the user date into a string
-        OptionsUserData aData( (sal_uLong) pEntry->GetUserData() );
+        OptionsUserData aData( reinterpret_cast<sal_uLong>( pEntry->GetUserData() ) );
         if(aData.HasNumericValue())
         {
             OUStringBuffer sTxt;
@@ -1234,7 +1234,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
         SvTreeListEntry *pEntry = m_pLinguDicsCLB->GetEntry( i );
         if (pEntry)
         {
-            DicUserData aData( (sal_uLong)pEntry->GetUserData() );
+            DicUserData aData( reinterpret_cast<sal_uLong>(pEntry->GetUserData()) );
             if (aData.GetEntryId() < nDics)
             {
                 bool bChecked = m_pLinguDicsCLB->IsChecked( i );
@@ -1267,7 +1267,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         SvTreeListEntry *pEntry = m_pLinguOptionsCLB->GetEntry( j );
 
-        OptionsUserData aData( (sal_uLong)pEntry->GetUserData() );
+        OptionsUserData aData( reinterpret_cast<sal_uLong>(pEntry->GetUserData()) );
         OUString aPropName( lcl_GetPropertyName( (EID_OPTIONS) aData.GetEntryId() ) );
 
         Any aAny;
@@ -1293,8 +1293,8 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     DBG_ASSERT( pPostBreakEntry, "NULL Pointer" );
     if (pPreBreakEntry && pPostBreakEntry)
     {
-        OptionsUserData aPreBreakData( (sal_uLong)pPreBreakEntry->GetUserData() );
-        OptionsUserData aPostBreakData( (sal_uLong)pPostBreakEntry->GetUserData() );
+        OptionsUserData aPreBreakData( reinterpret_cast<sal_uLong>(pPreBreakEntry->GetUserData()) );
+        OptionsUserData aPostBreakData( reinterpret_cast<sal_uLong>(pPostBreakEntry->GetUserData()) );
         if ( aPreBreakData.IsModified() || aPostBreakData.IsModified() )
         {
             SfxHyphenRegionItem aHyp( GetWhich( SID_ATTR_HYPHENREGION ) );
@@ -1308,7 +1308,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
     // automatic spell checking
     bool bNewAutoCheck = m_pLinguOptionsCLB->IsChecked( (sal_uLong) EID_SPELL_AUTO );
     const SfxPoolItem* pOld = GetOldItem( *rCoreSet, SID_AUTOSPELL_CHECK );
-    if ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() != bNewAutoCheck )
+    if ( !pOld || static_cast<const SfxBoolItem*>(pOld)->GetValue() != bNewAutoCheck )
     {
         rCoreSet->Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_CHECK ),
                                 bNewAutoCheck ) );
@@ -1354,7 +1354,7 @@ void SvxLinguTabPage::AddDicBoxEntry(
     if (pEntry)
     {
         DicUserData aData( GetDicUserData( rxDic, nIdx ) );
-        pEntry->SetUserData( (void *) aData.GetUserData() );
+        pEntry->SetUserData( reinterpret_cast<void *>(aData.GetUserData()) );
         lcl_SetCheckButton( pEntry, aData.IsChecked() );
     }
 
@@ -1436,57 +1436,57 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     aLngCfg.GetProperty( UPN_IS_SPELL_AUTO ) >>= bVal;
     const SfxPoolItem* pItem = GetItem( *rSet, SID_AUTOSPELL_CHECK );
     if (pItem)
-        bVal = ((SfxBoolItem *) pItem)->GetValue();
+        bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
     nUserData = OptionsUserData( EID_SPELL_AUTO, false, 0, true, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sGrammarAuto,       CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bVal;
     nUserData = OptionsUserData( EID_GRAMMAR_AUTO, false, 0, true, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sCapitalWords,    CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_SPELL_UPPER_CASE ) >>= bVal;
     nUserData = OptionsUserData( EID_CAPITAL_WORDS, false, 0, true, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sWordsWithDigits, CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_SPELL_WITH_DIGITS ) >>= bVal;
     nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, false, 0, true, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sSpellSpecial,    CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_SPELL_SPECIAL ) >>= bVal;
     nUserData = OptionsUserData( EID_SPELL_SPECIAL, false, 0, true, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sNumMinWordlen,   CBCOL_SECOND );
     aLngCfg.GetProperty( UPN_HYPH_MIN_WORD_LENGTH ) >>= nVal;
     nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, true, (sal_uInt16)nVal, false, false).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
 
     const SfxHyphenRegionItem *pHyp = NULL;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_HYPHENREGION );
     if ( rSet->GetItemState( nWhich, false ) == SfxItemState::SET )
-        pHyp = &( (const SfxHyphenRegionItem &) rSet->Get( nWhich ) );
+        pHyp = &static_cast<const SfxHyphenRegionItem &>( rSet->Get( nWhich ) );
 
     pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
     aLngCfg.GetProperty( UPN_HYPH_MIN_LEADING ) >>= nVal;
     if (pHyp)
         nVal = (sal_Int16) pHyp->GetMinLead();
     nUserData = OptionsUserData( EID_NUM_PRE_BREAK, true, (sal_uInt16)nVal, false, false).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
 
     pEntry = CreateEntry( sNumPostBreak,    CBCOL_SECOND );
@@ -1494,20 +1494,20 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     if (pHyp)
         nVal = (sal_Int16) pHyp->GetMinTrail();
     nUserData = OptionsUserData( EID_NUM_POST_BREAK, true, (sal_uInt16)nVal, false, false).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
 
     pEntry = CreateEntry( sHyphAuto,        CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_HYPH_AUTO ) >>= bVal;
     nUserData = OptionsUserData( EID_HYPH_AUTO, false, 0, true, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sHyphSpecial,     CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_HYPH_SPECIAL ) >>= bVal;
     nUserData = OptionsUserData( EID_HYPH_SPECIAL, false, 0, true, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
+    pEntry->SetUserData( reinterpret_cast<void *>(nUserData) );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
@@ -1645,7 +1645,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         SvTreeListEntry *pEntry = m_pLinguDicsCLB->GetCurEntry();
         if (pEntry)
         {
-            DicUserData aData( (sal_uLong) pEntry->GetUserData() );
+            DicUserData aData( reinterpret_cast<sal_uLong>(pEntry->GetUserData()) );
             sal_uInt16 nDicPos = aData.GetEntryId();
             sal_Int32 nDics = aDics.getLength();
             if (nDicPos < nDics)
@@ -1676,7 +1676,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         SvTreeListEntry *pEntry = m_pLinguDicsCLB->GetCurEntry();
         if (pEntry)
         {
-            DicUserData aData( (sal_uLong) pEntry->GetUserData() );
+            DicUserData aData( reinterpret_cast<sal_uLong>(pEntry->GetUserData()) );
             sal_uInt16 nDicPos = aData.GetEntryId();
             sal_Int32 nDics = aDics.getLength();
             if (nDicPos < nDics)
@@ -1715,7 +1715,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                             DBG_ASSERT( pDicEntry, "missing entry" );
                             if (pDicEntry)
                             {
-                                DicUserData aDicData( (sal_uLong) pDicEntry->GetUserData() );
+                                DicUserData aDicData( reinterpret_cast<sal_uLong>(pDicEntry->GetUserData()) );
                                 if (aDicData.GetEntryId() == nDicPos )
                                 {
                                     m_pLinguDicsCLB->RemoveEntry( i );
@@ -1736,7 +1736,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         DBG_ASSERT( pEntry, "no entry selected" );
         if (pEntry)
         {
-            OptionsUserData aData( (sal_uLong)pEntry->GetUserData() );
+            OptionsUserData aData( reinterpret_cast<sal_uLong>(pEntry->GetUserData()) );
             if(aData.HasNumericValue())
             {
                 sal_uInt16 nRID = aData.GetEntryId();
@@ -1748,7 +1748,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                     if (-1 != nVal && aData.GetNumericValue() != nVal)
                     {
                         aData.SetNumericValue( (sal_uInt8)nVal ); //! sets IsModified !
-                        pEntry->SetUserData( (void *) aData.GetUserData() );
+                        pEntry->SetUserData( reinterpret_cast<void *>(aData.GetUserData()) );
                         m_pLinguOptionsCLB->Invalidate();
                     }
                 }
@@ -1775,7 +1775,7 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
         SvTreeListEntry *pEntry = pBox->GetCurEntry();
         if (pEntry)
         {
-            DicUserData aData( (sal_uLong) pEntry->GetUserData() );
+            DicUserData aData( reinterpret_cast<sal_uLong>( pEntry->GetUserData() ) );
 
             // always allow to edit (i.e. at least view the content of the dictionary)
             m_pLinguDicsEditPB->Enable( true/*aData.IsEditable()*/ );
@@ -1787,7 +1787,7 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
         SvTreeListEntry *pEntry = pBox->GetCurEntry();
         if (pEntry)
         {
-            OptionsUserData aData( (sal_uLong) pEntry->GetUserData() );
+            OptionsUserData aData( reinterpret_cast<sal_uLong>( pEntry->GetUserData() ) );
             m_pLinguOptionsEditPB->Enable( aData.HasNumericValue() );
         }
     }

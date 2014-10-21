@@ -76,8 +76,8 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 
         if ( pSh )
         {
-            const SvxFontListItem* pFLItem = (const SvxFontListItem*)
-                pSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+            const SvxFontListItem* pFLItem = static_cast<const SvxFontListItem*>(
+                pSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
             if ( pFLItem )
                 pApm_pFontList = pFLItem->GetFontList();
         }
@@ -92,21 +92,21 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
         }
 
         if ( pList )
-            ( (SvxCharNamePage&)rPage ).
+            static_cast<SvxCharNamePage&>(rPage).
                 SetFontList( SvxFontListItem( pList, SID_ATTR_CHAR_FONTLIST ) );
-        ( (SvxCharNamePage&)rPage ).EnableSearchMode();
+        static_cast<SvxCharNamePage&>(rPage).EnableSearchMode();
     }
     else if (nId == m_nParaStdPageId)
     {
-        ( (SvxStdParagraphTabPage&)rPage ).EnableAutoFirstLine();
+        static_cast<SvxStdParagraphTabPage&>(rPage).EnableAutoFirstLine();
     }
     else if (nId == m_nParaAlignPageId)
     {
-        ( (SvxParaAlignTabPage&)rPage ).EnableJustifyExt();
+        static_cast<SvxParaAlignTabPage&>(rPage).EnableJustifyExt();
     }
     else if (nId == m_nBackPageId)
     {
-        ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(true);
+        static_cast<SvxBackgroundTabPage&>(rPage).ShowParaControl(true);
     }
 }
 
@@ -161,7 +161,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
             if ( pEntry )
             {
                 m_pAttrLB->SetCheckButtonState( pEntry, bChecked ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
-                pEntry->SetUserData( (void*)(sal_uLong)nSlot );
+                pEntry->SetUserData( reinterpret_cast<void*>(nSlot) );
             }
         }
         nWhich = aIter.NextWhich();
@@ -176,11 +176,11 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
 {
     SearchAttrItem aInvalidItem;
-    aInvalidItem.pItem = (SfxPoolItem*)-1;
+    aInvalidItem.pItem = reinterpret_cast<SfxPoolItem*>(-1);
 
     for ( sal_uInt16 i = 0; i < m_pAttrLB->GetEntryCount(); ++i )
     {
-        sal_uInt16 nSlot = (sal_uInt16)(sal_uLong)m_pAttrLB->GetEntryData(i);
+        sal_uInt16 nSlot = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pAttrLB->GetEntryData(i));
         bool bChecked = m_pAttrLB->IsChecked(i);
 
         sal_uInt16 j;
@@ -193,7 +193,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
                 {
                     if( !IsInvalidItem( rItem.pItem ) )
                         delete rItem.pItem;
-                    rItem.pItem = (SfxPoolItem*)-1;
+                    rItem.pItem = reinterpret_cast<SfxPoolItem*>(-1);
                 }
                 else if( IsInvalidItem( rItem.pItem ) )
                     rItem.pItem = 0;

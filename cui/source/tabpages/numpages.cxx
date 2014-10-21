@@ -250,14 +250,14 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
-            bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
+            bIsPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
-            nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
+            nActNumLvl = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
-        pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -302,7 +302,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -410,14 +410,14 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
-            bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
+            bIsPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
-            nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
+            nActNumLvl = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
-        pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -461,7 +461,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -607,14 +607,14 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
-            bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
+            bIsPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
-            nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
+            nActNumLvl = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
-        pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -658,7 +658,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -704,8 +704,8 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
                     {
                         SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
                         const SvxFontListItem* pFontListItem =
-                                (const SvxFontListItem* )pCurDocShell
-                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST );
+                                static_cast<const SvxFontListItem*>( pCurDocShell
+                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
                         pList = pFontListItem ? pFontListItem->GetFontList() : 0;
                     }
                     if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
@@ -837,14 +837,14 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
-            bIsPreset = ((const SfxBoolItem*)pItem)->GetValue();
+            bIsPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
-            nActNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
+            nActNumLvl = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
-        pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
     }
     if(pActNum && *pSaveNum != *pActNum)
     {
@@ -905,7 +905,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
 
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
@@ -976,8 +976,8 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
     ::std::vector< sal_uInt16> aRemove( rFmtLB.GetEntryCount(), nDontRemove);
     for (size_t i=0; i<aRemove.size(); ++i)
     {
-        sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)rFmtLB.GetEntryData(
-                sal::static_int_cast< sal_Int32 >(i));
+        sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(
+                sal::static_int_cast< sal_Int32 >(i)));
         if (nEntryData > NumberingType::CHARS_LOWER_LETTER_N && nEntryData != nDoNotRemove)
             aRemove[i] = nEntryData;
     }
@@ -993,7 +993,7 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
                 bool bInsert = true;
                 for(sal_Int32 nEntry = 0; nEntry < rFmtLB.GetEntryCount(); nEntry++)
                 {
-                    sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)rFmtLB.GetEntryData(nEntry);
+                    sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(rFmtLB.GetEntryData(nEntry));
                     if(nEntryData == (sal_uInt16) nCurrent)
                     {
                         bInsert = false;
@@ -1005,7 +1005,7 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
                 {
                     OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
                     sal_Int32 nPos = rFmtLB.InsertEntry(aIdent);
-                    rFmtLB.SetEntryData(nPos,(void*)(sal_uLong)nCurrent);
+                    rFmtLB.SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)nCurrent));
                 }
             }
         }
@@ -1014,7 +1014,7 @@ void SvxNumOptionsTabPage::GetI18nNumbering( ListBox& rFmtLB, sal_uInt16 nDoNotR
     {
         if (aRemove[i] != nDontRemove)
         {
-            sal_Int32 nPos = rFmtLB.GetEntryPos( (void*)(sal_uLong)aRemove[i]);
+            sal_Int32 nPos = rFmtLB.GetEntryPos( reinterpret_cast<void*>((sal_uLong)aRemove[i]));
             rFmtLB.RemoveEntry( nPos);
         }
     }
@@ -1155,14 +1155,14 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
-            bPreset = ((const SfxBoolItem*)pItem)->GetValue();
+            bPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
-            nTmpNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
+            nTmpNumLvl = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
-        pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
     }
 
     bModified = (!pActNum->Get( 0 ) || bPreset);
@@ -1230,7 +1230,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
 
     // insert levels
     if(!m_pLevelLB->GetEntryCount())
@@ -1287,7 +1287,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         {
             pItem = pDocSh->GetItem( SID_COLOR_TABLE );
             if ( pItem )
-                pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+                pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
         }
 
         if ( !pColorTable.is() )
@@ -1307,7 +1307,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
          || ( 0 != ( pShell = SfxObjectShell::Current()) &&
               0 != ( pItem = pShell->GetItem( SID_HTML_MODE ) ) ) )
     {
-        sal_uInt16 nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         bHTMLMode = 0 != (nHtmlMode&HTMLMODE_ON);
     }
 
@@ -1331,7 +1331,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         sal_Int32 nFmtCount = m_pFmtLB->GetEntryCount();
         for(sal_Int32 i = nFmtCount; i; i--)
         {
-            sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)m_pFmtLB->GetEntryData(i - 1);
+            sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1));
             if(/*SVX_NUM_NUMBER_NONE == nEntryData ||*/
                 ((SVX_NUM_BITMAP|LINK_TOKEN) ==  nEntryData))
                 m_pFmtLB->RemoveEntry(i - 1);
@@ -1341,14 +1341,14 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     if(!pActNum->IsFeatureSupported(NUM_ENABLE_LINKED_BMP))
     {
         sal_IntPtr nData = SVX_NUM_BITMAP|LINK_TOKEN;
-        sal_Int32 nPos = m_pFmtLB->GetEntryPos((void*)nData);
+        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(nData));
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
     else if(!pActNum->IsFeatureSupported(NUM_ENABLE_EMBEDDED_BMP))
     {
         sal_IntPtr nData = SVX_NUM_BITMAP;
-        sal_Int32 nPos = m_pFmtLB->GetEntryPos((void*)nData);
+        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(nData));
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
@@ -1371,7 +1371,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         sal_Int32 nFmtCount = m_pFmtLB->GetEntryCount();
         for(sal_Int32 i = nFmtCount; i; i--)
         {
-            sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)m_pFmtLB->GetEntryData(i - 1);
+            sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1));
             if( /*nEntryData >= SVX_NUM_CHARS_UPPER_LETTER &&*/  nEntryData <= SVX_NUM_NUMBER_NONE)
                 m_pFmtLB->RemoveEntry(i - 1);
         }
@@ -1490,7 +1490,7 @@ void SvxNumOptionsTabPage::InitControls()
     if(bSameType)
     {
         sal_uInt16 nLBData = nNumberingType;
-        m_pFmtLB->SelectEntryPos(m_pFmtLB->GetEntryPos( (void*)sal::static_int_cast<sal_uIntPtr>( nLBData ) ));
+        m_pFmtLB->SelectEntryPos(m_pFmtLB->GetEntryPos( reinterpret_cast<void*>(sal::static_int_cast<sal_uIntPtr>( nLBData ) )));
     }
     else
         m_pFmtLB->SetNoSelection();
@@ -1713,7 +1713,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             // PAGEDESC does not exist
-            sal_uInt16 nNumType = (sal_uInt16)(sal_uLong)pBox->GetEntryData(pBox->GetSelectEntryPos());
+            sal_uInt16 nNumType = (sal_uInt16)reinterpret_cast<sal_uLong>(pBox->GetEntryData(pBox->GetSelectEntryPos()));
             aNumFmt.SetNumberingType((sal_Int16)nNumType);
             sal_uInt16 nNumberingType = aNumFmt.GetNumberingType();
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))
@@ -2913,14 +2913,14 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
     if(pExampleSet)
     {
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_NUM_PRESET, false, &pItem))
-            bPreset = ((const SfxBoolItem*)pItem)->GetValue();
+            bPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(SfxItemState::SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pItem))
-            nTmpNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
+            nTmpNumLvl = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
     if(SfxItemState::SET == rSet.GetItemState(nNumItemId, false, &pItem))
     {
         delete pSaveNum;
-        pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+        pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
     }
     bModified = (!pActNum->Get( 0 ) || bPreset);
     if(*pSaveNum != *pActNum ||
@@ -2998,7 +2998,7 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
     }
     DBG_ASSERT(eState == SfxItemState::SET, "no item found!");
     delete pSaveNum;
-    pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+    pSaveNum = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
 
     // insert levels
     if(!m_pLevelLB->GetEntryCount())

@@ -297,7 +297,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     const SfxPoolItem* pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ROT_X );
     if(pItem)
     {
-        const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getX()) / fUIScale);
+        const double fTmp(((double)static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getX()) / fUIScale);
         SetMetricValue(*m_pMtrPosX, basegfx::fround(fTmp), ePoolUnit);
     }
     else
@@ -308,7 +308,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     pItem = GetItem(*rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
     if(pItem)
     {
-        const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getY()) / fUIScale);
+        const double fTmp(((double)static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getY()) / fUIScale);
         SetMetricValue(*m_pMtrPosY, basegfx::fround(fTmp), ePoolUnit);
     }
     else
@@ -319,7 +319,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
     pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ANGLE );
     if(pItem)
     {
-        m_pCtlAngle->SetRotation(((const SfxInt32Item*)pItem)->GetValue());
+        m_pCtlAngle->SetRotation(static_cast<const SfxInt32Item*>(pItem)->GetValue());
     }
     else
     {
@@ -528,7 +528,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         if( pItem )
         {
             const double fUIScale(boost::rational_cast<double>(this->pView->GetModel()->GetUIScale()));
-            const double fTmp((double)((const SdrMetricItem*)pItem)->GetValue() / fUIScale);
+            const double fTmp((double)static_cast<const SdrMetricItem*>(pItem)->GetValue() / fUIScale);
             SetMetricValue(*m_pMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else
@@ -551,7 +551,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
         if( pItem )
         {
-            m_pMtrAngle->SetValue( ( (const SfxInt32Item*)pItem )->GetValue() );
+            m_pMtrAngle->SetValue( static_cast<const SfxInt32Item*>(pItem)->GetValue() );
         }
         else
         {
@@ -906,21 +906,21 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_X );
         if ( pItem )
         {
-            const double fTmp((((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getX()) / fUIScale);
+            const double fTmp((static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getX()) / fUIScale);
             SetMetricValue(*m_pMtrPosX, basegfx::fround(fTmp), mePoolUnit);
         }
 
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_Y );
         if ( pItem )
         {
-            const double fTmp((((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getY()) / fUIScale);
+            const double fTmp((static_cast<const SfxInt32Item*>(pItem)->GetValue() - maAnchor.getY()) / fUIScale);
             SetMetricValue(*m_pMtrPosY, basegfx::fround(fTmp), mePoolUnit);
         }
 
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_POS );
         if ( pItem )
         {
-            bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
+            bool bProtected = static_cast<const SfxBoolItem*>( pItem )->GetValue();
             m_pTsbPosProtect->SetState( bProtected ? TRISTATE_TRUE : TRISTATE_FALSE );
             m_pTsbPosProtect->EnableTriState( false );
         }
@@ -938,7 +938,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
     { // #i75273# set width
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
-        mfOldWidth = std::max( pItem ? (double)((const SfxUInt32Item*)pItem)->GetValue() : 0.0, 1.0 );
+        mfOldWidth = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
         double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), (MapUnit)mePoolUnit, MAP_100TH_MM)) / fUIScale);
 
         if(m_pMtrWidth->GetDecimalDigits())
@@ -950,7 +950,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
     { // #i75273# set height
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
-        mfOldHeight = std::max( pItem ? (double)((const SfxUInt32Item*)pItem)->GetValue() : 0.0, 1.0 );
+        mfOldHeight = std::max( pItem ? (double)static_cast<const SfxUInt32Item*>(pItem)->GetValue() : 0.0, 1.0 );
         double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), (MapUnit)mePoolUnit, MAP_100TH_MM)) / fUIScale);
 
         if(m_pMtrHeight->GetDecimalDigits())
@@ -963,7 +963,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_SIZE );
     if ( pItem )
     {
-        m_pTsbSizeProtect->SetState( ( (const SfxBoolItem*)pItem )->GetValue()
+        m_pTsbSizeProtect->SetState( static_cast<const SfxBoolItem*>(pItem)->GetValue()
                               ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbSizeProtect->EnableTriState( false );
     }
@@ -973,7 +973,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_AUTOWIDTH );
     if ( pItem )
     {
-        m_pTsbAutoGrowWidth->SetState( ( ( const SfxBoolItem* )pItem )->GetValue()
+        m_pTsbAutoGrowWidth->SetState( static_cast<const SfxBoolItem*>( pItem )->GetValue()
                            ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
     else
@@ -982,7 +982,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_AUTOHEIGHT );
     if ( pItem )
     {
-        m_pTsbAutoGrowHeight->SetState( ( ( const SfxBoolItem* )pItem )->GetValue()
+        m_pTsbAutoGrowHeight->SetState( static_cast<const SfxBoolItem*>( pItem )->GetValue()
                            ? TRISTATE_TRUE : TRISTATE_FALSE );
     }
     else

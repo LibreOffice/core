@@ -162,7 +162,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
             if( LISTBOX_ENTRY_NOTFOUND == ObjectLB().GetEntryPos( aName ) )
                 ObjectLB().SetEntryData(
-                    ObjectLB().InsertEntry( aName ), (void*) nFormat );
+                    ObjectLB().InsertEntry( aName ), reinterpret_cast<void*>(nFormat) );
         }
     }
 
@@ -199,7 +199,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
     if( Dialog::Execute() == RET_OK )
     {
-        nSelFormat  = (sal_uLong)ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() );
+        nSelFormat  = reinterpret_cast<sal_uLong>(ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() ));
     }
 
     return nSelFormat;

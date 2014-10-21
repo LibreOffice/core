@@ -167,7 +167,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1HORZDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrEdgeNode1HorzDistItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrEdgeNode1HorzDistItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHorz1, nValue, eUnit );
     }
     else
@@ -181,7 +181,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2HORZDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrEdgeNode2HorzDistItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrEdgeNode2HorzDistItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHorz2, nValue, eUnit );
     }
     else
@@ -195,7 +195,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1VERTDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrEdgeNode1VertDistItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrEdgeNode1VertDistItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldVert1, nValue, eUnit );
     }
     else
@@ -209,7 +209,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2VERTDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrEdgeNode2VertDistItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrEdgeNode2VertDistItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldVert2, nValue, eUnit );
     }
     else
@@ -223,7 +223,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE1DELTA );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLine1, nValue, eUnit );
     }
     else
@@ -237,7 +237,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE2DELTA );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLine2, nValue, eUnit );
     }
     else
@@ -251,7 +251,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE3DELTA );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLine3, nValue, eUnit );
     }
     else
@@ -265,7 +265,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTAANZ );
     if( pItem )
     {
-        sal_uInt16 nValue = ( ( const SdrEdgeLineDeltaAnzItem* )pItem )->GetValue();
+        sal_uInt16 nValue = static_cast<const SdrEdgeLineDeltaAnzItem*>( pItem )->GetValue();
         if( nValue <= 2 )
         {
             m_pFtLine3->Enable( false );
@@ -292,7 +292,7 @@ void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
     if( pItem )
     {
-        SdrEdgeKind nValue = ( ( const SdrEdgeKindItem* )pItem )->GetValue();
+        SdrEdgeKind nValue = static_cast<const SdrEdgeKindItem*>( pItem )->GetValue();
         m_pLbType->SelectEntryPos( sal::static_int_cast< sal_uInt16 >(nValue) );
     }
     else
@@ -496,7 +496,7 @@ void SvxConnectionPage::FillTypeLB()
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
     if( pItem )
     {
-        const SdrEdgeKindItem* pEdgeKindItem = (const SdrEdgeKindItem*) pItem;
+        const SdrEdgeKindItem* pEdgeKindItem = static_cast<const SdrEdgeKindItem*>( pItem );
         sal_uInt16 nCount = pEdgeKindItem->GetValueCount();
         OUString aStr;
 

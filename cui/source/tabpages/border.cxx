@@ -221,7 +221,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     {
         // paragraph or table
         const SvxBoxInfoItem* pBoxInfo =
-            (const SvxBoxInfoItem*)&( rCoreAttrs.Get( nWhich ) );
+            static_cast<const SvxBoxInfoItem*>(&( rCoreAttrs.Get( nWhich ) ));
 
         mbHorEnabled = pBoxInfo->IsHorEnabled();
         mbVerEnabled = pBoxInfo->IsVerEnabled();
@@ -290,7 +290,7 @@ SvxBorderTabPage::SvxBorderTabPage(vcl::Window* pParent, const SfxItemSet& rCore
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+            pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
 
     DBG_ASSERT( pColorTable.is(), "ColorTable not found!" );
@@ -388,9 +388,9 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
     SfxMapUnit              eCoreUnit;
 
-    pBoxItem  = (const SvxBoxItem*)GetItem( *rSet, SID_ATTR_BORDER_OUTER );
+    pBoxItem  = static_cast<const SvxBoxItem*>(GetItem( *rSet, SID_ATTR_BORDER_OUTER ));
 
-    pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( *rSet, SID_ATTR_BORDER_INNER, false );
+    pBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetItem( *rSet, SID_ATTR_BORDER_INNER, false ));
 
     eCoreUnit = rSet->GetPool()->GetMetric( nWhichBox );
 
@@ -556,7 +556,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        sal_uInt16 nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         if(nHtmlMode & HTMLMODE_ON)
         {
             // there are no shadows in Html-mode and only complete borders
@@ -598,12 +598,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
     bool                  bPut          = true;
-    sal_uInt16                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
-    sal_uInt16                nBoxInfoWhich = rCoreAttrs->GetPool()->GetWhich( SID_ATTR_BORDER_INNER, false );
+    sal_uInt16            nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
+    sal_uInt16            nBoxInfoWhich = rCoreAttrs->GetPool()->GetWhich( SID_ATTR_BORDER_INNER, false );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
-    SvxBoxItem* pOldBoxItem = (SvxBoxItem*)GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_OUTER );
+    const SvxBoxItem*     pOldBoxItem = static_cast<const SvxBoxItem*>(GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_OUTER ));
 
     SfxMapUnit eCoreUnit = rOldSet.GetPool()->GetMetric( nBoxWhich );
 
@@ -656,8 +656,8 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
                      || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_LEFT ) != svx::FRAMESTATE_HIDE
                      || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) != svx::FRAMESTATE_HIDE )
                 {
-                    SvxBoxInfoItem* pOldBoxInfoItem = (SvxBoxInfoItem*)GetOldItem(
-                                                        *rCoreAttrs, SID_ATTR_BORDER_INNER );
+                    const SvxBoxInfoItem* pOldBoxInfoItem = static_cast<const SvxBoxInfoItem*>(GetOldItem(
+                                                        *rCoreAttrs, SID_ATTR_BORDER_INNER ));
                     if (
                         !pOldBoxItem ||
                         m_pLeftMF->IsValueChangedFromSaved() ||
@@ -708,12 +708,12 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
     if (   SfxItemState::DEFAULT == rOldSet.GetItemState( nBoxWhich,     false ))
     {
-        bPut = aBoxItem != (const SvxBoxItem&)(rOldSet.Get(nBoxWhich));
+        bPut = aBoxItem != static_cast<const SvxBoxItem&>(rOldSet.Get(nBoxWhich));
     }
     if(  SfxItemState::DEFAULT == rOldSet.GetItemState( nBoxInfoWhich, false ) )
     {
-        const SvxBoxInfoItem& rOldBoxInfo = (const SvxBoxInfoItem&)
-                                rOldSet.Get(nBoxInfoWhich);
+        const SvxBoxInfoItem& rOldBoxInfo = static_cast<const SvxBoxInfoItem&>(
+                                rOldSet.Get(nBoxInfoWhich));
 
         aBoxInfoItem.SetMinDist( rOldBoxInfo.IsMinDist() );
         aBoxInfoItem.SetDefDist( rOldBoxInfo.GetDefDist() );
@@ -729,7 +729,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         }
         const SfxPoolItem* pOld = GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_INNER, false );
 
-        if ( !pOld || !( *(const SvxBoxInfoItem*)pOld == aBoxInfoItem ) )
+        if ( !pOld || !( *static_cast<const SvxBoxInfoItem*>(pOld) == aBoxInfoItem ) )
         {
             rCoreAttrs->Put( aBoxInfoItem );
             bAttrsChanged |= true;
@@ -839,7 +839,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl)
 
 IMPL_LINK( SvxBorderTabPage, SelColHdl_Impl, ListBox *, pLb )
 {
-    ColorListBox* pColLb = (ColorListBox*)(pLb);
+    ColorListBox* pColLb = static_cast<ColorListBox*>(pLb);
 
     if (pLb == m_pLbLineColor)
     {

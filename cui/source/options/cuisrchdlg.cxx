@@ -54,8 +54,8 @@ SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(vcl::Window *pParent,
 {
     // pPage will be implicitly destroyed by the
     // SfxSingleTabDialog destructor
-    pPage = (SvxJSearchOptionsPage *)
-        SvxJSearchOptionsPage::Create(get_content_area(), &rOptionsSet );
+    pPage = static_cast<SvxJSearchOptionsPage *>(
+        SvxJSearchOptionsPage::Create(get_content_area(), &rOptionsSet ));
     SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
     pPage->EnableSaveOptions(false);
 }

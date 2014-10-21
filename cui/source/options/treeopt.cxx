@@ -1051,7 +1051,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         {
             pPageInfo->m_pPage = ::CreateGeneralTabPage(
                 pPageInfo->m_nPageId, pTabBox, *pColorPageItemSet );
-            mpColorPage = (SvxColorTabPage*)pPageInfo->m_pPage;
+            mpColorPage = static_cast<SvxColorTabPage*>(pPageInfo->m_pPage);
             mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
         }
         else
@@ -1201,7 +1201,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
 
                 // miscellaneous - Year2000
                 if( SfxItemState::DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
-                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, ((const SfxUInt16Item*)pItem)->GetValue() ) );
+                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<const SfxUInt16Item*>(pItem)->GetValue() ) );
                 else
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
             }
@@ -1250,11 +1250,11 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             {
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
-                    pRet->Put(SfxUInt16Item(SID_ATTR_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
+                    pRet->Put(SfxUInt16Item(SID_ATTR_LANGUAGE, static_cast<const SvxLanguageItem*>(pItem)->GetLanguage()));
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pItem))
-                    pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CJK_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
+                    pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CJK_LANGUAGE, static_cast<const SvxLanguageItem*>(pItem)->GetLanguage()));
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pItem))
-                    pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CTL_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
+                    pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CTL_LANGUAGE, static_cast<const SvxLanguageItem*>(pItem)->GetLanguage()));
 
                 pRet->Put(aHyphen);
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
@@ -1338,7 +1338,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
             sal_uInt16 nY2K = USHRT_MAX;
             if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
-                nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
+                nY2K = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             if( USHRT_MAX != nY2K )
             {
                 if ( pViewFrame )
@@ -1353,11 +1353,11 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 //          evaluate print
 
             if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, false, &pItem))
-                aMisc.SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
+                aMisc.SetNotFoundWarning(static_cast<const SfxBoolItem*>(pItem)->GetValue());
 
             if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_CHANGESTODOC, false, &pItem))
             {
-                const SfxFlagItem* pFlag = (const SfxFlagItem*)pItem;
+                const SfxFlagItem* pFlag = static_cast<const SfxFlagItem*>(pItem);
                 aMisc.SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
                 aMisc.SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
             }
@@ -1404,13 +1404,13 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 
     if ( SfxItemState::SET == rSet.GetItemState( SID_SPELL_MODIFIED, false, &pItem ) )
     {
-        bSaveSpellCheck = ( (const SfxBoolItem*)pItem )->GetValue();
+        bSaveSpellCheck = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
     Reference< XComponentContext >  xContext( ::comphelper::getProcessComponentContext() );
     Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
     if ( SfxItemState::SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, false, &pItem ) )
     {
-        const SfxHyphenRegionItem* pHyphenItem = (const SfxHyphenRegionItem*)pItem;
+        const SfxHyphenRegionItem* pHyphenItem = static_cast<const SfxHyphenRegionItem*>(pItem);
 
         xProp->setHyphMinLeading( (sal_Int16) pHyphenItem->GetMinLead() );
         xProp->setHyphMinTrailing( (sal_Int16) pHyphenItem->GetMinTrail() );
@@ -1440,7 +1440,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 
         if( SfxItemState::SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
         {
-            bool bOnlineSpelling = ((const SfxBoolItem*)pItem)->GetValue();
+            bool bOnlineSpelling = static_cast<const SfxBoolItem*>(pItem)->GetValue();
             pDispatch->Execute(SID_AUTOSPELL_CHECK,
                 SfxCallMode::ASYNCHRON|SfxCallMode::RECORD, pItem, 0L);
 

@@ -314,7 +314,7 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , pbAreaTP( NULL )
     , aXFStyleItem( drawing::FillStyle_SOLID )
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
-    , aXFillAttr( (XOutdevItemPool*) rInAttrs.GetPool() )
+    , aXFillAttr( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() ))
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( CM_RGB )
 {
@@ -447,9 +447,9 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                 {
                     m_pLbColorModel->SelectEntryPos( CM_RGB );
 
-                    ChangeColor(((const XFillColorItem*)pPoolItem)->GetColorValue());
+                    ChangeColor(static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue());
 
-                    m_pEdtName->SetText( ( ( const XFillColorItem* ) pPoolItem )->GetName() );
+                    m_pEdtName->SetText( static_cast<const XFillColorItem*>( pPoolItem )->GetName() );
 
                     m_pR->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
                     m_pG->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
@@ -598,7 +598,7 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 
     if ( nState >= SfxItemState::DEFAULT )
     {
-        XFillColorItem aColorItem( (const XFillColorItem&)rSet->Get( XATTR_FILLCOLOR ) );
+        XFillColorItem aColorItem( static_cast<const XFillColorItem&>(rSet->Get( XATTR_FILLCOLOR )) );
         aNewColor = aColorItem.GetColorValue();
         m_pLbColor->SelectEntry(aNewColor);
         m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
@@ -1123,9 +1123,9 @@ void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
 {
     const OfaRefItem<XColorList> *pPtr = NULL;
     if ( pViewFrame != NULL && pViewFrame->GetDispatcher() )
-        pPtr = (const OfaRefItem<XColorList> *)pViewFrame->
+        pPtr = static_cast<const OfaRefItem<XColorList> *>(pViewFrame->
             GetDispatcher()->Execute( SID_GET_COLORLIST,
-                                      SfxCallMode::SYNCHRON );
+                                      SfxCallMode::SYNCHRON ));
     pColorList = pPtr ? pPtr->GetValue() : XColorList::GetStdColorList();
 
     SetPageType( &pShadow->nUnknownType );
@@ -1151,7 +1151,7 @@ void SvxColorTabPage::SaveToViewFrame( SfxViewFrame *pViewFrame )
         return;
 
     const OfaRefItem<XColorList> * pPtr;
-    pPtr = (const OfaRefItem<XColorList>*)pViewFrame->GetDispatcher()->Execute( SID_GET_COLORLIST, SfxCallMode::SYNCHRON );
+    pPtr = static_cast<const OfaRefItem<XColorList>*>(pViewFrame->GetDispatcher()->Execute( SID_GET_COLORLIST, SfxCallMode::SYNCHRON ));
     if( pPtr )
     {
         XColorListRef pReference = pPtr->GetValue();

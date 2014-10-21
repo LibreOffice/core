@@ -246,31 +246,31 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 
     nWhich = GetWhich( SDRATTR_CAPTIONESCABS );
     eUnit = pPool->GetMetric( nWhich );
-    nEscAbs = ( ( const SdrCaptionEscAbsItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nEscAbs = static_cast<const SdrCaptionEscAbsItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_pMF_ANSATZ, nEscAbs, eUnit );
     nEscAbs = static_cast<long>(m_pMF_ANSATZ->GetValue());
 
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
-    nEscRel = (long)( ( const SdrCaptionEscRelItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nEscRel = (long)static_cast<const SdrCaptionEscRelItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
 
     //------- line length ----------
     nWhich = GetWhich( SDRATTR_CAPTIONLINELEN );
     eUnit = pPool->GetMetric( nWhich );
-    nLineLen = ( ( const SdrCaptionLineLenItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nLineLen = static_cast<const SdrCaptionLineLenItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_pMF_LAENGE, nLineLen, eUnit );
     nLineLen = static_cast<long>(m_pMF_LAENGE->GetValue());
 
     //------- distance to box ----------
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
-    nGap = ( ( const SdrCaptionGapItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
+    nGap = static_cast<const SdrCaptionGapItem&>( rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_pMF_ABSTAND, nGap, eUnit );
     nGap = static_cast<long>(m_pMF_ABSTAND->GetValue());
 
-    nCaptionType = (short)( ( const SdrCaptionTypeItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
-    bFitLineLen = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
-    nEscDir = (short)( ( const SdrCaptionEscDirItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
-    bEscRel = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();
+    nCaptionType = (short)static_cast<const SdrCaptionTypeItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONTYPE ) ) ).GetValue();
+    bFitLineLen = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONFITLINELEN ) ) ).GetValue();
+    nEscDir = (short)static_cast<const SdrCaptionEscDirItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
+    bEscRel = static_cast<const SfxBoolItem&>( rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();
 
     // special treatment!!! XXX
     if( nCaptionType==SDRCAPT_TYPE1 )
@@ -546,13 +546,13 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nPositionSizePageId)
     {
-        ( (SvxPositionSizeTabPage&) rPage ).SetView( pView );
-        ( (SvxPositionSizeTabPage&) rPage ).Construct();
+        static_cast<SvxPositionSizeTabPage&>( rPage ).SetView( pView );
+        static_cast<SvxPositionSizeTabPage&>( rPage ).Construct();
         if( nAnchorCtrls & SVX_OBJ_NORESIZE )
-            ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
+            static_cast<SvxPositionSizeTabPage&>( rPage ).DisableResize();
 
         if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
-            ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
+            static_cast<SvxPositionSizeTabPage&>( rPage ).DisableProtect();
     }
     else if (nId == m_nSwPosSizePageId)
     {
@@ -562,8 +562,8 @@ void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nCaptionPageId)
     {
-        ( (SvxCaptionTabPage&) rPage ).SetView( pView );
-        ( (SvxCaptionTabPage&) rPage ).Construct();
+        static_cast<SvxCaptionTabPage&>( rPage ).SetView( pView );
+        static_cast<SvxCaptionTabPage&>( rPage ).Construct();
     }
 }
 

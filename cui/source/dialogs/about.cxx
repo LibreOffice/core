@@ -88,8 +88,8 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     SetLogo();
 
     // Allow the button to be identifiable once they are clicked
-    m_pCreditsButton->SetData( (void*)CREDITS_BUTTON );
-    m_pWebsiteButton->SetData( (void*)WEBSITE_BUTTON );
+    m_pCreditsButton->SetData( reinterpret_cast<void*>(CREDITS_BUTTON) );
+    m_pWebsiteButton->SetData( reinterpret_cast<void*>(WEBSITE_BUTTON) );
 
     // Connect all handlers
     m_pCreditsButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
@@ -103,10 +103,10 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
     OUString sURL = "";
 
     // Find which button was pressed and from this, get the URL to be opened
-    AboutDialogButton* pDialogButton = (AboutDialogButton*)pButton->GetData();
-    if ( pDialogButton ==  (AboutDialogButton*)CREDITS_BUTTON )
+    AboutDialogButton aDialogButton = static_cast<AboutDialogButton>(reinterpret_cast<sal_Int64>(pButton->GetData()));
+    if ( aDialogButton == CREDITS_BUTTON )
         sURL = m_aCreditsLinkStr;
-    else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
+    else if ( aDialogButton == WEBSITE_BUTTON )
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
         localizeWebserviceURI(sURL);

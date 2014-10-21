@@ -177,7 +177,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldLineDist, nValue, eUnit );
     }
     else
@@ -192,7 +192,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelplineOverhang, nValue, eUnit );
     }
     else
@@ -207,7 +207,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelplineDist, nValue, eUnit );
     }
     else
@@ -222,7 +222,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelpline1Len, nValue, eUnit );
     }
     else
@@ -237,7 +237,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem )
     {
-        long nValue = ( ( const SdrMetricItem* )pItem )->GetValue();
+        long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
         SetMetricValue( *m_pMtrFldHelpline2Len, nValue, eUnit );
     }
     else
@@ -249,7 +249,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureBelowRefEdgeItem
     if( rAttrs->GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SfxItemState::DONTCARE )
     {
-        m_pTsbBelowRefEdge->SetState( ( ( const SdrMeasureBelowRefEdgeItem& )rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
+        m_pTsbBelowRefEdge->SetState( static_cast<const SdrMeasureBelowRefEdgeItem&>( rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbBelowRefEdge->EnableTriState( false );
     }
@@ -265,7 +265,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
     if( pItem )
     {
-        sal_Int16 nValue = ( ( const SdrMeasureDecimalPlacesItem* )pItem )->GetValue();
+        sal_Int16 nValue = static_cast<const SdrMeasureDecimalPlacesItem*>( pItem )->GetValue();
         m_pMtrFldDecimalPlaces->SetValue( nValue );
     }
     else
@@ -278,7 +278,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // Attention: negate !
     if( rAttrs->GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SfxItemState::DONTCARE )
     {
-        m_pTsbParallel->SetState( ( ( const SdrMeasureTextRota90Item& )rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ) ).
+        m_pTsbParallel->SetState( static_cast<const SdrMeasureTextRota90Item&>( rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ) ).
                         GetValue() ? TRISTATE_FALSE : TRISTATE_TRUE );
         m_pTsbParallel->EnableTriState( false );
     }
@@ -291,7 +291,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureShowUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASURESHOWUNIT ) != SfxItemState::DONTCARE )
     {
-        m_pTsbShowUnit->SetState( ( ( const SdrYesNoItem& )rAttrs->Get( SDRATTR_MEASURESHOWUNIT ) ).
+        m_pTsbShowUnit->SetState( static_cast<const SdrYesNoItem&>( rAttrs->Get( SDRATTR_MEASURESHOWUNIT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbShowUnit->EnableTriState( false );
     }
@@ -304,12 +304,12 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // SdrMeasureUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASUREUNIT ) != SfxItemState::DONTCARE )
     {
-        long nFieldUnit = (long) ( ( const SdrMeasureUnitItem& )rAttrs->
+        long nFieldUnit = (long) static_cast<const SdrMeasureUnitItem&>( rAttrs->
                                     Get( SDRATTR_MEASUREUNIT ) ).GetValue();
 
         for( sal_Int32 i = 0; i < m_pLbUnit->GetEntryCount(); ++i )
         {
-            if ( (sal_IntPtr)m_pLbUnit->GetEntryData( i ) == nFieldUnit )
+            if ( reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( i )) == nFieldUnit )
             {
                 m_pLbUnit->SelectEntryPos( i );
                 break;
@@ -326,7 +326,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
     {
         SdrMeasureTextVPos eVPos = (SdrMeasureTextVPos)
-                    ( ( const SdrMeasureTextVPosItem& )rAttrs->Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
+                    static_cast<const SdrMeasureTextVPosItem&>( rAttrs->Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
         {
             if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
             {
@@ -334,7 +334,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                 m_pTsbAutoPosH->EnableTriState( false );
 
                 SdrMeasureTextHPos eHPos = (SdrMeasureTextHPos)
-                            ( ( const SdrMeasureTextHPosItem& )rAttrs->Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
+                            static_cast<const SdrMeasureTextHPosItem&>( rAttrs->Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
                 RECT_POINT eRP = RP_MM;
                 switch( eVPos )
                 {
@@ -494,7 +494,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbUnit->GetEntryData( nPos );
+            sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( nPos ));
             FieldUnit _eUnit = (FieldUnit) nFieldUnit;
             rAttrs->Put( SdrMeasureUnitItem( _eUnit ) );
             bModified = true;
@@ -539,7 +539,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
         {
             eOldVPos = (SdrMeasureTextVPos)
-                        ( ( const SdrMeasureTextVPosItem& )rOutAttrs.Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
+                        static_cast<const SdrMeasureTextVPosItem&>( rOutAttrs.Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
             if( eOldVPos != eVPos )
             {
                 rAttrs->Put( SdrMeasureTextVPosItem( eVPos ) );
@@ -555,7 +555,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
         {
             eOldHPos = (SdrMeasureTextHPos)
-                        ( ( const SdrMeasureTextHPosItem& )rOutAttrs.Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
+                        static_cast<const SdrMeasureTextHPosItem&>( rOutAttrs.Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
             if( eOldHPos != eHPos )
             {
                 rAttrs->Put( SdrMeasureTextHPosItem( eHPos ) );
@@ -724,7 +724,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
         sal_Int32 nPos = m_pLbUnit->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbUnit->GetEntryData( nPos );
+            sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( nPos ));
             FieldUnit _eUnit = (FieldUnit) nFieldUnit;
             aAttrSet.Put( SdrMeasureUnitItem( _eUnit ) );
         }
@@ -797,14 +797,14 @@ void SvxMeasurePage::FillUnitLB()
     sal_IntPtr nUnit = FUNIT_NONE;
     OUString aStrMetric( m_pFtAutomatic->GetText());
     sal_Int32 nPos = m_pLbUnit->InsertEntry( aStrMetric );
-    m_pLbUnit->SetEntryData( nPos, (void*)nUnit );
+    m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
 
     for( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
         aStrMetric = aMetricArr.GetStringByPos( i );
         nUnit = aMetricArr.GetValue( i );
         nPos = m_pLbUnit->InsertEntry( aStrMetric );
-        m_pLbUnit->SetEntryData( nPos, (void*)nUnit );
+        m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
     }
 }
 void SvxMeasurePage::PageCreated(const SfxAllItemSet& aSet)

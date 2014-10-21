@@ -62,7 +62,7 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
 {
     const SfxPoolItem* pItem;
     if ( SfxItemState::SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, false, &pItem ) )
-        bIDEDialogMode = ((const SfxBoolItem*)pItem)->GetValue();
+        bIDEDialogMode = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 }
 
 // attention, this array is indexed directly (0, 1, ...) in the code
@@ -203,7 +203,7 @@ void _SvxMacroTabPage::EnableButtons()
     const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
     {
-        SvLBoxString* pEventMacro = (SvLBoxString*)pE->GetItem( LB_MACROS_ITEMPOS );
+        const SvLBoxString* pEventMacro = static_cast<const SvLBoxString*>(pE->GetItem( LB_MACROS_ITEMPOS ));
         mpImpl->pDeletePB->Enable( 0 != pEventMacro && !mpImpl->bReadOnly );
 
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly );

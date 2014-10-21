@@ -46,7 +46,7 @@ void OptLBoxString_Impl::Paint(
     vcl::Font aOldFont( rDev.GetFont() );
     vcl::Font aFont( aOldFont );
     //detect readonly state by asking for a valid Image
-    if(pEntry && !(!((OptHeaderTabListBox&)rDev).GetCollapsedEntryBmp(pEntry)))
+    if(pEntry && !(!static_cast<OptHeaderTabListBox&>(rDev).GetCollapsedEntryBmp(pEntry)))
         aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
     rDev.SetFont( aFont );
     rDev.DrawText( rPos, GetText() );
@@ -70,7 +70,7 @@ void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const OUString& rT
     for ( sal_uInt16 nCol = 1; nCol < _nTabCount; ++nCol )
     {
         // initialize all columns with own class (column 0 == Bitmap)
-        SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
+        SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nCol ));
         OptLBoxString_Impl* pStr = new OptLBoxString_Impl( pEntry, 0, pCol->GetText() );
         pEntry->ReplaceItem( pStr, nCol );
     }

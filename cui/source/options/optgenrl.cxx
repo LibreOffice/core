@@ -330,7 +330,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 
     if (rSet->GetItemState(nWhich) == SfxItemState::SET)
     {
-        if (sal_uInt16 const nField = ((SfxUInt16Item&)rSet->Get(nWhich)).GetValue())
+        if (sal_uInt16 const nField = static_cast<const SfxUInt16Item&>(rSet->Get(nWhich)).GetValue())
         {
             for (unsigned i = 0; i != vFields.size(); ++i)
                 if (nField == vFieldInfo[vFields[i]->iField].nGrabFocusId)

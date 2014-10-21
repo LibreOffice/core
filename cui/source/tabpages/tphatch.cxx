@@ -63,7 +63,7 @@ SvxHatchTabPage::SvxHatchTabPage
     pPos                ( 0 ),
     pbAreaTP            ( 0 ),
 
-    pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
+    pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
     aXFStyleItem        ( drawing::FillStyle_HATCH ),
     aXHatchItem         ( OUString(), XHatch() ),
     aXFillAttr          ( pXPool ),
@@ -163,7 +163,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
                 *pnColorListState & CT_MODIFIED )
             {
                 if( *pnColorListState & CT_CHANGED )
-                    pColorList = ( (SvxAreaTabDialog*) GetParentDialog() )->GetNewColorList();
+                    pColorList = static_cast<SvxAreaTabDialog*>( GetParentDialog() )->GetNewColorList();
 
                 // LbLineColor
                 nPos = m_pLbLineColor->GetSelectEntryPos();
@@ -209,8 +209,8 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         }
     }
 
-    rXFSet.Put ( ( XFillColorItem& )    rSet.Get(XATTR_FILLCOLOR) );
-    rXFSet.Put ( ( XFillBackgroundItem&)rSet.Get(XATTR_FILLBACKGROUND) );
+    rXFSet.Put( static_cast<const XFillColorItem&>(     rSet.Get(XATTR_FILLCOLOR)) );
+    rXFSet.Put( static_cast<const XFillBackgroundItem&>(rSet.Get(XATTR_FILLBACKGROUND)) );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 }
@@ -331,8 +331,8 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
         m_pBtnSave->Disable();
     }
 
-    rXFSet.Put ( ( XFillColorItem& )    rSet->Get(XATTR_FILLCOLOR) );
-    rXFSet.Put ( ( XFillBackgroundItem&)rSet->Get(XATTR_FILLBACKGROUND) );
+    rXFSet.Put( static_cast<const XFillColorItem&>(     rSet->Get(XATTR_FILLCOLOR)) );
+    rXFSet.Put( static_cast<const XFillBackgroundItem&>(rSet->Get(XATTR_FILLBACKGROUND)) );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 }
@@ -392,10 +392,10 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
         const SfxPoolItem* pPoolItem = NULL;
         if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
-            if( ( drawing::FillStyle_HATCH == (drawing::FillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
+            if( ( drawing::FillStyle_HATCH == (drawing::FillStyle) static_cast<const XFillStyleItem*>( pPoolItem )->GetValue() ) &&
                 ( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLHATCH ), true, &pPoolItem ) ) )
             {
-                pHatch.reset(new XHatch( ( ( const XFillHatchItem* ) pPoolItem )->GetHatchValue() ));
+                pHatch.reset(new XHatch( static_cast<const XFillHatchItem*>( pPoolItem )->GetHatchValue() ));
             }
         }
         if( !pHatch )
@@ -690,7 +690,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
             if( pHatchList->Load() )
             {
                 pHatchingList = pHatchList;
-                ( (SvxAreaTabDialog*) GetParentDialog() )->SetNewHatchingList( pHatchingList );
+                static_cast<SvxAreaTabDialog*>( GetParentDialog() )->SetNewHatchingList( pHatchingList );
 
                 m_pLbHatchings->Clear();
                 m_pLbHatchings->Fill( pHatchingList );

@@ -77,7 +77,7 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
     {
         bNew = false;
         const SvxPostItAuthorItem& rAuthor =
-            (const SvxPostItAuthorItem&)rSet.Get( nWhich );
+            static_cast<const SvxPostItAuthorItem&>(rSet.Get( nWhich ));
         aAuthorStr = rAuthor.GetValue();
     }
     else
@@ -88,7 +88,7 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
     if ( rSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
     {
         const SvxPostItDateItem& rDate =
-            (const SvxPostItDateItem&)rSet.Get( nWhich );
+            static_cast<const SvxPostItDateItem&>(rSet.Get( nWhich ));
         aDateStr = rDate.GetValue();
     }
     else
@@ -103,7 +103,7 @@ SvxPostItDialog::SvxPostItDialog(vcl::Window* pParent, const SfxItemSet& rCoreSe
     if ( rSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
     {
         const SvxPostItTextItem& rText =
-            (const SvxPostItTextItem&)rSet.Get( nWhich );
+            static_cast<const SvxPostItTextItem&>(rSet.Get( nWhich ));
         aTextStr = rText.GetValue();
     }
 
