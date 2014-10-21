@@ -54,6 +54,8 @@ void FirebirdTest::testEmptyDBConnection()
         getDocumentForFileName("firebird_empty.odb");
 
     getConnectionForDocument(xDocument);
+
+    closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
 }
 
 /**
@@ -93,6 +95,8 @@ void FirebirdTest::testIntegerDatabase()
         xRow->getString(xColumnLocate->findColumn("_VARCHAR")));
 
     CPPUNIT_ASSERT(!xResultSet->next()); // Should only be one row
+
+    closeDocument(uno::Reference<lang::XComponent>(xDocument, uno::UNO_QUERY));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);

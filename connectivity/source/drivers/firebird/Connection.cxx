@@ -55,6 +55,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace connectivity::firebird;
@@ -166,7 +167,6 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
             m_pExtractedFDBFile.reset(new ::utl::TempFile(NULL, true));
-            m_pExtractedFDBFile->EnableKillingFile();
             m_sFirebirdURL = m_pExtractedFDBFile->GetFileName() + "/firebird.fdb";
 
             SAL_INFO("connectivity.firebird", "Temporary .fdb location:  " << m_sFirebirdURL);
@@ -785,6 +785,12 @@ void Connection::disposing()
     dispose_ChildImpl();
     cppu::WeakComponentImplHelperBase::disposing();
     m_xDriver.clear();
+
+    if (m_pExtractedFDBFile)
+    {
+        ::utl::removeTree(m_pExtractedFDBFile->GetURL());
+        m_pExtractedFDBFile.reset();
+    }
 }
 
 void Connection::disposeStatements()
