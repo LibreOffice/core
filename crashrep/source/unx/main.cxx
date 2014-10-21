@@ -27,6 +27,8 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <pthread.h>
 #include <limits.h>
 
@@ -71,9 +73,9 @@ static string g_strPStackFileName;
 static string g_strChecksumFileName;
 static string g_strProgramDir;
 
-static char g_szStackFile[L_tmpnam] = "";
-static char g_szDescriptionFile[2048] = "";
-static char g_szReportFile[2048] = "";
+static const char *g_szStackFile = "tmp/locrs_szStackFile";
+static const char *g_szDescriptionFile = "tmp/locrs_szReportFile";
+static const char *g_szReportFile = "tmp/locrs_szReportFile";
 
 #define REPORT_SERVER   (g_strReportServer.c_str())
 #define REPORT_PORT     g_uReportPort
@@ -165,7 +167,15 @@ static size_t fcopy( FILE *fpout, FILE *fpin )
 
 bool write_report( const boost::unordered_map< string, string >& rSettings )
 {
-    FILE    *fp = fopen( tmpnam( g_szReportFile ), "w" );
+    mode_t nOrigMode = umask(S_IRWXG | S_IRWXO);
+    int nDescriptor = mkstemp(const_cast<char *>(g_szReportFile));
+    umask(nOrigMode);
+
+    FILE *fp = nDescriptor != -1 ? fdopen(nDescriptor, "w") : NULL;
+
+    if (!fp)
+       return false;
+
     const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
 
     fprintf( fp,
@@ -232,8 +242,11 @@ bool write_report( const boost::unordered_map< string, string >& rSettings )
 
 bool write_description( const boost::unordered_map< string, string >& rSettings )
 {
-    bool    bSuccess = false;
-    FILE    *fp = fopen( tmpnam( g_szDescriptionFile ), "w" );
+    bool bSuccess = false;
+    mode_t nOrigMode = umask(S_IRWXG | S_IRWXO);
+    int nDescriptor = mkstemp(const_cast<char *>(g_szDescriptionFile));
+    umask(nOrigMode);
+    FILE *fp = nDescriptor != -1 ? fdopen(nDescriptor, "w") : NULL;
 
     if ( fp )
     {
