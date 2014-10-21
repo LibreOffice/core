@@ -239,22 +239,6 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     gtk_container_add (GTK_CONTAINER (m_pFilterExpander), scrolled_window);
     gtk_widget_show (scrolled_window);
 
-    OString sExpand(getenv("SAL_EXPANDFPICKER"));
-    sal_Int32 nExpand  = sExpand.toInt32();
-    switch (nExpand)
-    {
-        default:
-        case 0:
-            break;
-        case 1:
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), true);
-            break;
-        case 2:
-            expandexpanders(GTK_CONTAINER(m_pDialog));
-            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), true);
-            break;
-    }
-
     m_pFilterStore = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
         G_TYPE_STRING, G_TYPE_STRING);
     m_pFilterView = gtk_tree_view_new_with_model (GTK_TREE_MODEL(m_pFilterStore));
@@ -1339,9 +1323,7 @@ throw( uno::RuntimeException, std::exception )
 
     GtkWidget *pWidget;
 
-    if ( nControlId == ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR )
-        gtk_expander_set_expanded( GTK_EXPANDER( m_pFilterExpander ), bEnable );
-    else if( ( pWidget = getWidget( nControlId ) ) )
+    if ( ( pWidget = getWidget( nControlId ) ) )
     {
         if( bEnable )
         {
@@ -1971,11 +1953,9 @@ void SalGtkFilePicker::SetFilters()
         }
     }
 
-    // Hide the expander if there's no choice to be made there
-    if (gtk_tree_model_iter_n_children(GTK_TREE_MODEL(m_pFilterStore), NULL) > 1)
-        gtk_widget_show( m_pFilterExpander );
-    else
-        gtk_widget_hide( m_pFilterExpander );
+    // We always hide the expander now and depend on the user using the glob
+    // list, or type a filename suffix, to select a filter by inference.
+    gtk_widget_hide(m_pFilterExpander);
 
     // set the default filter
     if (!sPseudoFilter.isEmpty())
