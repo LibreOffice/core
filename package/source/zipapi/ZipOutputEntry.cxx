@@ -68,8 +68,7 @@ uno::Sequence< sal_Int8 > ZipOutputEntry::getData()
     return m_pBuffer->getSequence();
 }
 
-void SAL_CALL ZipOutputEntry::closeEntry()
-    throw(IOException, RuntimeException)
+void ZipOutputEntry::closeEntry()
 {
     m_aDeflater.finish();
     while (!m_aDeflater.finished())
@@ -120,8 +119,7 @@ void SAL_CALL ZipOutputEntry::closeEntry()
     }
 }
 
-void SAL_CALL ZipOutputEntry::write( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-    throw(IOException, RuntimeException)
+void ZipOutputEntry::write( const Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
     if (!m_aDeflater.finished())
     {
