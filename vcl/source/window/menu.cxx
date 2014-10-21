@@ -103,11 +103,11 @@ static void ImplSetMenuItemData( MenuItemData* pData )
 {
     // convert data
     if ( !pData->aImage )
-        pData->eType = MENUITEM_STRING;
+        pData->eType = MenuItemType::STRING;
     else if ( pData->aText.isEmpty() )
-        pData->eType = MENUITEM_IMAGE;
+        pData->eType = MenuItemType::IMAGE;
     else
-        pData->eType = MENUITEM_STRINGIMAGE;
+        pData->eType = MenuItemType::STRINGIMAGE;
 }
 
 Menu::Menu()
@@ -382,7 +382,7 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nIt
         nPos = MENU_APPEND;
 
     // put Item in MenuItemList
-    MenuItemData* pData = pItemList->Insert(nItemId, MENUITEM_STRING,
+    MenuItemData* pData = pItemList->Insert(nItemId, MenuItemType::STRING,
                              nItemBits, rStr, Image(), this, nPos, rIdent);
 
     // update native menu
@@ -576,10 +576,10 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
 {
     MenuItemType eType = rMenu.GetItemType( nPos );
 
-    if ( eType == MENUITEM_DONTKNOW )
+    if ( eType == MenuItemType::DONTKNOW )
         return;
 
-    if ( eType == MENUITEM_SEPARATOR )
+    if ( eType == MenuItemType::SEPARATOR )
         pThis->InsertSeparator( OString(), nNewPos );
     else
     {
@@ -593,9 +593,9 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
         if (!pData)
             return;
 
-        if ( eType == MENUITEM_STRINGIMAGE )
+        if ( eType == MenuItemType::STRINGIMAGE )
             pThis->InsertItem( nId, pData->aText, pData->aImage, pData->nBits, pData->sIdent, nNewPos );
-        else if ( eType == MENUITEM_STRING )
+        else if ( eType == MenuItemType::STRING )
             pThis->InsertItem( nId, pData->aText, pData->nBits, pData->sIdent, nNewPos );
         else
             pThis->InsertItem( nId, pData->aImage, pData->nBits, pData->sIdent, nNewPos );
@@ -721,7 +721,7 @@ MenuItemType Menu::GetItemType( sal_uInt16 nPos ) const
     if ( pData )
         return pData->eType;
     else
-        return MENUITEM_DONTKNOW;
+        return MenuItemType::DONTKNOW;
 }
 
 OString Menu::GetCurItemIdent() const
@@ -1266,7 +1266,7 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
     if( pData && !pData->bVisible )
         bVisible = false;
 
-    if ( bVisible && pData && pData->eType == MENUITEM_SEPARATOR )
+    if ( bVisible && pData && pData->eType == MenuItemType::SEPARATOR )
     {
         if( nPos == 0 ) // no separator should be shown at the very beginning
             bVisible = false;
@@ -1282,14 +1282,14 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
                 pNextData = pItemList->GetDataFromPos( n );
                 if( pNextData && pNextData->bVisible )
                 {
-                    if( pNextData->eType == MENUITEM_SEPARATOR || ImplIsVisible(n) )
+                    if( pNextData->eType == MenuItemType::SEPARATOR || ImplIsVisible(n) )
                         break;
                 }
             }
             if( n == nCount ) // no next visible item
                 bVisible = false;
             // check for separator
-            if( pNextData && pNextData->bVisible && pNextData->eType == MENUITEM_SEPARATOR )
+            if( pNextData && pNextData->bVisible && pNextData->eType == MenuItemType::SEPARATOR )
                 bVisible = false;
 
             if( bVisible )
@@ -1299,7 +1299,7 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
                     pNextData = pItemList->GetDataFromPos( n-1 );
                     if( pNextData && pNextData->bVisible )
                     {
-                        if( pNextData->eType != MENUITEM_SEPARATOR && ImplIsVisible(n-1) )
+                        if( pNextData->eType != MenuItemType::SEPARATOR && ImplIsVisible(n-1) )
                             break;
                     }
                 }
@@ -1316,7 +1316,7 @@ bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
     {
         if( !pData ) // e.g. nPos == ITEMPOS_INVALID
             bVisible = false;
-        else if ( pData->eType != MENUITEM_SEPARATOR ) // separators handled above
+        else if ( pData->eType != MenuItemType::SEPARATOR ) // separators handled above
         {
             // bVisible = pData->bEnabled && ( !pData->pSubMenu || pData->pSubMenu->HasValidEntries( true ) );
             bVisible = pData->bEnabled; // do not check submenus as they might be filled at Activate().
@@ -1519,8 +1519,8 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( --i );
             if ( ImplIsVisible( i )
-               && (  ( pData->eType == MENUITEM_IMAGE )
-                  || ( pData->eType == MENUITEM_STRINGIMAGE )
+               && (  ( pData->eType == MenuItemType::IMAGE )
+                  || ( pData->eType == MenuItemType::STRINGIMAGE )
                   )
                )
             {
@@ -1550,14 +1550,14 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
             long nWidth = 0;
 
             // Separator
-            if (!IsMenuBar()&& (pData->eType == MENUITEM_SEPARATOR))
+            if (!IsMenuBar()&& (pData->eType == MenuItemType::SEPARATOR))
             {
                 DBG_ASSERT( !IsMenuBar(), "Separator in MenuBar ?! " );
                 pData->aSz.Height() = 4;
             }
 
             // Image:
-            if (!IsMenuBar()&& ((pData->eType == MENUITEM_IMAGE) || (pData->eType == MENUITEM_STRINGIMAGE)))
+            if (!IsMenuBar()&& ((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
             {
                 Size aImgSz = pData->aImage.GetSizePixel();
                 aImgSz.Height() += 4; // add a border for native marks
@@ -1575,12 +1575,12 @@ Size Menu::ImplCalcSize( const vcl::Window* pWin )
             {
                 nCheckWidth = aMaxSize.Width();
                 // checks / images take the same place
-                if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
+                if( ! ( ( pData->eType == MenuItemType::IMAGE ) || ( pData->eType == MenuItemType::STRINGIMAGE ) ) )
                     nWidth += nCheckWidth + nExtra * 2;
             }
 
             // Text:
-            if ( (pData->eType == MENUITEM_STRING) || (pData->eType == MENUITEM_STRINGIMAGE) )
+            if ( (pData->eType == MenuItemType::STRING) || (pData->eType == MenuItemType::STRINGIMAGE) )
             {
                 long nTextWidth = pWin->GetCtrlTextWidth( pData->aText );
                 long nTextHeight = pWin->GetTextHeight();
@@ -1811,7 +1811,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                 }
 
                 // Separator
-                if (!bLayout && !IsMenuBar() && (pData->eType == MENUITEM_SEPARATOR))
+                if (!bLayout && !IsMenuBar() && (pData->eType == MenuItemType::SEPARATOR))
                 {
                     bool bNativeOk = false;
                     if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
@@ -1860,7 +1860,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                     // however do not do this if native checks will be painted since
                     // the selection color too often does not fit the theme's check and/or radio
 
-                    if( ! ( ( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE ) ) )
+                    if( ! ( ( pData->eType == MenuItemType::IMAGE ) || ( pData->eType == MenuItemType::STRINGIMAGE ) ) )
                     {
                         if ( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
                                                              (pData->nBits & MIB_RADIOCHECK)
@@ -1922,7 +1922,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                 }
 
                 // Image:
-                if (!bLayout && !IsMenuBar() && ((pData->eType == MENUITEM_IMAGE) || (pData->eType == MENUITEM_STRINGIMAGE)))
+                if (!bLayout && !IsMenuBar() && ((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
                 {
                     // Don't render an image for a check thing
                     if( pData->bChecked )
@@ -1934,7 +1934,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                 }
 
                 // Text:
-                if ( ( pData->eType == MENUITEM_STRING ) || ( pData->eType == MENUITEM_STRINGIMAGE ) )
+                if ( ( pData->eType == MenuItemType::STRING ) || ( pData->eType == MenuItemType::STRINGIMAGE ) )
                 {
                     aTmpPos.X() = aPos.X() + nTextPos;
                     aTmpPos.Y() = aPos.Y();
@@ -2171,9 +2171,9 @@ void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
     {
         bool bRemove = false;
         MenuItemData* pItem = pItemList->GetDataFromPos( n );
-        if ( pItem->eType == MENUITEM_SEPARATOR )
+        if ( pItem->eType == MenuItemType::SEPARATOR )
         {
-            if ( !n || ( GetItemType( n-1 ) == MENUITEM_SEPARATOR ) )
+            if ( !n || ( GetItemType( n-1 ) == MenuItemType::SEPARATOR ) )
                 bRemove = true;
         }
         else
@@ -2194,7 +2194,7 @@ void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
     {
         sal_uInt16 nLast = GetItemCount() - 1;
         MenuItemData* pItem = pItemList->GetDataFromPos( nLast );
-        if ( pItem->eType == MENUITEM_SEPARATOR )
+        if ( pItem->eType == MenuItemType::SEPARATOR )
             RemoveItem( nLast );
     }
     delete mpLayoutData, mpLayoutData = NULL;
@@ -2207,7 +2207,7 @@ bool Menu::HasValidEntries( bool bCheckPopups )
     for ( sal_uInt16 n = 0; !bValidEntries && ( n < nCount ); n++ )
     {
         MenuItemData* pItem = pItemList->GetDataFromPos( n );
-        if ( pItem->bEnabled && ( pItem->eType != MENUITEM_SEPARATOR ) )
+        if ( pItem->bEnabled && ( pItem->eType != MenuItemType::SEPARATOR ) )
         {
             if ( bCheckPopups && pItem->pSubMenu )
                 bValidEntries = pItem->pSubMenu->HasValidEntries( true );
@@ -2862,7 +2862,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
         {
             OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
-                0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
+                0xFFFF, MenuItemType::STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
             size_t nPos = 0;
             pData = pItemList->GetData( pData->nId, nPos );
             assert(pData);
@@ -2975,7 +2975,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
             if (  (  pData->bEnabled
                   || !Application::GetSettings().GetStyleSettings().GetSkipDisabledInMenus()
                   )
-               && ( pData->eType != MENUITEM_SEPARATOR )
+               && ( pData->eType != MenuItemType::SEPARATOR )
                && ImplIsVisible( n )
                && ImplIsSelectable( n )
                )

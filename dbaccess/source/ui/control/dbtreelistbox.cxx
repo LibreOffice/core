@@ -430,7 +430,7 @@ namespace
         sal_uInt16 nCount = _pPopup->GetItemCount();
         for (sal_uInt16 i=0; i < nCount; ++i)
         {
-            if ( _pPopup->GetItemType(i) != MENUITEM_SEPARATOR )
+            if ( _pPopup->GetItemType(i) != MenuItemType::SEPARATOR )
             {
                 sal_uInt16 nId = _pPopup->GetItemId(i);
                 PopupMenu* pSubPopUp = _pPopup->GetPopupMenu(nId);
@@ -462,7 +462,7 @@ namespace
         for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
         {
             // do not adjust separators
-            if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
+            if ( _rMenu.GetItemType( pos ) == MenuItemType::SEPARATOR )
                 continue;
 
             sal_uInt16 nId = _rMenu.GetItemId(pos);
@@ -498,7 +498,7 @@ namespace
         for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
         {
             // do not adjust separators
-            if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
+            if ( _rMenu.GetItemType( pos ) == MenuItemType::SEPARATOR )
                 continue;
 
             sal_uInt16 nId = _rMenu.GetItemId(pos);

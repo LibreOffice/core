@@ -582,7 +582,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
         if ( n == nPos )
         {
-            if ( pData->eType != MENUITEM_SEPARATOR )
+            if ( pData->eType != MenuItemType::SEPARATOR )
             {
                 // #107747# give menuitems the height of the menubar
                 Rectangle aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
@@ -681,7 +681,7 @@ Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
             if ( n == nPos )
             {
-                if ( pData->eType != MENUITEM_SEPARATOR )
+                if ( pData->eType != MenuItemType::SEPARATOR )
                     // #107747# give menuitems the height of the menubar
                     aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
                 break;
@@ -785,7 +785,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                 }
 
                 MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
-                if ( ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
+                if ( ( pData->eType != MenuItemType::SEPARATOR ) && pMenu->ImplIsVisible( n ) )
                 {
                     bool bDoSelect = true;
                     if( ImplGetSVData()->maNWFData.mbOpenMenuOnF10 )

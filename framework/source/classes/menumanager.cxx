@@ -152,7 +152,7 @@ MenuManager::MenuManager(
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         sal_uInt16 nCount = 0;
-                        if ( pPopupMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
+                        if ( pPopupMenu->GetItemType( nCount-1 ) != MenuItemType::SEPARATOR )
                             pPopupMenu->InsertSeparator();
 
                         // Use resource to load popup menu title
@@ -209,7 +209,7 @@ MenuManager::MenuManager(
                            pMenu->SetItemImage( nItemId, aImage );
                 }
             }
-            else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
+            else if ( pMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
             {
                 if ( bShowMenuImages )
                 {
@@ -520,7 +520,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     ++nRemoveItemCount;
                 }
 
-                if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
+                if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
                     pMenu->RemoveItem( pMenu->GetItemCount()-1 );
 
                 // remove all old picklist entries from menu handler
@@ -647,7 +647,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
             for ( sal_uInt16 n = nPos; n < pMenu->GetItemCount(); )
                 pMenu->RemoveItem( n );
 
-            if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MENUITEM_SEPARATOR )
+            if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
                 pMenu->RemoveItem( pMenu->GetItemCount()-1 );
         }
 
@@ -827,7 +827,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
 
         sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         if ( pMenu == m_pVCLMenu &&
-             pMenu->GetItemType( nCurItemId ) != MENUITEM_SEPARATOR )
+             pMenu->GetItemType( nCurItemId ) != MenuItemType::SEPARATOR )
         {
             if ( nCurItemId >= START_ITEMID_WINDOWLIST &&
                  nCurItemId <= END_ITEMID_WINDOWLIST )
@@ -928,7 +928,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,bool
     for ( sal_uInt16 nPos = 0; nPos < _pMenu->GetItemCount(); nPos++ )
     {
         sal_uInt16 nId = _pMenu->GetItemId( nPos );
-        if ( _pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
+        if ( _pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR )
         {
             bool bTmpShowMenuImages( bShowMenuImages );
             // overwrite the show icons on menu option?

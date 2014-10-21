@@ -127,7 +127,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
         for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
         {
             nId = pPopupMenu->GetItemId( sal_uInt16( i ));
-            if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR )
+            if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MenuItemType::SEPARATOR )
             {
                 aCommand = pPopupMenu->GetItemCommand( nId );
                 if ( aCommand.startsWith( m_aEmptyDocURL ) )
@@ -149,7 +149,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
             for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
             {
                 nId = pPopupMenu->GetItemId( sal_uInt16( i ));
-                if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR )
+                if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MenuItemType::SEPARATOR )
                 {
                     aCommand = pPopupMenu->GetItemCommand( nId );
                     if ( aCommand.indexOf( aDefaultModuleName ) >= 0 )
@@ -225,7 +225,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         for ( sal_uInt32 i = 0; i < nItemCount; i++ )
         {
             sal_uInt16 nId( pPopupMenu->GetItemId( sal_uInt16( i )));
-            if ( nId && ( pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR ))
+            if ( nId && ( pPopupMenu->GetItemType( nId ) != MenuItemType::SEPARATOR ))
             {
                 aIds.push_back( nId );
                 aMenuShortCuts.push_back( aEmptyKeyCode );
@@ -344,7 +344,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         {
             sal_uInt16 nItemId = pSubMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ) );
             if (( nItemId != 0 ) &&
-                ( pSubMenu->GetItemType( nItemId ) != MENUITEM_SEPARATOR ))
+                ( pSubMenu->GetItemType( nItemId ) != MenuItemType::SEPARATOR ))
             {
                 MenuConfiguration::Attributes* pBmkAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pSubMenu->GetUserValue( nItemId ));
                 if ( pBmkAttributes != 0 )

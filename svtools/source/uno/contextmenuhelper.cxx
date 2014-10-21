@@ -574,7 +574,7 @@ ContextMenuHelper::completeMenuProperties(
             PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nId );
             if ( pPopupMenu )
                 completeMenuProperties( pPopupMenu );
-            if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
+            if ( pMenu->GetItemType( nPos ) != MenuItemType::SEPARATOR )
             {
                 OUString aCmdURL( pMenu->GetItemCommand( nId ));
 
