@@ -108,11 +108,6 @@ void ZipOutputStream::finish(  )
     m_xStream->flush();
 }
 
-ByteChucker& ZipOutputStream::getChucker()
-{
-    return m_aChucker;
-}
-
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
     throw(IOException, RuntimeException)
 {
