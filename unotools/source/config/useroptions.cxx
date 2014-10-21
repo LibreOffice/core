@@ -64,8 +64,7 @@ char const * const vOptionNames[] = {
     "initials",                  // USER_OPT_ID
     "postalcode",                // USER_OPT_ZIP
     "fathersname",               // USER_OPT_FATHERSNAME
-    "apartment",                 // USER_OPT_APARTMENT
-    "customernumber"             // USER_OPT_CUSTOMERNUMBER
+    "apartment"                  // USER_OPT_APARTMENT
 };
 const sal_uInt16 nOptionNameCount = SAL_N_ELEMENTS(vOptionNames);
 
@@ -297,9 +296,6 @@ OUString SvtUserOptions::GetTelephoneHome  () const { return GetToken(USER_OPT_T
 OUString SvtUserOptions::GetTelephoneWork  () const { return GetToken(USER_OPT_TELEPHONEWORK); }
 OUString SvtUserOptions::GetFax            () const { return GetToken(USER_OPT_FAX); }
 OUString SvtUserOptions::GetEmail          () const { return GetToken(USER_OPT_EMAIL); }
-OUString SvtUserOptions::GetCustomerNumber () const { return GetToken(USER_OPT_CUSTOMERNUMBER); }
-
-void SvtUserOptions::SetCustomerNumber (OUString const& sToken) { SetToken(USER_OPT_CUSTOMERNUMBER, sToken); }
 
 bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
 {

@@ -45,7 +45,6 @@
 #define USER_OPT_ZIP                ((sal_uInt16)14)
 #define USER_OPT_FATHERSNAME        ((sal_uInt16)15)
 #define USER_OPT_APARTMENT          ((sal_uInt16)16)
-#define USER_OPT_CUSTOMERNUMBER     ((sal_uInt16)17)
 
 // class SvtUserOptions --------------------------------------------------
 
@@ -73,12 +72,8 @@ public:
     OUString GetTelephoneWork  () const;
     OUString GetFax            () const;
     OUString GetEmail          () const;
-    OUString GetCustomerNumber () const;
 
     OUString GetFullName       () const;
-
-    // set the address token
-    void SetCustomerNumber (OUString const&);
 
     bool      IsTokenReadonly (sal_uInt16 nToken) const;
     OUString GetToken (sal_uInt16 nToken) const;
