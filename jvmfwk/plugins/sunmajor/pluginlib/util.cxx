@@ -98,8 +98,7 @@ char const *g_arCollectDirs[] = {
 char const *g_arSearchPaths[] = {
 #ifdef MACOSX
     "",
-    "Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin",
-    "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/"
+    "Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin" // Apple & Oracle's Java Applet Plugin folder
 #else
 #ifndef JVM_ONE_PATH_CHECK
     "",
