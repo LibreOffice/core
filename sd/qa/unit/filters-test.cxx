@@ -84,6 +84,10 @@ void SdFiltersTest::testCVEs()
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
             OUString("sdfilt"));
 
+    testDir(OUString("Impress Office Open XML"),
+            getURLFromSrc("/sd/qa/unit/data/pptx/"),
+            OUString(""),  (SFX_FILTER_IMPORT | SFX_FILTER_ALIEN | SFX_FILTER_STARONEFILTER));
+
     testDir(OUString("impress8"),
             getURLFromSrc("/sd/qa/unit/data/odp/"),
             OUString("sdfilt"));
