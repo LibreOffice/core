@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
+use IO::Handle;
 
 die "Usage: $0 identifier\n" .
     "(identifier is for example org.libreoffice)" unless $#ARGV == 0;
@@ -15,5 +16,6 @@ while (<LOGCAT>) {
     $pid = $1;
   } elsif (m!^[EIW]/[^(]+\( *$pid\)!) {
     print $_;
+    STDOUT->flush();
   }
 }
