@@ -847,6 +847,8 @@ void SlideTransitionPane::applyToSelectedPages()
 {
     if( ! mbUpdatingControls )
     {
+        Window *pFocusWindow = Application::GetFocusWindow();
+
         ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
         impl::TransitionEffect aEffect = getTransitionEffectFromControls();
         if( ! pSelectedPages->empty())
@@ -863,6 +865,9 @@ void SlideTransitionPane::applyToSelectedPages()
             else
                 stopEffects();
         }
+
+        if (pFocusWindow)
+            pFocusWindow->GrabFocus();
     }
 }
 
