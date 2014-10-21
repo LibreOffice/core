@@ -920,7 +920,7 @@ OUString SwXCell::getFormula(void) throw( uno::RuntimeException, std::exception 
     return sRet;
 }
 
-///@see sw_setValue (TODO: seems to be C&P programming here)
+///@see sw_setValue (TODO: seems to be copy and paste programming here)
 void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
@@ -1745,7 +1745,7 @@ sal_Bool SwXTextTableCursor::mergeRange()
     if(pUnoCrsr)
     {
         {
-            // hier muessen die Actions aufgehoben werden
+            // The Actions need to be revoked here
             UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
         }
         SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
@@ -2014,7 +2014,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
     {
         bool bVal = *(sal_Bool*)pRepHead->getValue();
-        ((SwTable&)rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO MULTIHEADER
+        ((SwTable&)rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
     }
 
     const uno::Any* pBackColor   = 0;
@@ -2314,7 +2314,7 @@ uno::Sequence< OUString > SwXTextTable::getCellNames(void) throw( uno::RuntimeEx
     if(pFmt)
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
-          // exists at the table and at all boxes
+        // exists at the table and at all boxes
         SwTableLines& rTblLines = pTable->GetTabLines();
         std::vector<OUString*> aAllNames;
         lcl_InspectLines(rTblLines, aAllNames);
@@ -4478,7 +4478,7 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     }
 }
 
-///@see SwXTextTable::getRowDescriptions (TODO: seems to be C&P programming here)
+///@see SwXTextTable::getRowDescriptions (TODO: seems to be copy and paste programming here)
 uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
                                             throw( uno::RuntimeException, std::exception )
 {
@@ -4519,7 +4519,7 @@ uno::Sequence< OUString > SwXCellRange::getRowDescriptions(void)
     return aRet;
 }
 
-///@see SwXTextTable::setRowDescriptions (TODO: seems to be C&P programming here)
+///@see SwXTextTable::setRowDescriptions (TODO: seems to be copy and paste programming here)
 void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
                                                     throw( uno::RuntimeException, std::exception )
 {
@@ -4554,7 +4554,7 @@ void SwXCellRange::setRowDescriptions(const uno::Sequence< OUString >& rRowDesc)
     }
 }
 
-///@see SwXTextTable::setColumnDescriptions (TODO: seems to be C&P programming here)
+///@see SwXTextTable::setColumnDescriptions (TODO: seems to be copy and paste programming here)
 uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
                                         throw( uno::RuntimeException, std::exception )
 {
@@ -4595,7 +4595,7 @@ uno::Sequence< OUString > SwXCellRange::getColumnDescriptions(void)
     return aRet;
 }
 
-///@see SwXTextTable::setColumnDescriptions (TODO: seems to be C&P programming here)
+///@see SwXTextTable::setColumnDescriptions (TODO: seems to be copy and paste programming here)
 void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& ColumnDesc)
                                                         throw( uno::RuntimeException, std::exception )
 {
@@ -4705,7 +4705,7 @@ void SwXCellRange::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     {
         /*
          * Not sure if this will cause a memory leak - this pTblCrsr
-         * is deleted in SwDoc and GPFs here when deleted again
+         * is deleted in SwDoc and segfaults here when deleted again
          * if(!aCursorDepend.GetRegisteredIn())
             delete pTblCrsr;
          */
@@ -4764,7 +4764,7 @@ sal_Int32 SwXTableRows::getCount(void) throw( uno::RuntimeException, std::except
     return nRet;
 }
 
-///@see SwXCell::CreateXCell (TODO: seems to be C&P programming here)
+///@see SwXCell::CreateXCell (TODO: seems to be copy and paste programming here)
 uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
@@ -5027,7 +5027,7 @@ sal_Bool SwXTableColumns::hasElements(void) throw( uno::RuntimeException, std::e
     return sal_True;
 }
 
-///@see SwXTableRows::insertByIndex (TODO: seems to be C&P programming here)
+///@see SwXTableRows::insertByIndex (TODO: seems to be copy and paste programming here)
 void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     throw (uno::RuntimeException, std::exception)
 {
@@ -5082,7 +5082,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     }
 }
 
-///@see SwXTableRows::removeByIndex (TODO: seems to be C&P programming here)
+///@see SwXTableRows::removeByIndex (TODO: seems to be copy and paste programming here)
 void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     throw (uno::RuntimeException, std::exception)
 {

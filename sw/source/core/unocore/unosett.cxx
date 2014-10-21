@@ -1362,7 +1362,8 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     OUString CharStyleName;
     if(pCharFmt)
         CharStyleName = pCharFmt->GetName();
-    //egal ob ein Style vorhanden ist oder nicht ueberschreibt der Array-Eintrag diesen String
+
+    // Whether or not a style is present: the array entry overwrites this string
     if (!m_sNewCharStyleNames[nIndex].isEmpty() &&
         !SwXNumberingRules::isInvalidStyle(m_sNewCharStyleNames[nIndex]))
     {

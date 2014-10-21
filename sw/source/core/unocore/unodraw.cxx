@@ -842,8 +842,8 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
         SdrPage* pPage = pModel->GetPage( 0 );
 
         {
-            // waehrend des queryInterface braucht man ein Ref auf das
-            // Objekt, sonst wird es geloescht.
+            // We need a Ref to the object during queryInterface or else
+            // it will be deleted
             pDrawPage = new SwFmDrawPage(pPage);
             uno::Reference< drawing::XDrawPage >  xPage = pDrawPage;
             uno::Any aAgg = xPage->queryInterface(cppu::UnoType<uno::XAggregation>::get());
@@ -856,7 +856,9 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
     return pDrawPage;
 }
 
-// renamed and outlined to detect where it's called
+/**
+ * Renamed and outlined to detect where it's called
+ */
 void SwXDrawPage::InvalidateSwDoc()
 {
     pDoc = 0;
@@ -1060,7 +1062,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo(void) th
             uno::Reference< beans::XPropertySet >  xPrSet =
                     *(uno::Reference< beans::XPropertySet >*)aPSet.getValue();
             uno::Reference< beans::XPropertySetInfo >  xInfo = xPrSet->getPropertySetInfo();
-            // PropertySetInfo verlaengern!
+            // Expand PropertySetInfo!
             const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
             aRet = new SfxExtItemPropertySetInfo( m_pPropertyMapEntries, aPropSeq );
         }

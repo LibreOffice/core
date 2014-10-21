@@ -495,7 +495,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
 
 extern Color aGlobalRetoucheColor;
 
-// Returns if the current background color is dark.
+/// Returns if the current background color is dark.
 static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
 {
     const Color* pCol = rInf.GetFont()->GetBackColor();
@@ -777,12 +777,16 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     }
 }
 
-// Draws a special portion, e.g., line break portion, tab portion.
-// rPor     - The portion
-// rRect    - The rectangle surrounding the character
-// rCol     - Specify a color for the character
-// bCenter  - Draw the character centered, otherwise left aligned
-// bRotate  - Rotate the character if character rotation is set
+/**
+ * Draws a special portion
+ * E.g.: line break portion, tab portion
+ *
+ * @param rPor The portion
+ * @param rRect The rectangle surrounding the character
+ * @param rCol Specify a color for the character
+ * @param bCenter Draw the character centered, otherwise left aligned
+ * @param bRotate Rotate the character if character rotation is set
+ */
 static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
                       SwRect& rRect, const Color& rCol, sal_Unicode cChar,
                       sal_uInt8 nOptions )
@@ -1338,11 +1342,13 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewI
     Init();
 }
 
-// If the Hyphenator returns ERROR or the language is set to NOLANGUAGE
-// we do not hyphenate.
-// Else, we always hyphenate if we do interactive hyphenation.
-// If we do not do interactive hyphenation, we only hyphenate if ParaFmt is
-// set to automatic hyphenation.
+/**
+ * If the Hyphenator returns ERROR or the language is set to NOLANGUAGE
+ * we do not hyphenate.
+ * Else, we always hyphenate if we do interactive hyphenation.
+ * If we do not do interactive hyphenation, we only hyphenate if ParaFmt is
+ * set to automatic hyphenation.
+ */
 bool SwTxtFormatInfo::IsHyphenate() const
 {
     if( !bInterHyph && !bAutoHyph )
@@ -1408,12 +1414,14 @@ void SwTxtFormatInfo::Init()
     SetPaintOfst(0);
 }
 
-// There are a few differences between a copy constructor
-// and the following constructor for multi-line formatting.
-// The root is the first line inside the multi-portion,
-// the line start is the actual position in the text,
-// the line width is the rest width from the surrounding line
-// and the bMulti and bFirstMulti-flag has to be set correctly.
+/**
+ * There are a few differences between a copy constructor
+ * and the following constructor for multi-line formatting.
+ * The root is the first line inside the multi-portion,
+ * the line start is the actual position in the text,
+ * the line width is the rest width from the surrounding line
+ * and the bMulti and bFirstMulti-flag has to be set correctly.
+ */
 SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     SwLineLayout& rLay, SwTwips nActWidth ) : SwTxtPaintInfo( rInf ),
     bTabOverflow( false )
@@ -1489,9 +1497,9 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     sal_Int32 i = nStart;
 
     // Used for decimal tab handling:
-
     const sal_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
+
     // #i45951# German (Switzerland) uses ' as thousand separator
     const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
 
@@ -1539,7 +1547,6 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
 
                 // Compatibility: First non-digit character behind a
                 // a digit character becomes the hook character
-
                 if ( bTabCompat )
                 {
                     if ( ( 0x2F < cPos && cPos < 0x3A ) ||

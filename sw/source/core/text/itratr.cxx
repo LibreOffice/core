@@ -87,16 +87,21 @@ SwAttrIter::~SwAttrIter()
     delete pFnt;
 }
 
-// Liefert fuer eine Position das Attribut, wenn das Attribut genau auf
-// der Position nPos liegt und kein EndIndex besitzt.
-// GetAttr() wird fuer Attribute benoetigt, die die Formatierung beeinflussen
-// sollen, ohne dabei den Inhalt des Strings zu veraendern. Solche "entarteten"
-// Attribute sind z.B. Felder (die expandierten Text bereit halten) und
-// zeilengebundene Frames. Um Mehrdeutigkeiten zwischen verschiedenen
-// solcher Attribute zu vermeiden, werden beim Anlegen eines Attributs
-// an der Startposition ein Sonderzeichen in den String einfuegt.
-// Der Formatierer stoesst auf das Sonderzeichen und holt sich per
-// GetAttr() das entartete Attribut.
+/**
+ * Returns the attribute for a position
+ *
+ * Only if the attribute is exactly at the position @param nPos and
+ * does not have an EndIndex
+ *
+ * We need this function for attributes which should alter formatting without
+ * changing the content of the string.
+ * Such "degenerated" attributes are e.g.: fields which retain expanded text and
+ * line-bound Frames.
+ * In order to avoid ambiguities between different such attributes, we insert a
+ * special character at the start of the string, when creating such an attribute.
+ * The Formatter later on encounters such a special character and retrieves the
+ * degenerate attribute via GetAttr().
+ */
 SwTxtAttr *SwAttrIter::GetAttr( const sal_Int32 nPosition ) const
 {
     return (m_pTxtNode) ? m_pTxtNode->GetTxtAttrForCharAt(nPosition) : 0;
@@ -192,17 +197,17 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 {
     SwTxtAttr *pTxtAttr;
 
-    if ( nStartIndex ) // wenn ueberhaupt schon Attribute geoeffnet wurden...
+    if ( nStartIndex ) // If attributes have been opened at all ...
     {
-        // Schliesse Attr, die z. Z. geoeffnet sind, vor nNewPos+1 aber enden.
+        // Close attributes that are currently open, but stop at nNewPos+1
 
-        // Solange wir noch nicht am Ende des EndArrays angekommen sind &&
-        // das TextAttribut vor oder an der neuen Position endet ...
+        // As long as we've not yet reached the end of EndArray and the
+        // TextAttribute ends before or at the new position ...
         while ( ( nEndIndex < pHints->GetEndCount() ) &&
                 (*(pTxtAttr=pHints->GetEnd(nEndIndex))->GetAnyEnd()<=nNewPos))
         {
-            // schliesse die TextAttribute, deren StartPos vor
-            // oder an der alten nPos lag, die z.Z. geoeffnet sind.
+            // Close the TextAttributes, whoes StartPos were before or at
+            // the old nPos and are currently open
             if (pTxtAttr->GetStart() <= nPos)  Rst( pTxtAttr );
             nEndIndex++;
         }
@@ -215,8 +220,9 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
             nEndIndex++;
         }
     }
-    // Solange wir noch nicht am Ende des StartArrays angekommen sind &&
-    // das TextAttribut vor oder an der neuen Position beginnt ...
+
+    // As long as we've not yet reached the end of EndArray and the
+    // TextAttribute ends before or at the new position ...
     while ( ( nStartIndex < pHints->GetStartCount() ) &&
             ((pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()<=nNewPos) )
     {
@@ -303,7 +309,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
         }
     }
     if (m_pTxtNode!=NULL) {
-        // TODO maybe use hints like FieldHints for this instead of looking at the text...
+        // TODO: maybe use hints like FieldHints for this instead of looking at the text...
         const sal_Int32 l = nNext<m_pTxtNode->Len() ? nNext : m_pTxtNode->Len();
         sal_Int32 p=nPos;
         const sal_Unicode* aStr = m_pTxtNode->GetTxt().getStr();
@@ -545,8 +551,9 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
 
 #define FLYINCNT_MIN_WIDTH 284
 
-// changing this method very likely requires changing of
-// "GetScalingOfSelectedText"
+/**
+ * Changing this method very likely requires changing of GetScalingOfSelectedText
+ */
 void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin, OutputDevice* pOut ) const
 {
@@ -765,18 +772,20 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     rMax += aNodeArgs.nMaxWidth;
     rMax += nLROffset;
     rMax += nAdd;
-    if( rMax < rMin ) // z.B. Rahmen mit Durchlauf gehen zunaechst nur
-        rMax = rMin;  // in das Minimum ein
+    if( rMax < rMin ) // e.g. Frames with flow through only contribute to the minimum
+        rMax = rMin;
     pOut->SetMapMode( aOldMap );
 }
 
-// Calculates the width of the text part specified by nStt and nEnd,
-// the height of the line containing nStt is devided by this width,
-// indicating the scaling factor, if the text part is rotated.
-// Having CH_BREAKs in the text part, this method returns the scaling
-// factor for the longest of the text parts separated by the CH_BREAKs.
-//
-// changing this method very likely requires changing of "GetMinMaxSize"
+/**
+ * Calculates the width of the text part specified by nStt and nEnd,
+ * the height of the line containing nStt is devided by this width,
+ * indicating the scaling factor, if the text part is rotated.
+ * Having CH_BREAKs in the text part, this method returns the scaling
+ * factor for the longest of the text parts separated by the CH_BREAK
+ *
+ * Changing this method very likely requires changing of "GetMinMaxSize"
+ */
 sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     const
 {

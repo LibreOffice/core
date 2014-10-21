@@ -34,8 +34,8 @@ class SwTxtGuess
     sal_Int32 nBreakStart;     // start index of word containing line break
     sal_Int32 nBreakPos;       // start index of break position
     sal_Int32 nFieldDiff;      // absolut positions can be wrong if we
-                                // a field in the text has been expanded
-    sal_uInt16 nBreakWidth;         // width of the broken portion
+                               // a field in the text has been expanded
+    sal_uInt16 nBreakWidth;    // width of the broken portion
 public:
     inline SwTxtGuess(): pHanging( NULL ), nCutPos(0), nBreakStart(0),
                         nBreakPos(0), nFieldDiff(0), nBreakWidth(0)

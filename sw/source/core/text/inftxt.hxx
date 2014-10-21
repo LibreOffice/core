@@ -122,7 +122,7 @@ class SwTxtInfo
     // Implementation in txthyph.cxx
     friend void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot );
     SwParaPortion *pPara;
-    sal_Int32 nTxtStart;                 // TxtOfst for Follows
+    sal_Int32 nTxtStart; // TxtOfst for Follows
 
 protected:
     SwTxtInfo()
@@ -172,18 +172,18 @@ protected:
     bool m_bStopUnderflow : 1; // Underflow was stopped e.g. by a FlyPortion
     bool m_bFtnInside : 1;     // the current line contains a footnote
     bool m_bOtherThanFtnInside : 1; // the current line contains another portion than a footnote portion.
-                                      // needed for checking keep together of footnote portion with previous portion
+                                    // needed for checking keep together of footnote portion with previous portion
     bool m_bMulti : 1;        // inside a multiportion
     bool m_bFirstMulti : 1;   // this flag is used for two purposes:
-                                // - the multiportion is the first lineportion
-                                // - indicates, if we are currently in second
-                                //   line of multi portion
+                              // - the multiportion is the first lineportion
+                              // - indicates, if we are currently in second
+                              //   line of multi portion
     bool m_bRuby : 1;         // during the formatting of a phonetic line
     bool m_bHanging : 1;      // formatting of hanging punctuation allowed
     bool m_bScriptSpace : 1;  // space between different scripts (Asian/Latin)
     bool m_bForbiddenChars : 1; // Forbidden start/endline characters
     bool m_bSnapToGrid : 1;   // paragraph snaps to grid
-    sal_uInt8 m_nDirection : 2;       // writing direction: 0/90/180/270 degree
+    sal_uInt8 m_nDirection : 2; // writing direction: 0/90/180/270 degree
 
 protected:
     void CtorInitTxtSizeInfo( SwTxtFrm *pFrm, SwFont *pFnt = 0,
@@ -535,11 +535,11 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     SwTwips nLeft;              // Left margin
     SwTwips nRight;             // Right margin
     SwTwips nFirst;             // EZE
-    sal_uInt16 nRealWidth;          // "real" line width
-    sal_uInt16 nWidth;              // "virtual" line width
-    sal_uInt16 nLineHeight;         // Final height after CalcLine
-    sal_uInt16 nLineNettoHeight;    // line height without spacing
-    sal_uInt16 nForcedLeftMargin;   // Shift of left margin due to frame
+    sal_uInt16 nRealWidth;      // "real" line width
+    sal_uInt16 nWidth;          // "virtual" line width
+    sal_uInt16 nLineHeight;     // Final height after CalcLine
+    sal_uInt16 nLineNettoHeight; // line height without spacing
+    sal_uInt16 nForcedLeftMargin; // Shift of left margin due to frame
 
     sal_Int16  nMinLeading;     // minimum number of chars before hyphenation point
     sal_Int16  nMinTrailing;    // minimum number of chars after hyphenation point
@@ -728,11 +728,13 @@ public:
     inline bool IsTabOverflow() { return bTabOverflow; }
 };
 
-// For the text replacement and restoration of SwTxtSizeInfo.
-// The way this is done is a bit of a hack: Although rInf is const we change it
-// anyway.
-// Because rInf is restorated again in the DTOR, we can do this.
-// You could call it a "logical const", if you wish.
+/**
+ * For the text replacement and restoration of SwTxtSizeInfo.
+ * The way this is done is a bit of a hack: Although rInf is const we change it
+ * anyway.
+ * Because rInf is restorated again in the DTOR, we can do this.
+ * You could call it a "logical const", if you wish.
+ */
 class SwTxtSlot
 {
     OUString aTxt;

@@ -897,7 +897,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SHADOW_TRANSPARENCE), RES_SHADOW,       cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_SHADOW_TRANSPARENCE},
                     { OUString(UNO_NAME_SERVER_MAP), RES_URL,               cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_URL_SERVERMAP         },
                     { OUString(UNO_NAME_SIZE_PROTECTED), RES_PROTECT,           cppu::UnoType<bool>::get(),             PROPERTY_NONE, MID_PROTECT_SIZE    },
-                    //Surround bleibt, weil es mit der 5.1 ausgeliefert wurde, obwohl es mit text::WrapTextMode identisch ist
+                    // We keep Surround, as we delivered it with 5.1, although it's identical to text::WrapTextMode
                     { OUString(UNO_NAME_SURROUND), RES_SURROUND,          cppu::UnoType<css::text::WrapTextMode>::get(),    PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE },
                     { OUString(UNO_NAME_TEXT_WRAP), RES_SURROUND,           cppu::UnoType<css::text::WrapTextMode>::get(),             PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
                     { OUString(UNO_NAME_SURROUND_ANCHORONLY), RES_SURROUND,             cppu::UnoType<bool>::get(),             PROPERTY_NONE, MID_SURROUND_ANCHORONLY      },
@@ -1266,7 +1266,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aFramePropertyMap_Impl[] =
                 {   //UUUU
-                    // evtl. completely remove SvxBrushItem stuff ()
+                    // TODO: We should consider completely removing SvxBrushItem() stuff
                     // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
                     // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
@@ -1301,7 +1301,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aGraphicPropertyMap_Impl[] =
                 {   //UUUU
-                    // evtl. completely remove SvxBrushItem stuff ()
+                    // TODO: We should consider completely removing SvxBrushItem() stuff
                     // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
                     // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
@@ -1345,7 +1345,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aEmbeddedPropertyMap_Impl[] =
                 {   //UUUU
-                    // evtl. completely remove SvxBrushItem stuff ()
+                    // TODO: We should consider completely removing SvxBrushItem() stuff
                     // add support for XATTR_FILL_FIRST, XATTR_FILL_LAST
                     // COMMON_FRAME_PROPERTIES currently hosts the RES_BACKGROUND entries from SvxBrushItem
                     COMMON_FRAME_PROPERTIES
@@ -1706,7 +1706,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             break;
             case PROPERTY_MAP_TEXT_TABLE_CURSOR:
             {
-                // das PropertySet entspricht dem Range ohne Chart-Properties
+                // The PropertySet corresponds to the Range without Chart properties
                 static SfxItemPropertyMapEntry const aTableCursorPropertyMap_Impl [] =
                 {
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN_01
