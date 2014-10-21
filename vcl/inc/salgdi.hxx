@@ -287,8 +287,7 @@ public:
                                     long nDestX, long nDestY,
                                     long nSrcX, long nSrcY,
                                     long nSrcWidth, long nSrcHeight,
-                                    sal_uInt16 nFlags,
-                                    const OutputDevice *pOutDev );
+                                    sal_uInt16 nFlags );
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics

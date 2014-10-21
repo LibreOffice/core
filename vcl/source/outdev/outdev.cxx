@@ -692,6 +692,24 @@ void OutputDevice::CopyArea( const Point& rDestPt,
         mpAlphaVDev->CopyArea( rDestPt, rSrcPt, rSrcSize, nFlags );
 }
 
+void OutputDevice::CopyArea( long nDestX, long nDestY,
+                             long nSrcX, long nSrcY,
+                             long nSrcWidth, long nSrcHeight,
+                             sal_uInt16 nFlags )
+{
+    if ( !mpGraphics && !AcquireGraphics() )
+        return;
+
+    if ( (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) || IsRTLEnabled() )
+    {
+        mirror( nDestX, nSrcWidth );
+        mirror( nSrcX, nSrcWidth );
+    }
+
+    mpGraphics->CopyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
+}
+
+
 // Direct OutputDevice drawing protected function
 
 void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)

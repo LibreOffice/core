@@ -519,6 +519,12 @@ public:
                                     const Point& rSrcPt,  const Size& rSrcSize,
                                     sal_uInt16 nFlags = 0 );
 
+    void                        CopyArea( long nDestX, long nDestY,
+                                    long nSrcX, long nSrcY,
+                                    long nSrcWidth, long nSrcHeight,
+                                    sal_uInt16 nFlags = 0 );
+
+
 protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags);

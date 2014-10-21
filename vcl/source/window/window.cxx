@@ -1232,10 +1232,10 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
                 aPosAry.mnDestY-aPosAry.mnSrcY,
                 false);
 
-        mpGraphics->CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
+        CopyArea(aPosAry.mnDestX, aPosAry.mnDestY,
                 aPosAry.mnSrcX, aPosAry.mnSrcY,
                 aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                SAL_COPYAREA_WINDOWINVALIDATE, this);
+                SAL_COPYAREA_WINDOWINVALIDATE);
 
         return;
     }
@@ -1732,10 +1732,10 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                 const bool bSelectClipRegion = pOutDev->SelectClipRegion( aRegion, pGraphics );
                                 if ( bSelectClipRegion )
                                 {
-                                    pGraphics->CopyArea( mnOutOffX, mnOutOffY,
-                                                         nOldOutOffX, nOldOutOffY,
-                                                         nOldOutWidth, nOldOutHeight,
-                                                         SAL_COPYAREA_WINDOWINVALIDATE, this );
+                                    CopyArea( mnOutOffX, mnOutOffY,
+                                              nOldOutOffX, nOldOutOffY,
+                                              nOldOutWidth, nOldOutHeight,
+                                              SAL_COPYAREA_WINDOWINVALIDATE );
                                 }
                                 else
                                     bInvalidate = true;
