@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_awt_Gradient2_idl__
+#define __com_sun_star_awt_Gradient2_idl__
+
+#include <com/sun/star/awt/GradientStyle.idl>
+#include <com/sun/star/awt/GradientStop.idl>
+
+
+
+ module com {  module sun {  module star {  module awt {
+
+
+/** awt::Gradient supports only two colors Start and End.
+  * However a gradient fill can also be characterized by multiple stops.
+  * Each Stop is assigned a color and has a relative position in the
+  * the fill (color band).
+ */
+struct Gradient2 : Gradient
+{
+
+    /** specifies list of gradient stops
+     */
+    sequence< com::sun::star::awt::GradientStop> GradientStops;
+
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

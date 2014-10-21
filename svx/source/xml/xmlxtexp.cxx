@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -377,7 +377,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
                 pExporter.reset(new SvxXMLHatchEntryExporter(*this));
                 pEleName = "hatch-table";
             }
-            else if( aExportType == cppu::UnoType< awt::Gradient >::get() )
+            else if( aExportType == cppu::UnoType< awt::Gradient2 >::get() )
             {
                 pExporter.reset(new SvxXMLGradientEntryExporter(*this));
                 pEleName = "gradient-table";

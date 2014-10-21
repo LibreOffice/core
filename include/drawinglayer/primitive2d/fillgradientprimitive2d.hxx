@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/texture/texture.hxx>
+#include <tools/color.hxx>
 
 
 // predefines

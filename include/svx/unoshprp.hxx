@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
@@ -252,13 +252,13 @@
     { OUString(UNO_NAME_FILLBITMAPNAME),           XATTR_FILLBITMAP        , ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLBITMAPURL),            XATTR_FILLBITMAP        , ::cppu::UnoType<OUString>::get(), 0, MID_GRAFURL }, \
     { OUString(UNO_NAME_FILLGRADIENTSTEPCOUNT),    XATTR_GRADIENTSTEPCOUNT , ::cppu::UnoType<sal_Int16>::get(), 0, 0}, \
-    { OUString(UNO_NAME_FILLGRADIENT),      XATTR_FILLGRADIENT      , ::cppu::UnoType<com::sun::star::awt::Gradient>::get(),        0,     MID_FILLGRADIENT}, \
+    { OUString(UNO_NAME_FILLGRADIENT),      XATTR_FILLGRADIENT      , ::cppu::UnoType<com::sun::star::awt::Gradient2>::get(),        0,     MID_FILLGRADIENT}, \
     { OUString(UNO_NAME_FILLGRADIENTNAME),         XATTR_FILLGRADIENT      , ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLHATCH),         XATTR_FILLHATCH         , ::cppu::UnoType<com::sun::star::drawing::Hatch>::get(),           0,     MID_FILLHATCH}, \
     { OUString(UNO_NAME_FILLHATCHNAME),            XATTR_FILLHATCH         , ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLSTYLE),         XATTR_FILLSTYLE         , ::cppu::UnoType<com::sun::star::drawing::FillStyle>::get() ,      0,     0}, \
     { OUString(UNO_NAME_FILL_TRANSPARENCE), XATTR_FILLTRANSPARENCE, ::cppu::UnoType<sal_Int16>::get() ,           0,     0}, \
-    { OUString(UNO_NAME_FILLTRANSPARENCEGRADIENT), XATTR_FILLFLOATTRANSPARENCE, ::cppu::UnoType<com::sun::star::awt::Gradient>::get(),         0,     MID_FILLGRADIENT}, \
+    { OUString(UNO_NAME_FILLTRANSPARENCEGRADIENT), XATTR_FILLFLOATTRANSPARENCE, ::cppu::UnoType<com::sun::star::awt::Gradient2>::get(),         0,     MID_FILLGRADIENT}, \
     { OUString(UNO_NAME_FILLTRANSPARENCEGRADIENTNAME), XATTR_FILLFLOATTRANSPARENCE, ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { OUString(UNO_NAME_FILLCOLOR_2),       XATTR_SECONDARYFILLCOLOR, ::cppu::UnoType<sal_Int32>::get(),          0,     0}, \
     { OUString(UNO_NAME_GRAPHIC_GRAPHICCROP), SDRATTR_GRAFCROP      , ::cppu::UnoType<com::sun::star::text::GraphicCrop>::get(), 0, 0 },

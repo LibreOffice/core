@@ -18,7 +18,7 @@
  */
 #include "Paint.hxx"
 #include <sfx2/sidebar/Tools.hxx>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 
 using namespace css;
 
@@ -47,7 +47,7 @@ Paint Paint::Create (const css::uno::Any& rValue)
     if (rValue >>= aColor)
         return Paint(Color(aColor));
 
-    awt::Gradient aAwtGradient;
+    awt::Gradient2 aAwtGradient;
     if (rValue >>= aAwtGradient)
         return Paint(Tools::AwtToVclGradient(aAwtGradient));
 

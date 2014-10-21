@@ -47,7 +47,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <com/sun/star/awt/RasterOperation.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineCap.hpp>
@@ -347,7 +347,7 @@ sal_uInt32 EscherPropertyContainer::ImplGetColor( const sal_uInt32 nSOColor, boo
 }
 
 sal_uInt32 EscherPropertyContainer::GetGradientColor(
-    const ::com::sun::star::awt::Gradient* pGradient,
+    const ::com::sun::star::awt::Gradient2* pGradient,
         sal_uInt32 nStartColor )
 {
     sal_uInt32  nIntensity = 100;
@@ -373,7 +373,7 @@ sal_uInt32 EscherPropertyContainer::GetGradientColor(
 }
 
 void EscherPropertyContainer::CreateGradientProperties(
-    const ::com::sun::star::awt::Gradient & rGradient )
+    const ::com::sun::star::awt::Gradient2 & rGradient )
 {
     sal_uInt32  nFillType = ESCHER_FillShadeScale;
     sal_uInt32  nAngle = 0;
@@ -429,7 +429,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet , bool bTransparentGradient)
 {
     ::com::sun::star::uno::Any          aAny;
-    ::com::sun::star::awt::Gradient const * pGradient = NULL;
+    ::com::sun::star::awt::Gradient2 const * pGradient = NULL;
 
     sal_uInt32  nFillType = ESCHER_FillShadeScale;
     sal_Int32  nAngle = 0;
@@ -443,7 +443,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, OUString( "FillTransparenceGradient" ), false ) )
     {
-        pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+        pGradient = static_cast<css::awt::Gradient2 const *>(aAny.getValue());
 
         ::com::sun::star::uno::Any          aAnyTemp;
         const rtl::OUString aPropName( "FillStyle" );
@@ -459,8 +459,8 @@ void EscherPropertyContainer::CreateGradientProperties(
                 if ( EscherPropertyValueHelper::GetPropertyValue(
                     aAnyTemp, rXPropSet, OUString( "FillColor" ), false ) )
                 {
-                    const_cast<css::awt::Gradient *>(pGradient)->StartColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
-                    const_cast<css::awt::Gradient *>(pGradient)->EndColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
+                    const_cast<css::awt::Gradient2 *>(pGradient)->StartColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
+                    const_cast<css::awt::Gradient2 *>(pGradient)->EndColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
                 }
             }
             // gradient and transparency.
@@ -468,7 +468,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
                     aAny, rXPropSet, OUString( "FillGradient" ), false ) )
-                    pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+                    pGradient = static_cast<css::awt::Gradient2 const *>(aAny.getValue());
             }
         }
 
@@ -477,7 +477,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     else if ( EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, OUString( "FillGradient" ), false ) )
     {
-        pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+        pGradient = static_cast<css::awt::Gradient2 const *>(aAny.getValue());
     }
 
     if ( pGradient )
@@ -546,7 +546,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, OUString( "FillTransparenceGradient" ), false ) )
     {
-        pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+        pGradient = static_cast<css::awt::Gradient2 const *>(aAny.getValue());
         if ( pGradient )
         {
             sal_uInt32  nBlue =  GetGradientColor( pGradient, nFirstColor ) >> 16;

@@ -45,7 +45,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/Size.hpp>
