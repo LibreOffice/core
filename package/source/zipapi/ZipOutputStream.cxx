@@ -50,28 +50,20 @@ ZipOutputStream::~ZipOutputStream( void )
         delete m_aZipList[i];
 }
 
-void ZipOutputStream::putNextEntry( ZipEntry& rEntry, bool bEncrypt )
-    throw(IOException, RuntimeException)
+void ZipOutputStream::setEntry( ZipEntry *pEntry )
 {
-    assert(!m_pCurrentEntry && "Forgot to close an entry before putNextEntry()?");
-    if (rEntry.nTime == -1)
-        rEntry.nTime = getCurrentDosTime();
-    if (rEntry.nMethod == -1)
-        rEntry.nMethod = DEFLATED;
-    rEntry.nVersion = 20;
-    rEntry.nFlag = 1 << 11;
-    if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
-        rEntry.nCrc == -1)
+    if (pEntry->nTime == -1)
+        pEntry->nTime = getCurrentDosTime();
+    if (pEntry->nMethod == -1)
+        pEntry->nMethod = DEFLATED;
+    pEntry->nVersion = 20;
+    pEntry->nFlag = 1 << 11;
+    if (pEntry->nSize == -1 || pEntry->nCompressedSize == -1 ||
+        pEntry->nCrc == -1)
     {
-        rEntry.nSize = rEntry.nCompressedSize = 0;
-        rEntry.nFlag |= 8;
+        pEntry->nSize = pEntry->nCompressedSize = 0;
+        pEntry->nFlag |= 8;
     }
-    m_bEncrypt = bEncrypt;
-
-    sal_Int32 nLOCLength = writeLOC(rEntry);
-    rEntry.nOffset = m_aChucker.GetPosition() - nLOCLength;
-    m_aZipList.push_back( &rEntry );
-    m_pCurrentEntry = &rEntry;
 }
 
 void ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 /*nNewOffset*/, sal_Int32 nNewLength )
@@ -80,13 +72,14 @@ void ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 /*nNewO
     m_aChucker.WriteBytes( Sequence< sal_Int8 >(rBuffer.getConstArray(), nNewLength) );
 }
 
-void ZipOutputStream::rawCloseEntry()
+void ZipOutputStream::rawCloseEntry( bool bEncrypt )
     throw(IOException, RuntimeException)
 {
+    assert(m_pCurrentEntry && "Forgot to call writeLOC()?");
     if ( m_pCurrentEntry->nMethod == DEFLATED && ( m_pCurrentEntry->nFlag & 8 ) )
         writeEXT(*m_pCurrentEntry);
 
-    if (m_bEncrypt)
+    if (bEncrypt)
         m_pCurrentEntry->nMethod = STORED;
 
     m_pCurrentEntry = NULL;
@@ -192,9 +185,14 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
     }
 }
 
-sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
+void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
     throw(IOException, RuntimeException)
 {
+    assert(!m_pCurrentEntry && "Forgot to close an entry with rawCloseEntry()?");
+    m_pCurrentEntry = pEntry;
+    m_aZipList.push_back( m_pCurrentEntry );
+    const ZipEntry &rEntry = *m_pCurrentEntry;
+
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, true ) )
         throw IOException("Unexpected character is used in file name." );
 
@@ -206,7 +204,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
 
     m_aChucker << rEntry.nFlag;
     // If it's an encrypted entry, we pretend its stored plain text
-    if (m_bEncrypt)
+    if (bEncrypt)
         m_aChucker << static_cast < sal_Int16 > ( STORED );
     else
         m_aChucker << rEntry.nMethod;
@@ -240,7 +238,7 @@ sal_Int32 ZipOutputStream::writeLOC( const ZipEntry &rEntry )
     Sequence < sal_Int8 > aSequence( (sal_Int8*)sUTF8Name.getStr(), sUTF8Name.getLength() );
     m_aChucker.WriteBytes( aSequence );
 
-    return LOCHDR + nNameLength;
+    m_pCurrentEntry->nOffset = m_aChucker.GetPosition() - (LOCHDR + nNameLength);
 }
 
 sal_uInt32 ZipOutputStream::getCurrentDosTime()

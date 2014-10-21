@@ -674,7 +674,8 @@ bool ZipPackageStream::saveChild(
             if ( bRawStream )
                 xStream->skipBytes( m_nMagicalHackPos );
 
-            rZipOut.putNextEntry(*pTempEntry);
+            ZipOutputStream::setEntry(pTempEntry);
+            rZipOut.writeLOC(pTempEntry);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
 
@@ -731,7 +732,8 @@ bool ZipPackageStream::saveChild(
 
         try
         {
-            rZipOut.putNextEntry(*pTempEntry, bToBeEncrypted);
+            ZipOutputStream::setEntry(pTempEntry);
+            rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
             sal_Int32 nLength;
@@ -759,7 +761,7 @@ bool ZipPackageStream::saveChild(
                 uno::Sequence< sal_Int8 > aCompressedData = aZipEntry.getData();
                 rZipOut.rawWrite(aCompressedData, 0, aCompressedData.getLength());
             }
-            rZipOut.rawCloseEntry();
+            rZipOut.rawCloseEntry(bToBeEncrypted);
         }
         catch ( ZipException& )
         {
