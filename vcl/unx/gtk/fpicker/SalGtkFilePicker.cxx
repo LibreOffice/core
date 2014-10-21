@@ -61,19 +61,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-static void expandexpanders(GtkContainer *pWidget)
-{
-    GList *pChildren = gtk_container_get_children(pWidget);
-    for( GList *p = pChildren; p; p = p->next )
-    {
-        if (GTK_IS_CONTAINER(GTK_WIDGET(p->data)))
-            expandexpanders(GTK_CONTAINER(GTK_WIDGET(p->data)));
-        if (GTK_IS_EXPANDER(GTK_WIDGET(p->data)))
-            gtk_expander_set_expanded(GTK_EXPANDER(GTK_WIDGET(p->data)), true);
-    }
-    g_list_free(pChildren);
-}
-
 void SalGtkFilePicker::dialog_mapped_cb(GtkWidget *, SalGtkFilePicker *pobjFP)
 {
     pobjFP->InitialMapping();
