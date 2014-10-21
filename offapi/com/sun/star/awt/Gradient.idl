@@ -20,7 +20,7 @@
 #define __com_sun_star_awt_Gradient_idl__
 
 #include <com/sun/star/awt/GradientStyle.idl>
-
+#include <com/sun/star/awt/GradientStop.idl>
 #include <com/sun/star/util/Color.idl>
 
 
@@ -87,6 +87,11 @@ published struct Gradient
      *  is undefined.
      */
     short StepCount;
+
+    /** specifies list of gradient stops characterized by the gradient colors
+     *  and their relative positions in the color band.
+     */
+    sequence< com::sun::star::awt::GradientStop> GradStops;
 
 };
 

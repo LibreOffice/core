@@ -22,7 +22,8 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
-
+#include <vector>
+#include <tuple>
 
 // predefines
 
@@ -75,7 +76,19 @@ namespace drawinglayer
                 double fAngle,
                 const basegfx::BColor& rStartColor,
                 const basegfx::BColor& rEndColor,
+                sal_uInt16 nSteps,
+                std::vector< std::tuple< double,basegfx::BColor > > aGradStops);
+
+            FillGradientAttribute(
+                GradientStyle eStyle,
+                double fBorder,
+                double fOffsetX,
+                double fOffsetY,
+                double fAngle,
+                const basegfx::BColor& rStartColor,
+                const basegfx::BColor& rEndColor,
                 sal_uInt16 nSteps);
+
             FillGradientAttribute();
             FillGradientAttribute(const FillGradientAttribute& rCandidate);
             FillGradientAttribute& operator=(const FillGradientAttribute& rCandidate);
@@ -96,6 +109,7 @@ namespace drawinglayer
             const basegfx::BColor& getStartColor() const;
             const basegfx::BColor& getEndColor() const;
             sal_uInt16 getSteps() const;
+            std::vector< std::tuple< double,basegfx::BColor > > getGradStops() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

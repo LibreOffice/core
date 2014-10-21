@@ -39,6 +39,29 @@ namespace drawinglayer
             basegfx::BColor                         maStartColor;
             basegfx::BColor                         maEndColor;
             sal_uInt16                              mnSteps;
+            std::vector< std::tuple< double,basegfx::BColor > > maGradStops;
+
+            ImpFillGradientAttribute(
+                GradientStyle eStyle,
+                double fBorder,
+                double fOffsetX,
+                double fOffsetY,
+                double fAngle,
+                const basegfx::BColor& rStartColor,
+                const basegfx::BColor& rEndColor,
+                sal_uInt16 nSteps,
+                std::vector< std::tuple< double,basegfx::BColor > > aGradStops)
+            :   meStyle(eStyle),
+                mfBorder(fBorder),
+                mfOffsetX(fOffsetX),
+                mfOffsetY(fOffsetY),
+                mfAngle(fAngle),
+                maStartColor(rStartColor),
+                maEndColor(rEndColor),
+                mnSteps(nSteps),
+                maGradStops(aGradStops)
+            {
+            }
 
             ImpFillGradientAttribute(
                 GradientStyle eStyle,
@@ -56,7 +79,8 @@ namespace drawinglayer
                 mfAngle(fAngle),
                 maStartColor(rStartColor),
                 maEndColor(rEndColor),
-                mnSteps(nSteps)
+                mnSteps(nSteps),
+                maGradStops(std::vector< std::tuple< double,basegfx::BColor > >())
             {
             }
 
@@ -68,7 +92,8 @@ namespace drawinglayer
                 mfAngle(0.0),
                 maStartColor(basegfx::BColor()),
                 maEndColor(basegfx::BColor()),
-                mnSteps(0)
+                mnSteps(0),
+                maGradStops(std::vector< std::tuple< double,basegfx::BColor > >())
             {
             }
 
@@ -81,6 +106,7 @@ namespace drawinglayer
             const basegfx::BColor& getStartColor() const { return maStartColor; }
             const basegfx::BColor& getEndColor() const { return maEndColor; }
             sal_uInt16 getSteps() const { return mnSteps; }
+            std::vector< std::tuple< double,basegfx::BColor > > getGradStops() const { return maGradStops; }
 
             bool operator==(const ImpFillGradientAttribute& rCandidate) const
             {
@@ -91,7 +117,8 @@ namespace drawinglayer
                     && getAngle() == rCandidate.getAngle()
                     && getStartColor() == rCandidate.getStartColor()
                     && getEndColor() == rCandidate.getEndColor()
-                    && getSteps() == rCandidate.getSteps());
+                    && getSteps() == rCandidate.getSteps()
+                    && getGradStops() == rCandidate.getGradStops());
             }
         };
 
@@ -112,6 +139,21 @@ namespace drawinglayer
             sal_uInt16 nSteps)
         :   mpFillGradientAttribute(ImpFillGradientAttribute(
                 eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, nSteps))
+        {
+        }
+
+        FillGradientAttribute::FillGradientAttribute(
+            GradientStyle eStyle,
+            double fBorder,
+            double fOffsetX,
+            double fOffsetY,
+            double fAngle,
+            const basegfx::BColor& rStartColor,
+            const basegfx::BColor& rEndColor,
+            sal_uInt16 nSteps,
+            std::vector< std::tuple< double,basegfx::BColor > > aGradStops)
+        :   mpFillGradientAttribute(ImpFillGradientAttribute(
+                eStyle, fBorder, fOffsetX, fOffsetY, fAngle, rStartColor, rEndColor, nSteps, aGradStops))
         {
         }
 
@@ -183,6 +225,11 @@ namespace drawinglayer
         sal_uInt16 FillGradientAttribute::getSteps() const
         {
             return mpFillGradientAttribute->getSteps();
+        }
+
+        std::vector< std::tuple< double,basegfx::BColor > > FillGradientAttribute::getGradStops() const
+        {
+            return mpFillGradientAttribute->getGradStops();
         }
 
     } // end of namespace attribute

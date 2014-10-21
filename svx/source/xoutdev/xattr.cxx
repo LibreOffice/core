@@ -2298,7 +2298,8 @@ XGradient::XGradient() :
     nOfsY( 50 ),
     nIntensStart( 100 ),
     nIntensEnd( 100 ),
-    nStepCount( 0 )
+    nStepCount( 0 ),
+    aGradStops(std::vector< std::tuple< double, Color > >())
 {
 }
 
@@ -2306,7 +2307,8 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
                      XGradientStyle eTheStyle, long nTheAngle, sal_uInt16 nXOfs,
                      sal_uInt16 nYOfs, sal_uInt16 nTheBorder,
                      sal_uInt16 nStartIntens, sal_uInt16 nEndIntens,
-                     sal_uInt16 nSteps) :
+                     sal_uInt16 nSteps,
+                     std::vector< std::tuple< double, Color > > aGradientStops) :
     eStyle(eTheStyle),
     aStartColor(rStart),
     aEndColor(rEnd),
@@ -2316,7 +2318,8 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
     nOfsY(nYOfs),
     nIntensStart(nStartIntens),
     nIntensEnd(nEndIntens),
-    nStepCount(nSteps)
+    nStepCount(nSteps),
+    aGradStops(aGradientStops)
 {
 }
 
@@ -2331,7 +2334,8 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nOfsY          == rGradient.nOfsY          &&
              nIntensStart   == rGradient.nIntensStart   &&
              nIntensEnd     == rGradient.nIntensEnd     &&
-             nStepCount     == rGradient.nStepCount );
+             nStepCount     == rGradient.nStepCount     &&
+             aGradStops     == rGradient.aGradStops );
 }
 
 TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
@@ -2595,6 +2599,13 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
                     aXGradient.SetEndIntens( aGradient2.EndIntensity );
                     aXGradient.SetSteps( aGradient2.StepCount );
 
+                    std::vector< std::tuple< double, Color > > aGradStops;
+                    for(int i=0; i < aGradient2.GradStops.getLength() ; i++ )
+                    {
+                        aGradStops.push_back(std::make_tuple(aGradient2.GradStops[i].StopPosition,aGradient2.GradStops[i].StopColor));
+                    }
+                    aXGradient.SetGradStops(aGradStops);
+
                     SetGradientValue( aXGradient );
                 }
 
@@ -2631,6 +2642,13 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
             aXGradient.SetStartIntens( aGradient2.StartIntensity );
             aXGradient.SetEndIntens( aGradient2.EndIntensity );
             aXGradient.SetSteps( aGradient2.StepCount );
+
+            std::vector< std::tuple< double, Color > > aGradStops;
+            for(int i=0; i < aGradient2.GradStops.getLength() ; i++ )
+            {
+                aGradStops.push_back(std::make_tuple(aGradient2.GradStops[i].StopPosition,aGradient2.GradStops[i].StopColor));
+            }
+            aXGradient.SetGradStops(aGradStops);
 
             SetGradientValue( aXGradient );
             break;

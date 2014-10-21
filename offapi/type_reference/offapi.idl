@@ -383,6 +383,10 @@ module com {
      SQUARE = 4,
      RECT = 5
     };
+    published struct GradientStop {
+     short StopPosition;
+     com::sun::star::util::Color StopColor;
+    };
     published struct Gradient {
      ::com::sun::star::awt::GradientStyle Style;
      ::com::sun::star::util::Color StartColor;
@@ -394,6 +398,7 @@ module com {
      short StartIntensity;
      short EndIntensity;
      short StepCount;
+     sequence< com::sun::star::awt::GradientStop> GradStops;
     };
     published constants ImageAlign {
      const short BOTTOM = 3;
