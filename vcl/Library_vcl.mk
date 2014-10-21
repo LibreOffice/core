@@ -273,6 +273,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/region \
     vcl/source/gdi/regionband \
     vcl/source/gdi/salgdilayout \
+    vcl/source/gdi/salgdiimpl \
     vcl/source/gdi/sallayout \
     vcl/source/gdi/salmisc \
     vcl/source/gdi/salnativewidgets-none \
