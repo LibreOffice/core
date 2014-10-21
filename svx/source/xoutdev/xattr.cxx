@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svl/itempool.hxx>
@@ -2298,7 +2298,8 @@ XGradient::XGradient() :
     nOfsY( 50 ),
     nIntensStart( 100 ),
     nIntensEnd( 100 ),
-    nStepCount( 0 )
+    nStepCount( 0 ),
+    aGradientStops(std::vector< std::tuple< double, Color > >())
 {
 }
 
@@ -2306,7 +2307,8 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
                      XGradientStyle eTheStyle, long nTheAngle, sal_uInt16 nXOfs,
                      sal_uInt16 nYOfs, sal_uInt16 nTheBorder,
                      sal_uInt16 nStartIntens, sal_uInt16 nEndIntens,
-                     sal_uInt16 nSteps) :
+                     sal_uInt16 nSteps,
+                     std::vector< std::tuple< double, Color > > aGradientStops) :
     eStyle(eTheStyle),
     aStartColor(rStart),
     aEndColor(rEnd),
@@ -2316,7 +2318,8 @@ XGradient::XGradient(const Color& rStart, const Color& rEnd,
     nOfsY(nYOfs),
     nIntensStart(nStartIntens),
     nIntensEnd(nEndIntens),
-    nStepCount(nSteps)
+    nStepCount(nSteps),
+    aGradientStops(aGradientStops)
 {
 }
 
@@ -2331,7 +2334,8 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nOfsY          == rGradient.nOfsY          &&
              nIntensStart   == rGradient.nIntensStart   &&
              nIntensEnd     == rGradient.nIntensEnd     &&
-             nStepCount     == rGradient.nStepCount );
+             nStepCount     == rGradient.nStepCount     &&
+             aGradientStops     == rGradient.aGradientStops );
 }
 
 TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
@@ -2486,7 +2490,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
         {
             uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
 
-            ::com::sun::star::awt::Gradient aGradient2;
+            ::com::sun::star::awt::Gradient2 aGradient2;
 
             const XGradient& aXGradient = GetGradientValue();
             aGradient2.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
@@ -2512,7 +2516,7 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
         case MID_FILLGRADIENT:
         {
             const XGradient& aXGradient = GetGradientValue();
-            ::com::sun::star::awt::Gradient aGradient2;
+            ::com::sun::star::awt::Gradient2 aGradient2;
 
             aGradient2.Style = (::com::sun::star::awt::GradientStyle) aXGradient.GetGradientStyle();
             aGradient2.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
@@ -2562,7 +2566,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
         case 0:
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
-            ::com::sun::star::awt::Gradient         aGradient2;
+            ::com::sun::star::awt::Gradient2         aGradient2;
             OUString                           aName;
             bool                                    bGradient( false );
 
@@ -2595,6 +2599,13 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
                     aXGradient.SetEndIntens( aGradient2.EndIntensity );
                     aXGradient.SetSteps( aGradient2.StepCount );
 
+                    std::vector< std::tuple< double, Color > > aGradStops;
+                    for(int i=0; i < aGradient2.GradientStops.getLength() ; i++ )
+                    {
+                        aGradStops.push_back(std::make_tuple(aGradient2.GradientStops[i].RelativePosition,aGradient2.GradientStops[i].nColor));
+                    }
+                    aXGradient.SetGradientStops(aGradStops);
+
                     SetGradientValue( aXGradient );
                 }
 
@@ -2615,7 +2626,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
 
         case MID_FILLGRADIENT:
         {
-            ::com::sun::star::awt::Gradient aGradient2;
+            ::com::sun::star::awt::Gradient2 aGradient2;
             if(!(rVal >>= aGradient2))
                 return false;
 
@@ -2631,6 +2642,13 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
             aXGradient.SetStartIntens( aGradient2.StartIntensity );
             aXGradient.SetEndIntens( aGradient2.EndIntensity );
             aXGradient.SetSteps( aGradient2.StepCount );
+
+            std::vector< std::tuple< double, Color > > aGradStops;
+            for(int i=0; i < aGradient2.GradientStops.getLength() ; i++ )
+            {
+                aGradStops.push_back(std::make_tuple(aGradient2.GradientStops[i].RelativePosition,aGradient2.GradientStops[i].nColor));
+            }
+            aXGradient.SetGradientStops(aGradStops);
 
             SetGradientValue( aXGradient );
             break;
