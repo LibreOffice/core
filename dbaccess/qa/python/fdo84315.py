@@ -66,6 +66,7 @@ class Fdo84315(unittest.TestCase):
         while xResultset.next():
             self.assertEqual(xResultset.getInt(1), expected_values.popleft())
         self.assertEqual(len(expected_values), 0)
+        xCon.dispose()
 
 if __name__ == '__main__':
     unittest.main()
