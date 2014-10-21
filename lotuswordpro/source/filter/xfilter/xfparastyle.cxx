@@ -305,7 +305,7 @@ bool    XFParaStyle::Equal(IXFStyle *pStyle)
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStylePara )
         return false;
 
-    XFParaStyle *pOther = (XFParaStyle*)(pStyle);
+    XFParaStyle *pOther = static_cast<XFParaStyle*>(pStyle);
 
     if( m_nFlag != pOther->m_nFlag )
         return false;

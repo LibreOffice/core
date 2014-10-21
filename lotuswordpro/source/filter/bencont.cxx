@@ -125,7 +125,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
     {
         if (! pNamedObject->IsPropertyName())
             return BenErr_NameConflict;
-        else *ppPropertyName = (pCBenPropertyName) pNamedObject;
+        else *ppPropertyName = static_cast<pCBenPropertyName>(pNamedObject);
     }
     else
     {
@@ -134,7 +134,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
             return BenErr_DuplicateObjectID;
 
         *ppPropertyName = new CBenPropertyName(this, cNextAvailObjectID,
-          (pCBenObject) pPrevObject, sPropertyName, pPrevNamedObjectListElmt);
+          static_cast<pCBenObject>(pPrevObject), sPropertyName, pPrevNamedObjectListElmt);
         ++cNextAvailObjectID;
     }
 
@@ -144,7 +144,7 @@ LtcBenContainer::RegisterPropertyName(const char * sPropertyName,
 pCBenObject
 LtcBenContainer::GetNextObject(pCBenObject pCurrObject)
 {
-    return (pCBenObject) cObjects.GetNextOrNULL(pCurrObject);
+    return static_cast<pCBenObject>(cObjects.GetNextOrNULL(pCurrObject));
 }
 
 pCBenObject

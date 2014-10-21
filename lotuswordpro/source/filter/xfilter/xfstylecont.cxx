@@ -217,7 +217,7 @@ void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
 
     if( pStyle->GetStyleFamily() == enumXFStyleText )
     {
-        XFTextStyle *pTS = (XFTextStyle*)pStyle;
+        XFTextStyle *pTS = static_cast<XFTextStyle*>(pStyle);
         pStyleFont = pTS->GetFont();
         if( !pStyleFont.is() )
             return;
@@ -236,7 +236,7 @@ void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStylePara )
     {
-        XFParaStyle *pPS = (XFParaStyle*)pStyle;
+        XFParaStyle *pPS = static_cast<XFParaStyle*>(pStyle);
         pStyleFont = pPS->GetFont();
         if( !pStyleFont.is() )
             return;

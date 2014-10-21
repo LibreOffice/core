@@ -167,12 +167,12 @@ bool LwpFormulaInfo::ReadCellRange()
     bool readSucceeded = true;
     if (!ReadCellID( )) // start
         readSucceeded = false;
-    LwpFormulaCellAddr* pStartCellAddr = (LwpFormulaCellAddr*)m_aStack.back();
+    LwpFormulaCellAddr* pStartCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
     m_aStack.pop_back();
 
     if (!ReadCellID()) // end
         readSucceeded = false;
-    LwpFormulaCellAddr* pEndCellAddr = (LwpFormulaCellAddr*)m_aStack.back();
+    LwpFormulaCellAddr* pEndCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
     m_aStack.pop_back();
 
     m_aStack.push_back( new LwpFormulaCellRangeAddr(pStartCellAddr->GetCol(),
@@ -368,7 +368,7 @@ void LwpFormulaInfo::Read()
 {
     LwpCellList::Read();
     {
-        LwpRowList* pRowList =(LwpRowList*)cParent.obj().get();
+        LwpRowList* pRowList = static_cast<LwpRowList*>(cParent.obj().get());
         if (pRowList)
         {
             m_nFormulaRow = pRowList->GetRowID();

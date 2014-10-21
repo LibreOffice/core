@@ -66,7 +66,7 @@ FindNamedObject(pCUtList pList, const char * sName,
       pCurr = pCurr->GetPrev())
     {
         pCBenNamedObjectListElmt pCurrNamedObjectListElmt =
-          (pCBenNamedObjectListElmt) pCurr;
+          static_cast<pCBenNamedObjectListElmt>(pCurr);
 
         int Comp = strcmp(sName, pCurrNamedObjectListElmt->GetNamedObject()->
           GetNameCStr());
@@ -96,7 +96,7 @@ FindID(pCUtList pList, BenObjectID ObjectID, pCUtListElmt * ppPrev)
     for (pCUtListElmt pCurr = pList->GetLast(); pCurr != &rTerminating;
       pCurr = pCurr->GetPrev())
     {
-        pCBenIDListElmt pCurrIDListElmt = (pCBenIDListElmt) pCurr;
+        pCBenIDListElmt pCurrIDListElmt = static_cast<pCBenIDListElmt>(pCurr);
 
         if (ObjectID == pCurrIDListElmt->GetID())
             return pCurrIDListElmt;

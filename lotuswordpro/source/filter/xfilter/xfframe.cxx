@@ -97,7 +97,7 @@ void    XFFrame::Add(XFContent *pContent)
     XFContentContainer::Add(pContent);
     if( pContent->GetContentType() == enumXFContentFrame )
     {
-        XFFrame *pFrame = (XFFrame*)pContent;
+        XFFrame *pFrame = static_cast<XFFrame*>(pContent);
         if( pFrame )
         {
             pFrame->SetZIndex(pFrame->m_nZIndex + 1);
@@ -199,7 +199,7 @@ void    XFFrame::AdjustZIndex()
         {
             if( pContent->GetContentType() == enumXFContentFrame )
             {
-                XFFrame *pFrame = (XFFrame*)pContent.get();
+                XFFrame *pFrame = static_cast<XFFrame*>(pContent.get());
                 pFrame->m_nZIndex = m_nZIndex + 1;
                 pFrame->AdjustZIndex();
             }

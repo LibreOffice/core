@@ -375,8 +375,8 @@ LwpEnSuperTableLayout* LwpFootnote::FindFootnoteTableLayout()
             pContent->IsActive() && pContent->GetLayout(NULL))
         {
             // Found it!
-            return (LwpEnSuperTableLayout *)
-                ((LwpTable*)pContent)->GetSuperTableLayout();
+            return static_cast<LwpEnSuperTableLayout *>(
+                static_cast<LwpTable*>(pContent)->GetSuperTableLayout());
         }
 
     return NULL;

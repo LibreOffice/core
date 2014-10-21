@@ -1108,9 +1108,9 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 
     try{
 
-        LwpDLVListHeadHolder* pHolder = (LwpDLVListHeadHolder*)pFoundry->GetNumberManager().GetTableRangeID().obj().get();
+        LwpDLVListHeadHolder* pHolder = static_cast<LwpDLVListHeadHolder*>(pFoundry->GetNumberManager().GetTableRangeID().obj().get());
 
-        LwpTableRange* pTableRange = (LwpTableRange*)pHolder->GetHeadID().obj().get();
+        LwpTableRange* pTableRange = static_cast<LwpTableRange*>(pHolder->GetHeadID().obj().get());
 
         //Look up the table
         while (NULL!=pTableRange)
@@ -1125,17 +1125,17 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
 
         if (pTableRange)
         {
-            LwpCellRange* pRange = (LwpCellRange*)pTableRange->GetCellRangeID().obj().get();
-            LwpFolder* pFolder = (LwpFolder*)pRange->GetFolderID().obj().get();
+            LwpCellRange* pRange = static_cast<LwpCellRange*>(pTableRange->GetCellRangeID().obj().get());
+            LwpFolder* pFolder = static_cast<LwpFolder*>(pRange->GetFolderID().obj().get());
             LwpObjectID aRowListID = pFolder->GetChildHeadID();
-            LwpRowList* pRowList = (LwpRowList*)aRowListID.obj().get();
+            LwpRowList* pRowList = static_cast<LwpRowList*>(aRowListID.obj().get());
 
             //loop the rowlist
             while( NULL!=pRowList)
             {
                 sal_uInt16 nRowID =  pRowList->GetRowID();
                 {
-                    LwpCellList* pCellList = (LwpCellList*)pRowList->GetChildHeadID().obj().get();
+                    LwpCellList* pCellList = static_cast<LwpCellList*>(pRowList->GetChildHeadID().obj().get());
                     //loop the celllist
                     while( NULL!=pCellList)
                     {
@@ -1156,10 +1156,10 @@ void LwpTableLayout::PutCellVals(LwpFoundry* pFoundry, LwpObjectID aTableID)
                                 assert(false);
                             }
                         }
-                        pCellList = (LwpCellList*)pCellList->GetNextID().obj().get();
+                        pCellList = static_cast<LwpCellList*>(pCellList->GetNextID().obj().get());
                     }
                 }
-                pRowList =(LwpRowList*)pRowList->GetNextID().obj().get();
+                pRowList = static_cast<LwpRowList*>(pRowList->GetNextID().obj().get());
             }
         }
 
@@ -1195,7 +1195,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
             if (!sNumfmt.isEmpty())
             {
-                pNumStyle = (XFNumberStyle*)pXFStyleManager->FindStyle( sNumfmt);
+                pNumStyle = static_cast<XFNumberStyle*>(pXFStyleManager->FindStyle( sNumfmt));
                 XFColor aColor = pNumStyle->GetColor();
                 if ( aColor != aNullColor )
                     bColorMod = true;//end

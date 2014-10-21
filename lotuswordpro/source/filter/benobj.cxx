@@ -67,7 +67,7 @@ pCBenProperty
 CBenObject::UseProperty(BenObjectID PropertyID)
 {
     pCUtListElmt pPrev;
-    return (pCBenProperty) FindID(&cProperties, PropertyID, &pPrev);
+    return static_cast<pCBenProperty>( FindID(&cProperties, PropertyID, &pPrev) );
 }
 
 pCBenValue

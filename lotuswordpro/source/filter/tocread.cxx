@@ -295,8 +295,8 @@ CBenTOCReader::ReadTOC()
                         return BenErr_DuplicateName;
                     }
 
-                    pCBenObject pPrevObject = (pCBenObject) cpContainer->
-                      GetObjects().GetLast();
+                    pCBenObject pPrevObject = static_cast<pCBenObject>( cpContainer->
+                      GetObjects().GetLast());
 
                     if (PropertyID == BEN_PROPID_GLOBAL_PROPERTY_NAME)
                         pObject = new CBenPropertyName(cpContainer, ObjectID,

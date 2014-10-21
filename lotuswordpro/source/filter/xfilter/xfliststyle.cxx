@@ -163,7 +163,7 @@ XFListStyle::XFListStyle()
         m_pListLevels[i]->SetMinLabelWidth(0.499);
         m_pListLevels[i]->SetIndent(0.501*(i+1));
         m_pListLevels[i]->SetLevel(i+1);
-        ( (XFListlevelNumber*)m_pListLevels[i])->SetNumFmt(nf);
+        static_cast<XFListlevelNumber*>(m_pListLevels[i])->SetNumFmt(nf);
     }
 }
 
@@ -175,12 +175,12 @@ XFListStyle::XFListStyle(const XFListStyle& other):XFStyle(other)
         type = other.m_pListLevels[i]->m_eListType;
         if( type == enumXFListLevelNumber )
         {
-            XFListlevelNumber *pNum = (XFListlevelNumber*)other.m_pListLevels[i];
+            XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(other.m_pListLevels[i]);
             m_pListLevels[i] = new XFListlevelNumber(*pNum);
         }
         else if( type == enumXFListLevelBullet )
         {
-            XFListLevelBullet *pBullet = (XFListLevelBullet*)other.m_pListLevels[i];
+            XFListLevelBullet *pBullet = static_cast<XFListLevelBullet*>(other.m_pListLevels[i]);
             m_pListLevels[i] = new XFListLevelBullet(*pBullet);
         }
         else
@@ -196,12 +196,12 @@ XFListStyle& XFListStyle::operator=(const XFListStyle& other)
         type = other.m_pListLevels[i]->m_eListType;
         if( type == enumXFListLevelNumber )
         {
-            XFListlevelNumber *pNum = (XFListlevelNumber*)m_pListLevels[i];
+            XFListlevelNumber *pNum = static_cast<XFListlevelNumber*>(m_pListLevels[i]);
             m_pListLevels[i] = new XFListlevelNumber(*pNum);
         }
         else if( type == enumXFListLevelBullet )
         {
-            XFListLevelBullet *pBullet = (XFListLevelBullet*)m_pListLevels[i];
+            XFListLevelBullet *pBullet = static_cast<XFListLevelBullet*>(m_pListLevels[i]);
             m_pListLevels[i] = new XFListLevelBullet(*pBullet);
         }
         else
