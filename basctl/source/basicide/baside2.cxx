@@ -341,7 +341,7 @@ bool ModulWindow::BasicExecute()
             // first Macro, else blind "Main" (ExtSearch?)
             for ( sal_uInt16 nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
             {
-                SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
+                SbMethod* pM = static_cast<SbMethod*>(xModule->GetMethods()->Get( nMacro ));
                 DBG_ASSERT( pM, "Method?" );
                 pM->GetLineRange( nStart, nEnd );
                 if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
@@ -544,7 +544,7 @@ bool ModulWindow::ToggleBreakPoint( sal_uLong nLine )
                 {
                     for ( sal_uInt16 nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
                     {
-                        SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( nMethod );
+                        SbMethod* pMethod = static_cast<SbMethod*>(xModule->GetMethods()->Get( nMethod ));
                         DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
                         pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
                     }
@@ -744,7 +744,7 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
         if ( !aStatus.bError )
         {
             sal_uInt16 nStart, nEnd;
-            SbMethod* pMethod = (SbMethod*)xModule->Find( rMacroName, SbxCLASS_METHOD );
+            SbMethod* pMethod = static_cast<SbMethod*>(xModule->Find( rMacroName, SbxCLASS_METHOD ));
             if ( pMethod )
             {
                 pMethod->GetLineRange( nStart, nEnd );
@@ -1311,7 +1311,7 @@ void ModulWindow::BasicStarted()
             rList.SetBreakPointsInBasic( xModule );
             for ( sal_uInt16 nMethod = 0; nMethod < xModule->GetMethods()->Count(); nMethod++ )
             {
-                SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( nMethod );
+                SbMethod* pMethod = static_cast<SbMethod*>(xModule->GetMethods()->Get( nMethod ));
                 DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
                 pMethod->SetDebugFlags( pMethod->GetDebugFlags() | SbDEBUG_BREAK );
             }

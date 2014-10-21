@@ -404,7 +404,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
         sal_uInt16 nRealCount = nCount;
         for ( sal_uInt16 i = 0; i < nCount; i++ )
         {
-            SbMethod* pMethod = (SbMethod*)pMod->GetMethods()->Get( i );
+            SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get( i ));
             if( pMethod->IsHidden() )
                 --nRealCount;
         }
@@ -413,7 +413,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
         sal_uInt16 iTarget = 0;
         for ( sal_uInt16 i = 0 ; i < nCount; ++i )
         {
-            SbMethod* pMethod = (SbMethod*)pMod->GetMethods()->Get( i );
+            SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get( i ));
             if( pMethod->IsHidden() )
                 continue;
             SAL_WARN_IF( !pMethod, "basctl.basicide","Method not found! (NULL)" );
@@ -452,7 +452,7 @@ bool HasMethod (
         SbxArray* pMethods = pMod->GetMethods();
         if ( pMethods )
         {
-            SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
+            SbMethod* pMethod = static_cast<SbMethod*>(pMethods->Find( rMethName, SbxCLASS_METHOD ));
             if ( pMethod && !pMethod->IsHidden() )
                 bHasMethod = true;
         }

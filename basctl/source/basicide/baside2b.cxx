@@ -2653,16 +2653,16 @@ void CodeCompleteListBox::InsertSelectedEntry()
         GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
         GetParentEditView()->DeleteSelected();
 
-        if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
+        if( !GetEntry( GetSelectEntryPos() ).isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), false );
+            GetParentEditView()->InsertText( GetEntry(GetSelectEntryPos()), false );
         }
     }
     else
     {
-        if( !((OUString) GetEntry( GetSelectEntryPos() )).isEmpty() )
+        if( !GetEntry( GetSelectEntryPos() ).isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( (OUString) GetEntry(GetSelectEntryPos()), false );
+            GetParentEditView()->InsertText( GetEntry(GetSelectEntryPos()), false );
         }
     }
     HideAndRestoreFocus();
@@ -2672,7 +2672,7 @@ void CodeCompleteListBox::SetMatchingEntries()
 {
     for(sal_uInt16 i=0; i< GetEntryCount(); ++i)
     {
-        OUString sEntry = (OUString) GetEntry(i);
+        OUString sEntry = GetEntry(i);
         if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() ) )
         {
             SelectEntry(sEntry);
@@ -2729,7 +2729,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                             nInd = 0;
                         for( sal_Int32 i = nInd; i != GetEntryCount(); ++i )
                         {
-                            OUString sEntry = (OUString) GetEntry(i);
+                            OUString sEntry = GetEntry(i);
                             if( sEntry.startsWithIgnoreAsciiCase( aFuncBuffer.toString() )
                                 && (aFuncBuffer.toString() != sTypedText) && (i != nInd) )
                             {
@@ -2758,7 +2758,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                     TextSelection aSel( GetParentEditView()->GetSelection() );
                     TextPaM aEnd( GetParentEditView()->CursorEndOfLine(pCodeCompleteWindow->GetTextSelection().GetEnd()) );
                     GetParentEditView()->SetSelection(TextSelection(pCodeCompleteWindow->GetTextSelection().GetStart(), aEnd ) );
-                    OUString aTabInsertedStr( ((OUString)GetParentEditView()->GetSelected()) );
+                    OUString aTabInsertedStr( GetParentEditView()->GetSelected() );
                     GetParentEditView()->SetSelection( aSel );
 
                     if( !aTabInsertedStr.isEmpty() && aTabInsertedStr != aFuncBuffer.toString() )
@@ -2836,7 +2836,7 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
         OUString aLongestEntry = pListBox->GetEntry( 0 );// grab the longest one: max search
         for( sal_Int32 i=1; i< pListBox->GetEntryCount(); ++i )
         {
-            if( ((OUString) pListBox->GetEntry( i )).getLength() > aLongestEntry.getLength() )
+            if( pListBox->GetEntry( i ).getLength() > aLongestEntry.getLength() )
                 aLongestEntry = pListBox->GetEntry( i );
         }
         // get column/line count

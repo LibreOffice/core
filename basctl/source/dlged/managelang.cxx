@@ -291,7 +291,7 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
         {
             if ( m_pCheckLangLB->IsChecked(i) )
             {
-                LanguageType eType = LanguageType( (sal_uLong)m_pCheckLangLB->GetEntryData(i) );
+                LanguageType eType = LanguageType( reinterpret_cast<sal_uLong>(m_pCheckLangLB->GetEntryData(i)) );
                 aLocaleSeq[j++] = LanguageTag::convertToLocale( eType );
             }
         }

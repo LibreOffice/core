@@ -358,7 +358,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     pDlgEdForm = new DlgEdForm(*this);
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel , uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
-    ((DlgEdPage*)pDlgEdModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
+    static_cast<DlgEdPage*>(pDlgEdModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
     pDlgEdModel->GetPage(0)->InsertObject( pDlgEdForm );
     AdjustPageSize();
     pDlgEdForm->SetRectFromProps();
@@ -418,7 +418,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
 void DlgEditor::ResetDialog ()
 {
     DlgEdForm* pOldDlgEdForm = pDlgEdForm;
-    DlgEdPage* pPage = (DlgEdPage*)pDlgEdModel->GetPage(0);
+    DlgEdPage* pPage = static_cast<DlgEdPage*>(pDlgEdModel->GetPage(0));
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
     bool bWasMarked = pDlgEdView->IsObjMarked( pOldDlgEdForm );
     pDlgEdView->UnmarkAll();

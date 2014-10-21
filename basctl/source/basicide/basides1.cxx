@@ -262,7 +262,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         {
             if ( rReq.GetArgs() )
             {
-                const SfxUInt16Item &rTabId = (const SfxUInt16Item&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID );
+                const SfxUInt16Item &rTabId = static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID ));
                 Organize( rTabId.GetValue() );
             }
             else
@@ -278,7 +278,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_EDITMACRO:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SfxMacroInfoItem& rInfo = (const SfxMacroInfoItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO );
+            const SfxMacroInfoItem& rInfo = static_cast<const SfxMacroInfoItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO ));
             BasicManager* pBasMgr = (BasicManager*)rInfo.GetBasicManager();
             DBG_ASSERT( pBasMgr, "Nichts selektiert im Basic-Baum ?" );
 
@@ -316,7 +316,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                             pModule = pBasic->FindModule( aModName );
                     }
                     else
-                        pModule = (SbModule*) pBasic->GetModules()->Get(0);
+                        pModule = static_cast<SbModule*>( pBasic->GetModules()->Get(0) );
                 }
                 DBG_ASSERT( pModule, "Kein Modul!" );
                 if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxCLASS_METHOD ) )
@@ -345,8 +345,8 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_NAMECHANGEDONTAB:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SfxUInt16Item &rTabId = (const SfxUInt16Item&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID );
-            const SfxStringItem &rModName = (const SfxStringItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_MODULENAME );
+            const SfxUInt16Item &rTabId = static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID ));
+            const SfxStringItem &rModName = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_MODULENAME ));
             if ( aWindowTable.find( rTabId.GetValue() ) !=  aWindowTable.end() )
             {
                 BaseWindow* pWin = aWindowTable[ rTabId.GetValue() ];
@@ -397,7 +397,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_UPDATEMODULESOURCE:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SfxMacroInfoItem& rInfo = (const SfxMacroInfoItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO );
+            const SfxMacroInfoItem& rInfo = static_cast<const SfxMacroInfoItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_MACROINFO ));
             BasicManager* pBasMgr = (BasicManager*)rInfo.GetBasicManager();
             DBG_ASSERT( pBasMgr, "Store source: Kein BasMgr?" );
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
@@ -432,10 +432,10 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_LIBLOADED:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SfxUsrAnyItem& rShellItem = (const SfxUsrAnyItem&)rReq.GetArgs()->Get( SID_BASICIDE_ARG_DOCUMENT_MODEL );
+            const SfxUsrAnyItem& rShellItem = static_cast<const SfxUsrAnyItem&>(rReq.GetArgs()->Get( SID_BASICIDE_ARG_DOCUMENT_MODEL ));
             uno::Reference< frame::XModel > xModel( rShellItem.GetValue(), UNO_QUERY );
             ScriptDocument aDocument( xModel.is() ? ScriptDocument( xModel ) : ScriptDocument::getApplicationScriptDocument() );
-            const SfxStringItem& rLibNameItem = (const SfxStringItem&)rReq.GetArgs()->Get( SID_BASICIDE_ARG_LIBNAME );
+            const SfxStringItem& rLibNameItem = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get( SID_BASICIDE_ARG_LIBNAME ));
             OUString aLibName( rLibNameItem.GetValue() );
 
             if ( nSlot == SID_BASICIDE_LIBSELECTED )
@@ -509,7 +509,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_SBXINSERTED:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
+            const SbxItem& rSbxItem = static_cast<const SbxItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX ));
             ScriptDocument aDocument( rSbxItem.GetDocument() );
             OUString aLibName( rSbxItem.GetLibName() );
             OUString aName( rSbxItem.GetName() );
@@ -525,7 +525,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_SBXDELETED:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
+            const SbxItem& rSbxItem = static_cast<const SbxItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX ));
             ScriptDocument aDocument( rSbxItem.GetDocument() );
             BaseWindow* pWin = FindWindow( aDocument, rSbxItem.GetLibName(), rSbxItem.GetName(), rSbxItem.GetType(), true );
             if ( pWin )
@@ -535,7 +535,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_SHOWSBX:
         {
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
-            const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
+            const SbxItem& rSbxItem = static_cast<const SbxItem&>(rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX ));
             ScriptDocument aDocument( rSbxItem.GetDocument() );
             OUString aLibName( rSbxItem.GetLibName() );
             OUString aName( rSbxItem.GetName() );

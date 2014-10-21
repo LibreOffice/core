@@ -970,7 +970,7 @@ bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 void DlgEdObj::SetDefaults()
 {
     // set parent form
-    pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEdForm();
+    pDlgEdForm = static_cast<DlgEdPage*>(GetPage())->GetDlgEdForm();
 
     if ( pDlgEdForm )
     {

@@ -141,7 +141,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
         }
     }
 
-    SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD );
+    SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ));
 
     if( pDispatcher )
     {
@@ -237,7 +237,7 @@ StarBASIC* FindBasic( const SbxVariable* pVar )
     SbxVariable const* pSbx = pVar;
     while (pSbx && !dynamic_cast<StarBASIC const*>(pSbx))
         pSbx = pSbx->GetParent();
-    return (StarBASIC*)pSbx;
+    return const_cast<StarBASIC*>(static_cast<const StarBASIC*>(pSbx));
 }
 
 BasicManager* FindBasicManager( StarBASIC* pLib )

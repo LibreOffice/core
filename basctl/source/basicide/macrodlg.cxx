@@ -268,7 +268,7 @@ SbMethod* MacroChooser::GetMacro()
         if ( pEntry )
         {
             OUString aMacroName( m_pMacroBox->GetEntryText( pEntry ) );
-            pMethod = (SbMethod*)pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD );
+            pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ));
         }
     }
     return pMethod;
@@ -361,7 +361,7 @@ SbMethod* MacroChooser::CreateMacro()
             pModule = pBasic->FindModule( aModName );
         }
         else if ( pBasic->GetModules()->Count() )
-            pModule = (SbModule*)pBasic->GetModules()->Get( 0 );
+            pModule = static_cast<SbModule*>(pBasic->GetModules()->Get( 0 ));
 
         if ( !pModule )
         {
@@ -513,7 +513,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
         size_t nMacroCount = pModule->GetMethods()->Count();
         for ( size_t iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
-            SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( iMeth );
+            SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Get( iMeth ));
             if( pMethod->IsHidden() )
                 continue;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
@@ -615,7 +615,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         {
             SbMethod* pMethod = GetMacro();
             SbModule* pModule = pMethod ? pMethod->GetModule() : NULL;
-            StarBASIC* pBasic = pModule ? (StarBASIC*)pModule->GetParent() : NULL;
+            StarBASIC* pBasic = pModule ? static_cast<StarBASIC*>(pModule->GetParent()) : NULL;
             BasicManager* pBasMgr = pBasic ? FindBasicManager(pBasic) : NULL;
             if ( pBasMgr )
             {

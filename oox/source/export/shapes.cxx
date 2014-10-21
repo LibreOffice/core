@@ -287,7 +287,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
-    SdrObjCustomShape* pShape = (SdrObjCustomShape*) GetSdrObjectFromXShape( xShape );
+    SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>( GetSdrObjectFromXShape( xShape ) );
     bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
     const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ) );
     DBG(fprintf(stderr, "custom shape type: %s ==> %s\n", USS( sShapeType ), sPresetShape));
@@ -1064,7 +1064,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );
                         if ( pSdrOLE2 && pSdrOLE2->ISA( SdrOle2Obj ) )
                         {
-                            const Graphic* pGraphic = ((SdrOle2Obj*)pSdrOLE2)->GetGraphic();
+                            const Graphic* pGraphic = static_cast<SdrOle2Obj*>(pSdrOLE2)->GetGraphic();
                             if ( pGraphic )
                                 WriteGraphicObjectShapePart( xShape, pGraphic );
                         }

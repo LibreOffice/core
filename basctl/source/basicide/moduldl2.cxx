@@ -254,7 +254,7 @@ void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
         sal_uInt16 nCount = pEntry->ItemCount();
         for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
         {
-            SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
+            SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nCol ));
             LibLBoxString* pStr = new LibLBoxString( pEntry, 0, pCol->GetText() );
             pEntry->ReplaceItem( pStr, nCol );
         }

@@ -483,7 +483,7 @@ void DialogWindow::ExecuteCommand( SfxRequest& rReq )
             const SfxItemSet* pArgs = rReq.GetArgs();
             DBG_ASSERT( pArgs, "Nix Args" );
 
-            const SfxAllEnumItem& rItem = (SfxAllEnumItem&)pArgs->Get( SID_CHOOSE_CONTROLS );
+            const SfxAllEnumItem& rItem = static_cast<const SfxAllEnumItem&>(pArgs->Get( SID_CHOOSE_CONTROLS ));
             switch( rItem.GetValue() )
             {
                 case SVX_SNAP_PUSHBUTTON:

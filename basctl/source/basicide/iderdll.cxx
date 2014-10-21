@@ -181,7 +181,7 @@ ExtraData::~ExtraData ()
 
 void ExtraData::SetSearchItem (const SvxSearchItem& rItem)
 {
-    pSearchItem.reset((SvxSearchItem*)rItem.Clone());
+    pSearchItem.reset(static_cast<SvxSearchItem*>(rItem.Clone()));
 }
 
 IMPL_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic )

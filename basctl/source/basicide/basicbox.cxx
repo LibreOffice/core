@@ -61,7 +61,7 @@ LibBoxControl::~LibBoxControl()
 
 void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    LibBox* pBox = (LibBox*)GetToolBox().GetItemWindow(GetId());
+    LibBox* pBox = static_cast<LibBox*>(GetToolBox().GetItemWindow(GetId()));
 
     DBG_ASSERT( pBox, "Box not found" );
     if ( !pBox )
