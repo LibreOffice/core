@@ -1123,16 +1123,21 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
     //because we neither use character bound frames nor objects which
     //are anchored to character bounds.
 
-    SwFrmFmts aCpy( *pTbl );
+    // Optimization: This code used to make a copy of pTbl and erase() handled items, but using
+    // vector::erase() is a bad idea for performance (especially with large mailmerge documents
+    // it results in extensive repeated copying). Use another vector for marking whether the item
+    // has been handled and operate on the original data without altering them.
+    std::vector< bool > handled( pTbl->size(), false );
+    size_t handledCount = 0;
 
-    sal_uInt16 nOldCnt = USHRT_MAX;
-
-    while ( !aCpy.empty() && aCpy.size() != nOldCnt )
+    while ( handledCount < pTbl->size())
     {
-        nOldCnt = aCpy.size();
-        for ( int i = 0; i < int(aCpy.size()); ++i )
+        bool changed = false;
+        for ( int i = 0; i < int(pTbl->size()); ++i )
         {
-            SwFrmFmt *pFmt = (SwFrmFmt*)aCpy[ sal_uInt16(i) ];
+            if( handled[ i ] )
+                continue;
+            SwFrmFmt *pFmt = (*pTbl)[ i ];
             const SwFmtAnchor &rAnch = pFmt->GetAnchor();
             bool bRemove = false;
             if ((rAnch.GetAnchorId() == FLY_AT_PAGE) ||
@@ -1156,12 +1161,14 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
             }
             if ( bRemove )
             {
-                aCpy.erase( aCpy.begin() + i );
-                --i;
+                handled[ i ] = true;
+                ++handledCount;
+                changed = true;
             }
         }
+        if( !changed )
+            break;
     }
-    aCpy.clear();
 }
 
 /** local method to set 'working' position for newly inserted frames
