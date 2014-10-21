@@ -446,7 +446,7 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
     RTFReferenceTable::Entries_t::iterator it = m_aStyleTableEntries.find(nStyle);
     if (it != m_aStyleTableEntries.end())
     {
-        RTFReferenceProperties& rProps = *(RTFReferenceProperties*)it->second.get();
+        RTFReferenceProperties& rProps = *static_cast<RTFReferenceProperties*>(it->second.get());
 
         // cloneAndDeduplicate() wants to know about only a single "style", so
         // let's merge paragraph and character style properties here.
@@ -457,7 +457,7 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
         if (itChar != m_aStyleTableEntries.end())
         {
             // Found active character style, then update aStyleSprms/Attributes.
-            RTFReferenceProperties& rCharProps = *(RTFReferenceProperties*)itChar->second.get();
+            RTFReferenceProperties& rCharProps = *static_cast<RTFReferenceProperties*>(itChar->second.get());
             RTFSprms& rCharStyleSprms = rCharProps.getSprms();
             for (RTFSprms::Iterator_t itSprm = rCharStyleSprms.begin(); itSprm != rCharStyleSprms.end(); ++itSprm)
             {

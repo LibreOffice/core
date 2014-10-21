@@ -867,7 +867,7 @@ namespace frm
                                                 const Reference<XControl>&,
                                                 bool )
     {
-        ((OClickableImageBaseControl *)pCompImpl)->actionPerformed_Impl( true, *(MouseEvent *)pEvt );
+        static_cast<OClickableImageBaseControl *>(pCompImpl)->actionPerformed_Impl( true, *static_cast<const MouseEvent *>(pEvt) );
     }
 
 

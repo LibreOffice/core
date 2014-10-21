@@ -1312,7 +1312,7 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
                 sId = "bitmap(" + OUString::number( nId ) + ")";
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
-                const Reference< XShape >& rxShape = (const Reference< XShape >&)( it->GetObject() );
+                const Reference< XInterface >& rxShape = it->GetObject();
                 Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
                 ::com::sun::star::awt::Rectangle    aBoundRect;
                 if( xShapePropSet.is() && ( xShapePropSet->getPropertyValue( "BoundRect" ) >>= aBoundRect ) )

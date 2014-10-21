@@ -499,7 +499,7 @@ void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutS
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getContext()->getServiceManager()->createInstanceWithContext( (OUString)VCL_CONTROLMODEL_EDIT, getContext() ),
+        getContext()->getServiceManager()->createInstanceWithContext( OUString(VCL_CONTROLMODEL_EDIT), getContext() ),
         UNO_QUERY
     );
     OSL_ENSURE( xFakedAggregate.is(), "OEditModel::writeAggregate: could not create an old EditControlModel!" );
@@ -521,7 +521,7 @@ void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStre
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getContext()->getServiceManager()->createInstanceWithContext( (OUString)VCL_CONTROLMODEL_EDIT, getContext() ),
+        getContext()->getServiceManager()->createInstanceWithContext( OUString(VCL_CONTROLMODEL_EDIT), getContext() ),
         UNO_QUERY
     );
     Reference< XPersistObject > xFakedPersist( xFakedAggregate, UNO_QUERY );
@@ -578,7 +578,7 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( 
             &&  (getString(aDefaultControl) == STARDIV_ONE_FORM_CONTROL_TEXTFIELD )
             )
         {
-            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( (OUString)STARDIV_ONE_FORM_CONTROL_EDIT ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( OUString(STARDIV_ONE_FORM_CONTROL_EDIT) ) );
             // Older as well as current versions should understand this : the former knew only the STARDIV_ONE_FORM_CONTROL_EDIT,
             // the latter are registered for both STARDIV_ONE_FORM_CONTROL_EDIT and STARDIV_ONE_FORM_CONTROL_TEXTFIELD.
         }

@@ -377,7 +377,7 @@ namespace frm
             aEvt.Source = *this;
             ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
             while( aIt.hasMoreElements() )
-                ((XTextListener *)aIt.next())->textChanged( aEvt );
+                static_cast<XTextListener *>(aIt.next())->textChanged( aEvt );
         }
 #endif
     }

@@ -516,7 +516,7 @@ namespace frm
         {
             EmptyFontDescriptor aEmpty;
             if ( PROPERTY_ID_FONT == _nHandle )
-                return makeAny( (FontDescriptor)aEmpty );
+                return makeAny( FontDescriptor(aEmpty) );
             return lcl_extractFontDescriptorAggregate( _nHandle, aEmpty );
         }
 

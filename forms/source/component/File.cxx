@@ -246,7 +246,7 @@ void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
     EventObject aEvt(static_cast<XWeak*>(this));
     bool bContinue = true;
     while (aIter.hasMoreElements() && bContinue)
-        bContinue =((XResetListener*)aIter.next())->approveReset(aEvt);
+        bContinue = static_cast<XResetListener*>(aIter.next())->approveReset(aEvt);
 
     if (bContinue)
     {

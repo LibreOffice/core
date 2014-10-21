@@ -184,7 +184,7 @@ public:
 EventObject* OFormSubmitResetThread::cloneEvent(
         const EventObject *pEvt ) const
 {
-    return new ::com::sun::star::awt::MouseEvent( *(::com::sun::star::awt::MouseEvent *)pEvt );
+    return new ::com::sun::star::awt::MouseEvent( *static_cast<const ::com::sun::star::awt::MouseEvent *>(pEvt) );
 }
 
 
@@ -195,9 +195,9 @@ void OFormSubmitResetThread::processEvent(
         bool _bSubmit)
 {
     if (_bSubmit)
-        ((ODatabaseForm *)pCompImpl)->submit_impl(_rControl, *static_cast<const ::com::sun::star::awt::MouseEvent*>(_pEvt), true);
+        static_cast<ODatabaseForm *>(pCompImpl)->submit_impl(_rControl, *static_cast<const ::com::sun::star::awt::MouseEvent*>(_pEvt), true);
     else
-        ((ODatabaseForm *)pCompImpl)->reset_impl(true);
+        static_cast<ODatabaseForm *>(pCompImpl)->reset_impl(true);
 }
 
 
@@ -2175,7 +2175,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
         bool bCanceled = false;
         while (aIter.hasMoreElements() && !bCanceled)
         {
-            if (!((XSubmitListener*)aIter.next())->approveSubmit(aEvt))
+            if (!static_cast<XSubmitListener*>(aIter.next())->approveSubmit(aEvt))
                 bCanceled = true;
         }
 
@@ -2968,7 +2968,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
             aGuard.clear();
 
             while (aIter.hasMoreElements())
-                ((XLoadListener*)aIter.next())->reloading(aEvent);
+                static_cast<XLoadListener*>(aIter.next())->reloading(aEvent);
 
             aGuard.reset();
         }
@@ -2990,7 +2990,7 @@ void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteraction
         ::cppu::OInterfaceIteratorHelper aIter(m_aLoadListeners);
         aGuard.clear();
         while (aIter.hasMoreElements())
-            ((XLoadListener*)aIter.next())->reloaded(aEvent);
+            static_cast<XLoadListener*>(aIter.next())->reloaded(aEvent);
 
         // if we are on the insert row, we have to reset all controls
         // to set the default values
