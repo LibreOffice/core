@@ -40,6 +40,9 @@ char const* const* OtherInfo::getJavaExePaths(int * size)
         "bin/java.exe",
         "jre/bin/java.exe"
 #elif defined UNX
+#ifdef MACOSX
+        "Contents/Home/bin/java",
+#endif
         "bin/java",
         "jre/bin/java"
 #endif
@@ -58,7 +61,8 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
     "/bin/jrockit/jvm.dll"
 #elif defined UNX
 #ifdef MACOSX
-        "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22
+        "/../../../../../Frameworks/JavaVM.framework/JavaVM", // Apple
+        "/jre/lib/server/libjvm.dylib" // Oracle
 #else
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
