@@ -54,8 +54,6 @@ sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aDa
                 io::IOException,
                 uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
-
     if ( !m_xInStream.is() )
         throw io::IOException(THROW_WHERE );
 
@@ -73,8 +71,6 @@ sal_Int32 SAL_CALL WrapStreamForShare::readSomeBytes( uno::Sequence< sal_Int8 >&
                 io::IOException,
                 uno::RuntimeException, std::exception )
 {
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
-
     if ( !m_xInStream.is() )
         throw io::IOException(THROW_WHERE );
 
