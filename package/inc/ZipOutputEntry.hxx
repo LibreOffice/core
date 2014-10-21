@@ -19,7 +19,6 @@
 #ifndef INCLUDED_PACKAGE_INC_ZIPOUTPUTENTRY_HXX
 #define INCLUDED_PACKAGE_INC_ZIPOUTPUTENTRY_HXX
 
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
@@ -56,11 +55,8 @@ public:
 
     css::uno::Sequence< sal_Int8 > getData();
 
-    // XZipOutputEntry interfaces
-    void SAL_CALL closeEntry(  )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    void closeEntry();
+    void write(const css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 private:
     void doDeflate();
