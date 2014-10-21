@@ -328,7 +328,9 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 xParser->parseStrict( aURL );
 
             xDispatcher = xDesktop->queryDispatch( aURL, OUString(), 0 );
-
+            SAL_WARN_IF(
+                !xDispatcher.is(), "desktop.app",
+                "unsupported dispatch request <" << aName << ">");
             if( xDispatcher.is() )
             {
                 {
