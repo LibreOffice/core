@@ -293,9 +293,7 @@ public:
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
     void                        CopyBits(
                                     const SalTwoRect& rPosAry,
-                                    SalGraphics* pSrcGraphics,
-                                    const OutputDevice *pOutDev,
-                                    const OutputDevice *pSrcOutDev );
+                                    SalGraphics* pSrcGraphics );
 
     void                        DrawBitmap(
                                     const SalTwoRect& rPosAry,

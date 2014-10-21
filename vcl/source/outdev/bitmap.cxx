@@ -435,7 +435,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
                         if ( (nWidth > 0) && (nHeight > 0) )
                         {
-                            (((OutputDevice*)&aVDev)->mpGraphics)->CopyBits( aPosAry, mpGraphics, this, this );
+                            ((OutputDevice*)&aVDev)->CopyBits( aPosAry, mpGraphics, this );
                         }
                         else
                         {

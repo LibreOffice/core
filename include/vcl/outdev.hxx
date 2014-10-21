@@ -524,6 +524,8 @@ public:
                                     long nSrcWidth, long nSrcHeight,
                                     sal_uInt16 nFlags = 0 );
 
+    void                        CopyBits( const SalTwoRect& rPosAry,
+                                    SalGraphics* pSrcGraphics, const OutputDevice *pSrcOutDev );
 
 protected:
 
