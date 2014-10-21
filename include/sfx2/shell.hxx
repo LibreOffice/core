@@ -567,12 +567,10 @@ inline void SfxShell::SetPool
     pPool = pNewPool;
 }
 
-#define SFX_SLOTMAP(ShellClass) static SfxFormalArgument a##ShellClass##Args_Impl[1]; \
-                                static SfxSlot a##ShellClass##Slots_Impl[] =
+#define SFX_SLOTMAP(ShellClass) static SfxSlot a##ShellClass##Slots_Impl[] =
 
 #define SFX_DECL_INTERFACE(nId)                                             \
             static SfxInterface*                pInterface;                 \
-            static const SfxFormalArgument*     pSfxFormalArgs_Impl;        \
             static SfxInterface*                GetStaticInterface();       \
             static SfxInterfaceId               GetInterfaceId() {return SfxInterfaceId(nId);} \
             static void                         RegisterInterface(SfxModule* pMod=NULL); \
@@ -581,7 +579,6 @@ inline void SfxShell::SetPool
 #define SFX_IMPL_INTERFACE(Class,SuperClass,NameResId)                      \
                                                                             \
     SfxInterface* Class::pInterface = 0;                                    \
-    const SfxFormalArgument* Class::pSfxFormalArgs_Impl = a##Class##Args_Impl;\
     SfxInterface* Class::GetStaticInterface()                      \
     {                                                                       \
         if ( !pInterface )                                                  \
