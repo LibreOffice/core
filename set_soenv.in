@@ -1482,8 +1482,12 @@ elsif ($platform =~ m/darwin/)
 {
     $FRAMEWORKSHOME = "@MACOSX_SDK_PATH@/System/Library/Frameworks";
     chomp( my $TOOLSPATH = `xcode-select --print-path` );
-    my $STLINC .= $I."$TOOLSPATH/Toolchains/XcodeDefault.xctoolchain/usr/lib/c++/v1/";
-    $SOLARINC .= $STLINC . $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
+    my $STLINC = "$TOOLSPATH/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1/";
+	if ( !(-e $STLINC) && !(-d $STLINC) ) {
+	   # Xcode 5
+	   $STLINC = "$TOOLSPATH/Toolchains/XcodeDefault.xctoolchain/usr/lib/c++/v1/";
+	} 
+    $SOLARINC .= $I.$STLINC . $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
     $GUIBASE  = "aqua";
 }
 else
