@@ -748,7 +748,7 @@ bool ZipPackageStream::saveChild(
             }
             else
             {
-                ZipOutputEntry aZipEntry(m_xContext, &rZipOut, *pTempEntry, this, bToBeEncrypted);
+                ZipOutputEntry aZipEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
                 do
                 {
                     nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
@@ -756,6 +756,8 @@ bool ZipPackageStream::saveChild(
                 }
                 while ( nLength == n_ConstBufferSize );
                 aZipEntry.closeEntry();
+                uno::Sequence< sal_Int8 > aCompressedData = aZipEntry.getData();
+                rZipOut.rawWrite(aCompressedData, 0, aCompressedData.getLength());
             }
             rZipOut.rawCloseEntry();
         }

@@ -24,11 +24,10 @@
 
 #include <osl/time.h>
 
-#include <ByteChucker.hxx>
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>
 #include <ZipFile.hxx>
-#include <ZipOutputStream.hxx>
+#include <ZipPackageBuffer.hxx>
 #include <ZipPackageStream.hxx>
 
 using namespace com::sun::star;
@@ -39,13 +38,12 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 /** This class is used to deflate Zip entries
  */
 ZipOutputEntry::ZipOutputEntry( const uno::Reference< uno::XComponentContext >& rxContext,
-                        ZipOutputStream* pOutputStream,
                         ZipEntry& rEntry,
                         ZipPackageStream* pStream,
                         bool bEncrypt)
 : m_aDeflateBuffer(n_ConstBufferSize)
 , m_aDeflater(DEFAULT_COMPRESSION, true)
-, m_pZipOutputStream(pOutputStream)
+, m_pBuffer(new ZipPackageBuffer(n_ConstBufferSize))
 , m_pCurrentEntry(&rEntry)
 , m_nDigested(0)
 , m_bEncryptCurrentEntry(bEncrypt)
@@ -62,6 +60,12 @@ ZipOutputEntry::ZipOutputEntry( const uno::Reference< uno::XComponentContext >& 
 
 ZipOutputEntry::~ZipOutputEntry( void )
 {
+}
+
+uno::Sequence< sal_Int8 > ZipOutputEntry::getData()
+{
+    m_pBuffer->realloc(m_pBuffer->getPosition());
+    return m_pBuffer->getSequence();
 }
 
 void SAL_CALL ZipOutputEntry::closeEntry()
@@ -151,7 +155,7 @@ void ZipOutputEntry::doDeflate()
             // FIXME64: uno::Sequence not 64bit safe.
             uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
-            m_pZipOutputStream->getChucker().WriteBytes( aEncryptionBuffer );
+            m_pBuffer->writeBytes( aEncryptionBuffer );
 
             // the sizes as well as checksum for encrypted streams is calculated here
             m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();
@@ -160,7 +164,7 @@ void ZipOutputEntry::doDeflate()
         }
         else
         {
-            m_pZipOutputStream->getChucker().WriteBytes ( aTmpBuffer );
+            m_pBuffer->writeBytes ( aTmpBuffer );
         }
     }
 
@@ -170,7 +174,7 @@ void ZipOutputEntry::doDeflate()
         uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
         if ( aEncryptionBuffer.getLength() )
         {
-            m_pZipOutputStream->getChucker().WriteBytes( aEncryptionBuffer );
+            m_pBuffer->writeBytes( aEncryptionBuffer );
 
             // the sizes as well as checksum for encrypted streams is calculated hier
             m_pCurrentEntry->nCompressedSize += aEncryptionBuffer.getLength();

@@ -53,7 +53,6 @@ public:
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void finish()
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    ByteChucker& getChucker();
 
     static sal_uInt32 getCurrentDosTime();
 
