@@ -3975,7 +3975,7 @@ bool PPTParaSheet::Read( SdrPowerPointImport&
         }
         nPMask >>= 1;
     }
-    return false;
+    return true;
 }
 
 void PPTParaSheet::UpdateBulletRelSize(  sal_uInt32 nLevel, sal_uInt16 nFontHeight )
