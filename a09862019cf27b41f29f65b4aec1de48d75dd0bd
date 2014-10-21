@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_5c867dba",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-21T15:49:58Z",
+      "side": 1,
+      "message": "This changes user-visible behavior of the BASIC function GetSolarVersion, from e.g. returning 440 to returning 40400.  The documentation of that BASIC function in LO Help is vague enough (\"Returns the internal number of the current LibreOffice version.\"), so this change is probably fine after all, but probably best to explicitly mention it in \u003chttps://wiki.documentfoundation.org/ReleaseNotes/4.4\u003e anyway.",
+      "revId": "a09862019cf27b41f29f65b4aec1de48d75dd0bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_3c93c9fc",
+        "filename": "desktop/source/app/officeipcthread.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-21T15:49:58Z",
+      "side": 1,
+      "message": "the changes to desktop/ should be fine; that FastPipeCommunication stuff is most likely dead anyway, but can be removed in an independent commit (if it is dead indeed)",
+      "revId": "a09862019cf27b41f29f65b4aec1de48d75dd0bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
