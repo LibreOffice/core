@@ -76,7 +76,7 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
 
     if (rInAttrs->GetItemState(SCHATTR_STARTING_ANGLE, true, &pPoolItem) == SfxItemState::SET)
     {
-        long nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
+        long nTmp = (long)static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         m_pAngleDial->SetRotation( nTmp*100 );
     }
     else

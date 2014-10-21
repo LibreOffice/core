@@ -123,7 +123,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     m_pRbtAxis2->Check(false);
     if (rInAttrs->GetItemState(SCHATTR_AXIS,true, &pPoolItem) == SfxItemState::SET)
     {
-        long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
+        long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         if(nVal==CHART_AXIS_SECONDARY_Y)
         {
             m_pRbtAxis2->Check(true);
@@ -134,13 +134,13 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     long nTmp;
     if (rInAttrs->GetItemState(SCHATTR_BAR_GAPWIDTH, true, &pPoolItem) == SfxItemState::SET)
     {
-        nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
+        nTmp = (long)static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         m_pMTGap->SetValue(nTmp);
     }
 
     if (rInAttrs->GetItemState(SCHATTR_BAR_OVERLAP, true, &pPoolItem) == SfxItemState::SET)
     {
-        nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
+        nTmp = (long)static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         m_pMTOverlap->SetValue(nTmp);
     }
 
@@ -171,7 +171,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     {
         ::com::sun::star::uno::Sequence < sal_Int32 > aMissingValueTreatments;
         if( rInAttrs->GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, true, &pPoolItem) == SfxItemState::SET )
-            aMissingValueTreatments =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
+            aMissingValueTreatments =static_cast<const SfxIntegerListItem*>(pPoolItem)->GetConstSequence();
 
         if ( aMissingValueTreatments.getLength()>1 && rInAttrs->GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,true, &pPoolItem) == SfxItemState::SET)
         {
@@ -190,7 +190,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
                     m_pRB_ContinueLine->Enable(true);
             }
 
-            long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
+            long nVal=static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
             if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
                 m_pRB_DontPaint->Check(true);
             else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)

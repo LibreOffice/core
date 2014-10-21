@@ -184,7 +184,7 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
     const SfxPoolItem* pPoolItem = NULL;
     if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
     {
-        sal_Int32 nLegendPosition = ((const SfxInt32Item*)pPoolItem)->GetValue();
+        sal_Int32 nLegendPosition = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         switch( nLegendPosition )
         {
             case chart2::LegendPosition_LINE_START:

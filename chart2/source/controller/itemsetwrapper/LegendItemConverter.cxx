@@ -125,7 +125,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
             const SfxPoolItem* pPoolItem = NULL;
             if( rInItemSet.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
             {
-                chart2::LegendPosition eNewPos = static_cast<chart2::LegendPosition>(((const SfxInt32Item*)pPoolItem)->GetValue());
+                chart2::LegendPosition eNewPos = static_cast<chart2::LegendPosition>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
 
                 ::com::sun::star::chart::ChartLegendExpansion eExpansion = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
                 switch( eNewPos )

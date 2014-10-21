@@ -71,7 +71,7 @@ void SchLayoutTabPage::Reset(const SfxItemSet* rInAttrs)
 
     if (rInAttrs->GetItemState(SCHATTR_STYLE_SHAPE,true, &pPoolItem) == SfxItemState::SET)
     {
-        long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
+        long nVal = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         if(m_pGeometryResources)
         {
             m_pGeometryResources->SelectEntryPos(static_cast<sal_uInt16>(nVal));

@@ -62,7 +62,7 @@ void SchLegendPosTabPage::Reset(const SfxItemSet* rInAttrs)
 
     const SfxPoolItem* pPoolItem = 0;
     if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
+        m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue()) );
 }
 
 } //namespace chart

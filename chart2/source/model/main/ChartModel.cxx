@@ -1417,8 +1417,7 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
 void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     throw (uno::RuntimeException, std::exception)
 {
-    void* pPtr = (void*)nWindowPtr;
-    OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(pPtr);
+    OpenGLWindow* pWindow = reinterpret_cast<OpenGLWindow*>(nWindowPtr);
     mpOpenGLWindow = pWindow;
 }
 

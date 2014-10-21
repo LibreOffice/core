@@ -602,7 +602,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
         {
             //if th object is a polygon
             //from each point a handle is generated
-            const ::basegfx::B2DPolyPolygon& rPolyPolygon = ((SdrPathObj*)m_pMarkObj)->GetPathPoly();
+            const ::basegfx::B2DPolyPolygon& rPolyPolygon = static_cast<SdrPathObj*>(m_pMarkObj)->GetPathPoly();
             for( sal_uInt32 nN = 0L; nN < rPolyPolygon.count(); nN++)
             {
                 const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nN));

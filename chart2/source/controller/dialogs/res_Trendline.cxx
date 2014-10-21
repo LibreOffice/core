@@ -158,21 +158,21 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     double nValue = 0.0;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, true, &pPoolItem ) == SfxItemState::SET )
     {
-        nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
+        nValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue() ;
     }
     lcl_setValue( *m_pFmtFld_ExtrapolateForward, nValue );
 
     nValue = 0.0;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, true, &pPoolItem ) == SfxItemState::SET )
     {
-        nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
+        nValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue() ;
     }
     lcl_setValue( *m_pFmtFld_ExtrapolateBackward, nValue );
 
     nValue = 0.0;
     if( rInAttrs.GetItemState( SCHATTR_REGRESSION_INTERCEPT_VALUE, true, &pPoolItem ) == SfxItemState::SET )
     {
-        nValue = ((const SvxDoubleItem*)pPoolItem)->GetValue() ;
+        nValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue() ;
     }
     lcl_setValue( *m_pFmtFld_InterceptValue, nValue );
 

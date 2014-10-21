@@ -74,7 +74,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId,
 
     const SfxPoolItem *pPoolItem = NULL;
     if( rInAttrs.GetItemState(nWhichId, true, &pPoolItem) == SfxItemState::SET )
-        rCheckbox.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
+        rCheckbox.Check( static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() );
     else
     {
         rCheckbox.EnableTriState( true );
@@ -135,7 +135,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window
     ::com::sun::star::uno::Sequence < sal_Int32 > aAvailabelPlacementList;
     const SfxPoolItem *pPoolItem = NULL;
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, true, &pPoolItem) == SfxItemState::SET )
-        aAvailabelPlacementList =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
+        aAvailabelPlacementList = static_cast<const SfxIntegerListItem*>(pPoolItem)->GetConstSequence();
 
     m_pLB_LabelPlacement->Clear();
     for( sal_Int32 nN=0; nN<aAvailabelPlacementList.getLength(); ++nN )
@@ -331,7 +331,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_SEPARATOR, true, &pPoolItem) == SfxItemState::SET )
        for(sal_Int32 i=0; i < NUMBER_SEPARATORS; ++i )
        {
-          if( m_aEntryMap[i] == ((const SfxStringItem*)pPoolItem)->GetValue())
+          if( m_aEntryMap[i] == static_cast<const SfxStringItem*>(pPoolItem)->GetValue())
               m_pLB_Separator->SelectEntryPos( i );
        }
     else
@@ -339,7 +339,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_PLACEMENT, true, &pPoolItem) == SfxItemState::SET )
     {
-        sal_Int32 nPlacement = ((const SfxInt32Item*)pPoolItem)->GetValue();
+        sal_Int32 nPlacement = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
         ::std::map< sal_Int32, sal_uInt16 >::const_iterator aIt( m_aPlacementToListBoxMap.find(nPlacement) );
         if(aIt!=m_aPlacementToListBoxMap.end())
         {
@@ -353,7 +353,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
         m_pLB_LabelPlacement->SetNoSelection();
 
     if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_pLB_TextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
+        m_pLB_TextDirection->SelectEntryValue( SvxFrameDirection(static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue()) );
 
     if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SfxItemState::SET )
     {

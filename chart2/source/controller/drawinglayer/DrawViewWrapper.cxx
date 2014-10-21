@@ -257,7 +257,7 @@ SdrObject* DrawViewWrapper::getTextEditObject() const
     SdrObject* pObj = this->getSelectedObject();
     SdrObject* pTextObj = NULL;
     if( pObj && pObj->HasTextEdit())
-        pTextObj = (SdrTextObj*)pObj;
+        pTextObj = static_cast<SdrTextObj*>(pObj);
     return pTextObj;
 }
 
