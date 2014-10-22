@@ -16,6 +16,24 @@
       "revId": "3a1092004f735572809724314c087b4e36a57381",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_dc1cad79",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000274
+      },
+      "writtenOn": "2014-10-22T06:19:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba076199_bc34594a",
+      "revId": "3a1092004f735572809724314c087b4e36a57381",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
