@@ -117,12 +117,20 @@ private: //methods
      *         have changed during the call, and the caller needs to call this
      *         method once again to get the text shapes created.
      */
-    bool    createTextShapes( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::drawing::XShapes >& xTarget
-                     , TickIter& rTickIter
-                     , AxisLabelProperties& rAxisLabelProperties
-                     , TickFactory2D* pTickFactory
-                     , sal_Int32 nScreenDistanceBetweenTicks );
+    bool createTextShapes(
+        const css::uno::Reference<css::drawing::XShapes >& xTarget,
+        TickIter& rTickIter, AxisLabelProperties& rAxisLabelProperties,
+        TickFactory2D* pTickFactory, sal_Int32 nScreenDistanceBetweenTicks );
+
+    /**
+     * Variant of createTextShapes where none of auto-staggering and
+     * link-breaking are allowed in case of overlaps.  Overlaps of text shapes
+     * are to be resolved only by adjusting the label tick interval.
+     */
+    bool createTextShapesSimple(
+        const css::uno::Reference<css::drawing::XShapes >& xTarget,
+        TickIter& rTickIter, AxisLabelProperties& rAxisLabelProperties,
+        TickFactory2D* pTickFactory );
 
     void createTickMarkLineShapes( TickInfoArrayType& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory2D& rTickFactory2D, bool bOnlyAtLabels );
 
