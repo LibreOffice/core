@@ -4051,12 +4051,12 @@ void ScCompiler::SetRelNameReference()
     for( ScToken* t = static_cast<ScToken*>(pArr->GetNextReference()); t;
                   t = static_cast<ScToken*>(pArr->GetNextReference()) )
     {
-        ScSingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
             rRef1.SetRelName( true );
         if ( t->GetType() == svDoubleRef )
         {
-            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
             if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                 rRef2.SetRelName( true );
         }
@@ -4072,9 +4072,9 @@ void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
                   t = static_cast<ScToken*>(pArr->GetNextReference()) )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
     }
 }
 
@@ -4088,9 +4088,9 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
                   t = static_cast<ScToken*>(rArr.GetNextReference()) )
     {
         if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( t->GetSingleRef() ).Ref() );
+            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
-            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, t->GetDoubleRef() );
+            ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
     }
 }
 
@@ -4134,7 +4134,7 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
         case svExternalSingleRef:
             pConv->makeExternalRefStr(
                    rBuffer, GetPos(), nFileId, *pFileName, t->GetString().getString(),
-                   static_cast<ScToken*>(t)->GetSingleRef());
+                   *static_cast<ScToken*>(t)->GetSingleRef());
         break;
         case svExternalDoubleRef:
         {
@@ -4145,7 +4145,7 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
 
             pConv->makeExternalRefStr(
                 rBuffer, GetPos(), nFileId, *pFileName, aTabNames, t->GetString().getString(),
-                static_cast<ScToken*>(t)->GetDoubleRef());
+                *static_cast<ScToken*>(t)->GetDoubleRef());
         }
         break;
         default:
@@ -4204,7 +4204,7 @@ void ScCompiler::CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken*
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     const OpCode eOp = _pTokenP->GetOpCode();
-    const ScSingleRefData& rRef = static_cast<const ScToken*>(_pTokenP)->GetSingleRef();
+    const ScSingleRefData& rRef = *static_cast<const ScToken*>(_pTokenP)->GetSingleRef();
     ScComplexRefData aRef;
     aRef.Ref1 = aRef.Ref2 = rRef;
     if ( eOp == ocColRowName )
@@ -4232,7 +4232,7 @@ void ScCompiler::CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken*
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
-                      static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false);
+                      *static_cast<ScToken*>(_pTokenP)->GetDoubleRef(), false);
 }
 
 void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pTokenP) const
@@ -4325,7 +4325,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
 
 bool ScCompiler::HandleSingleRef()
 {
-    ScSingleRefData& rRef = static_cast<ScToken*>(mpToken.get())->GetSingleRef();
+    ScSingleRefData& rRef = *static_cast<ScToken*>(mpToken.get())->GetSingleRef();
     ScAddress aAbs = rRef.toAbs(aPos);
     if (!ValidAddress(aAbs))
     {

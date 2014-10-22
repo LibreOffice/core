@@ -81,7 +81,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             case svSingleRef:
                 {
                     const ScToken* pT = static_cast<const ScToken*>(p);
-                    const ScSingleRefData& rRef = pT->GetSingleRef();
+                    const ScSingleRefData& rRef = *pT->GetSingleRef();
                     if (!rRef.Valid())
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.IsFlag3D())
@@ -91,7 +91,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
             case svDoubleRef:
                 {
                     const ScToken* pT = static_cast<const ScToken*>(p);
-                    const ScComplexRefData& rRef = pT->GetDoubleRef();
+                    const ScComplexRefData& rRef = *pT->GetDoubleRef();
                     if (!rRef.Valid())
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.Ref1.IsFlag3D())
@@ -101,14 +101,14 @@ void ScRefTokenHelper::compileRangeRepresentation(
             case svExternalSingleRef:
                 {
                     const ScToken* pT = static_cast<const ScToken*>(p);
-                    if (!pT->GetSingleRef().ValidExternal())
+                    if (!pT->GetSingleRef()->ValidExternal())
                         bFailure = true;
                 }
                 break;
             case svExternalDoubleRef:
                 {
                     const ScToken* pT = static_cast<const ScToken*>(p);
-                    if (!pT->GetDoubleRef().ValidExternal())
+                    if (!pT->GetDoubleRef()->ValidExternal())
                         bFailure = true;
                 }
                 break;
@@ -142,7 +142,7 @@ bool ScRefTokenHelper::getRangeFromToken(
                 (eType == svSingleRef && bExternal))
                 return false;
 
-            const ScSingleRefData& rRefData = pToken->GetSingleRef();
+            const ScSingleRefData& rRefData = *pToken->GetSingleRef();
             rRange.aStart = rRefData.toAbs(rPos);
             rRange.aEnd = rRange.aStart;
             return true;
@@ -154,7 +154,7 @@ bool ScRefTokenHelper::getRangeFromToken(
                 (eType == svDoubleRef && bExternal))
                 return false;
 
-            const ScComplexRefData& rRefData = pToken->GetDoubleRef();
+            const ScComplexRefData& rRefData = *pToken->GetDoubleRef();
             rRange = rRefData.toAbs(rPos);
             return true;
         }
@@ -446,7 +446,7 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
         case svSingleRef:
         case svExternalSingleRef:
         {
-            const ScSingleRefData& r = pToken->GetSingleRef();
+            const ScSingleRefData& r = *pToken->GetSingleRef();
             rData.Ref1 = r;
             rData.Ref1.SetFlag3D(true);
             rData.Ref2 = r;
@@ -455,7 +455,7 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
         break;
         case svDoubleRef:
         case svExternalDoubleRef:
-            rData = pToken->GetDoubleRef();
+            rData = *pToken->GetDoubleRef();
         break;
         default:
             // Not a reference token.  Bail out.

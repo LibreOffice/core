@@ -320,7 +320,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         if (nTab != nTab1)
         {
             aRefData.SetRelTab(nTab - aBasePos.Tab());
-            t->GetSingleRef() = aRefData;
+            *t->GetSingleRef() = aRefData;
         }
 
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
@@ -335,7 +335,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                 aPos = ScAddress(nCol, nRow, nTab);
                 // Reference in each cell must point to the origin cell relative to the current cell.
                 aRefData.SetAddress(aBasePos, aPos);
-                t->GetSingleRef() = aRefData;
+                *t->GetSingleRef() = aRefData;
                 boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
                 pCell = new ScFormulaCell(this, aPos, *pTokArr, eGram, MM_REFERENCE);
                 pTab->SetFormulaCell(nCol, nRow, pCell);
@@ -447,7 +447,7 @@ bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr, con
                 rToken.GetIndex(), rToken.GetString().getString(), 1);
         case svExternalDoubleRef:
         {
-            const ScComplexRefData& rRef = rToken.GetDoubleRef();
+            const ScComplexRefData& rRef = *rToken.GetDoubleRef();
             ScRange aAbs = rRef.toAbs(rPos);
             size_t nSheets = aAbs.aEnd.Tab() - aAbs.aStart.Tab() + 1;
             return rRefMgr.setCacheTableReferenced(

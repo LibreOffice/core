@@ -1171,7 +1171,7 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
                 nGlobalError = p->GetError();
                 break;
             case svSingleRef:
-                SingleRefToVars( static_cast<ScToken*>(p)->GetSingleRef(), rCol, rRow, rTab);
+                SingleRefToVars( *static_cast<ScToken*>(p)->GetSingleRef(), rCol, rRow, rTab);
                 if ( !pDok->aTableOpList.empty() )
                     ReplaceCell( rCol, rRow, rTab );
                 break;
@@ -1199,7 +1199,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                     SCCOL nCol;
                     SCROW nRow;
                     SCTAB nTab;
-                    SingleRefToVars( static_cast<ScToken*>(p)->GetSingleRef(), nCol, nRow, nTab);
+                    SingleRefToVars( *static_cast<ScToken*>(p)->GetSingleRef(), nCol, nRow, nTab);
                     rAdr.Set( nCol, nRow, nTab );
                     if ( !pDok->aTableOpList.empty() )
                         ReplaceCell( rAdr );
@@ -1218,7 +1218,7 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         bool bDontCheckForTableOp )
 {
-    const ScComplexRefData& rCRef = p->GetDoubleRef();
+    const ScComplexRefData& rCRef = *p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
     if ( !pDok->aTableOpList.empty() && !bDontCheckForTableOp )
@@ -1325,7 +1325,7 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
                 break;
             case svDoubleRef:
                 --sp;
-                DoubleRefToRange( p->GetDoubleRef(), rRange);
+                DoubleRefToRange( *p->GetDoubleRef(), rRange);
                 break;
             case svRefList:
                 {
@@ -1369,7 +1369,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
-                DoubleRefToRange( static_cast<ScToken*>(p)->GetDoubleRef(), rRange, bDontCheckForTableOp);
+                DoubleRefToRange( *static_cast<ScToken*>(p)->GetDoubleRef(), rRange, bDontCheckForTableOp);
                 break;
             default:
                 SetError( errIllegalParameter);
@@ -1405,7 +1405,7 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
 
     rFileId = p->GetIndex();
     rTabName = p->GetString().getString();
-    rRef = static_cast<ScToken*>(p)->GetSingleRef();
+    rRef = *static_cast<ScToken*>(p)->GetSingleRef();
 }
 
 void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)
@@ -1481,7 +1481,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
 
     rFileId = p->GetIndex();
     rTabName = p->GetString().getString();
-    rRef = static_cast<ScToken*>(p)->GetDoubleRef();
+    rRef = *static_cast<ScToken*>(p)->GetDoubleRef();
 }
 
 void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray)
@@ -1690,7 +1690,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     {
                         sal_uInt16 nFileId = p->GetIndex();
                         OUString aTabName = p->GetString().getString();
-                        const ScComplexRefData& rRef = static_cast<ScToken*>(p)->GetDoubleRef();
+                        const ScComplexRefData& rRef = *static_cast<ScToken*>(p)->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
                         GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
                         if (nGlobalError)
@@ -1812,7 +1812,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
                     aRet.mpMat->SetErrorInterpreter(this);
                     if (p2->GetByte() == MATRIX_TOKEN_HAS_RANGE)
                     {
-                        const ScComplexRefData& rRef = p2->GetDoubleRef();
+                        const ScComplexRefData& rRef = *p2->GetDoubleRef();
                         if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel())
                         {
                             aRet.mnCol1 = rRef.Ref1.Col();
@@ -3579,7 +3579,7 @@ void ScInterpreter::ScDBArea()
 
 void ScInterpreter::ScColRowNameAuto()
 {
-    ScComplexRefData aRefData( static_cast<const ScToken*>(pCur)->GetDoubleRef() );
+    ScComplexRefData aRefData( *static_cast<const ScToken*>(pCur)->GetDoubleRef() );
     ScRange aAbs = aRefData.toAbs(aPos);
     if (!ValidRange(aAbs))
     {

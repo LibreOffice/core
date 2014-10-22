@@ -1118,7 +1118,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     {
         case svSingleRef:
         {
-            const ScSingleRefData& rData = pToken->GetSingleRef();
+            const ScSingleRefData& rData = *pToken->GetSingleRef();
             nMinCol = rData.Col();
             nMinRow = rData.Row();
             nMaxCol = rData.Col();
@@ -1128,7 +1128,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         break;
         case svDoubleRef:
         {
-            const ScComplexRefData& rData = pToken->GetDoubleRef();
+            const ScComplexRefData& rData = *pToken->GetDoubleRef();
             nMinCol = min(rData.Ref1.Col(), rData.Ref2.Col());
             nMinRow = min(rData.Ref1.Row(), rData.Ref2.Row());
             nMaxCol = max(rData.Ref1.Col(), rData.Ref2.Col());
@@ -1138,7 +1138,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         break;
         case svExternalSingleRef:
         {
-            const ScSingleRefData& rData = pToken->GetSingleRef();
+            const ScSingleRefData& rData = *pToken->GetSingleRef();
             nMinCol = rData.Col();
             nMinRow = rData.Row();
             nMaxCol = rData.Col();
@@ -1151,7 +1151,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         break;
         case svExternalDoubleRef:
         {
-            const ScComplexRefData& rData = pToken->GetDoubleRef();
+            const ScComplexRefData& rData = *pToken->GetDoubleRef();
             nMinCol = min(rData.Ref1.Col(), rData.Ref2.Col());
             nMinRow = min(rData.Ref1.Row(), rData.Ref2.Row());
             nMaxCol = max(rData.Ref1.Col(), rData.Ref2.Col());
@@ -1176,7 +1176,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rData = pToken->GetSingleRef();
+                const ScSingleRefData& rData = *pToken->GetSingleRef();
 
                 nMinCol = min(nMinCol, rData.Col());
                 nMinRow = min(nMinRow, rData.Row());
@@ -1188,7 +1188,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             break;
             case svDoubleRef:
             {
-                const ScComplexRefData& rData = pToken->GetDoubleRef();
+                const ScComplexRefData& rData = *pToken->GetDoubleRef();
 
                 nMinCol = min(nMinCol, rData.Ref1.Col());
                 nMinCol = min(nMinCol, rData.Ref2.Col());
@@ -1212,7 +1212,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
                 if (nFileId != pToken->GetIndex() || aExtTabName != pToken->GetString())
                     return false;
 
-                const ScSingleRefData& rData = pToken->GetSingleRef();
+                const ScSingleRefData& rData = *pToken->GetSingleRef();
 
                 nMinCol = min(nMinCol, rData.Col());
                 nMinRow = min(nMinRow, rData.Row());
@@ -1228,7 +1228,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
                 if (nFileId != pToken->GetIndex() || aExtTabName != pToken->GetString())
                     return false;
 
-                const ScComplexRefData& rData = pToken->GetDoubleRef();
+                const ScComplexRefData& rData = *pToken->GetDoubleRef();
 
                 nMinCol = min(nMinCol, rData.Ref1.Col());
                 nMinCol = min(nMinCol, rData.Ref2.Col());
@@ -1268,7 +1268,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             case svSingleRef:
             case svExternalSingleRef:
             {
-                const ScSingleRefData& rData = pToken->GetSingleRef();
+                const ScSingleRefData& rData = *pToken->GetSingleRef();
                 if (rData.Col() == nMinCol && rData.Row() == nMinRow)
                     // The corner cell is contained.
                     return false;
@@ -1286,7 +1286,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             case svDoubleRef:
             case svExternalDoubleRef:
             {
-                const ScComplexRefData& rData = pToken->GetDoubleRef();
+                const ScComplexRefData& rData = *pToken->GetDoubleRef();
                 const ScSingleRefData& r1 = rData.Ref1;
                 const ScSingleRefData& r2 = rData.Ref2;
                 if (r1.Col() <= nMinCol && nMinCol <= r2.Col() &&
@@ -1378,7 +1378,7 @@ public:
         if (rRef->GetType() != svDoubleRef)
             return;
 
-        ScComplexRefData& rData = rRef->GetDoubleRef();
+        ScComplexRefData& rData = *rRef->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 
@@ -1490,7 +1490,7 @@ ScChart2DataProvider::createDataSource(
             if ((*itr)->GetType() != svDoubleRef)
                 continue;
 
-            ScComplexRefData& rData = (*itr)->GetDoubleRef();
+            ScComplexRefData& rData = *(*itr)->GetDoubleRef();
             ScSingleRefData& s = rData.Ref1;
             ScSingleRefData& e = rData.Ref2;
 
@@ -1630,7 +1630,7 @@ public:
         if (!ScRefTokenHelper::isRef(pToken))
             return;
 
-        const ScSingleRefData& r = pToken->GetSingleRef();
+        const ScSingleRefData& r = *pToken->GetSingleRef();
         mpTabNumList->push_back(r.Tab());
     }
 
@@ -1695,7 +1695,7 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
         StackVar eVar = aRefToken->GetType();
         if (eVar == svDoubleRef || eVar == svExternalDoubleRef)
         {
-            const ScComplexRefData& r = aRefToken->GetDoubleRef();
+            const ScComplexRefData& r = *aRefToken->GetDoubleRef();
             if (r.Ref1.Tab() == r.Ref2.Tab())
             {
                 mnColumnCount = std::max<SCCOL>(mnColumnCount, static_cast<SCCOL>(abs(r.Ref2.Col() - r.Ref1.Col())+1));
@@ -1716,7 +1716,7 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
         }
         else if (eVar == svSingleRef || eVar == svExternalSingleRef)
         {
-            const ScSingleRefData& r = aRefToken->GetSingleRef();
+            const ScSingleRefData& r = *aRefToken->GetSingleRef();
             mnColumnCount = std::max<SCCOL>( mnColumnCount, 1);
             mnRowCount = std::max<SCROW>( mnRowCount, 1);
             if( mnStartColumn == -1 )
@@ -3596,7 +3596,7 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
         if ((*itr)->GetType() != svDoubleRef)
             continue;
 
-        ScComplexRefData& rData = (*itr)->GetDoubleRef();
+        ScComplexRefData& rData = *(*itr)->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 
@@ -3635,7 +3635,7 @@ sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
         if ((*itr)->GetType() != svDoubleRef)
             continue;
 
-        ScComplexRefData& rData = (*itr)->GetDoubleRef();
+        ScComplexRefData& rData = *(*itr)->GetDoubleRef();
         ScSingleRefData& s = rData.Ref1;
         ScSingleRefData& e = rData.Ref2;
 

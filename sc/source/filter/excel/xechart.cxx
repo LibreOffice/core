@@ -922,7 +922,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
             case ::formula::svExternalDoubleRef:
             {
                 // split 3-dimensional ranges into single sheets
-                const ScComplexRefData& rComplexRef = static_cast< const ScToken* >( pToken )->GetDoubleRef();
+                const ScComplexRefData& rComplexRef = *static_cast< const ScToken* >( pToken )->GetDoubleRef();
                 ScAddress aAbs1 = rComplexRef.Ref1.toAbs(ScAddress());
                 ScAddress aAbs2 = rComplexRef.Ref2.toAbs(ScAddress());
                 for (SCsTAB nScTab = aAbs1.Tab(); nScTab <= aAbs2.Tab(); ++nScTab)

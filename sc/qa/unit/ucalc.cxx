@@ -1274,7 +1274,7 @@ bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelC
     if (!pToken)
         return false;
 
-    ScSingleRefData& rRef = pToken->GetSingleRef();
+    ScSingleRefData& rRef = *pToken->GetSingleRef();
     if (!rRef.IsColRel() || rRef.Col() != nRelCol)
     {
         cerr << "Unexpected relative column address." << endl;
@@ -1296,7 +1296,7 @@ bool checkDeletedRefToken(ScDocument& rDoc, const ScAddress& rPos)
     if (!pToken)
         return false;
 
-    ScSingleRefData& rRef = pToken->GetSingleRef();
+    ScSingleRefData& rRef = *pToken->GetSingleRef();
     if (!rRef.IsDeleted())
     {
         cerr << "Deleted reference is expected, but it's still a valid reference." << endl;
@@ -4189,7 +4189,7 @@ bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange, 
         {
             case formula::svSingleRef:
             {
-                ScSingleRefData aData = p->GetSingleRef();
+                ScSingleRefData aData = *p->GetSingleRef();
                 if (rRange.aStart != rRange.aEnd)
                     break;
 
@@ -4200,7 +4200,7 @@ bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange, 
             break;
             case formula::svDoubleRef:
             {
-                ScComplexRefData aData = p->GetDoubleRef();
+                ScComplexRefData aData = *p->GetDoubleRef();
                 ScRange aThis = aData.toAbs(rPos);
                 if (aThis == rRange)
                     return true;

@@ -331,7 +331,7 @@ void ScDocumentImport::setMatrixCells(
         aPos.SetRow(nRow);
         // Reference in each cell must point to the origin cell relative to the current cell.
         aRefData.SetAddress(rBasePos, aPos);
-        t->GetSingleRef() = aRefData;
+        *t->GetSingleRef() = aRefData;
         boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
         pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
         pBlockPos->miCellPos =
@@ -351,7 +351,7 @@ void ScDocumentImport::setMatrixCells(
         {
             aPos.SetRow(nRow);
             aRefData.SetAddress(rBasePos, aPos);
-            t->GetSingleRef() = aRefData;
+            *t->GetSingleRef() = aRefData;
             boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
             pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
             pBlockPos->miCellPos =

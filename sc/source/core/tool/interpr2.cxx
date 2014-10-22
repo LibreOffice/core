@@ -1952,13 +1952,13 @@ void ScInterpreter::ScIntersect()
             if (sv[i] == svSingleRef)
             {
                 ScComplexRefData aRef;
-                aRef.Ref1 = aRef.Ref2 = xt[i]->GetSingleRef();
+                aRef.Ref1 = aRef.Ref2 = *xt[i]->GetSingleRef();
                 xt[i] = new ScRefListToken;
                 xt[i]->GetRefList()->push_back( aRef);
             }
             else if (sv[i] == svDoubleRef)
             {
-                ScComplexRefData aRef = xt[i]->GetDoubleRef();
+                ScComplexRefData aRef = *xt[i]->GetDoubleRef();
                 xt[i] = new ScRefListToken;
                 xt[i]->GetRefList()->push_back( aRef);
             }
@@ -2024,14 +2024,14 @@ void ScInterpreter::ScIntersect()
                 case svDoubleRef:
                 {
                     {
-                        const ScAddress& r = pt[i]->GetSingleRef().toAbs(aPos);
+                        const ScAddress& r = pt[i]->GetSingleRef()->toAbs(aPos);
                         nC1[i] = r.Col();
                         nR1[i] = r.Row();
                         nT1[i] = r.Tab();
                     }
                     if (sv[i] == svDoubleRef)
                     {
-                        const ScAddress& r = pt[i]->GetSingleRef2().toAbs(aPos);
+                        const ScAddress& r = pt[i]->GetSingleRef2()->toAbs(aPos);
                         nC2[i] = r.Col();
                         nR2[i] = r.Row();
                         nT2[i] = r.Tab();
@@ -2129,12 +2129,12 @@ void ScInterpreter::ScUnionFunc()
             case svSingleRef:
                 {
                     ScComplexRefData aRef;
-                    aRef.Ref1 = aRef.Ref2 = pt[i]->GetSingleRef();
+                    aRef.Ref1 = aRef.Ref2 = *pt[i]->GetSingleRef();
                     pRes->push_back( aRef);
                 }
                 break;
             case svDoubleRef:
-                pRes->push_back( pt[i]->GetDoubleRef());
+                pRes->push_back( *pt[i]->GetDoubleRef());
                 break;
             case svRefList:
                 {

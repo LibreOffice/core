@@ -55,7 +55,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
         {
             case formula::svSingleRef:
             {
-                ScAddress aCell =  t->GetSingleRef().toAbs(rPos);
+                ScAddress aCell =  t->GetSingleRef()->toAbs(rPos);
                 if (aCell.IsValid())
                     mpDoc->StartListeningCell(aCell, this);
 
@@ -64,8 +64,8 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
             break;
             case formula::svDoubleRef:
             {
-                const ScSingleRefData& rRef1 = t->GetSingleRef();
-                const ScSingleRefData& rRef2 = t->GetSingleRef2();
+                const ScSingleRefData& rRef1 = *t->GetSingleRef();
+                const ScSingleRefData& rRef2 = *t->GetSingleRef2();
                 ScAddress aCell1 = rRef1.toAbs(rPos);
                 ScAddress aCell2 = rRef2.toAbs(rPos);
                 if (aCell1.IsValid() && aCell2.IsValid())

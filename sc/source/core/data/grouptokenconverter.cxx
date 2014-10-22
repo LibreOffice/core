@@ -102,7 +102,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
         {
             case svSingleRef:
             {
-                ScSingleRefData aRef = pToken->GetSingleRef();
+                ScSingleRefData aRef = *pToken->GetSingleRef();
                 ScAddress aRefPos = aRef.toAbs(mrPos);
                 if (aRef.IsRowRel())
                 {
@@ -141,7 +141,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
             break;
             case svDoubleRef:
             {
-                ScComplexRefData aRef = pToken->GetDoubleRef();
+                ScComplexRefData aRef = *pToken->GetDoubleRef();
                 ScRange aAbs = aRef.toAbs(mrPos);
 
                 // Check for self reference.

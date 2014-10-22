@@ -1901,7 +1901,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
 {
     // get the Excel address components, adjust internal data in aRefData
     bool bNatLangRef = (meBiff == EXC_BIFF8) && mxData->mpScBasePos && (rTokData.GetOpCode() == ocColRowName);
-    ScSingleRefData aRefData = static_cast< const ScToken* >( rTokData.mpScToken )->GetSingleRef();
+    ScSingleRefData aRefData = *static_cast< const ScToken* >( rTokData.mpScToken )->GetSingleRef();
     XclAddress aXclPos( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclPos, bNatLangRef, false, false );
 
@@ -1958,7 +1958,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpScToken& rTokData )
 void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpScToken& rTokData )
 {
     // get the Excel address components, adjust internal data in aRefData
-    ScComplexRefData aRefData = static_cast< const ScToken* >( rTokData.mpScToken )->GetDoubleRef();
+    ScComplexRefData aRefData = *static_cast< const ScToken* >( rTokData.mpScToken )->GetDoubleRef();
     XclRange aXclRange( ScAddress::UNINITIALIZED );
     ConvertRefData( aRefData, aXclRange, false );
 
@@ -2005,7 +2005,7 @@ void XclExpFmlaCompImpl::ProcessExternalCellRef( const XclExpScToken& rTokData )
     if( mxData->mpLinkMgr )
     {
         // get the Excel address components, adjust internal data in aRefData
-        ScSingleRefData aRefData = static_cast< const ScToken* >( rTokData.mpScToken )->GetSingleRef();
+        ScSingleRefData aRefData = *static_cast< const ScToken* >( rTokData.mpScToken )->GetSingleRef();
         XclAddress aXclPos( ScAddress::UNINITIALIZED );
         ConvertRefData( aRefData, aXclPos, false, false, false );
 
@@ -2041,7 +2041,7 @@ void XclExpFmlaCompImpl::ProcessExternalRangeRef( const XclExpScToken& rTokData 
     if( mxData->mpLinkMgr )
     {
         // get the Excel address components, adjust internal data in aRefData
-        ScComplexRefData aRefData = static_cast< const ScToken* >( rTokData.mpScToken )->GetDoubleRef();
+        ScComplexRefData aRefData = *static_cast< const ScToken* >( rTokData.mpScToken )->GetDoubleRef();
         XclRange aXclRange( ScAddress::UNINITIALIZED );
         ConvertRefData( aRefData, aXclRange, false );
 
@@ -2127,14 +2127,14 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                         {
                             case svExternalSingleRef:
                             {
-                                ScSingleRefData aRefData = static_cast< ScToken* >( pScToken )->GetSingleRef();
+                                ScSingleRefData aRefData = *static_cast< ScToken* >( pScToken )->GetSingleRef();
                                 mxData->mpLinkMgr->StoreCell(
                                     nFileId, pScToken->GetString().getString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }
                             break;
                             case svExternalDoubleRef:
                             {
-                                ScComplexRefData aRefData = static_cast< ScToken* >( pScToken )->GetDoubleRef();
+                                ScComplexRefData aRefData = *static_cast< ScToken* >( pScToken )->GetDoubleRef();
                                 mxData->mpLinkMgr->StoreCellRange(
                                     nFileId, pScToken->GetString().getString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }

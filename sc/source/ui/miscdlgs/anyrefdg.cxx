@@ -209,12 +209,12 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                         ScRange aRange;
                         if(bDoubleRef)
                         {
-                            ScComplexRefData aRef( pToken->GetDoubleRef() );
+                            ScComplexRefData aRef( *pToken->GetDoubleRef() );
                             aRange = aRef.toAbs(aPos);
                         }
                         else
                         {
-                            ScSingleRefData aRef( pToken->GetSingleRef() );
+                            ScSingleRefData aRef( *pToken->GetSingleRef() );
                             aRange.aStart = aRef.toAbs(aPos);
                             aRange.aEnd = aRange.aStart;
                         }

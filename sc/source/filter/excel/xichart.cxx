@@ -780,7 +780,7 @@ sal_uInt16 XclImpChSourceLink::GetCellCount() const
                 case ::formula::svExternalDoubleRef:
                 {
                     // cell range
-                    const ScComplexRefData& rComplexRef = static_cast< const ScToken* >( pToken )->GetDoubleRef();
+                    const ScComplexRefData& rComplexRef = *static_cast< const ScToken* >( pToken )->GetDoubleRef();
                     ScAddress aAbs1 = rComplexRef.Ref1.toAbs(ScAddress());
                     ScAddress aAbs2 = rComplexRef.Ref2.toAbs(ScAddress());
                     sal_uInt32 nTabs = static_cast<sal_uInt32>(aAbs2.Tab() - aAbs1.Tab() + 1);

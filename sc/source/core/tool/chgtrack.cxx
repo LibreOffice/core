@@ -1883,7 +1883,7 @@ void ScChangeActionContent::PutValueToDoc(
 
 static void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
 {
-    ScSingleRefData& rRef1 = rTok.GetSingleRef();
+    ScSingleRefData& rRef1 = *rTok.GetSingleRef();
     if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
     {
         rRef1.SetColDeleted( true );
@@ -1898,7 +1898,7 @@ static void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
     }
     if ( rTok.GetType() == formula::svDoubleRef )
     {
-        ScSingleRefData& rRef2 = rTok.GetDoubleRef().Ref2;
+        ScSingleRefData& rRef2 = rTok.GetDoubleRef()->Ref2;
         if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
         {
             rRef2.SetColDeleted( true );

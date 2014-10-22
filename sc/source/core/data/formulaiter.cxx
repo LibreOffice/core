@@ -34,13 +34,13 @@ ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
 
 static bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p, const ScAddress& rPos )
 {
-    ScSingleRefData& rRef1 = p->GetSingleRef();
+    ScSingleRefData& rRef1 = *p->GetSingleRef();
     ScAddress aAbs1 = rRef1.toAbs(rPos);
     if (!ValidAddress(aAbs1))
         return true;
     if ( p->GetType() == svDoubleRef || p->GetType() == svExternalDoubleRef )
     {
-        ScSingleRefData& rRef2 = p->GetDoubleRef().Ref2;
+        ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
         ScAddress aAbs2 = rRef2.toAbs(rPos);
         if (!ValidAddress(aAbs2))
             return true;

@@ -89,7 +89,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
             {
                 case svDoubleRef:
                 {
-                    ScSingleRefData& rRef2 = static_cast<ScToken*>(t)->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = static_cast<ScToken*>(t)->GetDoubleRef()->Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return true;
                 }
@@ -97,7 +97,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
 
                 case svSingleRef:
                 {
-                    ScSingleRefData& rRef1 = static_cast<ScToken*>(t)->GetSingleRef();
+                    ScSingleRefData& rRef1 = *static_cast<ScToken*>(t)->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
                         return true;
                 }
@@ -1452,7 +1452,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
             ScToken* t;
             while ( ( t = static_cast<ScToken*>(pFormula->GetNextReference()) ) != NULL )
             {
-                ScSingleRefData& rRef1 = t->GetSingleRef();
+                ScSingleRefData& rRef1 = *t->GetSingleRef();
                 ScAddress aAbs = rRef1.toAbs(aSrcPos);
                 if (!rRef1.IsTabDeleted())
                 {
@@ -1463,7 +1463,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
                 }
                 if ( t->GetType() == svDoubleRef )
                 {
-                    ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
                     aAbs = rRef2.toAbs(aSrcPos);
                     if (!rRef2.IsTabDeleted())
                     {

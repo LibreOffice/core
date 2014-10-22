@@ -78,12 +78,12 @@ public:
         Any other non-overloaded method pops up an assertion.
      */
 
-    virtual const ScSingleRefData&    GetSingleRef() const;
-    virtual ScSingleRefData&      GetSingleRef();
-    virtual const ScComplexRefData& GetDoubleRef() const;
-    virtual ScComplexRefData&       GetDoubleRef();
-    virtual const ScSingleRefData&    GetSingleRef2() const;
-    virtual ScSingleRefData&      GetSingleRef2();
+    virtual const ScSingleRefData*    GetSingleRef() const;
+    virtual ScSingleRefData*      GetSingleRef();
+    virtual const ScComplexRefData* GetDoubleRef() const;
+    virtual ScComplexRefData*       GetDoubleRef();
+    virtual const ScSingleRefData*    GetSingleRef2() const;
+    virtual ScSingleRefData*      GetSingleRef2();
     virtual const ScMatrix*     GetMatrix() const;
     virtual ScMatrix*           GetMatrix();
     virtual ScJumpMatrix*       GetJumpMatrix() const;
@@ -128,8 +128,8 @@ public:
                                     ScToken( formula::svSingleRef, e ), aSingleRef( r ) {}
                                 ScSingleRefToken( const ScSingleRefToken& r ) :
                                     ScToken( r ), aSingleRef( r.aSingleRef ) {}
-    virtual const ScSingleRefData&    GetSingleRef() const SAL_OVERRIDE;
-    virtual ScSingleRefData&      GetSingleRef() SAL_OVERRIDE;
+    virtual const ScSingleRefData*    GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData*      GetSingleRef() SAL_OVERRIDE;
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScSingleRefToken(*this); }
@@ -152,12 +152,12 @@ public:
                                 }
                                 ScDoubleRefToken( const ScDoubleRefToken& r ) :
                                     ScToken( r ), aDoubleRef( r.aDoubleRef ) {}
-    virtual const ScSingleRefData&    GetSingleRef() const SAL_OVERRIDE;
-    virtual ScSingleRefData&      GetSingleRef() SAL_OVERRIDE;
-    virtual const ScComplexRefData& GetDoubleRef() const SAL_OVERRIDE;
-    virtual ScComplexRefData&       GetDoubleRef() SAL_OVERRIDE;
-    virtual const ScSingleRefData&    GetSingleRef2() const SAL_OVERRIDE;
-    virtual ScSingleRefData&      GetSingleRef2() SAL_OVERRIDE;
+    virtual const ScSingleRefData*    GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData*      GetSingleRef() SAL_OVERRIDE;
+    virtual const ScComplexRefData* GetDoubleRef() const SAL_OVERRIDE;
+    virtual ScComplexRefData*       GetDoubleRef() SAL_OVERRIDE;
+    virtual const ScSingleRefData*    GetSingleRef2() const SAL_OVERRIDE;
+    virtual ScSingleRefData*      GetSingleRef2() SAL_OVERRIDE;
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScDoubleRefToken(*this); }
@@ -196,8 +196,8 @@ public:
     virtual sal_uInt8 GetByte() const SAL_OVERRIDE;
     virtual const ScMatrix* GetMatrix() const SAL_OVERRIDE;
     virtual ScMatrix* GetMatrix() SAL_OVERRIDE;
-    virtual const ScComplexRefData& GetDoubleRef() const SAL_OVERRIDE;
-    virtual ScComplexRefData& GetDoubleRef() SAL_OVERRIDE;
+    virtual const ScComplexRefData* GetDoubleRef() const SAL_OVERRIDE;
+    virtual ScComplexRefData* GetDoubleRef() SAL_OVERRIDE;
     virtual bool operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken* Clone() const SAL_OVERRIDE;
 };
@@ -216,8 +216,8 @@ public:
 
     virtual sal_uInt16                  GetIndex() const SAL_OVERRIDE;
     virtual svl::SharedString GetString() const SAL_OVERRIDE;
-    virtual const ScSingleRefData&  GetSingleRef() const SAL_OVERRIDE;
-    virtual ScSingleRefData&          GetSingleRef() SAL_OVERRIDE;
+    virtual const ScSingleRefData*  GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData*          GetSingleRef() SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalSingleRefToken(*this); }
 };
@@ -236,12 +236,12 @@ public:
 
     virtual sal_uInt16                 GetIndex() const SAL_OVERRIDE;
     virtual svl::SharedString GetString() const SAL_OVERRIDE;
-    virtual const ScSingleRefData& GetSingleRef() const SAL_OVERRIDE;
-    virtual ScSingleRefData&       GetSingleRef() SAL_OVERRIDE;
-    virtual const ScSingleRefData& GetSingleRef2() const SAL_OVERRIDE;
-    virtual ScSingleRefData&       GetSingleRef2() SAL_OVERRIDE;
-    virtual const ScComplexRefData&    GetDoubleRef() const SAL_OVERRIDE;
-    virtual ScComplexRefData&      GetDoubleRef() SAL_OVERRIDE;
+    virtual const ScSingleRefData* GetSingleRef() const SAL_OVERRIDE;
+    virtual ScSingleRefData*       GetSingleRef() SAL_OVERRIDE;
+    virtual const ScSingleRefData* GetSingleRef2() const SAL_OVERRIDE;
+    virtual ScSingleRefData*       GetSingleRef2() SAL_OVERRIDE;
+    virtual const ScComplexRefData*    GetDoubleRef() const SAL_OVERRIDE;
+    virtual ScComplexRefData*      GetDoubleRef() SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalDoubleRefToken(*this); }
 };
@@ -431,14 +431,14 @@ public:
                         formula::StackVar eType = rT.GetType();
                         if ( eType == formula::svSingleRef || eType == formula::svExternalSingleRef )
                         {
-                            pS = &rT.GetSingleRef();
+                            pS = rT.GetSingleRef();
                             aDub.Ref1 = aDub.Ref2 = *pS;
                             pD = &aDub;
                         }
                         else
                         {
                             pS = 0;
-                            pD = &rT.GetDoubleRef();
+                            pD = rT.GetDoubleRef();
                         }
                     }
                 SingleDoubleRefModifier( ScSingleRefData& rS )
@@ -463,10 +463,10 @@ public:
     const ScSingleRefData&    Ref2;
 
                 SingleDoubleRefProvider( const ScToken& r )
-                        : Ref1( r.GetSingleRef() ),
+                        : Ref1( *r.GetSingleRef() ),
                         Ref2( (r.GetType() == formula::svDoubleRef ||
                                     r.GetType() == formula::svExternalDoubleRef) ?
-                                r.GetDoubleRef().Ref2 : Ref1 )
+                                r.GetDoubleRef()->Ref2 : Ref1 )
                     {}
                 SingleDoubleRefProvider( const ScSingleRefData& r )
                         : Ref1( r ), Ref2( r )

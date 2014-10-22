@@ -221,7 +221,7 @@ void ScRangeData::GuessPosition()
     pCode->Reset();
     while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
     {
-        ScSingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.Col() < nMinCol )
             nMinCol = rRef1.Col();
         if ( rRef1.IsRowRel() && rRef1.Row() < nMinRow )
@@ -231,7 +231,7 @@ void ScRangeData::GuessPosition()
 
         if ( t->GetType() == svDoubleRef )
         {
-            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
             if ( rRef2.IsColRel() && rRef2.Col() < nMinCol )
                 nMinCol = rRef2.Col();
             if ( rRef2.IsRowRel() && rRef2.Row() < nMinRow )
@@ -543,7 +543,7 @@ void ScRangeData::ValidateTabRefs()
     pCode->Reset();
     while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
     {
-        ScSingleRefData& rRef1 = t->GetSingleRef();
+        ScSingleRefData& rRef1 = *t->GetSingleRef();
         ScAddress aAbs = rRef1.toAbs(aPos);
         if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
         {
@@ -554,7 +554,7 @@ void ScRangeData::ValidateTabRefs()
         }
         if ( t->GetType() == svDoubleRef )
         {
-            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
+            ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
             aAbs = rRef2.toAbs(aPos);
             if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
             {
@@ -583,7 +583,7 @@ void ScRangeData::ValidateTabRefs()
             {
                 case svSingleRef:
                 {
-                    ScSingleRefData& rRef = t->GetSingleRef();
+                    ScSingleRefData& rRef = *t->GetSingleRef();
                     if (!rRef.IsTabDeleted())
                     {
                         ScAddress aAbs = rRef.toAbs(aOldPos);
@@ -593,7 +593,7 @@ void ScRangeData::ValidateTabRefs()
                 break;
                 case svDoubleRef:
                 {
-                    ScComplexRefData& rRef = t->GetDoubleRef();
+                    ScComplexRefData& rRef = *t->GetDoubleRef();
                     if (!rRef.Ref1.IsTabDeleted())
                     {
                         ScAddress aAbs = rRef.Ref1.toAbs(aOldPos);
