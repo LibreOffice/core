@@ -14,7 +14,7 @@ my $pid = '';
 while (<LOGCAT>) {
   if (m!^I/ActivityManager\( *\d+\): Start proc $id for activity .*: pid=(\d+)!) {
     $pid = $1;
-  } elsif (m!^[EIW]/[^(]+\( *$pid\)!) {
+  } elsif (m!^[EIWD]/[^(]+\( *$pid\)!) {
     print $_;
     STDOUT->flush();
   }
