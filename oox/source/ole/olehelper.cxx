@@ -262,7 +262,7 @@ void OleHelper::exportGuid( BinaryOutputStream& rOStr, const SvGlobalName& rId )
     rOStr << rId.GetCLSID().Data1;
     rOStr << rId.GetCLSID().Data2;
     rOStr << rId.GetCLSID().Data3;
-    rOStr.writeArray( &rId.GetCLSID().Data4, 8 );
+    rOStr.writeArray( rId.GetCLSID().Data4, 8 );
 }
 
 OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
