@@ -76,8 +76,8 @@ void normalize(
 
 class Test: public CppUnit::TestFixture {
 public:
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
 
     void testKeyFetch();
     void testKeySet();
@@ -129,7 +129,7 @@ protected:
     virtual bool iteration() = 0;
 
 private:
-    virtual void SAL_CALL run();
+    virtual void SAL_CALL run() SAL_OVERRIDE;
 
     osl::Condition & stop_;
     bool success_;
@@ -165,7 +165,7 @@ public:
         OUString const & relative);
 
 private:
-    virtual bool iteration();
+    virtual bool iteration() SAL_OVERRIDE;
 
     Test const & test_;
     OUString path_;
@@ -192,7 +192,7 @@ public:
         OUString const & relative);
 
 private:
-    virtual bool iteration();
+    virtual bool iteration() SAL_OVERRIDE;
 
     Test const & test_;
     OUString path_;
@@ -237,11 +237,11 @@ protected:
 
 private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual void SAL_CALL propertyChange(
         css::beans::PropertyChangeEvent const &)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     int count_;
     bool * destroyed_;
@@ -295,7 +295,7 @@ public:
     SimpleRecursiveTest(Test const & theTest, int count, bool * destroyed);
 
 private:
-    virtual void step() const;
+    virtual void step() const SAL_OVERRIDE;
 };
 
 SimpleRecursiveTest::SimpleRecursiveTest(
