@@ -507,9 +507,21 @@ bool ScToken::checkTextEqual( const FormulaToken& _rToken ) const
 }
 
 #if DEBUG_FORMULA_COMPILER
-void ScToken::Dump() const
+void DumpToken(ScToken const & rToken)
 {
-    cout << "-- ScToken (base class)" << endl;
+    switch (rToken.GetType()) {
+    case svSingleRef:
+        cout << "-- ScSingleRefToken" << endl;
+        rToken.GetSingleRef().Dump(1);
+        break;
+    case svDoubleRef:
+        cout << "-- ScDoubleRefToken" << endl;
+        rToken.GetDoubleRef().Dump(1);
+        break;
+    default:
+        cout << "-- ScToken (base class)" << endl;
+        break;
+    }
 }
 #endif
 
@@ -724,14 +736,6 @@ bool ScSingleRefToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r ) && aSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
 }
 
-#if DEBUG_FORMULA_COMPILER
-void ScSingleRefToken::Dump() const
-{
-    cout << "-- ScSingleRefToken" << endl;
-    aSingleRef.Dump(1);
-}
-#endif
-
 const ScSingleRefData&    ScDoubleRefToken::GetSingleRef() const  { return aDoubleRef.Ref1; }
 ScSingleRefData&          ScDoubleRefToken::GetSingleRef()        { return aDoubleRef.Ref1; }
 const ScComplexRefData&     ScDoubleRefToken::GetDoubleRef() const  { return aDoubleRef; }
@@ -746,14 +750,6 @@ bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
 }
-
-#if DEBUG_FORMULA_COMPILER
-void ScDoubleRefToken::Dump() const
-{
-    cout << "-- ScDoubleRefToken" << endl;
-    aDoubleRef.Dump(1);
-}
-#endif
 
 const ScRefList*        ScRefListToken::GetRefList() const  { return &aRefList; }
       ScRefList*        ScRefListToken::GetRefList()        { return &aRefList; }
@@ -4091,7 +4087,7 @@ void ScTokenArray::Dump() const
             continue;
         }
 
-        p->Dump();
+        DumpToken(*p);
     }
 
     cout << "+++ RPN Tokens +++" << endl;
@@ -4105,7 +4101,7 @@ void ScTokenArray::Dump() const
             continue;
         }
 
-        p->Dump();
+        DumpToken(*p);
     }
 }
 #endif

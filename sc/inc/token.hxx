@@ -89,11 +89,11 @@ public:
     virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
+};
 
 #if DEBUG_FORMULA_COMPILER
-    virtual void Dump() const;
+void DumpToken(ScToken const & rToken);
 #endif
-};
 
 /** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
     ranges as needed for ocRange.
@@ -134,9 +134,6 @@ public:
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScSingleRefToken(*this); }
 
-#if DEBUG_FORMULA_COMPILER
-    virtual void Dump() const SAL_OVERRIDE;
-#endif
     DECL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken );
 };
 
@@ -165,9 +162,6 @@ public:
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScDoubleRefToken(*this); }
 
-#if DEBUG_FORMULA_COMPILER
-    virtual void Dump() const SAL_OVERRIDE;
-#endif
     DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken );
 };
 
