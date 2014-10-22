@@ -32,6 +32,8 @@
 #include "sallayout.hxx"
 #include "vclpluginapi.h"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <deque>
 
 class ImplFontMetricData;
@@ -91,7 +93,7 @@ class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
     friend class X11SalGraphicsImpl;
 
 private:
-    SalGraphicsImpl* mpImpl;
+    boost::scoped_ptr<SalGraphicsImpl> mpImpl;
 
 protected:
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
