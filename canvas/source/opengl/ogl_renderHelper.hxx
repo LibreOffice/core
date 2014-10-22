@@ -5,12 +5,15 @@ namespace oglcanvas
     class RenderHelper
     {
     public:
-        RenderHelper();
+
         void renderVertexConstColor(GLfloat vertices[] , GLfloat color[4], GLenum mode) const ;
         void renderVertexUVTex(GLfloat vertices[], GLfloat uvCoordinates[], GLfloat color[4], GLenum mode) const ;
         void renderVertexTex(GLfloat vertices[], GLfloat, GLfloat, GLfloat color[4], GLenum mode) const;
         void dispose();
+        RenderHelper();
     private:
+        RenderHelper&  operator = (const RenderHelper& other);
+        RenderHelper(const RenderHelper& other);
         void  InitOpenGL();
         GLuint                                            m_vertexBuffer;
         GLuint                                            m_uvBuffer;

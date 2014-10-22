@@ -47,7 +47,6 @@ namespace oglcanvas
         ::canvas::tools::setIdentityAffineMatrix2D(maTransformation);
         maCanvasHelper.init( *rRefDevice.get(),
                              rDeviceHelper );
-        mRenderHelper =  RenderHelper();
     }
 
     void CanvasCustomSprite::disposeThis()
