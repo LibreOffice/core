@@ -492,7 +492,9 @@ Components::Components(
         OUString type(conf.copy(i, c - i));
         OUString url(conf.copy(c + 1, n - c - 1));
         if ( type == "xcsxcu" ) {
+            sal_uInt32 nStartTime = osl_getGlobalTimer();
             parseXcsXcuLayer(layer, url);
+            SAL_INFO("configmgr", "parseXcsXcuLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
             layer += 2; //TODO: overflow
         } else if ( type == "bundledext" )
         {
@@ -518,7 +520,9 @@ Components::Components(
             parseModuleLayer(layer, url);
             ++layer; //TODO: overflow
         } else if ( type == "res" ) {
+            sal_uInt32 nStartTime = osl_getGlobalTimer();
             parseResLayer(layer, url);
+            SAL_INFO("configmgr", "parseResLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
             ++layer; //TODO: overflow
         } else if ( type == "user" ) {
             if (url.isEmpty()) {
