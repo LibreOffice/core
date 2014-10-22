@@ -50,8 +50,10 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
     inline bool is() const { return begin != 0; }
 
     inline bool equals(Span const & text) const {
-        return rtl_str_compare_WithLength(
-            begin, length, text.begin, text.length) == 0;
+        return length == text.length
+            && (rtl_str_compare_WithLength(
+                    begin, length, text.begin, text.length)
+                == 0);
     }
 
     inline bool equals(char const * textBegin, sal_Int32 textLength) const {
