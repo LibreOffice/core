@@ -365,6 +365,47 @@ bool lcl_hasWordBreak( const Reference<drawing::XShape>& xShape )
     return false;
 }
 
+OUString getTextLabelString(
+    const FixedNumberFormatter& rFixedNumberFormatter, const uno::Sequence<OUString>* pCategories,
+    const TickInfo* pTickInfo, bool bComplexCat, sal_Int32& rExtraColor, bool& rHasExtraColor )
+{
+    if (pCategories)
+    {
+        // This is a normal category axis.  Get the label string from the
+        // label string array.
+        sal_Int32 nIndex = static_cast<sal_Int32>(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
+        if( nIndex>=0 && nIndex<pCategories->getLength() )
+            return (*pCategories)[nIndex];
+
+        return OUString();
+    }
+    else if (bComplexCat)
+    {
+        // This is a complex category axis.  The label is stored in the tick.
+        return pTickInfo->aText;
+    }
+
+    // This is a numeric axis.  Format the original tick value per number format.
+    return rFixedNumberFormatter.getFormattedString(pTickInfo->getUnscaledTickValue(), rExtraColor, rHasExtraColor);
+}
+
+void getAxisLabelProperties(
+    tNameSequence& rPropNames, tAnySequence& rPropValues, const AxisProperties& rAxisProp,
+    const AxisLabelProperties& rAxisLabelProp,
+    sal_Int32 nLimitedSpaceForText, bool bLimitedHeight )
+{
+    Reference<beans::XPropertySet> xProps(rAxisProp.m_xAxisModel, uno::UNO_QUERY);
+
+    PropertyMapper::getTextLabelMultiPropertyLists(
+        xProps, rPropNames, rPropValues, false, nLimitedSpaceForText, bLimitedHeight);
+
+    LabelPositionHelper::doDynamicFontResize(
+        rPropValues, rPropNames, xProps, rAxisLabelProp.m_aFontReferenceSize);
+
+    LabelPositionHelper::changeTextAdjustment(
+        rPropValues, rPropNames, rAxisProp.maLabelAlignment.meAlignment);
+}
+
 /**
  * Iterate through only the first 2 and last 2 tick info items, and the tick
  * that has the longest text (in terms of character length) in case it's not
@@ -644,17 +685,12 @@ bool VCartesianAxis::createTextShapes(
     const TickInfo* pPREPreviousVisibleTickInfo = NULL;
     const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
 
+    bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
+
     //prepare properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
     tAnySequence aPropValues;
-
-    bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
-    Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
-    PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false
-        , nLimitedSpaceForText, bLimitedHeight );
-    LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
-        , m_aAxisLabelProperties.m_aFontReferenceSize );
-    LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, m_aAxisProperties.maLabelAlignment.meAlignment );
+    getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, nLimitedSpaceForText, bLimitedHeight);
 
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
     sal_Int32 nColor = Color( COL_AUTO ).GetColor();
@@ -725,25 +761,9 @@ bool VCartesianAxis::createTextShapes(
         bool bHasExtraColor=false;
         sal_Int32 nExtraColor=0;
 
-        OUString aLabel;
-        if(pCategories)
-        {
-            // This is a normal category axis.  Get the label string from the
-            // label string array.
-            sal_Int32 nIndex = static_cast<sal_Int32>(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
-            if( nIndex>=0 && nIndex<pCategories->getLength() )
-                aLabel = (*pCategories)[nIndex];
-        }
-        else if( m_aAxisProperties.m_bComplexCategories )
-        {
-            // This is a complex category axis.  The label is stored in the tick.
-            aLabel = pTickInfo->aText;
-        }
-        else
-        {
-            // This is a numeric axis.  Format the original tick value per number format.
-            aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->getUnscaledTickValue(), nExtraColor, bHasExtraColor );
-        }
+        OUString aLabel = getTextLabelString(
+            aFixedNumberFormatter, pCategories, pTickInfo, isComplexCategoryAxis(),
+            nExtraColor, bHasExtraColor);
 
         if(pColorAny)
             *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
@@ -810,10 +830,7 @@ bool VCartesianAxis::createTextShapes(
                         // Try auto-rotating the labels at 45 degrees and
                         // start over.  This rotation angle will be stored for
                         // all future text shape creation runs.
-
-                        rAxisLabelProperties.fRotationAngleDegree = 45;
-                        rAxisLabelProperties.bLineBreakAllowed = false;
-                        rAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
+                        rAxisLabelProperties.autoRotate45();
                         m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree; // Store it for future runs.
                         removeTextShapesFromTicks();
                         return false;
@@ -862,17 +879,12 @@ bool VCartesianAxis::createTextShapesSimple(
     const TickInfo* pPreviousVisibleTickInfo = NULL;
     const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
 
+    bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
+
     //prepare properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
     tAnySequence aPropValues;
-
-    bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
-    Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
-    PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false
-        , -1, bLimitedHeight );
-    LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
-        , m_aAxisLabelProperties.m_aFontReferenceSize );
-    LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, m_aAxisProperties.maLabelAlignment.meAlignment );
+    getAxisLabelProperties(aPropNames, aPropValues, m_aAxisProperties, rAxisLabelProperties, -1, bLimitedHeight);
 
     uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
     sal_Int32 nColor = Color( COL_AUTO ).GetColor();
@@ -921,25 +933,9 @@ bool VCartesianAxis::createTextShapesSimple(
         bool bHasExtraColor=false;
         sal_Int32 nExtraColor=0;
 
-        OUString aLabel;
-        if(pCategories)
-        {
-            // This is a normal category axis.  Get the label string from the
-            // label string array.
-            sal_Int32 nIndex = static_cast<sal_Int32>(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
-            if( nIndex>=0 && nIndex<pCategories->getLength() )
-                aLabel = (*pCategories)[nIndex];
-        }
-        else if( m_aAxisProperties.m_bComplexCategories )
-        {
-            // This is a complex category axis.  The label is stored in the tick.
-            aLabel = pTickInfo->aText;
-        }
-        else
-        {
-            // This is a numeric axis.  Format the original tick value per number format.
-            aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->getUnscaledTickValue(), nExtraColor, bHasExtraColor );
-        }
+        OUString aLabel = getTextLabelString(
+            aFixedNumberFormatter, pCategories, pTickInfo, isComplexCategoryAxis(),
+            nExtraColor, bHasExtraColor);
 
         if(pColorAny)
             *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
@@ -975,10 +971,7 @@ bool VCartesianAxis::createTextShapesSimple(
                     // Try auto-rotating the labels at 45 degrees and
                     // start over.  This rotation angle will be stored for
                     // all future text shape creation runs.
-
-                    rAxisLabelProperties.fRotationAngleDegree = 45;
-                    rAxisLabelProperties.bLineBreakAllowed = false;
-                    rAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
+                    rAxisLabelProperties.autoRotate45();
                     m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree; // Store it for future runs.
                     removeTextShapesFromTicks();
                     return false;
