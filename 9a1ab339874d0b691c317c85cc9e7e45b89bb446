@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_d7eda626",
+        "filename": "svtools/source/contnr/simptabl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2014-10-22T22:07:28Z",
+      "side": 1,
+      "message": "Language dependent collation was replaced by OUString comparison. It\u0027s OK for config keys (Expert Config dialog), but probably not for other use cases.",
+      "revId": "9a1ab339874d0b691c317c85cc9e7e45b89bb446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
