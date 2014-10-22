@@ -408,15 +408,15 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                 case svSingleRef:
                     {
                         sheet::SingleReference aSingleRef;
-                        lcl_SingleRefToApi( aSingleRef, *static_cast<const ScToken&>(rToken).GetSingleRef() );
+                        lcl_SingleRefToApi( aSingleRef, *rToken.GetSingleRef() );
                         rAPI.Data <<= aSingleRef;
                     }
                     break;
                 case formula::svDoubleRef:
                     {
                         sheet::ComplexReference aCompRef;
-                        lcl_SingleRefToApi( aCompRef.Reference1, *static_cast<const ScToken&>(rToken).GetSingleRef() );
-                        lcl_SingleRefToApi( aCompRef.Reference2, *static_cast<const ScToken&>(rToken).GetSingleRef2() );
+                        lcl_SingleRefToApi( aCompRef.Reference1, *rToken.GetSingleRef() );
+                        lcl_SingleRefToApi( aCompRef.Reference2, *rToken.GetSingleRef2() );
                         rAPI.Data <<= aCompRef;
                     }
                     break;
@@ -429,13 +429,13 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     }
                     break;
                 case svMatrix:
-                    if (!ScRangeToSequence::FillMixedArray( rAPI.Data, static_cast<const ScToken&>(rToken).GetMatrix(), true))
+                    if (!ScRangeToSequence::FillMixedArray( rAPI.Data, rToken.GetMatrix(), true))
                         rAPI.Data.clear();
                     break;
                 case svExternalSingleRef:
                     {
                         sheet::SingleReference aSingleRef;
-                        lcl_ExternalRefToApi( aSingleRef, *static_cast<const ScToken&>(rToken).GetSingleRef() );
+                        lcl_ExternalRefToApi( aSingleRef, *rToken.GetSingleRef() );
                         size_t nCacheId;
                         rDoc.GetExternalRefManager()->getCacheTable(
                             rToken.GetIndex(), rToken.GetString().getString(), false, &nCacheId);
@@ -450,8 +450,8 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                 case svExternalDoubleRef:
                     {
                         sheet::ComplexReference aComplRef;
-                        lcl_ExternalRefToApi( aComplRef.Reference1, *static_cast<const ScToken&>(rToken).GetSingleRef() );
-                        lcl_ExternalRefToApi( aComplRef.Reference2, *static_cast<const ScToken&>(rToken).GetSingleRef2() );
+                        lcl_ExternalRefToApi( aComplRef.Reference1, *rToken.GetSingleRef() );
+                        lcl_ExternalRefToApi( aComplRef.Reference2, *rToken.GetSingleRef2() );
                         size_t nCacheId;
                         rDoc.GetExternalRefManager()->getCacheTable(
                             rToken.GetIndex(), rToken.GetString().getString(), false, &nCacheId);
@@ -459,7 +459,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         // NOTE: This assumes that cached sheets are in consecutive order!
                         aComplRef.Reference2.Sheet =
                             aComplRef.Reference1.Sheet +
-                            (static_cast<const ScToken&>(rToken).GetSingleRef2()->Tab() - static_cast<const ScToken&>(rToken).GetSingleRef()->Tab());
+                            (rToken.GetSingleRef2()->Tab() - rToken.GetSingleRef()->Tab());
                         sheet::ExternalReference aExtRef;
                         aExtRef.Index = rToken.GetIndex();
                         aExtRef.Reference <<= aComplRef;

@@ -48,8 +48,8 @@ ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
 void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos)
 {
     pArr->Reset();
-    ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+    formula::FormulaToken* t;
+    while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
     {
         switch (t->GetType())
         {

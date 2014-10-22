@@ -1367,9 +1367,9 @@ void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
         ScFormulaCell* pFCell = aIter.getFormulaCell();
         ScDetectiveRefIter aRefIter(pFCell);
-        for (ScToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
+        for (formula::FormulaToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
-            ScTokenRef pRef(static_cast<ScToken*>(p->Clone()));
+            ScTokenRef pRef(p->Clone());
             ScRefTokenHelper::join(rRefTokens, pRef, aIter.GetPos());
         }
     }
@@ -1390,10 +1390,10 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
         ScFormulaCell* pFCell = aIter.getFormulaCell();
         ScDetectiveRefIter aRefIter(pFCell);
-        for (ScToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
+        for (formula::FormulaToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
             const ScAddress& aPos = aIter.GetPos();
-            ScTokenRef pRef(static_cast<ScToken*>(p->Clone()));
+            ScTokenRef pRef(p->Clone());
             if (ScRefTokenHelper::intersects(aSrcRange, pRef, aPos))
             {
                 // This address is absolute.

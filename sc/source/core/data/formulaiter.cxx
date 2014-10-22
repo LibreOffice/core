@@ -32,7 +32,7 @@ ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
     aPos = pCell->aPos;
 }
 
-static bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p, const ScAddress& rPos )
+static bool lcl_ScDetectiveRefIter_SkipRef( formula::FormulaToken* p, const ScAddress& rPos )
 {
     ScSingleRefData& rRef1 = *p->GetSingleRef();
     ScAddress aAbs1 = rRef1.toAbs(rPos);
@@ -51,7 +51,7 @@ static bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p, const ScAddress& rPos )
 bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 {
     bool bRet = false;
-    ScToken* p = GetNextRefToken();
+    formula::FormulaToken* p = GetNextRefToken();
     if( p )
     {
         SingleDoubleRefProvider aProv( *p );
@@ -63,12 +63,12 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
     return bRet;
 }
 
-ScToken* ScDetectiveRefIter::GetNextRefToken()
+formula::FormulaToken* ScDetectiveRefIter::GetNextRefToken()
 {
-    ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
     while (p && lcl_ScDetectiveRefIter_SkipRef(p, aPos))
     {
-        p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+        p = pCode->GetNextReferenceRPN();
     }
     return p;
 }

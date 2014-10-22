@@ -46,7 +46,7 @@ struct ScQueryEntry;
 struct ScSingleRefData;
 struct ScComplexRefData;
 
-class ScToken;
+namespace formula { class FormulaToken; }
 class ScJumpMatrix;
 struct ScRefCellValue;
 
@@ -156,7 +156,7 @@ private:
     svl::SharedStringPool& mrStrPool;
     formula::FormulaTokenRef  xResult;
     ScJumpMatrix*   pJumpMatrix;        // currently active array condition, if any
-    ScTokenMatrixMap* pTokenMatrixMap;  // map ScToken* to formula::FormulaTokenRef if in array condition
+    ScTokenMatrixMap* pTokenMatrixMap;  // map FormulaToken* to formula::FormulaTokenRef if in array condition
     ScFormulaCell* pMyFormulaCell;      // the cell of this formula expression
     SvNumberFormatter* pFormatter;
 
@@ -289,7 +289,7 @@ void DoubleRefToRange( const ScComplexRefData&, ScRange&, bool bDontCheckForTabl
   */
 void PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRefInList );
 void PopDoubleRef( ScRange&, bool bDontCheckForTableOp = false );
-void DoubleRefToVars( const ScToken* p,
+void DoubleRefToVars( const formula::FormulaToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         bool bDontCheckForTableOp = false );

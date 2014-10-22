@@ -24,7 +24,7 @@
 
 class ScTokenArray;
 class ScFormulaCell;
-class ScToken;
+namespace formula { class FormulaToken; }
 
 /**
  * Iterator for references in a formula cell.
@@ -37,7 +37,7 @@ private:
 public:
                 ScDetectiveRefIter( ScFormulaCell* pCell );
     bool        GetNextRef( ScRange& rRange );
-    ScToken*    GetNextRefToken();
+    formula::FormulaToken* GetNextRefToken();
 };
 
 #endif

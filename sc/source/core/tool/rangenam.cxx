@@ -217,9 +217,9 @@ void ScRangeData::GuessPosition()
     SCsROW nMinRow = 0;
     SCsTAB nMinTab = 0;
 
-    ScToken* t;
+    formula::FormulaToken* t;
     pCode->Reset();
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.Col() < nMinCol )
@@ -282,10 +282,10 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
 {
     bool bChanged = false;
 
-    ScToken* t;
+    formula::FormulaToken* t;
     pCode->Reset();
 
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         if( t->GetType() != svIndex )
         {
@@ -314,10 +314,10 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
     bool bChanged = false;
 
-    ScToken* t;
+    formula::FormulaToken* t;
     pCode->Reset();
 
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         if( t->GetType() != svIndex )
         {
@@ -539,9 +539,9 @@ void ScRangeData::ValidateTabRefs()
 
     SCTAB nMinTab = aPos.Tab();
     SCTAB nMaxTab = nMinTab;
-    ScToken* t;
+    formula::FormulaToken* t;
     pCode->Reset();
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         ScAddress aAbs = rRef1.toAbs(aPos);
@@ -577,7 +577,7 @@ void ScRangeData::ValidateTabRefs()
         aPos.SetTab( aPos.Tab() - nMove );
 
         pCode->Reset();
-        while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
+        while ( ( t = pCode->GetNextReference() ) != NULL )
         {
             switch (t->GetType())
             {

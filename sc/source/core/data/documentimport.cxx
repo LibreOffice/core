@@ -322,7 +322,7 @@ void ScDocumentImport::setMatrixCells(
     aRefData.SetAddress(rBasePos, rBasePos);
 
     ScTokenArray aArr; // consists only of one single reference token.
-    ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference(aRefData));
+    formula::FormulaToken* t = aArr.AddMatrixSingleReference(aRefData);
 
     ScAddress aPos = rBasePos;
     for (SCROW nRow = rRange.aStart.Row()+1; nRow <= rRange.aEnd.Row(); ++nRow)

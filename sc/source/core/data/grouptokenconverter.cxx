@@ -96,13 +96,12 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
         // vector reference token.  Note: we only care about relative vs
         // absolute reference state for row directions.
 
-        const ScToken* pToken = static_cast<const ScToken*>(p);
         SCROW nLen = mrCell.GetCellGroup()->mnLength;
-        switch (pToken->GetType())
+        switch (p->GetType())
         {
             case svSingleRef:
             {
-                ScSingleRefData aRef = *pToken->GetSingleRef();
+                ScSingleRefData aRef = *p->GetSingleRef();
                 ScAddress aRefPos = aRef.toAbs(mrPos);
                 if (aRef.IsRowRel())
                 {
@@ -141,7 +140,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
             break;
             case svDoubleRef:
             {
-                ScComplexRefData aRef = *pToken->GetDoubleRef();
+                ScComplexRefData aRef = *p->GetDoubleRef();
                 ScRange aAbs = aRef.toAbs(mrPos);
 
                 // Check for self reference.
@@ -228,7 +227,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
             }
             break;
             default:
-                mrGroupTokens.AddToken(*pToken);
+                mrGroupTokens.AddToken(*p);
         }
     }
 

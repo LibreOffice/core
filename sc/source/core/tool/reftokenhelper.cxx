@@ -80,8 +80,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
         {
             case svSingleRef:
                 {
-                    const ScToken* pT = static_cast<const ScToken*>(p);
-                    const ScSingleRefData& rRef = *pT->GetSingleRef();
+                    const ScSingleRefData& rRef = *p->GetSingleRef();
                     if (!rRef.Valid())
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.IsFlag3D())
@@ -90,8 +89,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
             case svDoubleRef:
                 {
-                    const ScToken* pT = static_cast<const ScToken*>(p);
-                    const ScComplexRefData& rRef = *pT->GetDoubleRef();
+                    const ScComplexRefData& rRef = *p->GetDoubleRef();
                     if (!rRef.Valid())
                         bFailure = true;
                     else if (bOnly3DRef && !rRef.Ref1.IsFlag3D())
@@ -100,15 +98,13 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
             case svExternalSingleRef:
                 {
-                    const ScToken* pT = static_cast<const ScToken*>(p);
-                    if (!pT->GetSingleRef()->ValidExternal())
+                    if (!p->GetSingleRef()->ValidExternal())
                         bFailure = true;
                 }
                 break;
             case svExternalDoubleRef:
                 {
-                    const ScToken* pT = static_cast<const ScToken*>(p);
-                    if (!pT->GetDoubleRef()->ValidExternal())
+                    if (!p->GetDoubleRef()->ValidExternal())
                         bFailure = true;
                 }
                 break;
@@ -121,8 +117,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
         }
         if (!bFailure)
-            rRefTokens.push_back(
-                    ScTokenRef(static_cast<ScToken*>(p->Clone())));
+            rRefTokens.push_back(ScTokenRef(p->Clone()));
 
     }
     if (bFailure)

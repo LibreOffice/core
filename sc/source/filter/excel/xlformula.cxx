@@ -884,7 +884,7 @@ inline bool lclGetAddress( ScAddress& rAddress, const FormulaToken& rToken, cons
     bool bIsSingleRef = (eOpCode == ocPush) && (rToken.GetType() == svSingleRef);
     if( bIsSingleRef )
     {
-        const ScSingleRefData& rRef = *static_cast<const ScToken&>(rToken).GetSingleRef();
+        const ScSingleRefData& rRef = *rToken.GetSingleRef();
         rAddress = rRef.toAbs(rPos);
         bIsSingleRef = !rRef.IsDeleted();
     }

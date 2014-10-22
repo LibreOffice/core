@@ -32,8 +32,8 @@ typedef sal_Int32 SCsCOLROW;
 typedef ::boost::intrusive_ptr<ScMatrix>        ScMatrixRef;
 typedef ::boost::intrusive_ptr<const ScMatrix>  ScConstMatrixRef;
 
-class ScToken;
-typedef ::boost::intrusive_ptr<ScToken> ScTokenRef;
+namespace formula { class FormulaToken; }
+typedef ::boost::intrusive_ptr<formula::FormulaToken> ScTokenRef;
 
 typedef sal_uInt8 ScMatValType;
 const ScMatValType SC_MATVAL_VALUE     = 0x00;

@@ -205,8 +205,8 @@ bool hasRefsToSrcDoc(ScRangeData& rData, sal_uInt16 nFileId)
         return false;
 
     pArray->Reset();
-    ScToken* p = static_cast<ScToken*>(pArray->GetNextReference());
-    for (; p; p = static_cast<ScToken*>(pArray->GetNextReference()))
+    formula::FormulaToken* p = pArray->GetNextReference();
+    for (; p; p = pArray->GetNextReference())
     {
         if (!p->IsExternalRef())
             continue;
@@ -2185,20 +2185,20 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
         {
             case svSingleRef:
             {
-                const ScSingleRefData& rRef = *static_cast<const ScToken*>(pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = *pToken->GetSingleRef();
                 OUString aTabName;
                 pSrcDoc->GetName(rRef.Tab(), aTabName);
-                ScExternalSingleRefToken aNewToken(nFileId, aTabName, *static_cast<const ScToken*>(pToken)->GetSingleRef());
+                ScExternalSingleRefToken aNewToken(nFileId, aTabName, *pToken->GetSingleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }
             break;
             case svDoubleRef:
             {
-                const ScSingleRefData& rRef = *static_cast<const ScToken*>(pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = *pToken->GetSingleRef();
                 OUString aTabName;
                 pSrcDoc->GetName(rRef.Tab(), aTabName);
-                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, *static_cast<const ScToken*>(pToken)->GetDoubleRef());
+                ScExternalDoubleRefToken aNewToken(nFileId, aTabName, *pToken->GetDoubleRef());
                 pNew->AddToken(aNewToken);
                 bTokenAdded = true;
             }

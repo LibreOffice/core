@@ -524,7 +524,7 @@ static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, SCSIZE nParmCols, SCSIZE
 
 bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
-    pJumpMatrix = static_cast<ScToken*>(pStack[sp-nStackLevel])->GetJumpMatrix();
+    pJumpMatrix = pStack[sp-nStackLevel]->GetJumpMatrix();
     bool bHasResMat = pJumpMatrix->HasResultMatrix();
     SCSIZE nC, nR;
     if ( nStackLevel == 2 )
@@ -2471,7 +2471,7 @@ void ScInterpreter::ScIsRef()
         {
             FormulaTokenRef x = PopToken();
             if ( !nGlobalError )
-                nRes = !static_cast<ScToken*>(x.get())->GetRefList()->empty();
+                nRes = !x.get()->GetRefList()->empty();
         }
         break;
         default:
@@ -7369,7 +7369,7 @@ void ScInterpreter::ScIndex()
         else
             nRow = 0;
         if (GetStackType() == svRefList)
-            nAreaCount = (sp ? static_cast<ScToken*>(pStack[sp-1])->GetRefList()->size() : 0);
+            nAreaCount = (sp ? pStack[sp-1]->GetRefList()->size() : 0);
         else
             nAreaCount = 1;     // one reference or array or whatever
         if (nAreaCount == 0 || (size_t)nArea > nAreaCount)
@@ -7497,7 +7497,7 @@ void ScInterpreter::ScIndex()
                             return;
                         }
                         ScRange aRange( ScAddress::UNINITIALIZED);
-                        DoubleRefToRange( (*(static_cast<ScToken*>(xRef.get())->GetRefList()))[nArea-1], aRange);
+                        DoubleRefToRange( (*(xRef.get()->GetRefList()))[nArea-1], aRange);
                         aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                         if ( nParamCount == 2 && nRow1 == nRow2 )
                             bRowArray = true;
@@ -7576,22 +7576,22 @@ void ScInterpreter::ScAreas()
             case svSingleRef:
                 {
                     FormulaTokenRef xT = PopToken();
-                    ValidateRef( *static_cast<ScToken*>(xT.get())->GetSingleRef());
+                    ValidateRef( *xT.get()->GetSingleRef());
                     ++nCount;
                 }
                 break;
             case svDoubleRef:
                 {
                     FormulaTokenRef xT = PopToken();
-                    ValidateRef( *static_cast<ScToken*>(xT.get())->GetDoubleRef());
+                    ValidateRef( *xT.get()->GetDoubleRef());
                     ++nCount;
                 }
                 break;
             case svRefList:
                 {
                     FormulaTokenRef xT = PopToken();
-                    ValidateRef( *(static_cast<ScToken*>(xT.get())->GetRefList()));
-                    nCount += static_cast<ScToken*>(xT.get())->GetRefList()->size();
+                    ValidateRef( *(xT.get()->GetRefList()));
+                    nCount += xT.get()->GetRefList()->size();
                 }
                 break;
             default:
@@ -8250,7 +8250,7 @@ void ScInterpreter::ScErrorType()
                 nErr = nGlobalError;
             else
             {
-                const ScRefList* pRefList = static_cast<ScToken*>(x.get())->GetRefList();
+                const ScRefList* pRefList = x.get()->GetRefList();
                 size_t n = pRefList->size();
                 if (!n)
                     nErr = errNoRef;

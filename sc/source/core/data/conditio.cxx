@@ -89,7 +89,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
             {
                 case svDoubleRef:
                 {
-                    ScSingleRefData& rRef2 = static_cast<ScToken*>(t)->GetDoubleRef()->Ref2;
+                    ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return true;
                 }
@@ -97,7 +97,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
 
                 case svSingleRef:
                 {
-                    ScSingleRefData& rRef1 = *static_cast<ScToken*>(t)->GetSingleRef();
+                    ScSingleRefData& rRef1 = *t->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
                         return true;
                 }
@@ -1359,8 +1359,8 @@ void ScConditionEntry::SourceChanged( const ScAddress& rChanged )
         if (pFormula)
         {
             pFormula->Reset();
-            ScToken* t;
-            while ( ( t = static_cast<ScToken*>(pFormula->GetNextReference()) ) != NULL )
+            formula::FormulaToken* t;
+            while ( ( t = pFormula->GetNextReference() ) != NULL )
             {
                 SingleDoubleRefProvider aProv( *t );
                 if ( aProv.Ref1.IsColRel() || aProv.Ref1.IsRowRel() || aProv.Ref1.IsTabRel() ||
@@ -1449,8 +1449,8 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
         if (pFormula)
         {
             pFormula->Reset();
-            ScToken* t;
-            while ( ( t = static_cast<ScToken*>(pFormula->GetNextReference()) ) != NULL )
+            formula::FormulaToken* t;
+            while ( ( t = pFormula->GetNextReference() ) != NULL )
             {
                 ScSingleRefData& rRef1 = *t->GetSingleRef();
                 ScAddress aAbs = rRef1.toAbs(aSrcPos);

@@ -969,7 +969,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
         if (mpArray->GetLen() != 1)
             break;
 
-        const ScToken* p = static_cast<const ScToken*>(mpArray->First());
+        const formula::FormulaToken* p = mpArray->First();
         if (!p->IsExternalRef())
             break;
 

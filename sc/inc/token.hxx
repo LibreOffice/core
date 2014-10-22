@@ -45,25 +45,8 @@ class ScJumpMatrix;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
 
-class SC_DLLPUBLIC ScToken : public formula::FormulaToken
-{
-private:
-                                // not implemented, prevent usage
-                                ScToken();
-            ScToken&            operator=( const ScToken& );
-
-protected:
-
-    ScToken( formula::StackVar eTypeP,OpCode e = ocPush ) : formula::FormulaToken(eTypeP,e) {}
-    ScToken( const ScToken& r ): formula::FormulaToken(r) {}
-
-public:
-
-    virtual                     ~ScToken();
-};
-
 #if DEBUG_FORMULA_COMPILER
-void DumpToken(ScToken const & rToken);
+void DumpToken(formula::FormulaToken const & rToken);
 #endif
 
 /** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
@@ -80,25 +63,25 @@ void DumpToken(ScToken const & rToken);
 */
 formula::FormulaTokenRef extendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 
-inline void intrusive_ptr_add_ref(const ScToken* p)
+inline void intrusive_ptr_add_ref(const formula::FormulaToken* p)
 {
     p->IncRef();
 }
 
-inline void intrusive_ptr_release(const ScToken* p)
+inline void intrusive_ptr_release(const formula::FormulaToken* p)
 {
     p->DecRef();
 }
 
-class ScSingleRefToken : public ScToken
+class ScSingleRefToken : public formula::FormulaToken
 {
 private:
             ScSingleRefData       aSingleRef;
 public:
                                 ScSingleRefToken( const ScSingleRefData& r, OpCode e = ocPush ) :
-                                    ScToken( formula::svSingleRef, e ), aSingleRef( r ) {}
+                                    FormulaToken( formula::svSingleRef, e ), aSingleRef( r ) {}
                                 ScSingleRefToken( const ScSingleRefToken& r ) :
-                                    ScToken( r ), aSingleRef( r.aSingleRef ) {}
+                                    FormulaToken( r ), aSingleRef( r.aSingleRef ) {}
     virtual const ScSingleRefData*    GetSingleRef() const SAL_OVERRIDE;
     virtual ScSingleRefData*      GetSingleRef() SAL_OVERRIDE;
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
@@ -108,21 +91,21 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken );
 };
 
-class ScDoubleRefToken : public ScToken
+class ScDoubleRefToken : public formula::FormulaToken
 {
 private:
             ScComplexRefData        aDoubleRef;
 public:
                                 ScDoubleRefToken( const ScComplexRefData& r, OpCode e = ocPush  ) :
-                                    ScToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
+                                    FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
                                 ScDoubleRefToken( const ScSingleRefData& r, OpCode e = ocPush  ) :
-                                    ScToken( formula::svDoubleRef, e )
+                                    FormulaToken( formula::svDoubleRef, e )
                                 {
                                     aDoubleRef.Ref1 = r;
                                     aDoubleRef.Ref2 = r;
                                 }
                                 ScDoubleRefToken( const ScDoubleRefToken& r ) :
-                                    ScToken( r ), aDoubleRef( r.aDoubleRef ) {}
+                                    FormulaToken( r ), aDoubleRef( r.aDoubleRef ) {}
     virtual const ScSingleRefData*    GetSingleRef() const SAL_OVERRIDE;
     virtual ScSingleRefData*      GetSingleRef() SAL_OVERRIDE;
     virtual const ScComplexRefData* GetDoubleRef() const SAL_OVERRIDE;
@@ -136,7 +119,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken );
 };
 
-class ScMatrixToken : public ScToken
+class ScMatrixToken : public formula::FormulaToken
 {
 private:
             ScMatrixRef         pMatrix;
@@ -155,7 +138,7 @@ public:
  * both the values in matrix form, and the range address the matrix
  * represents.
  */
-class ScMatrixRangeToken : public ScToken
+class ScMatrixRangeToken : public formula::FormulaToken
 {
     ScMatrixRef mpMatrix;
     ScComplexRefData maRef;
@@ -173,7 +156,7 @@ public:
     virtual FormulaToken* Clone() const SAL_OVERRIDE;
 };
 
-class ScExternalSingleRefToken : public ScToken
+class ScExternalSingleRefToken : public formula::FormulaToken
 {
     sal_uInt16                  mnFileId;
     svl::SharedString           maTabName;
@@ -193,7 +176,7 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalSingleRefToken(*this); }
 };
 
-class ScExternalDoubleRefToken : public ScToken
+class ScExternalDoubleRefToken : public formula::FormulaToken
 {
     sal_uInt16                  mnFileId;
     svl::SharedString           maTabName;  // name of the first sheet
@@ -217,7 +200,7 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScExternalDoubleRefToken(*this); }
 };
 
-class ScExternalNameToken : public ScToken
+class ScExternalNameToken : public formula::FormulaToken
 {
     sal_uInt16                  mnFileId;
     svl::SharedString           maName;
@@ -236,15 +219,15 @@ public:
 
 // Only created from within the interpreter, no conversion from ScRawToken,
 // never added to ScTokenArray!
-class ScJumpMatrixToken : public ScToken
+class ScJumpMatrixToken : public formula::FormulaToken
 {
 private:
             ScJumpMatrix*       pJumpMatrix;
 public:
                                 ScJumpMatrixToken( ScJumpMatrix* p ) :
-                                    ScToken( formula::svJumpMatrix ), pJumpMatrix( p ) {}
+                                    FormulaToken( formula::svJumpMatrix ), pJumpMatrix( p ) {}
                                 ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
-                                    ScToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
+                                    FormulaToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
     virtual                     ~ScJumpMatrixToken();
     virtual ScJumpMatrix*       GetJumpMatrix() const SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
@@ -253,32 +236,32 @@ public:
 
 // Only created from within the interpreter, no conversion from ScRawToken,
 // never added to ScTokenArray!
-class ScRefListToken : public ScToken
+class ScRefListToken : public formula::FormulaToken
 {
 private:
             ScRefList           aRefList;
 public:
                                 ScRefListToken() :
-                                    ScToken( formula::svRefList ) {}
+                                    FormulaToken( formula::svRefList ) {}
                                 ScRefListToken( const ScRefListToken & r ) :
-                                    ScToken( r ), aRefList( r.aRefList ) {}
+                                    FormulaToken( r ), aRefList( r.aRefList ) {}
     virtual const ScRefList*    GetRefList() const SAL_OVERRIDE;
     virtual       ScRefList*    GetRefList() SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScRefListToken(*this); }
 };
 
-class SC_DLLPUBLIC ScEmptyCellToken : public ScToken
+class SC_DLLPUBLIC ScEmptyCellToken : public formula::FormulaToken
 {
             bool                bInherited          :1;
             bool                bDisplayedAsString  :1;
 public:
     explicit                    ScEmptyCellToken( bool bInheritedP, bool bDisplayAsString ) :
-                                    ScToken( formula::svEmptyCell ),
+                                    FormulaToken( formula::svEmptyCell ),
                                     bInherited( bInheritedP ),
                                     bDisplayedAsString( bDisplayAsString ) {}
                                 ScEmptyCellToken( const ScEmptyCellToken& r ) :
-                                    ScToken( r ),
+                                    FormulaToken( r ),
                                     bInherited( r.bInherited ),
                                     bDisplayedAsString( r.bDisplayedAsString ) {}
             bool                IsInherited() const { return bInherited; }
@@ -290,10 +273,10 @@ public:
 };
 
 /**  Transports the result from the interpreter to the formula cell. */
-class SC_DLLPUBLIC ScMatrixCellResultToken : public ScToken
+class SC_DLLPUBLIC ScMatrixCellResultToken : public formula::FormulaToken
 {
     // No non-const access implemented, silence down unxsols4 complaining about
-    // the public GetMatrix() hiding the one from ScToken.
+    // the public GetMatrix() hiding the one from FormulaToken.
     virtual ScMatrix*           GetMatrix() SAL_OVERRIDE;
 
 protected:
@@ -366,7 +349,7 @@ public:
     void ResetResult();
 };
 
-class SC_DLLPUBLIC ScHybridCellToken : public ScToken
+class SC_DLLPUBLIC ScHybridCellToken : public formula::FormulaToken
 {
 private:
     double mfDouble;
@@ -397,7 +380,7 @@ class SingleDoubleRefModifier
         SingleDoubleRefModifier& operator=( const SingleDoubleRefModifier& );
 
 public:
-                SingleDoubleRefModifier( ScToken& rT )
+        SingleDoubleRefModifier( formula::FormulaToken& rT )
                     {
                         formula::StackVar eType = rT.GetType();
                         if ( eType == formula::svSingleRef || eType == formula::svExternalSingleRef )
@@ -433,7 +416,7 @@ public:
     const ScSingleRefData&    Ref1;
     const ScSingleRefData&    Ref2;
 
-                SingleDoubleRefProvider( const ScToken& r )
+                SingleDoubleRefProvider( const formula::FormulaToken& r )
                         : Ref1( *r.GetSingleRef() ),
                         Ref2( (r.GetType() == formula::svDoubleRef ||
                                     r.GetType() == formula::svExternalDoubleRef) ?

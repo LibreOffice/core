@@ -682,8 +682,8 @@ bool ScValidationData::GetSelectionFromFormula(
 
     ScTokenArray* pArr = (ScTokenArray*) &rTokArr;
     pArr->Reset();
-    ScToken* t = NULL;
-    if (pArr->GetLen() == 1 && (t = static_cast<ScToken*>(pArr->GetNextReferenceOrName())) != NULL)
+    formula::FormulaToken* t = NULL;
+    if (pArr->GetLen() == 1 && (t = pArr->GetNextReferenceOrName()) != NULL)
     {
         if (t->GetOpCode() == ocDBArea)
         {

@@ -780,7 +780,7 @@ sal_uInt16 XclImpChSourceLink::GetCellCount() const
                 case ::formula::svExternalDoubleRef:
                 {
                     // cell range
-                    const ScComplexRefData& rComplexRef = *static_cast< const ScToken* >( pToken )->GetDoubleRef();
+                    const ScComplexRefData& rComplexRef = *pToken->GetDoubleRef();
                     ScAddress aAbs1 = rComplexRef.Ref1.toAbs(ScAddress());
                     ScAddress aAbs2 = rComplexRef.Ref2.toAbs(ScAddress());
                     sal_uInt32 nTabs = static_cast<sal_uInt32>(aAbs2.Tab() - aAbs1.Tab() + 1);
@@ -882,7 +882,7 @@ void XclImpChSourceLink::FillSourceLink( ::std::vector< ScTokenRef >& rTokens ) 
     mxTokenArray->Reset();
     for (FormulaToken* p = mxTokenArray->First(); p; p = mxTokenArray->Next())
     {
-        ScTokenRef pToken(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef pToken(p->Clone());
         if (ScRefTokenHelper::isRef(pToken))
             // This is a reference token.  Store it.
             ScRefTokenHelper::join(rTokens, pToken, ScAddress());

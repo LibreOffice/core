@@ -1242,7 +1242,7 @@ bool broadcasterShifted(const ScDocument& rDoc, const ScAddress& rFrom, const Sc
     return true;
 }
 
-ScToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos)
+formula::FormulaToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos)
 {
     ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
     if (!pFC)
@@ -1258,7 +1258,7 @@ ScToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos)
         return NULL;
     }
 
-    ScToken* pToken = static_cast<ScToken*>(pTokens->First());
+    formula::FormulaToken* pToken = pTokens->First();
     if (!pToken || pToken->GetType() != formula::svSingleRef)
     {
         cerr << "Not a single reference token." << endl;
@@ -1270,7 +1270,7 @@ ScToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos)
 
 bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelCol, SCsROW nRelRow)
 {
-    ScToken* pToken = getSingleRefToken(rDoc, rPos);
+    formula::FormulaToken* pToken = getSingleRefToken(rDoc, rPos);
     if (!pToken)
         return false;
 
@@ -1292,7 +1292,7 @@ bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelC
 
 bool checkDeletedRefToken(ScDocument& rDoc, const ScAddress& rPos)
 {
-    ScToken* pToken = getSingleRefToken(rDoc, rPos);
+    formula::FormulaToken* pToken = getSingleRefToken(rDoc, rPos);
     if (!pToken)
         return false;
 

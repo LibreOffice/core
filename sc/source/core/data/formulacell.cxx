@@ -134,11 +134,11 @@ lcl_checkRangeDimensions(
 static bool
 lcl_checkRangeDimensions(
     const ScAddress& rPos,
-    const deque<ScToken*>::const_iterator aBegin,
-    const deque<ScToken*>::const_iterator aEnd,
+    const deque<formula::FormulaToken*>::const_iterator aBegin,
+    const deque<formula::FormulaToken*>::const_iterator aEnd,
     bool& bCol, bool& bRow, bool& bTab)
 {
-    deque<ScToken*>::const_iterator aCur(aBegin);
+    deque<formula::FormulaToken*>::const_iterator aCur(aBegin);
     ++aCur;
     const SingleDoubleRefProvider aRef(**aBegin);
     bool bOk(false);
@@ -164,7 +164,7 @@ lcl_checkRangeDimensions(
     return false;
 }
 
-class LessByReference : std::binary_function<const ScToken*, const ScToken*, bool>
+class LessByReference : std::binary_function<const formula::FormulaToken*, const formula::FormulaToken*, bool>
 {
     ScAddress maPos;
     DimensionSelector maFunc;
@@ -172,7 +172,7 @@ public:
     LessByReference(const ScAddress& rPos, const DimensionSelector& rFunc) :
         maPos(rPos), maFunc(rFunc) {}
 
-    bool operator() (const ScToken* pRef1, const ScToken* pRef2)
+    bool operator() (const formula::FormulaToken* pRef1, const formula::FormulaToken* pRef2)
     {
         const SingleDoubleRefProvider aRef1(*pRef1);
         const SingleDoubleRefProvider aRef2(*pRef2);
@@ -185,7 +185,7 @@ public:
  * denoted by token p1. Dimension, in which the comparison takes place, is
  * given by maFunc.
  */
-class AdjacentByReference : std::binary_function<const ScToken*, const ScToken*, bool>
+class AdjacentByReference : std::binary_function<const formula::FormulaToken*, const formula::FormulaToken*, bool>
 {
     ScAddress maPos;
     DimensionSelector maFunc;
@@ -193,7 +193,7 @@ public:
     AdjacentByReference(const ScAddress& rPos, DimensionSelector aFunc) :
         maPos(rPos), maFunc(aFunc) {}
 
-    bool operator() (const ScToken* p1, const ScToken* p2)
+    bool operator() (const formula::FormulaToken* p1, const formula::FormulaToken* p2)
     {
         const SingleDoubleRefProvider aRef1(*p1);
         const SingleDoubleRefProvider aRef2(*p2);
@@ -203,9 +203,9 @@ public:
 
 static bool
 lcl_checkIfAdjacent(
-    const ScAddress& rPos, const deque<ScToken*>& rReferences, const DimensionSelector aWhich)
+    const ScAddress& rPos, const deque<formula::FormulaToken*>& rReferences, const DimensionSelector aWhich)
 {
-    typedef deque<ScToken*>::const_iterator Iter;
+    typedef deque<formula::FormulaToken*>::const_iterator Iter;
     Iter aBegin(rReferences.begin());
     Iter aEnd(rReferences.end());
     Iter aBegin1(aBegin);
@@ -215,7 +215,7 @@ lcl_checkIfAdjacent(
 
 static void
 lcl_fillRangeFromRefList(
-    const ScAddress& aPos, const deque<ScToken*>& rReferences, ScRange& rRange)
+    const ScAddress& aPos, const deque<formula::FormulaToken*>& rReferences, ScRange& rRange)
 {
     const ScSingleRefData aStart(
             SingleDoubleRefProvider(*rReferences.front()).Ref1);
@@ -227,7 +227,7 @@ lcl_fillRangeFromRefList(
 
 static bool
 lcl_refListFormsOneRange(
-        const ScAddress& rPos, deque<ScToken*>& rReferences,
+        const ScAddress& rPos, deque<formula::FormulaToken*>& rReferences,
         ScRange& rRange)
 {
     if (rReferences.size() == 1)
@@ -278,7 +278,7 @@ bool lcl_isReference(const FormulaToken& rToken)
         rToken.GetType() == svDoubleRef;
 }
 
-void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc, const ScAddress& aNewPos, const ScAddress& aOldPos)
+void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc, const ScAddress& aNewPos, const ScAddress& aOldPos)
 {
     bool bOldGlobal = pToken->IsGlobal();
     SCTAB aOldTab = aOldPos.Tab();
@@ -352,7 +352,7 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
     pToken->SetGlobal(bNewGlobal);
 }
 
-void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc)
+void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc)
 {
     ScDBCollection* pOldDBCollection = pOldDoc->GetDBCollection();
     if (!pOldDBCollection)
@@ -736,8 +736,8 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     {
         if (!pDocument->IsClipboardSource() || aPos.Tab() != rCell.aPos.Tab())
         {
-            ScToken* pToken = NULL;
-            while((pToken = static_cast<ScToken*>(pCode->GetNextName()))!= NULL)
+            formula::FormulaToken* pToken = NULL;
+            while((pToken = pCode->GetNextName())!= NULL)
             {
                 OpCode eOpCode = pToken->GetOpCode();
                 if (eOpCode == ocName)
@@ -762,8 +762,8 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     if( !bCompile )
     {   // Name references with references and ColRowNames
         pCode->Reset();
-        ScToken* t;
-        while ( ( t = static_cast<ScToken*>(pCode->GetNextReferenceOrName()) ) != NULL && !bCompile )
+        formula::FormulaToken* t;
+        while ( ( t = pCode->GetNextReferenceOrName() ) != NULL && !bCompile )
         {
             if ( t->IsExternalRef() )
             {
@@ -858,7 +858,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     {
         // Reference to another cell that contains a matrix formula.
         pCode->Reset();
-        ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+        formula::FormulaToken* p = pCode->GetNextReferenceRPN();
         if( p )
         {
             /* FIXME: original GetFormula() code obtained
@@ -922,7 +922,7 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
     {
         // Reference to another cell that contains a matrix formula.
         pCode->Reset();
-        ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+        formula::FormulaToken* p = pCode->GetNextReferenceRPN();
         if( p )
         {
             /* FIXME: original GetFormula() code obtained
@@ -972,7 +972,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
 
     const ScMatrix* pMat = NULL;
     if (!pCode->GetCodeError() && aResult.GetType() == svMatrixCell &&
-            ((pMat = static_cast<const ScToken*>(aResult.GetToken().get())->GetMatrix()) != 0))
+            ((pMat = aResult.GetToken().get()->GetMatrix()) != 0))
         pMat->GetDimensions( rCols, rRows );
     else
     {
@@ -2334,7 +2334,7 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
         case MM_REFERENCE :
         {
             pCode->Reset();
-            ScToken* t = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+            formula::FormulaToken* t = pCode->GetNextReferenceRPN();
             if( t )
             {
                 ScSingleRefData& rRef = *t->GetSingleRef();
@@ -2542,7 +2542,7 @@ sc::FormulaResultValue ScFormulaCell::GetResult() const
 bool ScFormulaCell::HasOneReference( ScRange& r ) const
 {
     pCode->Reset();
-    ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
     if( p && !pCode->GetNextReferenceRPN() )        // only one!
     {
         SingleDoubleRefProvider aProv( *p );
@@ -2573,13 +2573,12 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
 
     pCode->Reset();
     // Get first reference, if any
-    ScToken* const pFirstReference(
-            dynamic_cast<ScToken*>(pCode->GetNextReferenceRPN()));
+    formula::FormulaToken* const pFirstReference(pCode->GetNextReferenceRPN());
     if (pFirstReference)
     {
         // Collect all consecutive references, starting by the one
         // already found
-        std::deque<ScToken*> aReferences;
+        std::deque<formula::FormulaToken*> aReferences;
         aReferences.push_back(pFirstReference);
         FormulaToken* pToken(pCode->NextRPN());
         FormulaToken* pFunction(0);
@@ -2587,7 +2586,7 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
         {
             if (lcl_isReference(*pToken))
             {
-                aReferences.push_back(dynamic_cast<ScToken*>(pToken));
+                aReferences.push_back(pToken);
                 pToken = pCode->NextRPN();
             }
             else
@@ -2611,8 +2610,8 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
 bool ScFormulaCell::HasRelNameReference() const
 {
     pCode->Reset();
-    ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReferenceRPN()) ) != NULL )
+    formula::FormulaToken* t;
+    while ( ( t = pCode->GetNextReferenceRPN() ) != NULL )
     {
         if ( t->GetSingleRef()->IsRelName() ||
                 (t->GetType() == formula::svDoubleRef &&
@@ -2658,11 +2657,11 @@ bool checkCompileColRowName(
             if (rCxt.mnColDelta <= 0 && rCxt.mnRowDelta <= 0)
                 return false;
 
-            ScToken* t;
+            formula::FormulaToken* t;
             ScRangePairList* pColList = rDoc.GetColNameRanges();
             ScRangePairList* pRowList = rDoc.GetRowNameRanges();
             rCode.Reset();
-            while ((t = static_cast<ScToken*>(rCode.GetNextColRowName())) != NULL)
+            while ((t = rCode.GetNextColRowName()) != NULL)
             {
                 ScSingleRefData& rRef = *t->GetSingleRef();
                 if (rCxt.mnRowDelta > 0 && rRef.IsColRel())
@@ -2706,8 +2705,8 @@ bool checkCompileColRowName(
                 return true;
 
             rCode.Reset();
-            const ScToken* t = static_cast<const ScToken*>(rCode.GetNextColRowName());
-            for (; t; t = static_cast<const ScToken*>(rCode.GetNextColRowName()))
+            const formula::FormulaToken* t = rCode.GetNextColRowName();
+            for (; t; t = rCode.GetNextColRowName())
             {
                 const ScSingleRefData& rRef = *t->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(aPos);
@@ -3192,7 +3191,7 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
         return;
 
     pCode->Reset();
-    ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
     while (p)
     {
         ScSingleRefData& rRef1 = *p->GetSingleRef();
@@ -3204,7 +3203,7 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
             if (!rRef2.IsTabRel() && nTable <= rRef2.Tab())
                 rRef2.IncTab(1);
         }
-        p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+        p = pCode->GetNextReferenceRPN();
     }
 }
 
@@ -3219,7 +3218,7 @@ bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
 
     bool bRet = false;
     pCode->Reset();
-    ScToken* p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
     while (p)
     {
         ScSingleRefData& rRef1 = *p->GetSingleRef();
@@ -3241,7 +3240,7 @@ bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
                     rRef2.SetAbsTab(aPos.Tab());
             }
         }
-        p = static_cast<ScToken*>(pCode->GetNextReferenceRPN());
+        p = pCode->GetNextReferenceRPN();
     }
     return bRet;
 }
@@ -3260,8 +3259,8 @@ void ScFormulaCell::TransposeReference()
 {
     bool bFound = false;
     pCode->Reset();
-    ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
+    formula::FormulaToken* t;
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.IsRowRel() )
@@ -3317,10 +3316,10 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
 
     ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : NULL;
     bool bRefChanged = false;
-    ScToken* t;
+    formula::FormulaToken* t;
 
     pCode->Reset();
-    while( (t = static_cast<ScToken*>(pCode->GetNextReferenceOrName())) != NULL )
+    while( (t = pCode->GetNextReferenceOrName()) != NULL )
     {
         if( t->GetOpCode() == ocName )
         {
@@ -3371,10 +3370,10 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     EndListeningTo( pDocument );
 
     bool bRefChanged = false;
-    ScToken* t;
+    formula::FormulaToken* t;
 
     pCode->Reset();
-    while( (t = static_cast<ScToken*>(pCode->GetNextReferenceOrName())) != NULL )
+    while( (t = pCode->GetNextReferenceOrName()) != NULL )
     {
         if( t->GetOpCode() == ocName )
         {
@@ -3554,8 +3553,8 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
     // check we are basically the same function
     for ( sal_uInt16 i = 0; i < nThisLen; i++ )
     {
-        ScToken *pThisTok = static_cast<ScToken*>( pThis[i] );
-        ScToken *pOtherTok = static_cast<ScToken*>( pOther[i] );
+        formula::FormulaToken *pThisTok = pThis[i];
+        formula::FormulaToken *pOtherTok = pOther[i];
 
         if ( pThisTok->GetType() != pOtherTok->GetType() ||
              pThisTok->GetOpCode() != pOtherTok->GetOpCode() ||
@@ -3708,12 +3707,11 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         pCode->Reset();
         for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
         {
-            const ScToken* pToken = static_cast<const ScToken*>(p);
-            switch (pToken->GetType())
+            switch (p->GetType())
             {
                 case svSingleRef:
                 {
-                    ScSingleRefData aRef = *pToken->GetSingleRef();
+                    ScSingleRefData aRef = *p->GetSingleRef();
                     ScAddress aRefPos = aRef.toAbs(aPos);
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
                     if (!pNewToken)
@@ -3724,7 +3722,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 break;
                 case svDoubleRef:
                 {
-                    ScComplexRefData aRef = *pToken->GetDoubleRef();
+                    ScComplexRefData aRef = *p->GetDoubleRef();
                     ScRange aRefRange = aRef.toAbs(aPos);
                     formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
                     if (!pNewToken)
@@ -3734,7 +3732,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                 }
                 break;
                 default:
-                    aCode.AddToken(*pToken);
+                    aCode.AddToken(*p);
             }
         }
 
@@ -3776,7 +3774,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
 namespace {
 
 void startListeningArea(
-    ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const ScToken& rToken)
+    ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const formula::FormulaToken& rToken)
 {
     const ScSingleRefData& rRef1 = *rToken.GetSingleRef();
     const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
@@ -3815,8 +3813,8 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
     }
 
     pArr->Reset();
-    ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+    formula::FormulaToken* t;
+    while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
     {
         switch (t->GetType())
         {
@@ -3853,8 +3851,8 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
     }
 
     pArr->Reset();
-    ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+    formula::FormulaToken* t;
+    while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
     {
         switch (t->GetType())
         {
@@ -3878,7 +3876,7 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
 namespace {
 
 void endListeningArea(
-    ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const ScToken& rToken)
+    ScFormulaCell* pCell, ScDocument& rDoc, const ScAddress& rPos, const formula::FormulaToken& rToken)
 {
     const ScSingleRefData& rRef1 = *rToken.GetSingleRef();
     const ScSingleRefData& rRef2 = *rToken.GetSingleRef2();
@@ -3923,8 +3921,8 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         aCellPos = aPos;
     }
     pArr->Reset();
-    ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+    formula::FormulaToken* t;
+    while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
     {
         switch (t->GetType())
         {
@@ -3963,8 +3961,8 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
     }
 
     pArr->Reset();
-    ScToken* t;
-    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+    formula::FormulaToken* t;
+    while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
     {
         switch (t->GetType())
         {

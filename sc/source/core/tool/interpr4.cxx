@@ -885,7 +885,7 @@ void ScInterpreter::PushWithoutError( FormulaToken& r )
             maxsp = sp + 1;
         else
             pStack[ sp ]->DecRef();
-        pStack[ sp ] = (ScToken*) &r;
+        pStack[ sp ] = &r;
         ++sp;
     }
 }
@@ -1171,7 +1171,7 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
                 nGlobalError = p->GetError();
                 break;
             case svSingleRef:
-                SingleRefToVars( *static_cast<ScToken*>(p)->GetSingleRef(), rCol, rRow, rTab);
+                SingleRefToVars( *p->GetSingleRef(), rCol, rRow, rTab);
                 if ( !pDok->aTableOpList.empty() )
                     ReplaceCell( rCol, rRow, rTab );
                 break;
@@ -1199,7 +1199,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
                     SCCOL nCol;
                     SCROW nRow;
                     SCTAB nTab;
-                    SingleRefToVars( *static_cast<ScToken*>(p)->GetSingleRef(), nCol, nRow, nTab);
+                    SingleRefToVars( *p->GetSingleRef(), nCol, nRow, nTab);
                     rAdr.Set( nCol, nRow, nTab );
                     if ( !pDok->aTableOpList.empty() )
                         ReplaceCell( rAdr );
@@ -1213,7 +1213,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
         SetError( errUnknownStackVariable);
 }
 
-void ScInterpreter::DoubleRefToVars( const ScToken* p,
+void ScInterpreter::DoubleRefToVars( const formula::FormulaToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         bool bDontCheckForTableOp )
@@ -1284,7 +1284,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
-                DoubleRefToVars( static_cast<ScToken*>(p), rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
+                DoubleRefToVars( p, rCol1, rRow1, rTab1, rCol2, rRow2, rTab2,
                         bDontCheckForTableOp);
                 break;
             default:
@@ -1317,19 +1317,18 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
     if (sp)
     {
         formula::FormulaToken* pToken = pStack[ sp-1 ];
-        ScToken* p = static_cast<ScToken*>(pToken);
         switch (pToken->GetType())
         {
             case svError:
-                nGlobalError = p->GetError();
+                nGlobalError = pToken->GetError();
                 break;
             case svDoubleRef:
                 --sp;
-                DoubleRefToRange( *p->GetDoubleRef(), rRange);
+                DoubleRefToRange( *pToken->GetDoubleRef(), rRange);
                 break;
             case svRefList:
                 {
-                    const ScRefList* pList = p->GetRefList();
+                    const ScRefList* pList = pToken->GetRefList();
                     if (rRefInList < pList->size())
                     {
                         DoubleRefToRange( (*pList)[rRefInList], rRange);
@@ -1369,7 +1368,7 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
                 nGlobalError = p->GetError();
                 break;
             case svDoubleRef:
-                DoubleRefToRange( *static_cast<ScToken*>(p)->GetDoubleRef(), rRange, bDontCheckForTableOp);
+                DoubleRefToRange( *p->GetDoubleRef(), rRange, bDontCheckForTableOp);
                 break;
             default:
                 SetError( errIllegalParameter);
@@ -1405,7 +1404,7 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
 
     rFileId = p->GetIndex();
     rTabName = p->GetString().getString();
-    rRef = *static_cast<ScToken*>(p)->GetSingleRef();
+    rRef = *p->GetSingleRef();
 }
 
 void ScInterpreter::PopExternalSingleRef(ScExternalRefCache::TokenRef& rToken, ScExternalRefCache::CellFormat* pFmt)
@@ -1481,7 +1480,7 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
 
     rFileId = p->GetIndex();
     rTabName = p->GetString().getString();
-    rRef = *static_cast<ScToken*>(p)->GetDoubleRef();
+    rRef = *p->GetDoubleRef();
 }
 
 void ScInterpreter::PopExternalDoubleRef(ScExternalRefCache::TokenArrayRef& rArray)
@@ -1508,7 +1507,7 @@ void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
     // For now, we only support single range data for external
     // references, which means the array should only contain a
     // single matrix token.
-    ScToken* p = static_cast<ScToken*>(pArray->First());
+    formula::FormulaToken* p = pArray->First();
     if (!p || p->GetType() != svMatrix)
         SetError( errIllegalParameter);
     else
@@ -1547,7 +1546,7 @@ void ScInterpreter::GetExternalDoubleRef(
         return;
     }
 
-    ScToken* pToken = static_cast<ScToken*>(pArray->First());
+    formula::FormulaToken* pToken = pArray->First();
     if (pToken->GetType() != svMatrix)
     {
         SetError(errIllegalArgument);
@@ -1635,7 +1634,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     if ( ScParameterClassification::GetParameterType( pCur, nParams - i)
                             == ScParameterClassification::Value )
                     {   // only if single value expected
-                        ScMatrixRef pMat = static_cast<ScToken*>(p)->GetMatrix();
+                        ScMatrixRef pMat = p->GetMatrix();
                         if ( !pMat )
                             SetError( errUnknownVariable);
                         else
@@ -1660,7 +1659,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                         SCCOL nCol1, nCol2;
                         SCROW nRow1, nRow2;
                         SCTAB nTab1, nTab2;
-                        DoubleRefToVars( static_cast<const ScToken*>( p), nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                        DoubleRefToVars( p, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                         // Make sure the map exists, created if not.
                         GetTokenMatrixMap();
                         ScMatrixRef pMat = CreateMatrixFromDoubleRef( p,
@@ -1674,7 +1673,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                                 if ( nJumpRows < static_cast<SCSIZE>(nRow2 - nRow1 + 1) )
                                     nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
-                            ScToken* pNew = new ScMatrixToken( pMat);
+                            formula::FormulaToken* pNew = new ScMatrixToken( pMat);
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
                             p->DecRef();    // p may be dead now!
@@ -1690,20 +1689,20 @@ bool ScInterpreter::ConvertMatrixParameters()
                     {
                         sal_uInt16 nFileId = p->GetIndex();
                         OUString aTabName = p->GetString().getString();
-                        const ScComplexRefData& rRef = *static_cast<ScToken*>(p)->GetDoubleRef();
+                        const ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
                         GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
                         if (nGlobalError)
                             break;
 
-                        ScToken* pTemp = static_cast<ScToken*>(pArray->First());
+                        formula::FormulaToken* pTemp = pArray->First();
                         if (!pTemp)
                             break;
 
                         ScMatrixRef pMat = pTemp->GetMatrix();
                         if (pMat)
                         {
-                            ScToken* pNew = new ScMatrixToken( pMat);
+                            formula::FormulaToken* pNew = new ScMatrixToken( pMat);
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
                             p->DecRef();    // p may be dead now!
@@ -1778,7 +1777,7 @@ ScMatrixRef ScInterpreter::PopMatrix()
                 break;
             case svMatrix:
                 {
-                    ScMatrix* pMat = static_cast<ScToken*>(p)->GetMatrix();
+                    ScMatrix* pMat = p->GetMatrix();
                     if ( pMat )
                         pMat->SetErrorInterpreter( this);
                     else
@@ -1805,14 +1804,13 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
             {
                 --sp;
                 FormulaToken* p = pStack[sp];
-                ScToken* p2 = static_cast<ScToken*>(p);
-                aRet.mpMat = p2->GetMatrix();
+                aRet.mpMat = p->GetMatrix();
                 if (aRet.mpMat)
                 {
                     aRet.mpMat->SetErrorInterpreter(this);
-                    if (p2->GetByte() == MATRIX_TOKEN_HAS_RANGE)
+                    if (p->GetByte() == MATRIX_TOKEN_HAS_RANGE)
                     {
-                        const ScComplexRefData& rRef = *p2->GetDoubleRef();
+                        const ScComplexRefData& rRef = *p->GetDoubleRef();
                         if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel())
                         {
                             aRet.mnCol1 = rRef.Ref1.Col();
@@ -3579,7 +3577,7 @@ void ScInterpreter::ScDBArea()
 
 void ScInterpreter::ScColRowNameAuto()
 {
-    ScComplexRefData aRefData( *static_cast<const ScToken*>(pCur)->GetDoubleRef() );
+    ScComplexRefData aRefData( *pCur->GetDoubleRef() );
     ScRange aAbs = aRefData.toAbs(aPos);
     if (!ValidRange(aAbs))
     {
@@ -4500,7 +4498,7 @@ StackVar ScInterpreter::Interpret()
     if (eType == svMatrix)
         // Results are immutable in case they would be reused as input for new
         // interpreters.
-        static_cast<ScToken*>(xResult.get())->GetMatrix()->SetImmutable( true);
+        xResult.get()->GetMatrix()->SetImmutable( true);
     return eType;
 }
 

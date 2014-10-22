@@ -307,7 +307,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     aRefData.SetAddress(aBasePos, aBasePos);
 
     ScTokenArray aArr; // consists only of one single reference token.
-    ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference( aRefData));
+    formula::FormulaToken* t = aArr.AddMatrixSingleReference( aRefData);
 
     itr = rMark.begin();
     for (; itr != itrEnd && *itr < nMax; ++itr)
@@ -438,7 +438,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
 
 namespace {
 
-bool setCacheTableReferenced(ScToken& rToken, ScExternalRefManager& rRefMgr, const ScAddress& rPos)
+bool setCacheTableReferenced(formula::FormulaToken& rToken, ScExternalRefManager& rRefMgr, const ScAddress& rPos)
 {
     switch (rToken.GetType())
     {
@@ -473,9 +473,9 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress
 
     ScExternalRefManager* pRefMgr = NULL;
     rArr.Reset();
-    ScToken* t = NULL;
+    formula::FormulaToken* t = NULL;
     bool bAllMarked = false;
-    while (!bAllMarked && (t = static_cast<ScToken*>(rArr.GetNextReferenceOrName())) != NULL)
+    while (!bAllMarked && (t = rArr.GetNextReferenceOrName()) != NULL)
     {
         if (t->IsExternalRef())
         {
@@ -493,7 +493,7 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress
                 continue;
 
             ScTokenArray* pArray = pRangeData->GetCode();
-            for (t = static_cast<ScToken*>(pArray->First()); t; t = static_cast<ScToken*>(pArray->Next()))
+            for (t = pArray->First(); t; t = pArray->Next())
             {
                 if (!t->IsExternalRef())
                     continue;

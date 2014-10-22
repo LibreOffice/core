@@ -1881,7 +1881,7 @@ void ScChangeActionContent::PutValueToDoc(
     }
 }
 
-static void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
+static void lcl_InvalidateReference( formula::FormulaToken& rTok, const ScBigAddress& rPos )
 {
     ScSingleRefData& rRef1 = *rTok.GetSingleRef();
     if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )
@@ -2015,24 +2015,24 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
             const ScBigAddress& rPos = aBigRange.aStart;
             if ( bOldFormula )
             {
-                ScToken* t;
+                formula::FormulaToken* t;
                 ScTokenArray* pArr = maOldCell.mpFormula->GetCode();
                 pArr->Reset();
-                while ( ( t = static_cast<ScToken*>(pArr->GetNextReference()) ) != NULL )
+                while ( ( t = pArr->GetNextReference() ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
             }
             if ( bNewFormula )
             {
-                ScToken* t;
+                formula::FormulaToken* t;
                 ScTokenArray* pArr = maNewCell.mpFormula->GetCode();
                 pArr->Reset();
-                while ( ( t = static_cast<ScToken*>(pArr->GetNextReference()) ) != NULL )
+                while ( ( t = pArr->GetNextReference() ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
                 pArr->Reset();
-                while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+                while ( ( t = pArr->GetNextReferenceRPN() ) != NULL )
                     lcl_InvalidateReference( *t, rPos );
             }
         }

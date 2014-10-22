@@ -197,7 +197,7 @@ vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
         if (!p)
             continue;
 
-        ScTokenRef pCopy(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef pCopy(p->Clone());
         ScRefTokenHelper::join(*pTokens, pCopy, ScAddress());
     }
     return pTokens.release();
@@ -218,7 +218,7 @@ vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
         if (!p)
             continue;
 
-        ScTokenRef p2(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef p2(p->Clone());
         ScRefTokenHelper::join(*pTokens, p2, ScAddress());
     }
     return pTokens.release();
@@ -234,7 +234,7 @@ vector<ScTokenRef>* TokenTable::getAllRanges() const
         if (!p)
             continue;
 
-        ScTokenRef p2(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef p2(p->Clone());
         ScRefTokenHelper::join(*pTokens, p2, ScAddress());
     }
     return pTokens.release();
@@ -310,7 +310,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                         StackVar eType = pToken->GetType();
                         if( eType==svExternal || eType==svExternalSingleRef || eType==svExternalDoubleRef || eType==svExternalName )
                             bExternal = true;//lllll todo correct?
-                        ScTokenRef pSharedToken(static_cast<ScToken*>(pToken->Clone()));
+                        ScTokenRef pSharedToken(pToken->Clone());
                         ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, ScAddress(), bExternal);
                         SCCOL nCol1=0, nCol2=0;
                         SCROW nRow1=0, nRow2=0;
@@ -2216,7 +2216,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
             case svExternalSingleRef:
             case svExternalDoubleRef:
             {
-                ScTokenRef pNew(static_cast<ScToken*>(p->Clone()));
+                ScTokenRef pNew(p->Clone());
                 aRefTokens.push_back(pNew);
             }
             break;
@@ -2706,7 +2706,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
             continue;
         }
 
-        const ScMatrix* pMat = static_cast<ScToken*>(p)->GetMatrix();
+        const ScMatrix* pMat = p->GetMatrix();
         SCSIZE nCSize, nRSize;
         pMat->GetDimensions(nCSize, nRSize);
         for (SCSIZE nC = 0; nC < nCSize; ++nC)
@@ -3353,7 +3353,7 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
         vector<ScTokenRef>::const_iterator itr = m_pTokens->begin(), itrEnd = m_pTokens->end();
         for (; itr != itrEnd; ++itr)
         {
-            ScTokenRef p(static_cast<ScToken*>((*itr)->Clone()));
+            ScTokenRef p((*itr)->Clone());
             pTokensNew->push_back(p);
         }
     }
@@ -3521,7 +3521,7 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
         bool bHasStringLabel = false;
         if (m_pTokens->size() == 1)
         {
-            const ScToken& rToken = *(*m_pTokens)[0];
+            const formula::FormulaToken& rToken = *(*m_pTokens)[0];
             bHasStringLabel = rToken.GetType() == formula::svString;
         }
         aRet <<= bHasStringLabel;

@@ -358,7 +358,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken))
                 != pTokenMatrixMap->end()))
     {
-        return static_cast<ScToken*>((*aIter).second.get())->GetMatrix();
+        return (*aIter).second.get()->GetMatrix();
     }
 
     ScMatrixRef pMat = GetNewMat( nMatCols, nMatRows, true);
@@ -406,7 +406,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
             SCTAB nTab1, nTab2;
-            const ScToken* p = sp ? static_cast<const ScToken*>(pStack[sp-1]) : NULL;
+            const formula::FormulaToken* p = sp ? pStack[sp-1] : NULL;
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             pMat = CreateMatrixFromDoubleRef( p, nCol1, nRow1, nTab1,
                     nCol2, nRow2, nTab2);

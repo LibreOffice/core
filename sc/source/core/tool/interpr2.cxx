@@ -1938,14 +1938,14 @@ void ScInterpreter::ScIntersect()
         return;
     }
 
-    ScToken* x1 = static_cast<ScToken*>(p1st.get());
-    ScToken* x2 = static_cast<ScToken*>(p2nd.get());
+    formula::FormulaToken* x1 = p1st.get();
+    formula::FormulaToken* x2 = p2nd.get();
     if (sv1 == svRefList || sv2 == svRefList)
     {
         // Now this is a bit nasty but it simplifies things, and having
         // intersections with lists isn't too common, if at all..
         // Convert a reference to list.
-        ScToken* xt[2] = { x1, x2 };
+        formula::FormulaToken* xt[2] = { x1, x2 };
         StackVar sv[2] = { sv1, sv2 };
         for (size_t i=0; i<2; ++i)
         {
@@ -2011,7 +2011,7 @@ void ScInterpreter::ScIntersect()
     }
     else
     {
-        ScToken* pt[2] = { x1, x2 };
+        formula::FormulaToken* pt[2] = { x1, x2 };
         StackVar sv[2] = { sv1, sv2 };
         SCCOL nC1[2], nC2[2];
         SCROW nR1[2], nR2[2];
@@ -2100,8 +2100,8 @@ void ScInterpreter::ScUnionFunc()
         return;
     }
 
-    ScToken* x1 = static_cast<ScToken*>(p1st.get());
-    ScToken* x2 = static_cast<ScToken*>(p2nd.get());
+    formula::FormulaToken* x1 = p1st.get();
+    formula::FormulaToken* x2 = p2nd.get();
 
     ScTokenRef xRes;
     // Append to an existing RefList if there is one.
@@ -2118,7 +2118,7 @@ void ScInterpreter::ScUnionFunc()
     else
         xRes = new ScRefListToken;
     ScRefList* pRes = xRes->GetRefList();
-    ScToken* pt[2] = { x1, x2 };
+    formula::FormulaToken* pt[2] = { x1, x2 };
     StackVar sv[2] = { sv1, sv2 };
     for (size_t i=0; i<2; ++i)
     {

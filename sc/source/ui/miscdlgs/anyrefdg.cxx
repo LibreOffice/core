@@ -196,7 +196,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                 pTabViewShell->ClearHighlightRanges();
 
                 pScTokA->Reset();
-                const ScToken* pToken = static_cast<const ScToken*>(pScTokA->GetNextReference());
+                const formula::FormulaToken* pToken = pScTokA->GetNextReference();
 
                 sal_uInt16 nIndex=0;
 
@@ -222,7 +222,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                         pTabViewShell->AddHighlightRange(aRange, aColName);
                     }
 
-                    pToken = static_cast<const ScToken*>(pScTokA->GetNextReference());
+                    pToken = pScTokA->GetNextReference();
                 }
             }
         }
