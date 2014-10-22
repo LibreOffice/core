@@ -38,6 +38,7 @@ $(eval $(call gb_Library_add_exception_objects,oglcanvas,\
 	canvas/source/opengl/ogl_spritedevicehelper \
 	canvas/source/opengl/ogl_textlayout \
 	canvas/source/opengl/ogl_texturecache \
+	canvas/source/opengl/ogl_renderHelper \
 ))
 
 $(eval $(call gb_Library_use_externals,oglcanvas,\

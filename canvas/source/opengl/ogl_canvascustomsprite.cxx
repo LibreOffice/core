@@ -24,7 +24,6 @@
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 #include <GL/glew.h>
 
 using namespace ::com::sun::star;
@@ -48,7 +47,7 @@ namespace oglcanvas
         ::canvas::tools::setIdentityAffineMatrix2D(maTransformation);
         maCanvasHelper.init( *rRefDevice.get(),
                              rDeviceHelper );
-        InitOpenGL();
+        mRenderHelper =  RenderHelper();
     }
 
     void CanvasCustomSprite::disposeThis()
@@ -56,11 +55,7 @@ namespace oglcanvas
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mpSpriteCanvas.clear();
-        glDeleteBuffers(1, &m_vertexBuffer);
-        glDeleteBuffers(1, &m_uvBuffer);
-        glDeleteProgram( m_texManProgID);
-        glDeleteProgram( m_simpleProgID);
-        glDeleteProgram( m_texProgID);
+        mRenderHelper.dispose();
         // forward to parent
         CanvasCustomSpriteBaseT::disposeThis();
     }
@@ -131,27 +126,6 @@ namespace oglcanvas
         return this;
     }
 
-    void CanvasCustomSprite::InitOpenGL()
-    {
-        //Load Shaders //
-        m_texManProgID = OpenGLHelper::LoadShaders("textManipulatingVertexShader", "textFragmentShader");
-        m_simpleProgID = OpenGLHelper::LoadShaders("simpleVertexShader", "textFragmentShader");
-        m_texProgID = OpenGLHelper::LoadShaders("texVertrexShader", "constantFragmentShader");
-        // Get a handle for uniforms
-        m_manTexUnf = glGetUniformLocation(m_texManProgID, "TextTex");
-        m_simpleTexUnf = glGetUniformLocation(m_simpleProgID, "TextTex");
-        m_manCordUnf = glGetUniformLocation(m_texManProgID, "texCord");
-        m_texColorUnf = glGetUniformLocation(m_texProgID, "constantColor");
-        m_manColorUnf = glGetUniformLocation(m_texManProgID,"colorTex");
-        m_simpleColorUnf = glGetUniformLocation(m_simpleProgID,"colorTex");
-        //Gen Buffers for texturecoordinates/vertices
-        glGenBuffers(1, &m_vertexBuffer);
-        glGenBuffers(1, &m_uvBuffer);
-        m_manPosAttrb = glGetAttribLocation(m_texManProgID ,"vPosition");
-        m_simpleUvAttrb = glGetAttribLocation(m_simpleProgID ,"UV");
-        m_simplePosAttrb = glGetAttribLocation(m_simpleProgID ,"vPosition");
-        m_texPosAttrb = glGetAttribLocation(m_texProgID ,"vPosition");
-    }
 
     bool CanvasCustomSprite::renderSprite() const
     {
@@ -213,7 +187,8 @@ namespace oglcanvas
                 glBlendFunc(GL_SRC_ALPHA,
                             GL_ONE_MINUS_SRC_ALPHA);
 
-                // blend against fixed vertex color; texture alpha is multiplied in
+                GLfloat color[] = {1, 1, 1, (float)mfAlpha};
+
                 if( mxClip.is() )
                 {
                     const double fWidth=maSize.Width;
@@ -239,33 +214,7 @@ namespace oglcanvas
                         vertices[i*2]= rPt.getX();
                         vertices[i*2+1]= rPt.getY();
                     }
-
-                    //Bind Buffers
-                    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-                    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-                    glUseProgram(m_texManProgID);
-
-                    //Set Uniforms
-                    glUniform1i(m_manTexUnf, 0);
-                    glUniform2f(m_manCordUnf,fWidth,fHeight);
-                    glUniform4f(m_manColorUnf, 1, 1, 1, mfAlpha);
-
-                    glEnableVertexAttribArray(m_manPosAttrb);
-                    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-                    glVertexAttribPointer(
-                        m_manPosAttrb,
-                        2,                            // size
-                        GL_FLOAT,                     // type
-                        GL_FALSE,                     // normalized?
-                        0,                            // stride
-                        (void*)0                      // array buffer offset
-                    );
-
-                    glDrawArrays(GL_TRIANGLES, 0, rTriangulatedPolygon.count());
-
-                    glDisableVertexAttribArray(m_manPosAttrb);
-                    glUseProgram(0);
+                    mRenderHelper.renderVertexTex( vertices, fWidth, fHeight,  color, GL_TRIANGLES);
                 }
                 else
                 {
@@ -281,44 +230,7 @@ namespace oglcanvas
                                                (float) fWidth, 0,
                                                (float) fWidth, (float) fHeight };
 
-                    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-                    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-                    glBindBuffer(GL_ARRAY_BUFFER, m_uvBuffer);
-                    glBufferData(GL_ARRAY_BUFFER, sizeof(uvCoordinates), uvCoordinates, GL_STATIC_DRAW);
-
-                    glUseProgram(m_simpleProgID);
-
-                    glUniform1i(m_simpleTexUnf, 0);
-                    glUniform4f(m_simpleColorUnf, 1, 1, 1, mfAlpha);
-
-                    glEnableVertexAttribArray(m_simplePosAttrb); //richtige ID herausfinden
-                    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-                    glVertexAttribPointer(
-                        m_simplePosAttrb,
-                        2,                            // size
-                        GL_FLOAT,                     // type
-                        GL_FALSE,                     // normalized?
-                        0,                            // stride
-                        (void*)0                      // array buffer offset
-                    );
-
-                    glEnableVertexAttribArray(m_simpleUvAttrb);
-                    glBindBuffer(GL_ARRAY_BUFFER, m_uvBuffer);
-                    glVertexAttribPointer(
-                        m_simpleUvAttrb,
-                        2,                            // size
-                        GL_FLOAT,                     // type
-                        GL_FALSE,                     // normalized?
-                        0,                            // stride
-                        (void*)0                      // array buffer offset
-                    );
-
-                    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-                    glDisableVertexAttribArray(m_simplePosAttrb);
-                    glDisableVertexAttribArray(m_simpleUvAttrb);
-                    glUseProgram(0);
+                    mRenderHelper.renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
                 }
 
                 glBindTexture(GL_TEXTURE_2D, 0);
@@ -331,31 +243,9 @@ namespace oglcanvas
                               (float) maSize.Width+4, -2,
                               -2, -2,
                               (float) maSize.Width+4, (float) maSize.Height+4 };
+        GLfloat color[] = {1, 0, 0, 1};
 
-        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-        glUseProgram(m_texProgID);
-
-        glUniform4f(m_texColorUnf, 1, 0, 0, 1);
-        glEnableVertexAttribArray(m_texPosAttrb); //richtige ID herausfinden
-
-        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-        glVertexAttribPointer(
-                        m_texPosAttrb,
-                        2,                            // size
-                        GL_FLOAT,                     // type
-                        GL_FALSE,                     // normalized?
-                        0,                            // stride
-                        (void*)0                      // array buffer offset
-        );
-
-        glDrawArrays(GL_LINE_STRIP, 0, 6);
-
-        glDisableVertexAttribArray(m_texPosAttrb);
-        glUseProgram(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+        mRenderHelper.renderVertexConstColor(vertices, color, GL_LINE_STRIP);
 
         std::vector<double> aVec;
         aVec.push_back(mfAlpha);
@@ -365,6 +255,7 @@ namespace oglcanvas
 
         return true;
     }
+
 
 }
 
