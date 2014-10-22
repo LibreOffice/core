@@ -84,9 +84,9 @@ private:
                                );
 
     XID GetXRenderPicture();
-    virtual bool drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
+    bool drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
 
-    virtual long GetGraphicsHeight() const;
+    long GetGraphicsHeight() const;
 
     void drawMaskedBitmap( const SalTwoRect& rPosAry,
                                               const SalBitmap& rSalBitmap,
