@@ -98,6 +98,8 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
     aHeaderBar.SetSelectHdl(LINK( this, SvSimpleTable, HeaderBarClick));
     aHeaderBar.SetDoubleClickHdl(LINK( this, SvSimpleTable, HeaderBarDblClick));
 
+    GetModel()->SetCompareHdl( LINK( this, SvSimpleTable, CompareHdl));
+
     EnableCellFocus();
     DisableTransientChildren();
     InitHeaderBar( &aHeaderBar );
@@ -278,13 +280,21 @@ void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)
             aHeaderBar.SetItemBits( nCol+1, HIB_STDSTYLE | HIB_UPARROW);
             GetModel()->SetSortMode(SortDescending);
         }
-        nSortCol=nCol;
-        GetModel()->SetCompareHdl( LINK( this, SvSimpleTable, CompareHdl));
-        GetModel()->Resort();
+        if(nSortCol == nCol)
+        {
+            GetModel()->Reverse();
+            Resize();   //update rows
+        }
+        else
+        {
+            nSortCol=nCol;
+            GetModel()->Resort();
+        }
     }
     else
         GetModel()->SetSortMode(SortNone);
     nSortCol=nCol;
+    SetAlternatingRow(true);
 }
 
 void SvSimpleTable::HBarClick()
@@ -445,17 +455,12 @@ sal_Int32 SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRig
         sal_uInt16 nLeftKind = pLeftItem->GetType();
         sal_uInt16 nRightKind = pRightItem->GetType();
 
-        if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
-            nLeftKind == SV_ITEM_ID_LBOXSTRING )
+        if(nRightKind == SV_ITEM_ID_LBOXSTRING && nLeftKind == SV_ITEM_ID_LBOXSTRING )
         {
-            IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
-            const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
+            OUString sLeft = ((SvLBoxString*)pLeftItem)->GetText().toAsciiLowerCase();
+            OUString sRight = ((SvLBoxString*)pRightItem)->GetText().toAsciiLowerCase();
 
-            nCompare = pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),
-                                    ((SvLBoxString*)pRightItem)->GetText());
-
-            if (nCompare == 0)
-                nCompare = -1;
+            nCompare = (sLeft < sRight) * -1;
         }
     }
     return nCompare;
