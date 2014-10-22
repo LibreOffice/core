@@ -81,7 +81,7 @@ struct AxisLabelProperties SAL_FINAL
     void init( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XAxis >&  xAxisModel );
 
-    bool getIsStaggered() const;
+    bool isStaggered() const;
 };
 
 struct AxisLabelAlignment

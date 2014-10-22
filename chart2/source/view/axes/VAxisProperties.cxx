@@ -407,7 +407,7 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
     }
 }
 
-bool AxisLabelProperties::getIsStaggered() const
+bool AxisLabelProperties::isStaggered() const
 {
     return ( STAGGER_ODD == eStaggering || STAGGER_EVEN == eStaggering );
 }

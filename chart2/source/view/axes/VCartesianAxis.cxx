@@ -600,20 +600,25 @@ sal_Int32 VCartesianAxis::getTextLevelCount() const
 }
 
 bool VCartesianAxis::createTextShapes(
-                       const Reference< drawing::XShapes >& xTarget
-                     , TickIter& rTickIter
-                     , AxisLabelProperties& rAxisLabelProperties
-                     , TickFactory2D* pTickFactory
-                     , sal_Int32 nScreenDistanceBetweenTicks )
+    const Reference<drawing::XShapes>& xTarget, TickIter& rTickIter,
+    AxisLabelProperties& rAxisLabelProperties, TickFactory2D* pTickFactory,
+    sal_Int32 nScreenDistanceBetweenTicks )
 {
+    const bool bIsHorizontalAxis = pTickFactory->isHorizontalAxis();
+    const bool bIsVerticalAxis = pTickFactory->isVerticalAxis();
+
+    if (!isBreakOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis) &&
+        !isAutoStaggeringOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) &&
+        !rAxisLabelProperties.isStaggered())
+        return createTextShapesSimple(xTarget, rTickIter, rAxisLabelProperties, pTickFactory);
+
     FixedNumberFormatter aFixedNumberFormatter(
                 m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
 
-    const bool bIsHorizontalAxis = pTickFactory->isHorizontalAxis();
-    const bool bIsVerticalAxis = pTickFactory->isVerticalAxis();
-    bool bIsStaggered = rAxisLabelProperties.getIsStaggered();
+    bool bIsStaggered = rAxisLabelProperties.isStaggered();
     B2DVector aTextToTickDistance = pTickFactory->getDistanceAxisTickToText(m_aAxisProperties, true);
     sal_Int32 nLimitedSpaceForText = -1;
+
     if( isBreakOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis ) )
     {
         nLimitedSpaceForText = nScreenDistanceBetweenTicks;
@@ -832,6 +837,169 @@ bool VCartesianAxis::createTextShapes(
         }
 
         pPREPreviousVisibleTickInfo = pPreviousVisibleTickInfo;
+        pPreviousVisibleTickInfo = pTickInfo;
+    }
+    return true;
+}
+
+bool VCartesianAxis::createTextShapesSimple(
+    const Reference<drawing::XShapes>& xTarget, TickIter& rTickIter,
+    AxisLabelProperties& rAxisLabelProperties, TickFactory2D* pTickFactory )
+{
+    FixedNumberFormatter aFixedNumberFormatter(
+                m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
+
+    const bool bIsHorizontalAxis = pTickFactory->isHorizontalAxis();
+    const bool bIsVerticalAxis = pTickFactory->isVerticalAxis();
+    B2DVector aTextToTickDistance = pTickFactory->getDistanceAxisTickToText(m_aAxisProperties, true);
+
+     // Stores an array of text label strings in case of a normal
+     // (non-complex) category axis.
+    const uno::Sequence<OUString>* pCategories = NULL;
+    if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
+        pCategories = &m_aTextLabels;
+
+    const TickInfo* pPreviousVisibleTickInfo = NULL;
+    const TickInfo* pLastVisibleNeighbourTickInfo = NULL;
+
+    //prepare properties for multipropertyset-interface of shape
+    tNameSequence aPropNames;
+    tAnySequence aPropValues;
+
+    bool bLimitedHeight = fabs(aTextToTickDistance.getX()) > fabs(aTextToTickDistance.getY());
+    Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
+    PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false
+        , -1, bLimitedHeight );
+    LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
+        , m_aAxisLabelProperties.m_aFontReferenceSize );
+    LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, m_aAxisProperties.maLabelAlignment.meAlignment );
+
+    uno::Any* pColorAny = PropertyMapper::getValuePointer(aPropValues,aPropNames,"CharColor");
+    sal_Int32 nColor = Color( COL_AUTO ).GetColor();
+    if(pColorAny)
+        *pColorAny >>= nColor;
+
+    uno::Any* pLimitedSpaceAny = PropertyMapper::getValuePointerForLimitedSpace(aPropValues,aPropNames,bLimitedHeight);
+
+    sal_Int32 nTick = 0;
+    for( TickInfo* pTickInfo = rTickIter.firstInfo()
+        ; pTickInfo
+        ; pTickInfo = rTickIter.nextInfo(), nTick++ )
+    {
+        pLastVisibleNeighbourTickInfo = pPreviousVisibleTickInfo;
+
+        //don't create labels which does not fit into the rhythm
+        if( nTick%rAxisLabelProperties.nRhythm != 0 )
+            continue;
+
+        //don't create labels for invisible ticks
+        if( !pTickInfo->bPaintIt )
+            continue;
+
+        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
+        {
+            // Overlapping is not allowed.  If the label overlaps with its
+            // neighbering label, try increasing the tick interval (or rhythm
+            // as it's called) and start over.
+
+            if( lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
+                       , rAxisLabelProperties.fRotationAngleDegree
+                       , pTickInfo->aTickScreenPosition
+                       , bIsHorizontalAxis, bIsVerticalAxis ) )
+            {
+                // This tick overlaps with its neighbor. Increment the visible
+                // tick intervals (if that's allowed) and start over.
+
+                if( rAxisLabelProperties.bRhythmIsFix )
+                    continue;
+                rAxisLabelProperties.nRhythm++;
+                removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
+                return false;
+            }
+        }
+
+        bool bHasExtraColor=false;
+        sal_Int32 nExtraColor=0;
+
+        OUString aLabel;
+        if(pCategories)
+        {
+            // This is a normal category axis.  Get the label string from the
+            // label string array.
+            sal_Int32 nIndex = static_cast<sal_Int32>(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
+            if( nIndex>=0 && nIndex<pCategories->getLength() )
+                aLabel = (*pCategories)[nIndex];
+        }
+        else if( m_aAxisProperties.m_bComplexCategories )
+        {
+            // This is a complex category axis.  The label is stored in the tick.
+            aLabel = pTickInfo->aText;
+        }
+        else
+        {
+            // This is a numeric axis.  Format the original tick value per number format.
+            aLabel = aFixedNumberFormatter.getFormattedString( pTickInfo->getUnscaledTickValue(), nExtraColor, bHasExtraColor );
+        }
+
+        if(pColorAny)
+            *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
+        if(pLimitedSpaceAny)
+            *pLimitedSpaceAny = uno::makeAny(sal_Int32(-1*pTickInfo->nFactorForLimitedTextWidth));
+
+        B2DVector aTickScreenPos2D = pTickInfo->aTickScreenPosition;
+        aTickScreenPos2D += aTextToTickDistance;
+        awt::Point aAnchorScreenPosition2D(
+            static_cast<sal_Int32>(aTickScreenPos2D.getX())
+            ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
+
+        //create single label
+        if(!pTickInfo->xTextShape.is())
+            pTickInfo->xTextShape = createSingleLabel( m_xShapeFactory, xTarget
+                                    , aAnchorScreenPosition2D, aLabel
+                                    , rAxisLabelProperties, m_aAxisProperties
+                                    , aPropNames, aPropValues );
+        if(!pTickInfo->xTextShape.is())
+            continue;
+
+        recordMaximumTextSize( pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
+
+        //if NO OVERLAP -> remove overlapping shapes
+        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
+        {
+            // Check if the label still overlaps with its neighber.
+            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
+            {
+                // It overlaps.
+                if( !rAxisLabelProperties.bOverlapAllowed && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) )
+                {
+                    // Try auto-rotating the labels at 45 degrees and
+                    // start over.  This rotation angle will be stored for
+                    // all future text shape creation runs.
+
+                    rAxisLabelProperties.fRotationAngleDegree = 45;
+                    rAxisLabelProperties.bLineBreakAllowed = false;
+                    rAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
+                    m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree; // Store it for future runs.
+                    removeTextShapesFromTicks();
+                    return false;
+                }
+
+                if( rAxisLabelProperties.bRhythmIsFix )
+                {
+                    // Tick interval is fixed.  We have no choice but to
+                    // remove this label.
+                    xTarget->remove(pTickInfo->xTextShape);
+                    pTickInfo->xTextShape = NULL;
+                    continue;
+                }
+
+                // Try incrementing the tick interval and start over.
+                rAxisLabelProperties.nRhythm++;
+                removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
+                return false;
+            }
+        }
+
         pPreviousVisibleTickInfo = pTickInfo;
     }
     return true;
@@ -1377,7 +1545,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
             }
         }
     }
-    else if( rAxisLabelProperties.getIsStaggered() )
+    else if (rAxisLabelProperties.isStaggered())
     {
         if( !m_aAllTickInfos.empty() )
         {
