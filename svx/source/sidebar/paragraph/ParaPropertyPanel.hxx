@@ -25,7 +25,6 @@
 #include <editeng/lspcitem.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <svx/tbxcolorupdate.hxx>
 #include <svx/relfld.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -33,9 +32,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
-#include <boost/scoped_ptr.hpp>
-
-#include <svx/sidebar/ColorPopup.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/poolitem.hxx>
@@ -104,8 +100,6 @@ private:
     SvxRelativeField*   mpRightIndent;
     SvxRelativeField*   mpFLineIndent;
 
-    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
-
     // Resources
     Image  maSpace3;
     Image  maIndHang;
@@ -125,8 +119,6 @@ private:
 
     sal_uInt16          mnBulletTypeIndex;
     sal_uInt16          mnNumTypeIndex;
-    Color               maColor;
-    bool                    mbColorAvailable;
     FieldUnit                       m_eMetricUnit;
     FieldUnit                       m_last_eMetricUnit;
     SfxMapUnit                      m_eLRSpaceUnit;
@@ -141,7 +133,6 @@ private:
     ::sfx2::sidebar::ControllerItem  maIncIndentControl;
     ::sfx2::sidebar::ControllerItem  maBulletOnOff;
     ::sfx2::sidebar::ControllerItem  maNumberOnOff;
-    ::sfx2::sidebar::ControllerItem  maBackColorControl;
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
     ::sfx2::sidebar::ControllerItem  maBulletNumRuleIndex;
     ::sfx2::sidebar::ControllerItem  maNumNumRuleIndex;
@@ -152,7 +143,6 @@ private:
     ParaLineSpacingPopup maLineSpacePopup;
     ParaBulletsPopup maBulletsPopup;
     ParaNumberingPopup maNumberingPopup;
-    ColorPopup maBGColorPopup;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
 
@@ -170,7 +160,6 @@ private:
     DECL_LINK(ULSpaceHdl_Impl, void*);
     DECL_LINK(ClickUL_IncDec_Hdl_Impl, ToolBox*);
 
-    void ParaBKGStateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedLnSPImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
@@ -189,18 +178,13 @@ private:
     PopupControl* CreateLineSpacingControl (PopupContainer* pParent);
     PopupControl* CreateBulletsPopupControl (PopupContainer* pParent);
     PopupControl* CreateNumberingPopupControl (PopupContainer* pParent);
-    PopupControl* CreateBGColorPopupControl (PopupContainer* pParent);
     DECL_LINK(ClickLineSPDropDownHdl_Impl, ToolBox*);
     DECL_LINK(NumBTbxDDHandler, ToolBox*);
-    DECL_LINK(ToolBoxBackColorDDHandler, ToolBox *);
 
     void InitToolBoxIndent();
-    void InitToolBoxBGColor();
     void InitToolBoxBulletsNumbering();
     void InitToolBoxSpacing();
     void InitToolBoxLineSpacing();
-
-    void SetBGColor (const OUString& rsColorName, const Color aColor);
 };
 
 } } // end of namespace ::svx::sidebar

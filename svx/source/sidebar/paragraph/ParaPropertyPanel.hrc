@@ -22,7 +22,7 @@
 //for numbering and bullet
 #define IID_BULLET          1
 #define IID_NUMBER          2
-//============================== popup bullet and numbering & back color =========================
+//============================== popup bullet and numbering =========================
 #define VS_VALUES           1
 #define CB_BULLET_MORE      4
 #define BMP_BULLET_MORE     5
@@ -30,8 +30,6 @@
 #define VS_NUMBERING        10
 #define CB_NUMBERING_MORE   12
 #define BMP_NUMERING_MORE   13
-#define VS_FONT_COLOR       1
-#define STR_NOFILL          2
 
 //============================== line space popup page ==============================
 

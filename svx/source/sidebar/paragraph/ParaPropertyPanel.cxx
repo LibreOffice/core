@@ -16,8 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <svx/sidebar/ColorControl.hxx>
-
 #include "ParaPropertyPanel.hxx"
 #include "ParaPropertyPanel.hrc"
 
@@ -31,8 +29,6 @@
 #include <sfx2/sidebar/Tools.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include <sfx2/dispatch.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/toolbox.hxx>
@@ -50,8 +46,6 @@ using namespace css::uno;
 
 const char UNO_DEFAULTBULLET[]    = ".uno:DefaultBullet";
 const char UNO_DEFAULTNUMBERING[] = ".uno:DefaultNumbering";
-
-const char UNO_PARABACKCOLOR[]    = ".uno:BackgroundColor";
 
 const char UNO_INCREMENTINDENT[]  = ".uno:IncrementIndent";
 const char UNO_DECREMENTINDENT[]  = ".uno:DecrementIndent";
@@ -280,18 +274,6 @@ void ParaPropertyPanel::InitToolBoxIndent()
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 }
 
-void ParaPropertyPanel::InitToolBoxBGColor()
-{
-    const sal_uInt16 nIdBackColor = mpTBxBackColor->GetItemId(UNO_PARABACKCOLOR);
-
-    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(0 /* not defined, default is transparent */, nIdBackColor, mpTBxBackColor));
-    mpTBxBackColor->SetItemBits( nIdBackColor, mpTBxBackColor->GetItemBits( nIdBackColor ) | ToolBoxItemBits::DROPDOWNONLY );
-
-    Link aLink = LINK(this, ParaPropertyPanel, ToolBoxBackColorDDHandler);
-    mpTBxBackColor->SetDropdownClickHdl ( aLink );
-    mpTBxBackColor->SetSelectHdl ( aLink );
-}
-
 void ParaPropertyPanel::InitToolBoxBulletsNumbering()
 {
     const sal_uInt16 nIdBullet = mpTBxNumBullet->GetItemId(UNO_DEFAULTBULLET);
@@ -347,7 +329,6 @@ void ParaPropertyPanel::initial()
 {
     //toolbox
     InitToolBoxIndent();
-    InitToolBoxBGColor();
     InitToolBoxBulletsNumbering();
     InitToolBoxSpacing();
     InitToolBoxLineSpacing();
@@ -394,47 +375,6 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
     GetBindings()->GetDispatcher()->Execute(nSID, SfxCallMode::RECORD, &aBoolItem, 0L);
 
     return 0;
-}
-
-// for Background color
-IMPL_LINK(ParaPropertyPanel, ToolBoxBackColorDDHandler,ToolBox*, pToolBox)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
-
-    if(aCommand == UNO_PARABACKCOLOR)
-    {
-        pToolBox->SetItemDown( nId, true );
-        maBGColorPopup.Show(*pToolBox);
-        maBGColorPopup.SetCurrentColor(maColor, mbColorAvailable);
-    }
-    return 0;
-}
-
-void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState)
-{
-    if( eState >= SfxItemState::DEFAULT && pState->ISA(SvxColorItem))
-    {
-        const SvxColorItem* pItem = static_cast<const SvxColorItem*>(pState);
-        maColor = pItem->GetValue();
-        mbColorAvailable = true;
-        mpColorUpdater->Update(maColor);
-    }
-    else
-    {
-        mbColorAvailable = false;
-        maColor.SetColor(COL_AUTO);
-        mpColorUpdater->Update(maColor);
-    }
-}
-
-void ParaPropertyPanel::SetBGColor (
-    const OUString& /*rsColorName*/,
-    const Color aColor)
-{
-    SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);
-    mpBindings->GetDispatcher()->Execute(SID_BACKGROUND_COLOR, SfxCallMode::RECORD, &aColorItem, 0L);
-    maColor = aColor;
 }
 
 // for Paragraph Indent
@@ -689,10 +629,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
     case FN_BUL_NUM_RULE_INDEX:
     case FN_NUM_NUM_RULE_INDEX:
         StateChangeBulletNumRuleImpl( nSID, eState, pState );
-        break;
-
-    case SID_BACKGROUND_COLOR:
-        ParaBKGStateChanged(nSID, eState, pState);
         break;
     }
 }
@@ -1049,37 +985,12 @@ PopupControl* ParaPropertyPanel::CreateNumberingPopupControl (PopupContainer* pP
     return new ParaNumberingControl(pParent, *this);
 }
 
-namespace
-{
-    Color GetNoBackgroundColor(void)
-    {
-        return COL_TRANSPARENT;
-    }
-} // end of anonymous namespace
-
-PopupControl* ParaPropertyPanel::CreateBGColorPopupControl (PopupContainer* pParent)
-{
-    const ResId aResId(SVX_RES(STR_NOFILL));
-
-    return new ColorControl(
-        pParent,
-        mpBindings,
-        SVX_RES(RID_POPUPPANEL_PARAPAGE_BACK_COLOR),
-        SVX_RES(VS_FONT_COLOR),
-        ::boost::bind(GetNoBackgroundColor),
-        ::boost::bind(&ParaPropertyPanel::SetBGColor, this, _1,_2),
-        pParent,
-        &aResId);
-}
-
-
 ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui", rxFrame),
 
-      mpColorUpdater (),
       maSpace3 (SVX_RES(IMG_SPACE3)),
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
       maNumBImageList (SVX_RES(IL_NUM_BULLET)),
@@ -1093,8 +1004,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maLower (0),
       mnBulletTypeIndex ((sal_uInt16)0xFFFF),
       mnNumTypeIndex ((sal_uInt16)0xFFFF),
-      maColor (COL_AUTO),
-      mbColorAvailable (true),
       m_eMetricUnit(FUNIT_NONE),
       m_last_eMetricUnit(FUNIT_NONE),
       m_eLRSpaceUnit(),
@@ -1108,7 +1017,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maIncIndentControl(SID_INC_INDENT, *pBindings,*this, OUString("IncrementIndent"), rxFrame),
       maBulletOnOff(FN_NUM_BULLET_ON, *pBindings, *this, OUString("DefaultBullet"), rxFrame),
       maNumberOnOff(FN_NUM_NUMBERING_ON, *pBindings, *this, OUString("DefaultNumbering"), rxFrame),
-      maBackColorControl (SID_BACKGROUND_COLOR, *pBindings,*this),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
       maBulletNumRuleIndex (FN_BUL_NUM_RULE_INDEX, *pBindings,*this),
       maNumNumRuleIndex (FN_NUM_NUM_RULE_INDEX, *pBindings,*this),
@@ -1118,7 +1026,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maLineSpacePopup(this, ::boost::bind(&ParaPropertyPanel::CreateLineSpacingControl, this, _1)),
       maBulletsPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBulletsPopupControl, this, _1)),
       maNumberingPopup(this, ::boost::bind(&ParaPropertyPanel::CreateNumberingPopupControl, this, _1)),
-      maBGColorPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBGColorPopupControl, this, _1)),
       mxSidebar(rxSidebar)
 {
     //Alignment
