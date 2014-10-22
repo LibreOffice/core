@@ -312,34 +312,6 @@ void SimpleRecursiveTest::step() const
         css::uno::makeAny(OUString("step")));
 }
 
-class CrossThreadTest: public RecursiveTest {
-public:
-    CrossThreadTest(Test const & theTest, int count, bool * destroyed);
-
-private:
-    virtual void step() const;
-};
-
-CrossThreadTest::CrossThreadTest(
-    Test const & theTest, int count, bool * destroyed):
-    RecursiveTest(theTest, count, destroyed)
-{}
-
-void CrossThreadTest::step() const
-{
-    osl::Condition stop;
-    stop.set();
-    WriterThread(
-        stop, test_,
-        OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                 "dotuno:WebHtml"),
-        OUString("Label")).join();
-    test_.resetKey(
-        OUString("/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
-                 "dotuno:WebHtml"),
-        OUString("Label"));
-}
-
 void Test::setUp()
 {
     provider_ = css::configuration::theDefaultProvider::get(
