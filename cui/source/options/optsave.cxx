@@ -107,7 +107,7 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
     aODFVersionLB->SetEntryData(0, (void*)2         ); // 1.0/1.1
     aODFVersionLB->SetEntryData(1, (void*)4         ); // 1.2
-    aODFVersionLB->SetEntryData(2, (void*)8         ); // 1.2 Extended (compat mode)
+    aODFVersionLB->SetEntryData(2, (void*)8         ); // 1.2 Extended (compatibility mode)
     aODFVersionLB->SetEntryData(3, (void*)0x7fffffff); // 1.2 Extended (recommended)
 
     aDocTypeLB->SetEntryData(0, reinterpret_cast<void*>(APP_WRITER)       );
