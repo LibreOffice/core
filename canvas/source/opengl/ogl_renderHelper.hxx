@@ -1,5 +1,4 @@
 #include <GL/glew.h>
-#include <vcl/opengl/OpenGLHelper.hxx>
 namespace oglcanvas
 {
     class RenderHelper

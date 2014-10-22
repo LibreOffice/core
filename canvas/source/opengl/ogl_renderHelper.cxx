@@ -1,12 +1,12 @@
 #include <GL/glew.h>
 #include "ogl_renderHelper.hxx"
+#include <vcl/opengl/OpenGLHelper.hxx>
 namespace oglcanvas
 {
     RenderHelper::RenderHelper()
     {
         InitOpenGL();
     }
-
     void RenderHelper::InitOpenGL()
     {
         //Load Shaders //
