@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/dllapi.h>
+
 #include <rtl/ustring.hxx>
 
 #include <tools/solar.h>
@@ -30,7 +32,7 @@
 class SalGraphics;
 class SalBitmap;
 
-class SalGraphicsImpl
+class VCL_PLUGIN_PUBLIC SalGraphicsImpl
 {
 public:
 
