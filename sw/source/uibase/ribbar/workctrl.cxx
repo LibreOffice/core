@@ -25,6 +25,8 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/imagemgr.hxx>
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <initui.hxx>
@@ -46,6 +48,8 @@
 #include <misc.hrc>
 
 #include <vcl/svapp.hxx>
+
+
 
 // Size check
 #define NAVI_ENTRIES 20
@@ -282,57 +286,48 @@ SwTbxFieldCtrl::SwTbxFieldCtrl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopup(0),
-    pView(0)
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 SwTbxFieldCtrl::~SwTbxFieldCtrl()
 {
-    DelPopup();
 }
 
 SfxPopupWindow* SwTbxFieldCtrl::CreatePopupWindow()
 {
-    pView = ::GetActiveView();
+    SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
        !pView->GetWrtShell().HasReadonlySel() )
     {
-        ToolBox& rBox = GetToolBox();
+        PopupMenu* pPopup = new PopupMenu(SW_RES(RID_INSERT_FIELD_CTRL));
 
-        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
-        Point aPt(rBox.OutputToScreenPixel(aItemRect.TopLeft()));
-        aPt.X() += aItemRect.GetWidth()/2;
-        aPt.Y() += aItemRect.GetHeight()/2;
-        if(pView)
+        if (::GetHtmlMode(pView->GetDocShell()) & HTMLMODE_ON)
         {
-            Link aLnk = LINK(this, SwTbxFieldCtrl, PopupHdl);
-
-            pPopup = new PopupMenu(SW_RES(RID_INSERT_FIELD_CTRL));
-            pPopup->SetSelectHdl(aLnk);
-
-            if (::GetHtmlMode(pView->GetDocShell()) & HTMLMODE_ON)
-            {
-                pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_PGCOUNT));
-                pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_TOPIC));
-            }
+            pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_PGCOUNT));
+            pPopup->RemoveItem(pPopup->GetItemPos(FN_INSERT_FLD_TOPIC));
         }
-        ToolBox* pToolBox = &GetToolBox();
-        sal_uInt16 nId = GetId();
+
+        ToolBox*      pToolBox = &GetToolBox();
+        sal_uInt16    nId      = GetId();
+        SfxDispatcher *rDispat = pView->GetViewFrame()->GetDispatcher();
+
+        // set the icons in the Popup-Menu, delete the pPopup
+        SfxPopupMenuManager aPop( pPopup, rDispat->GetFrame()->GetBindings() );
+
         pToolBox->SetItemDown( nId, true );
 
         pPopup->Execute( pToolBox, pToolBox->GetItemRect( nId ),
-            (pToolBox->GetAlign() == WINDOWALIGN_TOP || pToolBox->GetAlign() == WINDOWALIGN_BOTTOM) ?
-                POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
+                (pToolBox->GetAlign() == WINDOWALIGN_TOP || pToolBox->GetAlign() == WINDOWALIGN_BOTTOM) ?
+                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
 
         pToolBox->SetItemDown( nId, false );
     }
-    GetToolBox().EndSelection();
-    DelPopup();
-    return 0;
 
+    GetToolBox().EndSelection();
+
+    return 0;
 }
 
 SfxPopupWindowType SwTbxFieldCtrl::GetPopupWindowType() const
@@ -351,51 +346,6 @@ void SwTbxFieldCtrl::StateChanged( sal_uInt16,
     }
 }
 
-IMPL_LINK(SwTbxFieldCtrl, PopupHdl, PopupMenu*, pMenu)
-{
-    sal_uInt16 nId = pMenu->GetCurItemId();
-
-    Sequence< PropertyValue > aArgs;
-    const char* pChar = 0;
-    switch(nId)
-    {
-        case FN_INSERT_FLD_DATE:
-            pChar = ".uno:InsertDateField";
-        break;
-        case FN_INSERT_FLD_TIME:
-            pChar = ".uno:InsertTimeField";
-        break;
-        case FN_INSERT_FLD_PGNUMBER:
-            pChar = ".uno:InsertPageNumberField";
-        break;
-        case FN_INSERT_FLD_PGCOUNT:
-            pChar = ".uno:InsertPageCountField";
-        break;
-        case FN_INSERT_FLD_TOPIC:
-            pChar = ".uno:InsertTopicField";
-        break;
-        case FN_INSERT_FLD_TITLE:
-            pChar = ".uno:InsertTitleField";
-        break;
-        case FN_INSERT_FLD_AUTHOR:
-            pChar = ".uno:InsertAuthorField";
-        break;
-        default:
-            pChar = ".uno:InsertFieldCtrl";
-    }
-    Dispatch( OUString::createFromAscii( pChar ),aArgs );
-
-    return 0;
-}
-
-void SwTbxFieldCtrl::DelPopup()
-{
-    if(pPopup)
-    {
-        delete pPopup;
-        pPopup = 0;
-    }
-}
 
 // Navigation-Popup
 // determine the order of the toolbox items
