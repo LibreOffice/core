@@ -21,15 +21,13 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLDDELINKSCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
-
+#include "xmlimprt.hxx"
 #include <list>
-
-class ScXMLImport;
 
 class ScXMLDDELinksContext : public SvXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDELinksContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -68,8 +66,8 @@ class ScXMLDDELinkContext : public SvXMLImportContext
     sal_Int32       nRows;
     sal_uInt8       nMode;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDELinkContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -100,8 +98,8 @@ class ScXMLDDESourceContext : public SvXMLImportContext
 {
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDESourceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -123,8 +121,8 @@ class ScXMLDDETableContext : public SvXMLImportContext
 {
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDETableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -146,8 +144,8 @@ class ScXMLDDEColumnContext : public SvXMLImportContext
 {
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDEColumnContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -170,8 +168,8 @@ class ScXMLDDERowContext : public SvXMLImportContext
     ScXMLDDELinkContext*    pDDELink;
     sal_Int32               nRows;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDERowContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
@@ -200,8 +198,8 @@ class ScXMLDDECellContext : public SvXMLImportContext
 
     ScXMLDDELinkContext* pDDELink;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
     ScXMLDDECellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,

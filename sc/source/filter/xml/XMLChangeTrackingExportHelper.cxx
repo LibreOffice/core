@@ -555,7 +555,7 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
                     bAll = true;
                 else
                 {
-                    const ScChangeActionDel* pDel = (const ScChangeActionDel*) p;
+                    const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(p);
                     if ( (pDel->GetDx() > pDelAction->GetDx() || pDel->GetDy() > pDelAction->GetDy()) &&
                             pDel->GetBigRange() == pDelAction->GetBigRange() )
                     {

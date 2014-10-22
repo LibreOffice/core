@@ -3140,7 +3140,7 @@ void ScInterpreter::ScMacro()
     }
 
     bool bVolatileMacro = false;
-    SbMethod* pMethod = (SbMethod*)pVar;
+    SbMethod* pMethod = static_cast<SbMethod*>(pVar);
 
     SbModule* pModule = pMethod->GetModule();
     bool bUseVBAObjects = pModule->IsVBACompat();

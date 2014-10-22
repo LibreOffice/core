@@ -24,10 +24,9 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "detfunc.hxx"
 #include "detdata.hxx"
+#include "xmlimprt.hxx"
 
 #include <list>
-
-class ScXMLImport;
 
 struct ScMyImpDetectiveObj
 {
@@ -78,8 +77,8 @@ class ScXMLDetectiveContext : public SvXMLImportContext
 private:
     ScMyImpDetectiveObjVec*     pDetectiveObjVec;
 
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&          GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport&                GetScImport()       { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
                                 ScXMLDetectiveContext(
@@ -105,8 +104,8 @@ private:
     ScMyImpDetectiveObj         aDetectiveObj;
     bool                        bValid;
 
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&          GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport&                GetScImport()       { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
                                 ScXMLDetectiveHighlightedContext(
@@ -132,8 +131,8 @@ private:
     ScMyImpDetectiveOp          aDetectiveOp;
     bool                        bHasType;
 
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&          GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport&                GetScImport()       { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
                                 ScXMLDetectiveOperationContext(

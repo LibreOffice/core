@@ -39,8 +39,8 @@ private:
     bool            bIsActive;
     bool            bProtected;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

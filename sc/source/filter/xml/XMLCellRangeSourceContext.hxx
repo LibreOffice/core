@@ -21,8 +21,8 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLCELLRANGESOURCECONTEXT_HXX
 
 #include <xmloff/xmlimp.hxx>
+#include "xmlimprt.hxx"
 
-class ScXMLImport;
 
 struct ScMyImpCellRangeSource
 {
@@ -40,8 +40,8 @@ struct ScMyImpCellRangeSource
 class ScXMLCellRangeSourceContext : public SvXMLImportContext
 {
 private:
-    const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&          GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport&                GetScImport()       { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
                                 ScXMLCellRangeSourceContext(

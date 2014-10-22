@@ -1460,13 +1460,13 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, boo
         {
             if ( pToken->GetType() == svSingleRef )
             {
-                const ScSingleRefData& rRef = *((const ScSingleRefToken*)pToken)->GetSingleRef();
+                const ScSingleRefData& rRef = *static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
                 rRange.aStart = rRange.aEnd = rRef.toAbs(rPos);
                 bIs = !bValidOnly || ValidAddress(rRange.aStart);
             }
             else if ( pToken->GetType() == svDoubleRef )
             {
-                const ScComplexRefData& rCompl = *((const ScDoubleRefToken*)pToken)->GetDoubleRef();
+                const ScComplexRefData& rCompl = *static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef();
                 const ScSingleRefData& rRef1 = rCompl.Ref1;
                 const ScSingleRefData& rRef2 = rCompl.Ref2;
                 rRange.aStart = rRef1.toAbs(rPos);

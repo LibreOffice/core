@@ -51,7 +51,7 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 
         sal_uInt16 nWhichId(pWhichIds[i]);
         if (bExportDefaults && (0 != (pItem = &pItemPool->GetDefaultItem(nWhichId))))
         {
-            const SvxFontItem *pFont((const SvxFontItem *)pItem);
+            const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
             Add( pFont->GetFamilyName(), pFont->GetStyleName(),
                     pFont->GetFamily(), pFont->GetPitch(),
                     pFont->GetCharSet() );
@@ -61,7 +61,7 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 
         {
             if( 0 != (pItem = pItemPool->GetItem2( nWhichId, j ) ) )
             {
-                const SvxFontItem *pFont((const SvxFontItem *)pItem);
+                const SvxFontItem *pFont(static_cast<const SvxFontItem *>(pItem));
                 Add( pFont->GetFamilyName(), pFont->GetStyleName(),
                      pFont->GetFamily(), pFont->GetPitch(),
                      pFont->GetCharSet() );

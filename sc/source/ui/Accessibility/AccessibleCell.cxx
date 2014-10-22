@@ -338,9 +338,9 @@ bool ScAccessibleCell::IsEditable(
         mpDoc)
     {
         // here I have to test whether the protection of the table should influence this cell.
-        const ScProtectionAttr* pItem = (const ScProtectionAttr*)mpDoc->GetAttr(
+        const ScProtectionAttr* pItem = static_cast<const ScProtectionAttr*>(mpDoc->GetAttr(
             maCellAddress.Col(), maCellAddress.Row(),
-            maCellAddress.Tab(), ATTR_PROTECTION);
+            maCellAddress.Tab(), ATTR_PROTECTION));
         if (pItem)
             bEditable = !pItem->GetProtection();
     }
@@ -354,9 +354,9 @@ bool ScAccessibleCell::IsOpaque(
     bool bOpaque(true);
     if (mpDoc)
     {
-        const SvxBrushItem* pItem = (const SvxBrushItem*)mpDoc->GetAttr(
+        const SvxBrushItem* pItem = static_cast<const SvxBrushItem*>(mpDoc->GetAttr(
             maCellAddress.Col(), maCellAddress.Row(),
-            maCellAddress.Tab(), ATTR_BACKGROUND);
+            maCellAddress.Tab(), ATTR_BACKGROUND));
         if (pItem)
             bOpaque = pItem->GetColor() != COL_TRANSPARENT;
     }
@@ -589,7 +589,7 @@ bool ScAccessibleCell::IsDropdown()
             return true;
     }
     ScMergeFlagAttr* pAttr;
-    pAttr = (ScMergeFlagAttr*)mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
+    pAttr = static_cast<ScMergeFlagAttr*>(mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG ));
     if( pAttr->HasAutoFilter() )
     {
         return true;

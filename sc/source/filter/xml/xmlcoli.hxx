@@ -21,8 +21,8 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include "xmlimprt.hxx"
 
-class ScXMLImport;
 
 class ScXMLTableColContext : public SvXMLImportContext
 {
@@ -31,8 +31,8 @@ class ScXMLTableColContext : public SvXMLImportContext
     OUString           sVisibility;
     OUString           sCellStyleName;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -61,8 +61,8 @@ class ScXMLTableColsContext : public SvXMLImportContext
     bool        bGroup;
     bool        bGroupDisplay;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

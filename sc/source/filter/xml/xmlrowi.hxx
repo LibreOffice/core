@@ -22,8 +22,8 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include "address.hxx"
+#include "xmlimprt.hxx"
 
-class ScXMLImport;
 
 class ScXMLTableRowContext : public SvXMLImportContext
 {
@@ -32,8 +32,8 @@ class ScXMLTableRowContext : public SvXMLImportContext
     sal_Int32 nRepeatedRows;
     bool bHasCell;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -60,8 +60,8 @@ class ScXMLTableRowsContext : public SvXMLImportContext
     bool bGroup;
     bool bGroupDisplay;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

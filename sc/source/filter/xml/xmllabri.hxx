@@ -20,14 +20,13 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLLABRI_HXX
 
 #include <xmloff/xmlictxt.hxx>
-
-class ScXMLImport;
+#include "xmlimprt.hxx"
 
 class ScXMLLabelRangesContext : public SvXMLImportContext
 {
 private:
-    const ScXMLImport&          GetScImport() const     { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()           { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&          GetScImport() const     { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport&                GetScImport()           { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
                                 ScXMLLabelRangesContext(
@@ -53,8 +52,8 @@ private:
     OUString             sDataRangeStr;
     bool                        bColumnOrientation;
 
-    const ScXMLImport&          GetScImport() const     { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport&                GetScImport()           { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport&          GetScImport() const     { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport&                GetScImport()           { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
                                 ScXMLLabelRangeContext(

@@ -20,11 +20,11 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABI_HXX
 
 #include "externalrefmgr.hxx"
+#include "xmlimprt.hxx"
 
 #include <xmloff/xmlictxt.hxx>
 #include <memory>
 
-class ScXMLImport;
 
 struct ScXMLExternalTabData
 {
@@ -45,8 +45,8 @@ class ScXMLTableContext : public SvXMLImportContext
     bool            bStartFormPage;
     bool            bPrintEntireSheet;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

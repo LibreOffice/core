@@ -20,13 +20,13 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEMPTYCONTEXT_HXX
 
 #include <xmloff/xmlictxt.hxx>
+#include "xmlimprt.hxx"
 
-class ScXMLImport;
 
 class ScXMLEmptyContext : public SvXMLImportContext
 {
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

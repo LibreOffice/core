@@ -22,18 +22,18 @@
 
 #include "XMLChangeTrackingImportHelper.hxx"
 #include "chgtrack.hxx"
+#include "xmlimprt.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ustrbuf.hxx>
 
-class ScXMLImport;
 class ScXMLChangeTrackingImportHelper;
 
 class ScXMLTrackedChangesContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLTrackedChangesContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

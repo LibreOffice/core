@@ -2853,7 +2853,7 @@ bool ScCompiler::IsMacro( const OUString& rName )
     if (FormulaGrammar::isODFF( GetGrammar()) && aName.startsWithIgnoreAsciiCase("USER."))
         aName = aName.copy(5);
 
-    SbxMethod* pMeth = (SbxMethod*) pObj->Find( aName, SbxCLASS_METHOD );
+    SbxMethod* pMeth = static_cast<SbxMethod*>(pObj->Find( aName, SbxCLASS_METHOD ));
     if( !pMeth )
     {
         return false;

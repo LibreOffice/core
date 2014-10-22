@@ -176,7 +176,7 @@ bool ScTpFormulaItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
-    const ScTpFormulaItem& rPItem = (const ScTpFormulaItem&)rItem;
+    const ScTpFormulaItem& rPItem = static_cast<const ScTpFormulaItem&>(rItem);
     return ( theOptions == rPItem.theOptions );
 }
 

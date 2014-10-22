@@ -25,8 +25,8 @@
 #include <editeng/editdata.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include "xmlimprt.hxx"
 
-class ScXMLImport;
 class ScXMLTableRowCellContext;
 
 struct ScXMLAnnotationStyleEntry
@@ -102,8 +102,8 @@ private:
     ScXMLTableRowCellContext* pCellContext;
     SvXMLImportContext* pShapeContext;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 };
 
 #endif

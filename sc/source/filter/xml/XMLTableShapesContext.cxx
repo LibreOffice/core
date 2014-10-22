@@ -52,7 +52,7 @@ SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nPre
         uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
         if (xShapes.is())
         {
-            XMLTableShapeImportHelper* pTableShapeImport((XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get());
+            XMLTableShapeImportHelper* pTableShapeImport(static_cast<XMLTableShapeImportHelper*>(rXMLImport.GetShapeImport().get()));
             pTableShapeImport->SetOnTable(true);
             pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
                 rXMLImport, nPrefix, rLName, xAttrList, xShapes);

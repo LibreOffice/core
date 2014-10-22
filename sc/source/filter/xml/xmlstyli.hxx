@@ -78,8 +78,8 @@ class XMLTableStyleContext : public XMLPropStyleContext
     ScConditionalFormat*        mpCondFormat;
     bool                        mbDeleteCondFormat;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 protected:
 
@@ -146,8 +146,8 @@ class XMLTableStylesContext : public SvXMLStylesContext
     rtl::Reference < SvXMLImportPropertyMapper > xRowImpPropMapper;
     rtl::Reference < SvXMLImportPropertyMapper > xTableImpPropMapper;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 protected:
 
@@ -254,8 +254,8 @@ class ScCellTextStyleContext : public XMLTextStyleContext
 {
     sal_Int32   nLastSheet;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,

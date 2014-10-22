@@ -351,7 +351,7 @@ class ScXMLMapContext : public SvXMLImportContext
     OUString msCondition;
     OUString msBaseCell;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 public:
 
     ScXMLMapContext(
@@ -727,7 +727,7 @@ void XMLTableStylesContext::EndElement()
     if (bAutoStyles)
         GetImport().GetTextImport()->SetAutoStyles( this );
     else
-        ((ScXMLImport&)GetImport()).InsertStyles();
+        GetScImport().InsertStyles();
 }
 
 rtl::Reference < SvXMLImportPropertyMapper >
@@ -1089,7 +1089,7 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
         ScDrawTextCursor* pDrawImp = ScDrawTextCursor::getImplementation( xPropSet );
         if (pDrawImp)
         {
-            XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
+            XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());
             ScXMLAnnotationContext* pAnnotationContext = pTableShapeImport->GetAnnotationContext();
             if (pAnnotationContext)
             {

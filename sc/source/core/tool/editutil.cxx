@@ -285,7 +285,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    const ScMergeAttr* pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
     long nCellX = (long) ( pDoc->GetColWidth(nCol,nTab) * nPPTX );
     if ( pMerge->GetColMerge() > 1 )
     {
@@ -300,11 +300,11 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
         nCellY += (long) pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
     }
 
-    const SvxMarginItem* pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
+    const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
     sal_uInt16 nIndent = 0;
-    if ( ((const SvxHorJustifyItem&)pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue() ==
+    if ( static_cast<const SvxHorJustifyItem&>(pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue() ==
                 SVX_HOR_JUSTIFY_LEFT )
-        nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
+        nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue();
     long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
     aStartPos.X()   += nPixDifX * nLayoutSign;
     nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // wegen Umbruch etc.
@@ -313,12 +313,12 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
 
     long nPixDifY;
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
-    SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
+    SvxCellVerJustify eJust = (SvxCellVerJustify) static_cast<const SvxVerJustifyItem&>(pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
     //  asian vertical is always edited top-aligned
-    bool bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
-        ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
+    bool bAsianVertical = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_STACKED )).GetValue() &&
+        static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
 
     if ( eJust == SVX_VER_JUSTIFY_TOP ||
             ( bForceToTop && ( SC_MOD()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )
@@ -692,7 +692,7 @@ ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
         : ScEditEngineDefaulter( pDoc->GetEnginePool() )
 {
     SetEditTextObjectPool( pDoc->GetEditPool() );
-    Init((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
+    Init(static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)));
 }
 
 ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
@@ -873,7 +873,7 @@ void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, sal_Int32, sal
 
     if ( pFld && pFld->ISA( SvxURLField ) && bExecuteURL )
     {
-        const SvxURLField* pURLField = (const SvxURLField*) pFld;
+        const SvxURLField* pURLField = static_cast<const SvxURLField*>(pFld);
         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
     }
 }

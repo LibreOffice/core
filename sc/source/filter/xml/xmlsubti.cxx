@@ -153,11 +153,11 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
             uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
             if ( xProperties.is() )
             {
-                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
+                XMLTableStylesContext *pStyles = static_cast<XMLTableStylesContext *>(rImport.GetAutoStyles());
                 if ( pStyles )
                 {
-                    XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, true);
+                    XMLTableStyleContext* pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
+                            XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, true)));
                     if ( pStyle )
                     {
                         pStyle->FillPropertySet(xProperties);

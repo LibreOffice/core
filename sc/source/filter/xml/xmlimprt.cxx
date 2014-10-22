@@ -58,6 +58,7 @@
 #include "patattr.hxx"
 
 #include "XMLConverter.hxx"
+#include "XMLDetectiveContext.hxx"
 #include "XMLTableShapeImportHelper.hxx"
 #include "XMLChangeTrackingImportHelper.hxx"
 #include "chgviset.hxx"
@@ -240,7 +241,7 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
 class ScXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 protected:
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -314,7 +315,7 @@ SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
 
 class ScXMLBodyContext_Impl : public SvXMLImportContext
 {
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -2270,9 +2271,9 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const OUString& rLocalName,
         *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
 
     if (bIsAutoStyle)
-        SetAutoStyles((SvXMLStylesContext*)pContext);
+        SetAutoStyles(static_cast<SvXMLStylesContext*>(pContext));
     else
-        SetStyles((SvXMLStylesContext*)pContext);
+        SetStyles(static_cast<SvXMLStylesContext*>(pContext));
 
     return pContext;
 }
@@ -2830,9 +2831,11 @@ void ScXMLImport::SetStyleToRanges()
         uno::Reference <beans::XPropertySet> xProperties (xSheetCellRanges, uno::UNO_QUERY);
         if (xProperties.is())
         {
-            XMLTableStylesContext *pStyles((XMLTableStylesContext *)GetAutoStyles());
-            XMLTableStyleContext* pStyle( pStyles ? (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, true) : NULL );
+            XMLTableStylesContext *pStyles(static_cast<XMLTableStylesContext *>(GetAutoStyles()));
+            XMLTableStyleContext* pStyle = NULL;
+            if ( pStyles )
+                pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
+                        XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName, true)));
             if (pStyle)
             {
                 pStyle->FillPropertySet(xProperties);
@@ -3433,6 +3436,13 @@ void ScXMLImport::NotifyEmbeddedFontRead()
 {
     if ( pDoc )
         pDoc->SetIsUsingEmbededFonts( true );
+}
+
+ScMyImpDetectiveOpArray* ScXMLImport::GetDetectiveOpArray()
+{
+    if (!pDetectiveOpArray)
+        pDetectiveOpArray = new ScMyImpDetectiveOpArray();
+    return pDetectiveOpArray;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

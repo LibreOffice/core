@@ -21,16 +21,15 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
-
-class ScXMLImport;
+#include "xmlimprt.hxx"
 
 class ScXMLContentContext : public SvXMLImportContext
 {
     OUStringBuffer sOUText;
     OUStringBuffer& sValue;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 

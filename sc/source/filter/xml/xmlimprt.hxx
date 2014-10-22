@@ -34,7 +34,6 @@
 #include "compiler.hxx"
 
 #include "xmlstyle.hxx"
-#include "XMLDetectiveContext.hxx"
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
@@ -54,6 +53,7 @@ class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
 class ScEditEngineDefaulter;
 class ScDocumentImport;
+class ScMyImpDetectiveOpArray;
 
 namespace sc {
 
@@ -1137,10 +1137,7 @@ public:
         pValidations->push_back(rValidation); }
     bool GetValidation(const OUString& sName, ScMyImportValidation& aValidation);
 
-    inline ScMyImpDetectiveOpArray* GetDetectiveOpArray()   {
-        if (!pDetectiveOpArray)
-            pDetectiveOpArray = new ScMyImpDetectiveOpArray();
-        return pDetectiveOpArray; }
+    ScMyImpDetectiveOpArray* GetDetectiveOpArray();
 
     void SetRemoveLastChar(bool bValue) { bRemoveLastChar = bValue; }
     bool GetRemoveLastChar() { return bRemoveLastChar; }

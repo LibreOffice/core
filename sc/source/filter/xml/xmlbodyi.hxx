@@ -22,10 +22,10 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include "xmlimprt.hxx"
 
 #include "tabprotection.hxx"
 
-class ScXMLImport;
 class ScXMLChangeTrackingImportHelper;
 
 class ScXMLBodyContext : public SvXMLImportContext
@@ -37,8 +37,8 @@ class ScXMLBodyContext : public SvXMLImportContext
     bool            bHadCalculationSettings;
 
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLBodyContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

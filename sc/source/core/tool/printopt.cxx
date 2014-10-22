@@ -96,7 +96,7 @@ bool ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
-    const ScTpPrintItem& rPItem = (const ScTpPrintItem&)rItem;
+    const ScTpPrintItem& rPItem = static_cast<const ScTpPrintItem&>(rItem);
     return ( theOptions == rPItem.theOptions );
 }
 

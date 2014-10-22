@@ -125,11 +125,11 @@ void ScXMLTableColContext::EndElement()
             {
                 if (!sStyleName.isEmpty())
                 {
-                    XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
+                    XMLTableStylesContext *pStyles = static_cast<XMLTableStylesContext *>(rXMLImport.GetAutoStyles());
                     if ( pStyles )
                     {
-                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, true);
+                        XMLTableStyleContext* pStyle = const_cast<XMLTableStyleContext*>(static_cast<const XMLTableStyleContext *>(pStyles->FindStyleChildContext(
+                            XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, true)));
                         if (pStyle)
                         {
                             pStyle->FillPropertySet(xColumnProperties);

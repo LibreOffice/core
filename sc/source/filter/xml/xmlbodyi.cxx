@@ -37,6 +37,7 @@
 #include "XMLCalculationSettingsContext.hxx"
 #include "XMLTrackedChangesContext.hxx"
 #include "XMLEmptyContext.hxx"
+#include "XMLDetectiveContext.hxx"
 #include "scerrors.hxx"
 #include "tabprotection.hxx"
 #include "datastreamimport.hxx"

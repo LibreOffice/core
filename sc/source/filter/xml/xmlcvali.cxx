@@ -51,8 +51,8 @@ class ScXMLContentValidationContext : public SvXMLImportContext
 
     SvXMLImportContextRef           xEventContext;
 
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    const ScXMLImport& GetScImport() const { return static_cast<const ScXMLImport&>(GetImport()); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
     com::sun::star::sheet::ValidationAlertStyle GetAlertStyle() const;
     void SetFormula( OUString& rFormula, OUString& rFormulaNmsp, FormulaGrammar::Grammar& reGrammar,
@@ -89,7 +89,7 @@ class ScXMLHelpMessageContext : public SvXMLImportContext
 
     ScXMLContentValidationContext* pValidationContext;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -119,7 +119,7 @@ class ScXMLErrorMessageContext : public SvXMLImportContext
 
     ScXMLContentValidationContext* pValidationContext;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -146,7 +146,7 @@ class ScXMLErrorMacroContext : public SvXMLImportContext
 
     ScXMLContentValidationContext*  pValidationContext;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -419,7 +419,7 @@ void ScXMLContentValidationContext::EndElement()
     {
         OUString sOnError("OnError");
         XMLEventsImportContext* pEvents =
-            (XMLEventsImportContext*)&xEventContext;
+            static_cast<XMLEventsImportContext*>(&xEventContext);
         uno::Sequence<beans::PropertyValue> aValues;
         pEvents->GetEventSequence( sOnError, aValues );
 

@@ -2254,8 +2254,8 @@ void ScInterpreter::ScCell()
                 sal_Unicode c = 0;
                 if (aCell.hasString())
                 {
-                    const SvxHorJustifyItem* pJustAttr = (const SvxHorJustifyItem*)
-                        pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY );
+                    const SvxHorJustifyItem* pJustAttr = static_cast<const SvxHorJustifyItem*>(
+                        pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY ));
                     switch( pJustAttr->GetValue() )
                     {
                         case SVX_HOR_JUSTIFY_STANDARD:
@@ -2270,8 +2270,8 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType.equalsAscii( "PROTECT" ) )
             {   // 1 = cell locked
-                const ScProtectionAttr* pProtAttr = (const ScProtectionAttr*)
-                    pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION );
+                const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(
+                    pDok->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_PROTECTION ));
                 PushInt( pProtAttr->GetProtection() ? 1 : 0 );
             }
 
@@ -8121,7 +8121,7 @@ void ScInterpreter::ScText()
             const ScPatternAttr* pPattern = pDok->GetPattern(
                     aPos.Col(), aPos.Row(), aPos.Tab() );
             if ( pPattern )
-                eCellLang = ((const SvxLanguageItem&)
+                eCellLang = static_cast<const SvxLanguageItem&>(
                         pPattern->GetItem( ATTR_LANGUAGE_FORMAT )).GetValue();
             else
                 eCellLang = ScGlobal::eLnge;

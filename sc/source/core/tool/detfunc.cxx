@@ -129,7 +129,7 @@ static bool lcl_HasThickLine( SdrObject& rObj )
 {
     // thin lines get width 0 -> everything greater 0 is a thick line
 
-    return ( ((const XLineWidthItem&)rObj.GetMergedItem(XATTR_LINEWIDTH)).GetValue() > 0 );
+    return static_cast<const XLineWidthItem&>(rObj.GetMergedItem(XATTR_LINEWIDTH)).GetValue() > 0;
 }
 
 ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
@@ -229,7 +229,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
 
     //  do use the default cell style, so the user has a chance to
     //  modify the font for the annotations
-    ((const ScPatternAttr&)rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN)).
+    static_cast<const ScPatternAttr&>(rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN)).
         FillEditItemSet( &aCaptionSet );
 
     // support the best position for the tail connector now that
@@ -416,9 +416,9 @@ bool ScDetectiveFunc::HasArrow( const ScAddress& rStart,
             const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
             bool bObjStartAlien =
-                lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
+                lcl_IsOtherTab( static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
             bool bObjEndAlien =
-                lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
+                lcl_IsOtherTab( static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
 
             bool bStartHit = bStartAlien ? bObjStartAlien :
                                 ( !bObjStartAlien && aStartRect.IsInside(pObject->GetPoint(0)) );
@@ -442,9 +442,9 @@ bool ScDetectiveFunc::IsNonAlienArrow( SdrObject* pObject )
         const SfxItemSet& rSet = pObject->GetMergedItemSet();
 
         bool bObjStartAlien =
-            lcl_IsOtherTab( ((const XLineStartItem&)rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
+            lcl_IsOtherTab( static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue() );
         bool bObjEndAlien =
-            lcl_IsOtherTab( ((const XLineEndItem&)rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
+            lcl_IsOtherTab( static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue() );
 
         return !bObjStartAlien && !bObjEndAlien;
     }
@@ -744,7 +744,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
             if ( pObject->GetLayer() == SC_LAYER_INTERN &&
                     pObject->Type() == TYPE(SdrRectObj) )
             {
-                aObjRect = ((SdrRectObj*)pObject)->GetLogicRect();
+                aObjRect = static_cast<SdrRectObj*>(pObject)->GetLogicRect();
                 aObjRect.Justify();
                 if ( RectIsPoints( aObjRect, aStartCorner, aEndCorner ) )
                     ppObj[nDelCount++] = pObject;
@@ -1309,7 +1309,7 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
     const ScPatternAttr* pPattern = aAttrIter.GetNext( nCol, nRow1, nRow2 );
     while ( pPattern && nInsCount < SC_DET_MAXCIRCLE )
     {
-        sal_uLong nIndex = ((const SfxUInt32Item&)pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
+        sal_uLong nIndex = static_cast<const SfxUInt32Item&>(pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
         if (nIndex)
         {
             const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
@@ -1596,7 +1596,7 @@ ScDetectiveObjType ScDetectiveFunc::GetDetectiveObjectType( SdrObject* pObject, 
                     FindFrameForObject( pObject, rSource );     // modifies rSource
                 }
 
-                ColorData nObjColor = ((const XLineColorItem&)pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
+                ColorData nObjColor = static_cast<const XLineColorItem&>(pObject->GetMergedItem(XATTR_LINECOLOR)).GetColorValue().GetColor();
                 if ( nObjColor == GetErrorColor() && nObjColor != GetArrowColor() )
                     rRedLine = true;
             }

@@ -47,7 +47,7 @@ class ScXMLChangeInfoContext : public SvXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     sal_uInt32                          nParagraphCount;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLChangeInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -68,7 +68,7 @@ class ScXMLBigRangeContext : public SvXMLImportContext
 {
     ScBigRange&         rBigRange;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLBigRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -104,7 +104,7 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
     bool                            bBigRange;
     bool                            bContainsCell;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLCellContentDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -125,7 +125,7 @@ class ScXMLDependenceContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLDependenceContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -146,7 +146,7 @@ class ScXMLDependingsContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLDependingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -167,7 +167,7 @@ class ScXMLChangeDeletionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLChangeDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -188,7 +188,7 @@ class ScXMLDeletionsContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLDeletionsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -216,7 +216,7 @@ class ScXMLChangeTextPContext : public SvXMLImportContext
     SvXMLImportContext*         pTextPContext;
     sal_uInt16                      nPrefix;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
 
@@ -253,7 +253,7 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     bool                bString;
     bool                bFormula;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLChangeCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -294,7 +294,7 @@ class ScXMLPreviousContext : public SvXMLImportContext
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLPreviousContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -316,7 +316,7 @@ class ScXMLContentChangeContext : public SvXMLImportContext
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScBigRange                          aBigRange;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLContentChangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -336,7 +336,7 @@ class ScXMLInsertionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLInsertionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -356,7 +356,7 @@ class ScXMLInsertionCutOffContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLInsertionCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -376,7 +376,7 @@ class ScXMLMovementCutOffContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLMovementCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -396,7 +396,7 @@ class ScXMLCutOffsContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLCutOffsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -416,7 +416,7 @@ class ScXMLDeletionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -438,7 +438,7 @@ class ScXMLMovementContext : public SvXMLImportContext
     ScBigRange                          aTargetRange;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLMovementContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
@@ -458,7 +458,7 @@ class ScXMLRejectionContext : public SvXMLImportContext
 {
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
     ScXMLRejectionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

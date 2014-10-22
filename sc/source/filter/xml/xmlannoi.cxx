@@ -54,7 +54,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     uno::Reference<drawing::XShapes> xLocalShapes (GetScImport().GetTables().GetCurrentXShapes());
     if (xLocalShapes.is())
     {
-        XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
+        XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());
         pTableShapeImport->SetAnnotation(this);
         pShapeContext = GetScImport().GetShapeImport()->CreateGroupChildContext(
             GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, true);
@@ -169,7 +169,7 @@ void ScXMLAnnotationContext::EndElement()
         mrAnnotationData.maCreateDate = maCreateDateStringBuffer.makeStringAndClear();
     mrAnnotationData.maSimpleText = maTextBuffer.makeStringAndClear();
 
-    XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
+    XMLTableShapeImportHelper* pTableShapeImport = static_cast<XMLTableShapeImportHelper*>(GetScImport().GetShapeImport().get());
     pTableShapeImport->SetAnnotation(NULL);
 }
 
