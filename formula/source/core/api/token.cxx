@@ -254,6 +254,71 @@ void FormulaToken::SetError( sal_uInt16 )
     SAL_WARN( "formula.core", "FormulaToken::SetError: virtual dummy called" );
 }
 
+const ScSingleRefData* FormulaToken::GetSingleRef() const
+{
+    OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );
+    return nullptr;
+}
+
+ScSingleRefData* FormulaToken::GetSingleRef()
+{
+    OSL_FAIL( "FormulaToken::GetSingleRef: virtual dummy called" );
+    return nullptr;
+}
+
+const ScComplexRefData* FormulaToken::GetDoubleRef() const
+{
+    OSL_FAIL( "FormulaToken::GetDoubleRef: virtual dummy called" );
+    return nullptr;
+}
+
+ScComplexRefData* FormulaToken::GetDoubleRef()
+{
+    OSL_FAIL( "FormulaToken::GetDoubleRef: virtual dummy called" );
+    return nullptr;
+}
+
+const ScSingleRefData* FormulaToken::GetSingleRef2() const
+{
+    OSL_FAIL( "FormulaToken::GetSingleRef2: virtual dummy called" );
+    return nullptr;
+}
+
+ScSingleRefData* FormulaToken::GetSingleRef2()
+{
+    OSL_FAIL( "FormulaToken::GetSingleRef2: virtual dummy called" );
+    return nullptr;
+}
+
+const ScMatrix* FormulaToken::GetMatrix() const
+{
+    OSL_FAIL( "FormulaToken::GetMatrix: virtual dummy called" );
+    return NULL;
+}
+
+ScMatrix* FormulaToken::GetMatrix()
+{
+    OSL_FAIL( "FormulaToken::GetMatrix: virtual dummy called" );
+    return NULL;
+}
+
+ScJumpMatrix* FormulaToken::GetJumpMatrix() const
+{
+    OSL_FAIL( "FormulaToken::GetJumpMatrix: virtual dummy called" );
+    return NULL;
+}
+const std::vector<ScComplexRefData>* FormulaToken::GetRefList() const
+{
+    OSL_FAIL( "FormulaToken::GetRefList: virtual dummy called" );
+    return NULL;
+}
+
+std::vector<ScComplexRefData>* FormulaToken::GetRefList()
+{
+    OSL_FAIL( "FormulaToken::GetRefList: virtual dummy called" );
+    return NULL;
+}
+
 bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;

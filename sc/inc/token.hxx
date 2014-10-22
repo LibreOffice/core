@@ -62,33 +62,6 @@ protected:
 public:
 
     virtual                     ~ScToken();
-
-    /**
-        Dummy methods to avoid switches and casts where possible,
-        the real token classes have to overload the appropriate method[s].
-        The only methods valid anytime if not overloaded are:
-
-        - GetByte() since this represents the count of parameters to a function
-          which of course is 0 on non-functions. formula::FormulaByteToken and ScExternal do
-          overload it.
-
-        - HasForceArray() since also this is only used for operators and
-          functions and is 0 for other tokens.
-
-        Any other non-overloaded method pops up an assertion.
-     */
-
-    virtual const ScSingleRefData*    GetSingleRef() const;
-    virtual ScSingleRefData*      GetSingleRef();
-    virtual const ScComplexRefData* GetDoubleRef() const;
-    virtual ScComplexRefData*       GetDoubleRef();
-    virtual const ScSingleRefData*    GetSingleRef2() const;
-    virtual ScSingleRefData*      GetSingleRef2();
-    virtual const ScMatrix*     GetMatrix() const;
-    virtual ScMatrix*           GetMatrix();
-    virtual ScJumpMatrix*       GetJumpMatrix() const;
-    virtual const ScRefList*    GetRefList() const;
-    virtual       ScRefList*    GetRefList();
 };
 
 #if DEBUG_FORMULA_COMPILER

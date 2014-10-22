@@ -20,6 +20,10 @@
 #ifndef INCLUDED_FORMULA_TOKEN_HXX
 #define INCLUDED_FORMULA_TOKEN_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <string.h>
 #include <formula/opcode.hxx>
 #include <tools/mempool.hxx>
@@ -28,6 +32,11 @@
 #include <formula/types.hxx>
 #include <svl/sharedstring.hxx>
 #include <osl/interlck.h>
+
+class ScJumpMatrix;
+class ScMatrix;
+struct ScComplexRefData;
+struct ScSingleRefData;
 
 namespace formula
 {
@@ -153,6 +162,18 @@ public:
     virtual FormulaToken*       GetFAPOrigToken() const;
     virtual sal_uInt16          GetError() const;
     virtual void                SetError( sal_uInt16 );
+
+    virtual const ScSingleRefData*    GetSingleRef() const;
+    virtual ScSingleRefData*      GetSingleRef();
+    virtual const ScComplexRefData* GetDoubleRef() const;
+    virtual ScComplexRefData*       GetDoubleRef();
+    virtual const ScSingleRefData*    GetSingleRef2() const;
+    virtual ScSingleRefData*      GetSingleRef2();
+    virtual const ScMatrix*     GetMatrix() const;
+    virtual ScMatrix*           GetMatrix();
+    virtual ScJumpMatrix*       GetJumpMatrix() const;
+    virtual const std::vector<ScComplexRefData>* GetRefList() const;
+    virtual       std::vector<ScComplexRefData>* GetRefList();
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 
