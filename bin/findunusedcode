@@ -57,6 +57,7 @@ grep ::.*\( unusedcode.all \
 		  | grep -v ^Dde \
 		  | grep -v ^graphite2:: \
 		  | grep -v ^jvmaccess:: \
+		  | grep -v ^Json:: \
 		  | grep -v ^libcdr:: \
 		  | grep -v ^libcmis:: \
 		  | grep -v ^libgltf:: \

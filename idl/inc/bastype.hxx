@@ -65,7 +65,6 @@ public:
     friend SvStream& operator >> (SvStream &, SvBOOL &);
 
     bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-    OString    GetSvIdlString( SvStringHashEntry * pName );
 };
 
 

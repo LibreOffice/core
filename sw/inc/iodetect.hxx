@@ -57,8 +57,6 @@ struct SwIoDetect
     {
         return rNm.startsWith(sName);
     }
-
-    OUString IsReader(const sal_Char* pHeader, sal_uLong nLen_) const;
 };
 
 enum ReaderWriterEnum {

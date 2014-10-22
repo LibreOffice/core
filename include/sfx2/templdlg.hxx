@@ -28,36 +28,17 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 
+namespace SfxTemplate
+{
+    // converts from SFX_STYLE_FAMILY Ids to 1-5
+    sal_uInt16 SFX2_DLLPUBLIC SfxFamilyIdToNId(SfxStyleFamily nFamily);
+    // converts from 1-5 to SFX_STYLE_FAMILY Ids
+    SfxStyleFamily SFX2_DLLPUBLIC NIdToSfxFamilyId(sal_uInt16 nId);
+}
+
 class SfxTemplateDialog_Impl;
 
-// class SfxTemplateDialog -----------------------------------------------
-class SfxTemplateDialog : public SfxDockingWindow
-{
-private:
-friend class SfxTemplateDialog_Impl;
-
-    SfxTemplateDialog_Impl*     pImpl;
-
-    virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
-    virtual void                Resize() SAL_OVERRIDE;
-    virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment ) SAL_OVERRIDE;
-    virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-
-public:
-    SfxTemplateDialog( SfxBindings*, SfxChildWindow*, vcl::Window* );
-    virtual ~SfxTemplateDialog();
-
-    virtual void                Update();
-
-    // converts from SFX_STYLE_FAMILY Ids to 1-5
-    static sal_uInt16 SFX2_DLLPUBLIC SfxFamilyIdToNId(SfxStyleFamily nFamily);
-    // converts from 1-5 to SFX_STYLE_FAMILY Ids
-    static SfxStyleFamily SFX2_DLLPUBLIC NIdToSfxFamilyId(sal_uInt16 nId);
-};
-
-
 // class SfxTemplatePanelControl -----------------------------------------
-
 class SFX2_DLLPUBLIC SfxTemplatePanelControl : public DockingWindow
 {
 public:
@@ -75,7 +56,6 @@ private:
     SfxTemplateDialog_Impl*     pImpl;
     SfxBindings* mpBindings;
 };
-
 
 #endif
 

@@ -47,27 +47,6 @@ void SvMetaObject::WriteStars( SvStream & rOutStm )
     rOutStm.WriteChar( '/' ) << endl;
 }
 
-bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegPos )
-{
-    // write no empty brackets
-    sal_uLong nPos = rOutStm.Tell();
-    rOutStm.Seek( nBegPos );
-    bool bOnlySpace = true;
-    while( bOnlySpace && rOutStm.Tell() < nPos )
-    {
-        char c;
-        rOutStm.ReadChar( c );
-        if( !isspace( c ) )
-            bOnlySpace = false;
-    }
-    if( bOnlySpace )
-        // nothing written
-        rOutStm.Seek( nBegPos );
-    else
-        rOutStm.Seek( nPos );
-    return bOnlySpace;
-}
-
 void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
 {
     // write no empty brackets

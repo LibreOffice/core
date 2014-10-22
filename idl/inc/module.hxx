@@ -54,7 +54,6 @@ protected:
     virtual void        ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 public:
                         TYPEINFO_OVERRIDE();
-                        SvMetaModule();
 
     const OUString &    GetIdlFileName() const { return aIdlFileName; }
     const OString& GetModulePrefix() const { return aModulePrefix.getString(); }

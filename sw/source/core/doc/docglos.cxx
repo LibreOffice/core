@@ -78,16 +78,6 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
     }
 }
 
-void SwDoc::ReplaceUserDefinedDocumentProperties(const SwDoc& rSource)
-{
-    uno::Reference<document::XDocumentPropertiesSupplier> xSourceDPS(
-        rSource.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
-    uno::Reference<document::XDocumentProperties> xSourceDocProps(
-        xSourceDPS->getDocumentProperties() );
-
-    ReplaceUserDefinedDocumentProperties( xSourceDocProps );
-}
-
 void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge)
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xSourceDPS(

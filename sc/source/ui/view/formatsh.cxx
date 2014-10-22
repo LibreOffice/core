@@ -215,7 +215,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
 
-                bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue());
+                bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
                 delete pItem;
 
                 if ( bProtected || bPage )
@@ -231,7 +231,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
                 SfxPoolItem* pItem = NULL;
                 pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
                 SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
-                bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue());
+                bool bPage = pFamilyItem && SFX_STYLE_FAMILY_PAGE == SfxTemplate::NIdToSfxFamilyId(pFamilyItem->GetValue());
                 delete pItem;
 
                 if ( bProtected && !bPage )

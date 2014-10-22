@@ -204,24 +204,6 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, bool bVar ) const
-{
-    const SvNumberIdentifier & rId = GetSlotId();
-    sal_uLong n = rId.GetValue();
-    if( !rBase.aStructSlotId.getString().isEmpty() )
-    {
-        n = n << 20;
-        n += rBase.aStructSlotId.GetValue();
-    }
-    if (dynamic_cast<const SvMetaSlot*>(this))
-        n |= 0x20000;
-    if( !bVar )
-        n += 0x10000;
-    else if ( GetIsCollection() )
-        n += 0x40000;
-    return n;
-}
-
 sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
 {
     SvMetaType * pType = GetType();
@@ -336,14 +318,6 @@ const OString& SvMetaType::GetBasicName() const
         return static_cast<SvMetaType*>(GetRef())->GetBasicName();
 }
 
-OString SvMetaType::GetBasicPostfix() const
-{
-    // MBN and Co always want "As xxx"
-    return OStringBuffer(" As ").
-        append(GetBasicName()).
-        makeStringAndClear();
-}
-
 bool SvMetaType::GetIn() const
 {
     if( aIn.IsSet() || !GetRef() )
@@ -448,20 +422,6 @@ bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
     if( GetType() != TYPE_ENUM )
         aOdlName.setString(rName);
     return SvMetaReference::SetName( rName, pBase );
-}
-
-OString SvMetaType::GetCString() const
-{
-    OStringBuffer out( GetSvName() );
-    if( aCall0 == (int)CALL_POINTER )
-        out.append(" *");
-    else if( aCall0 == (int)CALL_REFERENCE )
-        out.append(" &");
-    if( aCall1 == (int)CALL_POINTER )
-        out.append('*');
-    else if( aCall1 == (int)CALL_REFERENCE )
-        out.append('&');
-    return out.makeStringAndClear();
 }
 
 bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,

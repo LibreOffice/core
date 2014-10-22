@@ -48,51 +48,6 @@ SwIoDetect aFilterDetect[] =
     SwIoDetect( FILTER_TEXT )
 };
 
-OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
-{
-    // Filter recognition
-    struct W1_FIB
-    {
-        SVBT16 wIdent;      // 0x0 int magic number
-        SVBT16 nFib;        // 0x2 FIB version written
-        SVBT16 nProduct;    // 0x4 product version written by
-        SVBT16 nlocale;     // 0x6 language stamp---localized version;
-        SVBT16 pnNext;      // 0x8
-        SVBT16 fFlags;
-
-        sal_uInt16 nFibGet()    { return SVBT16ToShort(nFib); }
-        sal_uInt16 wIdentGet()  { return SVBT16ToShort(wIdent); }
-        sal_uInt16 fFlagsGet()  { return SVBT16ToShort(fFlags); }
-        // SVBT16 fComplex :1;// 0004 when 1, file is in complex, fast-saved format.
-        bool fComplexGet()      { return static_cast< bool >((fFlagsGet() >> 2) & 1); }
-    };
-
-    bool bRet = false;
-    if ( sHTML == sName )
-        bRet = HTMLParser::IsHTMLFormat( pHeader, true, RTL_TEXTENCODING_DONTKNOW );
-    else if ( FILTER_RTF == sName )
-        bRet = 0 == strncmp( "{\\rtf", pHeader, 5 );
-    else if ( sWW5 == sName )
-    {
-        W1_FIB *pW1Header = (W1_FIB*)pHeader;
-        if (pW1Header->wIdentGet() == 0xA5DC && pW1Header->nFibGet() == 0x65)
-            bRet = true; /*WW5*/
-        else if (pW1Header->wIdentGet() == 0xA5DB && pW1Header->nFibGet() == 0x2D)
-            bRet = true; /*WW2*/
-    }
-    else if ( sWW1 == sName )
-    {
-        bRet = (( ((W1_FIB*)pHeader)->wIdentGet() == 0xA59C
-                    && ((W1_FIB*)pHeader)->nFibGet() == 0x21)
-                && ((W1_FIB*)pHeader)->fComplexGet() == false);
-    }
-    else if ( FILTER_TEXT == sName )
-        bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
-    else if ( FILTER_TEXT_DLG == sName)
-        bRet = SwIoSystem::IsDetectableText( pHeader, nLen_, 0, 0, 0, true);
-    return bRet ? sName : OUString();
-}
-
 const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {
     // for StorageFilters also set the SubStorageName

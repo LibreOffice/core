@@ -188,14 +188,4 @@ bool SvStringHashTable::equals( const OString& rElement,
     return rElement.equals( pEntries[ nIndex ].GetName() );
 }
 
-void SvStringHashTable::FillHashList( SvStringHashList * pList ) const
-{
-    for( sal_uInt32 n = 0; n < GetMax(); n++ )
-    {
-        if( IsEntry( n ) )
-            pList->push_back( Get( n ) );
-    }
-    // hash order, sort now
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

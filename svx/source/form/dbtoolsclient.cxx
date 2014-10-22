@@ -219,32 +219,12 @@ namespace svxform
         return xReturn;
     }
 
-
     void OStaticDataAccessTools::TransferFormComponentProperties(const Reference< XPropertySet>& _rxOld,
         const Reference< XPropertySet>& _rxNew, const Locale& _rLocale) const
     {
         if ( ensureLoaded() )
             m_xDataAccessTools->TransferFormComponentProperties(_rxOld, _rxNew, _rLocale);
     }
-
-
-    OUString OStaticDataAccessTools::quoteName(const OUString& _rQuote, const OUString& _rName) const
-    {
-        OUString sReturn;
-        if ( ensureLoaded() )
-            sReturn = m_xDataAccessTools->quoteName(_rQuote, _rName);
-        return sReturn;
-    }
-
-
-    OUString OStaticDataAccessTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet>& _xTable ) const
-    {
-        OUString sReturn;
-        if ( ensureLoaded() )
-            sReturn = m_xDataAccessTools->composeTableNameForSelect( _rxConnection, _xTable );
-        return sReturn;
-    }
-
 
     Reference< XDataSource > OStaticDataAccessTools::getDataSource( const OUString& _rsRegisteredName, const Reference< XComponentContext>& _rxContext ) const
     {
@@ -254,7 +234,6 @@ namespace svxform
         return xReturn;
     }
 
-
     bool OStaticDataAccessTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
     {
         bool bRet = false;
@@ -262,7 +241,6 @@ namespace svxform
             bRet = m_xDataAccessTools->canInsert( _rxCursorSet );
         return bRet;
     }
-
 
     bool OStaticDataAccessTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
     {

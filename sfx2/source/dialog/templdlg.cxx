@@ -127,87 +127,6 @@ private:
     DeletionWatcher *const m_pPrevious; /// let's add more epicycles!
 };
 
-// Re-direct functions
-
-SfxTemplateDialog::SfxTemplateDialog
-(
-    SfxBindings *pBind,
-    SfxChildWindow *pCW,
-    vcl::Window *pParent
-)
-
-/*  [Description]
-    Designer class.
-*/
-    : SfxDockingWindow( pBind, pCW, pParent, SfxResId(DLG_STYLE_DESIGNER) ),
-
-    pImpl( new SfxTemplateDialog_Impl( pBind, this ) )
-
-{
-    pImpl->updateNonFamilyImages();
-}
-
-SfxTemplateDialog::~SfxTemplateDialog()
-{
-    delete pImpl;
-}
-
-void SfxTemplateDialog::DataChanged( const DataChangedEvent& _rDCEvt )
-{
-    if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) &&
-         ( 0 != ( SETTINGS_STYLE & _rDCEvt.GetFlags() ) ) )
-    {
-        pImpl->updateFamilyImages();
-        pImpl->updateNonFamilyImages();
-    }
-
-    SfxDockingWindow::DataChanged( _rDCEvt );
-}
-
-void SfxTemplateDialog::Update()
-{
-    pImpl->Update();
-}
-
-
-
-void SfxTemplateDialog::Resize()
-{
-    if(pImpl)
-        pImpl->Resize();
-    SfxDockingWindow::Resize();
-}
-
-
-
-
-SfxChildAlignment SfxTemplateDialog::CheckAlignment(SfxChildAlignment eActAlign,SfxChildAlignment eAlign)
-{
-    switch (eAlign)
-    {
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_HIGHESTTOP:
-        case SFX_ALIGN_LOWESTTOP:
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_LOWESTBOTTOM:
-        case SFX_ALIGN_HIGHESTBOTTOM:
-            return eActAlign;
-
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_RIGHT:
-        case SFX_ALIGN_FIRSTLEFT:
-        case SFX_ALIGN_LASTLEFT:
-        case SFX_ALIGN_FIRSTRIGHT:
-        case SFX_ALIGN_LASTRIGHT:
-            return eAlign;
-
-        default:
-            return eAlign;
-    }
-}
-
-
-
 void DropListBox_Impl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     nModifier = rMEvt.GetModifier();
@@ -775,7 +694,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
 sal_uInt16 SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(sal_uInt16 nId)
 {
     const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nId );
-    return SfxTemplateDialog::SfxFamilyIdToNId(pItem->GetFamily())-1;
+    return SfxTemplate::SfxFamilyIdToNId(pItem->GetFamily())-1;
 }
 
 void SfxTemplateDialog_Impl::EnableEdit(bool bEnable)
@@ -870,7 +789,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     for( ; nCount--; )
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nCount );
-        sal_uInt16 nId = SfxTemplateDialog::SfxFamilyIdToNId( pItem->GetFamily() );
+        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId( pItem->GetFamily() );
         InsertFamilyItem( nId, pItem );
     }
 
@@ -959,29 +878,32 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         m_pDeletionWatcher->signal();
 }
 
-sal_uInt16 SfxTemplateDialog::SfxFamilyIdToNId(SfxStyleFamily nFamily)
+namespace SfxTemplate
 {
-    switch ( nFamily )
+    sal_uInt16 SfxFamilyIdToNId(SfxStyleFamily nFamily)
     {
-        case SFX_STYLE_FAMILY_CHAR:   return 1;
-        case SFX_STYLE_FAMILY_PARA:   return 2;
-        case SFX_STYLE_FAMILY_FRAME:  return 3;
-        case SFX_STYLE_FAMILY_PAGE:   return 4;
-        case SFX_STYLE_FAMILY_PSEUDO: return 5;
-        default:                      return 0;
+        switch ( nFamily )
+        {
+            case SFX_STYLE_FAMILY_CHAR:   return 1;
+            case SFX_STYLE_FAMILY_PARA:   return 2;
+            case SFX_STYLE_FAMILY_FRAME:  return 3;
+            case SFX_STYLE_FAMILY_PAGE:   return 4;
+            case SFX_STYLE_FAMILY_PSEUDO: return 5;
+            default:                      return 0;
+        }
     }
-}
 
-SfxStyleFamily SfxTemplateDialog::NIdToSfxFamilyId(sal_uInt16 nId)
-{
-    switch (nId)
+    SfxStyleFamily NIdToSfxFamilyId(sal_uInt16 nId)
     {
-        case 1: return SFX_STYLE_FAMILY_CHAR;
-        case 2: return SFX_STYLE_FAMILY_PARA;
-        case 3: return SFX_STYLE_FAMILY_FRAME;
-        case 4: return SFX_STYLE_FAMILY_PAGE;
-        case 5: return SFX_STYLE_FAMILY_PSEUDO;
-        default: return SFX_STYLE_FAMILY_ALL;
+        switch (nId)
+        {
+            case 1: return SFX_STYLE_FAMILY_CHAR;
+            case 2: return SFX_STYLE_FAMILY_PARA;
+            case 3: return SFX_STYLE_FAMILY_FRAME;
+            case 4: return SFX_STYLE_FAMILY_PAGE;
+            case 5: return SFX_STYLE_FAMILY_PSEUDO;
+            default: return SFX_STYLE_FAMILY_ALL;
+        }
     }
 }
 
@@ -992,7 +914,7 @@ const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() con
     for(size_t i = 0; i < nCount; ++i)
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->at( i );
-        sal_uInt16 nId = SfxTemplateDialog::SfxFamilyIdToNId(pItem->GetFamily());
+        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId(pItem->GetFamily());
         if(nId == nActFamily)
             return pItem;
     }
@@ -2324,24 +2246,6 @@ PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
     return pMenu;
 }
 
-
-
-
-SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
-    SfxBindings* pB, SfxTemplateDialog* pDlgWindow ) :
-
-    SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
-
-    m_pFloat            ( pDlgWindow ),
-    m_bZoomIn           ( false ),
-    m_aActionTbL        ( pDlgWindow, this ),
-    m_aActionTbR        ( pDlgWindow, SfxResId( TB_ACTION ) )
-
-{
-    pDlgWindow->FreeResource();
-    Initialize();
-}
-
 SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(
     SfxBindings* pB, SfxTemplatePanelControl* pDlgWindow )
     : SfxCommonTemplateDialog_Impl( pB, pDlgWindow, true ),
@@ -2419,7 +2323,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
     for( ; nLoop--; )
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nLoop );
-        sal_uInt16 nId = SfxTemplateDialog::SfxFamilyIdToNId( pItem->GetFamily() );
+        sal_uInt16 nId = SfxTemplate::SfxFamilyIdToNId( pItem->GetFamily() );
         m_aActionTbL.SetItemImage( nId, pItem->GetImage() );
     }
 }
@@ -2777,25 +2681,6 @@ void SfxCommonTemplateDialog_Impl::ReplaceUpdateButtonByMenu()
     //does nothing
 }
 
-void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
-{
-    if ( nStateChange == StateChangedType::INITSHOW )
-    {
-        SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
-        vcl::Window* pEditWin = pFrame->GetViewShell()->GetWindow();
-
-        Size aSize = pEditWin->GetSizePixel();
-        Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
-        aPoint = GetParent()->ScreenToOutputPixel( aPoint );
-        Size aWinSize = GetSizePixel();
-        aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
-        aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
-        SetFloatingPos( aPoint );
-    }
-
-    SfxDockingWindow::StateChanged( nStateChange );
-}
-
 DropToolBox_Impl::DropToolBox_Impl(vcl::Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog) :
     ToolBox(pParent),
     DropTargetHelper(this),
@@ -2818,7 +2703,7 @@ sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     // special case: page styles are allowed to create new styles by example
     // but not allowed to be created by drag and drop
-    if ( nItemId != SfxTemplateDialog::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE )&&
+    if ( nItemId != SfxTemplate::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE )&&
         IsDropFormatSupported( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
         !rParent.bNewByExampleDisabled )
     {

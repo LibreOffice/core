@@ -43,7 +43,6 @@ public:
             SvMetaObject();
 
     static void         WriteTab( SvStream & rOutStm, sal_uInt16 nTab );
-    static bool         TestAndSeekSpaceOnly( SvStream &, sal_uLong nBegPos );
     static void         Back2Delemitter( SvStream & );
     static void         WriteStars( SvStream & );
 

@@ -71,7 +71,6 @@ class SfxProgress;
 class SfxSlotPool;
 typedef boost::ptr_vector<SfxStbCtrlFactory> SfxStbCtrlFactArr_Impl;
 typedef boost::ptr_vector<SfxTbxCtrlFactory> SfxTbxCtrlFactArr_Impl;
-class SfxTemplateDialog;
 class SfxViewFrame;
 typedef ::std::vector<SfxViewFrame*> SfxViewFrameArr_Impl;
 class SfxViewShell;

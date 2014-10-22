@@ -114,8 +114,6 @@ public:
     SvStringHashEntry * Get ( sal_uInt32 nIndex ) const; // return pointer to string
     SvStringHashEntry & operator []( sal_uInt32 nPos ) const
             { return pEntries[ nPos ]; }
-
-    void    FillHashList( SvStringHashList * rList ) const;
 };
 
 #endif // INCLUDED_IDL_INC_HASH_HXX

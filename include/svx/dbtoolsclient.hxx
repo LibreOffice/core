@@ -108,16 +108,6 @@ namespace svxform
             const ::com::sun::star::lang::Locale& _rLocale
         ) const;
 
-        OUString quoteName(
-            const OUString& _rQuote,
-            const OUString& _rName
-        ) const;
-
-        OUString composeTableNameForSelect(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
-        ) const;
-
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
                 const OUString& _rsRegisteredName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext

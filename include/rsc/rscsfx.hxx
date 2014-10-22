@@ -37,7 +37,7 @@ enum SfxStyleFamily { SFX_STYLE_FAMILY_CHAR    = 1,
                       };
 
 
-// SfxTemplateDialog
+// SfxTemplate
 #define RSC_SFX_STYLE_ITEM_LIST         0x1
 #define RSC_SFX_STYLE_ITEM_BITMAP       0x2
 #define RSC_SFX_STYLE_ITEM_TEXT         0x4

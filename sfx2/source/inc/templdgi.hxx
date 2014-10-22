@@ -344,11 +344,10 @@ public:
     friend class SfxTemplateDialog;
     TYPEINFO_OVERRIDE();
 
-    SfxTemplateDialog_Impl( SfxBindings*, SfxTemplateDialog* pDlgWindow );
     SfxTemplateDialog_Impl( SfxBindings*, SfxTemplatePanelControl* pDlgWindow );
     virtual ~SfxTemplateDialog_Impl();
 
-    void Initialize (void);
+    void Initialize();
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_TEMPLDGI_HXX

@@ -45,7 +45,6 @@ class SvMetaAttribute : public SvMetaReference
     bool                bNewAttr;
 
 protected:
-    sal_uLong        MakeSlotValue( SvIdlDataBase & rBase, bool bVariable ) const;
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm ) SAL_OVERRIDE;
 public:
@@ -177,7 +176,6 @@ public:
                         { aBasicName.setString(rName); }
 
     const OString& GetBasicName() const;
-    OString GetBasicPostfix() const;
     const OString& GetSvName() const;
     const OString& GetSbxName() const;
     const OString& GetOdlName() const;
@@ -188,7 +186,6 @@ public:
 
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-    OString             GetCString() const;
 
     sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );

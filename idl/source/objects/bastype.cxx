@@ -147,16 +147,6 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
     return false;
 }
 
-OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
-{
-    if( nVal )
-        return pName->GetName();
-
-    return OStringBuffer(pName->GetName()).
-        append("(FALSE)").
-        makeStringAndClear();
-}
-
 bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
