@@ -6090,8 +6090,9 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
         case 6:
         case 7:
             if (
-                (0xa5dc != nMagic && 0xa5db != nMagic) &&
-                (nMagic < 0xa697 || nMagic > 0xa699)
+                 0xa59b != nMagic && 0xa59c != nMagic &&
+                 0xa5dc != nMagic && 0xa5db != nMagic &&
+                 (nMagic < 0xa697 || nMagic > 0xa699)
                )
             {
                 // Test for own 97 fake!

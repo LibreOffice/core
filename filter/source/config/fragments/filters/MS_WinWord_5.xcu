@@ -21,7 +21,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>WW6</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Microsoft WinWord 5</value>
+            <value xml:lang="en-US">Microsoft WinWord 1/2/5</value>
         </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_MS_WinWord_5</value></prop>

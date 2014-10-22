@@ -73,8 +73,10 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         if ( pInStrm->Read( nBuffer, nBufSize ) < nBufSize )
             return OUString();
 
-        bIsDetected = ( nBuffer[0] == 0xDB && nBuffer[1] == 0xA5 && nBuffer[2] == 0x2D )  // WinWord 2.0 file
-                   || ( nBuffer[0] == 0xDC && nBuffer[1] == 0xA5 && nBuffer[2] == 0x65 ); // WinWord 6.0/95, as a single stream file
+        bIsDetected = (nBuffer[0] == 0x9B && nBuffer[1] == 0xA5 && nBuffer[2] == 0x21)  // WinWord 1
+                   || (nBuffer[0] == 0x9C && nBuffer[1] == 0xA5 && nBuffer[2] == 0x21)  // PMWord 1
+                   || (nBuffer[0] == 0xDB && nBuffer[1] == 0xA5 && nBuffer[2] == 0x2D)  // WinWord 2
+                   || (nBuffer[0] == 0xDC && nBuffer[1] == 0xA5 && nBuffer[2] == 0x65); // WinWord 6.0/95, as a single stream file
     }
     else
     {

@@ -780,7 +780,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
 
 wwSprmParser::wwSprmParser(ww::WordVersion eVersion) : meVersion(eVersion)
 {
-   OSL_ENSURE((meVersion >= ww::eWW2 && meVersion <= ww::eWW8),
+   OSL_ENSURE((meVersion >= ww::eWW1 && meVersion <= ww::eWW8),
         "Impossible value for version");
 
     mnDelta = (ww::IsSevenMinus(meVersion)) ? 0 : 1;
@@ -2480,7 +2480,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
 
                     FillEntry(aEntry, nDataOffset, aEntry.mnLen);
 
-                    if (aEntry.mnLen && eVersion == ww::eWW2)
+                    if (aEntry.mnLen && eVersion <= ww::eWW2)
                     {
                         Word2CHPX aChpx = ReadWord2Chpx(*pSt, nFilePos + nOfs + 1, static_cast< sal_uInt8 >(aEntry.mnLen));
                         std::vector<sal_uInt8> aSprms = ChpxToSprms(aChpx);
@@ -2507,7 +2507,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                         aEntry.mnLen *= 2;
 
                         //stylecode, std/istd
-                        if (eVersion == ww::eWW2)
+                        if (eVersion <= ww::eWW2)
                         {
                             if (aEntry.mnLen >= 1)
                             {
@@ -2843,6 +2843,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
 
     switch (GetFIBVersion())
     {
+        case ww::eWW1:
         case ww::eWW2:
             pFkpSizeTab = WW8FkpSizeTabVer2;
             break;
@@ -5124,6 +5125,10 @@ ww::WordVersion WW8Fib::GetFIBVersion() const
     ww::WordVersion eVer = ww::eWW8;
     /*
      * Word for Windows 2 I think (1.X might work too if anyone has an example.
+     *
+     * 0xA59B for Word 1 for Windows
+     * 0xA59C for Word 1 for OS/2 "PM Word"
+     *
      * Various pages claim that the fileformats of Word 1 and 2 for Windows are
      * equivalent to Word for Macintosh 4 and 5. On the other hand
      *
@@ -5138,7 +5143,9 @@ ww::WordVersion WW8Fib::GetFIBVersion() const
      * its format isn't the same as that of Word 2 for windows. Nor is it
      * the same as that of Word for DOS/PCWord 5
      */
-    if (wIdent == 0xa5db)
+    if (wIdent == 0xa59b || wIdent == 0xa59c)
+        eVer = ww::eWW1;
+    else if (wIdent == 0xa5db)
         eVer = ww::eWW2;
     else
     {
@@ -5367,12 +5374,20 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     lcbPlcfmcr = Readcb(rSt, eVer);
     rSt.ReadInt32( fcSttbfmcr );
     lcbSttbfmcr = Readcb(rSt, eVer);
-    rSt.ReadInt32( fcPrDrvr );
-    lcbPrDrvr = Readcb(rSt, eVer);
-    rSt.ReadInt32( fcPrEnvPort );
-    lcbPrEnvPort = Readcb(rSt, eVer);
-    rSt.ReadInt32( fcPrEnvLand );
-    lcbPrEnvLand = Readcb(rSt, eVer);
+    if (eVer >= ww::eWW2)
+    {
+        rSt.ReadInt32( fcPrDrvr );
+        lcbPrDrvr = Readcb(rSt, eVer);
+        rSt.ReadInt32( fcPrEnvPort );
+        lcbPrEnvPort = Readcb(rSt, eVer);
+        rSt.ReadInt32( fcPrEnvLand );
+        lcbPrEnvLand = Readcb(rSt, eVer);
+    }
+    else
+    {
+        rSt.ReadInt32( fcPrEnvPort );
+        lcbPrEnvPort = Readcb(rSt, eVer);
+    }
     rSt.ReadInt32( fcWss );
     lcbWss = Readcb(rSt, eVer);
     rSt.ReadInt32( fcDop );
@@ -5393,13 +5408,17 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     // weiteres short nur bei Ver67 ueberspringen
     if (IsSevenMinus(eVer))
     {
-        rSt.SeekRel( 1*sizeof( sal_Int16) );
+        if (eVer == ww::eWW1)
+            rSt.SeekRel(1*sizeof(sal_Int32));
+        rSt.SeekRel(1*sizeof(sal_Int16));
 
-        // folgende 4 Shorts existieren nur bei Ver67;
-        rSt.ReadInt16( pnChpFirst_Ver67 );
-        rSt.ReadInt16( pnPapFirst_Ver67 );
-        rSt.ReadInt16( cpnBteChp_Ver67 );
-        rSt.ReadInt16( cpnBtePap_Ver67 );
+        if (eVer >= ww::eWW2)
+        {
+            rSt.ReadInt16(pnChpFirst_Ver67);
+            rSt.ReadInt16(pnPapFirst_Ver67);
+        }
+        rSt.ReadInt16(cpnBteChp_Ver67);
+        rSt.ReadInt16(cpnBtePap_Ver67);
     }
 
     if (eVer > ww::eWW2)

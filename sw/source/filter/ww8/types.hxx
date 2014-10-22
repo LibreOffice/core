@@ -30,7 +30,7 @@ namespace ww
             const sal_uInt8* data() const { return empty() ? 0 : &front(); }
     };
 
-    enum WordVersion {eWW2 = 2, eWW6 = 6, eWW7 = 7, eWW8 = 8};
+    enum WordVersion {eWW1 = 1, eWW2 = 2, eWW6 = 6, eWW7 = 7, eWW8 = 8};
     inline bool IsSevenMinus(WordVersion eVer) { return eVer <= eWW7; }
     inline bool IsEightPlus(WordVersion eVer) { return eVer >= eWW8; }
 

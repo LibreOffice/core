@@ -1642,6 +1642,7 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
                     return sprmTDxaCol;
             }
             break;
+        case ww::eWW1:
         case ww::eWW2:
             switch (nId)
             {
@@ -4358,7 +4359,7 @@ void WW8RStyle::ImportNewFormatStyles()
 
 void WW8RStyle::ImportStyles()
 {
-    if (ww::eWW2 == pIo->pWwFib->GetFIBVersion())
+    if (pIo->pWwFib->GetFIBVersion() <= ww::eWW2)
         ImportOldFormatStyles();
     else
         ImportNewFormatStyles();
