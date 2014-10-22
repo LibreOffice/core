@@ -25,13 +25,11 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/GenericCommands',
     'org.openoffice.Office/Accelerators',
     'org.openoffice.Office/UI',
-
     'org.openoffice.Office.UI/DrawImpressCommands',
     'org.openoffice.Office.UI/Sidebar',
     'org.openoffice.Office.UI/ChartCommands',
     'org.openoffice.Office.UI/DbuCommands',
     'org.openoffice.Office.UI/Controller',
-    'org.openoffice.Office/UI',
     'org.openoffice.Office.UI/StartModuleCommands',
     'org.openoffice.Office.UI/BasicIDEWindowState',
     'org.openoffice.Office.UI/GenericCategories',
@@ -39,38 +37,18 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/Factories',
     'org.openoffice.Office.UI/BaseWindowState',
     'org.openoffice.Office.UI/BasicIDECommands',
-    'org.openoffice.Office.UI/Sidebar',
     'org.openoffice.Office.UI/BibliographyCommands',
     'org.openoffice.Office.UI/DbQueryWindowState',
     'org.openoffice.Office.UI/WindowState',
-    'org.openoffice.Office.UI/Controller',
     'org.openoffice.Office.UI/DbRelationWindowState',
     'org.openoffice.Office.UI/DbTableWindowState',
     'org.openoffice.Office.UI/DbTableDataWindowState',
     'org.openoffice.Office.UI/DbBrowserWindowState',
     'org.openoffice.Office.UI/WindowContentFactories',
-    'org.openoffice.Office.UI/Factories',
     'org.openoffice.Office.UI/StartModuleWindowState',
     'org.openoffice.Office.UI/GlobalSettings',
     'org.openoffice.Office.UI/Commands',
-    'org.openoffice.Office.UI/BibliographyCommands',
-    'org.openoffice.Office.UI/StartModuleCommands',
-    'org.openoffice.Office.UI/DrawImpressCommands',
-    'org.openoffice.Office.UI/BasicIDECommands',
-    'org.openoffice.Office.UI/GenericCommands',
-    'org.openoffice.Office.UI/ChartCommands',
-    'org.openoffice.Office.UI/DbuCommands',
     'org.openoffice.Office.UI/BibliographyWindowState',
-    'org.openoffice.Office.UI/StartModuleWindowState',
-    'org.openoffice.Office.UI/DbTableDataWindowState',
-    'org.openoffice.Office.UI/DbRelationWindowState',
-    'org.openoffice.Office.UI/DbBrowserWindowState',
-    'org.openoffice.Office.UI/BasicIDEWindowState',
-    'org.openoffice.Office.UI/DbTableWindowState',
-    'org.openoffice.Office.UI/DbQueryWindowState',
-    'org.openoffice.Office.UI/ChartWindowState',
-    'org.openoffice.Office.UI/BaseWindowState',
-    'org.openoffice.Office.UI/GenericCategories',
     'org.openoffice.Office.UI/Category',
     ]
 
@@ -92,4 +70,11 @@ if __name__ == '__main__':
             saved = saved + size
 
     print "saved %d of %d bytes: %2.f%%" % (saved, total, saved*100.0/total)
+
+    # The namespace prefixes xs and oor are present in attribute *values*, and namespace
+    # declarations for them are needed, even if no actual elements or attributes with these
+    # namespace prefixes are present. Fun.
+    root.set('xmlns:xs', 'http://www.w3.org/2001/XMLSchema')
+    root.set('xmlns:oor', 'http://openoffice.org/2001/registry')
+
     tree.write(sys.argv[2], 'UTF-8', True)
