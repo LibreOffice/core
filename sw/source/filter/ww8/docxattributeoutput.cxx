@@ -483,14 +483,6 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                        and VML Drawing in another AlternateContent.
                  **/
                 SetAlternateContentChoiceOpen( true );
-                /** FDO#71834 :
-                       We should probably be renaming the function
-                       switchHeaderFooter to something like SaveRetrieveTableReference.
-                       Save the table reference attributes before calling WriteDMLTextFrame,
-                       otherwise the StartParagraph function will use the previous existing
-                       table reference attributes since the variable is being shared.
-                */
-                switchHeaderFooter(true,1);
                 /** Save the table info's before writing the shape
                         as there might be a new table that might get
                         spawned from within the VML & DML block and alter
@@ -500,7 +492,14 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 //Reset the table infos after saving.
                 m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 
+                /** FDO#71834 :
+                       Save the table reference attributes before calling WriteDMLTextFrame,
+                       otherwise the StartParagraph function will use the previous existing
+                       table reference attributes since the variable is being shared.
+                */
+                DocxTableExportContext aDMLTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
                 m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
+                aDMLTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
                 m_pSerializer->endElementNS(XML_mc, XML_Choice);
                 SetAlternateContentChoiceOpen( false );
 
@@ -509,14 +508,11 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 // same table second time.
                 m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
                 //reset the tableReference.
-                switchHeaderFooter(false,0);
 
                 m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+                DocxTableExportContext aVMLTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
                 m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
-                /* FDO#71834 :Restore the data here after having written the Shape
-                   for further processing.
-                */
-                switchHeaderFooter(false,-1);
+                aVMLTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
                 m_rExport.mpTableInfo = pOldTableInfo;
 
                 m_pSerializer->endElementNS(XML_mc, XML_Fallback);
