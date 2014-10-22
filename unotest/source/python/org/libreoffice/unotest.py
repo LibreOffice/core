@@ -174,15 +174,6 @@ class UnoInProcess:
     def getDoc(self):
         return self.xDoc
     def setUp(self):
-        # set UserInstallation to user profile dir in test/user-template:
-        path = os.getenv("WORKDIR")
-        if os.name == "nt":
-            # do not quote drive letter - it must be "X:"
-            url = "file:///" + path
-        else:
-            url = "file://" + quote(path)
-        os.putenv("UserInstallation", url + "/unittest")
-
         self.xContext = pyuno.getComponentContext()
         pyuno.private_initTestEnvironment()
     def openEmptyWriterDoc(self):

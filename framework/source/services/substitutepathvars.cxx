@@ -1250,7 +1250,9 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     //TODO: Is that still the case? (With OOo 3.4, "unopkg sync" was run as part
     // of the setup. Then no user installation was required.)
     //Therefore we do not assert here.
-    if( aState == ::utl::Bootstrap::PATH_EXISTS ) {
+    // It's not possible to detect when an empty value would actually be used.
+    // (note: getenv is a hack to detect if we're running in a unit test)
+    if (aState == ::utl::Bootstrap::PATH_EXISTS || getenv("SRC_ROOT")) {
         m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
     }
 
