@@ -131,14 +131,24 @@ protected: //methods
 
     /**
      * Shift the screen positions of the tick labels according to the stagger
-     * settings.  Stagger setting is finalized during the createTextShapes
+     * settings.  Final stagger setting is decided during the createTextShapes
      * call, but this method does the physical shifting of the label
-     * positions.
+     * positions based on the final stagger setting.
      */
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
                             , TickFactory2D* pTickFactory2D );
+
+    /**
+     * @return true if we can try to stagger labels in order to avoid
+     *         overlaps, otherwise false.
+     */
     bool isAutoStaggeringOfLabelsAllowed(
         const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis ) const;
+
+    /**
+     * @return true if we can break a single line label text into multiple
+     *         lines for better fitting, otherwise false.
+     */
     bool isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis ) const;
 
     ::basegfx::B2DVector getScreenPosition( double fLogicX, double fLogicY, double fLogicZ ) const;
