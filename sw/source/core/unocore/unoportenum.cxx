@@ -522,7 +522,7 @@ lcl_InsertRubyPortion(
     const SwTxtAttr & rAttr, const bool bEnd)
 {
     SwXTextPortion* pPortion = new SwXTextPortion(pUnoCrsr,
-            static_cast<const SwTxtRuby&>(rAttr), xParent, bEnd);
+            static_txtattr_cast<const SwTxtRuby&>(rAttr), xParent, bEnd);
     rPortions.push_back(pPortion);
     pPortion->SetCollapsed(rAttr.End() ? false : true);
 }

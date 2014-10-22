@@ -563,7 +563,8 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     else
         SetTop( ! rRuby.GetPosition() );
 
-    const SwCharFmt* pFmt = ((SwTxtRuby*)rCreate.pAttr)->GetCharFmt();
+    const SwCharFmt *const pFmt =
+        static_txtattr_cast<SwTxtRuby const*>(rCreate.pAttr)->GetCharFmt();
     SwFont *pRubyFont;
     if( pFmt )
     {

@@ -1033,15 +1033,15 @@ void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
             case RES_TXTATR_FIELD:
             case RES_TXTATR_ANNOTATION:
                 pHt = new SwHistorySetTxtFld(
-                            static_cast<SwTxtFld*>(pHint), nNodeIdx );
+                        static_txtattr_cast<SwTxtFld*>(pHint), nNodeIdx);
                 break;
             case RES_TXTATR_TOXMARK:
                 pHt = new SwHistorySetTOXMark(
-                            static_cast<SwTxtTOXMark*>(pHint), nNodeIdx );
+                        static_txtattr_cast<SwTxtTOXMark*>(pHint), nNodeIdx);
                 break;
             case RES_TXTATR_REFMARK:
                 pHt = new SwHistorySetRefMark(
-                            static_cast<SwTxtRefMark*>(pHint), nNodeIdx );
+                        static_txtattr_cast<SwTxtRefMark*>(pHint), nNodeIdx);
                 break;
             default:
                 pHt = new SwHistorySetTxt(

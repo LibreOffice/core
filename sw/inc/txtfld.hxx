@@ -27,7 +27,7 @@
 class SwPaM;
 class SwTxtNode;
 
-class SwTxtFld : public SwTxtAttr
+class SwTxtFld : public virtual SwTxtAttr
 {
     mutable OUString m_aExpand; // only used to determine, if field content is changing in <ExpandTxtFld()>
     SwTxtNode * m_pTxtNode;
@@ -73,7 +73,9 @@ public:
 
 };
 
-class SwTxtInputFld : public SwTxtFld
+class SwTxtInputFld
+    : public SwTxtAttrNesting
+    , public SwTxtFld
 {
 public:
     SwTxtInputFld(
@@ -83,8 +85,6 @@ public:
         bool const bInClipboard );
 
     virtual ~SwTxtInputFld();
-
-    virtual sal_Int32* GetEnd() SAL_OVERRIDE;
 
     void LockNotifyContentChange();
     void UnlockNotifyContentChange();
@@ -96,7 +96,6 @@ public:
     void UpdateFieldContent();
 
 private:
-    sal_Int32 m_nEnd;
 
     bool m_bLockNotifyContentChange;
 };

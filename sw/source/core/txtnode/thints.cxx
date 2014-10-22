@@ -105,7 +105,7 @@ struct TxtAttrDeleter
         if (RES_TXTATR_META == pAttr->Which() ||
             RES_TXTATR_METAFIELD == pAttr->Which())
         {
-            static_cast<SwTxtMeta *>(pAttr)->ChgTxtNode(0); // prevents ASSERT
+            static_txtattr_cast<SwTxtMeta *>(pAttr)->ChgTxtNode(0); // prevents ASSERT
         }
         SwTxtAttr::Destroy( pAttr, m_rPool );
     }
@@ -237,19 +237,19 @@ MakeTxtAttrNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNesting,
     {
         case RES_TXTATR_INETFMT:
         {
-            static_cast<SwTxtINetFmt*>(pNew)->InitINetFmt(rNode);
+            static_txtattr_cast<SwTxtINetFmt*>(pNew)->InitINetFmt(rNode);
             break;
         }
         case RES_TXTATR_CJK_RUBY:
         {
-            static_cast<SwTxtRuby*>(pNew)->InitRuby(rNode);
+            static_txtattr_cast<SwTxtRuby*>(pNew)->InitRuby(rNode);
             break;
         }
         default:
             OSL_FAIL("MakeTxtAttrNesting: what the hell is that?");
             break;
     }
-    return static_cast<SwTxtAttrNesting*>(pNew);
+    return static_txtattr_cast<SwTxtAttrNesting*>(pNew);
 }
 
 typedef ::std::vector<SwTxtAttrNesting *> NestList_t;
@@ -400,7 +400,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         break;
                     case SPLIT_OTHER:
                         OverlappingExisting.push_back(
-                            static_cast<SwTxtAttrNesting*>(pOther));
+                            static_txtattr_cast<SwTxtAttrNesting*>(pOther));
                         break;
                     default:
                         OSL_FAIL("bad code monkey");
@@ -413,7 +413,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                 {
                 // ruby and hyperlink: if there is nesting, _overwrite_
                 OverwrittenExisting.push_back(
-                    static_cast<SwTxtAttrNesting*>(pOther));
+                    static_txtattr_cast<SwTxtAttrNesting*>(pOther));
                 }
                 else if ((nNewStart == nOtherStart) && pOther->HasDummyChar())
                 {
@@ -620,7 +620,10 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 SwTxtAttr* pNewAttr = MakeTxtAttr( *rNode.GetDoc(),
                         pOther->GetAttr(), nOtherStart, nThisStart );
                 if ( RES_TXTATR_CHARFMT == pOther->Which() )
-                    static_cast<SwTxtCharFmt*>(pNewAttr)->SetSortNumber( static_cast<SwTxtCharFmt*>(pOther)->GetSortNumber() );
+                {
+                    static_txtattr_cast<SwTxtCharFmt*>(pNewAttr)->SetSortNumber(
+                        static_txtattr_cast<SwTxtCharFmt*>(pOther)->GetSortNumber() );
+                }
                 aInsDelHints.push_back( pNewAttr );
 
                 NoteInHistory( pOther );
@@ -637,7 +640,10 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 SwTxtAttr* pNewAttr = MakeTxtAttr( *rNode.GetDoc(),
                         pOther->GetAttr(), nOtherStart, nThisEnd );
                 if ( RES_TXTATR_CHARFMT == pOther->Which() )
-                    static_cast<SwTxtCharFmt*>(pNewAttr)->SetSortNumber( static_cast<SwTxtCharFmt*>(pOther)->GetSortNumber() );
+                {
+                    static_txtattr_cast<SwTxtCharFmt*>(pNewAttr)->SetSortNumber(
+                        static_txtattr_cast<SwTxtCharFmt*>(pOther)->GetSortNumber());
+                }
                 aInsDelHints.push_back( pNewAttr );
 
                 NoteInHistory( pOther );
@@ -806,7 +812,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
             {
                 pNewAttr = MakeTxtAttr( *rNode.GetDoc(), rNewHint.GetAttr(),
                         nPorStart, nPorEnd );
-                static_cast<SwTxtCharFmt*>(pNewAttr)->SetSortNumber( nCharStyleCount );
+                static_txtattr_cast<SwTxtCharFmt*>(pNewAttr)->SetSortNumber(nCharStyleCount);
             }
         }
         else
@@ -1140,13 +1146,14 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
         case RES_TXTATR_INPUTFIELD:
             if( !pDoc->IsInDtor() )
             {
+                SwTxtFld *const pTxtFld(static_txtattr_cast<SwTxtFld*>(pAttr));
                 // Wenn wir ein HiddenParaField sind, dann muessen wir
                 // ggf. fuer eine Neuberechnung des Visible-Flags sorgen.
                 const SwField* pFld = pAttr->GetFmtFld().GetField();
 
                 //JP 06-08-95: DDE-Felder bilden eine Ausnahme
                 OSL_ENSURE( RES_DDEFLD == pFld->GetTyp()->Which() ||
-                        this == ((SwTxtFld*)pAttr)->GetpTxtNode(),
+                        this == pTxtFld->GetpTxtNode(),
                         "Wo steht denn dieses Feld?" );
 
                 // bestimmte Felder mussen am Doc das Calculations-Flag updaten
@@ -1163,16 +1170,16 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 case RES_DBNUMSETFLD:
                 case RES_DBNEXTSETFLD:
                     if( !pDoc->getIDocumentFieldsAccess().IsNewFldLst() && GetNodes().IsDocNodes() )
-                        pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst( false, *(SwTxtFld*)pAttr );
+                        pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst(false, *pTxtFld);
                     break;
                 case RES_DDEFLD:
-                    if( GetNodes().IsDocNodes() &&
-                        ((SwTxtFld*)pAttr)->GetpTxtNode() )
+                    if (GetNodes().IsDocNodes() && pTxtFld->GetpTxtNode())
                         ((SwDDEFieldType*)pFld->GetTyp())->DecRefCnt();
                     break;
                 case RES_POSTITFLD:
                     {
-                        const_cast<SwFmtFld&>(pAttr->GetFmtFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pAttr)->GetFmtFld(), SwFmtFldHintWhich::REMOVED ) );
+                        const_cast<SwFmtFld&>(pAttr->GetFmtFld()).Broadcast(
+                            SwFmtFldHint(&pTxtFld->GetFmtFld(), SwFmtFldHintWhich::REMOVED));
                         break;
                     }
                 }
@@ -1190,7 +1197,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
-            static_cast<SwTxtMeta*>(pAttr)->ChgTxtNode(0);
+            static_txtattr_cast<SwTxtMeta*>(pAttr)->ChgTxtNode(0);
             break;
 
         default:
@@ -2921,7 +2928,7 @@ static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharF
 
             if ( nOtherStart == nHtStart && nOtherEnd == nHtEnd )
             {
-                nSortNumber = static_cast<const SwTxtCharFmt*>(pOtherHt)->GetSortNumber() + 1;
+                nSortNumber = static_txtattr_cast<const SwTxtCharFmt*>(pOtherHt)->GetSortNumber() + 1;
             }
         }
     }
@@ -2968,7 +2975,7 @@ bool SwpHints::TryInsertHint(
         if ( SfxItemState::SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
             rNode.SetCalcHiddenCharFlags();
 
-        ((SwTxtCharFmt*)pHint)->ChgTxtNode( &rNode );
+        static_txtattr_cast<SwTxtCharFmt*>(pHint)->ChgTxtNode( &rNode );
         break;
     }
     // #i75430# Recalc hidden flags if necessary
@@ -3003,17 +3010,18 @@ bool SwpHints::TryInsertHint(
         break;
     }
     case RES_TXTATR_INETFMT:
-        static_cast<SwTxtINetFmt*>(pHint)->InitINetFmt(rNode);
+        static_txtattr_cast<SwTxtINetFmt*>(pHint)->InitINetFmt(rNode);
         break;
 
     case RES_TXTATR_FIELD:
     case RES_TXTATR_ANNOTATION:
     case RES_TXTATR_INPUTFIELD:
         {
-            bool bDelFirst = 0 != ((SwTxtFld*)pHint)->GetpTxtNode();
-            ((SwTxtFld*)pHint)->ChgTxtNode( &rNode );
+            SwTxtFld *const pTxtFld(static_txtattr_cast<SwTxtFld*>(pHint));
+            bool bDelFirst = 0 != pTxtFld->GetpTxtNode();
+            pTxtFld->ChgTxtNode( &rNode );
             SwDoc* pDoc = rNode.GetDoc();
-            const SwField* pFld = ((SwTxtFld*)pHint)->GetFmtFld().GetField();
+            const SwField* pFld = pTxtFld->GetFmtFld().GetField();
 
             if( !pDoc->getIDocumentFieldsAccess().IsNewFldLst() )
             {
@@ -3029,9 +3037,9 @@ bool SwpHints::TryInsertHint(
                 case RES_DBNEXTSETFLD:
                     {
                         if( bDelFirst )
-                            pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst( false, *(SwTxtFld*)pHint );
+                            pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst(false, *pTxtFld);
                         if( rNode.GetNodes().IsDocNodes() )
-                            pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst( true, *(SwTxtFld*)pHint );
+                            pDoc->getIDocumentFieldsAccess().InsDelFldInFldLst(true, *pTxtFld);
                     }
                     break;
                 case RES_DDEFLD:
@@ -3057,7 +3065,7 @@ bool SwpHints::TryInsertHint(
                                     pDoc->getIDocumentFieldsAccess().InsertFldType( *pFld->GetTyp() );
                         if( pFldType != pFld->GetTyp() )
                         {
-                            SwFmtFld* pFmtFld = (SwFmtFld*)&((SwTxtFld*)pHint)->GetFmtFld();
+                            SwFmtFld* pFmtFld = const_cast<SwFmtFld*>(&pTxtFld->GetFmtFld());
                             pFmtFld->RegisterToFieldType( *pFldType );
                             pFmtFld->GetField()->ChgTyp( pFldType );
                         }
@@ -3076,7 +3084,10 @@ bool SwpHints::TryInsertHint(
 
                 case RES_POSTITFLD:
                     if ( pDoc->GetDocShell() )
-                        pDoc->GetDocShell()->Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFmtFld(), SwFmtFldHintWhich::INSERTED ) );
+                    {
+                        pDoc->GetDocShell()->Broadcast( SwFmtFldHint(
+                            &pTxtFld->GetFmtFld(), SwFmtFldHintWhich::INSERTED));
+                    }
                     break;
                 }
                 if( bInsFldType )
@@ -3088,7 +3099,7 @@ bool SwpHints::TryInsertHint(
         ((SwTxtFtn*)pHint)->ChgTxtNode( &rNode );
         break;
     case RES_TXTATR_REFMARK:
-        ((SwTxtRefMark*)pHint)->ChgTxtNode( &rNode );
+        static_txtattr_cast<SwTxtRefMark*>(pHint)->ChgTxtNode( &rNode );
         if( rNode.GetNodes().IsDocNodes() )
         {
             // search for a reference with the same name
@@ -3136,16 +3147,16 @@ bool SwpHints::TryInsertHint(
         }
         break;
     case RES_TXTATR_TOXMARK:
-        ((SwTxtTOXMark*)pHint)->ChgTxtNode( &rNode );
+        static_txtattr_cast<SwTxtTOXMark*>(pHint)->ChgTxtNode( &rNode );
         break;
 
     case RES_TXTATR_CJK_RUBY:
-        static_cast<SwTxtRuby*>(pHint)->InitRuby(rNode);
+        static_txtattr_cast<SwTxtRuby*>(pHint)->InitRuby(rNode);
         break;
 
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
-        static_cast<SwTxtMeta *>(pHint)->ChgTxtNode( &rNode );
+        static_txtattr_cast<SwTxtMeta *>(pHint)->ChgTxtNode( &rNode );
         break;
 
     case RES_CHRATR_HIDDEN:
@@ -3204,7 +3215,7 @@ bool SwpHints::TryInsertHint(
     if (pHint->IsNesting())
     {
         const bool bRet(
-            TryInsertNesting(rNode, *static_cast<SwTxtAttrNesting*>(pHint)));
+            TryInsertNesting(rNode, *static_txtattr_cast<SwTxtAttrNesting*>(pHint)));
         if (!bRet) return false;
     }
     // Currently REFMARK and TOXMARK have OverlapAllowed set to true.
@@ -3246,7 +3257,7 @@ bool SwpHints::TryInsertHint(
         {
             // #i82989# Check sort numbers in NoHintAdjustMode
             if ( RES_TXTATR_CHARFMT == nWhich )
-                lcl_CheckSortNumber( *this, *static_cast<SwTxtCharFmt*>(pHint) );
+                lcl_CheckSortNumber(*this, *static_txtattr_cast<SwTxtCharFmt*>(pHint));
 
             SwpHintsArray::Insert( pHint );
             NoteInHistory( pHint, true );
@@ -3281,13 +3292,14 @@ void SwpHints::DeleteAtPos( const size_t nPos )
 
     if( pHint->Which() == RES_TXTATR_FIELD )
     {
-        const SwFieldType* pFldTyp = ((SwTxtFld*)pHint)->GetFmtFld().GetField()->GetTyp();
+        SwTxtFld *const pTxtFld(static_txtattr_cast<SwTxtFld*>(pHint));
+        const SwFieldType* pFldTyp = pTxtFld->GetFmtFld().GetField()->GetTyp();
         if( RES_DDEFLD == pFldTyp->Which() )
         {
-            const SwTxtNode* pNd = ((SwTxtFld*)pHint)->GetpTxtNode();
+            const SwTxtNode* pNd = pTxtFld->GetpTxtNode();
             if( pNd && pNd->GetNodes().IsDocNodes() )
                 ((SwDDEFieldType*)pFldTyp)->DecRefCnt();
-            ((SwTxtFld*)pHint)->ChgTxtNode( 0 );
+            pTxtFld->ChgTxtNode(0);
         }
         else if ( m_bHasHiddenParaField &&
                  RES_HIDDENPARAFLD == pFldTyp->Which() )
@@ -3297,7 +3309,9 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     }
     else if ( pHint->Which() == RES_TXTATR_ANNOTATION )
     {
-        const_cast<SwFmtFld&>(((SwTxtFld*)pHint)->GetFmtFld()).Broadcast( SwFmtFldHint( &((SwTxtFld*)pHint)->GetFmtFld(), SwFmtFldHintWhich::REMOVED ) );
+        SwTxtFld *const pTxtFld(static_txtattr_cast<SwTxtFld*>(pHint));
+        const_cast<SwFmtFld&>(pTxtFld->GetFmtFld()).Broadcast(
+            SwFmtFldHint(&pTxtFld->GetFmtFld(), SwFmtFldHintWhich::REMOVED));
     }
 
     CalcFlags();

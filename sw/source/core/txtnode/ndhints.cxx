@@ -44,8 +44,10 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
             {
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
-                    const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
-                    const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    const sal_uInt16 nS1 =
+                        static_txtattr_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const sal_uInt16 nS2 =
+                        static_txtattr_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     if ( nS1 != nS2 ) // robust
                         return nS1 < nS2;
                 }
@@ -75,8 +77,10 @@ static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
             {
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
-                    const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
-                    const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    const sal_uInt16 nS1 =
+                        static_txtattr_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const sal_uInt16 nS2 =
+                        static_txtattr_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
                 }
@@ -257,9 +261,9 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                     ) // never two AUTOFMT on same range
                 &&  (   (pHtThis->Which() != RES_TXTATR_CHARFMT)
                     ||  (pHtLast->Which() != RES_TXTATR_CHARFMT)
-                    ||  (static_cast<const SwTxtCharFmt *>(pHtThis)
+                    ||  (static_txtattr_cast<const SwTxtCharFmt *>(pHtThis)
                                 ->GetSortNumber() !=
-                         static_cast<const SwTxtCharFmt *>(pHtLast)
+                         static_txtattr_cast<const SwTxtCharFmt *>(pHtLast)
                                 ->GetSortNumber())
                     ) // multiple CHARFMT on same range need distinct sortnr
                 )

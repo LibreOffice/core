@@ -50,14 +50,6 @@ public:
 };
 
 
-class SwTxtAttrNesting : public SwTxtAttrEnd
-{
-protected:
-    SwTxtAttrNesting( SfxPoolItem & i_rAttr,
-        const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
-    virtual ~SwTxtAttrNesting();
-};
-
 class SwTxtMeta : public SwTxtAttrNesting
 {
 private:

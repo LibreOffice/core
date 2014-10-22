@@ -1671,7 +1671,7 @@ bool SwContentAtPos::IsInProtectSect() const
         {
         case SW_FIELD:
         case SW_CLICKFIELD:
-            pNd = ((SwTxtFld*)pFndTxtAttr)->GetpTxtNode();
+            pNd = static_txtattr_cast<SwTxtFld const*>(pFndTxtAttr)->GetpTxtNode();
             break;
 
         case SW_FTN:
@@ -1679,7 +1679,7 @@ bool SwContentAtPos::IsInProtectSect() const
             break;
 
         case SW_INETATTR:
-            pNd = ((SwTxtINetFmt*)pFndTxtAttr)->GetpTxtNode();
+            pNd = static_txtattr_cast<SwTxtINetFmt const*>(pFndTxtAttr)->GetpTxtNode();
             break;
 
         default:

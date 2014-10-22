@@ -40,7 +40,8 @@ TYPEINIT1(SwTxtRuby,SwClient);
 
 SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
                     sal_Int32 nStt, sal_Int32 nEnde )
-    : SwTxtAttrEnd( rAttr, nStt, nEnde )
+    : SwTxtAttr( rAttr, nStt )
+    , SwTxtAttrEnd( rAttr, nStt, nEnde )
     , m_pTxtNode( 0 )
     , m_nSortNumber( 0 )
 {
@@ -84,7 +85,8 @@ bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 
 SwTxtAttrNesting::SwTxtAttrNesting( SfxPoolItem & i_rAttr,
             const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
-    : SwTxtAttrEnd( i_rAttr, i_nStart, i_nEnd )
+    : SwTxtAttr( i_rAttr, i_nStart )
+    , SwTxtAttrEnd( i_rAttr, i_nStart, i_nEnd )
 {
     SetDontExpand( true );  // never expand this attribute
     // lock the expand flag: simple guarantee that nesting will not be
@@ -100,7 +102,8 @@ SwTxtAttrNesting::~SwTxtAttrNesting()
 
 SwTxtINetFmt::SwTxtINetFmt( SwFmtINetFmt& rAttr,
                             sal_Int32 nStart, sal_Int32 nEnd )
-    : SwTxtAttrNesting( rAttr, nStart, nEnd )
+    : SwTxtAttr( rAttr, nStart )
+    , SwTxtAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
     , m_pTxtNode( 0 )
     , m_bVisited( false )
@@ -202,7 +205,8 @@ bool SwTxtINetFmt::IsProtect( ) const
 
 SwTxtRuby::SwTxtRuby( SwFmtRuby& rAttr,
                       sal_Int32 nStart, sal_Int32 nEnd )
-    : SwTxtAttrNesting( rAttr, nStart, nEnd )
+    : SwTxtAttr( rAttr, nStart )
+    , SwTxtAttrNesting( rAttr, nStart, nEnd )
     , SwClient( 0 )
     , m_pTxtNode( 0 )
 {
@@ -305,7 +309,8 @@ SwTxtMeta::CreateTxtMeta(
 
 SwTxtMeta::SwTxtMeta( SwFmtMeta & i_rAttr,
         const sal_Int32 i_nStart, const sal_Int32 i_nEnd )
-    : SwTxtAttrNesting( i_rAttr, i_nStart, i_nEnd )
+    : SwTxtAttr( i_rAttr, i_nStart )
+    , SwTxtAttrNesting( i_rAttr, i_nStart, i_nEnd )
 {
     i_rAttr.SetTxtAttr( this );
     SetHasDummyChar(true);

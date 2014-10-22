@@ -270,7 +270,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             case RES_TXTATR_ANNOTATION:
                             case RES_TXTATR_INPUTFIELD:
                                 {
-                                    SwTxtFld* pTxtFld = static_cast<SwTxtFld*>(pAttr);
+                                    SwTxtFld* pTxtFld = static_txtattr_cast<SwTxtFld*>(pAttr);
                                     rNds.GetDoc()->getIDocumentFieldsAccess().InsDelFldInFldLst( !bToUndo, *pTxtFld );
 
                                     const SwFieldType* pTyp = pTxtFld->GetFmtFld().GetField()->GetTyp();
@@ -314,7 +314,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             case RES_TXTATR_METAFIELD:
                                 {
                                     SwTxtMeta *const pTxtMeta(
-                                        static_cast<SwTxtMeta*>(pAttr));
+                                        static_txtattr_cast<SwTxtMeta*>(pAttr));
                                     // force removal of UNO object
                                     pTxtMeta->ChgTxtNode(0);
                                     pTxtMeta->ChgTxtNode(pTxtNd);

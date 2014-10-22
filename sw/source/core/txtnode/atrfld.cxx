@@ -329,6 +329,8 @@ bool SwFmtFld::IsProtect() const
            && mpTxtFld->GetpTxtNode()->IsProtect();
 }
 
+// class SwTxtFld ////////////////////////////////////////////////////
+
 SwTxtFld::SwTxtFld(
     SwFmtFld & rAttr,
     sal_Int32 const nStartPos,
@@ -501,6 +503,8 @@ void SwTxtFld::DeleteTxtFld( const SwTxtFld& rTxtFld )
     }
 }
 
+// class SwTxtInputFld ///////////////////////////////////////////////
+
 // input field in-place editing
 SwTxtInputFld::SwTxtInputFld(
     SwFmtFld & rAttr,
@@ -508,27 +512,17 @@ SwTxtInputFld::SwTxtInputFld(
     sal_Int32 const nEnd,
     bool const bInClipboard )
 
-    : SwTxtFld( rAttr, nStart, bInClipboard )
-    , m_nEnd( nEnd )
+    : SwTxtAttr( rAttr, nStart )
+    , SwTxtAttrNesting( rAttr, nStart, nEnd )
+    , SwTxtFld( rAttr, nStart, bInClipboard )
     , m_bLockNotifyContentChange( false )
 {
     SetHasDummyChar( false );
     SetHasContent( true );
-
-    SetDontExpand( true );
-    SetLockExpandFlag( true );
-    SetDontExpandStartAttr( true );
-
-    SetNesting( true );
 }
 
 SwTxtInputFld::~SwTxtInputFld()
 {
-}
-
-sal_Int32* SwTxtInputFld::GetEnd()
-{
-    return &m_nEnd;
 }
 
 void SwTxtInputFld::LockNotifyContentChange()
@@ -602,12 +596,15 @@ void SwTxtInputFld::UpdateTextNodeContent( const OUString& rNewContent )
     GetTxtNode().ReplaceText( aIdx, nDelLen, rNewContent );
 }
 
+// class SwTxtAnnotationFld //////////////////////////////////////////
+
 // text annotation field
 SwTxtAnnotationFld::SwTxtAnnotationFld(
     SwFmtFld & rAttr,
     sal_Int32 const nStart,
     bool const bInClipboard )
-    : SwTxtFld( rAttr, nStart, bInClipboard )
+    : SwTxtAttr( rAttr, nStart )
+    , SwTxtFld( rAttr, nStart, bInClipboard )
 {
 }
 

@@ -1406,7 +1406,8 @@ void lcl_CopyHint(
         {
             if( pOtherDoc != NULL )
             {
-                static_cast<const SwTxtFld*>(pHt)->CopyTxtFld( static_cast<SwTxtFld*>(pNewHt) );
+                static_txtattr_cast<const SwTxtFld*>(pHt)->CopyTxtFld(
+                        static_txtattr_cast<SwTxtFld*>(pNewHt));
             }
 
             // Tabellenformel ??
@@ -1416,7 +1417,7 @@ void lcl_CopyHint(
             {
                 // wandel die interne in eine externe Formel um
                 const SwTableNode* const pDstTblNd =
-                    static_cast<const SwTxtFld*>(pHt)->GetTxtNode().FindTableNode();
+                    static_txtattr_cast<const SwTxtFld*>(pHt)->GetTxtNode().FindTableNode();
                 if( pDstTblNd )
                 {
                     SwTblField* const pTblFld =
@@ -1432,7 +1433,8 @@ void lcl_CopyHint(
     case RES_TXTATR_ANNOTATION :
         if( pOtherDoc != NULL )
         {
-            static_cast<const SwTxtFld*>(pHt)->CopyTxtFld( static_cast<SwTxtFld*>(pNewHt) );
+            static_txtattr_cast<const SwTxtFld*>(pHt)->CopyTxtFld(
+                    static_txtattr_cast<SwTxtFld*>(pNewHt));
         }
         break;
 
@@ -1442,7 +1444,7 @@ void lcl_CopyHint(
         {
             // Beim Kopieren von TOXMarks(Client) in andere Dokumente
             // muss der Verzeichnis (Modify) ausgetauscht werden
-            static_cast<SwTxtTOXMark*>(pNewHt)->CopyTOXMark( pOtherDoc );
+            static_txtattr_cast<SwTxtTOXMark*>(pNewHt)->CopyTOXMark(pOtherDoc);
         }
         break;
 
@@ -1470,8 +1472,8 @@ void lcl_CopyHint(
             if( pOtherDoc && pDest && pDest->GetpSwpHints()
                 && pDest->GetpSwpHints()->Contains( pNewHt ) )
             {
-                const SwDoc* const pDoc = static_cast<const SwTxtINetFmt*>(pHt)
-                    ->GetTxtNode().GetDoc();
+                const SwDoc* const pDoc = static_txtattr_cast<
+                        const SwTxtINetFmt*>(pHt)->GetTxtNode().GetDoc();
                 if ( pDoc )
                 {
                     const SwCharFmts* pCharFmts = pDoc->GetCharFmts();
@@ -1488,7 +1490,7 @@ void lcl_CopyHint(
             //JP 24.04.98: Bug 49753 - ein TextNode muss am Attribut
             //              gesetzt sein, damit die Vorlagen erzeugt
             //              werden koenne
-            SwTxtINetFmt* const pINetHt = static_cast<SwTxtINetFmt*>(pNewHt);
+            SwTxtINetFmt *const pINetHt = static_txtattr_cast<SwTxtINetFmt*>(pNewHt);
             if ( !pINetHt->GetpTxtNode() )
             {
                 pINetHt->ChgTxtNode( pDest );
@@ -3030,7 +3032,7 @@ static void Replace0xFF(
                         if( bExpandFlds )
                         {
                             const OUString aExpand(
-                                static_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()->ExpandField(true));
+                                static_txtattr_cast<SwTxtFld const*>(pAttr)->GetFmtFld().GetField()->ExpandField(true));
                             rTxt.insert(nPos, aExpand);
                             nPos = nPos + aExpand.getLength();
                             nEndPos = nEndPos + aExpand.getLength();
@@ -3196,7 +3198,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 case RES_TXTATR_ANNOTATION:
                     {
                         OUString const aExpand(
-                            static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true) );
+                            static_txtattr_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true));
                         if (!aExpand.isEmpty())
                         {
                             ++aDestIdx;     // dahinter einfuegen;

@@ -1462,7 +1462,8 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                        || pHt->Which() == RES_TXTATR_INPUTFIELD )
                      && (nFldIndex-- == 0))
                 {
-                    pTxtFld = (SwTxtFld *)pHt;
+                    pTxtFld = const_cast<SwTxtFld*>(
+                                static_txtattr_cast<SwTxtFld const*>(pHt));
                     break;
                 }
                 else if (pHt->Which() == RES_TXTATR_REFMARK

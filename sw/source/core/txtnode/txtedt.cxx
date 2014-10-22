@@ -609,7 +609,7 @@ void SwTxtNode::RstTxtAttr(
                         {
                             SwTxtCharFmt* pCharFmt = dynamic_cast<SwTxtCharFmt*>(pHt);
                             if ( pCharFmt )
-                                static_cast<SwTxtCharFmt*>(pNew)->SetSortNumber( pCharFmt->GetSortNumber() );
+                                static_txtattr_cast<SwTxtCharFmt*>(pNew)->SetSortNumber(pCharFmt->GetSortNumber());
 
                             InsertHint( pNew,
                                 nsSetAttrMode::SETATTR_NOHINTADJUST );

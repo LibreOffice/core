@@ -135,7 +135,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                         const bool bEmpty =
                             ( pHt->Which() != RES_TXTATR_FIELD
                               && pHt->Which() != RES_TXTATR_ANNOTATION )
-                            || (static_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true).isEmpty());;
+                            || (static_txtattr_cast<SwTxtFld const*>(pHt)->GetFmtFld().GetField()->ExpandField(true).isEmpty());;
                         if ( bEmpty && nStart == nAkt )
                         {
                             rArr.push_back( nAkt );
@@ -352,7 +352,8 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
                         {
                             const SwTxtAttr* pTxtAttr = bSrchForward ?  (*pHts)[GetPostIt(aLoop+aIgnore,pHts)] : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)];
-                            if ( pPostItMgr && pPostItMgr->SearchReplace(((SwTxtFld*)pTxtAttr)->GetFmtFld(),rSearchOpt,bSrchForward) )
+                            if (pPostItMgr && pPostItMgr->SearchReplace(
+                                    static_txtattr_cast<SwTxtFld const*>(pTxtAttr)->GetFmtFld(),rSearchOpt,bSrchForward))
                             {
                                 bFound = true ;
                                 break;

@@ -123,7 +123,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
                 ((SwChapterField*)pFld)->ChangeExpansion( pFrame,
-                                        &((SwTxtFld*)pHint)->GetTxtNode() );
+                    &static_txtattr_cast<SwTxtFld const*>(pHint)->GetTxtNode());
             }
             {
                 OUString const aStr( (bName)
@@ -185,12 +185,14 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 if( !::lcl_IsInBody( pFrame ) )
                 {
                     pExpFld->ChgBodyTxtFlag( false );
-                    pExpFld->ChangeExpansion( *pFrame, *((SwTxtFld*)pHint) );
+                    pExpFld->ChangeExpansion(*pFrame,
+                            *static_txtattr_cast<SwTxtFld const*>(pHint));
                 }
                 else if( !pExpFld->IsInBodyTxt() )
                 {
                     // war vorher anders, also erst expandieren, dann umsetzen!!
-                    pExpFld->ChangeExpansion( *pFrame, *((SwTxtFld*)pHint) );
+                    pExpFld->ChangeExpansion(*pFrame,
+                            *static_txtattr_cast<SwTxtFld const*>(pHint));
                     pExpFld->ChgBodyTxtFlag( true );
                 }
             }
@@ -220,7 +222,8 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         case RES_REFPAGEGETFLD:
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
-                ((SwRefPageGetField*)pFld)->ChangeExpansion( pFrame, (SwTxtFld*)pHint );
+                ((SwRefPageGetField*)pFld)->ChangeExpansion(pFrame,
+                        static_txtattr_cast<SwTxtFld const*>(pHint));
             }
             {
                 OUString const aStr( (bName)

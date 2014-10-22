@@ -210,23 +210,23 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
     // We do not want to show visited links:
     // (printing, pdf export, page preview)
 
+    SwTxtINetFmt & rINetAttr(const_cast<SwTxtINetFmt&>(
+                            static_txtattr_cast<SwTxtINetFmt const&>(rAttr)));
     if ( pShell->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
          pShell->GetViewOptions()->IsPDFExport() ||
          pShell->GetViewOptions()->IsPagePreview() )
     {
-        if ( ((SwTxtINetFmt&)rAttr).IsVisited() )
+        if (rINetAttr.IsVisited())
         {
             if ( pColor )
             {
                 // take color from character format 'unvisited link'
-                SwTxtINetFmt& rInetAttr( const_cast<SwTxtINetFmt&>(
-                    static_cast<const SwTxtINetFmt&>(rAttr)) );
-                rInetAttr.SetVisited( false );
-                const SwCharFmt* pTmpFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
+                rINetAttr.SetVisited(false);
+                const SwCharFmt* pTmpFmt = rINetAttr.GetCharFmt();
                 const SfxPoolItem* pItem;
                 pTmpFmt->GetItemState( RES_CHRATR_COLOR, true, &pItem );
                 *pColor = ((SvxColorItem*)pItem)->GetValue();
-                rInetAttr.SetVisited( true );
+                rINetAttr.SetVisited(true);
             }
             return true;
         }
@@ -240,14 +240,14 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
 
     if ( pShell->GetWin() &&
         (
-          (((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsVisitedLinks()) ||
-          (!((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsLinks())
+          (rINetAttr.IsVisited() && SwViewOption::IsVisitedLinks()) ||
+          (!rINetAttr.IsVisited() && SwViewOption::IsLinks())
         )
        )
     {
         if ( pColor )
         {
-            if ( ((SwTxtINetFmt&)rAttr).IsVisited() )
+            if (rINetAttr.IsVisited())
             {
                 // take color from view option 'visited link color'
                 *pColor = SwViewOption::GetVisitedLinksColor();

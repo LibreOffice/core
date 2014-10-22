@@ -121,7 +121,7 @@ public:
 
 };
 
-class SwTxtAttrEnd : public SwTxtAttr
+class SwTxtAttrEnd : public virtual SwTxtAttr
 {
 protected:
     sal_Int32 m_nEnd;
@@ -130,6 +130,15 @@ public:
     SwTxtAttrEnd( SfxPoolItem& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
 
     virtual sal_Int32* GetEnd() SAL_OVERRIDE;
+};
+
+// attribute that must not overlap others
+class SwTxtAttrNesting : public SwTxtAttrEnd
+{
+protected:
+    SwTxtAttrNesting( SfxPoolItem & i_rAttr,
+        const sal_Int32 i_nStart, const sal_Int32 i_nEnd );
+    virtual ~SwTxtAttrNesting();
 };
 
 inline const sal_Int32* SwTxtAttr::End() const
@@ -225,6 +234,16 @@ inline const SwFmtMeta& SwTxtAttr::GetMeta() const
     assert( m_pAttr && (m_pAttr->Which() == RES_TXTATR_META ||
         m_pAttr->Which() == RES_TXTATR_METAFIELD) );
     return (const SwFmtMeta&)(*m_pAttr);
+}
+
+// these should be static_casts but with virtual inheritance it's not possible
+template<typename T, typename S> inline T static_txtattr_cast(S * s)
+{
+    return dynamic_cast<T>(s);
+}
+template<typename T, typename S> inline T static_txtattr_cast(S & s)
+{
+    return dynamic_cast<T>(s);
 }
 
 #endif

@@ -75,7 +75,8 @@ void SwFmtRefMark::InvalidateRefMark()
 
 SwTxtRefMark::SwTxtRefMark( SwFmtRefMark& rAttr,
             sal_Int32 const nStartPos, sal_Int32 const*const pEnd)
-    : SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
+    : SwTxtAttr(rAttr, nStartPos)
+    , SwTxtAttrEnd( rAttr, nStartPos, nStartPos )
     , m_pTxtNode( 0 )
     , m_pEnd( 0 )
 {

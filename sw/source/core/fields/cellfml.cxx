@@ -153,7 +153,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
         if ( bOK && (Char==CH_TXTATR_BREAKWORD || Char==CH_TXTATR_INWORD) )
         {
             SwTxtFld * const pTxtFld =
-                static_cast<SwTxtFld*>( pTxtNd->GetTxtAttrForCharAt( nSttPos, RES_TXTATR_FIELD ) );
+                static_txtattr_cast<SwTxtFld*>(pTxtNd->GetTxtAttrForCharAt(nSttPos, RES_TXTATR_FIELD));
             if ( pTxtFld == NULL )
                 break;
 
