@@ -96,10 +96,6 @@ public:
 
 class SwTbxFieldCtrl : public SfxToolBoxControl
 {
-    PopupMenu*              pPopup;
-    SwView*                 pView;
-
-    void                    DelPopup();
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
