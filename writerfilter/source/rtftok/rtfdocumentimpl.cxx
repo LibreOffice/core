@@ -4877,6 +4877,11 @@ int RTFDocumentImpl::pushState()
         break;
     }
 
+    // If this is true, then ooxml:endtrackchange will be generated.  Make sure
+    // we don't generate more ooxml:endtrackchange than ooxml:trackchange: new
+    // state does not inherit this flag.
+    m_aStates.top().bStartedTrackchange = false;
+
     return 0;
 }
 
