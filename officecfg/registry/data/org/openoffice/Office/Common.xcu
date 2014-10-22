@@ -575,7 +575,7 @@
     </prop>
     <prop oor:name="CmisServersUrls">
       <value>
-        <it>http://&lt;host&gt;/alfresco/cmisws/RepositoryService?wsdl</it>
+        <it>http://&lt;host:port&gt;/alfresco/cmisatom</it>
         <it>https://api.alfresco.com/cmis/versions/1.0/atom/</it>
         <it>http://&lt;host&gt;/p8cmis/wsdl</it>
         <it>https://apps.lotuslive.com/files/basic/cmis/my/servicedoc</it>
