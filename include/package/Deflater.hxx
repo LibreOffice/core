@@ -35,8 +35,7 @@ protected:
     com::sun::star::uno::Sequence< sal_Int8 > sInBuffer;
     bool                    bFinish;
     bool                    bFinished;
-    bool                    bSetParams;
-    sal_Int32               nLevel, nStrategy;
+    sal_Int32               nStrategy;
     sal_Int64               nOffset, nLength;
     z_stream*               pStream;
 
@@ -47,7 +46,6 @@ public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel, bool bNowrap);
     void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
-    void SAL_CALL setLevel( sal_Int32 nNewLevel );
     bool SAL_CALL needsInput(  );
     void SAL_CALL finish(  );
     bool SAL_CALL finished(  ) { return bFinished;}

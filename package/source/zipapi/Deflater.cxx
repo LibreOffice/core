@@ -59,8 +59,6 @@ void Deflater::init (sal_Int32 nLevelArg, sal_Int32 nStrategyArg, bool bNowrap)
 Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
 : bFinish(false)
 , bFinished(false)
-, bSetParams(false)
-, nLevel(nSetLevel)
 , nStrategy(DEFAULT_STRATEGY)
 , nOffset(0)
 , nLength(0)
@@ -71,58 +69,26 @@ Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
 sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
 {
     sal_Int32 nResult;
-    if (bSetParams)
-    {
-        pStream->next_in   = (unsigned char*) sInBuffer.getConstArray() + nOffset;
-        pStream->next_out  = (unsigned char*) rBuffer.getArray()+nNewOffset;
-        pStream->avail_in  = nLength;
-        pStream->avail_out = nNewLength;
+    pStream->next_in   = (unsigned char*) sInBuffer.getConstArray() + nOffset;
+    pStream->next_out  = (unsigned char*) rBuffer.getArray()+nNewOffset;
+    pStream->avail_in  = nLength;
+    pStream->avail_out = nNewLength;
 
 #if !defined Z_PREFIX
-        nResult = deflateParams(pStream, nLevel, nStrategy);
+    nResult = deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
 #else
-        nResult = z_deflateParams(pStream, nLevel, nStrategy);
+    nResult = z_deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
 #endif
-        switch (nResult)
-        {
-            case Z_OK:
-                bSetParams = false;
-                nOffset += nLength - pStream->avail_in;
-                nLength = pStream->avail_in;
-                return nNewLength - pStream->avail_out;
-            case Z_BUF_ERROR:
-                bSetParams = false;
-                return 0;
-            default:
-                return 0;
-        }
-    }
-    else
+    switch (nResult)
     {
-        pStream->next_in   = (unsigned char*) sInBuffer.getConstArray() + nOffset;
-        pStream->next_out  = (unsigned char*) rBuffer.getArray()+nNewOffset;
-        pStream->avail_in  = nLength;
-        pStream->avail_out = nNewLength;
-
-#if !defined Z_PREFIX
-        nResult = deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
-#else
-        nResult = z_deflate(pStream, bFinish ? Z_FINISH : Z_NO_FLUSH);
-#endif
-        switch (nResult)
-        {
-            case Z_STREAM_END:
-                bFinished = true;
-            case Z_OK:
-                nOffset += nLength - pStream->avail_in;
-                nLength = pStream->avail_in;
-                return nNewLength - pStream->avail_out;
-            case Z_BUF_ERROR:
-                bSetParams = false;
-                return 0;
-            default:
-                return 0;
-        }
+        case Z_STREAM_END:
+            bFinished = true;
+        case Z_OK:
+            nOffset += nLength - pStream->avail_in;
+            nLength = pStream->avail_in;
+            return nNewLength - pStream->avail_out;
+        default:
+            return 0;
     }
 }
 
@@ -134,18 +100,7 @@ void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffe
     nOffset = nNewOffset;
     nLength = nNewLength;
 }
-void SAL_CALL Deflater::setLevel( sal_Int32 nNewLevel )
-{
-    if ((nNewLevel < 0 || nNewLevel > 9) && nNewLevel != DEFAULT_COMPRESSION)
-    {
-        // do error handling
-    }
-    if (nNewLevel != nLevel)
-    {
-        nLevel = nNewLevel;
-        bSetParams = true;
-    }
-}
+
 bool SAL_CALL Deflater::needsInput(  )
 {
     return nLength <=0;
