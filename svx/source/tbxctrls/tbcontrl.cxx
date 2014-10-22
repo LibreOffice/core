@@ -59,6 +59,7 @@
 #include "helpid.hrc"
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <svx/xtable.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -2330,7 +2331,10 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
+    if ( dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) )
+        bSidebarType = true;
+    else
+        bSidebarType = false;
 
     // The following commands are available at the various modules
     switch( nSlotId )
@@ -2338,11 +2342,13 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
         case SID_ATTR_CHAR_COLOR:
             addStatusListener( OUString( ".uno:Color" ));
             mPaletteManager.SetLastColor( COL_RED );
+            bSidebarType = false;
             break;
 
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( OUString( ".uno:CharColorExt" ));
             mPaletteManager.SetLastColor( COL_RED );
+            bSidebarType = false;
             break;
 
         case SID_BACKGROUND_COLOR:
@@ -2353,6 +2359,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
             addStatusListener( OUString( ".uno:CharBackgroundExt" ));
             mPaletteManager.SetLastColor( COL_YELLOW );
+            bSidebarType = false;
             break;
 
         case SID_FRAME_LINECOLOR:
@@ -2369,6 +2376,11 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
             mPaletteManager.SetLastColor( COL_BLACK );
             break;
     }
+
+    if ( bSidebarType )
+        rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    else
+        rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 
     pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
     mPaletteManager.SetBtnUpdater( pBtnUpdater.get() );
@@ -2448,10 +2460,28 @@ void SvxColorToolBoxControl::StateChanged(
             rTbx.CheckItem( nId, pBool && pBool->GetValue() );
         }
     }
+    else if ( bSidebarType && SfxItemState::DEFAULT <= eState )
+    {
+        Color aColor;
+        if ( pState->ISA( SvxColorItem ) )
+            aColor = static_cast< const SvxColorItem* >(pState)->GetValue();
+        else if ( pState->ISA( XLineColorItem ) )
+            aColor = static_cast< const XLineColorItem* >(pState)->GetColorValue();
+        pBtnUpdater->Update( aColor );
+    }
 }
 
 void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 {
+    if ( bSidebarType )
+    {
+        // Open the popup also when Enter key is pressed.
+        css::uno::Reference< css::awt::XWindow > xWin = createPopupWindow();
+        if ( xWin.is() )
+            xWin->setFocus();
+        return;
+    }
+
     OUString aCommand;
     OUString aParamName;
 

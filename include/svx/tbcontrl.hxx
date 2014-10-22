@@ -220,6 +220,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
     PaletteManager                      mPaletteManager;
+    bool bSidebarType;
     DECL_LINK( SelectedHdl, Color* );
 public:
     SFX_DECL_TOOLBOX_CONTROL();
