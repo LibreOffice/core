@@ -57,8 +57,6 @@ protected:
     ScToken( formula::StackVar eTypeP,OpCode e = ocPush ) : formula::FormulaToken(eTypeP,e) {}
     ScToken( const ScToken& r ): formula::FormulaToken(r) {}
 
-    bool                        checkTextEqual( const formula::FormulaToken& rToken ) const;
-
 public:
 
     virtual                     ~ScToken();

@@ -455,33 +455,34 @@ ScToken::~ScToken()
 {
 }
 
+namespace {
+
 //  TextEqual: if same formula entered (for optimization in sort)
-bool ScToken::checkTextEqual( const FormulaToken& _rToken ) const
+bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
 {
     assert(
-        (eType == svSingleRef || eType == svDoubleRef)
-        && FormulaToken::operator ==(_rToken));
+        (_rToken1.GetType() == svSingleRef || _rToken1.GetType() == svDoubleRef)
+        && _rToken1.FormulaToken::operator ==(_rToken2));
 
     //  in relative Refs only compare relative parts
 
-    const ScToken& rToken = static_cast<const ScToken&>(_rToken);
     ScComplexRefData aTemp1;
-    if ( eType == svSingleRef )
+    if ( _rToken1.GetType() == svSingleRef )
     {
-        aTemp1.Ref1 = *GetSingleRef();
+        aTemp1.Ref1 = *_rToken1.GetSingleRef();
         aTemp1.Ref2 = aTemp1.Ref1;
     }
     else
-        aTemp1 = *GetDoubleRef();
+        aTemp1 = *_rToken1.GetDoubleRef();
 
     ScComplexRefData aTemp2;
-    if ( rToken.eType == svSingleRef )
+    if ( _rToken2.GetType() == svSingleRef )
     {
-        aTemp2.Ref1 = *rToken.GetSingleRef();
+        aTemp2.Ref1 = *_rToken2.GetSingleRef();
         aTemp2.Ref2 = aTemp2.Ref1;
     }
     else
-        aTemp2 = *rToken.GetDoubleRef();
+        aTemp2 = *_rToken2.GetDoubleRef();
 
     ScAddress aPos;
     ScRange aRange1 = aTemp1.toAbs(aPos), aRange2 = aTemp2.toAbs(aPos);
@@ -489,6 +490,8 @@ bool ScToken::checkTextEqual( const FormulaToken& _rToken ) const
     //  memcmp doesn't work because of the alignment byte after bFlags.
     //  After SmartRelAbs only absolute parts have to be compared.
     return aRange1 == aRange2 && aTemp1.Ref1.FlagValue() == aTemp2.Ref1.FlagValue() && aTemp1.Ref2.FlagValue() == aTemp2.Ref2.FlagValue();
+}
+
 }
 
 #if DEBUG_FORMULA_COMPILER
@@ -643,7 +646,7 @@ const ScSingleRefData*    ScSingleRefToken::GetSingleRef() const  { return &aSin
 ScSingleRefData*          ScSingleRefToken::GetSingleRef()        { return &aSingleRef; }
 bool ScSingleRefToken::TextEqual( const FormulaToken& _rToken ) const
 {
-    return FormulaToken::operator ==(_rToken) && checkTextEqual(_rToken);
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(*this, _rToken);
 }
 bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
@@ -658,7 +661,7 @@ const ScSingleRefData*    ScDoubleRefToken::GetSingleRef2() const { return &aDou
 ScSingleRefData*          ScDoubleRefToken::GetSingleRef2()       { return &aDoubleRef.Ref2; }
 bool ScDoubleRefToken::TextEqual( const FormulaToken& _rToken ) const
 {
-    return FormulaToken::operator ==(_rToken) && checkTextEqual(_rToken);
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(*this, _rToken);
 }
 bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
