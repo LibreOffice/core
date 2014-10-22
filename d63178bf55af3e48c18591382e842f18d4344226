@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_1748de5a",
+        "filename": "offapi/com/sun/star/awt/Gradient2.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-10-22T15:43:44Z",
+      "side": 1,
+      "message": "Can you avoid \"published\" here? Without that, it\u0027s not possible to extend this struct in the future.",
+      "revId": "d63178bf55af3e48c18591382e842f18d4344226",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_f7730ab3",
+        "filename": "offapi/com/sun/star/awt/GradientStop.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-10-22T15:43:44Z",
+      "side": 1,
+      "message": "Same here, can you avoid \"published\" here?",
+      "revId": "d63178bf55af3e48c18591382e842f18d4344226",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
