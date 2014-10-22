@@ -430,6 +430,7 @@ IMPL_LINK_NOARG( SvxJavaOptionsPage, ExpertConfigHdl_Impl )
         m_pExpertConfigDlg->FillItemSet();//save changes if there are any
     }
 
+    delete m_pExpertConfigDlg;
     return 0;
 }
 
