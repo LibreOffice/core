@@ -16,7 +16,6 @@
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
-#include <xmlreader/xmlreader.hxx>
 #include <map>
 #include <set>
 #include <stack>
@@ -39,6 +38,7 @@ class DateField;
 class TimeField;
 class VclExpander;
 class VclMultiLineEdit;
+namespace xmlreader { class XmlReader; }
 
 class VCL_DLLPUBLIC VclBuilder: private boost::noncopyable
 {

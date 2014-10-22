@@ -45,6 +45,7 @@
 #include <svdata.hxx>
 #include <svids.hrc>
 #include <window.h>
+#include <xmlreader/xmlreader.hxx>
 
 using namespace com::sun::star;
 

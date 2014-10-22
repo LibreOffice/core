@@ -18,6 +18,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/msgbox.hxx>
