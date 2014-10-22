@@ -135,7 +135,7 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScSingleRefToken(*this); }
 
 #if DEBUG_FORMULA_COMPILER
-    virtual void Dump() const;
+    virtual void Dump() const SAL_OVERRIDE;
 #endif
     DECL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken );
 };
@@ -166,7 +166,7 @@ public:
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScDoubleRefToken(*this); }
 
 #if DEBUG_FORMULA_COMPILER
-    virtual void Dump() const;
+    virtual void Dump() const SAL_OVERRIDE;
 #endif
     DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken );
 };
