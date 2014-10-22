@@ -183,8 +183,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(Window *parent)
       mbIsSynced(false),
       maRepositories()
 {
-    fprintf(stderr, "SfxTemplateManagerDlg::SfxTemplateManagerDlg\n");
-
     get(mpTabControl, "tab_control");
     get(mpSearchEdit, "search_edit");
     get(mpViewBar, "action_view");
