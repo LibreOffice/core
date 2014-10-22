@@ -78,7 +78,6 @@ void lcl_setRows_throw(const Reference< XResultSet >& _xResultSet,sal_Int32 _nTy
 }
 
 
-/* {{{ ODatabaseMetaData::ODatabaseMetaData() -I- */
 ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
     :m_rConnection(_rCon)
     ,m_bUseCatalog(true)
@@ -93,18 +92,14 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection& _rCon)
         osl_atomic_decrement(&m_refCount);
     }
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::~ODatabaseMetaData() -I- */
 ODatabaseMetaData::~ODatabaseMetaData()
 {
     OSL_TRACE("ODatabaseMetaData::~ODatabaseMetaData");
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getStringMetaData() -I- */
 OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const std::string& (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
@@ -120,10 +115,8 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     }
     return stringMetaData;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getStringMetaData() -I- */
 OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, std::string (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
@@ -139,10 +132,8 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     }
     return stringMetaData;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getStringMetaData() -I- */
 OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const sql::SQLString& (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
@@ -158,10 +149,8 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     }
     return stringMetaData;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getStringMetaData() -I- */
 OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, sql::SQLString (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
@@ -177,10 +166,8 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
     }
     return stringMetaData;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getInt32MetaData() -I- */
 sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, unsigned int (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
@@ -196,10 +183,8 @@ sal_Int32 ODatabaseMetaData::impl_getInt32MetaData(const sal_Char* _methodName, 
     }
     return int32MetaData;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getBoolMetaData() -I- */
 bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
@@ -215,10 +200,8 @@ bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (
     }
     return boolMetaData;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getBoolMetaData() -I- */
 bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _arg )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
@@ -234,10 +217,8 @@ bool ODatabaseMetaData::impl_getBoolMetaData(const sal_Char* _methodName, bool (
     }
     return boolMetaData;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::impl_getRSTypeMetaData() -I- */
 bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool (sql::DatabaseMetaData::*_Method)(int), sal_Int32 _resultSetType )
 {
     int resultSetType(sql::ResultSet::TYPE_FORWARD_ONLY);
@@ -248,234 +229,182 @@ bool ODatabaseMetaData::impl_getRSTypeMetaData(const sal_Char* _methodName, bool
 
     return impl_getBoolMetaData(_methodName, _Method, resultSetType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getCatalogSeparator() -I- */
 OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getCatalogSeparator", &sql::DatabaseMetaData::getCatalogSeparator);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxBinaryLiteralLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxBinaryLiteralLength", &sql::DatabaseMetaData::getMaxBinaryLiteralLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxRowSize() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxRowSize", &sql::DatabaseMetaData::getMaxRowSize);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxCatalogNameLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCatalogNameLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxCatalogNameLength", &sql::DatabaseMetaData::getMaxCatalogNameLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxCharLiteralLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxCharLiteralLength", &sql::DatabaseMetaData::getMaxCharLiteralLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxColumnNameLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxColumnNameLength", &sql::DatabaseMetaData::getMaxColumnNameLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxColumnsInIndex() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInIndex()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxColumnsInIndex", &sql::DatabaseMetaData::getMaxColumnsInIndex);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxCursorNameLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCursorNameLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxCursorNameLength", &sql::DatabaseMetaData::getMaxCursorNameLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxConnections() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxConnections()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxConnections", &sql::DatabaseMetaData::getMaxConnections);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxColumnsInTable() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxColumnsInTable", &sql::DatabaseMetaData::getMaxColumnsInTable);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxStatementLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxStatementLength", &sql::DatabaseMetaData::getMaxStatementLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxTableNameLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxTableNameLength", &sql::DatabaseMetaData::getMaxTableNameLength);
 }
-/* }}} */
 
-/* {{{ ODatabaseMetaData::getMaxTablesInSelect() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxTablesInSelect", &sql::DatabaseMetaData::getMaxTablesInSelect);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::doesMaxRowSizeIncludeBlobs() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("doesMaxRowSizeIncludeBlobs", &sql::DatabaseMetaData::doesMaxRowSizeIncludeBlobs);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::storesLowerCaseQuotedIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseQuotedIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("storesLowerCaseQuotedIdentifiers", &sql::DatabaseMetaData::storesLowerCaseQuotedIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::storesLowerCaseIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("storesLowerCaseIdentifiers", &sql::DatabaseMetaData::storesLowerCaseIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::storesMixedCaseQuotedIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("storesMixedCaseQuotedIdentifiers", &sql::DatabaseMetaData::storesMixedCaseQuotedIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::storesMixedCaseIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("storesMixedCaseIdentifiers", &sql::DatabaseMetaData::storesMixedCaseIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::storesUpperCaseQuotedIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("storesUpperCaseQuotedIdentifiers", &sql::DatabaseMetaData::storesUpperCaseQuotedIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::storesUpperCaseIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("storesUpperCaseIdentifiers", &sql::DatabaseMetaData::storesUpperCaseIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsAlterTableWithAddColumn() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsAlterTableWithAddColumn", &sql::DatabaseMetaData::supportsAlterTableWithAddColumn);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsAlterTableWithDropColumn() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsAlterTableWithDropColumn", &sql::DatabaseMetaData::supportsAlterTableWithDropColumn);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxIndexLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxIndexLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxIndexLength", &sql::DatabaseMetaData::getMaxIndexLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsNonNullableColumns() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsNonNullableColumns", &sql::DatabaseMetaData::supportsNonNullableColumns);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getCatalogTerm() -I- */
 OUString SAL_CALL ODatabaseMetaData::getCatalogTerm()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getCatalogTerm", &sql::DatabaseMetaData::getCatalogTerm);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getIdentifierQuoteString() -I- */
 OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -485,361 +414,281 @@ OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString()
     }
     return identifier_quote_string;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getExtraNameCharacters() -I- */
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getExtraNameCharacters", &sql::DatabaseMetaData::getExtraNameCharacters);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsDifferentTableCorrelationNames() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsDifferentTableCorrelationNames", &sql::DatabaseMetaData::supportsDifferentTableCorrelationNames);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::isCatalogAtStart() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("isCatalogAtStart", &sql::DatabaseMetaData::isCatalogAtStart);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::dataDefinitionIgnoredInTransactions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("dataDefinitionIgnoredInTransactions", &sql::DatabaseMetaData::dataDefinitionIgnoredInTransactions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::dataDefinitionCausesTransactionCommit() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionCausesTransactionCommit()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("dataDefinitionCausesTransactionCommit", &sql::DatabaseMetaData::dataDefinitionCausesTransactionCommit);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsDataManipulationTransactionsOnly() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataManipulationTransactionsOnly()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsDataManipulationTransactionsOnly", &sql::DatabaseMetaData::supportsDataManipulationTransactionsOnly);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsDataDefinitionAndDataManipulationTransactions", &sql::DatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsPositionedDelete() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedDelete()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsPositionedDelete", &sql::DatabaseMetaData::supportsPositionedDelete);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsPositionedUpdate() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsPositionedUpdate()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsPositionedUpdate", &sql::DatabaseMetaData::supportsPositionedUpdate);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsOpenStatementsAcrossRollback() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossRollback()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsOpenStatementsAcrossRollback", &sql::DatabaseMetaData::supportsOpenStatementsAcrossRollback);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsOpenStatementsAcrossCommit() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenStatementsAcrossCommit()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsOpenStatementsAcrossCommit", &sql::DatabaseMetaData::supportsOpenStatementsAcrossCommit);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsOpenCursorsAcrossCommit() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossCommit()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsOpenCursorsAcrossCommit", &sql::DatabaseMetaData::supportsOpenCursorsAcrossCommit);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsOpenCursorsAcrossRollback() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOpenCursorsAcrossRollback()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsOpenCursorsAcrossRollback", &sql::DatabaseMetaData::supportsOpenCursorsAcrossRollback);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsTransactionIsolationLevel() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel(sal_Int32 level)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsTransactionIsolationLevel", &sql::DatabaseMetaData::supportsTransactionIsolationLevel, level);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSchemasInDataManipulation() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSchemasInDataManipulation", &sql::DatabaseMetaData::supportsSchemasInDataManipulation);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsANSI92FullSQL() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92FullSQL()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsANSI92FullSQL", &sql::DatabaseMetaData::supportsANSI92FullSQL);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsANSI92EntryLevelSQL() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92EntryLevelSQL()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsANSI92EntryLevelSQL", &sql::DatabaseMetaData::supportsANSI92EntryLevelSQL);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsIntegrityEnhancementFacility() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsIntegrityEnhancementFacility()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsIntegrityEnhancementFacility", &sql::DatabaseMetaData::supportsIntegrityEnhancementFacility);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSchemasInIndexDefinitions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSchemasInIndexDefinitions", &sql::DatabaseMetaData::supportsSchemasInIndexDefinitions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSchemasInTableDefinitions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSchemasInTableDefinitions", &sql::DatabaseMetaData::supportsSchemasInTableDefinitions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsCatalogsInTableDefinitions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsCatalogsInTableDefinitions", &sql::DatabaseMetaData::supportsCatalogsInTableDefinitions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsCatalogsInIndexDefinitions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsCatalogsInIndexDefinitions", &sql::DatabaseMetaData::supportsCatalogsInIndexDefinitions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsCatalogsInDataManipulation() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsCatalogsInDataManipulation", &sql::DatabaseMetaData::supportsCatalogsInDataManipulation);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsOuterJoins() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsOuterJoins", &sql::DatabaseMetaData::supportsOuterJoins);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxStatements() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxStatements", &sql::DatabaseMetaData::getMaxStatements);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxProcedureNameLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxProcedureNameLength", &sql::DatabaseMetaData::getMaxProcedureNameLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxSchemaNameLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxSchemaNameLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxSchemaNameLength", &sql::DatabaseMetaData::getMaxSchemaNameLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsTransactions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsTransactions", &sql::DatabaseMetaData::supportsTransactions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::allProceduresAreCallable() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::allProceduresAreCallable()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("allProceduresAreCallable", &sql::DatabaseMetaData::allProceduresAreCallable);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsStoredProcedures() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredProcedures()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsStoredProcedures", &sql::DatabaseMetaData::supportsStoredProcedures);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSelectForUpdate() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSelectForUpdate()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSelectForUpdate", &sql::DatabaseMetaData::supportsSelectForUpdate);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::allTablesAreSelectable() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::allTablesAreSelectable()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("allTablesAreSelectable", &sql::DatabaseMetaData::allTablesAreSelectable);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::isReadOnly() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::isReadOnly()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("isReadOnly", &sql::DatabaseMetaData::isReadOnly);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::usesLocalFiles() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFiles()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("usesLocalFiles", &sql::DatabaseMetaData::usesLocalFiles);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::usesLocalFilePerTable() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::usesLocalFilePerTable()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("usesLocalFilePerTable", &sql::DatabaseMetaData::usesLocalFilePerTable);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsTypeConversion() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTypeConversion()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsTypeConversion", &sql::DatabaseMetaData::supportsTypeConversion);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::nullPlusNonNullIsNull() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::nullPlusNonNullIsNull()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("nullPlusNonNullIsNull", &sql::DatabaseMetaData::nullPlusNonNullIsNull);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsColumnAliasing() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsColumnAliasing()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsColumnAliasing", &sql::DatabaseMetaData::supportsColumnAliasing);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsTableCorrelationNames() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsTableCorrelationNames()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsTableCorrelationNames", &sql::DatabaseMetaData::supportsTableCorrelationNames);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsConvert() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /* fromType */, sal_Int32 /* toType */)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -856,263 +705,205 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /* fromType */, s
     }
     return sal_False;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsExpressionsInOrderBy() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExpressionsInOrderBy()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsExpressionsInOrderBy", &sql::DatabaseMetaData::supportsExpressionsInOrderBy);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsGroupBy() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupBy()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsGroupBy", &sql::DatabaseMetaData::supportsGroupBy);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsGroupByBeyondSelect() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByBeyondSelect()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsGroupByBeyondSelect", &sql::DatabaseMetaData::supportsGroupByBeyondSelect);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsGroupByUnrelated() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsGroupByUnrelated()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsGroupByUnrelated", &sql::DatabaseMetaData::supportsGroupByUnrelated);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsMultipleTransactions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleTransactions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsMultipleTransactions", &sql::DatabaseMetaData::supportsMultipleTransactions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsMultipleResultSets() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleResultSets()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsMultipleResultSets", &sql::DatabaseMetaData::supportsMultipleResultSets);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsLikeEscapeClause() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLikeEscapeClause()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsLikeEscapeClause", &sql::DatabaseMetaData::supportsLikeEscapeClause);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsOrderByUnrelated() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsOrderByUnrelated()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsOrderByUnrelated", &sql::DatabaseMetaData::supportsOrderByUnrelated);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsUnion() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnion()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsUnion", &sql::DatabaseMetaData::supportsUnion);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsUnionAll() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsUnionAll()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsUnionAll", &sql::DatabaseMetaData::supportsUnionAll);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsMixedCaseIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsMixedCaseIdentifiers", &sql::DatabaseMetaData::supportsMixedCaseIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsMixedCaseQuotedIdentifiers", &sql::DatabaseMetaData::supportsMixedCaseQuotedIdentifiers);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::nullsAreSortedAtEnd() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtEnd()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("nullsAreSortedAtEnd", &sql::DatabaseMetaData::nullsAreSortedAtEnd);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::nullsAreSortedAtStart() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedAtStart()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("nullsAreSortedAtStart", &sql::DatabaseMetaData::nullsAreSortedAtStart);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::nullsAreSortedHigh() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedHigh()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("nullsAreSortedHigh", &sql::DatabaseMetaData::nullsAreSortedHigh);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::nullsAreSortedLow() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::nullsAreSortedLow()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("nullsAreSortedLow", &sql::DatabaseMetaData::nullsAreSortedLow);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSchemasInProcedureCalls() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInProcedureCalls()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSchemasInProcedureCalls", &sql::DatabaseMetaData::supportsSchemasInProcedureCalls);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSchemasInPrivilegeDefinitions", &sql::DatabaseMetaData::supportsSchemasInPrivilegeDefinitions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsCatalogsInProcedureCalls() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsCatalogsInProcedureCalls", &sql::DatabaseMetaData::supportsCatalogsInProcedureCalls);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsCatalogsInPrivilegeDefinitions", &sql::DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsCorrelatedSubqueries() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCorrelatedSubqueries()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsCorrelatedSubqueries", &sql::DatabaseMetaData::supportsCorrelatedSubqueries);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSubqueriesInComparisons() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInComparisons()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSubqueriesInComparisons", &sql::DatabaseMetaData::supportsSubqueriesInComparisons);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSubqueriesInExists() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInExists()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSubqueriesInExists", &sql::DatabaseMetaData::supportsSubqueriesInExists);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSubqueriesInIns() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInIns()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSubqueriesInIns", &sql::DatabaseMetaData::supportsSubqueriesInIns);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsSubqueriesInQuantifieds() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsSubqueriesInQuantifieds()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsSubqueriesInQuantifieds", &sql::DatabaseMetaData::supportsSubqueriesInQuantifieds);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsANSI92IntermediateSQL() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsANSI92IntermediateSQL", &sql::DatabaseMetaData::supportsANSI92IntermediateSQL);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getURL() -I- */
 OUString SAL_CALL ODatabaseMetaData::getURL()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("ODatabaseMetaData::getURL");
     return m_rConnection.getConnectionSettings().connectionURL;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getUserName() -I- */
 OUString SAL_CALL ODatabaseMetaData::getUserName()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getUserName", &sql::DatabaseMetaData::getUserName);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getDriverName() -I- */
 OUString SAL_CALL ODatabaseMetaData::getDriverName()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1120,10 +911,8 @@ OUString SAL_CALL ODatabaseMetaData::getDriverName()
     OUString aValue( "MySQL Connector/OO.org" );
     return aValue;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getDriverVersion() -I- */
 OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1131,56 +920,44 @@ OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
     static const OUString sVersion( "0.9.2" );
     return sVersion;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getDatabaseProductVersion() -I- */
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getDatabaseProductVersion", &sql::DatabaseMetaData::getDatabaseProductVersion);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getDatabaseProductName() -I- */
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getDatabaseProductName", &sql::DatabaseMetaData::getDatabaseProductName);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getProcedureTerm() -I- */
 OUString SAL_CALL ODatabaseMetaData::getProcedureTerm()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getProcedureTerm", &sql::DatabaseMetaData::getProcedureTerm);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getSchemaTerm() -I- */
 OUString SAL_CALL ODatabaseMetaData::getSchemaTerm()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getSchemaTerm", &sql::DatabaseMetaData::getSchemaTerm);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getDriverMajorVersion() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("ODatabaseMetaData::getDriverMajorVersion");
     return MARIADBC_VERSION_MAJOR;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getDefaultTransactionIsolation() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1201,164 +978,128 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation()
     }
     return TransactionIsolation::NONE;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getDriverMinorVersion() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("ODatabaseMetaData::getDriverMinorVersion");
     return MARIADBC_VERSION_MINOR;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getSQLKeywords() -I- */
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getSQLKeywords", &sql::DatabaseMetaData::getSQLKeywords);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getSearchStringEscape() -I- */
 OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getSearchStringEscape", &sql::DatabaseMetaData::getSearchStringEscape);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getStringFunctions() -I- */
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getStringFunctions", &sql::DatabaseMetaData::getStringFunctions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getTimeDateFunctions() -I- */
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getTimeDateFunctions", &sql::DatabaseMetaData::getTimeDateFunctions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getSystemFunctions() -I- */
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getSystemFunctions", &sql::DatabaseMetaData::getSystemFunctions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getNumericFunctions() -I- */
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getStringMetaData("getNumericFunctions", &sql::DatabaseMetaData::getNumericFunctions);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsExtendedSQLGrammar() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsExtendedSQLGrammar", &sql::DatabaseMetaData::supportsExtendedSQLGrammar);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsCoreSQLGrammar() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCoreSQLGrammar()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsCoreSQLGrammar", &sql::DatabaseMetaData::supportsCoreSQLGrammar);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsMinimumSQLGrammar() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMinimumSQLGrammar()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsMinimumSQLGrammar", &sql::DatabaseMetaData::supportsMinimumSQLGrammar);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsFullOuterJoins() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsFullOuterJoins()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsFullOuterJoins", &sql::DatabaseMetaData::supportsFullOuterJoins);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsLimitedOuterJoins() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsLimitedOuterJoins()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsLimitedOuterJoins", &sql::DatabaseMetaData::supportsLimitedOuterJoins);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxColumnsInGroupBy() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInGroupBy()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxColumnsInGroupBy", &sql::DatabaseMetaData::getMaxColumnsInGroupBy);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxColumnsInOrderBy() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInOrderBy()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxColumnsInOrderBy", &sql::DatabaseMetaData::getMaxColumnsInOrderBy);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxColumnsInSelect() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInSelect()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxColumnsInSelect", &sql::DatabaseMetaData::getMaxColumnsInSelect);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getMaxUserNameLength() -I- */
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxUserNameLength()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getInt32MetaData("getMaxUserNameLength", &sql::DatabaseMetaData::getMaxUserNameLength);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsResultSetType() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetType(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("supportsResultSetType", &sql::DatabaseMetaData::supportsResultSetType, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsResultSetConcurrency() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setType, sal_Int32 concurrency)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1378,107 +1119,84 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setT
     }
     return sal_False;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::ownUpdatesAreVisible() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::ownUpdatesAreVisible(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("ownUpdatesAreVisible", &sql::DatabaseMetaData::ownUpdatesAreVisible, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::ownDeletesAreVisible() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::ownDeletesAreVisible(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("ownDeletesAreVisible", &sql::DatabaseMetaData::ownDeletesAreVisible, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::ownInsertsAreVisible() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::ownInsertsAreVisible(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("ownInsertsAreVisible", &sql::DatabaseMetaData::ownInsertsAreVisible, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::othersUpdatesAreVisible() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::othersUpdatesAreVisible(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("othersUpdatesAreVisible", &sql::DatabaseMetaData::othersUpdatesAreVisible, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::othersDeletesAreVisible() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::othersDeletesAreVisible(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("othersDeletesAreVisible", &sql::DatabaseMetaData::othersDeletesAreVisible, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::othersInsertsAreVisible() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::othersInsertsAreVisible(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("othersInsertsAreVisible", &sql::DatabaseMetaData::othersInsertsAreVisible, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::updatesAreDetected() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::updatesAreDetected(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("updatesAreDetected", &sql::DatabaseMetaData::updatesAreDetected, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::deletesAreDetected() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::deletesAreDetected(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("deletesAreDetected", &sql::DatabaseMetaData::deletesAreDetected, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::insertsAreDetected() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::insertsAreDetected(sal_Int32 setType)
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getRSTypeMetaData("insertsAreDetected", &sql::DatabaseMetaData::insertsAreDetected, setType);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::supportsBatchUpdates() -I- */
 sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates()
     throw(SQLException, RuntimeException, std::exception)
 {
     return impl_getBoolMetaData("supportsBatchUpdates", &sql::DatabaseMetaData::supportsBatchUpdates);
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getConnection() -I- */
 Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("ODatabaseMetaData::getConnection");
     return (Reference< XConnection >)&m_rConnection;
 }
-/* }}} */
 
 
 /*
@@ -1488,7 +1206,6 @@ Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
   the general way is more memory expensive
 */
 
-/* {{{ ODatabaseMetaData::getTableTypes() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1510,10 +1227,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes()
     lcl_setRows_throw(xResultSet, 5 ,rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getTypeInfo() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1553,10 +1268,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
     lcl_setRows_throw(xResultSet, 14, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getCatalogs() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1588,10 +1301,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
     lcl_setRows_throw(xResultSet, 0, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getSchemas() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -1630,10 +1341,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
     lcl_setRows_throw(xResultSet, 1, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getColumnPrivileges() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         const Any& catalog,
         const OUString& schema,
@@ -1673,10 +1382,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     lcl_setRows_throw(xResultSet, 2, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getColumns() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         const Any& catalog,
         const OUString& schemaPattern,
@@ -1722,10 +1429,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     lcl_setRows_throw(xResultSet, 3, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getTables() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         const Any& catalog,
         const OUString& schemaPattern,
@@ -1784,10 +1489,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     lcl_setRows_throw(xResultSet, 4, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getProcedureColumns() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
         const Any& /* catalog */,
         const OUString& /* schemaPattern */,
@@ -1799,10 +1502,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     // Currently there is no information available
     return NULL;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getProcedures() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
         const Any& catalog,
         const OUString& schemaPattern,
@@ -1844,10 +1545,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     lcl_setRows_throw(xResultSet, 7,rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getVersionColumns() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
         const Any& /* catalog */,
         const OUString& /* schema */,
@@ -1860,10 +1559,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     lcl_setRows_throw(xResultSet, 16,rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getExportedKeys() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
         const Any&  catalog ,
         const OUString&  schema ,
@@ -1900,10 +1597,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     lcl_setRows_throw(xResultSet, 8, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getImportedKeys() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
         const Any& catalog,
         const OUString& schema,
@@ -1942,10 +1637,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     lcl_setRows_throw(xResultSet,9,rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getPrimaryKeys() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
         const Any& catalog,
         const OUString& schema,
@@ -1983,10 +1676,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     lcl_setRows_throw(xResultSet, 10, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getIndexInfo() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         const Any& catalog,
         const OUString& schema,
@@ -2026,10 +1717,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     lcl_setRows_throw(xResultSet, 11, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getBestRowIdentifier() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
         const Any& catalog,
         const OUString& schema,
@@ -2069,10 +1758,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     lcl_setRows_throw(xResultSet, 15, rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getTablePrivileges() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
         const Any& catalog,
         const OUString& schemaPattern,
@@ -2131,10 +1818,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     lcl_setRows_throw(xResultSet,12,rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getCrossReference() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
         const Any& primaryCatalog,
         const OUString& primarySchema,
@@ -2178,10 +1863,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     lcl_setRows_throw(xResultSet,13,rRows);
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ ODatabaseMetaData::getUDTs() -I- */
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs(
         const Any& /* catalog */,
         const OUString& /* schemaPattern */,
@@ -2193,7 +1876,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs(
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::getUDTs", *this);
     return NULL;
 }
-/* }}} */
 
 /*
  * Local variables:

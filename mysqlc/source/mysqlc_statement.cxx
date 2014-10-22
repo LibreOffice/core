@@ -139,20 +139,16 @@ void SAL_CALL OCommonStatement::close()
     }
     dispose();
 }
-/* }}} */
 
 
-/* {{{ OStatement::clearBatch() -I- */
 void SAL_CALL OStatement::clearBatch()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OStatement::clearBatch");
     // if you support batches clear it here
 }
-/* }}} */
 
 
-/* {{{ OStatement::execute() -I- */
 sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -169,10 +165,8 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
     }
     return success;
 }
-/* }}} */
 
 
-/* {{{ OStatement::executeQuery() -I- */
 Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -192,10 +186,8 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& 
     }
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ OStatement::getConnection() -I- */
 Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -206,20 +198,16 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
     // just return(our connection here
     return ((Reference< XConnection >)m_pConnection);
 }
-/* }}} */
 
 
-/* {{{ OStatement::getUpdateCount() -I- */
 sal_Int32 SAL_CALL OCommonStatement::getUpdateCount()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getUpdateCount");
     return 0;
 }
-/* }}} */
 
 
-/* {{{ OStatement::queryInterface() -I- */
 Any SAL_CALL OStatement::queryInterface(const Type & rType)
     throw(RuntimeException, std::exception)
 {
@@ -230,10 +218,8 @@ Any SAL_CALL OStatement::queryInterface(const Type & rType)
     }
     return (aRet);
 }
-/* }}} */
 
 
-/* {{{ OStatement::addBatch() -I- */
 void SAL_CALL OStatement::addBatch(const OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -243,10 +229,8 @@ void SAL_CALL OStatement::addBatch(const OUString& sql)
 
     m_aBatchList.push_back(sql);
 }
-/* }}} */
 
 
-/* {{{ OStatement::executeBatch() -I- */
 Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -257,10 +241,8 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch()
     Sequence< sal_Int32 > aRet = Sequence< sal_Int32 >();
     return aRet;
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::executeUpdate() -I- */
 sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -277,10 +259,8 @@ sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
     }
     return affectedRows;
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::getResultSet() -I- */
 Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -298,10 +278,8 @@ Reference< XResultSet > SAL_CALL OCommonStatement::getResultSet()
     }
     return xResultSet;
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::getMoreResults() -I- */
 sal_Bool SAL_CALL OCommonStatement::getMoreResults()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -313,10 +291,8 @@ sal_Bool SAL_CALL OCommonStatement::getMoreResults()
     // and has one more at this moment return(true
     return (sal_False);
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::getWarnings() -I- */
 Any SAL_CALL OCommonStatement::getWarnings()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -326,10 +302,8 @@ Any SAL_CALL OCommonStatement::getWarnings()
 
     return makeAny(m_aLastWarning);
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::clearWarnings() -I- */
 void SAL_CALL OCommonStatement::clearWarnings()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -339,10 +313,8 @@ void SAL_CALL OCommonStatement::clearWarnings()
 
     m_aLastWarning = SQLWarning();
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::createArrayHelper() -I- */
 ::cppu::IPropertyArrayHelper* OCommonStatement::createArrayHelper( ) const
 {
     OSL_TRACE("OCommonStatement::createArrayHelper");
@@ -364,19 +336,15 @@ void SAL_CALL OCommonStatement::clearWarnings()
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::getInfoHelper() -I- */
 ::cppu::IPropertyArrayHelper & OCommonStatement::getInfoHelper()
 {
     OSL_TRACE("OCommonStatement::getInfoHelper");
     return(*const_cast<OCommonStatement*>(this)->getArrayHelper());
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::convertFastPropertyValue() -I- */
 sal_Bool OCommonStatement::convertFastPropertyValue(
         Any & /* rConvertedValue */, Any & /* rOldValue */,
         sal_Int32 /* nHandle */, const Any& /* rValue */)
@@ -387,10 +355,8 @@ sal_Bool OCommonStatement::convertFastPropertyValue(
     // here we have to try to convert
     return bConverted;
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::setFastPropertyValue_NoBroadcast() -I- */
 void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& /* rValue */)
     throw (Exception, std::exception)
 {
@@ -411,10 +377,8 @@ void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const
             ;
     }
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::getFastPropertyValue() -I- */
 void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) const
 {
     OSL_TRACE("OCommonStatement::getFastPropertyValue");
@@ -436,7 +400,6 @@ void OCommonStatement::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) con
             ;
     }
 }
-/* }}} */
 
 OUString OStatement::getImplementationName() throw (css::uno::RuntimeException, std::exception)
 {
@@ -457,54 +420,44 @@ sal_Bool OStatement::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-/* {{{ OCommonStatement::acquire() -I- */
 void SAL_CALL OCommonStatement::acquire()
     throw()
 {
     OSL_TRACE("OCommonStatement::acquire");
     OCommonStatement_IBase::acquire();
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::release() -I- */
 void SAL_CALL OCommonStatement::release()
     throw()
 {
     OSL_TRACE("OCommonStatement::release");
     relase_ChildImpl();
 }
-/* }}} */
 
 
-/* {{{ OStatement::acquire() -I- */
 void SAL_CALL OStatement::acquire()
     throw()
 {
     OSL_TRACE("OStatement::acquire");
     OCommonStatement::acquire();
 }
-/* }}} */
 
 
-/* {{{ OStatement::release() -I- */
 void SAL_CALL OStatement::release()
     throw()
 {
     OSL_TRACE("OStatement::release");
     OCommonStatement::release();
 }
-/* }}} */
 
 
-/* {{{ OCommonStatement::getPropertySetInfo() -I- */
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getPropertySetInfo");
     return(::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
 }
-/* }}} */
 
 /*
  * Local variables:

@@ -54,7 +54,6 @@ struct ProviderRequest
     {
     }
 
-    /* {{{ CREATE_PROVIDER -I- */
     inline bool CREATE_PROVIDER(
                 const OUString& Implname,
                 const Sequence< OUString > & Services,
@@ -73,10 +72,8 @@ struct ProviderRequest
 
     void* getProvider() const { return xRet.get(); }
 };
-/* }}} */
 
 
-/* {{{ component_getFactory -I- */
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
                     const sal_Char * pImplementationName,
                     void * pServiceManager,
@@ -101,7 +98,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
 
     return pRet;
 };
-/* }}} */
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(

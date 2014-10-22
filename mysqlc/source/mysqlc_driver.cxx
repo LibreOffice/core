@@ -41,7 +41,6 @@ using namespace connectivity::mysqlc;
     #include <mysql_driver.h>
 #endif
 
-/* {{{ MysqlCDriver::MysqlCDriver() -I- */
 MysqlCDriver::MysqlCDriver(const Reference< XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex)
     ,m_xFactory(_rxFactory)
@@ -53,9 +52,7 @@ MysqlCDriver::MysqlCDriver(const Reference< XMultiServiceFactory >& _rxFactory)
     OSL_TRACE("MysqlCDriver::MysqlCDriver");
     cppDriver = NULL;
 }
-/* }}} */
 
-/* {{{ MysqlCDriver::disposing() -I- */
 void MysqlCDriver::disposing()
 {
     OSL_TRACE("MysqlCDriver::disposing");
@@ -73,19 +70,15 @@ void MysqlCDriver::disposing()
 
     ODriver_BASE::disposing();
 }
-/* }}} */
 
 // static ServiceInfo
-/* {{{ MysqlCDriver::getImplementationName_Static() -I- */
 OUString MysqlCDriver::getImplementationName_Static()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getImplementationName_Static");
     return OUString( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver"  );
 }
-/* }}} */
 
-/* {{{ MysqlCDriver::getSupportedServiceNames_Static() -I- */
 Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     throw(RuntimeException)
 {
@@ -96,33 +89,27 @@ Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
-/* }}} */
 
 
-/* {{{ MysqlCDriver::getImplementationName() -I- */
 OUString SAL_CALL MysqlCDriver::getImplementationName()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::getImplementationName");
     return getImplementationName_Static();
 }
-/* }}} */
 
 sal_Bool SAL_CALL MysqlCDriver::supportsService(const OUString& _rServiceName)
     throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
-/* }}} */
 
-/* {{{ MysqlCDriver::getSupportedServiceNames() -I- */
 Sequence< OUString > SAL_CALL MysqlCDriver::getSupportedServiceNames()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::getSupportedServiceNames");
     return getSupportedServiceNames_Static();
 }
-/* }}} */
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
@@ -203,7 +190,6 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     }
 }
 
-/* {{{ MysqlCDriver::connect() -I- */
 Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, const Sequence< PropertyValue >& info)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -236,18 +222,14 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
     }
     return xConn;
 }
-/* }}} */
 
-/* {{{ MysqlCDriver::acceptsURL() -I- */
 sal_Bool SAL_CALL MysqlCDriver::acceptsURL(const OUString& url)
         throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::acceptsURL");
     return url.startsWith("sdbc:mysqlc:");
 }
-/* }}} */
 
-/* {{{ MysqlCDriver::getPropertyInfo() -I- */
 Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const OUString& url, const Sequence< PropertyValue >& /* info */)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -274,25 +256,20 @@ Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const OUSt
 
     return Sequence< DriverPropertyInfo >();
 }
-/* }}} */
 
-/* {{{ MysqlCDriver::getMajorVersion() -I- */
 sal_Int32 SAL_CALL MysqlCDriver::getMajorVersion()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::getMajorVersion");
     return MARIADBC_VERSION_MAJOR;
 }
-/* }}} */
 
-/* {{{ MysqlCDriver::getMinorVersion() -I- */
 sal_Int32 SAL_CALL MysqlCDriver::getMinorVersion()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::getMinorVersion");
     return MARIADBC_VERSION_MINOR;
 }
-/* }}} */
 
 namespace connectivity
 {
@@ -305,7 +282,6 @@ Reference< XInterface >  SAL_CALL MysqlCDriver_CreateInstance(const Reference< X
     return(*(new MysqlCDriver(_rxFactory)));
 }
 
-/* {{{ connectivity::mysqlc::release() -I- */
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
              Reference< XInterface >& _xInterface,
@@ -339,9 +315,7 @@ void release(oslInterlockedCount& _refCount,
         osl_atomic_increment(&_refCount);
     }
 }
-/* }}} */
 
-/* {{{ connectivity::mysqlc::checkDisposed() -I- */
 void checkDisposed(bool _bThrow)
     throw (DisposedException)
 {
@@ -349,7 +323,6 @@ void checkDisposed(bool _bThrow)
         throw DisposedException();
     }
 }
-/* }}} */
 
 } /* mysqlc */
 } /* connectivity */
