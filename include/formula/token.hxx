@@ -156,7 +156,6 @@ public:
 
     virtual FormulaToken*       Clone() const { return new FormulaToken(*this); }
 
-    virtual bool                Is3DRef() const;    // reference with 3D flag set
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const;
     virtual bool                operator==( const FormulaToken& rToken ) const;
 

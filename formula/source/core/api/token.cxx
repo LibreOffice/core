@@ -74,11 +74,6 @@ FormulaToken::~FormulaToken()
 {
 }
 
-bool FormulaToken::Is3DRef() const
-{
-    return false;
-}
-
 bool FormulaToken::IsFunction() const
 {
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&

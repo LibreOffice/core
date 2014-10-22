@@ -89,7 +89,6 @@ public:
     virtual       ScRefList*    GetRefList();
 
     virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
-    virtual bool                Is3DRef() const SAL_OVERRIDE;    // reference with 3D flag set
 
 #if DEBUG_FORMULA_COMPILER
     virtual void Dump() const;

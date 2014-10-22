@@ -510,29 +510,6 @@ bool ScToken::TextEqual( const FormulaToken& _rToken ) const
         return *this == _rToken;     // else normal operator==
 }
 
-bool ScToken::Is3DRef() const
-{
-    switch ( eType )
-    {
-        case svDoubleRef :
-            if ( GetSingleRef2().IsFlag3D() )
-                return true;
-        //! fallthru
-        case svSingleRef :
-            if ( GetSingleRef().IsFlag3D() )
-                return true;
-            break;
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-            return true;
-        default:
-        {
-            // added to avoid warnings
-        }
-    }
-    return false;
-}
-
 #if DEBUG_FORMULA_COMPILER
 void ScToken::Dump() const
 {
