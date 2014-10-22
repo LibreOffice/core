@@ -57,6 +57,8 @@ protected:
     ScToken( formula::StackVar eTypeP,OpCode e = ocPush ) : formula::FormulaToken(eTypeP,e) {}
     ScToken( const ScToken& r ): formula::FormulaToken(r) {}
 
+    bool                        checkTextEqual( const formula::FormulaToken& rToken ) const;
+
 public:
 
     virtual                     ~ScToken();
@@ -87,8 +89,6 @@ public:
     virtual ScJumpMatrix*       GetJumpMatrix() const;
     virtual const ScRefList*    GetRefList() const;
     virtual       ScRefList*    GetRefList();
-
-    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
 
 #if DEBUG_FORMULA_COMPILER
     virtual void Dump() const;
@@ -130,6 +130,7 @@ public:
                                     ScToken( r ), aSingleRef( r.aSingleRef ) {}
     virtual const ScSingleRefData&    GetSingleRef() const SAL_OVERRIDE;
     virtual ScSingleRefData&      GetSingleRef() SAL_OVERRIDE;
+    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScSingleRefToken(*this); }
 
@@ -160,6 +161,7 @@ public:
     virtual ScComplexRefData&       GetDoubleRef() SAL_OVERRIDE;
     virtual const ScSingleRefData&    GetSingleRef2() const SAL_OVERRIDE;
     virtual ScSingleRefData&      GetSingleRef2() SAL_OVERRIDE;
+    virtual bool                TextEqual( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new ScDoubleRefToken(*this); }
 

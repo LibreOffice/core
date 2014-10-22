@@ -471,43 +471,39 @@ ScToken::~ScToken()
 }
 
 //  TextEqual: if same formula entered (for optimization in sort)
-bool ScToken::TextEqual( const FormulaToken& _rToken ) const
+bool ScToken::checkTextEqual( const FormulaToken& _rToken ) const
 {
-    if ( eType == svSingleRef || eType == svDoubleRef )
+    assert(
+        (eType == svSingleRef || eType == svDoubleRef)
+        && FormulaToken::operator ==(_rToken));
+
+    //  in relative Refs only compare relative parts
+
+    const ScToken& rToken = static_cast<const ScToken&>(_rToken);
+    ScComplexRefData aTemp1;
+    if ( eType == svSingleRef )
     {
-        //  in relative Refs only compare relative parts
-
-        if ( eType != _rToken.GetType() || GetOpCode() != _rToken.GetOpCode() )
-            return false;
-
-        const ScToken& rToken = static_cast<const ScToken&>(_rToken);
-        ScComplexRefData aTemp1;
-        if ( eType == svSingleRef )
-        {
-            aTemp1.Ref1 = GetSingleRef();
-            aTemp1.Ref2 = aTemp1.Ref1;
-        }
-        else
-            aTemp1 = GetDoubleRef();
-
-        ScComplexRefData aTemp2;
-        if ( rToken.eType == svSingleRef )
-        {
-            aTemp2.Ref1 = rToken.GetSingleRef();
-            aTemp2.Ref2 = aTemp2.Ref1;
-        }
-        else
-            aTemp2 = rToken.GetDoubleRef();
-
-        ScAddress aPos;
-        ScRange aRange1 = aTemp1.toAbs(aPos), aRange2 = aTemp2.toAbs(aPos);
-
-        //  memcmp doesn't work because of the alignment byte after bFlags.
-        //  After SmartRelAbs only absolute parts have to be compared.
-        return aRange1 == aRange2 && aTemp1.Ref1.FlagValue() == aTemp2.Ref1.FlagValue() && aTemp1.Ref2.FlagValue() == aTemp2.Ref2.FlagValue();
+        aTemp1.Ref1 = GetSingleRef();
+        aTemp1.Ref2 = aTemp1.Ref1;
     }
     else
-        return *this == _rToken;     // else normal operator==
+        aTemp1 = GetDoubleRef();
+
+    ScComplexRefData aTemp2;
+    if ( rToken.eType == svSingleRef )
+    {
+        aTemp2.Ref1 = rToken.GetSingleRef();
+        aTemp2.Ref2 = aTemp2.Ref1;
+    }
+    else
+        aTemp2 = rToken.GetDoubleRef();
+
+    ScAddress aPos;
+    ScRange aRange1 = aTemp1.toAbs(aPos), aRange2 = aTemp2.toAbs(aPos);
+
+    //  memcmp doesn't work because of the alignment byte after bFlags.
+    //  After SmartRelAbs only absolute parts have to be compared.
+    return aRange1 == aRange2 && aTemp1.Ref1.FlagValue() == aTemp2.Ref1.FlagValue() && aTemp1.Ref2.FlagValue() == aTemp2.Ref2.FlagValue();
 }
 
 #if DEBUG_FORMULA_COMPILER
@@ -719,6 +715,10 @@ ScRefList* ScToken::GetRefList()
 
 const ScSingleRefData&    ScSingleRefToken::GetSingleRef() const  { return aSingleRef; }
 ScSingleRefData&          ScSingleRefToken::GetSingleRef()        { return aSingleRef; }
+bool ScSingleRefToken::TextEqual( const FormulaToken& _rToken ) const
+{
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(_rToken);
+}
 bool ScSingleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aSingleRef == static_cast<const ScToken&>(r).GetSingleRef();
@@ -738,6 +738,10 @@ const ScComplexRefData&     ScDoubleRefToken::GetDoubleRef() const  { return aDo
 ScComplexRefData&           ScDoubleRefToken::GetDoubleRef()        { return aDoubleRef; }
 const ScSingleRefData&    ScDoubleRefToken::GetSingleRef2() const { return aDoubleRef.Ref2; }
 ScSingleRefData&          ScDoubleRefToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
+bool ScDoubleRefToken::TextEqual( const FormulaToken& _rToken ) const
+{
+    return FormulaToken::operator ==(_rToken) && checkTextEqual(_rToken);
+}
 bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aDoubleRef == static_cast<const ScToken&>(r).GetDoubleRef();
