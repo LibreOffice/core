@@ -93,21 +93,21 @@ public:
 #if DEBUG_FORMULA_COMPILER
     virtual void Dump() const;
 #endif
-
-    /** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
-        ranges as needed for ocRange.
-        @param rPos
-            The formula's position, used to calculate absolute positions from
-            relative references.
-        @param bReuseDoubleRef
-            If true, a DoubleRef token is reused if passed as rTok1 or rTok2,
-            else a new DoubleRef token is created and returned.
-        @return
-            A reused or new'ed ScDoubleRefToken, or a NULL TokenRef if rTok1 or
-            rTok2 are not of sv(Single|Double)Ref
-     */
-    static  formula::FormulaTokenRef          ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 };
+
+/** If rTok1 and rTok2 both are SingleRef or DoubleRef tokens, extend/merge
+    ranges as needed for ocRange.
+    @param rPos
+        The formula's position, used to calculate absolute positions from
+        relative references.
+    @param bReuseDoubleRef
+        If true, a DoubleRef token is reused if passed as rTok1 or rTok2,
+        else a new DoubleRef token is created and returned.
+    @return
+        A reused or new'ed ScDoubleRefToken, or a NULL TokenRef if rTok1 or
+        rTok2 are not of sv(Single|Double)Ref
+*/
+formula::FormulaTokenRef extendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 
 inline void intrusive_ptr_add_ref(const ScToken* p)
 {

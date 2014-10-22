@@ -2073,7 +2073,7 @@ void ScInterpreter::ScRangeFunc()
         PushIllegalArgument();
         return;
     }
-    FormulaTokenRef xRes = ScToken::ExtendRangeReference( *x1, *x2, aPos, false);
+    FormulaTokenRef xRes = extendRangeReference( *x1, *x2, aPos, false);
     if (!xRes)
         PushIllegalArgument();
     else

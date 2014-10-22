@@ -513,7 +513,7 @@ void ScToken::Dump() const
 }
 #endif
 
-FormulaTokenRef ScToken::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
+FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2,
         const ScAddress & rPos, bool bReuseDoubleRef )
 {
 
@@ -1966,12 +1966,12 @@ FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
         return NULL;
     sal_uInt16 nIdx = nLen;
     FormulaToken *p1, *p2, *p3;      // ref, ocRange, ref
-    // The actual types are checked in ExtendRangeReference().
+    // The actual types are checked in extendRangeReference().
     if (((p3 = PeekPrev(nIdx)) != 0) &&
             (((p2 = PeekPrev(nIdx)) != 0) && p2->GetOpCode() == ocRange) &&
             ((p1 = PeekPrev(nIdx)) != 0))
     {
-        FormulaTokenRef p = ScToken::ExtendRangeReference( *p1, *p3, rPos, true);
+        FormulaTokenRef p = extendRangeReference( *p1, *p3, rPos, true);
         if (p)
         {
             p->IncRef();

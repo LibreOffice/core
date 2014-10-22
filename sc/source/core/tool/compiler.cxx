@@ -4561,7 +4561,7 @@ bool ScCompiler::HandleDbData()
 
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
 {
-    return ScToken::ExtendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );
+    return extendRangeReference( rTok1, rTok2, aPos,bReuseDoubleRef );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
