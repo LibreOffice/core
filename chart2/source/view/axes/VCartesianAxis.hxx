@@ -100,7 +100,7 @@ public:
         ::basegfx::B2DVector aScreenPos;
     };
 
-protected: //methods
+private: //methods
     /**
      * Go through all tick label positions and decide which labels to display
      * based on the text shape geometry, overlap setting, tick interval,
