@@ -1174,8 +1174,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 SwNodeIndex appendedDocStart = pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
                                     nStartingPageNo, pTargetPageDesc, nDocNo == 1, targetDocPageCount);
 
-                                // #i72820# calculate layout to be able to find the correct page index
-                                pTargetShell->CalcLayout();
                                 targetDocPageCount += rWorkShell.GetPageCnt();
 
                                 if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
@@ -1321,6 +1319,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             // Unfreeze target document layouts and correct all PageDescs.
             if(rMergeDescriptor.bCreateSingleFile)
             {
+                pTargetShell->CalcLayout();
                 std::set<SwRootFrm*> aAllLayouts = pTargetShell->GetDoc()->GetAllLayouts();
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),
                     ::std::bind2nd(::std::mem_fun(&SwRootFrm::FreezeLayout), false));
