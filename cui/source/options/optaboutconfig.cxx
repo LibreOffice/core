@@ -38,11 +38,6 @@ using namespace com::sun::star::container;
 #define LONG_LEN_LIMIT      11
 #define HYPER_LEN_LIMIT     20
 
-#define ITEMID_PREFNAME     1
-#define ITEMID_PROPERTY     2
-#define ITEMID_TYPE         3
-#define ITEMID_VALUE        4
-
 struct Prop_Impl
 {
     OUString    Name;
@@ -141,11 +136,10 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pResetBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, ResetBtnHdl_Impl ) );
     m_pPrefBox->SetDoubleClickHdl( LINK(this, CuiAboutConfigTabPage, StandardHdl_Impl) );
 
-    HeaderBar &rBar = m_pPrefBox->GetTheHeaderBar();
-    rBar.InsertItem( ITEMID_PREFNAME, get<FixedText>("preference")->GetText(), 0, HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( ITEMID_PROPERTY, get<FixedText>("property")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
-    rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
+    m_pPrefBox->InsertHeaderEntry(get<FixedText>("preference")->GetText());
+    m_pPrefBox->InsertHeaderEntry(get<FixedText>("property")->GetText());
+    m_pPrefBox->InsertHeaderEntry(get<FixedText>("type")->GetText());
+    m_pPrefBox->InsertHeaderEntry(get<FixedText>("value")->GetText());
 
     long aTabs[] = {4,0,0,0,0};
 

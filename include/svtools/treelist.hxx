@@ -43,6 +43,8 @@
 #define LISTACTION_RESORTING        9
 #define LISTACTION_RESORTED         10
 #define LISTACTION_CLEARED          11
+#define LISTACTION_REVERSING        12
+#define LISTACTION_REVERSED         13
 
 class SvTreeListEntry;
 class SvListView;
@@ -121,6 +123,7 @@ class SVT_DLLPUBLIC SvTreeList
                         );
 
     SVT_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
+    SVT_DLLPRIVATE void ReverseChildren( SvTreeListEntry* pParent );
 
     SvTreeList(const SvTreeList&); // disabled
     SvTreeList& operator= (const SvTreeList&); // disabled
@@ -230,6 +233,7 @@ public:
     void                SetCompareHdl( const Link& rLink ) { aCompareLink = rLink; }
     const Link&         GetCompareHdl() const { return aCompareLink; }
     void                Resort();
+    void                Reverse();
 };
 
 class SVT_DLLPUBLIC SvListView
