@@ -493,7 +493,7 @@ void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 
     //  true = keep old content
 
-    ScPatternAttr* pNewPattern = (ScPatternAttr*) &aCache.ApplyTo( *pPattern, true );
+    const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &aCache.ApplyTo( *pPattern, true ) );
     ScDocumentPool::CheckRef( *pPattern );
     ScDocumentPool::CheckRef( *pNewPattern );
 
@@ -703,7 +703,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
     boost::scoped_ptr<ScPatternAttr> pTemp(new ScPatternAttr(*pOldPattern));
     pTemp->GetItemSet().Put(rAttr);
-    const ScPatternAttr* pNewPattern = (const ScPatternAttr*) &pDocPool->Put( *pTemp );
+    const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pDocPool->Put( *pTemp ) );
 
     if ( pNewPattern != pOldPattern )
         pAttrArray->SetPattern( nRow, pNewPattern );
@@ -1704,7 +1704,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
-        if ( ((ScMergeFlagAttr&)pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
             DeleteArea( nStart, nEnd, IDF_CONTENTS );
             sc::CopyToDocContext aCxt(*pDocument);
@@ -1735,7 +1735,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
-        if ( ((ScMergeFlagAttr&)pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
             rDestCol.DeleteArea( nStart, nEnd, IDF_CONTENTS );
             sc::CopyToDocContext aCxt(*rDestCol.pDocument);
@@ -1765,7 +1765,7 @@ bool ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern && bOk)
     {
-        if ( ((ScMergeFlagAttr&)pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
             if ( rDestCol.pAttrArray->HasAttrib( nStart, nEnd, HASATTR_PROTECTED ) )
                 bOk = false;
 
@@ -1783,7 +1783,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
-        if ( ((ScMergeFlagAttr&)pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
+        if ( static_cast<const ScMergeFlagAttr&>(pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
             aRange.aStart.SetRow( nStart );
             aRange.aEnd.SetRow( nEnd );

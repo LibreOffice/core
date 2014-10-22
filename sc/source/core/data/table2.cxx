@@ -871,7 +871,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     ScPatternAttr aNewPattern( *pPattern );
                     SfxItemSet& rNewSet = aNewPattern.GetItemSet();
 
-                    const SvxBoxItem& rOldBox = (const SvxBoxItem&)rSet.Get(ATTR_BORDER);
+                    const SvxBoxItem& rOldBox = static_cast<const SvxBoxItem&>(rSet.Get(ATTR_BORDER));
                     if ( rOldBox.GetTop() || rOldBox.GetBottom() || rOldBox.GetLeft() || rOldBox.GetRight() )
                     {
                         SvxBoxItem aNew( ATTR_BORDER );
@@ -886,7 +886,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         rNewSet.Put( aNew );
                     }
 
-                    const ScMergeAttr& rOldMerge = (const ScMergeAttr&)rSet.Get(ATTR_MERGE);
+                    const ScMergeAttr& rOldMerge = static_cast<const ScMergeAttr&>(rSet.Get(ATTR_MERGE));
                     if (rOldMerge.IsMerged())
                         rNewSet.Put( ScMergeAttr( std::min(
                                         static_cast<SCsCOL>(rOldMerge.GetRowMerge()),
@@ -894,7 +894,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                     std::min(
                                         static_cast<SCsROW>(rOldMerge.GetColMerge()),
                                         static_cast<SCsROW>(MAXROW+1 - (nCol-nCol1)))));
-                    const ScMergeFlagAttr& rOldFlag = (const ScMergeFlagAttr&)rSet.Get(ATTR_MERGE_FLAG);
+                    const ScMergeFlagAttr& rOldFlag = static_cast<const ScMergeFlagAttr&>(rSet.Get(ATTR_MERGE_FLAG));
                     if (rOldFlag.IsOverlapped())
                     {
                         sal_Int16 nNewFlags = rOldFlag.GetValue() & ~( SC_MF_HOR | SC_MF_VER );
@@ -1931,7 +1931,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
             double nFactor = 0.0;
             if ( nCol > nX2+1 )
             {
-                long nRotVal = ((const SfxInt32Item&) pPattern->
+                long nRotVal = static_cast<const SfxInt32Item&>( pPattern->
                         GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue();
                 double nRealOrient = nRotVal * F_PI18000;   // 1/100 Grad
                 double nCos = cos( nRealOrient );

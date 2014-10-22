@@ -65,8 +65,8 @@ VbaFontBase::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExcept
         nValue = SUPERSCRIPT;
         nValue2 = SUPERSCRIPTHEIGHT;
     }
-    mxFont->setPropertyValue( "CharEscapement" , ( uno::Any )nValue );
-    mxFont->setPropertyValue( "CharEscapementHeight" , ( uno::Any )nValue2 );
+    mxFont->setPropertyValue( "CharEscapement" , uno::Any(nValue) );
+    mxFont->setPropertyValue( "CharEscapementHeight" , uno::Any(nValue2) );
 }
 
 uno::Any SAL_CALL
@@ -97,8 +97,8 @@ VbaFontBase::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
         nValue2 = SUBSCRIPTHEIGHT;
     }
 
-     mxFont->setPropertyValue( "CharEscapementHeight" , ( uno::Any )nValue2 );
-    mxFont->setPropertyValue( "CharEscapement" , ( uno::Any )nValue );
+     mxFont->setPropertyValue( "CharEscapementHeight" , uno::Any(nValue2) );
+    mxFont->setPropertyValue( "CharEscapement" , uno::Any(nValue) );
 
 }
 

@@ -476,26 +476,18 @@ class ScChangeActionDelMoveEntry : public ScChangeActionLinkEntry
 
     ScChangeActionDelMoveEntry* GetNext()
                             {
-                                return (ScChangeActionDelMoveEntry*)
-                                ScChangeActionLinkEntry::GetNext();
+                                return static_cast<ScChangeActionDelMoveEntry*>(
+                                    ScChangeActionLinkEntry::GetNext());
                             }
-    ScChangeActionMove* GetMove()
-                            {
-                                return (ScChangeActionMove*)
-                                ScChangeActionLinkEntry::GetAction();
-                            }
+    inline ScChangeActionMove* GetMove();
 
 public:
     const ScChangeActionDelMoveEntry*   GetNext() const
                             {
-                                return (const ScChangeActionDelMoveEntry*)
-                                ScChangeActionLinkEntry::GetNext();
+                                return static_cast<const ScChangeActionDelMoveEntry*>(
+                                    ScChangeActionLinkEntry::GetNext());
                             }
-    const ScChangeActionMove*   GetMove() const
-                            {
-                                return (const ScChangeActionMove*)
-                                ScChangeActionLinkEntry::GetAction();
-                            }
+    inline const ScChangeActionMove*   GetMove() const;
     short               GetCutOffFrom() const { return nCutOffFrom; }
     short               GetCutOffTo() const { return nCutOffTo; }
 };
@@ -646,6 +638,17 @@ public:
         OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const SAL_OVERRIDE;
 };
 
+inline ScChangeActionMove* ScChangeActionDelMoveEntry::GetMove()
+                           {
+                               return static_cast<ScChangeActionMove*>(
+                                   ScChangeActionLinkEntry::GetAction());
+                           }
+
+inline const ScChangeActionMove* ScChangeActionDelMoveEntry::GetMove() const
+                          {
+                              return static_cast<const ScChangeActionMove*>(
+                                  ScChangeActionLinkEntry::GetAction());
+                          }
 //  ScChangeActionContent
 enum ScChangeActionContentCellType
 {

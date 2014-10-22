@@ -1668,7 +1668,7 @@ void OReportController::impl_initialize( )
 
     const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
 
-    rArguments.get_ensureType( (OUString)PROPERTY_REPORTNAME, m_sName );
+    rArguments.get_ensureType( OUString(PROPERTY_REPORTNAME), m_sName );
     if ( m_sName.isEmpty() )
         rArguments.get_ensureType( "DocumentTitle", m_sName );
 
@@ -4285,7 +4285,7 @@ void OReportController::openZoomDialog()
 
             if ( !bCancel )
             {
-                const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM );
+                const SvxZoomItem&  rZoomItem = static_cast<const SvxZoomItem&>(pDlg->GetOutputItemSet()->Get( SID_ATTR_ZOOM ));
                 m_eZoomType = rZoomItem.GetType();
                 m_nZoomValue = rZoomItem.GetValue();
                 if ( m_eZoomType != SVX_ZOOM_PERCENT )

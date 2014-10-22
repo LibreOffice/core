@@ -58,7 +58,7 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAl
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
-                OUString aName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                OUString aName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                 bool bHit = true;
                 if ( !bAllCharts )
                 {
@@ -134,9 +134,9 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
         SdrObject* pObject = aIter.Next();
         while( pObject )
         {
-            if( pObject->GetObjIdentifier() == OBJ_OLE2 && ((SdrOle2Obj*)pObject)->IsChart() )
+            if( pObject->GetObjIdentifier() == OBJ_OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
             {
-                OUString aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                OUString aChartName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
 
                 Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
                 Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
@@ -174,9 +174,9 @@ void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const S
         SdrObject* pObject = aIter.Next();
         while( pObject )
         {
-            if( pObject->GetObjIdentifier() == OBJ_OLE2 && ((SdrOle2Obj*)pObject)->IsChart() )
+            if( pObject->GetObjIdentifier() == OBJ_OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
             {
-                OUString aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                OUString aChartName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                 Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
                 Reference< util::XModifiable > xModif(xChartDoc, uno::UNO_QUERY_THROW);
                 xModif->setModified( sal_True);
@@ -191,9 +191,9 @@ uno::Reference< chart2::XChartDocument > ScChartHelper::GetChartFromSdrObject( S
     uno::Reference< chart2::XChartDocument > xReturn;
     if( pObject )
     {
-        if( pObject->GetObjIdentifier() == OBJ_OLE2 && ((SdrOle2Obj*)pObject)->IsChart() )
+        if( pObject->GetObjIdentifier() == OBJ_OLE2 && static_cast<SdrOle2Obj*>(pObject)->IsChart() )
         {
-            uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+            uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
             if( xIPObj.is() )
             {
                 svt::EmbeddedObjectRef::TryRunningState( xIPObj );

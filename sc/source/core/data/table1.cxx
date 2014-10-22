@@ -1195,7 +1195,7 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     if (bMarked && !rMark.IsCellMarked(nCol,nRow))
         return false;
 
-    if (bUnprotected && ((const ScProtectionAttr*)
+    if (bUnprotected && static_cast<const ScProtectionAttr*>(
                         GetAttr(nCol,nRow,ATTR_PROTECTION))->GetProtection())
         return false;
 
@@ -1819,7 +1819,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         const ScPatternAttr* pPattern = GetPattern( rCol, nRow );
         const SfxItemSet* pCondSet = pDocument->GetCondResult( rCol, nRow, nTab );
 
-        SvxCellHorJustify eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
+        SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                         pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();
         if ( eHorJust == SVX_HOR_JUSTIFY_CENTER )
             nMissing /= 2;                          // distributed into both directions

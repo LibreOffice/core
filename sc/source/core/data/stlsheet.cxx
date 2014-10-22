@@ -147,7 +147,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                     //  GetPrinter wuerde dann auch einen neuen Printer anlegen, weil der
                     //  gespeicherte Printer noch nicht geladen ist!
 
-                    ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
+                    ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
                     if ( pDoc )
                     {
                         // Setzen von sinnvollen Default-Werten:
@@ -155,8 +155,8 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
                         SvxSetItem      aHFSetItem(
-                                            (const SvxSetItem&)
-                                            rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) );
+                                            static_cast<const SvxSetItem&>(
+                                            rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) ));
 
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
                         SvxSizeItem     aHFSizeItem( // 0,5 cm + Abstand
@@ -224,7 +224,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
     {
         if ( !pSet->Count() )
         {
-            ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
+            ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
             if ( pDoc )
             {
                 sal_uLong nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,ScGlobal::eLnge );
@@ -242,7 +242,7 @@ bool ScStyleSheet::IsUsed() const
     {
         // Always query the document to let it decide if a rescan is necessary,
         // and store the state.
-        ScDocument* pDoc = ((ScStyleSheetPool*)pPool)->GetDocument();
+        ScDocument* pDoc = static_cast<ScStyleSheetPool*>(pPool)->GetDocument();
         if ( pDoc && pDoc->IsStyleSheetUsed( *this, true ) )
             eUsage = USED;
         else
@@ -266,7 +266,7 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 const OUString& ScStyleSheet::GetName() const
 {
     const OUString& rBase = SfxStyleSheet::GetName();
-    const OUString* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
+    const OUString* pForceStdName = static_cast<ScStyleSheetPool*>(pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
@@ -276,7 +276,7 @@ const OUString& ScStyleSheet::GetName() const
 const OUString& ScStyleSheet::GetParent() const
 {
     const OUString& rBase = SfxStyleSheet::GetParent();
-    const OUString* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
+    const OUString* pForceStdName = static_cast<ScStyleSheetPool*>(pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else
@@ -286,7 +286,7 @@ const OUString& ScStyleSheet::GetParent() const
 const OUString& ScStyleSheet::GetFollow() const
 {
     const OUString& rBase = SfxStyleSheet::GetFollow();
-    const OUString* pForceStdName = ((ScStyleSheetPool*)pPool)->GetForceStdName();
+    const OUString* pForceStdName = static_cast<ScStyleSheetPool*>(pPool)->GetForceStdName();
     if ( pForceStdName && rBase == ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return *pForceStdName;
     else

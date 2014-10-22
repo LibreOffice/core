@@ -278,7 +278,7 @@ std::vector<Color> ScDocument::GetDocColors()
                         case ATTR_FONT_COLOR:
                         case ATTR_BACKGROUND:
                             {
-                                Color aColor( ((SvxColorItem*)pItem)->GetValue() );
+                                Color aColor( static_cast<const SvxColorItem*>(pItem)->GetValue() );
                                 if( COL_AUTO != aColor.GetColor() &&
                                         std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
                                 {

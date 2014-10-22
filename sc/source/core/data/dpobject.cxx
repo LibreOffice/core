@@ -948,7 +948,7 @@ ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType ) const
 
 static bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasPivotButton();
+    return static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasPivotButton();
 }
 
 void ScDPObject::RefreshAfterLoad()

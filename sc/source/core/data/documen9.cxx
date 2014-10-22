@@ -226,7 +226,7 @@ bool ScDocument::IsChart( const SdrObject* pObject )
     // IsChart() implementation moved to svx drawinglayer
     if(pObject && OBJ_OLE2 == pObject->GetObjIdentifier())
     {
-        return ((SdrOle2Obj*)pObject)->IsChart();
+        return static_cast<const SdrOle2Obj*>(pObject)->IsChart();
     }
 
     return false;
@@ -234,7 +234,7 @@ bool ScDocument::IsChart( const SdrObject* pObject )
 
 IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 {
-    return (sal_IntPtr) &((GetColorList()->GetColor(*pColorIndex))->GetColor());
+    return reinterpret_cast<sal_IntPtr>( &((GetColorList()->GetColor(*pColorIndex))->GetColor()) );
 }
 IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 
@@ -350,7 +350,7 @@ void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
     {
         if (pObject->ISA(SdrGrafObj))
         {
-            SdrGrafObj* pGrafObj = (SdrGrafObj*)pObject;
+            SdrGrafObj* pGrafObj = static_cast<SdrGrafObj*>(pObject);
             if ( pGrafObj->IsAnimated() )
             {
                 const Rectangle& rRect = pGrafObj->GetCurrentBoundRect();
@@ -591,7 +591,7 @@ void ScDocument::UpdateFontCharSet()
         nCount = pPool->GetItemCount2(ATTR_FONT);
         for (i=0; i<nCount; i++)
         {
-            pItem = (SvxFontItem*)pPool->GetItem2(ATTR_FONT, i);
+            pItem = const_cast<SvxFontItem*>(static_cast<const SvxFontItem*>(pPool->GetItem2(ATTR_FONT, i)));
             if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                             ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 pItem->SetCharSet(eSysSet);
@@ -603,7 +603,7 @@ void ScDocument::UpdateFontCharSet()
             nCount = rDrawPool.GetItemCount2(EE_CHAR_FONTINFO);
             for (i=0; i<nCount; i++)
             {
-                pItem = (SvxFontItem*)rDrawPool.GetItem2(EE_CHAR_FONTINFO, i);
+                pItem = const_cast<SvxFontItem*>(static_cast<const SvxFontItem*>(rDrawPool.GetItem2(EE_CHAR_FONTINFO, i)));
                 if ( pItem && ( pItem->GetCharSet() == eSrcSet ||
                                 ( bUpdateOld && pItem->GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                     pItem->SetCharSet( eSysSet );

@@ -657,7 +657,7 @@ void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
     sal_uInt32 nCount = GetItemCount2(ATTR_PATTERN);
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem2(ATTR_PATTERN, i);
+        ScPatternAttr* pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(GetItem2(ATTR_PATTERN, i)));
         if ( pPattern && pPattern->GetStyleSheet() == pStyle )
             pPattern->StyleToName();
     }
@@ -699,12 +699,12 @@ static bool lcl_HFPresentation
     const IntlWrapper* pIntl
 )
 {
-    const SfxItemSet& rSet = ((const SfxSetItem&)rItem).GetItemSet();
+    const SfxItemSet& rSet = static_cast<const SfxSetItem&>(rItem).GetItemSet();
     const SfxPoolItem* pItem;
 
     if ( SfxItemState::SET == rSet.GetItemState(ATTR_PAGE_ON,false,&pItem) )
     {
-        if( false == ((const SfxBoolItem*)pItem)->GetValue() )
+        if( false == static_cast<const SfxBoolItem*>(pItem)->GetValue() )
             return false;
     }
 
@@ -728,7 +728,7 @@ static bool lcl_HFPresentation
 
             case ATTR_LRSPACE:
             {
-                SvxLRSpaceItem& rLRItem = (SvxLRSpaceItem&)*pItem;
+                const SvxLRSpaceItem& rLRItem = static_cast<const SvxLRSpaceItem&>(*pItem);
                 sal_uInt16 nPropLeftMargin  = rLRItem.GetPropLeft();
                 sal_uInt16 nPropRightMargin = rLRItem.GetPropRight();
                 sal_uInt16 nLeftMargin, nRightMargin;
@@ -805,39 +805,39 @@ bool ScDocumentPool::GetPresentation(
     {
         case ATTR_PAGE_TOPDOWN:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_PRINTDIR) + aStrSep;
-            rText += ((const SfxBoolItem&)rItem).GetValue() ?
+            rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ?
                 ScGlobal::GetRscString(STR_SCATTR_PAGE_TOPDOWN) :
                 ScGlobal::GetRscString(STR_SCATTR_PAGE_LEFTRIGHT) ;
         break;
 
         case ATTR_PAGE_HEADERS:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_HEADERS) + aStrSep;
-            rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
+            rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_NULLVALS:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NULLVALS) + aStrSep;
-            rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
+            rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_FORMULAS:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_FORMULAS) + aStrSep;
-            rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
+            rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_NOTES:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_NOTES) + aStrSep;
-            rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
+            rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_GRID:
             rText = ScGlobal::GetRscString(STR_SCATTR_PAGE_GRID) + aStrSep;
-            rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
+            rText += static_cast<const SfxBoolItem&>(rItem).GetValue() ? aStrYes : aStrNo ;
         break;
 
         case ATTR_PAGE_SCALETOPAGES:
         {
-            sal_uInt16  nPagNo = ((const SfxUInt16Item&)rItem).GetValue();
+            sal_uInt16  nPagNo = static_cast<const SfxUInt16Item&>(rItem).GetValue();
 
             if( nPagNo )
             {
@@ -855,7 +855,7 @@ bool ScDocumentPool::GetPresentation(
 
         case ATTR_PAGE_FIRSTPAGENO:
         {
-            sal_uInt16  nPagNo = ((const SfxUInt16Item&)rItem).GetValue();
+            sal_uInt16  nPagNo = static_cast<const SfxUInt16Item&>(rItem).GetValue();
 
             if( nPagNo )
             {
@@ -871,7 +871,7 @@ bool ScDocumentPool::GetPresentation(
 
         case ATTR_PAGE_SCALE:
         {
-            sal_uInt16  nPercent = ((const SfxUInt16Item&)rItem).GetValue();
+            sal_uInt16  nPercent = static_cast<const SfxUInt16Item &>(rItem).GetValue();
 
             if( nPercent )
             {

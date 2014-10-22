@@ -292,7 +292,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     SbxVariable* pVar = pRoot->Find( aErrorTitle, SbxCLASS_METHOD );
     if ( pVar && pVar->ISA(SbMethod) )
     {
-        SbMethod* pMethod = (SbMethod*)pVar;
+        SbMethod* pMethod = static_cast<SbMethod*>(pVar);
         SbModule* pModule = pMethod->GetModule();
         SbxObject* pObject = pModule->GetParent();
         OUStringBuffer aMacroStr = pObject->GetName();

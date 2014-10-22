@@ -256,10 +256,10 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                         maTabs[nTab]->SetStreamValid( false );
 
                 sal_uLong nOldFormat =
-                    ((const SfxUInt32Item*)&rSet.Get(
+                    static_cast<const SfxUInt32Item*>(&rSet.Get(
                     ATTR_VALUE_FORMAT ))->GetValue();
                 sal_uLong nNewFormat =
-                    ((const SfxUInt32Item*)&rChanges.Get(
+                    static_cast<const SfxUInt32Item*>(&rChanges.Get(
                     ATTR_VALUE_FORMAT ))->GetValue();
                 LanguageType eNewLang, eOldLang;
                 eNewLang = eOldLang = LANGUAGE_DONTKNOW;
@@ -375,7 +375,7 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
     {
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
         SvxFrameDirection eDirection = (SvxFrameDirection)
-            ((const SvxFrameDirectionItem&)rStyleSet.Get( ATTR_WRITINGDIR )).GetValue();
+            static_cast<const SvxFrameDirectionItem&>(rStyleSet.Get( ATTR_WRITINGDIR )).GetValue();
 
         if ( eDirection == FRMDIR_HORI_LEFT_TOP )
             eRet = EE_HTEXTDIR_L2R;
@@ -557,7 +557,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
         aScope.setTab(0);
 
     ScTable* pTab = maTabs[aScope.Tab()];
-    ScStyleSheet* pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE);
+    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE));
     OSL_ENSURE( pStyle, "Missing StyleSheet :-/" );
 
     if (!pStyle || getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
@@ -644,8 +644,8 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                 if ( bNewTab )
                 {
                     pTab = maTabs[aScope.Tab()];
-                    pStyle = (ScStyleSheet*)aScope.getStylePool()->Find(
-                        pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE);
+                    pStyle = static_cast<ScStyleSheet*>(aScope.getStylePool()->Find(
+                        pTab->aPageStyle, SFX_STYLE_FAMILY_PAGE));
 
                     if ( pStyle )
                     {
@@ -726,7 +726,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScDdeLink))
-            if ( !bExport40 || ((ScDdeLink*)pBase)->GetMode() == SC_DDE_DEFAULT )
+            if ( !bExport40 || static_cast<ScDdeLink*>(pBase)->GetMode() == SC_DDE_DEFAULT )
                 ++nDdeCount;
     }
 
@@ -742,7 +742,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScDdeLink))
         {
-            ScDdeLink* pLink = (ScDdeLink*)pBase;
+            ScDdeLink* pLink = static_cast<ScDdeLink*>(pBase);
             if ( !bExport40 || pLink->GetMode() == SC_DDE_DEFAULT )
                 pLink->Store( rStream, aHdr );
         }
@@ -1089,7 +1089,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
         {
-            ScAreaLink* pLink = (ScAreaLink*) pBase;
+            ScAreaLink* pLink = static_cast<ScAreaLink*>(pBase);
             ScRange aOutRange = pLink->GetDestArea();
 
             SCCOL nCol1 = aOutRange.aStart.Col();
@@ -1284,7 +1284,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                         sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                                         ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
                                                                                 ATTR_FONT_LANGUAGE );
-                        nLanguage = ((const SvxLanguageItem*)GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
+                        nLanguage = static_cast<const SvxLanguageItem*>(GetAttr( nCol, nRow, nTab, nWhich ))->GetValue();
                     }
 
                     uno::Sequence<sal_Int32> aOffsets;

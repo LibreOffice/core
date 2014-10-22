@@ -1824,7 +1824,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         if ( pCode->IsRecalcModeForced() )
         {
-            sal_uLong nValidation = ((const SfxUInt32Item*) pDocument->GetAttr(
+            sal_uLong nValidation = static_cast<const SfxUInt32Item*>(pDocument->GetAttr(
                     aPos.Col(), aPos.Row(), aPos.Tab(), ATTR_VALIDDATA ))->GetValue();
             if ( nValidation )
             {

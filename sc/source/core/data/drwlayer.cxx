@@ -202,7 +202,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
         SetObjectShell( pObjSh );
 
         // set color table
-        SvxColorListItem* pColItem = (SvxColorListItem*) pObjSh->GetItem( SID_COLOR_TABLE );
+        const SvxColorListItem* pColItem = static_cast<const SvxColorListItem*>( pObjSh->GetItem( SID_COLOR_TABLE ) );
         if ( pColItem )
             pXCol = pColItem->GetColorList();
     }
@@ -334,7 +334,7 @@ bool ScDrawLayer::ScAddPage( SCTAB nTab )
     if (bDrawIsInUndo)
         return false;   // not inserted
 
-    ScDrawPage* pPage = (ScDrawPage*)AllocPage( false );
+    ScDrawPage* pPage = static_cast<ScDrawPage*>(AllocPage( false ));
     InsertPage(pPage, static_cast<sal_uInt16>(nTab));
     if (bRecording)
         AddCalcUndo(new SdrUndoNewPage(*pPage));
@@ -363,7 +363,7 @@ void ScDrawLayer::ScRemovePage( SCTAB nTab )
 
 void ScDrawLayer::ScRenamePage( SCTAB nTab, const OUString& rNewName )
 {
-    ScDrawPage* pPage = (ScDrawPage*) GetPage(static_cast<sal_uInt16>(nTab));
+    ScDrawPage* pPage = static_cast<ScDrawPage*>( GetPage(static_cast<sal_uInt16>(nTab)) );
     if (pPage)
         pPage->SetName(rNewName);
 }
@@ -1467,7 +1467,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
             if ( pNewObject->GetObjIdentifier() == OBJ_OLE2 )
             {
-                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
+                uno::Reference< embed::XEmbeddedObject > xIPObj = static_cast<SdrOle2Obj*>(pNewObject)->GetObjRef();
                 uno::Reference< embed::XClassifiedObject > xClassified( xIPObj, uno::UNO_QUERY );
                 SvGlobalName aObjectClassName;
                 if ( xClassified.is() )
@@ -1485,7 +1485,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                     uno::Reference< chart2::XChartDocument > xNewChart( ScChartHelper::GetChartFromSdrObject( pNewObject ) );
                     if( xNewChart.is() && !xNewChart->hasInternalDataProvider() )
                     {
-                        OUString aChartName = ((SdrOle2Obj*)pNewObject)->GetPersistName();
+                        OUString aChartName = static_cast<SdrOle2Obj*>(pNewObject)->GetPersistName();
                         ::std::vector< ScRangeList > aRangesVector;
                         pDoc->GetChartRanges( aChartName, aRangesVector, pDoc );
                         if( !aRangesVector.empty() )
@@ -1880,7 +1880,7 @@ ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate 
     {
         SdrObjUserData* pData = pObj->GetUserData( i );
         if( pData && pData->GetInventor() == SC_DRAWLAYER && pData->GetId() == SC_UD_OBJDATA && ++nFound == 2 )
-            return (ScDrawObjData*)pData;
+            return static_cast<ScDrawObjData*>(pData);
     }
     if( pObj && bCreate )
     {
@@ -1894,7 +1894,7 @@ ScDrawObjData* ScDrawLayer::GetNonRotatedObjData( SdrObject* pObj, bool bCreate 
 ScDrawObjData* ScDrawLayer::GetObjData( SdrObject* pObj, bool bCreate )
 {
     if (SdrObjUserData *pData = GetFirstUserDataOfType(pObj, SC_UD_OBJDATA))
-        return (ScDrawObjData*) pData;
+        return static_cast<ScDrawObjData*>(pData);
 
     if( pObj && bCreate )
     {
@@ -1932,7 +1932,7 @@ ScDrawObjData* ScDrawLayer::GetNoteCaptionData( SdrObject* pObj, SCTAB nTab )
 
 ScIMapInfo* ScDrawLayer::GetIMapInfo( SdrObject* pObj )
 {
-    return (ScIMapInfo*)GetFirstUserDataOfType(pObj, SC_UD_IMAPDATA);
+    return static_cast<ScIMapInfo*>(GetFirstUserDataOfType(pObj, SC_UD_IMAPDATA));
 }
 
 IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
@@ -1954,7 +1954,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
 
         if ( pObj->ISA( SdrGrafObj )  ) // einfaches Grafik-Objekt
         {
-            const SdrGrafObj*   pGrafObj = (const SdrGrafObj*) pObj;
+            const SdrGrafObj*   pGrafObj = static_cast<const SdrGrafObj*>( pObj );
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
             const Graphic&      rGraphic = pGrafObj->GetGraphic();
 
@@ -1963,7 +1963,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
                 RotatePoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nSin, rGeo.nCos );
 
             // Spiegelung rueckgaengig
-            if ( ( (const SdrGrafObjGeoData*) pGrafObj->GetGeoData() )->bMirrored )
+            if ( static_cast<const SdrGrafObjGeoData*>( pGrafObj->GetGeoData() )->bMirrored )
                 aRelPoint.X() = aLogRect.Right() + aLogRect.Left() - aRelPoint.X();
 
             // ggf. Unshear:
@@ -1983,7 +1983,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
             // TODO/LEAN: working with visual area needs running state
-            aGraphSize = ((const SdrOle2Obj*)pObj)->GetOrigObjSize();
+            aGraphSize = static_cast<const SdrOle2Obj*>(pObj)->GetOrigObjSize();
             bObjSupported = true;
         }
 
@@ -2002,7 +2002,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
 ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, bool bCreate )
 {
     if (SdrObjUserData *pData = GetFirstUserDataOfType(pObj, SC_UD_MACRODATA))
-        return (ScMacroInfo*) pData;
+        return static_cast<ScMacroInfo*>(pData);
 
     if ( bCreate )
     {

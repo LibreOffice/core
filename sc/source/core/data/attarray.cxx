@@ -132,7 +132,7 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
 
     nCount = nLimit = 1;
     pData = new ScAttrEntry[1];
-    ScPatternAttr* pNewPattern = (ScPatternAttr*) &pDocPool->Put(*pPattern);
+    const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pDocPool->Put(*pPattern) );
     pData[0].nRow = MAXROW;
     pData[0].pPattern = pNewPattern;
 }
@@ -389,7 +389,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
         if (bPutToPool)
-            pPattern = (const ScPatternAttr*) &pDocument->GetPool()->Put(*pPattern);
+            pPattern = static_cast<const ScPatternAttr*>(&pDocument->GetPool()->Put(*pPattern));
 
         if ((nStartRow == 0) && (nEndRow == MAXROW))
             Reset(pPattern);
@@ -617,8 +617,8 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
                 }
 
                 pDocument->GetPool()->Remove(*pData[nPos].pPattern);
-                pData[nPos].pPattern = (const ScPatternAttr*)
-                                            &pDocument->GetPool()->Put(*pNewPattern);
+                pData[nPos].pPattern = static_cast<const ScPatternAttr*>(
+                                            &pDocument->GetPool()->Put(*pNewPattern));
                 if (Concat(nPos))
                     Search(nStart, nPos);
                 else
@@ -685,9 +685,9 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 SCROW           nY1 = nStart;
                 SCROW           nY2 = pData[nPos].nRow;
 
-                SvxBoxItem*     pNewBoxItem = pBoxItem ? (SvxBoxItem*)pBoxItem->Clone() : 0;
-                SvxLineItem*    pNewTLBRItem = pTLBRItem ? (SvxLineItem*)pTLBRItem->Clone() : 0;
-                SvxLineItem*    pNewBLTRItem = pBLTRItem ? (SvxLineItem*)pBLTRItem->Clone() : 0;
+                SvxBoxItem*     pNewBoxItem = pBoxItem ? static_cast<SvxBoxItem*>(pBoxItem->Clone()) : 0;
+                SvxLineItem*    pNewTLBRItem = pTLBRItem ? static_cast<SvxLineItem*>(pTLBRItem->Clone()) : 0;
+                SvxLineItem*    pNewBLTRItem = pBLTRItem ? static_cast<SvxLineItem*>(pBLTRItem->Clone()) : 0;
 
                 // fetch line and update attributes with parameters
 
@@ -754,8 +754,8 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                 {
                     // remove from pool ?
                     pDocument->GetPool()->Remove(*pData[nPos].pPattern);
-                    pData[nPos].pPattern = (const ScPatternAttr*)
-                                &pDocument->GetPool()->Put(*pNewPattern);
+                    pData[nPos].pPattern = static_cast<const ScPatternAttr*>(
+                                &pDocument->GetPool()->Put(*pNewPattern) );
 
                     if (Concat(nPos))
                         Search(nStart, nPos);
@@ -801,7 +801,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
         do
         {
             const ScPatternAttr* pOldPattern = pData[nPos].pPattern;
-            const ScPatternAttr* pNewPattern = (const ScPatternAttr*) &pCache->ApplyTo( *pOldPattern, true );
+            const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pCache->ApplyTo( *pOldPattern, true ) );
             ScDocumentPool::CheckRef( *pOldPattern );
             ScDocumentPool::CheckRef( *pNewPattern );
             if (pNewPattern != pOldPattern)
@@ -990,13 +990,13 @@ static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner
                                 bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
 {
     // right/bottom border set when connected together
-    const ScMergeAttr& rMerge = (const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE);
+    const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE));
     if ( rMerge.GetColMerge() == nDistRight + 1 )
         nDistRight = 0;
     if ( rMerge.GetRowMerge() == nDistBottom + 1 )
         nDistBottom = 0;
 
-    const SvxBoxItem* pCellFrame = (SvxBoxItem*) &pPattern->GetItemSet().Get( ATTR_BORDER );
+    const SvxBoxItem* pCellFrame = static_cast<const SvxBoxItem*>( &pPattern->GetItemSet().Get( ATTR_BORDER ) );
     const SvxBorderLine* pLeftAttr   = pCellFrame->GetLeft();
     const SvxBorderLine* pRightAttr  = pCellFrame->GetRight();
     const SvxBorderLine* pTopAttr    = pCellFrame->GetTop();
@@ -1094,11 +1094,11 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
     OSL_ENSURE( pBoxItem && pBoxInfoItem, "Missing line attributes!" );
 
     const ScPatternAttr* pPattern = GetPattern( nStartRow );
-    const SvxBoxItem* pOldFrame = (const SvxBoxItem*)
-                                  &pPattern->GetItemSet().Get( ATTR_BORDER );
+    const SvxBoxItem* pOldFrame = static_cast<const SvxBoxItem*>(
+                                  &pPattern->GetItemSet().Get( ATTR_BORDER ));
 
     // right/bottom border set when connected together
-    const ScMergeAttr& rMerge = (const ScMergeAttr&)pPattern->GetItem(ATTR_MERGE);
+    const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>(pPattern->GetItem(ATTR_MERGE));
     if ( rMerge.GetColMerge() == nDistRight + 1 )
         nDistRight = 0;
     if ( rMerge.GetRowMerge() == nDistBottom + 1 )
@@ -1210,14 +1210,14 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         if ( nMask & HASATTR_MERGED )
         {
             const ScMergeAttr* pMerge =
-                    (const ScMergeAttr*) &pPattern->GetItem( ATTR_MERGE );
+                    static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
             if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
                 bFound = true;
         }
         if ( nMask & ( HASATTR_OVERLAPPED | HASATTR_NOTOVERLAPPED | HASATTR_AUTOFILTER ) )
         {
             const ScMergeFlagAttr* pMergeFlag =
-                    (const ScMergeFlagAttr*) &pPattern->GetItem( ATTR_MERGE_FLAG );
+                    static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
             if ( (nMask & HASATTR_OVERLAPPED) && pMergeFlag->IsOverlapped() )
                 bFound = true;
             if ( (nMask & HASATTR_NOTOVERLAPPED) && !pMergeFlag->IsOverlapped() )
@@ -1228,14 +1228,14 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         if ( nMask & HASATTR_LINES )
         {
             const SvxBoxItem* pBox =
-                    (const SvxBoxItem*) &pPattern->GetItem( ATTR_BORDER );
+                    static_cast<const SvxBoxItem*>( &pPattern->GetItem( ATTR_BORDER ) );
             if ( pBox->GetLeft() || pBox->GetRight() || pBox->GetTop() || pBox->GetBottom() )
                 bFound = true;
         }
         if ( nMask & HASATTR_SHADOW )
         {
             const SvxShadowItem* pShadow =
-                    (const SvxShadowItem*) &pPattern->GetItem( ATTR_SHADOW );
+                    static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ) );
             if ( pShadow->GetLocation() != SVX_SHADOW_NONE )
                 bFound = true;
         }
@@ -1249,7 +1249,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         if ( nMask & HASATTR_PROTECTED )
         {
             const ScProtectionAttr* pProtect =
-                    (const ScProtectionAttr*) &pPattern->GetItem( ATTR_PROTECTION );
+                    static_cast<const ScProtectionAttr*>( &pPattern->GetItem( ATTR_PROTECTION ) );
             bool bFoundTemp = false;
             if ( pProtect->GetProtection() || pProtect->GetHideCell() )
                 bFoundTemp = true;
@@ -1292,7 +1292,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         if ( nMask & HASATTR_ROTATE )
         {
             const SfxInt32Item* pRotate =
-                    (const SfxInt32Item*) &pPattern->GetItem( ATTR_ROTATE_VALUE );
+                    static_cast<const SfxInt32Item*>( &pPattern->GetItem( ATTR_ROTATE_VALUE ) );
             // 90 or 270 degrees is former SvxOrientationItem - only look for other values
             // (see ScPatternAttr::GetCellOrientation)
             sal_Int32 nAngle = pRotate->GetValue();
@@ -1303,21 +1303,21 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         {
             if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
                 bFound = true;
-            else if (((const SfxBoolItem&)pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
+            else if (static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
                 bFound = true;
-            else if ((SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
+            else if ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
                         GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK)
                 bFound = true;
 
             else if (!static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty())
                 bFound = true;
-            else if (((const SfxInt32Item&)pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
+            else if (static_cast<const SfxInt32Item&>(pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
                 bFound = true;
         }
         if ( nMask & ( HASATTR_SHADOW_RIGHT | HASATTR_SHADOW_DOWN ) )
         {
             const SvxShadowItem* pShadow =
-                    (const SvxShadowItem*) &pPattern->GetItem( ATTR_SHADOW );
+                    static_cast<const SvxShadowItem*>( &pPattern->GetItem( ATTR_SHADOW ));
             SvxShadowLocation eLoc = pShadow->GetLocation();
             if ( nMask & HASATTR_SHADOW_RIGHT )
                 if ( eLoc == SVX_SHADOW_TOPRIGHT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
@@ -1329,7 +1329,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         if ( nMask & HASATTR_RTL )
         {
             const SvxFrameDirectionItem& rDirection =
-                    (const SvxFrameDirectionItem&) pPattern->GetItem( ATTR_WRITINGDIR );
+                    static_cast<const SvxFrameDirectionItem&>( pPattern->GetItem( ATTR_WRITINGDIR ) );
             if ( rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP )
                 bFound = true;
         }
@@ -1337,7 +1337,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         {
             //  called only if the sheet is LTR, so physical=logical alignment can be assumed
             SvxCellHorJustify eHorJust = (SvxCellHorJustify)
-                    ((const SvxHorJustifyItem&) pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
+                    static_cast<const SvxHorJustifyItem&>( pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
             if ( eHorJust == SVX_HOR_JUSTIFY_RIGHT || eHorJust == SVX_HOR_JUSTIFY_CENTER )
                 bFound = true;
         }
@@ -1374,7 +1374,7 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
     for (SCSIZE i=nStartIndex; i<=nEndIndex; i++)
     {
         pPattern = pData[i].pPattern;
-        pItem = (const ScMergeAttr*) &pPattern->GetItem( ATTR_MERGE );
+        pItem = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
         SCsCOL  nCountX = pItem->GetColMerge();
         SCsROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
@@ -1429,15 +1429,15 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             nThisEnd = nEndRow;
 
         pPattern = pData[nIndex].pPattern;
-        pItem = (const ScMergeAttr*) &pPattern->GetItem( ATTR_MERGE );
+        pItem = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
         SCsCOL  nCountX = pItem->GetColMerge();
         SCsROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
         {
-            const ScMergeAttr* pAttr = (const ScMergeAttr*)
-                                            &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE );
-            const ScMergeFlagAttr* pFlagAttr = (const ScMergeFlagAttr*)
-                                            &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE_FLAG );
+            const ScMergeAttr* pAttr = static_cast<const ScMergeAttr*>(
+                                            &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE ) );
+            const ScMergeFlagAttr* pFlagAttr = static_cast<const ScMergeFlagAttr*>(
+                                            &pDocument->GetPool()->GetDefaultItem( ATTR_MERGE_FLAG ));
 
             OSL_ENSURE( nCountY==1 || nThisStart==nThisEnd, "What's up?" );
 
@@ -1498,7 +1498,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
             if (nThisRow < nStartRow) nThisRow = nStartRow;
             nRow = pData[nIndex].nRow;
             SCROW nAttrRow = std::min( (SCROW)nRow, (SCROW)nEndRow );
-            pItem = (const ScMergeFlagAttr*) &pOldPattern->GetItem( ATTR_MERGE_FLAG );
+            pItem = static_cast<const ScMergeFlagAttr*>( &pOldPattern->GetItem( ATTR_MERGE_FLAG ) );
 
             if (pItem->IsOverlapped() || pItem->HasAutoFilter())
             {
@@ -1549,7 +1549,7 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
     while ( nThisRow <= nEndRow )
     {
         pOldPattern = pData[nIndex].pPattern;
-        nOldValue = ((const ScMergeFlagAttr*) &pOldPattern->GetItem( ATTR_MERGE_FLAG ))->GetValue();
+        nOldValue = static_cast<const ScMergeFlagAttr*>( &pOldPattern->GetItem( ATTR_MERGE_FLAG ))->GetValue();
         if ( (nOldValue | nFlags) != nOldValue )
         {
             nRow = pData[nIndex].nRow;
@@ -1585,7 +1585,7 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags 
     while ( nThisRow <= nEndRow )
     {
         pOldPattern = pData[nIndex].pPattern;
-        nOldValue = ((const ScMergeFlagAttr*) &pOldPattern->GetItem( ATTR_MERGE_FLAG ))->GetValue();
+        nOldValue = static_cast<const ScMergeFlagAttr*>(&pOldPattern->GetItem( ATTR_MERGE_FLAG ))->GetValue();
         if ( (nOldValue & ~nFlags) != nOldValue )
         {
             nRow = pData[nIndex].nRow;
@@ -1649,9 +1649,9 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         const SfxPoolItem* pItem;
 
         bool bNeedJust = ( rOldSet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem ) != SfxItemState::SET
-                           || (((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_LEFT &&
-                               ((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_RIGHT ));
-        sal_uInt16 nOldValue = ((const SfxUInt16Item&)rOldSet.Get( ATTR_INDENT )).GetValue();
+                           || (static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SVX_HOR_JUSTIFY_LEFT &&
+                               static_cast<const SvxHorJustifyItem*>(pItem)->GetValue() != SVX_HOR_JUSTIFY_RIGHT ));
+        sal_uInt16 nOldValue = static_cast<const SfxUInt16Item&>(rOldSet.Get( ATTR_INDENT )).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659
         long nColWidth = (long)pDocument->GetColWidth(nCol,nTab);
@@ -1703,7 +1703,7 @@ SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, bool bUp ) const
     {
         SCSIZE nIndex;
         Search(nRow, nIndex);
-        while (((const ScProtectionAttr&)pData[nIndex].pPattern->
+        while (static_cast<const ScProtectionAttr&>(pData[nIndex].pPattern->
                 GetItem(ATTR_PROTECTION)).GetProtection())
         {
             if (bUp)
@@ -1740,13 +1740,13 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
             {
                 boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pData[nPos].pPattern));
                 pDocument->GetPool()->Remove(*pData[nPos].pPattern);
-                pNewPattern->SetStyleSheet( (ScStyleSheet*)
+                pNewPattern->SetStyleSheet( static_cast<ScStyleSheet*>(
                     pDocument->GetStyleSheetPool()->
                         Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                               SFX_STYLE_FAMILY_PARA,
-                              SFXSTYLEBIT_AUTO | SCSTYLEBIT_STANDARD ) );
-                pData[nPos].pPattern = (const ScPatternAttr*)
-                                            &pDocument->GetPool()->Put(*pNewPattern);
+                              SFXSTYLEBIT_AUTO | SCSTYLEBIT_STANDARD ) ) );
+                pData[nPos].pPattern = static_cast<const ScPatternAttr*>(
+                                            &pDocument->GetPool()->Put(*pNewPattern));
                 pNewPattern.reset();
 
                 if (Concat(nPos))
@@ -1999,7 +1999,7 @@ bool ScAttrArray::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 
         for ( ; nIndex < nCount; nIndex++ )
         {
-            if ( ((const ScMergeFlagAttr&)pData[nIndex].pPattern->
+            if ( static_cast<const ScMergeFlagAttr&>(pData[nIndex].pPattern->
                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped() )
             {
                 bTest = false;  // may not be pushed out
@@ -2022,7 +2022,7 @@ bool ScAttrArray::TestInsertRow( SCSIZE nSize ) const
     while ( nFirstLost && pData[nFirstLost-1].nRow >= sal::static_int_cast<SCROW>(MAXROW + 1 - nSize) )
         --nFirstLost;
 
-    if ( ((const ScMergeFlagAttr&)pData[nFirstLost].pPattern->
+    if ( static_cast<const ScMergeFlagAttr&>(pData[nFirstLost].pPattern->
                 GetItem(ATTR_MERGE_FLAG)).IsVerOverlapped() )
         return false;
 
@@ -2040,7 +2040,7 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
     // set ScMergeAttr may not be extended (so behind delete again)
 
-    bool bDoMerge = ((const ScMergeAttr&) pData[nIndex].pPattern->GetItem(ATTR_MERGE)).IsMerged();
+    bool bDoMerge = static_cast<const ScMergeAttr&>( pData[nIndex].pPattern->GetItem(ATTR_MERGE)).IsMerged();
 
     SCSIZE nRemove = 0;
     SCSIZE i;
@@ -2231,15 +2231,15 @@ void ScAttrArray::CopyArea(
             {
                 // default: nothing changed
 
-                pNewPattern = (const ScPatternAttr*)
-                                &pDestDocPool->GetDefaultItem( ATTR_PATTERN );
+                pNewPattern = static_cast<const ScPatternAttr*>(
+                                &pDestDocPool->GetDefaultItem( ATTR_PATTERN ));
             }
             else if ( nStripFlags )
             {
                 boost::scoped_ptr<ScPatternAttr> pTmpPattern(new ScPatternAttr( *pOldPattern ));
                 sal_Int16 nNewFlags = 0;
                 if ( nStripFlags != SC_MF_ALL )
-                    nNewFlags = ((const ScMergeFlagAttr&)pTmpPattern->GetItem(ATTR_MERGE_FLAG)).
+                    nNewFlags = static_cast<const ScMergeFlagAttr&>(pTmpPattern->GetItem(ATTR_MERGE_FLAG)).
                                 GetValue() & ~nStripFlags;
 
                 if ( nNewFlags )
@@ -2248,14 +2248,14 @@ void ScAttrArray::CopyArea(
                     pTmpPattern->GetItemSet().ClearItem( ATTR_MERGE_FLAG );
 
                 if (bSamePool)
-                    pNewPattern = (ScPatternAttr*) &pDestDocPool->Put(*pTmpPattern);
+                    pNewPattern = static_cast<const ScPatternAttr*>( &pDestDocPool->Put(*pTmpPattern) );
                 else
                     pNewPattern = pTmpPattern->PutInPool( rAttrArray.pDocument, pDocument );
             }
             else
             {
                 if (bSamePool)
-                    pNewPattern = (ScPatternAttr*) &pDestDocPool->Put(*pOldPattern);
+                    pNewPattern = static_cast<const ScPatternAttr*>( &pDestDocPool->Put(*pOldPattern) );
                 else
                     pNewPattern = pOldPattern->PutInPool( rAttrArray.pDocument, pDocument );
             }
@@ -2300,7 +2300,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
             const ScPatternAttr* pNewPattern;
 
             if (bSamePool)
-                pNewPattern = (ScPatternAttr*) &pDestDocPool->Put(*pOldPattern);
+                pNewPattern = static_cast<const ScPatternAttr*>( &pDestDocPool->Put(*pOldPattern) );
             else
                 pNewPattern = pOldPattern->PutInPool( rAttrArray.pDocument, pDocument );
 

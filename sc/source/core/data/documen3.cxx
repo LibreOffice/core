@@ -1410,7 +1410,7 @@ bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 
             for ( nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAutoFilter; nCol++ )
             {
-                nFlag = ((ScMergeFlagAttr*)
+                nFlag = static_cast<const ScMergeFlagAttr*>(
                             GetAttr( nCol, nRow, nCurTab, ATTR_MERGE_FLAG ))->
                                 GetValue();
 
@@ -1972,8 +1972,8 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
 void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    const ScMergeAttr* pAttr = (const ScMergeAttr*)
-                                    GetAttr( nCol, nRow, nTab, ATTR_MERGE );
+    const ScMergeAttr* pAttr = static_cast<const ScMergeAttr*>(
+                                    GetAttr( nCol, nRow, nTab, ATTR_MERGE ));
 
     if ( pAttr->GetColMerge() <= 1 && pAttr->GetRowMerge() <= 1 )
         return;
@@ -1983,8 +1983,8 @@ void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
 
-    const ScMergeAttr* pDefAttr = (const ScMergeAttr*)
-                                        &xPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE );
+    const ScMergeAttr* pDefAttr = static_cast<const ScMergeAttr*>(
+                                        &xPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE ));
     ApplyAttr( nCol, nRow, nTab, *pDefAttr );
 }
 

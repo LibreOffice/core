@@ -241,7 +241,7 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 {
     // FIXME: An assignement operator would be nice here
     delete pSearchItem;
-    pSearchItem = (SvxSearchItem*)rNew.Clone();
+    pSearchItem = static_cast<SvxSearchItem*>(rNew.Clone());
 
     pSearchItem->SetWhich( SID_SEARCH_ITEM );
     pSearchItem->SetAppFlag( SVX_SEARCHAPP_CALC );
@@ -567,7 +567,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
         return;
     }
 
-    const ScPatternAttr* pPattern = (const ScPatternAttr*)&pPool->GetDefaultItem(ATTR_PATTERN);
+    const ScPatternAttr* pPattern = static_cast<const ScPatternAttr*>(&pPool->GetDefaultItem(ATTR_PATTERN));
     if (!pPattern)
     {
         OSL_FAIL("ScGlobal::InitTextHeight: No default pattern");
@@ -586,7 +586,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     if (nTest > nDefFontHeight)
         nDefFontHeight = nTest;
 
-    const SvxMarginItem* pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
+    const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem(ATTR_MARGIN));
 
     nTest = static_cast<sal_uInt16>(
         nDefFontHeight + pMargin->GetTopMargin() + pMargin->GetBottomMargin() - STD_ROWHEIGHT_DIFF);
@@ -1032,12 +1032,12 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
     if ( rSet.GetItemState( ATTR_VALUE_FORMAT, false, &pHardItem ) == SfxItemState::SET )
     {
         const SvNumberformat* pHardFormat = rFormatter.GetEntry(
-            ((const SfxUInt32Item*)pHardItem)->GetValue() );
+            static_cast<const SfxUInt32Item*>(pHardItem)->GetValue() );
 
         sal_uLong nParentFmt = 0; // Pool default
         const SfxItemSet* pParent = rSet.GetParent();
         if ( pParent )
-            nParentFmt = ((const SfxUInt32Item&)pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
+            nParentFmt = static_cast<const SfxUInt32Item&>(pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
         const SvNumberformat* pParFormat = rFormatter.GetEntry( nParentFmt );
 
         if ( pHardFormat && pParFormat &&

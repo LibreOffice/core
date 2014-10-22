@@ -1253,10 +1253,10 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
                 }
             }
             if ( eType == SC_CAT_MOVE &&
-                ((const ScChangeActionMove*)pAction)->
+                static_cast<const ScChangeActionMove*>(pAction)->
                 GetFromRange().aStart.Tab() == cell.Col() )
             {
-                ScRange aRange = ((const ScChangeActionMove*)pAction)->
+                ScRange aRange = static_cast<const ScChangeActionMove*>(pAction)->
                     GetFromRange().MakeRange();
                 if (ScViewUtil::IsActionShown( *pAction, *pSettings, *this ) )
                 {
@@ -1325,7 +1325,7 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
                 if ( eType == SC_CAT_MOVE )
                 {
                     ScRange aRange =
-                        ((const ScChangeActionMove*)pAction)->
+                        static_cast<const ScChangeActionMove*>(pAction)->
                         GetFromRange().MakeRange();
                     if ( aRange.In( aCellPos ) )
                     {

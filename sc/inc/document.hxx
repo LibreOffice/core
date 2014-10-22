@@ -1610,7 +1610,7 @@ public:
     void            ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, SCTAB nTab );
 
     SC_DLLPUBLIC ScPatternAttr*     GetDefPattern() const;
-    SC_DLLPUBLIC ScDocumentPool*        GetPool();
+    SC_DLLPUBLIC ScDocumentPool*    GetPool();
     SC_DLLPUBLIC ScStyleSheetPool*  GetStyleSheetPool() const;
 
     // PageStyle:

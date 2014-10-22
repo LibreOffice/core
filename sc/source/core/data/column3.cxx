@@ -2289,7 +2289,7 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
     const ScPatternAttr* pPattern = aAttrIter.Next( nTop, nBottom );
     while (pPattern)
     {
-        const ScProtectionAttr* pAttr = (const ScProtectionAttr*)&pPattern->GetItem(ATTR_PROTECTION);
+        const ScProtectionAttr* pAttr = static_cast<const ScProtectionAttr*>(&pPattern->GetItem(ATTR_PROTECTION));
         if ( pAttr->GetHideCell() )
             DeleteArea( nTop, nBottom, IDF_CONTENTS );
         else if ( pAttr->GetHideFormula() )

@@ -142,7 +142,7 @@ sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     if (!pPattern) return 0;
     const SfxItemSet* pCondSet = NULL;
-    if ( !((const ScCondFormatItem&)pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty() )
+    if ( !static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
 
     sal_uLong nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );

@@ -53,7 +53,7 @@ using ::std::set;
 
 // STATIC DATA -----------------------------------------------------------
 
-#define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
+#define GET_SCALEVALUE(set,id)  static_cast<const SfxUInt16Item&>(set.Get( id )).GetValue()
 
 void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 {
@@ -134,7 +134,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
          if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SfxItemState::SET )
          {
               OSL_ENSURE( pItem->ISA(SfxUInt16Item), "invalid Item" );
-              bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
+              bSkipColBreaks = bSkipRowBreaks = static_cast<const SfxUInt16Item*>(pItem)->GetValue() > 0;
          }
 
          if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SfxItemState::SET )

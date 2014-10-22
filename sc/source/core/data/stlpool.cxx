@@ -111,7 +111,7 @@ SfxStyleSheetBase* ScStyleSheetPool::Create( const OUString&   rName,
 SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
     OSL_ENSURE( rStyle.ISA(ScStyleSheet), "Invalid StyleSheet-class! :-/" );
-    return new ScStyleSheet( (const ScStyleSheet&) rStyle );
+    return new ScStyleSheet( static_cast<const ScStyleSheet&>(rStyle) );
 }
 
 void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
@@ -121,7 +121,7 @@ void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
         OSL_ENSURE( IS_SET( SFXSTYLEBIT_USERDEF, pStyle->GetMask() ),
                     "SFXSTYLEBIT_USERDEF not set!" );
 
-        ((ScDocumentPool&)rPool).StyleDeleted((ScStyleSheet*)pStyle);
+        static_cast<ScDocumentPool&>(rPool).StyleDeleted(static_cast<ScStyleSheet*>(pStyle));
         SfxStyleSheetPool::Remove(pStyle);
     }
 }
@@ -148,14 +148,14 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
 
             if ( rSourceSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SfxItemState::SET )
             {
-                const SfxItemSet& rSrcSub = ((const SvxSetItem*) pItem)->GetItemSet();
+                const SfxItemSet& rSrcSub = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                 SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
                 aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
                 rDestSet.Put( SvxSetItem( ATTR_PAGE_HEADERSET, aDestSub ) );
             }
             if ( rSourceSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SfxItemState::SET )
             {
-                const SfxItemSet& rSrcSub = ((const SvxSetItem*) pItem)->GetItemSet();
+                const SfxItemSet& rSrcSub = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
                 SfxItemSet aDestSub( *rDestSet.GetPool(), rSrcSub.GetRanges() );
                 aDestSub.PutExtended( rSrcSub, SfxItemState::DONTCARE, SfxItemState::DEFAULT );
                 rDestSet.Put( SvxSetItem( ATTR_PAGE_FOOTERSET, aDestSub ) );
@@ -241,7 +241,7 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 1. Standard
 
-    pSheet = (ScStyleSheet*) &Make( aStrStandard, SFX_STYLE_FAMILY_PARA, SCSTYLEBIT_STANDARD );
+    pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard, SFX_STYLE_FAMILY_PARA, SCSTYLEBIT_STANDARD ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_STD );
 
     //  if default fonts for the document's languages are different from the pool default,
@@ -272,9 +272,9 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 2. Ergebnis
 
-    pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_RESULT ),
+    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_RESULT ),
                                     SFX_STYLE_FAMILY_PARA,
-                                    SCSTYLEBIT_STANDARD );
+                                    SCSTYLEBIT_STANDARD ) );
     pSheet->SetParent( aStrStandard );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG );
     pSet = &pSheet->GetItemSet();
@@ -284,18 +284,18 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 3. Ergebnis1
 
-    pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_RESULT1 ),
+    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_RESULT1 ),
                                     SFX_STYLE_FAMILY_PARA,
-                                    SCSTYLEBIT_STANDARD );
+                                    SCSTYLEBIT_STANDARD ) );
 
     pSheet->SetParent( SCSTR( STR_STYLENAME_RESULT ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_ERG1 );
 
     // 4. Ueberschrift
 
-    pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_HEADLINE ),
+    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_HEADLINE ),
                                     SFX_STYLE_FAMILY_PARA,
-                                    SCSTYLEBIT_STANDARD );
+                                    SCSTYLEBIT_STANDARD ) );
 
     pSheet->SetParent( aStrStandard );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_UEB );
@@ -307,9 +307,9 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 5. Ueberschrift1
 
-    pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_HEADLINE1 ),
+    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_HEADLINE1 ),
                                     SFX_STYLE_FAMILY_PARA,
-                                    SCSTYLEBIT_STANDARD );
+                                    SCSTYLEBIT_STANDARD ) );
 
     pSheet->SetParent( SCSTR( STR_STYLENAME_HEADLINE ) );
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_CELL_UEB1 );
@@ -320,15 +320,15 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 1. Standard
 
-    pSheet = (ScStyleSheet*) &Make( aStrStandard,
+    pSheet = static_cast<ScStyleSheet*>( &Make( aStrStandard,
                                     SFX_STYLE_FAMILY_PAGE,
-                                    SCSTYLEBIT_STANDARD );
+                                    SCSTYLEBIT_STANDARD ) );
 
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_STD );
 
     // Abstand der Kopf-/Fusszeilen von der Tabelle
-    pHFSetItem = new SvxSetItem( ((SvxSetItem&)pSet->Get( ATTR_PAGE_HEADERSET ) ) );
+    pHFSetItem = new SvxSetItem( static_cast<const SvxSetItem&>(pSet->Get( ATTR_PAGE_HEADERSET ) ) );
     pSet->Put( *pHFSetItem, ATTR_PAGE_HEADERSET );
     pSet->Put( *pHFSetItem, ATTR_PAGE_FOOTERSET );
     DELETEZ( pHFSetItem );
@@ -361,9 +361,9 @@ void ScStyleSheetPool::CreateStandardStyles()
 
     // 2. Report
 
-    pSheet = (ScStyleSheet*) &Make( SCSTR( STR_STYLENAME_REPORT ),
+    pSheet = static_cast<ScStyleSheet*>( &Make( SCSTR( STR_STYLENAME_REPORT ),
                                     SFX_STYLE_FAMILY_PAGE,
-                                    SCSTYLEBIT_STANDARD );
+                                    SCSTYLEBIT_STANDARD ) );
     pSet = &pSheet->GetItemSet();
     pSheet->SetHelpId( aHelpFile, HID_SC_SHEET_PAGE_REP );
 
@@ -381,7 +381,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxInfoItem.SetTable( false );
     aBoxInfoItem.SetDist ( true );
 
-    pHFSetItem = new SvxSetItem( ((SvxSetItem&)pSet->Get( ATTR_PAGE_HEADERSET ) ) );
+    pHFSetItem = new SvxSetItem( static_cast<const SvxSetItem&>(pSet->Get( ATTR_PAGE_HEADERSET ) ) );
     pHFSet = &(pHFSetItem->GetItemSet());
 
     pHFSet->Put( SvxBrushItem( aColGrey, ATTR_BACKGROUND ) );

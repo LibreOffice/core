@@ -78,7 +78,7 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         }
         else
         {
-            sal_uInt16 nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
+            sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
                                 rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
             bHOver = ((nOverlap & SC_MF_HOR) != 0);
             bVOver = ((nOverlap & SC_MF_VER) != 0);
@@ -101,7 +101,7 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         }
         else
         {
-            sal_uInt16 nOverlap = ((ScMergeFlagAttr*)pDoc->GetAttr(
+            sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
                                 rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
             bVOver = ((nOverlap & SC_MF_VER) != 0);
         }
@@ -113,11 +113,11 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
         (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
     {
-        pMerge = (const ScMergeAttr*) &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
-                                        GetItem(ATTR_MERGE);
+        pMerge = static_cast<const ScMergeAttr*>( &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
+                                        GetItem(ATTR_MERGE));
     }
     else
-        pMerge = (const ScMergeAttr*) pDoc->GetAttr(rStartX,rStartY,nTab,ATTR_MERGE);
+        pMerge = static_cast<const ScMergeAttr*>( pDoc->GetAttr(rStartX,rStartY,nTab,ATTR_MERGE) );
 
     rEndX = rStartX + pMerge->GetColMerge() - 1;
     rEndY = rStartY + pMerge->GetRowMerge() - 1;
@@ -208,11 +208,11 @@ void ScDocument::FillInfo(
     RowInfo* pRowInfo = rTabInfo.mpRowInfo;
 
     const SvxBrushItem* pDefBackground =
-            (const SvxBrushItem*) &pPool->GetDefaultItem( ATTR_BACKGROUND );
+            static_cast<const SvxBrushItem*>( &pPool->GetDefaultItem( ATTR_BACKGROUND ) );
     const ScMergeAttr* pDefMerge =
-            (const ScMergeAttr*) &pPool->GetDefaultItem( ATTR_MERGE );
+            static_cast<const ScMergeAttr*>( &pPool->GetDefaultItem( ATTR_MERGE ) );
     const SvxShadowItem* pDefShadow =
-            (const SvxShadowItem*) &pPool->GetDefaultItem( ATTR_SHADOW );
+            static_cast<const SvxShadowItem*>( &pPool->GetDefaultItem( ATTR_SHADOW ) );
 
     SCROW nThisRow;
     SCCOL nX;
@@ -453,25 +453,25 @@ void ScDocument::FillInfo(
                         nThisRow=pThisAttrArr->pData[nIndex].nRow;              // Ende des Bereichs
                         pPattern=pThisAttrArr->pData[nIndex].pPattern;
 
-                        const SvxBrushItem* pBackground = (const SvxBrushItem*)
-                                                        &pPattern->GetItem(ATTR_BACKGROUND);
-                        const SvxBoxItem* pLinesAttr = (const SvxBoxItem*)
-                                                        &pPattern->GetItem(ATTR_BORDER);
+                        const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(
+                                                        &pPattern->GetItem(ATTR_BACKGROUND));
+                        const SvxBoxItem* pLinesAttr = static_cast<const SvxBoxItem*>(
+                                                        &pPattern->GetItem(ATTR_BORDER));
 
                         const SvxLineItem* pTLBRLine = static_cast< const SvxLineItem* >(
                             &pPattern->GetItem( ATTR_BORDER_TLBR ) );
                         const SvxLineItem* pBLTRLine = static_cast< const SvxLineItem* >(
                             &pPattern->GetItem( ATTR_BORDER_BLTR ) );
 
-                        const SvxShadowItem* pShadowAttr = (const SvxShadowItem*)
-                                                        &pPattern->GetItem(ATTR_SHADOW);
+                        const SvxShadowItem* pShadowAttr = static_cast<const SvxShadowItem*>(
+                                                        &pPattern->GetItem(ATTR_SHADOW));
                         if (pShadowAttr != pDefShadow)
                             bAnyShadow = true;
 
-                        const ScMergeAttr* pMergeAttr = (const ScMergeAttr*)
-                                                &pPattern->GetItem(ATTR_MERGE);
+                        const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
+                                                &pPattern->GetItem(ATTR_MERGE));
                         bool bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
-                        sal_uInt16 nOverlap = ((const ScMergeFlagAttr*) &pPattern->GetItemSet().
+                        sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItemSet().
                                                         Get(ATTR_MERGE_FLAG))->GetValue();
                         bool bHOverlapped = ((nOverlap & SC_MF_HOR) != 0);
                         bool bVOverlapped = ((nOverlap & SC_MF_VER) != 0);
@@ -486,8 +486,8 @@ void ScDocument::FillInfo(
                         bool bHidden, bHideFormula;
                         if (bTabProtect)
                         {
-                            const ScProtectionAttr& rProtAttr = (const ScProtectionAttr&)
-                                                        pPattern->GetItem(ATTR_PROTECTION);
+                            const ScProtectionAttr& rProtAttr = static_cast<const ScProtectionAttr&>(
+                                                        pPattern->GetItem(ATTR_PROTECTION));
                             bHidden = rProtAttr.GetHideCell();
                             bHideFormula = rProtAttr.GetHideFormula();
                         }
@@ -707,13 +707,13 @@ void ScDocument::FillInfo(
                             //  Hintergrund
                     if ( pCondSet->GetItemState( ATTR_BACKGROUND, true, &pItem ) == SfxItemState::SET )
                     {
-                        pInfo->pBackground = (const SvxBrushItem*) pItem;
+                        pInfo->pBackground = static_cast<const SvxBrushItem*>(pItem);
                         pRowInfo[nArrRow].bEmptyBack = false;
                     }
 
                             //  Umrandung
                     if ( pCondSet->GetItemState( ATTR_BORDER, true, &pItem ) == SfxItemState::SET )
-                        pInfo->pLinesAttr = (const SvxBoxItem*) pItem;
+                        pInfo->pLinesAttr = static_cast<const SvxBoxItem*>(pItem);
 
                     if ( pCondSet->GetItemState( ATTR_BORDER_TLBR, true, &pItem ) == SfxItemState::SET )
                         pInfo->mpTLBRLine = static_cast< const SvxLineItem* >( pItem );
@@ -723,7 +723,7 @@ void ScDocument::FillInfo(
                             //  Schatten
                     if ( pCondSet->GetItemState( ATTR_SHADOW, true, &pItem ) == SfxItemState::SET )
                     {
-                        pInfo->pShadowAttr = (const SvxShadowItem*) pItem;
+                        pInfo->pShadowAttr = static_cast<const SvxShadowItem*>(pItem);
                         bAnyShadow = true;
                     }
                 }
@@ -769,7 +769,7 @@ void ScDocument::FillInfo(
                     if ( !pStartCond || pStartCond->
                                     GetItemState(ATTR_BACKGROUND,true,&pItem) != SfxItemState::SET )
                         pItem = &pStartPattern->GetItem(ATTR_BACKGROUND);
-                    pInfo->pBackground = (const SvxBrushItem*) pItem;
+                    pInfo->pBackground = static_cast<const SvxBrushItem*>(pItem);
                     pRowInfo[nArrRow].bEmptyBack = false;
 
                     // Schatten
@@ -777,7 +777,7 @@ void ScDocument::FillInfo(
                     if ( !pStartCond || pStartCond->
                                     GetItemState(ATTR_SHADOW,true,&pItem) != SfxItemState::SET )
                         pItem = &pStartPattern->GetItem(ATTR_SHADOW);
-                    pInfo->pShadowAttr = (const SvxShadowItem*) pItem;
+                    pInfo->pShadowAttr = static_cast<const SvxShadowItem*>(pItem);
                     if (pInfo->pShadowAttr != pDefShadow)
                         bAnyShadow = true;
 

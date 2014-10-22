@@ -124,8 +124,8 @@ bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
-             && (nColMerge == ((ScMergeAttr&)rItem).nColMerge)
-             && (nRowMerge == ((ScMergeAttr&)rItem).nRowMerge);
+             && (nColMerge == static_cast<const ScMergeAttr&>(rItem).nColMerge)
+             && (nRowMerge == static_cast<const ScMergeAttr&>(rItem).nRowMerge);
 }
 
 SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
@@ -338,10 +338,10 @@ bool ScProtectionAttr::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
     return (Which() == rItem.Which())
-             && (bProtection == ((ScProtectionAttr&)rItem).bProtection)
-             && (bHideFormula == ((ScProtectionAttr&)rItem).bHideFormula)
-             && (bHideCell == ((ScProtectionAttr&)rItem).bHideCell)
-             && (bHidePrint == ((ScProtectionAttr&)rItem).bHidePrint);
+             && (bProtection == static_cast<const ScProtectionAttr&>(rItem).bProtection)
+             && (bHideFormula == static_cast<const ScProtectionAttr&>(rItem).bHideFormula)
+             && (bHideCell == static_cast<const ScProtectionAttr&>(rItem).bHideCell)
+             && (bHidePrint == static_cast<const ScProtectionAttr&>(rItem).bHidePrint);
 }
 
 SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
@@ -395,7 +395,7 @@ bool ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    return ( aRange == ( (ScRangeItem&)rAttr ).aRange );
+    return aRange == static_cast<const ScRangeItem&>(rAttr).aRange;
 }
 
 SfxPoolItem* ScRangeItem::Clone( SfxItemPool* ) const
@@ -481,8 +481,8 @@ bool ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
 
-    ScTableListItem&    rCmp   = (ScTableListItem&)rAttr;
-    bool                bEqual = (nCount == rCmp.nCount);
+    const ScTableListItem& rCmp   = static_cast<const ScTableListItem&>(rAttr);
+    bool                   bEqual = (nCount == rCmp.nCount);
 
     if ( nCount > 0 )
     {
@@ -641,7 +641,7 @@ bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
-    const ScPageHFItem& r = (const ScPageHFItem&)rItem;
+    const ScPageHFItem& r = static_cast<const ScPageHFItem&>(rItem);
 
     return    ScGlobal::EETextObjEqual(pLeftArea,   r.pLeftArea)
            && ScGlobal::EETextObjEqual(pCenterArea, r.pCenterArea)
@@ -949,7 +949,7 @@ OUString ScDoubleItem::GetValueText() const
 bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
-    const ScDoubleItem& _rItem = (const ScDoubleItem&)rItem;
+    const ScDoubleItem& _rItem = static_cast<const ScDoubleItem&>(rItem);
     return nValue == _rItem.nValue;
 }
 

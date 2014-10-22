@@ -4804,7 +4804,7 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         for (sal_uInt32 nItem=0; nItem<nDirCount; nItem++)
         {
             const SfxPoolItem* pItem = pPool->GetItem2( ATTR_WRITINGDIR, nItem );
-            if ( pItem && ((const SvxFrameDirectionItem*)pItem)->GetValue() == FRMDIR_HORI_RIGHT_TOP )
+            if ( pItem && static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue() == FRMDIR_HORI_RIGHT_TOP )
             {
                 bHasRtl = true;
                 break;
@@ -4867,7 +4867,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
 {
     //! Seitengrenzen fuer Druck beruecksichtigen !!!!!
 
-    const SvxBoxItem* pThisAttr = (const SvxBoxItem*) GetEffItem( nCol, nRow, nTab, ATTR_BORDER );
+    const SvxBoxItem* pThisAttr = static_cast<const SvxBoxItem*>( GetEffItem( nCol, nRow, nTab, ATTR_BORDER ) );
     OSL_ENSURE(pThisAttr,"where is the attribute?");
 
     const SvxBorderLine* pLeftLine   = pThisAttr->GetLeft();
@@ -4877,28 +4877,28 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     if ( nCol > 0 )
     {
-        const SvxBorderLine* pOther = ((const SvxBoxItem*)
+        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
                                 GetEffItem( nCol-1, nRow, nTab, ATTR_BORDER ))->GetRight();
         if ( ScHasPriority( pOther, pLeftLine ) )
             pLeftLine = pOther;
     }
     if ( nRow > 0 )
     {
-        const SvxBorderLine* pOther = ((const SvxBoxItem*)
+        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
                                 GetEffItem( nCol, nRow-1, nTab, ATTR_BORDER ))->GetBottom();
         if ( ScHasPriority( pOther, pTopLine ) )
             pTopLine = pOther;
     }
     if ( nCol < MAXCOL )
     {
-        const SvxBorderLine* pOther = ((const SvxBoxItem*)
+        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
                                 GetEffItem( nCol+1, nRow, nTab, ATTR_BORDER ))->GetLeft();
         if ( ScHasPriority( pOther, pRightLine ) )
             pRightLine = pOther;
     }
     if ( nRow < MAXROW )
     {
-        const SvxBorderLine* pOther = ((const SvxBoxItem*)
+        const SvxBorderLine* pOther = static_cast<const SvxBoxItem*>(
                                 GetEffItem( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
         if ( ScHasPriority( pOther, pBottomLine ) )
             pBottomLine = pOther;
@@ -5096,7 +5096,7 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
             SCCOL nOldCol = rStartCol;
             SCROW nOldRow = rStartRow;
             for (nCol=nOldCol; nCol<=nEndCol; nCol++)
-                while (((ScMergeFlagAttr*)GetAttr(nCol,rStartRow,nTab,ATTR_MERGE_FLAG))->
+                while (static_cast<const ScMergeFlagAttr*>(GetAttr(nCol,rStartRow,nTab,ATTR_MERGE_FLAG))->
                             IsVerOverlapped())
                     --rStartRow;
 
@@ -5110,7 +5110,7 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
             {
                 OSL_ENSURE( nIndex < pAttrArray->nCount, "Wrong index in AttrArray" );
 
-                if (((ScMergeFlagAttr&)pAttrArray->pData[nIndex].pPattern->
+                if (static_cast<const ScMergeFlagAttr&>(pAttrArray->pData[nIndex].pPattern->
                         GetItem(ATTR_MERGE_FLAG)).IsHorOverlapped())
                 {
                     SCROW nLoopEndRow = std::min( nEndRow, pAttrArray->pData[nIndex].nRow );
@@ -5119,7 +5119,7 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                         SCCOL nTempCol = nOldCol;
                         do
                             --nTempCol;
-                        while (((ScMergeFlagAttr*)GetAttr(nTempCol,nAttrRow,nTab,ATTR_MERGE_FLAG))
+                        while (static_cast<const ScMergeFlagAttr*>(GetAttr(nTempCol,nAttrRow,nTab,ATTR_MERGE_FLAG))
                                 ->IsHorOverlapped());
                         if (nTempCol < rStartCol)
                             rStartCol = nTempCol;
@@ -5343,8 +5343,8 @@ void ScDocument::SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const
 
 bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    const ScMergeFlagAttr* pAttr = (const ScMergeFlagAttr*)
-                                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
+    const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
+                                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ));
     if (pAttr)
         return pAttr->IsHorOverlapped();
     else
@@ -5356,8 +5356,8 @@ bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 
 bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    const ScMergeFlagAttr* pAttr = (const ScMergeFlagAttr*)
-                                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
+    const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
+                                        GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ));
     if (pAttr)
         return pAttr->IsVerOverlapped();
     else
@@ -5475,7 +5475,7 @@ void ScDocument::DeleteSelectionTab(
 
 ScPatternAttr* ScDocument::GetDefPattern() const
 {
-    return (ScPatternAttr*) &xPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN);
+    return const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(&xPoolHelper->GetDocPool()->GetDefaultItem(ATTR_PATTERN)));
 }
 
 ScDocumentPool* ScDocument::GetPool()
@@ -5534,11 +5534,11 @@ void ScDocument::UpdStlShtPtrsFrmNms()
     ScPatternAttr* pPattern;
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
+        pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
         if (pPattern)
             pPattern->UpdateStyleSheet(this);
     }
-    ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet(this);
+    const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN))).UpdateStyleSheet(this);
 }
 
 void ScDocument::StylesToNames()
@@ -5549,11 +5549,11 @@ void ScDocument::StylesToNames()
     ScPatternAttr* pPattern;
     for (sal_uInt32 i=0; i<nCount; i++)
     {
-        pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
+        pPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>(pPool->GetItem2(ATTR_PATTERN, i)));
         if (pPattern)
             pPattern->StyleToName();
     }
-    ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
+    const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN))).StyleToName();
 }
 
 sal_uLong ScDocument::GetCellCount() const
@@ -5767,7 +5767,7 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
             if ( pStyle )
             {
                 const SfxItemSet& rSet = pStyle->GetItemSet();
-                sal_uInt16 nFirst = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_FIRSTPAGENO)).GetValue();
+                sal_uInt16 nFirst = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_FIRSTPAGENO)).GetValue();
                 if ( nFirst != 0 )
                     return true;        // Seitennummer in neuer Vorlage angegeben
             }

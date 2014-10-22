@@ -938,9 +938,9 @@ SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
     {
         pContext = new OReportStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
-            SetAutoStyles((SvXMLStylesContext*)pContext);
+            SetAutoStyles(static_cast<SvXMLStylesContext*>(pContext));
         else
-            SetStyles((SvXMLStylesContext*)pContext);
+            SetStyles(static_cast<SvXMLStylesContext*>(pContext));
     }
     return pContext;
 }
