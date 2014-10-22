@@ -15,7 +15,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
- 
+
 [STR_NAME_MODULE_ROOT_HELPPACK]
 en-US = "Additional help packs"
 
@@ -286,10 +286,10 @@ en-US = "Catalan"
 [STR_DESC_MODULE_HELPPACK_CA]
 en-US = "Installs Catalan help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_CA_XV]
+[STR_NAME_MODULE_HELPPACK_CA_VALENCIA]
 en-US = "Catalan (Valencian)"
 
-[STR_DESC_MODULE_HELPPACK_CA_XV]
+[STR_DESC_MODULE_HELPPACK_CA_VALENCIA]
 en-US = "Installs Catalan (Valencian) help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_DA]
@@ -400,10 +400,10 @@ en-US = "Galician"
 [STR_DESC_MODULE_HELPPACK_GL]
 en-US = "Installs Galician help in %PRODUCTNAME %PRODUCTVERSION"
 
-[STR_NAME_MODULE_HELPPACK_SH]
+[STR_NAME_MODULE_HELPPACK_SR_LATN]
 en-US = "Serbian (Latin)"
 
-[STR_DESC_MODULE_HELPPACK_SH]
+[STR_DESC_MODULE_HELPPACK_SR_LATN]
 en-US = "Installs Serbian (Latin) help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_GA]
