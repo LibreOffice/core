@@ -1438,6 +1438,11 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             break;
         case SvListAction::RESORTING:
             break;
+        case SvListAction::REVERSING:
+            break;
+        case SvListAction::REVERSED:
+            bVisPositionsValid = false;
+            break;
         default:
             OSL_FAIL("unknown ActionId");
     }
@@ -1542,6 +1547,33 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
     {
         SvTreeListEntry& r = *it;
         ResortChildren(&r);
+    }
+
+    SetListPositions(pParent->maChildren); // correct list position in target list
+}
+
+void SvTreeList::Reverse()
+{
+    Broadcast(SvListAction::REVERSING);
+    bAbsPositionsValid = false;
+    ReverseChildren(pRootItem);
+    Broadcast(SvListAction::REVERSED);
+}
+
+void SvTreeList::ReverseChildren( SvTreeListEntry* pParent )
+{
+    DBG_ASSERT(pParent,"Parent not set");
+
+    if (pParent->maChildren.empty())
+        return;
+
+    std::reverse(pParent->maChildren.base().begin(), pParent->maChildren.base().end());
+    // Recursively sort child entries.
+    SvTreeListEntries::iterator it = pParent->maChildren.begin(), itEnd = pParent->maChildren.end();
+    for (; it != itEnd; ++it)
+    {
+        SvTreeListEntry& r = *it;
+        ReverseChildren(&r);
     }
 
     SetListPositions(pParent->maChildren); // correct list position in target list

@@ -23,6 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
+#include <unotools/intlwrapper.hxx>
 
 class SvSimpleTable;
 class SVT_DLLPUBLIC SvSimpleTableContainer : public Control
@@ -58,6 +59,8 @@ private:
     bool                bPaintFlag;
     bool                bSortDirection;
     sal_uInt16          nSortCol;
+
+    const CollatorWrapper aCollator;
 
     DECL_LINK( StartDragHdl, HeaderBar* );
     DECL_LINK( DragHdl, HeaderBar* );
