@@ -51,12 +51,14 @@
 #include <unx/x11/xlimits.hxx>
 
 #include "salgdiimpl.hxx"
+#include "gdiimpl.hxx"
 
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
 
-X11SalGraphics::X11SalGraphics()
-    : m_nXScreen( 0 ),
+X11SalGraphics::X11SalGraphics():
+    mpImpl(new X11SalGraphicsImpl(*this)),
+    m_nXScreen( 0 ),
     pFontGC_(NULL)
 {
     m_pFrame            = NULL;
