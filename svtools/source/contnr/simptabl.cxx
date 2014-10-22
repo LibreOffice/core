@@ -21,7 +21,6 @@
 #include <svtools/simptabl.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
-#include <unotools/intlwrapper.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -84,7 +83,8 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
         m_rParentTableContainer(rParent),
         aHeaderBar(&rParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
         nHeaderItemId(1),
-        bPaintFlag(true)
+        bPaintFlag(true),
+        aCollator(*(IntlWrapper( Application::GetSettings().GetLanguageTag() ).getCaseCollator()))
 {
     m_rParentTableContainer.SetTable(this);
 
@@ -97,6 +97,8 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
     aHeaderBar.SetEndDragHdl(LINK( this, SvSimpleTable, EndDragHdl));
     aHeaderBar.SetSelectHdl(LINK( this, SvSimpleTable, HeaderBarClick));
     aHeaderBar.SetDoubleClickHdl(LINK( this, SvSimpleTable, HeaderBarDblClick));
+
+    GetModel()->SetCompareHdl( LINK( this, SvSimpleTable, CompareHdl));
 
     EnableCellFocus();
     DisableTransientChildren();
@@ -262,29 +264,38 @@ sal_uInt16 SvSimpleTable::GetSelectedCol()
 
 void SvSimpleTable::SortByCol(sal_uInt16 nCol, bool bDir)
 {
-    bSortDirection=bDir;
     if(nSortCol!=0xFFFF)
         aHeaderBar.SetItemBits(nSortCol+1,HIB_STDSTYLE);
 
     if (nCol != 0xFFFF)
     {
-        if(bDir)
+        if(bDir || nSortCol != nCol)
         {
             aHeaderBar.SetItemBits( nCol+1, HIB_STDSTYLE | HIB_DOWNARROW);
             GetModel()->SetSortMode(SortAscending);
+            bDir = true;
         }
         else
         {
             aHeaderBar.SetItemBits( nCol+1, HIB_STDSTYLE | HIB_UPARROW);
             GetModel()->SetSortMode(SortDescending);
         }
-        nSortCol=nCol;
-        GetModel()->SetCompareHdl( LINK( this, SvSimpleTable, CompareHdl));
-        GetModel()->Resort();
+        if(nSortCol == nCol)
+        {
+            GetModel()->Reverse();
+            Resize();   //update rows
+        }
+        else
+        {
+            nSortCol=nCol;
+            GetModel()->Resort();
+        }
     }
     else
         GetModel()->SetSortMode(SortNone);
     nSortCol=nCol;
+    bSortDirection=bDir;
+    SetAlternatingRowColors( true );
 }
 
 void SvSimpleTable::HBarClick()
@@ -447,16 +458,8 @@ sal_Int32 SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRig
 
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )
-        {
-            IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
-            const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
-
-            nCompare = pCollator->compareString( static_cast<SvLBoxString*>(pLeftItem)->GetText(),
+            nCompare = aCollator.compareString( static_cast<SvLBoxString*>(pLeftItem)->GetText(),
                                     static_cast<SvLBoxString*>(pRightItem)->GetText());
-
-            if (nCompare == 0)
-                nCompare = -1;
-        }
     }
     return nCompare;
 }

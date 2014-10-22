@@ -44,7 +44,9 @@ enum class SvListAction
     INVALIDATE_ENTRY = 8,
     RESORTING        = 9,
     RESORTED         = 10,
-    CLEARED          = 11
+    CLEARED          = 11,
+    REVERSING        = 12,
+    REVERSED         = 13
 };
 
 class SvTreeListEntry;
@@ -124,6 +126,7 @@ class SVT_DLLPUBLIC SvTreeList
                         );
 
     SVT_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
+    SVT_DLLPRIVATE void ReverseChildren( SvTreeListEntry* pParent );
 
     SvTreeList(const SvTreeList&); // disabled
     SvTreeList& operator= (const SvTreeList&); // disabled
@@ -233,6 +236,7 @@ public:
     void                SetCompareHdl( const Link& rLink ) { aCompareLink = rLink; }
     const Link&         GetCompareHdl() const { return aCompareLink; }
     void                Resort();
+    void                Reverse();
 };
 
 class SVT_DLLPUBLIC SvListView
