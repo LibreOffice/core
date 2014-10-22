@@ -497,6 +497,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/ascii/wrtasc \
     sw/source/filter/basflt/docfact \
     sw/source/filter/basflt/fltini \
+    sw/source/filter/basflt/fltshell \
     sw/source/filter/basflt/iodetect \
     sw/source/filter/basflt/shellio \
     sw/source/filter/html/SwAppletImpl \
@@ -531,11 +532,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/filter/writer/writer \
     sw/source/filter/writer/wrt_fn \
     sw/source/filter/writer/wrtswtbl \
-    sw/source/filter/ww1/fltshell \
-    sw/source/filter/ww1/w1class \
-    sw/source/filter/ww1/w1filter \
-    sw/source/filter/ww1/w1par \
-    sw/source/filter/ww1/w1sprm \
     sw/source/filter/xml/XMLRedlineImportHelper \
     sw/source/filter/xml/swxml \
     sw/source/filter/xml/wrtxml \

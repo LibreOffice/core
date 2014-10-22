@@ -77,7 +77,6 @@ SwReaderWriterEntry aReaderWriter[] =
     SwReaderWriterEntry( &::GetWW8Reader, &::GetWW8Writer,  true  ),
     SwReaderWriterEntry( &::GetRTFReader, &::GetRTFWriter,  true  ),
     SwReaderWriterEntry( 0,               &::GetHTMLWriter, true  ),
-    SwReaderWriterEntry( 0,               0,                true  ),
     SwReaderWriterEntry( &::GetWW8Reader, 0,                true  ),
     SwReaderWriterEntry( 0,               &::GetXMLWriter,  true  ),
     SwReaderWriterEntry( 0,               &::GetASCWriter,  false ),
@@ -130,7 +129,6 @@ Filters::Filters()
 {
     _SetFltPtr( READER_WRITER_BAS, (ReadAscii = new AsciiReader) );
     _SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
-    _SetFltPtr( READER_WRITER_WW1, new WW1Reader );
     _SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
     _SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
     _SetFltPtr( READER_WRITER_TEXT, ReadAscii );

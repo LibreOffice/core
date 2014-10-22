@@ -41,7 +41,6 @@ SwIoDetect aFilterDetect[] =
     SwIoDetect( FILTER_WW8 ),
     SwIoDetect( sRtfWH ),
     SwIoDetect( sHTML ),
-    SwIoDetect( sWW1 ),
     SwIoDetect( sWW5 ),
     SwIoDetect( FILTER_XML ),
     SwIoDetect( FILTER_TEXT_DLG ),

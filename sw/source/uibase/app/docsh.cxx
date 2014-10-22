@@ -422,8 +422,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         if( pOldFilter &&
             ( pOldFilter->GetUserData() == FILTER_WW8 ||
               pOldFilter->GetUserData() == "CWW6" ||
-              pOldFilter->GetUserData() == "WW6" ||
-              pOldFilter->GetUserData() == "WW1" ) )
+              pOldFilter->GetUserData() == "WW6" ) )
         {
             // when saving it in our own fileformat, then remove the template
             // name from the docinfo.

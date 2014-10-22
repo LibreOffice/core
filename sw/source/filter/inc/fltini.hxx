@@ -39,11 +39,6 @@ public:
     HTMLReader();
 };
 
-class WW1Reader : public Reader
-{
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
-};
-
 class XMLReader : public Reader
 {
     virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;

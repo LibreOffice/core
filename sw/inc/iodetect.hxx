@@ -37,7 +37,6 @@
 #define FILTER_XMLV     "CXMLV"     ///< XML filter
 #define FILTER_XMLVW    "CXMLVWEB"  ///< XML filter
 #define sHTML           "HTML"
-#define sWW1            "WW1"
 #define sWW5            "WW6"
 #define sWW6            "CWW6"
 
@@ -66,7 +65,6 @@ enum ReaderWriterEnum {
     READER_WRITER_WW8,
     READER_WRITER_RTF_WH,
     READER_WRITER_HTML,
-    READER_WRITER_WW1,
     READER_WRITER_WW5,
     READER_WRITER_XML,
     READER_WRITER_TEXT_DLG,
