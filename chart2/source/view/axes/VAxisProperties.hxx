@@ -82,6 +82,8 @@ struct AxisLabelProperties SAL_FINAL
                 ::com::sun::star::chart2::XAxis >&  xAxisModel );
 
     bool isStaggered() const;
+
+    void autoRotate45();
 };
 
 struct AxisLabelAlignment

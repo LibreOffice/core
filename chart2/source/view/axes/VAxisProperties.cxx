@@ -412,6 +412,13 @@ bool AxisLabelProperties::isStaggered() const
     return ( STAGGER_ODD == eStaggering || STAGGER_EVEN == eStaggering );
 }
 
+void AxisLabelProperties::autoRotate45()
+{
+    fRotationAngleDegree = 45;
+    bLineBreakAllowed = false;
+    eStaggering = SIDE_BY_SIDE;
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
