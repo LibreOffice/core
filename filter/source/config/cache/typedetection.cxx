@@ -139,6 +139,7 @@ int getFlatTypeRank(const OUString& rType)
         "draw8",
         "chart8",
         "math8",
+        "writerglobal8_template",
         "writerglobal8",
         "writerweb8_writer_template",
         "StarBase",
