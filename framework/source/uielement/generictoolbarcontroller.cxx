@@ -349,10 +349,10 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
         Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         pMenu = new Toolbarmenu();
         m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, true, true ) );
-        if ( m_xMenuManager.is() )
+        if (m_xMenuManager.is())
         {
-            MenuBarManager* pMgr = dynamic_cast< MenuBarManager* >( m_xMenuManager.get() );
-            pMgr->SetItemContainer( m_xMenuDesc );
+            MenuBarManager& rMgr = dynamic_cast<MenuBarManager&>(*m_xMenuManager.get());
+            rMgr.SetItemContainer(m_xMenuDesc);
         }
     }
 
