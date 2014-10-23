@@ -1962,7 +1962,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 for ( i = 0; i < aStr.getLength(); i++ )
                 {
                     aPt2 = aPt;
-                    if ( i > 0 )
+                    if (i > 0 && nNormSize)
                     {
                         aPt2.X() += pDXAry[i-1]*((long)pA->GetWidth())/ nNormSize;
                         if ( nOrientation )
