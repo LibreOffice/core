@@ -148,25 +148,25 @@ SvxTableController::SvxTableController( SdrObjEditView* pView, const SdrObject* 
 , mnUpdateEvent( 0 )
 {
     if( pObj )
+    {
         mpModel = pObj->GetModel();
 
-    if( mxTableObj.is() )
-    {
-        static_cast< const SdrTableObj* >( pObj )->getActiveCellPos( maCursorFirstPos );
-        maCursorLastPos = maCursorFirstPos;
-
-        Reference< XTable > xTable( static_cast< const SdrTableObj* >( pObj )->getTable() );
-        if( xTable.is() )
+        if( mxTableObj.is() )
         {
-            mxModifyListener = new SvxTableControllerModifyListener( this );
-            xTable->addModifyListener( mxModifyListener );
+            static_cast< const SdrTableObj* >( pObj )->getActiveCellPos( maCursorFirstPos );
+            maCursorLastPos = maCursorFirstPos;
 
-            mxTable.set( dynamic_cast< TableModel* >( xTable.get() ) );
+            Reference< XTable > xTable( static_cast< const SdrTableObj* >( pObj )->getTable() );
+            if( xTable.is() )
+            {
+                mxModifyListener = new SvxTableControllerModifyListener( this );
+                xTable->addModifyListener( mxModifyListener );
+
+                mxTable.set( dynamic_cast< TableModel* >( xTable.get() ) );
+            }
         }
     }
 }
-
-
 
 SvxTableController::~SvxTableController()
 {
