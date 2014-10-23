@@ -98,8 +98,8 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         }
         else if ( pObj->ISA(SdrOle2Obj) )
         {
-            SdrOle2Obj* pOle2Obj = dynamic_cast<SdrOle2Obj*>(pObj);
-            if ( !pOle2Obj->GetObjRef().is() )
+            SdrOle2Obj& rOle2Obj = dynamic_cast<SdrOle2Obj&>(*pObj);
+            if (!rOle2Obj.GetObjRef().is())
             {
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                 uno::Reference < embed::XEmbeddedObject > xObj;
@@ -113,12 +113,12 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
                 * Das leere OLE-Objekt bekommt ein neues IPObj
                 **************************************************/
                 pObj->SetEmptyPresObj(false);
-                pOle2Obj->SetOutlinerParaObject(NULL);
-                pOle2Obj->SetObjRef(xObj);
-                pOle2Obj->SetPersistName(sName);
-                pOle2Obj->SetName(sName);
-                pOle2Obj->SetAspect(nAspect);
-                Rectangle aRect = pOle2Obj->GetLogicRect();
+                rOle2Obj.SetOutlinerParaObject(NULL);
+                rOle2Obj.SetObjRef(xObj);
+                rOle2Obj.SetPersistName(sName);
+                rOle2Obj.SetName(sName);
+                rOle2Obj.SetAspect(nAspect);
+                Rectangle aRect = rOle2Obj.GetLogicRect();
 
                 Size aTmp = aRect.GetSize();
                 awt::Size aSz( aTmp.Width(), aTmp.Height() );
