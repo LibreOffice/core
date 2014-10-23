@@ -58,7 +58,7 @@ void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
 {
     sal_uInt16                  nId  = GetId();
     ToolBox&                rTbx = GetToolBox();
-    ScZoomSliderWnd*        pBox = (ScZoomSliderWnd*)(rTbx.GetItemWindow( nId ));
+    ScZoomSliderWnd*        pBox = static_cast<ScZoomSliderWnd*>(rTbx.GetItemWindow( nId ));
     OSL_ENSURE( pBox ,"Control not found!" );
 
     if ( SfxItemState::DEFAULT != eState || pState->ISA( SfxVoidItem ) )

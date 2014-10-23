@@ -588,8 +588,8 @@ bool ScAccessibleCell::IsDropdown()
         if( pData && pData->HasSelectionList() )
             return true;
     }
-    ScMergeFlagAttr* pAttr;
-    pAttr = static_cast<ScMergeFlagAttr*>(mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG ));
+    const ScMergeFlagAttr* pAttr;
+    pAttr = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG ));
     if( pAttr->HasAutoFilter() )
     {
         return true;

@@ -110,7 +110,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                 // if object has no persistence it must be copied as a part of document
                 try
                 {
-                    uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObject)->GetObjRef(), uno::UNO_QUERY );
+                    uno::Reference< embed::XEmbedPersist > xPersObj( static_cast<SdrOle2Obj*>(pObject)->GetObjRef(), uno::UNO_QUERY );
                     if ( xPersObj.is() && xPersObj->hasEntry() )
                         bOleObj = true;
                 }
@@ -124,7 +124,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             if (nSdrObjKind == OBJ_GRAF)
             {
                 bGraphic = true;
-                if ( ((SdrGrafObj*)pObject)->GetGraphic().GetType() == GRAPHIC_BITMAP )
+                if ( static_cast<SdrGrafObj*>(pObject)->GetGraphic().GetType() == GRAPHIC_BITMAP )
                     bGrIsBit = true;
             }
 
@@ -418,7 +418,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
                 SdrObject* pObject = aIter.Next();
                 if (pObject && pObject->GetObjIdentifier() == OBJ_GRAF)
                 {
-                    SdrGrafObj* pGraphObj = (SdrGrafObj*) pObject;
+                    SdrGrafObj* pGraphObj = static_cast<SdrGrafObj*>(pObject);
                     bOK = SetGraphic( pGraphObj->GetGraphic(), rFlavor );
                 }
             }
@@ -467,7 +467,7 @@ bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 // for the changed pool defaults from drawing layer pool set those
                 // attributes as hard attributes to preserve them for saving
                 const SfxItemPool& rItemPool = pModel->GetItemPool();
-                const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
+                const SvxFontHeightItem& rDefaultFontHeight = static_cast<const SvxFontHeightItem&>(rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT));
 
                 // SW should have no MasterPages
                 OSL_ENSURE(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
@@ -480,7 +480,7 @@ bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                     while(aIter.IsMore())
                     {
                         SdrObject* pObj = aIter.Next();
-                        const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetMergedItem(EE_CHAR_FONTHEIGHT);
+                        const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(pObj->GetMergedItem(EE_CHAR_FONTHEIGHT));
 
                         if(rItem.GetHeight() == rDefaultFontHeight.GetHeight())
                         {
@@ -690,7 +690,7 @@ SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
         SdrObject* pObject = aIter.Next();
         if (pObject && pObject->GetObjIdentifier() == OBJ_OLE2)
         {
-            return (SdrOle2Obj*) pObject;
+            return static_cast<SdrOle2Obj*>(pObject);
         }
     }
 

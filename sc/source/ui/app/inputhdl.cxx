@@ -694,7 +694,7 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
             pEngine->SetSpeller( xXSpellChecker1 );
         }
 
-        bool bHyphen = pLastPattern && ((const SfxBoolItem&)pLastPattern->GetItem(ATTR_HYPHENATE)).GetValue();
+        bool bHyphen = pLastPattern && static_cast<const SfxBoolItem&>(pLastPattern->GetItem(ATTR_HYPHENATE)).GetValue();
         if ( bHyphen ) {
             com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
             pEngine->SetHyphenator( xXHyphenator );
@@ -1769,8 +1769,8 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     }
 
     bool bAsianVertical = pLastPattern &&
-        ((const SfxBoolItem&)pLastPattern->GetItem( ATTR_STACKED )).GetValue() &&
-        ((const SfxBoolItem&)pLastPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
+        static_cast<const SfxBoolItem&>(pLastPattern->GetItem( ATTR_STACKED )).GetValue() &&
+        static_cast<const SfxBoolItem&>(pLastPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
     if ( bAsianVertical )
     {
         // Always edit at top of cell -> LEFT when editing vertically
@@ -1888,7 +1888,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
                 if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
                 {
-                    sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                    sal_uLong nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                     bCellHasPercentFormat = ( NUMBERFORMAT_PERCENT ==
                                               rDoc.GetFormatTable()->GetType( nFormat ) );
                 }
@@ -1897,7 +1897,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
                 // Validity specified?
                 if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALIDDATA, true, &pItem ) )
-                    nValidation = ((const SfxUInt32Item*)pItem)->GetValue();
+                    nValidation = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                 else
                     nValidation = 0;
 
@@ -1918,7 +1918,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 //  Background color must be known for automatic font color.
                 //  For transparent cell background, the document background color must be used.
 
-                Color aBackCol = ((const SvxBrushItem&)
+                Color aBackCol = static_cast<const SvxBrushItem&>(
                                 pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
                 ScModule* pScMod = SC_MOD();
                 if ( aBackCol.GetTransparency() > 0 ||
@@ -1927,7 +1927,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 pEngine->SetBackgroundColor( aBackCol );
 
                 // Adjustment
-                eAttrAdjust = (SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
+                eAttrAdjust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
                                 GetItem(ATTR_HOR_JUSTIFY)).GetValue();
                 if ( eAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
                      static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )

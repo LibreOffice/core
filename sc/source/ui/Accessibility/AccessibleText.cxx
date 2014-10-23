@@ -1303,7 +1303,7 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 {
     ScDocShell* pDocSh = NULL;
     if (pViewShell)
-        pDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
+        pDocSh = static_cast<ScDocShell*>( pViewShell->GetDocument().GetDocumentShell());
     return pDocSh;
 }
 
@@ -1411,7 +1411,7 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
 {
     ScDocShell* pDocSh = NULL;
     if (pViewShell)
-        pDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
+        pDocSh = static_cast<ScDocShell*>(pViewShell->GetDocument().GetDocumentShell());
     return pDocSh;
 }
 
@@ -1429,7 +1429,7 @@ ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShel
     meAdjust(eAdjust)
 {
     if (pViewShell)
-        mpDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
+        mpDocSh = static_cast<ScDocShell*>(pViewShell->GetDocument().GetDocumentShell());
     if (mpDocSh)
         mpDocSh->GetDocument().AddUnoObject(*this);
 }
@@ -1482,7 +1482,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         //  -> use global pool from module
 
         SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
-        const ScPatternAttr& rPattern = (const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
+        const ScPatternAttr& rPattern = static_cast<const ScPatternAttr&>(SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN));
         rPattern.FillEditItemSet( &aDefaults );
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
@@ -1544,7 +1544,7 @@ ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
     mbDataValid(false)
 {
     if (pViewShell)
-        mpDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
+        mpDocSh = static_cast<ScDocShell*>(pViewShell->GetDocument().GetDocumentShell());
     if (mpDocSh)
         mpDocSh->GetDocument().AddUnoObject(*this);
 }

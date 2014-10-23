@@ -664,7 +664,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         if (pStyleSheet)
         {
             const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
-            aPaperSize = ((const SvxSizeItem&) rSourceSet.Get(ATTR_PAGE_SIZE)).GetSize();
+            aPaperSize = static_cast<const SvxSizeItem&>( rSourceSet.Get(ATTR_PAGE_SIZE)).GetSize();
 
             //  CopyStyleFrom kopiert SetItems mit richtigem Pool
             ScStyleSheetPool* pDestPool = rDestDoc.GetStyleSheetPool();
@@ -798,7 +798,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
             ScAddress aPos(nCol, nRow, nDestTab);
             if (nErrCode)
             {
-                if ( ((const SvxHorJustifyItem*) pDestDoc->GetAttr(
+                if ( static_cast<const SvxHorJustifyItem*>(pDestDoc->GetAttr(
                         nCol,nRow,nDestTab, ATTR_HOR_JUSTIFY))->GetValue() ==
                         SVX_HOR_JUSTIFY_STANDARD )
                     pDestDoc->ApplyAttr( nCol,nRow,nDestTab,

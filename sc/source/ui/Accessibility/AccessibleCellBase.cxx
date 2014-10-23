@@ -256,7 +256,7 @@ sal_Bool SAL_CALL
         }
         if (IsEditable(xParentStates))
         {
-            ScDocShell* pDocShell = (ScDocShell*) mpDoc->GetDocumentShell();
+            ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
             bResult = pDocShell->GetDocFunc().SetValueCell(maCellAddress, fValue, false);
         }
     }

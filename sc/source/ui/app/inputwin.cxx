@@ -271,7 +271,7 @@ ScInputWindow::~ScInputWindow()
         SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
         while ( pSh )
         {
-            ScInputHandler* pHdl = ((ScTabViewShell*)pSh)->GetInputHandler();
+            ScInputHandler* pHdl = static_cast<ScTabViewShell*>(pSh)->GetInputHandler();
             if ( pHdl && pHdl->GetInputWindow() == this )
             {
                 pHdl->SetInputWindow( NULL );
@@ -1782,7 +1782,7 @@ void ScTextWnd::StartEditEngine()
 //        SfxObjectShell* pObjSh = SfxObjectShell::Current();
         if ( pObjSh && pObjSh->ISA(ScDocShell) )
         {
-            ScDocument& rDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
+            ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();    // any document
             sal_uInt8 nScript = rDoc.GetStringScriptType( aString );
             if ( nScript & SCRIPTTYPE_COMPLEX )
                 Invalidate();
@@ -1882,7 +1882,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                 if ( pObjSh && pObjSh->ISA(ScDocShell) )
                 {
                     //  any document can be used (used only for its break iterator)
-                    ScDocument& rDoc = ((ScDocShell*)pObjSh)->GetDocument();
+                    ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();
                     nOldScript = rDoc.GetStringScriptType( aString );
                     nNewScript = rDoc.GetStringScriptType( rNewString );
                 }
@@ -2119,7 +2119,7 @@ void ScPosWnd::FillRangeNames()
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
     if ( pObjSh && pObjSh->ISA(ScDocShell) )
     {
-        ScDocument& rDoc = ((ScDocShell*)pObjSh)->GetDocument();
+        ScDocument& rDoc = static_cast<ScDocShell*>(pObjSh)->GetDocument();
 
         InsertEntry(ScGlobal::GetRscString( STR_MANAGE_NAMES ));
         SetSeparatorPos(0);
