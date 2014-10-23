@@ -20,24 +20,23 @@
 #ifndef INCLUDED_BASIC_BASRDLL_HXX
 #define INCLUDED_BASIC_BASRDLL_HXX
 
-class ResMgr;
+#include <boost/scoped_ptr.hpp>
 
-#include <vcl/accel.hxx>
 #include <basic/basicdllapi.h>
+
+class ResMgr;
 
 class BASIC_DLLPUBLIC BasicDLL
 {
-private:
-    ResMgr*     pBasResMgr;
-
-    bool        bDebugMode;
-    bool        bBreakEnabled;
+public:
+    struct Impl;
+    ::boost::scoped_ptr<Impl> m_pImpl;
 
 public:
                 BasicDLL();
                 ~BasicDLL();
 
-    ResMgr*     GetBasResMgr() const { return pBasResMgr; }
+    ResMgr*     GetBasResMgr() const;
 
     static void BasicBreak();
 

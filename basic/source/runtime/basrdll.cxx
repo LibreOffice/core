@@ -29,23 +29,36 @@
 #include <basrid.hxx>
 #include <sb.hrc>
 
+struct BasicDLL::Impl
+{
+    bool        bDebugMode;
+    bool        bBreakEnabled;
+
+    ::boost::scoped_ptr<ResMgr> pBasResMgr;
+
+    Impl()
+        : bDebugMode(false)
+        , bBreakEnabled(true)
+        , pBasResMgr(ResMgr::CreateResMgr("sb", Application::GetSettings().GetUILanguageTag()))
+    { }
+};
+
 BasResId::BasResId( sal_uInt32 nId ) :
     ResId( nId, *(BASIC_DLL()->GetBasResMgr()) )
 {
 }
 
 BasicDLL::BasicDLL()
+    : m_pImpl(new Impl)
 {
     BASIC_DLL() = this;
-    pBasResMgr = ResMgr::CreateResMgr("sb", Application::GetSettings().GetUILanguageTag() );
-    bDebugMode = false;
-    bBreakEnabled = true;
 }
 
 BasicDLL::~BasicDLL()
 {
-    delete pBasResMgr;
 }
+
+ResMgr* BasicDLL::GetBasResMgr() const { return m_pImpl->pBasResMgr.get(); }
 
 void BasicDLL::EnableBreak( bool bEnable )
 {
@@ -53,7 +66,7 @@ void BasicDLL::EnableBreak( bool bEnable )
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
-        pThis->bBreakEnabled = bEnable;
+        pThis->m_pImpl->bBreakEnabled = bEnable;
     }
 }
 
@@ -63,7 +76,7 @@ void BasicDLL::SetDebugMode( bool bDebugMode )
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
-        pThis->bDebugMode = bDebugMode;
+        pThis->m_pImpl->bDebugMode = bDebugMode;
     }
 }
 
@@ -78,7 +91,8 @@ void BasicDLL::BasicBreak()
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
-        if ( StarBASIC::IsRunning() && !bJustStopping && ( pThis->bBreakEnabled || pThis->bDebugMode ) )
+        if (StarBASIC::IsRunning() && !bJustStopping
+            && (pThis->m_pImpl->bBreakEnabled || pThis->m_pImpl->bDebugMode))
         {
             bJustStopping = true;
             StarBASIC::Stop();
