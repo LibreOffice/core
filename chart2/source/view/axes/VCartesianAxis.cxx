@@ -414,8 +414,7 @@ void getAxisLabelProperties(
 class MaxLabelTickIter : public TickIter
 {
 public:
-    MaxLabelTickIter( TickInfoArrayType& rTickInfoVector
-            , sal_Int32 nLongestLabelIndex );
+    MaxLabelTickIter( TickInfoArrayType& rTickInfoVector, size_t nLongestLabelIndex );
     virtual ~MaxLabelTickIter();
 
     virtual TickInfo* firstInfo() SAL_OVERRIDE;
@@ -423,21 +422,21 @@ public:
 
 private:
     TickInfoArrayType& m_rTickInfoVector;
-    ::std::vector< sal_Int32 > m_aValidIndices;
-    sal_Int32 m_nCurrentIndex;
+    std::vector<size_t> m_aValidIndices;
+    size_t m_nCurrentIndex;
 };
 
-MaxLabelTickIter::MaxLabelTickIter( TickInfoArrayType& rTickInfoVector
-            , sal_Int32 nLongestLabelIndex )
-            : m_rTickInfoVector(rTickInfoVector)
-            , m_nCurrentIndex(0)
+MaxLabelTickIter::MaxLabelTickIter(
+    TickInfoArrayType& rTickInfoVector, size_t nLongestLabelIndex ) :
+    m_rTickInfoVector(rTickInfoVector), m_nCurrentIndex(0)
 {
-    sal_Int32 nMaxIndex = m_rTickInfoVector.size()-1;
-    if( nLongestLabelIndex<0 || nLongestLabelIndex>=nMaxIndex-1 )
+    assert(!rTickInfoVector.empty()); // should be checked by the caller.
+
+    size_t nMaxIndex = m_rTickInfoVector.size()-1;
+    if (nLongestLabelIndex >= nMaxIndex-1)
         nLongestLabelIndex = 0;
 
-    if( nMaxIndex>=0 )
-        m_aValidIndices.push_back(0);
+    m_aValidIndices.push_back(0);
     if( nMaxIndex>=1 )
         m_aValidIndices.push_back(1);
     if( nLongestLabelIndex>1 )
@@ -454,7 +453,7 @@ MaxLabelTickIter::~MaxLabelTickIter()
 TickInfo* MaxLabelTickIter::firstInfo()
 {
     m_nCurrentIndex = 0;
-    if( m_nCurrentIndex < static_cast<sal_Int32>(m_aValidIndices.size()) )
+    if (m_nCurrentIndex < m_aValidIndices.size())
         return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
     return 0;
 }
@@ -462,7 +461,7 @@ TickInfo* MaxLabelTickIter::firstInfo()
 TickInfo* MaxLabelTickIter::nextInfo()
 {
     m_nCurrentIndex++;
-    if( m_nCurrentIndex>=0 && m_nCurrentIndex<static_cast<sal_Int32>(m_aValidIndices.size()) )
+    if (m_nCurrentIndex < m_aValidIndices.size())
         return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
     return 0;
 }
@@ -624,7 +623,7 @@ TickIter* VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
         {
             if( !m_aAllTickInfos.empty() )
             {
-                sal_Int32 nLongestLabelIndex = m_bUseTextLabels ? this->getIndexOfLongestLabel( m_aTextLabels ) : 0;
+                size_t nLongestLabelIndex = m_bUseTextLabels ? getIndexOfLongestLabel(m_aTextLabels) : 0;
                 return new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex );
             }
         }

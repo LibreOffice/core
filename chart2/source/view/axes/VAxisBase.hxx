@@ -65,7 +65,7 @@ public:
     void setExrtaLinePositionAtOtherAxis( double fCrossingAt );
 
 protected: //methods
-    sal_Int32 getIndexOfLongestLabel( const ::com::sun::star::uno::Sequence< OUString >& rLabels );
+    size_t getIndexOfLongestLabel( const css::uno::Sequence<OUString>& rLabels );
     void removeTextShapesFromTicks();
     void updateUnscaledValuesAtTicks( TickIter& rIter );
 
