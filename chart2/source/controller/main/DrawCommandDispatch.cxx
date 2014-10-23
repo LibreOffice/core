@@ -497,7 +497,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                     basegfx::B2DPoint( aRect.Right(), aRect.Top() ) );
                                 basegfx::B2DPolyPolygon aPoly;
                                 aPoly.append( aInnerPoly );
-                                ( dynamic_cast< SdrPathObj* >( pObj ) )->SetPathPoly( aPoly );
+                                dynamic_cast<SdrPathObj&>(*pObj).SetPathPoly(aPoly);
                             }
                         }
                         break;
