@@ -822,13 +822,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
                     Size aSizeMove(aNew.Left()-aOld.Left(), aNew.Top()-aOld.Top());
                     pObj->NbcMove(aSizeMove);
 
-                    boost::rational<sal_Int64> aXFrac;
-                    boost::rational<sal_Int64> aYFrac;
-                    if (aOld.GetWidth() != 0)
-                        aXFrac.assign(aNew.GetWidth(), aOld.GetWidth());
-                    if (aOld.GetHeight() != 0)
-                        aYFrac.assign(aNew.GetHeight(), aOld.GetHeight());
-                    pObj->NbcResize(aNew.TopLeft(), aXFrac, aYFrac);
+                    double fXFrac = static_cast<double>(aNew.GetWidth()) / static_cast<double>(aOld.GetWidth());
+                    double fYFrac = static_cast<double>(aNew.GetHeight()) / static_cast<double>(aOld.GetHeight());
+                    pObj->NbcResize(aNew.TopLeft(), rational_FromDouble(fXFrac), rational_FromDouble(fYFrac));
                 }
                 // order of these lines is important, modify rData.maLastRect carefully it is used as both
                 // a value and a flag for initialisation
