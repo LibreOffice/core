@@ -1907,6 +1907,13 @@ DECLARE_RTFIMPORT_TEST(testFdo83464, "fdo83464.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), getProperty<OUString>(getRun(getParagraphOfText(1, xFrameText->getText()), 1), "CharFontName"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo85179, "fdo85179.rtf")
+{
+    // This was 0, border around the picture was ignored on import.
+    // 360: EMU -> MM100
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(50800/360), getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
