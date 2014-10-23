@@ -45,7 +45,6 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
     );
 }
 
-
 void throwInvalidArgumentException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
@@ -70,14 +69,12 @@ void translateAndThrow(const ::sql::SQLException& _error, const ::com::sun::star
         );
 }
 
-
 OUString getStringFromAny(const Any& _rAny)
 {
     OUString nReturn;
     OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
-
 
 int mysqlToOOOType(int cppConnType)
     throw ()
@@ -149,7 +146,6 @@ int mysqlToOOOType(int cppConnType)
     OSL_FAIL( "mysqlToOOOType: unhandled case, falling back to VARCHAR" );
     return com::sun::star::sdbc::DataType::VARCHAR;
 }
-
 
 OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {

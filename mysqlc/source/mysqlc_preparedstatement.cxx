@@ -91,12 +91,10 @@ OPreparedStatement::OPreparedStatement(OConnection* _pConnection, sql::PreparedS
     }
 }
 
-
 OPreparedStatement::~OPreparedStatement()
 {
     OSL_TRACE("OPreparedStatement::~OPreparedStatement");
 }
-
 
 void SAL_CALL OPreparedStatement::acquire()
     throw()
@@ -105,14 +103,12 @@ void SAL_CALL OPreparedStatement::acquire()
     OCommonStatement::acquire();
 }
 
-
 void SAL_CALL OPreparedStatement::release()
     throw()
 {
     OSL_TRACE("OPreparedStatement::release");
     OCommonStatement::release();
 }
-
 
 Any SAL_CALL OPreparedStatement::queryInterface(const Type & rType)
     throw(RuntimeException, std::exception)
@@ -125,14 +121,12 @@ Any SAL_CALL OPreparedStatement::queryInterface(const Type & rType)
     return (aRet);
 }
 
-
 Sequence< Type > SAL_CALL OPreparedStatement::getTypes()
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OPreparedStatement::getTypes");
     return concatSequences(OPreparedStatement_BASE::getTypes(), OCommonStatement::getTypes());
 }
-
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     throw(SQLException, RuntimeException, std::exception)
@@ -156,7 +150,6 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData()
     return m_xMetaData;
 }
 
-
 void SAL_CALL OPreparedStatement::close()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -177,7 +170,6 @@ void SAL_CALL OPreparedStatement::close()
     // list
 }
 
-
 sal_Bool SAL_CALL OPreparedStatement::execute()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -194,7 +186,6 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
     return success;
 }
 
-
 sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -210,7 +201,6 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
     }
     return affectedRows;
 }
-
 
 void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString& x)
     throw(SQLException, RuntimeException, std::exception)
@@ -229,7 +219,6 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString&
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
-
 
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
     throw(SQLException, RuntimeException, std::exception)
@@ -276,7 +265,6 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
     return xResultSet;
 }
 
-
 void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -294,7 +282,6 @@ void SAL_CALL OPreparedStatement::setBoolean(sal_Int32 parameter, sal_Bool x)
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -311,7 +298,6 @@ void SAL_CALL OPreparedStatement::setByte(sal_Int32 parameter, sal_Int8 x)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
-
 
 void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData)
     throw(SQLException, RuntimeException, std::exception)
@@ -338,7 +324,6 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -363,7 +348,6 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
-
 
 void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTime& aVal)
     throw(SQLException, RuntimeException, std::exception)
@@ -398,7 +382,6 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -415,7 +398,6 @@ void SAL_CALL OPreparedStatement::setDouble(sal_Int32 parameter, double x)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
-
 
 void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
     throw(SQLException, RuntimeException, std::exception)
@@ -434,7 +416,6 @@ void SAL_CALL OPreparedStatement::setFloat(sal_Int32 parameter, float x)
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -451,7 +432,6 @@ void SAL_CALL OPreparedStatement::setInt(sal_Int32 parameter, sal_Int32 x)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
-
 
 void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
     throw(SQLException, RuntimeException, std::exception)
@@ -470,7 +450,6 @@ void SAL_CALL OPreparedStatement::setLong(sal_Int32 parameter, sal_Int64 aVal)
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 sqlType)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -488,7 +467,6 @@ void SAL_CALL OPreparedStatement::setNull(sal_Int32 parameter, sal_Int32 sqlType
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setClob(sal_Int32 parameter, const Reference< XClob >& /* x */)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -499,7 +477,6 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 parameter, const Reference< 
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setClob", *this);
 }
-
 
 void SAL_CALL OPreparedStatement::setBlob(sal_Int32 parameter, const Reference< XBlob >& /* x */)
     throw(SQLException, RuntimeException, std::exception)
@@ -512,7 +489,6 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 parameter, const Reference< 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBlob", *this);
 }
 
-
 void SAL_CALL OPreparedStatement::setArray(sal_Int32 parameter, const Reference< XArray >& /* x */)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -523,7 +499,6 @@ void SAL_CALL OPreparedStatement::setArray(sal_Int32 parameter, const Reference<
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setArray", *this);
 }
-
 
 void SAL_CALL OPreparedStatement::setRef(sal_Int32 parameter, const Reference< XRef >& /* x */)
     throw(SQLException, RuntimeException, std::exception)
@@ -699,7 +674,6 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setObjectNull(sal_Int32 parameter, sal_Int32 /* sqlType */, const OUString& /* typeName */)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -711,7 +685,6 @@ void SAL_CALL OPreparedStatement::setObjectNull(sal_Int32 parameter, sal_Int32 /
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setObjectNull", *this);
 }
 
-
 void SAL_CALL OPreparedStatement::setObject(sal_Int32 parameter, const Any& /* x */)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -722,7 +695,6 @@ void SAL_CALL OPreparedStatement::setObject(sal_Int32 parameter, const Any& /* x
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setObject", *this);
 }
-
 
 void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
     throw(SQLException, RuntimeException, std::exception)
@@ -740,7 +712,6 @@ void SAL_CALL OPreparedStatement::setShort(sal_Int32 parameter, sal_Int16 x)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_pConnection->getConnectionEncoding());
     }
 }
-
 
 void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< sal_Int8 >& x)
     throw(SQLException, RuntimeException, std::exception)
@@ -760,7 +731,6 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< 
     }
 }
 
-
 void SAL_CALL OPreparedStatement::setCharacterStream(sal_Int32 parameter,
                                                     const Reference< XInputStream >& /* x */,
                                                     sal_Int32 /* length */)
@@ -774,7 +744,6 @@ void SAL_CALL OPreparedStatement::setCharacterStream(sal_Int32 parameter,
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setCharacterStream", *this);
 }
 
-
 void SAL_CALL OPreparedStatement::setBinaryStream(sal_Int32 parameter,
                                                 const Reference< XInputStream >& /* x */,
                                                 sal_Int32 /* length */)
@@ -787,7 +756,6 @@ void SAL_CALL OPreparedStatement::setBinaryStream(sal_Int32 parameter,
 
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::setBinaryStream", *this);
 }
-
 
 void SAL_CALL OPreparedStatement::clearParameters()
     throw(SQLException, RuntimeException, std::exception)
@@ -805,14 +773,12 @@ void SAL_CALL OPreparedStatement::clearParameters()
     }
 }
 
-
 void SAL_CALL OPreparedStatement::clearBatch()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("OPreparedStatement::clearBatch");
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearBatch", *this);
 }
-
 
 void SAL_CALL OPreparedStatement::addBatch()
     throw(SQLException, RuntimeException, std::exception)
@@ -821,7 +787,6 @@ void SAL_CALL OPreparedStatement::addBatch()
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::addBatch", *this);
 }
 
-
 Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -829,7 +794,6 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch()
     Sequence< sal_Int32 > aRet= Sequence< sal_Int32 > ();
     return aRet;
 }
-
 
 void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
     throw(Exception, std::exception)
@@ -850,7 +814,6 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
             OPreparedStatement::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 }
-
 
 void OPreparedStatement::checkParameterIndex(sal_Int32 column)
 {

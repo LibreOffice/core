@@ -90,7 +90,6 @@ Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-
 OUString SAL_CALL MysqlCDriver::getImplementationName()
     throw(RuntimeException, std::exception)
 {

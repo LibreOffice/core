@@ -96,7 +96,6 @@ OPropertyMap::~OPropertyMap()
     }
 }
 
-
 OUString OPropertyMap::getNameByIndex(sal_Int32 idx) const
 {
     OUString sRet;
@@ -168,7 +167,6 @@ static const property_callback property_callbacks[PROPERTY_ID_LAST] =
     getPROPERTY_AUTOINCREMENTCREATION,
     getPROPERTY_PRIVILEGES,
 };
-
 
 OUString OPropertyMap::fillValue(sal_Int32 idx)
 {

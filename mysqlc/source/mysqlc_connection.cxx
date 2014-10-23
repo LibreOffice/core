@@ -74,7 +74,6 @@ OConnection::OConnection(MysqlCDriver& _rDriver, sql::Driver * _cppDriver)
     m_rDriver.acquire();
 }
 
-
 OConnection::~OConnection()
 {
     OSL_TRACE("OConnection::~OConnection");
@@ -83,7 +82,6 @@ OConnection::~OConnection()
     }
     m_rDriver.release();
 }
-
 
 void SAL_CALL OConnection::release()
     throw()
@@ -252,7 +250,6 @@ Reference< XStatement > SAL_CALL OConnection::createStatement()
     return xReturn;
 }
 
-
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const OUString& _sSql)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -274,7 +271,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const OUS
     return xStatement;
 }
 
-
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(const OUString& /*_sSql*/ )
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -285,7 +281,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(const OUString
     mysqlc_sdbc_driver::throwFeatureNotImplementedException("OConnection::prepareCall", *this);
     return Reference< XPreparedStatement >();
 }
-
 
 OUString SAL_CALL OConnection::nativeSQL(const OUString& _sSql)
     throw(SQLException, RuntimeException, std::exception)
@@ -304,7 +299,6 @@ OUString SAL_CALL OConnection::nativeSQL(const OUString& _sSql)
     return sNativeSQL;
 }
 
-
 void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -317,7 +311,6 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
 }
-
 
 sal_Bool SAL_CALL OConnection::getAutoCommit()
     throw(SQLException, RuntimeException, std::exception)
@@ -338,7 +331,6 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
     return autoCommit;
 }
 
-
 void SAL_CALL OConnection::commit()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -351,7 +343,6 @@ void SAL_CALL OConnection::commit()
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
 }
-
 
 void SAL_CALL OConnection::rollback()
     throw(SQLException, RuntimeException, std::exception)
@@ -366,7 +357,6 @@ void SAL_CALL OConnection::rollback()
     }
 }
 
-
 sal_Bool SAL_CALL OConnection::isClosed()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -376,7 +366,6 @@ sal_Bool SAL_CALL OConnection::isClosed()
     // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
     return (OConnection_BASE::rBHelper.bDisposed);
 }
-
 
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
     throw(SQLException, RuntimeException, std::exception)
@@ -398,7 +387,6 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
     return xMetaData;
 }
 
-
 void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -408,7 +396,6 @@ void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
 
     m_settings.readOnly = readOnly;
 }
-
 
 sal_Bool SAL_CALL OConnection::isReadOnly()
     throw(SQLException, RuntimeException, std::exception)
@@ -420,7 +407,6 @@ sal_Bool SAL_CALL OConnection::isReadOnly()
     // return if your connection to readonly
     return (m_settings.readOnly);
 }
-
 
 void SAL_CALL OConnection::setCatalog(const OUString& catalog)
     throw(SQLException, RuntimeException, std::exception)
@@ -437,7 +423,6 @@ void SAL_CALL OConnection::setCatalog(const OUString& catalog)
     }
 }
 
-
 OUString SAL_CALL OConnection::getCatalog()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -453,7 +438,6 @@ OUString SAL_CALL OConnection::getCatalog()
     }
     return catalog;
 }
-
 
 void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
     throw(SQLException, RuntimeException, std::exception)
@@ -490,7 +474,6 @@ void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
     }
 }
 
-
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -513,7 +496,6 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
     return TransactionIsolation::NONE;
 }
 
-
 Reference<XNameAccess> SAL_CALL OConnection::getTypeMap()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -528,7 +510,6 @@ Reference<XNameAccess> SAL_CALL OConnection::getTypeMap()
     return (t);
 }
 
-
 void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -538,7 +519,6 @@ void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)
 
     m_typeMap = typeMap;
 }
-
 
 // XCloseable
 void SAL_CALL OConnection::close()
@@ -557,7 +537,6 @@ void SAL_CALL OConnection::close()
     dispose();
 }
 
-
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings()
     throw(SQLException, RuntimeException, std::exception)
@@ -568,7 +547,6 @@ Any SAL_CALL OConnection::getWarnings()
     return x;
 }
 
-
 void SAL_CALL OConnection::clearWarnings()
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -576,13 +554,11 @@ void SAL_CALL OConnection::clearWarnings()
     // you should clear your collected warnings here#
 }
 
-
 void OConnection::buildTypeInfo()
     throw(SQLException)
 {
     OSL_TRACE("OConnection::buildTypeInfo");
 }
-
 
 void OConnection::disposing()
 {
@@ -604,7 +580,6 @@ void OConnection::disposing()
     dispose_ChildImpl();
     OConnection_BASE::disposing();
 }
-
 
 /* ToDo - upcast the connection to MySQL_Connection and use ::getSessionVariable() */
 
@@ -635,7 +610,6 @@ OUString OConnection::getMysqlVariable(const char *varname)
     return ret;
 }
 
-
 sal_Int32 OConnection::getMysqlVersion()
     throw(SQLException, RuntimeException)
 {
@@ -653,7 +627,6 @@ sal_Int32 OConnection::getMysqlVersion()
     }
     return version;
 }
-
 
 // TODO: Not used
 //sal_Int32 OConnection::sdbcColumnType(OUString typeName)

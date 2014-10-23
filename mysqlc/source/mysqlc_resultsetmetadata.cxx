@@ -33,7 +33,6 @@ OResultSetMetaData::~OResultSetMetaData()
 {
 }
 
-
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -48,7 +47,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
     }
     return 0; // fool compiler
 }
-
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -85,7 +83,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()
     return 0; // fool compiler
 }
 
-
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -101,7 +98,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     }
     return sal_False; // fool compiler
 }
-
 
 OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -119,7 +115,6 @@ OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
     return OUString(); // fool compiler
 }
 
-
 OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -135,7 +130,6 @@ OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     }
     return OUString(); // fool compiler
 }
-
 
 OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -153,7 +147,6 @@ OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
     return OUString(); // fool compiler
 }
 
-
 OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -169,7 +162,6 @@ OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
     }
     return OUString(); // fool compiler
 }
-
 
 OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -187,7 +179,6 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
     return OUString(); // fool compiler
 }
 
-
 OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -204,7 +195,6 @@ OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     return OUString(); // fool compiler
 }
 
-
 OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -214,7 +204,6 @@ OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
     OUString aRet = OUString();
     return aRet;
 }
-
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -232,7 +221,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
     return sal_False; // fool compiler
 }
 
-
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -248,7 +236,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     }
     return sal_False; // fool compiler
 }
-
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -266,7 +253,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
     return sal_False; // fool compiler
 }
 
-
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -283,7 +269,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
     return 0; // fool compiler
 }
 
-
 sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -298,7 +283,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
     }
     return 0; // fool compiler
 }
-
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -316,7 +300,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
     return sal_False; // fool compiler
 }
 
-
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -332,7 +315,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
     }
     return sal_False; // fool compiler
 }
-
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
@@ -350,7 +332,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
     return sal_False; // fool compiler
 }
 
-
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -367,7 +348,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
     return sal_False; // fool compiler
 }
 
-
 sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
     throw(SQLException, RuntimeException, std::exception)
 {
@@ -383,7 +363,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
     }
     return sal_False; // fool compiler
 }
-
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     throw (SQLException, RuntimeException)
