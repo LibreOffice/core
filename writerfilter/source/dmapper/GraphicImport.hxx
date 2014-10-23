@@ -57,7 +57,6 @@ class DomainMapper;
 
 enum GraphicImportType
 {
-    IMPORT_AS_GRAPHIC,
     IMPORT_AS_SHAPE,
     IMPORT_AS_DETECTED_INLINE,
     IMPORT_AS_DETECTED_ANCHOR

@@ -1162,7 +1162,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             table::BorderLine2 aBorderLine;
             for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
             {
-                if( m_pImpl->eGraphicImportType == IMPORT_AS_GRAPHIC || !nBorder )
+                if( !nBorder )
                 {
                     GraphicBorderLine& rBorderLine = m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder)];
                     if (rBorderLine.isEmpty() && xShapeProps.is())
