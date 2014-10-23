@@ -3033,13 +3033,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
 void DomainMapper::lcl_props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    std::string sType = ref->getType();
-    if( sType == "FSPA" )
-    {
-        m_pImpl->ImportGraphic(ref, IMPORT_AS_SHAPE);
-    }
-    else
-        ref->resolve(*this);
+    ref->resolve(*this);
 }
 
 void DomainMapper::lcl_table(Id name, writerfilter::Reference<Table>::Pointer_t ref)

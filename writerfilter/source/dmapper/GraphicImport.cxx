@@ -1153,43 +1153,39 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 uno::UNO_QUERY_THROW);
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
-                uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
+                uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
             xGraphicObject = uno::Reference< text::XTextContent >( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
 
-            //shapes have only one border, PICF might have four
+            //shapes have only one border
             table::BorderLine2 aBorderLine;
-            for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
+            GraphicBorderLine& rBorderLine = m_pImpl->aBorders[0];
+            if (rBorderLine.isEmpty() && xShapeProps.is())
             {
-                if( !nBorder )
-                {
-                    GraphicBorderLine& rBorderLine = m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder)];
-                    if (rBorderLine.isEmpty() && xShapeProps.is())
-                    {
-                        // In case we got no border tokens and we have the
-                        // original shape, then use its line properties as the
-                        // border.
-                        aBorderLine.Color = xShapeProps->getPropertyValue("LineColor").get<sal_Int32>();
-                        aBorderLine.LineWidth = xShapeProps->getPropertyValue("LineWidth").get<sal_Int32>();
-                    }
-                    else
-                    {
-                        aBorderLine.Color = rBorderLine.nLineColor;
-                        aBorderLine.InnerLineWidth = 0;
-                        aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
-                        aBorderLine.LineDistance = 0;
-                    }
-                }
-                PropertyIds aBorderProps[4] =
-                {
-                    PROP_LEFT_BORDER,
-                    PROP_RIGHT_BORDER,
-                    PROP_TOP_BORDER,
-                    PROP_BOTTOM_BORDER
-                };
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
+                // In case we got no border tokens and we have the
+                // original shape, then use its line properties as the
+                // border.
+                aBorderLine.Color = xShapeProps->getPropertyValue("LineColor").get<sal_Int32>();
+                aBorderLine.LineWidth = xShapeProps->getPropertyValue("LineWidth").get<sal_Int32>();
             }
+            else
+            {
+                aBorderLine.Color = rBorderLine.nLineColor;
+                aBorderLine.InnerLineWidth = 0;
+                aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
+                aBorderLine.LineDistance = 0;
+            }
+            PropertyIds aBorderProps[4] =
+            {
+                PROP_LEFT_BORDER,
+                PROP_RIGHT_BORDER,
+                PROP_TOP_BORDER,
+                PROP_BOTTOM_BORDER
+            };
+
+            for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
 
             // setting graphic object shadow proerties
             if (m_pImpl->bShadow)
@@ -1231,15 +1227,9 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PROTECTED ),
                     uno::makeAny(true));
 
-            if( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR )
+            if (m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;
-                if( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE )
-                {
-                    sal_Int32 nHeight = m_pImpl->nBottomPosition - m_pImpl->nTopPosition;
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
-                        uno::makeAny( awt::Size( nWidth, nHeight )));
-                }
                 //adjust margins
                 if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
                     (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
