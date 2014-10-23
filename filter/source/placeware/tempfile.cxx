@@ -33,25 +33,24 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
     if ( !pValue )
     {
         pValue = getenv( "TMP" );
-#if defined(SOLARIS) || defined (LINUX)
         if ( !pValue )
+        {
+#if defined(SOLARIS) || defined (LINUX)
             pValue = P_tmpdir;
+#else
+            return osl_File_E_NOENT
 #endif
+        }
     }
 
-    if ( pValue )
-    {
-        oslFileError error;
-        rtl_uString *ustrTempPath = NULL;
+    oslFileError error;
+    rtl_uString *ustrTempPath = NULL;
 
-        rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-        error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
-        rtl_uString_release( ustrTempPath );
+    rtl_string2UString( &ustrTempPath, pValue, strlen( pValue ), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
+    error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
+    rtl_uString_release( ustrTempPath );
 
-        return error;
-    }
-    else
-        return osl_File_E_NOENT;
+    return error;
 }
 #else
 
