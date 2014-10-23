@@ -557,6 +557,10 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
                 Read( nAnz );
                 Read( nStrLen );
 
+                const size_t nMaxEntries = aIn.remainingSize();
+                if (nStrLen > nMaxEntries)
+                    nStrLen = nMaxEntries;
+
                 if( nStrLen )
                 {
                     boost::scoped_array<sal_Char> p(new (::std::nothrow) sal_Char[ nStrLen + 1 ]);
