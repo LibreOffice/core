@@ -516,7 +516,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
 
 // XDataSinkEncrSupport
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
-        throw ( packages::WrongPasswordException,
+        throw ( packages::WrongPasswordException, ZipException,
                 io::IOException,
                 RuntimeException, std::exception )
 {

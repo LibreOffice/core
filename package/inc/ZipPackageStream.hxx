@@ -165,7 +165,7 @@ public:
 
     // XDataSinkEncrSupport
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream()
-        throw ( ::com::sun::star::packages::WrongPasswordException,
+        throw ( ::com::sun::star::packages::WrongPasswordException, ::com::sun::star::packages::zip::ZipException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream()
