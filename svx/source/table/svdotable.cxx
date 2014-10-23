@@ -85,7 +85,7 @@ class TableProperties : public TextProperties
 {
 protected:
     // create a new itemset
-    SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
+    SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
 public:
     // basic constructor
@@ -131,9 +131,9 @@ void TableProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNe
 }
 
 // create a new itemset
-SfxItemSet& TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+SfxItemSet* TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
 {
-    return *(new SfxItemSet(rPool,
+    return new SfxItemSet(rPool,
 
         // range from SdrAttrObj
         SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -147,7 +147,7 @@ SfxItemSet& TableProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         EE_ITEMS_START, EE_ITEMS_END,
 
         // end
-        0, 0));
+        0, 0);
 }
 
 class TableObjectGeoData : public SdrTextObjGeoData

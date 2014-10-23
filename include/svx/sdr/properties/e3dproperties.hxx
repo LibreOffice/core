@@ -33,7 +33,7 @@ namespace sdr
         {
         protected:
             // create a new itemset
-            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
+            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;

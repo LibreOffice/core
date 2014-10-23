@@ -56,7 +56,7 @@ namespace sdr
             SdrObject&                                      mrObject;
 
             // create a new object specific itemset with object specific ranges.
-            virtual SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
+            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
 
             // internal access to SdrObject
             SdrObject& GetSdrObject() const

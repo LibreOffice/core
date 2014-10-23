@@ -29,9 +29,9 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet& E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* E3dProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return *(new SfxItemSet(rPool,
+            return new SfxItemSet(rPool,
 
                 // ranges from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -42,7 +42,7 @@ namespace sdr
                 SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
 
                 // end
-                0, 0));
+                0, 0);
         }
 
         E3dProperties::E3dProperties(SdrObject& rObj)

@@ -60,9 +60,9 @@ namespace sdr
             }
         }
 
-        SfxItemSet& CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* CustomShapeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return *(new SfxItemSet(rPool,
+            return new SfxItemSet(rPool,
 
                 // ranges from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -82,7 +82,7 @@ namespace sdr
                 EE_ITEMS_START, EE_ITEMS_END,
 
                 // end
-                0, 0));
+                0, 0);
         }
 
         bool CustomShapeProperties::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem ) const
