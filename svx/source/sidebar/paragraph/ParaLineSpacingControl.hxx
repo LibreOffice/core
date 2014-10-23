@@ -30,12 +30,8 @@
 #include <editeng/lspcitem.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
 
-
 namespace svx { namespace sidebar {
 
-#define LSP_POS_GLOBAL_VALUE   "Line_Spacing_Pos"
-#define LSP_LV_GLOBAL_VALUE    "Line_Spacing_Lv"
-#define BEGIN_VALUE            28
 class ParaLineSpacingControl:public svx::sidebar::PopupControl
 {
 public:

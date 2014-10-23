@@ -47,8 +47,11 @@
 #define DO_NOT_CUSTOM          false
 #define USE_CUSTOM             true
 
-namespace svx { namespace sidebar {
+#define LSP_POS_GLOBAL_VALUE   "Line_Spacing_Pos"
+#define LSP_LV_GLOBAL_VALUE    "Line_Spacing_Lv"
+#define BEGIN_VALUE            28
 
+using namespace svx::sidebar;
 
 ParaLineSpacingControl::ParaLineSpacingControl(vcl::Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel)
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_LINESPACING))
@@ -777,7 +780,5 @@ void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEnt
     }
     maLineSpacing.SetNoSelection();
 }
-
-}} // end of namespace sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

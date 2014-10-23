@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "ParaLineSpacingPopup.hxx"
 #include "ParaLineSpacingControl.hxx"
 #include <boost/bind.hpp>
@@ -23,37 +24,29 @@
 
 namespace svx { namespace sidebar {
 
-ParaLineSpacingPopup::ParaLineSpacingPopup (
-    vcl::Window* pParent,
-    const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator)
+ParaLineSpacingPopup::ParaLineSpacingPopup(vcl::Window* pParent, const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator)
     : Popup(
         pParent,
         rControlCreator,
-        OUString( "Paragraph Line Spacing"))
+        OUString("Paragraph Line Spacing"))
 {
     SetPopupModeEndHandler(::boost::bind(&ParaLineSpacingPopup::PopupModeEndCallback, this));
 }
 
-
-
-
-ParaLineSpacingPopup::~ParaLineSpacingPopup (void)
+ParaLineSpacingPopup::~ParaLineSpacingPopup()
 {
 }
 
-
-
-
-void ParaLineSpacingPopup::Rearrange (SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext)
+void ParaLineSpacingPopup::Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext)
 {
     ProvideContainerAndControl();
 
     ParaLineSpacingControl* pControl = dynamic_cast<ParaLineSpacingControl*>(mpControl.get());
     if (pControl != NULL)
-        pControl->Rearrange(currSPState,currMetricUnit, currSPItem,currentContext);
+        pControl->Rearrange(currSPState, currMetricUnit, currSPItem,currentContext);
 }
 
-void ParaLineSpacingPopup::PopupModeEndCallback (void)
+void ParaLineSpacingPopup::PopupModeEndCallback()
 {
     ProvideContainerAndControl();
     ParaLineSpacingControl* pControl = dynamic_cast<ParaLineSpacingControl*>(mpControl.get());
@@ -61,20 +54,8 @@ void ParaLineSpacingPopup::PopupModeEndCallback (void)
         return;
 
     pControl->PopupModeEndCallback();
-
-    /*if( pControl->GetLastCustomState() == SPACING_CLOSE_BY_CUS_EDIT)
-    {
-        SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_SPACING_GLOBAL_VALUE );
-        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
-        aSeq[0].Name = "Spacing";
-        aSeq[0].Value <<= ::rtl::OUString( String::CreateFromInt32( pControl->GetLastCustomValue() ));
-        aWinOpt.SetUserData( aSeq );
-
-    }*/
 }
 
-
-} } // end of namespace svx::sidebar
-
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

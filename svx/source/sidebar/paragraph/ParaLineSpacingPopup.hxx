@@ -33,14 +33,12 @@ class ParaLineSpacingPopup
     : public Popup
 {
 public :
-    ParaLineSpacingPopup (
-        vcl::Window* pParent,
-        const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
-    virtual ~ParaLineSpacingPopup (void);
+    ParaLineSpacingPopup(vcl::Window* pParent, const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
+    virtual ~ParaLineSpacingPopup();
 
-    void Rearrange (SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem ,const ::sfx2::sidebar::EnumContext currentContext);
+    void Rearrange(SfxItemState currSPState, FieldUnit currMetricUnit, SvxLineSpacingItem* currSPItem, const ::sfx2::sidebar::EnumContext currentContext);
 private:
-    void PopupModeEndCallback (void);
+    void PopupModeEndCallback();
 };
 
 } } // end of namespace svx::sidebar
