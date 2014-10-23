@@ -947,8 +947,8 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
         aSize.Width() -= (aBorder.Left() + aBorder.Right());
         aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
         Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_TWIP );
-        SfxViewShell::SetZoomFactor( boost::rational<sal_Int64>( aSize.Width(), aObjSizePixel.Width() ),
-                        boost::rational<sal_Int64>( aSize.Height(), aObjSizePixel.Height() ) );
+        SfxViewShell::SetZoomFactor( boost::rational<long>( aSize.Width(), aObjSizePixel.Width() ),
+                        boost::rational<long>( aSize.Height(), aObjSizePixel.Height() ) );
     }
 
     m_bInInnerResizePixel = true;
@@ -985,10 +985,10 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 
         if( m_pHRuler->IsVisible() || m_pVRuler->IsVisible() )
         {
-            const boost::rational<sal_Int64>& rFrac = GetEditWin().GetMapMode().GetScaleX();
+            const boost::rational<long>& rFrac = GetEditWin().GetMapMode().GetScaleX();
             long nZoom = rFrac.numerator() * 100L / rFrac.denominator();
 
-            const boost::rational<sal_Int64> aFrac( nZoom, 100 );
+            const boost::rational<long> aFrac( nZoom, 100 );
             m_pVRuler->SetZoom( aFrac );
             m_pHRuler->SetZoom( aFrac );
             InvalidateRulerPos();   // Invalidate content.
@@ -1134,9 +1134,9 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     }
 }
 
-void SwView::SetZoomFactor( const boost::rational<sal_Int64>& rX, const boost::rational<sal_Int64>& rY )
+void SwView::SetZoomFactor( const boost::rational<long>& rX, const boost::rational<long>& rY )
 {
-    const boost::rational<sal_Int64>&rFrac = rX < rY ? rX : rY;
+    const boost::rational<long>&rFrac = rX < rY ? rX : rY;
     SetZoom( SVX_ZOOM_PERCENT, (short) boost::rational_cast<long>(rFrac * 100) );
 
     // To minimize rounding errors we also adjust the odd values

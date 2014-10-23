@@ -2423,7 +2423,7 @@ long BrowseBox::CalcReverseZoom(long nVal)
 {
     if (IsZoom())
     {
-        const boost::rational<sal_Int64>& rZoom = GetZoom();
+        const boost::rational<long>& rZoom = GetZoom();
         double n = (double)nVal;
         n *= (double)rZoom.denominator();
         n /= (double)rZoom.numerator();

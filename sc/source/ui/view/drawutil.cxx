@@ -27,9 +27,9 @@
 void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             OutputDevice* pDev,
-                            const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+                            const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
                             double nPPTX, double nPPTY,
-                            boost::rational<sal_Int64>& rScaleX, boost::rational<sal_Int64>& rScaleY )
+                            boost::rational<long>& rScaleX, boost::rational<long>& rScaleY )
 {
     long nPixelX = 0;
     long nTwipsX = 0;
@@ -69,7 +69,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
                             ((double)HMM_PER_TWIPS) /
                             ((double)rZoomX.denominator()) );
     else
-        rScaleX = boost::rational<sal_Int64>( 1, 1 );
+        rScaleX = boost::rational<long>( 1, 1 );
 
     if ( aPixelLog.Y() && nTwipsY )
         rScaleY = rational_FromDouble( ((double)aPixelLog.Y()) *
@@ -78,7 +78,7 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
                             ((double)HMM_PER_TWIPS) /
                             ((double)rZoomY.denominator()) );
     else
-        rScaleY = boost::rational<sal_Int64>( 1, 1 );
+        rScaleY = boost::rational<long>( 1, 1 );
 
     //  25 bits of accuracy are needed to always hit the right part of
     //  cells in the last rows (was 17 before 1M rows).

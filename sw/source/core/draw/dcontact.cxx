@@ -2372,7 +2372,7 @@ void SwDrawVirtObj::NbcMove(const Size& rSiz)
     SdrObject::NbcMove( rSiz );
 }
 
-void SwDrawVirtObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SwDrawVirtObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     rRefObj.NbcResize(rRef - GetOffset(), xFact, yFact);
     SetRectsDirty();
@@ -2401,7 +2401,7 @@ void SwDrawVirtObj::Move(const Size& rSiz)
     SdrObject::Move( rSiz );
 }
 
-void SwDrawVirtObj::Resize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact, bool bUnsetRelative)
+void SwDrawVirtObj::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
 {
     if(xFact.numerator() != xFact.denominator() || yFact.numerator() != yFact.denominator())
     {

@@ -153,7 +153,7 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
     SCROW nEndRow   = rRange.aEnd.Row();
 
     ScSizeDeviceProvider aProv( &rDocShell );
-    boost::rational<sal_Int64> aOne(1,1);
+    boost::rational<long> aOne(1,1);
 
     sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
@@ -3358,7 +3358,7 @@ static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCT
     double nPPTY = aProv.GetPPTY();
 
     ScDocument& rDoc = rDocShell.GetDocument();
-    boost::rational<sal_Int64> aOne(1,1);
+    boost::rational<long> aOne(1,1);
     sal_uInt16 nTwips = rDoc.GetOptimalColWidth( nCol, nTab, pDev, nPPTX, nPPTY, aOne, aOne,
                                                     bFormula, NULL );
 
@@ -3451,7 +3451,7 @@ bool ScDocFunc::SetWidthOrHeight(
                 }
 
                 ScSizeDeviceProvider aProv( &rDocShell );
-                boost::rational<sal_Int64> aOne(1,1);
+                boost::rational<long> aOne(1,1);
                 sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
                 aCxt.setForceAutoSize(bAll);
                 rDoc.SetOptimalHeight(aCxt, nStartNo, nEndNo, nTab);

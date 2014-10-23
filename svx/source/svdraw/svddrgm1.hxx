@@ -74,7 +74,7 @@ public:
 class SdrDragShear : public SdrDragMethod
 {
 private:
-    boost::rational<sal_Int64>       aFact;
+    boost::rational<long>       aFact;
     long                        nWink0;
     long                        nWink;
     double                      nTan;
@@ -151,7 +151,7 @@ private:
     Point                       aMarkCenter;
     Point                       aCenter;
     Point                       aStart;
-    boost::rational<sal_Int64>       aFact;
+    boost::rational<long>       aFact;
     Point                       aRad;
     bool                        bContortionAllowed;
     bool                        bNoContortionAllowed;

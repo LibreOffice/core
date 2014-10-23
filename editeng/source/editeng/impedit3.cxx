@@ -501,7 +501,7 @@ bool ImpEditEngine::ImpCheckRefMapMode()
 
         if ( bChange )
         {
-            boost::rational<sal_Int64> Scale1( 1, 1 );
+            boost::rational<long> Scale1( 1, 1 );
             aMapMode.SetScaleX( Scale1 );
             aMapMode.SetScaleY( Scale1 );
             GetRefDevice()->Push();

@@ -887,7 +887,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         }
         else
         {
-            aMtf.Scale( boost::rational<sal_Int64>( rDestSize.Width(), aSrcSize.Width() ), boost::rational<sal_Int64>( rDestSize.Height(), aSrcSize.Height() ) );
+            aMtf.Scale( boost::rational<long>( rDestSize.Width(), aSrcSize.Width() ), boost::rational<long>( rDestSize.Height(), aSrcSize.Height() ) );
             aMtf.SetPrefMapMode( rDestMap );
         }
 

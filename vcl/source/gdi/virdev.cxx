@@ -451,7 +451,7 @@ bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase )
 }
 
 bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer(
-    const Size& rNewSize, const boost::rational<sal_Int64>& rScale, const Point& rNewOffset,
+    const Size& rNewSize, const boost::rational<long>& rScale, const Point& rNewOffset,
     const basebmp::RawMemorySharedArray &pBuffer, const bool bTopDown )
 {
     if (pBuffer) {

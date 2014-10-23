@@ -64,7 +64,7 @@ public:
     bool IsDeleteMarkedPointsPossible() const SAL_OVERRIDE;
 
     void MoveMarkedPoints(const Size& rSiz);
-    void ResizeMarkedPoints(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact);
+    void ResizeMarkedPoints(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact);
     void RotateMarkedPoints(const Point& rRef, long nWink);
 
     // Hierbei entstehen eventuell beliebig viele neue Objekte:

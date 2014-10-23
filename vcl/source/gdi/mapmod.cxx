@@ -80,7 +80,7 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
     ImplMapMode* pImplMapMode = ((ImplMapMode*)aStaticImplMapModeAry)+eUnit;
     if ( !pImplMapMode->mbSimple )
     {
-        boost::rational<sal_Int64> aDefFraction( 1, 1 );
+        boost::rational<long> aDefFraction( 1, 1 );
         pImplMapMode->maScaleX  = aDefFraction;
         pImplMapMode->maScaleY  = aDefFraction;
         pImplMapMode->meUnit    = eUnit;
@@ -125,7 +125,7 @@ MapMode::MapMode( MapUnit eUnit )
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
-                  const boost::rational<sal_Int64>& rScaleX, const boost::rational<sal_Int64>& rScaleY )
+                  const boost::rational<long>& rScaleX, const boost::rational<long>& rScaleY )
 {
 
     mpImplMapMode           = new ImplMapMode;
@@ -163,14 +163,14 @@ void MapMode::SetOrigin( const Point& rLogicOrg )
     mpImplMapMode->maOrigin = rLogicOrg;
 }
 
-void MapMode::SetScaleX( const boost::rational<sal_Int64>& rScaleX )
+void MapMode::SetScaleX( const boost::rational<long>& rScaleX )
 {
 
     ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
 }
 
-void MapMode::SetScaleY( const boost::rational<sal_Int64>& rScaleY )
+void MapMode::SetScaleY( const boost::rational<long>& rScaleY )
 {
 
     ImplMakeUnique();

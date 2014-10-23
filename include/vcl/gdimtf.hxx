@@ -136,7 +136,7 @@ public:
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
     void            Scale( double fScaleX, double fScaleY );
-    void            Scale( const boost::rational<sal_Int64>& rScaleX, const boost::rational<sal_Int64>& rScaleY );
+    void            Scale( const boost::rational<long>& rScaleX, const boost::rational<long>& rScaleY );
     void            Rotate( long nAngle10 );
     void            Clip( const Rectangle& );
     /* get the bound rect of the contained actions

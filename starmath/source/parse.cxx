@@ -1947,7 +1947,7 @@ void SmParser::FontSize()
     }
 
     // get number argument
-    boost::rational<sal_Int64>  aValue( 1L );
+    boost::rational<long>  aValue( 1L );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
         double fTmp = OUString(m_aCurToken.aText).toDouble();
@@ -1969,7 +1969,7 @@ void SmParser::FontSize()
                     nNum    /= 10;
                     nDenom  /= 10;
                 }
-                aValue = boost::rational<sal_Int64>( nNum, nDenom );
+                aValue = boost::rational<long>( nNum, nDenom );
             }
         }
     }

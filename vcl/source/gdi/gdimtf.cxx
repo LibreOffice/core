@@ -550,8 +550,8 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         if( !aTmpPrefSize.Height() )
             aTmpPrefSize.Height() = aDestSize.Height();
 
-        boost::rational<sal_Int64> aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
-        boost::rational<sal_Int64> aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
+        boost::rational<long> aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
+        boost::rational<long> aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
 
         aScaleX *= aDrawMap.GetScaleX(); aDrawMap.SetScaleX( aScaleX );
         aScaleY *= aDrawMap.GetScaleY(); aDrawMap.SetScaleY( aScaleY );
@@ -816,7 +816,7 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
     aPrefSize.Height() = FRound( aPrefSize.Height() * fScaleY );
 }
 
-void GDIMetaFile::Scale( const boost::rational<sal_Int64>& rScaleX, const boost::rational<sal_Int64>& rScaleY )
+void GDIMetaFile::Scale( const boost::rational<long>& rScaleX, const boost::rational<long>& rScaleY )
 {
     Scale( boost::rational_cast<double>(rScaleX), boost::rational_cast<double>(rScaleY) );
 }

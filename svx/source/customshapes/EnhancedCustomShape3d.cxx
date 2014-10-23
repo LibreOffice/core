@@ -262,7 +262,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     if ( pModel )
     {
         fMap = 1.0;
-        boost::rational<sal_Int64> aFraction( pModel->GetScaleFraction() );
+        boost::rational<long> aFraction( pModel->GetScaleFraction() );
         if ( ( aFraction.numerator() ) != 1 || ( aFraction.denominator() != 1 ) )
         {
             fMap *= aFraction.numerator();

@@ -2352,7 +2352,7 @@ void SdrPathObj::NbcMove(const Size& rSiz)
     SdrTextObj::NbcMove(rSiz);
 }
 
-void SdrPathObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrPathObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRef.X(), -rRef.Y()));
     aTrans = basegfx::tools::createScaleTranslateB2DHomMatrix(
@@ -2454,8 +2454,8 @@ void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)
     long nDivY = aOld.Bottom()  - aOld.Top();
     if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
     if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
-    boost::rational<sal_Int64> aX(nMulX,nDivX);
-    boost::rational<sal_Int64> aY(nMulY,nDivY);
+    boost::rational<long> aX(nMulX,nDivX);
+    boost::rational<long> aY(nMulY,nDivY);
     NbcResize(aOld.TopLeft(), aX, aY);
     NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
 }

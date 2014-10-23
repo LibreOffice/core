@@ -455,12 +455,12 @@ public:
 
     long GetNeededSize(
         SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
-        const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+        const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
         bool bWidth, const ScNeededSizeOptions& rOptions, const ScPatternAttr** pPatternChange ) const;
 
     sal_uInt16 GetOptimalColWidth(
         OutputDevice* pDev, double nPPTX, double nPPTY,
-        const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+        const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
         bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const;
 
     void GetOptimalHeight(

@@ -226,7 +226,7 @@ Rectangle IMapRectangleObject::GetRectangle( bool bPixelCoords ) const
     return aNewRect;
 }
 
-void IMapRectangleObject::Scale( const boost::rational<sal_Int64>& rFracX, const boost::rational<sal_Int64>& rFracY )
+void IMapRectangleObject::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
 {
     Point   aTL( aRect.TopLeft() );
     Point   aBR( aRect.BottomRight() );
@@ -368,12 +368,12 @@ Rectangle IMapCircleObject::GetBoundRect() const
                       Size( nWidth, nWidth ) );
 }
 
-void IMapCircleObject::Scale( const boost::rational<sal_Int64>& rFracX, const boost::rational<sal_Int64>& rFracY )
+void IMapCircleObject::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
 {
-    boost::rational<sal_Int64> aAverage( rFracX );
+    boost::rational<long> aAverage( rFracX );
 
     aAverage += rFracY;
-    aAverage *= boost::rational<sal_Int64>( 1, 2 );
+    aAverage *= boost::rational<long>( 1, 2 );
 
     SCALEPOINT( aCenter, rFracX, rFracY );
 
@@ -487,7 +487,7 @@ void IMapPolygonObject::SetExtraEllipse( const Rectangle& rEllipse )
     }
 }
 
-void IMapPolygonObject::Scale( const boost::rational<sal_Int64>& rFracX, const boost::rational<sal_Int64>& rFracY )
+void IMapPolygonObject::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
 {
     sal_uInt16 nCount = aPoly.GetSize();
 
@@ -812,7 +812,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
     return( pObj ? ( pObj->IsActive() ? pObj : NULL ) : NULL );
 }
 
-void ImageMap::Scale( const boost::rational<sal_Int64>& rFracX, const boost::rational<sal_Int64>& rFracY )
+void ImageMap::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
 {
     size_t nCount = maList.size();
 

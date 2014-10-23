@@ -148,7 +148,7 @@ protected:
     OCustomShape(const OUString& _sComponentName);
 
     virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
@@ -196,7 +196,7 @@ protected:
 
 
     virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
@@ -244,7 +244,7 @@ protected:
     virtual ~OUnoObject();
 
     virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 

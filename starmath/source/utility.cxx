@@ -284,7 +284,7 @@ SmFace & SmFace::operator = (const SmFace &rFace)
 }
 
 
-SmFace & operator *= (SmFace &rFace, const boost::rational<sal_Int64>& rFrac)
+SmFace & operator *= (SmFace &rFace, const boost::rational<long>& rFrac)
     // scales the width and height of 'rFace' by 'rFrac' and returns a
     // reference to 'rFace'.
     // It's main use is to make scaling fonts look easier.

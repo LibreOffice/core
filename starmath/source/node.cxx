@@ -165,14 +165,14 @@ void SmNode::SetFont(const SmFace &rFace)
 }
 
 
-void SmNode::SetFontSize(const boost::rational<sal_Int64>& rSize, sal_uInt16 nType)
+void SmNode::SetFontSize(const boost::rational<long>& rSize, sal_uInt16 nType)
     //! 'rSize' is in units of pts
 {
     Size  aFntSize;
 
     if (!(Flags() & FLG_SIZE))
     {
-        boost::rational<sal_Int64>  aVal (SmPtsTo100th_mm(rSize.numerator()),
+        boost::rational<long>  aVal (SmPtsTo100th_mm(rSize.numerator()),
                         rSize.denominator());
         long      nHeight = boost::rational_cast<long>(aVal);
 
@@ -197,7 +197,7 @@ void SmNode::SetFontSize(const boost::rational<sal_Int64>& rSize, sal_uInt16 nTy
                 break;
 
             case FNTSIZ_DIVIDE:
-                if (rSize != boost::rational<sal_Int64>(0L))
+                if (rSize != boost::rational<long>(0L))
                     aFntSize.Height()   = boost::rational_cast<long>(aFntSize.Height() / rSize);
                 break;
             default:
@@ -220,7 +220,7 @@ void SmNode::SetFontSize(const boost::rational<sal_Int64>& rSize, sal_uInt16 nTy
 }
 
 
-void SmNode::SetSize(const boost::rational<sal_Int64>& rSize)
+void SmNode::SetSize(const boost::rational<long>& rSize)
 {
     GetFont() *= rSize;
 
@@ -906,7 +906,7 @@ void SmUnHorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pOper, "Sm: NULL pointer");
     OSL_ENSURE(pBody, "Sm: NULL pointer");
 
-    pOper->SetSize(boost::rational<sal_Int64> (rFormat.GetRelSize(SIZ_OPERATOR), 100));
+    pOper->SetSize(boost::rational<long> (rFormat.GetRelSize(SIZ_OPERATOR), 100));
     pOper->Arrange(rDev, rFormat);
     pBody->Arrange(rDev, rFormat);
 
@@ -1003,7 +1003,7 @@ void SmRootNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     pRootSym->MoveTo(aPos);
 
     if (pExtra)
-    {   pExtra->SetSize(boost::rational<sal_Int64>(rFormat.GetRelSize(SIZ_INDEX), 100));
+    {   pExtra->SetSize(boost::rational<long>(rFormat.GetRelSize(SIZ_INDEX), 100));
         pExtra->Arrange(rDev, rFormat);
 
         aPos = GetExtraPos(*pRootSym, *pExtra);
@@ -1097,7 +1097,7 @@ void SmBinHorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pOper  != NULL, "Sm: NULL pointer");
     OSL_ENSURE(pRight != NULL, "Sm: NULL pointer");
 
-    pOper->SetSize(boost::rational<sal_Int64> (rFormat.GetRelSize(SIZ_OPERATOR), 100));
+    pOper->SetSize(boost::rational<long> (rFormat.GetRelSize(SIZ_OPERATOR), 100));
 
     pLeft ->Arrange(rDev, rFormat);
     pOper ->Arrange(rDev, rFormat);
@@ -1139,7 +1139,7 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     bool  bIsTextmode = rFormat.IsTextmode();
     if (bIsTextmode)
     {
-        boost::rational<sal_Int64>  aFraction(rFormat.GetRelSize(SIZ_INDEX), 100);
+        boost::rational<long>  aFraction(rFormat.GetRelSize(SIZ_INDEX), 100);
         pNum  ->SetSize(aFraction);
         pLine ->SetSize(aFraction);
         pDenom->SetSize(aFraction);
@@ -1502,7 +1502,7 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         {
             sal_uInt16 nIndex = (eSubSup == CSUB  ||  eSubSup == CSUP) ?
                                     SIZ_LIMITS : SIZ_INDEX;
-            boost::rational<sal_Int64>  aFraction ( rFormat.GetRelSize(nIndex), 100 );
+            boost::rational<long>  aFraction ( rFormat.GetRelSize(nIndex), 100 );
             pSubSup->SetSize(aFraction);
         }
 
@@ -1833,9 +1833,9 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
     pBody->Arrange(aTmpDev, rFormat);
 
     // size is the same as for limits for this part
-    pScript->SetSize( boost::rational<sal_Int64>( rFormat.GetRelSize(SIZ_LIMITS), 100 ) );
+    pScript->SetSize( boost::rational<long>( rFormat.GetRelSize(SIZ_LIMITS), 100 ) );
     // braces are a bit taller than usually
-    pBrace ->SetSize( boost::rational<sal_Int64>(3, 2) );
+    pBrace ->SetSize( boost::rational<long>(3, 2) );
 
     long  nItalicWidth = pBody->GetItalicWidth();
     if (nItalicWidth > 0)
@@ -1929,7 +1929,7 @@ void SmOperNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pBody, "Sm: missing subnode");
 
     SmNode *pSymbol = GetSymbol();
-    pSymbol->SetSize(boost::rational<sal_Int64>(CalcSymbolHeight(*pSymbol, rFormat),
+    pSymbol->SetSize(boost::rational<long>(CalcSymbolHeight(*pSymbol, rFormat),
                               pSymbol->GetFont().GetSize().Height()));
 
     pBody->Arrange(rDev, rFormat);
@@ -2174,7 +2174,7 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmFontNode::SetSizeParameter(const boost::rational<sal_Int64>& rValue, sal_uInt16 Type)
+void SmFontNode::SetSizeParameter(const boost::rational<long>& rValue, sal_uInt16 Type)
 {
     nSizeType = Type;
     aFontSize = rValue;
@@ -2367,7 +2367,7 @@ void SmTextNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     sal_uInt16  nSizeDesc = GetFontDesc() == FNT_FUNCTION ?
                             SIZ_FUNCTION : SIZ_TEXT;
-    GetFont() *= boost::rational<sal_Int64> (rFormat.GetRelSize(nSizeDesc), 100);
+    GetFont() *= boost::rational<long> (rFormat.GetRelSize(nSizeDesc), 100);
 
     SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
@@ -2729,7 +2729,7 @@ void SmMathSymbolNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
 
     PrepareAttributes();
 
-    GetFont() *= boost::rational<sal_Int64> (rFormat.GetRelSize(SIZ_TEXT), 100);
+    GetFont() *= boost::rational<long> (rFormat.GetRelSize(SIZ_TEXT), 100);
 
     SmTmpDevice aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());

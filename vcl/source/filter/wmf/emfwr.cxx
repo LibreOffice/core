@@ -1252,8 +1252,8 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
                         MapMode aMapMode( aSubstitute.GetPrefMapMode() );
                         Size aOutSize( OutputDevice::LogicToLogic( pA->GetSize(), maVDev.GetMapMode(), aMapMode ) );
-                        aMapMode.SetScaleX( boost::rational<sal_Int64>( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
-                        aMapMode.SetScaleY( boost::rational<sal_Int64>( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
+                        aMapMode.SetScaleX( boost::rational<long>( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
+                        aMapMode.SetScaleY( boost::rational<long>( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
                         aMapMode.SetOrigin( OutputDevice::LogicToLogic( pA->GetPoint(), maVDev.GetMapMode(), aMapMode ) );
                         maVDev.SetMapMode( aMapMode );
                         ImplWrite( aSubstitute );

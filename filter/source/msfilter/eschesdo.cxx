@@ -64,7 +64,7 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
     : mpEscherEx(&rEx)
     , maMapModeSrc(MAP_100TH_MM)
     // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi
-    , maMapModeDest( MAP_INCH, Point(), boost::rational<sal_Int64>( 1, EES_MAP_FRACTION ), boost::rational<sal_Int64>( 1, EES_MAP_FRACTION ) )
+    , maMapModeDest( MAP_INCH, Point(), boost::rational<long>( 1, EES_MAP_FRACTION ), boost::rational<long>( 1, EES_MAP_FRACTION ) )
     , mpPicStrm(NULL)
     , mpHostAppData(NULL)
     , mnPagesWritten(0)

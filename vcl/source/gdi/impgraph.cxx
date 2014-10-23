@@ -1039,8 +1039,8 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
 
         aSize = Size( nWidth, nHeight );
         aMapMode = MapMode( (MapUnit) nMapMode, Point( nOffsX, nOffsY ),
-                            boost::rational<sal_Int64>( nScaleNumX, nScaleDenomX ),
-                            boost::rational<sal_Int64>( nScaleNumY, nScaleDenomY ) );
+                            boost::rational<long>( nScaleNumX, nScaleDenomX ),
+                            boost::rational<long>( nScaleNumY, nScaleDenomY ) );
     }
 
     nHeaderLen = rIStm.Tell() - nStartPos;

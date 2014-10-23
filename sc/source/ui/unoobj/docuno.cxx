@@ -1283,8 +1283,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                             // Scale and move the target rectangle from aLocationMM to aLocationPixel,
                             // to get the target rectangle in pixels.
 
-                            boost::rational<sal_Int64> aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
-                            boost::rational<sal_Int64> aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
+                            boost::rational<long> aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
+                            boost::rational<long> aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
 
                             long nX1 = aLocationPixel.Left() + boost::rational_cast<long>( (aTargetRect.Left() - aLocationMM.Left()) * aScaleX );
                             long nX2 = aLocationPixel.Left() + boost::rational_cast<long>( (aTargetRect.Right() - aLocationMM.Left()) * aScaleX );

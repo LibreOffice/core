@@ -66,7 +66,7 @@ protected:
 
 private:
     sal_Int32           mnXmlNamespace;
-    boost::rational<sal_Int64>            maFraction;
+    boost::rational<long>            maFraction;
     MapMode             maMapModeSrc, maMapModeDest;
 
     ::com::sun::star::awt::Size MapSize( const ::com::sun::star::awt::Size& ) const;

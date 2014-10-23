@@ -80,7 +80,7 @@ SdrMeasureObjGeoData::~SdrMeasureObjGeoData() {}
 OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind) const
 {
     OUString aStr;
-    boost::rational<sal_Int64> aMeasureScale(1, 1);
+    boost::rational<long> aMeasureScale(1, 1);
     bool bTextRota90(false);
     bool bShowUnit(false);
     FieldUnit eMeasureUnit(FUNIT_NONE);
@@ -105,7 +105,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                     eMeasureUnit = eModUIUnit;
 
                 sal_Int32 nLen(GetLen(aPt2 - aPt1));
-                boost::rational<sal_Int64> aFact(1,1);
+                boost::rational<long> aFact(1,1);
 
                 if(eMeasureUnit != eModUIUnit)
                 {
@@ -275,7 +275,7 @@ struct ImpMeasureRec : public SdrDragStatUserData
     bool                        bTextUpsideDown;
     long                        nMeasureOverhang;
     FieldUnit                   eMeasureUnit;
-    boost::rational<sal_Int64>       aMeasureScale;
+    boost::rational<long>       aMeasureScale;
     bool                        bShowUnit;
     OUString                    aFormatString;
     bool                        bTextAutoAngle;
@@ -1029,7 +1029,7 @@ void SdrMeasureObj::NbcMove(const Size& rSiz)
     MovePoint(aPt2,rSiz);
 }
 
-void SdrMeasureObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrMeasureObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     ResizePoint(aPt1,rRef,xFact,yFact);

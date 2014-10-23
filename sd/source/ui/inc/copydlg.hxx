@@ -64,7 +64,7 @@ private:
 
     const SfxItemSet&   mrOutAttrs;
     XColorListRef       mpColorList;
-    boost::rational<sal_Int64>            maUIScale;
+    boost::rational<long>            maUIScale;
     ::sd::View*         mpView;
 
     DECL_LINK( SelectColorHdl, void * );

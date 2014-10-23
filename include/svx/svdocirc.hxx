@@ -112,7 +112,7 @@ public:
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const SAL_OVERRIDE;
     virtual Pointer GetCreatePointer() const SAL_OVERRIDE;
     virtual void NbcMove(const Size& aSiz) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
     virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;

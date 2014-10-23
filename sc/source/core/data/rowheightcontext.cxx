@@ -12,7 +12,7 @@
 namespace sc {
 
 RowHeightContext::RowHeightContext(
-    double fPPTX, double fPPTY, const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+    double fPPTX, double fPPTY, const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
     OutputDevice* pOutDev ) :
     mfPPTX(fPPTX), mfPPTY(fPPTY),
     maZoomX(rZoomX), maZoomY(rZoomY),

@@ -32,9 +32,9 @@ class ScDrawUtil
 public:
     static void CalcScale( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        OutputDevice* pDev, const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+                        OutputDevice* pDev, const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
                         double nPPTX, double nPPTY,
-                        boost::rational<sal_Int64>& rScaleX, boost::rational<sal_Int64>& rScaleY );
+                        boost::rational<long>& rScaleX, boost::rational<long>& rScaleY );
 };
 
 #endif

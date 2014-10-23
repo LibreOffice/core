@@ -114,7 +114,7 @@ public:
     basegfx::B2DPolyPolygon getDragPolyPolygon(const SdrDragStat& rDrag) const;
 
     virtual void NbcMove(const Size& aSize) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRefPnt, const boost::rational<sal_Int64>& aXFact, const boost::rational<sal_Int64>& aYFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRefPnt, const boost::rational<long>& aXFact, const boost::rational<long>& aYFact) SAL_OVERRIDE;
     virtual void NbcRotate(const Point& rRefPnt, long nAngle, double fSin, double fCos) SAL_OVERRIDE;
     virtual void NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2) SAL_OVERRIDE;
     virtual void NbcShear(const Point& rRefPnt, long nAngle, double fTan, bool bVShear) SAL_OVERRIDE;

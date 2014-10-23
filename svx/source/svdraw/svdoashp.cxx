@@ -1561,15 +1561,15 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
         mpLastShadowGeometry->NbcMove( rSiz );
     }
 }
-void SdrObjCustomShape::Resize( const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact, bool bUnsetRelative )
+void SdrObjCustomShape::Resize( const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative )
 {
     SdrTextObj::Resize( rRef, xFact, yFact, bUnsetRelative );
 }
 
-void SdrObjCustomShape::NbcResize( const Point& rRef, const boost::rational<sal_Int64>& rxFact, const boost::rational<sal_Int64>& ryFact )
+void SdrObjCustomShape::NbcResize( const Point& rRef, const boost::rational<long>& rxFact, const boost::rational<long>& ryFact )
 {
-    boost::rational<sal_Int64> xFact( rxFact );
-    boost::rational<sal_Int64> yFact( ryFact );
+    boost::rational<long> xFact( rxFact );
+    boost::rational<long> yFact( ryFact );
 
     // taking care of handles that should not been changed
     Rectangle aOld( aRect );

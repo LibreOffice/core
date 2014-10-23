@@ -76,7 +76,7 @@ class BrowserColumn
 
 public:
                         BrowserColumn( sal_uInt16 nItemId, const Image &rImage,
-                                        const OUString& rTitle, sal_uLong nWidthPixel, const boost::rational<sal_Int64>& rCurrentZoom );
+                                        const OUString& rTitle, sal_uLong nWidthPixel, const boost::rational<long>& rCurrentZoom );
     virtual            ~BrowserColumn();
 
     sal_uInt16          GetId() const { return _nId; }
@@ -91,8 +91,8 @@ public:
     virtual void        Draw( BrowseBox& rBox, OutputDevice& rDev,
                               const Point& rPos, bool bCurs  );
 
-    void                SetWidth(sal_uLong nNewWidthPixel, const boost::rational<sal_Int64>& rCurrentZoom);
-    void                ZoomChanged(const boost::rational<sal_Int64>& rNewZoom);
+    void                SetWidth(sal_uLong nNewWidthPixel, const boost::rational<long>& rCurrentZoom);
+    void                ZoomChanged(const boost::rational<long>& rNewZoom);
 };
 
 

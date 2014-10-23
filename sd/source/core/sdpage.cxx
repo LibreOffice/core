@@ -1843,8 +1843,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     long nOldWidth  = GetWdt() - GetLftBorder() - GetRgtBorder();
     long nOldHeight = GetHgt() - GetUppBorder() - GetLwrBorder();
 
-    boost::rational<sal_Int64> aFractX( aNewPageSize.Width(), nOldWidth );
-    boost::rational<sal_Int64> aFractY( aNewPageSize.Height(), nOldHeight );
+    boost::rational<long> aFractX( aNewPageSize.Width(), nOldWidth );
+    boost::rational<long> aFractY( aNewPageSize.Height(), nOldHeight );
 
     const size_t nObjCnt = (mbScaleObjects ? GetObjCount() : 0);
 

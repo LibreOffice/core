@@ -202,8 +202,8 @@ void OReportSection::fill()
     m_pView->SetGridFine(aGridSizeFine);
 
     // #i93595# set snap grid width to snap to all existing subdivisions
-    const boost::rational<sal_Int64> aX(aGridSizeFine.A());
-    const boost::rational<sal_Int64> aY(aGridSizeFine.B());
+    const boost::rational<long> aX(aGridSizeFine.A());
+    const boost::rational<long> aY(aGridSizeFine.B());
     m_pView->SetSnapGridWidth(aX, aY);
 
     m_pView->SetGridSnap( pDesignView->isGridSnap() );

@@ -34,8 +34,8 @@ SvxXMeasurePreview::SvxXMeasurePreview( vcl::Window* pParent, WinBits nStyle)
 
     // Scale: 1:2
     MapMode aMapMode = GetMapMode();
-    aMapMode.SetScaleX( boost::rational<sal_Int64>( 1, 2 ) );
-    aMapMode.SetScaleY( boost::rational<sal_Int64>( 1, 2 ) );
+    aMapMode.SetScaleX( boost::rational<long>( 1, 2 ) );
+    aMapMode.SetScaleY( boost::rational<long>( 1, 2 ) );
     SetMapMode( aMapMode );
 
     Size aSize = GetOutputSize();
@@ -109,23 +109,23 @@ void SvxXMeasurePreview::MouseButtonDown( const MouseEvent& rMEvt )
     if( bZoomIn || bZoomOut )
     {
         MapMode aMapMode = GetMapMode();
-        boost::rational<sal_Int64> aXFrac = aMapMode.GetScaleX();
-        boost::rational<sal_Int64> aYFrac = aMapMode.GetScaleY();
-        boost::scoped_ptr<boost::rational<sal_Int64>> pMultFrac;
+        boost::rational<long> aXFrac = aMapMode.GetScaleX();
+        boost::rational<long> aYFrac = aMapMode.GetScaleY();
+        boost::scoped_ptr<boost::rational<long>> pMultFrac;
 
         if( bZoomIn )
         {
             if( bCtrl )
-                pMultFrac.reset(new boost::rational<sal_Int64>( 3, 2 ));
+                pMultFrac.reset(new boost::rational<long>( 3, 2 ));
             else
-                pMultFrac.reset(new boost::rational<sal_Int64>( 11, 10 ));
+                pMultFrac.reset(new boost::rational<long>( 11, 10 ));
         }
         else
         {
             if( bCtrl )
-                pMultFrac.reset(new boost::rational<sal_Int64>( 2, 3 ));
+                pMultFrac.reset(new boost::rational<long>( 2, 3 ));
             else
-                pMultFrac.reset(new boost::rational<sal_Int64>( 10, 11 ));
+                pMultFrac.reset(new boost::rational<long>( 10, 11 ));
         }
 
         aXFrac *= *pMultFrac;

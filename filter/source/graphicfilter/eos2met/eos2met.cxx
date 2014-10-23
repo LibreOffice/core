@@ -2168,8 +2168,8 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                     if ( pA->GetMapMode().GetMapUnit() == MAP_RELATIVE )
                     {
                         MapMode aMM = pA->GetMapMode();
-                        boost::rational<sal_Int64> aScaleX = aMM.GetScaleX();
-                        boost::rational<sal_Int64> aScaleY = aMM.GetScaleY();
+                        boost::rational<long> aScaleX = aMM.GetScaleX();
+                        boost::rational<long> aScaleY = aMM.GetScaleY();
 
                         Point aOrigin = aPictureMapMode.GetOrigin();
                         BigInt aX( aOrigin.X() );

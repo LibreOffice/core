@@ -396,8 +396,8 @@ public:
 
         @return Point, start position for new scale
     */
-    Point GetPreviewStartPosForNewScale( const boost::rational<sal_Int64>& _aNewScale,
-                                         const boost::rational<sal_Int64>& _aOldScale,
+    Point GetPreviewStartPosForNewScale( const boost::rational<long>& _aNewScale,
+                                         const boost::rational<long>& _aOldScale,
                                          const Size&     _aNewWinSize ) const;
 
     /** determines, if page with given page number is visible in preview

@@ -37,7 +37,7 @@ class ScDocument;
 class ScDPFieldButton
 {
 public:
-    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const boost::rational<sal_Int64>* pZoomX = NULL, const boost::rational<sal_Int64>* pZoomY = NULL,
+    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const boost::rational<long>* pZoomX = NULL, const boost::rational<long>* pZoomY = NULL,
                     ScDocument* pDoc = NULL);
     ~ScDPFieldButton();
 
@@ -59,8 +59,8 @@ private:
     Point                   maPos;
     Size                    maSize;
     OUString                maText;
-    boost::rational<sal_Int64>   maZoomX;
-    boost::rational<sal_Int64>   maZoomY;
+    boost::rational<long>   maZoomX;
+    boost::rational<long>   maZoomY;
     ScDocument*             mpDoc;
     OutputDevice*           mpOutDev;
     const StyleSettings*    mpStyle;

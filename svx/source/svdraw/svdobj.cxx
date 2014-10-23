@@ -1338,8 +1338,8 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nYMul=std::abs(nYMul);
         nXDiv=std::abs(nXDiv);
         nYDiv=std::abs(nYDiv);
-        boost::rational<sal_Int64> aXFact(nXMul,nXDiv); // fractions for canceling
-        boost::rational<sal_Int64> aYFact(nYMul,nYDiv); // and for comparing
+        boost::rational<long> aXFact(nXMul,nXDiv); // fractions for canceling
+        boost::rational<long> aYFact(nYMul,nYDiv); // and for comparing
         nXMul=aXFact.numerator();
         nYMul=aYFact.numerator();
         nXDiv=aXFact.denominator();
@@ -1495,7 +1495,7 @@ void SdrObject::NbcMove(const Size& rSiz)
     SetRectsDirty();
 }
 
-void SdrObject::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrObject::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     bool bXMirr = xFact < 0;
     bool bYMirr = yFact < 0;
@@ -1593,7 +1593,7 @@ void SdrObject::Move(const Size& rSiz)
     }
 }
 
-void SdrObject::Resize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact, bool bUnsetRelative)
+void SdrObject::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
 {
     if (xFact.numerator()!=xFact.denominator() || yFact.numerator()!=yFact.denominator()) {
         if (bUnsetRelative)
@@ -2262,15 +2262,15 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     if (aNewLogic!=rLogic) {
         NbcSetLogicRect(aNewLogic);
     }
-    boost::rational<sal_Int64> aResizeX(1,1);
-    boost::rational<sal_Int64> aResizeY(1,1);
+    boost::rational<long> aResizeX(1,1);
+    boost::rational<long> aResizeY(1,1);
     if (rAttr.GetItemState(SDRATTR_RESIZEXONE,true,&pPoolItem)==SfxItemState::SET) {
         aResizeX*=static_cast<const SdrResizeXOneItem*>(pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_RESIZEYONE,true,&pPoolItem)==SfxItemState::SET) {
         aResizeY*=static_cast<const SdrResizeYOneItem*>(pPoolItem)->GetValue();
     }
-    if (aResizeX!=boost::rational<sal_Int64>(1,1) || aResizeY!=boost::rational<sal_Int64>(1,1)) {
+    if (aResizeX!=boost::rational<long>(1,1) || aResizeY!=boost::rational<long>(1,1)) {
         NbcResize(aRef1,aResizeX,aResizeY);
     }
 }

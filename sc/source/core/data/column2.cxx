@@ -83,7 +83,7 @@ inline bool IsAmbiguousScript( sal_uInt8 nScript )
 
 long ScColumn::GetNeededSize(
     SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
-    const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
     bool bWidth, const ScNeededSizeOptions& rOptions,
     const ScPatternAttr** ppPatternChange ) const
 {
@@ -240,7 +240,7 @@ long ScColumn::GetNeededSize(
     //  bGetFont is set also if script type changes
     if (rOptions.bGetFont)
     {
-        boost::rational<sal_Int64> aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
+        boost::rational<long> aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
         vcl::Font aFont;
         // font color doesn't matter here
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aFontZoom, pCondSet, nScript );
@@ -616,7 +616,7 @@ public:
 }
 
 sal_uInt16 ScColumn::GetOptimalColWidth(
-    OutputDevice* pDev, double nPPTX, double nPPTY, const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+    OutputDevice* pDev, double nPPTX, double nPPTY, const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
     bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const
 {
     if (maCells.block_size() == 1 && maCells.begin()->type == sc::element_type_empty)

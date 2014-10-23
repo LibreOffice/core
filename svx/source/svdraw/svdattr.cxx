@@ -630,7 +630,7 @@ SdrFractionItem::SdrFractionItem(sal_uInt16 nId, SvStream& rIn):
     sal_Int32 nMul,nDiv;
     rIn.ReadInt32( nMul );
     rIn.ReadInt32( nDiv );
-    nValue=boost::rational<sal_Int64>(nMul,nDiv);
+    nValue=boost::rational<long>(nMul,nDiv);
 }
 
 bool SdrFractionItem::operator==(const SfxPoolItem& rCmp) const

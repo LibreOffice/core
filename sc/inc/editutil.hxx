@@ -44,8 +44,8 @@ class ScEditUtil
     OutputDevice*   pDev;           // MapMode has to be set
     double          nPPTX;
     double          nPPTY;
-    boost::rational<sal_Int64>        aZoomX;
-    boost::rational<sal_Int64>        aZoomY;
+    boost::rational<long>        aZoomX;
+    boost::rational<long>        aZoomY;
 
     static const char pCalcDelimiters[];
 
@@ -82,7 +82,7 @@ public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
-                            const boost::rational<sal_Int64>& rX, const boost::rational<sal_Int64>& rY ) :
+                            const boost::rational<long>& rX, const boost::rational<long>& rY ) :
                     pDoc(pDocument),nCol(nX),nRow(nY),nTab(nZ),
                     aScrPos(rScrPosPixel),pDev(pDevice),
                     nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY) {}

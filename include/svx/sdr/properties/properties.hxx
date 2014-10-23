@@ -147,7 +147,7 @@ namespace sdr
 
             // Scale the local ItemSet as far as it contains metric items. This needs to be
             // overloaded to do it for hierarchical objects like e.g. groups.
-            virtual void Scale(const boost::rational<sal_Int64>& rScale);
+            virtual void Scale(const boost::rational<long>& rScale);
 
             // Move local items to a new ItemPool. This needs to be
             // overloaded to do it for hierarchical objects like e.g. groups.

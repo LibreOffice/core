@@ -237,7 +237,7 @@ void SdDocPreviewWin::updateViewSettings()
 
             VirtualDevice       aVDev;
 
-            const boost::rational<sal_Int64>      aFrac( pDoc->GetScaleFraction() );
+            const boost::rational<long>      aFrac( pDoc->GetScaleFraction() );
             const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
 
             aVDev.SetMapMode( aMap );

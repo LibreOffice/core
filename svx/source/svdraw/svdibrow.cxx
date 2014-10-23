@@ -1217,7 +1217,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 case ITEM_FRACTION: {
                     if (!bPairX) nLongX=1;
                     if (!bPairY) nLongY=1;
-                    static_cast<SdrFractionItem*>(pNewItem)->SetValue(boost::rational<sal_Int64>(nLongX,nLongY));
+                    static_cast<SdrFractionItem*>(pNewItem)->SetValue(boost::rational<long>(nLongX,nLongY));
                 } break;
                 case ITEM_XCOLOR: break;
                 case ITEM_COLOR: break;

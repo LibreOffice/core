@@ -298,7 +298,7 @@ public:
      * @param bSameTabButMoved true if the same sheet as before is activated.
      */
     void            TabChanged( bool bSameTabButMoved = false );
-    void            SetZoom( const boost::rational<sal_Int64>& rNewX, const boost::rational<sal_Int64>& rNewY, bool bAll );
+    void            SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, bool bAll );
     SC_DLLPUBLIC void            RefreshZoom();
     void            SetPagebreakMode( bool bSet );
 

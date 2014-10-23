@@ -160,7 +160,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=pMod->GetScaleUnit();
-    boost::rational<sal_Int64> aMap=pMod->GetScaleFraction();
+    boost::rational<long> aMap=pMod->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
     return true;
 }
@@ -197,7 +197,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=pMod->GetScaleUnit();
-    boost::rational<sal_Int64> aMap=pMod->GetScaleFraction();
+    boost::rational<long> aMap=pMod->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
@@ -267,7 +267,7 @@ bool SdrExchangeView::Paste(
     MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
     MapUnit eDstUnit=pMod->GetScaleUnit();
     bool bResize=eSrcUnit!=eDstUnit;
-    boost::rational<sal_Int64> xResize,yResize;
+    boost::rational<long> xResize,yResize;
     Point aPt0;
     if (bResize)
     {
@@ -403,7 +403,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     MapUnit eSrcMU=rMap.GetMapUnit();
     MapUnit eDstMU=pMod->GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));
-    boost::rational<sal_Int64> aDstFr(pMod->GetScaleFraction());
+    boost::rational<long> aDstFr(pMod->GetScaleFraction());
     nSizX*=aMapFact.X().numerator();
     nSizX*=rMap.GetScaleX().numerator();
     nSizX*=aDstFr.denominator();

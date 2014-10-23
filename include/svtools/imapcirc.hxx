@@ -60,7 +60,7 @@ public:
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const SAL_OVERRIDE;
 
-    void                Scale( const boost::rational<sal_Int64>& rFractX, const boost::rational<sal_Int64>& rFracY );
+    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapCircleObject& rEqObj );

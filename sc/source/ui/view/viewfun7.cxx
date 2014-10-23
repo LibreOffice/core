@@ -420,7 +420,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
     if (aSourceMap.GetMapUnit() == MAP_PIXEL)
     {
         // consider pixel correction, so bitmap fits to screen
-        boost::rational<sal_Int64> aScaleX, aScaleY;
+        boost::rational<long> aScaleX, aScaleY;
         pScDrawView->CalcNormScale( aScaleX, aScaleY );
         aDestMap.SetScaleX(aScaleX);
         aDestMap.SetScaleY(aScaleY);

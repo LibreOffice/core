@@ -114,7 +114,7 @@ public:
     /** Return the scale factor that can be set at the map mode of the
         output window.
     */
-    boost::rational<sal_Int64> GetScaleFactor (void) const;
+    boost::rational<long> GetScaleFactor (void) const;
 
     Size GetPageObjectSize (void) const;
 

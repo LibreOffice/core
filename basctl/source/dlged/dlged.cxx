@@ -234,7 +234,7 @@ DlgEditor::DlgEditor (
     pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
     pDlgEdView->SetGridCoarse( aGridSize );
-    pDlgEdView->SetSnapGridWidth(boost::rational<sal_Int64>(aGridSize.Width(),1), boost::rational<sal_Int64>(aGridSize.Height(),1));
+    pDlgEdView->SetSnapGridWidth(boost::rational<long>(aGridSize.Width(),1), boost::rational<long>(aGridSize.Height(),1));
     pDlgEdView->SetGridSnap( bGridSnap );
     pDlgEdView->SetGridVisible( bGridVisible );
     pDlgEdView->SetDragStripes(false);

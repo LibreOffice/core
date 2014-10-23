@@ -89,7 +89,7 @@ OStartMarker::~OStartMarker()
 
 sal_Int32 OStartMarker::getMinHeight() const
 {
-    boost::rational<sal_Int64> aExtraWidth(long(2*REPORT_EXTRA_SPACE));
+    boost::rational<long> aExtraWidth(long(2*REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
     return LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() + boost::rational_cast<long>(aExtraWidth);
 }
@@ -221,7 +221,7 @@ void OStartMarker::Resize()
     aImageSize.Width() = long(aImageSize.Width() * boost::rational_cast<double>(rMapMode.GetScaleX()));
     aImageSize.Height() = long(aImageSize.Height() * boost::rational_cast<double>(rMapMode.GetScaleY()));
 
-    boost::rational<sal_Int64> aExtraWidth(long(REPORT_EXTRA_SPACE));
+    boost::rational<long> aExtraWidth(long(REPORT_EXTRA_SPACE));
     aExtraWidth *= rMapMode.GetScaleX();
 
     Point aPos(aImageSize.Width() + boost::rational_cast<long>((aExtraWidth + aExtraWidth)), boost::rational_cast<long>(aExtraWidth));
@@ -281,7 +281,7 @@ void OStartMarker::setCollapsed(bool _bCollapsed)
     changeImage();
 }
 
-void OStartMarker::zoom(const boost::rational<sal_Int64>& _aZoom)
+void OStartMarker::zoom(const boost::rational<long>& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
     m_aVRuler.SetZoom(_aZoom);

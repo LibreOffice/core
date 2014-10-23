@@ -1017,7 +1017,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX)
     }
     else
     {
-        boost::rational<sal_Int64> aFract( 1, 100 );
+        boost::rational<long> aFract( 1, 100 );
         sal_Int32 nWidth = mpMfSizeX->GetValue();
         sal_Int32 nHeight= static_cast< sal_Int32 >( nWidth * fRatio );
         const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );
@@ -1051,7 +1051,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY)
     }
     else
     {
-        boost::rational<sal_Int64> aFract( 1, 100 );
+        boost::rational<long> aFract( 1, 100 );
         sal_Int32 nHeight= mpMfSizeY->GetValue();
         sal_Int32 nWidth = static_cast< sal_Int32 >( nHeight * fRatio );
         const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );

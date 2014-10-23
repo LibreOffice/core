@@ -241,7 +241,7 @@ public:
     virtual Pointer GetCreatePointer() const SAL_OVERRIDE;
 
     virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
 
     virtual bool BegTextEdit(SdrOutliner& rOutl) SAL_OVERRIDE;
     virtual void EndTextEdit(SdrOutliner& rOutl) SAL_OVERRIDE;

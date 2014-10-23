@@ -318,8 +318,8 @@ long Window::SetZoomFactor(long nZoom)
 
     // Set the zoom factor at the window's map mode.
     MapMode aMap(GetMapMode());
-    aMap.SetScaleX(boost::rational<sal_Int64>(nZoom, 100));
-    aMap.SetScaleY(boost::rational<sal_Int64>(nZoom, 100));
+    aMap.SetScaleX(boost::rational<long>(nZoom, 100));
+    aMap.SetScaleY(boost::rational<long>(nZoom, 100));
     SetMapMode(aMap);
 
     // invalidate previous size - it was relative to the old scaling

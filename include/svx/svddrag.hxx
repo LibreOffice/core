@@ -146,8 +146,8 @@ public:
     bool CheckMinMoved(const Point& rPnt);
     long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }
     long  GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
-    boost::rational<sal_Int64> GetXFact() const;
-    boost::rational<sal_Int64> GetYFact() const;
+    boost::rational<long> GetXFact() const;
+    boost::rational<long> GetYFact() const;
 
     SdrDragMethod* GetDragMethod() const               { return pDragMethod; }
     void           SetDragMethod(SdrDragMethod* pMth)  { pDragMethod=pMth; }

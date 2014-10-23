@@ -248,14 +248,14 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         else if (sName.equalsAscii(SC_ZOOMVALUE) )
         {
             aSettings[i].Value >>= nTemp32;
-            boost::rational<sal_Int64> aZoom(nTemp32, 100);
+            boost::rational<long> aZoom(nTemp32, 100);
             aZoomX = aZoomY = aZoom;
             rHasZoom = true;
         }
         else if (sName.equalsAscii(SC_PAGEVIEWZOOMVALUE) )
         {
             aSettings[i].Value >>= nTemp32;
-            boost::rational<sal_Int64> aZoom(nTemp32, 100);
+            boost::rational<long> aZoom(nTemp32, 100);
             aPageZoomX = aPageZoomY = aZoom;
             rHasZoom = true;
         }
@@ -616,21 +616,21 @@ void ScViewData::SetZoomType( SvxZoomType eNew, bool bAll )
     SetZoomType( eNew, vTabs );
 }
 
-void ScViewData::SetZoom( const boost::rational<sal_Int64>& rNewX, const boost::rational<sal_Int64>& rNewY, std::vector< SCTAB >& tabs )
+void ScViewData::SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, std::vector< SCTAB >& tabs )
 {
     bool bAll = ( tabs.empty() );
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
-    boost::rational<sal_Int64> aFrac20( 1,5 );
-    boost::rational<sal_Int64> aFrac400( 4,1 );
+    boost::rational<long> aFrac20( 1,5 );
+    boost::rational<long> aFrac400( 4,1 );
 
-    boost::rational<sal_Int64> aValidX = rNewX;
+    boost::rational<long> aValidX = rNewX;
     if (aValidX<aFrac20)
         aValidX = aFrac20;
     if (aValidX>aFrac400)
         aValidX = aFrac400;
 
-    boost::rational<sal_Int64> aValidY = rNewY;
+    boost::rational<long> aValidY = rNewY;
     if (aValidY<aFrac20)
         aValidY = aFrac20;
     if (aValidY>aFrac400)
@@ -690,7 +690,7 @@ void ScViewData::SetZoom( const boost::rational<sal_Int64>& rNewX, const boost::
     RefreshZoom();
 }
 
-void ScViewData::SetZoom( const boost::rational<sal_Int64>& rNewX, const boost::rational<sal_Int64>& rNewY, bool bAll )
+void ScViewData::SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, bool bAll )
 {
     std::vector< SCTAB > vTabs;
     if ( !bAll ) // get selected tabs
@@ -1033,7 +1033,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             //  if text is formatted for printer, use the exact same paper width
             //  (and same line breaks) as for output.
 
-            boost::rational<sal_Int64> aFract(1,1);
+            boost::rational<long> aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
                                     HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.Width() = aUtilRect.GetWidth();
@@ -2120,18 +2120,18 @@ bool ScViewData::IsMinimized()
     return pView->IsMinimized();
 }
 
-void ScViewData::UpdateScreenZoom( const boost::rational<sal_Int64>& rNewX, const boost::rational<sal_Int64>& rNewY )
+void ScViewData::UpdateScreenZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY )
 {
-    boost::rational<sal_Int64> aOldX = GetZoomX();
-    boost::rational<sal_Int64> aOldY = GetZoomY();
+    boost::rational<long> aOldX = GetZoomX();
+    boost::rational<long> aOldY = GetZoomY();
 
     SetZoom( rNewX, rNewY, false );
 
-    boost::rational<sal_Int64> aWidth = GetZoomX();
+    boost::rational<long> aWidth = GetZoomX();
     aWidth *= aScrSize.Width();
     aWidth /= aOldX;
 
-    boost::rational<sal_Int64> aHeight = GetZoomY();
+    boost::rational<long> aHeight = GetZoomY();
     aHeight *= aScrSize.Height();
     aHeight /= aOldY;
 
@@ -2259,15 +2259,15 @@ void ScViewData::ReadUserData(const OUString& rData)
     // nicht pro Tabelle:
     SCTAB nTabStart = 2;
 
-    boost::rational<sal_Int64> aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
+    boost::rational<long> aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
 
     OUString aZoomStr = rData.getToken(0, ';');                 // Zoom/PageZoom/Modus
     sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0,'/').toInt32());
     if ( nNormZoom >= MINZOOM && nNormZoom <= MAXZOOM )
-        aZoomX = aZoomY = boost::rational<sal_Int64>( nNormZoom, 100 );           //  "normal" zoom (always)
+        aZoomX = aZoomY = boost::rational<long>( nNormZoom, 100 );           //  "normal" zoom (always)
     sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(1,'/').toInt32());
     if ( nPageZoom >= MINZOOM && nPageZoom <= MAXZOOM )
-        aPageZoomX = aPageZoomY = boost::rational<sal_Int64>( nPageZoom, 100 );   // Pagebreak-zoom, if set
+        aPageZoomX = aPageZoomY = boost::rational<long>( nPageZoom, 100 );   // Pagebreak-zoom, if set
     sal_Unicode cMode = aZoomStr.getToken(2,'/')[0];            // 0 or "0"/"1"
     SetPagebreakMode( cMode == '1' );
     // SetPagebreakMode muss immer gerufen werden wegen CalcPPT / RecalcPixPos()
@@ -2579,9 +2579,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
             // zoom for each sheet
             if( rTabSett.mnNormalZoom )
-                rViewTab.aZoomX = rViewTab.aZoomY = boost::rational<sal_Int64>( rTabSett.mnNormalZoom, 100L );
+                rViewTab.aZoomX = rViewTab.aZoomY = boost::rational<long>( rTabSett.mnNormalZoom, 100L );
             if( rTabSett.mnPageZoom )
-                rViewTab.aPageZoomX = rViewTab.aPageZoomY = boost::rational<sal_Int64>( rTabSett.mnPageZoom, 100L );
+                rViewTab.aPageZoomX = rViewTab.aPageZoomY = boost::rational<long>( rTabSett.mnPageZoom, 100L );
 
             rViewTab.bShowGrid = rTabSett.mbShowGrid;
 
@@ -2599,9 +2599,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
                 // view mode and default zoom (for new sheets) from current sheet
                 if( rTabSett.mnNormalZoom )
-                    aDefZoomX = aDefZoomY = boost::rational<sal_Int64>( rTabSett.mnNormalZoom, 100L );
+                    aDefZoomX = aDefZoomY = boost::rational<long>( rTabSett.mnNormalZoom, 100L );
                 if( rTabSett.mnPageZoom )
-                    aDefPageZoomX = aDefPageZoomY = boost::rational<sal_Int64>( rTabSett.mnPageZoom, 100L );
+                    aDefPageZoomX = aDefPageZoomY = boost::rational<long>( rTabSett.mnPageZoom, 100L );
                 /*  #i46820# set pagebreak mode via SetPagebreakMode(), this will
                     update map modes that are needed to draw text correctly. */
                 SetPagebreakMode( rTabSett.mbPageMode );
@@ -2787,7 +2787,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         {
             if (rSettings[i].Value >>= nTemp32)
             {
-                boost::rational<sal_Int64> aZoom(nTemp32, 100);
+                boost::rational<long> aZoom(nTemp32, 100);
                 aDefZoomX = aDefZoomY = aZoom;
             }
         }
@@ -2795,7 +2795,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         {
             if (rSettings[i].Value >>= nTemp32)
             {
-                boost::rational<sal_Int64> aZoom(nTemp32, 100);
+                boost::rational<long> aZoom(nTemp32, 100);
                 aDefPageZoomX = aDefPageZoomY = aZoom;
             }
         }

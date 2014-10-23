@@ -1951,19 +1951,19 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
              b) stretch bottom bound to where I think it should have been
              in the first place
             */
-            boost::rational<sal_Int64> aMoveHack(ww::nWrap100Percent, rSize.Width());
-            aMoveHack *= boost::rational<sal_Int64>(15, 1);
+            boost::rational<long> aMoveHack(ww::nWrap100Percent, rSize.Width());
+            aMoveHack *= boost::rational<long>(15, 1);
             long nMove(boost::rational_cast<long>(aMoveHack));
             aPoly.Move(nMove, 0);
 
-            boost::rational<sal_Int64> aHackX(ww::nWrap100Percent, ww::nWrap100Percent + nMove);
-            boost::rational<sal_Int64> aHackY(ww::nWrap100Percent, ww::nWrap100Percent - nMove);
+            boost::rational<long> aHackX(ww::nWrap100Percent, ww::nWrap100Percent + nMove);
+            boost::rational<long> aHackY(ww::nWrap100Percent, ww::nWrap100Percent - nMove);
             aPoly.Scale(boost::rational_cast<double>(aHackX), boost::rational_cast<double>(aHackY));
 
             // Turn polygon back into units that match the graphic's
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
-            boost::rational<sal_Int64> aMapPolyX(rOrigSize.Width(), ww::nWrap100Percent);
-            boost::rational<sal_Int64> aMapPolyY(rOrigSize.Height(), ww::nWrap100Percent);
+            boost::rational<long> aMapPolyX(rOrigSize.Width(), ww::nWrap100Percent);
+            boost::rational<long> aMapPolyY(rOrigSize.Height(), ww::nWrap100Percent);
             aPoly.Scale(boost::rational_cast<double>(aMapPolyX), boost::rational_cast<double>(aMapPolyY));
 
             // #i47277# - contour is already in unit of the

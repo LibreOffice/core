@@ -697,11 +697,11 @@ void ScTabView::UpdateVarZoom()
     if ( eZoomType != SVX_ZOOM_PERCENT && !bInZoomUpdate )
     {
         bInZoomUpdate = true;
-        const boost::rational<sal_Int64>& rOldX = GetViewData().GetZoomX();
-        const boost::rational<sal_Int64>& rOldY = GetViewData().GetZoomY();
+        const boost::rational<long>& rOldX = GetViewData().GetZoomX();
+        const boost::rational<long>& rOldY = GetViewData().GetZoomY();
         long nOldPercent = ( rOldY.numerator() * 100 ) / rOldY.denominator();
         sal_uInt16 nNewZoom = CalcZoom( eZoomType, (sal_uInt16)nOldPercent );
-        boost::rational<sal_Int64> aNew( nNewZoom, 100 );
+        boost::rational<long> aNew( nNewZoom, 100 );
 
         if ( aNew != rOldX || aNew != rOldY )
         {
@@ -924,7 +924,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             //  for ole inplace editing, the scale is defined by the visarea and client size
             //  and can't be changed directly
 
-            const boost::rational<sal_Int64>& rOldY = aViewData.GetZoomY();
+            const boost::rational<long>& rOldY = aViewData.GetZoomY();
             long nOld = long(( rOldY.numerator() * 100 ) / rOldY.denominator());
             long nNew = nOld;
             if ( pData->GetMode() == COMMAND_WHEEL_ZOOM_SCALE )
@@ -943,7 +943,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
                 bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
-                boost::rational<sal_Int64> aFract( nNew, 100 );
+                boost::rational<long> aFract( nNew, 100 );
                 SetZoom( aFract, aFract, bSyncZoom );
                 PaintGrid();
                 PaintTop();

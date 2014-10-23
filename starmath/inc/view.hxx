@@ -276,7 +276,7 @@ protected:
     virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize) SAL_OVERRIDE;
     virtual void OuterResizePixel(const Point &rOfs, const Size  &rSize) SAL_OVERRIDE;
     virtual void QueryObjAreaPixel( Rectangle& rRect ) const SAL_OVERRIDE;
-    virtual void SetZoomFactor( const boost::rational<sal_Int64> &rX, const boost::rational<sal_Int64> &rY ) SAL_OVERRIDE;
+    virtual void SetZoomFactor( const boost::rational<long> &rX, const boost::rational<long> &rY ) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();

@@ -213,8 +213,8 @@ void ScClient::ViewChanged()
     if (pDrawObj)
     {
         Rectangle aLogicRect = pDrawObj->GetLogicRect();
-        boost::rational<sal_Int64> aFractX = GetScaleWidth();
-        boost::rational<sal_Int64> aFractY = GetScaleHeight();
+        boost::rational<long> aFractX = GetScaleWidth();
+        boost::rational<long> aFractY = GetScaleHeight();
         aFractX *= aVisSize.Width();
         aFractY *= aVisSize.Height();
         aVisSize = Size( boost::rational_cast<long>(aFractX), boost::rational_cast<long>(aFractY) ); // Scaled for Draw model

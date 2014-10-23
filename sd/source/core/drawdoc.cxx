@@ -192,12 +192,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     // Allow UI scale only for draw documents.
     if( eType == DOCUMENT_TYPE_DRAW )
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), boost::rational<sal_Int64>( nX, nY ) );  // user-defined
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), boost::rational<long>( nX, nY ) );  // user-defined
     else
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), boost::rational<sal_Int64>( 1, 1 ) );    // default
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), boost::rational<long>( 1, 1 ) );    // default
 
     SetScaleUnit(MAP_100TH_MM);
-    SetScaleFraction(boost::rational<sal_Int64>(1, 1));
+    SetScaleFraction(boost::rational<long>(1, 1));
     SetDefaultFontHeight(847);     // 24p
 
     pItemPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);

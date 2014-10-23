@@ -644,7 +644,7 @@ private:
     RulerType       meDragType;
     MapUnit         meSourceUnit;
     FieldUnit       meUnit;
-    boost::rational<sal_Int64>        maZoom;
+    boost::rational<long>        maZoom;
     bool            mbCalc;
     bool            mbFormat;
     bool            mbDrag;
@@ -745,8 +745,8 @@ public:
 
     void            SetUnit( FieldUnit eNewUnit );
     FieldUnit       GetUnit() const { return meUnit; }
-    void            SetZoom( const boost::rational<sal_Int64>& rNewZoom );
-    boost::rational<sal_Int64>        GetZoom() const { return maZoom; }
+    void            SetZoom( const boost::rational<long>& rNewZoom );
+    boost::rational<long>        GetZoom() const { return maZoom; }
 
     void            SetSourceUnit( MapUnit eNewUnit ) { meSourceUnit = eNewUnit; }
     MapUnit         GetSourceUnit() const { return meSourceUnit; }

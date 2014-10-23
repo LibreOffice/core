@@ -447,7 +447,7 @@ bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMt
     rMtf.Stop();
     rMtf.WindStart();
     MapMode aMap( MAP_10TH_MM, Point(),
-                  boost::rational<sal_Int64>( 1, 4 ), boost::rational<sal_Int64>( 1, 4 ) );
+                  boost::rational<long>( 1, 4 ), boost::rational<long>( 1, 4 ) );
     rMtf.SetPrefMapMode( aMap );
     rMtf.SetPrefSize( Size( (short)rHead.Xsize, (short)rHead.Ysize ) );
     return true;

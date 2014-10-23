@@ -153,7 +153,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
         mpOutlinerParaObject=0;
         if (bScaleUnitChanged)
         {
-            boost::rational<sal_Int64> aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
+            boost::rational<long> aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
 
             if (bSetHgtItem)
             {

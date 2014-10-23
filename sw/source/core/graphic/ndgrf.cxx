@@ -812,8 +812,8 @@ void SwGrfNode::ScaleImageMap()
         return;
 
     bool bScale = false;
-    boost::rational<sal_Int64> aScaleX( 1, 1 );
-    boost::rational<sal_Int64> aScaleY( 1, 1 );
+    boost::rational<long> aScaleX( 1, 1 );
+    boost::rational<long> aScaleY( 1, 1 );
 
     const SwFmtFrmSize& rFrmSize = pFmt->GetFrmSize();
     const SvxBoxItem& rBox = pFmt->GetBox();
@@ -829,7 +829,7 @@ void SwGrfNode::ScaleImageMap()
 
         if( nGrfSize.Width() != nWidth )
         {
-            aScaleX = boost::rational<sal_Int64>( nGrfSize.Width(), nWidth );
+            aScaleX = boost::rational<long>( nGrfSize.Width(), nWidth );
             bScale = true;
         }
     }
@@ -844,7 +844,7 @@ void SwGrfNode::ScaleImageMap()
 
         if( nGrfSize.Height() != nHeight )
         {
-            aScaleY = boost::rational<sal_Int64>( nGrfSize.Height(), nHeight );
+            aScaleY = boost::rational<long>( nGrfSize.Height(), nHeight );
             bScale = true;
         }
     }

@@ -449,7 +449,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     SmNodePointer pNode(SmParser().ParseExpression(aElementVisual));
 
     pNode->Prepare(maFormat, *mpDocShell);
-    pNode->SetSize(boost::rational<sal_Int64>(10,8));
+    pNode->SetSize(boost::rational<long>(10,8));
     pNode->Arrange(*this, maFormat);
 
     Size aSizePixel = LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()), MAP_100TH_MM);

@@ -672,12 +672,12 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz)
 
 static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
-    ResizePoint(rPt,*(const Point*)p1,*(const boost::rational<sal_Int64>*)p2,*(const boost::rational<sal_Int64>*)p3);
-    if (pC1!=NULL) ResizePoint(*pC1,*(const Point*)p1,*(const boost::rational<sal_Int64>*)p2,*(const boost::rational<sal_Int64>*)p3);
-    if (pC2!=NULL) ResizePoint(*pC2,*(const Point*)p1,*(const boost::rational<sal_Int64>*)p2,*(const boost::rational<sal_Int64>*)p3);
+    ResizePoint(rPt,*(const Point*)p1,*(const boost::rational<long>*)p2,*(const boost::rational<long>*)p3);
+    if (pC1!=NULL) ResizePoint(*pC1,*(const Point*)p1,*(const boost::rational<long>*)p2,*(const boost::rational<long>*)p3);
+    if (pC2!=NULL) ResizePoint(*pC2,*(const Point*)p1,*(const boost::rational<long>*)p2,*(const boost::rational<long>*)p3);
 }
 
-void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));

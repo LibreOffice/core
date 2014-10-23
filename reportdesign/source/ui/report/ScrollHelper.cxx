@@ -101,7 +101,7 @@ void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
     m_aTotalPixelSize.Height() = _nHeight;
 
     // now set the ranges without start marker
-    boost::rational<sal_Int64> aStartWidth(REPORT_STARTMARKER_WIDTH * m_pParent->getController().getZoomValue(),100);
+    boost::rational<long> aStartWidth(REPORT_STARTMARKER_WIDTH * m_pParent->getController().getZoomValue(),100);
     long nWidth = long(_nWidth - boost::rational_cast<double>(aStartWidth));
     m_aHScroll.SetRangeMax( nWidth );
     m_aVScroll.SetRangeMax( m_aTotalPixelSize.Height() );
@@ -163,7 +163,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
     const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
     // resize scrollbars and set their ranges
     {
-        boost::rational<sal_Int64> aStartWidth(long(REPORT_STARTMARKER_WIDTH*m_pParent->getController().getZoomValue()),100);
+        boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH*m_pParent->getController().getZoomValue()),100);
         const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X() - boost::rational_cast<long>(aStartWidth);
         lcl_setScrollBar(nNewWidth,Point( boost::rational_cast<long>(aStartWidth) + aOffset.X(), aOutPixSz.Height() ),Size( nNewWidth, nScrSize ),m_aHScroll);
     }
@@ -383,7 +383,7 @@ sal_uInt32 OScrollWindowHelper::getMarkedObjectCount() const
     return m_aReportWindow.getMarkedObjectCount();
 }
 
-void OScrollWindowHelper::zoom(const boost::rational<sal_Int64>& _aZoom)
+void OScrollWindowHelper::zoom(const boost::rational<long>& _aZoom)
 {
     m_aReportWindow.zoom(_aZoom);
     Resize();

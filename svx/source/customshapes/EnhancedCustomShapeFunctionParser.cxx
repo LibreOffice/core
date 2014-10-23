@@ -116,7 +116,7 @@ public:
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
-        boost::rational<sal_Int64> aFract( maValue );
+        boost::rational<long> aFract( maValue );
         if ( aFract.denominator() == 1 )
         {
             aRet.Type = EnhancedCustomShapeParameterType::NORMAL;

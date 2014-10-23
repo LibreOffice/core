@@ -15,10 +15,10 @@
 
 class SvStream;
 
-TOOLS_DLLPUBLIC boost::rational<sal_Int64> rational_FromDouble(double dVal);
-TOOLS_DLLPUBLIC void rational_ReduceInaccurate(boost::rational<sal_Int64>& rRational, unsigned nSignificantBits);
-TOOLS_DLLPUBLIC SvStream& ReadFraction(SvStream& rIStream, boost::rational<sal_Int64>& rRational);
-TOOLS_DLLPUBLIC SvStream& WriteFraction(SvStream& rOStream, const boost::rational<sal_Int64>& rRational);
+TOOLS_DLLPUBLIC boost::rational<long> rational_FromDouble(double dVal);
+TOOLS_DLLPUBLIC void rational_ReduceInaccurate(boost::rational<long>& rRational, unsigned nSignificantBits);
+TOOLS_DLLPUBLIC SvStream& ReadFraction(SvStream& rIStream, boost::rational<long>& rRational);
+TOOLS_DLLPUBLIC SvStream& WriteFraction(SvStream& rOStream, const boost::rational<long>& rRational);
 
 #endif
 

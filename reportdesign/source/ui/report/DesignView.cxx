@@ -684,7 +684,7 @@ sal_uInt32 ODesignView::getMarkedObjectCount() const
     return m_aScrollWindow.getMarkedObjectCount();
 }
 
-void ODesignView::zoom(const boost::rational<sal_Int64>& _aZoom)
+void ODesignView::zoom(const boost::rational<long>& _aZoom)
 {
     m_aScrollWindow.zoom(_aZoom);
 }

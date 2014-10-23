@@ -262,7 +262,7 @@ public:
     /// update data for accessible preview
     /// change method signature due to new page preview functionality
     void UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
-                                  const boost::rational<sal_Int64>&  _rScale,
+                                  const boost::rational<long>&  _rScale,
                                   const SwPageFrm* _pSelectedPageFrm,
                                   const Size&      _rPreviewWinSize );
 

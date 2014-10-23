@@ -164,8 +164,8 @@ private:
     ScOutputType eType;         // Screen/Printer ...
     double mnPPTX;              // Pixel per Twips
     double mnPPTY;
-    boost::rational<sal_Int64> aZoomX;
-    boost::rational<sal_Int64> aZoomY;
+    boost::rational<long> aZoomX;
+    boost::rational<long> aZoomY;
 
     SdrObject* pEditObj;        // Omit when painting
 
@@ -262,8 +262,8 @@ public:
                                     SCTAB nNewTab, long nNewScrX, long nNewScrY,
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
-                                    const boost::rational<sal_Int64>* pZoomX = NULL,
-                                    const boost::rational<sal_Int64>* pZoomY = NULL );
+                                    const boost::rational<long>* pZoomX = NULL,
+                                    const boost::rational<long>* pZoomY = NULL );
 
                     ~ScOutputData();
 

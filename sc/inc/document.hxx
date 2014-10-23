@@ -1451,7 +1451,7 @@ public:
     void            StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                         OutputDevice* pDev,
                                         double nPPTX, double nPPTY,
-                                        const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY );
+                                        const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY );
 
     bool            IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
 
@@ -1519,7 +1519,7 @@ public:
 
     sal_uInt16          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
                                         double nPPTX, double nPPTY,
-                                        const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+                                        const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
                                         bool bFormula,
                                         const ScMarkData* pMarkData = NULL,
                                         const ScColWidthParam* pParam = NULL );
@@ -1532,7 +1532,7 @@ public:
     long            GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+                                    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
                                     bool bWidth, bool bTotalSize = false );
 
     SC_DLLPUBLIC void           ShowCol(SCCOL nCol, SCTAB nTab, bool bShow);

@@ -99,8 +99,8 @@ class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper5< embed::XEmbeddedCl
 public:
     Timer                           m_aTimer;               // activation timeout, starts after object connection
     Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
-    boost::rational<sal_Int64>           m_aScaleWidth;          // scaling that was applied to the object when it was not active
-    boost::rational<sal_Int64>           m_aScaleHeight;
+    boost::rational<long>           m_aScaleWidth;          // scaling that was applied to the object when it was not active
+    boost::rational<long>           m_aScaleHeight;
     SfxInPlaceClient*               m_pClient;
     sal_Int64                       m_nAspect;              // ViewAspect that is assigned from the container
     Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
@@ -615,7 +615,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_pImp->acquire();
     m_pImp->m_pClient = this;
     m_pImp->m_nAspect = nAspect;
-    m_pImp->m_aScaleWidth = m_pImp->m_aScaleHeight = boost::rational<sal_Int64>(1);
+    m_pImp->m_aScaleWidth = m_pImp->m_aScaleHeight = boost::rational<long>(1);
     m_pImp->m_xClient = static_cast< embed::XEmbeddedClient* >( m_pImp );
     pViewShell->NewIPClient_Impl(this);
     m_pImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
@@ -760,7 +760,7 @@ Rectangle SfxInPlaceClient::GetScaledObjArea() const
 }
 
 
-void SfxInPlaceClient::SetSizeScale( const boost::rational<sal_Int64>& rScaleWidth, const boost::rational<sal_Int64>& rScaleHeight )
+void SfxInPlaceClient::SetSizeScale( const boost::rational<long>& rScaleWidth, const boost::rational<long>& rScaleHeight )
 {
     if ( m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
     {
@@ -776,7 +776,7 @@ void SfxInPlaceClient::SetSizeScale( const boost::rational<sal_Int64>& rScaleWid
 }
 
 
-bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const boost::rational<sal_Int64>& rScaleWidth, const boost::rational<sal_Int64>& rScaleHeight )
+bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const boost::rational<long>& rScaleWidth, const boost::rational<long>& rScaleHeight )
 {
     if( rArea != m_pImp->m_aObjArea || m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
     {
@@ -794,13 +794,13 @@ bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const boost::
 }
 
 
-const boost::rational<sal_Int64>&  SfxInPlaceClient::GetScaleWidth() const
+const boost::rational<long>&  SfxInPlaceClient::GetScaleWidth() const
 {
     return m_pImp->m_aScaleWidth;
 }
 
 
-const boost::rational<sal_Int64>&  SfxInPlaceClient::GetScaleHeight() const
+const boost::rational<long>&  SfxInPlaceClient::GetScaleHeight() const
 {
     return m_pImp->m_aScaleHeight;
 }
@@ -955,8 +955,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
                                 Rectangle aScaledArea = GetScaledObjArea();
                                 m_pImp->m_aObjArea.SetSize( aNewSize );
-                                m_pImp->m_aScaleWidth = boost::rational<sal_Int64>( aScaledArea.GetWidth(), aNewSize.Width() );
-                                m_pImp->m_aScaleHeight = boost::rational<sal_Int64>( aScaledArea.GetHeight(), aNewSize.Height() );
+                                m_pImp->m_aScaleWidth = boost::rational<long>( aScaledArea.GetWidth(), aNewSize.Width() );
+                                m_pImp->m_aScaleHeight = boost::rational<long>( aScaledArea.GetHeight(), aNewSize.Height() );
                             }
                         }
                         catch (uno::Exception const& e)

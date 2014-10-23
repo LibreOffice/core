@@ -166,8 +166,8 @@ private:
     Size          aActOvalSize;
     vcl::Font     aActFont;
 
-    boost::rational<sal_Int64>        aHRes;
-    boost::rational<sal_Int64>        aVRes;
+    boost::rational<long>        aHRes;
+    boost::rational<long>        aVRes;
 
     bool Callback(sal_uInt16 nPercent);
 
@@ -1841,7 +1841,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aActFont.SetSize(Size(0,12));
     aActFont.SetAlign(ALIGN_BASELINE);
 
-    aHRes = aVRes = boost::rational<sal_Int64>( 1, 1 );
+    aHRes = aVRes = boost::rational<long>( 1, 1 );
 
     pVirDev = new VirtualDevice();
     pVirDev->EnableOutput(false);

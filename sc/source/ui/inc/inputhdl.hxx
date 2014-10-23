@@ -102,8 +102,8 @@ private:
     sal_uLong               nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
-    boost::rational<sal_Int64>   aScaleX;                    // for ref MapMode
-    boost::rational<sal_Int64>   aScaleY;
+    boost::rational<long>   aScaleX;                    // for ref MapMode
+    boost::rational<long>   aScaleY;
 
     ScTabViewShell*         pRefViewSh;
     ScTabViewShell*         pActiveViewSh;
@@ -209,7 +209,7 @@ public:
     void            ShowTip( const OUString& rText );     // at Cursor
     void            ShowTipBelow( const OUString& rText );
 
-    void            SetRefScale( const boost::rational<sal_Int64>& rX, const boost::rational<sal_Int64>& rY );
+    void            SetRefScale( const boost::rational<long>& rX, const boost::rational<long>& rY );
     void            UpdateRefDevice();
 
     EditView*       GetActiveView();

@@ -48,7 +48,7 @@ class SwPagePreviewWin : public vcl::Window
     sal_uInt16              mnSttPage;
     sal_uInt8                mnRow, mnCol;
     Size                maPxWinSize;
-    boost::rational<sal_Int64>            maScale;
+    boost::rational<long>            maScale;
     SwPagePreview&      mrView;
     bool                mbCalcScaleForPreviewLayout;
     Rectangle           maPaintedPreviewDocRect;

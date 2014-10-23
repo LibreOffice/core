@@ -212,7 +212,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
         EndUndo();
 }
 
-void SdrEditView::ResizeMarkedObj(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact, bool bCopy)
+void SdrEditView::ResizeMarkedObj(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bCopy)
 {
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -245,8 +245,8 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const boost::rational<sal_I
         EndUndo();
 }
 void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
-    const boost::rational<sal_Int64>& xFact,
-    const boost::rational<sal_Int64>& yFact,
+    const boost::rational<long>& xFact,
+    const boost::rational<long>& yFact,
     const bool bCopy,
     const bool bWdh,
     const bool bHgt)
@@ -276,7 +276,7 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
 
-        boost::rational<sal_Int64> aFrac(1,1);
+        boost::rational<long> aFrac(1,1);
         if (bWdh && bHgt)
             pO->Resize(rRef, xFact, yFact);
         else if (bWdh)
@@ -755,12 +755,12 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
         SetMarkedObjRect(aRect);
     }
     if (rAttr.GetItemState(SDRATTR_RESIZEXALL,true,&pPoolItem)==SfxItemState::SET) {
-        boost::rational<sal_Int64> aXFact=static_cast<const SdrResizeXAllItem*>(pPoolItem)->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),aXFact,boost::rational<sal_Int64>(1,1));
+        boost::rational<long> aXFact=static_cast<const SdrResizeXAllItem*>(pPoolItem)->GetValue();
+        ResizeMarkedObj(aAllSnapRect.TopLeft(),aXFact,boost::rational<long>(1,1));
     }
     if (rAttr.GetItemState(SDRATTR_RESIZEYALL,true,&pPoolItem)==SfxItemState::SET) {
-        boost::rational<sal_Int64> aYFact=static_cast<const SdrResizeYAllItem*>(pPoolItem)->GetValue();
-        ResizeMarkedObj(aAllSnapRect.TopLeft(),boost::rational<sal_Int64>(1,1),aYFact);
+        boost::rational<long> aYFact=static_cast<const SdrResizeYAllItem*>(pPoolItem)->GetValue();
+        ResizeMarkedObj(aAllSnapRect.TopLeft(),boost::rational<long>(1,1),aYFact);
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEALL,true,&pPoolItem)==SfxItemState::SET) {
         long nAngle=static_cast<const SdrRotateAllItem*>(pPoolItem)->GetValue();
@@ -1608,8 +1608,8 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // change size and height
     if (bChgSiz && (bResizeFreeAllowed || bResizePropAllowed)) {
-        boost::rational<sal_Int64> aWdt(nSizX,aRect.Right()-aRect.Left());
-        boost::rational<sal_Int64> aHgt(nSizY,aRect.Bottom()-aRect.Top());
+        boost::rational<long> aWdt(nSizX,aRect.Right()-aRect.Left());
+        boost::rational<long> aHgt(nSizY,aRect.Bottom()-aRect.Top());
         Point aRef(ImpGetPoint(aRect,eSizePoint));
 
         if(GetSdrPageView())

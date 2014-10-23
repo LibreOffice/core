@@ -231,7 +231,7 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, sal_uInt8 nScript )
 
     // call GetFont with a modified fraction, use only the height
 
-    boost::rational<sal_Int64> aFraction( nScale, 100 );
+    boost::rational<long> aFraction( nScale, 100 );
     if ( !bPixelToLogic )
         aFraction *= pOutput->aZoomY;
     vcl::Font aTmpFont;
@@ -2787,7 +2787,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            boost::rational<sal_Int64> aFract(1,1);
+            boost::rational<long> aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
@@ -3809,7 +3809,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            boost::rational<sal_Int64> aFract(1,1);
+            boost::rational<long> aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
@@ -4165,7 +4165,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            boost::rational<sal_Int64> aFract(1,1);
+            boost::rational<long> aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();

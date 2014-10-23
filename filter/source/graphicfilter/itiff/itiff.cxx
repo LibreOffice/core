@@ -1127,7 +1127,7 @@ void TIFFReader::MakePalCol( void )
             nRX=(sal_uLong)(fXResolution*2.54+0.5);
             nRY=(sal_uLong)(fYResolution*2.54+0.5);
         }
-        MapMode aMapMode(MAP_INCH,Point(0,0),boost::rational<sal_Int64>(1,nRX),boost::rational<sal_Int64>(1,nRY));
+        MapMode aMapMode(MAP_INCH,Point(0,0),boost::rational<long>(1,nRX),boost::rational<long>(1,nRY));
         aBitmap.SetPrefMapMode(aMapMode);
         aBitmap.SetPrefSize(Size(nImageWidth,nImageLength));
     }
