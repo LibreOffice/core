@@ -180,10 +180,10 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
             {
                 AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), _nLayerNo) );
                 pObj->SetLayer( _nLayerNo );
-                OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
+                OObjectBase& rBaseObj = dynamic_cast<OObjectBase&>(*pObj);
                 try
                 {
-                    pBaseObj->getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::makeAny(_nLayerNo == RPT_LAYER_FRONT));
+                    rBaseObj.getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::makeAny(_nLayerNo == RPT_LAYER_FRONT));
                 }
                 catch(const uno::Exception&)
                 {
