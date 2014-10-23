@@ -4507,7 +4507,9 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
         }
         if ( nFileOfs )
         {
-            sal_Int16   nTCount;
+            bool bRecordOk = true;
+
+            sal_Int16   nTCount(0);
             sal_Int32   i;
             rIn.ReadInt32( mpImplRuler->nFlags );
 
@@ -4518,10 +4520,16 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
                 rIn.ReadUInt16( mpImplRuler->nDefaultTab );
             if ( mpImplRuler->nFlags & 4 )
             {
-                rIn.ReadInt16( nTCount );
-                if ( nTCount )
+                rIn.ReadInt16(nTCount);
+
+                const size_t nMaxPossibleRecords = rIn.remainingSize() / (2*sizeof(sal_uInt16));
+                const sal_uInt16 nTabCount(nTCount);
+
+                bRecordOk = nTabCount <= nMaxPossibleRecords;
+
+                if (nTCount && bRecordOk)
                 {
-                    mpImplRuler->nTabCount = (sal_uInt16)nTCount;
+                    mpImplRuler->nTabCount = nTabCount;
                     mpImplRuler->pTab = new PPTTabEntry[ mpImplRuler->nTabCount ];
                     for ( i = 0; i < nTCount; i++ )
                     {
@@ -4530,23 +4538,27 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, SdrPowerP
                     }
                 }
             }
-            for ( i = 0; i < 5; i++ )
-            {
-                if ( mpImplRuler->nFlags & ( 8 << i ) )
-                    rIn.ReadUInt16( mpImplRuler->nTextOfs[ i ] );
-                if ( mpImplRuler->nFlags & ( 256 << i ) )
-                    rIn.ReadUInt16( mpImplRuler->nBulletOfs[ i ] );
-                if( mpImplRuler->nBulletOfs[ i ] > 0x7fff)
-                {
-                    // workaround
-                    // when bullet offset is > 0x7fff, the paragraph should look like
-                    // *    first line text
-                    // second line text
 
-                    // we add to bullet para indent 0xffff - bullet offset. it looks like
-                    // best we can do for now
-                    mpImplRuler->nTextOfs[ i ] += 0xffff - mpImplRuler->nBulletOfs[ i ];
-                    mpImplRuler->nBulletOfs[ i ] = 0;
+            if (bRecordOk)
+            {
+                for ( i = 0; i < 5; i++ )
+                {
+                    if ( mpImplRuler->nFlags & ( 8 << i ) )
+                        rIn.ReadUInt16( mpImplRuler->nTextOfs[ i ] );
+                    if ( mpImplRuler->nFlags & ( 256 << i ) )
+                        rIn.ReadUInt16( mpImplRuler->nBulletOfs[ i ] );
+                    if( mpImplRuler->nBulletOfs[ i ] > 0x7fff)
+                    {
+                        // workaround
+                        // when bullet offset is > 0x7fff, the paragraph should look like
+                        // *    first line text
+                        // second line text
+
+                        // we add to bullet para indent 0xffff - bullet offset. it looks like
+                        // best we can do for now
+                        mpImplRuler->nTextOfs[ i ] += 0xffff - mpImplRuler->nBulletOfs[ i ];
+                        mpImplRuler->nBulletOfs[ i ] = 0;
+                    }
                 }
             }
         }
