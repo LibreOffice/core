@@ -194,15 +194,14 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
 {
     void*   pPtr;
     sal_uInt8   aBuf[8];
-    bool    bCompatible;
     double  nRetValue;
     double  fDoubleBuf;
     float   fFloatBuf;
 
 #ifdef OSL_BIGENDIAN
-    bCompatible = true;
+    const bool bCompatible = true;
 #else
-    bCompatible = false;
+    const bool bCompatible = false;
 #endif
 
     if (mpSource + mnParaSize + nRealSize > mpEndValidSource)
