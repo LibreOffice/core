@@ -32,6 +32,9 @@
 #include <win/salframe.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#include "salgdiimpl.hxx"
+#include "gdiimpl.hxx"
+
 // comment out to prevent use of beziers on GDI functions
 #define USE_GDI_BEZIERS
 
@@ -105,9 +108,6 @@ static BYTE aOrdDither16Bit[8][8] =
 // map has many paint problems when drawing polygons/polyLines and a
 // complex is set
 #define GSL_PEN_WIDTH                   1
-
-#define SAL_POLYPOLYCOUNT_STACKBUF          8
-#define SAL_POLYPOLYPOINTS_STACKBUF         64
 
 void ImplInitSalGDI()
 {
@@ -365,6 +365,23 @@ void ImplFreeSalGDI()
     pSalData->mbResourcesAlreadyFreed = true;
 }
 
+int ImplIsSysColorEntry( SalColor nSalColor )
+{
+    SysColorEntry*  pEntry = pFirstSysColor;
+    const DWORD     nTestRGB = (DWORD)RGB( SALCOLOR_RED( nSalColor ),
+                                           SALCOLOR_GREEN( nSalColor ),
+                                           SALCOLOR_BLUE( nSalColor ) );
+
+    while ( pEntry )
+    {
+        if ( pEntry->nRGB == nTestRGB )
+            return TRUE;
+        pEntry = pEntry->pNext;
+    }
+
+    return FALSE;
+}
+
 static int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
 {
     // dither color?
@@ -386,23 +403,6 @@ static int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
          aImplExtraColor1.peBlue == nBlue )
     {
         return TRUE;
-    }
-
-    return FALSE;
-}
-
-int ImplIsSysColorEntry( SalColor nSalColor )
-{
-    SysColorEntry*  pEntry = pFirstSysColor;
-    const DWORD     nTestRGB = (DWORD)RGB( SALCOLOR_RED( nSalColor ),
-                                           SALCOLOR_GREEN( nSalColor ),
-                                           SALCOLOR_BLUE( nSalColor ) );
-
-    while ( pEntry )
-    {
-        if ( pEntry->nRGB == nTestRGB )
-            return TRUE;
-        pEntry = pEntry->pNext;
     }
 
     return FALSE;
@@ -464,16 +464,6 @@ void ImplUpdateSysColorEntries()
     ImplInsertSysColorEntry( COLOR_CAPTIONTEXT );
     ImplInsertSysColorEntry( COLOR_INACTIVECAPTION );
     ImplInsertSysColorEntry( COLOR_INACTIVECAPTIONTEXT );
-}
-
-static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
-{
-    SalColor nSalColor;
-    if ( nROPColor == SAL_ROP_0 )
-        nSalColor = MAKE_SALCOLOR( 0, 0, 0 );
-    else
-        nSalColor = MAKE_SALCOLOR( 255, 255, 255 );
-    return nSalColor;
 }
 
 void ImplSalInitGraphics( WinSalGraphics* pData )
@@ -566,106 +556,8 @@ void ImplClearHDCCache( SalData* pData )
     }
 }
 
-// #100127# Fill point and flag memory from array of points which
-// might also contain bezier control points for the PolyDraw() GDI method
-// Make sure pWinPointAry and pWinFlagAry are big enough
-void ImplPreparePolyDraw( bool                      bCloseFigures,
-                          sal_uLong                     nPoly,
-                          const sal_uInt32*         pPoints,
-                          const SalPoint* const*    pPtAry,
-                          const BYTE* const*        pFlgAry,
-                          POINT*                    pWinPointAry,
-                          BYTE*                     pWinFlagAry     )
-{
-    sal_uLong nCurrPoly;
-    for( nCurrPoly=0; nCurrPoly<nPoly; ++nCurrPoly )
-    {
-        const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
-        const BYTE* pCurrFlag = *pFlgAry++;
-        const sal_uInt32 nCurrPoints = *pPoints++;
-        const bool bHaveFlagArray( pCurrFlag );
-        sal_uLong nCurrPoint;
-
-        if( nCurrPoints )
-        {
-            // start figure
-            *pWinPointAry++ = *pCurrPoint++;
-            *pWinFlagAry++  = PT_MOVETO;
-            ++pCurrFlag;
-
-            for( nCurrPoint=1; nCurrPoint<nCurrPoints; )
-            {
-                // #102067# Check existence of flag array
-                if( bHaveFlagArray &&
-                    ( nCurrPoint + 2 ) < nCurrPoints )
-                {
-                    BYTE P4( pCurrFlag[ 2 ] );
-
-                    if( ( POLY_CONTROL == pCurrFlag[ 0 ] ) &&
-                        ( POLY_CONTROL == pCurrFlag[ 1 ] ) &&
-                        ( POLY_NORMAL == P4 || POLY_SMOOTH == P4 || POLY_SYMMTR == P4 ) )
-                    {
-                        // control point one
-                        *pWinPointAry++ = *pCurrPoint++;
-                        *pWinFlagAry++  = PT_BEZIERTO;
-
-                        // control point two
-                        *pWinPointAry++ = *pCurrPoint++;
-                        *pWinFlagAry++  = PT_BEZIERTO;
-
-                        // end point
-                        *pWinPointAry++ = *pCurrPoint++;
-                        *pWinFlagAry++  = PT_BEZIERTO;
-
-                        nCurrPoint += 3;
-                        pCurrFlag += 3;
-                        continue;
-                    }
-                }
-
-                // regular line point
-                *pWinPointAry++ = *pCurrPoint++;
-                *pWinFlagAry++  = PT_LINETO;
-                ++pCurrFlag;
-                ++nCurrPoint;
-            }
-
-            // end figure?
-            if( bCloseFigures )
-                pWinFlagAry[-1] |= PT_CLOSEFIGURE;
-        }
-    }
-}
-
-// #100127# draw an array of points which might also contain bezier control points
-void ImplRenderPath( HDC hdc, sal_uLong nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
-{
-    if( nPoints )
-    {
-        sal_uInt16 i;
-        // TODO: profile whether the following options are faster:
-        // a) look ahead and draw consecutive bezier or line segments by PolyBezierTo/PolyLineTo resp.
-        // b) convert our flag array to window's and use PolyDraw
-
-        MoveToEx( hdc, pPtAry->mnX, pPtAry->mnY, NULL );
-        ++pPtAry; ++pFlgAry;
-
-        for( i=1; i<nPoints; ++i, ++pPtAry, ++pFlgAry )
-        {
-            if( *pFlgAry != POLY_CONTROL )
-            {
-                LineTo( hdc, pPtAry->mnX, pPtAry->mnY );
-            }
-            else if( nPoints - i > 2 )
-            {
-                PolyBezierTo( hdc, reinterpret_cast<const POINT*>(pPtAry), 3 );
-                i += 2; pPtAry += 2; pFlgAry += 2;
-            }
-        }
-    }
-}
-
-WinSalGraphics::WinSalGraphics()
+WinSalGraphics::WinSalGraphics():
+    mpImpl(new WinSalGraphicsImpl(*this))
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
     {
@@ -678,8 +570,6 @@ WinSalGraphics::WinSalGraphics()
     mfCurrentFontScale = 1.0;
 
     mhLocalDC           = 0;
-    mhPen               = 0;
-    mhBrush             = 0;
     mhRegion            = 0;
     mhDefPen            = 0;
     mhDefBrush          = 0;
@@ -693,7 +583,6 @@ WinSalGraphics::WinSalGraphics()
     mpFontKernPairs     = NULL;
     mnFontKernPairCount = 0;
     mbFontKernInit      = FALSE;
-    mbXORMode           = FALSE;
     mnPenWidth          = GSL_PEN_WIDTH;
 }
 
@@ -701,17 +590,6 @@ WinSalGraphics::~WinSalGraphics()
 {
     // free obsolete GDI objects
         ReleaseFonts();
-
-    if ( mhPen )
-    {
-        if ( !mbStockPen )
-            DeletePen( mhPen );
-    }
-    if ( mhBrush )
-    {
-        if ( !mbStockBrush )
-            DeleteBrush( mhBrush );
-    }
 
     if ( mhRegion )
     {
@@ -730,6 +608,11 @@ WinSalGraphics::~WinSalGraphics()
     delete mpFontKernPairs;
 }
 
+HWND WinSalGraphics::gethWnd()
+{
+    return mhWnd;
+}
+
 void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
     rDPIX = GetDeviceCaps( getHDC(), LOGPIXELSX );
@@ -744,838 +627,110 @@ void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 
 sal_uInt16 WinSalGraphics::GetBitCount() const
 {
-    return (sal_uInt16)GetDeviceCaps( getHDC(), BITSPIXEL );
+    return mpImpl->GetBitCount();
 }
 
 long WinSalGraphics::GetGraphicsWidth() const
 {
-    if( mhWnd && IsWindow( mhWnd ) )
-    {
-        WinSalFrame* pFrame = GetWindowPtr( mhWnd );
-        if( pFrame )
-        {
-            if( pFrame->maGeometry.nWidth )
-                return pFrame->maGeometry.nWidth;
-            else
-            {
-                // TODO: perhaps not needed, maGeometry should always be up-to-date
-                RECT aRect;
-                GetClientRect( mhWnd, &aRect );
-                return aRect.right;
-            }
-        }
-    }
-
-    return 0;
+    return mpImpl->GetGraphicsWidth();
 }
 
 void WinSalGraphics::ResetClipRegion()
 {
-    if ( mhRegion )
-    {
-        DeleteRegion( mhRegion );
-        mhRegion = 0;
-    }
-
-    SelectClipRgn( getHDC(), 0 );
+    mpImpl->ResetClipRegion();
 }
 
 bool WinSalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
-    if ( mhRegion )
-    {
-        DeleteRegion( mhRegion );
-        mhRegion = 0;
-    }
-
-    bool bUsePolygon(i_rClip.HasPolyPolygonOrB2DPolyPolygon());
-    static bool bTryToAvoidPolygon(true);
-
-    // #i122149# try to avoid usage of tools::PolyPolygon ClipRegions when tools::PolyPolygon is no curve
-    // and only contains horizontal/vertical edges. In that case, use the fallback
-    // in GetRegionRectangles which will use vcl::Region::GetAsRegionBand() which will do
-    // the correct polygon-to-RegionBand transformation.
-    // Background is that when using the same Rectangle as rectangle or as Polygon
-    // clip region will lead to different results; the polygon-based one will be
-    // one pixel less to the right and down (see GDI docu for CreatePolygonRgn). This
-    // again is because of the polygon-nature and it's classic handling when filling.
-    // This also means that all cases which use a 'true' polygon-based incarnation of
-    // a vcl::Region should know what they do - it may lead to repaint errors.
-    if(bUsePolygon && bTryToAvoidPolygon)
-    {
-        const basegfx::B2DPolyPolygon aPolyPolygon( i_rClip.GetAsB2DPolyPolygon() );
-
-        if(!aPolyPolygon.areControlPointsUsed())
-        {
-            if(basegfx::tools::containsOnlyHorizontalAndVerticalEdges(aPolyPolygon))
-            {
-                bUsePolygon = false;
-            }
-        }
-    }
-
-    if(bUsePolygon)
-    {
-        // #i122149# check the comment above to know that this may lead to potential repaint
-        // problems. It may be solved (if needed) by scaling the polygon by one in X
-        // and Y. Currently the workaround to only use it if really unavoidable will
-        // solve most cases. When someone is really using polygon-based Regions he
-        // should know what he is doing.
-        // Added code to do that scaling to check if it works, testing it.
-        const basegfx::B2DPolyPolygon aPolyPolygon( i_rClip.GetAsB2DPolyPolygon() );
-        const sal_uInt32 nCount(aPolyPolygon.count());
-
-        if( nCount )
-        {
-            std::vector< POINT > aPolyPoints;
-            aPolyPoints.reserve( 1024 );
-            std::vector< INT > aPolyCounts( nCount, 0 );
-            basegfx::B2DHomMatrix aExpand;
-            static bool bExpandByOneInXandY(true);
-
-            if(bExpandByOneInXandY)
-            {
-                const basegfx::B2DRange aRangeS(aPolyPolygon.getB2DRange());
-                const basegfx::B2DRange aRangeT(aRangeS.getMinimum(), aRangeS.getMaximum() + basegfx::B2DTuple(1.0, 1.0));
-                aExpand = basegfx::B2DHomMatrix(basegfx::tools::createSourceRangeTargetRangeTransform(aRangeS, aRangeT));
-            }
-
-            for(sal_uInt32 a(0); a < nCount; a++)
-            {
-                const basegfx::B2DPolygon aPoly(
-                    basegfx::tools::adaptiveSubdivideByDistance(
-                        aPolyPolygon.getB2DPolygon(a),
-                        1));
-                const sal_uInt32 nPoints(aPoly.count());
-                aPolyCounts[a] = nPoints;
-
-                for( sal_uInt32 b = 0; b < nPoints; b++ )
-                {
-                    basegfx::B2DPoint aPt(aPoly.getB2DPoint(b));
-
-                    if(bExpandByOneInXandY)
-                    {
-                        aPt = aExpand * aPt;
-                    }
-
-                    POINT aPOINT;
-                    // #i122149# do correct rounding
-                    aPOINT.x = basegfx::fround(aPt.getX());
-                    aPOINT.y = basegfx::fround(aPt.getY());
-                    aPolyPoints.push_back( aPOINT );
-                }
-            }
-
-            mhRegion = CreatePolyPolygonRgn( &aPolyPoints[0], &aPolyCounts[0], nCount, ALTERNATE );
-        }
-    }
-    else
-    {
-        RectangleVector aRectangles;
-        i_rClip.GetRegionRectangles(aRectangles);
-
-        sal_uLong nRectBufSize = sizeof(RECT)*aRectangles.size();
-        if ( aRectangles.size() < SAL_CLIPRECT_COUNT )
-        {
-            if ( !mpStdClipRgnData )
-                mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
-            mpClipRgnData = mpStdClipRgnData;
-        }
-        else
-            mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
-        mpClipRgnData->rdh.dwSize   = sizeof( RGNDATAHEADER );
-        mpClipRgnData->rdh.iType    = RDH_RECTANGLES;
-        mpClipRgnData->rdh.nCount   = aRectangles.size();
-        mpClipRgnData->rdh.nRgnSize = nRectBufSize;
-        RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
-        SetRectEmpty( pBoundRect );
-        RECT* pNextClipRect         = (RECT*)(&(mpClipRgnData->Buffer));
-        bool bFirstClipRect         = true;
-
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
-        {
-            const long nW(aRectIter->GetWidth());
-            const long nH(aRectIter->GetHeight());
-
-            if(nW && nH)
-            {
-                const long nRight(aRectIter->Left() + nW);
-                const long nBottom(aRectIter->Top() + nH);
-
-                if(bFirstClipRect)
-                {
-                    pBoundRect->left = aRectIter->Left();
-                    pBoundRect->top = aRectIter->Top();
-                    pBoundRect->right = nRight;
-                    pBoundRect->bottom = nBottom;
-                    bFirstClipRect = false;
-                }
-                else
-                {
-                    if(aRectIter->Left() < pBoundRect->left)
-                    {
-                        pBoundRect->left = (int)aRectIter->Left();
-                    }
-
-                    if(aRectIter->Top() < pBoundRect->top)
-                    {
-                        pBoundRect->top = (int)aRectIter->Top();
-                    }
-
-                    if(nRight > pBoundRect->right)
-                    {
-                        pBoundRect->right = (int)nRight;
-                    }
-
-                    if(nBottom > pBoundRect->bottom)
-                    {
-                        pBoundRect->bottom = (int)nBottom;
-                    }
-                }
-
-                pNextClipRect->left = (int)aRectIter->Left();
-                pNextClipRect->top = (int)aRectIter->Top();
-                pNextClipRect->right = (int)nRight;
-                pNextClipRect->bottom = (int)nBottom;
-                pNextClipRect++;
-            }
-            else
-            {
-                mpClipRgnData->rdh.nCount--;
-                mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
-            }
-        }
-
-        // create clip region from ClipRgnData
-        if(0 == mpClipRgnData->rdh.nCount)
-        {
-            // #i123585# region is empty; this may happen when e.g. a tools::PolyPolygon is given
-            // that contains no polygons or only empty ones (no width/height). This is
-            // perfectly fine and we are done, except setting it (see end of method)
-        }
-        else if(1 == mpClipRgnData->rdh.nCount)
-        {
-            RECT* pRect = &(mpClipRgnData->rdh.rcBound);
-            mhRegion = CreateRectRgn( pRect->left, pRect->top,
-                                                     pRect->right, pRect->bottom );
-        }
-        else if(mpClipRgnData->rdh.nCount > 1)
-        {
-            sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
-            mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
-
-            // if ExtCreateRegion(...) is not supported
-            if( !mhRegion )
-            {
-                RGNDATAHEADER* pHeader = (RGNDATAHEADER*) mpClipRgnData;
-
-                if( pHeader->nCount )
-                {
-                    RECT* pRect = (RECT*) mpClipRgnData->Buffer;
-                    mhRegion = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
-                    pRect++;
-
-                    for( sal_uLong n = 1; n < pHeader->nCount; n++, pRect++ )
-                    {
-                        HRGN hRgn = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
-                        CombineRgn( mhRegion, mhRegion, hRgn, RGN_OR );
-                        DeleteRegion( hRgn );
-                    }
-                }
-            }
-
-            if ( mpClipRgnData != mpStdClipRgnData )
-                delete [] mpClipRgnData;
-        }
-    }
-
-    if( mhRegion )
-    {
-        SelectClipRgn( getHDC(), mhRegion );
-
-        // debug code if you weant to check range of the newly applied ClipRegion
-        //RECT aBound;
-        //const int aRegionType = GetRgnBox(mhRegion, &aBound);
-
-        //bool bBla = true;
-    }
-    else
-    {
-        // #i123585# See above, this is a valid case, execute it
-        SelectClipRgn( getHDC(), 0 );
-    }
-
-    // #i123585# retval no longer dependent of mhRegion, see TaskId comments above
-    return true;
+    return mpImpl->setClipRegion( i_rClip );
 }
 
 void WinSalGraphics::SetLineColor()
 {
-    // create and select new pen
-    HPEN hNewPen = GetStockPen( NULL_PEN );
-    HPEN hOldPen = SelectPen( getHDC(), hNewPen );
-
-    // destroy or save old pen
-    if ( mhPen )
-    {
-        if ( !mbStockPen )
-            DeletePen( mhPen );
-    }
-    else
-        mhDefPen = hOldPen;
-
-    // set new data
-    mhPen       = hNewPen;
-    mbPen       = FALSE;
-    mbStockPen  = TRUE;
+    mpImpl->SetLineColor();
 }
 
 void WinSalGraphics::SetLineColor( SalColor nSalColor )
 {
-    maLineColor = nSalColor;
-    COLORREF    nPenColor = PALETTERGB( SALCOLOR_RED( nSalColor ),
-                                        SALCOLOR_GREEN( nSalColor ),
-                                        SALCOLOR_BLUE( nSalColor ) );
-    HPEN        hNewPen = 0;
-    bool        bStockPen = FALSE;
-
-    // search for stock pen (only screen, because printer have problems,
-    // when we use stock objects)
-    if ( !mbPrinter )
-    {
-        SalData* pSalData = GetSalData();
-        for ( sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++ )
-        {
-            if ( nPenColor == pSalData->maStockPenColorAry[i] )
-            {
-                hNewPen = pSalData->mhStockPenAry[i];
-                bStockPen = TRUE;
-                break;
-            }
-        }
-    }
-
-    // create new pen
-    if ( !hNewPen )
-    {
-        if ( !mbPrinter )
-        {
-            if ( GetSalData()->mhDitherPal && ImplIsSysColorEntry( nSalColor ) )
-                nPenColor = PALRGB_TO_RGB( nPenColor );
-        }
-
-        hNewPen = CreatePen( PS_SOLID, mnPenWidth, nPenColor );
-        bStockPen = FALSE;
-    }
-
-    // select new pen
-    HPEN hOldPen = SelectPen( getHDC(), hNewPen );
-
-    // destroy or save old pen
-    if ( mhPen )
-    {
-        if ( !mbStockPen )
-            DeletePen( mhPen );
-    }
-    else
-        mhDefPen = hOldPen;
-
-    // set new data
-    mnPenColor  = nPenColor;
-    mhPen       = hNewPen;
-    mbPen       = TRUE;
-    mbStockPen  = bStockPen;
+    mpImpl->SetLineColor( nSalColor );
 }
 
 void WinSalGraphics::SetFillColor()
 {
-    // create and select new brush
-    HBRUSH hNewBrush = GetStockBrush( NULL_BRUSH );
-    HBRUSH hOldBrush = SelectBrush( getHDC(), hNewBrush );
-
-    // destroy or save old brush
-    if ( mhBrush )
-    {
-        if ( !mbStockBrush )
-            DeleteBrush( mhBrush );
-    }
-    else
-        mhDefBrush = hOldBrush;
-
-    // set new data
-    mhBrush     = hNewBrush;
-    mbBrush     = FALSE;
-    mbStockBrush = TRUE;
+    mpImpl->SetFillColor();
 }
 
 void WinSalGraphics::SetFillColor( SalColor nSalColor )
 {
-    maFillColor = nSalColor;
-    SalData*    pSalData    = GetSalData();
-    BYTE        nRed        = SALCOLOR_RED( nSalColor );
-    BYTE        nGreen      = SALCOLOR_GREEN( nSalColor );
-    BYTE        nBlue       = SALCOLOR_BLUE( nSalColor );
-    COLORREF    nBrushColor = PALETTERGB( nRed, nGreen, nBlue );
-    HBRUSH      hNewBrush   = 0;
-    bool        bStockBrush = FALSE;
-
-    // search for stock brush (only screen, because printer have problems,
-    // when we use stock objects)
-    if ( !mbPrinter )
-    {
-        for ( sal_uInt16 i = 0; i < pSalData->mnStockBrushCount; i++ )
-        {
-            if ( nBrushColor == pSalData->maStockBrushColorAry[ i ] )
-            {
-                hNewBrush = pSalData->mhStockBrushAry[i];
-                bStockBrush = TRUE;
-                break;
-            }
-        }
-    }
-
-    // create new brush
-    if ( !hNewBrush )
-    {
-        if ( mbPrinter || !pSalData->mhDitherDIB )
-            hNewBrush = CreateSolidBrush( nBrushColor );
-        else
-        {
-            if ( 24 == ((BITMAPINFOHEADER*)pSalData->mpDitherDIB)->biBitCount )
-            {
-                BYTE* pTmp = pSalData->mpDitherDIBData;
-                long* pDitherDiff = pSalData->mpDitherDiff;
-                BYTE* pDitherLow = pSalData->mpDitherLow;
-                BYTE* pDitherHigh = pSalData->mpDitherHigh;
-
-                for( long nY = 0L; nY < 8L; nY++ )
-                {
-                    for( long nX = 0L; nX < 8L; nX++ )
-                    {
-                        const long nThres = aOrdDither16Bit[ nY ][ nX ];
-                        *pTmp++ = DMAP( nBlue, nThres );
-                        *pTmp++ = DMAP( nGreen, nThres );
-                        *pTmp++ = DMAP( nRed, nThres );
-                    }
-                }
-
-                hNewBrush = CreateDIBPatternBrush( pSalData->mhDitherDIB, DIB_RGB_COLORS );
-            }
-            else if ( ImplIsSysColorEntry( nSalColor ) )
-            {
-                nBrushColor = PALRGB_TO_RGB( nBrushColor );
-                hNewBrush = CreateSolidBrush( nBrushColor );
-            }
-            else if ( ImplIsPaletteEntry( nRed, nGreen, nBlue ) )
-                hNewBrush = CreateSolidBrush( nBrushColor );
-            else
-            {
-                BYTE* pTmp = pSalData->mpDitherDIBData;
-                long* pDitherDiff = pSalData->mpDitherDiff;
-                BYTE* pDitherLow = pSalData->mpDitherLow;
-                BYTE* pDitherHigh = pSalData->mpDitherHigh;
-
-                for ( long nY = 0L; nY < 8L; nY++ )
-                {
-                    for ( long nX = 0L; nX < 8L; nX++ )
-                    {
-                        const long nThres = aOrdDither8Bit[ nY ][ nX ];
-                        *pTmp = DMAP( nRed, nThres ) + DMAP( nGreen, nThres ) * 6 + DMAP( nBlue, nThres ) * 36;
-                        pTmp++;
-                    }
-                }
-
-                hNewBrush = CreateDIBPatternBrush( pSalData->mhDitherDIB, DIB_PAL_COLORS );
-            }
-        }
-
-        bStockBrush = FALSE;
-    }
-
-    // select new brush
-    HBRUSH hOldBrush = SelectBrush( getHDC(), hNewBrush );
-
-    // destroy or save old brush
-    if ( mhBrush )
-    {
-        if ( !mbStockBrush )
-            DeleteBrush( mhBrush );
-    }
-    else
-        mhDefBrush = hOldBrush;
-
-    // set new data
-    mnBrushColor = nBrushColor;
-    mhBrush     = hNewBrush;
-    mbBrush     = TRUE;
-    mbStockBrush = bStockBrush;
+    mpImpl->SetFillColor( nSalColor );
 }
 
-void WinSalGraphics::SetXORMode( bool bSet, bool )
+void WinSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
-    mbXORMode = bSet;
-    ::SetROP2( getHDC(), bSet ? R2_XORPEN : R2_COPYPEN );
+    mpImpl->SetXORMode( bSet, bInvertOnly );
 }
 
 void WinSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
-    SetLineColor( ImplGetROPSalColor( nROPColor ) );
+    mpImpl->SetROPLineColor( nROPColor );
 }
 
 void WinSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
-    SetFillColor( ImplGetROPSalColor( nROPColor ) );
+    mpImpl->SetROPFillColor( nROPColor );
 }
 
 void WinSalGraphics::drawPixel( long nX, long nY )
 {
-    if ( mbXORMode )
-    {
-        HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
-        HBRUSH  hOldBrush = SelectBrush( getHDC(), hBrush );
-        PatBlt( getHDC(), (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
-        SelectBrush( getHDC(), hOldBrush );
-        DeleteBrush( hBrush );
-    }
-    else
-        SetPixel( getHDC(), (int)nX, (int)nY, mnPenColor );
+    mpImpl->drawPixel( nX, nY );
 }
 
 void WinSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    COLORREF nCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
-                                SALCOLOR_GREEN( nSalColor ),
-                                SALCOLOR_BLUE( nSalColor ) );
-
-    if ( !mbPrinter &&
-         GetSalData()->mhDitherPal &&
-         ImplIsSysColorEntry( nSalColor ) )
-        nCol = PALRGB_TO_RGB( nCol );
-
-    if ( mbXORMode )
-    {
-        HBRUSH  hBrush = CreateSolidBrush( nCol );
-        HBRUSH  hOldBrush = SelectBrush( getHDC(), hBrush );
-        PatBlt( getHDC(), (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
-        SelectBrush( getHDC(), hOldBrush );
-        DeleteBrush( hBrush );
-    }
-    else
-        ::SetPixel( getHDC(), (int)nX, (int)nY, nCol );
+    mpImpl->drawPixel( nX, nY, nSalColor );
 }
 
 void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    MoveToEx( getHDC(), (int)nX1, (int)nY1, NULL );
-
-    // we must paint the endpoint
-    int bPaintEnd = TRUE;
-    if ( nX1 == nX2 )
-    {
-        bPaintEnd = FALSE;
-        if ( nY1 <= nY2 )
-            nY2++;
-        else
-            nY2--;
-    }
-    if ( nY1 == nY2 )
-    {
-        bPaintEnd = FALSE;
-        if ( nX1 <= nX2 )
-            nX2++;
-        else
-            nX2--;
-    }
-
-    LineTo( getHDC(), (int)nX2, (int)nY2 );
-
-    if ( bPaintEnd && !mbPrinter )
-    {
-        if ( mbXORMode )
-        {
-            HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
-            HBRUSH  hOldBrush = SelectBrush( getHDC(), hBrush );
-            PatBlt( getHDC(), (int)nX2, (int)nY2, (int)1, (int)1, PATINVERT );
-            SelectBrush( getHDC(), hOldBrush );
-            DeleteBrush( hBrush );
-        }
-        else
-            SetPixel( getHDC(), (int)nX2, (int)nY2, mnPenColor );
-    }
+    mpImpl->drawLine( nX1, nY1, nX2, nY2 );
 }
 
 void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    if ( !mbPen )
-    {
-        if ( !mbPrinter )
-        {
-            PatBlt( getHDC(), (int)nX, (int)nY, (int)nWidth, (int)nHeight,
-                    mbXORMode ? PATINVERT : PATCOPY );
-        }
-        else
-        {
-            RECT aWinRect;
-            aWinRect.left   = nX;
-            aWinRect.top    = nY;
-            aWinRect.right  = nX+nWidth;
-            aWinRect.bottom = nY+nHeight;
-            ::FillRect( getHDC(), &aWinRect, mhBrush );
-        }
-    }
-    else
-        WIN_Rectangle( getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+    mpImpl->drawRect( nX, nY, nWidth, nHeight );
 }
 
 void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
-
-    POINT* pWinPtAry = (POINT*)pPtAry;
-
-    // we assume there are at least 2 points (Polyline requres at least 2 point, see MSDN)
-    // we must paint the endpoint for last line
-    BOOL bPaintEnd = TRUE;
-    if ( pWinPtAry[nPoints-2].x == pWinPtAry[nPoints-1].x )
-    {
-        bPaintEnd = FALSE;
-        if ( pWinPtAry[nPoints-2].y <=  pWinPtAry[nPoints-1].y )
-            pWinPtAry[nPoints-1].y++;
-        else
-            pWinPtAry[nPoints-1].y--;
-    }
-    if ( pWinPtAry[nPoints-2].y == pWinPtAry[nPoints-1].y )
-    {
-        bPaintEnd = FALSE;
-        if ( pWinPtAry[nPoints-2].x <= pWinPtAry[nPoints-1].x )
-            pWinPtAry[nPoints-1].x++;
-        else
-            pWinPtAry[nPoints-1].x--;
-    }
-
-    // for Windows 95 and its maximum number of points
-    if ( !Polyline( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-        Polyline( getHDC(), pWinPtAry, MAX_64KSALPOINTS );
-
-    if ( bPaintEnd && !mbPrinter )
-    {
-        if ( mbXORMode )
-        {
-            HBRUSH     hBrush = CreateSolidBrush( mnPenColor );
-            HBRUSH     hOldBrush = SelectBrush( getHDC(), hBrush );
-            PatBlt( getHDC(), (int)(pWinPtAry[nPoints-1].x), (int)(pWinPtAry[nPoints-1].y), (int)1, (int)1, PATINVERT );
-            SelectBrush( getHDC(), hOldBrush );
-            DeleteBrush( hBrush );
-        }
-        else
-            SetPixel( getHDC(), (int)(pWinPtAry[nPoints-1].x), (int)(pWinPtAry[nPoints-1].y), mnPenColor );
-    }
+    mpImpl->drawPolyLine( nPoints, pPtAry );
 }
 
 void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphics::DrawPolygon(): POINT != SalPoint" );
-
-    POINT* pWinPtAry = (POINT*)pPtAry;
-    // for Windows 95 and its maximum number of points
-    if ( !WIN_Polygon( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-        WIN_Polygon( getHDC(), pWinPtAry, MAX_64KSALPOINTS );
+    mpImpl->drawPolygon( nPoints, pPtAry );
 }
 
 void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                    PCONSTSALPOINT* pPtAry )
 {
-    UINT    aWinPointAry[SAL_POLYPOLYCOUNT_STACKBUF];
-    UINT*   pWinPointAry;
-    UINT    nPolyPolyPoints = 0;
-    UINT    nPoints;
-    UINT    i;
-
-    if ( nPoly <= SAL_POLYPOLYCOUNT_STACKBUF )
-        pWinPointAry = aWinPointAry;
-    else
-        pWinPointAry = new UINT[nPoly];
-
-    for ( i = 0; i < (UINT)nPoly; i++ )
-    {
-        nPoints = (UINT)pPoints[i]+1;
-        pWinPointAry[i] = nPoints;
-        nPolyPolyPoints += nPoints;
-    }
-
-    POINT  aWinPointAryAry[SAL_POLYPOLYPOINTS_STACKBUF];
-    POINT* pWinPointAryAry;
-    if ( nPolyPolyPoints <= SAL_POLYPOLYPOINTS_STACKBUF )
-        pWinPointAryAry = aWinPointAryAry;
-    else
-        pWinPointAryAry = new POINT[nPolyPolyPoints];
-    // for NT, we can handover the array directly
-   DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphics::DrawPolyPolygon(): POINT != SalPoint" );
-    const SalPoint* pPolyAry;
-    UINT            n = 0;
-    for ( i = 0; i < (UINT)nPoly; i++ )
-    {
-        nPoints = pWinPointAry[i];
-        pPolyAry = pPtAry[i];
-        memcpy( pWinPointAryAry+n, pPolyAry, (nPoints-1)*sizeof(POINT) );
-        pWinPointAryAry[n+nPoints-1] = pWinPointAryAry[n];
-        n += nPoints;
-    }
-
-    if ( !WIN_PolyPolygon( getHDC(), pWinPointAryAry, (int*)pWinPointAry, (UINT)nPoly ) &&
-         (nPolyPolyPoints > MAX_64KSALPOINTS) )
-    {
-        nPolyPolyPoints  = 0;
-        nPoly = 0;
-        do
-        {
-            nPolyPolyPoints += pWinPointAry[(UINT)nPoly];
-            nPoly++;
-        }
-        while ( nPolyPolyPoints < MAX_64KSALPOINTS );
-        nPoly--;
-        if ( pWinPointAry[(UINT)nPoly] > MAX_64KSALPOINTS )
-            pWinPointAry[(UINT)nPoly] = MAX_64KSALPOINTS;
-        if ( nPoly == 1 )
-            WIN_Polygon( getHDC(), pWinPointAryAry, *pWinPointAry );
-        else
-            WIN_PolyPolygon( getHDC(), pWinPointAryAry, (int*)pWinPointAry, nPoly );
-    }
-
-    if ( pWinPointAry != aWinPointAry )
-        delete [] pWinPointAry;
-    if ( pWinPointAryAry != aWinPointAryAry )
-        delete [] pWinPointAryAry;
+    mpImpl->drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
-
-#define SAL_POLY_STACKBUF       32
 
 bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
-#ifdef USE_GDI_BEZIERS
-    // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphics::DrawPolyLineBezier(): POINT != SalPoint" );
-
-    ImplRenderPath( getHDC(), nPoints, pPtAry, pFlgAry );
-
-    return true;
-#else
-    return false;
-#endif
+    return mpImpl->drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
-#ifdef USE_GDI_BEZIERS
-    // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphics::DrawPolygonBezier(): POINT != SalPoint" );
-
-    POINT   aStackAry1[SAL_POLY_STACKBUF];
-    BYTE    aStackAry2[SAL_POLY_STACKBUF];
-    POINT*  pWinPointAry;
-    BYTE*   pWinFlagAry;
-    if( nPoints > SAL_POLY_STACKBUF )
-    {
-        pWinPointAry = new POINT[ nPoints ];
-        pWinFlagAry = new BYTE[ nPoints ];
-    }
-    else
-    {
-        pWinPointAry = aStackAry1;
-        pWinFlagAry = aStackAry2;
-    }
-
-    sal_uInt32 nPoints_i32(nPoints);
-    ImplPreparePolyDraw(true, 1, &nPoints_i32, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
-
-    bool bRet( false );
-
-    if( BeginPath( getHDC() ) )
-    {
-        PolyDraw(getHDC(), pWinPointAry, pWinFlagAry, nPoints);
-
-        if( EndPath( getHDC() ) )
-        {
-            if( StrokeAndFillPath( getHDC() ) )
-                bRet = true;
-        }
-    }
-
-    if( pWinPointAry != aStackAry1 )
-    {
-        delete [] pWinPointAry;
-        delete [] pWinFlagAry;
-    }
-
-    return bRet;
-#else
-    return false;
-#endif
+    return mpImpl->drawPolygonBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                              const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
-#ifdef USE_GDI_BEZIERS
-    // for NT, we can handover the array directly
-    DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "WinSalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
-
-    sal_uLong nCurrPoly, nTotalPoints;
-    const sal_uInt32* pCurrPoints = pPoints;
-    for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
-        nTotalPoints += *pCurrPoints++;
-
-    POINT   aStackAry1[SAL_POLY_STACKBUF];
-    BYTE    aStackAry2[SAL_POLY_STACKBUF];
-    POINT*  pWinPointAry;
-    BYTE*   pWinFlagAry;
-    if( nTotalPoints > SAL_POLY_STACKBUF )
-    {
-        pWinPointAry = new POINT[ nTotalPoints ];
-        pWinFlagAry = new BYTE[ nTotalPoints ];
-    }
-    else
-    {
-        pWinPointAry = aStackAry1;
-        pWinFlagAry = aStackAry2;
-    }
-
-    ImplPreparePolyDraw(true, nPoly, pPoints, pPtAry, pFlgAry, pWinPointAry, pWinFlagAry);
-
-    bool bRet( false );
-
-    if( BeginPath( getHDC() ) )
-    {
-        PolyDraw(getHDC(), pWinPointAry, pWinFlagAry, nTotalPoints);
-
-        if( EndPath( getHDC() ) )
-        {
-            if( StrokeAndFillPath( getHDC() ) )
-                bRet = true;
-        }
-    }
-
-    if( pWinPointAry != aStackAry1 )
-    {
-        delete [] pWinPointAry;
-        delete [] pWinFlagAry;
-    }
-
-    return bRet;
-#else
-    return false;
-#endif
+    return mpImpl->drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
 }
-
-#define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
 
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uLong nComp, sal_uLong nSize )
 {
@@ -1655,6 +810,8 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
     }
     return bRetValue;
 }
+
+#define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
 
 bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
