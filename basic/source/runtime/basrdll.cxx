@@ -28,6 +28,7 @@
 #include <basic/basrdll.hxx>
 #include <basrid.hxx>
 #include <sb.hrc>
+#include <sbxbase.hxx>
 
 struct BasicDLL::Impl
 {
@@ -35,11 +36,13 @@ struct BasicDLL::Impl
     bool        bBreakEnabled;
 
     ::boost::scoped_ptr<ResMgr> pBasResMgr;
+    ::boost::scoped_ptr<SbxAppData> pSbxAppData;
 
     Impl()
         : bDebugMode(false)
         , bBreakEnabled(true)
         , pBasResMgr(ResMgr::CreateResMgr("sb", Application::GetSettings().GetUILanguageTag()))
+        , pSbxAppData(new SbxAppData)
     { }
 };
 
@@ -100,6 +103,11 @@ void BasicDLL::BasicBreak()
             bJustStopping = false;
         }
     }
+}
+
+SbxAppData& GetSbxData_Impl()
+{
+    return *BASIC_DLL()->m_pImpl->pSbxAppData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

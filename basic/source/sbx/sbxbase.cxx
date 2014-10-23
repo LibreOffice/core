@@ -32,14 +32,11 @@
 
 TYPEINIT0(SbxBase)
 
-namespace
+SbxAppData::SbxAppData()
+    : eSbxError(SbxERR_OK)
+    , pBasicFormater(0)
+    , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
-    class theSbxAppData : public rtl::Static<SbxAppData, theSbxAppData> {};
-}
-
-SbxAppData& GetSbxData_Impl()
-{
-    return theSbxAppData::get();
 }
 
 SbxAppData::~SbxAppData()

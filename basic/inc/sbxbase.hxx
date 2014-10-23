@@ -24,6 +24,7 @@
 #include <basic/sbxdef.hxx>
 #include <basic/basicdllapi.h>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/noncopyable.hpp>
 
 class SbxFactory;
 class SbxVariable;
@@ -33,6 +34,7 @@ typedef boost::ptr_vector<SbxFactory> SbxFacs;
 
 // AppData structure for SBX:
 struct SbxAppData
+    : private ::boost::noncopyable
 {
     SbxError            eSbxError;  // Error code
     SbxFacs             aFacs;      // Factories
@@ -41,13 +43,7 @@ struct SbxAppData
     LanguageType        eBasicFormaterLangType;
     // It might be useful to store this class 'global' because some string reosurces are saved here
 
-    SbxAppData()
-        : eSbxError(SbxERR_OK)
-        , aFacs()
-        , pBasicFormater(NULL)
-        , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
-    {
-    }
+    SbxAppData();
     ~SbxAppData();
 };
 

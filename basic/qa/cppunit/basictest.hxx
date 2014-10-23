@@ -25,9 +25,9 @@ class MacroSnippet
 {
     private:
     bool mbError;
+    BasicDLL maDll; // we need a dll instance for resouce manager etc.
     SbModuleRef mpMod;
     StarBASICRef mpBasic;
-    BasicDLL maDll; // we need a dll instance for resouce manager etc.
 
     void InitSnippet()
     {
