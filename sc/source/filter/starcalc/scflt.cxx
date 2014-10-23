@@ -2104,25 +2104,30 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
 {
     // rAttr is not reused, otherwise we'd have to delete [] rAttr.pData;
-    rStream.ReadUInt16( rAttr.Count );
-    if (rAttr.Count)
+    rStream.ReadUInt16(rAttr.Count);
+
+    const size_t nMaxEntries = rStream.remainingSize() / (sizeof(sal_uInt16) * 2);
+    if (rAttr.Count > nMaxEntries)
+        rAttr.Count = nMaxEntries;
+
+    if (!rAttr.Count)
+        return;
+
+    rAttr.pData = new (::std::nothrow) Sc10ColData[rAttr.Count];
+    if (rAttr.pData == NULL)
     {
-        rAttr.pData = new (::std::nothrow) Sc10ColData[rAttr.Count];
-        if (rAttr.pData != NULL)
-        {
-            for (sal_uInt16 i = 0; i < rAttr.Count; i++)
-            {
-                rStream.ReadUInt16( rAttr.pData[i].Row );
-                rStream.ReadUInt16( rAttr.pData[i].Value );
-            }
-            nError = rStream.GetError();
-        }
-        else
-        {
-            nError = errOutOfMemory;
-            rAttr.Count = 0;
-        }
+        nError = errOutOfMemory;
+        rAttr.Count = 0;
+        return;
     }
+
+    for (sal_uInt16 i = 0; i < rAttr.Count; ++i)
+    {
+        rStream.ReadUInt16( rAttr.pData[i].Row );
+        rStream.ReadUInt16( rAttr.pData[i].Value );
+    }
+
+    nError = rStream.GetError();
 }
 
 void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey)
