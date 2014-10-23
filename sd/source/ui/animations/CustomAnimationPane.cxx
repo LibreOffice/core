@@ -2070,10 +2070,10 @@ void CustomAnimationPane::moveSelection( bool bUp )
         {
             CustomAnimationEffectPtr pEffect = (*aIter++);
 
-            EffectSequence::iterator aEffectPos( pSequence->find( pEffect ) );
-            if( aEffectPos != rEffectSequence.end() )
+            EffectSequence::iterator aUpEffectPos( pSequence->find( pEffect ) );
+            if( aUpEffectPos != rEffectSequence.end() )
             {
-                EffectSequence::iterator aInsertPos( rEffectSequence.erase( aEffectPos ) );
+                EffectSequence::iterator aInsertPos( rEffectSequence.erase( aUpEffectPos ) );
 
                 if( aInsertPos != rEffectSequence.begin() )
                 {
@@ -2100,10 +2100,10 @@ void CustomAnimationPane::moveSelection( bool bUp )
         {
             CustomAnimationEffectPtr pEffect = (*aIter++);
 
-            EffectSequence::iterator aEffectPos( pSequence->find( pEffect ) );
-            if( aEffectPos != rEffectSequence.end() )
+            EffectSequence::iterator aDownEffectPos( pSequence->find( pEffect ) );
+            if( aDownEffectPos != rEffectSequence.end() )
             {
-                EffectSequence::iterator aInsertPos( rEffectSequence.erase( aEffectPos ) );
+                EffectSequence::iterator aInsertPos( rEffectSequence.erase( aDownEffectPos ) );
 
                 if( aInsertPos != rEffectSequence.end() )
                 {
