@@ -2228,6 +2228,7 @@ void SwHTMLParser::NewSelect()
 
         case HTML_O_SDONFOCUS:
             eScriptType2 = STARBASIC;
+            //fall-through
         case HTML_O_ONFOCUS:
             nEvent = HTML_ET_ONGETFOCUS;
             bSetEvent = true;
@@ -2235,6 +2236,7 @@ void SwHTMLParser::NewSelect()
 
         case HTML_O_SDONBLUR:
             eScriptType2 = STARBASIC;
+            //fall-through
         case HTML_O_ONBLUR:
             nEvent = HTML_ET_ONLOSEFOCUS;
             bSetEvent = true;
@@ -2242,6 +2244,7 @@ void SwHTMLParser::NewSelect()
 
         case HTML_O_SDONCLICK:
             eScriptType2 = STARBASIC;
+            //fall-through
         case HTML_O_ONCLICK:
             nEvent = HTML_ET_ONCLICK;
             bSetEvent = true;
@@ -2249,6 +2252,7 @@ void SwHTMLParser::NewSelect()
 
         case HTML_O_SDONCHANGE:
             eScriptType2 = STARBASIC;
+            //fall-through
         case HTML_O_ONCHANGE:
             nEvent = HTML_ET_ONCHANGE;
             bSetEvent = true;
