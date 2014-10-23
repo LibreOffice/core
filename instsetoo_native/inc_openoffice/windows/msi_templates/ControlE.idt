@@ -85,7 +85,7 @@ OutOfSpace	Resume	NewDialog	CustomSetup	ACTION <> "ADMIN"	0
 PatchWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	0
 PatchWelcome	Cancel	SpawnDialog	CancelSetup	1	1
 PatchWelcome	Next	EndDialog	Return	1	3
-PatchWelcome	Next	Reinstall	ALL	PATCH And REINSTALL=""	1
+PatchWelcome	Next	Reinstall	ALL	PATCH	1
 PatchWelcome	Next	ReinstallMode	omus	PATCH And REINSTALLMODE=""	2
 ReadyToInstall	Back	NewDialog	FileTypeDialog	Installed OR _IsSetupTypeMin = "Custom"	2
 ReadyToInstall	Back	NewDialog	MaintenanceType	Installed AND _IsMaintenance = "Reinstall"	3
