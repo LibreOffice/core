@@ -139,17 +139,17 @@ void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
     rIStm.ReadInt16( nUnit );
     ReadPair( rIStm, aOrg );
     rIStm.ReadInt32( nXNum ).ReadInt32( nXDenom ).ReadInt32( nYNum ).ReadInt32( nYDenom );
-    rMapMode = MapMode( (MapUnit) nUnit, aOrg, boost::rational<sal_Int64>( nXNum, nXDenom ), boost::rational<sal_Int64>( nYNum, nYDenom ) );
+    rMapMode = MapMode( (MapUnit) nUnit, aOrg, Fraction( nXNum, nXDenom ), Fraction( nYNum, nYDenom ) );
 }
 
 void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
     rOStm.WriteInt16(  rMapMode.GetMapUnit() );
     WritePair( rOStm, rMapMode.GetOrigin() );
-    rOStm.WriteInt32( rMapMode.GetScaleX().numerator() );
-    rOStm.WriteInt32( rMapMode.GetScaleX().denominator() );
-    rOStm.WriteInt32( rMapMode.GetScaleY().numerator() );
-    rOStm.WriteInt32( rMapMode.GetScaleY().denominator() );
+    rOStm.WriteInt32( rMapMode.GetScaleX().GetNumerator() );
+    rOStm.WriteInt32( rMapMode.GetScaleX().GetDenominator() );
+    rOStm.WriteInt32( rMapMode.GetScaleY().GetNumerator() );
+    rOStm.WriteInt32( rMapMode.GetScaleY().GetDenominator() );
 }
 
 void ImplWritePushAction( SvStream& rOStm )

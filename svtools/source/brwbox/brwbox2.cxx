@@ -549,7 +549,7 @@ void BrowseBox::Resize()
     // resized - which is done in UpdateScrollbars)
     sal_uLong nSBSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
-        nSBSize = (sal_uLong)(nSBSize * boost::rational_cast<double>(GetZoom()));
+        nSBSize = (sal_uLong)(nSBSize * (double)GetZoom());
 
     DoHideCursor( "Resize" );
     sal_uInt16 nOldVisibleRows = 0;
@@ -1136,7 +1136,7 @@ void BrowseBox::UpdateScrollbars()
     // the size of the corner window (and the width of the VSB/height of the HSB)
     sal_uLong nCornerSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
-        nCornerSize = (sal_uLong)(nCornerSize * boost::rational_cast<double>(GetZoom()));
+        nCornerSize = (sal_uLong)(nCornerSize * (double)GetZoom());
 
     bool bNeedsVScroll = false;
     long nMaxRows = 0;

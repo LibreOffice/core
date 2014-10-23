@@ -168,7 +168,7 @@
 #include <svtools/miscopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/wldcrd.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/datetime.hxx>

@@ -83,7 +83,7 @@ WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::scale(const boost::rational<sal_Int64>& rFractionX, const boost::rational<sal_Int64>& rFractionY)
+WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fraction & rFractionY)
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);
 
@@ -92,7 +92,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const boost::rational<sal_Int64>& rFra
 
     while (aIt != aItEnd)
     {
-        awt::Point aPoint( boost::rational_cast<long>(rFractionX * long(aIt->X)), boost::rational_cast<long>(rFractionY * long(aIt->Y)));
+        awt::Point aPoint((Fraction(long(aIt->X)) * rFractionX).operator long(), (Fraction(long(aIt->Y)) * rFractionY).operator long());
         pResult->addPoint(aPoint);
         ++aIt;
     }
@@ -106,17 +106,17 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 
     const long nWrap100Percent = 21600;
 
-    boost::rational<sal_Int64> aMove(nWrap100Percent, rSrcSize.Width);
-    aMove = aMove * boost::rational<sal_Int64>(15, 1);
-    awt::Point aMovePoint(boost::rational_cast<long>(aMove), 0);
+    Fraction aMove(nWrap100Percent, rSrcSize.Width);
+    aMove = aMove * Fraction(15, 1);
+    awt::Point aMovePoint(aMove.operator long(), 0);
     pResult = move(aMovePoint);
 
-    boost::rational<sal_Int64> aScaleX(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent + aMove));
-    boost::rational<sal_Int64> aScaleY(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent - aMove));
+    Fraction aScaleX(nWrap100Percent, Fraction(nWrap100Percent) + aMove);
+    Fraction aScaleY(nWrap100Percent, Fraction(nWrap100Percent) - aMove);
     pResult = pResult->scale(aScaleX, aScaleY);
 
-    boost::rational<sal_Int64> aScaleSrcX(rSrcSize.Width, nWrap100Percent);
-    boost::rational<sal_Int64> aScaleSrcY(rSrcSize.Height, nWrap100Percent);
+    Fraction aScaleSrcX(rSrcSize.Width, nWrap100Percent);
+    Fraction aScaleSrcY(rSrcSize.Height, nWrap100Percent);
     pResult = pResult->scale(aScaleSrcX, aScaleSrcY);
 
     return pResult;

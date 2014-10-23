@@ -258,8 +258,8 @@ public:
 class SVX_DLLPUBLIC SdrDragResize : public SdrDragMethod
 {
 protected:
-    boost::rational<sal_Int64>       aXFact;
-    boost::rational<sal_Int64>       aYFact;
+    Fraction                    aXFact;
+    Fraction                    aYFact;
 
 public:
     TYPEINFO_OVERRIDE();

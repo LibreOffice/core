@@ -440,7 +440,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 /**
  * adjust zoom factor for InPlace
  */
-void DrawViewShell::SetZoomFactor(const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY)
+void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
     ViewShell::SetZoomFactor(rZoomX, rZoomY);
     mbZoomOnPage = false;

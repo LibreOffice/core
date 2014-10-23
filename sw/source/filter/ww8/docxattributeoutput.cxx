@@ -6723,7 +6723,7 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
     {
         const SwPageFtnInfo& rFtnInfo = m_rExport.pDoc->GetPageDesc(0).GetFtnInfo();
         // Request a separator only in case the width is larger than zero.
-        bSeparator = boost::rational_cast<double>(rFtnInfo.GetWidth()) > 0;
+        bSeparator = double(rFtnInfo.GetWidth()) > 0;
     }
 
     if (bSeparator)

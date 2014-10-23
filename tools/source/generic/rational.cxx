@@ -15,7 +15,7 @@
 // If dVal > LONG_MAX or dVal < LONG_MIN, the rational throws a boost::bad_rational.
 // Otherwise, dVal and denominator are multiplied with 10, until one of them
 // is larger than (LONG_MAX / 10).
-boost::rational<sal_Int64> rational_FromDouble(double dVal)
+boost::rational<long> rational_FromDouble(double dVal)
 {
     long nDen = 1;
     long nMAX = LONG_MAX / 10;
@@ -30,7 +30,7 @@ boost::rational<sal_Int64> rational_FromDouble(double dVal)
         dVal *= 10;
         nDen *= 10;
     }
-    return boost::rational<sal_Int64>((long) dVal, nDen);
+    return boost::rational<long>((long) dVal, nDen);
 }
 
 // Similar to clz_table that can be googled
@@ -114,7 +114,7 @@ static int impl_NumberOfBits( unsigned long nNum )
 
     A ReduceInaccurate(8) yields 1/1.
 */
-void rational_ReduceInaccurate(boost::rational<sal_Int64>& rRational, unsigned nSignificantBits)
+void rational_ReduceInaccurate(boost::rational<long>& rRational, unsigned nSignificantBits)
 {
     if ( !rRational )
         return;
@@ -148,7 +148,7 @@ void rational_ReduceInaccurate(boost::rational<sal_Int64>& rRational, unsigned n
     rRational.assign( bNeg? -long( nMul ): long( nMul ), nDiv );
 }
 
-SvStream& ReadFraction(SvStream& rIStream, boost::rational<sal_Int64>& rRational)
+SvStream& ReadFraction(SvStream& rIStream, boost::rational<long>& rRational)
 {
     sal_Int32 nTmpNumerator(0), nTmpDenominator(0);
     rIStream.ReadInt32( nTmpNumerator );
@@ -162,7 +162,7 @@ SvStream& ReadFraction(SvStream& rIStream, boost::rational<sal_Int64>& rRational
     return rIStream;
 }
 
-SvStream& WriteFraction(SvStream& rOStream, const boost::rational<sal_Int64>& rRational)
+SvStream& WriteFraction(SvStream& rOStream, const boost::rational<long>& rRational)
 {
     //fdo#39428 SvStream no longer supports operator<<(long)
     rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rRational.numerator()) );

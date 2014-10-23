@@ -376,7 +376,7 @@ void AnnotationWindow::Rescale()
     {
         vcl::Font aFont( mpMeta->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
-        nHeight = nHeight * aMode.GetScaleY().numerator() / aMode.GetScaleY().denominator();
+        nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
         aFont.SetHeight( nHeight );
         mpMeta->SetControlFont( aFont );
     }

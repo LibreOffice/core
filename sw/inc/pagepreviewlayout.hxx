@@ -33,6 +33,7 @@
 class SwViewShell;
 class SwRootFrm;
 class SwPageFrm;
+class Fraction;
 struct PreviewPage;
 
 /** page preview functionality in the writer
@@ -396,8 +397,8 @@ public:
 
         @return Point, start position for new scale
     */
-    Point GetPreviewStartPosForNewScale( const boost::rational<sal_Int64>& _aNewScale,
-                                         const boost::rational<sal_Int64>& _aOldScale,
+    Point GetPreviewStartPosForNewScale( const Fraction& _aNewScale,
+                                         const Fraction& _aOldScale,
                                          const Size&     _aNewWinSize ) const;
 
     /** determines, if page with given page number is visible in preview

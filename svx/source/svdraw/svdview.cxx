@@ -480,8 +480,8 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 // account for FitToSize
                 bool bFitToSize(pTextObj->IsFitToSize());
                 if (bFitToSize) {
-                    boost::rational<sal_Int64> aX(aTextRect.GetWidth()-1, std::max(aAnchor.GetWidth()-1, 1L));
-                    boost::rational<sal_Int64> aY(aTextRect.GetHeight()-1, std::max(aAnchor.GetHeight()-1, 1L));
+                    Fraction aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
+                    Fraction aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
                     ResizePoint(aTemporaryTextRelativePosition,Point(),aX,aY);
                 }
                 // account for rotation

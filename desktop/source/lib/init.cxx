@@ -558,7 +558,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     VirtualDevice aDevice(0, (sal_uInt16)32);
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
     aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
-                Size(nCanvasWidth, nCanvasHeight), rational_FromDouble(1.0), Point(),
+                Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
                 aBuffer, true );
 
     pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,

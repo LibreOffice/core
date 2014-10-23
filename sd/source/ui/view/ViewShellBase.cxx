@@ -453,8 +453,8 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
         aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
         Size aObjSizePixel = mpImpl->mpViewWindow->LogicToPixel( aObjSize, MAP_100TH_MM );
         SfxViewShell::SetZoomFactor(
-            boost::rational<sal_Int64>( aSize.Width(), std::max( aObjSizePixel.Width(), (long int)1 ) ),
-            boost::rational<sal_Int64>( aSize.Height(), std::max( aObjSizePixel.Height(), (long int)1) ) );
+            Fraction( aSize.Width(), std::max( aObjSizePixel.Width(), (long int)1 ) ),
+            Fraction( aSize.Height(), std::max( aObjSizePixel.Height(), (long int)1) ) );
     }
 
     mpImpl->ResizePixel(rOrigin, rSize, false);
@@ -735,8 +735,8 @@ void ViewShellBase::Deactivate (bool bIsMDIActivate)
 }
 
 void ViewShellBase::SetZoomFactor (
-    const boost::rational<sal_Int64>& rZoomX,
-    const boost::rational<sal_Int64>& rZoomY)
+    const Fraction &rZoomX,
+    const Fraction &rZoomY)
 {
     SfxViewShell::SetZoomFactor (rZoomX, rZoomY);
     // Forward call to main sub shell.

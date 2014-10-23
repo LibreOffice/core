@@ -37,8 +37,8 @@ class ScDrawView: public FmFormView
     OutputDevice*           pDev;                   //! needed ?
     ScDocument*             pDoc;
     SCTAB                   nTab;
-    boost::rational<sal_Int64>   aScaleX;                // Factor for Drawing-MapMode
-    boost::rational<sal_Int64>   aScaleY;
+    Fraction                aScaleX;                // Factor for Drawing-MapMode
+    Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
     bool                    bInConstruct;
@@ -94,12 +94,12 @@ public:
     void            DoCut();
     void            DoCopy();
 
-    void            GetScale( boost::rational<sal_Int64>& rFractX, boost::rational<sal_Int64>& rFractY ) const;
+    void            GetScale( Fraction& rFractX, Fraction& rFractY ) const;
     void            RecalcScale();
     void            UpdateWorkArea();
     SCTAB           GetTab() const      { return nTab; }
 
-    void            CalcNormScale( boost::rational<sal_Int64>& rFractX, boost::rational<sal_Int64>& rFractY ) const;
+    void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
     void            SetPageAnchored();
     void            SetCellAnchored();

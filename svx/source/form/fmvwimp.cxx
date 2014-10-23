@@ -1459,8 +1459,8 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
             FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL, NULL ));
-            controlSize.Width() = boost::rational_cast<long>(controlSize.Width() * eTargetMode.GetScaleX());
-            controlSize.Height() = boost::rational_cast<long>(controlSize.Height() * eTargetMode.GetScaleY());
+            controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
+            controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
             ::Point controlPos( OutputDevice::LogicToLogic( ::Point( controlSize.Width(), 0 ), eSourceMode, eTargetMode ) );
             ::Rectangle controlRect( controlPos, OutputDevice::LogicToLogic( controlSize, eSourceMode, eTargetMode ) );
             pControl->SetLogicRect(controlRect);
@@ -1550,8 +1550,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     aRealSize.Height()= aDefSize.Height();
 
     // adjust to scaling of the target device (#53523#)
-    aRealSize.Width() = boost::rational_cast<long>(aRealSize.Width() * eTargetMode.GetScaleX());
-    aRealSize.Height() = boost::rational_cast<long>(aRealSize.Height() * eTargetMode.GetScaleY());
+    aRealSize.Width() = long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
+    aRealSize.Height() = long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
 
     // for boolean fields, we do not create a label, but just a checkbox
     bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
@@ -1617,8 +1617,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     if ( OBJ_FM_IMAGECONTROL == _nControlObjectID )
         aControlSize = aDefImageSize;
 
-    aControlSize.Width() = boost::rational_cast<long>(aControlSize.Width() * eTargetMode.GetScaleX());
-    aControlSize.Height() = boost::rational_cast<long>(aControlSize.Height() * eTargetMode.GetScaleY());
+    aControlSize.Width() = long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX());
+    aControlSize.Height() = long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY());
 
     pControl->SetLogicRect( ::Rectangle(
         OutputDevice::LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),

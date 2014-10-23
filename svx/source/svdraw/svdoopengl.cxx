@@ -35,7 +35,7 @@ sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
 }
 
 
-void SdrOpenGLObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrOpenGLObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrObject::NbcResize(rRef, xFact, yFact);
 

@@ -569,7 +569,7 @@ ScInputHandler::~ScInputHandler()
     delete pFormulaDataPara;
 }
 
-void ScInputHandler::SetRefScale( const boost::rational<sal_Int64>& rX, const boost::rational<sal_Int64>& rY )
+void ScInputHandler::SetRefScale( const Fraction& rX, const Fraction& rY )
 {
     if ( rX != aScaleX || rY != aScaleY )
     {
