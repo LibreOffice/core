@@ -1417,7 +1417,15 @@ SelectionType SwWrtShell::GetSelectionType() const
 
         if ( pTxtNd && pTxtNd->IsInList() )
         {
-            const SwNumFmt& rFmt = pNumRule->Get(sal::static_int_cast< sal_uInt8, sal_Int32>(pTxtNd->GetActualListLevel()));
+            int nLevel = pTxtNd->GetActualListLevel();
+
+            if (nLevel < 0)
+                nLevel = 0;
+
+            if (nLevel >= MAXLEVEL)
+                nLevel = MAXLEVEL - 1;
+
+            const SwNumFmt& rFmt = pNumRule->Get(nLevel);
             if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
                 nCnt |= nsSelectionType::SEL_NUM;
         }
