@@ -105,9 +105,11 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
 
         OUString aTest(aFullTest);
 
-        if (aTest == aLayout)
+        if (aTest == aLayout && pBMMPage->GetPageKind() == pTestPage->GetPageKind())
         {
-            if( bRenameDuplicates && pTestPage->getHash() != pBMMPage->getHash() )
+            // Ignore Layouts with "Default" these seem to be special - in the sense that there are lot of assumption all over Impress
+            // about this
+            if( bRenameDuplicates && aTest != OUString( SdResId( STR_LAYOUT_DEFAULT_NAME ) ) && pTestPage->getHash() != pBMMPage->getHash() )
             {
                 pBookmarkDoc->RenameLayoutTemplate( pBMMPage->GetLayoutName(), OUString(pBMMPage->GetName())+=OUString("_") );
                 aLayout = pBMMPage->GetName();
