@@ -2331,7 +2331,7 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
         // 1.200000000047something. To prevent this, we convert explicitly to double, and round it.
         double nZoom( fZoomX );
         nZoom = ::rtl::math::round( nZoom, 4 );
-        GetWindow()->SetZoom( rational_FromDouble( nZoom ) );
+        GetWindow()->SetZoom( Fraction( nZoom ) );
     }
 }
 

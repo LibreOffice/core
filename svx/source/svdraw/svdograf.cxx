@@ -897,12 +897,12 @@ SdrHdl* SdrGrafObj::GetHdl(sal_uInt32 nHdlNum) const
     return SdrRectObj::GetHdl( nHdlNum + 1L );
 }
 
-void SdrGrafObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     SdrRectObj::NbcResize( rRef, xFact, yFact );
 
-    bool bMirrX = xFact < 0;
-    bool bMirrY = yFact < 0;
+    bool bMirrX = xFact.GetNumerator() < 0;
+    bool bMirrY = yFact.GetNumerator() < 0;
 
     if( bMirrX != bMirrY )
         bMirrored = !bMirrored;

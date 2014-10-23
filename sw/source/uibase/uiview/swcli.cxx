@@ -67,8 +67,8 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
         MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
         MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
 
-        Size aNewObjSize( boost::rational_cast<long>(aLogRect.GetWidth() / GetScaleWidth()),
-                          boost::rational_cast<long>(aLogRect.GetHeight() / GetScaleHeight()) );
+        Size aNewObjSize( Fraction( aLogRect.GetWidth() ) / GetScaleWidth(),
+                          Fraction( aLogRect.GetHeight() ) / GetScaleHeight() );
 
         // convert to logical coordinates of the embedded object
         Size aNewSize = GetEditWin()->LogicToLogic( aNewObjSize, &aClientMap, &aObjectMap );
@@ -141,8 +141,8 @@ void SwOleClient::ViewChanged()
     const MapMode aObjMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
     aVisSize = OutputDevice::LogicToLogic( aVisSize, aObjMap, aMyMap );
 
-    aVisSize.Width() = boost::rational_cast<long>(aVisSize.Width() * GetScaleWidth());
-    aVisSize.Height()= boost::rational_cast<long>(aVisSize.Height() * GetScaleHeight());
+    aVisSize.Width() = Fraction( aVisSize.Width()  ) * GetScaleWidth();
+    aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
     rSh.LockView( true );   // Prevent scrolling in the EndAction

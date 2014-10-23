@@ -25,6 +25,7 @@
 #include <tools/gen.hxx>
 #include <svtools/imapobj.hxx>
 
+class Fraction;
 class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 {
     Point               aCenter;
@@ -60,7 +61,7 @@ public:
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const SAL_OVERRIDE;
 
-    void                Scale( const boost::rational<sal_Int64>& rFractX, const boost::rational<sal_Int64>& rFracY );
+    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapCircleObject& rEqObj );

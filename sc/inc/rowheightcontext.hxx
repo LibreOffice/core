@@ -12,7 +12,7 @@
 
 #include "scdllapi.h"
 
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 
 #include <vector>
 
@@ -26,8 +26,8 @@ class SC_DLLPUBLIC RowHeightContext
 
     double mfPPTX;
     double mfPPTY;
-    boost::rational<sal_Int64> maZoomX;
-    boost::rational<sal_Int64> maZoomY;
+    Fraction maZoomX;
+    Fraction maZoomY;
     OutputDevice* mpOutDev;
 
     sal_uInt16 mnExtraHeight;
@@ -35,15 +35,15 @@ class SC_DLLPUBLIC RowHeightContext
 
 public:
     RowHeightContext(
-        double fPPTX, double fPPTY, const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+        double fPPTX, double fPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
         OutputDevice* pOutDev );
 
     ~RowHeightContext();
 
     double getPPTX() const { return mfPPTX;}
     double getPPTY() const { return mfPPTY;}
-    const boost::rational<sal_Int64>& getZoomX() const { return maZoomX;}
-    const boost::rational<sal_Int64>& getZoomY() const { return maZoomY;}
+    const Fraction& getZoomX() const { return maZoomX;}
+    const Fraction& getZoomY() const { return maZoomY;}
 
     OutputDevice* getOutputDevice() { return mpOutDev;}
 

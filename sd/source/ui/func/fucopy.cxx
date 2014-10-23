@@ -235,8 +235,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 }
             }
 
-            boost::rational<sal_Int64> aWidth( aRect.Right() - aRect.Left() + lWidth, aRect.Right() - aRect.Left() );
-            boost::rational<sal_Int64> aHeight( aRect.Bottom() - aRect.Top() + lHeight, aRect.Bottom() - aRect.Top() );
+            Fraction aWidth( aRect.Right() - aRect.Left() + lWidth, aRect.Right() - aRect.Left() );
+            Fraction aHeight( aRect.Bottom() - aRect.Top() + lHeight, aRect.Bottom() - aRect.Top() );
 
             if( mpView->IsResizeAllowed() )
                 mpView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );

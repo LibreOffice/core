@@ -1965,7 +1965,7 @@ void SdrTableObj::NbcMove(const Size& rSiz)
 
 
 
-void SdrTableObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     Rectangle aOldRect( maLogicRect );
     ResizeRect(maLogicRect,rRef,xFact,yFact);

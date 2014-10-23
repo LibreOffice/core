@@ -102,8 +102,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPageWindow(vcl::Win
 
 void SvxPageWindow::Paint(const Rectangle&)
 {
-    boost::rational<sal_Int64> aXScale(aWinSize.Width(),std::max((long)(aSize.Width() * 2 + aSize.Width() / 8),1L));
-    boost::rational<sal_Int64> aYScale(aWinSize.Height(),std::max(aSize.Height(),1L));
+    Fraction aXScale(aWinSize.Width(),std::max((long)(aSize.Width() * 2 + aSize.Width() / 8),1L));
+    Fraction aYScale(aWinSize.Height(),std::max(aSize.Height(),1L));
     MapMode aMapMode(GetMapMode());
 
     if(aYScale < aXScale)
@@ -126,9 +126,9 @@ void SvxPageWindow::Paint(const Rectangle&)
         if (aSize.Width() > aSize.Height())
         {
             // Draw Landscape page of the same size
-            boost::rational<sal_Int64> aX = aMapMode.GetScaleX();
-            boost::rational<sal_Int64> aY = aMapMode.GetScaleY();
-            boost::rational<sal_Int64> a2(3, 2);
+            Fraction aX = aMapMode.GetScaleX();
+            Fraction aY = aMapMode.GetScaleY();
+            Fraction a2(1.5);
             aX *= a2;
             aY *= a2;
             aMapMode.SetScaleX(aX);

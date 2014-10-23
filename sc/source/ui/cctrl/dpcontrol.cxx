@@ -27,7 +27,7 @@
 #include "docpool.hxx"
 #include "patattr.hxx"
 
-ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const boost::rational<sal_Int64>* pZoomX, const boost::rational<sal_Int64>* pZoomY, ScDocument* pDoc) :
+ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
     mpDoc(pDoc),
     mpOutDev(pOutDev),
     mpStyle(pStyle),
@@ -40,12 +40,12 @@ ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pSt
     if (pZoomX)
         maZoomX = *pZoomX;
     else
-        maZoomX = boost::rational<sal_Int64>(1, 1);
+        maZoomX = Fraction(1, 1);
 
     if (pZoomY)
         maZoomY = *pZoomY;
     else
-        maZoomY = boost::rational<sal_Int64>(1, 1);
+        maZoomY = Fraction(1, 1);
 }
 
 ScDPFieldButton::~ScDPFieldButton()

@@ -332,7 +332,7 @@ void ViewShell::Scroll(long nScrollX, long nScrollY)
  */
 void ViewShell::SetZoom(long nZoom)
 {
-    boost::rational<sal_Int64> aUIScale(nZoom, 100);
+    Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
     if (mpHorizontalRuler.get() != NULL)
@@ -372,7 +372,7 @@ void ViewShell::SetZoom(long nZoom)
 void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
 {
     long nZoom = GetActiveWindow()->SetZoomRect(rZoomRect);
-    boost::rational<sal_Int64> aUIScale(nZoom, 100);
+    Fraction aUIScale(nZoom, 100);
     aUIScale *= GetDoc()->GetUIScale();
 
     Point aPos = GetActiveWindow()->GetWinViewPos();
@@ -624,9 +624,9 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 /**
  * Set zoom factor for InPlace
  */
-void ViewShell::SetZoomFactor(const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>&)
+void ViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction&)
 {
-    long nZoom = (long)(boost::rational_cast<double>(rZoomX) * 100);
+    long nZoom = (long)((double) rZoomX * 100);
     SetZoom(nZoom);
 }
 
@@ -843,10 +843,10 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         if( pObj->IsChart() ) //charts never should be stretched see #i84323# for example
             aObjAreaSize = aDrawSize;
 
-        boost::rational<sal_Int64> aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-        boost::rational<sal_Int64> aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-        rational_ReduceInaccurate(aScaleWidth, 10);       // kompatibel zum SdrOle2Obj
-        rational_ReduceInaccurate(aScaleHeight, 10);
+        Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
+        Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
+        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+        aScaleHeight.ReduceInaccurate(10);
         pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
         // visible section is only changed in-place!

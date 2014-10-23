@@ -125,8 +125,8 @@ const tools::PolyPolygon *SwNoTxtNode::HasContour() const
                     const Size aGrfPrefMapModeSize( GetGraphic().GetPrefSize() );
                     if ( aGrfMap.GetMapUnit() == MAP_INCH )
                     {
-                        nGrfDPIx = aGrfPixelSize.Width() / ( boost::rational_cast<double>(aGrfMap.GetScaleX()) * aGrfPrefMapModeSize.Width() );
-                        nGrfDPIy = aGrfPixelSize.Height() / ( boost::rational_cast<double>(aGrfMap.GetScaleY()) * aGrfPrefMapModeSize.Height() );
+                        nGrfDPIx = aGrfPixelSize.Width() / ( (double)aGrfMap.GetScaleX() * aGrfPrefMapModeSize.Width() );
+                        nGrfDPIy = aGrfPixelSize.Height() / ( (double)aGrfMap.GetScaleY() * aGrfPrefMapModeSize.Height() );
                     }
                     else
                     {

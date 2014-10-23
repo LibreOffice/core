@@ -687,7 +687,7 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 #include <tools/inetmime.hxx>

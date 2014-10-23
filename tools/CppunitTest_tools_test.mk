@@ -17,7 +17,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_bigint \
     tools/qa/cppunit/test_inetmime \
     tools/qa/cppunit/test_pathutils \
-    tools/qa/cppunit/test_rational \
     tools/qa/cppunit/test_reversemap \
     tools/qa/cppunit/test_stream \
     tools/qa/cppunit/test_urlobj \
