@@ -313,7 +313,7 @@ private:
     ImplThresholdRes                maThresRes;
     OutDevType                      meOutDevType;
     OutDevViewType                  meOutDevViewType;
-    vcl::Region                          maRegion;           // contains the clip region, see SetClipRegion(...)
+    vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
     Color                           maFillColor;
     vcl::Font                       maFont;
@@ -614,7 +614,7 @@ private:
 
 public:
 
-    vcl::Region                      GetClipRegion() const;
+    vcl::Region                 GetClipRegion() const;
     void                        SetClipRegion();
     void                        SetClipRegion( const vcl::Region& rRegion );
     bool                        SelectClipRegion( const vcl::Region&, SalGraphics* pGraphics = NULL );
@@ -625,7 +625,7 @@ public:
     void                        IntersectClipRegion( const Rectangle& rRect );
     void                        IntersectClipRegion( const vcl::Region& rRegion );
 
-    virtual vcl::Region              GetActiveClipRegion() const;
+    virtual vcl::Region         GetActiveClipRegion() const;
 
 protected:
 
@@ -1634,7 +1634,7 @@ public:
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
-    vcl::Region                      LogicToPixel( const vcl::Region& rLogicRegion,
+    vcl::Region                 LogicToPixel( const vcl::Region& rLogicRegion,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const;
 
@@ -1644,7 +1644,7 @@ public:
     Polygon                     PixelToLogic( const Polygon& rDevicePoly ) const;
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly ) const;
-    vcl::Region                      PixelToLogic( const vcl::Region& rDeviceRegion ) const;
+    vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion ) const;
     Point                       PixelToLogic( const Point& rDevicePt,
                                               const MapMode& rMapMode ) const;
     Size                        PixelToLogic( const Size& rDeviceSize,
@@ -1659,7 +1659,7 @@ public:
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
                                               const MapMode& rMapMode ) const;
-    vcl::Region                      PixelToLogic( const vcl::Region& rDeviceRegion,
+    vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion,
                                               const MapMode& rMapMode ) const;
 
     Point                       LogicToLogic( const Point&      rPtSource,
