@@ -240,13 +240,12 @@ void SbiExprNode::CollectBits()
 
 // If a twig can be converted, True will be returned. In this case
 // the result is in the left twig.
-
 void SbiExprNode::FoldConstants()
 {
     if( IsOperand() || eTok == LIKE ) return;
     if( pLeft )
         pLeft->FoldConstants();
-    if( pRight )
+    if (pLeft && pRight)
     {
         pRight->FoldConstants();
         if( pLeft->IsConstant() && pRight->IsConstant()
@@ -419,7 +418,7 @@ void SbiExprNode::FoldConstants()
             }
         }
     }
-    else if( pLeft && pLeft->IsNumber() )
+    else if (pLeft && pLeft->IsNumber())
     {
         nVal = pLeft->nVal;
         delete pLeft;
