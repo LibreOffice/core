@@ -21,8 +21,9 @@
 #define INCLUDED_VCL_OPENGLGDIIMPL_HXX
 
 #include "salgdiimpl.hxx"
+#include <vcl/dllapi.h>
 
-class OpenGLSalGraphicsImpl : public SalGraphicsImpl
+class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
 public:
     virtual ~OpenGLSalGraphicsImpl ();
