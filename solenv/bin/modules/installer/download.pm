@@ -299,13 +299,17 @@ sub get_downloadname_productname
 {
     my ($allvariables) = @_;
 
-    my $start = "LibreOffice";
+    my $start = "";
 
     if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LibreOffice"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOfficeDev" ) { $start = "LibreOfficeDev"; }
+    elsif ( $allvariables->{'PRODUCTNAME'} eq "LibreOfficeDev" ) { $start = "LibreOfficeDev"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "OxygenOffice" ) { $start = "OOOP"; }
+    elsif ( $allvariables->{'PRODUCTNAME'} eq "OxygenOffice" ) { $start = "OOOP"; }
+
+    elsif ( $allvariables->{'PRODUCTNAME'} eq "" ) { $start = "LibreOffice"; }
+
+    else  ( $start = $allvariables->{'PRODUCTNAME'}; }
 
     return $start;
 }
