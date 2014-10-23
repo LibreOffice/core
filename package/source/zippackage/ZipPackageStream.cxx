@@ -768,8 +768,18 @@ bool ZipPackageStream::saveChild(
             // the entry is provided to the ZipOutputStream that will delete it
             pAutoTempEntry.release();
 
-            if (pTempEntry->nMethod == STORED)
+            if (pTempEntry->nMethod == STORED || rPath.endsWith(".jpeg"))
             {
+                // Do not try to deflate jpeg files, pretend they are compressed already
+                // Unfortunately we don't know CRC value
+                if (rPath.endsWith(".jpeg"))
+                {
+                    uno::Reference< io::XSeekable > xSeek(xStream, uno::UNO_QUERY);
+                    pTempEntry->nSize = pTempEntry->nCompressedSize = xSeek->getLength();
+                    pTempEntry->nCrc = 0;
+                    pTempEntry->nMethod = STORED;
+                    pTempEntry->nFlag &= ~(pTempEntry->nFlag & 8);
+                }
                 sal_Int32 nLength;
                 uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
                 rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
