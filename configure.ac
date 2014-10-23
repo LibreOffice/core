@@ -1015,8 +1015,8 @@ AC_ARG_ENABLE(debug,
         [Include debugging information, disable compiler optimization and inlining plus
          extra debugging code like assertions. Extra large build! (enables -g compiler flag).]))
 
-AC_ARG_ENABLE(sal-info,
-    AS_HELP_STRING([--enable-sal-info],
+AC_ARG_ENABLE(sal-log,
+    AS_HELP_STRING([--enable-sal-log],
         [Make SAL_INFO and SAL_WARN calls do something even in a non-debug build.]))
 
 AC_ARG_ENABLE(selective-debuginfo,
@@ -3805,10 +3805,10 @@ AC_SUBST(ENABLE_DEBUG)
 AC_SUBST(ANDROID_DEBUGGABLE)
 AC_SUBST(ANDROID_INSTALL_LOCATION)
 
-if test "$enable_sal_info" = yes; then
-    ENABLE_SAL_INFO=TRUE
+if test "$enable_sal_log" = yes; then
+    ENABLE_SAL_LOG=TRUE
 fi
-AC_SUBST(ENABLE_SAL_INFO)
+AC_SUBST(ENABLE_SAL_LOG)
 
 dnl Selective debuginfo
 ENABLE_DEBUGINFO_FOR=
