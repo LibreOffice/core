@@ -17,7 +17,7 @@ extern "C"
 {
 #endif
 
-#if defined(__linux__) || defined(_AIX)
+#if defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX)
 
 #include <stdio.h>
 #include <stdlib.h>
