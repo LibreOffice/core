@@ -619,7 +619,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                         //the maOldFieldHdl for all that have ended up using
                         //maNewFieldHdl
                         std::vector<SdrOutliner*> aOutliners(mpSdrModel->GetActiveOutliners());
-                        for (auto aIter = aOutliners.begin(); aIter != aOutliners.end(); ++aIter)
+                        for (std::vector<SdrOutliner*>::iterator aIter = aOutliners.begin(); aIter != aOutliners.end(); ++aIter)
                         {
                             SdrOutliner* pOutliner = *aIter;
                             if (maNewFieldHdl == pOutliner->GetCalcFieldValueHdl())
