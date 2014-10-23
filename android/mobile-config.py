@@ -39,7 +39,6 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/BasicIDECommands',
     'org.openoffice.Office.UI/BibliographyCommands',
     'org.openoffice.Office.UI/DbQueryWindowState',
-    'org.openoffice.Office.UI/WindowState',
     'org.openoffice.Office.UI/DbRelationWindowState',
     'org.openoffice.Office.UI/DbTableWindowState',
     'org.openoffice.Office.UI/DbTableDataWindowState',
@@ -47,7 +46,6 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/WindowContentFactories',
     'org.openoffice.Office.UI/StartModuleWindowState',
     'org.openoffice.Office.UI/GlobalSettings',
-    'org.openoffice.Office.UI/Commands',
     'org.openoffice.Office.UI/BibliographyWindowState',
     'org.openoffice.Office.UI/Category',
     ]
