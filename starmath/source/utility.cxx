@@ -284,14 +284,14 @@ SmFace & SmFace::operator = (const SmFace &rFace)
 }
 
 
-SmFace & operator *= (SmFace &rFace, const boost::rational<long>& rFrac)
+SmFace & operator *= (SmFace &rFace, const Fraction &rFrac)
     // scales the width and height of 'rFace' by 'rFrac' and returns a
     // reference to 'rFace'.
     // It's main use is to make scaling fonts look easier.
 {   const Size &rFaceSize = rFace.GetSize();
 
-    rFace.SetSize(Size(rFaceSize.Width() * boost::rational_cast<long>(rFrac),
-                       rFaceSize.Height() * boost::rational_cast<long>(rFrac)));
+    rFace.SetSize(Size(Fraction(rFaceSize.Width())  *= rFrac,
+                       Fraction(rFaceSize.Height()) *= rFrac));
     return rFace;
 }
 

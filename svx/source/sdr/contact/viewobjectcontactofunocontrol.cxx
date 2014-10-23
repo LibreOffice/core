@@ -279,9 +279,9 @@ namespace sdr { namespace contact {
         ::basegfx::B2DVector aZoom( 1, 1 );
         if ( pWindow )
         {
-            const boost::rational<long>& rZoom( pWindow->GetZoom() );
-            aZoom.setX( boost::rational_cast<double>(rZoom) );
-            aZoom.setY( boost::rational_cast<double>(rZoom) );
+            const Fraction& rZoom( pWindow->GetZoom() );
+            aZoom.setX( (double)rZoom );
+            aZoom.setY( (double)rZoom );
         }
         return aZoom;
     }
@@ -867,8 +867,8 @@ namespace sdr { namespace contact {
 
         ::basegfx::B2DHomMatrix aScaleNormalization;
         MapMode aCurrentDeviceMapMode( rPageViewDevice.GetMapMode() );
-        aScaleNormalization.set( 0, 0, boost::rational_cast<double>(aCurrentDeviceMapMode.GetScaleX()) );
-        aScaleNormalization.set( 1, 1, boost::rational_cast<double>(aCurrentDeviceMapMode.GetScaleY()) );
+        aScaleNormalization.set( 0, 0, (double)aCurrentDeviceMapMode.GetScaleX() );
+        aScaleNormalization.set( 1, 1, (double)aCurrentDeviceMapMode.GetScaleY() );
         m_aZoomLevelNormalization *= aScaleNormalization;
 
     #if OSL_DEBUG_LEVEL > 1

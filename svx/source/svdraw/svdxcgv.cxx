@@ -160,7 +160,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=pMod->GetScaleUnit();
-    boost::rational<long> aMap=pMod->GetScaleFraction();
+    Fraction aMap=pMod->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
     return true;
 }
@@ -197,7 +197,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=pMod->GetScaleUnit();
-    boost::rational<long> aMap=pMod->GetScaleFraction();
+    Fraction aMap=pMod->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
@@ -267,7 +267,7 @@ bool SdrExchangeView::Paste(
     MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
     MapUnit eDstUnit=pMod->GetScaleUnit();
     bool bResize=eSrcUnit!=eDstUnit;
-    boost::rational<long> xResize,yResize;
+    Fraction xResize,yResize;
     Point aPt0;
     if (bResize)
     {
@@ -403,19 +403,19 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     MapUnit eSrcMU=rMap.GetMapUnit();
     MapUnit eDstMU=pMod->GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));
-    boost::rational<long> aDstFr(pMod->GetScaleFraction());
-    nSizX*=aMapFact.X().numerator();
-    nSizX*=rMap.GetScaleX().numerator();
-    nSizX*=aDstFr.denominator();
-    nSizX/=aMapFact.X().denominator();
-    nSizX/=rMap.GetScaleX().denominator();
-    nSizX/=aDstFr.numerator();
-    nSizY*=aMapFact.Y().numerator();
-    nSizY*=rMap.GetScaleY().numerator();
-    nSizX*=aDstFr.denominator();
-    nSizY/=aMapFact.Y().denominator();
-    nSizY/=rMap.GetScaleY().denominator();
-    nSizY/=aDstFr.numerator();
+    Fraction aDstFr(pMod->GetScaleFraction());
+    nSizX*=aMapFact.X().GetNumerator();
+    nSizX*=rMap.GetScaleX().GetNumerator();
+    nSizX*=aDstFr.GetDenominator();
+    nSizX/=aMapFact.X().GetDenominator();
+    nSizX/=rMap.GetScaleX().GetDenominator();
+    nSizX/=aDstFr.GetNumerator();
+    nSizY*=aMapFact.Y().GetNumerator();
+    nSizY*=rMap.GetScaleY().GetNumerator();
+    nSizX*=aDstFr.GetDenominator();
+    nSizY/=aMapFact.Y().GetDenominator();
+    nSizY/=rMap.GetScaleY().GetDenominator();
+    nSizY/=aDstFr.GetNumerator();
     long xs=nSizX;
     long ys=nSizY;
     Point aPos(rCenter.X()-xs/2,rCenter.Y()-ys/2);

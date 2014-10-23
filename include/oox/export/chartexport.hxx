@@ -84,7 +84,7 @@ public:
 private:
     sal_Int32           mnXmlNamespace;
     sal_Int32           mnSeriesCount;
-    boost::rational<long>            maFraction;
+    Fraction            maFraction;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxChartModel;
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
     com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > mxNewDiagram;

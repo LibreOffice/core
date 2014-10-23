@@ -1283,13 +1283,17 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                             // Scale and move the target rectangle from aLocationMM to aLocationPixel,
                             // to get the target rectangle in pixels.
 
-                            boost::rational<long> aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
-                            boost::rational<long> aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
+                            Fraction aScaleX( aLocationPixel.GetWidth(), aLocationMM.GetWidth() );
+                            Fraction aScaleY( aLocationPixel.GetHeight(), aLocationMM.GetHeight() );
 
-                            long nX1 = aLocationPixel.Left() + boost::rational_cast<long>( (aTargetRect.Left() - aLocationMM.Left()) * aScaleX );
-                            long nX2 = aLocationPixel.Left() + boost::rational_cast<long>( (aTargetRect.Right() - aLocationMM.Left()) * aScaleX );
-                            long nY1 = aLocationPixel.Top() + boost::rational_cast<long>( (aTargetRect.Top() - aLocationMM.Top()) * aScaleY );
-                            long nY2 = aLocationPixel.Top() + boost::rational_cast<long>( (aTargetRect.Bottom() - aLocationMM.Top()) * aScaleY );
+                            long nX1 = aLocationPixel.Left() + (long)
+                                ( Fraction( aTargetRect.Left() - aLocationMM.Left(), 1 ) * aScaleX );
+                            long nX2 = aLocationPixel.Left() + (long)
+                                ( Fraction( aTargetRect.Right() - aLocationMM.Left(), 1 ) * aScaleX );
+                            long nY1 = aLocationPixel.Top() + (long)
+                                ( Fraction( aTargetRect.Top() - aLocationMM.Top(), 1 ) * aScaleY );
+                            long nY2 = aLocationPixel.Top() + (long)
+                                ( Fraction( aTargetRect.Bottom() - aLocationMM.Top(), 1 ) * aScaleY );
 
                             if ( nX1 > aLocationPixel.Right() ) nX1 = aLocationPixel.Right();
                             if ( nX2 > aLocationPixel.Right() ) nX2 = aLocationPixel.Right();

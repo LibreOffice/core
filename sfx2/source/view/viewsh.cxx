@@ -853,8 +853,8 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
 
 
 
-void SfxViewShell::SetZoomFactor( const boost::rational<long>& rZoomX,
-    const boost::rational<long>& rZoomY )
+void SfxViewShell::SetZoomFactor( const Fraction &rZoomX,
+    const Fraction &rZoomY )
 {
     DBG_ASSERT( GetWindow(), "no window" );
     MapMode aMap( GetWindow()->GetMapMode() );

@@ -3883,7 +3883,7 @@ sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero )
 
 sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice* pDev,
                                        double nPPTX, double nPPTY,
-                                       const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+                                       const Fraction& rZoomX, const Fraction& rZoomY,
                                        bool bFormula, const ScMarkData* pMarkData,
                                        const ScColWidthParam* pParam )
 {
@@ -3897,7 +3897,7 @@ sal_uInt16 ScDocument::GetOptimalColWidth( SCCOL nCol, SCTAB nTab, OutputDevice*
 long ScDocument::GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+                                    const Fraction& rZoomX, const Fraction& rZoomY,
                                     bool bWidth, bool bTotalSize )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -4586,7 +4586,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
 void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY )
+                                    const Fraction& rZoomX, const Fraction& rZoomY )
 {
     TableContainer::iterator it = maTabs.begin();
     for (; it != maTabs.end(); ++it)

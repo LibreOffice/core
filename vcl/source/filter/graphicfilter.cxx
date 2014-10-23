@@ -860,7 +860,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 MapMode     aMap( MAP_100TH_INCH );
 
                 sal_Int32   nDPI = rConfigItem.ReadInt32( "Resolution", 75 );
-                boost::rational<long>    aFrac( 1, std::min( std::max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
+                Fraction    aFrac( 1, std::min( std::max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
 
                 aMap.SetScaleX( aFrac );
                 aMap.SetScaleY( aFrac );
@@ -900,8 +900,8 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 if( aNewSize.Width() && aNewSize.Height() )
                 {
                     const Size aPreferredSize( aMtf.GetPrefSize() );
-                    aMtf.Scale( boost::rational<long>( aNewSize.Width(), aPreferredSize.Width() ),
-                                boost::rational<long>( aNewSize.Height(), aPreferredSize.Height() ) );
+                    aMtf.Scale( Fraction( aNewSize.Width(), aPreferredSize.Width() ),
+                                Fraction( aNewSize.Height(), aPreferredSize.Height() ) );
                 }
                 aGraphic = Graphic( aMtf );
             }

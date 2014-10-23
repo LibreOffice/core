@@ -23,7 +23,7 @@
 #include <deque>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <resourcemodel/LoggedResources.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
 namespace writerfilter {
@@ -50,7 +50,7 @@ public:
     Points_t::iterator end();
 
     WrapPolygon::Pointer_t move(const css::awt::Point & rMove);
-    WrapPolygon::Pointer_t scale(const boost::rational<long> & rFractionX, const boost::rational<long> & rFractionY);
+    WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
     WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize);
     css::drawing::PointSequenceSequence getPointSequenceSequence() const;
 };

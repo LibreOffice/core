@@ -355,8 +355,8 @@ void SwCalcPixStatics( OutputDevice *pOut )
     nMinDistPixelH = nPixelSzH * 2 + 1;
 
     const MapMode &rMap = pOut->GetMapMode();
-    aScaleX = boost::rational_cast<double>(rMap.GetScaleX());
-    aScaleY = boost::rational_cast<double>(rMap.GetScaleY());
+    aScaleX = rMap.GetScaleX();
+    aScaleY = rMap.GetScaleY();
 }
 
 /**
@@ -2960,17 +2960,17 @@ void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
     SwViewShell* pViewShell = mrTabFrm.getRootFrm()->GetCurrShell();
     OutputDevice* pOutDev = pViewShell->GetOut();
     const MapMode& rMapMode = pOutDev->GetMapMode();
-    const boost::rational<long>& rFracX = rMapMode.GetScaleX();
-    const boost::rational<long>& rFracY = rMapMode.GetScaleY();
+    const Fraction& rFracX = rMapMode.GetScaleX();
+    const Fraction& rFracY = rMapMode.GetScaleY();
 
     svx::frame::Style aL(rBoxItem.GetLeft());
-    aL.SetPatternScale(boost::rational_cast<double>(rFracY));
+    aL.SetPatternScale(rFracY);
     svx::frame::Style aR(rBoxItem.GetRight());
-    aR.SetPatternScale(boost::rational_cast<double>(rFracY));
+    aR.SetPatternScale(rFracY);
     svx::frame::Style aT(rBoxItem.GetTop());
-    aT.SetPatternScale(boost::rational_cast<double>(rFracX));
+    aT.SetPatternScale(rFracX);
     svx::frame::Style aB(rBoxItem.GetBottom());
-    aB.SetPatternScale(boost::rational_cast<double>(rFracX));
+    aB.SetPatternScale(rFracX);
 
     aR.MirrorSelf();
     aB.MirrorSelf();
@@ -5576,7 +5576,8 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
 
     SWRECTFN( this )
     SwTwips nPrtWidth = (Prt().*fnRect->fnGetWidth)();
-    const SwTwips nWidth = boost::rational_cast<long>(long(nPrtWidth) * rInf.GetWidth());
+    Fraction aFract( nPrtWidth, 1 );
+    const SwTwips nWidth = (long)(aFract *= rInf.GetWidth());
 
     SwTwips nX = (this->*fnRect->fnGetPrtLeft)();
     switch ( rInf.GetAdj() )

@@ -630,7 +630,7 @@ SdrFractionItem::SdrFractionItem(sal_uInt16 nId, SvStream& rIn):
     sal_Int32 nMul,nDiv;
     rIn.ReadInt32( nMul );
     rIn.ReadInt32( nDiv );
-    nValue=boost::rational<long>(nMul,nDiv);
+    nValue=Fraction(nMul,nDiv);
 }
 
 bool SdrFractionItem::operator==(const SfxPoolItem& rCmp) const
@@ -643,12 +643,19 @@ bool SdrFractionItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper *) const
 {
-    sal_Int32 nDiv = nValue.denominator();
-    rText = OUString::number(nValue.numerator());
-
-    if(nDiv != 1)
+    if(nValue.IsValid())
     {
-        rText = rText + "/" + OUString::number(nDiv);
+        sal_Int32 nDiv = nValue.GetDenominator();
+        rText = OUString::number(nValue.GetNumerator());
+
+        if(nDiv != 1)
+        {
+            rText = rText + "/" + OUString::number(nDiv);
+        }
+    }
+    else
+    {
+        rText = "?";
     }
 
     if(ePresentation == SFX_ITEM_PRESENTATION_COMPLETE)
@@ -672,8 +679,8 @@ SfxPoolItem* SdrFractionItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 
 SvStream& SdrFractionItem::Store(SvStream& rOut, sal_uInt16 /*nItemVers*/) const
 {
-    rOut.WriteInt32( nValue.numerator() );
-    rOut.WriteInt32( nValue.denominator() );
+    rOut.WriteInt32( nValue.GetNumerator() );
+    rOut.WriteInt32( nValue.GetDenominator() );
     return rOut;
 }
 
@@ -692,9 +699,16 @@ bool SdrScaleItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresentationMetric*/, OUString &rText, const IntlWrapper *) const
 {
-    sal_Int32 nDiv = GetValue().denominator();
+    if(GetValue().IsValid())
+    {
+        sal_Int32 nDiv = GetValue().GetDenominator();
 
-    rText = OUString::number(GetValue().numerator()) + ":" + OUString::number(nDiv);
+        rText = OUString::number(GetValue().GetNumerator()) + ":" + OUString::number(nDiv);
+    }
+    else
+    {
+        rText = "?";
+    }
 
     if(ePresentation == SFX_ITEM_PRESENTATION_COMPLETE)
     {

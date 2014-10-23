@@ -192,7 +192,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         m_pWrtShell->ApplyViewOptions( aOpt );
     }
 
-    const boost::rational<long> aFrac( nFac, 100 );
+    const Fraction aFrac( nFac, 100 );
     m_pVRuler->SetZoom( aFrac );
     m_pVRuler->ForceUpdate();
     m_pHRuler->SetZoom( aFrac );

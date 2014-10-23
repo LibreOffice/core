@@ -23,7 +23,7 @@
 #include "address.hxx"
 #include "cellvalue.hxx"
 #include <tools/color.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
@@ -164,8 +164,8 @@ private:
     ScOutputType eType;         // Screen/Printer ...
     double mnPPTX;              // Pixel per Twips
     double mnPPTY;
-    boost::rational<long> aZoomX;
-    boost::rational<long> aZoomY;
+    Fraction aZoomX;
+    Fraction aZoomY;
 
     SdrObject* pEditObj;        // Omit when painting
 
@@ -262,8 +262,8 @@ public:
                                     SCTAB nNewTab, long nNewScrX, long nNewScrY,
                                     SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                                     double nPixelPerTwipsX, double nPixelPerTwipsY,
-                                    const boost::rational<long>* pZoomX = NULL,
-                                    const boost::rational<long>* pZoomY = NULL );
+                                    const Fraction* pZoomX = NULL,
+                                    const Fraction* pZoomY = NULL );
 
                     ~ScOutputData();
 

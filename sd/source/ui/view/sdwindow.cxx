@@ -179,10 +179,10 @@ void Window::SetMaxZoom (long int nMax)
 
 long Window::GetZoom (void) const
 {
-    if( GetMapMode().GetScaleX().denominator() )
+    if( GetMapMode().GetScaleX().GetDenominator() )
     {
-        return GetMapMode().GetScaleX().numerator() * 100L
-            / GetMapMode().GetScaleX().denominator();
+        return GetMapMode().GetScaleX().GetNumerator() * 100L
+            / GetMapMode().GetScaleX().GetDenominator();
     }
     else
     {
@@ -318,8 +318,8 @@ long Window::SetZoomFactor(long nZoom)
 
     // Set the zoom factor at the window's map mode.
     MapMode aMap(GetMapMode());
-    aMap.SetScaleX(boost::rational<long>(nZoom, 100));
-    aMap.SetScaleY(boost::rational<long>(nZoom, 100));
+    aMap.SetScaleX(Fraction(nZoom, 100));
+    aMap.SetScaleY(Fraction(nZoom, 100));
     SetMapMode(aMap);
 
     // invalidate previous size - it was relative to the old scaling

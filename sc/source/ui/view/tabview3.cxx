@@ -2337,8 +2337,8 @@ void ScTabView::RecalcPPT()
         //  call view SetZoom (including draw scale, split update etc)
         //  and paint only if values changed
 
-        boost::rational<long> aZoomX = aViewData.GetZoomX();
-        boost::rational<long> aZoomY = aViewData.GetZoomY();
+        Fraction aZoomX = aViewData.GetZoomX();
+        Fraction aZoomY = aViewData.GetZoomY();
         SetZoom( aZoomX, aZoomY, false );
 
         PaintGrid();

@@ -220,7 +220,7 @@ void OSectionWindow::Resize()
     Window::Resize();
 
     Size aOutputSize = GetOutputSizePixel();
-    boost::rational<long> aEndWidth(long(REPORT_ENDMARKER_WIDTH));
+    Fraction aEndWidth(long(REPORT_ENDMARKER_WIDTH));
     aEndWidth *= GetMapMode().GetScaleX();
 
     const Point aThumbPos = m_pParent->getView()->getThumbPos();
@@ -236,33 +236,33 @@ void OSectionWindow::Resize()
     {
         const bool bShowEndMarker = m_pParent->getView()->GetTotalWidth() <= (aThumbPos.X() +  aOutputSize.Width() );
 
-        boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+        Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
         aStartWidth *= GetMapMode().GetScaleX();
 
         // set start marker
-        m_aStartMarker.SetPosSizePixel(Point(0,0),Size(boost::rational_cast<long>(aStartWidth),aOutputSize.Height()));
+        m_aStartMarker.SetPosSizePixel(Point(0,0),Size(aStartWidth,aOutputSize.Height()));
 
         // set report section
         const uno::Reference< report::XSection> xSection = m_aReportSection.getSection();
         Size aSectionSize = LogicToPixel( Size( 0,xSection->getHeight() ) );
-        Point aReportPos(boost::rational_cast<long>(aStartWidth),0);
-        aSectionSize.Width() = aOutputSize.Width() - boost::rational_cast<long>(aStartWidth);
+        Point aReportPos(aStartWidth,0);
+        aSectionSize.Width() = aOutputSize.Width() - (long)aStartWidth;
         if ( bShowEndMarker )
-            aSectionSize.Width() -= boost::rational_cast<long>(aEndWidth);
+            aSectionSize.Width() -= (long)aEndWidth;
 
         m_aReportSection.SetPosSizePixel(aReportPos,aSectionSize);
 
         // set splitter
         aReportPos.Y() += aSectionSize.Height();
         m_aSplitter.SetPosSizePixel(aReportPos,Size(aSectionSize.Width(),m_aSplitter.GetSizePixel().Height()));
-        aSectionSize.Height() = (long)(1000 * boost::rational_cast<double>(this->GetMapMode().GetScaleY()));
-        m_aSplitter.SetDragRectPixel( Rectangle(Point(boost::rational_cast<long>(aStartWidth),0),aSectionSize));
+        aSectionSize.Height() = (long)(1000 * (double)GetMapMode().GetScaleY());
+        m_aSplitter.SetDragRectPixel( Rectangle(Point(aStartWidth,0),aSectionSize));
 
         // set end marker
         aReportPos.X() += aSectionSize.Width();
         aReportPos.Y() = 0;
         m_aEndMarker.Show(bShowEndMarker);
-        m_aEndMarker.SetPosSizePixel(aReportPos,Size(boost::rational_cast<long>(aEndWidth),aOutputSize.Height()));
+        m_aEndMarker.SetPosSizePixel(aReportPos,Size(aEndWidth,aOutputSize.Height()));
     }
 }
 
@@ -299,7 +299,7 @@ IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
     return 0L;
 }
 
-void OSectionWindow::zoom(const boost::rational<long>& _aZoom)
+void OSectionWindow::zoom(const Fraction& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
     m_aStartMarker.zoom(_aZoom);

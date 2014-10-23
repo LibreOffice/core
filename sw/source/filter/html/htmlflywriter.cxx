@@ -1120,8 +1120,8 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
         } while (bFound);
 
         bool bScale = false;
-        boost::rational<long> aScaleX(1, 1);
-        boost::rational<long> aScaleY(1, 1);
+        Fraction aScaleX(1, 1);
+        Fraction aScaleY(1, 1);
 
         const SwFmtFrmSize& rFrmSize = rFrmFmt.GetFrmSize();
         const SvxBoxItem& rBox = rFrmFmt.GetBox();
@@ -1137,7 +1137,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
 
             if (rRealSize.Width() != nWidth)
             {
-                aScaleX = boost::rational<long>(nWidth, rRealSize.Width());
+                aScaleX = Fraction(nWidth, rRealSize.Width());
                 bScale = true;
             }
         }
@@ -1154,7 +1154,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
 
             if (rRealSize.Height() != nHeight)
             {
-                aScaleY = boost::rational<long>(nHeight, rRealSize.Height());
+                aScaleY = Fraction(nHeight, rRealSize.Height());
                 bScale = true;
             }
         }

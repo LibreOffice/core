@@ -211,7 +211,7 @@ namespace sdr
         {
         }
 
-        void DefaultProperties::Scale(const boost::rational<long>& rScale)
+        void DefaultProperties::Scale(const Fraction& rScale)
         {
             if(mpItemSet)
             {

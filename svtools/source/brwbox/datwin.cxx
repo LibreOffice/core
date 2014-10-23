@@ -104,7 +104,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
-                              const OUString& rTitle, sal_uLong nWidthPixel, const boost::rational<long>& rCurrentZoom )
+                              const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
     _aImage( rImage ),
@@ -112,8 +112,8 @@ BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
     _bFrozen( false )
 {
     double n = (double)_nWidth;
-    n *= (double)rCurrentZoom.denominator();
-    n /= (double)rCurrentZoom.numerator();
+    n *= (double)rCurrentZoom.GetDenominator();
+    n /= (double)rCurrentZoom.GetNumerator();
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
@@ -123,12 +123,12 @@ BrowserColumn::~BrowserColumn()
 
 
 
-void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const boost::rational<long>& rCurrentZoom)
+void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
 {
     _nWidth = nNewWidthPixel;
     double n = (double)_nWidth;
-    n *= (double)rCurrentZoom.denominator();
-    n /= (double)rCurrentZoom.numerator();
+    n *= (double)rCurrentZoom.GetDenominator();
+    n /= (double)rCurrentZoom.GetNumerator();
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
@@ -174,11 +174,11 @@ void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos
 
 
 
-void BrowserColumn::ZoomChanged(const boost::rational<long>& rNewZoom)
+void BrowserColumn::ZoomChanged(const Fraction& rNewZoom)
 {
     double n = (double)_nOriginalWidth;
-    n *= (double)rNewZoom.numerator();
-    n /= (double)rNewZoom.denominator();
+    n *= (double)rNewZoom.GetNumerator();
+    n /= (double)rNewZoom.GetDenominator();
 
     _nWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }

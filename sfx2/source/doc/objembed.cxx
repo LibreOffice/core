@@ -180,8 +180,8 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
     aSize = pDev->LogicToLogic( aSize, &aWilliMode, &aMod );
     if( aSize.Width() && aSize.Height() )
     {
-        boost::rational<long> aXF( rSize.Width(), aSize.Width() );
-        boost::rational<long> aYF( rSize.Height(), aSize.Height() );
+        Fraction aXF( rSize.Width(), aSize.Width() );
+        Fraction aYF( rSize.Height(), aSize.Height() );
 
         DoDraw_Impl( pDev, rObjPos, aXF, aYF, rSetup, nAspect );
     }
@@ -190,8 +190,8 @@ void SfxObjectShell::DoDraw( OutputDevice* pDev,
 
 void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
                                const Point & rViewPos,
-                               const boost::rational<long>& rScaleX,
-                               const boost::rational<long>& rScaleY,
+                               const Fraction & rScaleX,
+                               const Fraction & rScaleY,
                                const JobSetup & rSetup,
                                sal_uInt16 nAspect )
 {

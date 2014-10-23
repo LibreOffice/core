@@ -500,7 +500,7 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, bool bIsFirst)
     // ... and also set DefTab at the ruler
     pRuler->SetDefTabDist( GetDoc()->GetDefaultTabulator() ); // new
 
-    boost::rational<long> aUIScale(pWin->GetMapMode().GetScaleX());
+    Fraction aUIScale(pWin->GetMapMode().GetScaleX());
     aUIScale *= GetDoc()->GetUIScale();
     pRuler->SetZoom(aUIScale);
 
@@ -529,7 +529,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
-    boost::rational<long> aUIScale(pWin->GetMapMode().GetScaleY());
+    Fraction aUIScale(pWin->GetMapMode().GetScaleY());
     aUIScale *= GetDoc()->GetUIScale();
     pRuler->SetZoom(aUIScale);
 

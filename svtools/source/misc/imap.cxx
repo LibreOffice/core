@@ -35,8 +35,8 @@
 #include <boost/scoped_ptr.hpp>
 
 
-#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).numerator())/(aFracX).denominator();  \
-                                      (aPT).Y()=((aPT).Y()*(aFracY).numerator())/(aFracY).denominator();
+#define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();  \
+                                      (aPT).Y()=((aPT).Y()*(aFracY).GetNumerator())/(aFracY).GetDenominator();
 
 
 /******************************************************************************/
@@ -226,13 +226,16 @@ Rectangle IMapRectangleObject::GetRectangle( bool bPixelCoords ) const
     return aNewRect;
 }
 
-void IMapRectangleObject::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
+void IMapRectangleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
     Point   aTL( aRect.TopLeft() );
     Point   aBR( aRect.BottomRight() );
 
-    SCALEPOINT( aTL, rFracX, rFracY );
-    SCALEPOINT( aBR, rFracX, rFracY );
+    if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
+    {
+        SCALEPOINT( aTL, rFracX, rFracY );
+        SCALEPOINT( aBR, rFracX, rFracY );
+    }
 
     aRect = Rectangle( aTL, aBR );
 }
@@ -368,16 +371,19 @@ Rectangle IMapCircleObject::GetBoundRect() const
                       Size( nWidth, nWidth ) );
 }
 
-void IMapCircleObject::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
+void IMapCircleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
-    boost::rational<long> aAverage( rFracX );
+    Fraction aAverage( rFracX );
 
     aAverage += rFracY;
-    aAverage *= boost::rational<long>( 1, 2 );
+    aAverage *= Fraction( 1, 2 );
 
-    SCALEPOINT( aCenter, rFracX, rFracY );
+    if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
+    {
+        SCALEPOINT( aCenter, rFracX, rFracY );
+    }
 
-    nRadius = ( nRadius * aAverage.numerator() ) / aAverage.denominator();
+    nRadius = ( nRadius * aAverage.GetNumerator() ) / aAverage.GetDenominator();
 }
 
 bool IMapCircleObject::IsEqual( const IMapCircleObject& rEqObj )
@@ -487,7 +493,7 @@ void IMapPolygonObject::SetExtraEllipse( const Rectangle& rEllipse )
     }
 }
 
-void IMapPolygonObject::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
+void IMapPolygonObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
     sal_uInt16 nCount = aPoly.GetSize();
 
@@ -495,7 +501,10 @@ void IMapPolygonObject::Scale( const boost::rational<long>& rFracX, const boost:
     {
         Point aScaledPt( aPoly[ i ] );
 
-        SCALEPOINT( aScaledPt, rFracX, rFracY );
+        if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
+        {
+            SCALEPOINT( aScaledPt, rFracX, rFracY );
+        }
 
         aPoly[ i ] = aScaledPt;
     }
@@ -505,8 +514,11 @@ void IMapPolygonObject::Scale( const boost::rational<long>& rFracX, const boost:
         Point   aTL( aEllipse.TopLeft() );
         Point   aBR( aEllipse.BottomRight() );
 
-        SCALEPOINT( aTL, rFracX, rFracY );
-        SCALEPOINT( aBR, rFracX, rFracY );
+        if ( rFracX.GetDenominator() && rFracY.GetDenominator() )
+        {
+            SCALEPOINT( aTL, rFracX, rFracY );
+            SCALEPOINT( aBR, rFracX, rFracY );
+        }
 
         aEllipse = Rectangle( aTL, aBR );
     }
@@ -812,7 +824,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
     return( pObj ? ( pObj->IsActive() ? pObj : NULL ) : NULL );
 }
 
-void ImageMap::Scale( const boost::rational<long>& rFracX, const boost::rational<long>& rFracY )
+void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
     size_t nCount = maList.size();
 

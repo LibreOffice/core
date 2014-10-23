@@ -206,7 +206,7 @@ void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Poin
         aSectionSize.Height() = nMinHeight;
     }
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    aSectionSize.Height() += (long)(rSettings.GetSplitSize() * boost::rational_cast<double>(_rSectionWindow.GetMapMode().GetScaleY()));
+    aSectionSize.Height() += (long)(rSettings.GetSplitSize() * (double)_rSectionWindow.GetMapMode().GetScaleY());
 
     if ( _bSet )
         _rSectionWindow.SetPosSizePixel(_rStartPoint,aSectionSize);
@@ -263,13 +263,13 @@ void OViewsWindow::Paint( const Rectangle& rRect )
     Window::Paint( rRect );
 
     Size aOut = GetOutputSizePixel();
-    boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= GetMapMode().GetScaleX();
 
-    aOut.Width() -= boost::rational_cast<long>(aStartWidth);
+    aOut.Width() -= (long)aStartWidth;
     aOut = PixelToLogic(aOut);
 
-    Rectangle aRect(PixelToLogic(Point(boost::rational_cast<long>(aStartWidth),0)),aOut);
+    Rectangle aRect(PixelToLogic(Point(aStartWidth,0)),aOut);
     Wallpaper aWall( m_aColorConfig.GetColorValue(::svtools::APPBACKGROUND).nColor );
     DrawWallpaper(aRect,aWall);
 }
@@ -1685,11 +1685,11 @@ void OViewsWindow::collapseSections(const uno::Sequence< beans::PropertyValue>& 
     }
 }
 
-void OViewsWindow::zoom(const boost::rational<long>& _aZoom)
+void OViewsWindow::zoom(const Fraction& _aZoom)
 {
     const MapMode& aMapMode = GetMapMode();
 
-    boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     if ( _aZoom < aMapMode.GetScaleX() )
         aStartWidth *= aMapMode.GetScaleX();
     else
@@ -1707,7 +1707,7 @@ void OViewsWindow::zoom(const boost::rational<long>& _aZoom)
     Resize();
 
     Size aOut = GetOutputSizePixel();
-    aOut.Width() = boost::rational_cast<long>(aStartWidth);
+    aOut.Width() = aStartWidth;
     aOut = PixelToLogic(aOut);
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);

@@ -3583,14 +3583,14 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 {
     MapMode     aMapMode( rMtf.GetPrefMapMode() );
     Size        aPrefSize( rMtf.GetPrefSize() );
-    boost::rational<long>    aFractionX = aMapMode.GetScaleX();
-    boost::rational<long>    aFractionY = aMapMode.GetScaleY();
+    Fraction    aFractionX( aMapMode.GetScaleX() );
+    Fraction    aFractionY( aMapMode.GetScaleY() );
 
     mpVDev->Push();
 
     Size aSize( OutputDevice::LogicToLogic( rSize100thmm, MAP_100TH_MM, aMapMode ) );
-    aMapMode.SetScaleX( aFractionX *= boost::rational<long>( aSize.Width(), aPrefSize.Width() ) );
-    aMapMode.SetScaleY( aFractionY *= boost::rational<long>( aSize.Height(), aPrefSize.Height() ) );
+    aMapMode.SetScaleX( aFractionX *= Fraction( aSize.Width(), aPrefSize.Width() ) );
+    aMapMode.SetScaleY( aFractionY *= Fraction( aSize.Height(), aPrefSize.Height() ) );
 
     Point aOffset( OutputDevice::LogicToLogic( rPos100thmm, MAP_100TH_MM, aMapMode ) );
     aMapMode.SetOrigin( aOffset += aMapMode.GetOrigin() );

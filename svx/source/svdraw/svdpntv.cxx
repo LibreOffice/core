@@ -1149,11 +1149,11 @@ void SdrPaintView::MakeVisible(const Rectangle& rRect, vcl::Window& rWin)
         {
             bNewScale=true;
             // set new MapMode (Size+Org) and invalidate everything
-            boost::rational<long> aXFact(aNewSize.Width(),aActualSize.Width());
-            boost::rational<long> aYFact(aNewSize.Height(),aActualSize.Height());
+            Fraction aXFact(aNewSize.Width(),aActualSize.Width());
+            Fraction aYFact(aNewSize.Height(),aActualSize.Height());
             if (aYFact>aXFact) aXFact=aYFact;
             aXFact*=aMap.GetScaleX();
-            rational_ReduceInaccurate(aXFact, 10); // to avoid runovers and BigInt mapping
+            aXFact.ReduceInaccurate(10); // to avoid runovers and BigInt mapping
             aMap.SetScaleX(aXFact);
             aMap.SetScaleY(aYFact);
             rWin.SetMapMode(aMap);

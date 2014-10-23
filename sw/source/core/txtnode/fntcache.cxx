@@ -467,10 +467,12 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         // one in the ViewOptions, this Font must not be cached,
         // hence set zoom factor to an invalid value
         long nTmp;
-        if( pOut->GetMapMode().GetScaleX() == pOut->GetMapMode().GetScaleY() )
+        if( pOut->GetMapMode().GetScaleX().IsValid() &&
+            pOut->GetMapMode().GetScaleY().IsValid() &&
+            pOut->GetMapMode().GetScaleX() == pOut->GetMapMode().GetScaleY() )
         {
-            nTmp = ( 100 * pOut->GetMapMode().GetScaleX().numerator() ) /
-                     pOut->GetMapMode().GetScaleX().denominator();
+            nTmp = ( 100 * pOut->GetMapMode().GetScaleX().GetNumerator() ) /
+                     pOut->GetMapMode().GetScaleX().GetDenominator();
         }
         else
             nTmp = 0;
@@ -1131,7 +1133,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     if ( bDirectPrint )
     {
-        const boost::rational<long> aTmp( 1, 1 );
+        const Fraction aTmp( 1, 1 );
         bool bStretch = rInf.GetWidth() && ( rInf.GetLen() > 1 ) && bPrt
                         && ( aTmp != rInf.GetOut().GetMapMode().GetScaleX() );
 

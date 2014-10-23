@@ -19,7 +19,7 @@
 
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/ustring.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 
 // Makes parser a static resource,
 // we're synchronized externally.
@@ -116,19 +116,19 @@ public:
     virtual EnhancedCustomShapeParameter fillNode( std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) SAL_OVERRIDE
     {
         EnhancedCustomShapeParameter aRet;
-        boost::rational<long> aFract( maValue );
-        if ( aFract.denominator() == 1 )
+        Fraction aFract( maValue );
+        if ( aFract.GetDenominator() == 1 )
         {
             aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
-            aRet.Value <<= (sal_Int32)aFract.numerator();
+            aRet.Value <<= (sal_Int32)aFract.GetNumerator();
         }
         else
         {
             EnhancedCustomShapeEquation aEquation;
             aEquation.nOperation = 1;
             aEquation.nPara[ 0 ] = 1;
-            aEquation.nPara[ 1 ] = (sal_Int16)aFract.numerator();
-            aEquation.nPara[ 2 ] = (sal_Int16)aFract.denominator();
+            aEquation.nPara[ 1 ] = (sal_Int16)aFract.GetNumerator();
+            aEquation.nPara[ 2 ] = (sal_Int16)aFract.GetDenominator();
             aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
             aRet.Value <<= (sal_Int32)rEquations.size();
             rEquations.push_back( aEquation );

@@ -83,7 +83,7 @@ inline bool IsAmbiguousScript( sal_uInt8 nScript )
 
 long ScColumn::GetNeededSize(
     SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
-    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+    const Fraction& rZoomX, const Fraction& rZoomY,
     bool bWidth, const ScNeededSizeOptions& rOptions,
     const ScPatternAttr** ppPatternChange ) const
 {
@@ -240,7 +240,7 @@ long ScColumn::GetNeededSize(
     //  bGetFont is set also if script type changes
     if (rOptions.bGetFont)
     {
-        boost::rational<long> aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
+        Fraction aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
         vcl::Font aFont;
         // font color doesn't matter here
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aFontZoom, pCondSet, nScript );
@@ -413,7 +413,7 @@ long ScColumn::GetNeededSize(
 
             // space for AutoFilter button:  20 * nZoom/100
             if ( pFlag->HasAutoFilter() && !bTextWysiwyg )
-                nDocWidth -= (rZoomX.numerator()*20)/rZoomX.denominator();
+                nDocWidth -= (rZoomX.GetNumerator()*20)/rZoomX.GetDenominator();
 
             aPaper.Width() = nDocWidth;
 
@@ -501,7 +501,7 @@ long ScColumn::GetNeededSize(
                                 aHMMMode).Height();
 
             // With non-100% zoom and several lines or paragraphs, don't shrink below the result with FORMAT100 set
-            if ( !bTextWysiwyg && ( rZoomY.numerator() != 1 || rZoomY.denominator() != 1 ) &&
+            if ( !bTextWysiwyg && ( rZoomY.GetNumerator() != 1 || rZoomY.GetDenominator() != 1 ) &&
                  ( pEngine->GetParagraphCount() > 1 || ( bBreak && pEngine->GetLineCount(0) > 1 ) ) )
             {
                 pEngine->SetControlWord( nCtrl | EE_CNTRL_FORMAT100 );
@@ -551,7 +551,7 @@ long ScColumn::GetNeededSize(
 
         sal_Int16 nFlags = static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
         if (nFlags & SC_MF_AUTO)
-            nValue += (rZoomX.numerator()*20)/rZoomX.denominator();
+            nValue += (rZoomX.GetNumerator()*20)/rZoomX.GetDenominator();
     }
     return nValue;
 }
@@ -616,7 +616,7 @@ public:
 }
 
 sal_uInt16 ScColumn::GetOptimalColWidth(
-    OutputDevice* pDev, double nPPTX, double nPPTY, const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+    OutputDevice* pDev, double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
     bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const
 {
     if (maCells.block_size() == 1 && maCells.begin()->type == sc::element_type_empty)

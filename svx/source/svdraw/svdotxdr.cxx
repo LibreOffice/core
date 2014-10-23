@@ -104,12 +104,12 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nYMul=std::abs(nYMul);
         nXDiv=std::abs(nXDiv);
         nYDiv=std::abs(nYDiv);
-        boost::rational<long> aXFact(nXMul,nXDiv); // fractions for canceling
-        boost::rational<long> aYFact(nYMul,nYDiv); // and for comparing
-        nXMul=aXFact.numerator();
-        nYMul=aYFact.numerator();
-        nXDiv=aXFact.denominator();
-        nYDiv=aYFact.denominator();
+        Fraction aXFact(nXMul,nXDiv); // fractions for canceling
+        Fraction aYFact(nYMul,nYDiv); // and for comparing
+        nXMul=aXFact.GetNumerator();
+        nYMul=aYFact.GetNumerator();
+        nXDiv=aXFact.GetDenominator();
+        nYDiv=aYFact.GetDenominator();
         if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {

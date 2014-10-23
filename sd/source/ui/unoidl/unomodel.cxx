@@ -2226,10 +2226,10 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     // that VirtualDevices use a DPI of 96.
     // We specifically calculate these scales first as we're still
     // in TWIPs, and might as well minimise the number of conversions.
-    boost::rational<long> scaleX = boost::rational<long>( nOutputWidth, 96 ) * boost::rational<long>(1440L) /
-                                boost::rational<long>( nTileWidth );
-    boost::rational<long> scaleY = boost::rational<long>( nOutputHeight, 96 ) * boost::rational<long>(1440L) /
-                                boost::rational<long>( nTileHeight );
+    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
+                                Fraction( nTileWidth);
+    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+                                Fraction( nTileHeight);
 
     // svx seems to be the only component that works natively in
     // 100th mm rather than TWIP. It makes most sense just to

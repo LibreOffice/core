@@ -333,8 +333,8 @@ void ScTabViewShell::UpdateOleZoom()
         {
             vcl::Window* pWin = GetActiveWin();
             Size aWinHMM = pWin->PixelToLogic( pWin->GetOutputSizePixel(), MAP_100TH_MM );
-            SetZoomFactor( boost::rational<long>( aWinHMM.Width(),aObjSize.Width() ),
-                            boost::rational<long>( aWinHMM.Height(),aObjSize.Height() ) );
+            SetZoomFactor( Fraction( aWinHMM.Width(),aObjSize.Width() ),
+                            Fraction( aWinHMM.Height(),aObjSize.Height() ) );
         }
     }
 }
@@ -362,8 +362,8 @@ void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
         if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
         {
             Size aLogicSize = GetWindow()->PixelToLogic( aSize, MAP_100TH_MM );
-            SfxViewShell::SetZoomFactor( boost::rational<long>( aLogicSize.Width(),aObjSize.Width() ),
-                            boost::rational<long>( aLogicSize.Height(),aObjSize.Height() ) );
+            SfxViewShell::SetZoomFactor( Fraction( aLogicSize.Width(),aObjSize.Width() ),
+                            Fraction( aLogicSize.Height(),aObjSize.Height() ) );
         }
 
         Point aPos( rOfs );
@@ -401,19 +401,19 @@ void ScTabViewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
     ForceMove();
 }
 
-void ScTabViewShell::SetZoomFactor( const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY )
+void ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
 {
     //  fuer OLE...
 
-    boost::rational<long> aFrac20( 1,5 );
-    boost::rational<long> aFrac400( 4,1 );
+    Fraction aFrac20( 1,5 );
+    Fraction aFrac400( 4,1 );
 
-    boost::rational<long> aNewX( rZoomX );
+    Fraction aNewX( rZoomX );
     if ( aNewX < aFrac20 )
         aNewX = aFrac20;
     if ( aNewX > aFrac400 )
         aNewX = aFrac400;
-    boost::rational<long> aNewY( rZoomY );
+    Fraction aNewY( rZoomY );
     if ( aNewY < aFrac20 )
         aNewY = aFrac20;
     if ( aNewY > aFrac400 )
@@ -1727,7 +1727,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     }
     else
     {
-        boost::rational<long> aFract( rAppOpt.GetZoom(), 100 );
+        Fraction aFract( rAppOpt.GetZoom(), 100 );
         SetZoom( aFract, aFract, true );
         SetZoomType( rAppOpt.GetZoomType(), true );
     }

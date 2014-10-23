@@ -23,6 +23,7 @@
 
 #include "pdf.hrc"
 #include "tools/urlobj.hxx"
+#include "tools/fract.hxx"
 #include "tools/poly.hxx"
 #include "vcl/mapmod.hxx"
 #include "vcl/virdev.hxx"

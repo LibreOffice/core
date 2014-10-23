@@ -878,7 +878,7 @@ OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
     return pPara;
 }
 
-void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, boost::rational<long>& rFitXKorreg) const
+void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXKorreg) const
 {
     OutputDevice* pOut = rOutliner.GetRefDevice();
     bool bNoStretching(false);
@@ -970,7 +970,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
         nLoopCount++;
         Size aSiz(rOutliner.CalcTextSize());
         long nXDiff=aSiz.Width()-nWantWdt;
-        rFitXKorreg=boost::rational<long>(nWantWdt,aSiz.Width());
+        rFitXKorreg=Fraction(nWantWdt,aSiz.Width());
         if (((nXDiff>=nXTolMi || !bChkX) && nXDiff<=nXTolPl) || nXDiff==nXDiff0) {
             bNoMoreLoop = true;
         } else {
@@ -1252,7 +1252,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( bool             bContourFrame,
                                                Rectangle&       rTextRect,
                                                Rectangle&       rAnchorRect,
                                                Rectangle&       rPaintRect,
-                                               boost::rational<long>&        rFitXKorreg ) const
+                                               Fraction&        rFitXKorreg ) const
 {
     if (!bContourFrame)
     {
@@ -1356,7 +1356,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
 {
     Rectangle aTextRect;
     Rectangle aAnchorRect;
-    boost::rational<long> aFitXKorreg(1,1);
+    Fraction aFitXKorreg(1,1);
 
     bool bContourFrame=IsContourTextFrame();
 
@@ -1844,7 +1844,7 @@ GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
     Rectangle aTextRect;
     Rectangle aAnchorRect;
     Rectangle aPaintRect;
-    boost::rational<long> aFitXKorreg(1,1);
+    Fraction aFitXKorreg(1,1);
     bool bContourFrame(IsContourTextFrame());
 
     // get outliner set up. To avoid getting a somehow rotated MetaFile,

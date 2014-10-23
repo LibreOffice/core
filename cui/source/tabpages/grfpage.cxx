@@ -812,8 +812,8 @@ void SvxCropExample::SetFrameSize( const Size& rSz )
     if(!aFrameSize.Height())
         aFrameSize.Height() = 1;
     Size aWinSize( GetOutputSizePixel() );
-    boost::rational<long> aXScale( aWinSize.Width() * 4, aFrameSize.Width() * 5 );
-    boost::rational<long> aYScale( aWinSize.Height() * 4, aFrameSize.Height() * 5 );
+    Fraction aXScale( aWinSize.Width() * 4, aFrameSize.Width() * 5 );
+    Fraction aYScale( aWinSize.Height() * 4, aFrameSize.Height() * 5 );
 
     if( aYScale < aXScale )
         aXScale = aYScale;

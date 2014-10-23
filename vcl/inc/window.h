@@ -231,7 +231,7 @@ public:
     void*               mpUserData;
     vcl::Cursor*        mpCursor;
     Pointer             maPointer;
-    boost::rational<long>            maZoom;
+    Fraction            maZoom;
     OUString            maText;
     vcl::Font*          mpControlFont;
     Color               maControlForeground;

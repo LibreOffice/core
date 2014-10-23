@@ -45,9 +45,9 @@ OEndMarker::~OEndMarker()
 
 void OEndMarker::Paint( const Rectangle& /*rRect*/ )
 {
-    boost::rational<long> aCornerSpace(long(CORNER_SPACE));
+    Fraction aCornerSpace(long(CORNER_SPACE));
     aCornerSpace *= GetMapMode().GetScaleX();
-    const long nCornerSpace = boost::rational_cast<long>(aCornerSpace);
+    const long nCornerSpace = aCornerSpace;
 
     Size aSize = GetSizePixel();
     aSize.Width() += nCornerSpace;

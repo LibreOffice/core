@@ -95,7 +95,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         Rectangle aTextRect;
         TakeTextRect(rOutl, aTextRect, false,
             &aAnchorRect);
-        boost::rational<long> aFitXKorreg(1,1);
+        Fraction aFitXKorreg(1,1);
         ImpSetCharStretching(rOutl,aTextRect.GetSize(),aAnchorRect.GetSize(),aFitXKorreg);
     }
     else if (IsAutoFit())

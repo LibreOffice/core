@@ -43,7 +43,7 @@ class SfxProgress;
 class SvData;
 class SfxViewShell;
 class SystemWindow;
-namespace boost { template<typename T> class rational; }
+class Fraction;
 class Point;
 class Size;
 class SfxChildWindow;
@@ -118,7 +118,7 @@ public:
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
     vcl::Window&                 GetWindow() const;
-    virtual void            SetZoomFactor( const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY );
+    virtual void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;
 

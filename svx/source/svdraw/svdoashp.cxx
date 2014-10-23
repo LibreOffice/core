@@ -1561,15 +1561,15 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
         mpLastShadowGeometry->NbcMove( rSiz );
     }
 }
-void SdrObjCustomShape::Resize( const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative )
+void SdrObjCustomShape::Resize( const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative )
 {
     SdrTextObj::Resize( rRef, xFact, yFact, bUnsetRelative );
 }
 
-void SdrObjCustomShape::NbcResize( const Point& rRef, const boost::rational<long>& rxFact, const boost::rational<long>& ryFact )
+void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, const Fraction& ryFact )
 {
-    boost::rational<long> xFact( rxFact );
-    boost::rational<long> yFact( ryFact );
+    Fraction xFact( rxFact );
+    Fraction yFact( ryFact );
 
     // taking care of handles that should not been changed
     Rectangle aOld( aRect );
@@ -1577,16 +1577,16 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const boost::rational<long
 
     SdrTextObj::NbcResize( rRef, xFact, yFact );
 
-    if ( ( xFact.numerator() != xFact.denominator() )
-        || ( yFact.numerator()!= yFact.denominator() ) )
+    if ( ( xFact.GetNumerator() != xFact.GetDenominator() )
+        || ( yFact.GetNumerator()!= yFact.GetDenominator() ) )
     {
-        if ( ( ( xFact.numerator() < 0 ) && ( xFact.denominator() > 0 ) ) ||
-            ( ( xFact.numerator() > 0 ) && ( xFact.denominator() < 0 ) ) )
+        if ( ( ( xFact.GetNumerator() < 0 ) && ( xFact.GetDenominator() > 0 ) ) ||
+            ( ( xFact.GetNumerator() > 0 ) && ( xFact.GetDenominator() < 0 ) ) )
         {
             SetMirroredX( IsMirroredX() == false );
         }
-        if ( ( ( yFact.numerator() < 0 ) && ( yFact.denominator() > 0 ) ) ||
-            ( ( yFact.numerator() > 0 ) && ( yFact.denominator() < 0 ) ) )
+        if ( ( ( yFact.GetNumerator() < 0 ) && ( yFact.GetDenominator() > 0 ) ) ||
+            ( ( yFact.GetNumerator() > 0 ) && ( yFact.GetDenominator() < 0 ) ) )
         {
             SetMirroredY( IsMirroredY() == false );
         }

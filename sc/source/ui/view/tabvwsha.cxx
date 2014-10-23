@@ -287,8 +287,9 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    const boost::rational<long>& rOldY = GetViewData().GetZoomY();
-                    sal_uInt16 nZoom = (sal_uInt16)(( rOldY.numerator() * 100 ) / rOldY.denominator());
+                    const Fraction& rOldY = GetViewData().GetZoomY();
+                    sal_uInt16 nZoom = (sal_uInt16)(( rOldY.GetNumerator() * 100 )
+                                                / rOldY.GetDenominator());
                     rSet.Put( SvxZoomItem( SVX_ZOOM_PERCENT, nZoom, nWhich ) );
                 }
                 break;
@@ -299,8 +300,8 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );
                     else
                     {
-                        const boost::rational<long>& rOldY = GetViewData().GetZoomY();
-                        sal_uInt16 nCurrentZoom = (sal_uInt16)(( rOldY.numerator() * 100 ) / rOldY.denominator());
+                        const Fraction& rOldY = GetViewData().GetZoomY();
+                        sal_uInt16 nCurrentZoom = (sal_uInt16)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
 
                         if( nCurrentZoom )
                         {

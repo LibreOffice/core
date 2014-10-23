@@ -737,7 +737,7 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
         return aStdSizeAry;
 
     MapMode aOldMapMode = pDevice->GetMapMode();
-    MapMode aMap( MAP_10TH_INCH, Point(), boost::rational<long>( 1, 72 ), boost::rational<long>( 1, 72 ) );
+    MapMode aMap( MAP_10TH_INCH, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
     pDevice->SetMapMode( aMap );
 
     sal_uInt16  i;

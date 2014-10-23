@@ -89,9 +89,9 @@ OStartMarker::~OStartMarker()
 
 sal_Int32 OStartMarker::getMinHeight() const
 {
-    boost::rational<long> aExtraWidth(long(2*REPORT_EXTRA_SPACE));
+    Fraction aExtraWidth(long(2*REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
-    return LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() + boost::rational_cast<long>(aExtraWidth);
+    return LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() + (long)aExtraWidth;
 }
 
 void OStartMarker::Paint( const Rectangle& rRect )
@@ -99,7 +99,7 @@ void OStartMarker::Paint( const Rectangle& rRect )
     (void)rRect;
     Size aSize = GetOutputSizePixel();
     long nSize = aSize.Width();
-    const long nCornerWidth = long(CORNER_SPACE * boost::rational_cast<double>(GetMapMode().GetScaleX()));
+    const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
 
     if ( isCollapsed() )
     {
@@ -134,7 +134,7 @@ void OStartMarker::Paint( const Rectangle& rRect )
     }
     if ( m_bMarked )
     {
-        const long nCornerHeight = long(CORNER_SPACE * boost::rational_cast<double>(GetMapMode().GetScaleY()));
+        const long nCornerHeight = long(CORNER_SPACE * (double)GetMapMode().GetScaleY());
         Rectangle aRect( Point(nCornerWidth,nCornerHeight),
                          Size(aSize.Width() - nCornerWidth - nCornerWidth,aSize.Height() - nCornerHeight - nCornerHeight));
         ColorChanger aColors( this, COL_WHITE, COL_WHITE );
@@ -218,17 +218,17 @@ void OStartMarker::Resize()
 
     Size aImageSize = m_aImage.GetImage().GetSizePixel();
     const MapMode& rMapMode = GetMapMode();
-    aImageSize.Width() = long(aImageSize.Width() * boost::rational_cast<double>(rMapMode.GetScaleX()));
-    aImageSize.Height() = long(aImageSize.Height() * boost::rational_cast<double>(rMapMode.GetScaleY()));
+    aImageSize.Width() = long(aImageSize.Width() * (double)rMapMode.GetScaleX());
+    aImageSize.Height() = long(aImageSize.Height() * (double)rMapMode.GetScaleY());
 
-    boost::rational<long> aExtraWidth(long(REPORT_EXTRA_SPACE));
+    Fraction aExtraWidth(long(REPORT_EXTRA_SPACE));
     aExtraWidth *= rMapMode.GetScaleX();
 
-    Point aPos(aImageSize.Width() + boost::rational_cast<long>((aExtraWidth + aExtraWidth)), boost::rational_cast<long>(aExtraWidth));
+    Point aPos(aImageSize.Width() + (long)(aExtraWidth + aExtraWidth), aExtraWidth);
     const long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText.GetTextHeight())).Height());
     m_aText.SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
 
-    aPos.X() = boost::rational_cast<long>(aExtraWidth);
+    aPos.X() = aExtraWidth;
     aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
     m_aImage.SetPosSizePixel(aPos,aImageSize);
 }
@@ -281,7 +281,7 @@ void OStartMarker::setCollapsed(bool _bCollapsed)
     changeImage();
 }
 
-void OStartMarker::zoom(const boost::rational<long>& _aZoom)
+void OStartMarker::zoom(const Fraction& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
     m_aVRuler.SetZoom(_aZoom);

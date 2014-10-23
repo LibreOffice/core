@@ -144,8 +144,8 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_POSITION_BOTTOM].Name = OUString(SC_POSITIONBOTTOM);
         pSettings[SC_POSITION_BOTTOM].Value <<= sal_Int32(nPosY[SC_SPLIT_BOTTOM]);
 
-        sal_Int32 nZoomValue ((aZoomY.numerator() * 100) / aZoomY.denominator());
-        sal_Int32 nPageZoomValue ((aPageZoomY.numerator() * 100) / aPageZoomY.denominator());
+        sal_Int32 nZoomValue ((aZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
+        sal_Int32 nPageZoomValue ((aPageZoomY.GetNumerator() * 100) / aPageZoomY.GetDenominator());
         pSettings[SC_TABLE_ZOOM_TYPE].Name = OUString(SC_ZOOMTYPE);
         pSettings[SC_TABLE_ZOOM_TYPE].Value <<= sal_Int16(eZoomType);
         pSettings[SC_TABLE_ZOOM_VALUE].Name = OUString(SC_ZOOMVALUE);
@@ -248,14 +248,14 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         else if (sName.equalsAscii(SC_ZOOMVALUE) )
         {
             aSettings[i].Value >>= nTemp32;
-            boost::rational<long> aZoom(nTemp32, 100);
+            Fraction aZoom(nTemp32, 100);
             aZoomX = aZoomY = aZoom;
             rHasZoom = true;
         }
         else if (sName.equalsAscii(SC_PAGEVIEWZOOMVALUE) )
         {
             aSettings[i].Value >>= nTemp32;
-            boost::rational<long> aZoom(nTemp32, 100);
+            Fraction aZoom(nTemp32, 100);
             aPageZoomX = aPageZoomY = aZoom;
             rHasZoom = true;
         }
@@ -616,21 +616,21 @@ void ScViewData::SetZoomType( SvxZoomType eNew, bool bAll )
     SetZoomType( eNew, vTabs );
 }
 
-void ScViewData::SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, std::vector< SCTAB >& tabs )
+void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs )
 {
     bool bAll = ( tabs.empty() );
     if ( !bAll ) // create associated table data
         CreateTabData( tabs );
-    boost::rational<long> aFrac20( 1,5 );
-    boost::rational<long> aFrac400( 4,1 );
+    Fraction aFrac20( 1,5 );
+    Fraction aFrac400( 4,1 );
 
-    boost::rational<long> aValidX = rNewX;
+    Fraction aValidX = rNewX;
     if (aValidX<aFrac20)
         aValidX = aFrac20;
     if (aValidX>aFrac400)
         aValidX = aFrac400;
 
-    boost::rational<long> aValidY = rNewY;
+    Fraction aValidY = rNewY;
     if (aValidY<aFrac20)
         aValidY = aFrac20;
     if (aValidY>aFrac400)
@@ -690,7 +690,7 @@ void ScViewData::SetZoom( const boost::rational<long>& rNewX, const boost::ratio
     RefreshZoom();
 }
 
-void ScViewData::SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, bool bAll )
+void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll )
 {
     std::vector< SCTAB > vTabs;
     if ( !bAll ) // get selected tabs
@@ -1033,7 +1033,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
             //  if text is formatted for printer, use the exact same paper width
             //  (and same line breaks) as for output.
 
-            boost::rational<long> aFract(1,1);
+            Fraction aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
                                     HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
             aPaperSize.Width() = aUtilRect.GetWidth();
@@ -2120,31 +2120,31 @@ bool ScViewData::IsMinimized()
     return pView->IsMinimized();
 }
 
-void ScViewData::UpdateScreenZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY )
+void ScViewData::UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY )
 {
-    boost::rational<long> aOldX = GetZoomX();
-    boost::rational<long> aOldY = GetZoomY();
+    Fraction aOldX = GetZoomX();
+    Fraction aOldY = GetZoomY();
 
     SetZoom( rNewX, rNewY, false );
 
-    boost::rational<long> aWidth = GetZoomX();
-    aWidth *= aScrSize.Width();
+    Fraction aWidth = GetZoomX();
+    aWidth *= Fraction( aScrSize.Width(),1 );
     aWidth /= aOldX;
 
-    boost::rational<long> aHeight = GetZoomY();
-    aHeight *= aScrSize.Height();
+    Fraction aHeight = GetZoomY();
+    aHeight *= Fraction( aScrSize.Height(),1 );
     aHeight /= aOldY;
 
-    aScrSize.Width()  = boost::rational_cast<long>(aWidth);
-    aScrSize.Height() = boost::rational_cast<long>(aHeight);
+    aScrSize.Width()  = (long) aWidth;
+    aScrSize.Height() = (long) aHeight;
 }
 
 void ScViewData::CalcPPT()
 {
-    nPPTX = ScGlobal::nScreenPPTX * boost::rational_cast<double>(this->GetZoomX());
+    nPPTX = ScGlobal::nScreenPPTX * (double) GetZoomX();
     if (pDocShell)
         nPPTX = nPPTX / pDocShell->GetOutputFactor();   // Faktor ist Drucker zu Bildschirm
-    nPPTY = ScGlobal::nScreenPPTY * boost::rational_cast<double>(this->GetZoomY());
+    nPPTY = ScGlobal::nScreenPPTY * (double) GetZoomY();
 
     //  if detective objects are present,
     //  try to adjust horizontal scale so the most common column width has minimal rounding errors,
@@ -2192,9 +2192,9 @@ void ScViewData::WriteUserData(OUString& rData)
     //  PosX[links]/PosX[rechts]/PosY[oben]/PosY[unten]
     //  wenn Zeilen groesser 8192, "+" statt "/"
 
-    sal_uInt16 nZoom = (sal_uInt16)((pThisTab->aZoomY.numerator() * 100) / pThisTab->aZoomY.denominator());
+    sal_uInt16 nZoom = (sal_uInt16)((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());
     rData = OUString::number( nZoom ) + "/";
-    nZoom = (sal_uInt16)((pThisTab->aPageZoomY.numerator() * 100) / pThisTab->aPageZoomY.denominator());
+    nZoom = (sal_uInt16)((pThisTab->aPageZoomY.GetNumerator() * 100) / pThisTab->aPageZoomY.GetDenominator());
     rData += OUString::number( nZoom ) + "/";
     if (bPagebreak)
         rData += "1";
@@ -2259,15 +2259,15 @@ void ScViewData::ReadUserData(const OUString& rData)
     // nicht pro Tabelle:
     SCTAB nTabStart = 2;
 
-    boost::rational<long> aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
+    Fraction aZoomX, aZoomY, aPageZoomX, aPageZoomY;    // evaluate (all sheets?)
 
     OUString aZoomStr = rData.getToken(0, ';');                 // Zoom/PageZoom/Modus
     sal_uInt16 nNormZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(0,'/').toInt32());
     if ( nNormZoom >= MINZOOM && nNormZoom <= MAXZOOM )
-        aZoomX = aZoomY = boost::rational<long>( nNormZoom, 100 );           //  "normal" zoom (always)
+        aZoomX = aZoomY = Fraction( nNormZoom, 100 );           //  "normal" zoom (always)
     sal_uInt16 nPageZoom = sal::static_int_cast<sal_uInt16>(aZoomStr.getToken(1,'/').toInt32());
     if ( nPageZoom >= MINZOOM && nPageZoom <= MAXZOOM )
-        aPageZoomX = aPageZoomY = boost::rational<long>( nPageZoom, 100 );   // Pagebreak-zoom, if set
+        aPageZoomX = aPageZoomY = Fraction( nPageZoom, 100 );   // Pagebreak-zoom, if set
     sal_Unicode cMode = aZoomStr.getToken(2,'/')[0];            // 0 or "0"/"1"
     SetPagebreakMode( cMode == '1' );
     // SetPagebreakMode muss immer gerufen werden wegen CalcPPT / RecalcPixPos()
@@ -2447,8 +2447,8 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
 
             // view mode and zoom
             rTabSett.mbPageMode = bPagebreak;
-            rTabSett.mnNormalZoom = boost::rational_cast<long>(pViewTab->aZoomY * rational_FromDouble(100.));
-            rTabSett.mnPageZoom = boost::rational_cast<long>(pViewTab->aPageZoomY * rational_FromDouble(100.));
+            rTabSett.mnNormalZoom = static_cast< long >( pViewTab->aZoomY * Fraction( 100.0 ) );
+            rTabSett.mnPageZoom = static_cast< long >( pViewTab->aPageZoomY * Fraction( 100.0 ) );
         }
     }
 }
@@ -2579,9 +2579,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
             // zoom for each sheet
             if( rTabSett.mnNormalZoom )
-                rViewTab.aZoomX = rViewTab.aZoomY = boost::rational<long>( rTabSett.mnNormalZoom, 100L );
+                rViewTab.aZoomX = rViewTab.aZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
             if( rTabSett.mnPageZoom )
-                rViewTab.aPageZoomX = rViewTab.aPageZoomY = boost::rational<long>( rTabSett.mnPageZoom, 100L );
+                rViewTab.aPageZoomX = rViewTab.aPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
 
             rViewTab.bShowGrid = rTabSett.mbShowGrid;
 
@@ -2599,9 +2599,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
                 // view mode and default zoom (for new sheets) from current sheet
                 if( rTabSett.mnNormalZoom )
-                    aDefZoomX = aDefZoomY = boost::rational<long>( rTabSett.mnNormalZoom, 100L );
+                    aDefZoomX = aDefZoomY = Fraction( rTabSett.mnNormalZoom, 100L );
                 if( rTabSett.mnPageZoom )
-                    aDefPageZoomX = aDefPageZoomY = boost::rational<long>( rTabSett.mnPageZoom, 100L );
+                    aDefPageZoomX = aDefPageZoomY = Fraction( rTabSett.mnPageZoom, 100L );
                 /*  #i46820# set pagebreak mode via SetPagebreakMode(), this will
                     update map modes that are needed to draw text correctly. */
                 SetPagebreakMode( rTabSett.mbPageMode );
@@ -2662,8 +2662,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         pSettings[SC_ACTIVE_TABLE].Value <<= sName;
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = OUString(SC_HORIZONTALSCROLLBARWIDTH);
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
-        sal_Int32 nZoomValue ((pThisTab->aZoomY.numerator() * 100) / pThisTab->aZoomY.denominator());
-        sal_Int32 nPageZoomValue ((pThisTab->aPageZoomY.numerator() * 100) / pThisTab->aPageZoomY.denominator());
+        sal_Int32 nZoomValue ((pThisTab->aZoomY.GetNumerator() * 100) / pThisTab->aZoomY.GetDenominator());
+        sal_Int32 nPageZoomValue ((pThisTab->aPageZoomY.GetNumerator() * 100) / pThisTab->aPageZoomY.GetDenominator());
         pSettings[SC_ZOOM_TYPE].Name = OUString(SC_ZOOMTYPE);
         pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pThisTab->eZoomType);
         pSettings[SC_ZOOM_VALUE].Name = OUString(SC_ZOOMVALUE);
@@ -2787,7 +2787,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         {
             if (rSettings[i].Value >>= nTemp32)
             {
-                boost::rational<long> aZoom(nTemp32, 100);
+                Fraction aZoom(nTemp32, 100);
                 aDefZoomX = aDefZoomY = aZoom;
             }
         }
@@ -2795,7 +2795,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
         {
             if (rSettings[i].Value >>= nTemp32)
             {
-                boost::rational<long> aZoom(nTemp32, 100);
+                Fraction aZoom(nTemp32, 100);
                 aDefPageZoomX = aDefPageZoomY = aZoom;
             }
         }

@@ -116,7 +116,7 @@ public:
     virtual Pointer GetCreatePointer() const SAL_OVERRIDE;
 
     virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
     virtual void NbcSetRelativePos(const Point& rPnt) SAL_OVERRIDE;
     virtual Point GetRelativePos() const SAL_OVERRIDE;

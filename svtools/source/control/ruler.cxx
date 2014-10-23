@@ -256,7 +256,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     // Initialize Units
     mnUnitIndex     = RULER_UNIT_CM;
     meUnit          = FUNIT_CM;
-    maZoom          = boost::rational<long>( 1, 1 );
+    maZoom          = Fraction( 1, 1 );
     meSourceUnit    = MAP_100TH_MM;
 
     // Recalculate border widths
@@ -2478,9 +2478,9 @@ void Ruler::SetUnit( FieldUnit eNewUnit )
     }
 }
 
-void Ruler::SetZoom( const boost::rational<long>& rNewZoom )
+void Ruler::SetZoom( const Fraction& rNewZoom )
 {
-    DBG_ASSERT( rNewZoom.numerator(), "Ruler::SetZoom() with scale 0 is not allowed" );
+    DBG_ASSERT( rNewZoom.GetNumerator(), "Ruler::SetZoom() with scale 0 is not allowed" );
 
     if ( maZoom != rNewZoom )
     {

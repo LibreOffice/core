@@ -403,8 +403,8 @@ void SdrObjGroup::NbcSetSnapRect(const Rectangle& rRect)
     if (nDivX==0) { nMulX=1; nDivX=1; }
     if (nDivY==0) { nMulY=1; nDivY=1; }
     if (nMulX!=nDivX || nMulY!=nDivY) {
-        boost::rational<long> aX(nMulX,nDivX);
-        boost::rational<long> aY(nMulY,nDivY);
+        Fraction aX(nMulX,nDivX);
+        Fraction aY(nMulY,nDivY);
         NbcResize(aOld.TopLeft(),aX,aY);
     }
     if (rRect.Left()!=aOld.Left() || rRect.Top()!=aOld.Top()) {
@@ -436,10 +436,10 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
 }
 
 
-void SdrObjGroup::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    bool bXMirr = xFact.numerator() < 0;
-    bool bYMirr = yFact.numerator() < 0;
+    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
@@ -538,8 +538,8 @@ void SdrObjGroup::SetSnapRect(const Rectangle& rRect)
     if (nDivX==0) { nMulX=1; nDivX=1; }
     if (nDivY==0) { nMulY=1; nDivY=1; }
     if (nMulX!=nDivX || nMulY!=nDivY) {
-        boost::rational<long> aX(nMulX,nDivX);
-        boost::rational<long> aY(nMulY,nDivY);
+        Fraction aX(nMulX,nDivX);
+        Fraction aY(nMulY,nDivY);
         Resize(aOld.TopLeft(),aX,aY);
     }
     if (rRect.Left()!=aOld.Left() || rRect.Top()!=aOld.Top()) {
@@ -587,11 +587,11 @@ void SdrObjGroup::Move(const Size& rSiz)
 }
 
 
-void SdrObjGroup::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
+void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
-    if (xFact.numerator()!=xFact.denominator() || yFact.numerator()!=yFact.denominator()) {
-        bool bXMirr = xFact.numerator() < 0;
-        bool bYMirr = yFact.numerator() < 0;
+    if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
+        bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+        bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
         if (bXMirr || bYMirr) {
             Point aRef1(GetSnapRect().Center());
             if (bXMirr) {

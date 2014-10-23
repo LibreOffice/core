@@ -27,7 +27,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/gen.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 
 class OutputDevice;
 class ScDocument;
@@ -44,8 +44,8 @@ class ScEditUtil
     OutputDevice*   pDev;           // MapMode has to be set
     double          nPPTX;
     double          nPPTY;
-    boost::rational<long>        aZoomX;
-    boost::rational<long>        aZoomY;
+    Fraction        aZoomX;
+    Fraction        aZoomY;
 
     static const char pCalcDelimiters[];
 
@@ -82,7 +82,7 @@ public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
-                            const boost::rational<long>& rX, const boost::rational<long>& rY ) :
+                            const Fraction& rX, const Fraction& rY ) :
                     pDoc(pDocument),nCol(nX),nRow(nY),nTab(nZ),
                     aScrPos(rScrPosPixel),pDev(pDevice),
                     nPPTX(nScaleX),nPPTY(nScaleY),aZoomX(rX),aZoomY(rY) {}

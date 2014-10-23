@@ -25,7 +25,7 @@
 #include <osl/mutex.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>
 #include <svx/IAccessibleParent.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 
 #include <svx/AccessibleControlShape.hxx>
 #include <svx/AccessibleShape.hxx>
@@ -140,7 +140,7 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
                             const std::vector<PreviewPage*>& _rPreviewPages,
-                            const boost::rational<long>&  _rScale,
+                            const Fraction&  _rScale,
                             const SwPageFrm* _pSelectedPageFrm,
                             const Size&      _rPreviewWinSize );
 
@@ -249,7 +249,7 @@ public:
 
     // update preview data (and fire events if necessary)
     void UpdatePreview( const std::vector<PreviewPage*>& _rPreviewPages,
-                        const boost::rational<long>&  _rScale,
+                        const Fraction&  _rScale,
                         const SwPageFrm* _pSelectedPageFrm,
                         const Size&      _rPreviewWinSize );
 

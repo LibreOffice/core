@@ -24,8 +24,8 @@
 class SdrScaleItem: public SdrFractionItem {
 public:
     TYPEINFO_OVERRIDE();
-    SdrScaleItem(sal_uInt16 nId=0): SdrFractionItem(nId, boost::rational<long>(1,1) ) {}
-    SdrScaleItem(sal_uInt16 nId, const boost::rational<long>& rVal): SdrFractionItem(nId,rVal) {}
+    SdrScaleItem(sal_uInt16 nId=0): SdrFractionItem(nId,Fraction(1,1)) {}
+    SdrScaleItem(sal_uInt16 nId, const Fraction& rVal): SdrFractionItem(nId,rVal) {}
     SdrScaleItem(sal_uInt16 nId, SvStream& rIn): SdrFractionItem(nId,rIn) {}
     virtual bool GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
     virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const SAL_OVERRIDE;

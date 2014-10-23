@@ -2352,11 +2352,11 @@ void SdrPathObj::NbcMove(const Size& rSiz)
     SdrTextObj::NbcMove(rSiz);
 }
 
-void SdrPathObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-rRef.X(), -rRef.Y()));
     aTrans = basegfx::tools::createScaleTranslateB2DHomMatrix(
-        boost::rational_cast<double>(xFact), boost::rational_cast<double>(yFact), rRef.X(), rRef.Y()) * aTrans;
+        double(xFact), double(yFact), rRef.X(), rRef.Y()) * aTrans;
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
@@ -2454,8 +2454,8 @@ void SdrPathObj::NbcSetSnapRect(const Rectangle& rRect)
     long nDivY = aOld.Bottom()  - aOld.Top();
     if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
     if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
-    boost::rational<long> aX(nMulX,nDivX);
-    boost::rational<long> aY(nMulY,nDivY);
+    Fraction aX(nMulX,nDivX);
+    Fraction aY(nMulY,nDivY);
     NbcResize(aOld.TopLeft(), aX, aY);
     NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
 }

@@ -39,7 +39,7 @@
 
 class SfxBaseController;
 class Size;
-namespace boost { template<typename T> class rational; }
+class Fraction;
 namespace vcl { class Window; }
 class KeyEvent;
 class WorkWindow;
@@ -146,7 +146,7 @@ protected:
 
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void                SetZoomFactor( const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY );
+    virtual void                SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     virtual void                Move();
 

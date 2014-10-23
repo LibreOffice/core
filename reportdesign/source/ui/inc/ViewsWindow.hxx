@@ -331,7 +331,7 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const boost::rational<long>& _aZoom);
+        void zoom(const Fraction& _aZoom);
 
         void scrollChildren(const Point& _aThumbPos);
 

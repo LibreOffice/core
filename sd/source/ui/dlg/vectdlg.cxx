@@ -113,7 +113,7 @@ void SdVectorizeDlg::InitPreviewBmp()
     m_pBmpWin->SetGraphic( aPreviewBmp );
 }
 
-Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, boost::rational<long>& rScale )
+Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 {
     Bitmap      aNew( rBmp );
     const Size  aSizePix( aNew.GetSizePixel() );
@@ -121,11 +121,11 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, boost::rational<long>& r
     if( aSizePix.Width() > VECTORIZE_MAX_EXTENT || aSizePix.Height() > VECTORIZE_MAX_EXTENT )
     {
         const Rectangle aRect( GetRect( Size( VECTORIZE_MAX_EXTENT, VECTORIZE_MAX_EXTENT ), aSizePix ) );
-        rScale = boost::rational<long>( aSizePix.Width(), aRect.GetWidth() );
+        rScale = Fraction( aSizePix.Width(), aRect.GetWidth() );
         aNew.Scale( aRect.GetSize() );
     }
     else
-        rScale = boost::rational<long>( 1, 1 );
+        rScale = Fraction( 1, 1 );
 
     aNew.ReduceColors( (sal_uInt16) m_pNmLayers->GetValue(), BMP_REDUCE_SIMPLE );
 
@@ -137,7 +137,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     mpDocSh->SetWaitCursor( true );
     m_pPrgs->SetValue( 0 );
 
-    boost::rational<long>    aScale;
+    Fraction    aScale;
     Bitmap      aTmp( GetPreparedBitmap( rBmp, aScale ) );
 
     if( !!aTmp )

@@ -1904,32 +1904,32 @@ void SwPostItMgr::Rescale()
 
 sal_Int32 SwPostItMgr::GetInitialAnchorDistance() const
 {
-    const boost::rational<long>& f( mpEditWin->GetMapMode().GetScaleY() );
-    return POSTIT_INITIAL_ANCHOR_DISTANCE * f.numerator() / f.denominator();
+    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    return POSTIT_INITIAL_ANCHOR_DISTANCE * f.GetNumerator() / f.GetDenominator();
 }
 
 sal_Int32 SwPostItMgr::GetSpaceBetween() const
 {
-    const boost::rational<long>& f( mpEditWin->GetMapMode().GetScaleY() );
-    return ( POSTIT_SPACE_BETWEEN ) * f.numerator() / f.denominator();
+    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    return ( POSTIT_SPACE_BETWEEN ) * f.GetNumerator() / f.GetDenominator();
 }
 
 sal_Int32 SwPostItMgr::GetScrollSize() const
 {
-    const boost::rational<long>& f( mpEditWin->GetMapMode().GetScaleY() );
-    return ( POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META ) * f.numerator() / f.denominator();
+    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    return ( POSTIT_SPACE_BETWEEN + POSTIT_MINIMUMSIZE_WITH_META ) * f.GetNumerator() / f.GetDenominator();
 }
 
 sal_Int32 SwPostItMgr::GetMinimumSizeWithMeta() const
 {
-    const boost::rational<long>& f( mpEditWin->GetMapMode().GetScaleY() );
-    return POSTIT_MINIMUMSIZE_WITH_META * f.numerator() / f.denominator();
+    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    return POSTIT_MINIMUMSIZE_WITH_META * f.GetNumerator() / f.GetDenominator();
 }
 
 sal_Int32 SwPostItMgr::GetSidebarScrollerHeight() const
 {
-    const boost::rational<long>& f( mpEditWin->GetMapMode().GetScaleY() );
-    return POSTIT_SCROLL_SIDEBAR_HEIGHT * f.numerator() / f.denominator();
+    const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
+    return POSTIT_SCROLL_SIDEBAR_HEIGHT * f.GetNumerator() / f.GetDenominator();
 }
 
 void SwPostItMgr::SetSpellChecking()

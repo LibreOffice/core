@@ -2372,7 +2372,7 @@ void SwDrawVirtObj::NbcMove(const Size& rSiz)
     SdrObject::NbcMove( rSiz );
 }
 
-void SwDrawVirtObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
+void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     rRefObj.NbcResize(rRef - GetOffset(), xFact, yFact);
     SetRectsDirty();
@@ -2401,9 +2401,9 @@ void SwDrawVirtObj::Move(const Size& rSiz)
     SdrObject::Move( rSiz );
 }
 
-void SwDrawVirtObj::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
+void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
 {
-    if(xFact.numerator() != xFact.denominator() || yFact.numerator() != yFact.denominator())
+    if(xFact.GetNumerator() != xFact.GetDenominator() || yFact.GetNumerator() != yFact.GetDenominator())
     {
         Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
         rRefObj.Resize(rRef - GetOffset(), xFact, yFact, bUnsetRelative);

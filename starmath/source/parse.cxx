@@ -1947,7 +1947,7 @@ void SmParser::FontSize()
     }
 
     // get number argument
-    boost::rational<long>  aValue( 1L );
+    Fraction  aValue( 1L );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
         double fTmp = OUString(m_aCurToken.aText).toDouble();
@@ -1960,16 +1960,16 @@ void SmParser::FontSize()
             //!! (for example in SmNode::SetFontSize the font size calculated
             //!! may become 0 because of this!!! Happens e.g. for ftmp = 2.9 with Linux
             //!! or ftmp = 1.11111111111111111... (11/9) on every platform.)
-            if (aValue.denominator() > 1000)
+            if (aValue.GetDenominator() > 1000)
             {
-                long nNum   = aValue.numerator();
-                long nDenom = aValue.denominator();
+                long nNum   = aValue.GetNumerator();
+                long nDenom = aValue.GetDenominator();
                 while (nDenom > 1000)
                 {
                     nNum    /= 10;
                     nDenom  /= 10;
                 }
-                aValue = boost::rational<long>( nNum, nDenom );
+                aValue = Fraction( nNum, nDenom );
             }
         }
     }

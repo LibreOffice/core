@@ -161,8 +161,8 @@ public:
     virtual void Activate (bool IsMDIActivate) SAL_OVERRIDE;
     virtual void Deactivate (bool IsMDIActivate) SAL_OVERRIDE;
     virtual void SetZoomFactor (
-        const boost::rational<long>& rZoomX,
-        const boost::rational<long>& rZoomY) SAL_OVERRIDE;
+        const Fraction &rZoomX,
+        const Fraction &rZoomY) SAL_OVERRIDE;
     virtual bool PrepareClose (bool bUI = true) SAL_OVERRIDE;
     virtual void WriteUserData (OUString&, bool bBrowse = false) SAL_OVERRIDE;
     virtual void ReadUserData (const OUString&, bool bBrowse = false) SAL_OVERRIDE;

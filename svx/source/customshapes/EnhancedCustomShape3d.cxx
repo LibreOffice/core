@@ -262,11 +262,11 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
     if ( pModel )
     {
         fMap = 1.0;
-        boost::rational<long> aFraction( pModel->GetScaleFraction() );
-        if ( ( aFraction.numerator() ) != 1 || ( aFraction.denominator() != 1 ) )
+        Fraction aFraction( pModel->GetScaleFraction() );
+        if ( ( aFraction.GetNumerator() ) != 1 || ( aFraction.GetDenominator() != 1 ) )
         {
-            fMap *= aFraction.numerator();
-            fMap /= aFraction.denominator();
+            fMap *= aFraction.GetNumerator();
+            fMap /= aFraction.GetDenominator();
             pMap = &fMap;
         }
         if ( pModel->GetScaleUnit() != MAP_100TH_MM )

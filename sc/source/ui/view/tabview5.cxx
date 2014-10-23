@@ -370,7 +370,7 @@ void ScTabView::SetZoomType( SvxZoomType eNew, bool bAll )
     aViewData.SetZoomType( eNew, bAll );
 }
 
-void ScTabView::SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, bool bAll )
+void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll )
 {
     aViewData.SetZoom( rNewX, rNewY, bAll );
     if (pDrawView)

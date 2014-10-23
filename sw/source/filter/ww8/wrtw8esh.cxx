@@ -2155,12 +2155,12 @@ void SwBasicEscherEx::Init()
 
     // MS-DFF-Properties sind grossteils in EMU (English Metric Units) angegeben
     // 1mm=36000emu, 1twip=635emu
-    boost::rational<long> aFact(360, 1);
+    Fraction aFact(360, 1);
     aFact /= GetMapFactor(MAP_100TH_MM, eMap).X();
     // create little values
-    aFact = boost::rational<long>(aFact.numerator(), aFact.denominator());
-    mnEmuMul = aFact.numerator();
-    mnEmuDiv = aFact.denominator();
+    aFact = Fraction(aFact.GetNumerator(), aFact.GetDenominator());
+    mnEmuMul = aFact.GetNumerator();
+    mnEmuDiv = aFact.GetDenominator();
 
     SetHellLayerId(rWrt.pDoc->getIDocumentDrawModelAccess().GetHellId());
 }

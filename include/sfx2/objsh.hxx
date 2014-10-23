@@ -638,8 +638,8 @@ public:
 
     SAL_DLLPRIVATE void DoDraw_Impl( OutputDevice* pDev,
                                             const Point & rViewPos,
-                                            const boost::rational<long>& rScaleX,
-                                            const boost::rational<long>& rScaleY,
+                                            const Fraction & rScaleX,
+                                            const Fraction & rScaleY,
                                             const JobSetup & rSetup,
                                             sal_uInt16 nAspect );
 

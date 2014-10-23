@@ -56,7 +56,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <svl/rectitem.hxx>
 #include <svtools/soerr.hxx>
@@ -99,8 +99,8 @@ class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper5< embed::XEmbeddedCl
 public:
     Timer                           m_aTimer;               // activation timeout, starts after object connection
     Rectangle                       m_aObjArea;             // area of object in coordinate system of the container (without scaling)
-    boost::rational<long>           m_aScaleWidth;          // scaling that was applied to the object when it was not active
-    boost::rational<long>           m_aScaleHeight;
+    Fraction                        m_aScaleWidth;          // scaling that was applied to the object when it was not active
+    Fraction                        m_aScaleHeight;
     SfxInPlaceClient*               m_pClient;
     sal_Int64                       m_nAspect;              // ViewAspect that is assigned from the container
     Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
@@ -427,8 +427,8 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
 
     // apply scaling to object area and convert to pixels
     Rectangle aRealObjArea( m_aObjArea );
-    aRealObjArea.SetSize( Size( boost::rational_cast<long>( aRealObjArea.GetWidth() * m_aScaleWidth ),
-                                boost::rational_cast<long>( aRealObjArea.GetHeight() * m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_aScaleWidth,
+                                Fraction( aRealObjArea.GetHeight() ) * m_aScaleHeight ) );
 
     aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
     return AWTRectangle( aRealObjArea );
@@ -444,8 +444,8 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
 
     // currently(?) same as placement
     Rectangle aRealObjArea( m_aObjArea );
-    aRealObjArea.SetSize( Size( boost::rational_cast<long>( aRealObjArea.GetWidth() * m_aScaleWidth ),
-                                boost::rational_cast<long>( aRealObjArea.GetHeight() * m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_aScaleWidth,
+                                Fraction( aRealObjArea.GetHeight() ) * m_aScaleHeight ) );
 
     aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
     return AWTRectangle( aRealObjArea );
@@ -507,8 +507,8 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
         SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
         // new size of the object area without scaling
-        Size aNewObjSize( boost::rational_cast<long>( aNewLogicRect.GetWidth() / m_aScaleWidth ),
-                          boost::rational_cast<long>( aNewLogicRect.GetHeight() / m_aScaleHeight ) );
+        Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,
+                          Fraction( aNewLogicRect.GetHeight() ) / m_aScaleHeight );
 
         // now remove scaling from new placement and keep this a the new object area
         aNewLogicRect.SetSize( aNewObjSize );
@@ -615,7 +615,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_pImp->acquire();
     m_pImp->m_pClient = this;
     m_pImp->m_nAspect = nAspect;
-    m_pImp->m_aScaleWidth = m_pImp->m_aScaleHeight = boost::rational<long>(1);
+    m_pImp->m_aScaleWidth = m_pImp->m_aScaleHeight = Fraction(1,1);
     m_pImp->m_xClient = static_cast< embed::XEmbeddedClient* >( m_pImp );
     pViewShell->NewIPClient_Impl(this);
     m_pImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
@@ -754,13 +754,13 @@ Rectangle SfxInPlaceClient::GetObjArea() const
 Rectangle SfxInPlaceClient::GetScaledObjArea() const
 {
     Rectangle aRealObjArea( m_pImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( boost::rational_cast<long>( aRealObjArea.GetWidth() * m_pImp->m_aScaleWidth ),
-                                boost::rational_cast<long>( aRealObjArea.GetHeight() * m_pImp->m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_pImp->m_aScaleWidth,
+                                Fraction( aRealObjArea.GetHeight() ) * m_pImp->m_aScaleHeight ) );
     return aRealObjArea;
 }
 
 
-void SfxInPlaceClient::SetSizeScale( const boost::rational<long>& rScaleWidth, const boost::rational<long>& rScaleHeight )
+void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight )
 {
     if ( m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
     {
@@ -776,7 +776,7 @@ void SfxInPlaceClient::SetSizeScale( const boost::rational<long>& rScaleWidth, c
 }
 
 
-bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const boost::rational<long>& rScaleWidth, const boost::rational<long>& rScaleHeight )
+bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
 {
     if( rArea != m_pImp->m_aObjArea || m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
     {
@@ -794,13 +794,13 @@ bool SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const boost::
 }
 
 
-const boost::rational<long>&  SfxInPlaceClient::GetScaleWidth() const
+const Fraction& SfxInPlaceClient::GetScaleWidth() const
 {
     return m_pImp->m_aScaleWidth;
 }
 
 
-const boost::rational<long>&  SfxInPlaceClient::GetScaleHeight() const
+const Fraction& SfxInPlaceClient::GetScaleHeight() const
 {
     return m_pImp->m_aScaleHeight;
 }
@@ -812,8 +812,8 @@ void SfxInPlaceClient::Invalidate()
 
     // the object area is provided in logical coordinates of the window but without scaling applied
     Rectangle aRealObjArea( m_pImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( boost::rational_cast<long>( aRealObjArea.GetWidth() * m_pImp->m_aScaleWidth ),
-                                boost::rational_cast<long>( aRealObjArea.GetHeight() * m_pImp->m_aScaleHeight ) ) );
+    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_pImp->m_aScaleWidth,
+                                Fraction( aRealObjArea.GetHeight() ) * m_pImp->m_aScaleHeight ) );
     m_pEditWin->Invalidate( aRealObjArea );
 
     ViewChanged();
@@ -955,8 +955,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
                                 Rectangle aScaledArea = GetScaledObjArea();
                                 m_pImp->m_aObjArea.SetSize( aNewSize );
-                                m_pImp->m_aScaleWidth = boost::rational<long>( aScaledArea.GetWidth(), aNewSize.Width() );
-                                m_pImp->m_aScaleHeight = boost::rational<long>( aScaledArea.GetHeight(), aNewSize.Height() );
+                                m_pImp->m_aScaleWidth = Fraction( aScaledArea.GetWidth(), aNewSize.Width() );
+                                m_pImp->m_aScaleHeight = Fraction( aScaledArea.GetHeight(), aNewSize.Height() );
                             }
                         }
                         catch (uno::Exception const& e)

@@ -43,14 +43,41 @@ Reduces accuracy until it is a fraction (should become
 ctor fraction once); we could also do this with BigInts
 */
 
-static boost::rational<long> ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
+static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 {
-    if( nD1 == 0 || nD2 == 0 )
+    long i = 1;
+
+    if ( nN1 < 0 ) { i = -i; nN1 = -nN1; }
+    if ( nN2 < 0 ) { i = -i; nN2 = -nN2; }
+    if ( nD1 < 0 ) { i = -i; nD1 = -nD1; }
+    if ( nD2 < 0 ) { i = -i; nD2 = -nD2; }
+    // all positive; i sign
+
+    Fraction aF( i*nN1, nD1 );
+    aF *= Fraction( nN2, nD2 );
+
+    if( nD1 == 0 || nD2 == 0 ) //under these bad circumstances the following while loop will be endless
     {
         DBG_ASSERT(false,"Invalid parameter for ImplMakeFraction");
-        return boost::rational<long>( 1, 1 );
+        return Fraction( 1, 1 );
     }
-    return boost::rational<long>( nN1, nD1 ) * boost::rational<long>( nN2, nD2 );
+
+    while ( aF.GetDenominator() == -1 )
+    {
+        if ( nN1 > nN2 )
+            nN1 = (nN1 + 1) / 2;
+        else
+            nN2 = (nN2 + 1) / 2;
+        if ( nD1 > nD2 )
+            nD1 = (nD1 + 1) / 2;
+        else
+            nD2 = (nD2 + 1) / 2;
+
+        aF = Fraction( i*nN1, nD1 );
+        aF *= Fraction( nN2, nD2 );
+    }
+
+    return aF;
 }
 
 // Fraction.GetNumerator()
@@ -220,8 +247,8 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             break;
     }
 
-    boost::rational<long> aScaleX = rMapMode.GetScaleX();
-    boost::rational<long> aScaleY = rMapMode.GetScaleY();
+    Fraction aScaleX = rMapMode.GetScaleX();
+    Fraction aScaleY = rMapMode.GetScaleY();
 
     // set offset according to MapMode
     Point aOrigin = rMapMode.GetOrigin();
@@ -234,70 +261,70 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     }
     else
     {
-        rMapRes.mfOffsetX *= aScaleX.denominator();
-        rMapRes.mfOffsetX /= aScaleX.numerator();
+        rMapRes.mfOffsetX *= aScaleX.GetDenominator();
+        rMapRes.mfOffsetX /= aScaleX.GetNumerator();
         rMapRes.mfOffsetX += aOrigin.X();
-        rMapRes.mfOffsetY *= aScaleY.denominator();
-        rMapRes.mfOffsetY /= aScaleY.numerator();
+        rMapRes.mfOffsetY *= aScaleY.GetDenominator();
+        rMapRes.mfOffsetY /= aScaleY.GetNumerator();
         rMapRes.mfOffsetY += aOrigin.Y();
 
         BigInt aX( rMapRes.mnMapOfsX );
-        aX *= BigInt( aScaleX.denominator() );
+        aX *= BigInt( aScaleX.GetDenominator() );
         if ( rMapRes.mnMapOfsX >= 0 )
         {
-            if ( aScaleX.numerator() >= 0 )
-                aX += BigInt( aScaleX.numerator()/2 );
+            if ( aScaleX.GetNumerator() >= 0 )
+                aX += BigInt( aScaleX.GetNumerator()/2 );
             else
-                aX -= BigInt( (aScaleX.numerator()+1)/2 );
+                aX -= BigInt( (aScaleX.GetNumerator()+1)/2 );
         }
         else
         {
-            if ( aScaleX.numerator() >= 0 )
-                aX -= BigInt( (aScaleX.numerator()-1)/2 );
+            if ( aScaleX.GetNumerator() >= 0 )
+                aX -= BigInt( (aScaleX.GetNumerator()-1)/2 );
             else
-                aX += BigInt( aScaleX.numerator()/2 );
+                aX += BigInt( aScaleX.GetNumerator()/2 );
         }
-        aX /= BigInt( aScaleX.numerator() );
+        aX /= BigInt( aScaleX.GetNumerator() );
         rMapRes.mnMapOfsX = (long)aX + aOrigin.X();
         BigInt aY( rMapRes.mnMapOfsY );
-        aY *= BigInt( aScaleY.denominator() );
+        aY *= BigInt( aScaleY.GetDenominator() );
         if( rMapRes.mnMapOfsY >= 0 )
         {
-            if ( aScaleY.numerator() >= 0 )
-                aY += BigInt( aScaleY.numerator()/2 );
+            if ( aScaleY.GetNumerator() >= 0 )
+                aY += BigInt( aScaleY.GetNumerator()/2 );
             else
-                aY -= BigInt( (aScaleY.numerator()+1)/2 );
+                aY -= BigInt( (aScaleY.GetNumerator()+1)/2 );
         }
         else
         {
-            if ( aScaleY.numerator() >= 0 )
-                aY -= BigInt( (aScaleY.numerator()-1)/2 );
+            if ( aScaleY.GetNumerator() >= 0 )
+                aY -= BigInt( (aScaleY.GetNumerator()-1)/2 );
             else
-                aY += BigInt( aScaleY.numerator()/2 );
+                aY += BigInt( aScaleY.GetNumerator()/2 );
         }
-        aY /= BigInt( aScaleY.numerator() );
+        aY /= BigInt( aScaleY.GetNumerator() );
         rMapRes.mnMapOfsY = (long)aY + aOrigin.Y();
     }
 
-    rMapRes.mfScaleX *= (double)rMapRes.mnMapScNumX * (double)aScaleX.numerator() /
-        ((double)rMapRes.mnMapScDenomX * (double)aScaleX.denominator());
-    rMapRes.mfScaleY *= (double)rMapRes.mnMapScNumY * (double)aScaleY.numerator() /
-        ((double)rMapRes.mnMapScDenomY * (double)aScaleY.denominator());
+    rMapRes.mfScaleX *= (double)rMapRes.mnMapScNumX * (double)aScaleX.GetNumerator() /
+        ((double)rMapRes.mnMapScDenomX * (double)aScaleX.GetDenominator());
+    rMapRes.mfScaleY *= (double)rMapRes.mnMapScNumY * (double)aScaleY.GetNumerator() /
+        ((double)rMapRes.mnMapScDenomY * (double)aScaleY.GetDenominator());
 
     // calculate scaling factor according to MapMode
     // aTemp? = rMapRes.mnMapSc? * aScale?
-    boost::rational<long> aTempX = ImplMakeFraction( rMapRes.mnMapScNumX,
-                                        aScaleX.numerator(),
+    Fraction aTempX = ImplMakeFraction( rMapRes.mnMapScNumX,
+                                        aScaleX.GetNumerator(),
                                         rMapRes.mnMapScDenomX,
-                                        aScaleX.denominator() );
-    boost::rational<long> aTempY = ImplMakeFraction( rMapRes.mnMapScNumY,
-                                        aScaleY.numerator(),
+                                        aScaleX.GetDenominator() );
+    Fraction aTempY = ImplMakeFraction( rMapRes.mnMapScNumY,
+                                        aScaleY.GetNumerator(),
                                         rMapRes.mnMapScDenomY,
-                                        aScaleY.denominator() );
-    rMapRes.mnMapScNumX   = aTempX.numerator();
-    rMapRes.mnMapScDenomX = aTempX.denominator();
-    rMapRes.mnMapScNumY   = aTempY.numerator();
-    rMapRes.mnMapScDenomY = aTempY.denominator();
+                                        aScaleY.GetDenominator() );
+    rMapRes.mnMapScNumX   = aTempX.GetNumerator();
+    rMapRes.mnMapScDenomX = aTempX.GetDenominator();
+    rMapRes.mnMapScNumY   = aTempY.GetNumerator();
+    rMapRes.mnMapScDenomY = aTempY.GetDenominator();
 
     // hack: 0/n approximately 1/max
     if ( !rMapRes.mnMapScNumX )
@@ -739,14 +766,14 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     {
         Point aOrigin( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
         // aScale? = maMapMode.GetScale?() * rNewMapMode.GetScale?()
-        boost::rational<long> aScaleX = ImplMakeFraction( maMapMode.GetScaleX().numerator(),
-                                             rNewMapMode.GetScaleX().numerator(),
-                                             maMapMode.GetScaleX().denominator(),
-                                             rNewMapMode.GetScaleX().denominator() );
-        boost::rational<long> aScaleY = ImplMakeFraction( maMapMode.GetScaleY().numerator(),
-                                             rNewMapMode.GetScaleY().numerator(),
-                                             maMapMode.GetScaleY().denominator(),
-                                             rNewMapMode.GetScaleY().denominator() );
+        Fraction aScaleX = ImplMakeFraction( maMapMode.GetScaleX().GetNumerator(),
+                                             rNewMapMode.GetScaleX().GetNumerator(),
+                                             maMapMode.GetScaleX().GetDenominator(),
+                                             rNewMapMode.GetScaleX().GetDenominator() );
+        Fraction aScaleY = ImplMakeFraction( maMapMode.GetScaleY().GetNumerator(),
+                                             rNewMapMode.GetScaleY().GetNumerator(),
+                                             maMapMode.GetScaleY().GetDenominator(),
+                                             rNewMapMode.GetScaleY().GetDenominator() );
         maMapMode.SetOrigin( aOrigin );
         maMapMode.SetScaleX( aScaleX );
         maMapMode.SetScaleY( aScaleY );
@@ -785,14 +812,14 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
     MapUnit eNew = rNewMapMode.GetMapUnit();
 
     // a?F = rNewMapMode.GetScale?() / maMapMode.GetScale?()
-    boost::rational<long> aXF = ImplMakeFraction( rNewMapMode.GetScaleX().numerator(),
-                                     maMapMode.GetScaleX().denominator(),
-                                     rNewMapMode.GetScaleX().denominator(),
-                                     maMapMode.GetScaleX().numerator() );
-    boost::rational<long> aYF = ImplMakeFraction( rNewMapMode.GetScaleY().numerator(),
-                                     maMapMode.GetScaleY().denominator(),
-                                     rNewMapMode.GetScaleY().denominator(),
-                                     maMapMode.GetScaleY().numerator() );
+    Fraction aXF = ImplMakeFraction( rNewMapMode.GetScaleX().GetNumerator(),
+                                     maMapMode.GetScaleX().GetDenominator(),
+                                     rNewMapMode.GetScaleX().GetDenominator(),
+                                     maMapMode.GetScaleX().GetNumerator() );
+    Fraction aYF = ImplMakeFraction( rNewMapMode.GetScaleY().GetNumerator(),
+                                     maMapMode.GetScaleY().GetDenominator(),
+                                     rNewMapMode.GetScaleY().GetDenominator(),
+                                     maMapMode.GetScaleY().GetNumerator() );
 
     Point aPt( LogicToLogic( Point(), NULL, &rNewMapMode ) );
     if ( eNew != eOld )
@@ -807,23 +834,23 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         }
         else
         {
-            boost::rational<long> aF( aImplNumeratorAry[eNew] * aImplDenominatorAry[eOld],
+            Fraction aF( aImplNumeratorAry[eNew] * aImplDenominatorAry[eOld],
                          aImplNumeratorAry[eOld] * aImplDenominatorAry[eNew] );
 
             // a?F =  a?F * aF
-            aXF = ImplMakeFraction( aXF.numerator(),   aF.numerator(),
-                                    aXF.denominator(), aF.denominator() );
-            aYF = ImplMakeFraction( aYF.numerator(),   aF.numerator(),
-                                    aYF.denominator(), aF.denominator() );
+            aXF = ImplMakeFraction( aXF.GetNumerator(),   aF.GetNumerator(),
+                                    aXF.GetDenominator(), aF.GetDenominator() );
+            aYF = ImplMakeFraction( aYF.GetNumerator(),   aF.GetNumerator(),
+                                    aYF.GetDenominator(), aF.GetDenominator() );
             if ( eOld == MAP_PIXEL )
             {
-                aXF *= boost::rational<long>( mnDPIX, 1 );
-                aYF *= boost::rational<long>( mnDPIY, 1 );
+                aXF *= Fraction( mnDPIX, 1 );
+                aYF *= Fraction( mnDPIY, 1 );
             }
             else if ( eNew == MAP_PIXEL )
             {
-                aXF *= boost::rational<long>( 1, mnDPIX );
-                aYF *= boost::rational<long>( 1, mnDPIY );
+                aXF *= Fraction( 1, mnDPIX );
+                aYF *= Fraction( 1, mnDPIY );
             }
         }
     }

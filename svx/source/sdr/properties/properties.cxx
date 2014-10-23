@@ -74,7 +74,7 @@ namespace sdr
             ClearObjectItem(nWhich);
         }
 
-        void BaseProperties::Scale(const boost::rational<long>& /*rScale*/)
+        void BaseProperties::Scale(const Fraction& /*rScale*/)
         {
             // default implementation does nothing; overload where
             // an ItemSet is implemented.

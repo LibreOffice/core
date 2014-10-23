@@ -2376,8 +2376,8 @@ void PSWriter::ImplGetMapMode( const MapMode& rMapMode )
 {
     ImplWriteLine( "tm setmatrix" );
     double fMul = ImplGetScaling( rMapMode );
-    double fScaleX = boost::rational_cast<double>(rMapMode.GetScaleX()) * fMul;
-    double fScaleY = boost::rational_cast<double>(rMapMode.GetScaleY()) * fMul;
+    double fScaleX = (double)rMapMode.GetScaleX() * fMul;
+    double fScaleY = (double)rMapMode.GetScaleY() * fMul;
     ImplTranslate( rMapMode.GetOrigin().X() * fScaleX, rMapMode.GetOrigin().Y() * fScaleY );
     ImplScale( fScaleX, fScaleY );
 }

@@ -111,8 +111,8 @@ namespace {
 
         Sequence< PropertyValue >   maFilterData;
 
-        boost::rational<long>    maScaleX;
-        boost::rational<long>    maScaleY;
+        Fraction    maScaleX;
+        Fraction    maScaleY;
 
         ExportSettings( SdrModel* pDoc );
     };
@@ -407,7 +407,7 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
     // use scaling?
     if( nWidthPixel )
     {
-        const boost::rational<long> aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+        const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
 
         aMM.SetScaleX( aFrac );
 
@@ -417,7 +417,7 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWid
 
     if( nHeightPixel )
     {
-        const boost::rational<long> aFrac( (long) nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+        const Fraction aFrac( (long) nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
 
         if( nWidthPixel == 0 )
             aMM.SetScaleX( aFrac );
@@ -577,25 +577,25 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
-                        rSettings.maScaleX = boost::rational<long>( nVal, rSettings.maScaleX.denominator() );
+                        rSettings.maScaleX = Fraction( nVal, rSettings.maScaleX.GetDenominator() );
                 }
                 else if ( pDataValues->Name == "ScaleXDenominator" )
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
-                        rSettings.maScaleX = boost::rational<long>( rSettings.maScaleX.numerator(), nVal );
+                        rSettings.maScaleX = Fraction( rSettings.maScaleX.GetNumerator(), nVal );
                 }
                 else if ( pDataValues->Name == "ScaleYNumerator" )
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
-                        rSettings.maScaleY = boost::rational<long>( nVal, rSettings.maScaleY.denominator() );
+                        rSettings.maScaleY = Fraction( nVal, rSettings.maScaleY.GetDenominator() );
                 }
                 else if ( pDataValues->Name == "ScaleYDenominator" )
                 {
                     sal_Int32 nVal = 1;
                     if( pDataValues->Value >>= nVal )
-                        rSettings.maScaleY = boost::rational<long>( rSettings.maScaleY.numerator(), nVal );
+                        rSettings.maScaleY = Fraction( rSettings.maScaleY.GetNumerator(), nVal );
                 }
 
                 pDataValues++;

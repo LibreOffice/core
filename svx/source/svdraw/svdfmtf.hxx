@@ -63,8 +63,8 @@ protected:
     Point                       maOfs;
     double                      mfScaleX;
     double                      mfScaleY;
-    boost::rational<long>       maScaleX;
-    boost::rational<long>       maScaleY;
+    Fraction                    maScaleX;
+    Fraction                    maScaleY;
 
     bool                        mbFntDirty;
 

@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include <svtools/imapobj.hxx>
 
-namespace boost { template<typename T> class rational; }
+class Fraction;
 
 class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 {
@@ -60,7 +60,7 @@ public:
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const SAL_OVERRIDE;
 
-    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
+    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapCircleObject& rEqObj );

@@ -212,8 +212,8 @@ public:
     // waagerechte Linie hat z.B. immer eine Hoehe von 0.
     void SetMarkedObjRect(const Rectangle& rRect, bool bCopy=false);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
-    void ResizeMarkedObj(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bCopy=false);
-    void ResizeMultMarkedObj(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
+    void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
+    void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
     long GetMarkedObjRotate() const;
     void RotateMarkedObj(const Point& rRef, long nWink, bool bCopy=false);
     void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
@@ -228,7 +228,7 @@ public:
     void CopyMarkedObj();
     void SetAllMarkedRect(const Rectangle& rRect, bool bCopy=false) { SetMarkedObjRect(rRect,bCopy); }
     void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj   (rSiz,bCopy); }
-    void ResizeAllMarked(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bCopy=false) { ResizeMarkedObj (rRef,xFact,yFact,bCopy); }
+    void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false) { ResizeMarkedObj (rRef,xFact,yFact,bCopy); }
     long GetAllMarkedRotate() const { return GetMarkedObjRotate(); }
     void RotateAllMarked(const Point& rRef, long nWink, bool bCopy=false) { RotateMarkedObj(rRef,nWink,bCopy); }
     void MirrorAllMarked(const Point& rRef1, const Point& rRef2, bool bCopy=false) { MirrorMarkedObj(rRef1,rRef2,bCopy); }

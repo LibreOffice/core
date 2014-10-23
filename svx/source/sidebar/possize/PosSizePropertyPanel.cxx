@@ -508,7 +508,7 @@ IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     sal_Int64 nTmp = dTmp*100;
 
     // #i123993# Need to take UIScale into account when executing rotations
-    const double fUIScale(mpView && mpView->GetModel() ? boost::rational_cast<double>(mpView->GetModel()->GetUIScale()) : 1.0);
+    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
@@ -526,7 +526,7 @@ IMPL_LINK( PosSizePropertyPanel, RotationHdl, void *, EMPTYARG )
     sal_Int32 nTmp = mpDial->GetRotation();
 
     // #i123993# Need to take UIScale into account when executing rotations
-    const double fUIScale(mpView && mpView->GetModel() ? boost::rational_cast<double>(mpView->GetModel()->GetUIScale()) : 1.0);
+    const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
     SfxInt32Item aAngleItem( SID_ATTR_TRANSFORM_ANGLE,(sal_uInt32) nTmp);
     SfxInt32Item aRotXItem( SID_ATTR_TRANSFORM_ROT_X, basegfx::fround(mlRotX * fUIScale));
     SfxInt32Item aRotYItem( SID_ATTR_TRANSFORM_ROT_Y, basegfx::fround(mlRotY * fUIScale));
@@ -604,7 +604,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 {
                     long mlOldWidth1 = pWidthItem->GetValue();
 
-                    mlOldWidth1 = boost::rational_cast<long>(mlOldWidth1 / maUIScale);
+                    mlOldWidth1 = Fraction( mlOldWidth1 ) / maUIScale;
                     SetFieldUnit( *mpMtrWidth, meDlgUnit, true );
                     SetMetricValue( *mpMtrWidth, mlOldWidth1, mePoolUnit );
                     mlOldWidth = mlOldWidth1;
@@ -624,7 +624,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 {
                     long mlOldHeight1 = pHeightItem->GetValue();
 
-                    mlOldHeight1 = boost::rational_cast<long>(mlOldHeight1 / maUIScale);
+                    mlOldHeight1 = Fraction( mlOldHeight1 ) / maUIScale;
                     SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
                     SetMetricValue( *mpMtrHeight, mlOldHeight1, mePoolUnit );
                     mlOldHeight = mlOldHeight1;
@@ -643,7 +643,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     long nTmp = pItem->GetValue();
-                    nTmp = boost::rational_cast<long>(nTmp / maUIScale);
+                    nTmp = Fraction( nTmp ) / maUIScale;
                     SetFieldUnit( *mpMtrPosX, meDlgUnit, true );
                     SetMetricValue( *mpMtrPosX, nTmp, mePoolUnit );
                     break;
@@ -661,7 +661,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     long nTmp = pItem->GetValue();
-                    nTmp = boost::rational_cast<long>(nTmp / maUIScale);
+                    nTmp = Fraction( nTmp ) / maUIScale;
                     SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
                     SetMetricValue( *mpMtrPosY, nTmp, mePoolUnit );
                     break;
@@ -679,7 +679,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotX = pItem->GetValue();
-                    mlRotX = boost::rational_cast<long>(mlRotX / maUIScale);
+                    mlRotX = Fraction( mlRotX ) / maUIScale;
                 }
             }
             break;
@@ -692,7 +692,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 if(pItem)
                 {
                     mlRotY = pItem->GetValue();
-                    mlRotY = boost::rational_cast<long>(mlRotY / maUIScale);
+                    mlRotY = Fraction( mlRotY ) / maUIScale;
                 }
             }
             break;
@@ -898,19 +898,19 @@ void PosSizePropertyPanel::executeSize()
 {
     if ( mpMtrWidth->IsValueModified() || mpMtrHeight->IsValueModified())
     {
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->GetModel()->GetUIScale();
 
         // get Width
         double nWidth = (double)mpMtrWidth->GetValue( meDlgUnit );
         nWidth = MetricField::ConvertDoubleValue( nWidth, mpMtrWidth->GetBaseValue(), mpMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lWidth = (long)(nWidth * boost::rational_cast<double>(aUIScale));
+        long lWidth = (long)(nWidth * (double)aUIScale);
         lWidth = OutputDevice::LogicToLogic( lWidth, MAP_100TH_MM, (MapUnit)mePoolUnit );
         lWidth = (long)mpMtrWidth->Denormalize( lWidth );
 
         // get Height
         double nHeight = (double)mpMtrHeight->GetValue( meDlgUnit );
         nHeight = MetricField::ConvertDoubleValue( nHeight, mpMtrHeight->GetBaseValue(), mpMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lHeight = (long)(nHeight * boost::rational_cast<double>(aUIScale));
+        long lHeight = (long)(nHeight * (double)aUIScale);
         lHeight = OutputDevice::LogicToLogic( lHeight, MAP_100TH_MM, (MapUnit)mePoolUnit );
         lHeight = (long)mpMtrWidth->Denormalize( lHeight );
 
@@ -953,11 +953,11 @@ void PosSizePropertyPanel::executePosX()
         maRect = mpView->GetAllMarkedRect();
         aRect = mpView->GetAllMarkedRect();
 
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
-        lX = boost::rational_cast<long>(lX * aUIScale);
+        lX = Fraction( lX ) * aUIScale;
         lY += maAnchorPos.Y();
-        lY = boost::rational_cast<long>(lY * aUIScale);
+        lY = Fraction( lY ) * aUIScale;
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
@@ -980,11 +980,11 @@ void PosSizePropertyPanel::executePosY()
         maRect = mpView->GetAllMarkedRect();
         aRect = mpView->GetAllMarkedRect();
 
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
-        lX = boost::rational_cast<long>(lX * aUIScale);
+        lX = Fraction( lX ) * aUIScale;
         lY += maAnchorPos.Y();
-        lY = boost::rational_cast<long>(lY * aUIScale);
+        lY = Fraction( lY ) * aUIScale;
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
@@ -1158,7 +1158,7 @@ void PosSizePropertyPanel::DisableControls()
 
 void PosSizePropertyPanel::UpdateUIScale()
 {
-    const boost::rational<long> aUIScale (mpView->GetModel()->GetUIScale());
+    const Fraction aUIScale (mpView->GetModel()->GetUIScale());
     if (maUIScale != aUIScale)
     {
         // UI scale has changed.

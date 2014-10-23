@@ -99,11 +99,11 @@ public:
     virtual       void       NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
     virtual       void       NbcMove  (const Size& rSiz) SAL_OVERRIDE;
-    virtual       void       NbcResize(const Point& rRef, const boost::rational<long>& xFact,
-                                       const boost::rational<long>& yFact) SAL_OVERRIDE;
+    virtual       void       NbcResize(const Point& rRef, const Fraction& xFact,
+                                       const Fraction& yFact) SAL_OVERRIDE;
     virtual       void       Move  (const Size& rSiz) SAL_OVERRIDE;
-    virtual       void       Resize(const Point& rRef, const boost::rational<long>& xFact,
-                                    const boost::rational<long>& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
+    virtual       void       Resize(const Point& rRef, const Fraction& xFact,
+                                    const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
 
     const SwFrmFmt *GetFmt() const;
           SwFrmFmt *GetFmt();

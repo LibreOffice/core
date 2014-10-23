@@ -1779,7 +1779,7 @@ SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 void SdrDragResize::TakeSdrDragComment(OUString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethResize, rStr);
-    boost::rational<long> aFact1(1,1);
+    Fraction aFact1(1,1);
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
     sal_Int32 nXDiv(aStart.X() - aRef.X());
@@ -1878,7 +1878,7 @@ basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation()
 {
     basegfx::B2DHomMatrix aRetval(basegfx::tools::createTranslateB2DHomMatrix(
         -DragStat().Ref1().X(), -DragStat().Ref1().Y()));
-    aRetval.scale(boost::rational_cast<double>(aXFact), boost::rational_cast<double>(aYFact));
+    aRetval.scale(aXFact, aYFact);
     aRetval.translate(DragStat().Ref1().X(), DragStat().Ref1().Y());
 
     return aRetval;
@@ -1889,7 +1889,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
     Point aPnt(GetSnapPos(rNoSnapPnt));
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
-    boost::rational<long> aMaxFact(0x7FFFFFFF,1);
+    Fraction aMaxFact(0x7FFFFFFF,1);
     Rectangle aLR(getSdrDragView().GetWorkArea());
     bool bWorkArea=!aLR.IsEmpty();
     bool bDragLimit=IsDragLimit();
@@ -1920,7 +1920,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.X()>aSR.Left())
         {
-            boost::rational<long> aMax(aRef.X()-aLR.Left(),aRef.X()-aSR.Left());
+            Fraction aMax(aRef.X()-aLR.Left(),aRef.X()-aSR.Left());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1928,7 +1928,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.X()<aSR.Right())
         {
-            boost::rational<long> aMax(aLR.Right()-aRef.X(),aSR.Right()-aRef.X());
+            Fraction aMax(aLR.Right()-aRef.X(),aSR.Right()-aRef.X());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1936,7 +1936,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.Y()>aSR.Top())
         {
-            boost::rational<long> aMax(aRef.Y()-aLR.Top(),aRef.Y()-aSR.Top());
+            Fraction aMax(aRef.Y()-aLR.Top(),aRef.Y()-aSR.Top());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1944,7 +1944,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (aRef.Y()<aSR.Bottom())
         {
-            boost::rational<long> aMax(aLR.Bottom()-aRef.Y(),aSR.Bottom()-aRef.Y());
+            Fraction aMax(aLR.Bottom()-aRef.Y(),aSR.Bottom()-aRef.Y());
 
             if (aMax<aMaxFact)
                 aMaxFact=aMax;
@@ -1979,7 +1979,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
         if (bOrtho)
         {
-            if ((boost::rational<long>(nXMul,nXDiv)>boost::rational<long>(nYMul,nYDiv)) !=getSdrDragView().IsBigOrtho())
+            if ((Fraction(nXMul,nXDiv)>Fraction(nYMul,nYDiv)) !=getSdrDragView().IsBigOrtho())
             {
                 nXMul=nYMul;
                 nXDiv=nYDiv;
@@ -2027,8 +2027,8 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
         }
     }
 
-    boost::rational<long> aNeuXFact(nXMul,nXDiv);
-    boost::rational<long> aNeuYFact(nYMul,nYDiv);
+    Fraction aNeuXFact(nXMul,nXDiv);
+    Fraction aNeuYFact(nYMul,nYDiv);
 
     if (bOrtho)
     {
@@ -2046,10 +2046,10 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
     }
 
     if (bXNeg)
-        aNeuXFact=boost::rational<long>(-aNeuXFact.numerator(),aNeuXFact.denominator());
+        aNeuXFact=Fraction(-aNeuXFact.GetNumerator(),aNeuXFact.GetDenominator());
 
     if (bYNeg)
-        aNeuYFact=boost::rational<long>(-aNeuYFact.numerator(),aNeuYFact.denominator());
+        aNeuYFact=Fraction(-aNeuYFact.GetNumerator(),aNeuYFact.GetDenominator());
 
     if (DragStat().CheckMinMoved(aPnt))
     {
@@ -2317,12 +2317,12 @@ basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation()
     {
         if (bVertical)
         {
-            aRetval.scale(boost::rational_cast<double>(aFact), 1.0);
+            aRetval.scale(aFact, 1.0);
             aRetval.shearY(-nTan);
         }
         else
         {
-            aRetval.scale(1.0, boost::rational_cast<double>(aFact));
+            aRetval.scale(1.0, aFact);
             aRetval.shearX(-nTan);
         }
     }
@@ -2344,7 +2344,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
         Point aP0(DragStat().GetStart());
         Point aPnt(rPnt);
-        boost::rational<long> aNeuFact(1,1);
+        Fraction aNeuFact(1,1);
 
         // if angle snapping not activated, snap to raster (except when using slant)
         if (nSA==0 && !bSlant)
@@ -2389,11 +2389,11 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
                 if (bVertical)
                 {
-                    aNeuFact=boost::rational<long>(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
+                    aNeuFact=Fraction(aPt2.X()-aRef.X(),aP0.X()-aRef.X());
                 }
                 else
                 {
-                    aNeuFact=boost::rational<long>(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
+                    aNeuFact=Fraction(aPt2.Y()-aRef.Y(),aP0.Y()-aRef.Y());
                 }
             }
         }
@@ -2451,11 +2451,11 @@ void SdrDragShear::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
     {
         if (bVertical)
         {
-            rTarget.Resize(DragStat().GetRef1(),aFact,boost::rational<long>(1,1));
+            rTarget.Resize(DragStat().GetRef1(),aFact,Fraction(1,1));
         }
         else
         {
-            rTarget.Resize(DragStat().GetRef1(),boost::rational<long>(1,1),aFact);
+            rTarget.Resize(DragStat().GetRef1(),Fraction(1,1),aFact);
         }
     }
 
@@ -2469,7 +2469,7 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (bResize && aFact==boost::rational<long>(1,1))
+    if (bResize && aFact==Fraction(1,1))
         bResize=false;
 
     if (nWink!=0 || bResize)
@@ -2489,11 +2489,11 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
         {
             if (bVertical)
             {
-                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),aFact,boost::rational<long>(1,1),bCopy);
+                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),aFact,Fraction(1,1),bCopy);
             }
             else
             {
-                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),boost::rational<long>(1,1),aFact,bCopy);
+                getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),Fraction(1,1),aFact,bCopy);
             }
 
             bCopy=false;
@@ -3016,7 +3016,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
 
                     if (bResize)
                     {
-                        boost::rational<long> aFact1(1,1);
+                        Fraction aFact1(1,1);
 
                         if (bVertical)
                         {
@@ -3108,7 +3108,7 @@ void SdrDragCrook::_MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
 
     if (bResize)
     {
-        boost::rational<long> aFact1(1,1);
+        Fraction aFact1(1,1);
 
         if (bVert)
         {
@@ -3184,7 +3184,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         else
             bAtCenter=true;
 
-        boost::rational<long> aNeuFact(1,1);
+        Fraction aNeuFact(1,1);
         long dx1=aPnt.X()-aNeuCenter.X();
         long dy1=aPnt.Y()-aNeuCenter.Y();
         bValid=bVertical ? dx1!=0 : dy1!=0;
@@ -3254,7 +3254,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
                 if (bAtCenter)
                     nMul*=2;
 
-                aNeuFact=boost::rational<long>(nMul,nMarkSize);
+                aNeuFact=Fraction(nMul,nMarkSize);
                 nWink=nPntWink;
             }
             else
@@ -3287,7 +3287,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
                 nMul = std::abs(nMul);
             }
 
-            aNeuFact=boost::rational<long>(nMul,nDiv);
+            aNeuFact=Fraction(nMul,nDiv);
         }
 
         if (aNeuCenter!=aCenter || bNeuContortion!=bContortion || aNeuFact!=aFact ||
@@ -3301,7 +3301,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             aCenter=aNeuCenter;
             aFact=aNeuFact;
             aRad=Point(nNeuRad,nNeuRad);
-            bResize=aFact!=boost::rational<long>(1,1);
+            bResize=aFact!=Fraction(1,1) && aFact.GetDenominator()!=0 && aFact.IsValid();
             DragStat().NextMove(aPnt);
             Show();
         }
@@ -3310,14 +3310,14 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
 void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    const bool bDoResize(aFact!=boost::rational<long>(1,1));
+    const bool bDoResize(aFact!=Fraction(1,1));
     const bool bDoCrook(aCenter!=aMarkCenter && aRad.X()!=0 && aRad.Y()!=0);
 
     if (bDoCrook || bDoResize)
     {
         if (bDoResize)
         {
-            boost::rational<long> aFact1(1,1);
+            Fraction aFact1(1,1);
 
             if (bContortion)
             {
@@ -3370,7 +3370,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (bResize && aFact==boost::rational<long>(1,1))
+    if (bResize && aFact==Fraction(1,1))
         bResize=false;
 
     const bool bUndo = getSdrDragView().IsUndoEnabled();
@@ -3392,7 +3392,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
 
         if (bResize)
         {
-            boost::rational<long> aFact1(1,1);
+            Fraction aFact1(1,1);
 
             if (bContortion)
             {

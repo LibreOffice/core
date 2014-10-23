@@ -437,7 +437,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
 //  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
 
-void ScDrawView::CalcNormScale( boost::rational<long>& rFractX, boost::rational<long>& rFractY ) const
+void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 {
     double nPPTX = ScGlobal::nScreenPPTX;
     double nPPTY = ScGlobal::nScreenPPTY;
@@ -453,7 +453,7 @@ void ScDrawView::CalcNormScale( boost::rational<long>& rFractX, boost::rational<
     if (nEndRow<20)
         nEndRow = 1000;
 
-    boost::rational<long> aZoom(1,1);
+    Fraction aZoom(1,1);
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,
                             nPPTX, nPPTY, rFractX,rFractY );
 }
@@ -513,7 +513,7 @@ void ScDrawView::SetMarkedOriginalSize()
             {
                 //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
 
-                boost::rational<long> aNormScaleX, aNormScaleY;
+                Fraction aNormScaleX, aNormScaleY;
                 CalcNormScale( aNormScaleX, aNormScaleY );
                 aDestMap.SetScaleX(aNormScaleX);
                 aDestMap.SetScaleY(aNormScaleY);
@@ -535,8 +535,8 @@ void ScDrawView::SetMarkedOriginalSize()
             Rectangle aDrawRect = pObj->GetLogicRect();
 
             pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
-            pObj->Resize( aDrawRect.TopLeft(), boost::rational<long>( aOriginalSize.Width(), aDrawRect.GetWidth() ),
-                                                 boost::rational<long>( aOriginalSize.Height(), aDrawRect.GetHeight() ) );
+            pObj->Resize( aDrawRect.TopLeft(), Fraction( aOriginalSize.Width(), aDrawRect.GetWidth() ),
+                                                 Fraction( aOriginalSize.Height(), aDrawRect.GetHeight() ) );
             ++nDone;
         }
     }

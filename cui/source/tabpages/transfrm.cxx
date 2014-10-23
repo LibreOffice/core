@@ -90,9 +90,9 @@ static void lcl_ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits,
     rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
 }
 
-static void lcl_ScaleRect(basegfx::B2DRange& rRange, const boost::rational<long> aUIScale)
+static void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
 {
-    const double fFactor(1.0 / boost::rational_cast<double>(aUIScale));
+    const double fFactor(1.0 / double(aUIScale));
     rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
 }
 
@@ -254,7 +254,7 @@ void SvxAngleTabPage::Construct()
     }
 
     // take scale into account
-    const boost::rational<long> aUIScale = pView->GetModel()->GetUIScale();
+    const Fraction aUIScale(pView->GetModel()->GetUIScale());
     lcl_ScaleRect(maRange, aUIScale);
 
     // take UI units into account
@@ -274,7 +274,7 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 
     if(m_pCtlAngle->IsValueModified() || m_pMtrPosX->IsValueModified() || m_pMtrPosY->IsValueModified())
     {
-        const double fUIScale(boost::rational_cast<double>(this->pView->GetModel()->GetUIScale()));
+        const double fUIScale(double(pView->GetModel()->GetUIScale()));
         const double fTmpX((GetCoreValue(*m_pMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(*m_pMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
@@ -292,7 +292,7 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 
 void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 {
-    const double fUIScale(boost::rational_cast<double>(this->pView->GetModel()->GetUIScale()));
+    const double fUIScale(double(pView->GetModel()->GetUIScale()));
 
     const SfxPoolItem* pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ROT_X );
     if(pItem)
@@ -475,9 +475,9 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
     if( m_pMtrRadius->IsValueChangedFromSaved() )
     {
-        boost::rational<long> aUIScale = pView->GetModel()->GetUIScale();
+        Fraction aUIScale = pView->GetModel()->GetUIScale();
         long nTmp = GetCoreValue( *m_pMtrRadius, ePoolUnit );
-        nTmp = boost::rational_cast<long>(nTmp * aUIScale);
+        nTmp = Fraction( nTmp ) * aUIScale;
 
         rAttrs->Put( makeSdrEckenradiusItem( nTmp ) );
         bModified = true;
@@ -527,8 +527,8 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
         if( pItem )
         {
-            const double fUIScale(boost::rational_cast<double>(this->pView->GetModel()->GetUIScale()));
-            const double fTmp((double)static_cast<const SdrMetricItem*>(pItem)->GetValue() / fUIScale);
+            const double fUIScale(double(pView->GetModel()->GetUIScale()));
+            const double fTmp((double)((const SdrMetricItem*)pItem)->GetValue() / fUIScale);
             SetMetricValue(*m_pMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else
@@ -758,7 +758,7 @@ void SvxPositionSizeTabPage::Construct()
     }
 
     // take scale into account
-    const boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+    const Fraction aUIScale(mpView->GetModel()->GetUIScale());
     lcl_ScaleRect( maWorkRange, aUIScale );
     lcl_ScaleRect( maRange, aUIScale );
 
@@ -790,7 +790,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     {
         if ( m_pMtrPosX->IsValueModified() || m_pMtrPosY->IsValueModified() )
         {
-            const double fUIScale(boost::rational_cast<double>(this->mpView->GetModel()->GetUIScale()));
+            const double fUIScale(double(mpView->GetModel()->GetUIScale()));
             double fX((GetCoreValue( *m_pMtrPosX, mePoolUnit ) + maAnchor.getX()) * fUIScale);
             double fY((GetCoreValue( *m_pMtrPosY, mePoolUnit ) + maAnchor.getY()) * fUIScale);
 
@@ -828,19 +828,19 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
     if ( m_pMtrWidth->IsValueModified() || m_pMtrHeight->IsValueModified() )
     {
-        boost::rational<long> aUIScale = mpView->GetModel()->GetUIScale();
+        Fraction aUIScale = mpView->GetModel()->GetUIScale();
 
         // get Width
         double nWidth = static_cast<double>(m_pMtrWidth->GetValue( meDlgUnit ));
         nWidth = MetricField::ConvertDoubleValue( nWidth, m_pMtrWidth->GetBaseValue(), m_pMtrWidth->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lWidth = long(nWidth * boost::rational_cast<double>(aUIScale));
+        long lWidth = long(nWidth * (double)aUIScale);
         lWidth = OutputDevice::LogicToLogic( lWidth, MAP_100TH_MM, (MapUnit)mePoolUnit );
         lWidth = static_cast<long>(m_pMtrWidth->Denormalize( lWidth ));
 
         // get Height
         double nHeight = static_cast<double>(m_pMtrHeight->GetValue( meDlgUnit ));
         nHeight = MetricField::ConvertDoubleValue( nHeight, m_pMtrHeight->GetBaseValue(), m_pMtrHeight->GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
-        long lHeight = long(nHeight * boost::rational_cast<double>(aUIScale));
+        long lHeight = long(nHeight * (double)aUIScale);
         lHeight = OutputDevice::LogicToLogic( lHeight, MAP_100TH_MM, (MapUnit)mePoolUnit );
         lHeight = static_cast<long>(m_pMtrHeight->Denormalize( lHeight ));
 
@@ -899,7 +899,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 {
     const SfxPoolItem* pItem;
-    const double fUIScale(boost::rational_cast<double>(this->mpView->GetModel()->GetUIScale()));
+    const double fUIScale(double(mpView->GetModel()->GetUIScale()));
 
     if ( !mbPageDisabled )
     {

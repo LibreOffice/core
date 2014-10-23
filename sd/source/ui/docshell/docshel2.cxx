@@ -199,7 +199,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
 
     const Size  aPixSize( aVDev.LogicToPixel( aSize ) );
     const sal_uLong nMaxEdgePix = std::max( aPixSize.Width(), aPixSize.Height() );
-    boost::rational<long>    aFrac( nMaxEdgePixel, nMaxEdgePix );
+    Fraction    aFrac( nMaxEdgePixel, nMaxEdgePix );
 
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
@@ -207,7 +207,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixe
     aVDev.SetOutputSize( aSize );
 
     // that we also get the dark lines at the right and bottom page margin
-    aFrac = boost::rational<long>( nMaxEdgePixel - 1, nMaxEdgePix );
+    aFrac = Fraction( nMaxEdgePixel - 1, nMaxEdgePix );
     aMapMode.SetScaleX( aFrac );
     aMapMode.SetScaleY( aFrac );
     aVDev.SetMapMode( aMapMode );

@@ -507,7 +507,7 @@ bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
     }
 }
 
-void Window::SetZoom( const boost::rational<long>& rZoom )
+void Window::SetZoom( const Fraction& rZoom )
 {
     if ( mpWindowImpl->maZoom != rZoom )
     {
@@ -523,18 +523,18 @@ inline long WinFloatRound( double fVal )
 
 void Window::SetZoomedPointFont( const vcl::Font& rFont )
 {
-    const boost::rational<long>& rZoom = GetZoom();
-    if ( rZoom.numerator() != rZoom.denominator() )
+    const Fraction& rZoom = GetZoom();
+    if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
         vcl::Font aFont( rFont );
         Size aSize = aFont.GetSize();
         double n = (double)aSize.Width();
-        n *= (double)rZoom.numerator();
-        n /= (double)rZoom.denominator();
+        n *= (double)rZoom.GetNumerator();
+        n /= (double)rZoom.GetDenominator();
         aSize.Width() = WinFloatRound( n );
         n = (double)aSize.Height();
-        n *= (double)rZoom.numerator();
-        n /= (double)rZoom.denominator();
+        n *= (double)rZoom.GetNumerator();
+        n /= (double)rZoom.GetDenominator();
         aSize.Height() = WinFloatRound( n );
         aFont.SetSize( aSize );
         SetPointFont( aFont );
@@ -562,12 +562,12 @@ void Window::SetZoomedPointFont( const vcl::Font& rFont )
 long Window::CalcZoom( long nCalc ) const
 {
 
-    const boost::rational<long>& rZoom = GetZoom();
-    if ( rZoom.numerator() != rZoom.denominator() )
+    const Fraction& rZoom = GetZoom();
+    if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
         double n = (double)nCalc;
-        n *= (double)rZoom.numerator();
-        n /= (double)rZoom.denominator();
+        n *= (double)rZoom.GetNumerator();
+        n /= (double)rZoom.GetDenominator();
         nCalc = WinFloatRound( n );
     }
     return nCalc;
@@ -1318,14 +1318,14 @@ vcl::Cursor* Window::GetCursor() const
     return mpWindowImpl->mpCursor;
 }
 
-const boost::rational<long>&  Window::GetZoom() const
+const Fraction& Window::GetZoom() const
 {
     return mpWindowImpl->maZoom;
 }
 
 bool Window::IsZoom() const
 {
-    return mpWindowImpl->maZoom.numerator() != mpWindowImpl->maZoom.denominator();
+    return mpWindowImpl->maZoom.GetNumerator() != mpWindowImpl->maZoom.GetDenominator();
 }
 
 void Window::SetHelpText( const OUString& rHelpText )

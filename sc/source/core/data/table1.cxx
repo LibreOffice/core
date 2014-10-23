@@ -430,7 +430,7 @@ void ScTable::SetLink( sal_uInt8 nMode,
 
 sal_uInt16 ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
-                                    const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+                                    const Fraction& rZoomX, const Fraction& rZoomY,
                                     bool bFormula, const ScMarkData* pMarkData,
                                     const ScColWidthParam* pParam )
 {
@@ -441,7 +441,7 @@ sal_uInt16 ScTable::GetOptimalColWidth( SCCOL nCol, OutputDevice* pDev,
 long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
-                                const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
+                                const Fraction& rZoomX, const Fraction& rZoomY,
                                 bool bWidth, bool bTotalSize )
 {
     ScNeededSizeOptions aOptions;
@@ -1801,7 +1801,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         aOptions.bFormula    = bFormula;
         aOptions.bSkipMerged = false;
 
-        boost::rational<long> aZoom(1,1);
+        Fraction aZoom(1,1);
         nPixel = aCol[rCol].GetNeededSize(
             nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions, NULL );
 

@@ -145,7 +145,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
                             SCTAB nNewTab, long nNewScrX, long nNewScrY,
                             SCCOL nNewX1, SCROW nNewY1, SCCOL nNewX2, SCROW nNewY2,
                             double nPixelPerTwipsX, double nPixelPerTwipsY,
-                            const boost::rational<long>* pZoomX, const boost::rational<long>* pZoomY ) :
+                            const Fraction* pZoomX, const Fraction* pZoomY ) :
     mpDev( pNewDev ),
     mpRefDevice( pNewDev ),      // default is output device
     pFmtDevice( pNewDev ),      // default is output device
@@ -193,11 +193,11 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     if (pZoomX)
         aZoomX = *pZoomX;
     else
-        aZoomX = boost::rational<long>(1,1);
+        aZoomX = Fraction(1,1);
     if (pZoomY)
         aZoomY = *pZoomY;
     else
-        aZoomY = boost::rational<long>(1,1);
+        aZoomY = Fraction(1,1);
 
     nVisX1 = nX1;
     nVisY1 = nY1;

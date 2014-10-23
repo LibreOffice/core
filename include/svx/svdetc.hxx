@@ -62,7 +62,7 @@ friend class SdrAttrObj;
     Color      aFontColor;
     sal_uIntPtr      nFontHeight;
     MapUnit    eMapUnit;
-    boost::rational<long>   aMapFraction;
+    Fraction   aMapFraction;
 
 private:
     static SdrEngineDefaults& GetDefaults();
@@ -92,8 +92,8 @@ public:
     static void       SetMapUnit(MapUnit eMap)             { GetDefaults().eMapUnit=eMap; }
     static MapUnit    GetMapUnit()                         { return GetDefaults().eMapUnit; }
     // Default MapFraction ist 1/1.
-    static void       SetMapFraction(const boost::rational<long>& rMap) { GetDefaults().aMapFraction=rMap; }
-    static boost::rational<long>   GetMapFraction()                     { return GetDefaults().aMapFraction; }
+    static void       SetMapFraction(const Fraction& rMap) { GetDefaults().aMapFraction=rMap; }
+    static Fraction   GetMapFraction()                     { return GetDefaults().aMapFraction; }
 
     // Einen Outliner mit den engineglobalen
     // Defaulteinstellungen auf dem Heap erzeugen.

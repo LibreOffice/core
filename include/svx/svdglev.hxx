@@ -78,7 +78,7 @@ public:
     void DeleteMarkedGluePoints();
 
     void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy=false);
-    void ResizeMarkedGluePoints(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bCopy=false);
+    void ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void RotateMarkedGluePoints(const Point& rRef, long nWink, bool bCopy=false);
     void MirrorMarkedGluePoints(const Point& rRef1, const Point& rRef2, bool bCopy=false);
     void MirrorMarkedGluePointsHorizontal(bool bCopy=false);

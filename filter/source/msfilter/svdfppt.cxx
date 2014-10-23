@@ -2474,9 +2474,9 @@ Size SdrPowerPointImport::GetPageSize() const
         long nInchMul = 1, nInchDiv = 1;
         if ( bInch )
         {   // temporarily convert size (for rounding it) from inch to metric units
-            boost::rational<long> aFact = GetMapFactor(eMap,MAP_100TH_MM).X();
-            nInchMul = aFact.numerator();
-            nInchDiv = aFact.denominator();
+            Fraction aFact(GetMapFactor(eMap,MAP_100TH_MM).X());
+            nInchMul = aFact.GetNumerator();
+            nInchDiv = aFact.GetDenominator();
             aRet.Width() = BigMulDiv( aRet.Width(), nInchMul, nInchDiv );
             aRet.Height() = BigMulDiv( aRet.Height(), nInchMul, nInchDiv );
         }

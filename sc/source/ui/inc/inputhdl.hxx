@@ -24,7 +24,7 @@
 #include "address.hxx"
 #include "typedstrdata.hxx"
 
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclevent.hxx>
@@ -99,11 +99,11 @@ private:
     bool                    bCellHasPercentFormat:1;
     bool                    bLastIsSymbol:1;
     bool                    mbDocumentDisposing:1;
-    sal_uLong               nValidation;
+    sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
-    boost::rational<long>   aScaleX;                    // for ref MapMode
-    boost::rational<long>   aScaleY;
+    Fraction                aScaleX;                    // for ref MapMode
+    Fraction                aScaleY;
 
     ScTabViewShell*         pRefViewSh;
     ScTabViewShell*         pActiveViewSh;
@@ -209,7 +209,7 @@ public:
     void            ShowTip( const OUString& rText );     // at Cursor
     void            ShowTipBelow( const OUString& rText );
 
-    void            SetRefScale( const boost::rational<long>& rX, const boost::rational<long>& rY );
+    void            SetRefScale( const Fraction& rX, const Fraction& rY );
     void            UpdateRefDevice();
 
     EditView*       GetActiveView();

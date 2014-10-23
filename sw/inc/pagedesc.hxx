@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_PAGEDESC_HXX
 #define INCLUDED_SW_INC_PAGEDESC_HXX
 
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/color.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwPageFtnInfo
     sal_uLong   nLineWidth;              ///< width of separator line
     editeng::SvxBorderStyle eLineStyle;  ///< Style of the separator line
     Color       aLineColor;              ///< color of the separator line
-    boost::rational<long>    aWidth;     ///< percentage width of the separator line.
+    Fraction    aWidth;                  ///< percentage width of the separator line.
     SwFtnAdj    eAdj;                    ///< line adjustment.
     SwTwips     nTopDist;                ///< distance between body and separator.
     SwTwips     nBottomDist;             ///< distance between separator and first footnote
@@ -56,7 +56,7 @@ public:
     sal_uLong           GetLineWidth() const { return nLineWidth; }
     const Color&    GetLineColor() const { return aLineColor;}
     editeng::SvxBorderStyle  GetLineStyle() const { return eLineStyle; }
-    const boost::rational<long>& GetWidth() const    { return aWidth; }
+    const Fraction& GetWidth() const    { return aWidth; }
     SwFtnAdj    GetAdj()    const       { return eAdj; }
     SwTwips     GetTopDist()const       { return nTopDist; }
     SwTwips     GetBottomDist() const   { return nBottomDist; }
@@ -65,7 +65,7 @@ public:
     void SetLineWidth(sal_uLong nSet  )     { nLineWidth = nSet; }
     void SetLineStyle( editeng::SvxBorderStyle eSet )   { eLineStyle = eSet; }
     void SetLineColor(const Color& rCol )  { aLineColor = rCol;}
-    void SetWidth( const boost::rational<long> &rNew){ aWidth = rNew; }
+    void SetWidth( const Fraction &rNew){ aWidth = rNew; }
     void SetAdj   ( SwFtnAdj eNew )     { eAdj = eNew; }
     void SetTopDist   ( SwTwips nNew )  { nTopDist = nNew; }
     void SetBottomDist( SwTwips nNew )  { nBottomDist = nNew; }

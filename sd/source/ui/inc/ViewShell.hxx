@@ -536,8 +536,8 @@ protected:
     virtual void Activate(bool IsMDIActivate) SAL_OVERRIDE;
     virtual void Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
 
-    virtual void SetZoomFactor( const boost::rational<long>& rZoomX,
-                                const boost::rational<long>& rZoomY );
+    virtual void SetZoomFactor( const Fraction &rZoomX,
+                                const Fraction &rZoomY );
 
     /**
         This must be called after the ctor, but before anything else.

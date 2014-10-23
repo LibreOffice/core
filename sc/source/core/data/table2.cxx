@@ -2547,7 +2547,7 @@ bool ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyle
 void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRemoved,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
-                                const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY )
+                                const Fraction& rZoomX, const Fraction& rZoomY )
 {
     ScFlatBoolRowSegments aUsedRows;
     for (SCCOL i = 0; i <= MAXCOL; ++i)

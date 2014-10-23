@@ -743,8 +743,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     Size _aVisArea( aSize.Width, aSize.Height );
 
-    boost::rational<long> aScaleWidth( 1, 1 );
-    boost::rational<long> aScaleHeight( 1, 1 );
+    Fraction aScaleWidth( 1, 1 );
+    Fraction aScaleHeight( 1, 1 );
 
     bool bUseObjectSize = false;
 
@@ -777,8 +777,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
             }
             else
             {
-                aScaleWidth = boost::rational<long>( aObjArea.Width(),   _aVisArea.Width() );
-                aScaleHeight = boost::rational<long>( aObjArea.Height(), _aVisArea.Height());
+                aScaleWidth = Fraction( aObjArea.Width(),   _aVisArea.Width() );
+                aScaleHeight = Fraction( aObjArea.Height(), _aVisArea.Height());
             }
         }
     }
@@ -815,8 +815,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     else
     {
-        aArea.Width ( boost::rational_cast<long>(aArea.Width() / pCli->GetScaleWidth()) );
-        aArea.Height( boost::rational_cast<long>(aArea.Height() / pCli->GetScaleHeight()) );
+        aArea.Width ( Fraction( aArea.Width()  ) / pCli->GetScaleWidth() );
+        aArea.Height( Fraction( aArea.Height() ) / pCli->GetScaleHeight());
     }
 
     pCli->SetObjAreaAndScale( aArea.SVRect(), aScaleWidth, aScaleHeight );

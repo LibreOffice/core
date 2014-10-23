@@ -80,7 +80,7 @@ public:
 
     virtual SdrUnoObj* Clone() const SAL_OVERRIDE;
     SdrUnoObj& operator= (const SdrUnoObj& rObj);
-    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
     virtual void NbcSetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
 
     // SpecialDrag support
