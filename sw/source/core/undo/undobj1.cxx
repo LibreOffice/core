@@ -646,6 +646,7 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
             case FLY_AS_CHAR:
             case FLY_AT_CHAR:
                 nOldCntnt = pAnchor->GetCntntAnchor()->nContent.GetIndex();
+                //fall-through
             case FLY_AT_PARA:
             case FLY_AT_FLY:
                 nOldNode = pAnchor->GetCntntAnchor()->nNode.GetIndex();
