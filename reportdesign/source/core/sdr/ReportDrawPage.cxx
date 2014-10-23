@@ -76,15 +76,15 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
 
         if ( pObj->ISA(OUnoObject) )
         {
-            OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObj);
-            if ( pUnoObj->GetObjIdentifier() == OBJ_DLG_FIXEDTEXT )
+            OUnoObject& rUnoObj = dynamic_cast<OUnoObject&>(*pObj);
+            if (rUnoObj.GetObjIdentifier() == OBJ_DLG_FIXEDTEXT)
             {
-                uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xControlModel(rUnoObj.GetUnoControlModel(),uno::UNO_QUERY);
                 if ( xControlModel.is() )
                     xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(sal_True));
             }
             else
-                bChangeOrientation = pUnoObj->GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;
+                bChangeOrientation = rUnoObj.GetObjIdentifier() == OBJ_DLG_HFIXEDLINE;
             SvxShapeControl* pShape = new SvxShapeControl( pObj );
             xShape.set(static_cast<cppu::OWeakObject*>(static_cast<SvxShape_UnoImplHelper *>(pShape)),uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
