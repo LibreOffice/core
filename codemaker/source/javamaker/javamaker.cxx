@@ -42,11 +42,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         if (!options.initOptions(argc, argv)) {
             return EXIT_FAILURE;
         }
-    } catch (IllegalArgument & e) {
-        std::cerr << "Illegal option " << e.m_message << '\n';
-        return EXIT_FAILURE;
-    }
-    try {
+
         rtl::Reference< TypeManager > typeMgr(new TypeManager);
         for (std::vector< rtl::OString >::const_iterator i(
                  options.getExtraInputFiles().begin());
@@ -89,6 +85,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         std::cerr
             << "ERROR: Bad format of <" << e.getUri() << ">, \""
             << e.getDetail() << "\"\n";
+        return EXIT_FAILURE;
+    } catch (IllegalArgument & e) {
+        std::cerr << "Illegal option " << e.m_message << '\n';
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
