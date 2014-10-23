@@ -19,6 +19,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <vcl/svapp.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sbxfac.hxx>
@@ -41,7 +42,10 @@ SbxAppData::SbxAppData()
 
 SbxAppData::~SbxAppData()
 {
+    SolarMutexGuard g;
+
     delete pBasicFormater;
+    aFacs.clear();
 }
 
 SbxBase::SbxBase()

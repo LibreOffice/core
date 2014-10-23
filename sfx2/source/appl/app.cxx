@@ -232,11 +232,12 @@ SfxApplication::~SfxApplication()
     // delete global options
     SvtViewOptions::ReleaseOptions();
 
+    if ( !pAppData_Impl->bDowning )
+        Deinitialize();
+
 #if HAVE_FEATURE_SCRIPTING
     delete pBasic;
 #endif
-    if ( !pAppData_Impl->bDowning )
-        Deinitialize();
 
     delete pAppData_Impl;
     pApp = 0;
