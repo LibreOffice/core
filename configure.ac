@@ -778,7 +778,7 @@ linux-android*)
     ;;
 esac
 
-if echo "$host_os" | grep -q linux-android || test "$enable_sdremote_android" = "yes"; then
+if echo "$host_os" | grep -q linux-android ; then
     if test -z "$with_android_sdk"; then
         AC_MSG_ERROR([the --with-android-sdk option is mandatory])
     fi
@@ -1131,12 +1131,6 @@ AC_ARG_ENABLE(sdremote-bluetooth,
     AS_HELP_STRING([--disable-sdremote-bluetooth],
         [Determines whether to build sdremote with bluetooth support.
          Requires dbus on Linux.]))
-
-AC_ARG_ENABLE(sdremote-android,
-    AS_HELP_STRING([--enable-sdremote-android],
-        [Determines whether to build the Impress Remote Android app -- requires
-        a correctly configured android sdk.]),
-,enable_sdremote_android=no)
 
 AC_ARG_ENABLE(gconf,
     AS_HELP_STRING([--disable-gconf],
@@ -10000,16 +9994,6 @@ fi
 AC_SUBST(ENABLE_SDREMOTE)
 AC_SUBST(ENABLE_SDREMOTE_BLUETOOTH)
 AC_SUBST(SYSTEM_BLUEZ)
-
-AC_MSG_CHECKING([whether to enable Impress remote control android app])
-if echo "$host_os" | grep -q linux-android || test "$enable_sdremote_android" = "yes"; then
-    AC_MSG_RESULT([yes])
-    ENABLE_SDREMOTE_ANDROID=TRUE
-else
-    AC_MSG_RESULT([no])
-    ENABLE_SDREMOTE_ANDROID=
-fi
-AC_SUBST(ENABLE_SDREMOTE_ANDROID)
 
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
