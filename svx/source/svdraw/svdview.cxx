@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
-
 #include <editeng/eeitem.hxx>
 
 #include "svx/svdstr.hrc"
@@ -480,8 +478,8 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 // account for FitToSize
                 bool bFitToSize(pTextObj->IsFitToSize());
                 if (bFitToSize) {
-                    boost::rational<long> aX(aTextRect.GetWidth()-1, std::max(aAnchor.GetWidth()-1, 1L));
-                    boost::rational<long> aY(aTextRect.GetHeight()-1, std::max(aAnchor.GetHeight()-1, 1L));
+                    boost::rational<long> aX(aTextRect.GetWidth()-1,aAnchor.GetWidth()-1);
+                    boost::rational<long> aY(aTextRect.GetHeight()-1,aAnchor.GetHeight()-1);
                     ResizePoint(aTemporaryTextRelativePosition,Point(),aX,aY);
                 }
                 // account for rotation
