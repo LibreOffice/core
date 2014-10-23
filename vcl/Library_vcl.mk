@@ -625,6 +625,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/app/salinst \
     vcl/win/source/app/salshl \
     vcl/win/source/app/saltimer \
+    vcl/win/source/gdi/gdiimpl \
     vcl/win/source/gdi/salbmp \
     vcl/win/source/gdi/salgdi \
     vcl/win/source/gdi/salgdi2 \
