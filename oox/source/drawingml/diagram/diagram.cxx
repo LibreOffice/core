@@ -223,8 +223,9 @@ void Diagram::build(  )
         ++aCurrPoint;
     }
 
-    dgm::Connections::const_iterator aCurrCxn( getData()->getConnections( ).begin() );
-    const dgm::Connections::const_iterator aEndCxn( getData()->getConnections( ).end() );
+    const dgm::Connections& rConnections = getData()->getConnections();
+    dgm::Connections::const_iterator aCurrCxn(rConnections.begin());
+    const dgm::Connections::const_iterator aEndCxn(rConnections.end());
     while( aCurrCxn != aEndCxn )
     {
 #if OSL_DEBUG_LEVEL > 1
