@@ -232,6 +232,12 @@ gb_GLOBALDEFS += -DNDEBUG \
 
 endif
 
+ifeq ($(ENABLE_SAL_LOG),TRUE)
+gb_GLOBALDEFS += -DSAL_LOG_INFO \
+				 -DSAL_LOG_WARN \
+
+endif
+
 else
 gb_GLOBALDEFS += -DSAL_LOG_INFO \
 				 -DSAL_LOG_WARN \

@@ -902,6 +902,10 @@ AC_ARG_ENABLE(debug,
         [Include debugging information, disable compiler optimization and inlining plus
          extra debugging code like assertions. Extra large build! (enables -g compiler flag).]))
 
+AC_ARG_ENABLE(sal-log,
+    AS_HELP_STRING([--enable-sal-log],
+        [Make SAL_INFO and SAL_WARN calls do something even in a non-debug build.]))
+
 AC_ARG_ENABLE(selective-debuginfo,
     AS_HELP_STRING([--enable-selective-debuginfo],
         [If --enable-debug or --enable-dbgutil is used, build debugging information
@@ -3791,6 +3795,11 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
+
+if test "$enable_sal_log" = yes; then
+    ENABLE_SAL_LOG=TRUE
+fi
+AC_SUBST(ENABLE_SAL_LOG)
 
 dnl Selective debuginfo
 ENABLE_DEBUGINFO_FOR=
