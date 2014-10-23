@@ -112,9 +112,9 @@ namespace sdr
         }
 
         // create a new itemset
-        SfxItemSet& AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return *(new SfxItemSet(rPool,
+            return new SfxItemSet(rPool,
 
                 // ranges from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -122,7 +122,7 @@ namespace sdr
                 SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
 
                 // end
-                0, 0));
+                0, 0);
         }
 
         AttributeProperties::AttributeProperties(SdrObject& rObj)
@@ -421,7 +421,7 @@ namespace sdr
                                 pItemSet = pItemSet->GetParent();
                             }
 
-                            SfxItemSet* pNewSet = &CreateObjectSpecificItemSet(pNewModel->GetItemPool());
+                            SfxItemSet* pNewSet = CreateObjectSpecificItemSet(pNewModel->GetItemPool());
 
                             std::vector<const SfxItemSet*>::reverse_iterator riter;
                             for (riter = aSetList.rbegin(); riter != aSetList.rend(); ++riter)

@@ -34,10 +34,10 @@ namespace sdr
 {
     namespace properties
     {
-        SfxItemSet& DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* DefaultProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
-            return *(new SfxItemSet(rPool));
+            return new SfxItemSet(rPool);
         }
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
@@ -81,7 +81,7 @@ namespace sdr
         {
             if(!mpItemSet)
             {
-                ((DefaultProperties*)this)->mpItemSet = &(((DefaultProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                ((DefaultProperties*)this)->mpItemSet = ((DefaultProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
                 ((DefaultProperties*)this)->ForceDefaultAttributes();
             }
 

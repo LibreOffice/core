@@ -31,9 +31,9 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet& ConnectorProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* ConnectorProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return *(new SfxItemSet(rPool,
+            return new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -47,7 +47,7 @@ namespace sdr
                 EE_ITEMS_START, EE_ITEMS_END,
 
                 // end
-                0, 0));
+                0, 0);
         }
 
         ConnectorProperties::ConnectorProperties(SdrObject& rObj)

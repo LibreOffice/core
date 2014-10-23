@@ -29,10 +29,10 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet& PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // overloaded to legally return a valid ItemSet
-            return *(new SfxItemSet(rPool));
+            return new SfxItemSet(rPool);
         }
 
         PageProperties::PageProperties(SdrObject& rObj)
@@ -60,7 +60,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                ((PageProperties*)this)->mpEmptyItemSet = &(((PageProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                ((PageProperties*)this)->mpEmptyItemSet = ((PageProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");

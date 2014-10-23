@@ -31,11 +31,11 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet& EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Basic implementation; Basic object has NO attributes
             DBG_ASSERT(false, "EmptyProperties::CreateObjectSpecificItemSet() should never be called");
-            return *(new SfxItemSet(rPool));
+            return new SfxItemSet(rPool);
         }
 
         EmptyProperties::EmptyProperties(SdrObject& rObj)
@@ -71,7 +71,7 @@ namespace sdr
         {
             if(!mpEmptyItemSet)
             {
-                ((EmptyProperties*)this)->mpEmptyItemSet = &(((EmptyProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                ((EmptyProperties*)this)->mpEmptyItemSet = ((EmptyProperties*)this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool());
             }
 
             DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");

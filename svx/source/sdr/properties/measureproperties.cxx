@@ -38,9 +38,9 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet& MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* MeasureProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return *(new SfxItemSet(rPool,
+            return new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -54,7 +54,7 @@ namespace sdr
                 EE_ITEMS_START, EE_ITEMS_END,
 
                 // end
-                0, 0));
+                0, 0);
         }
 
         MeasureProperties::MeasureProperties(SdrObject& rObj)

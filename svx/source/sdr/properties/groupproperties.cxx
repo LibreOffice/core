@@ -33,12 +33,12 @@ namespace sdr
     namespace properties
     {
         // create a new itemset
-        SfxItemSet& GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
             // Groups have in principle no ItemSet. To support methods like
             // GetMergedItemSet() the local one is used. Thus, all items in the pool
             // may be used and a pool itemset is created.
-            return *(new SfxItemSet(rPool));
+            return new SfxItemSet(rPool);
         }
 
         GroupProperties::GroupProperties(SdrObject& rObj)

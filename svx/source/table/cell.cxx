@@ -147,7 +147,7 @@ namespace sdr
         {
         protected:
             // create a new itemset
-            SfxItemSet& CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
+            SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
             const svx::ITextProvider& getTextProvider() const SAL_OVERRIDE;
 
@@ -179,9 +179,9 @@ namespace sdr
         };
 
         // create a new itemset
-        SfxItemSet& CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet* CellProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            return *(new SfxItemSet(rPool,
+            return new SfxItemSet(rPool,
 
                 // range from SdrAttrObj
                 SDRATTR_START, SDRATTR_SHADOW_LAST,
@@ -195,7 +195,7 @@ namespace sdr
                 EE_ITEMS_START, EE_ITEMS_END,
 
                 // end
-                0, 0));
+                0, 0);
         }
 
         const svx::ITextProvider& CellProperties::getTextProvider() const
