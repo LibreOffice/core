@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 
+#include <memory>
 #include <vector>
 #include <iterator>
 #include <algorithm>
@@ -1094,37 +1095,40 @@ protected:
 
 class ImplPolygonPointFilter : public ImplPointFilter
 {
-public:
-    ImplPolygon*    mpPoly;     // Don't remove, assigned by polygon
+    std::unique_ptr<ImplPolygon> mxPoly;
     sal_uInt16      mnSize;
+public:
+    ImplPolygonPointFilter(sal_uInt16 nDestSize)
+        : mxPoly(new ImplPolygon(nDestSize))
+        , mnSize(0)
+    {
+    }
 
-                    ImplPolygonPointFilter( sal_uInt16 nDestSize ) :
-                        mnSize( 0 )
-                    {
-                        mpPoly = new ImplPolygon( nDestSize );
-                    }
-
-    virtual         ~ImplPolygonPointFilter() {}
+    virtual ~ImplPolygonPointFilter()
+    {
+    }
 
     virtual void    LastPoint() SAL_OVERRIDE;
     virtual void    Input( const Point& rPoint ) SAL_OVERRIDE;
+
+    ImplPolygon*    release() { return mxPoly.release(); }
 };
 
 void ImplPolygonPointFilter::Input( const Point& rPoint )
 {
-    if ( !mnSize || (rPoint != mpPoly->mpPointAry[mnSize-1]) )
+    if ( !mnSize || (rPoint != mxPoly->mpPointAry[mnSize-1]) )
     {
         mnSize++;
-        if ( mnSize > mpPoly->mnPoints )
-            mpPoly->ImplSetSize( mnSize );
-        mpPoly->mpPointAry[mnSize-1] = rPoint;
+        if ( mnSize > mxPoly->mnPoints )
+            mxPoly->ImplSetSize( mnSize );
+        mxPoly->mpPointAry[mnSize-1] = rPoint;
     }
 }
 
 void ImplPolygonPointFilter::LastPoint()
 {
-    if ( mnSize < mpPoly->mnPoints )
-        mpPoly->ImplSetSize( mnSize );
+    if ( mnSize < mxPoly->mnPoints )
+        mxPoly->ImplSetSize( mnSize );
 };
 
 class ImplEdgePointFilter : public ImplPointFilter
@@ -1311,7 +1315,7 @@ void Polygon::Clip( const Rectangle& rRect, bool bPolygon )
         else
             delete mpImplPolygon;
     }
-    mpImplPolygon = aPolygon.mpPoly;
+    mpImplPolygon = aPolygon.release();
 }
 
 Rectangle Polygon::GetBoundRect() const
