@@ -407,9 +407,10 @@ void getAxisLabelProperties(
 }
 
 /**
- * Iterate through only the first 2 and last 2 tick info items, and the tick
- * that has the longest text (in terms of character length) in case it's not
- * in the first or last 2 items.
+ * Iterate through only 3 ticks including the one that has the longest text
+ * length.  When the first tick has the longest text, it iterates through
+ * the first 3 ticks.  Otherwise it iterates through 3 ticks such that the
+ * 2nd tick is the one with the longest text.
  */
 class MaxLabelTickIter : public TickIter
 {
@@ -431,21 +432,27 @@ MaxLabelTickIter::MaxLabelTickIter(
     m_rTickInfoVector(rTickInfoVector), m_nCurrentIndex(0)
 {
     assert(!rTickInfoVector.empty()); // should be checked by the caller.
+    assert(nLongestLabelIndex < rTickInfoVector.size());
 
     size_t nMaxIndex = m_rTickInfoVector.size()-1;
     if (nLongestLabelIndex >= nMaxIndex-1)
         nLongestLabelIndex = 0;
 
-    m_aValidIndices.push_back(0);
-    if( nMaxIndex>=1 )
-        m_aValidIndices.push_back(1);
-    if( nLongestLabelIndex>1 )
+    if (nLongestLabelIndex > 0)
+        m_aValidIndices.push_back(nLongestLabelIndex-1);
+
+    m_aValidIndices.push_back(nLongestLabelIndex);
+
+    while (m_aValidIndices.size() < 3)
+    {
+        ++nLongestLabelIndex;
+        if (nLongestLabelIndex > nMaxIndex)
+            break;
+
         m_aValidIndices.push_back(nLongestLabelIndex);
-    if( nMaxIndex > 2 )
-        m_aValidIndices.push_back(nMaxIndex-1);
-    if( nMaxIndex > 1 )
-        m_aValidIndices.push_back(nMaxIndex);
+    }
 }
+
 MaxLabelTickIter::~MaxLabelTickIter()
 {
 }
@@ -624,6 +631,9 @@ TickIter* VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
             if( !m_aAllTickInfos.empty() )
             {
                 size_t nLongestLabelIndex = m_bUseTextLabels ? getIndexOfLongestLabel(m_aTextLabels) : 0;
+                if (nLongestLabelIndex >= m_aAllTickInfos[0].size())
+                    return NULL;
+
                 return new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex );
             }
         }
