@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_d73006a1",
+        "filename": "crashrep/source/unx/main.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-10-23T11:19:06Z",
+      "side": 1,
+      "message": "1. mkstemp requires the letters \"XXXXXX\" in the passed file name template\n2. since mkstemp modifies the passed string, passing in a static buffer is probably not a good idea; perhaps it\u0027s better to initialize the globals with 0 and malloc the string.",
+      "revId": "d67cbc4abcd63e7850d995fb14a708406f820087",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
