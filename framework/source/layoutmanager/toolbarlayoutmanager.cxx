@@ -2243,13 +2243,12 @@ void ToolbarLayoutManager::implts_getDockingAreaElementInfoOnSingleRowCol( ui::D
 void ToolbarLayoutManager::implts_findNextDockingPos( ui::DockingArea DockingArea, const ::Size& aUIElementSize, awt::Point& rVirtualPos, ::Point& rPixelPos )
 {
     SolarMutexClearableGuard aReadLock;
+    if (( DockingArea < ui::DockingArea_DOCKINGAREA_TOP ) || ( DockingArea > ui::DockingArea_DOCKINGAREA_RIGHT ))
+        DockingArea = ui::DockingArea_DOCKINGAREA_TOP;
     uno::Reference< awt::XWindow > xDockingWindow( m_xDockAreaWindows[DockingArea] );
     ::Size                         aDockingWinSize;
     vcl::Window*                        pDockingWindow( 0 );
     aReadLock.clear();
-
-    if (( DockingArea < ui::DockingArea_DOCKINGAREA_TOP ) || ( DockingArea > ui::DockingArea_DOCKINGAREA_RIGHT ))
-        DockingArea = ui::DockingArea_DOCKINGAREA_TOP;
 
     {
         // Retrieve output size from container Window
