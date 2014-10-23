@@ -1584,9 +1584,10 @@ SwXText::convertToTextFrame(
         // todo: if the start/end is in a table then insert a paragraph
         // before/after, move the start/end nodes, then convert and
         // remove the additional paragraphs in the end
+        SwTableNode * pStartTableNode(0);
         if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
-            SwTableNode * pStartTableNode(pStartStartNode->FindTableNode());
+            pStartTableNode = pStartStartNode->FindTableNode();
             // Is it the same table start node than the end?
             SwTableNode *const pEndStartTableNode(pEndStartNode->FindTableNode());
             while (pEndStartTableNode && pStartTableNode &&
@@ -1595,6 +1596,9 @@ SwXText::convertToTextFrame(
                 SwStartNode* pStartStartTableNode = pStartTableNode->StartOfSectionNode();
                 pStartTableNode = pStartStartTableNode->FindTableNode();
             }
+        }
+        if (pStartTableNode)
+        {
             const SwNodeIndex aTblIdx(  *pStartTableNode, -1 );
             SwPosition aBefore(aTblIdx);
             bParaBeforeInserted = GetDoc()->getIDocumentContentOperations().AppendTxtNode( aBefore );
