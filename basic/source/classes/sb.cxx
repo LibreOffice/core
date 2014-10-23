@@ -109,7 +109,10 @@ DocBasicItem::DocBasicItem( StarBASIC& rDocBasic ) :
 
 DocBasicItem::~DocBasicItem()
 {
+    SolarMutexGuard g;
+
     stopListening();
+    mxClassModules.Clear(); // release with SolarMutex locked
 }
 
 void DocBasicItem::clearDependingVarsOnDelete( StarBASIC& rDeletedBasic )
