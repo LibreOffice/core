@@ -108,6 +108,8 @@ void X11SalGraphics::freeResources()
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
     if( mpClipRegion ) XDestroyRegion( mpClipRegion ), mpClipRegion = None;
 
+    mpImpl->freeResources();
+
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pFontGC_ ) XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
     if( m_pDeleteColormap )
@@ -117,8 +119,6 @@ void X11SalGraphics::freeResources()
         XRenderPeer::GetInstance().FreePicture( m_aXRenderPicture ), m_aXRenderPicture = 0;
 
     bFontGC_ = false;
-
-    mpImpl->freeResources();
 }
 
 void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
