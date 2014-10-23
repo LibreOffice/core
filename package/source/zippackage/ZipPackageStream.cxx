@@ -653,7 +653,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
 }
 
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getPlainRawStream()
-        throw ( io::IOException,
+        throw ( io::IOException, packages::NoEncryptionException,
                 uno::RuntimeException, std::exception )
 {
     // There is no stream attached to this object

@@ -183,7 +183,7 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getPlainRawStream()
-        throw ( ::com::sun::star::io::IOException,
+        throw ( ::com::sun::star::io::IOException, ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XUnoTunnel

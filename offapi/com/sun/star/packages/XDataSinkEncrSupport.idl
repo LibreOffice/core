@@ -121,11 +121,15 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
     @returns
         the plain raw stream as it is stored in the package
 
+    @throws ::com::sun::star::packages::NoEncryptionException
+        the PackageStream object is not encrypted
+
     @throws ::com::sun::star::io::IOException
         in case of io problems during retrieving
      */
     ::com::sun::star::io::XInputStream getPlainRawStream()
-        raises( ::com::sun::star::io::IOException );
+        raises( ::com::sun::star::io::IOException,
+                ::com::sun::star::packages::NoEncryptionException );
 
 };
 
