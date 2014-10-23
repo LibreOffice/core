@@ -818,8 +818,8 @@ void SdrCircObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     bNoShearRota|=(aGeo.nRotationAngle==0 && aGeo.nShearAngle==0);
     if (meCircleKind!=OBJ_CIRC) {
-        bool bXMirr = xFact < 0;
-        bool bYMirr = yFact < 0;
+        bool bXMirr = xFact.numerator() < 0;
+        bool bYMirr = yFact.numerator() < 0;
         if (bXMirr || bYMirr) {
             // At bXMirr!=bYMirr we should actually swap both line ends.
             // That, however, is pretty bad (because of forced "hard" formatting).

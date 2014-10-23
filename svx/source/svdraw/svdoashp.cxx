@@ -1580,11 +1580,13 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const boost::rational<long
     if ( ( xFact.numerator() != xFact.denominator() )
         || ( yFact.numerator()!= yFact.denominator() ) )
     {
-        if ( xFact < 0 )
+        if ( ( ( xFact.numerator() < 0 ) && ( xFact.denominator() > 0 ) ) ||
+            ( ( xFact.numerator() > 0 ) && ( xFact.denominator() < 0 ) ) )
         {
             SetMirroredX( IsMirroredX() == false );
         }
-        if ( yFact < 0 )
+        if ( ( ( yFact.numerator() < 0 ) && ( yFact.denominator() > 0 ) ) ||
+            ( ( yFact.numerator() > 0 ) && ( yFact.denominator() < 0 ) ) )
         {
             SetMirroredY( IsMirroredY() == false );
         }

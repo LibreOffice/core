@@ -438,8 +438,8 @@ void SdrObjGroup::NbcMove(const Size& rSiz)
 
 void SdrObjGroup::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
-    bool bXMirr = xFact < 0;
-    bool bYMirr = yFact < 0;
+    bool bXMirr = xFact.numerator() < 0;
+    bool bYMirr = yFact.numerator() < 0;
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
@@ -590,8 +590,8 @@ void SdrObjGroup::Move(const Size& rSiz)
 void SdrObjGroup::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
 {
     if (xFact.numerator()!=xFact.denominator() || yFact.numerator()!=yFact.denominator()) {
-        bool bXMirr = xFact < 0;
-        bool bYMirr = yFact < 0;
+        bool bXMirr = xFact.numerator() < 0;
+        bool bYMirr = yFact.numerator() < 0;
         if (bXMirr || bYMirr) {
             Point aRef1(GetSnapRect().Center());
             if (bXMirr) {
