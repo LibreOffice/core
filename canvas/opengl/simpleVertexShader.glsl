@@ -9,12 +9,13 @@
 attribute vec2 vPosition;
 attribute vec2 UV;
 varying vec2 textCoords;
+uniform mat4 MVP;
 
 void main(void)
 {
-    gl_Position =  vec4(vPosition,1,1);	
-
-     textCoords = UV;
+    vec4 v =  vec4(vPosition,1,1);	
+    gl_Position = MVP * v;
+    textCoords = UV;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

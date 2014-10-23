@@ -7,10 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 attribute vec2 vPosition;
+uniform mat4 MVP;
 
 void main(void)
 {
-    gl_Position =  vec4(vPosition,1,1);	
+     vec4 v =  vec4(vPosition,1,1);	
+     gl_Position = MVP * v;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

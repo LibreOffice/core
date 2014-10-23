@@ -9,11 +9,12 @@
 attribute vec2 vPosition;
 varying vec2 textCoords;
 uniform vec2 texCord;
+uniform mat4 MVP;
 
 void main(void)
 {
-    gl_Position =  vec4(vPosition,1,1);	
-
+     vec4 v =  vec4(vPosition,1,1);	
+     gl_Position = MVP * v;
      textCoords = vPosition/texCord;
 }
 
