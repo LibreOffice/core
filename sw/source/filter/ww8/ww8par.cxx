@@ -475,6 +475,10 @@ bool Sttb::Read( SvStream& rS )
     rS.ReadUInt16( fExtend ).ReadUInt16( cData ).ReadUInt16( cbExtra );
     if ( cData )
     {
+        //if they are all going to be empty strings, how many could there be
+        const size_t nMaxPossibleRecords = rS.remainingSize() / sizeof(sal_uInt16);
+        if (cData > nMaxPossibleRecords)
+            return false;
         for ( sal_Int32 index = 0; index < cData; ++index )
         {
             SBBItem aItem;
