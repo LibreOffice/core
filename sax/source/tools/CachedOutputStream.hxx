@@ -47,7 +47,7 @@ public:
                          , mpCache(mnMaximumSize)
                          , pSeq(mpCache.get())
                          , mbWriteToOutStream(true)
-                         , mpForMerge(NULL)
+                         , mpForMerge(nullptr)
     {}
     ~CachedOutputStream() {}
 
