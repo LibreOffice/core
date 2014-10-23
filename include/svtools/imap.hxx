@@ -22,12 +22,12 @@
 
 #include <svtools/svtdllapi.h>
 #include <tools/stream.hxx>
-#include <boost/rational.hpp>
 #include <vector>
 
 class Point;
 class Rectangle;
 class Size;
+namespace boost { template<typename T> class rational; }
 class IMapObject;
 
 typedef ::std::vector< IMapObject* > IMapObjectList_impl;

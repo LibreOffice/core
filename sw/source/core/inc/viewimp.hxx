@@ -25,7 +25,6 @@
 #include <vcl/timer.hxx>
 #include <swrect.hxx>
 #include <swtypes.hxx>
-#include <boost/rational.hpp>
 #include <vector>
 
 class SwViewShell;
@@ -41,6 +40,7 @@ class SwPageFrm;
 class SwRegionRects;
 class SwAccessibleMap;
 class SdrObject;
+namespace boost { template<typename T> class rational; }
 class SwPrintData;
 class SwPagePreviewLayout;
 struct PreviewPage;

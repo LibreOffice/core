@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SFX2_VIEWFRM_HXX
 #define INCLUDED_SFX2_VIEWFRM_HXX
 
-#include <boost/rational.hpp>
-
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
@@ -45,6 +43,7 @@ class SfxProgress;
 class SvData;
 class SfxViewShell;
 class SystemWindow;
+namespace boost { template<typename T> class rational; }
 class Point;
 class Size;
 class SfxChildWindow;

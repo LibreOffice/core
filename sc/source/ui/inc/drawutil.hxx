@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DRAWUTIL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DRAWUTIL_HXX
 
-#include <boost/rational.hpp>
-
 #include "address.hxx"
 
+namespace boost { template<typename T> class rational; }
 class OutputDevice;
 class ScDocument;
 

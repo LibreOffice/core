@@ -22,7 +22,6 @@
 
 // template class <std::vector>
 #include <vector>
-#include <boost/rational.hpp>
 // datatypes sal_xyz
 #include <sal/types.h>
 // classes <Point>, <Size> and <Rectangle>
@@ -33,6 +32,7 @@
 class SwViewShell;
 class SwRootFrm;
 class SwPageFrm;
+namespace boost { template<typename T> class rational; }
 struct PreviewPage;
 
 /** page preview functionality in the writer

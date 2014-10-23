@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SVTOOLS_IMAPCIRC_HXX
 #define INCLUDED_SVTOOLS_IMAPCIRC_HXX
 
-#include <boost/rational.hpp>
-
 #include <svtools/svtdllapi.h>
 #include <tools/gen.hxx>
 #include <svtools/imapobj.hxx>
+
+namespace boost { template<typename T> class rational; }
 
 class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 {

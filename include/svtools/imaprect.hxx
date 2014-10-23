@@ -19,11 +19,11 @@
 #ifndef INCLUDED_SVTOOLS_IMAPRECT_HXX
 #define INCLUDED_SVTOOLS_IMAPRECT_HXX
 
-#include <boost/rational.hpp>
-
 #include <svtools/svtdllapi.h>
 #include <svtools/imapobj.hxx>
 #include <tools/gen.hxx>
+
+namespace boost { template<typename T> class rational; }
 
 class SVT_DLLPUBLIC IMapRectangleObject : public IMapObject
 {

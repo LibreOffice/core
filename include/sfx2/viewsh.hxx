@@ -35,11 +35,11 @@
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>
-#include <boost/rational.hpp>
 #include <vector>
 
 class SfxBaseController;
 class Size;
+namespace boost { template<typename T> class rational; }
 namespace vcl { class Window; }
 class KeyEvent;
 class WorkWindow;
