@@ -647,7 +647,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
             static const char * cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
             static jmethodID mID2 = NULL;
             if ( !mID2)
-                mID2  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );OSL_ENSURE(mID,"Unknown method id!");
+                mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );
             if ( mID2 )
                 out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, args[0].l );
         }
