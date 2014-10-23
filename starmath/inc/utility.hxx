@@ -23,7 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <deque>
 
 
@@ -41,28 +41,28 @@ inline long SmPtsTo100th_mm(long nNumPts)
 }
 
 
-inline long SmPtsTo100th_mm(const boost::rational<sal_Int64> &rNumPts)
-    // as above but with argument 'rNumPts' as 'boost::rational<sal_Int64>'
+inline long SmPtsTo100th_mm(const Fraction &rNumPts)
+    // as above but with argument 'rNumPts' as 'Fraction'
 {
-    boost::rational<sal_Int64>  aTmp (254000L, 7227L);
-    return boost::rational_cast<long>(aTmp * rNumPts);
+    Fraction  aTmp (254000L, 7227L);
+    return aTmp *= rNumPts;
 }
 
 
-inline boost::rational<sal_Int64> Sm100th_mmToPts(long nNum100th_mm)
+inline Fraction Sm100th_mmToPts(long nNum100th_mm)
     // returns the length (in points) that corresponds to the length
     // 'nNum100th_mm' (in 100th of mm).
 {
     SAL_WARN_IF( nNum100th_mm < 0, "starmath", "Ooops..." );
-    boost::rational<sal_Int64>  aTmp (7227L, 254000L);
-    return aTmp *= boost::rational<sal_Int64>(nNum100th_mm);
+    Fraction  aTmp (7227L, 254000L);
+    return aTmp *= Fraction(nNum100th_mm);
 }
 
 
-inline long SmRoundFraction(const boost::rational<sal_Int64> &rFrac)
+inline long SmRoundFraction(const Fraction &rFrac)
 {
-    SAL_WARN_IF( rFrac <= boost::rational<sal_Int64>(), "starmath", "Ooops..." );
-    return (rFrac.numerator() + rFrac.denominator() / 2) / rFrac.denominator();
+    SAL_WARN_IF( rFrac <= Fraction(), "starmath", "Ooops..." );
+    return (rFrac.GetNumerator() + rFrac.GetDenominator() / 2) / rFrac.GetDenominator();
 }
 
 
@@ -109,7 +109,7 @@ public:
     SmFace & operator = (const SmFace &rFace);
 };
 
-SmFace & operator *= (SmFace &rFace, const boost::rational<sal_Int64> &rFrac);
+SmFace & operator *= (SmFace &rFace, const Fraction &rFrac);
 
 
 

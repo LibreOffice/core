@@ -28,6 +28,8 @@ class SvStream;
 
 #define MAX_DIGITS 8
 
+class Fraction;
+
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED BigInt
 {
 private:
@@ -145,6 +147,8 @@ public:
     TOOLS_DLLPUBLIC friend          bool operator> ( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   bool operator<=( const BigInt& rVal1, const BigInt& rVal2 );
     friend inline   bool operator>=( const BigInt& rVal1, const BigInt& rVal2 );
+
+    friend class Fraction;
 };
 
 inline BigInt::operator short() const

@@ -2313,7 +2313,7 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
                         break;
                 }
                 Append( ::rtl::math::doubleToUString(
-                            boost::rational_cast<double>(pNode->GetSizeParameter()),
+                            static_cast<double>( pNode->GetSizeParameter( ) ),
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', true ) );
                 Append( " " );

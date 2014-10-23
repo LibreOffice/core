@@ -78,33 +78,33 @@ SdSnapLineDlg::SdSnapLineDlg(
     SetMetricValue( *m_pMtrFldX, aLeftTop.X(), ePoolUnit );
 
     long nValue = static_cast<long>(m_pMtrFldX->GetValue());
-    nValue = boost::rational_cast<long>(nValue / aUIScale);
+    nValue = Fraction( nValue ) / aUIScale;
     m_pMtrFldX->SetMin( nValue );
     m_pMtrFldX->SetFirst( nValue );
 
     SetMetricValue( *m_pMtrFldX, aRightBottom.X(), ePoolUnit );
     nValue = static_cast<long>(m_pMtrFldX->GetValue());
-    nValue = boost::rational_cast<long>(nValue / aUIScale);
+    nValue = Fraction( nValue ) / aUIScale;
     m_pMtrFldX->SetMax( nValue );
     m_pMtrFldX->SetLast( nValue );
 
     SetMetricValue( *m_pMtrFldY, aLeftTop.Y(), ePoolUnit );
     nValue = static_cast<long>(m_pMtrFldY->GetValue());
-    nValue = boost::rational_cast<long>(nValue / aUIScale);
+    nValue = Fraction( nValue ) / aUIScale;
     m_pMtrFldY->SetMin( nValue );
     m_pMtrFldY->SetFirst( nValue );
 
     SetMetricValue( *m_pMtrFldY, aRightBottom.Y(), ePoolUnit );
     nValue = static_cast<long>(m_pMtrFldY->GetValue());
-    nValue = boost::rational_cast<long>(nValue / aUIScale);
+    nValue = Fraction( nValue ) / aUIScale;
     m_pMtrFldY->SetMax( nValue );
     m_pMtrFldY->SetLast( nValue );
 
     // set values
     nXValue = ((const SfxInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
     nYValue = ((const SfxInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
-    nXValue = boost::rational_cast<long>(nXValue / aUIScale);
-    nYValue = boost::rational_cast<long>(nYValue / aUIScale);
+    nXValue = Fraction(nXValue) / aUIScale;
+    nYValue = Fraction(nYValue) / aUIScale;
     SetMetricValue( *m_pMtrFldX, nXValue, SFX_MAPUNIT_100TH_MM);
     SetMetricValue( *m_pMtrFldY, nYValue, SFX_MAPUNIT_100TH_MM);
 
@@ -135,8 +135,8 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     else if ( m_pRbVert->IsChecked() ) eKind = SK_VERTICAL;
     else                            eKind = SK_POINT;
 
-    nXValue = boost::rational_cast<long>(GetCoreValue(*m_pMtrFldX, SFX_MAPUNIT_100TH_MM) * aUIScale);
-    nYValue = boost::rational_cast<long>(GetCoreValue(*m_pMtrFldY, SFX_MAPUNIT_100TH_MM) * aUIScale);
+    nXValue = Fraction( GetCoreValue( *m_pMtrFldX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
+    nYValue = Fraction( GetCoreValue( *m_pMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
 
     rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (sal_uInt16)eKind));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_X, nXValue));

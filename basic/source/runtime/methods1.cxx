@@ -1342,8 +1342,8 @@ static double GetDialogZoomFactor( bool bX, long nValue )
     if( pDevice )
     {
         Size aRefSize( nValue, nValue );
-        boost::rational<sal_Int64> aFracX( 1, 26 );
-        boost::rational<sal_Int64> aFracY( 1, 24 );
+        Fraction aFracX( 1, 26 );
+        Fraction aFracY( 1, 24 );
         MapMode aMap( MAP_APPFONT, Point(), aFracX, aFracY );
         Size aScaledSize = pDevice->LogicToPixel( aRefSize, aMap );
         aRefSize = pDevice->LogicToPixel( aRefSize, MapMode(MAP_TWIP) );

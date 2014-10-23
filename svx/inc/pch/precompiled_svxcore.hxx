@@ -737,7 +737,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fldunit.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>

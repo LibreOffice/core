@@ -32,7 +32,7 @@ public:
 
     OpenGLContext* getOpenGLContext() { return mpContext;}
 
-    virtual void NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
     void setRenderer(IOpenGLRenderer* pRenderer);
     IOpenGLRenderer* getRenderer();

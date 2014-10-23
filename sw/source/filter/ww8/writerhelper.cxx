@@ -666,9 +666,9 @@ namespace sw
         {
             Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
             const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
-            boost::rational<sal_Int64> aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
-            boost::rational<sal_Int64> aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
-            aPoly.Scale(boost::rational_cast<double>(aMapPolyX), boost::rational_cast<double>(aMapPolyY));
+            Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
+            Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
+            aPoly.Scale(aMapPolyX, aMapPolyY);
 
             /*
              a) stretch right bound by 15twips
@@ -678,15 +678,15 @@ namespace sw
              See the import for details
             */
             const Size &rSize = pNd->GetTwipSize();
-            boost::rational<sal_Int64> aMoveHack(ww::nWrap100Percent, rSize.Width());
-            aMoveHack *= boost::rational<sal_Int64>(15, 1);
-            long nMove(boost::rational_cast<long>(aMoveHack));
+            Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
+            aMoveHack *= Fraction(15, 1);
+            long nMove(aMoveHack);
 
-            boost::rational<sal_Int64> aHackX(ww::nWrap100Percent + nMove,
+            Fraction aHackX(ww::nWrap100Percent + nMove,
                     ww::nWrap100Percent);
-            boost::rational<sal_Int64> aHackY(ww::nWrap100Percent - nMove,
+            Fraction aHackY(ww::nWrap100Percent - nMove,
                     ww::nWrap100Percent);
-            aPoly.Scale(boost::rational_cast<double>(aHackX), boost::rational_cast<double>(aHackY));
+            aPoly.Scale(aHackX, aHackY);
 
             aPoly.Move(-nMove, 0);
             return aPoly;

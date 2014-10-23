@@ -48,7 +48,7 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
         long nHgt0=aSR0.Bottom()-aSR0.Top();
         long nWdt1=rRect.Right()-rRect.Left();
         long nHgt1=rRect.Bottom()-rRect.Top();
-        SdrTextObj::NbcResize(maSnapRect.TopLeft(),boost::rational<sal_Int64>(nWdt1,nWdt0),boost::rational<sal_Int64>(nHgt1,nHgt0));
+        SdrTextObj::NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
         SdrTextObj::NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
         long nHDist=GetTextLeftDistance()+GetTextRightDistance();
@@ -118,7 +118,7 @@ void SdrTextObj::NbcMove(const Size& rSiz)
     SetRectsDirty(true);
 }
 
-void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& xFact, const boost::rational<sal_Int64>& yFact)
+void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
     bool bNoShearMerk=aGeo.nShearAngle==0;
     bool bRota90Merk=bNoShearMerk && aGeo.nRotationAngle % 9000 ==0;
@@ -126,8 +126,8 @@ void SdrTextObj::NbcResize(const Point& rRef, const boost::rational<sal_Int64>& 
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
     long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
     long nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-    bool bXMirr = xFact < 0;
-    bool bYMirr = yFact < 0;
+    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
+    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {

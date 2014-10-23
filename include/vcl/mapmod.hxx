@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_MAPMOD_HXX
 
 #include <tools/gen.hxx>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/resid.hxx>
@@ -44,8 +44,8 @@ private:
     sal_uLong           mnRefCount;
     MapUnit         meUnit;
     Point           maOrigin;
-    boost::rational<sal_Int64>        maScaleX;
-    boost::rational<sal_Int64>        maScaleY;
+    Fraction        maScaleX;
+    Fraction        maScaleY;
     bool            mbSimple;
 
     friend SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rMapMode );
@@ -75,7 +75,7 @@ public:
                     MapMode( const MapMode& rMapMode );
                     MapMode( MapUnit eUnit );
                     MapMode( MapUnit eUnit, const Point& rLogicOrg,
-                             const boost::rational<sal_Int64>& rScaleX, const boost::rational<sal_Int64>& rScaleY );
+                             const Fraction& rScaleX, const Fraction& rScaleY );
                     ~MapMode();
 
     void            SetMapUnit( MapUnit eUnit );
@@ -86,11 +86,11 @@ public:
     const Point&    GetOrigin() const
                         { return mpImplMapMode->maOrigin; }
 
-    void            SetScaleX( const boost::rational<sal_Int64>& rScaleX );
-    const boost::rational<sal_Int64>&  GetScaleX() const
+    void            SetScaleX( const Fraction& rScaleX );
+    const Fraction& GetScaleX() const
                         { return mpImplMapMode->maScaleX; }
-    void            SetScaleY( const boost::rational<sal_Int64>& rScaleY );
-    const boost::rational<sal_Int64>&  GetScaleY() const
+    void            SetScaleY( const Fraction& rScaleY );
+    const Fraction& GetScaleY() const
                         { return mpImplMapMode->maScaleY; }
 
     MapMode&        operator=( const MapMode& rMapMode );

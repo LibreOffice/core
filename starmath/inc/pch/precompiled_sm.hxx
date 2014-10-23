@@ -162,7 +162,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/rational.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>

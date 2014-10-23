@@ -24,6 +24,7 @@
 
 #include "address.hxx"
 
+class Fraction;
 class OutputDevice;
 class ScDocument;
 
@@ -32,9 +33,9 @@ class ScDrawUtil
 public:
     static void CalcScale( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        OutputDevice* pDev, const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY,
+                        OutputDevice* pDev, const Fraction& rZoomX, const Fraction& rZoomY,
                         double nPPTX, double nPPTY,
-                        boost::rational<sal_Int64>& rScaleX, boost::rational<sal_Int64>& rScaleY );
+                        Fraction& rScaleX, Fraction& rScaleY );
 };
 
 #endif

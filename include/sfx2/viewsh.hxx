@@ -40,6 +40,7 @@
 
 class SfxBaseController;
 class Size;
+class Fraction;
 namespace vcl { class Window; }
 class KeyEvent;
 class WorkWindow;
@@ -146,7 +147,7 @@ protected:
 
     virtual void                InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void                OuterResizePixel( const Point &rOfs, const Size &rSize );
-    virtual void                SetZoomFactor( const boost::rational<sal_Int64>& rZoomX, const boost::rational<sal_Int64>& rZoomY );
+    virtual void                SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     virtual void                Move();
 
