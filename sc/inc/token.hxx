@@ -63,16 +63,6 @@ void DumpToken(formula::FormulaToken const & rToken);
 */
 formula::FormulaTokenRef extendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 
-inline void intrusive_ptr_add_ref(const formula::FormulaToken* p)
-{
-    p->IncRef();
-}
-
-inline void intrusive_ptr_release(const formula::FormulaToken* p)
-{
-    p->DecRef();
-}
-
 class ScSingleRefToken : public formula::FormulaToken
 {
 private:
