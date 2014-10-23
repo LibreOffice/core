@@ -513,8 +513,6 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             }
         }
         break;
-    case RES_FLTR_STYLESHEET:
-        break;
 
     case RES_TXTATR_FIELD:
     case RES_TXTATR_ANNOTATION:
@@ -552,8 +550,6 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
         }
         break;
 
-    case RES_FLTR_NUMRULE_NUM:
-        break;
     case RES_FLTR_BOOKMARK:
         {
             SwFltBookmark* pB = (SwFltBookmark*)rEntry.pAttr;
