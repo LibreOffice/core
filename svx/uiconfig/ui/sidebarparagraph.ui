@@ -24,7 +24,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_markup" translatable="yes">Bullets and Numbering</property>
             <property name="tooltip_text" translatable="yes">Bullets and Numbering</property>
             <property name="show_arrow">False</property>
             <child>
@@ -32,7 +31,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Bullets</property>
                 <property name="tooltip_text" translatable="yes">Bullets</property>
                 <property name="is_important">True</property>
                 <property name="action_name">.uno:DefaultBullet</property>
@@ -48,7 +46,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Numbering</property>
                 <property name="tooltip_text" translatable="yes">Numbering</property>
                 <property name="is_important">True</property>
                 <property name="action_name">.uno:DefaultNumbering</property>
@@ -72,7 +69,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="has_tooltip">True</property>
-            <property name="tooltip_markup" translatable="yes">Paragraph Background Color</property>
             <property name="tooltip_text" translatable="yes">Paragraph Background Color</property>
             <property name="halign">end</property>
             <child>
@@ -106,7 +102,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Horizontal Alignment</property>
                 <property name="tooltip_text" translatable="yes">Horizontal Alignment</property>
                 <property name="halign">start</property>
                 <property name="show_arrow">False</property>
@@ -208,7 +203,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Vertical Alignment</property>
                 <property name="tooltip_text" translatable="yes">Vertical Alignment</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
@@ -292,7 +286,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Spacing</property>
                 <property name="tooltip_text" translatable="yes">Spacing</property>
                 <property name="show_arrow">False</property>
                 <child>
@@ -302,8 +295,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Increase Spacing</property>
-                    <property name="tooltip_text" translatable="yes">Increase Spacing</property>
+                    <property name="tooltip_text" translatable="yes">Increase Paragraph Spacing</property>
                     <property name="action_name">.uno:ParaspaceIncrease</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -317,8 +309,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Decrease Spacing</property>
-                    <property name="tooltip_text" translatable="yes">Decrease Spacing</property>
+                    <property name="tooltip_text" translatable="yes">Decrease Paragraph Spacing</property>
                     <property name="action_name">.uno:ParaspaceDecrease</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -358,7 +349,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Above Paragraph Spacing</property>
                     <property name="tooltip_text" translatable="yes">Above Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
@@ -402,7 +392,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Below Paragraph Spacing</property>
                     <property name="tooltip_text" translatable="yes">Below Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
@@ -427,7 +416,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Line Spacing</property>
                 <property name="tooltip_text" translatable="yes">Line Spacing</property>
                 <property name="hexpand">True</property>
                 <child>
@@ -435,7 +423,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Line Spacing</property>
                     <property name="tooltip_text" translatable="yes">Line Spacing</property>
                     <property name="action_name">.uno:LineSpacing</property>
                     <property name="use_underline">True</property>
@@ -491,7 +478,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Indent</property>
                     <property name="tooltip_text" translatable="yes">Indent</property>
                     <property name="show_arrow">False</property>
                     <child>
@@ -499,7 +485,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Decrease Indent</property>
                         <property name="tooltip_text" translatable="yes">Decrease Indent</property>
                         <property name="action_name">.uno:DecrementIndent</property>
                         <property name="use_underline">True</property>
@@ -516,7 +501,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Increase Indent</property>
                         <property name="tooltip_text" translatable="yes">Increase Indent</property>
                         <property name="action_name">.uno:IncrementIndent</property>
                         <property name="use_underline">True</property>
@@ -531,7 +515,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Switch to Hanging Indent</property>
                         <property name="tooltip_text" translatable="yes">Switch to Hanging Indent</property>
                         <property name="action_name">.uno:HangingIndent</property>
                         <property name="use_underline">True</property>
@@ -553,7 +536,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Indent</property>
                     <property name="tooltip_text" translatable="yes">Indent</property>
                     <property name="show_arrow">False</property>
                     <child>
@@ -563,7 +545,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Increase Indent</property>
                         <property name="tooltip_text" translatable="yes">Increase Indent</property>
                         <property name="action_name">.uno:Promote</property>
                         <property name="use_underline">True</property>
@@ -578,7 +559,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Decrease Indent</property>
                         <property name="tooltip_text" translatable="yes">Decrease Indent</property>
                         <property name="action_name">.uno:Demote</property>
                         <property name="use_underline">True</property>
@@ -593,7 +573,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_markup" translatable="yes">Switch to Hanging Indent</property>
                         <property name="tooltip_text" translatable="yes">Switch to Hanging Indent</property>
                         <property name="action_name">.uno:HangingIndent2</property>
                         <property name="use_underline">True</property>
