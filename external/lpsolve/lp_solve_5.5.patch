@@ -90,7 +90,7 @@
 -  $c -fPIC -fno-common -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I. $opts -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
 -  $c -dynamiclib liblpsolve55.a -compatibility_version 5.5.0 -current_version 5.5.0 -o liblpsolve55.dylib `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc
 +  $c $extra_cflags -fPIC -fno-common -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I. $opts -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $extra_cdefs $src
-+  $c $extra_linkflags -dynamiclib liblpsolve55.a -compatibility_version 5.5.0 -current_version 5.5.0 -o liblpsolve55.dylib `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc
++  $c $extra_linkflags -dynamiclib liblpsolve55.a -install_name @__________________________________________________OOO/liblpsolve55.dylib -compatibility_version 5.5.0 -current_version 5.5.0 -o liblpsolve55.dylib `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc
  fi
  
  rm *.o 2>/dev/null
