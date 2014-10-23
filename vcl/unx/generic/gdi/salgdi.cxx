@@ -145,9 +145,13 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
 
     if( hDrawable_ )
     {
-        // nPenPixel_      = GetPixel( nPenColor_ ); // TODO: moggi: FIX ME
+        X11SalGraphicsImpl* pImpl = dynamic_cast<X11SalGraphicsImpl*>(mpImpl.get());
+        if (pImpl)
+        {
+            pImpl->nPenPixel_      = GetPixel( pImpl->nPenColor_ );
+            pImpl->nBrushPixel_    = GetPixel( pImpl->nBrushColor_ );
+        }
         nTextPixel_     = GetPixel( nTextColor_ );
-        // nBrushPixel_    = GetPixel( nBrushColor_ ); // TODO: moggi: FIX ME
     }
 }
 
