@@ -1249,14 +1249,12 @@ bool EscherPropertyContainer::CreateShapeProperties( const ::com::sun::star::uno
         bool bVal = false;
         ::com::sun::star::uno::Any aAny;
         sal_uInt32 nShapeAttr = 0;
-        (void)EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "Visible" ), true );
-        if ( aAny >>= bVal )
+        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, OUString("Visible"), true) && (aAny >>= bVal))
         {
             if ( !bVal )
                 nShapeAttr |= 0x20002;  // set fHidden = true
         }
-        (void)EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString( "Printable" ), true );
-        if ( aAny >>= bVal )
+        if (EscherPropertyValueHelper::GetPropertyValue(aAny, aXPropSet, OUString( "Printable"), true) && (aAny >>= bVal))
         {
             if ( !bVal )
                 nShapeAttr |= 0x10000;  // set fPrint = false;
