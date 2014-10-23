@@ -36,7 +36,6 @@
 #include <boost/ptr_container/ptr_deque.hpp>
 
 class SwTOXBase;
-class SwFltShell;
 class SwField;
 class SwFieldType;
 class Graphic;
@@ -137,7 +136,6 @@ class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
     typedef boost::ptr_deque<SwFltStackEntry> Entries;
     typedef Entries::iterator myEIter;
     Entries maEntries;
-    friend class SwFltShell;
 
     sal_uLong nFieldFlags;
     vcl::KeyCode aEmptyKeyCode; // fuer Bookmarks
@@ -270,7 +268,6 @@ public:
 class SW_DLLPUBLIC SwFltBookmark : public SfxPoolItem
 {
 private:
-    friend class SwFltShell;    // darf aName und aVal uebersetzen
 
     long mnHandle;
     OUString maName;
@@ -317,18 +314,6 @@ public:
     bool HadPageDescItem() const { return bHadPageDescItem; }
 };
 
-class SwFltSection : public SfxPoolItem
-{
-    SwSectionData * m_pSection;
-
-public:
-    SwFltSection( SwSectionData *const pSect );
-    SwFltSection( const SwFltSection& );
-    // "pure virtual Methoden" vom SfxPoolItem
-    virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
-    virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
-    SwSectionData * GetSectionData()    { return m_pSection; }
-};
 // Der WWEndStack verhaelt sich wie der WWControlStck, nur dass die Attribute
 // auf ihm bis ans Ende des Dokuments gehortet werden, falls auf sie noch
 // zugegriffen werden muss (z.B. Book/RefMarks, Index u.s.w.)
@@ -457,238 +442,6 @@ public:
     virtual bool BeginFly( RndStdIds eAnchor, bool bAbsolutePos,
                                const SfxItemSet* pMoreAttrs = 0 ) SAL_OVERRIDE;
     virtual void EndFly() SAL_OVERRIDE;
-};
-
-class SwFltFormatCollection : public SwFltOutBase
-{
-    SwTxtFmtColl* pColl;
-    SfxItemSet* pFlyAttrs;      // Simulation der Flys in Styles
-    bool bHasFly;
-public:
-    SwFltFormatCollection(SwDoc&, RES_POOL_COLLFMT_TYPE nType);
-    SwFltFormatCollection(SwDoc&, const OUString& rName );
-    virtual ~SwFltFormatCollection() { if( pFlyAttrs ) delete pFlyAttrs; }
-
-    void Reset()
-    {
-        // #i73790# - method renamed
-        pColl->ResetAllFmtAttr();
-        pColl->SetAuto(false); // nach Empfehlung JP
-    }
-    void Derived(SwTxtFmtColl* pBase)
-        { pColl->SetDerivedFrom(pBase); }
-
-//  SwTxtFmtColl* Search(String, CharSet eSrc);
-    SwTxtFmtColl* GetColl()         { return pColl; }
-    void SetHasFly()                { bHasFly = true; }
-    SfxItemSet* GetpFlyAttrs()      { return pFlyAttrs; }
-
-    virtual SwFltOutBase& operator << (const SfxPoolItem& rItem) SAL_OVERRIDE;
-    virtual const SfxPoolItem& GetAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
-    virtual const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
-
-    virtual bool IsInFly() SAL_OVERRIDE;
-    virtual void SetFlyFrmAttr(const SfxPoolItem& rAttr) SAL_OVERRIDE;
-    virtual const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich) SAL_OVERRIDE;
-    virtual bool BeginFly( RndStdIds eAnchor, bool bAbsolutePos,
-                               const SfxItemSet* pMoreAttrs = 0 ) SAL_OVERRIDE;
-    bool BeginStyleFly( SwFltOutDoc* pOutDoc );
-    virtual void EndFly() SAL_OVERRIDE;
-};
-
-// dies nun ist die zauberhafteklasse: intention: alle eins nach dem
-// andern hinein'pipe'n. wird eine besondere struktur eingelesen, wird
-// eine klammer geoeffnet (BeginXxx) und nach beendigung geschlossen
-// (EndXxx), wobei Xxx zB fuer Fusznoten, Kopf/Fuszzeilen oder
-// Tabellen steht. Styles funktionieren auch so, haben aber den
-// unterschied, keine buchstaben zu akzeptieren.
-// beginnt ein neuer absatz oder aehnliches, wird NextXxx genutzt.
-// hier ist moeglich, Tab, Zeilenumbruch, Absatzende, Seitenumbruch
-// und Sektionsende einzufuegen.
-
-class SwFltShell
-{
-    SwFltOutDoc* pOutDoc;
-    SwFltFormatCollection* pColls[256];
-    SwFltOutBase* pOut;
-
-//  SwFltFormatCollection* pFormat; // set when in style-mode
-    SwPageDesc* pCurrentPageDesc;
-    SwPosition* pSavedPos; // set, when in footnote or header/footer -mode
-#ifdef None
-#undef None
-#endif
-    enum SubModes {
-        None,
-        Header,
-        Footer,
-        Footnote,
-        Table,
-        Fly,
-        Style,
-        Max
-    } eSubMode;
-
-// Fly items:
-    sal_uInt16 nAktStyle;               // zur Indizierung pStyleFlyTable
-
-    SwFltControlStack aStack;
-    SwFltEndStack aEndStack;
-    SwPaM* pPaM;
-
-    OUString sBaseURL;
-    sal_uInt16 nPageDescOffset; // fuers update der pagedescs
-    rtl_TextEncoding eSrcCharSet; // charset der quelle
-    friend class SwFltControlStack;
-    bool bNewDoc;
-    bool bStdPD;
-    bool bProtect;
-
-public:
-    SwFltShell(SwDoc* , SwPaM& , const OUString& rBaseURL, bool bNew, sal_uLong = 0);
-    ~SwFltShell();
-
-    SwDoc& GetDoc()                 { return *aStack.pDoc; }
-
-    rtl_TextEncoding SetCharSet(rtl_TextEncoding eNew)    { rtl_TextEncoding eOld = eSrcCharSet;
-                                          eSrcCharSet = eNew;
-                                          return eOld;
-                                        }
-    void SetUseStdPageDesc()        { bStdPD = true; }
-    void SetProtect()               { bProtect = true; }
-    SwPageDesc* MakePageDesc(SwPageDesc* pFirstPageDesc = NULL);
-    SwPageDesc& GetPageDesc()       { return *pCurrentPageDesc; }
-    void NextTab()                  { (*this) << sal_uInt8(0x09); }
-    void NextLine()                 { (*this) << sal_uInt8(0x0a); }
-    void NextParagraph();
-    void NextPage();
-    void NextSection()      { pCurrentPageDesc = MakePageDesc(); }
-
-    SwFltShell& AddGraphic( const OUString& rPicName );
-    SwFltShell& AddError( const sal_Char* pErr );
-    SwFltShell& EndItem( sal_uInt16 nId );
-    SwFltShell& SetStyle( sal_uInt16 nStyle );
-
-    SwFltShell& operator << ( Graphic& );
-    SwFltShell& operator << ( SwFltBookmark& aBook );
-    void SetBookEnd(long nHandle);
-    SwFltShell& operator << ( const OUString& );  // Vorsicht: CHARSET_ANSI
-    SwFltShell& operator << ( const sal_Unicode );
-    SwFltShell& operator << ( const SwField& );
-    SwFltShell& operator << ( const SfxPoolItem& rItem )
-        { *pOut << rItem; return *this; }
-
-//  SwFltShell& operator >> (SfxPoolItem&);
-// methode zum beenden einer sub-sektion, zB Fusznote etc
-    void End()                      { eSubMode = None; }
-// methoden zur verwaltung von Header/Footer
-    void BeginHeader(SwPageDesc* =NULL);
-    void BeginFooter(SwPageDesc* =NULL);
-    void EndHeaderFooter();
-// methoden zur verwaltung von FootNotes
-    void BeginFootnote();
-    void EndFootnote();
-// methoden zur verwaltung von Tabellen
-    bool IsInTable() {
-        return ( pOut == pOutDoc ) && pOutDoc->IsInTable(); }
-    const SfxPoolItem& GetCellAttr(sal_uInt16 nWhich) {
-        return pOut->GetCellAttr(nWhich); }
-    bool BeginTable() {
-        bool b = pOut->BeginTable();
-        if(b) eSubMode = Table;
-        return b; }
-    void NextTableCell() {
-        pOut->NextTableCell(); }
-    void NextTableRow() {
-        pOut->NextTableRow(); }
-    void SetTableWidth(SwTwips nW) {
-        pOut->SetTableWidth(nW); }
-    bool IsTableWidthSet() {
-        return pOutDoc->IsTableWidthSet(); }
-    void SetTableOrient(sal_Int16 eOri) {
-        pOut->SetTableOrient(eOri); }
-    void SetCellWidth(SwTwips nWidth, sal_uInt16 nCell = USHRT_MAX ) {
-        pOut->SetCellWidth(nWidth, nCell); }
-    void SetCellHeight(SwTwips nH) {
-        pOut->SetCellHeight(nH); }
-    void SetCellBorder(const SvxBoxItem& rFmtBox, sal_uInt16 nCell = USHRT_MAX ){
-        pOut->SetCellBorder(rFmtBox, nCell); }
-    void SetCellSpace(sal_uInt16 nSp) {
-        pOut->SetCellSpace(nSp); }
-    void DeleteCell(sal_uInt16 nCell = USHRT_MAX) {
-        pOut->DeleteCell(nCell); }
-    void EndTable() {
-        pOut->EndTable(); }
-// methoden zur verwaltung von Flys
-    bool IsInFly() { return pOut->IsInFly(); }
-    bool BeginFly( RndStdIds eAnchor = FLY_AT_PARA, bool bAbsolutePos = false );
-    void SetFlyAnchor( RndStdIds eAnchor )
-        { pOut->SetFlyAnchor( eAnchor ); }
-    void SetFlyXPos( short nXPos, sal_Int16 eHRel = com::sun::star::text::RelOrientation::FRAME,
-                     sal_Int16 eHAlign = com::sun::star::text::HoriOrientation::NONE );
-    void SetFlyYPos( short nYPos, sal_Int16 eVRel = com::sun::star::text::RelOrientation::FRAME,
-                     sal_Int16 eVAlign = com::sun::star::text::VertOrientation::NONE );
-    void SetFlyFrmAttr(const SfxPoolItem& rAttr){
-        pOut->SetFlyFrmAttr( rAttr ); }
-    void EndFly();
-// methoden zur verwaltung von styles:
-    void BeginStyle(sal_uInt16 nUserCode, RES_POOL_COLLFMT_TYPE aType)
-    {
-        OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
-        OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
-        if (eSubMode == Style)
-            EndStyle();
-        pOut = pColls[nUserCode] = new SwFltFormatCollection(GetDoc(), aType);
-        nAktStyle = nUserCode;
-        eSubMode = Style;
-    }
-    void BeginStyle( sal_uInt16 nUserCode, const OUString& rName )
-    {
-        OSL_ENSURE(nUserCode<sizeof(pColls)/sizeof(*pColls), "code out of bounds");
-        OSL_ENSURE(pColls[nUserCode] == NULL, "user codes dublicate");
-        if (eSubMode == Style)
-            EndStyle();
-        pOut = pColls[nUserCode] = new SwFltFormatCollection(GetDoc(), rName );
-        nAktStyle = nUserCode;
-        eSubMode = Style;
-    }
-    bool IsStyleImported(sal_uInt16 nUserCode)
-        { return pColls[nUserCode] != 0; }
-    void BaseStyle(sal_uInt16 nBased)
-    {
-        OSL_ENSURE(eSubMode == Style, "wrong state for style");
-        OSL_ENSURE(pColls[nBased], "Style based on noexistent style" );
-        if( eSubMode == Style && pColls[nBased]->GetColl() )
-            ((SwFltFormatCollection*)pOut)->Derived(pColls[nBased]->GetColl());
-    }
-    void NextStyle(sal_uInt16 nWhich, sal_uInt16 nNext);
-
-    void EndStyle()
-    {
-//   OSL_ENSURE(eSubMode == Style, "wrong state for style");
-        nAktStyle = 0;
-        pOut = pOutDoc;
-        eSubMode = None;
-    }
-
-    bool IsFlagSet(SwFltControlStack::Flags no) const
-        { return aStack.IsFlagSet(no); }
-    OUString ConvertUStr(const OUString& rInOut);
-    OUString QuoteStr( const OUString& rIn );
-
-    // folgende status kann die shell verwalten:
-    const SfxPoolItem& GetNodeOrStyAttr(sal_uInt16 nWhich);
-    const SfxPoolItem& GetAttr(sal_uInt16 nWhich);
-    const SfxPoolItem& GetFlyFrmAttr(sal_uInt16 nWhich);
-    SwFieldType* GetSysFldType(sal_uInt16 eWhich);
-    bool GetWeightBold();
-    bool GetPostureItalic();
-    bool GetCrossedOut();
-    bool GetContour();
-    bool GetCaseKapitaelchen();
-    bool GetCaseVersalien();
-
-    const OUString& GetBaseURL() const { return sBaseURL; }
 };
 
 SW_DLLPUBLIC void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);

@@ -241,15 +241,6 @@ public:
                 ::com::sun::star::document::XDocumentProperties>&,
             SvKeyValueIterator* );
 
-    // Ist der uebergebene 0-terminierte String (vermutlich) der Anfang
-    // eines HTML-Files? Er sollte mind. 80 Zeichen lang sein.
-    // Mit Ausnahme des Falls, dass SwitchToUCS2==false und
-    // SVPAR_CS_DONTKNOW uebergeben wird muss der String mit zwei(!)
-    // 0-Bytes an einer geraden(!) Position terminiert sein.
-    static bool IsHTMLFormat( const sal_Char* pHeader,
-                      bool bSwitchToUCS2 = false,
-                      rtl_TextEncoding eEnc=RTL_TEXTENCODING_DONTKNOW );
-
     bool ParseScriptOptions( OUString& rLangString, const OUString&, HTMLScriptLanguage& rLang,
                              OUString& rSrc, OUString& rLibrary, OUString& rModule );
 
