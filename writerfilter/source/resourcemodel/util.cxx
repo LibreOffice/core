@@ -40,6 +40,7 @@ string toString(uno::Reference< text::XTextRange > textRange)
 {
     string result;
 
+    (void) textRange;
 #ifdef DEBUG_WRITERFILTER
     if (textRange.get())
     {

@@ -34,6 +34,7 @@ QNameToString::Pointer_t QNameToString::Instance()
 
 std::string QNameToString::operator()(Id qName)
 {
+    (void) qName;
 #ifdef DEBUG_WRITERFILTER
     Map::const_iterator aIt = mMap.find(qName);
 
