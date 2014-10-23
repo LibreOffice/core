@@ -1658,7 +1658,7 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 
 bool WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize )
 {
-    bool bRetValue = FALSE;
+    bool bRetValue = false;
 
     if ( mbPrinter )
     {
