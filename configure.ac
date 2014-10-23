@@ -3017,9 +3017,11 @@ fi
 if test "$enable_readonly_installset" = yes; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_FEATURE_READONLY_INSTALLSET)
+    ENABLE_READONLY_INSTALLSET=TRUE
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST(ENABLE_READONLY_INSTALLSET)
 
 dnl ===================================================================
 dnl Structure of install set

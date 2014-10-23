@@ -18,6 +18,12 @@ postprocess_XCU := $(call gb_XcuDataTarget_get_target,officecfg/registry/data/or
 postprocess_MOD := $(call gb_XcuModuleTarget_get_target,officecfg/registry/data)
 postprocess_DRIVERS :=
 
+ifeq ($(ENABLE_READONLY_INSTALLSET),TRUE)
+
+postprocess_XCDS := main.xcd
+
+else
+
 postprocess_XCDS := \
 	base.xcd \
 	calc.xcd \
@@ -35,6 +41,8 @@ postprocess_XCDS := \
 	pyuno.xcd \
 	writer.xcd \
 	xsltfilter.xcd
+
+endif
 
 postprocess_DEPS_base := main
 postprocess_FILES_base := \
@@ -381,7 +389,9 @@ postprocess_FILES_pyuno := \
 	$(postprocess_MOD)/org/openoffice/Office/Scripting-python.xcu
 
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
+ifeq ($(ENABLE_READONLY_INSTALLSET),)
 postprocess_XCDS += reportbuilder.xcd
+endif
 postprocess_DEPS_reportbuilder := main
 postprocess_FILES_reportbuilder := \
 	$(postprocess_XCS)/Office/ReportDesign.xcs \
@@ -433,7 +443,9 @@ postprocess_FILES_xsltfilter := \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_xslt_types.xcu)
 
 ifneq ($(BUILD_POSTGRESQL_SDBC),)
+ifeq ($(ENABLE_READONLY_INSTALLSET),)
 postprocess_XCDS += postgresql.xcd
+endif
 postprocess_DEPS_postgresql := main
 postprocess_FILES_postgresql := $(call gb_XcuModuleTarget_get_target,connectivity/registry/postgresql)/org/openoffice/Office/DataAccess/Drivers-postgresql.xcu
 postprocess_DRIVERS += postgresql
@@ -441,7 +453,9 @@ endif
 
 ifeq (unx,$(GUIBASE))
 ifneq (,$(or $(filter TRUETRUE,$(ENABLE_GCONF)$(ENABLE_LOCKDOWN))$(filter TRUE,$(ENABLE_GIO))))
+ifeq ($(ENABLE_READONLY_INSTALLSET),)
 postprocess_XCDS += gnome.xcd
+endif
 postprocess_DEPS_gnome := main
 ifeq ($(ENABLE_GCONF)$(ENABLE_LOCKDOWN),TRUETRUE)
 postprocess_FILES_gnome += \
@@ -457,7 +471,9 @@ endif
 endif # unx == $(GUIBASE)
 
 ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
+ifeq ($(ENABLE_READONLY_INSTALLSET),)
 postprocess_XCDS += onlineupdate.xcd
+endif
 postprocess_DEPS_onlineupdate := main
 postprocess_FILES_onlineupdate := \
 	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Addons-onlineupdate.xcu \
@@ -465,14 +481,18 @@ postprocess_FILES_onlineupdate := \
 endif
 
 ifeq ($(ENABLE_OPENGL),TRUE)
+ifeq ($(ENABLE_READONLY_INSTALLSET),)
 postprocess_XCDS += ogltrans.xcd
+endif
 postprocess_DEPS_ogltrans := main
 postprocess_FILES_ogltrans := \
 	$(postprocess_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
 endif
 
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
+ifeq ($(ENABLE_READONLY_INSTALLSET),)
 postprocess_XCDS += pdfimport.xcd
+endif
 postprocess_OPTDEPS_pdfimport := calc draw impress math writer
 	# HACK: for all fcfg_X_types.xcu in filter/Configuration_filter.mk that
 	# include pdf_Portable_Document_Format (i.e., X in calc, draw, global,
@@ -484,13 +504,49 @@ postprocess_FILES_pdfimport := \
 endif
 
 ifeq (WNT,$(OS))
+ifeq ($(ENABLE_READONLY_INSTALLSET),)
 postprocess_XCDS += forcedefault.xcd
+endif
 postprocess_DEPS_forcedefault := main
 postprocess_FILES_forcedefault := \
 	$(postprocess_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
 endif
 
 postprocess_DRIVERS := $(foreach driver,$(postprocess_DRIVERS),driver_$(driver))
+
+ifeq ($(ENABLE_READONLY_INSTALLSET),TRUE)
+
+# This must probably be sorted so that a dependency comes before the
+# dependent. (Check the postprocess_DEPS_foo variables above). Note
+# that postprocess_FILES_main already contains the stuff that is in
+# the main.xcd in the "normal" case, and that most of the other
+# postprocess_DEPS_foo thingies depend on main, so this automatically
+# works out fine for those dependencies.
+
+postprocess_FILES_main += \
+	$(postprocess_FILES_base) \
+	$(postprocess_FILES_calc) \
+	$(postprocess_FILES_cjk) \
+	$(postprocess_FILES_ctl) \
+	$(postprocess_FILES_draw) \
+	$(postprocess_FILES_graphicfilter) \
+	$(postprocess_FILES_impress) \
+	$(postprocess_FILES_writer) \
+	$(postprocess_FILES_librelogo) \
+	$(postprocess_FILES_korea) \
+	$(postprocess_FILES_lingucomponent) \
+	$(postprocess_FILES_math) \
+	$(postprocess_FILES_pyuno) \
+	$(postprocess_FILES_reportbuilder) \
+	$(postprocess_FILES_xsltfilter) \
+	$(postprocess_FILES_postgresql) \
+	$(postprocess_FILES_gnome) \
+	$(postprocess_FILES_onlineupdate) \
+	$(postprocess_FILES_ogltrans) \
+	$(postprocess_FILES_pdfimport) \
+	$(postprocess_FILES_forcedefault) \
+
+endif
 
 #
 # Targets
