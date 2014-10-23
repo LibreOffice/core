@@ -29,9 +29,9 @@ namespace o3tl {
 
 template<typename T> struct typed_flags {};
 
-#if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 6 && \
+#if defined __GNUC__ && __GNUC__ == 4 && __GNUC_MINOR__ <= 7 && \
     !defined __clang__
-#define O3TL_STD_UNDERLYING_TYPE_E unsigned int
+#define O3TL_STD_UNDERLYING_TYPE_E signed int
 #else
 #define O3TL_STD_UNDERLYING_TYPE_E typename std::underlying_type<E>::type
 #endif
