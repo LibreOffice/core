@@ -311,7 +311,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 
     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_CHANGE_TRACK_TABLE_CELL, true, true);
-    if (!sString.isEmpty())
+    if (rCell.mpEditText && !sString.isEmpty())
     {
         if (!pEditTextObj)
         {
