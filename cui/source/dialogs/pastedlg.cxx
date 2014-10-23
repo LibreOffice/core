@@ -97,9 +97,11 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 {
     //TODO/LATER: why is the Descriptor never used?!
     TransferableObjectDescriptor aDesc;
-    if( rHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
-        ((TransferableDataHelper&)rHelper).GetTransferableObjectDescriptor(
-                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc );
+    if (rHelper.HasFormat(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR))
+    {
+        (void)const_cast<TransferableDataHelper&>(rHelper).GetTransferableObjectDescriptor(
+                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc);
+    }
     if ( !pFormats )
         pFormats = &rHelper.GetDataFlavorExVector();
 
