@@ -1523,13 +1523,6 @@ AC_ARG_WITH(fonts,
          known to be available on the system then you should use this option.]),
 ,)
 
-AC_ARG_WITH(ppds,
-    AS_HELP_STRING([--without-ppds],
-        [Removes Postscript Printer definition files from LibreOffice
-         installation set, for people building for specific distributions where
-         PPDs are known to be already available (every recent distro with CUPS backend).]),
-,)
-
 AC_ARG_WITH(epm,
     AS_HELP_STRING([--with-epm],
         [Decides which epm to use. Default is to use the one from the system if
@@ -11567,20 +11560,6 @@ else
 fi
 AC_SUBST(WITH_FONTS)
 AC_DEFINE_UNQUOTED([TEST_FONTS_MISSING], $TEST_FONTS_MISSING)
-
-dnl ===================================================================
-dnl Test whether to include ppds
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include PPDs])
-if test "$with_ppds" != "no"; then
-    AC_MSG_RESULT([yes])
-    WITHOUT_PPDS=
-else
-    AC_MSG_RESULT([no])
-    WITHOUT_PPDS=TRUE
-    SCPDEFS="$SCPDEFS -DWITHOUT_PPDS"
-fi
-AC_SUBST(WITHOUT_PPDS)
 
 dnl ===================================================================
 dnl Test whether to include extra galleries

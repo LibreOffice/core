@@ -20,7 +20,6 @@ $(eval $(call gb_Package_Package,vcl_fontunxppds,$(SRCDIR)/vcl/unx/generic/print
 
 $(eval $(call gb_Package_add_files,vcl_fontunxppds,$(LIBO_SHARE_FOLDER)/psprint/driver,\
 	SGENPRT.PS \
-	SGENT42.PS \
 ))
 
 # vim: set noet sw=4 ts=4:

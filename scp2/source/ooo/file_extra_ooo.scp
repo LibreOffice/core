@@ -76,14 +76,12 @@ End
 
 #ifdef GUIBASE_UNX
 
-#ifndef WITHOUT_PPDS
 File gid_File_Extra_Fontunxppds
     Dir = FILELIST_DIR;
     TXT_FILE_BODY;
     Styles = (FILELIST);
     Name = "vcl_fontunxppds.filelist";
 End
-#endif
 
 File gid_File_Extra_Fontunxpsprint
     Dir = FILELIST_DIR;
