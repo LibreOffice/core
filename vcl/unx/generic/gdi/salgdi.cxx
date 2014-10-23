@@ -52,6 +52,7 @@
 
 #include "salgdiimpl.hxx"
 #include "gdiimpl.hxx"
+#include "openglgdiimpl.hxx"
 
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
@@ -61,6 +62,9 @@ X11SalGraphics::X11SalGraphics():
     m_nXScreen( 0 ),
     pFontGC_(NULL)
 {
+    static const char* pOpenGL = getenv("USE_OPENGL");
+    if (pOpenGL)
+        mpImpl.reset(new OpenGLSalGraphicsImpl());
     m_pFrame            = NULL;
     m_pVDev             = NULL;
     m_pColormap         = NULL;
