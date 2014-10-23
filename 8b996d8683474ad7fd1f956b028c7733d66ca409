@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_179c5e68",
+        "filename": "offapi/com/sun/star/awt/Gradient2.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-23T16:03:48Z",
+      "side": 1,
+      "message": "Probably better to explain here how this extends Gradient, than to repeat the description of Gradient.",
+      "revId": "8b996d8683474ad7fd1f956b028c7733d66ca409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_f7878a10",
+        "filename": "offapi/com/sun/star/awt/Gradient2.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-23T16:03:48Z",
+      "side": 1,
+      "message": "better to call it GradientStops?",
+      "revId": "8b996d8683474ad7fd1f956b028c7733d66ca409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_d78c8637",
+        "filename": "offapi/com/sun/star/awt/GradientStop.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-23T16:03:48Z",
+      "side": 1,
+      "message": "not sure what value range such \"relative positions\" have, but typically better to stick to the \"default\" long than to use short (even if many other places set bad examples and do use short where they arguably should use long)\n\nalso, given the struct\u0027s name already contains \"Stop,\" probably no need to repeat it in the member names",
+      "revId": "8b996d8683474ad7fd1f956b028c7733d66ca409",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
