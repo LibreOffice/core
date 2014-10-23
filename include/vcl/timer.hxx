@@ -27,11 +27,24 @@
 struct ImplTimerData;
 struct ImplSVData;
 
+enum IdlePriority {
+        VCL_IDLE_PRIORITY_HIGHEST, //   -> 0ms
+        VCL_IDLE_PRIORITY_HIGH, //      -> 1ms
+        VCL_IDLE_PRIORITY_REPAINT, //    -> 30ms
+        VCL_IDLE_PRIORITY_RESIZE,  //    -> 50ms
+        VCL_IDLE_PRIORITY_MEDIUM, //     -> 50ms
+        VCL_IDLE_PRIORITY_LOW, //        -> 100ms
+        VCL_IDLE_PRIORITY_LOWER, //      -> 200ms
+        VCL_IDLE_PRIORITY_LOWEST //     -> 400ms
+};
+
 /// Base-class for timers - usually a simple, one-shot timeout
 class VCL_DLLPUBLIC Timer
 {
 protected:
     ImplTimerData*  mpTimerData;
+    sal_Int32       mnDefaultPriority;
+    sal_Int32       mnPriority;
     sal_uLong       mnTimeout;
     bool            mbActive;
     bool            mbAuto;
@@ -47,8 +60,11 @@ public:
     void            Start();
     void            Stop();
 
-    /// set the timeout in milliseconds
-    void            SetTimeout( sal_uLong nTimeoutMs );
+    /// set the timeout in milliseconds and the priority
+    void            SetTimeout( sal_uLong nTimeoutMs, sal_Int32 nPriority = VCL_IDLE_PRIORITY_MEDIUM );
+    void            SetPriority( const sal_Int32 nPriority ) { mnPriority = nPriority; }
+    sal_Int32       GetPriority() const { return mnPriority; }
+    sal_Int32       GetDefaultPriority() const { return mnDefaultPriority; }
     sal_uLong       GetTimeout() const { return mnTimeout; }
     bool            IsActive() const { return mbActive; }
 
@@ -60,6 +76,18 @@ public:
 
     static void ImplDeInitTimer();
     static void ImplTimerCallbackProc();
+    sal_Int32 getIntFromEnum (IdlePriority e){
+        switch (e) {
+            case VCL_IDLE_PRIORITY_HIGHEST: return -40;
+            case VCL_IDLE_PRIORITY_HIGH: return -30;
+            case VCL_IDLE_PRIORITY_REPAINT: return -20;
+            case VCL_IDLE_PRIORITY_RESIZE: return -10;
+            case VCL_IDLE_PRIORITY_MEDIUM: return 0;
+            case VCL_IDLE_PRIORITY_LOW: return 10;
+            case VCL_IDLE_PRIORITY_LOWER: return 20;
+            case VCL_IDLE_PRIORITY_LOWEST: return 30;
+        }
+    }
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at

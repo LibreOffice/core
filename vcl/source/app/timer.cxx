@@ -30,7 +30,9 @@
 
 struct ImplTimerData
 {
+    ImplTimerData() : mpPrioNext(NULL) {}
     ImplTimerData*  mpNext;         // Pointer to the next Instance
+    ImplTimerData*  mpPrioNext;     // Pointer to the next Instance with lower Priority
     Timer*          mpTimer;        // Pointer to VCL Timer instance
     sal_uLong       mnUpdateTime;   // Last Update Time
     sal_uLong       mnTimerUpdate;  // TimerCallbackProcs on stack
@@ -89,6 +91,7 @@ void Timer::ImplTimerCallbackProc()
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData*  pTimerData;
+    ImplTimerData*  pPrioFirstTimerData;
     ImplTimerData*  pPrevTimerData;
     sal_uLong       nMinPeriod = MAX_TIMER_PERIOD;
     sal_uLong       nDeltaTime;
@@ -102,6 +105,7 @@ void Timer::ImplTimerCallbackProc()
 
     // find timer where the timer handler needs to be called
     pTimerData = pSVData->mpFirstTimerData;
+    pPrioFirstTimerData = pTimerData;
     while ( pTimerData )
     {
         // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
@@ -112,24 +116,58 @@ void Timer::ImplTimerCallbackProc()
             // time has expired
             if ( (pTimerData->mnUpdateTime+pTimerData->mpTimer->mnTimeout) <= nTime )
             {
-                // set new update time
-                pTimerData->mnUpdateTime = nTime;
+                ImplTimerData* pCurrentTimer = pPrioFirstTimerData;
+                pPrevTimerData = NULL;
 
-                // if no AutoTimer than stop
-                if ( !pTimerData->mpTimer->mbAuto )
-                {
-                    pTimerData->mpTimer->mbActive = false;
-                    pTimerData->mbDelete = true;
+                if(pCurrentTimer != pTimerData){
+                    while(pCurrentTimer && pCurrentTimer->mpTimer && pCurrentTimer->mpTimer->GetPriority() <= pTimerData->mpTimer->GetPriority()){
+                        pPrevTimerData = pCurrentTimer;
+                        pCurrentTimer = pCurrentTimer->mpPrioNext;
+                    }
+
+                    if(!pPrevTimerData){
+                        if(pCurrentTimer && pCurrentTimer->mpTimer)
+                            pTimerData->mpPrioNext = pCurrentTimer;
+                        else
+                            pTimerData->mpPrioNext = NULL;
+                        pCurrentTimer = pTimerData;
+                    }
+                    else{
+                        pPrevTimerData->mpPrioNext = pTimerData;
+                        if(pCurrentTimer && pCurrentTimer->mpTimer)
+                            pTimerData->mpPrioNext = pCurrentTimer;
+                        else
+                            pTimerData->mpPrioNext = NULL;
+                        pCurrentTimer = pPrioFirstTimerData;
+                    }
+
                 }
-
-                // call Timeout
-                pTimerData->mbInTimeout = true;
-                pTimerData->mpTimer->Timeout();
-                pTimerData->mbInTimeout = false;
+                pPrioFirstTimerData = pCurrentTimer;
             }
         }
-
         pTimerData = pTimerData->mpNext;
+    }
+
+    while(pPrioFirstTimerData && pPrioFirstTimerData->mpTimer){
+        // set new update time
+        pPrioFirstTimerData->mnUpdateTime = nTime;
+
+        // if no AutoTimer than stop
+        if ( !pPrioFirstTimerData->mpTimer->mbAuto )
+        {
+            pPrioFirstTimerData->mpTimer->mbActive = false;
+            pPrioFirstTimerData->mbDelete = true;
+        }
+
+        // call Timeout
+        pPrioFirstTimerData->mbInTimeout = true;
+        pPrioFirstTimerData->mpTimer->Timeout();
+        if(pPrioFirstTimerData->mpTimer)
+            pPrioFirstTimerData->mpTimer->SetPriority( pPrioFirstTimerData->mpTimer->GetDefaultPriority() );
+        pPrioFirstTimerData->mbInTimeout = false;
+        pPrevTimerData = pPrioFirstTimerData;
+        pPrioFirstTimerData = pPrioFirstTimerData->mpPrioNext;
+        pPrevTimerData->mpPrioNext = NULL;
     }
 
     // determine new time
@@ -200,6 +238,7 @@ void Timer::ImplTimerCallbackProc()
 Timer::Timer():
     mpTimerData(NULL),
     mnTimeout(1),
+    mnPriority(0),
     mbActive(false),
     mbAuto(false)
 {
@@ -208,6 +247,7 @@ Timer::Timer():
 Timer::Timer( const Timer& rTimer ):
     mpTimerData(NULL),
     mnTimeout(rTimer.mnTimeout),
+    mnPriority(rTimer.mnPriority),
     mbActive(false),
     mbAuto(false),
     maTimeoutHdl(rTimer.maTimeoutHdl)
@@ -230,9 +270,11 @@ void Timer::Timeout()
     maTimeoutHdl.Call( this );
 }
 
-void Timer::SetTimeout( sal_uLong nNewTimeout )
+void Timer::SetTimeout( sal_uLong nNewTimeout, sal_Int32 nNewPriority )
 {
     mnTimeout = nNewTimeout;
+    mnPriority = nNewPriority;
+    mnDefaultPriority = nNewPriority;
 
     // if timer is active then renew clock
     if ( mbActive )
@@ -312,6 +354,7 @@ Timer& Timer::operator=( const Timer& rTimer )
 
     mbActive        = false;
     mnTimeout       = rTimer.mnTimeout;
+    mnPriority      = rTimer.mnPriority;
     maTimeoutHdl    = rTimer.maTimeoutHdl;
 
     if ( rTimer.IsActive() )
