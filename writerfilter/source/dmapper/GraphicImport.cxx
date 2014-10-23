@@ -1159,9 +1159,10 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             {
                 if( m_pImpl->eGraphicImportType == IMPORT_AS_GRAPHIC || !nBorder )
                 {
-                    aBorderLine.Color = m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineColor;
+                    GraphicBorderLine& rBorderLine = m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder)];
+                    aBorderLine.Color = rBorderLine.nLineColor;
                     aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.OuterLineWidth = (sal_Int16)m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineWidth;
+                    aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
                     aBorderLine.LineDistance = 0;
                 }
                 PropertyIds aBorderProps[4] =
