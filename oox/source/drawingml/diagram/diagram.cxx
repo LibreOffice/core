@@ -295,8 +295,9 @@ void Diagram::build(  )
     }
 
     // assign outline levels
-    DiagramData::StringMap::iterator aPresOfIter=getData()->getPresOfNameMap().begin();
-    const DiagramData::StringMap::iterator aPresOfEnd=getData()->getPresOfNameMap().end();
+    DiagramData::StringMap& rStringMap = getData()->getPresOfNameMap();
+    DiagramData::StringMap::iterator aPresOfIter=rStringMap.begin();
+    const DiagramData::StringMap::iterator aPresOfEnd=rStringMap.end();
     while( aPresOfIter != aPresOfEnd )
     {
         DiagramData::StringMap::value_type::second_type::iterator aPresOfNodeIterCalcLevel=aPresOfIter->second.begin();
