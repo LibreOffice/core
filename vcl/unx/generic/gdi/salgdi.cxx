@@ -148,8 +148,8 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
         X11SalGraphicsImpl* pImpl = dynamic_cast<X11SalGraphicsImpl*>(mpImpl.get());
         if (pImpl)
         {
-            pImpl->nPenPixel_      = GetPixel( pImpl->nPenColor_ );
-            pImpl->nBrushPixel_    = GetPixel( pImpl->nBrushColor_ );
+            pImpl->mnPenPixel      = GetPixel( pImpl->mnPenColor );
+            pImpl->mnBrushPixel    = GetPixel( pImpl->mnBrushColor );
         }
         nTextPixel_     = GetPixel( nTextColor_ );
     }

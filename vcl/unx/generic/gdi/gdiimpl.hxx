@@ -36,37 +36,39 @@ class X11SalGraphics;
 
 class X11SalGraphicsImpl : public SalGraphicsImpl
 {
+    friend X11SalGraphics;
+
 private:
     X11SalGraphics& mrParent;
 
-    SalColor nBrushColor_;
-    GC pBrushGC_;      // Brush attributes
-    Pixel nBrushPixel_;
+    SalColor mnBrushColor;
+    GC mpBrushGC;      // Brush attributes
+    Pixel mnBrushPixel;
 
-    bool bPenGC_ : 1;        // is Pen GC valid
-    bool bBrushGC_ : 1;      // is Brush GC valid
-    bool bMonoGC_ : 1;       // is Mono GC valid
-    bool bCopyGC_ : 1;       // is Copy GC valid
-    bool bInvertGC_ : 1;     // is Invert GC valid
-    bool bInvert50GC_ : 1;   // is Invert50 GC valid
-    bool bStippleGC_ : 1;    // is Stipple GC valid
-    bool bTrackingGC_ : 1;   // is Tracking GC valid
-    bool bDitherBrush_ : 1;  // is solid or tile
+    bool mbPenGC : 1;        // is Pen GC valid
+    bool mbBrushGC : 1;      // is Brush GC valid
+    bool mbMonoGC : 1;       // is Mono GC valid
+    bool mbCopyGC : 1;       // is Copy GC valid
+    bool mbInvertGC : 1;     // is Invert GC valid
+    bool mbInvert50GC : 1;   // is Invert50 GC valid
+    bool mbStippleGC : 1;    // is Stipple GC valid
+    bool mbTrackingGC : 1;   // is Tracking GC valid
+    bool mbDitherBrush : 1;  // is solid or tile
 
-    bool bXORMode_ : 1;      // is ROP XOR Mode set
+    bool mbXORMode : 1;      // is ROP XOR Mode set
 
-    GC pPenGC_;        // Pen attributes
-    SalColor nPenColor_;
-    Pixel nPenPixel_;
+    GC mpPenGC;        // Pen attributes
+    SalColor mnPenColor;
+    Pixel mnPenPixel;
 
 
-    GC pMonoGC_;
-    GC pCopyGC_;
-    GC pMaskGC_;
-    GC pInvertGC_;
-    GC pInvert50GC_;
-    GC pStippleGC_;
-    GC pTrackingGC_;
+    GC mpMonoGC;
+    GC mpCopyGC;
+    GC mpMaskGC;
+    GC mpInvertGC;
+    GC mpInvert50GC;
+    GC mpStippleGC;
+    GC mpTrackingGC;
 
     GC CreateGC( Drawable      hDrawable,
             unsigned long nMask = GCGraphicsExposures );
