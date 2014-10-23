@@ -135,9 +135,10 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
     fFrac = modf( fValue, &fInt );
     if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) ) // 2^29
     {
-        rnRKValue = static_cast< sal_Int32 >( fInt );
-        rnRKValue <<= 2;
-        rnRKValue |= EXC_RK_INT;
+        rnRKValue
+            = static_cast<sal_Int32>(
+                static_cast<sal_uInt32>(static_cast<sal_Int32>(fInt)) << 2)
+            | EXC_RK_INT;
         return true;
     }
 
@@ -145,9 +146,10 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
     fFrac = modf( fValue * 100.0, &fInt );
     if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) )
     {
-        rnRKValue = static_cast< sal_Int32 >( fInt );
-        rnRKValue <<= 2;
-        rnRKValue |= EXC_RK_INT100;
+        rnRKValue
+            = static_cast<sal_Int32>(
+                static_cast<sal_uInt32>(static_cast<sal_Int32>(fInt)) << 2)
+            | EXC_RK_INT100;
         return true;
     }
 
