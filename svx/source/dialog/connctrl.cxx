@@ -113,8 +113,6 @@ void SvxXConnectionPreview::AdaptSize()
             aNewSize.Height()= (long) ( (double) nWidth / fRectWH );
         }
 
-        if (aRect.GetWidth() == 0)
-            return;
         boost::rational<sal_Int64> aFrac1( aWinSize.Width(), aRect.GetWidth() );
         boost::rational<sal_Int64> aFrac2( aWinSize.Height(), aRect.GetHeight() );
         boost::rational<sal_Int64> aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
