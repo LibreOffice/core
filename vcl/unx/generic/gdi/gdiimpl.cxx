@@ -122,29 +122,29 @@ namespace
 
 X11SalGraphicsImpl::X11SalGraphicsImpl(X11SalGraphics& rParent):
     mrParent(rParent),
-    nBrushColor_( MAKE_SALCOLOR( 0xFF, 0xFF, 0XFF ) ),
-    pBrushGC_(NULL),
-    nBrushPixel_(0),
-    bPenGC_(false),
-    bBrushGC_(false),
-    bMonoGC_(false),
-    bCopyGC_(false),
-    bInvertGC_(false),
-    bInvert50GC_(false),
-    bStippleGC_(false),
-    bTrackingGC_(false),
-    bDitherBrush_(false),
-    bXORMode_(false),
-    pPenGC_(NULL),
-    nPenColor_( MAKE_SALCOLOR( 0x00, 0x00, 0x00 ) ),
-    nPenPixel_(0),
-    pMonoGC_(NULL),
-    pCopyGC_(NULL),
-    pMaskGC_(NULL),
-    pInvertGC_(NULL),
-    pInvert50GC_(NULL),
-    pStippleGC_(NULL),
-    pTrackingGC_(NULL)
+    mnBrushColor( MAKE_SALCOLOR( 0xFF, 0xFF, 0XFF ) ),
+    mpBrushGC(NULL),
+    mnBrushPixel(0),
+    mbPenGC(false),
+    mbBrushGC(false),
+    mbMonoGC(false),
+    mbCopyGC(false),
+    mbInvertGC(false),
+    mbInvert50GC(false),
+    mbStippleGC(false),
+    mbTrackingGC(false),
+    mbDitherBrush(false),
+    mbXORMode(false),
+    mpPenGC(NULL),
+    mnPenColor( MAKE_SALCOLOR( 0x00, 0x00, 0x00 ) ),
+    mnPenPixel(0),
+    mpMonoGC(NULL),
+    mpCopyGC(NULL),
+    mpMaskGC(NULL),
+    mpInvertGC(NULL),
+    mpInvert50GC(NULL),
+    mpStippleGC(NULL),
+    mpTrackingGC(NULL)
 {
 }
 
@@ -181,16 +181,16 @@ void X11SalGraphicsImpl::freeResources()
 {
     Display *pDisplay = mrParent.GetXDisplay();
 
-    if( pPenGC_ ) XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
-    if( pBrushGC_ ) XFreeGC( pDisplay, pBrushGC_ ), pBrushGC_ = None;
-    if( pMonoGC_ ) XFreeGC( pDisplay, pMonoGC_ ), pMonoGC_ = None;
-    if( pTrackingGC_ ) XFreeGC( pDisplay, pTrackingGC_ ), pTrackingGC_ = None;
-    if( pCopyGC_ ) XFreeGC( pDisplay, pCopyGC_ ), pCopyGC_ = None;
-    if( pMaskGC_ ) XFreeGC( pDisplay, pMaskGC_ ), pMaskGC_ = None;
-    if( pInvertGC_ ) XFreeGC( pDisplay, pInvertGC_ ), pInvertGC_ = None;
-    if( pInvert50GC_ ) XFreeGC( pDisplay, pInvert50GC_ ), pInvert50GC_ = None;
-    if( pStippleGC_ ) XFreeGC( pDisplay, pStippleGC_ ), pStippleGC_ = None;
-    bTrackingGC_ = bPenGC_ = bBrushGC_ = bMonoGC_ = bCopyGC_ = bInvertGC_ = bInvert50GC_ = bStippleGC_ = false;
+    if( mpPenGC ) XFreeGC( pDisplay, mpPenGC ), mpPenGC = None;
+    if( mpBrushGC ) XFreeGC( pDisplay, mpBrushGC ), mpBrushGC = None;
+    if( mpMonoGC ) XFreeGC( pDisplay, mpMonoGC ), mpMonoGC = None;
+    if( mpTrackingGC ) XFreeGC( pDisplay, mpTrackingGC ), mpTrackingGC = None;
+    if( mpCopyGC ) XFreeGC( pDisplay, mpCopyGC ), mpCopyGC = None;
+    if( mpMaskGC ) XFreeGC( pDisplay, mpMaskGC ), mpMaskGC = None;
+    if( mpInvertGC ) XFreeGC( pDisplay, mpInvertGC ), mpInvertGC = None;
+    if( mpInvert50GC ) XFreeGC( pDisplay, mpInvert50GC ), mpInvert50GC = None;
+    if( mpStippleGC ) XFreeGC( pDisplay, mpStippleGC ), mpStippleGC = None;
+    mbTrackingGC = mbPenGC = mbBrushGC = mbMonoGC = mbCopyGC = mbInvertGC = mbInvert50GC = mbStippleGC = false;
 }
 
 GC X11SalGraphicsImpl::CreateGC( Drawable hDrawable, unsigned long nMask )
@@ -211,24 +211,24 @@ GC X11SalGraphicsImpl::CreateGC( Drawable hDrawable, unsigned long nMask )
 
 inline GC X11SalGraphicsImpl::GetCopyGC()
 {
-    if( bXORMode_ ) return GetInvertGC();
+    if( mbXORMode ) return GetInvertGC();
 
-    if( !pCopyGC_ )
-        pCopyGC_ = CreateGC( mrParent.GetDrawable() );
+    if( !mpCopyGC )
+        mpCopyGC = CreateGC( mrParent.GetDrawable() );
 
-    if( !bCopyGC_ )
+    if( !mbCopyGC )
     {
-        mrParent.SetClipRegion( pCopyGC_ );
-        bCopyGC_ = true;
+        mrParent.SetClipRegion( mpCopyGC );
+        mbCopyGC = true;
     }
-    return pCopyGC_;
+    return mpCopyGC;
 }
 
 GC X11SalGraphicsImpl::GetTrackingGC()
 {
     const char    dash_list[2] = {2, 2};
 
-    if( !pTrackingGC_ )
+    if( !mpTrackingGC )
     {
         XGCValues     values;
 
@@ -239,56 +239,56 @@ GC X11SalGraphicsImpl::GetTrackingGC()
         values.line_width           = 1;
         values.line_style           = LineOnOffDash;
 
-        pTrackingGC_ = XCreateGC( mrParent.GetXDisplay(), mrParent.GetDrawable(),
+        mpTrackingGC = XCreateGC( mrParent.GetXDisplay(), mrParent.GetDrawable(),
                                   GCGraphicsExposures | GCForeground | GCFunction
                                   | GCLineWidth | GCLineStyle,
                                   &values );
-        XSetDashes( mrParent.GetXDisplay(), pTrackingGC_, 0, dash_list, 2 );
+        XSetDashes( mrParent.GetXDisplay(), mpTrackingGC, 0, dash_list, 2 );
     }
 
-    if( !bTrackingGC_ )
+    if( !mbTrackingGC )
     {
-        mrParent.SetClipRegion( pTrackingGC_ );
-        bTrackingGC_ = true;
+        mrParent.SetClipRegion( mpTrackingGC );
+        mbTrackingGC = true;
     }
 
-    return pTrackingGC_;
+    return mpTrackingGC;
 }
 
 inline GC X11SalGraphicsImpl::GetMonoGC( Pixmap hPixmap )
 {
-    if( !pMonoGC_ )
-        pMonoGC_ = CreateGC( hPixmap );
+    if( !mpMonoGC )
+        mpMonoGC = CreateGC( hPixmap );
 
-    if( !bMonoGC_ )
+    if( !mbMonoGC )
     {
-        mrParent.SetClipRegion( pMonoGC_ );
-        bMonoGC_ = true;
+        mrParent.SetClipRegion( mpMonoGC );
+        mbMonoGC = true;
     }
 
-    return pMonoGC_;
+    return mpMonoGC;
 }
 
 GC X11SalGraphicsImpl::GetInvertGC()
 {
-    if( !pInvertGC_ )
-        pInvertGC_ = CreateGC( mrParent.GetDrawable(),
+    if( !mpInvertGC )
+        mpInvertGC = CreateGC( mrParent.GetDrawable(),
                                GCGraphicsExposures
                                | GCForeground
                                | GCFunction
                                | GCLineWidth );
 
-    if( !bInvertGC_ )
+    if( !mbInvertGC )
     {
-        mrParent.SetClipRegion( pInvertGC_ );
-        bInvertGC_ = true;
+        mrParent.SetClipRegion( mpInvertGC );
+        mbInvertGC = true;
     }
-    return pInvertGC_;
+    return mpInvertGC;
 }
 
 GC X11SalGraphicsImpl::GetInvert50GC()
 {
-    if( !pInvert50GC_ )
+    if( !mpInvert50GC )
     {
         XGCValues values;
 
@@ -320,109 +320,109 @@ GC X11SalGraphicsImpl::GetInvert50GC()
             values.stipple              = mrParent.GetDisplay()->GetInvert50( mrParent.m_nXScreen );
         }
 
-        pInvert50GC_ = XCreateGC( mrParent.GetXDisplay(), mrParent.GetDrawable(),
+        mpInvert50GC = XCreateGC( mrParent.GetXDisplay(), mrParent.GetDrawable(),
                                   nValueMask,
                                   &values );
     }
 
-    if( !bInvert50GC_ )
+    if( !mbInvert50GC )
     {
-        mrParent.SetClipRegion( pInvert50GC_ );
-        bInvert50GC_ = true;
+        mrParent.SetClipRegion( mpInvert50GC );
+        mbInvert50GC = true;
     }
-    return pInvert50GC_;
+    return mpInvert50GC;
 }
 
 inline GC X11SalGraphicsImpl::GetStippleGC()
 {
-    if( !pStippleGC_ )
-        pStippleGC_ = CreateGC( mrParent.GetDrawable(),
+    if( !mpStippleGC )
+        mpStippleGC = CreateGC( mrParent.GetDrawable(),
                                 GCGraphicsExposures
                                 | GCFillStyle
                                 | GCLineWidth );
 
-    if( !bStippleGC_ )
+    if( !mbStippleGC )
     {
-        XSetFunction( mrParent.GetXDisplay(), pStippleGC_, bXORMode_ ? GXxor : GXcopy );
-        mrParent.SetClipRegion( pStippleGC_ );
-        bStippleGC_ = true;
+        XSetFunction( mrParent.GetXDisplay(), mpStippleGC, mbXORMode ? GXxor : GXcopy );
+        mrParent.SetClipRegion( mpStippleGC );
+        mbStippleGC = true;
     }
 
-    return pStippleGC_;
+    return mpStippleGC;
 }
 
 GC X11SalGraphicsImpl::SelectBrush()
 {
     Display *pDisplay = mrParent.GetXDisplay();
 
-    DBG_ASSERT( nBrushColor_ != SALCOLOR_NONE, "Brush Transparent" );
+    DBG_ASSERT( mnBrushColor != SALCOLOR_NONE, "Brush Transparent" );
 
-    if( !pBrushGC_ )
+    if( !mpBrushGC )
     {
         XGCValues values;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = False;
 
-        pBrushGC_ = XCreateGC( pDisplay, mrParent.hDrawable_,
+        mpBrushGC = XCreateGC( pDisplay, mrParent.hDrawable_,
                                GCSubwindowMode | GCFillRule | GCGraphicsExposures,
                                &values );
     }
 
-    if( !bBrushGC_ )
+    if( !mbBrushGC )
     {
-        if( !bDitherBrush_ )
+        if( !mbDitherBrush )
         {
-            XSetFillStyle ( pDisplay, pBrushGC_, FillSolid );
-            XSetForeground( pDisplay, pBrushGC_, nBrushPixel_ );
+            XSetFillStyle ( pDisplay, mpBrushGC, FillSolid );
+            XSetForeground( pDisplay, mpBrushGC, mnBrushPixel );
             if( mrParent.bPrinter_ )
-                XSetTile( pDisplay, pBrushGC_, None );
+                XSetTile( pDisplay, mpBrushGC, None );
         }
         else
         {
             // Bug in Sun Solaris 2.5.1, XFillPolygon doesn't always reflect
             // changes of the tile. PROPERTY_BUG_Tile doesn't fix this !
             if (mrParent.GetDisplay()->GetProperties() & PROPERTY_BUG_FillPolygon_Tile)
-                XSetFillStyle ( pDisplay, pBrushGC_, FillSolid );
+                XSetFillStyle ( pDisplay, mpBrushGC, FillSolid );
 
-            XSetFillStyle ( pDisplay, pBrushGC_, FillTiled );
-            XSetTile      ( pDisplay, pBrushGC_, mrParent.hBrush_ );
+            XSetFillStyle ( pDisplay, mpBrushGC, FillTiled );
+            XSetTile      ( pDisplay, mpBrushGC, mrParent.hBrush_ );
         }
-        XSetFunction  ( pDisplay, pBrushGC_, bXORMode_ ? GXxor : GXcopy );
-        mrParent.SetClipRegion( pBrushGC_ );
+        XSetFunction  ( pDisplay, mpBrushGC, mbXORMode ? GXxor : GXcopy );
+        mrParent.SetClipRegion( mpBrushGC );
 
-        bBrushGC_ = true;
+        mbBrushGC = true;
     }
 
-    return pBrushGC_;
+    return mpBrushGC;
 }
 
 GC X11SalGraphicsImpl::SelectPen()
 {
     Display *pDisplay = mrParent.GetXDisplay();
 
-    if( !pPenGC_ )
+    if( !mpPenGC )
     {
         XGCValues values;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = False;
 
-        pPenGC_ = XCreateGC( pDisplay, mrParent.hDrawable_,
+        mpPenGC = XCreateGC( pDisplay, mrParent.hDrawable_,
                              GCSubwindowMode | GCFillRule | GCGraphicsExposures,
                              &values );
     }
 
-    if( !bPenGC_ )
+    if( !mbPenGC )
     {
-        if( nPenColor_ != SALCOLOR_NONE )
-            XSetForeground( pDisplay, pPenGC_, nPenPixel_ );
-        XSetFunction  ( pDisplay, pPenGC_, bXORMode_ ? GXxor : GXcopy );
-        mrParent.SetClipRegion( pPenGC_ );
-        bPenGC_ = true;
+        if( mnPenColor != SALCOLOR_NONE )
+            XSetForeground( pDisplay, mpPenGC, mnPenPixel );
+        XSetFunction  ( pDisplay, mpPenGC, mbXORMode ? GXxor : GXcopy );
+        mrParent.SetClipRegion( mpPenGC );
+        mbPenGC = true;
     }
 
-    return pPenGC_;
+    return mpPenGC;
 }
 
 void X11SalGraphicsImpl::DrawLines( sal_uLong              nPoints,
@@ -516,7 +516,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
 
         GC pCopyGC;
 
-        if( bXORMode_
+        if( mbXORMode
             && !pSrcGraphics->bVirDev_
             && (mrParent.GetDisplay()->GetProperties() & PROPERTY_BUG_XCopyArea_GXxor) )
         {
@@ -716,7 +716,7 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
         DBG_TESTTRANS( aFG );
 
         // #105055# For XOR mode, keep background behind bitmap intact
-        if( !bXORMode_ )
+        if( !mbXORMode )
         {
             // mask out background in pixmap #2 (nontransparent areas 0)
             aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
@@ -736,8 +736,8 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
         DBG_TESTTRANS( aBG );
 
         // #105055# Disable XOR temporarily
-        bool bOldXORMode( bXORMode_ );
-        bXORMode_ = false;
+        bool bOldXORMode( mbXORMode );
+        mbXORMode = false;
 
         // copy pixmap #2 (result) to background
         XCopyArea( pXDisp, aBG, aDrawable, GetCopyGC(),
@@ -747,7 +747,7 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
 
         DBG_TESTTRANS( aBG );
 
-        bXORMode_ = bOldXORMode;
+        mbXORMode = bOldXORMode;
 
         XFreeGC( pXDisp, aTmpGC );
         XFlush( pXDisp );
@@ -907,7 +907,7 @@ bool X11SalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
     if( ! mrParent.m_pFrame && ! mrParent.m_pVDev )
         return false;
 
-    if( bPenGC_ || !bBrushGC_ || bXORMode_ )
+    if( mbPenGC || !mbBrushGC || mbXORMode )
         return false; // can only perform solid fills without XOR.
 
     if( mrParent.m_pVDev && mrParent.m_pVDev->GetDepth() < 8 )
@@ -918,7 +918,7 @@ bool X11SalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
         return false;
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
-    const XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency);
+    const XRenderColor aRenderColor = GetXRenderColor( mnBrushColor , fTransparency);
 
     XRenderPeer& rPeer = XRenderPeer::GetInstance();
     rPeer.FillRectangle( PictOpOver,
@@ -983,15 +983,15 @@ void X11SalGraphicsImpl::ResetClipRegion()
 {
     if( mrParent.mpClipRegion )
     {
-        bPenGC_         = false;
+        mbPenGC         = false;
         mrParent.bFontGC_ = false;
-        bBrushGC_       = false;
-        bMonoGC_        = false;
-        bCopyGC_        = false;
-        bInvertGC_      = false;
-        bInvert50GC_    = false;
-        bStippleGC_     = false;
-        bTrackingGC_    = false;
+        mbBrushGC       = false;
+        mbMonoGC        = false;
+        mbCopyGC        = false;
+        mbInvertGC      = false;
+        mbInvert50GC    = false;
+        mbStippleGC     = false;
+        mbTrackingGC    = false;
 
         XDestroyRegion( mrParent.mpClipRegion );
         mrParent.mpClipRegion    = NULL;
@@ -1047,15 +1047,15 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
     //}
 
     // done, invalidate GCs
-    bPenGC_         = false;
+    mbPenGC         = false;
     mrParent.bFontGC_ = false;
-    bBrushGC_       = false;
-    bMonoGC_        = false;
-    bCopyGC_        = false;
-    bInvertGC_      = false;
-    bInvert50GC_    = false;
-    bStippleGC_     = false;
-    bTrackingGC_    = false;
+    mbBrushGC       = false;
+    mbMonoGC        = false;
+    mbCopyGC        = false;
+    mbInvertGC      = false;
+    mbInvert50GC    = false;
+    mbStippleGC     = false;
+    mbTrackingGC    = false;
 
     if( XEmptyRegion( mrParent.mpClipRegion ) )
     {
@@ -1067,42 +1067,42 @@ bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 
 void X11SalGraphicsImpl::SetLineColor()
 {
-    if( nPenColor_ != SALCOLOR_NONE )
+    if( mnPenColor != SALCOLOR_NONE )
     {
-        nPenColor_      = SALCOLOR_NONE;
-        bPenGC_         = false;
+        mnPenColor      = SALCOLOR_NONE;
+        mbPenGC         = false;
     }
 }
 
 void X11SalGraphicsImpl::SetLineColor( SalColor nSalColor )
 {
-    if( nPenColor_ != nSalColor )
+    if( mnPenColor != nSalColor )
     {
-        nPenColor_      = nSalColor;
-        nPenPixel_      = mrParent.GetPixel( nSalColor );
-        bPenGC_         = false;
+        mnPenColor      = nSalColor;
+        mnPenPixel      = mrParent.GetPixel( nSalColor );
+        mbPenGC         = false;
     }
 }
 
 void X11SalGraphicsImpl::SetFillColor()
 {
-    if( nBrushColor_ != SALCOLOR_NONE )
+    if( mnBrushColor != SALCOLOR_NONE )
     {
-        bDitherBrush_   = false;
-        nBrushColor_    = SALCOLOR_NONE;
-        bBrushGC_       = false;
+        mbDitherBrush   = false;
+        mnBrushColor    = SALCOLOR_NONE;
+        mbBrushGC       = false;
     }
 }
 
 void X11SalGraphicsImpl::SetFillColor( SalColor nSalColor )
 {
-    if( nBrushColor_ != nSalColor )
+    if( mnBrushColor != nSalColor )
     {
-        bDitherBrush_   = false;
-        nBrushColor_    = nSalColor;
-        nBrushPixel_    = mrParent.GetPixel( nSalColor );
+        mbDitherBrush   = false;
+        mnBrushColor    = nSalColor;
+        mnBrushPixel    = mrParent.GetPixel( nSalColor );
         if( TrueColor != mrParent.GetColormap().GetVisual().GetClass()
-            && mrParent.GetColormap().GetColor( nBrushPixel_ ) != nBrushColor_
+            && mrParent.GetColormap().GetColor( mnBrushPixel ) != mnBrushColor
             && nSalColor != MAKE_SALCOLOR( 0x00, 0x00, 0x00 ) // black
             && nSalColor != MAKE_SALCOLOR( 0x00, 0x00, 0x80 ) // blue
             && nSalColor != MAKE_SALCOLOR( 0x00, 0x80, 0x00 ) // green
@@ -1119,8 +1119,8 @@ void X11SalGraphicsImpl::SetFillColor( SalColor nSalColor )
             && nSalColor != MAKE_SALCOLOR( 0xFF, 0x00, 0xFF ) // light magenta
             && nSalColor != MAKE_SALCOLOR( 0xFF, 0xFF, 0x00 ) // light brown
             && nSalColor != MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ) )
-            bDitherBrush_ = mrParent.GetDitherPixmap(nSalColor);
-        bBrushGC_       = false;
+            mbDitherBrush = mrParent.GetDitherPixmap(nSalColor);
+        mbBrushGC       = false;
     }
 }
 
@@ -1129,17 +1129,17 @@ void X11SalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )
     switch( nROPColor )
     {
         case SAL_ROP_0 : // 0
-            nPenPixel_ = (Pixel)0;
+            mnPenPixel = (Pixel)0;
             break;
         case SAL_ROP_1 : // 1
-            nPenPixel_ = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnPenPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
         case SAL_ROP_INVERT : // 2
-            nPenPixel_ = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnPenPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
     }
-    nPenColor_  = mrParent.GetColormap().GetColor( nPenPixel_ );
-    bPenGC_     = false;
+    mnPenColor  = mrParent.GetColormap().GetColor( mnPenPixel );
+    mbPenGC     = false;
 }
 
 void X11SalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
@@ -1147,40 +1147,40 @@ void X11SalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
     switch( nROPColor )
     {
         case SAL_ROP_0 : // 0
-            nBrushPixel_ = (Pixel)0;
+            mnBrushPixel = (Pixel)0;
             break;
         case SAL_ROP_1 : // 1
-            nBrushPixel_ = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnBrushPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
         case SAL_ROP_INVERT : // 2
-            nBrushPixel_ = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
+            mnBrushPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
     }
-    bDitherBrush_   = false;
-    nBrushColor_    = mrParent.GetColormap().GetColor( nBrushPixel_ );
-    bBrushGC_       = false;
+    mbDitherBrush   = false;
+    mnBrushColor    = mrParent.GetColormap().GetColor( mnBrushPixel );
+    mbBrushGC       = false;
 }
 
 void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
 {
-    if( !bXORMode_ == bSet )
+    if( !mbXORMode == bSet )
     {
-        bXORMode_   = bSet;
-        bPenGC_     = false;
+        mbXORMode   = bSet;
+        mbPenGC     = false;
         mrParent.bFontGC_ = false;
-        bBrushGC_   = false;
-        bMonoGC_        = false;
-        bCopyGC_        = false;
-        bInvertGC_  = false;
-        bInvert50GC_    = false;
-        bStippleGC_ = false;
-        bTrackingGC_    = false;
+        mbBrushGC   = false;
+        mbMonoGC        = false;
+        mbCopyGC        = false;
+        mbInvertGC  = false;
+        mbInvert50GC    = false;
+        mbStippleGC = false;
+        mbTrackingGC    = false;
     }
 }
 
 void X11SalGraphicsImpl::drawPixel( long nX, long nY )
 {
-    if( nPenColor_ !=  SALCOLOR_NONE )
+    if( mnPenColor !=  SALCOLOR_NONE )
         XDrawPoint( mrParent.GetXDisplay(), mrParent.GetDrawable(), SelectPen(), nX, nY );
 }
 
@@ -1190,31 +1190,31 @@ void X11SalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
     {
         Display *pDisplay = mrParent.GetXDisplay();
 
-        if( (nPenColor_ == SALCOLOR_NONE) && !bPenGC_ )
+        if( (mnPenColor == SALCOLOR_NONE) && !mbPenGC )
         {
             SetLineColor( nSalColor );
             XDrawPoint( pDisplay, mrParent.GetDrawable(), SelectPen(), nX, nY );
-            nPenColor_ = SALCOLOR_NONE;
-            bPenGC_ = False;
+            mnPenColor = SALCOLOR_NONE;
+            mbPenGC = False;
         }
         else
         {
             GC pGC = SelectPen();
 
-            if( nSalColor != nPenColor_ )
+            if( nSalColor != mnPenColor )
                 XSetForeground( pDisplay, pGC, mrParent.GetPixel( nSalColor ) );
 
             XDrawPoint( pDisplay, mrParent.GetDrawable(), pGC, nX, nY );
 
-            if( nSalColor != nPenColor_ )
-                XSetForeground( pDisplay, pGC, nPenPixel_ );
+            if( nSalColor != mnPenColor )
+                XSetForeground( pDisplay, pGC, mnPenPixel );
         }
     }
 }
 
 void X11SalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    if( nPenColor_ != SALCOLOR_NONE )
+    if( mnPenColor != SALCOLOR_NONE )
     {
         if ( mrParent.GetDisplay()->GetProperties() & PROPERTY_BUG_DrawLine )
         {
@@ -1231,7 +1231,7 @@ void X11SalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void X11SalGraphicsImpl::drawRect( long nX, long nY, long nDX, long nDY )
 {
-    if( nBrushColor_ != SALCOLOR_NONE )
+    if( mnBrushColor != SALCOLOR_NONE )
     {
         XFillRectangle( mrParent.GetXDisplay(),
                         mrParent.GetDrawable(),
@@ -1239,7 +1239,7 @@ void X11SalGraphicsImpl::drawRect( long nX, long nY, long nDX, long nDY )
                         nX, nY, nDX, nDY );
     }
     // description DrawRect is wrong; thus -1
-    if( nPenColor_ != SALCOLOR_NONE )
+    if( mnPenColor != SALCOLOR_NONE )
         XDrawRectangle( mrParent.GetXDisplay(),
                         mrParent.GetDrawable(),
                         SelectPen(),
@@ -1253,7 +1253,7 @@ void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAr
 
 void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry, bool bClose )
 {
-    if( nPenColor_ != SALCOLOR_NONE )
+    if( mnPenColor != SALCOLOR_NONE )
     {
         SalPolyLine Points( nPoints, pPtAry );
 
@@ -1268,7 +1268,7 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
 
     if( nPoints < 3 )
     {
-        if( !bXORMode_ )
+        if( !mbXORMode )
         {
             if( 1 == nPoints  )
                 drawPixel( pPtAry[0].mnX, pPtAry[0].mnY );
@@ -1316,14 +1316,14 @@ void X11SalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry
         }
     }
 
-    if( nBrushColor_ != SALCOLOR_NONE )
+    if( mnBrushColor != SALCOLOR_NONE )
         XFillPolygon( mrParent.GetXDisplay(),
                       mrParent.GetDrawable(),
                       SelectBrush(),
                       &Points[0], nPoints,
                       Complex, CoordModeOrigin );
 
-    if( nPenColor_ != SALCOLOR_NONE )
+    if( mnPenColor != SALCOLOR_NONE )
         DrawLines( nPoints, Points, SelectPen(), true );
 }
 
@@ -1331,7 +1331,7 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
                                    const sal_uInt32    *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
-    if( nBrushColor_ != SALCOLOR_NONE )
+    if( mnBrushColor != SALCOLOR_NONE )
     {
         sal_uInt32      i, n;
         Region          pXRegA  = NULL;
@@ -1360,7 +1360,7 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
             GC pGC = SelectBrush();
             mrParent.SetClipRegion( pGC, pXRegA ); // ??? twice
             XDestroyRegion( pXRegA );
-            bBrushGC_ = false;
+            mbBrushGC = false;
 
             XFillRectangle( mrParent.GetXDisplay(),
                             mrParent.GetDrawable(),
@@ -1369,7 +1369,7 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
         }
    }
 
-   if( nPenColor_ != SALCOLOR_NONE )
+   if( mnPenColor != SALCOLOR_NONE )
        for( sal_uInt32 i = 0; i < nPoly; i++ )
            drawPolyLine( pPoints[i], pPtAry[i], true );
 }
@@ -1456,13 +1456,13 @@ bool X11SalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrig
         return true;
 
     // nothing to do if everything is transparent
-    if( (nBrushColor_ == SALCOLOR_NONE)
-    &&  (nPenColor_ == SALCOLOR_NONE) )
+    if( (mnBrushColor == SALCOLOR_NONE)
+    &&  (mnPenColor == SALCOLOR_NONE) )
         return true;
 
     // cannot handle pencolor!=brushcolor yet
-    if( (nPenColor_ != SALCOLOR_NONE)
-    &&  (nPenColor_ != nBrushColor_) )
+    if( (mnPenColor != SALCOLOR_NONE)
+    &&  (mnPenColor != mnBrushColor) )
         return false;
 
     // TODO: remove the env-variable when no longer needed
@@ -1554,7 +1554,7 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB
     }
 
     // set polygon foreground color and opacity
-    XRenderColor aRenderColor = GetXRenderColor( nBrushColor_ , fTransparency );
+    XRenderColor aRenderColor = GetXRenderColor( mnBrushColor , fTransparency );
     rRenderPeer.FillRectangle( PictOpSrc, rEntry.m_aPicture, &aRenderColor, 0, 0, 1, 1 );
 
     // set clipping
@@ -1593,8 +1593,8 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
     // temporarily adjust brush color to pen color
     // since the line is drawn as an area-polygon
-    const SalColor aKeepBrushColor = nBrushColor_;
-    nBrushColor_ = nPenColor_;
+    const SalColor aKeepBrushColor = mnBrushColor;
+    mnBrushColor = mnPenColor;
 
     // #i11575#desc5#b adjust B2D tesselation result to raster positions
     basegfx::B2DPolygon aPolygon = rPolygon;
@@ -1619,7 +1619,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
             bDrawnOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
 
         // restore the original brush GC
-        nBrushColor_ = aKeepBrushColor;
+        mnBrushColor = aKeepBrushColor;
         return bDrawnOk;
     }
 
@@ -1653,7 +1653,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
     }
 
     // restore the original brush GC
-    nBrushColor_ = aKeepBrushColor;
+    mnBrushColor = aKeepBrushColor;
     return bDrawnOk;
 }
 
