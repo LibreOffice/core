@@ -469,13 +469,13 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
    if ( pTabProtect )
    {
         Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
-        sal_uInt16 nHash(0x0000);
         OString sHash;
         if (aHash.getLength() >= 2)
         {
-            nHash = ((aHash[0] << 8) & 0xFFFF);
-            nHash |= (aHash[1] & 0xFF);
-            sHash = OString::number( nHash, 16 );
+            sHash = OString::number(
+                ( static_cast<sal_uInt8>(aHash[0]) << 8
+                  | static_cast<sal_uInt8>(aHash[1]) ),
+                16 );
         }
         sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
         rWorksheet->singleElement( XML_sheetProtection,
