@@ -150,8 +150,9 @@ void Diagram::build(  )
     output << "digraph datatree {" << std::endl;
 #endif
 
-    dgm::Points::iterator aCurrPoint( getData()->getPoints( ).begin() );
-    dgm::Points::iterator aEndPoint( getData()->getPoints( ).end() );
+    dgm::Points& rPoints = getData()->getPoints();
+    dgm::Points::iterator aCurrPoint(rPoints.begin());
+    dgm::Points::iterator aEndPoint(rPoints.end());
     while( aCurrPoint != aEndPoint )
     {
 #if OSL_DEBUG_LEVEL > 1
