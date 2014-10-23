@@ -35,7 +35,7 @@ namespace configmgr {
 
 ParseManager::ParseManager(
     OUString const & url, rtl::Reference< Parser > const & parser)
-   : reader_(url), parser_(parser), itemNamespaceId_(-1)
+   : url_(url), reader_(url), parser_(parser), itemNamespaceId_(-1)
 {
     assert(parser.is());
     int id;
@@ -56,6 +56,7 @@ ParseManager::ParseManager(
 }
 
 bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
+    sal_uInt32 startTime( osl_getGlobalTimer() );
     for (;;) {
         switch (itemData_.is()
                 ? xmlreader::XmlReader::RESULT_BEGIN
@@ -66,6 +67,7 @@ bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
             if (!parser_->startElement(
                     reader_, itemNamespaceId_, itemData_, existingDependencies))
             {
+                SAL_INFO("configmgr", "parsing " << url_ << " took " << (osl_getGlobalTimer() - startTime) << " ms, fail");
                 return false;
             }
             break;
@@ -76,6 +78,7 @@ bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
             parser_->characters(itemData_);
             break;
         case xmlreader::XmlReader::RESULT_DONE:
+            SAL_INFO("configmgr", "parsing " << url_ << " took " << (osl_getGlobalTimer() - startTime) << " ms, success");
             return true;
         }
         itemData_.clear();
