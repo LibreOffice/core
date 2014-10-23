@@ -78,8 +78,6 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = NULL;
-
     if( XML_NAMESPACE_STYLE == nPrefix &&
         ((IsXMLToken(rLocalName, XML_HEADER_STYLE )) ||
          (IsXMLToken(rLocalName, XML_FOOTER_STYLE )) ) )
@@ -119,10 +117,11 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
             }
             if (!bEnd)
                 nEndIndex = nIndex;
-            pContext = new PageHeaderFooterContext(GetImport(), nPrefix, rLocalName,
+            return new PageHeaderFooterContext(GetImport(), nPrefix, rLocalName,
                             xAttrList, GetProperties(), xImpPrMap, nStartIndex, nEndIndex, bHeader);
         }
     }
+
     if( XML_NAMESPACE_STYLE == nPrefix &&
         IsXMLToken(rLocalName, XML_PAGE_LAYOUT_PROPERTIES) )
     {
@@ -148,7 +147,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
             if (!bEnd)
                 nEndIndex = nIndex;
             PageContextType aType = Page;
-            pContext = new PagePropertySetContext( GetImport(), nPrefix,
+            return new PagePropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
                                                     XML_TYPE_PROP_PAGE_LAYOUT,
                                                     GetProperties(),
@@ -156,10 +155,7 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
         }
     }
 
-    if (!pContext)
-        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                           xAttrList );
-    return pContext;
+    return XMLPropStyleContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 }
 
 void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet > & rPropSet)
