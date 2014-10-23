@@ -179,6 +179,11 @@ struct GraphicBorderLine
         ,bHasShadow(false)
         {}
 
+    bool isEmpty()
+    {
+        return nLineWidth == 0 && nLineColor == 0 && bHasShadow == false;
+    }
+
 };
 
 class GraphicImport_Impl
@@ -704,7 +709,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
 
                         // fdo#70457: transform XShape into a SwXTextGraphicObject only if there's no rotation
                         if ( nRotation == 0 && !bContainsEffects )
-                            m_xGraphicObject = createGraphicObject( aMediaProperties );
+                            m_xGraphicObject = createGraphicObject( aMediaProperties, xShapeProps );
 
                         bUseShape = !m_xGraphicObject.is( );
 
@@ -1131,7 +1136,7 @@ void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::
 {
 }
 
-uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const beans::PropertyValues& aMediaProperties )
+uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const beans::PropertyValues& aMediaProperties, const uno::Reference<beans::XPropertySet>& xShapeProps )
 {
     uno::Reference< text::XTextContent > xGraphicObject;
     try
@@ -1160,10 +1165,21 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 if( m_pImpl->eGraphicImportType == IMPORT_AS_GRAPHIC || !nBorder )
                 {
                     GraphicBorderLine& rBorderLine = m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder)];
-                    aBorderLine.Color = rBorderLine.nLineColor;
-                    aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
-                    aBorderLine.LineDistance = 0;
+                    if (rBorderLine.isEmpty() && xShapeProps.is())
+                    {
+                        // In case we got no border tokens and we have the
+                        // original shape, then use its line properties as the
+                        // border.
+                        aBorderLine.Color = xShapeProps->getPropertyValue("LineColor").get<sal_Int32>();
+                        aBorderLine.LineWidth = xShapeProps->getPropertyValue("LineWidth").get<sal_Int32>();
+                    }
+                    else
+                    {
+                        aBorderLine.Color = rBorderLine.nLineColor;
+                        aBorderLine.InnerLineWidth = 0;
+                        aBorderLine.OuterLineWidth = (sal_Int16)rBorderLine.nLineWidth;
+                        aBorderLine.LineDistance = 0;
+                    }
                 }
                 PropertyIds aBorderProps[4] =
                 {
@@ -1371,7 +1387,8 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
         uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );
         aMediaProperties[0].Value <<= xIStream;
 
-        m_xGraphicObject = createGraphicObject( aMediaProperties );
+        uno::Reference<beans::XPropertySet> xPropertySet;
+        m_xGraphicObject = createGraphicObject( aMediaProperties, xPropertySet );
 }
 
 
