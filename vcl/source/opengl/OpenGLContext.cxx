@@ -369,14 +369,10 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
     return 0;
 }
 
-GLXFBConfig* getFBConfig(const SystemEnvData* sysData, int& nBestFBC)
+GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
 {
-    Display *dpy = reinterpret_cast<Display*>(sysData->pDisplay);
-
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return NULL;
-
-    Window win = sysData->aWindow;
 
     SAL_INFO("vcl.opengl", "parent window: " << win);
 
@@ -490,8 +486,7 @@ bool OpenGLContext::ImplInit()
     if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
-        const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
-        GLXFBConfig* pFBC = getFBConfig(sysData, best_fbc);
+        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc);
         if (!pFBC)
             return false;
 
@@ -851,6 +846,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     const SystemEnvData* sysData(pParent->GetSystemData());
 
     Display *dpy = reinterpret_cast<Display*>(sysData->pDisplay);
+    Window win = sysData->aWindow;
 
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return aWinData;
@@ -858,7 +854,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     initOpenGLFunctionPointers();
 
     int best_fbc = -1;
-    GLXFBConfig* pFBC = getFBConfig(sysData, best_fbc);
+    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc);
 
     XVisualInfo* vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
     if( vi )
