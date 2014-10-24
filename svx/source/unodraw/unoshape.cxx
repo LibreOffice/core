@@ -1643,112 +1643,109 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
     const SfxItemPropertySimpleEntry* pMap = mpPropSet->getPropertyMapEntry(rPropertyName);
 
-    if( mpObj.is() && mpModel )
+    if (!mpObj.is() || !mpModel)
     {
-        if( pMap == NULL )
-            throw beans::UnknownPropertyException();
+        // Since we have no actual sdr object right now, remember all
+        // properties in a list. These properties will be set when the sdr
+        // object is created.
 
-        if( (pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
-            throw beans::PropertyVetoException(
-                ( OUString(
-                        "Readonly property can't be set: " )
-                  + rPropertyName ),
-                uno::Reference< drawing::XShape >( this ) );
-
-        mpModel->SetChanged();
-
-        if(!setPropertyValueImpl( rPropertyName, pMap, rVal ) )
+        if (pMap && pMap->nWID)
         {
-            DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
-            DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
+            // FIXME: We should throw a UnknownPropertyException here.
+            //        But since this class is aggregated from classes that
+            //        support additional properties that we don't know here we
+            //        silently store *all* properties, even if they may be not
+            //        supported after creation.
+            mpPropSet->setPropertyValue( pMap, rVal );
+        }
+        return;
+    }
 
-            bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST && pMap->nWID != SDRATTR_TEXTDIRECTION;
+    if (!pMap)
+        throw beans::UnknownPropertyException();
 
-            if( pMap->nWID == SDRATTR_ECKENRADIUS )
-            {
-                sal_Int32 nCornerRadius = 0;
-                if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) || (nCornerRadius > 5000000))
-                    throw IllegalArgumentException();
-            }
+    if ((pMap->nFlags & beans::PropertyAttribute::READONLY) != 0)
+        throw beans::PropertyVetoException(
+            OUString("Readonly property can't be set: ") + rPropertyName,
+            uno::Reference<drawing::XShape>(this));
 
-            SfxItemSet* pSet;
-            if( mbIsMultiPropertyCall && !bIsNotPersist )
-            {
-                if( mpImpl->mpItemSet == NULL )
-                {
-                    pSet = mpImpl->mpItemSet = mpObj->GetMergedItemSet().Clone();
-                }
-                else
-                {
-                    pSet = mpImpl->mpItemSet;
-                }
-            }
-            else
-            {
-                pSet = new SfxItemSet( mpModel->GetItemPool(),  pMap->nWID, pMap->nWID);
-            }
+    mpModel->SetChanged();
 
-            if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
-                pSet->Put(mpObj->GetMergedItem(pMap->nWID));
+    if (setPropertyValueImpl(rPropertyName, pMap, rVal))
+        return;
 
-            if( !SvxUnoTextRangeBase::SetPropertyValueHelper( *pSet, pMap, rVal, *pSet ))
-            {
-                if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
-                {
-                    if(bIsNotPersist)
-                    {
-                        // Not-Persistent Attribute, hole diese extra
-                        mpObj->TakeNotPersistAttr(*pSet, false);
-                    }
-                }
+    DBG_ASSERT( pMap->nWID == SDRATTR_TEXTDIRECTION || pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
+    DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
 
-                if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
-                {
-                    // Default aus ItemPool holen
-                    if(SfxItemPool::IsWhich(pMap->nWID))
-                        pSet->Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
-                }
+    bool bIsNotPersist = pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST && pMap->nWID != SDRATTR_TEXTDIRECTION;
 
-                if( pSet->GetItemState( pMap->nWID ) == SfxItemState::SET )
-                {
-                    SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rVal, *pSet );
-                }
-            }
+    if( pMap->nWID == SDRATTR_ECKENRADIUS )
+    {
+        sal_Int32 nCornerRadius = 0;
+        if( !(rVal >>= nCornerRadius) || (nCornerRadius < 0) || (nCornerRadius > 5000000))
+            throw IllegalArgumentException();
+    }
 
-            if(bIsNotPersist)
-            {
-                // Not-Persist Attribute extra setzen
-                mpObj->ApplyNotPersistAttr( *pSet );
-                delete pSet;
-            }
-            else
-            {
-                // if we have a XMultiProperty call then the item set
-                // will be set in setPropertyValues later
-                if( !mbIsMultiPropertyCall )
-                {
-                    mpObj->SetMergedItemSetAndBroadcast( *pSet );
-
-                    delete pSet;
-                }
-            }
-            return;
+    SfxItemSet* pSet;
+    if( mbIsMultiPropertyCall && !bIsNotPersist )
+    {
+        if( mpImpl->mpItemSet == NULL )
+        {
+            pSet = mpImpl->mpItemSet = mpObj->GetMergedItemSet().Clone();
+        }
+        else
+        {
+            pSet = mpImpl->mpItemSet;
         }
     }
     else
     {
-        // since we have no actual sdr object right now
-        // remember all properties in a list. These
-        // properties will be set when the sdr object is
-        // created
+        pSet = new SfxItemSet( mpModel->GetItemPool(),  pMap->nWID, pMap->nWID);
+    }
 
-        if(pMap && pMap->nWID)
-// Fixme: We should throw a UnknownPropertyException here.
-//        But since this class is aggregated from classes
-//        that support additional properties that we don't
-//        know here we silently store *all* properties, even
-//        if they may be not supported after creation
-            mpPropSet->setPropertyValue( pMap, rVal );
+    if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
+        pSet->Put(mpObj->GetMergedItem(pMap->nWID));
+
+    if( !SvxUnoTextRangeBase::SetPropertyValueHelper( *pSet, pMap, rVal, *pSet ))
+    {
+        if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
+        {
+            if(bIsNotPersist)
+            {
+                // Not-Persistent Attribute, hole diese extra
+                mpObj->TakeNotPersistAttr(*pSet, false);
+            }
+        }
+
+        if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
+        {
+            // Default aus ItemPool holen
+            if(SfxItemPool::IsWhich(pMap->nWID))
+                pSet->Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
+        }
+
+        if( pSet->GetItemState( pMap->nWID ) == SfxItemState::SET )
+        {
+            SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rVal, *pSet );
+        }
+    }
+
+    if(bIsNotPersist)
+    {
+        // Not-Persist Attribute extra setzen
+        mpObj->ApplyNotPersistAttr( *pSet );
+        delete pSet;
+    }
+    else
+    {
+        // if we have a XMultiProperty call then the item set
+        // will be set in setPropertyValues later
+        if( !mbIsMultiPropertyCall )
+        {
+            mpObj->SetMergedItemSetAndBroadcast( *pSet );
+
+            delete pSet;
+        }
     }
 }
 
