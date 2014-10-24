@@ -246,9 +246,10 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
 
     SwFmtINetFmt aINetFmt(sURL, m_pTargetFrmLB->GetText());
     aINetFmt.SetName(m_pNameED->GetText());
-    bModified |= m_pURLED->IsValueChangedFromSaved();
-    bModified |= m_pNameED->IsModified();
-    bModified |= m_pTargetFrmLB->IsValueChangedFromSaved();
+    bool bURLModified = m_pURLED->IsValueChangedFromSaved();
+    bool bNameModified = m_pNameED->IsModified();
+    bool bTargetModified = m_pTargetFrmLB->IsValueChangedFromSaved();
+    bModified = bURLModified | bNameModified | bTargetModified;
 
     // set valid settings first
     OUString sEntry = m_pVisitedLB->GetSelectEntry();
