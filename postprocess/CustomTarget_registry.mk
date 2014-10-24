@@ -27,7 +27,6 @@ postprocess_XCDS := \
 	draw.xcd \
 	graphicfilter.xcd \
 	impress.xcd \
-	korea.xcd \
 	librelogo.xcd \
 	lingucomponent.xcd \
 	main.xcd \
@@ -112,10 +111,6 @@ postprocess_DEPS_librelogo := main writer
 postprocess_FILES_librelogo := \
 	$(postprocess_MOD)/org/openoffice/Office/Addons-librelogo.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/UI/WriterWindowState-librelogo.xcu
-
-postprocess_DEPS_korea := main
-postprocess_FILES_korea := \
-	$(postprocess_MOD)/org/openoffice/Office/Common-korea.xcu
 
 postprocess_DEPS_lingucomponent := main
 postprocess_FILES_lingucomponent := \

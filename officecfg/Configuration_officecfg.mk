@@ -94,7 +94,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-cjk.xcu \
 	org/openoffice/Office/Common-ctl.xcu \
 	org/openoffice/Office/Common-ctlseqcheck.xcu \
-	org/openoffice/Office/Common-korea.xcu \
 	org/openoffice/Office/DataAccess-evoab2.xcu \
 	org/openoffice/Office/DataAccess-reportbuilder.xcu \
 	org/openoffice/Office/Paths-macosx.xcu \
