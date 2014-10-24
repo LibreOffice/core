@@ -466,11 +466,11 @@
                 <property name="row_spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="embed">
-                    <property name="label" translatable="yes">Em_bed OpenDocument file</property>
+                    <property name="label" translatable="yes">Hybrid PDF (Em_bed ODF File)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Makes this PDF easily editable in %PRODUCTNAME</property>
+                    <property name="tooltip_text" translatable="yes">Makes a PDF easily editable in %PRODUCTNAME</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -484,10 +484,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pdfa">
-                    <property name="label" translatable="yes">P_DF/A-1a</property>
+                    <property name="label" translatable="yes">Archive P_DF/A-1a (ISO 19005-1)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Makes a PDF for preserving electronic documents</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -501,10 +502,11 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="tagged">
-                    <property name="label" translatable="yes">_Tagged PDF</property>
+                    <property name="label" translatable="yes">_Tagged PDF (Add document structure)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Includes document content structure information in a PDF</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -522,6 +524,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Makes a PDF that can be filled out and printed by a user</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
