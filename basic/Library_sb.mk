@@ -95,7 +95,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/uno/sbmodule \
 	basic/source/uno/sbservices \
 	basic/source/uno/scriptcont \
-	basic/source/runtime/basrdll \
 	basic/source/runtime/comenumwrapper \
 	basic/source/runtime/ddectrl \
 	basic/source/runtime/inputbox \
@@ -109,6 +108,7 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,sb,\
+	basic/source/runtime/basrdll \
 	basic/source/runtime/methods \
 	basic/source/runtime/methods1 \
 	basic/source/sbx/sbxarray \
