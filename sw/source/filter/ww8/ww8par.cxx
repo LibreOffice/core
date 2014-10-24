@@ -458,9 +458,10 @@ public:
     OUString getStringAtIndex( sal_uInt32 );
 };
 
-Sttb::Sttb() : fExtend( 0 )
-,cData( 0 )
-,cbExtra( 0 )
+Sttb::Sttb()
+    : fExtend(0)
+    , cData(0)
+    , cbExtra(0)
 {
 }
 
@@ -499,8 +500,12 @@ void Sttb::Print( FILE* fp )
 
     if ( cData )
     {
-        for ( sal_Int32 index = 0; index < cData; ++index )
+        for (sal_Int32 index = 0; index < cData; ++index)
+        {
+            if (index >= dataItems.size())
+                fprintf(fp, "   Sttb truncated at entry %d(0x%x)\n", static_cast< int >( index ), static_cast< unsigned int >( index ));
             fprintf(fp,"   string dataItem[ %d(0x%x) ] has name %s\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
     }
 }
 #endif
