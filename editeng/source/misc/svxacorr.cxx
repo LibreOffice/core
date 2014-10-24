@@ -50,11 +50,14 @@
 #include "vcl/window.hxx"
 #include <helpid.hrc>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <unotools/streamwrap.hxx>
 #include <SvXMLAutoCorrectImport.hxx>
 #include <SvXMLAutoCorrectExport.hxx>
+#include <SvXMLAutoCorrectTokenHandler.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -64,6 +67,7 @@
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::utl;
@@ -2008,11 +2012,14 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
 
                 // get filter
-                uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( xContext, *rpLst );
+                uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLExceptionListImport ( xContext, *rpLst );
 
                 // connect parser and filter
-                uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-                xParser->setDocumentHandler( xFilter );
+                uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create( xContext );
+                uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = static_cast< xml::sax::XFastTokenHandler* >( new SvXMLAutoCorrectTokenHandler );
+                xParser->setFastDocumentHandler( xFilter );
+                xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
+                xParser->setTokenHandler( xTokenHandler );
 
                 // parse
                 try
@@ -2120,12 +2127,15 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
-        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
+        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
         SAL_INFO("editeng", "AutoCorrect Import" );
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List, rAutoCorrect, xStg );
+        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List, rAutoCorrect, xStg );
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = static_cast< xml::sax::XFastTokenHandler* >( new SvXMLAutoCorrectTokenHandler );
 
         // connect parser and filter
-        xParser->setDocumentHandler( xFilter );
+        xParser->setFastDocumentHandler( xFilter );
+        xParser->registerNamespace( "http://openoffice.org/2001/block-list", SvXMLAutoCorrectToken::NAMESPACE );
+        xParser->setTokenHandler(xTokenHandler);
 
         // parse
         xParser->parseStream( aParserInput );

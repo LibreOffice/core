@@ -18,13 +18,10 @@
  */
 
 #include <SvXMLAutoCorrectImport.hxx>
-#include <vcl/svapp.hxx>
-#include <xmloff/xmltoken.hxx>
+#include <SvXMLAutoCorrectTokenHandler.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::xmloff::token;
-
-const char aBlockList[] =  "_block-list";
+using namespace ::css;
+using namespace ::css::xml::sax;
 
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< uno::XComponentContext > xContext,
@@ -36,92 +33,61 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     rAutoCorrect ( rNewAutoCorrect ),
     xStorage ( rNewStorage )
 {
-    GetNamespaceMap().Add(
-            OUString(aBlockList),
-            GetXMLToken ( XML_N_BLOCK_LIST),
-            XML_NAMESPACE_BLOCKLIST );
 }
 
 SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport ( void ) throw ()
 {
 }
 
-SvXMLImportContext *SvXMLAutoCorrectImport::CreateContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLImportContext *SvXMLAutoCorrectImport::CreateFastContext( sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
-
-    if( XML_NAMESPACE_BLOCKLIST == nPrefix &&
-        IsXMLToken ( rLocalName, XML_BLOCK_LIST ) )
-        pContext = new SvXMLWordListContext( *this, nPrefix, rLocalName, xAttrList );
+    if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
+        return new SvXMLWordListContext( *this, Element, xAttrList );
     else
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
-    return pContext;
+        return SvXMLImport::CreateFastContext( Element, xAttrList );
 }
 
 SvXMLWordListContext::SvXMLWordListContext(
    SvXMLAutoCorrectImport& rImport,
-   sal_uInt16 nPrefix,
-   const OUString& rLocalName,
+   sal_Int32 /*Element*/,
    const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & /*xAttrList*/ ) :
-   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   com::sun::star::xml::sax::XFastAttributeList > & /*xAttrList*/ ) :
+   SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
 }
 
-SvXMLImportContext *SvXMLWordListContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+com::sun::star::uno::Reference<XFastContextHandler> SvXMLWordListContext::createFastChildContext(
+    sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
-    SvXMLImportContext *pContext = 0;
-
-    if (nPrefix == XML_NAMESPACE_BLOCKLIST &&
-        IsXMLToken ( rLocalName, XML_BLOCK ) )
-        pContext = new SvXMLWordContext (rLocalRef, nPrefix, rLocalName, xAttrList);
+    if ( Element == SvXMLAutoCorrectToken::BLOCK )
+        return new SvXMLWordContext (rLocalRef, Element, xAttrList);
     else
-        pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
-    return pContext;
+        return new SvXMLImportContext( rLocalRef );
 }
+
 SvXMLWordListContext::~SvXMLWordListContext ( void )
 {
 }
 
 SvXMLWordContext::SvXMLWordContext(
    SvXMLAutoCorrectImport& rImport,
-   sal_uInt16 nPrefix,
-   const OUString& rLocalName,
+   sal_Int32 /*Element*/,
    const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   com::sun::star::xml::sax::XFastAttributeList > & xAttrList ) :
+   SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
-    OUString sRight;
-    OUString sWrong;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    OUString sWrong, sRight;
+    if ( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::ABBREVIATED_NAME ) )
+        sWrong = xAttrList->getValue( SvXMLAutoCorrectToken::ABBREVIATED_NAME );
 
-    for (sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
-        const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (XML_NAMESPACE_BLOCKLIST == nAttrPrefix)
-        {
-            if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
-            {
-                sWrong = rAttrValue;
-            }
-            else if ( IsXMLToken ( aLocalName, XML_NAME ) )
-            {
-                sRight = rAttrValue;
-            }
-        }
-    }
-    if (sWrong.isEmpty() || sRight.isEmpty())
+    if ( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::NAME ) )
+        sRight = xAttrList->getValue( SvXMLAutoCorrectToken::NAME );
+
+   if ( sWrong.isEmpty() || sRight.isEmpty())
         return;
 
     bool bOnlyTxt = sRight != sWrong;
@@ -148,87 +114,58 @@ SvXMLExceptionListImport::SvXMLExceptionListImport(
 :   SvXMLImport( xContext, "" ),
     rList (rNewList)
 {
-    GetNamespaceMap().Add(
-            OUString(aBlockList),
-            GetXMLToken ( XML_N_BLOCK_LIST),
-            XML_NAMESPACE_BLOCKLIST );
 }
 
 SvXMLExceptionListImport::~SvXMLExceptionListImport ( void ) throw ()
 {
 }
 
-SvXMLImportContext *SvXMLExceptionListImport::CreateContext(
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+SvXMLImportContext *SvXMLExceptionListImport::CreateFastContext(sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
-
-    if( XML_NAMESPACE_BLOCKLIST==nPrefix &&
-        IsXMLToken ( rLocalName, XML_BLOCK_LIST ) )
-        pContext = new SvXMLExceptionListContext( *this, nPrefix, rLocalName, xAttrList );
+    if( Element == SvXMLAutoCorrectToken::BLOCKLIST )
+        return new SvXMLExceptionListContext( *this, Element, xAttrList );
     else
-        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
-    return pContext;
+        return SvXMLImport::CreateFastContext( Element, xAttrList );
 }
 
 SvXMLExceptionListContext::SvXMLExceptionListContext(
    SvXMLExceptionListImport& rImport,
-   sal_uInt16 nPrefix,
-   const OUString& rLocalName,
+   sal_Int32 /*Element*/,
    const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & /* xAttrList */ ) :
-   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   com::sun::star::xml::sax::XFastAttributeList > & /* xAttrList */ ) :
+   SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
 }
 
-SvXMLImportContext *SvXMLExceptionListContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+com::sun::star::uno::Reference<xml::sax::XFastContextHandler> SvXMLExceptionListContext::createFastChildContext(
+    sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
-    SvXMLImportContext *pContext = 0;
-
-    if (nPrefix == XML_NAMESPACE_BLOCKLIST &&
-        IsXMLToken ( rLocalName, XML_BLOCK ) )
-        pContext = new SvXMLExceptionContext (rLocalRef, nPrefix, rLocalName, xAttrList);
+    if ( Element == SvXMLAutoCorrectToken::BLOCK )
+        return new SvXMLExceptionContext (rLocalRef, Element, xAttrList);
     else
-        pContext = new SvXMLImportContext( rLocalRef, nPrefix, rLocalName);
-    return pContext;
+        return new SvXMLImportContext( rLocalRef );
 }
+
 SvXMLExceptionListContext::~SvXMLExceptionListContext ( void )
 {
 }
 
 SvXMLExceptionContext::SvXMLExceptionContext(
    SvXMLExceptionListImport& rImport,
-   sal_uInt16 nPrefix,
-   const OUString& rLocalName,
+   sal_Int32 /*Element*/,
    const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   com::sun::star::xml::sax::XFastAttributeList > & xAttrList ) :
+   SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
     OUString sWord;
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    if( xAttrList.is() && xAttrList->hasAttribute( SvXMLAutoCorrectToken::ABBREVIATED_NAME ) )
+        sWord = xAttrList->getValue( SvXMLAutoCorrectToken::ABBREVIATED_NAME );
 
-    for (sal_Int16 i=0; i < nAttrCount; i++)
-    {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
-        const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (XML_NAMESPACE_BLOCKLIST == nAttrPrefix)
-        {
-            if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
-            {
-                sWord = rAttrValue;
-            }
-        }
-    }
-    if (sWord.isEmpty() )
+    if (sWord.isEmpty())
         return;
 
     rLocalRef.rList.insert( sWord );

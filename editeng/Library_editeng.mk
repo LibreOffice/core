@@ -87,6 +87,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/misc/hangulhanja \
     editeng/source/misc/splwrap \
     editeng/source/misc/svxacorr \
+    editeng/source/misc/SvXMLAutoCorrectTokenHandler \
     editeng/source/misc/SvXMLAutoCorrectExport \
     editeng/source/misc/SvXMLAutoCorrectImport \
     editeng/source/misc/swafopt \
