@@ -824,7 +824,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         aPropertyValue.Value <<= aPath.getAsConstList();
         aGeometry.push_back(aPropertyValue);
     }
-    if (!aGeometry.empty() && xPropertySet.is())
+    if (!aGeometry.empty() && xPropertySet.is() && !m_bTextFrame)
         xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(aGeometry.getAsConstList()));
 
     // Set position and size
