@@ -1436,7 +1436,7 @@ IMPL_STATIC_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 Link SvTreeListBox::GetDragFinishedHdl() const
 {
     AddBoxToDDList_Impl( *this );
-    return STATIC_LINK( this, SvTreeListBox, DragFinishHdl_Impl );
+    return STATIC_LINK( const_cast<SvTreeListBox*>(this), SvTreeListBox, DragFinishHdl_Impl );
 }
 
 /*

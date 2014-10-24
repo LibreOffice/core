@@ -56,6 +56,7 @@ public:
     virtual void                UpdateData() = 0;
     virtual void                SetDoUpdate(bool bValue) = 0;
     virtual bool            IsDirty() const = 0;
+    DECL_LINK( NotifyHdl, EENotify* );
 
 private:
     mutable SfxBroadcaster maBroadcaster;
@@ -96,7 +97,6 @@ public:
     virtual SvxViewForwarder* GetViewForwarder() SAL_OVERRIDE;
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) SAL_OVERRIDE;
 
-    DECL_LINK( NotifyHdl, EENotify* );
 protected:
     virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText) SAL_OVERRIDE;
 private:

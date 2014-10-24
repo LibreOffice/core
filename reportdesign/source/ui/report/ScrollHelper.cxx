@@ -82,7 +82,7 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
     aSettings.SetStyleSettings( aStyle );
     _rScrollBar.SetSettings( aSettings );
 
-    _rScrollBar.SetScrollHdl( LINK( this, OScrollWindowHelper, ScrollHdl ) );
+    _rScrollBar.SetScrollHdl( LINK( const_cast<OScrollWindowHelper*>(this), OScrollWindowHelper, ScrollHdl ) );
     _rScrollBar.SetLineSize( SCR_LINE_SIZE );
 }
 

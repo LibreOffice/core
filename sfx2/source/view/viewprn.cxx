@@ -423,7 +423,7 @@ public:
             SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent );
             ~SfxDialogExecutor_Impl() { delete _pOptions; }
 
-    Link                GetLink() const { return LINK( this, SfxDialogExecutor_Impl, Execute); }
+    Link                GetLink() const { return LINK(const_cast<SfxDialogExecutor_Impl*>(this), SfxDialogExecutor_Impl, Execute); }
     const SfxItemSet*   GetOptions() const { return _pOptions; }
     void                DisableHelp() { _bHelpDisabled = true; }
 };

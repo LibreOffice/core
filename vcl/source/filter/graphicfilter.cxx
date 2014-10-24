@@ -2168,7 +2168,7 @@ void GraphicFilter::ResetLastError()
 
 const Link GraphicFilter::GetFilterCallback() const
 {
-    const Link aLink( LINK( this, GraphicFilter, FilterCallback ) );
+    const Link aLink( LINK( const_cast<GraphicFilter*>(this), GraphicFilter, FilterCallback ) );
     return aLink;
 }
 

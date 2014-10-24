@@ -939,7 +939,7 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( bool /* bC
     return NULL;
 }
 
-IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
+IMPL_LINK(ScAccessibleTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
     {
@@ -1287,7 +1287,7 @@ SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
     }
 
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+        pEditEngine->SetNotifyHdl( LINK(this, ScAccessiblePreviewCellTextData, NotifyHdl) );
 
     return pForwarder;
 }
@@ -1395,7 +1395,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
 
     bDataValid = true;
 
-    pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+    pEditEngine->SetNotifyHdl( LINK(this, ScAccessiblePreviewHeaderCellTextData, NotifyHdl) );
 
     return pForwarder;
 }
@@ -1629,7 +1629,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
 
     mbDataValid = true;
 
-    mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+    mpEditEngine->SetNotifyHdl( LINK(this, ScAccessibleNoteTextData, NotifyHdl) );
 
     return mpForwarder;
 }

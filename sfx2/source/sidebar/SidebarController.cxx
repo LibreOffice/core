@@ -867,7 +867,7 @@ void SidebarController::ShowPopupMenu (
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     ::boost::shared_ptr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
-    pMenu->SetSelectHdl(LINK(this, SidebarController, OnMenuItemSelected));
+    pMenu->SetSelectHdl(LINK(const_cast<SidebarController*>(this), SidebarController, OnMenuItemSelected));
 
     // pass toolbox button rect so the menu can stay open on button up
     Rectangle aBox (rButtonBox);

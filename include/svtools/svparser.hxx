@@ -138,7 +138,7 @@ public:
     inline bool IsParserWorking() const { return SVPAR_WORKING == eState; }
 
     Link GetAsynchCallLink() const
-        { return STATIC_LINK( this, SvParser, NewDataRead ); }
+        { return STATIC_LINK( const_cast<SvParser*>(this), SvParser, NewDataRead ); }
 
     long CallAsyncCallLink() { return NewDataRead( this, 0 ); }
 
