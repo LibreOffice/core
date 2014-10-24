@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -1598,8 +1602,8 @@ SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
     uno::Reference<lang::XUnoTunnel> xModelTunnel( rImport.GetModel(), uno::UNO_QUERY );
     SwXTextDocument *pTxtDoc = reinterpret_cast< SwXTextDocument *>(
             sal::static_int_cast< sal_IntPtr >(  xModelTunnel->getSomething(SwXTextDocument::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtDoc, "Where is my model?" );
-    OSL_ENSURE( pTxtDoc->GetDocShell(), "Where is my shell?" );
+    assert( pTxtDoc );
+    assert( pTxtDoc->GetDocShell() );
     SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
     OSL_ENSURE( pDoc, "Where is my document?" );
     return pDoc;
