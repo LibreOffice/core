@@ -68,7 +68,7 @@ class FractionPrinter(object):
         if denominator > 0:
             return "%d/%d" % (numerator, denominator)
         else:
-            return "invalid %s" % self.typename
+            return "invalid %s %d/%d" % (self.typename, numerator, denominator)
 
 class DateTimeImpl(object):
 
