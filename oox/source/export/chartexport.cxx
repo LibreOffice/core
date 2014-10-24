@@ -439,7 +439,6 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     : DrawingML( pFS, pFB, eDocumentType )
     , mnXmlNamespace( nXmlNamespace )
     , mnSeriesCount(0)
-    , maFraction( 1, 576 )
     , mxChartModel( xModel )
     , mbHasCategoryLabels( false )
     , mbHasZAxis( false )
