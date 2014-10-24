@@ -39,6 +39,12 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
 {
 }
 
+SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp ) :
+    mrImport( rImp ),
+    mpRewindMap( 0 )
+{
+}
+
 SvXMLImportContext::~SvXMLImportContext()
 {
 }
@@ -59,6 +65,47 @@ void SvXMLImportContext::EndElement()
 }
 
 void SvXMLImportContext::Characters( const OUString& )
+{
+}
+
+// ::com::sun::star::xml::sax::XFastContextHandler:
+void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32, const uno::Reference< xml::sax::XFastAttributeList > &)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+}
+
+void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString &, const OUString &,
+    const uno::Reference< xml::sax::XFastAttributeList > &)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+}
+
+void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+}
+
+void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & , const OUString & )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createFastChildContext
+    (sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return mrImport.CreateFastContext( Element, Attribs );
+}
+
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext
+    (const OUString &, const OUString &, const uno::Reference< xml::sax::XFastAttributeList > &)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return 0;
+}
+
+void SAL_CALL SvXMLImportContext::characters(const OUString &)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 }
 

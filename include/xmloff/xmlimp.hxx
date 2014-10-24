@@ -48,10 +48,14 @@
 #include <xmloff/shapeimport.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase7.hxx>
 #include <xmloff/formlayerimport.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
@@ -71,6 +75,8 @@ class XMLErrors;
 class StyleMap;
 
 typedef std::vector<SvXMLImportContext *> SvXMLImportContexts_Impl;
+typedef std::vector< ::css::uno::Reference< ::css::xml::sax::XFastContextHandler>>
+            FastSvXMLImportContexts_Impl;
 
 namespace xmloff {
     class RDFaImportHelper;
@@ -90,8 +96,9 @@ namespace xmloff {
 
 
 
-class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
+class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
              ::com::sun::star::xml::sax::XExtendedDocumentHandler,
+             ::com::sun::star::xml::sax::XFastDocumentHandler,
              ::com::sun::star::lang::XServiceInfo,
              ::com::sun::star::lang::XInitialization,
              ::com::sun::star::document::XImporter,
@@ -131,6 +138,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper6<
     SvXMLNamespaceMap           *mpNamespaceMap;
     SvXMLUnitConverter          *mpUnitConv;
     SvXMLImportContexts_Impl    *mpContexts;
+    FastSvXMLImportContexts_Impl    *mpFastContexts;
     SvXMLNumFmtHelper           *mpNumImport;
     ProgressBarHelper           *mpProgressBarHelper;
     XMLEventImportHelper        *mpEventImportHelper;
@@ -156,6 +164,8 @@ protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual XMLTextImportHelper* CreateTextImport();
     inline void ClearTextImport() { mxTextImport = 0; }
@@ -205,7 +215,7 @@ public:
               ::com::sun::star::uno::RuntimeException,
               std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL startElement(const OUString& aName,
-                                       const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL endElement(const OUString& aName)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -218,6 +228,28 @@ public:
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    // ::css::xml::sax::XFastContextHandler
+    virtual void SAL_CALL startFastElement(sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL startUnknownElement(const OUString & Namespace,
+        const OUString & Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement(sal_Int32 Element)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL endUnknownElement(const OUString & Namespace,
+        const OUString & Name)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    createFastChildContext(sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    createUnknownChildContext(const OUString & Namespace, const OUString & Name,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::xml::sax::XExtendedDocumentHandler
     virtual void SAL_CALL startCDATA(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
