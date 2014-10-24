@@ -194,7 +194,8 @@
 #define SC_OPCODE_GAMMA_LN_MS       162
 #define SC_OPCODE_ERF_MS            163
 #define SC_OPCODE_ERFC_MS           164
-#define SC_OPCODE_STOP_1_PAR        165
+#define SC_OPCODE_ISOWEEKNUM        165
+#define SC_OPCODE_STOP_1_PAR        166
 
 /*** Functions with more than one parameters ***/
 #define SC_OPCODE_START_2_PAR       201
@@ -362,8 +363,7 @@
 #define SC_OPCODE_TABLE_OP          362
 #define SC_OPCODE_BETA_DIST         363
 #define SC_OPCODE_BETA_INV          364
-#define SC_OPCODE_WEEK              365     /* miscellaneous */
-#define SC_OPCODE_GET_DAY_OF_WEEK   366
+#define SC_OPCODE_GET_DAY_OF_WEEK   366     /* miscellaneous */
 #define SC_OPCODE_NO_NAME           367
 #define SC_OPCODE_STYLE             368
 #define SC_OPCODE_DDE               369

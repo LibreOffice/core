@@ -631,7 +631,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "ODDFPRICE",              "ODDFPRICE",            462,    NOID,   8,  9,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "ODDFYIELD",              "ODDFYIELD",            463,    NOID,   8,  9,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "RANDBETWEEN",            "RANDBETWEEN",          464,    NOID,   2,  2,  V, { RR }, FUNCFLAG_VOLATILE | FUNCFLAG_EXTERNAL },
-    { "WEEKNUM",                "WEEKNUM",              465,    NOID,   1,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
+    { "WEEKNUM_ADD",            "WEEKNUM",              465,    NOID,   1,  2,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "AMORDEGRC",              "AMORDEGRC",            466,    NOID,   6,  7,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "AMORLINC",               "AMORLINC",             467,    NOID,   6,  7,  V, { RR }, FUNCFLAG_EXTERNAL },
     { "CONVERT",                "CONVERT",              468,    NOID,   3,  3,  V, { RR }, FUNCFLAG_EXTERNAL },       // Calc: builtin and add-in (but different!)
@@ -874,9 +874,7 @@ static const FunctionData saFuncTable2013[] =
     { "IMSINH",                 "IMSINH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMTAN",                  "IMTAN",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "ISFORMULA",              "ISFORMULA",            NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
-    /* FIXME: ISOWEEKNUM vs. WEEKNUM mess needs to be sorted out before we can
-     * import. */
-    { 0/*"ISOWEEKNUM"*/,        "ISOWEEKNUM",           NOID,   NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "ISOWEEKNUM",             "ISOWEEKNUM",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "MUNIT",                  "MUNIT",                NOID,   NOID,   1,  1,  A, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "NUMBERVALUE",            "NUMBERVALUE",          NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "PDURATION",              "PDURATION",            NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },

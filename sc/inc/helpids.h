@@ -361,7 +361,8 @@
 #define HID_FUNC_JAHR                                           "SC_HID_FUNC_JAHR"
 #define HID_FUNC_TAGE                                           "SC_HID_FUNC_TAGE"
 #define HID_FUNC_DATEDIF                                        "SC_HID_FUNC_DATEDIF"
-#define HID_FUNC_KALENDERWOCHE                                  "SC_HID_FUNC_KALENDERWOCHE"
+#define HID_FUNC_ISOWEEKNUM                                     "SC_HID_FUNC_ISOWEEKNUM"
+#define HID_FUNC_WEEKNUM                                        "SC_HID_FUNC_WEEKNUM"
 #define HID_FUNC_OSTERSONNTAG                                   "SC_HID_FUNC_OSTERSONNTAG"
 
 #define HID_FUNC_BW                                             "SC_HID_FUNC_BW"
