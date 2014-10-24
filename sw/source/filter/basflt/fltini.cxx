@@ -56,7 +56,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <rtl/uri.hxx>
+#include <rtl/bootstrap.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -113,16 +113,6 @@ inline void _SetFltPtr( sal_uInt16 rPos, SwRead pReader )
         aReaderWriter[ rPos ].pReader = pReader;
 }
 
-namespace {
-
-#ifndef DISABLE_DYNLOADING
-
-extern "C" { static void SAL_CALL thisModule() {} }
-
-#endif
-
-}
-
 namespace sw {
 
 Filters::Filters()
@@ -151,7 +141,9 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 {
     if (!msword_.is())
     {
-        bool ok = msword_.loadRelative( &thisModule, SVLIBRARY( "msword" ), SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+        OUString url("$LO_LIB_DIR/" SVLIBRARY("msword"));
+        rtl::Bootstrap::expandMacros(url);
+        bool ok = msword_.load( url, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
         SAL_WARN_IF(!ok, "sw", "failed to load msword library");
     }
     if (msword_.is())
