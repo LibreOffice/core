@@ -428,6 +428,30 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
     return pFBC;
 }
 
+// we need them before glew can initialize them
+// glew needs an OpenGL context so we need to get the address manually
+void initOpenGLFunctionPointers()
+{
+    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
+    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
+    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
+    glXCreateContextAttribsARB = (GLXContext(*) (Display*, GLXFBConfig, GLXContext, Bool, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreateContextAttribsARB");;
+}
+
+XVisualInfo* getVisualInfo(Display* dpy, Window win)
+{
+    initOpenGLFunctionPointers();
+
+    int best_fbc = -1;
+    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc);
+
+    XVisualInfo* vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
+
+    XFree(pFBC);
+
+    return vi;
+}
+
 }
 
 #endif
@@ -457,6 +481,33 @@ bool OpenGLContext::init(SystemChildWindow* pChildWindow)
     initWindow();
     return ImplInit();
 }
+
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+bool OpenGLContext::init(Display* dpy, Window win, int screen)
+{
+    if(mbInitialized)
+        return true;
+
+    if (!dpy)
+        return false;
+
+    m_aGLWin.dpy = dpy;
+    m_aGLWin.win = win;
+    m_aGLWin.screen = screen;
+
+    XVisualInfo* vi = getVisualInfo(dpy, win);
+    Visual* pVisual = NULL;
+
+    if( vi )
+    {
+        SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
+        pVisual = vi->visual;
+    }
+    initGLWindow(pVisual);
+
+    return ImplInit();
+}
+#endif
 
 bool OpenGLContext::ImplInit()
 {
@@ -827,34 +878,6 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool b
 }
 
 #elif defined( UNX )
-
-namespace {
-
-// we need them before glew can initialize them
-// glew needs an OpenGL context so we need to get the address manually
-void initOpenGLFunctionPointers()
-{
-    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
-    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
-    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
-    glXCreateContextAttribsARB = (GLXContext(*) (Display*, GLXFBConfig, GLXContext, Bool, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreateContextAttribsARB");;
-}
-
-}
-
-XVisualInfo* getVisualInfo(Display* dpy, Window win)
-{
-    initOpenGLFunctionPointers();
-
-    int best_fbc = -1;
-    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc);
-
-    XVisualInfo* vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
-
-    XFree(pFBC);
-
-    return vi;
-}
 
 SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 {
