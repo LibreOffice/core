@@ -43,7 +43,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
     if ( !m_pImpl->m_rMutexRef.Is() )
         throw uno::RuntimeException(); // just a disaster
 
-    OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
+    assert(m_xStream.is());
 }
 
 OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
@@ -57,7 +57,7 @@ OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
 , m_bDisposed( false )
 , m_nStorageType( nStorageType )
 {
-    OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
+    assert(m_xStream.is());
 }
 
 OInputCompStream::~OInputCompStream()
@@ -119,12 +119,6 @@ sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData
         throw lang::DisposedException();
     }
 
-    if ( !m_xStream.is() )
-    {
-        SAL_INFO("package.xstor", "No stream!");
-        throw uno::RuntimeException();
-    }
-
     return m_xStream->readBytes( aData, nBytesToRead );
 }
 
@@ -139,12 +133,6 @@ sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& a
     {
         SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
-    }
-
-    if ( !m_xStream.is() )
-    {
-        SAL_INFO("package.xstor", "No stream!");
-        throw uno::RuntimeException();
     }
 
     return m_xStream->readSomeBytes( aData, nMaxBytesToRead );
@@ -164,12 +152,6 @@ void SAL_CALL OInputCompStream::skipBytes( sal_Int32 nBytesToSkip )
         throw lang::DisposedException();
     }
 
-    if ( !m_xStream.is() )
-    {
-        SAL_INFO("package.xstor", "No stream!");
-        throw uno::RuntimeException();
-    }
-
     m_xStream->skipBytes( nBytesToSkip );
 
 }
@@ -184,12 +166,6 @@ sal_Int32 SAL_CALL OInputCompStream::available(  )
     {
         SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
-    }
-
-    if ( !m_xStream.is() )
-    {
-        SAL_INFO("package.xstor", "No stream!");
-        throw uno::RuntimeException();
     }
 
     return m_xStream->available();
@@ -213,9 +189,6 @@ uno::Reference< io::XInputStream > SAL_CALL OInputCompStream::getInputStream()
         SAL_INFO("package.xstor", "Disposed!");
         throw lang::DisposedException();
     }
-
-    if ( !m_xStream.is() )
-        return uno::Reference< io::XInputStream >();
 
     return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
 }
