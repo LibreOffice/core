@@ -44,6 +44,16 @@ namespace sdr
         {
         }
 
+        const SdrObject& BaseProperties::GetSdrObject() const
+        {
+            return mrObject;
+        }
+
+        SdrObject& BaseProperties::GetSdrObject()
+        {
+            return mrObject;
+        }
+
         const SfxItemSet& BaseProperties::GetMergedItemSet() const
         {
             // default implementation falls back to GetObjectItemSet()

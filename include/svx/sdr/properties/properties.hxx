@@ -50,19 +50,20 @@ namespace sdr
     {
         class SVX_DLLPUBLIC BaseProperties
         {
-        protected:
+        private:
             // the owner of this Properties. Set from constructor and not
             // to be changed in any way.
             SdrObject&                                      mrObject;
+
+        protected:
 
             // create a new object specific itemset with object specific ranges.
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
 
             // internal access to SdrObject
-            SdrObject& GetSdrObject() const
-            {
-                return mrObject;
-            }
+            const SdrObject& GetSdrObject() const;
+
+            SdrObject& GetSdrObject();
 
             // Test changeability for a single item. If a implementation wants to prevent
             // changing an item this method may be overloaded.
