@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_37588256",
+        "filename": "jvmfwk/distributions/OpenOfficeorg/javavendors_macosx.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-10-24T17:53:40Z",
+      "side": 1,
+      "message": "Apple\u0027s java for OS X J2SE 5 is not available for OS X 10.8+",
+      "revId": "d79e447a1c97ee9759f63365c00d06d6ebfb77fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_575bf654",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-10-24T17:53:40Z",
+      "side": 1,
+      "message": "Us Map.entry to iterate over a set of properties instead of iterate over an enumeration of keys and then get the property value by performing a search using the property key.",
+      "revId": "d79e447a1c97ee9759f63365c00d06d6ebfb77fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
