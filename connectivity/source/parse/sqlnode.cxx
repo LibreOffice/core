@@ -1973,9 +1973,11 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
         }
         else
         {
-            OSQLParseNode* pNewComparison = NULL;
+            OSQLParseNode* pNewComparison;
             switch(pComparison->getNodeType())
             {
+            default:
+                assert(false && "OSQLParseNode::negateSearchCondition: unexpected node type!");
             case SQL_NODE_EQUAL:
                 pNewComparison = new OSQLParseNode(OUString("<>"),SQL_NODE_NOTEQUAL,SQL_NOTEQUAL);
                 break;
@@ -1994,10 +1996,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
             case SQL_NODE_NOTEQUAL:
                 pNewComparison = new OSQLParseNode(OUString("="),SQL_NODE_EQUAL,SQL_EQUAL);
                 break;
-            default:
-                break;
             }
-            assert(pNewComparison && "OSQLParseNode::negateSearchCondition: unexpected node type!");
             pSearchCondition->replace(pComparison, pNewComparison);
             delete pComparison;
         }
