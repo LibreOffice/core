@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_97ebaeb0",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-24T03:24:12Z",
+      "side": 1,
+      "message": "Weird label for a checkbox. Capitalization is wrong.",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_77d15afb",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-24T03:24:12Z",
+      "side": 1,
+      "message": "What’s the purpose of the article change?",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_57ce565b",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-24T03:24:12Z",
+      "side": 1,
+      "message": "PDFs are not archives, but even if they technically do, it’s not appropriate for a user-visible label. http://en.wikipedia.org/wiki/Archive_file#Examples",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_37dbe21d",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-24T03:24:12Z",
+      "side": 1,
+      "message": "This is weird English. Perhaps the word “create” would fit better?",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_17d8de1c",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-24T03:24:12Z",
+      "side": 1,
+      "message": "Wrong capitalization again, it should be sentence case",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_f7030a75",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-24T03:24:12Z",
+      "side": 1,
+      "message": "A final period and a possesive apostrophe is missing from this string.",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_d7080694",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-24T03:24:12Z",
+      "side": 1,
+      "message": "the “by a user” part is not necessary.",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
