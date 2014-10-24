@@ -439,6 +439,20 @@ bool ZipPackageStream::ParsePackageRawStream()
     return true;
 }
 
+static void deflateZipEntry(ZipOutputEntry *pZipEntry,
+        const uno::Reference< io::XInputStream >& xInStream)
+{
+    sal_Int32 nLength = 0;
+    uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
+    do
+    {
+        nLength = xInStream->readBytes(aSeq, n_ConstBufferSize);
+        pZipEntry->write(aSeq, 0, nLength);
+    }
+    while (nLength == n_ConstBufferSize);
+    pZipEntry->closeEntry();
+}
+
 class DeflateThread: public comphelper::ThreadTask
 {
     ZipOutputEntry *mpEntry;
@@ -454,16 +468,7 @@ public:
 private:
     virtual void doWork() SAL_OVERRIDE
     {
-        sal_Int32 nLength = 0;
-        uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
-        do
-        {
-            nLength = mxInStream->readBytes(aSeq, n_ConstBufferSize);
-            mpEntry->write(aSeq, 0, nLength);
-        }
-        while (nLength == n_ConstBufferSize);
-        mpEntry->closeEntry();
-
+        deflateZipEntry(mpEntry, mxInStream);
         mxInStream.clear();
     }
 };
@@ -784,9 +789,21 @@ bool ZipPackageStream::saveChild(
             else
             {
                 bParallelDeflate = true;
-                // Start a new thread deflating this zip entry
-                ZipOutputEntry *pZipEntry = new ZipOutputEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
-                rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(pZipEntry, xStream) );
+                if (bParallelDeflate)
+                {
+                    // Start a new thread deflating this zip entry
+                    ZipOutputEntry *pZipEntry = new ZipOutputEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
+                    rZipOut.addDeflatingThread( pZipEntry, new DeflateThread(pZipEntry, xStream) );
+                }
+                else
+                {
+                    rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
+                    ZipOutputEntry aZipEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
+                    deflateZipEntry(&aZipEntry, xStream);
+                    uno::Sequence< sal_Int8 > aCompressedData = aZipEntry.getData();
+                    rZipOut.rawWrite(aCompressedData, 0, aCompressedData.getLength());
+                    rZipOut.rawCloseEntry(bToBeEncrypted);
+                }
             }
         }
         catch ( ZipException& )
