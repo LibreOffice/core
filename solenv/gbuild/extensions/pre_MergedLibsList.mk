@@ -153,7 +153,6 @@ gb_MERGEDLIBS := \
 	utl \
 	uui \
 	vcl \
-	vclopengl \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		$(if $(ENABLE_HEADLESS),,vclplug_svp) \
 	) \

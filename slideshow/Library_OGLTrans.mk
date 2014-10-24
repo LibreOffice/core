@@ -31,7 +31,6 @@ $(eval $(call gb_Library_use_libraries,OGLTrans,\
     cppuhelper \
     sal \
     vcl \
-    vclopengl \
 	$(gb_UWINAPI) \
 ))
 

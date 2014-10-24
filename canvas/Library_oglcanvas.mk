@@ -20,7 +20,6 @@ $(eval $(call gb_Library_use_libraries,oglcanvas,\
 	cppuhelper \
 	comphelper \
 	vcl \
-	vclopengl \
 	tk \
 	tl \
 	i18nlangtag \

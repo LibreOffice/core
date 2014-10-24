@@ -48,7 +48,6 @@ $(eval $(call gb_Library_use_libraries,slideshow,\
     tl \
     utl \
     vcl \
-    vclopengl \
     $(gb_UWINAPI) \
 ))
 

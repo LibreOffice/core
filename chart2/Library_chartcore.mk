@@ -57,8 +57,6 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     ucbhelper \
     utl \
     vcl \
-    $(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)), \
-        vclopengl) \
 	$(gb_UWINAPI) \
 ))
 
