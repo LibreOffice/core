@@ -23,8 +23,14 @@
 #include "salgdiimpl.hxx"
 #include <vcl/dllapi.h>
 
+#include <vcl/opengl/OpenGLContext.hxx>
+
 class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
+private:
+
+    OpenGLContext maContext;
+
 public:
     virtual ~OpenGLSalGraphicsImpl ();
 
