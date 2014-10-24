@@ -127,7 +127,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                             if ( aFind != m_aNameMap.end() )
                                 sPropName = aFind->first;
                         }
-                        if ( !sPropName.isEmpty() && xPropInfo->hasPropertyByName(sPropName) )
+                        if (aFind != m_aNameMap.end() && !sPropName.isEmpty() && xPropInfo->hasPropertyByName(sPropName))
                             xProp->setPropertyValue(sPropName,aFind->second.second->operator()(sPropName,evt.NewValue));
                         else if (   evt.PropertyName == PROPERTY_CHARFONTNAME
                                 ||  evt.PropertyName == PROPERTY_CHARFONTSTYLENAME
