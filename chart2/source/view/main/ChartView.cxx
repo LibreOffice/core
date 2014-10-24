@@ -2546,8 +2546,6 @@ static const char* envChartDummyFactory = getenv("CHART_DUMMY_FACTORY");
 
 void ChartView::createShapes()
 {
-    return; // temporarily no-op
-
     osl::ResettableMutexGuard aTimedGuard(maTimeMutex);
     if(mrChartModel.isTimeBased())
     {
