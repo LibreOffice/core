@@ -26,13 +26,13 @@ gb_ComponentTarget_get_source = $(SRCDIR)/$(1).component
 # is a mapping from library filenames to direct pointers to the
 # corresponding PREFIX_component_getFactory functions.
 define gb_ComponentTarget__command
-$(call gb_Output_announce,$(3),$(true),CMP,1)
+$(call gb_Output_announce,$(2),$(true),CMP,1)
 $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component target: $(1)))
 	mkdir -p $(dir $(1)) && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		--stringparam uri '$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' \
 		--stringparam cppu_env $(gb_CPPU_ENV) -o $(1) \
-		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(2)
+		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(COMPONENTSOURCE)
 endef
 
 
@@ -43,16 +43,18 @@ $(call gb_ComponentTarget_get_clean_target,%) :
 
 # when a library is renamed, the component file needs to be rebuilt to match.
 # hence simply depend on Repository{,Fixes}.mk since the command runs quickly.
-$(call gb_ComponentTarget_get_target,%) $(call gb_ComponentTarget_get_target,CppunitTest/%) : \
-		$(call gb_ComponentTarget_get_source,%) \
+$(call gb_ComponentTarget_get_target,%) : \
 		$(SRCDIR)/Repository.mk \
 		$(SRCDIR)/RepositoryFixes.mk \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_ComponentTarget__command,$@,$<,$*)
+	$(call gb_ComponentTarget__command,$@,$*)
 
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
+$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTSOURCE := $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
+
+$(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget_get_source,$(patsubst CppunitTest/%,%,$(1)))
 
 endef
 
