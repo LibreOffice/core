@@ -1,0 +1,18 @@
+--- glm/glm/gtx/bit.inl
++++ glm/glm/gtx/bit.inl
+@@ -572,6 +572,7 @@
+ 		int const & ToBit
+ 	)
+ 	{
++		(void) FromBit;
+ 		assert(FromBit <= ToBit);
+ 		assert(ToBit <= sizeof(genIUType) * std::size_t(8));
+ 
+@@ -589,6 +589,7 @@
+ 		int const & ToBit
+ 	)
+ 	{
++		(void) FromBit;
+ 		assert(FromBit <= ToBit);
+ 		assert(ToBit <= sizeof(genIUType) * std::size_t(8));
+ 

@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,glm,1))
 $(eval $(call gb_UnpackedTarball_add_patches,glm, \
     external/glm/Wshadow-patch-fix.patch \
     external/glm/Wsign-compare.patch.0 \
+    external/glm/Wunused-parameter.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
