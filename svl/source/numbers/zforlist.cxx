@@ -1801,13 +1801,11 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
         }
     }
     sal_Int32 nCheckPos = 0;
-    OUString sTempIn(aCodeStr);
-    SvNumberformat* pFormat = new SvNumberformat(sTempIn,
+    SvNumberformat* pFormat = new SvNumberformat(aCodeStr,
                                                  pFormatScanner,
                                                  pStringScanner,
                                                  nCheckPos,
                                                  ActLnge);
-    aCodeStr = sTempIn;
     if ( !pFormat || !(nCheckPos == 0) )
     {
         if (LocaleDataWrapper::areChecksEnabled())
