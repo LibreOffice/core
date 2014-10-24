@@ -1,1 +1,15 @@
 Tools on top of VCL. Common dialogs, file and print dialogs, wizards, vcl filters, lots of helper code.
+
+
+== Image swapping ==
+
+LO has three kind of swapout mechanisms:
+
+1) Manual swap out calls: Maybe it comes from old days, when memory was more expensive to use so LO tried to store
+images in the memory only when it is really used and swap out them directly after use. These manual calls seems
+useless nowadays and even ineffective.
+
+2) Size based auto swapping: when the size of all graphic objects reaches a configurable limit (20 MB by default)
+then some of the graphics are saved to the local file system and freed in the memory.
+
+3) Time based auto swapping: more info needed.
