@@ -141,6 +141,15 @@ namespace sdr
         // OutputDevices then the given ones.
         void ObjectContactOfPageView::DoProcessDisplay(DisplayInfo& rDisplayInfo)
         {
+            OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
+            const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
+            if (!isOutputToRecordingMetaFile() // do those have outdev too?
+                && (0 == aOutputSizePixel.getWidth() ||
+                    0 == aOutputSizePixel.getHeight()))
+            {
+                return;
+            }
+
             // visualize entered group when that feature is switched on and it's not
             // a print output. #i29129# No ghosted display for printing.
             bool bVisualizeEnteredGroup(DoVisualizeEnteredGroup() && !isOutputToPrinter());
@@ -170,7 +179,6 @@ namespace sdr
 
             // update current ViewInformation2D at the ObjectContact
             const double fCurrentTime(getPrimitiveAnimator().GetTime());
-            OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
             basegfx::B2DRange aViewRange;
 
             // create ViewRange
@@ -194,7 +202,6 @@ namespace sdr
             else
             {
                 // use visible pixels, but transform to world coordinates
-                const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
                 aViewRange = basegfx::B2DRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
 
                 // if a clip region is set, use it
