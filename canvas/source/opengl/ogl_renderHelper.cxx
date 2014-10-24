@@ -4,6 +4,9 @@
 namespace oglcanvas
 {
     RenderHelper::RenderHelper()
+    : m_iWidth(1600) //Why this dimensions?
+    , m_iHeight(900)
+    , m_Model(glm::mat4(1.0f))
     {
         InitOpenGL();
     }
@@ -16,10 +19,16 @@ namespace oglcanvas
         // Get a handle for uniforms
         m_manTexUnf = glGetUniformLocation(m_texManProgID, "TextTex");
         m_simpleTexUnf = glGetUniformLocation(m_simpleProgID, "TextTex");
+
         m_manCordUnf = glGetUniformLocation(m_texManProgID, "texCord");
         m_texColorUnf = glGetUniformLocation(m_texProgID, "constantColor");
+
         m_manColorUnf = glGetUniformLocation(m_texManProgID,"colorTex");
         m_simpleColorUnf = glGetUniformLocation(m_simpleProgID,"colorTex");
+
+        m_texMVPUnf = glGetUniformLocation(m_texProgID, "MVP");
+        m_manMVPUnf = glGetUniformLocation(m_texManProgID, "MVP");
+        m_simpleMVPUnf = glGetUniformLocation(m_simpleProgID, "MVP");
         //Gen Buffers for texturecoordinates/vertices
         glGenBuffers(1, &m_vertexBuffer);
         glGenBuffers(1, &m_uvBuffer);
@@ -27,8 +36,24 @@ namespace oglcanvas
         m_simpleUvAttrb = glGetAttribLocation(m_simpleProgID ,"UV");
         m_simplePosAttrb = glGetAttribLocation(m_simpleProgID ,"vPosition");
         m_texPosAttrb = glGetAttribLocation(m_texProgID ,"vPosition");
-    }
 
+        glViewport(0, 0, m_iWidth, m_iHeight);
+    }
+    //Todo figgure out, which parameters i should use :)
+    void RenderHelper::SetVP(int width, int height)
+    {
+        m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
+        m_Projection = m_Projection * glm::scale(glm::vec3((float)width / m_iWidth, -(float)height / m_iHeight, 1.0f));
+
+        m_View       = glm::lookAt(glm::vec3(0,m_iHeight,1),
+                                   glm::vec3(0,m_iHeight,0),
+                                   glm::vec3(0,1,0) );
+    }
+    void RenderHelper::SetModelAndMVP(glm::mat4 mat)
+    {
+        m_Model = mat;
+        m_MVP = m_Projection * m_View * m_Model;
+    }
     void RenderHelper::renderVertexConstColor(GLfloat vertices[], GLfloat color[4], GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
@@ -69,6 +94,7 @@ namespace oglcanvas
 
         glUniform1i(m_simpleTexUnf, 0); //Use texture Unit 0
         glUniform4f(m_simpleColorUnf, color[0], color[1], color[2], color[3]);
+        glUniformMatrix4fv(m_simpleMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_simplePosAttrb);
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
@@ -122,6 +148,7 @@ namespace oglcanvas
         glUniform1i(m_manTexUnf, 0);
         glUniform2f(m_manCordUnf,fWidth,fHeight);
         glUniform4f(m_manColorUnf, color[0], color[1], color[2], color[3] );
+        glUniformMatrix4fv(m_manMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_manPosAttrb);
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);

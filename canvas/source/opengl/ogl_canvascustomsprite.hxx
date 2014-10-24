@@ -78,7 +78,7 @@ namespace oglcanvas
         double getPriority() const { return mfPriority; }
 
         /// Render sprite content at sprite position
-        bool renderSprite() const;
+        bool renderSprite();
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

@@ -47,6 +47,7 @@ namespace oglcanvas
         ::canvas::tools::setIdentityAffineMatrix2D(maTransformation);
         maCanvasHelper.init( *rRefDevice.get(),
                              rDeviceHelper );
+        mRenderHelper.SetVP(1600, 900);//is this right?
     }
 
     void CanvasCustomSprite::disposeThis()
@@ -126,30 +127,14 @@ namespace oglcanvas
     }
 
 
-    bool CanvasCustomSprite::renderSprite() const
+    bool CanvasCustomSprite::renderSprite()
     {
         if( ::basegfx::fTools::equalZero( mfAlpha ) )
             return true;
 
-        TransformationPreserver aPreserver1;
         const ::basegfx::B2IVector aSpriteSizePixel(
             ::canvas::tools::roundUp( maSize.Width ),
             ::canvas::tools::roundUp( maSize.Height ));
-        // translate sprite to output position
-        glTranslated(maPosition.getX(), maPosition.getY(), 0);
-
-        {
-            TransformationPreserver aPreserver2;
-
-            // apply sprite content transformation matrix
-            double aGLTransform[] =
-                {
-                    maTransformation.m00, maTransformation.m10, 0, 0,
-                    maTransformation.m01, maTransformation.m11, 0, 0,
-                    0,                    0,                    1, 0,
-                    maTransformation.m02, maTransformation.m12, 0, 1
-                };
-            glMultMatrixd(aGLTransform);
 
             IBufferContextSharedPtr pBufferContext;
             if( mfAlpha != 1.0 || mxClip.is() )
@@ -168,6 +153,8 @@ namespace oglcanvas
 
             if( pBufferContext )
             {
+                //no transformation
+                mRenderHelper.SetModelAndMVP(glm::mat4());
                 // content ended up in background buffer - compose to
                 // screen now. Calls below switches us back to window
                 // context, and binds to generated, dynamic texture
@@ -235,7 +222,8 @@ namespace oglcanvas
                 glBindTexture(GL_TEXTURE_2D, 0);
                 glDisable(GL_TEXTURE_2D);
             }
-        }
+        // translate sprite to output position
+        mRenderHelper.SetModelAndMVP(glm::translate(glm::vec3(maPosition.getX(), maPosition.getY(), 0)));
         GLfloat vertices[] = {-2, -2,
                               -2, (float) maSize.Height+4,
                               (float) maSize.Width+4, (float) maSize.Height+4,
