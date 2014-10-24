@@ -77,7 +77,6 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     ucbhelper \
     utl \
     vcl \
-    vclopengl \
     xo \
 	$(gb_UWINAPI) \
 ))

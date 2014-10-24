@@ -53,7 +53,6 @@ $(eval $(call gb_Executable_use_libraries,icontest,\
     tl \
     ucbhelper \
     vcl \
-    vclopengl \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,icontest,\

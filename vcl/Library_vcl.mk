@@ -45,6 +45,7 @@ $(eval $(call gb_Library_set_include,vcl,\
 
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
+    -DVCLOPENGL_DLLIMPLEMENTATION \
 	-DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
 	-DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
 	-DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
@@ -89,6 +90,17 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lobjc \
 ))
 endif
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Library_add_cxxflags,vcl,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/osx/OpenGLWrapper \
+))
+
+endif
 
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Library_use_libraries,vcl,\
@@ -99,14 +111,21 @@ endif
 $(eval $(call gb_Library_use_externals,vcl,\
 	boost_headers \
 	gio \
+	glew \
+	glm_headers \
 	harfbuzz \
-	icuuc \
 	icu_headers \
+	icuuc \
 	lcms2 \
+	mdds_headers \
+	mesa_headers \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/gdiimpl \
+    vcl/source/opengl/OpenGLContext \
+    vcl/source/opengl/OpenGLHelper \
+    vcl/source/window/openglwin \
     vcl/source/window/settings \
     vcl/source/window/paint \
     vcl/source/window/resource \
@@ -477,6 +496,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     Cocoa \
     Carbon \
     CoreFoundation \
+	OpenGL \
 ))
 
 ifneq ($(ENABLE_MACOSX_SANDBOX),TRUE)
@@ -646,9 +666,11 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	advapi32 \
 	gdi32 \
 	gdiplus \
+    glu32 \
 	imm32 \
 	mpr \
 	msimg32 \
+    opengl32 \
 	ole32 \
 	shell32 \
 	usp10 \
@@ -674,6 +696,9 @@ $(eval $(call gb_Library_add_libs,vcl,\
 	-lm \
 	-ldl \
 	-lpthread \
+    -lGL \
+    -lGLU \
+    -lX11 \
 ))
 endif
 

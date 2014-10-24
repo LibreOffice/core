@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Executable_svptest \
         Executable_svpclient \
         Executable_vcldemo) \
-    Library_vclopengl \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
