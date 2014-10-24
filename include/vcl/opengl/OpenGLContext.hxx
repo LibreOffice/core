@@ -158,6 +158,12 @@ public:
     bool init(vcl::Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
 
+// these methods are for the deep platform layer, don't use them in normal code
+// only in vcl's platform code
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    bool init(Display* dpy, Window win, int screen);
+#endif
+
     void makeCurrent();
     void resetCurrent();
     void swapBuffers();
