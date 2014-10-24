@@ -1108,19 +1108,19 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Interval to be calculated. Can be \"d\", \"m\", \"y\", \"ym\", \"md\" or \"yd\".";
         };
     };
-     // -=*# Resource for function KALENDERWOCHE #*=-
-    Resource SC_OPCODE_WEEK
+     // -=*# Resource for function ISOWEEKNUM #*=-
+    Resource SC_OPCODE_ISOWEEKNUM
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Calculates the calendar week corresponding to the given date." ;
+            Text [ en-US ] = "Calculates the ISO 8601 calender week for the given date: first day of week is Monday and week 1 is the week where the first Thursday of the year occurs)." ;
         };
         ExtraData =
         {
             0;
             ID_FUNCTION_GRP_DATETIME;
-            U2S( HID_FUNC_KALENDERWOCHE );
-            2;  0;  0;
+            U2S( HID_FUNC_ISOWEEKNUM );
+            1;  0;
             0;
         };
         String 2 // Name of Parameter 1
@@ -1130,14 +1130,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             Text [ en-US ] = "The internal number of the date." ;
-        };
-        String 4 // Name of Parameter 2
-        {
-            Text [ en-US ] = "mode" ;
-        };
-        String 5 // Description of Parameter 2
-        {
-            Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, other values = Monday)." ;
         };
     };
      // -=*# Resource for function OSTERSONNTAG #*=-

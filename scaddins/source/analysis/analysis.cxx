@@ -31,6 +31,7 @@
 #include <string.h>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
+#include <tools/date.hxx>
 #include <boost/math/special_functions/next.hpp>
 
 #define ADDIN_SERVICE               "com.sun.star.sheet.AddIn"
@@ -521,17 +522,44 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEdate( const uno::Reference< beans::XProper
     return aDate.getDate( nNullDate );
 }
 
-sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
+sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nDate, const uno::Any& rMode ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     nDate += GetNullDate( xOpt );
 
     sal_uInt16  nDay, nMonth, nYear;
     DaysToDate( nDate, nDay, nMonth, nYear );
 
-    sal_Int32   nFirstInYear = DateToDays( 1, 1, nYear );
-    sal_uInt16  nFirstDayInYear = GetDayOfWeek( nFirstInYear );
+    nDate = 10000 * nYear + 100 * nMonth + nDay;
+    Date aDate( nDate );
 
-    return ( nDate - nFirstInYear + ( ( nMode == 1 )? ( nFirstDayInYear + 1 ) % 7 : nFirstDayInYear ) ) / 7 + 1;
+    sal_Int32 nMinimumNumberOfDaysInWeek;
+    DayOfWeek eFirstDayOfWeek;
+    sal_Int32 nMode = aAnyConv.getInt32( xOpt, rMode, 1 );
+    switch ( nMode )
+    {
+        case   1 :
+        case  11 :
+        case   2 :
+        case  12 :
+        case  13 :
+        case  14 :
+        case  15 :
+        case  16 :
+        case  17 :
+            eFirstDayOfWeek = (DayOfWeek) ( ( nMode - 1 )  % 10 );
+            nMinimumNumberOfDaysInWeek = 1; //the week containing January 1 is week 1
+            break;
+        case  21 :
+        case 150 :
+            // ISO 8601
+            eFirstDayOfWeek = MONDAY;
+            nMinimumNumberOfDaysInWeek = 4;
+            break;
+        default :
+            //incorrect argument
+            throw lang::IllegalArgumentException();
+    }
+    return ( aDate.GetWeekOfYear( eFirstDayOfWeek, nMinimumNumberOfDaysInWeek ) );
 }
 
 sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( const uno::Reference< beans::XPropertySet >& xOpt, sal_Int32 nDate, sal_Int32 nMonths ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )

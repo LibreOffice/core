@@ -127,29 +127,25 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
     Resource ANALYSIS_Weeknum
     {
-        String 1    // description Weeknum_add
+        String 1 // Description for WEEKNUM
         {
-            Text [ en-US ] = "Returns the number of the calendar week in which the specified date occurs.";
+            Text [ en-US ] = "Calculates the calendar week corresponding to the given date." ;
         };
-
-        String 2 // name of parameter 1         Weeknum_add
-        {
-            Text [ en-US ] = "Date";
-        };
-
-        String 3 // description of parameter 1  Weeknum_add
-        {
-            Text [ en-US ] = "The date";
-        };
-
-        String 4 // name of parameter 2         Weeknum_add
-        {
-            Text [ en-US ] = "Return type";
-        };
-
-        String 5 // description of parameter 2  Weeknum_add
-        {
-            Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, other values = Monday)";
+        String 2 // Name of Parameter 1
+         {
+            Text [ en-US ] = "Number" ;
+         };
+        String 3 // Description of Parameter 1
+         {
+            Text [ en-US ] = "The internal number of the date." ;
+         };
+        String 4 // Name of Parameter 2
+         {
+            Text [ en-US ] = "mode" ;
+         };
+        String 5 // Description of Parameter 2
+         {
+            Text [ en-US ] = "Indicates the first day of the week (1, 11=Sunday, 2, 12=Monday, 13-17=Tuesday-Saturday. 21 or 150 calculate according to ISO 8601)." ;
         };
     };
 

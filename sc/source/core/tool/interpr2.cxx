@@ -205,15 +205,13 @@ void ScInterpreter::ScGetDayOfWeek()
     }
 }
 
-void ScInterpreter::ScGetWeekOfYear()
+void ScInterpreter::ScGetIsoWeekOfYear()
 {
-    if ( MustHaveParamCount( GetByte(), 2 ) )
+    if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        short nFlag = (short) ::rtl::math::approxFloor(GetDouble());
-
         Date aDate = *(pFormatter->GetNullDate());
         aDate += (long)::rtl::math::approxFloor(GetDouble());
-        PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
+        PushInt( (int) aDate.GetWeekOfYear( MONDAY, 4 ) );
     }
 }
 

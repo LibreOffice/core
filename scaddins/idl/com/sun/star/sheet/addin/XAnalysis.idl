@@ -60,7 +60,7 @@ module addin
         /// weeknum.
         long getWeeknum(
                     [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long nStartDate, [in] long nMode )
+                    [in] long nStartDate, [in] any rMode )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// eomonth.
