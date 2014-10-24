@@ -181,8 +181,7 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/time \
 ))
 $(eval $(call gb_Library_add_cobject,sal,sal/osl/unx/signal, \
-	$(if $(filter $(ENABLE_CRASHDUMP),YES), \
-		-DSAL_ENABLE_CRASH_REPORT) \
+	$(if $(ENABLE_CRASHDUMP),-DSAL_ENABLE_CRASH_REPORT) \
 ))
 
 # Note that the uunxapi.mm file just includes the uunxapi.cxx one
