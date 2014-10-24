@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <cmath>
 
 #include <limits.h>
 #include <rtl/ustring.hxx>
