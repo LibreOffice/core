@@ -100,9 +100,8 @@ SourceFileProvider::SourceFileProvider(
                 if (k == map->end()) {
                     k = map->insert(std::make_pair(id, new Module)).first;
                 }
-                Module * mod = dynamic_cast< Module * >(k->second.get());
-                assert(mod != 0);
-                map = &mod->map;
+                Module& mod = dynamic_cast<Module&>(*k->second.get());
+                map = &mod.map;
             }
         }
     }
