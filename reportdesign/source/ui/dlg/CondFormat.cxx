@@ -509,7 +509,7 @@ namespace rptui
                 pConditionCandidate = pConditionCandidate->GetParent();
                 pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             }
-            if ( pPlaygroundCandidate == m_pConditionPlayground )
+            if (pConditionCandidate && pPlaygroundCandidate == m_pConditionPlayground)
             {
                 impl_ensureConditionVisible( dynamic_cast< const Condition& >( *pConditionCandidate ).getConditionIndex() );
             }
