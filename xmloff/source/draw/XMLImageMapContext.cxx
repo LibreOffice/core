@@ -58,7 +58,7 @@ using ::com::sun::star::drawing::PointSequenceSequence;
 using ::com::sun::star::document::XEventsSupplier;
 
 
-enum XMLImageMapToken
+enum XMLImageMapToken: decltype(XML_TOK_UNKNOWN)
 {
     XML_TOK_IMAP_URL,
     XML_TOK_IMAP_X,
