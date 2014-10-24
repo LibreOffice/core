@@ -264,43 +264,6 @@ void OOXMLParserState::endTxbxContent()
     inTxbxContent = false;
 }
 
-#ifdef DEBUG_WRITERFILTER
-void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
-{
-    pLogger->startElement("parserstate");
-
-    std::string sTmp;
-
-    if (isInSectionGroup())
-        sTmp += "s";
-    else
-        sTmp += "-";
-
-    if (isInParagraphGroup())
-        sTmp += "p";
-    else
-        sTmp += "-";
-
-    if (isInCharacterGroup())
-        sTmp += "c";
-    else
-        sTmp += "-";
-
-    if (isForwardEvents())
-        sTmp += "f";
-    else
-        sTmp += "-";
-
-    pLogger->attribute("state", sTmp);
-    pLogger->attribute("XNoteId", getXNoteId() );
-    if (mpCharacterProps != OOXMLPropertySet::Pointer_t())
-        pLogger->chars(mpCharacterProps->toString());
-
-    pLogger->endElement();
- }
-
-#endif
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

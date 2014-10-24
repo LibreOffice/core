@@ -203,10 +203,6 @@ public:
 
     void sendPropertyToParent();
 
-#ifdef DEBUG_WRITERFILTER
-    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
-#endif
-
     sal_uInt32 getInstanceNumber() { return mnInstanceNumber; }
 protected:
     OOXMLFastContextHandler * mpParent;
@@ -305,10 +301,6 @@ public:
 
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet) SAL_OVERRIDE;
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const SAL_OVERRIDE;
-
-#ifdef DEBUG_WRITERFILTER
-    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const SAL_OVERRIDE;
-#endif
 
 protected:
     /// the properties

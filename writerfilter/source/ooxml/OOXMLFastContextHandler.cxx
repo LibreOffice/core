@@ -57,33 +57,6 @@ using namespace ::com::sun::star;
 using namespace oox;
 using namespace ::std;
 
-#ifdef DEBUG_WRITERFILTER
-static string resourceToString(OOXMLFastContextHandler::ResourceEnum_t eResource)
-{
-    string sResult;
-
-    switch (eResource)
-    {
-    case OOXMLFastContextHandler::STREAM:
-        sResult = "Stream";
-        break;
-    case OOXMLFastContextHandler::PROPERTIES:
-        sResult = "Properties";
-        break;
-    case OOXMLFastContextHandler::TABLE:
-        sResult = "Table";
-        break;
-    case OOXMLFastContextHandler::SHAPE:
-        sResult = "Shape";
-        break;
-    default:
-        sResult = "??";
-    }
-
-    return sResult;
-}
-#endif
-
 set<OOXMLFastContextHandler *> aSetContexts;
 
 #ifdef DEBUG_WRITERFILTER
@@ -374,37 +347,6 @@ void OOXMLFastContextHandler::endAction(Token_t Element)
 {
     OOXMLFactory::getInstance()->endAction(this, Element);
 }
-
-#ifdef DEBUG_WRITERFILTER
-void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) const
-{
-    pLogger->startElement("context");
-
-    static char sBuffer[128];
-    snprintf(sBuffer, sizeof(sBuffer), "%p", this);
-
-    pLogger->attribute("parent", std::string(sBuffer));
-    pLogger->attribute("type", getType());
-    pLogger->attribute("resource", resourceToString(getResource()));
-    pLogger->attribute("token", fastTokenToId(getToken()));
-    pLogger->attribute("id", (*QNameToString::Instance())(getId()));
-
-    OOXMLValue::Pointer_t pVal(getValue());
-
-    if (pVal.get() != nullptr)
-        pLogger->attribute("value", pVal->toString());
-    else
-        pLogger->attribute("value", std::string("(null)"));
-
-    pLogger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
-
-    mpParserState->dumpXml( pLogger );
-
-    pLogger->endElement();
-}
-
-#endif
 
 void OOXMLFastContextHandler::setId(Id rId)
 {
@@ -1092,38 +1034,6 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
 {
     return OOXMLValue::Pointer_t(new OOXMLPropertySetValue(mpPropertySet));
 }
-
-#ifdef DEBUG_WRITERFILTER
-void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLogger) const
-{
-    pLogger->startElement("context");
-
-    static char sBuffer[128];
-    snprintf(sBuffer, sizeof(sBuffer), "%p", this);
-
-    pLogger->attribute("parent", std::string(sBuffer));
-    pLogger->attribute("type", getType());
-    pLogger->attribute("resource", resourceToString(getResource()));
-    pLogger->attribute("token", fastTokenToId(getToken()));
-    pLogger->attribute("id", (*QNameToString::Instance())(getId()));
-
-    OOXMLValue::Pointer_t pVal(getValue());
-
-    if (pVal.get() != nullptr)
-        pLogger->attribute("value", pVal->toString());
-    else
-        pLogger->attribute("value", std::string("(null)"));
-
-    pLogger->attribute("resolve", mbResolve ? "resolve" : "noResolve");
-
-    pLogger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
-
-    mpParserState->dumpXml( pLogger );
-
-    pLogger->endElement();
-}
-#endif
 
 void OOXMLFastContextHandlerProperties::newProperty
 (const Id & rId, OOXMLValue::Pointer_t pVal)

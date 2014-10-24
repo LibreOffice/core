@@ -115,11 +115,6 @@ public:
     void startTxbxContent();
     void endTxbxContent();
 
-#ifdef DEBUG_WRITERFILTER
-public:
-    void dumpXml( const TagLogger::Pointer_t& pLogger );
-#endif
-
 };
 
 }}
