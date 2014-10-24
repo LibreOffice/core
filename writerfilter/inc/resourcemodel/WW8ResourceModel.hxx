@@ -98,11 +98,6 @@ public:
      */
     virtual void resolve(T & rHandler) = 0;
 
-    /**
-       Returns the type of the reference aka the name of the access class.
-     */
-    virtual std::string getType() const = 0;
-
 protected:
     ~Reference() {}
 };

@@ -41,13 +41,6 @@ void RTFReferenceProperties::resolve(Properties& rHandler)
     }
 }
 
-std::string RTFReferenceProperties::getType() const
-{
-    return "RTFReferenceProperties";
-}
-
-
-
 } // namespace rtftok
 } // namespace writerfilter
 

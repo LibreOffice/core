@@ -850,11 +850,6 @@ uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const OU
     return pStream->getDocumentStream();
 }
 
-std::string OOXMLDocumentImpl::getType() const
-{
-    return "OOXMLDocumentImpl";
-}
-
 void OOXMLDocumentImpl::setModel(uno::Reference<frame::XModel> xModel)
 {
     mxModel.set(xModel);

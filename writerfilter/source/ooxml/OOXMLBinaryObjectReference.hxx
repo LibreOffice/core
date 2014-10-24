@@ -39,8 +39,6 @@ public:
     virtual ~OOXMLBinaryObjectReference();
 
     virtual void resolve(BinaryObj & rHandler) SAL_OVERRIDE;
-
-    virtual std::string getType() const SAL_OVERRIDE;
 };
 }}
 

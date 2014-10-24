@@ -27,7 +27,6 @@ public:
     RTFReferenceTable(Entries_t const& rEntries);
     virtual ~RTFReferenceTable();
     virtual void resolve(Table& rHandler) SAL_OVERRIDE;
-    virtual std::string getType() const SAL_OVERRIDE;
 private:
     Entries_t m_aEntries;
 };

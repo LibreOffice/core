@@ -133,13 +133,6 @@ public:
     virtual void resolve(Stream & rStream) SAL_OVERRIDE = 0;
 
     /**
-       Returns string representation of the type of this reference.
-
-       DEBUGGING PURPOSE ONLY.
-     */
-    virtual std::string getType() const SAL_OVERRIDE = 0;
-
-    /**
        Resolves a footnote to a stream handler.
 
        A footnote is resolved if either the note type or

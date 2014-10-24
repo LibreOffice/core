@@ -169,7 +169,6 @@ public:
     virtual ~OOXMLPropertySetImpl();
 
     virtual void resolve(Properties & rHandler) SAL_OVERRIDE;
-    virtual std::string getType() const SAL_OVERRIDE;
     virtual void add(OOXMLProperty::Pointer_t pProperty) SAL_OVERRIDE;
     virtual void add(OOXMLPropertySet::Pointer_t pPropertySet) SAL_OVERRIDE;
     virtual OOXMLPropertySet * clone() const SAL_OVERRIDE;
@@ -293,7 +292,6 @@ public:
 
     virtual void resolve(Table & rTable) SAL_OVERRIDE;
     virtual void add(ValuePointer_t pPropertySet);
-    virtual std::string getType() const SAL_OVERRIDE;
     virtual OOXMLTable * clone() const SAL_OVERRIDE;
 };
 

@@ -29,11 +29,6 @@ void RTFReferenceTable::resolve(Table& rHandler)
         rHandler.entry(i->first, i->second);
 }
 
-std::string RTFReferenceTable::getType() const
-{
-    return "RTFReferenceTable";
-}
-
 } // namespace rtftok
 } // namespace writerfilter
 

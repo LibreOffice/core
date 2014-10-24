@@ -32,9 +32,6 @@ public:
 
     /// Resolves this document to a stream handler.
     virtual void resolve(Stream& rHandler) SAL_OVERRIDE = 0;
-
-    /// Returns string representation of the type of this reference. (Debugging purpose only.)
-    virtual ::std::string getType() const SAL_OVERRIDE = 0;
 };
 
 /// Interface to create an RTFDocument instance.

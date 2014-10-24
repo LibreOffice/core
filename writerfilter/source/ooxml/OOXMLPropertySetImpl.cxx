@@ -455,11 +455,6 @@ OOXMLPropertySetImpl::end() const
     return mProperties.end();
 }
 
-string OOXMLPropertySetImpl::getType() const
-{
-    return string(maType.getStr());
-}
-
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
     if (pProperty.get() != nullptr && pProperty->getId() != 0x0)
@@ -806,11 +801,6 @@ void OOXMLTableImpl::add(ValuePointer_t pPropertySet)
 {
     if (pPropertySet.get() != nullptr)
         mPropertySets.push_back(pPropertySet);
-}
-
-string OOXMLTableImpl::getType() const
-{
-    return "OOXMLTableImpl";
 }
 
 OOXMLTable * OOXMLTableImpl::clone() const

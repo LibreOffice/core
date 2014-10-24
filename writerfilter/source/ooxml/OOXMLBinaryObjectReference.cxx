@@ -70,11 +70,6 @@ void OOXMLBinaryObjectReference::resolve(BinaryObj & rHandler)
                   mSequence.getLength(), pRef);
 }
 
-std::string OOXMLBinaryObjectReference::getType() const
-{
-    return "OOXMLBinaryObjectReference";
-}
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

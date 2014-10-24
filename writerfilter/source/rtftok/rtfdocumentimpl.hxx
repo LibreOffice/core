@@ -333,7 +333,6 @@ public:
 
     // RTFDocument
     virtual void resolve(Stream& rHandler) SAL_OVERRIDE;
-    virtual std::string getType() const SAL_OVERRIDE;
 
     // RTFListener
     virtual int dispatchDestination(RTFKeyword nKeyword) SAL_OVERRIDE;

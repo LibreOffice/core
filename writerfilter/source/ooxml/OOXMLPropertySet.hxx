@@ -54,7 +54,6 @@ public:
     virtual ~OOXMLPropertySet();
 
     virtual void resolve(Properties & rHandler) SAL_OVERRIDE = 0;
-    virtual std::string getType() const SAL_OVERRIDE = 0;
     virtual void add(OOXMLProperty::Pointer_t pProperty) = 0;
     virtual void add(OOXMLPropertySet::Pointer_t pPropertySet) = 0;
     virtual OOXMLPropertySet * clone() const = 0;

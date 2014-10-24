@@ -5937,12 +5937,6 @@ int RTFDocumentImpl::popState()
     return 0;
 }
 
-::std::string RTFDocumentImpl::getType() const
-{
-    return "RTFDocumentImpl";
-}
-
-
 bool RTFDocumentImpl::isInBackground()
 {
     return m_aStates.top().bInBackground;
