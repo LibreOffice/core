@@ -686,7 +686,7 @@ void ScConflictsDlg::UpdateView()
             ScChangeActionList::const_iterator aEndShared = aItr->maSharedActions.end();
             for ( ScChangeActionList::const_iterator aItrShared = aItr->maSharedActions.begin(); aItrShared != aEndShared; ++aItrShared )
             {
-                ScChangeAction* pAction = mpSharedTrack->GetAction( *aItrShared );
+                ScChangeAction* pAction = mpSharedTrack ? mpSharedTrack->GetAction(*aItrShared) : NULL;
                 if ( pAction )
                 {
                     // only display shared top content entries
