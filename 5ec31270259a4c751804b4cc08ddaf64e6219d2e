@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_3793e2fc",
+        "filename": "include/tools/fract.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2014-10-24T14:08:38Z",
+      "side": 1,
+      "message": "I don\u0027t think there is any precedence of using Capitalized words as the \u0027area\u0027 in SAL_WARN. \"tools.fraction\" might be the logical area here perhaps? But we don\u0027t have any enforced convention...",
+      "range": {
+        "startLine": 85,
+        "startChar": 19,
+        "endLine": 85,
+        "endChar": 27
+      },
+      "revId": "5ec31270259a4c751804b4cc08ddaf64e6219d2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
