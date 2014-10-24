@@ -53,6 +53,8 @@ typedef ::boost::unordered_map< OUString,
     OUStringHash,
             ::std::equal_to< OUString > > Msp_hash;
 
+class NonDocMSPCreator;
+
 class ActiveMSPList : public ::cppu::WeakImplHelper1< css::lang::XEventListener  >
 {
 
@@ -88,8 +90,9 @@ private:
         return createNewMSP( css::uno::makeAny( context ) );
     }
 
-    void ensureNonDocMSPs();
+    friend class NonDocMSPCreator;
     void createNonDocMSPs();
+
     Msp_hash m_hMsps;
     ScriptComponent_map m_mScriptComponents;
     osl::Mutex m_mutex;

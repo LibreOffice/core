@@ -66,6 +66,26 @@ ActiveMSPList::createNewMSP( const uno::Any& context )
     return msp;
 }
 
+class NonDocMSPCreator
+{
+public:
+    NonDocMSPCreator(ActiveMSPList *pList)
+    {
+        pList->createNonDocMSPs();
+    }
+};
+
+namespace
+{
+    //thread-safe double-locked class to ensure createNonDocMSPs is called once
+    class theNonDocMSPCreator : public rtl::StaticWithArg<NonDocMSPCreator, ActiveMSPList*, theNonDocMSPCreator> {};
+
+    void ensureNonDocMSPs(ActiveMSPList *pList)
+    {
+        theNonDocMSPCreator::get(pList);
+    }
+}
+
 Reference< provider::XScriptProvider >
 ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
 {
@@ -105,7 +125,7 @@ ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
         return msp;
     }
 
-    ensureNonDocMSPs();
+    ensureNonDocMSPs(this);
     return m_hMsps[ shareDirString ];
 }
 
@@ -286,27 +306,6 @@ ActiveMSPList::createNonDocMSPs()
     // should check if provider reference is valid
     m_hMsps[ bundledDirString ] = bundledMsp;
 }
-
-void
-ActiveMSPList::ensureNonDocMSPs()
-{
-    static bool created = false;
-    if ( created )
-    {
-        return;
-    }
-    else
-    {
-        ::osl::MutexGuard guard( m_mutex );
-        if ( created )
-        {
-            return;
-        }
-        createNonDocMSPs();
-        created = true;
-    }
-}
-
 
 } // namespace func_provider
 
