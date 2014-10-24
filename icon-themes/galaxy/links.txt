@@ -7,3 +7,5 @@ cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
 cmd/sc_nexttrackedchange.png cmd/sc_arrowshapes.right-arrow.png
 cmd/sc_previoustrackedchange.png cmd/sc_arrowshapes.left-arrow.png
+cmd/sc_fillcolor.png cmd/sc_formatarea.png
+cmd/lc_fillcolor.png cmd/lc_formatarea.png

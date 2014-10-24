@@ -255,6 +255,7 @@
 #define RID_SVXSTR_CHARFONTNAME             (RID_SVX_START + 200)
 #define RID_SVXSTR_LINECOLOR                (RID_SVX_START + 201)
 #define RID_SVXSTR_MORE_STYLES              (RID_SVX_START + 202)
+#define RID_SVXSTR_FILLCOLOR                (RID_SVX_START + 203)
 
 // Strings for insert/overwrite mode
 #define RID_SVXSTR_INSERT_HELPTEXT          (RID_SVX_START + 210)

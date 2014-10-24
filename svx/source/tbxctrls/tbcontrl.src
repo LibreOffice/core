@@ -76,6 +76,11 @@ String RID_SVXSTR_LINECOLOR
     Text [ en-US ] = "Line Color" ;
 };
 
+String RID_SVXSTR_FILLCOLOR
+{
+    Text [ en-US ] = "Fill Color" ;
+};
+
 ComboBox RID_SVXTBX_STYLE
 {
     HelpId = HID_STYLE_LISTBOX ;

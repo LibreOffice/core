@@ -322,6 +322,7 @@ void SwDLL::RegisterControls()
     SvxLineWidthToolBoxControl::RegisterControl(SID_ATTR_LINE_WIDTH, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_LINE_COLOR, pMod );
     SvxLineEndToolBoxControl::RegisterControl(SID_ATTR_LINEEND_STYLE, pMod );
+    SvxColorToolBoxControl::RegisterControl(SID_ATTR_FILL_COLOR, pMod);
 
     SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR, pMod );

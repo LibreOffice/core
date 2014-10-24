@@ -1182,11 +1182,17 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         mpAutomaticSeparator->Hide();
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
     }
-    else
+    else if ( SID_ATTR_LINE_COLOR == theSlotId )
     {
         mpButtonAutoColor->Hide();
         mpAutomaticSeparator->Hide();
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
+    }
+    else if ( SID_ATTR_FILL_COLOR == theSlotId )
+    {
+        mpButtonAutoColor->Hide();
+        mpAutomaticSeparator->Hide();
+        mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FILLCOLOR ) );
     }
 
     mpPaletteListBox->SetStyle( mpPaletteListBox->GetStyle() | WB_BORDER | WB_AUTOSIZE );
@@ -1338,6 +1344,8 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
                 aColor = static_cast<const SvxColorItem*>(pState)->GetValue();
             else if ( pState->ISA( XLineColorItem ) )
                 aColor = static_cast<const XLineColorItem*>(pState)->GetColorValue();
+            else if ( pState->ISA( XFillColorItem ) )
+                aColor = static_cast<const XFillColorItem*>(pState)->GetColorValue();
 
             for ( size_t i = 1; i <= mpColorSet->GetItemCount(); ++i )
             {
@@ -2375,6 +2383,11 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
             addStatusListener( OUString( ".uno:XLineColor" ));
             mPaletteManager.SetLastColor( COL_BLACK );
             break;
+
+        case SID_ATTR_FILL_COLOR:
+            addStatusListener( OUString( ".uno:FillColor" ));
+            mPaletteManager.SetLastColor( COL_DEFAULT_SHAPE_FILLING );
+            break;
     }
 
     if ( bSidebarType )
@@ -2427,6 +2440,10 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
         case SID_ATTR_LINE_COLOR:
             pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
             break;
+
+        case SID_ATTR_FILL_COLOR:
+            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_FILLCOLOR ) );
+            break;
     }
 
     pColorWin->StartPopupMode( &GetToolBox(),
@@ -2467,6 +2484,9 @@ void SvxColorToolBoxControl::StateChanged(
             aColor = static_cast< const SvxColorItem* >(pState)->GetValue();
         else if ( pState->ISA( XLineColorItem ) )
             aColor = static_cast< const XLineColorItem* >(pState)->GetColorValue();
+        else if ( pState->ISA( XFillColorItem ) )
+            aColor = static_cast< const XFillColorItem* >(pState)->GetColorValue();
+
         pBtnUpdater->Update( aColor );
     }
 }
@@ -2521,6 +2541,11 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
             aCommand    = ".uno:XLineColor";
             aParamName  = "XLineColor";
             break;
+
+        case SID_ATTR_FILL_COLOR:
+            aCommand    = ".uno:FillColor";
+            aParamName  = "FillColor";
+            break;
     }
 
     Sequence< PropertyValue > aArgs( 1 );
@@ -2538,6 +2563,8 @@ void SvxColorToolBoxControl::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod
 {
     if ( nSlotId == SID_ATTR_LINE_COLOR )
         SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XLineColorItem), nSlotId ) );
+    else if ( nSlotId == SID_ATTR_FILL_COLOR )
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XFillColorItem), nSlotId ) );
     else
         SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxColorItem), nSlotId ) );
 }

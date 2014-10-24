@@ -20,6 +20,7 @@
 
 #include <svx/tbxcolorupdate.hxx>
 #include <svx/svxids.hrc>
+#include <svx/xdef.hxx>
 
 #include <vcl/toolbox.hxx>
 #include <vcl/bmpacc.hxx>
@@ -69,6 +70,9 @@ namespace svx
                 break;
             case SID_ATTR_LINE_COLOR:
                 Update( COL_BLACK );
+                break;
+            case SID_ATTR_FILL_COLOR:
+                Update( COL_DEFAULT_SHAPE_FILLING );
                 break;
             default :
                 Update( COL_TRANSPARENT );
