@@ -22,8 +22,6 @@
 #include <sot/storage.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlnmspe.hxx>
 #include <editeng/svxacorr.hxx>
 
 class SvXMLAutoCorrectImport : public SvXMLImport
@@ -32,20 +30,19 @@ protected:
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const OUString& rLocalName,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList ) SAL_OVERRIDE;
+
 public:
     SvxAutocorrWordList     *pAutocorr_List;
     SvxAutoCorrect          &rAutoCorrect;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
 
     SvXMLAutoCorrectImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::css::uno::Reference< ::css::uno::XComponentContext > xContext,
         SvxAutocorrWordList *pNewAutocorr_List,
         SvxAutoCorrect &rNewAutoCorrect,
-        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage);
+        const ::css::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage);
 
     virtual ~SvXMLAutoCorrectImport ( void ) throw ();
 };
@@ -55,15 +52,13 @@ class SvXMLWordListContext : public SvXMLImportContext
 private:
     SvXMLAutoCorrectImport & rLocalRef;
 public:
-    SvXMLWordListContext ( SvXMLAutoCorrectImport& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    SvXMLWordListContext ( SvXMLAutoCorrectImport& rImport, sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList );
+
+    virtual com::sun::star::uno::Reference<XFastContextHandler> createFastChildContext( sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+
     virtual ~SvXMLWordListContext ( void );
 };
 
@@ -72,11 +67,9 @@ class SvXMLWordContext : public SvXMLImportContext
 private:
     SvXMLAutoCorrectImport & rLocalRef;
 public:
-    SvXMLWordContext ( SvXMLAutoCorrectImport& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    SvXMLWordContext ( SvXMLAutoCorrectImport& rImport, sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList );
+
     virtual ~SvXMLWordContext ( void );
 };
 
@@ -87,15 +80,13 @@ protected:
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const OUString& rLocalName,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element, const ::css::uno::Reference<
+            ::css::xml::sax::XFastAttributeList > & xAttrList ) SAL_OVERRIDE;
 public:
     SvStringsISortDtor  &rList;
 
     SvXMLExceptionListImport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const ::css::uno::Reference< ::css::uno::XComponentContext > xContext,
         SvStringsISortDtor & rNewList );
 
     virtual ~SvXMLExceptionListImport ( void ) throw ();
@@ -106,15 +97,13 @@ class SvXMLExceptionListContext : public SvXMLImportContext
 private:
     SvXMLExceptionListImport & rLocalRef;
 public:
-    SvXMLExceptionListContext ( SvXMLExceptionListImport& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    SvXMLExceptionListContext ( SvXMLExceptionListImport& rImport, sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList );
+
+    virtual com::sun::star::uno::Reference<XFastContextHandler> createFastChildContext( sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+
     virtual ~SvXMLExceptionListContext ( void );
 };
 
@@ -123,11 +112,9 @@ class SvXMLExceptionContext : public SvXMLImportContext
 private:
     SvXMLExceptionListImport & rLocalRef;
 public:
-    SvXMLExceptionContext ( SvXMLExceptionListImport& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    SvXMLExceptionContext ( SvXMLExceptionListImport& rImport, sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList );
+
     virtual ~SvXMLExceptionContext ( void );
 };
 
