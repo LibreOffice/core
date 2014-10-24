@@ -707,7 +707,7 @@ void ScConflictsDlg::UpdateView()
             ScChangeActionList::const_iterator aEndOwn = aItr->maOwnActions.end();
             for ( ScChangeActionList::const_iterator aItrOwn = aItr->maOwnActions.begin(); aItrOwn != aEndOwn; ++aItrOwn )
             {
-                ScChangeAction* pAction = mpOwnTrack->GetAction( *aItrOwn );
+                ScChangeAction* pAction = mpOwnTrack ? mpOwnTrack->GetAction(*aItrOwn) : NULL;
                 if ( pAction )
                 {
                     // only display own top content entries
