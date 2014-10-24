@@ -38,7 +38,7 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
 #if defined(SOLARIS) || defined (LINUX)
             pValue = P_tmpdir;
 #else
-            return osl_File_E_NOENT
+            return osl_File_E_NOENT;
 #endif
         }
     }
