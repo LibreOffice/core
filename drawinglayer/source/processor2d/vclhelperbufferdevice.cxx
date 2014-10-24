@@ -85,6 +85,9 @@ namespace
         ::osl::MutexGuard aGuard(m_aMutex);
         VirtualDevice* pRetval = 0;
 
+        if (nBits == 0)
+            nBits = rOutDev.GetBitCount();
+
         if(!maFreeBuffers.empty())
         {
             bool bOkay(false);
@@ -183,6 +186,8 @@ namespace
 
         maUsedBuffers.erase(aUsedFound);
         maFreeBuffers.push_back(&rDevice);
+        SAL_WARN_IF(maFreeBuffers.size() > 1000, "drawinglayer", "excessive cached buffers, "
+            << maFreeBuffers.size() << " entries!");
         Start();
     }
 
