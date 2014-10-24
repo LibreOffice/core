@@ -26,81 +26,12 @@
 #include <tools/fract.hxx>
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
-#include <tools/bigint.hxx>
 
-/** Compute greates common divisor using Euclidian algorithm
+template<typename T>
+static boost::rational<T> rational_FromDouble(double dVal);
 
-    As the algorithm works on positive values only, the absolute value
-    of each parameter is used.
-
-    @param nVal1
-    @param nVal2
-
-    @note: If one parameter is {0,1}, GetGGT returns 1.
-*/
-static long GetGGT( long nVal1, long nVal2 )
-{
-    nVal1 = std::abs( nVal1 );
-    nVal2 = std::abs( nVal2 );
-
-    if ( nVal1 <= 1 || nVal2 <= 1 )
-        return 1;
-
-    while ( nVal1 != nVal2 )
-    {
-        if ( nVal1 > nVal2 )
-        {
-            nVal1 %= nVal2;
-            if ( nVal1 == 0 )
-                return nVal2;
-        }
-        else
-        {
-            nVal2 %= nVal1;
-            if ( nVal2 == 0 )
-                return nVal1;
-        }
-    }
-    return nVal1;
-}
-
-static void Reduce( BigInt &rVal1, BigInt &rVal2 )
-{
-    BigInt nA( rVal1 );
-    BigInt nB( rVal2 );
-    nA.Abs();
-    nB.Abs();
-
-    if ( nA.IsOne() || nB.IsOne() || nA.IsZero() || nB.IsZero() )
-        return;
-
-    while ( nA != nB )
-    {
-        if ( nA > nB )
-        {
-            nA %= nB;
-            if ( nA.IsZero() )
-            {
-                rVal1 /= nB;
-                rVal2 /= nB;
-                return;
-            }
-        }
-        else
-        {
-            nB %= nA;
-            if ( nB.IsZero() )
-            {
-                rVal1 /= nA;
-                rVal2 /= nA;
-                return;
-            }
-        }
-    }
-
-    rVal1 /= nA;
-    rVal2 /= nB;
-}
+template<typename T>
+static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits);
 
 // Initialized by setting nNum as nominator and nDen as denominator
 // Negative values in the denominator are invalid and cause the
@@ -108,218 +39,233 @@ static void Reduce( BigInt &rVal1, BigInt &rVal2 )
 // in order to return the correct value.
 Fraction::Fraction( long nNum, long nDen )
 {
-    nNumerator = nNum;
-    nDenominator = nDen;
-    if ( nDenominator < 0 )
-    {
-        nDenominator = -nDenominator;
-        nNumerator   = -nNumerator;
-    }
-
-    // Reduce through GCD
-    long n = GetGGT( nNumerator, nDenominator );
-    nNumerator   /= n;
-    nDenominator /= n;
-}
-
-// If dVal > LONG_MAX, the fraction is set as invalid.
-// Otherwise, dVal and denominator are multiplied with 10, until one of them
-// is larger than (LONG_MAX / 10) and the fraction is reduced with GCD
-Fraction::Fraction( double dVal )
-{
-    long nDen = 1;
-    long nMAX = LONG_MAX / 10;
-
-    if ( dVal > LONG_MAX || dVal < LONG_MIN )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
+    if ( nDen == 0 ) {
+        valid = false;
+        SAL_WARN( "tools.fraction", "'Fraction(" + std::to_string(nNum) + ",0)' invalid fraction created" );
         return;
     }
+    value.assign( nNum, nDen);
+    valid = true;
+}
 
-    while ( std::abs( dVal ) < nMAX && nDen < nMAX )
-    {
-        dVal *= 10;
-        nDen *= 10;
+Fraction::Fraction( double dVal )
+{
+    try {
+        value = rational_FromDouble<sal_Int64>( dVal );
+        if ( HasOverflowValue() )
+            throw boost::bad_rational();
+        valid = true;
+    } catch(const boost::bad_rational& unused) {
+        valid = false;
+        SAL_WARN( "tools.fraction", "'Fraction(" + std::to_string(dVal) + ")' invalid fraction created" );
     }
-    nNumerator   = (long)dVal;
-    nDenominator = nDen;
+}
 
-    // Reduce through GCD
-    long n = GetGGT( nNumerator, nDenominator );
-    nNumerator   /= n;
-    nDenominator /= n;
+bool Fraction::HasOverflowValue()
+{
+    return value.numerator() < std::numeric_limits<long>::min() ||
+        value.numerator() > std::numeric_limits<long>::max() ||
+        value.denominator() < std::numeric_limits<long>::min() ||
+        value.denominator() > std::numeric_limits<long>::max();
 }
 
 Fraction::operator double() const
 {
-    if ( nDenominator > 0 )
-        return (double)nNumerator / (double)nDenominator;
-    else
-        return (double)0;
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'double()' on invalid fraction" );
+        return 0.0;
+    }
+
+    return boost::rational_cast<double>(value);
 }
 
 // This methods first validates both values.
 // If one of the arguments is invalid, the whole operation is invalid.
-// For addition both fractions are extended to match the denominator,
-// then nominators are added and reduced (through GCD).
-// Internal datatype for computation is SLong to detect overflows,
+// After computation detect if result overflows a long value
 // which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
-    if ( !rVal.IsValid() )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
-    }
-    if ( !IsValid() )
+    if ( !rVal.valid )
+        valid = false;
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'operator +=' with invalid fraction" );
         return *this;
-
-    // (a/b) + (c/d) = ( (a*d) + (c*b) ) / (b*d)
-    BigInt nN( nNumerator );
-    nN *= BigInt( rVal.nDenominator );
-    BigInt nW1Temp( nDenominator );
-    nW1Temp *= BigInt( rVal.nNumerator );
-    nN += nW1Temp;
-
-    BigInt nD( nDenominator );
-    nD *= BigInt( rVal.nDenominator );
-
-    Reduce( nN, nD );
-
-    if ( nN.bIsBig || nD.bIsBig )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
     }
-    else
-    {
-        nNumerator   = (long)nN,
-        nDenominator = (long)nD;
+
+    value += rVal.value;
+
+    if ( HasOverflowValue() ) {
+        valid = false;
+        SAL_WARN( "tools.fraction", "'operator +=' detected overflow" );
     }
 
     return *this;
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// For substraction, both fractions are extended to match the denominator,
-// then nominators are substracted and reduced (through GCD).
-// Internal datatype for computation is SLong to detect overflows,
-// which cause the operation to be marked as invalid
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
-    if ( !rVal.IsValid() )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
-    }
-    if ( !IsValid() )
+    if ( !rVal.valid )
+        valid = false;
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'operator -=' with invalid fraction" );
         return *this;
-
-    // (a/b) - (c/d) = ( (a*d) - (c*b) ) / (b*d)
-    BigInt nN( nNumerator );
-    nN *= BigInt( rVal.nDenominator );
-    BigInt nW1Temp( nDenominator );
-    nW1Temp *= BigInt( rVal.nNumerator );
-    nN -= nW1Temp;
-
-    BigInt nD( nDenominator );
-    nD *= BigInt( rVal.nDenominator );
-
-    Reduce( nN, nD );
-
-    if ( nN.bIsBig || nD.bIsBig )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
     }
-    else
-    {
-        nNumerator   = (long)nN,
-        nDenominator = (long)nD;
+
+    value -= rVal.value;
+
+    if ( HasOverflowValue() ) {
+        valid = false;
+        SAL_WARN( "tools.fraction", "'operator -=' detected overflow" );
     }
 
     return *this;
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// For mutliplication, nominator and denominators are first reduced
-// (through GCD), and then multiplied.
-// Internal datatype for computation is BigInt to detect overflows,
-// which cause the operation to be marked as invalid
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
-    if ( !rVal.IsValid() )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
-    }
-    if ( !IsValid() )
+    if ( !rVal.valid )
+        valid = false;
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'operator *=' with invalid fraction" );
         return *this;
-
-    long nGGT1 = GetGGT( nNumerator, rVal.nDenominator );
-    long nGGT2 = GetGGT( rVal.nNumerator, nDenominator );
-    BigInt nN( nNumerator / nGGT1 );
-    nN *= BigInt( rVal.nNumerator / nGGT2 );
-    BigInt nD( nDenominator / nGGT2 );
-    nD *= BigInt( rVal.nDenominator / nGGT1 );
-
-    if ( nN.bIsBig || nD.bIsBig )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
     }
-    else
-    {
-        nNumerator   = (long)nN,
-        nDenominator = (long)nD;
+
+    value *= rVal.value;
+
+    if ( HasOverflowValue() ) {
+        valid = false;
+        SAL_WARN( "tools.fraction", "'operator *=' detected overflow" );
     }
 
     return *this;
 }
 
-// This methods first validates both values.
-// If one of the arguments is invalid, the whole operation is invalid.
-// For dividing a/b, we multiply a with the inverse of b.
-// To avoid overflows, we first reduce both fractions with GCD.
-// Internal datatype for computation is BigInt to detect overflows,
-// which cause the operation to be marked as invalid
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
-    if ( !rVal.IsValid() )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
-    }
-    if ( !IsValid() )
+    if ( !rVal.valid )
+        valid = false;
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'operator /=' with invalid fraction" );
         return *this;
-
-    long nGGT1 = GetGGT( nNumerator, rVal.nNumerator );
-    long nGGT2 = GetGGT( rVal.nDenominator, nDenominator );
-    BigInt nN( nNumerator / nGGT1 );
-    nN *= BigInt( rVal.nDenominator / nGGT2 );
-    BigInt nD( nDenominator / nGGT2 );
-    nD *= BigInt( rVal.nNumerator / nGGT1 );
-
-    if ( nN.bIsBig || nD.bIsBig )
-    {
-        nNumerator   = 0;
-        nDenominator = -1;
     }
-    else
-    {
-        nNumerator   = (long)nN,
-        nDenominator = (long)nD;
-        if ( nDenominator < 0 )
-        {
-            nDenominator = -nDenominator;
-            nNumerator   = -nNumerator;
-        }
+
+    value /= rVal.value;
+
+    if ( HasOverflowValue() ) {
+        valid = false;
+        SAL_WARN( "tools.fraction", "'operator /=' detected overflow" );
     }
 
     return *this;
+}
+
+/** Inaccurate cancellation for a fraction.
+
+    Clip both nominator and denominator to said number of bits. If
+    either of those already have equal or less number of bits used,
+    this method does nothing.
+
+    @param nSignificantBits denotes, how many significant binary
+    digits to maintain, in both nominator and denominator.
+
+    @example ReduceInaccurate(8) has an error <1% [1/2^(8-1)] - the
+    largest error occurs with the following pair of values:
+
+    binary    1000000011111111111111111111111b/1000000000000000000000000000000b
+    =         1082130431/1073741824
+    = approx. 1.007812499
+
+    A ReduceInaccurate(8) yields 1/1.
+*/
+void Fraction::ReduceInaccurate( unsigned nSignificantBits )
+{
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'ReduceInaccurate' on invalid fraction" );
+        return;
+    }
+    if ( !value.numerator() )
+        return;
+
+    rational_ReduceInaccurate(value, nSignificantBits);
+}
+
+bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    if ( !rVal1.valid || !rVal2.valid ) {
+        SAL_WARN( "tools.fraction", "'operator ==' with an invalid fraction" );
+        return false;
+    }
+
+    return rVal1.value == rVal2.value;
+}
+
+bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    if ( !rVal1.valid || !rVal2.valid ) {
+        SAL_WARN( "tools.fraction", "'operator <' with an invalid fraction" );
+        return false;
+    }
+
+    return rVal1.value < rVal2.value;
+}
+
+bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    if ( !rVal1.valid || !rVal2.valid ) {
+        SAL_WARN( "tools.fraction", "'operator >' with an invalid fraction" );
+        return false;
+    }
+
+    return rVal1.value > rVal2.value;
+}
+
+SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
+{
+    sal_Int32 num(0), den(0);
+    rIStream.ReadInt32( num );
+    rIStream.ReadInt32( den );
+    if ( den <= 0 ) {
+        SAL_WARN( "tools.fraction", "'ReadFraction()' read an invalid fraction" );
+        rFract.valid = false;
+    } else {
+        rFract.value.assign( num, den );
+        rFract.valid = true;
+    }
+    return rIStream;
+}
+
+SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
+{
+    if ( !rFract.valid ) {
+        SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction" );
+        rOStream.WriteInt32( 0 );
+        rOStream.WriteInt32( -1 );
+    } else {
+        rOStream.WriteInt32( rFract.value.numerator() );
+        rOStream.WriteInt32( rFract.value.denominator() );
+    }
+    return rOStream;
+}
+
+// If dVal > LONG_MAX or dVal < LONG_MIN, the rational throws a boost::bad_rational.
+// Otherwise, dVal and denominator are multiplied by 10, until one of them
+// is larger than (LONG_MAX / 10).
+//
+// NOTE: here we use 'long' due that only values in long range are valid.
+template<typename T>
+static boost::rational<T> rational_FromDouble(double dVal)
+{
+    if ( dVal > std::numeric_limits<long>::max() ||
+            dVal < std::numeric_limits<long>::min() )
+        throw boost::bad_rational();
+
+    const long nMAX = std::numeric_limits<long>::max() / 10;
+    long nDen = 1;
+    while ( std::abs( dVal ) < nMAX && nDen < nMAX ) {
+        dVal *= 10;
+        nDen *= 10;
+    }
+    return boost::rational<T>( long(dVal), nDen );
 }
 
 // Similar to clz_table that can be googled
@@ -403,15 +349,16 @@ static int impl_NumberOfBits( unsigned long nNum )
 
     A ReduceInaccurate(8) yields 1/1.
 */
-void Fraction::ReduceInaccurate( unsigned nSignificantBits )
+template<typename T>
+static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits)
 {
-    if ( !nNumerator || !nDenominator )
+    if ( !rRational )
         return;
 
-    // Count with unsigned longs only
-    const bool bNeg = ( nNumerator < 0 );
-    unsigned long nMul = (unsigned long)( bNeg? -nNumerator: nNumerator );
-    unsigned long nDiv = (unsigned long)( nDenominator );
+    // http://www.boost.org/doc/libs/release/libs/rational/rational.html#Internal%20representation
+    const bool bNeg = ( rRational.numerator() < 0 );
+    T nMul = bNeg? -rRational.numerator(): rRational.numerator();
+    T nDiv = rRational.denominator();
 
     DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
 
@@ -425,81 +372,13 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     nMul >>= nToLose;
     nDiv >>= nToLose;
 
-    if ( !nMul || !nDiv )
-    {
+    if ( !nMul || !nDiv ) {
         // Return without reduction
         OSL_FAIL( "Oops, we reduced too much..." );
         return;
     }
 
-    // Reduce
-    long n1 = GetGGT( nMul, nDiv );
-    if ( n1 != 1 )
-    {
-        nMul /= n1;
-        nDiv /= n1;
-    }
-
-    nNumerator = bNeg? -long( nMul ): long( nMul );
-    nDenominator = nDiv;
-}
-
-bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return false;
-
-    return rVal1.nNumerator == rVal2.nNumerator
-           && rVal1.nDenominator == rVal2.nDenominator;
-}
-
-// This methods first validates and reduces both values.
-// To compare (a/b) with (c/d), extend denominators (b*d), then return
-// the result of comparing the nominators (a < c)
-bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return false;
-
-    BigInt nN( rVal1.nNumerator );
-    nN *= BigInt( rVal2.nDenominator );
-    BigInt nD( rVal1.nDenominator );
-    nD *= BigInt( rVal2.nNumerator );
-
-    return nN < nD;
-}
-
-// This methods first validates and reduces both values.
-// To compare (a/b) with (c/d), extend denominators (b*d), then return
-// the result of comparing nominators (a > c)
-bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return false;
-
-    BigInt nN( rVal1.nNumerator );
-    nN *= BigInt( rVal2.nDenominator );
-    BigInt nD( rVal1.nDenominator);
-    nD *= BigInt( rVal2.nNumerator );
-
-    return nN > nD;
-}
-
-SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
-{
-    sal_Int32 nTmp(0);
-    rIStream.ReadInt32( nTmp );
-    rFract.nNumerator = nTmp;
-    rIStream.ReadInt32( nTmp );
-    rFract.nDenominator = nTmp;
-    return rIStream;
-}
-
-SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
-{
-    rOStream.WriteInt32( rFract.nNumerator );
-    rOStream.WriteInt32( rFract.nDenominator );
-    return rOStream;
+    rRational.assign( bNeg? -T( nMul ): T( nMul ), nDiv );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

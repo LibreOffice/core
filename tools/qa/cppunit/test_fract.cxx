@@ -96,9 +96,16 @@ public:
         CPPUNIT_ASSERT_EQUAL(1L, f.GetDenominator());
     }
 
+    void testCreateFromDoubleIn32BitsPlatform() {
+        // This pass in 64 bits but fail in 32 bits
+        Fraction f(0.960945);
+        CPPUNIT_ASSERT_EQUAL(true, f.IsValid());
+    }
+
     CPPUNIT_TEST_SUITE(FractionTest);
     CPPUNIT_TEST(testFraction);
     CPPUNIT_TEST(testMinLongDouble);
+    CPPUNIT_TEST(testCreateFromDoubleIn32BitsPlatform);
     CPPUNIT_TEST_SUITE_END();
 };
 

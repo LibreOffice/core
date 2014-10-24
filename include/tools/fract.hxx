@@ -19,26 +19,32 @@
 #ifndef INCLUDED_TOOLS_FRACT_HXX
 #define INCLUDED_TOOLS_FRACT_HXX
 
+#include <boost/rational.hpp>
+#include <sal/log.hxx>
 #include <tools/toolsdllapi.h>
 
 class SvStream;
 
+// This class uses the platform defined type 'long' as valid values but do all
+// calculations using sal_Int64 with checks for 'long' overflows.
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
 {
 private:
-    long            nNumerator;
-    long            nDenominator;
+    bool                        valid;
+    boost::rational<sal_Int64>  value;
+
+    bool            HasOverflowValue();
 
 public:
-                    Fraction() { nNumerator = 0; nDenominator = 1; }
+                    Fraction() { valid = true; }
                     Fraction( const Fraction & rFrac );
                     Fraction( long nNum, long nDen=1 );
                     Fraction( double dVal );
 
     bool            IsValid() const;
 
-    long            GetNumerator() const { return nNumerator; }
-    long            GetDenominator() const { return nDenominator; }
+    long            GetNumerator() const;
+    long            GetDenominator() const;
 
     operator        long() const;
     operator        double() const;
@@ -70,28 +76,50 @@ public:
 
 inline Fraction::Fraction( const Fraction& rFrac )
 {
-    nNumerator   = rFrac.nNumerator;
-    nDenominator = rFrac.nDenominator;
+    valid = rFrac.valid;
+    if ( valid )
+        value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
+}
+
+inline long Fraction::GetNumerator() const
+{
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'GetNumerator()' on invalid fraction" );
+        return 0;
+    }
+    return value.numerator();
+}
+
+inline long Fraction::GetDenominator() const {
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'GetDenominator()' on invalid fraction" );
+        return -1;
+    }
+    return value.denominator();
 }
 
 inline Fraction& Fraction::operator=( const Fraction& rFrac )
 {
-    nNumerator   = rFrac.nNumerator;
-    nDenominator = rFrac.nDenominator;
+    if ( this != &rFrac ) {
+        valid = rFrac.valid;
+        if ( valid )
+            value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
+    }
     return *this;
 }
 
 inline bool Fraction::IsValid() const
 {
-    return (nDenominator > 0);
+    return valid;
 }
 
 inline Fraction::operator long() const
 {
-    if ( nDenominator > 0 )
-        return (nNumerator / nDenominator);
-    else
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
         return 0;
+    }
+    return boost::rational_cast<long>(value);
 }
 
 inline Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
