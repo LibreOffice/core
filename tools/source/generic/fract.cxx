@@ -136,7 +136,7 @@ Fraction::Fraction( double dVal )
         return;
     }
 
-    while ( std::abs( (long)dVal ) < nMAX && nDen < nMAX )
+    while ( std::abs( dVal ) < nMAX && nDen < nMAX )
     {
         dVal *= 10;
         nDen *= 10;

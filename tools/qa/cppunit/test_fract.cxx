@@ -90,8 +90,15 @@ public:
 #endif
     }
 
+    void testMinLongDouble() {
+        Fraction f(double(SAL_MIN_INT32));
+        CPPUNIT_ASSERT_EQUAL(long(SAL_MIN_INT32), f.GetNumerator());
+        CPPUNIT_ASSERT_EQUAL(1L, f.GetDenominator());
+    }
+
     CPPUNIT_TEST_SUITE(FractionTest);
     CPPUNIT_TEST(testFraction);
+    CPPUNIT_TEST(testMinLongDouble);
     CPPUNIT_TEST_SUITE_END();
 };
 
