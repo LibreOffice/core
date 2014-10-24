@@ -15,6 +15,8 @@ $(eval $(call gb_CppunitTest_add_exception_objects,configmgr_unit, \
     configmgr/qa/unit/test \
 ))
 
+$(eval $(call gb_CppunitTest_set_componentfile,configmgr_unit,configmgr/source/configmgr))
+
 $(eval $(call gb_CppunitTest_use_library_objects,configmgr_unit,configmgr))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,configmgr_unit,))
@@ -37,7 +39,6 @@ $(eval $(call gb_CppunitTest_use_ure,configmgr_unit))
 $(eval $(call gb_CppunitTest_use_configuration,configmgr_unit))
 
 $(eval $(call gb_CppunitTest_use_components,configmgr_unit,\
-    configmgr/source/configmgr \
     i18npool/util/i18npool \
     i18npool/source/search/i18nsearch \
     sax/source/expatwrap/expwrap \

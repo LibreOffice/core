@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,svgio_import_test))
 
+$(eval $(call gb_CppunitTest_set_componentfile,svgio_import_test,svgio/svgio))
+
 $(eval $(call gb_CppunitTest_set_include,svgio_import_test,\
     $$(INCLUDE) \
     -I$(SRCDIR)/svgio/inc \
@@ -63,7 +65,6 @@ $(eval $(call gb_CppunitTest_use_components,svgio_import_test,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
-    svgio/svgio \
     sax/source/expatwrap/expwrap \
 ))
 

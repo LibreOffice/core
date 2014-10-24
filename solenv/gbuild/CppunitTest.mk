@@ -242,6 +242,18 @@ $(call gb_CppunitTest_get_target,$(1)) : \
 
 endef
 
+define gb_CppunitTest_set_componentfile
+$(call gb_ComponentTarget_ComponentTarget,CppunitTest/$(2),\
+    $(call gb_Helper_make_url,$(gb_CppunitTest_DLLDIR))/,\
+    $(call gb_CppunitTest_get_filename,$(1)))
+$(call gb_CppunitTest_get_target,$(1)) : \
+    $(call gb_ComponentTarget_get_target,CppunitTest/$(2))
+$(call gb_CppunitTest_get_clean_target,$(1)) : \
+    $(call gb_ComponentTarget_get_clean_target,CppunitTest/$(2))
+$(call gb_CppunitTest_use_component,$(1),CppunitTest/$(2))
+
+endef
+
 # Given a list of component files, filter out those corresponding
 # to libraries not built in this configuration.
 define gb_CppunitTest__filter_not_built_components
