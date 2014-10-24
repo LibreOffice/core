@@ -793,7 +793,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     beans::PropertyValue* pGeomValues = aGeomPropSeq.getArray();
     for (std::vector<beans::PropertyValue>::iterator i = aGeomPropVec.begin(); i != aGeomPropVec.end(); ++i)
         *pGeomValues++ = *i;
-    if (aGeomPropSeq.getLength() && xPropertySet.is())
+    if (aGeomPropSeq.getLength() && xPropertySet.is() && !m_bTextFrame)
         xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(aGeomPropSeq));
 
     // Set position and size
