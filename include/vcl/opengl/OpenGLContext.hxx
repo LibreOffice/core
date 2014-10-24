@@ -185,6 +185,9 @@ public:
 private:
     SAL_DLLPRIVATE bool initWindow();
     SAL_DLLPRIVATE bool ImplInit();
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    SAL_DLLPRIVATE void initGLWindow(Visual* pVisual);
+#endif
 
 #if defined(MACOSX)
     NSOpenGLView* getOpenGLView();

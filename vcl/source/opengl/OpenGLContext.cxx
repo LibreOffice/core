@@ -781,9 +781,16 @@ bool OpenGLContext::initWindow()
     m_aGLWin.win = pChildSysData->aWindow;
     m_aGLWin.screen = pChildSysData->nScreen;
 
+    Visual* pVisual = (Visual*)pChildSysData->pVisual;
+    initGLWindow(pVisual);
+
+    return true;
+}
+
+void OpenGLContext::initGLWindow(Visual* pVisual)
+{
     // Get visual info
     {
-        Visual* pVisual = (Visual*)pChildSysData->pVisual;
         XVisualInfo aTemplate;
         aTemplate.visualid = XVisualIDFromVisual( pVisual );
         int nVisuals = 0;
@@ -801,8 +808,6 @@ bool OpenGLContext::initWindow()
 
     m_aGLWin.GLXExtensions = glXQueryExtensionsString( m_aGLWin.dpy, m_aGLWin.screen );
     SAL_INFO("vcl.opengl", "available GLX extensions: " << m_aGLWin.GLXExtensions);
-
-    return true;
 }
 
 #endif
@@ -837,6 +842,20 @@ void initOpenGLFunctionPointers()
 
 }
 
+XVisualInfo* getVisualInfo(Display* dpy, Window win)
+{
+    initOpenGLFunctionPointers();
+
+    int best_fbc = -1;
+    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc);
+
+    XVisualInfo* vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
+
+    XFree(pFBC);
+
+    return vi;
+}
+
 SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 {
     SystemWindowData aWinData;
@@ -851,19 +870,13 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return aWinData;
 
-    initOpenGLFunctionPointers();
+    XVisualInfo* vi = getVisualInfo(dpy, win);
 
-    int best_fbc = -1;
-    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc);
-
-    XVisualInfo* vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
     if( vi )
     {
         SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
         aWinData.pVisual = (void*)(vi->visual);
     }
-
-    XFree(pFBC);
 
     return aWinData;
 }
