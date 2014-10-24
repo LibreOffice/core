@@ -6648,7 +6648,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             }
         }
         else
-            bLowMode = bLowerMode ? sal_True : sal_False;
+            bLowMode = bLowerMode;
     }
 
     // OD 05.09.2002 #102912#
