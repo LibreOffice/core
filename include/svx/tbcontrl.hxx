@@ -43,7 +43,8 @@
         ----------------------
         Item type:      SvxColorItem
                         SfxBoolItem
-                    and XLineColorItem
+                        XLineColorItem
+                    and XFillColorItem
 
         for font color (writer, ...)
         Execute-Id      SID_ATTR_CHAR_COLOR2
@@ -69,6 +70,9 @@
 
         for line color
         Execute-Id      SID_ATTR_LINE_COLOR
+
+        for area fill color
+        Execute-Id      SID_ATTR_FILL_COLOR
 
         SvxPatternToolBoxControl
         ------------------------
