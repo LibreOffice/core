@@ -288,6 +288,12 @@ public:
                                     const sal_uInt8* const* pFlgAry,
                                     const OutputDevice *pOutDev );
 
+    bool                        DrawGradient(
+                                    const tools::PolyPolygon& rPolyPoly,
+                                    const Gradient& rGradient,
+                                    OutputDevice* );
+
+
     // CopyArea --> No RasterOp, but ClipRegion
     void                        CopyArea(
                                     long nDestX, long nDestY,
@@ -450,6 +456,11 @@ protected:
                                     const sal_uInt32* pPoints,
                                     const SalPoint* const* pPtAry,
                                     const sal_uInt8* const* pFlgAry ) = 0;
+
+
+    virtual bool                drawGradient(
+                                    const tools::PolyPolygon& rPolyPoly,
+                                    const Gradient& rGradient ) = 0;
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void                copyArea(
