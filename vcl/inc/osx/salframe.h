@@ -62,13 +62,13 @@ public:
     int                             mnMaxWidth;             // max. client width in pixels
     int                             mnMaxHeight;            // max. client height in pixels
     NSRect                          maFullScreenRect;       // old window size when in FullScreen
-    bool                            mbGraphics:1;           // is Graphics used?
-    bool                            mbFullScreen:1;         // is Window in FullScreen?
-    bool                            mbShown:1;
-    bool                            mbInitShow:1;
-    bool                            mbPositioned:1;
-    bool                            mbSized:1;
-    bool                            mbPresentation:1;
+    int                             mbGraphics:1;           // is Graphics used?
+    int                             mbFullScreen:1;         // is Window in FullScreen?
+    int                             mbShown:1;
+    int                             mbInitShow:1;
+    int                             mbPositioned:1;
+    int                             mbSized:1;
+    int                             mbPresentation:1;
 
     sal_uLong                           mnStyle;
     unsigned int                    mnStyleMask;            // our style mask from NSWindow creation
