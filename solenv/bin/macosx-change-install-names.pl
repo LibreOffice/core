@@ -71,9 +71,23 @@ $type = shift @ARGV;
 $loc = shift @ARGV;
 foreach $file (@ARGV)
 {
+    my $call_id = "otool -D $file";
+    open(ID, "-|", $call_id) or die "cannot $call_id";
+    my $change = "";
+    while (<ID>)
+    {
+        if (m'^(((/.*)?/)?@_{50}([^/]+)(/.+))\n$')
+        {
+            $change .= " -id " . action($type, $loc, $4) . $5;
+        }
+        elsif (m'^(((/.*)?/)?@\._{50}([^/]+)(/.+)?(/[^/]+))\n$')
+        {
+            $change .= " -id " . action($type, $loc, $4) . $6;
+        }
+    }
+    close(ID) or die "got $? from $call_id";
     my $call = "otool -L $file";
     open(IN, "-|", $call) or die "cannot $call";
-    my $change = "";
     while (<IN>)
     {
         if (m'^\s*(((/.*)?/)?@_{50}([^/]+)(/.+)) \(compatibility version \d+\.\d+\.\d+, current version \d+\.\d+\.\d+\)\n$')
