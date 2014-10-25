@@ -20,6 +20,7 @@
 #include "java/lang/Class.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include "java/tools.hxx"
 #include "java/sql/SQLException.hxx"
 #include <osl/mutex.hxx>
@@ -209,12 +210,20 @@ void java_lang_Object::ThrowLoggedSQLException( const ::comphelper::ResourceBase
     }
 }
 
-
 void java_lang_Object::ThrowSQLException( JNIEnv* _pEnvironment, const Reference< XInterface>& _rxContext )
 {
     SQLException aException;
     if ( lcl_translateJNIExceptionToUNOException( _pEnvironment, _rxContext, aException ) )
         throw aException;
+}
+
+void java_lang_Object::ThrowRuntimeException( JNIEnv* _pEnvironment, const Reference< XInterface>& _rxContext )
+{
+    SQLException aException;
+    if ( lcl_translateJNIExceptionToUNOException( _pEnvironment, _rxContext, aException ) )
+    {
+        throw WrappedTargetRuntimeException(aException.Message, aException.Context, makeAny(aException));
+    }
 }
 
 void java_lang_Object::obtainMethodId_throwSQL(JNIEnv* _pEnv,const char* _pMethodName, const char* _pSignature,jmethodID& _inout_MethodID) const

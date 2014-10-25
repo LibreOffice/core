@@ -105,6 +105,7 @@ namespace connectivity
             JNIEnv* pEnvironment,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
         );
+        static void ThrowRuntimeException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
 
         static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext=NULL);
 
