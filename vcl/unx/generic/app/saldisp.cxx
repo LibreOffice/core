@@ -2331,10 +2331,10 @@ bool SalDisplay::XIfEventWithTimeout( XEvent* o_pEvent, XPointer i_pPredicateDat
         aFD.fd = ConnectionNumber(GetDisplay());
         aFD.events = POLLIN;
         aFD.revents = 0;
-        poll( &aFD, 1, i_nTimeout );
+        (void)poll(&aFD, 1, i_nTimeout);
         if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
         {
-            poll( &aFD, 1, i_nTimeout ); // try once more for a packet of events from the Xserver
+            (void)poll(&aFD, 1, i_nTimeout); // try once more for a packet of events from the Xserver
             if( ! XCheckIfEvent( GetDisplay(), o_pEvent, i_pPredicate, i_pPredicateData ) )
             {
                 bRet = false;
