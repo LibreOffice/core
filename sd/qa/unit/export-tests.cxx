@@ -35,6 +35,8 @@
 #include <svx/svdoole2.hxx>
 #include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <rtl/ustring.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -50,6 +52,9 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <config_features.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -72,6 +77,7 @@ public:
     void testBnc822347_EmptyBullet();
     void testFdo83751();
     void testFdo79731();
+    void testSwappedOutImageExport();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testN821567);
@@ -87,6 +93,7 @@ public:
     CPPUNIT_TEST(testBnc822347_EmptyBullet);
     CPPUNIT_TEST(testFdo83751);
     CPPUNIT_TEST(testFdo79731);
+    CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -486,6 +493,69 @@ void SdExportTest::testFdo79731()
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT(pDoc);
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testSwappedOutImageExport()
+{
+    // Problem was with the swapped out images, which were not swapped in during export.
+    static const std::vector<sal_Int32> vFormats = {
+        ODP,
+        PPT,
+        PPTX,
+    };
+
+    for( size_t nExportFormat = 0; nExportFormat < vFormats.size(); ++nExportFormat )
+    {
+        // Load the original file with one image
+        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/document_with_an_image.odp"), ODP);
+        const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[nExportFormat].pFilterName);
+
+        // Swap out the image
+        SdDrawDocument *pDoc = xDocShRef->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != NULL );
+        const SdrPage* pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
+        SdrGrafObj* pGrafObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pGrafObject != NULL);
+        pGrafObject->ForceSwapOut();
+
+        // Export the document and import again for a check
+        uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[nExportFormat].pFilterName), RTL_TEXTENCODING_UTF8);
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        xComponent.set(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        xDocShRef = loadURL(aTempFile.GetURL(), nExportFormat);
+
+        // Check whether graphic exported well after it was swapped out
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xDrawPagesSupplier->getDrawPages()->getCount() == 1 );
+        uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("vnd.sun.star.GraphicObject:10000000000002620000017D9F4CD7A2"), sURL);
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+        }
+        xDocShRef->DoClose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
