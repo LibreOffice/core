@@ -218,7 +218,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
     sal_uInt8   nDat = 0, nCol = 0;
 
     //sanity check there is enough data before trying allocation
-    if (nPlanes > m_rPCX.remainingSize() / nBytesPerPlaneLin)
+    if (nBytesPerPlaneLin > m_rPCX.remainingSize() / nPlanes)
     {
         nStatus = false;
         return;
