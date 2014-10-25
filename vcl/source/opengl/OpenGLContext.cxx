@@ -374,7 +374,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return NULL;
 
-    SAL_INFO("vcl.opengl", "parent window: " << win);
+    SAL_INFO("vcl.opengl", "window: " << win);
 
     XWindowAttributes xattr;
     XGetWindowAttributes( dpy, win, &xattr );
