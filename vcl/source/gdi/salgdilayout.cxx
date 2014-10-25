@@ -544,6 +544,11 @@ bool SalGraphics::DrawPolyLine( const basegfx::B2DPolygon& i_rPolygon,
     return bRet;
 }
 
+bool SalGraphics::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient, OutputDevice* )
+{
+    return drawGradient( rPolyPoly, rGradient );
+}
+
 void SalGraphics::CopyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
