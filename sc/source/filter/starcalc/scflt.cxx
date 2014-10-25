@@ -1634,15 +1634,18 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     nError = errUnknownFormat;
                     break;
             }
-            sal_uInt16 NoteLen;
-            rStream.ReadUInt16( NoteLen );
-            if (NoteLen != 0)
+            sal_uInt16 nNoteLen(0);
+            rStream.ReadUInt16(nNoteLen);
+            size_t nAvailable = rStream.remainingSize();
+            if (nNoteLen > nAvailable)
+                nNoteLen = nAvailable;
+            if (nNoteLen != 0)
             {
-                boost::scoped_array<sal_Char> pNote(new sal_Char[NoteLen+1]);
-                rStream.Read(pNote.get(), NoteLen);
-                pNote[NoteLen] = 0;
-                OUString aNoteText( SC10TOSTRING(pNote.get()));
-                pNote.reset();
+                boost::scoped_array<sal_Char> xNote(new sal_Char[nNoteLen+1]);
+                nNoteLen = rStream.Read(xNote.get(), nNoteLen);
+                xNote[nNoteLen] = 0;
+                OUString aNoteText( SC10TOSTRING(xNote.get()));
+                xNote.reset();
                 ScAddress aPos( Col, static_cast<SCROW>(Row), Tab );
                 ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
             }
