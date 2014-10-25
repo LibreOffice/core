@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			--with-www=xml \
 			--without-xslt-config \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(filter MACOSX,$(OS)),--libdir=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
 		&& $(MAKE) \

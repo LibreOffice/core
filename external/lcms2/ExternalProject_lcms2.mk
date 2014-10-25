@@ -31,7 +31,7 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 			CFLAGS='$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))' \
 			$(if $(filter-out WNTGCC,$(OS)$(COM)),,CPPFLAGS=" -DCMS_DLL_BUILD") \
 			$(if $(filter IOS ANDROID,$(OS)), --disable-shared --enable-static, --enable-shared --disable-static) \
-			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(filter MACOSX,$(OS)),--libdir=/@.__________________________________________________OOO) \
 		&& cd src \
 		&& $(MAKE) \
 	)
