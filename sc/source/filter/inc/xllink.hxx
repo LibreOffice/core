@@ -76,7 +76,7 @@ enum XclSupbookType
     EXC_SBTYPE_EXTERN,      /// SUPBOOK is used for external references.
     EXC_SBTYPE_ADDIN,       /// SUPBOOK contains add-in functions.
     EXC_SBTYPE_SPECIAL,     /// SUPBOOK is used for DDE or OLE links.
-    EXC_SBTYPE_EUROTOOL     /// SUPBOOK is uesd for EUROCONVERT.
+    EXC_SBTYPE_EUROTOOL     /// SUPBOOK is used for EUROCONVERT.
 };
 
 #endif
