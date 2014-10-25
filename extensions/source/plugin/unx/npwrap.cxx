@@ -377,12 +377,12 @@ int main( int argc, char **argv)
     if ((flags = fcntl (wakeup_fd[0], F_GETFL)) != -1)
     {
         flags |= O_NONBLOCK;
-        fcntl (wakeup_fd[0], F_SETFL, flags);
+        (void)fcntl(wakeup_fd[0], F_SETFL, flags);
     }
     if ((flags = fcntl (wakeup_fd[1], F_GETFL)) != -1)
     {
         flags |= O_NONBLOCK;
-        fcntl (wakeup_fd[1], F_SETFL, flags);
+        (void)fcntl(wakeup_fd[1], F_SETFL, flags);
     }
 
     pPluginLib = LoadModule( argv[2] );
