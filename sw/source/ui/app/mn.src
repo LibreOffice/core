@@ -267,13 +267,13 @@
                 {\
                     Identifier = SID_PASTE_UNFORMATTED ; \
                     HelpId =  CMD_SID_PASTE_UNFORMATTED ; \
-                    Text [ en-US ] = "~Text Only" ; \
+                    Text [ en-US ] = "~Unformatted Text" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_PASTE_SPECIAL ; \
                     HelpId =  CMD_SID_PASTE_SPECIAL ; \
-                    Text [ en-US ] = "~More" ; \
+                    Text [ en-US ] = "~More Options..." ; \
                 };\
             };\
         };\
@@ -284,9 +284,9 @@
     ItemList =                                                              \
     {                                                                       \
         MENU_PASTE_SPECIAL                                                  \
-        MN_RESET                                                            \
         _NUMBERING_RELATED_MENU                                             \
         SEPARATOR ;                                                         \
+        MN_RESET                                                            \
         MN_TEXT_ATTR                                                        \
         SEPARATOR ;                                                         \
         MN_TXT                                                              \
