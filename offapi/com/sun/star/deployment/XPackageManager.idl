@@ -123,6 +123,7 @@ interface XPackageManager
                          [in] com::sun::star::task::XAbortChannel xAbortChannel,
                          [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
+                com::sun::star::ucb::ContentCreationException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
