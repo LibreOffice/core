@@ -249,7 +249,7 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     bool bURLModified = m_pURLED->IsValueChangedFromSaved();
     bool bNameModified = m_pNameED->IsModified();
     bool bTargetModified = m_pTargetFrmLB->IsValueChangedFromSaved();
-    bModified = bURLModified | bNameModified | bTargetModified;
+    bModified = bURLModified || bNameModified || bTargetModified;
 
     // set valid settings first
     OUString sEntry = m_pVisitedLB->GetSelectEntry();
