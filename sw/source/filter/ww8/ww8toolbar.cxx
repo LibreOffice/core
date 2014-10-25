@@ -1165,6 +1165,10 @@ bool MacroNames::Read( SvStream &rS)
     rS.ReadUInt16( iMac );
     if ( iMac )
     {
+        //even an empty MacroName will take 2 bytes
+        size_t nMaxAvailableRecords = rS.remainingSize()/sizeof(sal_uInt16);
+        if (iMac > nMaxAvailableRecords)
+            return false;
         rgNames = new MacroName[ iMac ];
         for ( sal_Int32 index = 0; index < iMac; ++index )
         {
