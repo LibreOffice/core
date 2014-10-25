@@ -26,8 +26,8 @@ gb_COMPILEROPTFLAGS := -O1
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
-# Darwin mktemp -t expects a prefix, not a pattern
-gb_MKTEMP ?= /usr/bin/mktemp -t gbuild.
+# Note that BSD mktemp -t expects a prefix, not a pattern; if it fails, assume GNU syntax
+gb_MKTEMP ?= /usr/bin/mktemp -t gbuild. 2>/dev/null || mktemp -t gbuild.XXXXXX
 
 gb_OSDEFS := \
 	-D$(OS) \
