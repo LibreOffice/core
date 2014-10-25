@@ -3042,6 +3042,9 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
                 sal_Int32 nWidth = sal_Int32(fConverted * 635); // Twips -> EMUs
                 m_aFlyProperties.push_back(std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
             }
+            else
+                // No border: no line.
+                m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "0"));
         }
 
         return;
