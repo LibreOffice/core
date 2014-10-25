@@ -34,6 +34,8 @@ private:
 public:
     virtual ~OpenGLSalGraphicsImpl ();
 
+    OpenGLContext& GetOpenGLContext() { return maContext; }
+
     virtual void freeResources() SAL_OVERRIDE;
 
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
