@@ -62,19 +62,19 @@ sal_Int32 SAL_CALL java_io_InputStream::readSomeBytes( ::com::sun::star::uno::Se
 void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callIntMethodWithIntArg_Nothrow("skip",mID,nBytesToSkip);
+    callIntMethodWithIntArg_ThrowRuntime("skip",mID,nBytesToSkip);
 }
 
 sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethod_Nothrow("available", mID);
+    return callIntMethod_ThrowRuntime("available", mID);
 }
 
 void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    callVoidMethod_Nothrow("close",mID);
+    callVoidMethod_ThrowRuntime("close",mID);
 }
 
 sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)

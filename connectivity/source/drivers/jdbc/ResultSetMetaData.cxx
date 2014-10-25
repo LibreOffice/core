@@ -58,14 +58,14 @@ jclass java_sql_ResultSetMetaData::getMyClass() const
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg_Throw("getColumnDisplaySize",mID,column);
+    return callIntMethodWithIntArg_ThrowSQL("getColumnDisplaySize",mID,column);
 }
 
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg_Throw("getColumnType",mID,column);
+    return callIntMethodWithIntArg_ThrowSQL("getColumnType",mID,column);
 }
 
 
@@ -74,7 +74,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLExcep
     if ( m_nColumnCount == -1 )
     {
         static jmethodID mID(NULL);
-        m_nColumnCount = callIntMethod_Throw("getColumnCount", mID);
+        m_nColumnCount = callIntMethod_ThrowSQL("getColumnCount", mID);
     } // if ( m_nColumnCount == -1 )
     return m_nColumnCount;
 
@@ -157,19 +157,19 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg_Throw("getPrecision",mID,column);
+    return callIntMethodWithIntArg_ThrowSQL("getPrecision",mID,column);
 }
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg_Throw("getScale",mID,column);
+    return callIntMethodWithIntArg_ThrowSQL("getScale",mID,column);
 }
 
 sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
 {
     static jmethodID mID(NULL);
-    return callIntMethodWithIntArg_Throw("isNullable",mID,column);
+    return callIntMethodWithIntArg_ThrowSQL("isNullable",mID,column);
 }
 
 

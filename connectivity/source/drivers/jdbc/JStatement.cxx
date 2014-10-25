@@ -85,7 +85,7 @@ void SAL_CALL OStatement_BASE2::disposing()
     if ( object )
     {
         static jmethodID mID(NULL);
-        callVoidMethod_Throw("close", mID);
+        callVoidMethod_ThrowSQL("close", mID);
     }
 
     ::comphelper::disposeComponent(m_xGeneratedStatement);
@@ -192,7 +192,7 @@ void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException, std::e
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callVoidMethod_Nothrow("cancel",mID);
+    callVoidMethod_ThrowRuntime("cancel",mID);
 }
 
 
@@ -214,7 +214,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
 
         createStatement(t.pEnv);
         static jmethodID mID(NULL);
-        callVoidMethod_Throw("clearBatch", mID);
+        callVoidMethod_ThrowSQL("clearBatch", mID);
     } //t.pEnv
 }
 
@@ -368,7 +368,7 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(::com::sun:
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    sal_Int32 out = callIntMethod_Throw("getUpdateCount", mID);
+    sal_Int32 out = callIntMethod_ThrowSQL("getUpdateCount", mID);
     m_aLogger.log( LogLevel::FINER, STR_LOG_UPDATE_COUNT, (sal_Int32)out );
     return out;
 }
@@ -409,7 +409,7 @@ void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(::com::sun::star:
     {
         createStatement(t.pEnv);
         static jmethodID mID(NULL);
-        callVoidMethod_Throw("clearWarnings", mID);
+        callVoidMethod_ThrowSQL("clearWarnings", mID);
     }
 }
 
@@ -442,7 +442,7 @@ sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jm
 {
     sal_Int32 out = _nDefault;
     if ( object )
-        out = callIntMethod_Nothrow(_pMethodName, _inout_MethodID);
+        out = callIntMethod_ThrowRuntime(_pMethodName, _inout_MethodID);
     return out;
 }
 
@@ -450,9 +450,8 @@ sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jm
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    return callIntMethod_Nothrow(_pMethodName, _inout_MethodID);
+    return callIntMethod_ThrowRuntime(_pMethodName, _inout_MethodID);
 }
-
 
 sal_Int32 java_sql_Statement_Base::getFetchDirection() throw(SQLException, RuntimeException)
 {
@@ -496,7 +495,7 @@ void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLExceptio
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg_Nothrow("setQueryTimeOut", mID, _par0);
+    callVoidMethodWithIntArg_ThrowRuntime("setQueryTimeOut", mID, _par0);
 }
 
 
@@ -510,9 +509,8 @@ void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException
     m_bEscapeProcessing = _par0;
     createStatement( t.pEnv );
     static jmethodID mID(NULL);
-    callVoidMethodWithBoolArg_Nothrow("setEscapeProcessing", mID, _par0);
+    callVoidMethodWithBoolArg_ThrowRuntime("setEscapeProcessing", mID, _par0);
 }
-
 
 void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeException)
 {
@@ -521,7 +519,7 @@ void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, Ru
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg_Nothrow("setMaxRows", mID, _par0);
+    callVoidMethodWithIntArg_ThrowRuntime("setMaxRows", mID, _par0);
 }
 
 void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -552,7 +550,7 @@ void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLExcept
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg_Nothrow("setFetchDirection", mID, _par0);
+    callVoidMethodWithIntArg_ThrowRuntime("setFetchDirection", mID, _par0);
 }
 
 void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -564,7 +562,7 @@ void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg_Nothrow("setFetchSize", mID, _par0);
+    callVoidMethodWithIntArg_ThrowRuntime("setFetchSize", mID, _par0);
 }
 
 void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -574,7 +572,7 @@ void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLExceptio
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    callVoidMethodWithIntArg_Nothrow("setMaxFieldSize", mID, _par0);
+    callVoidMethodWithIntArg_ThrowRuntime("setMaxFieldSize", mID, _par0);
 }
 
 void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLException, RuntimeException)

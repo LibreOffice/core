@@ -115,19 +115,19 @@ namespace connectivity
         bool        callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         bool        callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
         jobject         callResultSetMethod( JNIEnv& _rEnv, const char* _pMethodName, jmethodID& _inout_MethodID ) const;
-        sal_Int32       callIntMethod_Throw(const char* _pMethodName, jmethodID& _inout_MethodID) const;
-        sal_Int32       callIntMethod_Nothrow(const char* _pMethodName, jmethodID& _inout_MethodID) const;
-        sal_Int32       callIntMethodWithIntArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
-        sal_Int32       callIntMethodWithIntArg_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
+        sal_Int32       callIntMethod_ThrowSQL(const char* _pMethodName, jmethodID& _inout_MethodID) const;
+        sal_Int32       callIntMethod_ThrowRuntime(const char* _pMethodName, jmethodID& _inout_MethodID) const;
+        sal_Int32       callIntMethodWithIntArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
+        sal_Int32       callIntMethodWithIntArg_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
         sal_Int32       callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const;
         OUString callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         OUString callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;
-        void            callVoidMethod_Throw( const char* _pMethodName, jmethodID& _inout_MethodID) const;
-        void            callVoidMethod_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID) const;
-        void            callVoidMethodWithIntArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
-        void            callVoidMethodWithIntArg_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
-        void            callVoidMethodWithBoolArg_Throw( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const;
-        void            callVoidMethodWithBoolArg_Nothrow( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const;
+        void            callVoidMethod_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID) const;
+        void            callVoidMethod_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID) const;
+        void            callVoidMethodWithIntArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
+        void            callVoidMethodWithIntArg_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
+        void            callVoidMethodWithBoolArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const;
+        void            callVoidMethodWithBoolArg_ThrowRuntime( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const;
         void            callVoidMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID, const OUString& _nArgument ) const;
         jobject         callObjectMethod( JNIEnv * pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID ) const;
         jobject         callObjectMethodWithIntArg( JNIEnv * pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;
@@ -143,7 +143,7 @@ namespace connectivity
         }
 
         template< typename T >
-                        void callVoidMethod_Throw(const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID,sal_Int32 _nArgument, const T& _aValue) const
+                        void callVoidMethod_ThrowSQL(const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID,sal_Int32 _nArgument, const T& _aValue) const
         {
             SDBThreadAttach t;
             obtainMethodId_throwSQL(t.pEnv, _pMethodName,_pSignature, _inout_MethodID);
