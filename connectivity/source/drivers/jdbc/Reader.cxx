@@ -90,10 +90,10 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
         static const char * cMethodName = "read";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nBytesToRead );
         if ( !out )
-            ThrowSQLException(t.pEnv,*this);
+            ThrowRuntimeException(t.pEnv,*this);
         if(out > 0)
         {
             jboolean p = sal_False;

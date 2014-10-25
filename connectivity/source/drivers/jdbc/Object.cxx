@@ -301,7 +301,7 @@ sal_Int32 java_lang_Object::callIntMethod_ThrowRuntime(const char* _pMethodName,
     obtainMethodId_throwRuntime(t.pEnv, _pMethodName,"()I", _inout_MethodID);
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
-    isExceptionOccurred(t.pEnv,true);
+    ThrowRuntimeException(t.pEnv, NULL);
     return (sal_Int32)out;
 }
 
@@ -323,7 +323,7 @@ sal_Int32 java_lang_Object::callIntMethodWithIntArg_ThrowRuntime( const char* _p
     obtainMethodId_throwRuntime(t.pEnv, _pMethodName,"(I)I", _inout_MethodID);
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID , _nArgument) );
-    isExceptionOccurred(t.pEnv,true);
+    ThrowRuntimeException(t.pEnv, NULL);
     return (sal_Int32)out;
 }
 
@@ -346,7 +346,7 @@ void java_lang_Object::callVoidMethod_ThrowRuntime( const char* _pMethodName, jm
 
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID );
-    isExceptionOccurred(t.pEnv, true);
+    ThrowRuntimeException(t.pEnv, NULL);
 }
 
 void java_lang_Object::callVoidMethodWithIntArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const
@@ -368,7 +368,7 @@ void java_lang_Object::callVoidMethodWithIntArg_ThrowRuntime( const char* _pMeth
 
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
-    isExceptionOccurred(t.pEnv, true);
+    ThrowRuntimeException(t.pEnv, NULL);
 }
 
 void java_lang_Object::callVoidMethodWithBoolArg_ThrowSQL( const char* _pMethodName, jmethodID& _inout_MethodID, bool _nArgument ) const
@@ -388,7 +388,7 @@ void java_lang_Object::callVoidMethodWithBoolArg_ThrowRuntime( const char* _pMet
     obtainMethodId_throwRuntime(t.pEnv, _pMethodName,"(Z)V", _inout_MethodID);
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,int(_nArgument) );
-    isExceptionOccurred(t.pEnv,true);
+    ThrowRuntimeException(t.pEnv, NULL);
 }
 
 OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
