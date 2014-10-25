@@ -27,7 +27,6 @@
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
-class SwImpBlocks;
 
 #define SWXML_CONVBLOCK     0x0001
 #define SWXML_NOROOTCOMMIT  0x0002
