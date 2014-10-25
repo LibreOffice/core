@@ -635,7 +635,7 @@ bool OpenGLContext::ImplInit()
 #elif defined( UNX )
     if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
     {
-        SAL_INFO("vcl.opengl", "unable to select current GLX context");
+        SAL_WARN("vcl.opengl", "unable to select current GLX context");
         return false;
     }
 
