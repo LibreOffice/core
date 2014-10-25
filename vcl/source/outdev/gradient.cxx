@@ -50,6 +50,12 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
     if ( mbOutputClipped )
         return;
 
+    if ( mpGraphics || AcquireGraphics() )
+    {
+        if ( mpGraphics->DrawGradient( rPolyPoly, rGradient, this ) )
+            return;
+    }
+
     if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
@@ -71,27 +77,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
             SetGrayscaleColors( aGradient );
         }
 
-        if( mpMetaFile )
-        {
-            const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
-
-            if ( rPolyPoly.IsRect() )
-            {
-                mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, aGradient ) );
-            }
-            else
-            {
-                mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
-                mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
-
-                Push( PushFlags::CLIPREGION );
-                IntersectClipRegion(vcl::Region(rPolyPoly));
-                DrawGradient( aBoundRect, rGradient );
-                Pop();
-
-                mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
-            }
-        }
+        DrawGradientToMetafile( rPolyPoly, rGradient );
 
         if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
             return;
@@ -148,9 +134,9 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
                     // polypolygon, so pass in a NULL for the clipping parameter
                     if( aGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
-                        DrawLinearGradient( aRect, aGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
+                        DrawLinearGradient( aRect, aGradient, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
                     else
-                        DrawComplexGradient( aRect, aGradient, false, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
+                        DrawComplexGradient( aRect, aGradient, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
                 }
 
                 Pop();
@@ -160,6 +146,83 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
+}
+
+void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
+                                            const Gradient& rGradient )
+{
+    if ( !mpMetaFile )
+        return;
+
+    if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
+    {
+        Gradient aGradient( rGradient );
+
+        if ( mnDrawMode & ( DRAWMODE_GRAYGRADIENT | DRAWMODE_GHOSTEDGRADIENT ) )
+        {
+            SetGrayscaleColors( aGradient );
+        }
+
+        const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
+        if ( rPolyPoly.IsRect() )
+        {
+            mpMetaFile->AddAction( new MetaGradientAction( aBoundRect, aGradient ) );
+        }
+        else
+        {
+            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
+            mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
+
+            Push( PushFlags::CLIPREGION );
+            IntersectClipRegion(vcl::Region(rPolyPoly));
+            DrawGradient( aBoundRect, rGradient );
+            Pop();
+
+            mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
+        }
+
+        if( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
+            return;
+
+        // Clip and then draw the gradient
+        if( !Rectangle( PixelToLogic( Point() ), GetOutputSize() ).IsEmpty() )
+        {
+            // convert rectangle to pixels
+            Rectangle aRect( ImplLogicToDevicePixel( aBoundRect ) );
+            aRect.Justify();
+
+            // do nothing if the rectangle is empty
+            if ( !aRect.IsEmpty() )
+            {
+                if( !mbOutputClipped )
+                {
+                    tools::PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+
+                    // calculate step count if necessary
+                    if ( !aGradient.GetSteps() )
+                        aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
+
+                    if ( rPolyPoly.IsRect() )
+                    {
+                        // because we draw with no border line, we have to expand gradient
+                        // rect to avoid missing lines on the right and bottom edge
+                        aRect.Left()--;
+                        aRect.Top()--;
+                        aRect.Right()++;
+                        aRect.Bottom()++;
+                    }
+
+                    // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
+                    // polypolygon, so pass in a NULL for the clipping parameter
+                    if( aGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
+                        DrawLinearGradientToMetafile( aRect, aGradient );
+                    else
+                        DrawComplexGradientToMetafile( aRect, aGradient );
+                }
+            }
+        }
+    }
 }
 
 namespace
@@ -177,7 +240,7 @@ namespace
 
 void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
                                        const Gradient& rGradient,
-                                       bool bMtf, const tools::PolyPolygon* pClipPolyPoly )
+                                       const tools::PolyPolygon* pClipPolyPoly )
 {
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -244,10 +307,8 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         nRed        = (sal_uInt8)nStartRed;
         nGreen      = (sal_uInt8)nStartGreen;
         nBlue       = (sal_uInt8)nStartBlue;
-        if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-        else
-            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+
+        mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
         aBorderRect.Bottom() = (long)( aBorderRect.Top() + fBorder );
         aRect.Top() = aBorderRect.Bottom();
@@ -256,10 +317,9 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         aPoly[2] = aBorderRect.BottomRight();
         aPoly[3] = aBorderRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
-        if ( bMtf )
-            mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
-        else
-            ImplDrawPolygon( aPoly, pClipPolyPoly );
+
+        ImplDrawPolygon( aPoly, pClipPolyPoly );
+
         if ( !bLinear)
         {
             aBorderRect = aMirrorRect;
@@ -270,14 +330,13 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
             aPoly[2] = aBorderRect.BottomRight();
             aPoly[3] = aBorderRect.BottomLeft();
             aPoly.Rotate( aCenter, nAngle );
-            if ( bMtf )
-                mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
-            else
-                ImplDrawPolygon( aPoly, pClipPolyPoly );
+
+            ImplDrawPolygon( aPoly, pClipPolyPoly );
         }
     }
 
     // calculate step count
+    bool    bMtf = false;
     long    nStepCount  = GetGradientSteps( rGradient, aRect, bMtf );
 
     // minimal three steps and maximal as max color steps
@@ -313,10 +372,8 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         nGreen = GetGradientColorValue((long)fTempColor);
         fTempColor = ((double)nStartBlue) * (1.0-fAlpha) + ((double)nEndBlue) * fAlpha;
         nBlue = GetGradientColorValue((long)fTempColor);
-        if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-        else
-            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+
+        mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
         // Polygon for this color step
         aRect.Top() = (long)( fGradientLine + ((double) i) * fScanInc );
@@ -326,10 +383,9 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         aPoly[2] = aRect.BottomRight();
         aPoly[3] = aRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
-        if ( bMtf )
-            mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
-        else
-            ImplDrawPolygon( aPoly, pClipPolyPoly );
+
+        ImplDrawPolygon( aPoly, pClipPolyPoly );
+
         if ( !bLinear )
         {
             aMirrorRect.Bottom() = (long)( fMirrorGradientLine - ((double) i) * fScanInc );
@@ -339,10 +395,8 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
             aPoly[2] = aMirrorRect.BottomRight();
             aPoly[3] = aMirrorRect.BottomLeft();
             aPoly.Rotate( aCenter, nAngle );
-            if ( bMtf )
-                mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
-            else
-                ImplDrawPolygon( aPoly, pClipPolyPoly );
+
+            ImplDrawPolygon( aPoly, pClipPolyPoly );
         }
     }
     if ( !bLinear)
@@ -351,10 +405,8 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         nRed = GetGradientColorValue(nEndRed);
         nGreen = GetGradientColorValue(nEndGreen);
         nBlue = GetGradientColorValue(nEndBlue);
-        if ( bMtf )
-            mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-        else
-            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+
+        mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
         aRect.Top() = (long)( fGradientLine + ((double)nSteps) * fScanInc );
         aRect.Bottom() = (long)( fMirrorGradientLine - ((double) nSteps) * fScanInc );
@@ -363,16 +415,14 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         aPoly[2] = aRect.BottomRight();
         aPoly[3] = aRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
-        if ( bMtf )
-            mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
-        else
-            ImplDrawPolygon( aPoly, pClipPolyPoly );
+
+        ImplDrawPolygon( aPoly, pClipPolyPoly );
     }
 }
 
 void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
-                                            const Gradient& rGradient,
-                                            bool bMtf, const tools::PolyPolygon* pClipPolyPoly )
+                                        const Gradient& rGradient,
+                                        const tools::PolyPolygon* pClipPolyPoly )
 {
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,
@@ -398,11 +448,12 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
-    if ( UsePolyPolygonForComplexGradient() || bMtf )
+    if ( UsePolyPolygonForComplexGradient() )
         pPolyPoly.reset(new tools::PolyPolygon( 2 ));
 
-    // last parameter - true if complex gradient, false if linear
-    long nStepCount = GetGradientSteps( rGradient, rRect, bMtf, true );
+    bool bMtf = false;
+    bool bComplex = true;
+    long nStepCount = GetGradientSteps( rGradient, rRect, bMtf, bComplex );
 
     // at least three steps and at most the number of colour differences
     long nSteps = std::max( nStepCount, 2L );
@@ -438,10 +489,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
     sal_uInt8   nRed = (sal_uInt8) nStartRed, nGreen = (sal_uInt8) nStartGreen, nBlue = (sal_uInt8) nStartBlue;
     bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
 
-    if( bMtf )
-        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-    else
-        mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+    mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
     if( pPolyPoly )
     {
@@ -494,10 +542,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
             pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
             pPolyPoly->Replace( aPoly, 1 );
 
-            if( bMtf )
-                mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
-            else
-                ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
+            ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
 
             // #107349# Set fill color _after_ geometry painting:
             // pPolyPoly's geometry is the band from last iteration's
@@ -506,18 +551,12 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
             // full aPoly. Thus, here, we're painting the band before
             // the one painted in the window outdev path below. To get
             // matching colors, have to delay color setting here.
-            if( bMtf )
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-            else
-                mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
         }
         else
         {
             // #107349# Set fill color _before_ geometry painting
-            if( bMtf )
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-            else
-                mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
             ImplDrawPolygon( aPoly, pClipPolyPoly );
         }
@@ -540,17 +579,321 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
                 nBlue = GetGradientColorValue( nEndBlue );
             }
 
-            if( bMtf )
-            {
-                mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
-                mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
-            }
-            else
-            {
-                mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
-                   ImplDrawPolygon( rPoly, pClipPolyPoly );
-            }
+            mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
+            ImplDrawPolygon( rPoly, pClipPolyPoly );
         }
+    }
+}
+
+void OutputDevice::DrawLinearGradientToMetafile( const Rectangle& rRect,
+                                                 const Gradient& rGradient )
+{
+    // get BoundRect of rotated rectangle
+    Rectangle aRect;
+    Point     aCenter;
+    sal_uInt16    nAngle = rGradient.GetAngle() % 3600;
+
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
+    bool bLinear = (rGradient.GetStyle() == GradientStyle_LINEAR);
+    double fBorder = rGradient.GetBorder() * aRect.GetHeight() / 100.0;
+    if ( !bLinear )
+    {
+        fBorder /= 2.0;
+    }
+    Rectangle aMirrorRect = aRect; // used in style axial
+    aMirrorRect.Top() = ( aRect.Top() + aRect.Bottom() ) / 2;
+    if ( !bLinear )
+    {
+        aRect.Bottom() = aMirrorRect.Top();
+    }
+
+    // colour-intensities of start- and finish; change if needed
+    long    nFactor;
+    Color   aStartCol   = rGradient.GetStartColor();
+    Color   aEndCol     = rGradient.GetEndColor();
+    long    nStartRed   = aStartCol.GetRed();
+    long    nStartGreen = aStartCol.GetGreen();
+    long    nStartBlue  = aStartCol.GetBlue();
+    long    nEndRed     = aEndCol.GetRed();
+    long    nEndGreen   = aEndCol.GetGreen();
+    long    nEndBlue    = aEndCol.GetBlue();
+            nFactor     = rGradient.GetStartIntensity();
+            nStartRed   = (nStartRed   * nFactor) / 100;
+            nStartGreen = (nStartGreen * nFactor) / 100;
+            nStartBlue  = (nStartBlue  * nFactor) / 100;
+            nFactor     = rGradient.GetEndIntensity();
+            nEndRed     = (nEndRed   * nFactor) / 100;
+            nEndGreen   = (nEndGreen * nFactor) / 100;
+            nEndBlue    = (nEndBlue  * nFactor) / 100;
+
+    // gradient style axial has exchanged start and end colors
+    if ( !bLinear)
+    {
+        long nTempColor = nStartRed;
+        nStartRed = nEndRed;
+        nEndRed = nTempColor;
+        nTempColor = nStartGreen;
+        nStartGreen = nEndGreen;
+        nEndGreen = nTempColor;
+        nTempColor = nStartBlue;
+        nStartBlue = nEndBlue;
+        nEndBlue = nTempColor;
+    }
+
+    sal_uInt8   nRed;
+    sal_uInt8   nGreen;
+    sal_uInt8   nBlue;
+
+    // Create border
+    Rectangle aBorderRect = aRect;
+    Polygon     aPoly( 4 );
+    if (fBorder > 0.0)
+    {
+        nRed        = (sal_uInt8)nStartRed;
+        nGreen      = (sal_uInt8)nStartGreen;
+        nBlue       = (sal_uInt8)nStartBlue;
+
+        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+
+        aBorderRect.Bottom() = (long)( aBorderRect.Top() + fBorder );
+        aRect.Top() = aBorderRect.Bottom();
+        aPoly[0] = aBorderRect.TopLeft();
+        aPoly[1] = aBorderRect.TopRight();
+        aPoly[2] = aBorderRect.BottomRight();
+        aPoly[3] = aBorderRect.BottomLeft();
+        aPoly.Rotate( aCenter, nAngle );
+
+        mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+
+        if ( !bLinear)
+        {
+            aBorderRect = aMirrorRect;
+            aBorderRect.Top() = (long) ( aBorderRect.Bottom() - fBorder );
+            aMirrorRect.Bottom() = aBorderRect.Top();
+            aPoly[0] = aBorderRect.TopLeft();
+            aPoly[1] = aBorderRect.TopRight();
+            aPoly[2] = aBorderRect.BottomRight();
+            aPoly[3] = aBorderRect.BottomLeft();
+            aPoly.Rotate( aCenter, nAngle );
+
+            mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+        }
+    }
+
+    bool    bMtf = true;
+    long    nStepCount  = GetGradientSteps( rGradient, aRect, bMtf );
+
+    // minimal three steps and maximal as max color steps
+    long   nAbsRedSteps   = std::abs( nEndRed   - nStartRed );
+    long   nAbsGreenSteps = std::abs( nEndGreen - nStartGreen );
+    long   nAbsBlueSteps  = std::abs( nEndBlue  - nStartBlue );
+    long   nMaxColorSteps = std::max( nAbsRedSteps , nAbsGreenSteps );
+    nMaxColorSteps = std::max( nMaxColorSteps, nAbsBlueSteps );
+    long nSteps = std::min( nStepCount, nMaxColorSteps );
+    if ( nSteps < 3)
+    {
+        nSteps = 3;
+    }
+
+    double fScanInc = ((double)aRect.GetHeight()) / (double) nSteps;
+    double fGradientLine = (double)aRect.Top();
+    double fMirrorGradientLine = (double) aMirrorRect.Bottom();
+
+    double fAlpha = 0.0;
+    const double fStepsMinus1 = ((double)nSteps) - 1.0;
+    double fTempColor;
+    if ( !bLinear)
+    {
+        nSteps -= 1; // draw middle polygons as one polygon after loop to avoid gap
+    }
+    for ( long i = 0; i < nSteps; i++ )
+    {
+        // linear interpolation of color
+        fAlpha = ((double)i) / fStepsMinus1;
+        fTempColor = ((double)nStartRed) * (1.0-fAlpha) + ((double)nEndRed) * fAlpha;
+        nRed = GetGradientColorValue((long)fTempColor);
+        fTempColor = ((double)nStartGreen) * (1.0-fAlpha) + ((double)nEndGreen) * fAlpha;
+        nGreen = GetGradientColorValue((long)fTempColor);
+        fTempColor = ((double)nStartBlue) * (1.0-fAlpha) + ((double)nEndBlue) * fAlpha;
+        nBlue = GetGradientColorValue((long)fTempColor);
+
+        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+
+        // Polygon for this color step
+        aRect.Top() = (long)( fGradientLine + ((double) i) * fScanInc );
+        aRect.Bottom() = (long)( fGradientLine + ( ((double) i) + 1.0 ) * fScanInc );
+        aPoly[0] = aRect.TopLeft();
+        aPoly[1] = aRect.TopRight();
+        aPoly[2] = aRect.BottomRight();
+        aPoly[3] = aRect.BottomLeft();
+        aPoly.Rotate( aCenter, nAngle );
+
+        mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+
+        if ( !bLinear )
+        {
+            aMirrorRect.Bottom() = (long)( fMirrorGradientLine - ((double) i) * fScanInc );
+            aMirrorRect.Top() = (long)( fMirrorGradientLine - (((double) i) + 1.0)* fScanInc );
+            aPoly[0] = aMirrorRect.TopLeft();
+            aPoly[1] = aMirrorRect.TopRight();
+            aPoly[2] = aMirrorRect.BottomRight();
+            aPoly[3] = aMirrorRect.BottomLeft();
+            aPoly.Rotate( aCenter, nAngle );
+
+            mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+        }
+    }
+    if ( !bLinear)
+    {
+        // draw middle polygon with end color
+        nRed = GetGradientColorValue(nEndRed);
+        nGreen = GetGradientColorValue(nEndGreen);
+        nBlue = GetGradientColorValue(nEndBlue);
+
+        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+
+        aRect.Top() = (long)( fGradientLine + ((double)nSteps) * fScanInc );
+        aRect.Bottom() = (long)( fMirrorGradientLine - ((double) nSteps) * fScanInc );
+        aPoly[0] = aRect.TopLeft();
+        aPoly[1] = aRect.TopRight();
+        aPoly[2] = aRect.BottomRight();
+        aPoly[3] = aRect.BottomLeft();
+        aPoly.Rotate( aCenter, nAngle );
+
+        mpMetaFile->AddAction( new MetaPolygonAction( aPoly ) );
+    }
+}
+
+void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
+                                                  const Gradient& rGradient )
+{
+    // Determine if we output via Polygon or PolyPolygon
+    // For all rasteroperations other then Overpaint always use PolyPolygon,
+    // as we will get wrong results if we output multiple times on top of each other.
+    // Also for printers always use PolyPolygon, as not all printers
+    // can print polygons on top of each other.
+
+    boost::scoped_ptr<tools::PolyPolygon> pPolyPoly;
+    Rectangle       aRect;
+    Point           aCenter;
+    Color           aStartCol( rGradient.GetStartColor() );
+    Color           aEndCol( rGradient.GetEndColor() );
+    long            nStartRed = ( (long) aStartCol.GetRed() * rGradient.GetStartIntensity() ) / 100;
+    long            nStartGreen = ( (long) aStartCol.GetGreen() * rGradient.GetStartIntensity() ) / 100;
+    long            nStartBlue = ( (long) aStartCol.GetBlue() * rGradient.GetStartIntensity() ) / 100;
+    long            nEndRed = ( (long) aEndCol.GetRed() * rGradient.GetEndIntensity() ) / 100;
+    long            nEndGreen = ( (long) aEndCol.GetGreen() * rGradient.GetEndIntensity() ) / 100;
+    long            nEndBlue = ( (long) aEndCol.GetBlue() * rGradient.GetEndIntensity() ) / 100;
+    long            nRedSteps = nEndRed - nStartRed;
+    long            nGreenSteps = nEndGreen - nStartGreen;
+    long            nBlueSteps = nEndBlue   - nStartBlue;
+    sal_uInt16      nAngle = rGradient.GetAngle() % 3600;
+
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
+    pPolyPoly.reset(new tools::PolyPolygon( 2 ));
+
+    // last parameter - true if complex gradient, false if linear
+    long nStepCount = GetGradientSteps( rGradient, rRect, true, true );
+
+    // at least three steps and at most the number of colour differences
+    long nSteps = std::max( nStepCount, 2L );
+    long nCalcSteps  = std::abs( nRedSteps );
+    long nTempSteps = std::abs( nGreenSteps );
+    if ( nTempSteps > nCalcSteps )
+        nCalcSteps = nTempSteps;
+    nTempSteps = std::abs( nBlueSteps );
+    if ( nTempSteps > nCalcSteps )
+        nCalcSteps = nTempSteps;
+    if ( nCalcSteps < nSteps )
+        nSteps = nCalcSteps;
+    if ( !nSteps )
+        nSteps = 1;
+
+    // determine output limits and stepsizes for all directions
+    Polygon aPoly;
+    double  fScanLeft = aRect.Left();
+    double  fScanTop = aRect.Top();
+    double  fScanRight = aRect.Right();
+    double  fScanBottom = aRect.Bottom();
+    double fScanIncX = (double) aRect.GetWidth() / (double) nSteps * 0.5;
+    double fScanIncY = (double) aRect.GetHeight() / (double) nSteps * 0.5;
+
+    // all gradients are rendered as nested rectangles which shrink
+    // equally in each dimension - except for 'square' gradients
+    // which shrink to a central vertex but are not per-se square.
+    if( rGradient.GetStyle() != GradientStyle_SQUARE )
+    {
+        fScanIncY = std::min( fScanIncY, fScanIncX );
+        fScanIncX = fScanIncY;
+    }
+    sal_uInt8   nRed = (sal_uInt8) nStartRed, nGreen = (sal_uInt8) nStartGreen, nBlue = (sal_uInt8) nStartBlue;
+    bool    bPaintLastPolygon( false ); // #107349# Paint last polygon only if loop has generated any output
+
+    mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+
+    pPolyPoly->Insert( aPoly = rRect );
+    pPolyPoly->Insert( aPoly );
+
+    // loop to output Polygone/PolyPolygone sequentially
+    for( long i = 1; i < nSteps; i++ )
+    {
+        // calculate new Polygon
+        aRect.Left() = (long)( fScanLeft += fScanIncX );
+        aRect.Top() = (long)( fScanTop += fScanIncY );
+        aRect.Right() = (long)( fScanRight -= fScanIncX );
+        aRect.Bottom() = (long)( fScanBottom -= fScanIncY );
+
+        if( ( aRect.GetWidth() < 2 ) || ( aRect.GetHeight() < 2 ) )
+            break;
+
+        if( rGradient.GetStyle() == GradientStyle_RADIAL || rGradient.GetStyle() == GradientStyle_ELLIPTICAL )
+            aPoly = Polygon( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
+        else
+            aPoly = Polygon( aRect );
+
+        aPoly.Rotate( aCenter, nAngle );
+
+        // adapt colour accordingly
+        const long nStepIndex = ( ( pPolyPoly ) ? i : ( i + 1 ) );
+        nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
+        nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
+        nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
+
+        bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
+
+        pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
+        pPolyPoly->Replace( aPoly, 1 );
+
+        mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
+
+        // #107349# Set fill color _after_ geometry painting:
+        // pPolyPoly's geometry is the band from last iteration's
+        // aPoly to current iteration's aPoly. The window outdev
+        // path (see else below), on the other hand, paints the
+        // full aPoly. Thus, here, we're painting the band before
+        // the one painted in the window outdev path below. To get
+        // matching colors, have to delay color setting here.
+        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+    }
+
+    const Polygon& rPoly = pPolyPoly->GetObject( 1 );
+
+    if( !rPoly.GetBoundRect().IsEmpty() )
+    {
+        // #107349# Paint last polygon with end color only if loop
+        // has generated output. Otherwise, the current
+        // (i.e. start) color is taken, to generate _any_ output.
+        if( bPaintLastPolygon )
+        {
+            nRed = GetGradientColorValue( nEndRed );
+            nGreen = GetGradientColorValue( nEndGreen );
+            nBlue = GetGradientColorValue( nEndBlue );
+        }
+
+        mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
+        mpMetaFile->AddAction( new MetaPolygonAction( rPoly ) );
     }
 }
 
@@ -671,9 +1014,9 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
             aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
 
         if( aGradient.GetStyle() == GradientStyle_LINEAR || aGradient.GetStyle() == GradientStyle_AXIAL )
-            DrawLinearGradient( aRect, aGradient, true, NULL );
+            DrawLinearGradientToMetafile( aRect, aGradient );
         else
-            DrawComplexGradient( aRect, aGradient, true, NULL );
+            DrawComplexGradientToMetafile( aRect, aGradient );
 
         mpMetaFile->AddAction( new MetaPopAction() );
         mpMetaFile = pOldMtf;
