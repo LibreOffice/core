@@ -358,7 +358,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
         else if (i->first == "fillColor" && xPropertySet.is())
         {
-            aAny <<= msfilter::util::BGRToRGB(i->second.toInt32());
+            aAny <<= msfilter::util::BGRToRGB(i->second.toUInt32());
             if (m_bTextFrame)
                 xPropertySet->setPropertyValue("BackColor", aAny);
             else
