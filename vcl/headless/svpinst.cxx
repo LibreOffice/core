@@ -91,12 +91,12 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
         if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
-            fcntl (m_pTimeoutFDS[0], F_SETFL, flags);
+            (void)fcntl(m_pTimeoutFDS[0], F_SETFL, flags);
         }
         if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
-            fcntl (m_pTimeoutFDS[1], F_SETFL, flags);
+            (void)fcntl(m_pTimeoutFDS[1], F_SETFL, flags);
         }
     }
     m_aEventGuard = osl_createMutex();
