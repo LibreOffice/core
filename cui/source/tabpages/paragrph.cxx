@@ -576,16 +576,6 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
         m_pRegisterFL->Hide();
         m_pRegisterCB->Hide();
         m_pAutoCB->Hide();
-
-        if(!(nHtmlMode & HTMLMODE_SOME_STYLES)) // IE or SW
-        {
-            m_pRightLabel->Disable();
-            m_pRightIndent->Disable();
-            m_pTopDist->Disable();  //HTML3.2 and NS 3.0
-            m_pBottomDist->Disable();
-            m_pFLineIndent->Disable();
-            m_pFLineLabel->Disable();
-        }
     }
 
     // this sets the min/max limits; do this _after_ setting the values,
@@ -1019,17 +1009,13 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     m_pLastLineLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
     m_pTextDirectionLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, TextDirectionHdl_Impl ) );
 
-    sal_uInt16 nHtmlMode = GetHtmlMode_Impl(rSet);
-    if(!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES)) )
+    if( aLangOptions.IsCTLFontEnabled() )
     {
-        if( aLangOptions.IsCTLFontEnabled() )
-        {
-            m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-            m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-            m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+        m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+        m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+        m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
 
-            m_pPropertiesFL->Show();
-        }
+        m_pPropertiesFL->Show();
     }
 
     setPreviewsToSamePlace(pParent, this);
