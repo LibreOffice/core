@@ -280,7 +280,7 @@ static gboolean pollXtTimerCallback(gpointer)
 static gboolean prepareWakeupEvent( GSource*, gint* )
 {
     struct pollfd aPoll = { wakeup_fd[0], POLLIN, 0 };
-    poll( &aPoll, 1, 0 );
+    (void)poll(&aPoll, 1, 0);
     return (aPoll.revents & POLLIN ) != 0;
 }
 
