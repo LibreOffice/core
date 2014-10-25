@@ -237,6 +237,7 @@ public:
                                 const ::basegfx::B2DVector& rLineWidths,
                                 basegfx::B2DLineJoin,
                                 com::sun::star::drawing::LineCap eLineCap) SAL_OVERRIDE;
+    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE { return false; };
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void            copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,

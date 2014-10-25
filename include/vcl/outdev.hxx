@@ -833,8 +833,12 @@ protected:
 
 private:
 
-    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const tools::PolyPolygon* pClipPolyPoly );
-    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, bool bMtf, const tools::PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawLinearGradient( const Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
+    SAL_DLLPRIVATE void         DrawComplexGradient( const Rectangle& rRect, const Gradient& rGradient, const tools::PolyPolygon* pClipPolyPoly );
+
+    SAL_DLLPRIVATE void         DrawGradientToMetafile( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    SAL_DLLPRIVATE void         DrawLinearGradientToMetafile( const Rectangle& rRect, const Gradient& rGradient );
+    SAL_DLLPRIVATE void         DrawComplexGradientToMetafile( const Rectangle& rRect, const Gradient& rGradient );
 
     SAL_DLLPRIVATE long         GetGradientSteps( const Gradient& rGradient, const Rectangle& rRect, bool bMtf, bool bComplex=false );
 
