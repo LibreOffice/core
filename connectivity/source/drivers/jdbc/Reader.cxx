@@ -65,9 +65,9 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
         static const char * cMethodName = "available";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwRuntime(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallBooleanMethod( object, mID);
-        ThrowSQLException(t.pEnv,*this);
+        ThrowRuntimeException(t.pEnv,*this);
     } //t.pEnv
     return out;
 }
