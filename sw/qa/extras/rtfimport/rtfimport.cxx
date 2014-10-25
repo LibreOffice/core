@@ -1914,6 +1914,12 @@ DECLARE_RTFIMPORT_TEST(testFdo85179, "fdo85179.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(50800/360), getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineWidth);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo82859, "fdo82859.rtf")
+{
+    // This was 0: "0xffffff" was converted to 0, i.e. the background was black instead of the default.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(getShape(1), "BackColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
