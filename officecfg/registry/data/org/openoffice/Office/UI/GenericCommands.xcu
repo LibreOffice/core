@@ -5436,7 +5436,7 @@
       </node>
       <node oor:name=".uno:ChangesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Chan~ges</value>
+          <value xml:lang="en-US">Track Chan~ges</value>
         </prop>
       </node>
       <node oor:name=".uno:ToolsMenu" oor:op="replace">

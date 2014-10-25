@@ -158,7 +158,7 @@
       </node>
       <node oor:name=".uno:ProtectTraceChangeMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Protect Records...</value>
+          <value xml:lang="en-US">~Protect Changes...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -203,7 +203,7 @@
       </node>
       <node oor:name=".uno:TrackChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Record</value>
+          <value xml:lang="en-US">~Record Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -211,7 +211,7 @@
       </node>
       <node oor:name=".uno:ShowTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Show</value>
+          <value xml:lang="en-US">~Show Changes</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -224,7 +224,7 @@
       </node>
       <node oor:name=".uno:CommentChangeTracking" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Comment...</value>
+          <value xml:lang="en-US">~Comment on Change...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -242,7 +242,7 @@
       </node>
       <node oor:name=".uno:AcceptTrackedChanges" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Accept or Reject...</value>
+          <value xml:lang="en-US">~List of Changes...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
