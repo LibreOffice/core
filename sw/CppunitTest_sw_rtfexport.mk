@@ -75,6 +75,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_rtfexport,\
 	uui/util/uui \
     writerfilter/util/writerfilter \
     xmloff/util/xo \
+	oox/util/oox \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_rtfexport))
