@@ -66,7 +66,7 @@ void PyUNO_del (PyObject* self)
 
 OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef , sal_Int32 mode )
 {
-    OSL_ASSERT( pVal );
+    assert( pVal );
     if (pTypeRef->eTypeClass == typelib_TypeClass_VOID)
         return OUString("void");
 
@@ -124,7 +124,7 @@ OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef
         buf.append( "{ " );
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
-        OSL_ASSERT( pTypeDescr );
+        assert( pTypeDescr );
 
         typelib_CompoundTypeDescription * pCompType = (typelib_CompoundTypeDescription *)pTypeDescr;
         sal_Int32 nDescr = pCompType->nMembers;
