@@ -106,6 +106,8 @@ public:
     void testFunctionsExcel2010ODS();
 #endif
 
+    void testSupBookVirtualPath();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -144,6 +146,9 @@ public:
      * allowed, which is nonsense). Skip this test until solved. */
 #if 0
     CPPUNIT_TEST(testFunctionsExcel2010ODS);
+#endif
+#if !defined(WNT)
+    CPPUNIT_TEST(testSupBookVirtualPath);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -1658,6 +1663,23 @@ void ScExportTest::tearDown()
 {
     uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
     test::BootstrapFixture::tearDown();
+}
+
+void ScExportTest::testSupBookVirtualPath()
+{
+    ScDocShellRef xShell = loadDoc("external-ref.", XLS);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell, XLS);
+    xShell->DoClose();
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    if (!checkFormula(*pDoc, ScAddress(0,0,0), "'file:///home/timar/Documents/external.xls'#$Sheet1.A1"))
+        CPPUNIT_FAIL("Wrong SupBook VirtualPath URL");
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
