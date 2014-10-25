@@ -719,6 +719,12 @@ DECLARE_RTFEXPORT_TEST(testFdo82860, "fdo82860.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("hello"), getParagraphOfText(1, xText)->getString());
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo82858, "fdo82858.docx")
+{
+    // This was table::BorderLineStyle::SOLID, exporter failed to write explicit no line when line color was written.
+    CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineStyle);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
