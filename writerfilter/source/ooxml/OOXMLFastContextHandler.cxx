@@ -59,27 +59,6 @@ using namespace ::std;
 
 set<OOXMLFastContextHandler *> aSetContexts;
 
-#ifdef DEBUG_WRITERFILTER
-class OOXMLIdToString : public IdToString
-{
-public:
-    OOXMLIdToString() : IdToString() {}
-    virtual ~OOXMLIdToString() {}
-
-    virtual string toString(const Id & rId) const SAL_OVERRIDE
-    {
-        string s((*QNameToString::Instance())(rId));
-
-        if (s.empty())
-            s = "(fasttoken)" + fastTokenToId(rId);
-        else
-            s = "(qname)" + s;
-
-        return s;
-    }
-};
-#endif
-
 /*
   class OOXMLFastContextHandler
  */
