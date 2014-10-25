@@ -114,7 +114,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS.ReadUInt16( reserved2 ).ReadUChar( reserved3 ).ReadUInt16( reserved4 ).ReadUInt16( reserved5 );
-    rS.ReadInt16( cbTBD ).ReadInt16( cCust ).ReadInt32( cbDTBC );
+    rS.ReadInt16( cbTBD ).ReadUInt16( cCust ).ReadInt32( cbDTBC );
     long nExpectedPos =  rS.Tell() + cbDTBC;
     if ( cbDTBC )
     {
@@ -146,9 +146,15 @@ bool SwCTBWrapper::Read( SvStream& rS )
         // seek to correct position after rtbdc
         rS.Seek( nExpectedPos );
     }
-    if ( cCust )
+    if (cCust)
     {
-        for ( sal_Int32 index = 0; index < cCust; ++index )
+        //Each customization takes a min of 8 bytes
+        size_t nMaxPossibleRecords = rS.remainingSize() / 8;
+        if (cCust > nMaxPossibleRecords)
+        {
+            return false;
+        }
+        for (sal_uInt16 index = 0; index < cCust; ++index)
         {
             Customization aCust( this );
             if ( !aCust.Read( rS ) )

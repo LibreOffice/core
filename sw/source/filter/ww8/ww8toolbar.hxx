@@ -155,7 +155,7 @@ class SwCTBWrapper : public Tcg255SubStruct
     sal_uInt16 reserved5;
 
     sal_Int16 cbTBD;
-    sal_Int16 cCust;
+    sal_uInt16 cCust;
 
     sal_Int32 cbDTBC;
 
