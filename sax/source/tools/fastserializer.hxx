@@ -220,7 +220,7 @@ private:
 #endif
 
     void writeTokenValueList();
-    void writeFastAttributeList( FastAttributeList* pAttrList );
+    void writeFastAttributeList(FastAttributeList& rAttrList);
 
     /** Forward the call to the output stream, or write to the stack.
 

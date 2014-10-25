@@ -202,7 +202,7 @@ namespace sax_fastparser {
 
         writeId(Element);
         if (pAttrList)
-            writeFastAttributeList(pAttrList);
+            writeFastAttributeList(*pAttrList);
         else
             writeTokenValueList();
 
@@ -237,7 +237,7 @@ namespace sax_fastparser {
 
         writeId(Element);
         if (pAttrList)
-            writeFastAttributeList(pAttrList);
+            writeFastAttributeList(*pAttrList);
         else
             writeTokenValueList();
 
@@ -277,12 +277,12 @@ namespace sax_fastparser {
         maTokenValues.clear();
     }
 
-    void FastSaxSerializer::writeFastAttributeList( FastAttributeList* pAttrList )
+    void FastSaxSerializer::writeFastAttributeList(FastAttributeList& rAttrList)
     {
 #ifdef DBG_UTIL
         ::std::set<OString> DebugAttributes;
 #endif
-        const std::vector< sal_Int32 >& Tokens = pAttrList->getFastAttributeTokens();
+        const std::vector< sal_Int32 >& Tokens = rAttrList.getFastAttributeTokens();
         for (size_t j = 0; j < Tokens.size(); j++)
         {
             writeBytes(sSpace, N_CHARS(sSpace));
@@ -299,7 +299,7 @@ namespace sax_fastparser {
 
             writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
 
-            write(pAttrList->getFastAttributeValue(j), pAttrList->AttributeValueLength(j), true);
+            write(rAttrList.getFastAttributeValue(j), rAttrList.AttributeValueLength(j), true);
 
             writeBytes(sQuote, N_CHARS(sQuote));
         }
