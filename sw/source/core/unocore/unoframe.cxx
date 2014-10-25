@@ -3045,7 +3045,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 }
 
 void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SwFrmFmt* pFmt;
     if(IsDescriptor())
