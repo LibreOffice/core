@@ -59,7 +59,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         static const char * cMethodName = "length";
         // submit Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallLongMethod( object, mID );
         ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
@@ -76,7 +76,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
         static const char * cMethodName = "getBytes";
         // submit Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray out = static_cast<jbyteArray>(t.pEnv->CallObjectMethod( object, mID,pos,count));
         ThrowSQLException(t.pEnv,*this);
         if(out)
@@ -111,7 +111,7 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
         static const char * cMethodName = "position";
         // submit Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // convert Parameter
         jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
         t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());

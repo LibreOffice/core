@@ -117,7 +117,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
     {
         // execute Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         OSL_VERIFY_RES( !isExceptionOccurred(t.pEnv, true),"Exception occurred!");
         jvalue args[4];
 
@@ -346,7 +346,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
     {
         // execute Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[5];
         // convert Parameter
         args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
@@ -387,7 +387,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
     {
         // execute Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[3];
         // convert Parameter
         args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
@@ -503,7 +503,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
 
         // execute Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[6];
         // convert Parameter
         args[0].l = primaryCatalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(primaryCatalog)) : 0;
@@ -631,7 +631,7 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
             ?   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;"
             :   "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
         // obtain method ID
-        obtainMethodId(t.pEnv, _pMethodName,pSignature, _inout_MethodID);
+        obtainMethodId_throwSQL(t.pEnv, _pMethodName,pSignature, _inout_MethodID);
 
         // call method
 
@@ -1000,7 +1000,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
 
     {
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, pMethodName,"(II)Z", mID);
+        obtainMethodId_throwSQL(t.pEnv, pMethodName,"(II)Z", mID);
         out = t.pEnv->CallBooleanMethod( object, mID, fromType, toType );
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
@@ -1342,7 +1342,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
 
     {
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, pMethodName,"(II)Z", mID);
+        obtainMethodId_throwSQL(t.pEnv, pMethodName,"(II)Z", mID);
         out =   t.pEnv->CallBooleanMethod( object, mID, setType, concurrency);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
@@ -1424,7 +1424,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
         static const char * cMethodName = "getUDTs";
         // dismiss Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         {
             jvalue args[4];
             // initialize temporary Variable

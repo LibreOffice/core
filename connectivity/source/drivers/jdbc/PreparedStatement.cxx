@@ -130,7 +130,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
         static const char * cMethodName = "setString";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,x));
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,str.get());
         // and clean up
@@ -332,7 +332,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
         static const char * cMethodName = "setObject";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         {
             jobject obj = NULL;
             double nTemp = 0.0;
@@ -430,7 +430,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
         static const char * cMethodName = "setBytes";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray pByteArray = t.pEnv->NewByteArray(x.getLength());
         t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),(jbyte*)x.getConstArray());
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,pByteArray);
@@ -456,7 +456,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
         static const char * cMethodName = "setCharacterStream";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         Sequence< sal_Int8 > aSeq;
         if ( x.is() )
             x->readBytes( aSeq, length );
@@ -503,7 +503,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
         static const char * cMethodName = "setBinaryStream";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         {
             Sequence< sal_Int8 > aSeq;
             if ( x.is() )

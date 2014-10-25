@@ -235,7 +235,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(
         static const char * cMethodName = "execute";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // convert Parameter
         jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
         {
@@ -270,7 +270,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OU
         static const char * cMethodName = "executeQuery";
         // Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // convert Parameter
         jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
         {

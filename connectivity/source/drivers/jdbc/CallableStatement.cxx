@@ -215,7 +215,7 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
         static const char * cMethodName = "registerOutParameter";
         // execute Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // Convert Parameter
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,typeName));
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,str.get());
@@ -235,7 +235,7 @@ void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32
         static const char * cMethodName = "registerOutParameter";
         // execute Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,scale);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }

@@ -109,7 +109,8 @@ namespace connectivity
         static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext=NULL);
 
         static jclass   findMyClass(const char* _pClassName);
-        void            obtainMethodId(JNIEnv* _pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID) const;
+        void            obtainMethodId_throwSQL(JNIEnv* _pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID) const;
+        void            obtainMethodId_throwRuntime(JNIEnv* _pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID) const;
 
         bool        callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         bool        callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
@@ -135,7 +136,7 @@ namespace connectivity
                         T callMethodWithIntArg(T (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) ,const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const
         {
             SDBThreadAttach t;
-            obtainMethodId(t.pEnv, _pMethodName,_pSignature, _inout_MethodID);
+            obtainMethodId_throwSQL(t.pEnv, _pMethodName,_pSignature, _inout_MethodID);
             T out = (t.pEnv->*pCallMethod)( object, _inout_MethodID,_nArgument);
             ThrowSQLException( t.pEnv, NULL );
             return out;
@@ -145,7 +146,7 @@ namespace connectivity
                         void callVoidMethod_Throw(const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID,sal_Int32 _nArgument, const T& _aValue) const
         {
             SDBThreadAttach t;
-            obtainMethodId(t.pEnv, _pMethodName,_pSignature, _inout_MethodID);
+            obtainMethodId_throwSQL(t.pEnv, _pMethodName,_pSignature, _inout_MethodID);
             t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument,_aValue);
             ThrowSQLException( t.pEnv, NULL );
         }

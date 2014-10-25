@@ -48,7 +48,7 @@ java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_O
     static const char * cSignature = "(Ljava/lang/String;)V";
     jobject tempObj;
     static jmethodID mID(NULL);
-    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
+    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
 
     jstring str = convertwchar_tToJavaString(t.pEnv,_par0.replace(',','.'));
     tempObj = t.pEnv->NewObject( getMyClass(), mID, str );
@@ -69,7 +69,7 @@ java_math_BigDecimal::java_math_BigDecimal( const double& _par0 ): java_lang_Obj
     static const char * cSignature = "(D)V";
     jobject tempObj;
     static jmethodID mID(NULL);
-    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
+    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
     tempObj = t.pEnv->NewObject( getMyClass(), mID, _par0 );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );

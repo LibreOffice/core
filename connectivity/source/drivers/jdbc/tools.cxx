@@ -50,7 +50,7 @@ void java_util_Properties::setProperty(const OUString& key, const OUString& valu
         static const char * cMethodName = "setProperty";
         // Turn off Java-Call
         static jmethodID mID(NULL);
-        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
         ThrowSQLException(t.pEnv,NULL);
         t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
@@ -85,7 +85,7 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
     static const char * cSignature = "()V";
     jobject tempObj;
     static jmethodID mID(NULL);
-    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
+    obtainMethodId_throwSQL(t.pEnv, "<init>",cSignature, mID);
     tempObj = t.pEnv->NewObject( getMyClass(), mID);
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
