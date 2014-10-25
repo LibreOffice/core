@@ -90,7 +90,7 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile, bool )
     : aFile( rFile ),
     aDateModified( Date::EMPTY ),
     aTimeModified( tools::Time::EMPTY ),
-    pDoc( 0 ), nCur( (sal_uInt16)-1 ),
+    pDoc( 0 ), nCur( USHRT_MAX ),
     bReadOnly( true ), bInPutMuchBlocks( false ),
     bInfoChanged(false)
 {
@@ -146,7 +146,7 @@ sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
          && pName->aShort == s )
             return i;
     }
-    return (sal_uInt16) -1;
+    return USHRT_MAX;
 }
 
 sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
@@ -159,7 +159,7 @@ sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
          && pName->aLong == rLong )
             return i;
     }
-    return (sal_uInt16) -1;
+    return USHRT_MAX;
 }
 
 OUString SwImpBlocks::GetShortName( sal_uInt16 n ) const
@@ -187,7 +187,7 @@ void SwImpBlocks::AddName( const OUString& rShort, const OUString& rLong,
                            bool bOnlyTxt )
 {
     sal_uInt16 nIdx = GetIndex( rShort );
-    if( nIdx != (sal_uInt16) -1 )
+    if( nIdx != USHRT_MAX )
     {
         delete aNames[nIdx];
         aNames.erase( aNames.begin() + nIdx );
@@ -280,12 +280,12 @@ sal_uInt16 SwTextBlocks::GetCount() const
 
 sal_uInt16 SwTextBlocks::GetIndex( const OUString& r ) const
 {
-    return pImp ? pImp->GetIndex( r ) : (sal_uInt16) -1;
+    return pImp ? pImp->GetIndex( r ) : USHRT_MAX;
 }
 
 sal_uInt16 SwTextBlocks::GetLongIndex( const OUString& r ) const
 {
-    return pImp ? (sal_uInt16)(pImp->GetLongIndex( r )) : (sal_uInt16) -1;
+    return pImp ? pImp->GetLongIndex( r ) : USHRT_MAX;
 }
 
 OUString SwTextBlocks::GetShortName( sal_uInt16 n ) const
@@ -317,7 +317,7 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
                 pImp->aNames.erase( pImp->aNames.begin() + n );
             }
             if( n == pImp->nCur )
-                pImp->nCur = (sal_uInt16) -1;
+                pImp->nCur = USHRT_MAX;
             if( !nErr )
                 nErr = pImp->MakeBlockList();
         }
@@ -331,7 +331,7 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
 
 sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 {
-    sal_uInt16 nIdx = (sal_uInt16)-1;
+    sal_uInt16 nIdx = USHRT_MAX;
     if( pImp && !pImp->bInPutMuchBlocks )
     {
         pImp->nCur = nIdx;
@@ -344,7 +344,8 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString
         if( aNew.isEmpty() )
         {
             OSL_ENSURE( false, "No short name provided in the rename" );
-            nErr = ERR_SWG_INTERNAL_ERROR; return (sal_uInt16) -1;
+            nErr = ERR_SWG_INTERNAL_ERROR;
+            return USHRT_MAX;
         }
 
         if( pImp->IsFileChanged() )
@@ -401,7 +402,7 @@ bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
             pImp->ClearDoc();
             nErr = pImp->GetDoc( n );
             if( nErr )
-                pImp->nCur = (sal_uInt16)-1;
+                pImp->nCur = USHRT_MAX;
             else
                 pImp->nCur = n;
         }
@@ -442,14 +443,14 @@ bool SwTextBlocks::BeginPutDoc( const OUString& s, const OUString& l )
 
 sal_uInt16 SwTextBlocks::PutDoc()
 {
-    sal_uInt16 nIdx = (sal_uInt16)-1;
+    sal_uInt16 nIdx = USHRT_MAX;
     if( pImp )
     {
         nErr = pImp->PutDoc();
         if( !nErr )
         {
             pImp->nCur = GetIndex( pImp->aShort );
-            if( pImp->nCur != (sal_uInt16) -1 )
+            if( pImp->nCur != USHRT_MAX )
                 pImp->aNames[ pImp->nCur ]->aLong = pImp->aLong;
             else
             {
@@ -472,7 +473,7 @@ sal_uInt16 SwTextBlocks::PutDoc()
 sal_uInt16 SwTextBlocks::PutText( const OUString& rShort, const OUString& rName,
                                   const OUString& rTxt )
 {
-    sal_uInt16 nIdx = (sal_uInt16) -1;
+    sal_uInt16 nIdx = USHRT_MAX;
     if( pImp )
     {
         bool bOk = pImp->bInPutMuchBlocks;
@@ -488,11 +489,11 @@ sal_uInt16 SwTextBlocks::PutText( const OUString& rShort, const OUString& rName,
         {
             OUString aNew = GetAppCharClass().uppercase( rShort );
             nErr = pImp->PutText( aNew, rName, rTxt );
-            pImp->nCur = (sal_uInt16) -1;
+            pImp->nCur = USHRT_MAX;
             if( !nErr )
             {
                 nIdx = GetIndex( pImp->aShort );
-                if( nIdx != (sal_uInt16) -1 )
+                if( nIdx != USHRT_MAX )
                     pImp->aNames[ nIdx ]->aLong = rName;
                 else
                 {
@@ -524,7 +525,7 @@ void SwTextBlocks::ClearDoc()
     if( pImp )
     {
         pImp->ClearDoc();
-        pImp->nCur = (sal_uInt16) -1;
+        pImp->nCur = USHRT_MAX;
     }
 }
 

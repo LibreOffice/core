@@ -155,7 +155,7 @@ void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
                                const OUString& rPackageName, bool bOnlyTxt )
 {
     sal_uInt16 nIdx = GetIndex( rShort );
-    if( nIdx != (sal_uInt16) -1 )
+    if (nIdx != USHRT_MAX)
     {
         delete aNames[nIdx];
         aNames.erase( aNames.begin() + nIdx );
@@ -500,7 +500,7 @@ void SwXMLTextBlocks::CloseFile()
 void SwXMLTextBlocks::SetIsTextOnly( const OUString& rShort, bool bNewValue )
 {
     sal_uInt16 nIdx = GetIndex ( rShort );
-    if (nIdx != (sal_uInt16) -1  && nIdx != USHRT_MAX)
+    if (nIdx != USHRT_MAX)
         aNames[nIdx]->bIsOnlyTxt = bNewValue;
 }
 
@@ -513,7 +513,7 @@ bool SwXMLTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
 {
     sal_uInt16 nIdx = GetIndex ( rShort );
     bool bRet = false;
-    if (nIdx != (sal_uInt16) -1  && nIdx != USHRT_MAX)
+    if (nIdx != USHRT_MAX)
     {
         bRet = aNames[nIdx]->bIsOnlyTxt;
     }
