@@ -59,7 +59,7 @@ Dim vCurrentDoc() As Variant
 	TraceLogLast = 0
 	TraceLogMaxEntries = 0
 	CalledSub = &quot;&quot;
-	Introspection = Nothing
+	Set Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
 	Set FindRecord = Nothing
 	Set StatusBar = Nothing
 	Set Dialogs = New Collection

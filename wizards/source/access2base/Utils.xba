@@ -315,7 +315,6 @@ Public Function _hasUNOMethod(pvObject As Variant, psMethod As String) As Boolea
 Dim vInspect as Variant
 	_hasUNOMethod = False
 	On Local Error Resume Next
-	If IsNull(_A2B_.Introspection) Then _A2B_.Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
 	vInspect = _A2B_.Introspection.Inspect(pvObject)
 	_hasUNOMethod = vInspect.hasMethod(psMethod, com.sun.star.beans.MethodConcept.ALL)
 
@@ -329,7 +328,6 @@ Public Function _hasUNOProperty(pvObject As Variant, psProperty As String) As Bo
 Dim vInspect as Variant
 	_hasUNOProperty = False
 	On Local Error Resume Next
-	If IsNull(_A2B_.Introspection) Then _A2B_.Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
 	vInspect = _A2B_.Introspection.Inspect(pvObject)
 	_hasUNOProperty = vInspect.hasProperty(psProperty, com.sun.star.beans.PropertyConcept.ALL)
 
