@@ -151,6 +151,15 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
             pImpl->mnPenPixel      = GetPixel( pImpl->mnPenColor );
             pImpl->mnBrushPixel    = GetPixel( pImpl->mnBrushColor );
         }
+        else
+        {
+            OpenGLSalGraphicsImpl* pOpenGLImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
+            if (pOpenGLImpl)
+            {
+                pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
+                        GetDisplay()->GetDrawable(m_nXScreen), m_nXScreen.getXScreen());
+            }
+        }
         nTextPixel_     = GetPixel( nTextColor_ );
     }
 }
