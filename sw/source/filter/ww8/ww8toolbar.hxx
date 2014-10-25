@@ -124,7 +124,7 @@ class Customization : public TBBase
 
     sal_Int32 tbidForTBD;
     sal_uInt16 reserved1;
-    sal_Int16 ctbds;
+    sal_uInt16 ctbds;
     SwCTBWrapper* pWrapper;
     boost::shared_ptr< SwCTB > customizationDataCTB;
     std::vector< TBDelta > customizationDataTBDelta;

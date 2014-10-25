@@ -244,11 +244,12 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     return false;
 }
 
-Customization::Customization( SwCTBWrapper* wrapper ) : tbidForTBD( 0 )
-,reserved1( 0 )
-, ctbds( 0 )
-, pWrapper( wrapper )
-, bIsDroppedMenuTB( false )
+Customization::Customization( SwCTBWrapper* wrapper )
+    : tbidForTBD( 0 )
+    , reserved1( 0 )
+    , ctbds( 0 )
+    , pWrapper( wrapper )
+    , bIsDroppedMenuTB( false )
 {
 }
 
@@ -260,10 +261,14 @@ bool Customization::Read( SvStream &rS)
 {
     SAL_INFO("sw.ww8","Custimization::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
-    rS.ReadInt32( tbidForTBD ).ReadUInt16( reserved1 ).ReadInt16( ctbds );
+    rS.ReadInt32( tbidForTBD ).ReadUInt16( reserved1 ).ReadUInt16( ctbds );
     if ( tbidForTBD )
     {
-        for ( sal_Int32 index = 0; index < ctbds; ++index )
+        //each TBDelta is at least 18 bytes in size
+        size_t nMaxAvailableRecords = rS.remainingSize() / 18;
+        if (ctbds > nMaxAvailableRecords)
+            return false;
+        for (sal_uInt16 index = 0; index < ctbds; ++index)
         {
             TBDelta aTBDelta;
             if (!aTBDelta.Read( rS ) )
@@ -311,7 +316,7 @@ void Customization::Print( FILE* fp )
 
         indent_printf( fp,"  TBDelta(s) are associated with %s toolbar.\n", pToolBar);
         std::vector< TBDelta >::iterator it = customizationDataTBDelta.begin();
-        for ( sal_Int32 index = 0; index < ctbds; ++it,++index )
+        for (sal_uInt16 index = 0; index < ctbds; ++it, ++index)
             it->Print( fp );
     }
 }
