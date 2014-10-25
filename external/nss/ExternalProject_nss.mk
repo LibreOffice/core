@@ -66,7 +66,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			$(if $(filter arm64,$(CC)),USE_64=1)) \
 		$(if $(filter MACOSX,$(OS)),\
 			$(if $(filter-out POWERPC,$(CPUNAME)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH)) \
-			NSS_USE_SYSTEM_SQLITE=1) \
+			$(if $(filter-out 1050,$(MACOSX_SDK_VERSION)),NSS_USE_SYSTEM_SQLITE=1)) \
 		$(if $(filter LINUX,$(OS)),$(if $(ENABLE_DBGUTIL),,BUILD_OPT=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(CROSS_COMPILING),\

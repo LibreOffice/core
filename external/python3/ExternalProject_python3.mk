@@ -75,8 +75,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
 		$(if $(filter MACOSX,$(OS)), \
 			$(if $(filter INTEL,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) \
-                                --with-universal-archs=intel \
-            ) \
+                                $(if $(filter 1050,$(MACOSX_SDK_VERSION)),--with-universal-archs=32-bit,--with-universal-archs=intel) \
+                        ) \
 			--enable-framework=/@__________________________________________________OOO --with-framework-name=LibreOfficePython, \
 			--enable-shared \
 		) \

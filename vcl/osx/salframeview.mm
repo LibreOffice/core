@@ -35,6 +35,14 @@
 
 #define WHEEL_EVENT_FACTOR 1.5
 
+// for fullscreen support on OS X < 10.7
+#if MACOSX_SDK_VERSION < 1070
+    #define NSWindowCollectionBehaviorFullScreenPrimary   (1 << 7)
+    #define NSWindowCollectionBehaviorFullScreenAuxiliary (1 << 8)
+//  #define NSFullScreenWindowMask (1 << 14)
+#endif
+
+
 static sal_uInt16 ImplGetModifierMask( unsigned int nMask )
 {
     sal_uInt16 nRet = 0;
@@ -171,6 +179,18 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 static AquaSalFrame* getMouseContainerFrame()
 {
     AquaSalFrame* pDispatchFrame = nullptr;
+#if MACOSX_SDK_VERSION < 1060
+    NSInteger nWindows = 0;
+    NSCountWindows( &nWindows );
+    NSInteger* pWindows = (NSInteger*)alloca( nWindows * sizeof(NSInteger) );
+    NSWindowList( nWindows, pWindows ); // NSWindowList is supposed to be in z-order front to back
+    for(int i = 0; i < nWindows && ! pDispatchFrame; i++ )
+    {
+        NSWindow* pWin = [NSApp windowWithWindowNumber: pWindows[i]];
+        if( pWin && [pWin isMemberOfClass: [SalFrameWindow class]] && [(SalFrameWindow*)pWin containsMouse] )
+            pDispatchFrame = [(SalFrameWindow*)pWin getSalFrame];
+    }
+#else
     NSArray* aWindows = [NSWindow windowNumbersWithOptions:0];
     for(NSUInteger i = 0; i < [aWindows count] && ! pDispatchFrame; i++ )
     {
@@ -178,6 +198,7 @@ static AquaSalFrame* getMouseContainerFrame()
         if( pWin && [pWin isMemberOfClass: [SalFrameWindow class]] && [(SalFrameWindow*)pWin containsMouse] )
             pDispatchFrame = [(SalFrameWindow*)pWin getSalFrame];
     }
+#endif
     return pDispatchFrame;
 }
 
@@ -766,11 +787,19 @@ private:
 
         if( bNewSeries )
             mfMagnifyDeltaSum = 0.0;
+#if MACOSX_SDK_VERSION < 1060
+        mfMagnifyDeltaSum += [pEvent deltaZ];
+#else
         mfMagnifyDeltaSum += [pEvent magnification];
+#endif
 
         mfLastMagnifyTime = [pEvent timestamp];
 // TODO: change to 0.1 when CommandWheelMode::ZOOM handlers allow finer zooming control
+#if MACOSX_SDK_VERSION < 1060
+        static const float fMagnifyFactor = 0.25;
+#else
         static const float fMagnifyFactor = 0.25*500; // steps are 500 times smaller for -magnification
+#endif
         static const float fMinMagnifyStep = 15.0 / fMagnifyFactor;
         if( fabs(mfMagnifyDeltaSum) <= fMinMagnifyStep )
             return;
@@ -1033,9 +1062,15 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
+#if MACOSX_SDK_VERSION < 1060
+-(void)insertText:(id)aString
+#else
 -(void)insertText:(id)aString replacementRange:(NSRange)replacementRange
+#endif
 {
+#if MACOSX_SDK_VERSION >= 1060
     (void) replacementRange; // FIXME: surely it must be used
+#endif
 
     SolarMutexGuard aGuard;
 
@@ -1614,9 +1649,15 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     return mSelectedRange;
 }
 
+#if MACOSX_SDK_VERSION < 1060
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange
+#else
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange replacementRange:(NSRange)replacementRange
+#endif
 {
+#if MACOSX_SDK_VERSION >= 1060
     (void) replacementRange; // FIXME - use it!
+#endif
 
     SolarMutexGuard aGuard;
 
@@ -1684,10 +1725,16 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     mSelectedRange = mMarkedRange = NSMakeRange(NSNotFound, 0);
 }
 
+#if MACOSX_SDK_VERSION < 1060
+- (NSAttributedString *)attributedSubstringFromRange:(NSRange)aRange
+#else
 - (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+#endif
 {
     (void) aRange;
+#if MACOSX_SDK_VERSION >= 1060
     (void) actualRange;
+#endif
 
     // FIXME - Implement
     return nil;
@@ -1728,11 +1775,17 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     mpLastEvent = nil;
 }
 
+#if MACOSX_SDK_VERSION < 1060
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange
+#else
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+#endif
 {
      // FIXME - These should probably be used?
     (void) aRange;
+#if MACOSX_SDK_VERSION >= 1060
     (void) actualRange;
+#endif
 
     SolarMutexGuard aGuard;
 

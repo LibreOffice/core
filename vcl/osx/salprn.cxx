@@ -462,7 +462,11 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             {
                 [mpPrintInfo setJobDisposition: NSPrintSaveJob];
                 NSString* pPath = CreateNSString( *i_pFileName );
+#if MACOSX_SDK_VERSION < 1060
+                [pPrintDict setObject:[NSURL fileURLWithPath:pPath] forKey:NSPrintSavePath];
+#else
                 [pPrintDict setObject:[NSURL fileURLWithPath:pPath] forKey:NSPrintJobSavingURL];
+#endif
                 [pPath release];
             }
 

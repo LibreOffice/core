@@ -1095,7 +1095,12 @@ NSImage* CreateNSImage( const Image& rImage )
     NSImage* pImage = [[NSImage alloc] initWithSize: NSMakeSize( aSize.Width(), aSize.Height() )];
     if( pImage )
     {
+#if MACOSX_SDK_VERSION < 1060
+        [pImage setFlipped:YES];
+        [pImage lockFocus];
+#else
         [pImage lockFocusFlipped:YES];
+#endif
         NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
         CGContextRef rCGContext = static_cast<CGContextRef>([pContext graphicsPort]);
 

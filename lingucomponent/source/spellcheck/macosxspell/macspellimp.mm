@@ -348,7 +348,11 @@ Reference< XSpellAlternatives >
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
         [macSpell setLanguage:aLang];
+#if MACOSX_SDK_VERSION < 1060
+        NSArray *guesses = [macSpell guessesForWord:aNSStr];
+#else
         NSArray *guesses = [macSpell guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang inSpellDocumentWithTag:0];
+#endif
         count = [guesses count];
         if (count)
         {

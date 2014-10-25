@@ -83,9 +83,13 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
          ((mpFontData->GetWeight() < WEIGHT_SEMIBOLD) &&
           (mpFontData->GetWeight() != WEIGHT_DONTKNOW)) )
     {
+#if MACOSX_SDK_VERSION >= 1060
         int nStroke = -lrint((3.5F * pReqFont->GetWeight()) / mpFontData->GetWeight());
         CFNumberRef rStroke = CFNumberCreate(nullptr, kCFNumberSInt32Type, &nStroke);
         CFDictionarySetValue(mpStyleDict, kCTStrokeWidthAttributeName, rStroke);
+#else /* kCTStrokeWidthAttributeName is not available */
+        /* do we really need "fake" bold? */
+#endif
     }
 
     // fake italic
@@ -349,8 +353,10 @@ FontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFont
     if( bFontEnabled )
     {
         int bEnabled = TRUE; // by default (and when we're on OS X < 10.6) it's "enabled"
+#if MACOSX_SDK_VERSION >= 1060
         CFNumberRef pEnabled = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute ));
         CFNumberGetValue( pEnabled, kCFNumberIntType, &bEnabled );
+#endif
         *bFontEnabled = bEnabled;
     }
 

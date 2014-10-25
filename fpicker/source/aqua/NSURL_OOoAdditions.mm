@@ -83,6 +83,25 @@ NSString* resolveAlias( NSString* i_pSystemPath )
                                                    kCFURLPOSIXPathStyle, false);
     if( rUrl != nullptr )
     {
+#if MACOSX_SDK_VERSION < 1060
+        FSRef rFS;
+        if( CFURLGetFSRef( rUrl, &rFS ) )
+        {
+            Boolean bIsFolder = false;
+            Boolean bAlias = false;
+            OSErr err = FSResolveAliasFile( &rFS, true, &bIsFolder, &bAlias );
+            if( (err == noErr) && bAlias )
+            {
+                CFURLRef rResolvedUrl = CFURLCreateFromFSRef( kCFAllocatorDefault, &rFS );
+                if( rResolvedUrl != nullptr )
+                {
+                    pResolvedPath = const_cast<NSString*>(reinterpret_cast<NSString const *>(CFURLCopyFileSystemPath( rResolvedUrl, kCFURLPOSIXPathStyle )));
+                    CFRelease( rResolvedUrl );
+                }
+            }
+        }
+        CFRelease( rUrl );
+#else
         CFErrorRef rError;
         CFDataRef rBookmark = CFURLCreateBookmarkDataFromFile( nullptr, rUrl, &rError );
         CFRelease( rUrl );
@@ -102,6 +121,7 @@ NSString* resolveAlias( NSString* i_pSystemPath )
                 CFRelease( rResolvedUrl );
             }
         }
+#endif
     }
     
     return pResolvedPath;

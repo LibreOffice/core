@@ -137,6 +137,19 @@ int SalAquaPicker::run()
 
     int retVal = 0;
 
+#if MACOSX_SDK_VERSION < 1060
+    NSString *startDirectory;
+    if (m_sDisplayDirectory.getLength() > 0) {
+        NSString *temp = [NSString stringWithOUString:m_sDisplayDirectory];
+        NSURL *url = [NSURL URLWithString:temp];
+        startDirectory = [url path];
+
+        OSL_TRACE("start dir: %s", [startDirectory UTF8String]);
+    }
+    else {
+        startDirectory = NSHomeDirectory();
+    }
+#else
     NSURL *startDirectory;
     if (m_sDisplayDirectory.getLength() > 0) {
         NSString *temp = [NSString stringWithOUString:m_sDisplayDirectory];
@@ -147,17 +160,26 @@ int SalAquaPicker::run()
     else {
         startDirectory = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
     }
+#endif
 
     switch(m_nDialogType) {
         case NAVIGATIONSERVICES_DIRECTORY:
         case NAVIGATIONSERVICES_OPEN:
+#if MACOSX_SDK_VERSION < 1060
+            retVal = [(NSOpenPanel*)m_pDialog runModalForDirectory:startDirectory file:nil types:nil];
+#else
             [m_pDialog setDirectoryURL:startDirectory];
             retVal = [(NSOpenPanel*)m_pDialog runModal];
+#endif
             break;
         case NAVIGATIONSERVICES_SAVE:
+#if MACOSX_SDK_VERSION < 1060
+            retVal = [m_pDialog runModalForDirectory:startDirectory file:[NSString stringWithOUString:((SalAquaFilePicker*)this)->getSaveFileName()]];
+#else
             [m_pDialog setDirectoryURL:startDirectory];
             [m_pDialog setNameFieldStringValue:[NSString stringWithOUString:static_cast<SalAquaFilePicker*>(this)->getSaveFileName()]];
             retVal = [m_pDialog runModal];
+#endif
             break;
         // [m_pDialog beginSheetForDirectory:startDirectory file:[m_pDialog saveFilename] modalForWindow:[NSApp keyWindow] modalDelegate:((SalAquaFilePicker*)this)->getDelegate() didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
         default:
@@ -165,10 +187,17 @@ int SalAquaPicker::run()
     }
 
     if (retVal == NSFileHandlingPanelOKButton) {
+#if MACOSX_SDK_VERSION < 1060
+        NSString* pDir = [m_pDialog directory];
+        if (pDir) {
+            implsetDisplayDirectory([[NSURL fileURLWithPath:pDir] OUStringForInfo:FULLPATH]);
+        }
+#else
         NSURL* pDir = [m_pDialog directoryURL];
         if (pDir) {
             implsetDisplayDirectory([pDir OUStringForInfo:FULLPATH]);
         }
+#endif
     }
 
     [pool release];

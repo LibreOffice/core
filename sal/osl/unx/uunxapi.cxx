@@ -35,7 +35,7 @@ inline rtl::OString OUStringToOString(const rtl_uString* s)
                                   osl_getThreadTextEncoding());
 }
 
-#if HAVE_FEATURE_MACOSX_SANDBOX
+#if defined(MACOSX) && MACOSX_SDK_VERSION >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
 
 #include <Foundation/Foundation.h>
 #include <Security/Security.h>
@@ -289,7 +289,7 @@ int open_c(const char *cpPath, int oflag, int mode)
 
     int result = open(cpPath, oflag, mode);
 
-#if HAVE_FEATURE_MACOSX_SANDBOX
+#if defined(MACOSX) && MACOSX_SDK_VERSION >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
     if (isSandboxed && result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
     {
         // A new file was created. Check if it is outside the sandbox.
