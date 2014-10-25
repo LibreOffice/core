@@ -908,6 +908,11 @@ OUString lclEncodeDosUrl(
                 aBuf.append(EXC_URL_DOSDRIVE).append(cDrive);
             aOldUrl = aOldUrl.copy(3);
         }
+        else
+        {
+            // URL probably points to a document on a Unix-like file system
+            aBuf.append(EXC_URL_DRIVEROOT);
+        }
 
         // directories
         sal_Int32 nPos = -1;
@@ -948,6 +953,11 @@ OUString lclEncodeDosUrl(
     // table name
     if (pTableName)
         aBuf.append(*pTableName);
+
+    // VirtualPath must be shorter than 255 chars ([MS-XLS].pdf 2.5.277)
+    // It's better to truncate, than generate invalid file that Excel cannot open.
+    if (aBuf.getLength() > 255)
+        aBuf.setLength(255);
 
     return aBuf.makeStringAndClear();
 }
