@@ -137,8 +137,8 @@ void SwFlyFreeFrm::MakeAll()
     }
 
     // #i81146# new loop control
-    sal_uInt16 nLoopControlRuns = 0;
-    const sal_uInt16 nLoopControlMax = 10;
+    int nLoopControlRuns = 0;
+    const int nLoopControlMax = 10;
 
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea || bFormatHeightOnly || !m_bValidContentPos )
     {
@@ -467,7 +467,7 @@ TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
 
 void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
 
     SwFmtAnchor *pAnch = 0;
     if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
@@ -1022,7 +1022,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                 SWRECTFN( pClip )
                 const SwLayoutFrm *pUp = pClip->GetUpper();
                 const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
-                sal_uInt16 nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
+                const sal_uInt16 nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
                                        FRM_FOOTER | FRM_FTN
                                      : FRM_BODY   | FRM_FLY | FRM_HEADER |
                                        FRM_FOOTER | FRM_CELL| FRM_FTN;

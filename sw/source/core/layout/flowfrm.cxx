@@ -802,7 +802,7 @@ bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
 
     //My Pagedesc doesn't count if I'm a follow!
     SwPageDesc *pDesc = 0;
-    sal_uInt16 nTmp = 0;
+    int nTmp = 0;
     SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( this );
     if ( !pFlow || !pFlow->IsFollow() )
     {
@@ -821,8 +821,7 @@ bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
     // Does the Cntnt bring a Pagedesc or do we need the
     // virtual page number of the new layout leaf?
     // PageDesc isn't allowed with Follows
-    const bool bOdd = nTmp ? ( (nTmp % 2) ? sal_True : sal_False )
-                           : pNew->OnRightPage();
+    const bool bOdd = nTmp ? (nTmp % 2) !=0 : pNew->OnRightPage();
     if ( !pDesc )
         pDesc = pNew->FindPageDesc();
 

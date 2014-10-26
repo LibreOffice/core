@@ -562,8 +562,8 @@ void SwLayAction::InternalAction()
                     XCHECKPAGE;
 
                     // #i81146# new loop control
-                    sal_uInt16 nLoopControlRuns_1 = 0;
-                    const sal_uInt16 nLoopControlMax = 20;
+                    int nLoopControlRuns_1 = 0;
+                    const int nLoopControlMax = 20;
 
                     while ( !IsNextCycle() && pPage->IsInvalidLayout() )
                     {
@@ -724,8 +724,8 @@ void SwLayAction::InternalAction()
             XCHECKPAGE;
 
             // #i81146# new loop control
-            sal_uInt16 nLoopControlRuns_2 = 0;
-            const sal_uInt16 nLoopControlMax = 20;
+            int nLoopControlRuns_2 = 0;
+            const int nLoopControlMax = 20;
 
             // special case: interrupt content formatting
             // #i28701# - conditions are incorrect (macros IS_FLYS and IS_INVAFLY only
@@ -746,7 +746,7 @@ void SwLayAction::InternalAction()
                 }
 
                 // #i81146# new loop control
-                sal_uInt16 nLoopControlRuns_3 = 0;
+                int nLoopControlRuns_3 = 0;
 
                 while ( pPg->IsInvalidLayout() )
                 {
@@ -1287,17 +1287,15 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
                 }
                 else
                 {
-                    sal_uInt16 i;
-
                     SwRegionRects aRegion( aOldRect );
                     aRegion -= aPaint;
-                    for ( i = 0; i < aRegion.size(); ++i )
+                    for ( size_t i = 0; i < aRegion.size(); ++i )
                         pImp->GetShell()->AddPaintRect( aRegion[i] );
                     aRegion.ChangeOrigin( aPaint );
                     aRegion.clear();
                     aRegion.push_back( aPaint );
                     aRegion -= aOldRect;
-                    for ( i = 0; i < aRegion.size(); ++i )
+                    for ( size_t i = 0; i < aRegion.size(); ++i )
                         pImp->GetShell()->AddPaintRect( aRegion[i] );
                 }
             }
@@ -2176,7 +2174,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         // Further start/end actions only happen if there were paints started
         // somewhere or if the visibility of the CharRects has changed.
         bool bActions = false;
-        sal_uInt16 nBoolIdx = 0;
+        size_t nBoolIdx = 0;
         do
         {
             --pSh->mnStartAction;
@@ -2198,7 +2196,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 bActions |= aTmp != pSh->VisArea();
                 if ( aTmp == pSh->VisArea() && pSh->ISA(SwCrsrShell) )
                 {
-                    bActions |= (aBools[nBoolIdx]) !=
+                    bActions |= aBools[nBoolIdx] !=
                                  static_cast<SwCrsrShell*>(pSh)->GetCharRect().IsOver( pSh->VisArea() );
                 }
             }

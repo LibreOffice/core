@@ -83,7 +83,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     bool bCallPrepare = false;
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     if (RES_ATTRSET_CHG == nWhich && pNew)
     {
         if(pOld &&

@@ -255,8 +255,8 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
             bAdjustAttributes = true;
         else
         {
-            sal_uInt16 nCount = std::min( rNew.GetColumns().size(), rOld.GetColumns().size() );
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            const size_t nCount = std::min( rNew.GetColumns().size(), rOld.GetColumns().size() );
+            for ( size_t i = 0; i < nCount; ++i )
                 if ( !(rOld.GetColumns()[i] == rNew.GetColumns()[i]) )
                 {
                     bAdjustAttributes = true;

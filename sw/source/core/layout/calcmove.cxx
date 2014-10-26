@@ -487,7 +487,7 @@ void SwFrm::MakePos()
         }
 
         pPrv = lcl_Prev( this, false );
-        sal_uInt16 nMyType = GetType();
+        const sal_uInt16 nMyType = GetType();
         SWRECTFN( ( IsCellFrm() && GetUpper() ? GetUpper() : this  ) )
         if ( !bUseUpper && pPrv )
         {

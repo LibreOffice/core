@@ -843,7 +843,7 @@ bool SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
          ) )
         return false;
 
-    for ( sal_uInt16 i = 0; i < m_aColumns.size(); ++i )
+    for ( size_t i = 0; i < m_aColumns.size(); ++i )
         if ( !(m_aColumns[i] == rCmp.GetColumns()[i]) )
             return false;
 
@@ -863,7 +863,7 @@ sal_uInt16 SwFmtCol::GetGutterWidth( bool bMin ) const
     else if ( m_aColumns.size() > 2 )
     {
         bool bSet = false;
-        for ( sal_uInt16 i = 1; i < m_aColumns.size()-1; ++i )
+        for ( size_t i = 1; i+1 < m_aColumns.size(); ++i )
         {
             const sal_uInt16 nTmp = m_aColumns[i].GetRight() + m_aColumns[i+1].GetLeft();
             if ( bSet )
@@ -892,13 +892,13 @@ void SwFmtCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
     else
     {
         sal_uInt16 nHalf = nNew / 2;
-        for ( sal_uInt16 i = 0; i < m_aColumns.size(); ++i )
+        for ( size_t i = 0; i < m_aColumns.size(); ++i )
         {   SwColumn *pCol = &m_aColumns[i];
             pCol->SetLeft ( nHalf );
             pCol->SetRight( nHalf );
             if ( i == 0 )
                 pCol->SetLeft( 0 );
-            else if ( i == (m_aColumns.size() - 1) )
+            else if ( i+1 == m_aColumns.size() )
                 pCol->SetRight( 0 );
         }
     }
@@ -1204,7 +1204,7 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_SURROUND_SURROUNDTYPE:
         {
             sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
-            if( eVal >= 0 && eVal < (sal_Int16)SURROUND_END )
+            if( eVal >= 0 && eVal < SURROUND_END )
                 SetValue( static_cast<sal_uInt16>(eVal) );
             else {
                 //exception
@@ -2443,7 +2443,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     SwFmtHeader *pH = 0;
     SwFmtFooter *pF = 0;
 
-    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
 
     if( RES_ATTRSET_CHG == nWhich )
     {
@@ -2583,7 +2583,7 @@ SwRect SwFrmFmt::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
     }
     else
     {
-        sal_uInt16 nFrmType = RES_FLYFRMFMT == Which() ? FRM_FLY : USHRT_MAX;
+        const sal_uInt16 nFrmType = RES_FLYFRMFMT == Which() ? FRM_FLY : USHRT_MAX;
         pFrm = ::GetFrmOfModify( 0, *(SwModify*)this, nFrmType, pPoint,
                                     0, bCalcFrm );
     }
@@ -2645,7 +2645,7 @@ bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
         while( pFlyNd )
         {
             // then we walk up using the anchor
-            sal_uInt16 n;
+            size_t n;
             for( n = 0; n < rFmts.size(); ++n )
             {
                 const SwFrmFmt* pFmt = rFmts[ n ];
@@ -2776,7 +2776,7 @@ void SwFlyFrmFmt::MakeFrms()
             {
                 const SwNodeIndex &rIdx = aAnchorAttr.GetCntntAnchor()->nNode;
                 SwFrmFmts& rFmts = *GetDoc()->GetSpzFrmFmts();
-                for( sal_uInt16 i = 0; i < rFmts.size(); ++i )
+                for( size_t i = 0; i < rFmts.size(); ++i )
                 {
                     SwFrmFmt* pFlyFmt = rFmts[i];
                     if( pFlyFmt->GetCntnt().GetCntntIdx() &&

@@ -89,7 +89,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
     // Size setting: Fixed size is always the width
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
-    sal_uInt16 nDir =
+    const sal_uInt16 nDir =
         ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( FRMDIR_ENVIRONMENT == nDir )
     {
@@ -1424,8 +1424,8 @@ void CalcCntnt( SwLayoutFrm *pLay,
         SwAnchoredObject* pAgainObj2 = 0;
 
         // FME 2007-08-30 #i81146# new loop control
-        sal_uInt16 nLoopControlRuns = 0;
-        const sal_uInt16 nLoopControlMax = 20;
+        int nLoopControlRuns = 0;
+        const int nLoopControlMax = 20;
         const SwFrm* pLoopControlCond = 0;
 
         SwFrm* pLast;

@@ -104,7 +104,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
     }
     else if( pEndArr )
     {
-        for ( sal_uInt16 i = 0; i < pEndArr->size(); ++i )
+        for ( size_t i = 0; i < pEndArr->size(); ++i )
         {
             SwFtnFrm *pEndFtn = (*pEndArr)[i];
             if( pEndFtn->GetAttr() == pFtn->GetAttr() )
@@ -161,7 +161,7 @@ void SwLooping::Control( SwPageFrm* pPage )
 {
     if( !pPage )
         return;
-    sal_uInt16 nNew = pPage->GetPhyPageNum();
+    const sal_uInt16 nNew = pPage->GetPhyPageNum();
     if( nNew > nMaxPage )
         nMaxPage = nNew;
     if( nNew < nMinPage )

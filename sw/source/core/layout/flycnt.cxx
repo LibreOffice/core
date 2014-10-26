@@ -58,7 +58,7 @@ TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
 
 void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
     const SwFmtAnchor *pAnch = 0;
 
     if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
@@ -931,7 +931,7 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
     {
         const SwLayoutFrm *pPge = pLay;
         sal_uInt64 nOldNew = SAL_MAX_UINT64;
-        for ( sal_uInt16 i = 0; pPge->GetPrev() && (i < 3); ++i )
+        for ( int i = 0; pPge->GetPrev() && (i < 3); ++i )
         {
             pPge = (SwLayoutFrm*)pPge->GetPrev();
             const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
@@ -956,7 +956,7 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
         }
         pPge = pLay;
         nOldNew = SAL_MAX_UINT64;
-        for ( sal_uInt16 j = 0; pPge->GetNext() && (j < 3); ++j )
+        for ( int j = 0; pPge->GetNext() && (j < 3); ++j )
         {
             pPge = (SwLayoutFrm*)pPge->GetNext();
             const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );

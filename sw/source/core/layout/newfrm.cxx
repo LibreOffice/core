@@ -358,7 +358,7 @@ void _FrmFinit()
 {
 #if OSL_DEBUG_LEVEL > 0
     // The cache may only contain null pointers at this time.
-    for( sal_uInt16 n = SwFrm::GetCachePtr()->size(); n; )
+    for( size_t n = SwFrm::GetCachePtr()->size(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];

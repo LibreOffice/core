@@ -46,9 +46,9 @@ static sal_uLong lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
     SwFtnIdxs::const_iterator it = rFtnIdxs.find( pBla );
     if ( it != rFtnIdxs.end() )
     {
-        sal_uInt16 nRet = it - rFtnIdxs.begin();
+        sal_uLong nRet = it - rFtnIdxs.begin();
         if( pAttr->GetFtn().IsEndNote() )
-            return sal_uLong(nRet) + ENDNOTE;
+            return nRet + ENDNOTE;
         return nRet;
     }
     OSL_ENSURE( !pDoc, "FtnPos not found." );
@@ -787,7 +787,7 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
         {
             // Will be reached only if old and new boss are both either pages or the last (new)
             // or first (old) column of a page. In this case, check if pages were skipped.
-            sal_uInt16 nDiff = pOldPage->GetPhyPageNum() - pRet->FindPageFrm()->GetPhyPageNum();
+            const sal_uInt16 nDiff = pOldPage->GetPhyPageNum() - pRet->FindPageFrm()->GetPhyPageNum();
             if ( nDiff > 2 ||
                  (nDiff > 1 && !((SwPageFrm*)pOldPage->GetPrev())->IsEmptyPage()) )
                 bJump = true;
@@ -1903,7 +1903,7 @@ void SwFtnBossFrm::_MoveFtns( SwFtnFrms &rFtnArr, bool bCalc )
     // #i21478# - keep last inserted footnote in order to
     // format the content of the following one.
     SwFtnFrm* pLastInsertedFtn = 0L;
-    for ( sal_uInt16 i = 0; i < rFtnArr.size(); ++i )
+    for ( size_t i = 0; i < rFtnArr.size(); ++i )
     {
         SwFtnFrm *pFtn = rFtnArr[i];
 

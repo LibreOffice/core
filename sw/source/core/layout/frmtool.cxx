@@ -922,7 +922,7 @@ SwCntntNotify::~SwCntntNotify()
             SwNodeIndex *pIdx  = 0;
             SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
 
-            for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
+            for ( size_t i = 0; i < pTbl->size(); ++i )
             {
                 SwFrmFmt *pFmt = (*pTbl)[i];
                 const SwFmtAnchor &rAnch = pFmt->GetAnchor();
