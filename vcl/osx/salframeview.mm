@@ -1731,7 +1731,7 @@ private:
 
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext
 {
-    if ( mpReferenceWrapper == nil ) {
+    if ( !mpReferenceWrapper ) {
         // some frames never become visible ..
         ::vcl::Window *pWindow = mpFrame -> GetWindow();
         if ( ! pWindow )

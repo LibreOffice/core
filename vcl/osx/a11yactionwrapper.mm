@@ -53,7 +53,7 @@
 
 +(NSArray *)actionNamesForElement:(AquaA11yWrapper *)wrapper {
     NSMutableArray * actionNames = [ [ NSMutableArray alloc ] init ];
-    if ( [ wrapper accessibleAction ] != nil ) {
+    if ( [ wrapper accessibleAction ] ) {
         for ( int cnt = 0; cnt < [ wrapper accessibleAction ] -> getAccessibleActionCount(); cnt++ ) {
             [ actionNames addObject: [ AquaA11yActionWrapper nativeActionNameFor: CreateNSString ( [ wrapper accessibleAction ] -> getAccessibleActionDescription ( cnt ) ) ] ];
         }
@@ -62,7 +62,7 @@
 }
 
 +(void)doAction:(NSString *)action ofElement:(AquaA11yWrapper *)wrapper {
-    if ( [ wrapper accessibleAction ] != nil ) {
+    if ( [ wrapper accessibleAction ] ) {
         for ( int cnt = 0; cnt < [ wrapper accessibleAction ] -> getAccessibleActionCount(); cnt++ ) {
             if ( [ action isEqualToString: [ AquaA11yActionWrapper nativeActionNameFor: CreateNSString ( [ wrapper accessibleAction ] -> getAccessibleActionDescription ( cnt ) ) ] ] ) {
                 [ wrapper accessibleAction ] -> doAccessibleAction ( cnt );
