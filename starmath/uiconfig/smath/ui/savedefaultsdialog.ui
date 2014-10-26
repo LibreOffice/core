@@ -7,6 +7,7 @@
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Save defaults?</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
@@ -17,7 +18,7 @@
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">24</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>

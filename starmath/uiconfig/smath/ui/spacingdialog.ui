@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="SpacingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Spacing</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
@@ -139,7 +142,6 @@
                               <object class="GtkGrid" id="grid2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -148,13 +150,10 @@
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -162,13 +161,10 @@
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -176,13 +172,10 @@
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">3</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -197,8 +190,6 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -213,8 +204,6 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -229,8 +218,6 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">3</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -238,13 +225,10 @@
                                     <property name="can_focus">True</property>
                                     <property name="no_show_all">True</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="invisible_char_set">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="top_attach">4</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -259,8 +243,6 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">4</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -276,7 +258,6 @@
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">2</property>
                                     <property name="width">2</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -290,13 +271,11 @@
                               <object class="GtkBox" id="box6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="image">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="stock">gtk-missing-image</property>
                                   </object>
                                   <packing>
@@ -375,7 +354,6 @@
                               <object class="GtkGrid" id="grid3">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -384,14 +362,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Spacing</property>
+                                    <property name="label" translatable="yes">_Spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -399,14 +375,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Line spacing</property>
+                                    <property name="label" translatable="yes">_Line spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -414,14 +388,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Root spacing</property>
+                                    <property name="label" translatable="yes">_Root spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">2</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -435,13 +407,11 @@
                               <object class="GtkBox" id="box10">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="1image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist11.png</property>
                                   </object>
                                   <packing>
@@ -454,7 +424,6 @@
                                   <object class="GtkImage" id="1image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist12.png</property>
                                   </object>
                                   <packing>
@@ -467,7 +436,6 @@
                                   <object class="GtkImage" id="1image3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist13.png</property>
                                   </object>
                                   <packing>
@@ -545,7 +513,6 @@
                               <object class="GtkGrid" id="grid4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -554,14 +521,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Superscript</property>
+                                    <property name="label" translatable="yes">_Superscript:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -569,14 +534,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">S_ubscript</property>
+                                    <property name="label" translatable="yes">S_ubscript:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -590,13 +553,11 @@
                               <object class="GtkBox" id="box13">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="2image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist21.png</property>
                                   </object>
                                   <packing>
@@ -609,7 +570,6 @@
                                   <object class="GtkImage" id="2image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist22.png</property>
                                   </object>
                                   <packing>
@@ -687,7 +647,6 @@
                               <object class="GtkGrid" id="grid5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -696,14 +655,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Numerator</property>
+                                    <property name="label" translatable="yes">_Numerator:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -711,14 +668,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Denominator</property>
+                                    <property name="label" translatable="yes">_Denominator:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -732,13 +687,11 @@
                               <object class="GtkBox" id="box16">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="3image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist31.png</property>
                                   </object>
                                   <packing>
@@ -751,7 +704,6 @@
                                   <object class="GtkImage" id="3image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist32.png</property>
                                   </object>
                                   <packing>
@@ -829,7 +781,6 @@
                               <object class="GtkGrid" id="grid6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -838,14 +789,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Excess length</property>
+                                    <property name="label" translatable="yes">_Excess length:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -853,14 +802,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Weight</property>
+                                    <property name="label" translatable="yes">_Weight:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -874,13 +821,11 @@
                               <object class="GtkBox" id="box19">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="4image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist41.png</property>
                                   </object>
                                   <packing>
@@ -893,7 +838,6 @@
                                   <object class="GtkImage" id="4image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist42.png</property>
                                   </object>
                                   <packing>
@@ -971,7 +915,6 @@
                               <object class="GtkGrid" id="grid7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -980,14 +923,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Upper limit</property>
+                                    <property name="label" translatable="yes">_Upper limit:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -995,14 +936,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Lower limit</property>
+                                    <property name="label" translatable="yes">_Lower limit:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1016,13 +955,11 @@
                               <object class="GtkBox" id="box22">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="5image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist51.png</property>
                                   </object>
                                   <packing>
@@ -1035,7 +972,6 @@
                                   <object class="GtkImage" id="5image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist52.png</property>
                                   </object>
                                   <packing>
@@ -1113,7 +1049,6 @@
                               <object class="GtkGrid" id="grid8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1122,14 +1057,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Excess size (left/right)</property>
+                                    <property name="label" translatable="yes">_Excess size (left/right):</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1137,14 +1070,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Spacing</property>
+                                    <property name="label" translatable="yes">_Spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1152,14 +1083,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Excess size</property>
+                                    <property name="label" translatable="yes">_Excess size:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">2</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1173,13 +1102,11 @@
                               <object class="GtkBox" id="box25">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="6image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist61.png</property>
                                   </object>
                                   <packing>
@@ -1192,7 +1119,6 @@
                                   <object class="GtkImage" id="6image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist62.png</property>
                                   </object>
                                   <packing>
@@ -1205,7 +1131,6 @@
                                   <object class="GtkImage" id="6image4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist61.png</property>
                                   </object>
                                   <packing>
@@ -1283,7 +1208,6 @@
                               <object class="GtkGrid" id="grid9">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1292,14 +1216,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Line spacing</property>
+                                    <property name="label" translatable="yes">_Line spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1307,14 +1229,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Column spacing</property>
+                                    <property name="label" translatable="yes">_Column spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1328,13 +1248,11 @@
                               <object class="GtkBox" id="box28">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="7image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist71.png</property>
                                   </object>
                                   <packing>
@@ -1347,7 +1265,6 @@
                                   <object class="GtkImage" id="7image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist72.png</property>
                                   </object>
                                   <packing>
@@ -1425,7 +1342,6 @@
                               <object class="GtkGrid" id="grid10">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1434,14 +1350,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Primary height</property>
+                                    <property name="label" translatable="yes">_Primary height:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1449,14 +1363,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Minimum spacing</property>
+                                    <property name="label" translatable="yes">_Minimum spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1470,13 +1382,11 @@
                               <object class="GtkBox" id="box31">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="8image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist81.png</property>
                                   </object>
                                   <packing>
@@ -1489,7 +1399,6 @@
                                   <object class="GtkImage" id="8image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist82.png</property>
                                   </object>
                                   <packing>
@@ -1567,7 +1476,6 @@
                               <object class="GtkGrid" id="grid11">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1576,14 +1484,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Excess size</property>
+                                    <property name="label" translatable="yes">_Excess size:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1591,14 +1497,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Spacing</property>
+                                    <property name="label" translatable="yes">_Spacing:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1612,13 +1516,11 @@
                               <object class="GtkBox" id="box34">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="9image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist91.png</property>
                                   </object>
                                   <packing>
@@ -1631,7 +1533,6 @@
                                   <object class="GtkImage" id="9image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist92.png</property>
                                   </object>
                                   <packing>
@@ -1709,7 +1610,6 @@
                               <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="hexpand">True</property>
                                 <property name="row_spacing">6</property>
                                 <property name="column_spacing">12</property>
@@ -1718,14 +1618,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Left</property>
+                                    <property name="label" translatable="yes">_Left:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1733,14 +1631,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Right</property>
+                                    <property name="label" translatable="yes">_Right:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1748,14 +1644,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Top</property>
+                                    <property name="label" translatable="yes">_Top:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">2</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -1763,14 +1657,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">_Bottom</property>
+                                    <property name="label" translatable="yes">_Bottom:</property>
                                     <property name="use_underline">True</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">3</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1784,13 +1676,11 @@
                               <object class="GtkBox" id="box7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="valign=">start</property>
                                 <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkImage" id="10image1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist101.png</property>
                                   </object>
                                   <packing>
@@ -1803,7 +1693,6 @@
                                   <object class="GtkImage" id="10image2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist102.png</property>
                                   </object>
                                   <packing>
@@ -1816,7 +1705,6 @@
                                   <object class="GtkImage" id="10image3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist103.png</property>
                                   </object>
                                   <packing>
@@ -1829,7 +1717,6 @@
                                   <object class="GtkImage" id="10image4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="valign=">start</property>
                                     <property name="pixbuf">starmath/res/dist104.png</property>
                                   </object>
                                   <packing>
@@ -1890,6 +1777,83 @@
       <action-widget response="0">default</action-widget>
       <action-widget response="0">help</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="mode">both</property>
+    <widgets>
+      <widget name="image"/>
+      <widget name="1image1"/>
+      <widget name="1image2"/>
+      <widget name="1image3"/>
+      <widget name="2image1"/>
+      <widget name="2image2"/>
+      <widget name="3image1"/>
+      <widget name="3image2"/>
+      <widget name="4image1"/>
+      <widget name="4image2"/>
+      <widget name="5image1"/>
+      <widget name="5image2"/>
+      <widget name="6image1"/>
+      <widget name="6image2"/>
+      <widget name="6image4"/>
+      <widget name="7image1"/>
+      <widget name="7image2"/>
+      <widget name="8image1"/>
+      <widget name="8image2"/>
+      <widget name="9image1"/>
+      <widget name="9image2"/>
+      <widget name="10image1"/>
+      <widget name="10image2"/>
+      <widget name="10image3"/>
+      <widget name="10image4"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="label1"/>
+      <widget name="label2"/>
+      <widget name="label3"/>
+      <widget name="label4"/>
+      <widget name="1label1"/>
+      <widget name="1label2"/>
+      <widget name="1label3"/>
+      <widget name="2label1"/>
+      <widget name="2label2"/>
+      <widget name="3label1"/>
+      <widget name="3label2"/>
+      <widget name="4label1"/>
+      <widget name="4label2"/>
+      <widget name="5label1"/>
+      <widget name="5label2"/>
+      <widget name="6label1"/>
+      <widget name="6label2"/>
+      <widget name="6label4"/>
+      <widget name="7label1"/>
+      <widget name="7label2"/>
+      <widget name="8label1"/>
+      <widget name="8label2"/>
+      <widget name="9label1"/>
+      <widget name="9label2"/>
+      <widget name="10label1"/>
+      <widget name="10label2"/>
+      <widget name="10label3"/>
+      <widget name="10label4"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup3">
+    <widgets>
+      <widget name="title"/>
+      <widget name="1title"/>
+      <widget name="2title"/>
+      <widget name="3title"/>
+      <widget name="4title"/>
+      <widget name="5title"/>
+      <widget name="6title"/>
+      <widget name="7title"/>
+      <widget name="8title"/>
+      <widget name="9title"/>
+      <widget name="10title"/>
+    </widgets>
   </object>
   <object class="GtkMenu" id="menu">
     <property name="visible">True</property>
@@ -1974,82 +1938,5 @@
         <property name="use_underline">True</property>
       </object>
     </child>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">both</property>
-    <widgets>
-      <widget name="image"/>
-      <widget name="1image1"/>
-      <widget name="1image2"/>
-      <widget name="1image3"/>
-      <widget name="2image1"/>
-      <widget name="2image2"/>
-      <widget name="3image1"/>
-      <widget name="3image2"/>
-      <widget name="4image1"/>
-      <widget name="4image2"/>
-      <widget name="5image1"/>
-      <widget name="5image2"/>
-      <widget name="6image1"/>
-      <widget name="6image2"/>
-      <widget name="6image4"/>
-      <widget name="7image1"/>
-      <widget name="7image2"/>
-      <widget name="8image1"/>
-      <widget name="8image2"/>
-      <widget name="9image1"/>
-      <widget name="9image2"/>
-      <widget name="10image1"/>
-      <widget name="10image2"/>
-      <widget name="10image3"/>
-      <widget name="10image4"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup2">
-    <widgets>
-      <widget name="label1"/>
-      <widget name="label2"/>
-      <widget name="label3"/>
-      <widget name="label4"/>
-      <widget name="1label1"/>
-      <widget name="1label2"/>
-      <widget name="1label3"/>
-      <widget name="2label1"/>
-      <widget name="2label2"/>
-      <widget name="3label1"/>
-      <widget name="3label2"/>
-      <widget name="4label1"/>
-      <widget name="4label2"/>
-      <widget name="5label1"/>
-      <widget name="5label2"/>
-      <widget name="6label1"/>
-      <widget name="6label2"/>
-      <widget name="6label4"/>
-      <widget name="7label1"/>
-      <widget name="7label2"/>
-      <widget name="8label1"/>
-      <widget name="8label2"/>
-      <widget name="9label1"/>
-      <widget name="9label2"/>
-      <widget name="10label1"/>
-      <widget name="10label2"/>
-      <widget name="10label3"/>
-      <widget name="10label4"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup3">
-    <widgets>
-      <widget name="title"/>
-      <widget name="1title"/>
-      <widget name="2title"/>
-      <widget name="3title"/>
-      <widget name="4title"/>
-      <widget name="5title"/>
-      <widget name="6title"/>
-      <widget name="7title"/>
-      <widget name="8title"/>
-      <widget name="9title"/>
-      <widget name="10title"/>
-    </widgets>
   </object>
 </interface>
