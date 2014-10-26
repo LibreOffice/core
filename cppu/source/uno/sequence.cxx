@@ -431,6 +431,8 @@ static inline bool icopyConstructFromElements(
             rtl_uString ** pDestElements = (rtl_uString **) pSeq->elements;
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
+                // https://communities.coverity.com/thread/2993
+                /* coverity[overrun-buffer-arg] */
                 ::rtl_uString_acquire(
                     ((rtl_uString **)pSourceElements)[nPos] );
                 pDestElements[nPos] = ((rtl_uString **)pSourceElements)[nPos];
