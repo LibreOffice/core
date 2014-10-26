@@ -38,8 +38,3 @@ export PATH
 : ${UNO_PATH=$sd_prog}
 export UNO_PATH
 
-# Set URE_BOOTSTRAP so that "uno.getComponentContext()" bootstraps a complete
-# OOo UNO environment:
-: ${URE_BOOTSTRAP=vnd.sun.star.pathname:$sd_prog/fundamentalrc}
-export URE_BOOTSTRAP
-
