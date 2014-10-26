@@ -69,7 +69,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
 
     // create the Movie
 
-        mpMovie = [mpMovie initWithURL:aURL error:nil];
+        mpMovie = [mpMovie initWithURL:aURL error:reinterpret_cast<NSError **>(nil)];
         if(mpMovie)
         {
             [mpMovie retain];

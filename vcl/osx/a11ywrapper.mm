@@ -149,7 +149,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 // (getter with parameter)    attributeNameHereAttributeForParameter:
 // (setter)                   setAttributeNameHereAttributeForElement:to:
 -(SEL)selectorForAttribute:(NSString *)attribute asGetter:(BOOL)asGetter withGetterParameter:(BOOL)withGetterParameter {
-    SEL selector = static_cast<SEL>(nil);
+    SEL selector = reinterpret_cast<SEL>(nil);
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     @try {
         // step 1: create method name from attribute name
@@ -175,7 +175,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         // step 2: create selector
         selector = NSSelectorFromString ( methodName );
     } @catch ( id exception ) {
-        selector = static_cast<SEL>(nil);
+        selector = reinterpret_cast<SEL>(nil);
     }
     [ pool release ];
     return selector;
