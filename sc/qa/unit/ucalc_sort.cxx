@@ -1329,6 +1329,114 @@ void Test::testSortRefUpdate5()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortRefUpdate6()
+{
+    SortRefNoUpdateSetter aUpdateSet;
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Sort");
+
+    const char* aData[][3] = {
+        { "Order", "Value", "1" },
+        { "9", "1", "=C1+B2" },
+        { "1", "2", "=C2+B3" },
+        { "8", "3", "=C3+B4" },
+    };
+
+    ScAddress aPos(0,0,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT(aDataRange.aStart == aPos);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Order", "Value", "1" },
+            { "9", "1", "2" },
+            { "1", "2", "4" },
+            { "8", "3", "7" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Sort A1:C4.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 2, 3));
+
+    // Sort A1:A6 by column A (with a row header).
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 2;
+    aSortData.nRow1 = 0;
+    aSortData.nRow2 = 3;
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Order", "Value", "1" },
+            { "1", "2", "3" },
+            { "8", "3", "6" },
+            { "9", "1", "7" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Make sure that the formulas in C2:C4 are not adjusted.
+    if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "C1+B2"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(2,2,0), "C2+B3"))
+        CPPUNIT_FAIL("Wrong formula!");
+    if (!checkFormula(*m_pDoc, ScAddress(2,3,0), "C3+B4"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    pUndoMgr->Undo();
+
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Order", "Value", "1" },
+            { "9", "1", "2" },
+            { "1", "2", "4" },
+            { "8", "3", "7" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "After undo");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Redo and check.
+    pUndoMgr->Redo();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Order", "Value", "1" },
+            { "1", "2", "3" },
+            { "8", "3", "6" },
+            { "9", "1", "7" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSortOutOfPlaceResult()
 {
     m_pDoc->InsertTab(0, "Sort");

@@ -364,6 +364,7 @@ public:
     void testSortRefUpdate3();
     void testSortRefUpdate4();
     void testSortRefUpdate5();
+    void testSortRefUpdate6();
     void testSortOutOfPlaceResult();
     void testSortPartialFormulaGroup();
 
@@ -555,6 +556,7 @@ public:
     CPPUNIT_TEST(testSortRefUpdate3);
     CPPUNIT_TEST(testSortRefUpdate4);
     CPPUNIT_TEST(testSortRefUpdate5);
+    CPPUNIT_TEST(testSortRefUpdate6);
     CPPUNIT_TEST(testSortOutOfPlaceResult);
     CPPUNIT_TEST(testSortPartialFormulaGroup);
     CPPUNIT_TEST(testShiftCells);
