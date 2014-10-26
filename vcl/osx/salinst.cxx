@@ -476,7 +476,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         std::list<AquaSalFrame*>::iterator it = pSalData->maFrames.begin();
         while( it != pSalData->maFrames.end() )
         {
-            if ( (*it) && ((*it)->mbFullScreen == true) )
+            if ( (*it) && (*it)->mbFullScreen )
                 bIsFullScreenMode = true;
             ++it;
         }

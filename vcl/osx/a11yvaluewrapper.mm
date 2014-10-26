@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 
 +(id)valueAttributeForElement:(AquaA11yWrapper *)wrapper {
     // TODO: Detect Type from Any
-    if ( [ wrapper accessibleValue ] != nil ) {
+    if ( [ wrapper accessibleValue ] ) {
         long value = 0;
         [ wrapper accessibleValue ] -> getCurrentValue() >>= value;
         return [ NSNumber numberWithLong: value ];
@@ -40,7 +40,7 @@ using namespace ::com::sun::star::uno;
 
 +(id)minValueAttributeForElement:(AquaA11yWrapper *)wrapper {
     // TODO: Detect Type from Any
-    if ( [ wrapper accessibleValue ] != nil ) {
+    if ( [ wrapper accessibleValue ] ) {
         long value = 0;
         [ wrapper accessibleValue ] -> getMinimumValue() >>= value;
         return [ NSNumber numberWithLong: value ];
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 
 +(id)maxValueAttributeForElement:(AquaA11yWrapper *)wrapper {
     // TODO: Detect Type from Any
-    if ( [ wrapper accessibleValue ] != nil ) {
+    if ( [ wrapper accessibleValue ] ) {
         long value = 0;
         [ wrapper accessibleValue ] -> getMaximumValue() >>= value;
         return [ NSNumber numberWithLong: value ];
@@ -61,7 +61,7 @@ using namespace ::com::sun::star::uno;
 +(void)setValueAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
     // TODO: Detect Type from NSNumber
     if ( [ value isKindOfClass: [ NSNumber class ] ] 
-      && [ wrapper accessibleValue ] != nil ) {
+      && [ wrapper accessibleValue ] ) {
         NSNumber * number = (NSNumber *) value;
         Any numberAny ( [ number longValue ] );
         [ wrapper accessibleValue ] -> setCurrentValue ( numberAny );
@@ -74,7 +74,7 @@ using namespace ::com::sun::star::uno;
 
 +(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
     BOOL isSettable = NO;
-    if ( [ wrapper accessibleValue ] != nil 
+    if ( [ wrapper accessibleValue ]
       && [ attribute isEqualToString: NSAccessibilityValueAttribute ] 
       && ! [ wrapper isKindOfClass: [ AquaA11yWrapperStaticText class ] ] ) {
         isSettable = YES;
