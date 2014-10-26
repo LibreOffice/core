@@ -1175,17 +1175,20 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
                 //I don't want here.
                 bRemove = true;
             }
-            else if ( false == (bRemove = ::lcl_ObjConnected( pFmt, pSib )) ||
-                      ::lcl_InHeaderOrFooter( *pFmt ) )
+            else
             {
-            // OD 23.06.2003 #108784# - correction: for objects in header
-            // or footer create frames, in spite of the fact that an connected
-            // objects already exists.
-                //Call for Flys and DrawObjs only a MakeFrms if nor
-                //no dependent exists, otherwise, or if the MakeDrms creates no
-                //dependents, remove.
-                pFmt->MakeFrms();
                 bRemove = ::lcl_ObjConnected( pFmt, pSib );
+                if  ( !bRemove || ::lcl_InHeaderOrFooter( *pFmt ) )
+                {
+                    // OD 23.06.2003 #108784# - correction: for objects in header
+                    // or footer create frames, in spite of the fact that an connected
+                    // objects already exists.
+                    //Call for Flys and DrawObjs only a MakeFrms if nor
+                    //no dependent exists, otherwise, or if the MakeDrms creates no
+                    //dependents, remove.
+                    pFmt->MakeFrms();
+                    bRemove = ::lcl_ObjConnected( pFmt, pSib );
+                }
             }
             if ( bRemove )
             {
