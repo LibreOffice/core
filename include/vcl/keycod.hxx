@@ -38,10 +38,10 @@ private:
     KeyFuncType eFunc;
 
 public:
-                KeyCode() { nCode = 0; eFunc = KEYFUNC_DONTKNOW; }
+                KeyCode() { nCode = 0; eFunc = KeyFuncType::DONTKNOW; }
                 KeyCode( const ResId& rResId );
                 KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier = 0 )
-                    { nCode = nKey | nModifier; eFunc = KEYFUNC_DONTKNOW; }
+                    { nCode = nKey | nModifier; eFunc = KeyFuncType::DONTKNOW; }
                 KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 );
                 KeyCode( KeyFuncType eFunction );
 
@@ -70,7 +70,7 @@ public:
     OUString        GetName( vcl::Window* pWindow = NULL ) const;
 
     bool            IsFunction() const
-                    { return (eFunc != KEYFUNC_DONTKNOW); }
+                    { return (eFunc != KeyFuncType::DONTKNOW); }
 
     KeyFuncType     GetFunction() const;
 
@@ -92,12 +92,12 @@ inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMo
         nCode |= KEY_MOD2;
     if( bMod3 )
         nCode |= KEY_MOD3;
-    eFunc = KEYFUNC_DONTKNOW;
+    eFunc = KeyFuncType::DONTKNOW;
 }
 
 inline bool vcl::KeyCode::operator ==( const vcl::KeyCode& rKeyCode ) const
 {
-    if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
+    if ( (eFunc == KeyFuncType::DONTKNOW) && (rKeyCode.eFunc == KeyFuncType::DONTKNOW) )
         return (nCode == rKeyCode.nCode);
     else
         return (GetFunction() == rKeyCode.GetFunction());
@@ -105,7 +105,7 @@ inline bool vcl::KeyCode::operator ==( const vcl::KeyCode& rKeyCode ) const
 
 inline bool vcl::KeyCode::operator !=( const vcl::KeyCode& rKeyCode ) const
 {
-    if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
+    if ( (eFunc == KeyFuncType::DONTKNOW) && (rKeyCode.eFunc == KeyFuncType::DONTKNOW) )
         return (nCode != rKeyCode.nCode);
     else
         return (GetFunction() != rKeyCode.GetFunction());
@@ -113,7 +113,7 @@ inline bool vcl::KeyCode::operator !=( const vcl::KeyCode& rKeyCode ) const
 
 inline bool vcl::KeyCode::IsDefinedKeyCodeEqual( const vcl::KeyCode& rKeyCode ) const
 {
-    if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
+    if ( (eFunc == KeyFuncType::DONTKNOW) && (rKeyCode.eFunc == KeyFuncType::DONTKNOW) )
         return (GetFullCode() == rKeyCode.GetFullCode());
     return (GetFunction() == rKeyCode.GetFunction());
 }

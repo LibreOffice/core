@@ -616,7 +616,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
             {
-                KeyEvent aEvent( 0, KEYFUNC_CUT );
+                KeyEvent aEvent( 0, KeyFuncType::CUT );
                 pChild->KeyInput( aEvent );
             }
         }
@@ -625,7 +625,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
             {
-                KeyEvent aEvent( 0, KEYFUNC_COPY );
+                KeyEvent aEvent( 0, KeyFuncType::COPY );
                 pChild->KeyInput( aEvent );
             }
         }
@@ -634,7 +634,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
             vcl::Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
             if(pChild)
             {
-                KeyEvent aEvent( 0, KEYFUNC_PASTE );
+                KeyEvent aEvent( 0, KeyFuncType::PASTE );
                 pChild->KeyInput( aEvent );
             }
         }

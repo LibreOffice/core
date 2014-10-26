@@ -3183,7 +3183,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
 
                     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
                     if ( nChar && nChar != 8 && nChar != 127 &&     // no 'backspace', no 'delete'
-                         KEYFUNC_CUT != eFunc)                      // and no 'CTRL-X'
+                         KeyFuncType::CUT != eFunc)                      // and no 'CTRL-X'
                     {
                         if (bFormulaMode)
                             UseFormulaData();

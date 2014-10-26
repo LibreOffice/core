@@ -3259,7 +3259,7 @@ bool DbGridControl::IsTabAllowed(bool bRight) const
 
 void DbGridControl::KeyInput( const KeyEvent& rEvt )
 {
-    if (rEvt.GetKeyCode().GetFunction() == KEYFUNC_COPY)
+    if (rEvt.GetKeyCode().GetFunction() == KeyFuncType::COPY)
     {
         long nRow = GetCurRow();
         sal_uInt16 nColId = GetCurColumnId();

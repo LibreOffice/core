@@ -1285,16 +1285,16 @@ namespace svxform
         // copy'n'paste?
         switch ( rCode.GetFunction() )
         {
-            case KEYFUNC_CUT:
+            case KeyFuncType::CUT:
                 doCut();
                 break;
 
-            case KEYFUNC_PASTE:
+            case KeyFuncType::PASTE:
                 if ( implAcceptPaste() )
                     doPaste();
                 break;
 
-            case KEYFUNC_COPY:
+            case KeyFuncType::COPY:
                 doCopy();
                 break;
 
