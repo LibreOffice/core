@@ -746,11 +746,11 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         bool bRemove = false;
 
         // For each line test all following ones.
-        for ( sal_uInt16 k = 0; !bRemove && k < aCheck.size(); ++k )
+        for ( size_t k = 0; !bRemove && k < aCheck.size(); ++k )
         {
             SwLineRect &rR1 = *aCheck[k];
 
-            for ( sal_uInt16 k2 = k+1; !bRemove && k2 < aCheck.size(); ++k2 )
+            for ( size_t k2 = k+1; !bRemove && k2 < aCheck.size(); ++k2 )
             {
                 SwLineRect &rR2 = *aCheck[k2];
                 if ( bVert )
@@ -2263,7 +2263,7 @@ void DrawGraphic(
                 else
                     bGrfBackgrdAlreadyDrawn = true;
                 // loop rectangles of background region, which has to be drawn
-                for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+                for( size_t i = 0; i < aRegion.size(); ++i )
                 {
                     pOutDev->DrawRect( aRegion[i].SVRect() );
                 }
@@ -4274,12 +4274,12 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                     {
                         pOut->SetClipRegion(vcl::Region(aPoly));
                     }
-                    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+                    for ( size_t i = 0; i < aRegion.size(); ++i )
                         PaintBackground( aRegion[i], pPage, rAttrs, false, true );
                     pOut->Pop();
                 }
                 else
-                    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+                    for ( size_t i = 0; i < aRegion.size(); ++i )
                         PaintBackground( aRegion[i], pPage, rAttrs, false, true );
             }
 
@@ -4605,7 +4605,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
 
     pOut->SetDrawMode( nOldDrawMode );
 
-    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+    for ( size_t i = 0; i < aRegion.size(); ++i )
     {
         SwRect &rOut = aRegion[i];
         aOut = rOut;
@@ -4690,7 +4690,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     //{
     //    SwRegionRects aRegion( aOut, 4 );
     //    ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
-    //    for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+    //    for ( size_t i = 0; i < aRegion.size(); ++i )
     //        pLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
     //}
     //else
@@ -4818,12 +4818,10 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
 
 static sal_uInt16 lcl_GetLineWidth( const SvxBorderLine* pLine )
 {
-    sal_uInt16 result = 0;
-
     if ( pLine != NULL )
-        result = pLine->GetScaledWidth();
+        return pLine->GetScaledWidth();
 
-    return result;
+    return 0;
 }
 
 static double lcl_GetExtent( const SvxBorderLine* pSideLine, const SvxBorderLine* pOppositeLine )
@@ -4961,7 +4959,7 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
 
         // Shift the left border to the left.
         Point aCurPos = aRect.Pos();
-        sal_uInt16 nOffset = pLeftRightBorder->GetDistance();
+        const sal_uInt16 nOffset = pLeftRightBorder->GetDistance();
         aCurPos.X() -= nOffset;
         aCurPos.Y() -= nOffset;
         aRect.Pos(aCurPos);
@@ -5038,7 +5036,7 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
                                         (aRect.*_rRectFn->fnGetHeight)() );
 
         // Push the top border up a bit.
-        sal_uInt16 nOffset = pTopBottomBorder->GetDistance();
+        const sal_uInt16 nOffset = pTopBottomBorder->GetDistance();
         Point aCurPos = aRect.Pos();
         aCurPos.X() -= nOffset;
         aCurPos.Y() -= nOffset;
@@ -5122,7 +5120,7 @@ void PaintCharacterBorder(
 
     if( aTopBorder )
     {
-        sal_uInt16 nOffset = aTopBorder->GetDistance();
+        const sal_uInt16 nOffset = aTopBorder->GetDistance();
 
         Point aLeftTop(
             aAlignedRect.Left() - nOffset,
@@ -5161,7 +5159,7 @@ void PaintCharacterBorder(
 
     if( aLeftBorder )
     {
-        sal_uInt16 nOffset = aLeftBorder->GetDistance();
+        const sal_uInt16 nOffset = aLeftBorder->GetDistance();
 
         Point aLeftTop(
             aAlignedRect.Left() - nOffset,
@@ -7382,7 +7380,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
 
-        for ( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+        for ( size_t i = 0; i < aRegion.size(); ++i )
         {
             SwRect &rRetouche = aRegion[i];
 

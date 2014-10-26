@@ -369,7 +369,7 @@ static void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
 {
     // formats are in the special table of the document
 
-    for ( sal_uInt16 i = 0; i < rTbl.size(); ++i )
+    for ( size_t i = 0; i < rTbl.size(); ++i )
     {
         SdrObject *pSdrObj;
         SwFrmFmt *pFmt = rTbl[i];
@@ -1403,9 +1403,8 @@ void SwRootFrm::AssertFlyPages()
 
     // what page targets the "last" Fly?
     sal_uInt16 nMaxPg = 0;
-    sal_uInt16 i;
 
-    for ( i = 0; i < pTbl->size(); ++i )
+    for ( size_t i = 0; i < pTbl->size(); ++i )
     {
         const SwFmtAnchor &rAnch = (*pTbl)[i]->GetAnchor();
         if ( !rAnch.GetCntntAnchor() && nMaxPg < rAnch.GetPageNum() )
@@ -1425,7 +1424,7 @@ void SwRootFrm::AssertFlyPages()
         bool bOdd = (pPage->GetPhyPageNum() % 2) ? sal_True : sal_False;
         SwPageDesc *pDesc = pPage->GetPageDesc();
         SwFrm *pSibling = pPage->GetNext();
-        for ( i = pPage->GetPhyPageNum(); i < nMaxPg; ++i  )
+        for ( sal_uInt16 i = pPage->GetPhyPageNum(); i < nMaxPg; ++i  )
         {
             if ( !(bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
             {

@@ -1903,7 +1903,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
         const bool bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
 
-        for ( sal_uInt16 i = 0; i < aUnions.size(); ++i )
+        for ( size_t i = 0; i < aUnions.size(); ++i )
         {
             SwSelUnion *pUnion = &aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();

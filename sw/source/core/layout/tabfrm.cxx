@@ -87,7 +87,7 @@ SwTabFrm::SwTabFrm( SwTable &rTab, SwFrm* pSib ):
     //Create the lines and insert them.
     const SwTableLines &rLines = rTab.GetTabLines();
     SwFrm *pTmpPrev = 0;
-    for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
+    for ( size_t i = 0; i < rLines.size(); ++i )
     {
         SwRowFrm *pNew = new SwRowFrm( *rLines[i], this );
         if( pNew->Lower() )
@@ -1357,8 +1357,8 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
     SWRECTFN( pLay )
 
     // FME 2007-08-30 #i81146# new loop control
-    sal_uInt16 nLoopControlRuns = 0;
-    const sal_uInt16 nLoopControlMax = 10;
+    int nLoopControlRuns = 0;
+    const int nLoopControlMax = 10;
     const SwModify* pLoopControlCond = 0;
 
     while ( pCnt && pDontLeave->IsAnLower( pCnt ) )
@@ -1481,15 +1481,15 @@ static bool lcl_InnerCalcLayout( SwFrm *pFrm,
 static void lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
 {
     // FME 2007-08-30 #i81146# new loop control
-    sal_uInt16 nLoopControlRuns_1 = 0;
+    int nLoopControlRuns_1 = 0;
     sal_uInt16 nLoopControlStage_1 = 0;
-    const sal_uInt16 nLoopControlMax = 10;
+    const int nLoopControlMax = 10;
 
     bool bCheck = true;
     do
     {
         // FME 2007-08-30 #i81146# new loop control
-        sal_uInt16 nLoopControlRuns_2 = 0;
+        int nLoopControlRuns_2 = 0;
         sal_uInt16 nLoopControlStage_2 = 0;
 
         while( lcl_InnerCalcLayout( &rRow, nBottom ) )
@@ -3510,7 +3510,7 @@ SwRowFrm::SwRowFrm( const SwTableLine &rLine, SwFrm* pSib, bool bInsertContent )
     //Create the boxes and insert them.
     const SwTableBoxes &rBoxes = rLine.GetTabBoxes();
     SwFrm *pTmpPrev = 0;
-    for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+    for ( size_t i = 0; i < rBoxes.size(); ++i )
     {
         SwCellFrm *pNew = new SwCellFrm( *rBoxes[i], this, bInsertContent );
         pNew->InsertBehind( this, pTmpPrev );
@@ -3957,7 +3957,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
 
             while ( pTmpRow && !pPrevTabLine )
             {
-                sal_uInt16 nIdx = 0;
+                size_t nIdx = 0;
                 const SwTableLines& rLines = pTmpRow->GetTabLine()->GetUpper() ?
                                              pTmpRow->GetTabLine()->GetUpper()->GetTabLines() :
                                              pTable->GetTabLines();
@@ -4399,7 +4399,7 @@ SwCellFrm::SwCellFrm( const SwTableBox &rBox, SwFrm* pSib, bool bInsertContent )
     {
         const SwTableLines &rLines = rBox.GetTabLines();
         SwFrm *pTmpPrev = 0;
-        for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
+        for ( size_t i = 0; i < rLines.size(); ++i )
         {
             SwRowFrm *pNew = new SwRowFrm( *rLines[i], this, bInsertContent );
             pNew->InsertBehind( this, pTmpPrev );
@@ -4722,7 +4722,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                     const SwTableBox* pTmpBox = 0;
 
                     SwTwips nSumWidth = 0;
-                    sal_uInt16 i = 0;
+                    size_t i = 0;
                     do
                     {
                         pTmpBox = rBoxes[ i++ ];
