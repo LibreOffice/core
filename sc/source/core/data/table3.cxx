@@ -856,8 +856,11 @@ void ScTable::SortReorderByRow(
                     ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
 
                     ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos, SC_CLONECELL_DEFAULT);
-                    pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
-                    pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
+                    if (pArray->IsUpdateRefs())
+                    {
+                        pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
+                        pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
+                    }
 
                     sc::CellStoreType::iterator itBlk = rCellStore.push_back(pNew);
                 }
