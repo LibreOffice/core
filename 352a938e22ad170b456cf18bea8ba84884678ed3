@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_62f63ad9",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 914,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-26T03:52:10Z",
+      "side": 1,
+      "message": "I don’t see anything wrong with “Accept or Reject Changes”, but if you must, please change this to “~List of Changes...”. The title of the corresponding dialog must then be changed to match, otherwise you’ll confuse users, translators and help writers.",
+      "revId": "352a938e22ad170b456cf18bea8ba84884678ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_022c1e49",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-26T03:52:10Z",
+      "side": 1,
+      "message": "Same here. Use “~List of Changes...”. But again, I fail to see what the improvement on “clarity” this brings.",
+      "revId": "352a938e22ad170b456cf18bea8ba84884678ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_220042aa",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-10-26T03:52:10Z",
+      "side": 1,
+      "message": "Remove this separator",
+      "revId": "352a938e22ad170b456cf18bea8ba84884678ed3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
