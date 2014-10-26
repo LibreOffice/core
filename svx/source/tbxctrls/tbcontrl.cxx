@@ -2489,6 +2489,10 @@ void SvxColorToolBoxControl::StateChanged(
 
         pBtnUpdater->Update( aColor );
     }
+    else if ( bSidebarType )
+    {
+        pBtnUpdater->Update( COL_TRANSPARENT );
+    }
 }
 
 void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
