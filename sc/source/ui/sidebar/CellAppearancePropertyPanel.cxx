@@ -47,7 +47,6 @@
 using namespace css;
 using namespace css::uno;
 
-const char UNO_BACKGROUNDCOLOR[] = ".uno:BackgroundColor";
 const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
 const char UNO_LINESTYLE[] = ".uno:LineStyle";
 const char UNO_FRAMELINECOLOR[] = ".uno:FrameLineColor";
@@ -65,30 +64,6 @@ namespace
 // namespace open
 
 namespace sc { namespace sidebar {
-
-svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateFillColorPopupControl(svx::sidebar::PopupContainer* pParent)
-{
-    const ScResId aResId(VS_NOFILLCOLOR);
-
-    return new svx::sidebar::ColorControl(
-        pParent,
-        mpBindings,
-        ScResId(RID_POPUPPANEL_CELLAPPEARANCE_FILLCOLOR),
-        ScResId(VS_FILLCOLOR),
-        ::boost::bind(GetTransparentColor),
-        ::boost::bind(&CellAppearancePropertyPanel::SetFillColor, this, _1, _2),
-        pParent,
-        &aResId);
-}
-
-void CellAppearancePropertyPanel::SetFillColor(
-    const OUString& /*rsColorName*/,
-    const Color aColor)
-{
-    const SvxColorItem aColorItem(aColor, SID_BACKGROUND_COLOR);
-    mpBindings->GetDispatcher()->Execute(SID_BACKGROUND_COLOR, SfxCallMode::RECORD, &aColorItem, 0L);
-    maBackColor = aColor;
-}
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateLineColorPopupControl(svx::sidebar::PopupContainer* pParent)
 {
@@ -144,7 +119,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
 
-    maBackColorControl(SID_BACKGROUND_COLOR, *pBindings, *this),
     maLineColorControl(SID_FRAME_LINECOLOR, *pBindings, *this),
     maLineStyleControl(SID_FRAME_LINESTYLE, *pBindings, *this),
     maBorderOuterControl(SID_ATTR_BORDER_OUTER, *pBindings, *this),
@@ -164,7 +138,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maIMGLineStyle8(ScResId(IMG_LINE_STYLE8)),
     maIMGLineStyle9(ScResId(IMG_LINE_STYLE9)),
 
-    maBackColor(COL_TRANSPARENT),
     maLineColor(COL_BLACK),
     maTLBRColor(COL_BLACK),
     maBLTRColor(COL_BLACK),
@@ -177,7 +150,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mnBLTRIn(0),
     mnBLTROut(0),
     mnBLTRDis(0),
-    mbBackColorAvailable(true),
     mbLineColorAvailable(true),
     mbBorderStyleAvailable(true),
     mbLeft(false),
@@ -191,7 +163,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mbTLBR(false),
     mbBLTR(false),
 
-    maFillColorPopup(this, ::boost::bind(&CellAppearancePropertyPanel::CreateFillColorPopupControl, this, _1)),
     maLineColorPopup(this, ::boost::bind(&CellAppearancePropertyPanel::CreateLineColorPopupControl, this, _1)),
     mpCellLineStylePopup(),
     mpCellBorderStylePopup(),
@@ -200,15 +171,11 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maContext(),
     mpBindings(pBindings)
 {
-    get(mpTBFillColor,  "cellbackgroundcolor");
     get(mpTBCellBorder, "cellbordertype");
     get(mpTBLineStyle,  "borderlinestyle");
     get(mpTBLineColor,  "borderlinecolor");
     get(mpCBXShowGrid,  "cellgridlines");
 
-    mpFillColorUpdater.reset( new ::svx::ToolboxButtonColorUpdater(SID_ATTR_BRUSH,
-        mpTBFillColor->GetItemId( UNO_BACKGROUNDCOLOR ),
-        mpTBFillColor) );
     mpLineColorUpdater.reset( new ::svx::ToolboxButtonColorUpdater(SID_FRAME_LINECOLOR,
         mpTBLineColor->GetItemId( UNO_FRAMELINECOLOR ),
         mpTBLineColor) );
@@ -224,16 +191,10 @@ CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 
 void CellAppearancePropertyPanel::Initialize()
 {
-    const sal_uInt16 nIdBkColor = mpTBFillColor->GetItemId( UNO_BACKGROUNDCOLOR );
-    mpTBFillColor->SetItemBits( nIdBkColor, mpTBFillColor->GetItemBits( nIdBkColor ) | ToolBoxItemBits::DROPDOWNONLY );
-    Link aLink = LINK(this, CellAppearancePropertyPanel, TbxBKColorSelectHdl);
-    mpTBFillColor->SetDropdownClickHdl ( aLink );
-    mpTBFillColor->SetSelectHdl ( aLink );
-
     const sal_uInt16 nIdBorderType  = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
     mpTBCellBorder->SetItemImage( nIdBorderType, maIMGCellBorder );
     mpTBCellBorder->SetItemBits( nIdBorderType, mpTBCellBorder->GetItemBits( nIdBorderType ) | ToolBoxItemBits::DROPDOWNONLY );
-    aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
+    Link aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
     mpTBCellBorder->SetDropdownClickHdl ( aLink );
     mpTBCellBorder->SetSelectHdl ( aLink );
 
@@ -257,18 +218,6 @@ void CellAppearancePropertyPanel::Initialize()
 
     mpTBLineColor->SetAccessibleRelationLabeledBy(mpTBLineColor);
     mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
-}
-
-IMPL_LINK(CellAppearancePropertyPanel, TbxBKColorSelectHdl, ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if(aCommand == UNO_BACKGROUNDCOLOR)
-    {
-        maFillColorPopup.Show(*pToolBox);
-        maFillColorPopup.SetCurrentColor(maBackColor, mbBackColorAvailable);
-    }
-    return 0;
 }
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox)
@@ -386,24 +335,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
     switch(nSID)
     {
-    case SID_BACKGROUND_COLOR:
-        if(eState >= SfxItemState::DEFAULT)
-        {
-            const SvxColorItem* pSvxColorItem = dynamic_cast< const SvxColorItem* >(pState);
-
-            if(pSvxColorItem)
-            {
-                maBackColor = ((const SvxColorItem*)pState)->GetValue();
-                mbBackColorAvailable = true;
-                mpFillColorUpdater->Update(maBackColor);
-                break;
-            }
-        }
-
-        mbBackColorAvailable = false;
-        maBackColor.SetColor(COL_TRANSPARENT);
-        mpFillColorUpdater->Update(COL_TRANSPARENT);
-        break;
     case SID_FRAME_LINECOLOR:
         if( eState == SfxItemState::DONTCARE)
         {

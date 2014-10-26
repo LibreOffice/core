@@ -70,16 +70,13 @@ public:
 private:
     //ui controls
 
-    ToolBox*                                mpTBFillColor;
     ToolBox*                                mpTBCellBorder;
     ToolBox*                                mpTBLineStyle;
     ToolBox*                                mpTBLineColor;
-    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpFillColorUpdater;
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpLineColorUpdater;
     ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
     CheckBox*                               mpCBXShowGrid;
 
-    ::sfx2::sidebar::ControllerItem         maBackColorControl;
     ::sfx2::sidebar::ControllerItem         maLineColorControl;
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
@@ -100,9 +97,6 @@ private:
     Image                                   maIMGLineStyle8;
     Image                                   maIMGLineStyle9;
 
-    // cell background color
-    Color                                   maBackColor;
-
     // cell line color(s)
     Color                                   maLineColor;
     Color                                   maTLBRColor;
@@ -120,7 +114,6 @@ private:
     sal_uInt16                              mnBLTRDis;
 
     /// bitfield
-    bool                                    mbBackColorAvailable : 1;
     bool                                    mbLineColorAvailable : 1;
     bool                                    mbBorderStyleAvailable : 1;
 
@@ -139,7 +132,6 @@ private:
     bool                                    mbBLTR : 1;
 
     // popups
-    svx::sidebar::ColorPopup                maFillColorPopup;
     svx::sidebar::ColorPopup                maLineColorPopup;
     ::boost::scoped_ptr< CellLineStylePopup > mpCellLineStylePopup;
     ::boost::scoped_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
@@ -148,15 +140,10 @@ private:
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
-    DECL_LINK(TbxBKColorSelectHdl, ToolBox*);
     DECL_LINK(TbxLineColorSelectHdl, ToolBox*);
     DECL_LINK(TbxCellBorderSelectHdl, ToolBox*);
     DECL_LINK(TbxLineStyleSelectHdl, ToolBox*);
     DECL_LINK(CBOXGridShowClkHdl, void*);
-
-    // for fill color picker
-    svx::sidebar::PopupControl* CreateFillColorPopupControl(svx::sidebar::PopupContainer* pParent);
-    void SetFillColor(const OUString& rsColorName, const Color aColor);
 
     // for line color picker
     svx::sidebar::PopupControl* CreateLineColorPopupControl(svx::sidebar::PopupContainer* pParent);

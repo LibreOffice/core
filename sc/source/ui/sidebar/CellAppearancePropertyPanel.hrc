@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//BACK_COLOR PAGE
-#define STR_AUTOMATICE  2
-
 //line style page
 #define VS_STYLE        1
 #define PB_OPTIONS      2
@@ -75,8 +72,6 @@
 #define STR_BORDER_7            47
 #define STR_BORDER_8            48
 
-#define VS_FILLCOLOR            1
-#define VS_NOFILLCOLOR          2
 #define VS_LINECOLOR            1
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
