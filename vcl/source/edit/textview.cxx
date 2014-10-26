@@ -563,34 +563,34 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
 
     sal_uInt16 nCode = rKeyEvent.GetKeyCode().GetCode();
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
     {
         switch ( eFunc )
         {
-            case KEYFUNC_CUT:
+            case KeyFuncType::CUT:
             {
                 if ( !mpImpl->mbReadOnly )
                     Cut();
             }
             break;
-            case KEYFUNC_COPY:
+            case KeyFuncType::COPY:
             {
                 Copy();
             }
             break;
-            case KEYFUNC_PASTE:
+            case KeyFuncType::PASTE:
             {
                 if ( !mpImpl->mbReadOnly )
                     Paste();
             }
             break;
-            case KEYFUNC_UNDO:
+            case KeyFuncType::UNDO:
             {
                 if ( !mpImpl->mbReadOnly )
                     Undo();
             }
             break;
-            case KEYFUNC_REDO:
+            case KeyFuncType::REDO:
             {
                 if ( !mpImpl->mbReadOnly )
                     Redo();
@@ -598,10 +598,10 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
             break;
 
             default:    // might get processed below
-                        eFunc = KEYFUNC_DONTKNOW;
+                        eFunc = KeyFuncType::DONTKNOW;
         }
     }
-    if ( eFunc == KEYFUNC_DONTKNOW )
+    if ( eFunc == KeyFuncType::DONTKNOW )
     {
         switch ( nCode )
         {

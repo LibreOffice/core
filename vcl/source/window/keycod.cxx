@@ -26,27 +26,27 @@
 
 #include <tools/rc.h>
 
-static const sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
+static const sal_uInt16 aImplKeyFuncTab[(static_cast<int>(KeyFuncType::FRONT)+1)*4] =
 {
-    0, 0, 0, 0,                                                    // KEYFUNC_DONTKNOW
-    KEY_N | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_NEW
-    KEY_O | KEY_MOD1, KEY_OPEN, 0, 0,                              // KEYFUNC_OPEN
-    KEY_S | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_SAVE
-    KEY_S | KEY_SHIFT | KEY_MOD1, 0, 0, 0,                         // KEYFUNC_SAVEAS
-    KEY_P | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_PRINT
-    KEY_W | KEY_MOD1, KEY_F4 | KEY_MOD1, 0, 0,                     // KEYFUNC_CLOSE
-    KEY_Q | KEY_MOD1, KEY_F4 | KEY_MOD2, 0, 0,                     // KEYFUNC_QUIT
-    KEY_X | KEY_MOD1, KEY_DELETE | KEY_SHIFT, KEY_CUT, 0,          // KEYFUNC_CUT
-    KEY_C | KEY_MOD1, KEY_INSERT | KEY_MOD1, KEY_COPY, 0,          // KEYFUNC_COPY
-    KEY_V | KEY_MOD1, KEY_INSERT | KEY_SHIFT, KEY_PASTE, 0,        // KEYFUNC_PASTE
-    KEY_Z | KEY_MOD1, KEY_BACKSPACE | KEY_MOD2, KEY_UNDO, 0,       // KEYFUNC_UNDO
-    KEY_Y | KEY_MOD1, KEY_UNDO | KEY_SHIFT, 0, 0,                  // KEYFUNC_REDO
-    KEY_DELETE, 0, 0, 0,                                           // KEYFUNC_DELETE
-    KEY_REPEAT, 0, 0, 0,                                           // KEYFUNC_REPEAT
-    KEY_F | KEY_MOD1, KEY_FIND, 0, 0,                              // KEYFUNC_FIND
-    KEY_F | KEY_SHIFT | KEY_MOD1, KEY_SHIFT | KEY_FIND, 0, 0,      // KEYFUNC_FINDBACKWARD
-    KEY_RETURN | KEY_MOD2, 0, 0, 0,                                // KEYFUNC_PROPERTIES
-    0, 0, 0, 0                                                     // KEYFUNC_FRONT
+    0, 0, 0, 0,                                                    // KeyFuncType::DONTKNOW
+    KEY_N | KEY_MOD1, 0, 0, 0,                                     // KeyFuncType::NEW
+    KEY_O | KEY_MOD1, KEY_OPEN, 0, 0,                              // KeyFuncType::OPEN
+    KEY_S | KEY_MOD1, 0, 0, 0,                                     // KeyFuncType::SAVE
+    KEY_S | KEY_SHIFT | KEY_MOD1, 0, 0, 0,                         // KeyFuncType::SAVEAS
+    KEY_P | KEY_MOD1, 0, 0, 0,                                     // KeyFuncType::PRINT
+    KEY_W | KEY_MOD1, KEY_F4 | KEY_MOD1, 0, 0,                     // KeyFuncType::CLOSE
+    KEY_Q | KEY_MOD1, KEY_F4 | KEY_MOD2, 0, 0,                     // KeyFuncType::QUIT
+    KEY_X | KEY_MOD1, KEY_DELETE | KEY_SHIFT, KEY_CUT, 0,          // KeyFuncType::CUT
+    KEY_C | KEY_MOD1, KEY_INSERT | KEY_MOD1, KEY_COPY, 0,          // KeyFuncType::COPY
+    KEY_V | KEY_MOD1, KEY_INSERT | KEY_SHIFT, KEY_PASTE, 0,        // KeyFuncType::PASTE
+    KEY_Z | KEY_MOD1, KEY_BACKSPACE | KEY_MOD2, KEY_UNDO, 0,       // KeyFuncType::UNDO
+    KEY_Y | KEY_MOD1, KEY_UNDO | KEY_SHIFT, 0, 0,                  // KeyFuncType::REDO
+    KEY_DELETE, 0, 0, 0,                                           // KeyFuncType::DELETE
+    KEY_REPEAT, 0, 0, 0,                                           // KeyFuncType::REPEAT
+    KEY_F | KEY_MOD1, KEY_FIND, 0, 0,                              // KeyFuncType::FIND
+    KEY_F | KEY_SHIFT | KEY_MOD1, KEY_SHIFT | KEY_FIND, 0, 0,      // KeyFuncType::FINDBACKWARD
+    KEY_RETURN | KEY_MOD2, 0, 0, 0,                                // KeyFuncType::PROPERTIES
+    0, 0, 0, 0                                                     // KeyFuncType::FRONT
 };
 
 bool ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 )
@@ -77,7 +77,7 @@ vcl::KeyCode::KeyCode( KeyFuncType eFunction )
 
 vcl::KeyCode::KeyCode( const ResId& rResId )
     : nCode(0)
-    , eFunc(KEYFUNC_DONTKNOW)
+    , eFunc(KeyFuncType::DONTKNOW)
 {
     rResId.SetRT( RSC_KEYCODE );
 
@@ -91,7 +91,7 @@ vcl::KeyCode::KeyCode( const ResId& rResId )
         sal_uLong nKeyFunc  = pResMgr->ReadLong();
 
         eFunc = (KeyFuncType)nKeyFunc;
-        if ( eFunc != KEYFUNC_DONTKNOW )
+        if ( eFunc != KeyFuncType::DONTKNOW )
         {
             sal_uInt16 nDummy;
             ImplGetKeyCode( eFunc, nCode, nDummy, nDummy, nDummy );
@@ -110,13 +110,13 @@ OUString vcl::KeyCode::GetName( vcl::Window* pWindow ) const
 
 KeyFuncType vcl::KeyCode::GetFunction() const
 {
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
         return eFunc;
 
     sal_uInt16 nCompCode = GetModifier() | GetCode();
     if ( nCompCode )
     {
-        for ( sal_uInt16 i = (sal_uInt16)KEYFUNC_NEW; i < (sal_uInt16)KEYFUNC_FRONT; i++ )
+        for ( sal_uInt16 i = (sal_uInt16)KeyFuncType::NEW; i < (sal_uInt16)KeyFuncType::FRONT; i++ )
         {
             sal_uInt16 nKeyCode1;
             sal_uInt16 nKeyCode2;
@@ -128,7 +128,7 @@ KeyFuncType vcl::KeyCode::GetFunction() const
         }
     }
 
-    return KEYFUNC_DONTKNOW;
+    return KeyFuncType::DONTKNOW;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

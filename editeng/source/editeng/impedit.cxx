@@ -990,11 +990,11 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWi
     bool bDone = false;
 
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
     {
         switch ( eFunc )
         {
-            case KEYFUNC_CUT:
+            case KeyFuncType::CUT:
             {
                 if ( !bReadOnly )
                 {
@@ -1004,14 +1004,14 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWi
                 }
             }
             break;
-            case KEYFUNC_COPY:
+            case KeyFuncType::COPY:
             {
                 Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
                 CutCopy( aClipBoard, false );
                 bDone = true;
             }
             break;
-            case KEYFUNC_PASTE:
+            case KeyFuncType::PASTE:
             {
                 if ( !bReadOnly && IsPasteEnabled() )
                 {

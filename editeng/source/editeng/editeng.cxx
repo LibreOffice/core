@@ -974,18 +974,18 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
 
     sal_uInt16 nCode = rKeyEvent.GetKeyCode().GetCode();
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
     {
         switch ( eFunc )
         {
-            case KEYFUNC_UNDO:
+            case KeyFuncType::UNDO:
             {
                 if ( !bReadOnly )
                     pEditView->Undo();
                 return true;
             }
             // break;
-            case KEYFUNC_REDO:
+            case KeyFuncType::REDO:
             {
                 if ( !bReadOnly )
                     pEditView->Redo();
@@ -994,7 +994,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             // break;
 
             default:    // is then possible edited below.
-                        eFunc = KEYFUNC_DONTKNOW;
+                        eFunc = KeyFuncType::DONTKNOW;
         }
     }
 
@@ -1007,7 +1007,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
         pImpEditEngine->CallNotify( aNotify );
     }
 
-    if ( eFunc == KEYFUNC_DONTKNOW )
+    if ( eFunc == KeyFuncType::DONTKNOW )
     {
         switch ( nCode )
         {
@@ -2651,20 +2651,20 @@ bool EditEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
     bool bDoesChange = false;
 
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
     {
         switch ( eFunc )
         {
-            case KEYFUNC_UNDO:
-            case KEYFUNC_REDO:
-            case KEYFUNC_CUT:
-            case KEYFUNC_PASTE: bDoesChange = true;
+            case KeyFuncType::UNDO:
+            case KeyFuncType::REDO:
+            case KeyFuncType::CUT:
+            case KeyFuncType::PASTE: bDoesChange = true;
             break;
             default:    // is then possibly edited below.
-                        eFunc = KEYFUNC_DONTKNOW;
+                        eFunc = KeyFuncType::DONTKNOW;
         }
     }
-    if ( eFunc == KEYFUNC_DONTKNOW )
+    if ( eFunc == KeyFuncType::DONTKNOW )
     {
         switch ( rKeyEvent.GetKeyCode().GetCode() )
         {

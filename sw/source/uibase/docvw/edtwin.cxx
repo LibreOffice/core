@@ -2262,7 +2262,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     // Because Sfx accelerators are only called when they were
                     // enabled at the last status update, copy has to called
                     // 'forcefully' by us if necessary.
-                    if( rKeyCode.GetFunction() == KEYFUNC_COPY )
+                    if( rKeyCode.GetFunction() == KeyFuncType::COPY )
                         GetView().GetViewFrame()->GetBindings().Execute(SID_COPY);
 
                     if( !bIsDocReadOnly && bNormalChar )

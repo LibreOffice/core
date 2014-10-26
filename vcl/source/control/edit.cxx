@@ -1412,11 +1412,11 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
     mbInternModified = false;
 
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
     {
         switch ( eFunc )
         {
-            case KEYFUNC_CUT:
+            case KeyFuncType::CUT:
             {
                 if ( !mbReadOnly && maSelection.Len() && !(GetStyle() & WB_PASSWORD) )
                 {
@@ -1427,7 +1427,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
-            case KEYFUNC_COPY:
+            case KeyFuncType::COPY:
             {
                 if ( !(GetStyle() & WB_PASSWORD) )
                 {
@@ -1437,7 +1437,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
-            case KEYFUNC_PASTE:
+            case KeyFuncType::PASTE:
             {
                 if ( !mbReadOnly )
                 {
@@ -1447,7 +1447,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
-            case KEYFUNC_UNDO:
+            case KeyFuncType::UNDO:
             {
                 if ( !mbReadOnly )
                 {
@@ -1458,7 +1458,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             break;
 
             default:
-                eFunc = KEYFUNC_DONTKNOW;
+                eFunc = KeyFuncType::DONTKNOW;
         }
     }
 
@@ -1486,7 +1486,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         }
     }
 
-    if ( eFunc == KEYFUNC_DONTKNOW && ! bDone )
+    if ( eFunc == KeyFuncType::DONTKNOW && ! bDone )
     {
         switch ( nCode )
         {
@@ -2827,11 +2827,11 @@ PopupMenu* Edit::CreatePopupMenu()
         pPopup->SetMenuFlags ( MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
     if ( rStyleSettings.GetAcceleratorsInContextMenus() )
     {
-        pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, vcl::KeyCode( KEYFUNC_UNDO ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_CUT, vcl::KeyCode( KEYFUNC_CUT ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_COPY, vcl::KeyCode( KEYFUNC_COPY ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, vcl::KeyCode( KEYFUNC_PASTE ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, vcl::KeyCode( KEYFUNC_DELETE ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, vcl::KeyCode( KeyFuncType::UNDO ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_CUT, vcl::KeyCode( KeyFuncType::CUT ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_COPY, vcl::KeyCode( KeyFuncType::COPY ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, vcl::KeyCode( KeyFuncType::PASTE ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, vcl::KeyCode( KeyFuncType::DELETE ) );
         pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, vcl::KeyCode( KEY_A, false, true, false, false ) );
         pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, vcl::KeyCode( KEY_S, true, true, false, false ) );
     }

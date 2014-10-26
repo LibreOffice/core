@@ -322,20 +322,20 @@ bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
     bool bDoesChange = false;
 
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
     {
         switch ( eFunc )
         {
-            case KEYFUNC_UNDO:
-            case KEYFUNC_REDO:
-            case KEYFUNC_CUT:
-            case KEYFUNC_PASTE: bDoesChange = true;
+            case KeyFuncType::UNDO:
+            case KeyFuncType::REDO:
+            case KeyFuncType::CUT:
+            case KeyFuncType::PASTE: bDoesChange = true;
             break;
             default:    // might get handled below
-                        eFunc = KEYFUNC_DONTKNOW;
+                        eFunc = KeyFuncType::DONTKNOW;
         }
     }
-    if ( eFunc == KEYFUNC_DONTKNOW )
+    if ( eFunc == KeyFuncType::DONTKNOW )
     {
         switch ( rKeyEvent.GetKeyCode().GetCode() )
         {
