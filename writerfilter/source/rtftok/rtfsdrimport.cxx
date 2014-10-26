@@ -42,6 +42,8 @@
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 
+#include <boost/logic/tribool.hpp>
+
 using namespace com::sun::star;
 
 namespace writerfilter
@@ -147,7 +149,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;
     sal_Int16 nVertOrient = 0;
-    boost::optional<bool> obFitShapeToText;
+    boost::logic::tribool obFitShapeToText(boost::logic::indeterminate);
     bool bFilled = true;
 
     if (aKey == "posh")
@@ -191,7 +193,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
         }
     }
     else if (aKey == "fFitShapeToText")
-        obFitShapeToText.reset(aValue.toInt32() == 1);
+        obFitShapeToText = aValue.toInt32() == 1;
     else if (aKey == "fFilled")
         bFilled = aValue.toInt32() == 1;
     else if (aKey == "rotation")
@@ -208,10 +210,10 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
         xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
     if (nVertOrient != 0 && xPropertySet.is())
         xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
-    if (obFitShapeToText && xPropertySet.is())
+    if (!boost::logic::indeterminate(obFitShapeToText) && xPropertySet.is())
     {
-        xPropertySet->setPropertyValue("SizeType", uno::makeAny(*obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
-        xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(*obFitShapeToText));
+        xPropertySet->setPropertyValue("SizeType", uno::makeAny(obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
+        xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(static_cast<bool>(obFitShapeToText)));
     }
     if (!bFilled && xPropertySet.is())
     {
