@@ -202,8 +202,6 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
     Prt().Width( Frm().Width() - nLeft - nRight );
 }
 
-const sal_uInt16 nMinVertCellHeight = 1135;
-
 /// checks the layout direction and invalidates the lower frames rekursivly, if necessary.
 void SwFrm::CheckDirChange()
 {
@@ -225,13 +223,17 @@ void SwFrm::CheckDirChange()
                 if ( IsVertical() != GetUpper()->IsVertical() &&
                      ((SwCellFrm*)this)->GetTabBox()->getRowSpan() == 1 )
                 {
+                    enum {
+                        MIN_VERT_CELL_HEIGHT = 1135
+                    };
+
                     SwTableLine* pLine = (SwTableLine*)((SwCellFrm*)this)->GetTabBox()->GetUpper();
                     SwFrmFmt* pFrmFmt = pLine->GetFrmFmt();
                     SwFmtFrmSize aNew( pFrmFmt->GetFrmSize() );
                     if ( ATT_FIX_SIZE != aNew.GetHeightSizeType() )
                         aNew.SetHeightSizeType( ATT_MIN_SIZE );
-                    if ( aNew.GetHeight() < nMinVertCellHeight )
-                        aNew.SetHeight( nMinVertCellHeight );
+                    if ( aNew.GetHeight() < MIN_VERT_CELL_HEIGHT )
+                        aNew.SetHeight( MIN_VERT_CELL_HEIGHT );
                     SwDoc* pDoc = pFrmFmt->GetDoc();
                     pDoc->SetAttr( aNew, *pLine->ClaimFrmFmt() );
                 }
