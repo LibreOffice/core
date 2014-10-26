@@ -93,11 +93,11 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
             return true;
     }
 
-    if ( eFunc != KEYFUNC_DONTKNOW )
+    if ( eFunc != KeyFuncType::DONTKNOW )
     {
         switch ( eFunc )
         {
-            case KEYFUNC_CUT:
+            case KeyFuncType::CUT:
             {
                 if ( !bReadOnly )
                 {
@@ -106,13 +106,13 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                 }
             }
             break;
-            case KEYFUNC_COPY:
+            case KeyFuncType::COPY:
             {
                 Copy();
                 bKeyProcessed = true;
             }
             break;
-            case KEYFUNC_PASTE:
+            case KeyFuncType::PASTE:
             {
                 if ( !bReadOnly )
                 {
@@ -121,7 +121,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                 }
             }
             break;
-            case KEYFUNC_DELETE:
+            case KeyFuncType::DELETE:
             {
                 if( !bReadOnly && !bSelection && ( pOwner->ImplGetOutlinerMode() != OUTLINERMODE_TEXTOBJECT ) )
                 {
@@ -138,10 +138,10 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
             }
             break;
             default:    // is then possibly edited below.
-                        eFunc = KEYFUNC_DONTKNOW;
+                        eFunc = KeyFuncType::DONTKNOW;
         }
     }
-    if ( eFunc == KEYFUNC_DONTKNOW )
+    if ( eFunc == KeyFuncType::DONTKNOW )
     {
         switch ( nCode )
         {

@@ -1271,7 +1271,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  Spezialfall: Copy/Cut bei Mehrfachselektion -> Fehlermeldung
         //  (Slot ist disabled, SfxViewShell::KeyInput wuerde also kommentarlos verschluckt)
         KeyFuncType eFunc = aCode.GetFunction();
-        if ( eFunc == KEYFUNC_CUT )
+        if ( eFunc == KeyFuncType::CUT )
         {
             ScRange aDummy;
             ScMarkType eMarkType = GetViewData().GetSimpleArea( aDummy );
@@ -1288,7 +1288,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  container app and are executed during Window::KeyInput.
         //  -> don't pass keys to input handler that would be used there
         //  but should call slots instead.
-        bool bParent = ( GetViewFrame()->GetFrame().IsInPlace() && eFunc != KEYFUNC_DONTKNOW );
+        bool bParent = ( GetViewFrame()->GetFrame().IsInPlace() && eFunc != KeyFuncType::DONTKNOW );
 
         if( !bUsed && !bDraw && nCode != KEY_RETURN && !bParent )
             bUsed = pScMod->InputKeyEvent( rKEvt, true );       // Eingabe

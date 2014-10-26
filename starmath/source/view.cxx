@@ -435,11 +435,11 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 
     SmCursor& rCursor = pViewShell->GetDoc()->GetCursor();
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-    if (eFunc == KEYFUNC_COPY)
+    if (eFunc == KeyFuncType::COPY)
         rCursor.Copy();
-    else if (eFunc == KEYFUNC_CUT)
+    else if (eFunc == KeyFuncType::CUT)
         rCursor.Cut();
-    else if (eFunc == KEYFUNC_PASTE)
+    else if (eFunc == KeyFuncType::PASTE)
         rCursor.Paste();
     else {
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();

@@ -311,26 +311,26 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
     sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
     bool bHandled = false;
 
-    if(eFunc != KEYFUNC_DONTKNOW)
+    if(eFunc != KeyFuncType::DONTKNOW)
     {
         switch(eFunc)
         {
-            case KEYFUNC_CUT:
+            case KeyFuncType::CUT:
                 bHandled = ( m_aCutHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
                     m_aCutHandler.Call( NULL );
                 break;
-            case KEYFUNC_COPY:
+            case KeyFuncType::COPY:
                 bHandled = ( m_aCopyHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
                     m_aCopyHandler.Call( NULL );
                 break;
-            case KEYFUNC_PASTE:
+            case KeyFuncType::PASTE:
                 bHandled = ( m_aPasteHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
                     m_aPasteHandler.Call( NULL );
                 break;
-            case KEYFUNC_DELETE:
+            case KeyFuncType::DELETE:
                 bHandled = ( m_aDeleteHandler.IsSet() && !m_aSelectedEntries.empty() );
                 if ( bHandled )
                     m_aDeleteHandler.Call( NULL );

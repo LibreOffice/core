@@ -182,13 +182,13 @@ bool SdrView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     if (!bRet && !IsExtendedKeyInputDispatcherEnabled()) {
         bRet = true;
         switch (rKEvt.GetKeyCode().GetFullFunction()) {
-            case KEYFUNC_CUT   : Cut(); break;
-            case KEYFUNC_COPY  : Yank(); break;
-            case KEYFUNC_PASTE : Paste(pWin); break;
-            case KEYFUNC_DELETE: DeleteMarked(); break;
-            case KEYFUNC_UNDO: pMod->Undo(); break;
-            case KEYFUNC_REDO: pMod->Redo(); break;
-            case KEYFUNC_REPEAT: pMod->Repeat(*this); break;
+            case KeyFuncType::CUT   : Cut(); break;
+            case KeyFuncType::COPY  : Yank(); break;
+            case KeyFuncType::PASTE : Paste(pWin); break;
+            case KeyFuncType::DELETE: DeleteMarked(); break;
+            case KeyFuncType::UNDO: pMod->Undo(); break;
+            case KeyFuncType::REDO: pMod->Redo(); break;
+            case KeyFuncType::REPEAT: pMod->Repeat(*this); break;
             default: {
                 switch (rKEvt.GetKeyCode().GetFullCode()) {
                     case KEY_ESCAPE: {
@@ -1390,7 +1390,7 @@ void SdrView::DeleteMarked()
 {
     if (IsTextEdit())
     {
-        SdrObjEditView::KeyInput(KeyEvent(0,vcl::KeyCode(KEYFUNC_DELETE)),pTextEditWin);
+        SdrObjEditView::KeyInput(KeyEvent(0,vcl::KeyCode(KeyFuncType::DELETE)),pTextEditWin);
     }
     else
     {

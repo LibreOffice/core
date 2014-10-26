@@ -126,7 +126,7 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 
     // Is this a cut, copy, paste event?
     KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
-    if( (aKeyFunc==KEYFUNC_CUT)||(aKeyFunc==KEYFUNC_COPY)||(aKeyFunc==KEYFUNC_PASTE) )
+    if( (aKeyFunc==KeyFuncType::CUT)||(aKeyFunc==KeyFuncType::COPY)||(aKeyFunc==KeyFuncType::PASTE) )
         m_bAccelAction = true;
 
     MultiLineEditSyntaxHighlight::KeyInput( rKEvt );

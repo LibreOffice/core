@@ -693,25 +693,25 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
 
         aBaseLst.push_back( pKeyFunc = new RscEnum( pHS->getID( "EnumKeyFunc" ), RSC_NOTYPE ) );
 
-        SETCONST( pKeyFunc, "KEYFUNC_DONTKNOW",         KEYFUNC_DONTKNOW        );
-        SETCONST( pKeyFunc, "KEYFUNC_NEW",                      KEYFUNC_NEW                     );
-        SETCONST( pKeyFunc, "KEYFUNC_OPEN",                     KEYFUNC_OPEN            );
-        SETCONST( pKeyFunc, "KEYFUNC_SAVE",                     KEYFUNC_SAVE            );
-        SETCONST( pKeyFunc, "KEYFUNC_SAVEAS",           KEYFUNC_SAVEAS          );
-        SETCONST( pKeyFunc, "KEYFUNC_PRINT",            KEYFUNC_PRINT           );
-        SETCONST( pKeyFunc, "KEYFUNC_CLOSE",            KEYFUNC_CLOSE           );
-        SETCONST( pKeyFunc, "KEYFUNC_QUIT",                     KEYFUNC_QUIT            );
-        SETCONST( pKeyFunc, "KEYFUNC_CUT",                      KEYFUNC_CUT                     );
-        SETCONST( pKeyFunc, "KEYFUNC_COPY",                     KEYFUNC_COPY            );
-        SETCONST( pKeyFunc, "KEYFUNC_PASTE",            KEYFUNC_PASTE           );
-        SETCONST( pKeyFunc, "KEYFUNC_UNDO",                     KEYFUNC_UNDO            );
-        SETCONST( pKeyFunc, "KEYFUNC_REDO",                     KEYFUNC_REDO            );
-        SETCONST( pKeyFunc, "KEYFUNC_DELETE",           KEYFUNC_DELETE          );
-        SETCONST( pKeyFunc, "KEYFUNC_REPEAT",           KEYFUNC_REPEAT          );
-        SETCONST( pKeyFunc, "KEYFUNC_FIND",                     KEYFUNC_FIND            );
-        SETCONST( pKeyFunc, "KEYFUNC_PROPERTIES",       KEYFUNC_PROPERTIES      );
-        SETCONST( pKeyFunc, "KEYFUNC_FRONT",            KEYFUNC_FRONT           );
-        SETCONST( pKeyFunc, "KEYFUNC_FINDBACKWARD",     KEYFUNC_FINDBACKWARD );
+        SETCONST( pKeyFunc, "KEYFUNC_DONTKNOW",         KeyFuncType::DONTKNOW        );
+        SETCONST( pKeyFunc, "KEYFUNC_NEW",              KeyFuncType::NEW             );
+        SETCONST( pKeyFunc, "KEYFUNC_OPEN",             KeyFuncType::OPEN            );
+        SETCONST( pKeyFunc, "KEYFUNC_SAVE",             KeyFuncType::SAVE            );
+        SETCONST( pKeyFunc, "KEYFUNC_SAVEAS",           KeyFuncType::SAVEAS          );
+        SETCONST( pKeyFunc, "KEYFUNC_PRINT",            KeyFuncType::PRINT           );
+        SETCONST( pKeyFunc, "KEYFUNC_CLOSE",            KeyFuncType::CLOSE           );
+        SETCONST( pKeyFunc, "KEYFUNC_QUIT",             KeyFuncType::QUIT            );
+        SETCONST( pKeyFunc, "KEYFUNC_CUT",              KeyFuncType::CUT             );
+        SETCONST( pKeyFunc, "KEYFUNC_COPY",             KeyFuncType::COPY            );
+        SETCONST( pKeyFunc, "KEYFUNC_PASTE",            KeyFuncType::PASTE           );
+        SETCONST( pKeyFunc, "KEYFUNC_UNDO",             KeyFuncType::UNDO            );
+        SETCONST( pKeyFunc, "KEYFUNC_REDO",             KeyFuncType::REDO            );
+        SETCONST( pKeyFunc, "KEYFUNC_DELETE",           KeyFuncType::DELETE          );
+        SETCONST( pKeyFunc, "KEYFUNC_REPEAT",           KeyFuncType::REPEAT          );
+        SETCONST( pKeyFunc, "KEYFUNC_FIND",             KeyFuncType::FIND            );
+        SETCONST( pKeyFunc, "KEYFUNC_PROPERTIES",       KeyFuncType::PROPERTIES      );
+        SETCONST( pKeyFunc, "KEYFUNC_FRONT",            KeyFuncType::FRONT           );
+        SETCONST( pKeyFunc, "KEYFUNC_FINDBACKWARD",     KeyFuncType::FINDBACKWARD );
         // Variable einfuegen
         nVarId = aNmTb.Put( "Function", VARNAME );
         pClassKeyCode->SetVariable( nVarId, pKeyFunc, NULL );

@@ -2335,7 +2335,7 @@ bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
             break;
 
         default:
-            if( KEYFUNC_COPY == rKeyCode.GetFunction() )
+            if( KeyFuncType::COPY == rKeyCode.GetFunction() )
             {
                 m_pPage->CopyToClipboard();
                 nHandled = true;
