@@ -266,7 +266,6 @@ void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
 
     // Turn OFF flag for 'Writing Headers \ Footers'
     m_pAttrOutput->SetWritingHeaderFooter( false );
-    m_pAttrOutput->switchHeaderFooter(false, -1);
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
 #endif
@@ -720,6 +719,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     m_pAttrOutput->switchHeaderFooter(true, m_nHeadersFootersInSection++);
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
+    m_pAttrOutput->switchHeaderFooter(false, -1);
     m_pAttrOutput->EndParaSdtBlock();
 
     //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
