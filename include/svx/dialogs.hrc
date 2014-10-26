@@ -210,7 +210,6 @@
 #define RID_POPUPPANEL_AREAPAGE_TRGR        (RID_SVX_START + 320)
 
 #define RID_SIDEBAR_LINE_PANEL              (RID_SVX_START + 321)
-#define RID_POPUPPANEL_LINEPAGE_COLOR       (RID_SVX_START + 322)
 #define RID_POPUPPANEL_LINEPAGE_WIDTH       (RID_SVX_START + 324)
 
 #define RID_SIDEBAR_POSSIZE_PANEL           (RID_SVX_START + 325)
@@ -1029,7 +1028,6 @@
 #define IMG_PARA_CUSTOM_GRAY             (RID_SVX_SIDEBAR_BEGIN + 11)
 #define IL_NUM_BULLET                    (RID_SVX_SIDEBAR_BEGIN + 12)
 #define IL_NUM_BULLET_RTL                (RID_SVX_SIDEBAR_BEGIN + 13)
-#define IMG_LINE_COLOR                   (RID_SVX_SIDEBAR_BEGIN + 20)
 #define IMG_NONE_ICON                    (RID_SVX_SIDEBAR_BEGIN + 21)
 #define IMG_WIDTH1_ICON                  (RID_SVX_SIDEBAR_BEGIN + 22)
 #define IMG_WIDTH2_ICON                  (RID_SVX_SIDEBAR_BEGIN + 23)

@@ -27,13 +27,11 @@
 #include <vcl/field.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
-#include <svx/sidebar/ColorPopup.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
 #include "LineWidthPopup.hxx"
 
 
-namespace svx { class ToolboxButtonColorUpdater; }
 class XLineStyleItem;
 class XLineDashItem;
 class XLineStartItem;
@@ -51,7 +49,6 @@ namespace {
 namespace svx { namespace sidebar {
 
 class PopupContainer;
-class ColorPopup;
 class LineWidthControl;
 
 
@@ -86,8 +83,6 @@ private:
     //ui controls
     FixedText*                        mpFTWidth;
     ToolBox*                          mpTBWidth;
-    FixedText*                        mpFTColor;
-    ToolBox*                          mpTBColor;
     FixedText*                        mpFTStyle;
     ListBox*                          mpLBStyle;
     FixedText*                        mpFTTrancparency;
@@ -104,7 +99,6 @@ private:
     ::sfx2::sidebar::ControllerItem                         maStyleControl;
     ::sfx2::sidebar::ControllerItem                         maDashControl;
     ::sfx2::sidebar::ControllerItem                         maWidthControl;
-    ::sfx2::sidebar::ControllerItem                         maColorControl;
     ::sfx2::sidebar::ControllerItem                         maStartControl;
     ::sfx2::sidebar::ControllerItem                         maEndControl;
     ::sfx2::sidebar::ControllerItem                         maLineEndListControl;
@@ -113,8 +107,6 @@ private:
     ::sfx2::sidebar::ControllerItem                         maEdgeStyle;
     ::sfx2::sidebar::ControllerItem                         maCapStyle;
 
-    Color                                                   maColor;
-    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
     ::boost::scoped_ptr< XLineStyleItem >                   mpStyleItem;
     ::boost::scoped_ptr< XLineDashItem >                    mpDashItem;
     sal_uInt16                                              mnTrans;
@@ -126,11 +118,9 @@ private:
     ::boost::scoped_ptr< XLineEndItem >                     mpEndItem;
 
     //popup windows
-    ColorPopup maColorPopup;
     LineWidthPopup maLineWidthPopup;
 
-    // images from ressource
-    Image                                                   maIMGColor;
+    // images from resource
     Image                                                   maIMGNone;
 
     // multi-images
@@ -140,7 +130,6 @@ private:
     SfxBindings*                                            mpBindings;
 
     /// bitfield
-    bool                mbColorAvailable : 1;
     bool                mbWidthValuable : 1;
 
     void SetupIcons(void);
@@ -151,7 +140,6 @@ private:
     void SelectLineStyle();
 
     DECL_LINK(ImplWidthPopupModeEndHdl, FloatingWindow* );
-    DECL_LINK(ToolboxColorSelectHdl, ToolBox*);
     DECL_LINK(ChangeLineStyleHdl, void*);
     DECL_LINK(ToolboxWidthSelectHdl, ToolBox*);
     DECL_LINK(ChangeTransparentHdl , void *);
@@ -167,11 +155,6 @@ private:
         SfxBindings* pBindings);
     virtual ~LinePropertyPanel(void);
 
-    void SetColor(
-        const OUString& rsColorName,
-        const Color aColor);
-
-    PopupControl* CreateColorPopupControl (PopupContainer* pParent);
     PopupControl* CreateLineWidthPopupControl (PopupContainer* pParent);
 };
 

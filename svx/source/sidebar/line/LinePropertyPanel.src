@@ -21,10 +21,6 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-Image IMG_LINE_COLOR
-{
-    ImageBitmap = Bitmap{File = "symphony/Line_color.png";};
-};
 Image IMG_NONE_ICON
 {
     ImageBitmap = Bitmap{File = "symphony/blank.png";};
@@ -63,23 +59,6 @@ Image IMG_WIDTH8_ICON
     ImageBitmap = Bitmap{File = "symphony/width8.png";};
 };
 
-Control RID_POPUPPANEL_LINEPAGE_COLOR
-{
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT(  POPUP_COLOR_PICKER_WIDTH , POPUP_COLOR_PICKER_HEIGHT  );
-
-    Control VS_COLOR
-    {
-        HelpId = HID_PPROPERTYPANEL_LINE_VS_COLOR ;
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( OFFSET_X , OFFSET_Y );
-        Size = MAP_APPFONT (  POPUP_COLOR_PICKER_WIDTH - OFFSET_X * 2, POPUP_COLOR_PICKER_HEIGHT - OFFSET_Y * 2);
-        TabStop = TRUE ;
-        Text = "Color";
-    };
-};
 Control RID_POPUPPANEL_LINEPAGE_WIDTH
 {
     OutputSize = TRUE;

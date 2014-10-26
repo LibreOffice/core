@@ -26,7 +26,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/xlnclit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xdash.hxx>
 #include <svx/drawitem.hxx>
@@ -41,7 +40,6 @@
 #include <vcl/svapp.hxx>
 #include <svx/xlnwtit.hxx>
 #include <vcl/lstbox.hxx>
-#include <svx/tbxcolorupdate.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnstit.hxx>
@@ -50,17 +48,14 @@
 #include <svx/xlinjoit.hxx>
 #include "svx/sidebar/PopupContainer.hxx"
 #include "svx/sidebar/PopupControl.hxx"
-#include <svx/sidebar/ColorControl.hxx>
 #include "LineWidthControl.hxx"
 #include <boost/bind.hpp>
-#include <boost/scoped_ptr.hpp>
 
 using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
-const char UNO_SELECTCOLOR[] = ".uno:SelectColor";
 
 namespace {
     void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList)
@@ -161,7 +156,6 @@ LinePropertyPanel::LinePropertyPanel(
     maStyleControl(SID_ATTR_LINE_STYLE, *pBindings, *this),
     maDashControl (SID_ATTR_LINE_DASH, *pBindings, *this),
     maWidthControl(SID_ATTR_LINE_WIDTH, *pBindings, *this),
-    maColorControl(SID_ATTR_LINE_COLOR, *pBindings, *this),
     maStartControl(SID_ATTR_LINE_START, *pBindings, *this),
     maEndControl(SID_ATTR_LINE_END, *pBindings, *this),
     maLineEndListControl(SID_LINEEND_LIST, *pBindings, *this),
@@ -169,7 +163,6 @@ LinePropertyPanel::LinePropertyPanel(
     maTransControl(SID_ATTR_LINE_TRANSPARENCE, *pBindings, *this),
     maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
     maCapStyle(SID_ATTR_LINE_CAP, *pBindings, *this),
-    maColor(COL_BLACK),
     mpStyleItem(),
     mpDashItem(),
     mnTrans(0),
@@ -177,20 +170,15 @@ LinePropertyPanel::LinePropertyPanel(
     mnWidthCoreValue(0),
     mpStartItem(0),
     mpEndItem(0),
-    maColorPopup(this, ::boost::bind(&LinePropertyPanel::CreateColorPopupControl, this, _1)),
     maLineWidthPopup(this, ::boost::bind(&LinePropertyPanel::CreateLineWidthPopupControl, this, _1)),
-    maIMGColor(SVX_RES(IMG_LINE_COLOR)),
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
     mxFrame(rxFrame),
     mpBindings(pBindings),
-    mbColorAvailable(true),
     mbWidthValuable(true)
 {
     get(mpFTWidth, "widthlabel");
     get(mpTBWidth, "width");
-    get(mpFTColor, "colorlabel");
-    get(mpTBColor, "color");
     get(mpFTStyle, "stylelabel");
     get(mpLBStyle, "linestyle");
     get(mpFTTrancparency, "translabel");
@@ -203,8 +191,6 @@ LinePropertyPanel::LinePropertyPanel(
     get(mpFTCapStyle, "caplabel");
     get(mpLBCapStyle, "linecapstyle");
 
-    const sal_uInt16 nIdColor = mpTBColor->GetItemId(UNO_SELECTCOLOR);
-    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(0 /* not defined, default is transparent */, nIdColor, mpTBColor)),
     Initialize();
 }
 
@@ -229,17 +215,10 @@ void LinePropertyPanel::Initialize()
     mpIMGWidthIcon[7] = Image(SVX_RES(IMG_WIDTH8_ICON));
 
     meMapUnit = maWidthControl.GetCoreMetric();
-    const sal_uInt16 nIdColor = mpTBColor->GetItemId(UNO_SELECTCOLOR);
-
-    mpTBColor->SetItemImage(nIdColor, maIMGColor);
-    mpTBColor->SetItemBits( nIdColor, mpTBColor->GetItemBits( nIdColor ) | ToolBoxItemBits::DROPDOWNONLY );
-    Link aLink = LINK(this, LinePropertyPanel, ToolboxColorSelectHdl);
-    mpTBColor->SetDropdownClickHdl ( aLink );
-    mpTBColor->SetSelectHdl ( aLink );
 
     FillLineStyleList();
     SelectLineStyle();
-    aLink = LINK( this, LinePropertyPanel, ChangeLineStyleHdl );
+    Link aLink = LINK( this, LinePropertyPanel, ChangeLineStyleHdl );
     mpLBStyle->SetSelectHdl( aLink );
     mpLBStyle->SetAccessibleName(OUString( "Style"));
     mpLBStyle->AdaptDropDownLineCountToMaximum();
@@ -268,7 +247,6 @@ void LinePropertyPanel::Initialize()
     mpMFTransparent->SetAccessibleName(OUString( "Transparency"));  //wj acc
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
-    mpTBColor->SetAccessibleRelationLabeledBy(mpFTColor);
     mpLBStyle->SetAccessibleRelationLabeledBy(mpFTStyle);
     mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTrancparency);
     mpLBStart->SetAccessibleRelationLabeledBy(mpFTArrow);
@@ -340,40 +318,8 @@ void LinePropertyPanel::NotifyItemUpdate(
     (void)bIsEnabled;
     const bool bDisabled(SfxItemState::DISABLED == eState);
 
-    // By default, fill and show the color of existing line-color
-    mpColorUpdater->Update( maColor );
-
     switch(nSID)
     {
-        case SID_ATTR_LINE_COLOR:
-        {
-            if(bDisabled)
-            {
-                mpFTColor->Disable();
-                mpTBColor->Disable();
-            }
-            else
-            {
-                mpFTColor->Enable();
-                mpTBColor->Enable();
-            }
-
-            if(eState >= SfxItemState::DEFAULT)
-            {
-                const XLineColorItem* pItem = dynamic_cast< const XLineColorItem* >(pState);
-                if(pItem)
-                {
-                    maColor = pItem->GetColorValue();
-                    mbColorAvailable = true;
-                    mpColorUpdater->Update( maColor );
-                    break;
-                }
-            }
-
-            mbColorAvailable = false;
-            mpColorUpdater->Update(COL_WHITE);
-            break;
-        }
         case SID_ATTR_LINE_DASH:
         case SID_ATTR_LINE_STYLE:
         {
@@ -677,21 +623,6 @@ void LinePropertyPanel::NotifyItemUpdate(
 
 
 
-IMPL_LINK(LinePropertyPanel, ToolboxColorSelectHdl,ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if(aCommand == UNO_SELECTCOLOR)
-    {
-        maColorPopup.Show(*pToolBox);
-        maColorPopup.SetCurrentColor(maColor, mbColorAvailable);
-    }
-    return 0;
-}
-
-
-
-
 IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
 {
     const sal_Int32 nPos(mpLBStyle->GetSelectEntryPos());
@@ -868,30 +799,6 @@ IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
 
 
 
-namespace
-{
-    Color GetTransparentColor (void)
-    {
-        return COL_TRANSPARENT;
-    }
-} // end of anonymous namespace
-
-PopupControl* LinePropertyPanel::CreateColorPopupControl (PopupContainer* pParent)
-{
-    return new ColorControl(
-        pParent,
-        mpBindings,
-        SVX_RES(RID_POPUPPANEL_LINEPAGE_COLOR),
-        SVX_RES(VS_COLOR),
-        ::boost::bind(GetTransparentColor),
-        ::boost::bind(&LinePropertyPanel::SetColor, this, _1, _2),
-        pParent,
-        0);
-}
-
-
-
-
 PopupControl* LinePropertyPanel::CreateLineWidthPopupControl (PopupContainer* pParent)
 {
     return new LineWidthControl(pParent, *this);
@@ -948,17 +855,6 @@ void LinePropertyPanel::SetWidthIcon()
     else if(nVal > 52)
         mpTBWidth->SetItemImage( nIdWidth, mpIMGWidthIcon[7]);
 
-}
-
-
-
-void LinePropertyPanel::SetColor (
-    const OUString& rsColorName,
-    const Color aColor)
-{
-    XLineColorItem aColorItem(rsColorName, aColor);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_COLOR, SfxCallMode::RECORD, &aColorItem, 0L);
-    maColor = aColor;
 }
 
 
