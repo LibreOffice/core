@@ -1920,6 +1920,17 @@ DECLARE_RTFIMPORT_TEST(testFdo82859, "fdo82859.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(getShape(1), "BackColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo82076, "fdo82076.rtf")
+{
+    // Footnote position was wrong: should be at the end of the B1 cell.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    // This resulted in container::NoSuchElementException: the footnote was at the start of the A1 cell.
+    CPPUNIT_ASSERT_EQUAL(OUString("Footnote"), getProperty<OUString>(getRun(getParagraphOfText(1, xCell->getText()), 2), "TextPortionType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
