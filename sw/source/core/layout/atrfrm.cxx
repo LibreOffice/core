@@ -877,7 +877,8 @@ sal_uInt16 SwFmtCol::GetGutterWidth( bool bMin ) const
                 }
             }
             else
-            {   bSet = true;
+            {
+                bSet = true;
                 nRet = nTmp;
             }
         }
@@ -893,7 +894,8 @@ void SwFmtCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
     {
         sal_uInt16 nHalf = nNew / 2;
         for ( size_t i = 0; i < m_aColumns.size(); ++i )
-        {   SwColumn *pCol = &m_aColumns[i];
+        {
+            SwColumn *pCol = &m_aColumns[i];
             pCol->SetLeft ( nHalf );
             pCol->SetRight( nHalf );
             if ( i == 0 )
@@ -911,7 +913,8 @@ void SwFmtCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16 nA
     if ( !m_aColumns.empty() )
         m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
-    {   SwColumn *pCol = new SwColumn;
+    {
+        SwColumn *pCol = new SwColumn;
         m_aColumns.push_back( pCol );
     }
     m_bOrtho = true;

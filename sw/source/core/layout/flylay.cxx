@@ -423,7 +423,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 ChgLowersProp( aTmpOldSize );
                 SwFrm *pLow = Lower();
                 do
-                {   pLow->Calc();
+                {
+                    pLow->Calc();
                     // also calculate the (Column)BodyFrm
                     ((SwLayoutFrm*)pLow)->Lower()->Calc();
                     pLow = pLow->GetNext();
@@ -720,7 +721,8 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     {
         pSortedObjs->Remove( *pToMove );
         if ( !pSortedObjs->size() )
-        {   DELETEZ( pSortedObjs );
+        {
+            DELETEZ( pSortedObjs );
         }
     }
 
@@ -876,7 +878,8 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
         if ( pFly )
             AppendFly( pFly );
         else
-        {   OSL_ENSURE( pFmt, ":-( No Format given for Fly." );
+        {
+            OSL_ENSURE( pFmt, ":-( No Format given for Fly." );
             pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this, this );
             AppendFly( pFly );
             ::RegistFlys( this, pFly );
