@@ -55,7 +55,8 @@ enum RTFBufferTypes
     BUFFER_ENDRUN,
     BUFFER_PAR,
     BUFFER_STARTSHAPE,
-    BUFFER_ENDSHAPE
+    BUFFER_ENDSHAPE,
+    BUFFER_RESOLVESUBSTREAM
 };
 
 /// Form field types
