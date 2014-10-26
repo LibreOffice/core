@@ -1452,6 +1452,14 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
                     RTFSdrImport::SHAPE);
         else if (boost::get<0>(aTuple) == BUFFER_ENDSHAPE)
             m_pSdrImport->close();
+        else if (boost::get<0>(aTuple) == BUFFER_RESOLVESUBSTREAM)
+        {
+            RTFSprms& rAttributes = boost::get<1>(aTuple)->getAttributes();
+            sal_Size nPos = rAttributes.find(0)->getInt();
+            Id nId = rAttributes.find(1)->getInt();
+            OUString aCustomMark = rAttributes.find(2)->getString();
+            resolveSubstream(nPos, nId, aCustomMark);
+        }
         else
             assert(false);
     }
@@ -1668,7 +1676,16 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_FOOTNOTE;
             if (bCustomMark)
                 Mapper().startCharacterGroup();
-            resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
+                if (!m_aStates.top().pCurrentBuffer)
+                    resolveSubstream(m_nGroupStartPos - 1, nId, aCustomMark);
+                else
+                {
+                    RTFSprms aAttributes;
+                    aAttributes.set(Id(0), RTFValue::Pointer_t(new RTFValue(m_nGroupStartPos - 1)));
+                    aAttributes.set(Id(1), RTFValue::Pointer_t(new RTFValue(nId)));
+                    aAttributes.set(Id(2), RTFValue::Pointer_t(new RTFValue(aCustomMark)));
+                    m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_RESOLVESUBSTREAM, RTFValue::Pointer_t(new RTFValue(aAttributes))));
+                }
             if (bCustomMark)
             {
                 m_aStates.top().aCharacterAttributes.clear();
