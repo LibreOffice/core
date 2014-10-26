@@ -262,7 +262,7 @@ static double aEdgeScale = 0.5;
 // The help lines will be collected and merged in pSubsLines. These will
 // be compared with pLines before the work in order to avoid help lines
 // to hide borders.
-// bTablines is sal_True during the Paint of a table.
+// bTablines is true during the Paint of a table.
 static BorderLines *g_pBorderLines = 0;
 static SwLineRects *pLines = 0;
 static SwSubsRects *pSubsLines = 0;
@@ -3212,7 +3212,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
         SwLayAction aAction( (SwRootFrm*)this, pSh->Imp() );
         aAction.SetPaint( false );
         aAction.SetComplete( false );
-        aAction.SetReschedule( pProgress ? sal_True : sal_False );
+        aAction.SetReschedule( pProgress != nullptr );
         aAction.Action();
         ((SwRootFrm*)this)->ResetTurboFlag();
         if ( !pSh->ActionPend() )
@@ -4161,7 +4161,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         tools::PolyPolygon aPoly;
         if ( bContour )
         {
-            // OD 16.04.2003 #i13147# - add 2nd parameter with value <sal_True>
+            // OD 16.04.2003 #i13147# - add 2nd parameter with value <true>
             // to indicate that method is called for paint in order to avoid
             // load of the intrinsic graphic.
             bContour = GetContour( aPoly, true );
@@ -6503,7 +6503,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
         }
         // If still no background found for the fly frame, initialize the
         // background brush <pItem> with global retouche color and set <bBack>
-        // to sal_True, that fly frame will paint its background using this color.
+        // to true, that fly frame will paint its background using this color.
         if ( !bBack )
         {
             // OD 10.01.2003 #i6467# - on print output, pdf output and
@@ -7434,7 +7434,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
  * Old description in German:
  * Returns the Backgroundbrush for the area of the Frm.
  * The Brush is defined by the Frm or by an upper, the first Brush is
- * used. If no Brush is defined for a Frm, sal_False is returned.
+ * used. If no Brush is defined for a Frm, false is returned.
  *
  * @param rpBrush
  * output parameter - constant reference pointer the found background brush

@@ -319,7 +319,7 @@ SwFrmFmt *SwPageDesc::GetRightFmt(bool const bFirst)
 
 bool SwPageDesc::IsFirstShared() const
 {
-    return eUse & nsUseOnPage::PD_FIRSTSHARE ? sal_True : sal_False;
+    return (eUse & nsUseOnPage::PD_FIRSTSHARE) != 0;
 }
 
 void SwPageDesc::ChgFirstShare( bool bNew )

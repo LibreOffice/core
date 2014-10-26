@@ -424,7 +424,7 @@ bool SwRootFrm::FillSelection( SwSelectionList& aSelList, const SwRect& rRect) c
 
 /** Primary passes the call to the first page.
  *
- *  @return sal_False, if the passed Point gets changed
+ *  @return false, if the passed Point gets changed
  */
 bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS, bool bTestBackground ) const
@@ -1592,7 +1592,7 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, bool bNext ) const
 
 /** Returns the absolute document position of the desired page.
  *
- * Formatting is done only as far as needed and only if bFormat=sal_True.
+ * Formatting is done only as far as needed and only if bFormat=true.
  * Pos is set to the one of the last page, if the page number was chosen to big.
  *
  * @return Null, if the operation failed.
@@ -1634,7 +1634,7 @@ SwPageFrm* SwRootFrm::GetPageByPageNum( sal_uInt16 _nPageNum ) const
 }
 
 /**
- * @return sal_True, when the given physical pagenumber does't exist or this page is an empty page.
+ * @return true, when the given physical pagenumber does't exist or this page is an empty page.
  */
 bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
 {
@@ -1644,7 +1644,7 @@ bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
     const SwPageFrm *pPage = (const SwPageFrm*)Lower();
     while( pPage && nPageNum < pPage->GetPhyPageNum() )
         pPage = (const SwPageFrm*)pPage->GetNext();
-    return pPage ? pPage->IsEmptyPage() : sal_True;
+    return !pPage || pPage->IsEmptyPage();
 }
 
 /** Is the Frm or rather the Section in which it lies protected?
@@ -1762,7 +1762,7 @@ bool SwFrm::WannaRightPage() const
     OSL_ENSURE( pDesc, "No pagedescriptor" );
     bool bOdd;
     if( oPgNum )
-        bOdd = (oPgNum.get() % 2) ? sal_True : sal_False;
+        bOdd = (oPgNum.get() % 2) != 0;
     else
     {
         bOdd = pPage->OnRightPage();

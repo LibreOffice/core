@@ -4261,7 +4261,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
         return 0L;
     }
 
-    // bInfo may be set to sal_True by SwRowFrm::Format; we need to hangle this
+    // bInfo may be set to true by SwRowFrm::Format; we need to hangle this
     // here accordingly
     const bool bShrinkAnyway = bInfo;
 

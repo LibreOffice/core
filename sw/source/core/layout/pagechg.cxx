@@ -1176,7 +1176,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
         if ( rDesc.GetNumOffset() )
         {
             ::boost::optional<sal_uInt16> oNumOffset = rDesc.GetNumOffset();
-            bWishedOdd = ((oNumOffset ? oNumOffset.get() : 0) % 2) ? true : false;
+            bWishedOdd = oNumOffset && (oNumOffset.get() % 2) != 0;
             // use the opportunity to set the flag at root
             pRoot->SetVirtPageNum( true );
         }
@@ -1421,7 +1421,7 @@ void SwRootFrm::AssertFlyPages()
     if ( nMaxPg > pPage->GetPhyPageNum() )
     {
         // Continue pages based on the rules of the PageDesc after the last page.
-        bool bOdd = (pPage->GetPhyPageNum() % 2) ? sal_True : sal_False;
+        bool bOdd = (pPage->GetPhyPageNum() % 2) != 0;
         SwPageDesc *pDesc = pPage->GetPageDesc();
         SwFrm *pSibling = pPage->GetNext();
         for ( sal_uInt16 i = pPage->GetPhyPageNum(); i < nMaxPg; ++i  )
@@ -1432,7 +1432,7 @@ void SwRootFrm::AssertFlyPages()
                 pPage = new SwPageFrm( pDoc->GetEmptyPageFmt(), this, pDesc );
                 pPage->Paste( this, pSibling );
                 pPage->PreparePage( false );
-                bOdd = bOdd ? sal_False : sal_True;
+                bOdd = !bOdd;
                 ++i;
             }
             pPage = new
@@ -1440,7 +1440,7 @@ void SwRootFrm::AssertFlyPages()
                                        pDesc->GetLeftFmt()), this, pDesc );
             pPage->Paste( this, pSibling );
             pPage->PreparePage( false );
-            bOdd = bOdd ? sal_False : sal_True;
+            bOdd = !bOdd;
             pDesc = pDesc->GetFollow();
         }
         // If the endnote pages are now corrupt, destroy them.
