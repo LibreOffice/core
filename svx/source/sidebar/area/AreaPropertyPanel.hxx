@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANEL_HXX
 
-#include <svx/sidebar/ColorPopup.hxx>
 #include "AreaTransparencyGradientPopup.hxx"
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -37,13 +36,11 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <svl/intitem.hxx>
-#include <svx/tbxcolorupdate.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <boost/scoped_ptr.hpp>
 
 
 class XFillFloatTransparenceItem;
-namespace svx { class ToolboxButtonColorUpdater; }
 
 
 namespace svx { namespace sidebar {
@@ -85,7 +82,6 @@ public:
 
 private:
     sal_uInt16                                          meLastXFS;
-    Color                                               maLastColor;
 
     sal_Int32                                           mnLastPosGradient;
     sal_Int32                                           mnLastPosHatch;
@@ -109,8 +105,6 @@ private:
     MetricField*                                        mpMTRTransparent;
     ToolBox*                                            mpBTNGradient;
 
-    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
-
     ::boost::scoped_ptr< XFillStyleItem >               mpStyleItem;
     ::boost::scoped_ptr< XFillColorItem >               mpColorItem;
     ::boost::scoped_ptr< XFillGradientItem >            mpFillGradientItem;
@@ -122,7 +116,6 @@ private:
     ::sfx2::sidebar::ControllerItem                     maGradientControl;
     ::sfx2::sidebar::ControllerItem                     maHatchControl;
     ::sfx2::sidebar::ControllerItem                     maBitmapControl;
-    ::sfx2::sidebar::ControllerItem                     maColorTableControl;
     ::sfx2::sidebar::ControllerItem                     maGradientListControl;
     ::sfx2::sidebar::ControllerItem                     maHatchListControl;
     ::sfx2::sidebar::ControllerItem                     maBitmapListControl;
@@ -135,21 +128,14 @@ private:
     Image                                               maImgRadial;
     Image                                               maImgSquare;
     Image                                               maImgLinear;
-    Image                                               maImgColor;
-
-    OUString                                            msHelpFillAttr;
 
     AreaTransparencyGradientPopup maTrGrPopup;
-    ColorPopup maColorPopup;
 
     ::boost::scoped_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     ::boost::scoped_ptr< SfxUInt16Item >                mpTransparanceItem;
 
     css::uno::Reference<css::frame::XFrame>                 mxFrame;
     SfxBindings*                                        mpBindings;
-
-    /// bitfield
-    bool                                                mbColorAvail : 1;
 
     DECL_LINK(SelectFillTypeHdl, ListBox* );
     DECL_LINK(SelectFillAttrHdl, ListBox* );
@@ -159,10 +145,6 @@ private:
     // for transparency gradient
     PopupControl* CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK( ClickTrGrHdl_Impl, ToolBox* );
-
-    // for color picker
-    PopupControl* CreateColorPopupControl (PopupContainer* pParent);
-    DECL_LINK(ToolBoxColorDropHdl, ToolBox *); //for new color picker
 
     // constructor/destuctor
     AreaPropertyPanel(
@@ -175,11 +157,6 @@ private:
     void Initialize();
     void Update();
     void ImpUpdateTransparencies();
-
-    const Color& GetLastColor (void) const { return maLastColor;}
-    void SetColor (
-        const OUString& rsColorName,
-        const Color aColor);
 };
 
 

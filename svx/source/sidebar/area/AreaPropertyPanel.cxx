@@ -38,7 +38,6 @@
 #include <svx/svxitems.hrc>
 #include <vcl/toolbox.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <svx/sidebar/ColorControl.hxx>
 
 #include <boost/bind.hpp>
 
@@ -46,7 +45,6 @@ using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
-const char UNO_SIDEBARCOLOR[]    = ".uno:sidebarcolor";
 const char UNO_SIDEBARGRADIENT[] = ".uno:sidebargradient";
 
 namespace svx { namespace sidebar {
@@ -65,7 +63,6 @@ AreaPropertyPanel::AreaPropertyPanel(
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
-      maLastColor(Color(COL_DEFAULT_SHAPE_FILLING)),
       mnLastPosGradient(0),
       mnLastPosHatch(0),
       mnLastPosBitmap(0),
@@ -86,7 +83,6 @@ AreaPropertyPanel::AreaPropertyPanel(
       maGradientControl(SID_ATTR_FILL_GRADIENT, *pBindings, *this),
       maHatchControl(SID_ATTR_FILL_HATCH, *pBindings, *this),
       maBitmapControl(SID_ATTR_FILL_BITMAP, *pBindings, *this),
-      maColorTableControl(SID_COLOR_TABLE, *pBindings, *this),
       maGradientListControl(SID_GRADIENT_LIST, *pBindings, *this),
       maHatchListControl(SID_HATCH_LIST, *pBindings, *this),
       maBitmapListControl(SID_BITMAP_LIST, *pBindings, *this),
@@ -98,14 +94,11 @@ AreaPropertyPanel::AreaPropertyPanel(
       maImgRadial(SVX_RES(IMG_RADIAL)),
       maImgSquare(SVX_RES(IMG_SQUARE)),
       maImgLinear(SVX_RES(IMG_LINEAR)),
-      maImgColor(SVX_RES(IMG_AREA_COLOR)),
       maTrGrPopup(this, ::boost::bind(&AreaPropertyPanel::CreateTransparencyGradientControl, this, _1)),
-      maColorPopup(this, ::boost::bind(&AreaPropertyPanel::CreateColorPopupControl, this, _1)),
       mpFloatTransparenceItem(),
       mpTransparanceItem(),
       mxFrame(rxFrame),
-      mpBindings(pBindings),
-      mbColorAvail(true)
+      mpBindings(pBindings)
 {
     get(mpColorTextFT,    "filllabel");
     get(mpLbFillType,     "fillstyle");
@@ -115,9 +108,6 @@ AreaPropertyPanel::AreaPropertyPanel(
     get(mpLBTransType,    "transtype");
     get(mpMTRTransparent, "settransparency");
     get(mpBTNGradient,    "selectgradient");
-
-    const sal_uInt16 nIdColor = mpToolBoxColor->GetItemId(UNO_SIDEBARCOLOR);
-    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_FILL_COLOR, nIdColor, mpToolBoxColor)),
 
     Initialize();
 }
@@ -164,18 +154,6 @@ void AreaPropertyPanel::Initialize()
     aLink = LINK( this, AreaPropertyPanel, SelectFillAttrHdl );
     mpLbFillAttr->SetSelectHdl( aLink );
 
-    //add  for new color picker
-    mpLbFillAttr->Hide();
-    const sal_uInt16 nIdColor = mpToolBoxColor->GetItemId(UNO_SIDEBARCOLOR);
-    mpToolBoxColor->SetItemImage(nIdColor, maImgColor);
-    mpToolBoxColor->SetItemBits( nIdColor, mpToolBoxColor->GetItemBits( nIdColor ) | ToolBoxItemBits::DROPDOWNONLY );
-    mpToolBoxColor->SetItemText(nIdColor, msHelpFillAttr);
-
-    aLink = LINK(this, AreaPropertyPanel, ToolBoxColorDropHdl);
-    mpToolBoxColor->SetDropdownClickHdl ( aLink );
-    mpToolBoxColor->SetSelectHdl ( aLink );
-
-    //add end
     mpLBTransType->SetSelectHdl(LINK(this, AreaPropertyPanel, ChangeTrgrTypeHdl_Impl));
     mpLBTransType->SetAccessibleName(OUString( "Transparency"));    //wj acc
 
@@ -237,7 +215,7 @@ IMPL_LINK( AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox )
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
                 const OUString aTmpStr;
-                const Color aColor = maLastColor;
+                const Color aColor = mpColorItem->GetColorValue();
                 const XFillColorItem aXFillColorItem( aTmpStr, aColor );
 
                 // #i122676# change FillStyle and Color in one call
@@ -504,60 +482,9 @@ IMPL_LINK( AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox )
 }
 
 
-IMPL_LINK(AreaPropertyPanel, ToolBoxColorDropHdl, ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if(UNO_SIDEBARCOLOR == aCommand)
-    {
-        maColorPopup.Show(*pToolBox);
-
-        if (mpColorItem)
-        {
-            maColorPopup.SetCurrentColor(mpColorItem->GetColorValue(), mbColorAvail);
-        }
-        else
-        {
-            maColorPopup.SetCurrentColor(COL_WHITE, false);
-        }
-    }
-
-    return 0;
-}
-
-
-
-void AreaPropertyPanel::SetColor (
-    const OUString& rsColorName,
-    const Color aColor)
-{
-    const XFillColorItem aXFillColorItem(rsColorName, aColor);
-    mpBindings->GetDispatcher()->Execute(SID_ATTR_FILL_COLOR, SfxCallMode::RECORD, &aXFillColorItem, 0L);
-    maLastColor = aColor;
-}
-
-
-
-
 PopupControl* AreaPropertyPanel::CreateTransparencyGradientControl (PopupContainer* pParent)
 {
     return new AreaTransparencyGradientControl(pParent, *this);
-}
-
-
-
-
-PopupControl* AreaPropertyPanel::CreateColorPopupControl (PopupContainer* pParent)
-{
-    return new ColorControl(
-        pParent,
-        mpBindings,
-        SVX_RES(RID_POPUPPANEL_AERAPAGE_COLOR),
-        SVX_RES(VS_COLOR),
-        ::boost::bind(&AreaPropertyPanel::GetLastColor, this),
-        ::boost::bind(&AreaPropertyPanel::SetColor, this, _1,_2),
-        pParent,
-        0);
 }
 
 
@@ -857,24 +784,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
 
-                if(SfxItemState::DEFAULT == eState)
-                {
-                    mpToolBoxColor->Enable();
-                    mbColorAvail = true;
-                    // maLastColor = mpColorItem->GetColorValue();
-                    Update();
-                }
-                else if(SfxItemState::DISABLED == eState)
-                {
-                    mpToolBoxColor->Disable();
-                    mbColorAvail = false;
-                    mpColorUpdater->Update(COL_WHITE);
-                }
-                else
-                {
-                    mbColorAvail = false;
-                    mpColorUpdater->Update(COL_WHITE);
-                }
+                Update();
             }
             break;
         }
@@ -961,31 +871,6 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 else
                 {
                     mpLbFillAttr->SetNoSelection();
-                }
-            }
-            break;
-        }
-        case SID_COLOR_TABLE:
-        {
-            if(SfxItemState::DEFAULT == eState)
-            {
-                if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
-                {
-                    if(mpColorItem)
-                    {
-                        const Color aColor = mpColorItem->GetColorValue();
-                        const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxColorListItem aItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
-
-                        mpLbFillAttr->Clear();
-                        mpLbFillAttr->Enable();
-                        mpLbFillAttr->Fill(aItem.GetColorList());
-                        mpLbFillAttr->SelectEntry(aColor);
-                    }
-                    else
-                    {
-                        mpLbFillAttr->SetNoSelection();
-                    }
                 }
             }
             break;
@@ -1094,11 +979,6 @@ void AreaPropertyPanel::Update()
                 {
                     mpLbFillAttr->Hide();
                     mpToolBoxColor->Show();
-                    mpColorUpdater->Update(mpColorItem->GetColorValue());
-                }
-                else
-                {
-                    mpColorUpdater->Update(COL_WHITE);
                 }
                 break;
             }

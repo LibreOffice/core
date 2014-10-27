@@ -45,10 +45,6 @@ Image IMG_LINEAR
 {
     ImageBitmap = Bitmap{File = "symphony/linear.png";};
 };
-Image IMG_AREA_COLOR
-{
-    ImageBitmap = Bitmap{File = "symphony/fill_color.png";};
-};
 Image IMG_ROT_LEFT
 {
     ImageBitmap = Bitmap{File = "symphony/rotate_left.png";};
@@ -234,23 +230,6 @@ Control RID_POPUPPANEL_AREAPAGE_TRGR
     String STR_HELP_RIGHT
     {
         Text [ en-US ] = "Rotate clockwise by 45 degrees." ;
-    };
-};
-Control RID_POPUPPANEL_AERAPAGE_COLOR
-{
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT(  POPUP_COLOR_PICKER_WIDTH , POPUP_COLOR_PICKER_HEIGHT  );
-
-    Control VS_COLOR
-    {
-        HelpID = HID_PPROPERTYPANEL_AREA_COLOR_VS;
-        Hide = TRUE ;
-        Pos = MAP_APPFONT ( OFFSET_X , OFFSET_Y );
-        Size = MAP_APPFONT (  POPUP_COLOR_PICKER_WIDTH - OFFSET_X * 2, POPUP_COLOR_PICKER_HEIGHT - OFFSET_Y * 2);
-        TabStop = TRUE ;
-        Text = "Color";
     };
 };
 

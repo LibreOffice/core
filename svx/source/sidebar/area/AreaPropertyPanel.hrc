@@ -22,8 +22,6 @@
 #define TBI_LEFT                            1
 #define TBI_RIGHT                           1
 
-#define VS_COLOR            1
-
 #define FT_TRGR_CENTER_X    9
 #define MTR_TRGR_CENTER_X   10
 #define FT_TRGR_CENTER_Y    11
