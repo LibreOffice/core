@@ -157,7 +157,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
             OpenGLSalGraphicsImpl* pOpenGLImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
             if (pOpenGLImpl && m_pFrame && dynamic_cast<X11WindowProvider*>(m_pFrame))
             {
-                Window aWin = dynamic_cast<X12WindowProvider*>(m_pFrame)->GetX11Window();
+                Window aWin = dynamic_cast<X11WindowProvider*>(m_pFrame)->GetX11Window();
                     pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
                             aWin, m_nXScreen.getXScreen());
             }
