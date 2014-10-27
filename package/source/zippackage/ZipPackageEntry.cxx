@@ -42,7 +42,9 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 ZipPackageEntry::ZipPackageEntry()
 : mbIsFolder( false )
+, mbAllowRemoveOnInsert(false)
 , mpParent ( NULL )
+, m_nFormat(0)
 {
 }
 
