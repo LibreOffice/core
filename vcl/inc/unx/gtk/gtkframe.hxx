@@ -33,6 +33,7 @@
 
 #include <salframe.hxx>
 #include <vcl/sysdata.hxx>
+#include <unx/x11windowprovider.hxx>
 #include <unx/saltype.h>
 
 #include "tools/link.hxx"
@@ -58,7 +59,7 @@ typedef ::Window GdkNativeWindow;
     typedef void GDBusConnection;
 #endif
 
-class GtkSalFrame : public SalFrame
+class GtkSalFrame : public SalFrame, public X11WindowProvider
 {
     static const int nMaxGraphics = 2;
 
@@ -445,6 +446,8 @@ public:
     static GtkSalFrame             *getFromWindow( GtkWindow *pWindow );
 
     virtual void                    damaged (const basegfx::B2IBox& rDamageRect);
+
+    virtual Window GetX11Window() SAL_OVERRIDE;
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()
