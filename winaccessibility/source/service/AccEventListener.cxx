@@ -40,7 +40,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
-using namespace rtl;
 using namespace cppu;
 
 AccEventListener::AccEventListener(com::sun::star::accessibility::XAccessible* pAcc,
@@ -202,7 +201,7 @@ void AccEventListener::FireStatePropertyChange(short /*state*/, bool set )
  */
 short AccEventListener::GetRole()
 {
-    Reference<com::sun::star::accessibility::XAccessibleContext> const
+    css::uno::Reference<com::sun::star::accessibility::XAccessibleContext> const
         xContext(m_xAccessible->getAccessibleContext());
     if(xContext.is())
     {
@@ -235,7 +234,7 @@ void AccEventListener::RemoveMeFromBroadcaster()
         }
         try
         {
-            Reference<XAccessibleEventBroadcaster> const xBroadcaster(
+            css::uno::Reference<XAccessibleEventBroadcaster> const xBroadcaster(
                     m_xAccessible->getAccessibleContext(), UNO_QUERY);
             if (xBroadcaster.is())
             {
