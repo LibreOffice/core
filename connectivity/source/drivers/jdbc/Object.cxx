@@ -219,10 +219,13 @@ void java_lang_Object::ThrowSQLException( JNIEnv* _pEnvironment, const Reference
 
 void java_lang_Object::ThrowRuntimeException( JNIEnv* _pEnvironment, const Reference< XInterface>& _rxContext )
 {
-    SQLException aException;
-    if ( lcl_translateJNIExceptionToUNOException( _pEnvironment, _rxContext, aException ) )
+    try
     {
-        throw WrappedTargetRuntimeException(aException.Message, aException.Context, makeAny(aException));
+        ThrowSQLException(_pEnvironment, _rxContext);
+    }
+    catch (const SQLException& e)
+    {
+        throw WrappedTargetRuntimeException(e.Message, e.Context, makeAny(e));
     }
 }
 
