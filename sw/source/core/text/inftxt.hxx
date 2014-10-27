@@ -538,7 +538,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     sal_uInt16 nRealWidth;      // "real" line width
     sal_uInt16 nWidth;          // "virtual" line width
     sal_uInt16 nLineHeight;     // Final height after CalcLine
-    sal_uInt16 nLineNettoHeight; // line height without spacing
+    sal_uInt16 nLineNetHeight; // line height without spacing
     sal_uInt16 nForcedLeftMargin; // Shift of left margin due to frame
 
     sal_Int16  nMinLeading;     // minimum number of chars before hyphenation point
@@ -651,8 +651,8 @@ public:
     // these are used during fly calculation
     inline sal_uInt16 GetLineHeight() const { return nLineHeight; }
     inline void SetLineHeight( const sal_uInt16 nNew ) { nLineHeight = nNew; }
-    inline sal_uInt16 GetLineNettoHeight() const { return nLineNettoHeight; }
-    inline void SetLineNettoHeight( const sal_uInt16 nNew ) { nLineNettoHeight = nNew; }
+    inline sal_uInt16 GetLineNetHeight() const { return nLineNetHeight; }
+    inline void SetLineNetHeight( const sal_uInt16 nNew ) { nLineNetHeight = nNew; }
 
     inline const SwLinePortion *GetUnderflow() const { return pUnderflow; }
     inline SwLinePortion *GetUnderflow() { return pUnderflow; }

@@ -1337,7 +1337,7 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewI
     nForcedLeftMargin = 0;
     pRest = 0;
     nLineHeight = 0;
-    nLineNettoHeight = 0;
+    nLineNetHeight = 0;
     SetLineStart(0);
     Init();
 }
@@ -1443,7 +1443,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nRealWidth = sal_uInt16(nActWidth);
     nWidth = nRealWidth;
     nLineHeight = 0;
-    nLineNettoHeight = 0;
+    nLineNetHeight = 0;
     nForcedLeftMargin = 0;
 
     nMinLeading = 0;
@@ -1483,7 +1483,7 @@ bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
         if( pPor->IsFtnPortion() && nHeight > ((SwFtnPortion*)pPor)->Orig() )
         {
             SetLineHeight( nHeight );
-            SetLineNettoHeight( pCurr->Height() );
+            SetLineNetHeight( pCurr->Height() );
             return true;
         }
     }

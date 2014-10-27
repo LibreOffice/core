@@ -53,7 +53,7 @@ struct WW8SwFlyPara
     sal_Int16 nLeMgn, nRiMgn;       // Raender
     sal_Int16 nUpMgn, nLoMgn;       // Raender
     sal_Int16 nWidth, nHeight;      // Groesse
-    sal_Int16 nNettoWidth;
+    sal_Int16 nNetWidth;
 
     SwFrmSize eHeightFix;       // Hoehe Fix oder Min
     RndStdIds eAnchor;          // Bindung
@@ -66,7 +66,7 @@ struct WW8SwFlyPara
     sal_uInt8 nXBind, nYBind;        // relativ zu was gebunden
 
                 // 2.Teil: sich waehrend des Einlesens ergebende AEnderungen
-    long nNewNettoWidth;
+    long nNewNetWidth;
     SwPosition* pMainTextPos;   // um nach Apo in Haupttext zurueckzukehren
     sal_uInt16 nLineSpace;          // LineSpace in tw fuer Graf-Apos
     bool bAutoWidth;

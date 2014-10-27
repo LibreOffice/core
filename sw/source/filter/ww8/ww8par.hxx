@@ -886,7 +886,7 @@ private:
 
     SwSectionFmt *InsertSection(SwPaM& rMyPaM, wwSection &rSection);
     bool SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
-        sal_uInt32 nNettoWidth) const;
+        sal_uInt32 nNetWidth) const;
     bool SectionIsProtected(const wwSection &rSection) const;
     void SetLeftRight(wwSection &rSection);
     bool IsNewDoc() const;

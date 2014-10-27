@@ -1486,7 +1486,7 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
     bool bBuild = true;
     SetFlyInCntBase( false );
     GetInfo().SetLineHeight( 0 );
-    GetInfo().SetLineNettoHeight( 0 );
+    GetInfo().SetLineNetHeight( 0 );
 
     // Recycling muss bei geaenderter Zeilenhoehe unterdrueckt werden
     // und auch bei geaendertem Ascent (Absenken der Grundlinie).
@@ -2216,7 +2216,7 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                         // RealHeight including spacing
                         rInf.SetLineHeight( nHeight );
                         // Height without extra spacing
-                        rInf.SetLineNettoHeight( pCurr->Height() );
+                        rInf.SetLineNetHeight( pCurr->Height() );
                         return true;
                     }
                 }
@@ -2227,7 +2227,7 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                 if ( ! aInter.IsOver( aLine ) )
                 {
                     rInf.SetLineHeight( nHeight );
-                    rInf.SetLineNettoHeight( pCurr->Height() );
+                    rInf.SetLineNetHeight( pCurr->Height() );
                     return true;
                 }
                 else
@@ -2242,7 +2242,7 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                         ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
                     {
                         rInf.SetLineHeight( nHeight );
-                        rInf.SetLineNettoHeight( pCurr->Height() );
+                        rInf.SetLineNetHeight( pCurr->Height() );
                         return true;
                     }
                 }
@@ -2275,7 +2275,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         // Real line height has already been calculated, we only have to
         // search for intersections in the lower part of the strip
         nAscent = pCurr->GetAscent();
-        nHeight = rInf.GetLineNettoHeight();
+        nHeight = rInf.GetLineNetHeight();
         nTop += rInf.GetLineHeight() - nHeight;
     }
     else

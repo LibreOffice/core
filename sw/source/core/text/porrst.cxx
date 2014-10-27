@@ -397,7 +397,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
 
                             aFnt.ChgFnt( pSh, *pOut );
                             rRegDiff = aFnt.GetHeight( pSh, *pOut );
-                            sal_uInt16 nNettoHeight = rRegDiff;
+                            sal_uInt16 nNetHeight = rRegDiff;
 
                             switch( rSpace.GetLineSpaceRule() )
                             {
@@ -426,19 +426,19 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                     if( !nTmp )
                                         ++nTmp;
                                     rRegDiff = (sal_uInt16)nTmp;
-                                    nNettoHeight = rRegDiff;
+                                    nNetHeight = rRegDiff;
                                     break;
                                 }
                                 case SVX_INTER_LINE_SPACE_FIX:
                                 {
                                     rRegDiff = rRegDiff + rSpace.GetInterLineSpace();
-                                    nNettoHeight = rRegDiff;
+                                    nNetHeight = rRegDiff;
                                     break;
                                 }
                                 default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                             }
                             pDesc->SetRegHeight( rRegDiff );
-                            pDesc->SetRegAscent( rRegDiff - nNettoHeight +
+                            pDesc->SetRegAscent( rRegDiff - nNetHeight +
                                                  aFnt.GetAscent( pSh, *pOut ) );
                             pOut->SetMapMode( aOldMap );
                         }

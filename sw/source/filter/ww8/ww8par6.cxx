@@ -321,7 +321,7 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
 }
 
 bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
-    sal_uInt32 nNettoWidth) const
+    sal_uInt32 nNetWidth) const
 {
     //sprmSCcolumns - number of columns - 1
     const sal_Int16 nCols = rSection.NoCols();
@@ -346,7 +346,7 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
     }
 
     aCol.Init(nCols, writer_cast<sal_uInt16>(nColSpace),
-        writer_cast<sal_uInt16>(nNettoWidth));
+        writer_cast<sal_uInt16>(nNetWidth));
 
     // sprmSFEvenlySpaced
     if (!rSep.fEvenlySpaced)
@@ -364,7 +364,7 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
             pCol->SetLeft(writer_cast<sal_uInt16>(nLeft));
             pCol->SetRight(writer_cast<sal_uInt16>(nRight));
         }
-        aCol.SetWishWidth(writer_cast<sal_uInt16>(nNettoWidth));
+        aCol.SetWishWidth(writer_cast<sal_uInt16>(nNetWidth));
     }
     rFmt.SetFmtAttr(aCol);
     return true;
@@ -1751,7 +1751,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     (void) nPgLeft;
 
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // Initialisieren
-    nNewNettoWidth = MINFLY;                    // Minimum
+    nNewNetWidth = MINFLY;                    // Minimum
 
     eSurround = ( rWW.nSp37 > 1 ) ? SURROUND_IDEAL : SURROUND_NONE;
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
@@ -1780,15 +1780,15 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         nHeight = MINFLY;
     }
 
-    nWidth = nNettoWidth = rWW.nSp28;
+    nWidth = nNetWidth = rWW.nSp28;
     if( nWidth <= 10 )                              // Auto-Breite
     {
         bAutoWidth = true;
-        nWidth = nNettoWidth =
+        nWidth = nNetWidth =
             msword_cast<sal_Int16>((nPgWidth ? nPgWidth : 2268)); // 4 cm
     }
     if( nWidth <= MINFLY )
-        nWidth = nNettoWidth = MINFLY;              // Minimale Breite
+        nWidth = nNetWidth = MINFLY;              // Minimale Breite
 
     eVAlign = text::VertOrientation::NONE;                            // Defaults
     eHAlign = text::HoriOrientation::NONE;
@@ -1998,8 +1998,8 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
 // ohne Wissen ueber den Inhalt eingesetzt wird.
 void WW8SwFlyPara::BoxUpWidth( long nInWidth )
 {
-    if( bAutoWidth && nInWidth > nNewNettoWidth )
-        nNewNettoWidth = nInWidth;
+    if( bAutoWidth && nInWidth > nNewNetWidth )
+        nNewNetWidth = nInWidth;
 };
 
 // Die Klasse WW8FlySet ist von SfxItemSet abgeleitet und stellt auch
@@ -2505,10 +2505,10 @@ void SwWW8ImplReader::StopApo()
         // function, the extension of the SW-fly has to be set
         // manually as the SW fly has no auto function to adjust the
         // frame´s size.
-        if( pSFlyPara->nNewNettoWidth > MINFLY )    // BoxUpWidth ?
+        if( pSFlyPara->nNewNetWidth > MINFLY )    // BoxUpWidth ?
         {
-            long nW = pSFlyPara->nNewNettoWidth;
-            nW += pSFlyPara->nWidth - pSFlyPara->nNettoWidth;   // Rand dazu
+            long nW = pSFlyPara->nNewNetWidth;
+            nW += pSFlyPara->nWidth - pSFlyPara->nNetWidth;   // Rand dazu
             pSFlyPara->pFlyFmt->SetFmtAttr(
                 SwFmtFrmSize( pSFlyPara->eHeightFix, nW, pSFlyPara->nHeight ) );
         }
