@@ -655,60 +655,58 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
     // Valgrind typically emits many false errors when executing JIT'ed JVM
     // code, so force the JVM into interpreted mode:
-    bool forceInterpreted = FORCE_INTERPRETED > 0;
+    bool addForceInterpreted = FORCE_INTERPRETED > 0;
 
     // Some testing with Java 1.4 showed that JavaVMOption.optionString has to
     // be encoded with the system encoding (i.e., osl_getThreadTextEncoding):
     JavaVMInitArgs vm_args;
 
-    sal_Int32 nOptions = 1 + cOptions + (forceInterpreted ? 1 : 0);
-        //TODO: check for overflow
-    boost::scoped_array<JavaVMOption> sarOptions(new JavaVMOption[nOptions]);
-    JavaVMOption * options = sarOptions.get();
+    struct Option {
+        Option(OString const & theOptionString, void * theExtraInfo):
+            optionString(theOptionString), extraInfo(theExtraInfo)
+        {}
+
+        OString optionString;
+        void * extraInfo;
+    };
+    std::vector<Option> options;
 
     // We set an abort handler which is called when the VM calls _exit during
     // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
     // all some directories of the Java installation. This is necessary for
     // all versions below 1.5.1
-    int n = 0;
-    options[n].optionString= (char *) "abort";
-    options[n].extraInfo= reinterpret_cast<void*>(abort_handler);
-    ++n;
-    OString sClassPathOption;
+    options.push_back(Option("abort", reinterpret_cast<void*>(abort_handler)));
     for (int i = 0; i < cOptions; i++)
     {
+        OString opt(arOptions[i].optionString);
 #ifdef UNX
-    // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
-    // in the class path in order to have applet support.
-        OString sClassPath = arOptions[i].optionString;
-        if (sClassPath.startsWith("-Djava.class.path="))
+        // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
+        // in the class path in order to have applet support:
+        if (opt.startsWith("-Djava.class.path="))
         {
             OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
             if (!sAddPath.isEmpty())
-                sClassPathOption = sClassPath + OString(SAL_PATHSEPARATOR)
-                    + sAddPath;
-            else
-                sClassPathOption = sClassPath;
-            options[n].optionString = (char *) sClassPathOption.getStr();
-            options[n].extraInfo = arOptions[i].extraInfo;
-        }
-        else
-        {
-#endif
-            options[n].optionString = arOptions[i].optionString;
-            options[n].extraInfo = arOptions[i].extraInfo;
-#ifdef UNX
+                opt += OString(SAL_PATHSEPARATOR) + sAddPath;
         }
 #endif
-#if OSL_DEBUG_LEVEL >= 2
-        JFW_TRACE2("VM option: " << options[n].optionString);
-#endif
-        ++n;
+        if (opt == "-Xint") {
+            addForceInterpreted = false;
+        }
+        options.push_back(Option(opt, arOptions[i].extraInfo));
     }
-    if (forceInterpreted) {
-        options[n].optionString = const_cast<char *>("-Xint");
-        options[n].extraInfo = 0;
-        ++n;
+    if (addForceInterpreted) {
+        options.push_back(Option("-Xint", nullptr));
+    }
+
+    boost::scoped_array<JavaVMOption> sarOptions(new JavaVMOption[options.size()]);
+    for (std::vector<Option>::size_type i = 0; i != options.size(); ++i) {
+        SAL_INFO(
+            "jfw",
+            "VM option \"" << options[i].optionString << "\" "
+                << options[i].extraInfo);
+        sarOptions[i].optionString = const_cast<char *>(
+            options[i].optionString.getStr());
+        sarOptions[i].extraInfo = options[i].extraInfo;
     }
 
 #ifdef MACOSX
@@ -716,8 +714,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #else
     vm_args.version= JNI_VERSION_1_2;
 #endif
-    vm_args.options= options;
-    vm_args.nOptions= nOptions;
+    vm_args.options= sarOptions.get();
+    vm_args.nOptions= options.size(); //TODO overflow
     vm_args.ignoreUnrecognized= JNI_TRUE;
 
     /* We set a global flag which is used by the abort handler in order to
