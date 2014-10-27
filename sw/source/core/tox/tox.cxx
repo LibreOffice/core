@@ -141,7 +141,7 @@ void SwTOXMark::RegisterToTOXType(SwTOXType& rType)
 
 bool SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "Attributes are not the same" );
+    assert(SfxPoolItem::operator==(rAttr));
     return GetRegisteredIn() == ((SwTOXMark&)rAttr).GetRegisteredIn();
 }
 

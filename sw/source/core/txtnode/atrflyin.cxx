@@ -44,7 +44,7 @@ SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
 
 bool SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     return( pTxtAttr && ((SwFmtFlyCnt&)rAttr).pTxtAttr &&
             pTxtAttr->GetStart() == ((SwFmtFlyCnt&)rAttr).pTxtAttr->GetStart() &&
             pFmt == ((SwFmtFlyCnt&)rAttr).GetFrmFmt() );

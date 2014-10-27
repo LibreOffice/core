@@ -108,7 +108,7 @@ bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 
 bool SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "No mathing attributes" );
+    assert(SfxPoolItem::operator==(rAttr));
     return ( nLines == ((SwFmtDrop&)rAttr).GetLines() &&
              nChars == ((SwFmtDrop&)rAttr).GetChars() &&
              nDistance ==  ((SwFmtDrop&)rAttr).GetDistance() &&
@@ -217,7 +217,7 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 }
 bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "No matching attributes" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
 }

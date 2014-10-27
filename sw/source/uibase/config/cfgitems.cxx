@@ -78,7 +78,7 @@ SfxPoolItem* SwDocDisplayItem::Clone( SfxItemPool*  ) const
 
 bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SwDocDisplayItem& rItem = (SwDocDisplayItem&)rAttr;
 
@@ -169,7 +169,7 @@ SfxPoolItem* SwElemItem::Clone( SfxItemPool* ) const
 
 bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SwElemItem& rItem = (SwElemItem&)rAttr;
 
@@ -250,7 +250,7 @@ SfxPoolItem* SwAddPrinterItem::Clone( SfxItemPool* ) const
 
 bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SwAddPrinterItem& rItem = (SwAddPrinterItem&)rAttr;
 
@@ -327,7 +327,7 @@ SfxPoolItem* SwTestItem::Clone( SfxItemPool* ) const
 
 bool SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "different types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SwTestItem& rItem = (const SwTestItem&) rAttr;
 

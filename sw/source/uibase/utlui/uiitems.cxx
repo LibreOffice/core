@@ -214,7 +214,7 @@ SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
     const SwPtrItem& rItem = (SwPtrItem&)rAttr;
     return ( pMisc == rItem.pMisc );
 }
@@ -244,7 +244,7 @@ SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
 }
 
@@ -298,7 +298,7 @@ SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SwPaMItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
     const SwPaMItem& rItem = (SwPaMItem&)rAttr;
     return ( m_pPaM == rItem.m_pPaM );
 }

@@ -48,11 +48,11 @@ SwFmtWrapInfluenceOnObjPos& SwFmtWrapInfluenceOnObjPos::operator=( const SwFmtWr
     return *this;
 }
 
-bool SwFmtWrapInfluenceOnObjPos::operator==( const SfxPoolItem& _rAttr ) const
+bool SwFmtWrapInfluenceOnObjPos::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( _rAttr ), "no matching attributes" );
+    assert(SfxPoolItem::operator==(rAttr));
     return ( mnWrapInfluenceOnPosition ==
-                    static_cast<const SwFmtWrapInfluenceOnObjPos&>(_rAttr).
+                    static_cast<const SwFmtWrapInfluenceOnObjPos&>(rAttr).
                                                 GetWrapInfluenceOnObjPos() );
 }
 

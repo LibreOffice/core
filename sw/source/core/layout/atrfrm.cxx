@@ -198,7 +198,7 @@ SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
 
 bool SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     return( m_eFrmHeightType  == ((SwFmtFrmSize&)rAttr).m_eFrmHeightType &&
             m_eFrmWidthType  == ((SwFmtFrmSize&)rAttr).m_eFrmWidthType &&
             m_aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
@@ -464,7 +464,7 @@ SwFmtHeader::SwFmtHeader( bool bOn )
 
 bool SwFmtHeader::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     return ( GetRegisteredIn() == ((SwFmtHeader&)rAttr).GetRegisteredIn() &&
              bActive == ((SwFmtHeader&)rAttr).IsActive() );
 }
@@ -514,7 +514,7 @@ void SwFmtFooter::RegisterToFormat( SwFmt& rFmt )
 
 bool SwFmtFooter::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     return ( GetRegisteredIn() == ((SwFmtFooter&)rAttr).GetRegisteredIn() &&
              bActive == ((SwFmtFooter&)rAttr).IsActive() );
 }
@@ -551,7 +551,7 @@ void SwFmtCntnt::SetNewCntntIdx( const SwNodeIndex *pIdx )
 
 bool SwFmtCntnt::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     if( (bool)pStartNode != (bool)((SwFmtCntnt&)rAttr).pStartNode )
         return false;
     if( pStartNode )
@@ -602,7 +602,7 @@ bool SwFmtPageDesc::KnowsPageDesc() const
 
 bool SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     return  ( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
             ( oNumOffset == ((SwFmtPageDesc&)rAttr).oNumOffset ) &&
             ( GetPageDesc() == ((SwFmtPageDesc&)rAttr).GetPageDesc() );
@@ -829,7 +829,7 @@ SwFmtCol::SwFmtCol()
 
 bool SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "no equal attributes" );
+    assert(SfxPoolItem::operator==(rAttr));
     const SwFmtCol &rCmp = (const SwFmtCol&)rAttr;
     if( !(m_eLineStyle        == rCmp.m_eLineStyle  &&
           m_nLineWidth        == rCmp.m_nLineWidth  &&
@@ -1112,7 +1112,7 @@ SwFmtSurround::SwFmtSurround( const SwFmtSurround &rCpy ) :
 
 bool SwFmtSurround::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     return ( GetValue() == ((SwFmtSurround&)rAttr).GetValue() &&
              bAnchorOnly== ((SwFmtSurround&)rAttr).bAnchorOnly &&
              bContour== ((SwFmtSurround&)rAttr).bContour &&
@@ -1270,7 +1270,7 @@ SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, sal_Int16 eVert,
 
 bool SwFmtVertOrient::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "not the same attributes" );
+    assert(SfxPoolItem::operator==(rAttr));
     return ( m_nYPos     == ((SwFmtVertOrient&)rAttr).m_nYPos &&
              m_eOrient   == ((SwFmtVertOrient&)rAttr).m_eOrient &&
              m_eRelation == ((SwFmtVertOrient&)rAttr).m_eRelation );
@@ -1353,7 +1353,7 @@ SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
 
 bool SwFmtHoriOrient::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     return ( nXPos == ((SwFmtHoriOrient&)rAttr).nXPos &&
              eOrient == ((SwFmtHoriOrient&)rAttr).eOrient &&
              eRelation == ((SwFmtHoriOrient&)rAttr).eRelation &&
@@ -1492,7 +1492,7 @@ SwFmtAnchor& SwFmtAnchor::operator=(const SwFmtAnchor& rAnchor)
 
 bool SwFmtAnchor::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     SwFmtAnchor const& rFmtAnchor(static_cast<SwFmtAnchor const&>(rAttr));
     // OD 2004-05-05 #i28701# - Note: <mnOrder> hasn't to be considered.
     return ( nAnchorId == rFmtAnchor.GetAnchorId() &&
@@ -1661,7 +1661,7 @@ SwFmtURL::~SwFmtURL()
 
 bool SwFmtURL::operator==( const SfxPoolItem &rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "not the same attributes" );
+    assert(SfxPoolItem::operator==(rAttr));
     const SwFmtURL &rCmp = (SwFmtURL&)rAttr;
     bool bRet = bIsServerMap     == rCmp.IsServerMap() &&
                 sURL             == rCmp.GetURL() &&
@@ -1967,7 +1967,7 @@ SfxPoolItem* SwFmtEndAtTxtEnd::Clone( SfxItemPool* ) const
 
 bool SwFmtChain::operator==( const SfxPoolItem &rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return GetPrev() == ((SwFmtChain&)rAttr).GetPrev() &&
            GetNext() == ((SwFmtChain&)rAttr).GetNext();
@@ -2041,7 +2041,7 @@ SwFmtLineNumber::~SwFmtLineNumber()
 
 bool SwFmtLineNumber::operator==( const SfxPoolItem &rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return nStartValue  == ((SwFmtLineNumber&)rAttr).GetStartValue() &&
            bCountLines  == ((SwFmtLineNumber&)rAttr).IsCount();
@@ -2115,7 +2115,7 @@ SwTextGridItem::~SwTextGridItem()
 
 bool SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    assert(SfxPoolItem::operator==(rAttr));
     SwTextGridItem const& rOther(static_cast<SwTextGridItem const&>(rAttr));
     return m_eGridType == rOther.GetGridType()
         && m_nLines == rOther.GetLines()
