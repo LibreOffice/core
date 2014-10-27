@@ -4268,4 +4268,9 @@ void X11SalFrame::EndSetClipRegion()
 
 }
 
+Window X11SalFrame::GetX11Window()
+{
+    return mhWindow;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
