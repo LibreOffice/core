@@ -138,14 +138,14 @@ copy-stuff:
 	rm -Rf assets/share # pre-clean it
 	mkdir -p assets/share/config
 	cp -R $(INSTDIR)/share/registry assets/share
-	for F in main.xcd res/registry_en-US.xcd; do \
-		$(SRC_ROOT)/android/mobile-config.py assets/share/registry/$$F assets/share/registry/$$F.new && mv assets/share/registry/$$F.new assets/share/registry/$$F; \
-	done
 	if ! test z$(DISABLE_UI) = zTRUE; then \
 		echo "Copying UI files into the apk"; \
 		cp -R $(INSTDIR)/share/config/soffice.cfg assets/share/config; \
 	else \
 		echo "Skipping UI files"; \
+		for F in main.xcd res/registry_en-US.xcd; do \
+			$(SRC_ROOT)/android/mobile-config.py assets/share/registry/$$F assets/share/registry/$$F.new && mv assets/share/registry/$$F.new assets/share/registry/$$F; \
+		done; \
 	fi
 
 	mkdir -p assets/unpack/program
