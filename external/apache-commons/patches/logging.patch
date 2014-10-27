@@ -1,6 +1,6 @@
 --- misc/commons-logging-1.1.1-src/build.xml   2007-11-22 00:27:52.000000000 +0100
 +++ misc/build/commons-logging-1.1.1-src/build.xml     2008-06-24 14:23:56.316301736 +0200
-@@ -129,12 +129,6 @@
+@@ -129,14 +129,8 @@
    
  <!-- ========== Compiler Defaults ========================================= -->
  
@@ -11,8 +11,11 @@
 -  <property name="source.version" value="1.2"/>
 -
    <!-- Should Java compilations set the 'debug' compiler option? -->
-   <property name="compile.debug"           value="true"/>
+-  <property name="compile.debug"           value="true"/>
++  <property name="compile.debug"           value="false"/>
  
+   <!-- Should Java compilations set the 'deprecation' compiler option? -->
+   <property name="compile.deprecation"     value="false"/>
 @@ -283,6 +277,10 @@
                 classpathref="compile.classpath"
                 classname="org.apache.avalon.framework.logger.Logger"/>
@@ -24,7 +27,7 @@
      <available file="${log4j12.jar}" property="log4j12.present"/>
      <available file="${log4j13.jar}" property="log4j13.present"/>
      <available file="${build.home}/docs" property="maven.generated.docs.present"/>
-@@ -362,8 +360,8 @@
+@@ -358,8 +356,8 @@
             debug="${compile.debug}"
             deprecation="${compile.deprecation}"
             optimize="${compile.optimize}"
