@@ -803,6 +803,15 @@ void ScTable::SortReorderByRow(
     ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
     assert(pRows); // In sort-by-row mode we must have data rows already populated.
 
+    if (!pArray->IsUpdateRefs())
+    {
+        // When the update ref mode is disabled, we need to detach all formula
+        // cells in the sorted range before reordering, and re-start them
+        // afterward.
+        sc::EndListeningContext aCxt(*pDocument);
+        DetachFormulaCells(aCxt, nCol1, nRow1, nCol2, nRow2);
+    }
+
     // Split formula groups at the sort range boundaries (if applicable).
     std::vector<SCROW> aRowBounds;
     aRowBounds.reserve(2);
@@ -1081,6 +1090,12 @@ void ScTable::SortReorderByRow(
     // Re-group columns in the sorted range too.
     for (SCCOL i = nCol1; i <= nCol2; ++i)
         aCol[i].RegroupFormulaCells();
+
+    if (!pArray->IsUpdateRefs())
+    {
+        sc::StartListeningContext aCxt(*pDocument);
+        AttachFormulaCells(aCxt, nCol1, nRow1, nCol2, nRow2);
+    }
 }
 
 short ScTable::CompareCell(
