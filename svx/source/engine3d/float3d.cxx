@@ -2111,7 +2111,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 
 // Textures
     // Art
-    nValue = 3;
+    nValue = 99;
     if( aBtnTexLuminance.IsChecked() )
         nValue = 1;
     else if( aBtnTexColor.IsChecked() )
