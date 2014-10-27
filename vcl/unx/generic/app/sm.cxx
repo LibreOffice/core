@@ -699,23 +699,23 @@ void ICEWatchProc(
                 if ((flags = fcntl(pThis->m_nWakeupFiles[0], F_GETFD)) != -1)
                 {
                     flags |= FD_CLOEXEC;
-                    fcntl(pThis->m_nWakeupFiles[0], F_SETFD, flags);
+                    (void)fcntl(pThis->m_nWakeupFiles[0], F_SETFD, flags);
                 }
                 if ((flags = fcntl(pThis->m_nWakeupFiles[0], F_GETFL)) != -1)
                 {
                     flags |= O_NONBLOCK;
-                    fcntl(pThis->m_nWakeupFiles[0], F_SETFL, flags);
+                    (void)fcntl(pThis->m_nWakeupFiles[0], F_SETFL, flags);
                 }
                 // set close-on-exec and nonblock descriptor flag.
                 if ((flags = fcntl(pThis->m_nWakeupFiles[1], F_GETFD)) != -1)
                 {
                     flags |= FD_CLOEXEC;
-                    fcntl(pThis->m_nWakeupFiles[1], F_SETFD, flags);
+                    (void)fcntl(pThis->m_nWakeupFiles[1], F_SETFD, flags);
                 }
                 if ((flags = fcntl(pThis->m_nWakeupFiles[1], F_GETFL)) != -1)
                 {
                     flags |= O_NONBLOCK;
-                    fcntl(pThis->m_nWakeupFiles[1], F_SETFL, flags);
+                    (void)fcntl(pThis->m_nWakeupFiles[1], F_SETFL, flags);
                 }
                 pThis->m_ICEThread = osl_createThread(
                     ICEConnectionWorker, pThis);
