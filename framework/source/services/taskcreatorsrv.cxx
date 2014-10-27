@@ -272,10 +272,21 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     if ( ! xWindow.is())
         throw css::uno::Exception("TaskCreator service was not able to create suitable frame window.",
                                   static_cast< ::cppu::OWeakObject* >(this));
+
+    sal_Int32 nBackground = 0xffffffff;
+
     if (bTopWindow)
-        xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
-    else
-        xPeer->setBackground(0xffffffff);
+    {
+        try
+        {
+            nBackground = ::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor;
+        }
+        catch (const css::uno::Exception &)
+        {
+            // Ignore
+        }
+    }
+    xPeer->setBackground(nBackground);
 
     return xWindow;
 }
