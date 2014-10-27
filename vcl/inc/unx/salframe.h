@@ -26,6 +26,7 @@
 #include <unx/salunx.h>
 #include <unx/saltype.h>
 #include <unx/saldisp.hxx>
+#include <unx/x11windowprovider.hxx>
 #include <salframe.hxx>
 #include <salwtype.hxx>
 #include <salinst.hxx>
@@ -48,7 +49,7 @@ namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 #define SHOWSTATE_NORMAL        1
 #define SHOWSTATE_HIDDEN        2
 
-class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
+class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
 {
     friend class vcl_sal::WMAdaptor;
     friend class vcl_sal::NetWMAdaptor;
@@ -269,6 +270,8 @@ public:
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     // done setting up the clipregion
     virtual void                    EndSetClipRegion() SAL_OVERRIDE;
+
+    virtual Window GetX11Window() SAL_OVERRIDE;
 
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
 

@@ -51,6 +51,7 @@
 #include <unx/x11/xlimits.hxx>
 
 #include "salgdiimpl.hxx"
+#include "unx/x11windowprovider.hxx"
 #include "gdiimpl.hxx"
 #include "openglgdiimpl.hxx"
 
@@ -154,14 +155,11 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
         else
         {
             OpenGLSalGraphicsImpl* pOpenGLImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
-            if (pOpenGLImpl && m_pFrame)
+            if (pOpenGLImpl && m_pFrame && dynamic_cast<X11WindowProvider*>(m_pFrame))
             {
-                if( dynamic_cast<X11SalFrame*>(m_pFrame))
-                {
-                    Window aWin = dynamic_cast<X11SalFrame*>(m_pFrame)->GetDrawable();
+                Window aWin = dynamic_cast<X12WindowProvider*>(m_pFrame)->GetX11Window();
                     pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
                             aWin, m_nXScreen.getXScreen());
-                }
             }
         }
         nTextPixel_     = GetPixel( nTextColor_ );
