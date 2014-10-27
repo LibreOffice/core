@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ba076199_f778aafa",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2014-10-27T06:28:07Z",
+      "side": 1,
+      "message": "When talking in the future as the tooltip is supposed to when it is describing the action, \u0027this\u0027 isnt the right word to use.",
+      "parentUuid": "ba076199_77d15afb",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba076199_57ce565b",
         "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "ba076199_171d7ebd",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2014-10-27T06:28:07Z",
+      "side": 1,
+      "message": "The word archive here means storage and not compression.",
+      "parentUuid": "ba076199_57ce565b",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba076199_37dbe21d",
         "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
         "patchSetId": 1
@@ -64,6 +100,24 @@
       "writtenOn": "2014-10-24T03:24:12Z",
       "side": 1,
       "message": "This is weird English. Perhaps the word “create” would fit better?",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_d77da6e8",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2014-10-27T06:28:07Z",
+      "side": 1,
+      "message": "I was being consistent with the hybrid pdf tooltip which used \u0027makes\u0027.",
+      "parentUuid": "ba076199_37dbe21d",
       "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -98,6 +152,24 @@
       "writtenOn": "2014-10-24T03:24:12Z",
       "side": 1,
       "message": "A final period and a possesive apostrophe is missing from this string.",
+      "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_b78232c7",
+        "filename": "filter/uiconfig/ui/pdfgeneralpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2014-10-27T06:28:07Z",
+      "side": 1,
+      "message": "As non of the other tooltips had a final period, why would this one. A possessive apostrophe would be suitable if the sentence was \"Includes a document\u0027s content structure information in a PDF\".",
+      "parentUuid": "ba076199_f7030a75",
       "revId": "780ea93f7ce3153f1e72e90371875c5419663550",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
