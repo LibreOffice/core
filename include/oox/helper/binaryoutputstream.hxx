@@ -20,6 +20,9 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 
+#include <memory>
+#include <boost/shared_array.hpp>
+
 #include <oox/helper/binarystreambase.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -64,6 +67,9 @@ public:
     template< typename Type >
     void writeArray( Type* opnArray, sal_Int32 nElemCount );
 
+    template< typename Type >
+    void writeArray( const Type* opnArray, sal_Int32 nElemCount );
+
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >
     BinaryOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
@@ -86,6 +92,14 @@ void BinaryOutputStream::writeArray( Type* opnArray, sal_Int32 nElemCount )
     sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nElemCount, 0, SAL_MAX_INT32 / sizeof( Type ) ) * sizeof( Type );
     ByteOrderConverter::convertLittleEndianArray( opnArray, static_cast< size_t >( nElemCount ) );
     writeMemory( opnArray, nWriteSize, sizeof( Type ) );
+}
+
+template< typename Type >
+void BinaryOutputStream::writeArray( const Type* opnArray, sal_Int32 nElemCount )
+{
+    boost::shared_array<Type> pArray(new Type[nElemCount]);
+    std::uninitialized_copy(opnArray, opnArray + nElemCount, pArray.get());
+    writeArray(pArray.get(), nElemCount);
 }
 
 typedef ::boost::shared_ptr< BinaryOutputStream > BinaryOutputStreamRef;
