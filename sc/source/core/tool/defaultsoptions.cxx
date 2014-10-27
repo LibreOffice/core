@@ -83,7 +83,7 @@ OUString ScTpDefaultsItem::GetValueText() const
 
 bool ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     const ScTpDefaultsItem& rPItem = static_cast<const ScTpDefaultsItem&>(rItem);
     return ( theOptions == rPItem.theOptions );

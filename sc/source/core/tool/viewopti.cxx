@@ -217,7 +217,7 @@ OUString ScTpViewItem::GetValueText() const
 
 bool ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     const ScTpViewItem& rPItem = static_cast<const ScTpViewItem&>(rItem);
 

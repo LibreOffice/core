@@ -393,7 +393,7 @@ bool ScProtectionAttr::SetHidePrint( bool bHPrint)
  */
 bool ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     return aRange == static_cast<const ScRangeItem&>(rAttr).aRange;
 }
@@ -479,7 +479,7 @@ ScTableListItem& ScTableListItem::operator=( const ScTableListItem& rCpy )
 
 bool ScTableListItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
+    assert(SfxPoolItem::operator==(rAttr));
 
     const ScTableListItem& rCmp   = static_cast<const ScTableListItem&>(rAttr);
     bool                   bEqual = (nCount == rCmp.nCount);
@@ -639,7 +639,7 @@ OUString ScPageHFItem::GetValueText() const
 
 bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     const ScPageHFItem& r = static_cast<const ScPageHFItem&>(rItem);
 
@@ -948,7 +948,7 @@ OUString ScDoubleItem::GetValueText() const
 
 bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    assert(SfxPoolItem::operator==(rItem));
     const ScDoubleItem& _rItem = static_cast<const ScDoubleItem&>(rItem);
     return nValue == _rItem.nValue;
 }
@@ -997,7 +997,7 @@ ScPageScaleToItem* ScPageScaleToItem::Clone( SfxItemPool* ) const
 
 bool ScPageScaleToItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rCmp ), "ScPageScaleToItem::operator== - unequal wid or type" );
+    assert(SfxPoolItem::operator==(rCmp));
     const ScPageScaleToItem& rPageCmp = static_cast< const ScPageScaleToItem& >( rCmp );
     return ((mnWidth == rPageCmp.mnWidth) && (mnHeight == rPageCmp.mnHeight)) ? 1 : 0;
 }

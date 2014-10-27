@@ -123,7 +123,7 @@ OUString ScTpCalcItem::GetValueText() const
 
 bool ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {
-    OSL_ENSURE( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
+    assert(SfxPoolItem::operator==(rItem));
 
     const ScTpCalcItem& rPItem = static_cast<const ScTpCalcItem&>(rItem);
 
