@@ -1944,6 +1944,232 @@ void Test::testFormulaRefUpdateDeleteContent()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateDeleteAndShiftLeft()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert 1,2,3,4,5 in C1:G1.
+    for (SCCOL i = 0; i <= 4; ++i)
+        m_pDoc->SetValue(ScAddress(i+2,0,0), i+1);
+
+    // Insert formula in H1.
+    ScAddress aPos(7,0,0);
+    m_pDoc->SetString(aPos, "=SUM(C1:G1)");
+
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+
+    // Delete columns D:E (middle of the reference).
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bDeleted = rFunc.DeleteCells(ScRange(3,0,0,4,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    aPos.IncCol(-2);
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:E1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check.
+    SfxUndoManager* pUndo = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndo);
+
+    pUndo->Undo();
+    aPos.IncCol(2);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:G1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Delete columns C:D (left end of the reference).
+    bDeleted = rFunc.DeleteCells(ScRange(2,0,0,3,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    aPos.IncCol(-2);
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:E1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check again.
+    pUndo->Undo();
+    aPos.IncCol(2);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:G1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Delete columns B:E (overlaps on the left).
+    bDeleted = rFunc.DeleteCells(ScRange(1,0,0,4,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    aPos.IncCol(-4);
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(B1:C1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check again.
+    pUndo->Undo();
+    aPos.IncCol(4);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:G1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Start over with a new scenario.
+    clearSheet(m_pDoc, 0);
+
+    // Insert 1,2,3,4,5,6 into C1:H1.
+    for (SCCOL i = 0; i <= 5; ++i)
+        m_pDoc->SetValue(ScAddress(i+2,0,0), i+1);
+
+    // Set formula in B1.
+    aPos = ScAddress(1,0,0);
+    m_pDoc->SetString(aPos, "=SUM(C1:H1)");
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+
+    // Delete columns F:H (right end of the reference).
+    bDeleted = rFunc.DeleteCells(ScRange(5,0,0,7,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:E1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check.
+    pUndo->Undo();
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:H1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Delete columns G:I (overlaps on the right).
+    bDeleted = rFunc.DeleteCells(ScRange(6,0,0,8,MAXROW,0), &aMark, DEL_CELLSLEFT, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:F1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check again.
+    pUndo->Undo();
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(C1:H1)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaRefUpdateDeleteAndShiftUp()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert 1,2,3,4,5 in A3:A7.
+    for (SCROW i = 0; i <= 4; ++i)
+        m_pDoc->SetValue(ScAddress(0,i+2,0), i+1);
+
+    // Insert formula in A8.
+    ScAddress aPos(0,7,0);
+    m_pDoc->SetString(aPos, "=SUM(A3:A7)");
+
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+
+    // Delete rows 4:5 (middle of the reference).
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bDeleted = rFunc.DeleteCells(ScRange(0,3,0,MAXCOL,4,0), &aMark, DEL_CELLSUP, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    aPos.IncRow(-2);
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A5)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check.
+    SfxUndoManager* pUndo = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndo);
+
+    pUndo->Undo();
+    aPos.IncRow(2);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A7)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Delete rows 3:4 (top end of the reference).
+    bDeleted = rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,3,0), &aMark, DEL_CELLSUP, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    aPos.IncRow(-2);
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A5)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check again.
+    pUndo->Undo();
+    aPos.IncRow(2);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A7)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Delete rows 2:5 (overlaps on the top).
+    bDeleted = rFunc.DeleteCells(ScRange(0,1,0,MAXCOL,4,0), &aMark, DEL_CELLSUP, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    aPos.IncRow(-4);
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A2:A3)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check again.
+    pUndo->Undo();
+    aPos.IncRow(4);
+    CPPUNIT_ASSERT_EQUAL(15.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A7)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Start over with a new scenario.
+    clearSheet(m_pDoc, 0);
+
+    // Insert 1,2,3,4,5,6 into A3:A8.
+    for (SCROW i = 0; i <= 5; ++i)
+        m_pDoc->SetValue(ScAddress(0,i+2,0), i+1);
+
+    // Set formula in B1.
+    aPos = ScAddress(0,1,0);
+    m_pDoc->SetString(aPos, "=SUM(A3:A8)");
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+
+    // Delete rows 6:8 (bottom end of the reference).
+    bDeleted = rFunc.DeleteCells(ScRange(0,5,0,MAXCOL,7,0), &aMark, DEL_CELLSUP, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A5)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check.
+    pUndo->Undo();
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A8)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Delete rows 7:9 (overlaps on the bottom).
+    bDeleted = rFunc.DeleteCells(ScRange(0,6,0,MAXCOL,8,0), &aMark, DEL_CELLSUP, true, true);
+    CPPUNIT_ASSERT(bDeleted);
+
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A6)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    // Undo and check again.
+    pUndo->Undo();
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(aPos));
+    if (!checkFormula(*m_pDoc, aPos, "SUM(A3:A8)"))
+        CPPUNIT_FAIL("Wrong formula!");
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateName()
 {
     m_pDoc->InsertTab(0, "Formula");
