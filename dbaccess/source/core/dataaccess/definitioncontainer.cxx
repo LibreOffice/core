@@ -29,6 +29,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -212,19 +213,41 @@ void SAL_CALL ODefinitionContainer::replaceByName( const OUString& _rName, const
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
-    // let derived classes approve the new object
-    Reference< XContent > xNewElement(aElement,UNO_QUERY);
-    approveNewObject( _rName, xNewElement );    // will throw if necessary
+    try
+    {
+        // let derived classes approve the new object
+        Reference< XContent > xNewElement(aElement,UNO_QUERY);
+        approveNewObject( _rName, xNewElement );    // will throw if necessary
 
-    // the old element (for the notifications)
-    Reference< XContent > xOldElement = implGetByName( _rName, impl_haveAnyListeners_nothrow() );
+        // the old element (for the notifications)
+        Reference< XContent > xOldElement = implGetByName( _rName, impl_haveAnyListeners_nothrow() );
 
-    notifyByName( aGuard, _rName, xNewElement, xOldElement, E_REPLACED, ApproveListeners );
-    implReplace( _rName, xNewElement );
-    notifyByName( aGuard, _rName, xNewElement, xOldElement, E_REPLACED, ContainerListemers );
+        notifyByName( aGuard, _rName, xNewElement, xOldElement, E_REPLACED, ApproveListeners );
+        implReplace( _rName, xNewElement );
+        notifyByName( aGuard, _rName, xNewElement, xOldElement, E_REPLACED, ContainerListemers );
 
-    // and dispose it
-    disposeComponent(xOldElement);
+        // and dispose it
+        disposeComponent(xOldElement);
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const NoSuchElementException&)
+    {
+        throw;
+    }
+    catch (const WrappedTargetException&)
+    {
+        throw;
+    }
+    catch (const Exception& e)
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::lang::WrappedTargetException(
+          "wrapped Exception " + e.Message,
+          css::uno::Reference<css::uno::XInterface>(), a);
+    }
 }
 
 namespace
