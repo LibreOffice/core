@@ -45,6 +45,7 @@ interface XZipFileAccess: ::com::sun::star::uno::XInterface
     ::com::sun::star::io::XInputStream getStreamByPattern( [in] string aPattern )
         raises( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
+                ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::packages::zip::ZipException );
 
 };

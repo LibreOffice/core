@@ -358,7 +358,7 @@ sal_Bool SAL_CALL OZipFileAccess::hasElements()
 // XZipFileAccess
 uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( const OUString& aPatternString )
     throw ( container::NoSuchElementException,
-            io::IOException, packages::zip::ZipException,
+            io::IOException, packages::WrongPasswordException, packages::zip::ZipException,
             uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
