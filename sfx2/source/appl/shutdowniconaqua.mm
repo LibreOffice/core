@@ -44,7 +44,6 @@
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;

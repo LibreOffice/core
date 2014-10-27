@@ -62,7 +62,6 @@
 #include <bibconfig.hxx>
 #include <cppuhelper/implbase4.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
