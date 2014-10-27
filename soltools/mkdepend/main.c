@@ -194,7 +194,7 @@ int main(int argc, char    **argv)
         nargc = 1;
         if ((afd = open(argv[1]+1, O_RDONLY)) < 0)
             fatalerr("cannot open \"%s\"\n", argv[1]+1);
-        fstat(afd, &ast);
+        (void)fstat(afd, &ast);
         args = (char *)malloc(ast.st_size + 1);
         if ((ast.st_size = read(afd, args, (size_t) ast.st_size)) < 0)
             fatalerr("failed to read %s\n", argv[1]+1);
@@ -488,7 +488,7 @@ struct filepointer *getfile(char *file)
         *content->f_p = '\0';
         return(content);
     }
-    fstat(fd, &st);
+    (void)fstat(fd, &st);
 
     size_backup = st.st_size;
     malloc_size = size_backup;
