@@ -20,6 +20,7 @@
 #include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <vector>
 #include "vbaformatconditions.hxx"
 #include "vbaformatcondition.hxx"
@@ -103,9 +104,31 @@ public:
 
         virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
+            try
+            {
                 if ( nIndex < m_xIndexAccess->getCount() )
                         return xSheetConditionToFormatCondition( uno::Reference< XHelperInterface >( m_xParentRange, uno::UNO_QUERY_THROW ), m_xContext, m_xStyles, m_xParentCollection, m_xProps, m_xIndexAccess->getByIndex( nIndex++ ) );
-                throw container::NoSuchElementException();
+            }
+            catch (const container::NoSuchElementException&)
+            {
+                throw;
+            }
+            catch (const lang::WrappedTargetException&)
+            {
+                throw;
+            }
+            catch (const uno::RuntimeException&)
+            {
+                throw;
+            }
+            catch (const uno::Exception& e)
+            {
+                css::uno::Any a(cppu::getCaughtException());
+                throw css::lang::WrappedTargetException(
+                    "wrapped Exception " + e.Message,
+                    css::uno::Reference<css::uno::XInterface>(), a);
+            }
+            throw container::NoSuchElementException();
         }
 };
 
