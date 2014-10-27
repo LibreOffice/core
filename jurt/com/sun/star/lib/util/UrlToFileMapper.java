@@ -82,10 +82,10 @@ public final class UrlToFileMapper {
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e); // should never happen
                 }
-             }
-         }
+            }
+        }
         return buf.toString();
-     }
+    }
 
-     private UrlToFileMapper() {}
+    private UrlToFileMapper() {}
 }
