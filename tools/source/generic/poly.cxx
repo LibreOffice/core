@@ -606,7 +606,7 @@ void Polygon::SetFlags( sal_uInt16 nPos, PolyFlags eFlags )
 
     // we do only want to create the flag array if there
     // is at least one flag different to POLY_NORMAL
-    if ( mpImplPolygon || ( eFlags != POLY_NORMAL ) )
+    if ( eFlags != POLY_NORMAL )
     {
         ImplMakeUnique();
         mpImplPolygon->ImplCreateFlagArray();
