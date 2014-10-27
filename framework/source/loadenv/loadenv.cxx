@@ -661,13 +661,6 @@ namespace {
 
 bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
 {
-    // depending on the experimental mode
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
-    {
-        return false;
-    }
-
     OUString aURL;
     sal_Int32 nSize = rDescriptor.getLength();
     for (sal_Int32 i = 0; i < nSize; ++i)
@@ -683,10 +676,6 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
     if (aURL.isEmpty() || aURL.copy(0,8).equalsIgnoreAsciiCase("private:"))
         return false;
 
-    OUString aUseOrcus;
-    rtl::Bootstrap::get("LIBO_USE_ORCUS", aUseOrcus);
-    bool bUseOrcus = (aUseOrcus == "YES");
-
     // TODO : Type must be set to be generic_Text (or any other type that
     // exists) in order to find a usable loader. Exploit it as a temporary
     // hack.
@@ -697,6 +686,17 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
         rFilter = "gnumeric";
         return true;
     }
+
+    // depending on the experimental mode
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    {
+        return false;
+    }
+
+    OUString aUseOrcus;
+    rtl::Bootstrap::get("LIBO_USE_ORCUS", aUseOrcus);
+    bool bUseOrcus = (aUseOrcus == "YES");
 
     if (!bUseOrcus)
         return false;
