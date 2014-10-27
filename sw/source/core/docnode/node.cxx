@@ -81,27 +81,27 @@ TYPEINIT2( SwCntntNode, SwModify, SwIndexReg )
 namespace AttrSetHandleHelper
 {
 
-void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                       const SwCntntNode& rNode,
                       SwAttrSet& rNewAttrSet )
 {
-    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(mrpAttrSet.get());
+    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(rpAttrSet.get());
     if( rNode.GetModifyAtAttr() )
         const_cast<SwAttrSet*>(pAttrSet)->SetModifyAtAttr( 0 );
     IStyleAccess& rSA = pAttrSet->GetPool()->GetDoc()->GetIStyleAccess();
-    mrpAttrSet = rSA.getAutomaticStyle( rNewAttrSet, rNode.IsTxtNode() ?
+    rpAttrSet = rSA.getAutomaticStyle( rNewAttrSet, rNode.IsTxtNode() ?
                                                      IStyleAccess::AUTO_STYLE_PARA :
                                                      IStyleAccess::AUTO_STYLE_NOTXT );
-    const bool bSetModifyAtAttr = ((SwAttrSet*)mrpAttrSet.get())->SetModifyAtAttr( &rNode );
+    const bool bSetModifyAtAttr = ((SwAttrSet*)rpAttrSet.get())->SetModifyAtAttr( &rNode );
     rNode.SetModifyAtAttr( bSetModifyAtAttr );
 }
 
-void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+void SetParent( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                 const SwCntntNode& rNode,
                 const SwFmt* pParentFmt,
                 const SwFmt* pConditionalFmt )
 {
-    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(mrpAttrSet.get());
+    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(rpAttrSet.get());
     OSL_ENSURE( pAttrSet, "no SwAttrSet" );
     OSL_ENSURE( pParentFmt || !pConditionalFmt, "ConditionalFmt without ParentFmt?" );
 
@@ -128,25 +128,25 @@ void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
             aNewSet.Put( aFmtColl );
         }
 
-        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
     }
 }
 
-const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                         const SwCntntNode& rNode,
                         const SfxPoolItem& rAttr )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
     const SfxPoolItem* pRet = aNewSet.Put( rAttr );
     if ( pRet )
-        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
     return pRet;
 }
 
-bool Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rNode,
+bool Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet, const SwCntntNode& rNode,
          const SfxItemSet& rSet )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
 
     // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
@@ -166,16 +166,16 @@ bool Put( boost::shared_ptr<const SfxItemSet>& mrpAttrSet, const SwCntntNode& rN
     }
 
     if ( nRet )
-        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 
     return nRet;
 }
 
-bool Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwCntntNode& rNode, const SfxPoolItem& rAttr,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
 
     // for a correct broadcast, we need to do a SetModifyAtAttr with the items
     // from aNewSet. The 'regular' SetModifyAtAttr is done in GetNewAutoStyle
@@ -185,16 +185,16 @@ bool Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     const bool nRet = aNewSet.Put_BC( rAttr, pOld, pNew );
 
     if ( nRet )
-        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 
     return nRet;
 }
 
-bool Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwCntntNode& rNode, const SfxItemSet& rSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
 
     // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
@@ -219,35 +219,35 @@ bool Put_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
     }
 
     if ( nRet )
-        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 
     return nRet;
 }
 
-sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwCntntNode& rNode, sal_uInt16 nWhich,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
     const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich, pOld, pNew );
     if ( nRet )
-        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
     return nRet;
 }
 
-sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
+sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwCntntNode& rNode,
                      sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*mrpAttrSet );
+    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
     const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich1, nWhich2, pOld, pNew );
     if ( nRet )
-        GetNewAutoStyle( mrpAttrSet, rNode, aNewSet );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
     return nRet;
 }
 
