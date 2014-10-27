@@ -180,7 +180,11 @@ produceFile(const OString& regFileName, sPair_t const*const pDepFile)
     if ( !idlc()->getRoot()->dump(rootKey) )
     {
         rootKey.releaseKey();
-        regFile.close();
+        if (regFile.close() != REG_NO_ERROR)
+        {
+            fprintf(stderr, "%s: could not close registry file '%s'\n",
+                    pOptions->getProgramName().getStr(), regFileName.getStr());
+        }
         regFile.destroy(OStringToOUString(regFileName, RTL_TEXTENCODING_UTF8));
         removeIfExists(regFileName);
         cleanPath();
