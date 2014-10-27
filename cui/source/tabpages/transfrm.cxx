@@ -528,7 +528,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         if( pItem )
         {
             const double fUIScale(double(pView->GetModel()->GetUIScale()));
-            const double fTmp((double)((const SdrMetricItem*)pItem)->GetValue() / fUIScale);
+            const double fTmp((double)static_cast<const SdrMetricItem*>(pItem)->GetValue() / fUIScale);
             SetMetricValue(*m_pMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else

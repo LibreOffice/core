@@ -691,9 +691,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
 
         OUString aName = lcl_MakeOldPageStyleFormatName( i );
 
-        ScStyleSheet* pSheet = (ScStyleSheet*) &pStylePool->Make( aName,
+        ScStyleSheet* pSheet = static_cast<ScStyleSheet*>( &pStylePool->Make( aName,
                                     SFX_STYLE_FAMILY_PAGE,
-                                    SFXSTYLEBIT_USERDEF | SCSTYLEBIT_STANDARD );
+                                    SFXSTYLEBIT_USERDEF | SCSTYLEBIT_STANDARD ) );
         // #i68483# set page style name at sheet...
         pDoc->SetPageStyle( static_cast< SCTAB >( i ), aName );
 
@@ -1589,7 +1589,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 case ctValue :
                 {
                     const SfxPoolItem* pValueFormat = pDoc->GetAttr(Col, static_cast<SCROW> (Row), Tab, ATTR_VALUE_FORMAT);
-                    sal_uLong nFormat = ((SfxUInt32Item*)pValueFormat)->GetValue();
+                    sal_uLong nFormat = static_cast<const SfxUInt32Item*>(pValueFormat)->GetValue();
                     double Value = ScfTools::ReadLongDouble(rStream);
                     //rStream.Read(&Value, sizeof(Value));
 
@@ -2092,8 +2092,8 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             Sc10PatternData* pPattern = pPatternCollection->At(nPatternIndex);
             if (pPattern != NULL)
             {
-                ScStyleSheet* pStyle = (ScStyleSheet*) pStylePool->Find(
-                                    SC10TOSTRING( pPattern->Name ), SFX_STYLE_FAMILY_PARA);
+                ScStyleSheet* pStyle = static_cast<ScStyleSheet*>( pStylePool->Find(
+                                    SC10TOSTRING( pPattern->Name ), SFX_STYLE_FAMILY_PARA) );
 
                 if (pStyle != NULL)
                     pDoc->ApplyStyleAreaTab(Col, nStart, Col, nEnd, Tab, *pStyle);

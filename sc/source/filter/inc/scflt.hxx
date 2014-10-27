@@ -620,8 +620,8 @@ protected:
     sal_uLong nError;
 public:
                         Sc10FontCollection( SvStream& rStream );
-    sal_uLong               GetError() { return nError; }
-    Sc10FontData*       At(sal_uInt16 nIndex) { return (Sc10FontData*)ScCollection::At(nIndex); }
+    sal_uLong           GetError() { return nError; }
+    Sc10FontData*       At(sal_uInt16 nIndex) { return static_cast<Sc10FontData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
 };
@@ -651,11 +651,11 @@ public :
 class Sc10NameCollection : public ScCollection
 {
 protected:
-    sal_uLong               nError;
+    sal_uLong           nError;
 public:
                         Sc10NameCollection(SvStream& rStream);
-sal_uLong                   GetError() { return nError; }
-Sc10NameData*           At(sal_uInt16 nIndex) { return (Sc10NameData*)ScCollection::At(nIndex); }
+    sal_uLong           GetError() { return nError; }
+    Sc10NameData*       At(sal_uInt16 nIndex) { return static_cast<Sc10NameData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
 };
@@ -702,11 +702,11 @@ virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10PatternD
 class Sc10PatternCollection : public ScCollection
 {
 protected:
-    sal_uLong               nError;
+    sal_uLong           nError;
 public:
                         Sc10PatternCollection(SvStream& rStream);
-    sal_uLong               GetError() { return nError; }
-    Sc10PatternData*    At(sal_uInt16 nIndex) { return (Sc10PatternData*)ScCollection::At(nIndex); }
+    sal_uLong           GetError() { return nError; }
+    Sc10PatternData*    At(sal_uInt16 nIndex) { return static_cast<Sc10PatternData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
 };
@@ -730,12 +730,12 @@ virtual ScDataObject*       Clone() const SAL_OVERRIDE { return new Sc10DataBase
 class Sc10DataBaseCollection : public ScCollection
 {
 protected:
-    sal_uLong               nError;
+    sal_uLong           nError;
     sal_Char            ActName[32];
 public:
                         Sc10DataBaseCollection(SvStream& rStream);
-    sal_uLong               GetError() { return nError; }
-    Sc10DataBaseData*   At(sal_uInt16 nIndex) { return (Sc10DataBaseData*)ScCollection::At(nIndex); }
+    sal_uLong           GetError() { return nError; }
+    Sc10DataBaseData*   At(sal_uInt16 nIndex) { return static_cast<Sc10DataBaseData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
 };
@@ -755,7 +755,7 @@ class Sc10PageCollection : public ScCollection
 {
 public:
                         Sc10PageCollection() : ScCollection(1,1) {};
-    Sc10PageData*       At(sal_uInt16 nIndex) { return (Sc10PageData*)ScCollection::At(nIndex); }
+    Sc10PageData*       At(sal_uInt16 nIndex) { return static_cast<Sc10PageData*>(ScCollection::At(nIndex)); }
     sal_uInt16              InsertFormat( const Sc10PageFormat& rData );
     void                PutToDoc( ScDocument* pDoc );
 private:

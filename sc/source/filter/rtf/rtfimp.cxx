@@ -50,7 +50,7 @@ ScRTFImport::~ScRTFImport()
 {
     // ordering is important; get error in some other Dtor otherwise!
     // Is correct, as ScEEImport is Base Class
-    delete (ScRTFParser*) mpParser;     // before EditEngine!
+    delete static_cast<ScRTFParser*>(mpParser);     // before EditEngine!
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

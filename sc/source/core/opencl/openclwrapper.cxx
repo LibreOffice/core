@@ -620,7 +620,7 @@ bool OpenCLDevice::initOpenCLRunEnv( GPUEnv *gpuInfo )
         // Use available platform.
         cl_context_properties cps[3];
         cps[0] = CL_CONTEXT_PLATFORM;
-        cps[1] = (cl_context_properties) gpuInfo->mpPlatformID;
+        cps[1] = reinterpret_cast<cl_context_properties>(gpuInfo->mpPlatformID);
         cps[2] = 0;
         // Set device type for OpenCL
         if ( getenv("SC_OPENCLCPU") )
@@ -936,7 +936,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
 
     cl_context_properties cps[3];
     cps[0] = CL_CONTEXT_PLATFORM;
-    cps[1] = (cl_context_properties) platformId;
+    cps[1] = reinterpret_cast<cl_context_properties>(platformId);
     cps[2] = 0;
     cl_context context = clCreateContext( cps, 1, &pDeviceId, NULL, NULL, &nState );
 

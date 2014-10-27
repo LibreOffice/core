@@ -709,7 +709,7 @@ void XclExpChTrAction::AddDependentContents(
     for( itChangeAction = aActionMap.begin(); itChangeAction != aActionMap.end(); ++itChangeAction )
         if( itChangeAction->second->GetType() == SC_CAT_CONTENT )
             SetAddAction( new XclExpChTrCellContent(
-                *((const ScChangeActionContent*) itChangeAction->second), rRoot, rIdBuffer ) );
+                *static_cast<const ScChangeActionContent*>(itChangeAction->second), rRoot, rIdBuffer ) );
 }
 
 void XclExpChTrAction::SetIndex( sal_uInt32& rIndex )
@@ -1567,7 +1567,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
     switch( rAction.GetType() )
     {
         case SC_CAT_CONTENT:
-            pXclAction = new XclExpChTrCellContent( (const ScChangeActionContent&) rAction, GetRoot(), *pTabIdBuffer );
+            pXclAction = new XclExpChTrCellContent( static_cast<const ScChangeActionContent&>(rAction), GetRoot(), *pTabIdBuffer );
         break;
         case SC_CAT_INSERT_ROWS:
         case SC_CAT_INSERT_COLS:
@@ -1587,7 +1587,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         break;
         case SC_CAT_MOVE:
             if (pTempChangeTrack)
-                pXclAction = new XclExpChTrMoveRange( (const ScChangeActionMove&) rAction, GetRoot(), *pTabIdBuffer, *pTempChangeTrack );
+                pXclAction = new XclExpChTrMoveRange( static_cast<const ScChangeActionMove&>(rAction), GetRoot(), *pTabIdBuffer, *pTempChangeTrack );
         break;
         default:;
     }

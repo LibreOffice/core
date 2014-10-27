@@ -895,7 +895,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
                             STREAM_READWRITE| STREAM_SHARE_DENYALL );
     if( xOleStg.Is() )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj&)rOleObj).GetObjRef() );
+        uno::Reference < embed::XEmbeddedObject > xObj( static_cast<const SdrOle2Obj&>(rOleObj).GetObjRef() );
         if ( xObj.is() )
         {
             // set version to "old" version, because it must be
@@ -925,7 +925,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
             // OBJFLAGS subrecord, undocumented as usual
             rStrm.StartRecord( EXC_ID_OBJFLAGS, 2 );
             sal_uInt16 nFlags = EXC_OBJ_PIC_MANUALSIZE;
-            ::set_flag( nFlags, EXC_OBJ_PIC_SYMBOL, ((SdrOle2Obj&)rOleObj).GetAspect() == embed::Aspects::MSOLE_ICON );
+            ::set_flag( nFlags, EXC_OBJ_PIC_SYMBOL, static_cast<const SdrOle2Obj&>(rOleObj).GetAspect() == embed::Aspects::MSOLE_ICON );
             rStrm << nFlags;
             rStrm.EndRecord();
 

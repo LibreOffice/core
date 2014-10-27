@@ -43,7 +43,7 @@ public:
             ScTabDeletedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabDeletedHint();
 
-    SCTAB   GetTab()    { return nTab; }
+    SCTAB   GetTab() const { return nTab; }
 };
 
 class ScTabSizeChangedHint : public SfxHint
@@ -54,7 +54,7 @@ public:
             ScTabSizeChangedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabSizeChangedHint();
 
-    SCTAB   GetTab()    { return nTab; }
+    SCTAB   GetTab() const  { return nTab; }
 };
 
 //  Adjusting of detective UserData and draw undo's both have to be in SdrUndoGroup;

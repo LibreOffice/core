@@ -356,7 +356,7 @@ inline const TokenId TokenPool::Store( const sal_Int16 nWert )
 
 inline const TokenId TokenPool::LastId( void ) const
 {
-    return ( TokenId ) nElementAkt; // correct, as Ausgabe with Offset 1!
+    return static_cast<TokenId>(nElementAkt); // correct, as Ausgabe with Offset 1!
 }
 
 const inline ScTokenArray* TokenPool::operator []( const TokenId nId )

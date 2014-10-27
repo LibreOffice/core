@@ -177,9 +177,9 @@ bool lcl_IsFontwork( const SdrObject* pObj )
     if( pObj->GetObjIdentifier() == OBJ_CUSTOMSHAPE )
     {
         const OUString aTextPath = "TextPath";
-        SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
-            pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-        if( Any* pAny = rGeometryItem.GetPropertyValueByName( aTextPath, aTextPath ) )
+        const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(
+            pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+        if( const Any* pAny = rGeometryItem.GetPropertyValueByName( aTextPath, aTextPath ) )
             *pAny >>= bIsFontwork;
     }
     return bIsFontwork;
@@ -218,7 +218,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             if( mbIsRootDff )
             {
                 //! not-const because GetObjRef may load the OLE object
-                Reference < XClassifiedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), UNO_QUERY );
+                Reference < XClassifiedObject > xObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), UNO_QUERY );
                 if ( xObj.is() )
                 {
                     SvGlobalName aObjClsId( xObj->getClassID() );
@@ -394,7 +394,7 @@ void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
 EscherExHostAppData* XclEscherEx::EnterAdditionalTextGroup()
 {
     nAdditionalText = 1;
-    pAdditionalText = (XclEscherClientTextbox*) pCurrAppData->GetClientTextbox();
+    pAdditionalText = static_cast<XclEscherClientTextbox*>( pCurrAppData->GetClientTextbox() );
     pCurrAppData->SetClientTextbox( NULL );
     return pCurrAppData;
 }

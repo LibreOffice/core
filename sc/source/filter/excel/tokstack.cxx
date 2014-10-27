@@ -587,7 +587,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
 
 void TokenPool::operator >>( TokenId& rId )
 {
-    rId = ( TokenId ) ( nElementAkt + 1 );
+    rId = static_cast<TokenId>( nElementAkt + 1 );
 
     if( nElementAkt >= nElement )
         if (!GrowElement())
@@ -606,11 +606,11 @@ const TokenId TokenPool::Store( const double& rDouble )
 {
     if( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     if( nP_DblAkt >= nP_Dbl )
         if (!GrowDouble())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[ nElementAkt ] = nP_DblAkt;    // Index in Double-Array
     pType[ nElementAkt ] = T_D;             // set Typeinfo Double
@@ -622,7 +622,7 @@ const TokenId TokenPool::Store( const double& rDouble )
     nElementAkt++;
     nP_DblAkt++;
 
-    return ( const TokenId ) nElementAkt; // return old value + 1!
+    return static_cast<const TokenId>(nElementAkt); // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const sal_uInt16 nIndex )
@@ -635,11 +635,11 @@ const TokenId TokenPool::Store( const OUString& rString )
     // mostly copied to Store( const sal_Char* ), to avoid a temporary string
     if( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     if( nP_StrAkt >= nP_Str )
         if (!GrowString())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[ nElementAkt ] = nP_StrAkt;    // Index in String-Array
     pType[ nElementAkt ] = T_Str;           // set Typeinfo String
@@ -661,18 +661,18 @@ const TokenId TokenPool::Store( const OUString& rString )
     nElementAkt++;
     nP_StrAkt++;
 
-    return ( const TokenId ) nElementAkt; // return old value + 1!
+    return static_cast<const TokenId>(nElementAkt); // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const ScSingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     if( nP_RefTrAkt >= nP_RefTr )
         if (!GrowTripel())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
     pType[ nElementAkt ] = T_RefC;          // set Typeinfo Cell-Ref
@@ -685,18 +685,18 @@ const TokenId TokenPool::Store( const ScSingleRefData& rTr )
     nElementAkt++;
     nP_RefTrAkt++;
 
-    return ( const TokenId ) nElementAkt; // return old value + 1!
+    return static_cast<const TokenId>(nElementAkt); // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 {
     if( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     if( nP_RefTrAkt + 1 >= nP_RefTr )
         if (!GrowTripel( 2))
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[ nElementAkt ] = nP_RefTrAkt;
     pType[ nElementAkt ] = T_RefA;          // setTypeinfo Area-Ref
@@ -715,18 +715,18 @@ const TokenId TokenPool::Store( const ScComplexRefData& rTr )
 
     nElementAkt++;
 
-    return ( const TokenId ) nElementAkt; // return old value + 1!
+    return static_cast<const TokenId>(nElementAkt); // return old value + 1!
 }
 
 const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
 {
     if( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     if( nP_ExtAkt >= nP_Ext )
         if (!GrowExt())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[ nElementAkt ] = nP_ExtAkt;
     pType[ nElementAkt ] = T_Ext;           // set Typeinfo String
@@ -742,18 +742,18 @@ const TokenId TokenPool::Store( const DefTokenId e, const OUString& r )
     nElementAkt++;
     nP_ExtAkt++;
 
-    return ( const TokenId ) nElementAkt; // return old value + 1!
+    return static_cast<const TokenId>(nElementAkt); // return old value + 1!
 }
 
 const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     if( nP_NlfAkt >= nP_Nlf )
         if (!GrowNlf())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[ nElementAkt ] = nP_NlfAkt;
     pType[ nElementAkt ] = T_Nlf;
@@ -768,7 +768,7 @@ const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
     nElementAkt++;
     nP_NlfAkt++;
 
-    return ( const TokenId ) nElementAkt;
+    return static_cast<const TokenId>(nElementAkt);
 }
 
 const TokenId TokenPool::StoreMatrix()
@@ -777,11 +777,11 @@ const TokenId TokenPool::StoreMatrix()
 
     if( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     if( nP_MatrixAkt >= nP_Matrix )
         if (!GrowMatrix())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[ nElementAkt ] = nP_MatrixAkt;
     pType[ nElementAkt ] = T_Matrix;
@@ -793,14 +793,14 @@ const TokenId TokenPool::StoreMatrix()
     nElementAkt++;
     nP_MatrixAkt++;
 
-    return ( const TokenId ) nElementAkt;
+    return static_cast<const TokenId>(nElementAkt);
 }
 
 const TokenId TokenPool::StoreName( sal_uInt16 nIndex, bool bGlobal )
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[nElementAkt] = static_cast<sal_uInt16>(maRangeNames.size());
     pType[nElementAkt] = T_RN;
@@ -819,7 +819,7 @@ const TokenId TokenPool::StoreExtName( sal_uInt16 nFileId, const OUString& rName
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[nElementAkt] = static_cast<sal_uInt16>(maExtNames.size());
     pType[nElementAkt] = T_ExtName;
@@ -838,7 +838,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabNa
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[nElementAkt] = static_cast<sal_uInt16>(maExtCellRefs.size());
     pType[nElementAkt] = T_ExtRefC;
@@ -858,7 +858,7 @@ const TokenId TokenPool::StoreExtRef( sal_uInt16 nFileId, const OUString& rTabNa
 {
     if ( nElementAkt >= nElement )
         if (!GrowElement())
-            return (const TokenId) nElementAkt+1;
+            return static_cast<const TokenId>(nElementAkt+1);
 
     pElement[nElementAkt] = static_cast<sal_uInt16>(maExtAreaRefs.size());
     pType[nElementAkt] = T_ExtRefA;

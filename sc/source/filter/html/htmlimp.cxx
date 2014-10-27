@@ -65,18 +65,18 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
     Size aPageSize;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     const OUString& aPageStyle = mpDoc->GetPageStyle( rRange.aStart.Tab() );
-    ScStyleSheet* pStyleSheet = (ScStyleSheet*)mpDoc->
-        GetStyleSheetPool()->Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
+    ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(mpDoc->
+        GetStyleSheetPool()->Find( aPageStyle, SFX_STYLE_FAMILY_PAGE ));
     if ( pStyleSheet )
     {
         const SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        const SvxLRSpaceItem* pLRItem = (const SvxLRSpaceItem*) &rSet.Get( ATTR_LRSPACE );
+        const SvxLRSpaceItem* pLRItem = static_cast<const SvxLRSpaceItem*>( &rSet.Get( ATTR_LRSPACE ) );
         long nLeftMargin   = pLRItem->GetLeft();
         long nRightMargin  = pLRItem->GetRight();
-        const SvxULSpaceItem* pULItem = (const SvxULSpaceItem*) &rSet.Get( ATTR_ULSPACE );
+        const SvxULSpaceItem* pULItem = static_cast<const SvxULSpaceItem*>( &rSet.Get( ATTR_ULSPACE ) );
         long nTopMargin    = pULItem->GetUpper();
         long nBottomMargin = pULItem->GetLower();
-        aPageSize = ((const SvxSizeItem&) rSet.Get(ATTR_PAGE_SIZE)).GetSize();
+        aPageSize = static_cast<const SvxSizeItem&>(rSet.Get(ATTR_PAGE_SIZE)).GetSize();
         if ( !aPageSize.Width() || !aPageSize.Height() )
         {
             OSL_FAIL("PageSize Null ?!?!?");
@@ -102,7 +102,7 @@ ScHTMLImport::~ScHTMLImport()
 {
     // Ordering is important, otherwise we get an error in some other Dtor!
     // OK, as ScEEImport is the Base Class
-    delete (ScHTMLParser*) mpParser;        // before EditEngine!
+    delete static_cast<ScHTMLParser*>(mpParser);        // before EditEngine!
 }
 
 void ScHTMLImport::InsertRangeName( ScDocument* pDoc, const OUString& rName, const ScRange& rRange )
@@ -135,25 +135,25 @@ void ScHTMLImport::WriteToDocument(
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
             SCTAB nTab = maRange.aStart.Tab();
-            const ScMergeAttr* pItem = (ScMergeAttr*) mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
+            const ScMergeAttr* pItem = static_cast<const ScMergeAttr*>( mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE ) );
             if( pItem->IsMerged() )
             {
                 SCCOL nColMerge = pItem->GetColMerge();
                 SCROW nRowMerge = pItem->GetRowMerge();
 
-                const SvxBoxItem* pToItem = (const SvxBoxItem*)
-                    mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
+                const SvxBoxItem* pToItem = static_cast<const SvxBoxItem*>(
+                    mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER ) );
                 SvxBoxItem aNewItem( *pToItem );
                 if( nColMerge > 1 )
                 {
-                    const SvxBoxItem* pFromItem = (const SvxBoxItem*)
-                        mpDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
+                    const SvxBoxItem* pFromItem = static_cast<const SvxBoxItem*>(
+                        mpDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER ) );
                     aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_RIGHT ), BOX_LINE_RIGHT );
                 }
                 if( nRowMerge > 1 )
                 {
-                    const SvxBoxItem* pFromItem = (const SvxBoxItem*)
-                        mpDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
+                    const SvxBoxItem* pFromItem = static_cast<const SvxBoxItem*>(
+                        mpDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER ) );
                     aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_BOTTOM ), BOX_LINE_BOTTOM );
                 }
                 mpDoc->ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );

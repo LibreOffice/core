@@ -166,7 +166,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
             break;
         case RTFIMP_START:
         {
-            SvxRTFParser* pParser = (SvxRTFParser*) pInfo->pParser;
+            SvxRTFParser* pParser = static_cast<SvxRTFParser*>(pInfo->pParser);
             pParser->SetAttrPool( pPool );
             RTFPardAttrMapIds& rMap = pParser->GetPardMap();
             rMap.nBrush = ATTR_BACKGROUND;
@@ -392,11 +392,11 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             switch ( pInfo->nToken & ~(0xff | RTF_TABLEDEF) )
             {
                 case RTF_SHADINGDEF:
-                    ((SvxRTFParser*)pInfo->pParser)->ReadBackgroundAttr(
+                    static_cast<SvxRTFParser*>(pInfo->pParser)->ReadBackgroundAttr(
                         pInfo->nToken, pInsDefault->aItemSet, sal_True );
                 break;
                 case RTF_BRDRDEF:
-                    ((SvxRTFParser*)pInfo->pParser)->ReadBorderAttr(
+                    static_cast<SvxRTFParser*>(pInfo->pParser)->ReadBorderAttr(
                         pInfo->nToken, pInsDefault->aItemSet, sal_True );
                 break;
             }

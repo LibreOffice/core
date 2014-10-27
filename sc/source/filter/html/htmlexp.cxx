@@ -254,7 +254,7 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_ORIGURL );
         if( pItem )
         {
-            aCId = ((const SfxStringItem *)pItem)->GetValue();
+            aCId = static_cast<const SfxStringItem *>(pItem)->GetValue();
             OSL_ENSURE( !aCId.isEmpty(), "CID without length!" );
         }
     }
@@ -447,11 +447,11 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
         const SfxItemSet& rSetPara = pStyleSheet->GetItemSet();
 
         aHTMLStyle.nDefaultScriptType = ScGlobal::GetDefaultScriptType();
-        aHTMLStyle.aFontFamilyName = ((const SvxFontItem&)(rSetPara.Get(
+        aHTMLStyle.aFontFamilyName = static_cast<const SvxFontItem&>((rSetPara.Get(
                         ScGlobal::GetScriptedWhichID(
                             aHTMLStyle.nDefaultScriptType, ATTR_FONT
                             )))).GetFamilyName();
-        aHTMLStyle.nFontHeight = ((const SvxFontHeightItem&)(rSetPara.Get(
+        aHTMLStyle.nFontHeight = static_cast<const SvxFontHeightItem&>((rSetPara.Get(
                         ScGlobal::GetScriptedWhichID(
                             aHTMLStyle.nDefaultScriptType, ATTR_FONT_HEIGHT
                             )))).GetHeight();
@@ -468,7 +468,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
     const SfxItemSet& rSet = pStyleSheet->GetItemSet();
     if ( !aHTMLStyle.bInitialized )
     {
-        const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
+        const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(&rSet.Get( ATTR_BACKGROUND ));
         aHTMLStyle.aBackgroundColor = pBrushItem->GetColor();
         aHTMLStyle.bInitialized = true;
     }
@@ -550,7 +550,7 @@ OString ScHTMLExport::BorderToStyle(const char* pBorderName,
 void ScHTMLExport::WriteBody()
 {
     const SfxItemSet& rSet = PageDefaults( bAll ? 0 : aRange.aStart.Tab() );
-    const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
+    const SvxBrushItem* pBrushItem = static_cast<const SvxBrushItem*>(&rSet.Get( ATTR_BACKGROUND ));
 
     // default text color black
     if (!mbSkipHeaderFooter)
@@ -834,7 +834,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const ScPatternAttr* pAttr = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondItemSet = pDoc->GetCondResult( nCol, nRow, nTab );
 
-    const ScMergeFlagAttr& rMergeFlagAttr = (const ScMergeFlagAttr&) pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet );
+    const ScMergeFlagAttr& rMergeFlagAttr = static_cast<const ScMergeFlagAttr&>( pAttr->GetItem( ATTR_MERGE_FLAG, pCondItemSet ) );
     if ( rMergeFlagAttr.IsOverlapped() )
         return ;
 
@@ -874,7 +874,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);
 
     // border of the cells
-    SvxBoxItem* pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
+    const SvxBoxItem* pBorder = static_cast<const SvxBoxItem*>( pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER ) );
     if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
     {
         aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_style).
@@ -896,7 +896,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     const sal_Char* pChar;
     sal_uInt16 nHeightPixel;
 
-    const ScMergeAttr& rMergeAttr = (const ScMergeAttr&) pAttr->GetItem( ATTR_MERGE, pCondItemSet );
+    const ScMergeAttr& rMergeAttr = static_cast<const ScMergeAttr&>( pAttr->GetItem( ATTR_MERGE, pCondItemSet ) );
     if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
         SCCOL nC, jC;
@@ -942,36 +942,36 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             append(static_cast<sal_Int32>(nHeightPixel)).append('"');
     }
 
-    const SvxFontItem& rFontItem = (const SvxFontItem&) pAttr->GetItem(
+    const SvxFontItem& rFontItem = static_cast<const SvxFontItem&>( pAttr->GetItem(
             ScGlobal::GetScriptedWhichID( nScriptType, ATTR_FONT),
-            pCondItemSet);
+            pCondItemSet) );
 
-    const SvxFontHeightItem& rFontHeightItem = (const SvxFontHeightItem&)
+    const SvxFontHeightItem& rFontHeightItem = static_cast<const SvxFontHeightItem&>(
         pAttr->GetItem( ScGlobal::GetScriptedWhichID( nScriptType,
-                    ATTR_FONT_HEIGHT), pCondItemSet);
+                    ATTR_FONT_HEIGHT), pCondItemSet) );
 
-    const SvxWeightItem& rWeightItem = (const SvxWeightItem&) pAttr->GetItem(
+    const SvxWeightItem& rWeightItem = static_cast<const SvxWeightItem&>( pAttr->GetItem(
             ScGlobal::GetScriptedWhichID( nScriptType, ATTR_FONT_WEIGHT),
-            pCondItemSet);
+            pCondItemSet) );
 
-    const SvxPostureItem& rPostureItem = (const SvxPostureItem&)
+    const SvxPostureItem& rPostureItem = static_cast<const SvxPostureItem&>(
         pAttr->GetItem( ScGlobal::GetScriptedWhichID( nScriptType,
-                    ATTR_FONT_POSTURE), pCondItemSet);
+                    ATTR_FONT_POSTURE), pCondItemSet) );
 
-    const SvxUnderlineItem& rUnderlineItem = (const SvxUnderlineItem&)
-        pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet );
+    const SvxUnderlineItem& rUnderlineItem = static_cast<const SvxUnderlineItem&>(
+        pAttr->GetItem( ATTR_FONT_UNDERLINE, pCondItemSet ) );
 
-    const SvxColorItem& rColorItem = (const SvxColorItem&) pAttr->GetItem(
-            ATTR_FONT_COLOR, pCondItemSet );
+    const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>( pAttr->GetItem(
+            ATTR_FONT_COLOR, pCondItemSet ) );
 
-    const SvxHorJustifyItem& rHorJustifyItem = (const SvxHorJustifyItem&)
-        pAttr->GetItem( ATTR_HOR_JUSTIFY, pCondItemSet );
+    const SvxHorJustifyItem& rHorJustifyItem = static_cast<const SvxHorJustifyItem&>(
+        pAttr->GetItem( ATTR_HOR_JUSTIFY, pCondItemSet ) );
 
-    const SvxVerJustifyItem& rVerJustifyItem = (const SvxVerJustifyItem&)
-        pAttr->GetItem( ATTR_VER_JUSTIFY, pCondItemSet );
+    const SvxVerJustifyItem& rVerJustifyItem = static_cast<const SvxVerJustifyItem&>(
+        pAttr->GetItem( ATTR_VER_JUSTIFY, pCondItemSet ) );
 
-    const SvxBrushItem& rBrushItem = (const SvxBrushItem&) pAttr->GetItem(
-            ATTR_BACKGROUND, pCondItemSet );
+    const SvxBrushItem& rBrushItem = static_cast<const SvxBrushItem&>( pAttr->GetItem(
+            ATTR_BACKGROUND, pCondItemSet ) );
 
     Color aBgColor;
     if ( rBrushItem.GetColor().GetTransparency() == 255 )
@@ -1205,11 +1205,11 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                     SfxItemSet aSet = rEngine.GetAttribs( aSel );
                     if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
                     {
-                        const SvxFieldData* pField = ((const SvxFieldItem*)pItem)->GetField();
+                        const SvxFieldData* pField = static_cast<const SvxFieldItem*>(pItem)->GetField();
                         if ( pField && pField->ISA(SvxURLField) )
                         {
                             bUrl = true;
-                            const SvxURLField*  pURLField = (const SvxURLField*)pField;
+                            const SvxURLField*  pURLField = static_cast<const SvxURLField*>(pField);
 //                          String              aFieldText = rEngine.GetText( aSel );
                             rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_href ).WriteCharPtr( "=\"" );
                             OUT_STR( pURLField->GetURL() );
