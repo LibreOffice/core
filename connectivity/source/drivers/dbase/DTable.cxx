@@ -2166,7 +2166,14 @@ void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Ref
     Reference<XDataDescriptorFactory> xOldColumn;
     m_pColumns->getByName(colName) >>= xOldColumn;
 
-    alterColumn(m_pColumns->findColumn(colName)-1,descriptor,xOldColumn);
+    try
+    {
+        alterColumn(m_pColumns->findColumn(colName)-1,descriptor,xOldColumn);
+    }
+    catch (const css::lang::IndexOutOfBoundsException&)
+    {
+        throw NoSuchElementException(colName, *this);
+    }
 }
 
 void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
