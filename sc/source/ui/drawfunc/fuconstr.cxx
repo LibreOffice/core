@@ -243,7 +243,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                     FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
                     if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
                     {
-                        FuText* pText = (FuText*)pPoor;
+                        FuText* pText = static_cast<FuText*>(pPoor);
                         Point aMousePixel = rMEvt.GetPosPixel();
                         pText->SetInEditMode( pObj, &aMousePixel );
                     }

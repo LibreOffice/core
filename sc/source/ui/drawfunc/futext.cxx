@@ -94,7 +94,7 @@ static void lcl_InvalidateAttribs( SfxBindings& rBindings )
 static void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 {
     // use hyphenator only if hyphenation attribute is set
-    if ( pObj && ((const SfxBoolItem&)pObj->GetMergedItem(EE_PARA_HYPHENATE)).GetValue() ) {
+    if ( pObj && static_cast<const SfxBoolItem&>(pObj->GetMergedItem(EE_PARA_HYPHENATE)).GetValue() ) {
             com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xHyphenator( LinguMgr::GetHyphenator() );
             rOutliner.SetHyphenator( xHyphenator );
     }
@@ -486,7 +486,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                     if(pObj && pObj->ISA(SdrTextObj))
                     {
-                        SdrTextObj* pText = (SdrTextObj*)pObj;
+                        SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
                         SfxItemSet aSet(pDrDoc->GetItemPool());
 
                         pText->SetVerticalWriting(true);
@@ -658,7 +658,7 @@ void FuText::SelectionHasChanged()
                 nSdrObjKind == OBJ_OUTLINETEXT /* ||
                 pObj->ISA(SdrTextObj) */ )
             {
-                pTextObj = (SdrTextObj*) pObj;
+                pTextObj = static_cast<SdrTextObj*>(pObj);
             }
         }
     }
@@ -738,7 +738,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
 
-                    pTextObj = (SdrTextObj*) pObj;
+                    pTextObj = static_cast<SdrTextObj*>(pObj);
                     pView->SetEditMode();
 
                     //  set text cursor to click position or to end,
@@ -786,7 +786,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
     {
         if(pObj->ISA(SdrTextObj))
         {
-            SdrTextObj* pText = (SdrTextObj*)pObj;
+            SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
             pText->SetLogicRect(rRectangle);
 
             //  don't set default text, start edit mode instead

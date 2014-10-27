@@ -865,7 +865,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
     SC_MOD()->SetRefDialog( nId, true );
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-    ScSimpleRefDlgWrapper* pWnd =(ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
+    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
 
     if(pWnd!=NULL)
     {
@@ -896,7 +896,7 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
         FilterHandle(pTPFilter);
 
         nId = ScSimpleRefDlgWrapper::GetChildWindowId();
-        ScSimpleRefDlgWrapper* pWnd = (ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
+        ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
 
         if(pWnd!=NULL)
         {
@@ -1146,7 +1146,7 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
     // content (original value) but insert the predecessor of the MatrixOrigin
     // itself instead.
     if ( pScChangeAction->GetType() == SC_CAT_CONTENT &&
-            ((const ScChangeActionContent*)pScChangeAction)->IsMatrixOrigin() )
+            static_cast<const ScChangeActionContent*>(pScChangeAction)->IsMatrixOrigin() )
     {
         pActionMap->insert( ::std::make_pair( pScChangeAction->GetActionNumber(),
             const_cast<ScChangeAction*>( pScChangeAction ) ) );
@@ -1194,8 +1194,8 @@ bool ScAcceptChgDlg::InsertContentChildren(ScChangeActionMap* pActionMap,SvTreeL
 
     if ( !bParentInserted )
     {
-        pEntry=InsertChangeActionContent((const ScChangeActionContent*)
-                                pScChangeAction,pParent,RD_SPECIAL_NONE);
+        pEntry=InsertChangeActionContent(static_cast<const ScChangeActionContent*>(
+                                pScChangeAction),pParent,RD_SPECIAL_NONE);
 
         if(pEntry!=NULL)
         {
@@ -1934,8 +1934,8 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
                 nLeftKind == SV_ITEM_ID_LBOXSTRING )
             {
                 nCompare = ScGlobal::GetCaseCollator()->compareString(
-                                        ((SvLBoxString*)pLeftItem)->GetText(),
-                                        ((SvLBoxString*)pRightItem)->GetText());
+                                        static_cast<SvLBoxString*>(pLeftItem)->GetText(),
+                                        static_cast<SvLBoxString*>(pRightItem)->GetText());
 
                 if (nCompare == 0)
                     nCompare = -1;

@@ -75,7 +75,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     OSL_ENSURE( pDocSh, "DocShell not found!" );
 
     if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
-        pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+        pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     if ( !pColorList.is() )
         pColorList = XColorList::CreateStdColorList();
 

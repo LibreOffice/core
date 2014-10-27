@@ -130,7 +130,7 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 //  create OutlinerParaObject now so it can be set to vertical
                 if ( pObj->ISA(SdrTextObj) )
-                    ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
+                    static_cast<SdrTextObj*>(pObj)->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
                     pOPO->SetVertical( true );
@@ -238,7 +238,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                     basegfx::B2DPolygon aPoly;
                     aPoly.append(basegfx::B2DPoint(aStart.X(), nYMiddle));
                     aPoly.append(basegfx::B2DPoint(aEnd.X(), nYMiddle));
-                    ((SdrPathObj*)pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aPoly));
+                    static_cast<SdrPathObj*>(pObj)->SetPathPoly(basegfx::B2DPolyPolygon(aPoly));
                 }
                 else
                 {
@@ -254,7 +254,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                 {
                     bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
-                    ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
+                    static_cast<SdrTextObj*>(pObj)->SetVerticalWriting(bIsVertical);
 
                     if(bIsVertical)
                     {
@@ -270,8 +270,8 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                     // String aText(ScResId(STR_CAPTION_DEFAULT_TEXT));
                     // ((SdrCaptionObj*)pObj)->SetText(aText);
 
-                    ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
-                    ((SdrCaptionObj*)pObj)->SetTailPos(
+                    static_cast<SdrCaptionObj*>(pObj)->SetLogicRect(aRect);
+                    static_cast<SdrCaptionObj*>(pObj)->SetTailPos(
                         aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
                 }
                 else

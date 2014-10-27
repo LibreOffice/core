@@ -527,9 +527,9 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     {
                         if (!bOle)
                         {
-                            if (((SdrOle2Obj*) pObj)->GetObjRef().is())
+                            if (static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is())
                             {
-                                pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0 );
+                                pViewShell->ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0 );
                             }
                         }
                     }
@@ -551,7 +551,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
                         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
                         {
-                            FuText* pText = (FuText*)pPoor;
+                            FuText* pText = static_cast<FuText*>(pPoor);
                             Point aMousePixel = rMEvt.GetPosPixel();
                             pText->SetInEditMode( pObj, &aMousePixel );
                         }

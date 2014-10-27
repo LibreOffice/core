@@ -152,7 +152,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SfxItemState::SET )
                 {
-                    const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
+                    const SvxHyperlinkItem* pHyper = static_cast<const SvxHyperlinkItem*>(pItem);
                     const OUString& rName     = pHyper->GetName();
                     const OUString& rURL      = pHyper->GetURL();
                     const OUString& rTarget   = pHyper->GetTargetFrame();
@@ -253,7 +253,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     // wer weiss, wie lange das funktioniert? (->vom Abreisscontrol funktioniert es)
 
     if (nSlotId == SID_OBJECT_ALIGN && pArgs)
-        nSlotId = SID_OBJECT_ALIGN + ((SfxEnumItem&)pArgs->Get(SID_OBJECT_ALIGN)).GetValue() + 1;
+        nSlotId = SID_OBJECT_ALIGN + static_cast<const SfxEnumItem&>(pArgs->Get(SID_OBJECT_ALIGN)).GetValue() + 1;
 
     switch (nSlotId)
     {
@@ -444,7 +444,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
             if ( rReq.GetArgs() )
                 pViewFrm->SetChildWindow( nId,
-                                           ((const SfxBoolItem&)
+                                           static_cast<const SfxBoolItem&>(
                                             (rReq.GetArgs()->Get(SID_FONTWORK))).
                                                 GetValue() );
             else

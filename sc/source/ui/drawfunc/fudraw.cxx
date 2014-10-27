@@ -207,7 +207,7 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const 
         pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // no RTTI
         {
-            FuText* pText = (FuText*)pPoor;
+            FuText* pText = static_cast<FuText*>(pPoor);
             pText->SetInEditMode( pObj, NULL, true, pInitialKey );
             //! set cursor to end of text
         }

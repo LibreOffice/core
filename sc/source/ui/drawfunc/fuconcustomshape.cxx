@@ -43,7 +43,7 @@ FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, vcl::Window* pW
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
-        const SfxStringItem& rItm = (const SfxStringItem&)pArgs->Get( rReq.GetSlot() );
+        const SfxStringItem& rItm = static_cast<const SfxStringItem&>(pArgs->Get( rReq.GetSlot() ));
         aCustomShape = rItm.GetValue();
     }
 }
@@ -87,7 +87,7 @@ bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
         {
             SetAttributes( pObj );
             bool bForceNoFillStyle = false;
-            if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
+            if ( static_cast<SdrObjCustomShape*>(pObj)->UseNoFillStyle() )
                 bForceNoFillStyle = true;
             if ( bForceNoFillStyle )
                 pObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
@@ -265,7 +265,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
-        ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
+        static_cast<SdrObjCustomShape*>(pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }
 

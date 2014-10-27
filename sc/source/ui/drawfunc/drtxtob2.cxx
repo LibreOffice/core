@@ -148,7 +148,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 
                 if ( rReq.GetArgs() )
                     pViewFrm->SetChildWindow( nId,
-                                               ((const SfxBoolItem&)
+                                               static_cast<const SfxBoolItem&>(
                                                 (rReq.GetArgs()->Get(SID_FONTWORK))).
                                                     GetValue() );
                 else
@@ -209,7 +209,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     if ( pViewFrm->HasChildWindow(nId) )
-        pDlg = (SvxFontWorkDialog*)(pViewFrm->GetChildWindow(nId)->GetWindow());
+        pDlg = static_cast<SvxFontWorkDialog*>(pViewFrm->GetChildWindow(nId)->GetWindow());
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -250,7 +250,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
                 XColorListRef pColorList;
 
                 if ( pItem )
-                    pColorList = ((SvxColorListItem*)pItem)->GetColorList();
+                    pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
 
                 pDlg->SetActive();
 

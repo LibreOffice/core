@@ -159,7 +159,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
     //  Path is no longer used as name for the graphics object
 
-    ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
+    ScDrawLayer* pLayer = static_cast<ScDrawLayer*>(pView->GetModel());
     OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pObj->SetName(aName);
 
@@ -237,15 +237,15 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     if ( pReqArgs &&
          pReqArgs->GetItemState( SID_INSERT_GRAPHIC, true, &pItem ) == SfxItemState::SET )
     {
-        OUString aFileName = ((const SfxStringItem*)pItem)->GetValue();
+        OUString aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
         OUString aFilterName;
         if ( pReqArgs->GetItemState( FN_PARAM_FILTER, true, &pItem ) == SfxItemState::SET )
-            aFilterName = ((const SfxStringItem*)pItem)->GetValue();
+            aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
         bool bAsLink = false;
         if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
-            bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
+            bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
         Graphic aGraphic;
         int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );

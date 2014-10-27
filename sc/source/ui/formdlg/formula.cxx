@@ -93,11 +93,11 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
     if ( pDoc == NULL )
         pDoc = pViewData->GetDocument();
-    m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
+    m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS, static_cast<ScDocShell*>(pDoc->GetDocumentShell())),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
     xSet->setPropertyValue(OUString(SC_UNO_COMPILEFAP),uno::makeAny(sal_True));
 
-    m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
+    m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER, static_cast<ScDocShell*>(pDoc->GetDocumentShell())),uno::UNO_QUERY);
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
 
@@ -263,7 +263,7 @@ bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
     SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
     while ( pSh && !bAlive )
     {
-        if (((ScTabViewShell*)pSh)->GetInputHandler() == pHdl)
+        if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pHdl)
             bAlive = true;
         pSh = SfxViewShell::GetNext( *pSh, &aScType );
     }
@@ -443,7 +443,7 @@ bool ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
 {
     //  not allowed: different from this doc, and no name
     //  pDocSh is always a ScDocShell
-    if ( pDocSh && &((ScDocShell*)pDocSh)->GetDocument() != pDoc && !pDocSh->HasName() )
+    if ( pDocSh && &static_cast<ScDocShell*>(pDocSh)->GetDocument() != pDoc && !pDocSh->HasName() )
         return false;
 
     return true;        // everything else is allowed

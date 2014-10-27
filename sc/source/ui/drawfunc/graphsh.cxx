@@ -54,7 +54,7 @@ public:
         SdrPageView* pPageView = m_pView->GetSdrPageView();
         if( pPageView )
         {
-            SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
+            SdrGrafObj* pNewObj = static_cast<SdrGrafObj*>(m_pObj->Clone());
             OUString    aStr = m_pView->GetDescriptionOfMarkedObjects() + " External Edit";
             m_pView->BegUndo( aStr );
             pNewObj->SetGraphicObject( aGraphic );
@@ -117,7 +117,7 @@ void ScGraphicShell::GetFilterState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -134,9 +134,9 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aFilterObj( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            GraphicObject aFilterObj( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
 
             if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
@@ -145,7 +145,7 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
 
                 if( pPageView )
                 {
-                    SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
+                    SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>(pObj->Clone());
                     OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + OUString(ScResId( SCSTR_UNDO_GRAFFILTER ));
                     pView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
@@ -168,7 +168,7 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -185,9 +185,9 @@ void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
             ScExternalToolEdit* aExternalToolEdit = new ScExternalToolEdit( pView, pObj );
             aExternalToolEdit->Edit( &aGraphicObject );
         }
@@ -205,7 +205,7 @@ void ScGraphicShell::GetCompressGraphicState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -222,9 +222,9 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            SdrGrafObj* pGraphicObj = (SdrGrafObj*) pObj;
+            SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
             CompressGraphicsDialog dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
             if ( dialog.Execute() == RET_OK )
             {

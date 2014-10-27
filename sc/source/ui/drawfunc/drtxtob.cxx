@@ -182,7 +182,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
-                    nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                    nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                 }
 
                 if ( nFormat )
@@ -209,8 +209,8 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_CHARMAP:
             {
-                const SvxFontItem& rItem = (const SvxFontItem&)
-                            pOutView->GetAttribs().Get(EE_CHAR_FONTINFO);
+                const SvxFontItem& rItem = static_cast<const SvxFontItem&>(
+                            pOutView->GetAttribs().Get(EE_CHAR_FONTINFO));
 
                 OUString aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
@@ -222,7 +222,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
                 if ( pItem )
                 {
-                    aString = ((const SfxStringItem*)pItem)->GetValue();
+                    aString = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
@@ -259,7 +259,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SfxItemState::SET )
                 {
-                    const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
+                    const SvxHyperlinkItem* pHyper = static_cast<const SvxHyperlinkItem*>(pItem);
                     const OUString& rName     = pHyper->GetName();
                     const OUString& rURL      = pHyper->GetURL();
                     const OUString& rTarget   = pHyper->GetTargetFrame();
@@ -391,7 +391,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
                 const SvxFieldData* pField = pFieldItem->GetField();
                 if ( pField && pField->ISA(SvxURLField) )
                 {
-                    const SvxURLField* pURLField = (const SvxURLField*) pField;
+                    const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
                     aHLinkItem.SetName( pURLField->GetRepresentation() );
                     aHLinkItem.SetURL( pURLField->GetURL() );
                     aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
@@ -444,7 +444,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         {
-            bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+            bool bValue = static_cast<const SfxBoolItem&>( aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
@@ -559,7 +559,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
     pView->GetAttributes(aViewAttr);
 
     //  Unterstreichung
-    FontUnderline eOld = ((const SvxUnderlineItem&) aViewAttr.
+    FontUnderline eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
                                         Get(EE_CHAR_UNDERLINE)).GetLineStyle();
     FontUnderline eNew = eOld;
     switch (nSlot)
@@ -723,7 +723,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_SET_SUPER_SCRIPT:
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                 if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
@@ -737,7 +737,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         case SID_SET_SUB_SCRIPT:
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                 if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
@@ -806,31 +806,31 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 break;
 
             case SID_ATTR_CHAR_WEIGHT:
-                aNewAttr.Put( (const SvxWeightItem&)aEditAttr.Get( EE_CHAR_WEIGHT ) );
+                aNewAttr.Put( static_cast<const SvxWeightItem&>(aEditAttr.Get( EE_CHAR_WEIGHT )) );
                 break;
 
             case SID_ATTR_CHAR_POSTURE:
-                aNewAttr.Put( (const SvxPostureItem&)aEditAttr.Get( EE_CHAR_ITALIC ) );
+                aNewAttr.Put( static_cast<const SvxPostureItem&>(aEditAttr.Get( EE_CHAR_ITALIC )) );
                 break;
 
             case SID_ATTR_CHAR_UNDERLINE:
-                aNewAttr.Put( (const SvxUnderlineItem&)aEditAttr.Get( EE_CHAR_UNDERLINE ) );
+                aNewAttr.Put( static_cast<const SvxUnderlineItem&>(aEditAttr.Get( EE_CHAR_UNDERLINE )) );
                 break;
 
             case SID_ATTR_CHAR_OVERLINE:
-                aNewAttr.Put( (const SvxOverlineItem&)aEditAttr.Get( EE_CHAR_OVERLINE ) );
+                aNewAttr.Put( static_cast<const SvxOverlineItem&>(aEditAttr.Get( EE_CHAR_OVERLINE )) );
                 break;
 
             case SID_ATTR_CHAR_CONTOUR:
-                aNewAttr.Put( (const SvxContourItem&)aEditAttr.Get( EE_CHAR_OUTLINE ) );
+                aNewAttr.Put( static_cast<const SvxContourItem&>(aEditAttr.Get( EE_CHAR_OUTLINE )) );
                 break;
 
             case SID_ATTR_CHAR_SHADOWED:
-                aNewAttr.Put( (const SvxShadowedItem&)aEditAttr.Get( EE_CHAR_SHADOW ) );
+                aNewAttr.Put( static_cast<const SvxShadowedItem&>(aEditAttr.Get( EE_CHAR_SHADOW )) );
                 break;
 
             case SID_ATTR_CHAR_STRIKEOUT:
-                aNewAttr.Put( (const SvxCrossedOutItem&)aEditAttr.Get( EE_CHAR_STRIKEOUT ) );
+                aNewAttr.Put( static_cast<const SvxCrossedOutItem&>(aEditAttr.Get( EE_CHAR_STRIKEOUT )) );
                 break;
 
             case SID_DRAWTEXT_ATTR_DLG:
@@ -883,8 +883,8 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         else if( nSlot == SID_ATTR_PARA_LRSPACE )
         {
             sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
-            const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
-                pArgs->Get( nId );
+            const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
+                pArgs->Get( nId ));
             SfxItemSet aAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
             nId = EE_PARA_LRSPACE;
             SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
@@ -895,16 +895,16 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         }
         else if( nSlot == SID_ATTR_PARA_LINESPACE )
         {
-            SvxLineSpacingItem aLineSpaceItem = (const SvxLineSpacingItem&)pArgs->Get(
-                                                                GetPool().GetWhich(nSlot));
+            SvxLineSpacingItem aLineSpaceItem = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
+                                                                GetPool().GetWhich(nSlot)));
             SfxItemSet aAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
             aAttr.Put( aLineSpaceItem );
             pView->SetAttributes( aAttr );
         }
         else if( nSlot == SID_ATTR_PARA_ULSPACE )
         {
-            SvxULSpaceItem aULSpaceItem = (const SvxULSpaceItem&)pArgs->Get(
-                                                                GetPool().GetWhich(nSlot));
+            SvxULSpaceItem aULSpaceItem = static_cast<const SvxULSpaceItem&>(pArgs->Get(
+                                                                GetPool().GetWhich(nSlot)));
             SfxItemSet aAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
             aULSpaceItem.SetWhich(EE_PARA_ULSPACE);
             aAttr.Put( aULSpaceItem );
@@ -963,7 +963,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_ITALIC, nScript );
     //  Ausrichtung
 
-    SvxAdjust eAdj = ((const SvxAdjustItem&)aAttrSet.Get(EE_PARA_JUST)).GetAdjust();
+    SvxAdjust eAdj = static_cast<const SvxAdjustItem&>(aAttrSet.Get(EE_PARA_JUST)).GetAdjust();
     switch( eAdj )
     {
     case SVX_ADJUST_LEFT:
@@ -1001,7 +1001,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_RIGHT,     eAdj == SVX_ADJUST_RIGHT ) );
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_JUSTIFIED, eAdj == SVX_ADJUST_BLOCK ) );
 
-        SvxLRSpaceItem aLR = ((const SvxLRSpaceItem&)aAttrSet.Get( EE_PARA_LRSPACE ));
+        SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>(aAttrSet.Get( EE_PARA_LRSPACE ));
     aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
     rDestSet.Put(aLR);
     Invalidate( SID_ATTR_PARA_LRSPACE );
@@ -1009,7 +1009,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     if ( eState == SfxItemState::DONTCARE )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
     //xuxu for Line Space
-    SvxLineSpacingItem aLineSP = ((const SvxLineSpacingItem&)aAttrSet.
+    SvxLineSpacingItem aLineSP = static_cast<const SvxLineSpacingItem&>(aAttrSet.
                         Get( EE_PARA_SBL ));
     aLineSP.SetWhich(SID_ATTR_PARA_LINESPACE);
     rDestSet.Put(aLineSP);
@@ -1018,7 +1018,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     if ( eState == SfxItemState::DONTCARE )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
     //xuxu for UL Space
-    SvxULSpaceItem aULSP = ((const SvxULSpaceItem&)aAttrSet.
+    SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(aAttrSet.
                         Get( EE_PARA_ULSPACE ));
     aULSP.SetWhich(SID_ATTR_PARA_ULSPACE);
     rDestSet.Put(aULSP);
@@ -1030,7 +1030,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     //  Zeilenabstand
 
     sal_uInt16 nLineSpace = (sal_uInt16)
-                ((const SvxLineSpacingItem&)aAttrSet.
+                static_cast<const SvxLineSpacingItem&>(aAttrSet.
                         Get( EE_PARA_SBL )).GetPropLineSpace();
     switch( nLineSpace )
     {
@@ -1047,7 +1047,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  hoch-/tiefgestellt
 
-    SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+    SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
         rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, true ) );
@@ -1066,7 +1066,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
     else
     {
-        FontUnderline eUnderline = ((const SvxUnderlineItem&)
+        FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
                     aAttrSet.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
@@ -1091,7 +1091,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
             bLeftToRight = false;
     }
     else
-        bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
+        bLeftToRight = static_cast<const SvxWritingModeItem&>( aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
 
     if ( bDisableVerticalText )
     {
@@ -1119,7 +1119,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
     else
     {
-        SvxFrameDirection eAttrDir = (SvxFrameDirection)((const SvxFrameDirectionItem&)
+        SvxFrameDirection eAttrDir = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(
                                         aAttrSet.Get( EE_PARA_WRITINGDIR )).GetValue();
         if ( eAttrDir == FRMDIR_ENVIRONMENT )
         {
@@ -1178,7 +1178,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 SfxItemState eConState = aEditAttr.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
                 if( eConState != SfxItemState::DONTCARE )
                 {
-                    bContour = ( ( const SdrOnOffItem& )aEditAttr.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+                    bContour = static_cast<const SdrOnOffItem&>( aEditAttr.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
                 }
                 if (bContour) break;
 
@@ -1188,7 +1188,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
                 if(SfxItemState::DONTCARE != eVState)
                 {
-                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aEditAttr.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)static_cast<const SdrTextVertAdjustItem&>(aEditAttr.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);

@@ -318,7 +318,7 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 }
             }
 
-            ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+            static_cast<SdrPathObj*>(pObj)->SetPathPoly(aPoly);
         }
         else
         {

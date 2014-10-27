@@ -448,7 +448,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     {
         const SfxPoolItem* pItem;
         if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
-            aRangeString = OUString( ((const SfxStringItem*)pItem)->GetValue());
+            aRangeString = OUString( static_cast<const SfxStringItem*>(pItem)->GetValue());
 
         aPositionRange = pViewSh->GetViewData().GetCurPos();
     }
@@ -552,13 +552,13 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
         {
             if ( pItem->ISA( SfxUInt16Item ) )
-                nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
+                nToTable = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             else if ( pItem->ISA( SfxBoolItem ) )
             {
                 //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
                 //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
-                if ( ((const SfxBoolItem*)pItem)->GetValue() )
+                if ( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
                     nToTable = static_cast<sal_uInt16>(rScDoc.GetTableCount());
                 else
                     nToTable = static_cast<sal_uInt16>(rData.GetTabNo());

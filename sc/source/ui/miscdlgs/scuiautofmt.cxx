@@ -165,7 +165,7 @@ IMPL_LINK_NOARG_INLINE_END(ScAutoFormatDlg, DblClkHdl)
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
     ScAutoFormatData* pData = pFormat->findByIndex(nIndex);
-    bool bCheck = ((CheckBox*)pBtn)->IsChecked();
+    bool bCheck = static_cast<CheckBox*>(pBtn)->IsChecked();
 
     if ( pBtn == m_pBtnNumFormat )
         pData->SetIncludeValueFormat( bCheck );

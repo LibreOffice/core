@@ -354,7 +354,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aString += ScGlobal::GetRscString( STR_COLUMN );
     aString += strDelim;
     nPos = pLbRange->InsertEntry( aString );
-    pLbRange->SetEntryData( nPos, (void*)nEntryDataDelim );
+    pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
         boost::scoped_array<ScRangePair*> ppSortArray(xColNameRanges->CreateNameSortedArray(
@@ -390,14 +390,14 @@ void ScColRowNameRangesDlg::UpdateNames()
             aInsStr += strShow;
             nPos = pLbRange->InsertEntry( aInsStr );
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
-            pLbRange->SetEntryData( nPos, (void*)nEntryDataCol );
+            pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataCol) );
         }
     }
     aString = strDelim;
     aString += ScGlobal::GetRscString( STR_ROW );
     aString += strDelim;
     nPos = pLbRange->InsertEntry( aString );
-    pLbRange->SetEntryData( nPos, (void*)nEntryDataDelim );
+    pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xRowNameRanges->size()) > 0 )
     {
         boost::scoped_array<ScRangePair*> ppSortArray(xRowNameRanges->CreateNameSortedArray(
@@ -431,7 +431,7 @@ void ScColRowNameRangesDlg::UpdateNames()
             aInsStr += strShow;
             nPos = pLbRange->InsertEntry( aInsStr );
             aRangeMap.insert( NameRangeMap::value_type(aInsStr, aRange) );
-            pLbRange->SetEntryData( nPos, (void*)nEntryDataRow );
+            pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataRow) );
         }
     }
 
@@ -568,7 +568,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
     OUString aRangeStr = pLbRange->GetSelectEntry();
     sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
     bool bColName =
-        ((sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataCol);
+        (reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataCol);
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
     if (itr == aRangeMap.end())
         return 0;
@@ -607,7 +607,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl)
             }
             pLbRange->SelectEntryPos( nSelectPos );
             if ( nSelectPos &&
-                    (sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataDelim )
+                    reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataDelim )
                 pLbRange->SelectEntryPos( --nSelectPos );    // ---Row---
 
             pLbRange->GrabFocus();
@@ -631,7 +631,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
     sal_uInt16 nCnt = pLbRange->GetEntryCount();
     sal_uInt16 nMoves = 0;
     while ( nSelectPos < nCnt
-            && (sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataDelim )
+            && reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataDelim )
     {   // skip Delimiter
         ++nMoves;
         pLbRange->SelectEntryPos( ++nSelectPos );
@@ -658,7 +658,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
     if ( itr != aRangeMap.end() )
     {
         bool bColName =
-            ((sal_uLong)pLbRange->GetEntryData( nSelectPos ) == nEntryDataCol);
+            (reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataCol);
         UpdateRangeData( itr->second, bColName );
         pBtnAdd->Disable();
         pBtnRemove->Enable();
