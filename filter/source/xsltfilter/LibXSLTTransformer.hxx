@@ -37,7 +37,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/xslt/XXSLTTransformer.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::beans;
