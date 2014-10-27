@@ -520,9 +520,9 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLin
     mpPage3PresTypeLiveRB->Check();
     mpPage3PresTypeLiveRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
     mpPage3PresTypeKioskRB->SetClickHdl( LINK(this,AssistentDlgImpl, PresTypeHdl ));
-    mpPage3PresTimeTMF->SetFormat( TIMEF_SEC );
+    mpPage3PresTimeTMF->SetFormat( TimeFieldFormat::F_SEC );
     mpPage3PresTimeTMF->SetTime( ::tools::Time( 0, 0, 10 ) );
-    mpPage3BreakTMF->SetFormat( TIMEF_SEC );
+    mpPage3BreakTMF->SetFormat( TimeFieldFormat::F_SEC );
     mpPage3BreakTMF->SetTime( ::tools::Time( 0, 0, 10 ) );
     mpPage3LogoCB->Check();
 

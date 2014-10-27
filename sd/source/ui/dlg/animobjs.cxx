@@ -170,7 +170,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
     pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
 
     // as long as not in the resource
-    aTimeField.SetFormat( TIMEF_SEC_CS );
+    aTimeField.SetFormat( TimeFieldFormat::F_SEC_CS );
 
     aBtnFirst.SetClickHdl( LINK( this, AnimationWindow, ClickFirstHdl ) );
     aBtnReverse.SetClickHdl( LINK( this, AnimationWindow, ClickPlayHdl ) );

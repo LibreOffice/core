@@ -2011,8 +2011,8 @@ static bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              (rLocaleDataWrapper.getTimePM().indexOf(cChar) != -1) ||
              // Accept AM/PM:
              (cChar == 'a') || (cChar == 'A') || (cChar == 'm') || (cChar == 'M') || (cChar == 'p') || (cChar == 'P') ||
-             ((eFormat == TIMEF_100TH_SEC) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
-             ((eFormat == TIMEF_SEC_CS) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
+             ((eFormat == TimeFieldFormat::F_100TH_SEC) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
+             ((eFormat == TimeFieldFormat::F_SEC_CS) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
              (bDuration && (cChar == '-')) )
             return false;
         else
@@ -2091,7 +2091,7 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
     sal_Int32 nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
     if ( aStr[0] == '-' )
         bNegative = true;
-    if ( eFormat != TIMEF_SEC_CS )
+    if ( eFormat != TimeFieldFormat::F_SEC_CS )
     {
         if ( nSepPos < 0 )
             nSepPos = aStr.getLength();
@@ -2197,9 +2197,9 @@ static bool ImplTimeGetValue( const OUString& rStr, tools::Time& rTime,
     if ( (nMinute > 59) || (nSecond > 59) || (nNanoSec > 1000000000) )
         return false;
 
-    if ( eFormat == TIMEF_NONE )
+    if ( eFormat == TimeFieldFormat::F_NONE )
         nSecond = nNanoSec = 0;
-    else if ( eFormat == TIMEF_SEC )
+    else if ( eFormat == TimeFieldFormat::F_SEC )
         nNanoSec = 0;
 
     if ( !bDuration )
@@ -2275,12 +2275,12 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 
     bool bSecond = false;
     bool b100Sec = false;
-    if ( meFormat != TIMEF_NONE )
+    if ( meFormat != TimeFieldFormat::F_NONE )
         bSecond = true;
-    if ( meFormat == TIMEF_100TH_SEC )
+    if ( meFormat == TimeFieldFormat::F_100TH_SEC )
         b100Sec = true;
 
-    if ( meFormat == TIMEF_SEC_CS )
+    if ( meFormat == TimeFieldFormat::F_SEC_CS )
     {
         sal_uLong n  = aTempTime.GetHour() * 3600L;
         n       += aTempTime.GetMin()  * 60L;
@@ -2331,7 +2331,7 @@ void TimeField::ImplTimeSpinArea( bool bUp )
         Selection aSelection( GetField()->GetSelection() );
 
         // Area search
-        if ( GetFormat() != TIMEF_SEC_CS )
+        if ( GetFormat() != TimeFieldFormat::F_SEC_CS )
         {
             //Which area is the cursor in of HH:MM:SS.TT
             for ( sal_Int32 i = 1, nPos = 0; i <= 4; i++ )
@@ -2396,7 +2396,7 @@ void TimeField::ImplTimeSpinArea( bool bUp )
 
 void TimeFormatter::ImplInit()
 {
-    meFormat        = TIMEF_NONE;
+    meFormat        = TimeFieldFormat::F_NONE;
     mbDuration      = false;
     mnTimeFormat    = HOUR_24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
 }
@@ -2545,11 +2545,11 @@ void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, Selection* pNe
         OUString aStr;
         bool bSec    = false;
         bool b100Sec = false;
-        if ( meFormat != TIMEF_NONE )
+        if ( meFormat != TimeFieldFormat::F_NONE )
             bSec = true;
-        if ( meFormat == TIMEF_100TH_SEC || meFormat == TIMEF_SEC_CS )
+        if ( meFormat == TimeFieldFormat::F_100TH_SEC || meFormat == TimeFieldFormat::F_SEC_CS )
             b100Sec = true;
-        if ( meFormat == TIMEF_SEC_CS )
+        if ( meFormat == TimeFieldFormat::F_SEC_CS )
         {
             sal_uLong n  = aNewTime.GetHour() * 3600L;
             n       += aNewTime.GetMin()  * 60L;
@@ -2782,40 +2782,40 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
         {
             SetTimeFormat( HOUR_24 );
             SetDuration( false );
-            SetFormat( TIMEF_NONE );
+            SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
         case EXTTIMEF_24H_LONG:
         {
             SetTimeFormat( HOUR_24 );
             SetDuration( false );
-            SetFormat( TIMEF_SEC );
+            SetFormat( TimeFieldFormat::F_SEC );
         }
         break;
         case EXTTIMEF_12H_SHORT:
         {
             SetTimeFormat( HOUR_12 );
             SetDuration( false );
-            SetFormat( TIMEF_NONE );
+            SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
         case EXTTIMEF_12H_LONG:
         {
             SetTimeFormat( HOUR_12 );
             SetDuration( false );
-            SetFormat( TIMEF_SEC );
+            SetFormat( TimeFieldFormat::F_SEC );
         }
         break;
         case EXTTIMEF_DURATION_SHORT:
         {
             SetDuration( true );
-            SetFormat( TIMEF_NONE );
+            SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
         case EXTTIMEF_DURATION_LONG:
         {
             SetDuration( true );
-            SetFormat( TIMEF_SEC );
+            SetFormat( TimeFieldFormat::F_SEC );
         }
         break;
         default:    OSL_FAIL( "ExtTimeFieldFormat unknown!" );

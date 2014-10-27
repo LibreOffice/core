@@ -84,7 +84,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( vcl::Window* pWindow,
     aRbtAuto->SetClickHdl( aLink );
 
     aTmfPause->SetModifyHdl( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
-    aTmfPause->SetFormat( TIMEF_SEC );
+    aTmfPause->SetFormat( TimeFieldFormat::F_SEC );
 
     // fill Listbox with page names
     for (std::vector<OUString>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
