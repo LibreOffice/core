@@ -446,7 +446,7 @@ SdPublishingDlg::SdPublishingDlg(vcl::Window* pWindow, DocumentType eDocType)
 
     pPage2_ChgDefault->SetClickHdl(LINK(this,SdPublishingDlg, SlideChgHdl));
     pPage2_ChgAuto->SetClickHdl(LINK(this,SdPublishingDlg, SlideChgHdl));
-    pPage2_Duration->SetFormat( TIMEF_SEC );
+    pPage2_Duration->SetFormat( TimeFieldFormat::F_SEC );
 
     pPage5_Buttons->SetSelectHdl(LINK(this,SdPublishingDlg, ButtonsHdl ));
     pPage5_Buttons->SetStyle( pPage5_Buttons->GetStyle() | WB_VSCROLL );

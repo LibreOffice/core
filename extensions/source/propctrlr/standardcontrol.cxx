@@ -72,7 +72,7 @@ namespace pcr
         :OTimeControl_Base( PropertyControlType::TimeField, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetStrictFormat( true );
-        getTypedControlWindow()->SetFormat( TIMEF_SEC );
+        getTypedControlWindow()->SetFormat( TimeFieldFormat::F_SEC );
         getTypedControlWindow()->EnableEmptyFieldValue( true );
     }
 

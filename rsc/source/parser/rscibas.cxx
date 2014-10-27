@@ -209,9 +209,9 @@ RscEnum * RscTypCont::InitTimeFieldFormat()
     pTimeFieldFormat = new RscEnum( pHS->getID( "EnumTimeFieldFormat" ),
                                     RSC_NOTYPE );
 
-    SETCONST( pTimeFieldFormat, "TIMEF_NONE", TIMEF_NONE );
-    SETCONST( pTimeFieldFormat, "TIMEF_SEC", TIMEF_SEC );
-    SETCONST( pTimeFieldFormat, "TIMEF_100TH_SEC", TIMEF_100TH_SEC );
+    SETCONST( pTimeFieldFormat, "TIMEF_NONE", TimeFieldFormat::F_NONE );
+    SETCONST( pTimeFieldFormat, "TIMEF_SEC", TimeFieldFormat::F_SEC );
+    SETCONST( pTimeFieldFormat, "TIMEF_100TH_SEC", TimeFieldFormat::F_100TH_SEC );
 
     return pTimeFieldFormat;
 }
