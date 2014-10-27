@@ -70,6 +70,10 @@
 #endif
 #endif
 
+#if defined LINUX && defined X86
+#include <sys/resource.h>
+#endif
+
 using namespace osl;
 using namespace std;
 using namespace jfw_plugin;
@@ -676,6 +680,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // all some directories of the Java installation. This is necessary for
     // all versions below 1.5.1
     options.push_back(Option("abort", reinterpret_cast<void*>(abort_handler)));
+    bool hasStackSize = false;
     for (int i = 0; i < cOptions; i++)
     {
         OString opt(arOptions[i].optionString);
@@ -692,10 +697,45 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         if (opt == "-Xint") {
             addForceInterpreted = false;
         }
+        if (opt.startsWith("-Xss")) {
+            hasStackSize = true;
+        }
         options.push_back(Option(opt, arOptions[i].extraInfo));
     }
     if (addForceInterpreted) {
         options.push_back(Option("-Xint", nullptr));
+    }
+    if (!hasStackSize) {
+#if defined LINUX && defined X86
+        // At least OpenJDK 1.8.0's os::workaround_expand_exec_shield_cs_limit
+        // (hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp) can mmap an rwx
+        // page into the area that the main stack can grow down to according to
+        // "ulimit -s", as os::init_2's (hotspot/src/os/linux/vm/os_linux.cpp)
+        // call to
+        //
+        //   Linux::capture_initial_stack(JavaThread::stack_size_at_create());
+        //
+        // caps _initial_thread_stack_size at threadStackSizeInBytes ,i.e.,
+        // -Xss, which appears to default to only 327680, whereas "ulimit -s"
+        // defaults to 8192 * 1024 at least on Fedora 20; so attempt to pass in
+        // a useful -Xss argument:
+        rlimit l;
+        if (getrlimit(RLIMIT_STACK, &l) == 0) {
+            if (l.rlim_cur == RLIM_INFINITY) {
+                SAL_INFO("jfw", "RLIMIT_STACK RLIM_INFINITY -> 8192K");
+                l.rlim_cur = 8192 * 1024;
+            } else if (l.rlim_cur > 512 * 1024 * 1024) {
+                SAL_INFO(
+                    "jfw", "huge RLIMIT_STACK " << l.rlim_cur << " -> 8192K");
+                l.rlim_cur = 8192 * 1024;
+            }
+            options.push_back(
+                Option("-Xss" + OString::number(l.rlim_cur), nullptr));
+        } else {
+            int e = errno;
+            SAL_WARN("jfw", "getrlimit(RLIMIT_STACK) failed with errno " << e);
+        }
+#endif
     }
 
     boost::scoped_array<JavaVMOption> sarOptions(new JavaVMOption[options.size()]);
