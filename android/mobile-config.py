@@ -33,7 +33,6 @@ main_xcd_discard = [
     'org.openoffice.Office.UI/BasicIDEWindowState',
     'org.openoffice.Office.UI/GenericCategories',
     'org.openoffice.Office.UI/ChartWindowState',
-    'org.openoffice.Office.UI/Factories',
     'org.openoffice.Office.UI/BaseWindowState',
     'org.openoffice.Office.UI/BasicIDECommands',
     'org.openoffice.Office.UI/BibliographyCommands',
