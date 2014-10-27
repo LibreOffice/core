@@ -169,10 +169,10 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
 {
     m_pColormap = &GetGenericData()->GetSalDisplay()->GetColormap(nXScreen);
     m_nXScreen  = nXScreen;
+    m_pFrame    = pFrame;
     SetDrawable( aTarget, nXScreen );
 
     bWindow_    = true;
-    m_pFrame    = pFrame;
     m_pVDev     = NULL;
 }
 
