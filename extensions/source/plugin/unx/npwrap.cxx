@@ -365,12 +365,12 @@ int main( int argc, char **argv)
     if ((flags = fcntl (wakeup_fd[0], F_GETFD)) != -1)
     {
         flags |= FD_CLOEXEC;
-        fcntl (wakeup_fd[0], F_SETFD, flags);
+        (void)fcntl(wakeup_fd[0], F_SETFD, flags);
     }
     if ((flags = fcntl (wakeup_fd[1], F_GETFD)) != -1)
     {
         flags |= FD_CLOEXEC;
-        fcntl (wakeup_fd[1], F_SETFD, flags);
+        (void)fcntl(wakeup_fd[1], F_SETFD, flags);
     }
 
     // set non-blocking I/O flag.
