@@ -4508,4 +4508,9 @@ Size GtkSalDisplay::GetScreenSize( int nDisplayScreen )
     return Size( aRect.GetWidth(), aRect.GetHeight() );
 }
 
+Window GtkSalFrame::GetX11Window()
+{
+    return widget_get_xid(m_pWindow);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
