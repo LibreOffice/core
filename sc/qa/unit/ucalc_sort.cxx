@@ -18,6 +18,7 @@
 #include <scopetools.hxx>
 #include <globalnames.hxx>
 #include <dbdocfun.hxx>
+#include <docfunc.hxx>
 #include <scitems.hxx>
 #include <editutil.hxx>
 
@@ -1430,7 +1431,38 @@ void Test::testSortRefUpdate6()
             { "9", "1", "7" },
         };
 
-        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "After redo");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Change the value of C1 and make sure the formula broadcasting chain still works.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.SetValueCell(ScAddress(2,0,0), 11.0, false);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Order", "Value", "11" },
+            { "1", "2", "13" },
+            { "8", "3", "16" },
+            { "9", "1", "17" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "Change the header value");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    // Undo and check.
+    pUndoMgr->Undo();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Order", "Value", "1" },
+            { "1", "2", "3" },
+            { "8", "3", "6" },
+            { "9", "1", "7" },
+        };
+
+        bool bSuccess = checkOutput<3>(m_pDoc, aDataRange, aOutputCheck, "After undo of header value change");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
