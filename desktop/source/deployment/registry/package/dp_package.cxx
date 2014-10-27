@@ -1398,7 +1398,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
         if (notifyDetectionError ||
             !exc.isExtractableTo( cppu::UnoType<lang::IllegalArgumentException>::get()) )
         {
-            interactContinuation(
+            (void)interactContinuation(
                 Any( lang::WrappedTargetException("bundle item error!",
                          static_cast<OWeakObject *>(this), exc ) ),
                 cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv, 0, 0 );
