@@ -3103,8 +3103,6 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( bool bIgnoreExtraSpace )
             }
         }
     }
-    if ( nMaxWidth < 0 )
-        nMaxWidth = 0;
 
     nMaxWidth++; // widen it, because in CreateLines for >= is wrapped.
     return (sal_uInt32)nMaxWidth;
