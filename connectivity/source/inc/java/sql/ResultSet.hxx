@@ -87,7 +87,7 @@ namespace connectivity
                                                         ::com::sun::star::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                                                         const ::com::sun::star::uno::Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                                                 const ::com::sun::star::uno::Any& rValue

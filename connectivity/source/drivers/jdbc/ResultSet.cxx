@@ -899,7 +899,7 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
                             ::com::sun::star::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const ::com::sun::star::uno::Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
+                                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     bool bRet = false;
     switch(nHandle)
