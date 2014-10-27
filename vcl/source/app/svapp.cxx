@@ -517,7 +517,7 @@ void Application::SetSettings( const AllSettings& rSettings )
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
-        InitSettings();
+        InitSettings(pSVData);
         *pSVData->maAppData.mpSettings = rSettings;
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
     }
@@ -616,16 +616,14 @@ const AllSettings& Application::GetSettings()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
-        InitSettings();
+        InitSettings(pSVData);
     }
 
     return *(pSVData->maAppData.mpSettings);
 }
 
-void Application::InitSettings()
+void Application::InitSettings(ImplSVData* pSVData)
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
     assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
 
     pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;

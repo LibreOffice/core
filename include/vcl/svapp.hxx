@@ -1546,7 +1546,7 @@ public:
 
 private:
 
-    static void InitSettings();
+    static void InitSettings(ImplSVData* pSVData);
 
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
 };
