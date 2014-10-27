@@ -388,10 +388,14 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
                 setPropertyValue( pSourceProperty->Name, xSourceProps->getPropertyValue( pSourceProperty->Name ) );
             }
         }
+        catch(const RuntimeException&)
+        {
+            throw;
+        }
         catch(const Exception&)
         {
             css::uno::Any a(cppu::getCaughtException());
-            throw WrappedTargetException(
+            throw WrappedTargetRuntimeException(
                 "Could not clone the given database form.",
                 *const_cast< ODatabaseForm* >( &_cloneSource ),
                 a
@@ -400,7 +404,6 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     }
     osl_atomic_decrement( &m_refCount );
 }
-
 
 void ODatabaseForm::impl_construct()
 {
