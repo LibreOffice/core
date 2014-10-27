@@ -54,18 +54,26 @@ if __name__ == '__main__':
     tree = ET.parse(sys.argv[1])
     root = tree.getroot()
 
-    saved = 0
     total = 0
     for child in root:
-        section = child.attrib['{http://openoffice.org/2001/registry}name']
-        package = child.attrib['{http://openoffice.org/2001/registry}package']
-        size = len(ET.tostring(child));
-        total = total + size
-        key = '%s/%s' % (package, section)
-        if key in main_xcd_discard:
-            root.remove(child)
-            print 'removed %s - saving %d' % (key, size)
-            saved = saved + size
+        total += len(ET.tostring(child))
+
+    saved = 0
+    restarted = True
+
+    while restarted:
+        restarted = False
+        for child in root:
+            section = child.attrib['{http://openoffice.org/2001/registry}name']
+            package = child.attrib['{http://openoffice.org/2001/registry}package']
+            size = len(ET.tostring(child));
+            key = '%s/%s' % (package, section)
+            if key in main_xcd_discard:
+                root.remove(child)
+                print 'removed %s - saving %d' % (key, size)
+                saved = saved + size
+                restarted = True
+                break
 
     print "saved %d of %d bytes: %2.f%%" % (saved, total, saved*100.0/total)
 
