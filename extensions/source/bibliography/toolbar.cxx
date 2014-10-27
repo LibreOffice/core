@@ -281,7 +281,7 @@ void BibToolBar::InitListener()
                 pListener=new BibToolBarListener(this,aURL.Complete,nId);
             }
 
-            BibToolBarListenerRef* pxInsert = new Reference<frame::XStatusListener>;
+            BibToolBarListenerRef* pxInsert = new uno::Reference<frame::XStatusListener>;
             (*pxInsert) = pListener;
             aListenerArr.push_back( pxInsert );
             xDisp->addStatusListener(uno::Reference< frame::XStatusListener > (pListener),aURL);

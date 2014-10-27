@@ -182,7 +182,7 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
 
 OFieldExpressionControl::~OFieldExpressionControl()
 {
-    acquire();
+    WeakImplHelper1::acquire();
     uno::Reference< report::XGroups > xGroups = m_pParent->getGroups();
     xGroups->removeContainerListener(this);
 
