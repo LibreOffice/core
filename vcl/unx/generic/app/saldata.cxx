@@ -355,12 +355,12 @@ SalXLib::SalXLib()
         if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
-            fcntl (m_pTimeoutFDS[0], F_SETFD, flags);
+            (void)fcntl(m_pTimeoutFDS[0], F_SETFD, flags);
         }
         if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
-            fcntl (m_pTimeoutFDS[1], F_SETFD, flags);
+            (void)fcntl(m_pTimeoutFDS[1], F_SETFD, flags);
         }
 
         // set non-blocking I/O flag.

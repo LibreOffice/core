@@ -79,21 +79,21 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
         if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
-            (void)fcntl (m_pTimeoutFDS[0], F_SETFD, flags);
+            (void)fcntl(m_pTimeoutFDS[0], F_SETFD, flags);
         }
         if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
-            (void)fcntl (m_pTimeoutFDS[1], F_SETFD, flags);
+            (void)fcntl(m_pTimeoutFDS[1], F_SETFD, flags);
         }
 
         // set non-blocking I/O flag.
-        if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
+        if ((flags = fcntl(m_pTimeoutFDS[0], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
             (void)fcntl(m_pTimeoutFDS[0], F_SETFL, flags);
         }
-        if ((flags = fcntl (m_pTimeoutFDS[1], F_GETFL)) != -1)
+        if ((flags = fcntl(m_pTimeoutFDS[1], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
             (void)fcntl(m_pTimeoutFDS[1], F_SETFL, flags);
