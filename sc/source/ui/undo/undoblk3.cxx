@@ -211,7 +211,7 @@ void ScUndoDeleteContents::Redo()
 void ScUndoDeleteContents::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteContents( nFlags, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteContents( nFlags, true );
 }
 
 bool ScUndoDeleteContents::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -344,7 +344,7 @@ void ScUndoFillTable::Redo()
 void ScUndoFillTable::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->FillTab( nFlags, nFunction, bSkipEmpty, bAsLink );
 }
 
 bool ScUndoFillTable::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -367,9 +367,9 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
         bMulti      ( bNewMulti )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pApplyPattern = (ScPatternAttr*) &pPool->Put( *pNewApply );
-    pLineOuter = pNewOuter ? (SvxBoxItem*) &pPool->Put( *pNewOuter ) : NULL;
-    pLineInner = pNewInner ? (SvxBoxInfoItem*) &pPool->Put( *pNewInner ) : NULL;
+    pApplyPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewApply ) ));
+    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>(static_cast<const SvxBoxItem*>( &pPool->Put( *pNewOuter ) )) : NULL;
+    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>(static_cast<const SvxBoxInfoItem*>( &pPool->Put( *pNewInner ) )) : NULL;
 }
 
 ScUndoSelectionAttr::~ScUndoSelectionAttr()
@@ -479,7 +479,7 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         if (pLineOuter)
             rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner, true );
         else
@@ -626,7 +626,7 @@ void ScUndoAutoFill::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         if (eFillCmd==FILL_SIMPLE)
             rViewShell.FillSimple( eFillDir, true );
         else
@@ -754,7 +754,7 @@ void ScUndoMerge::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         bool bCont = false;
         rViewShell.MergeCells( false, bCont, true );
     }
@@ -906,7 +906,7 @@ void ScUndoAutoFormat::Redo()
 void ScUndoAutoFormat::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoFormat( nFormatNo, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoFormat( nFormatNo, true );
 }
 
 bool ScUndoAutoFormat::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1085,7 +1085,7 @@ void ScUndoReplace::Redo()
 void ScUndoReplace::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SearchAndReplace( pSearchItem, true, false );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SearchAndReplace( pSearchItem, true, false );
 }
 
 bool ScUndoReplace::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1267,7 +1267,7 @@ void ScUndoConversion::Redo()
 void ScUndoConversion::Repeat( SfxRepeatTarget& rTarget )
 {
     if( rTarget.ISA( ScTabViewTarget ) )
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoSheetConversion( maConvParam, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoSheetConversion( maConvParam, true );
 }
 
 bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1353,7 +1353,7 @@ void ScUndoRefConversion::Redo()
 void ScUndoRefConversion::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoRefConversion();
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoRefConversion();
 }
 
 bool ScUndoRefConversion::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1479,8 +1479,8 @@ static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const OUSt
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
-            if ( ((ScAreaLink*)pBase)->IsEqual( rDoc, rFlt, rOpt, rSrc, rDest ) )
-                return (ScAreaLink*)pBase;
+            if ( static_cast<ScAreaLink*>(pBase)->IsEqual( rDoc, rFlt, rOpt, rSrc, rDest ) )
+                return static_cast<ScAreaLink*>(pBase);
     }
 
     OSL_FAIL("ScAreaLink not found");

@@ -209,7 +209,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
         //  -> use global pool from module
 
         SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
-        const ScPatternAttr& rPattern = (const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
+        const ScPatternAttr& rPattern = static_cast<const ScPatternAttr&>(SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN));
         rPattern.FillEditItemSet( &aDefaults );
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
@@ -1029,7 +1029,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = NULL;                       // invalid now

@@ -32,13 +32,13 @@
 //! use SIDs?
 
 #define IS_SHARE_HEADER(set) \
-    ((SfxBoolItem&) \
-        ((SvxSetItem&)(set).Get(ATTR_PAGE_HEADERSET)).GetItemSet(). \
+    static_cast<const SfxBoolItem&>( \
+        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_HEADERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
 #define IS_SHARE_FOOTER(set) \
-    ((SfxBoolItem&) \
-        ((SvxSetItem&)(set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
+    static_cast<const SfxBoolItem&>( \
+        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
 ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
@@ -48,7 +48,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           const OString& rID, const OUString& rUIXMLDescription )
     :   SfxTabDialog( pFrameP, pParent, rID, rUIXMLDescription, &rCoreSet )
 {
-    eNumType = ((const SvxPageItem&)rCoreSet.Get(ATTR_PAGE)).GetNumType();
+    eNumType = static_cast<const SvxPageItem&>(rCoreSet.Get(ATTR_PAGE)).GetNumType();
 
     OUString aTmp = GetText();
 
@@ -163,9 +163,9 @@ ScHFEditActiveDlg::ScHFEditActiveDlg( SfxViewFrame*     pFrameP,
     :   ScHFEditDlg( pFrameP, pParent, rCoreSet, rPageStyle,
         "HeaderFooterDialog", "modules/scalc/ui/headerfooterdialog.ui" )
 {
-    const SvxPageItem&  rPageItem = (const SvxPageItem&)
+    const SvxPageItem&  rPageItem = static_cast<const SvxPageItem&>(
                 rCoreSet.Get(
-                    rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
+                    rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) ));
 
     bool bRightPage = ( SVX_PAGE_LEFT !=
                         SvxPageUsage(rPageItem.GetPageUsage()) );
@@ -197,7 +197,7 @@ void ScHFEditDlg::PageCreated( sal_uInt16 /* nId */, SfxTabPage& rPage )
 {
     // kann ja nur ne ScHFEditPage sein...
 
-    ((ScHFEditPage&)rPage).SetNumType(eNumType);
+    static_cast<ScHFEditPage&>(rPage).SetNumType(eNumType);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

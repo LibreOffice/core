@@ -101,7 +101,7 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
-        const ScLinkRefreshedHint& rLH = (const ScLinkRefreshedHint&) rHint;
+        const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
         if ( rLH.GetLinkType() == SC_LINKREFTYPE_SHEET && rLH.GetUrl() == aFileName )
             Refreshed_Impl();
     }
@@ -118,7 +118,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
             ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
             if (pBase->ISA(ScTableLink))
             {
-                ScTableLink* pTabLink = (ScTableLink*)pBase;
+                ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
                 if ( pTabLink->GetFileName().equals(aFileName) )
                     return pTabLink;
             }
@@ -630,7 +630,7 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
-        const ScLinkRefreshedHint& rLH = (const ScLinkRefreshedHint&) rHint;
+        const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
         if ( rLH.GetLinkType() == SC_LINKREFTYPE_AREA )
         {
             //  get this link to compare dest position
@@ -1076,7 +1076,7 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
-        const ScLinkRefreshedHint& rLH = (const ScLinkRefreshedHint&) rHint;
+        const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
         if ( rLH.GetLinkType() == SC_LINKREFTYPE_DDE &&
              rLH.GetDdeAppl()  == aAppl &&
              rLH.GetDdeTopic() == aTopic &&

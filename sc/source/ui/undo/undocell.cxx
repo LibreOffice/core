@@ -91,9 +91,9 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     bIsAutomatic( bAutomatic )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pNewPattern = (ScPatternAttr*) &pPool->Put( *pNewPat );
-    pOldPattern = (ScPatternAttr*) &pPool->Put( *pOldPat );
-    pApplyPattern = (ScPatternAttr*) &pPool->Put( *pApplyPat );
+    pNewPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pNewPat ) ));
+    pOldPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pOldPat ) ));
+    pApplyPattern = const_cast<ScPatternAttr*>(static_cast<const ScPatternAttr*>( &pPool->Put( *pApplyPat ) ));
 }
 
 ScUndoCursorAttr::~ScUndoCursorAttr()
@@ -176,7 +176,7 @@ void ScUndoCursorAttr::Redo()
 void ScUndoCursorAttr::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->ApplySelectionPattern( *pApplyPattern );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->ApplySelectionPattern( *pApplyPattern );
 }
 
 bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -316,7 +316,7 @@ void ScUndoEnterData::Repeat(SfxRepeatTarget& rTarget)
     if (rTarget.ISA(ScTabViewTarget))
     {
         OUString aTemp = maNewString;
-        ((ScTabViewTarget&)rTarget).GetViewShell()->EnterDataAtCursor( aTemp );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->EnterDataAtCursor( aTemp );
     }
 }
 
@@ -561,7 +561,7 @@ void ScUndoPageBreak::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
         if (bInsert)
             rViewShell.InsertPageBreak(bColumn, true);
@@ -634,7 +634,7 @@ void ScUndoPrintZoom::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         ScViewData& rViewData = rViewShell.GetViewData();
         rViewData.GetDocShell()->SetPrintZoom( rViewData.GetTabNo(), nNewScale, nNewPages );
     }
@@ -718,7 +718,7 @@ void ScUndoThesaurus::Redo()
 void ScUndoThesaurus::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DoThesaurus( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DoThesaurus( true );
 }
 
 bool ScUndoThesaurus::CanRepeat(SfxRepeatTarget& rTarget) const

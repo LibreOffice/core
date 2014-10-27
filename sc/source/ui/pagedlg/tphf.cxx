@@ -107,8 +107,8 @@ bool ScHFPage::FillItemSet( SfxItemSet* rOutSet )
 void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
     sal_uInt16          nPageWhich = GetWhich( SID_ATTR_PAGE );
-    const SvxPageItem&  rPageItem  = (const SvxPageItem&)
-                                     rSet.Get(nPageWhich);
+    const SvxPageItem&  rPageItem  = static_cast<const SvxPageItem&>(
+                                     rSet.Get(nPageWhich));
 
     nPageUsage = rPageItem.GetPageUsage();
 
@@ -215,8 +215,8 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
                 pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
         }
 
-        SvxNumType eNumType = ((const SvxPageItem&)aDataSet.Get(ATTR_PAGE)).GetNumType();
-        ((ScHFEditPage*)pDlg->GetTabPage())->SetNumType(eNumType);
+        SvxNumType eNumType = static_cast<const SvxPageItem&>(aDataSet.Get(ATTR_PAGE)).GetNumType();
+        static_cast<ScHFEditPage*>(pDlg->GetTabPage())->SetNumType(eNumType);
 
         aText += " (" + ScGlobal::GetRscString( STR_PAGESTYLE );
         aText += ": " + aStrPageStyle + ")";

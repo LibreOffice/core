@@ -218,7 +218,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
         {
             if( eState >= SfxItemState::DEFAULT)
             {
-                const SfxInt16Item* pItem = (const SfxInt16Item*)pState;
+                const SfxInt16Item* pItem = static_cast<const SfxInt16Item*>(pState);
                 sal_uInt16 nVal = pItem->GetValue();
                 mnCategorySelected = nVal;
                 mpLbCategory->SelectEntryPos(nVal);
@@ -256,7 +256,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             sal_uInt16        nLeadZeroes   =    0;
             if( eState >= SfxItemState::DEFAULT)
             {
-                const SfxStringItem* pItem = (const SfxStringItem*)pState;
+                const SfxStringItem* pItem = static_cast<const SfxStringItem*>(pState);
                 OUString aCode = pItem->GetValue();
             /*  if(aCode.Equals(String::CreateFromAscii("General")))
                 {

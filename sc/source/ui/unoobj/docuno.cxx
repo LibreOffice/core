@@ -645,7 +645,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const ScPointerChangedHint*>(&rHint) )
     {
-        sal_uInt16 nFlags = ((const ScPointerChangedHint&)rHint).GetFlags();
+        sal_uInt16 nFlags = static_cast<const ScPointerChangedHint&>(rHint).GetFlags();
         if (nFlags & SC_POINTERCHANGED_NUMFMT)
         {
             //  NumberFormatter-Pointer am Uno-Objekt neu setzen
@@ -2962,7 +2962,7 @@ void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //! Referenz-Update fuer Tab und Start/Ende
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -3230,7 +3230,7 @@ void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //! Referenz-Update fuer Tab und Start/Ende
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -3693,7 +3693,7 @@ void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //! Referenz-Update fuer Tab und Start/Ende
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

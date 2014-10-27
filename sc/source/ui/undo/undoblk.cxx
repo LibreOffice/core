@@ -131,7 +131,7 @@ bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
 
     if ( bPartOfPaste && pNextAction->ISA( ScUndoWrapper ) )
     {
-        ScUndoWrapper* pWrapper = (ScUndoWrapper*)pNextAction;
+        ScUndoWrapper* pWrapper = static_cast<ScUndoWrapper*>(pNextAction);
         SfxUndoAction* pWrappedAction = pWrapper->GetWrappedUndo();
         if ( pWrappedAction && pWrappedAction->ISA( ScUndoPaste ) )
         {
@@ -316,7 +316,7 @@ void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
             pPasteUndo->Repeat( rTarget );
         }
         else
-            ((ScTabViewTarget&)rTarget).GetViewShell()->InsertCells( eCmd, true );
+            static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->InsertCells( eCmd, true );
     }
 }
 
@@ -551,7 +551,7 @@ void ScUndoDeleteCells::Redo()
 void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteCells( eCmd, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( eCmd, true );
 }
 
 bool ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -730,7 +730,7 @@ void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
 {
     // if single selection
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteCells( DEL_DELROWS, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->DeleteCells( DEL_DELROWS, true );
 }
 
 bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -831,7 +831,7 @@ void ScUndoCut::Redo()
 void ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->CutToClip( NULL, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->CutToClip( NULL, true );
 }
 
 bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1092,7 +1092,7 @@ void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell* pViewSh = ((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell* pViewSh = static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pViewSh->GetActiveWin() );
         if (pOwnClip)
         {
@@ -1487,7 +1487,7 @@ void ScUndoListNames::Redo()
 void ScUndoListNames::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->InsertNameList();
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->InsertNameList();
 }
 
 bool ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1651,7 +1651,7 @@ void ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
     if (rTarget.ISA(ScTabViewTarget))
     {
         OUString aTemp = aName;
-        ((ScTabViewTarget&)rTarget).GetViewShell()->UseScenario(aTemp);
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->UseScenario(aTemp);
     }
 }
 
@@ -1659,7 +1659,7 @@ bool ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScViewData& rViewData = ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData();
+        ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
         return !rViewData.GetDocument()->IsScenario( rViewData.GetTabNo() );
     }
     return false;
@@ -1714,7 +1714,7 @@ void ScUndoSelectionStyle::DoChange( const bool bUndo )
     {
         ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
         ScStyleSheet* pStyleSheet =
-            (ScStyleSheet*) pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
+            static_cast<ScStyleSheet*>( pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA ) );
         if (!pStyleSheet)
         {
             OSL_FAIL("StyleSheet not found");
@@ -1752,15 +1752,15 @@ void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
-        ScStyleSheet* pStyleSheet = (ScStyleSheet*) pStlPool->
-                                            Find( aStyleName, SFX_STYLE_FAMILY_PARA );
+        ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>( pStlPool->
+                                            Find( aStyleName, SFX_STYLE_FAMILY_PARA ));
         if (!pStyleSheet)
         {
             OSL_FAIL("StyleSheet not found");
             return;
         }
 
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         rViewShell.SetStyleSheetToMarked( pStyleSheet, true );
     }
 }
@@ -1851,7 +1851,7 @@ void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
     {
         OUString aTemp = aFormula;
         ScDocument& rDoc = pDocShell->GetDocument();
-        ((ScTabViewTarget&)rTarget).GetViewShell()->EnterMatrix(aTemp, rDoc.GetGrammar());
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->EnterMatrix(aTemp, rDoc.GetGrammar());
     }
 }
 
@@ -1918,7 +1918,7 @@ void ScUndoIndent::Redo()
 void ScUndoIndent::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->ChangeIndent( bIsIncrement );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->ChangeIndent( bIsIncrement );
 }
 
 bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1974,7 +1974,7 @@ void ScUndoTransliterate::Redo()
 void ScUndoTransliterate::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->TransliterateText( nTransliterationType );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->TransliterateText( nTransliterationType );
 }
 
 bool ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -2036,7 +2036,7 @@ void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScViewData& rViewData = ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData();
+        ScViewData& rViewData = static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData();
         rViewData.GetDocFunc().ClearItems( rViewData.GetMarkData(), pWhich, false );
     }
 }
@@ -2100,7 +2100,7 @@ void ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         rViewShell.RemoveManualBreaks();
     }
 }
@@ -2210,7 +2210,7 @@ void ScUndoRemoveMerge::Redo()
 void ScUndoRemoveMerge::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveMerge();
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveMerge();
 }
 
 bool ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const

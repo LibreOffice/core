@@ -160,7 +160,7 @@ void ScUndoInsertTab::Redo()
 void ScUndoInsertTab::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData().GetDispatcher().
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 
@@ -255,7 +255,7 @@ void ScUndoInsertTables::Redo()
 void ScUndoInsertTables::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData().GetDispatcher().
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 
@@ -414,7 +414,7 @@ void ScUndoDeleteTab::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell* pViewShell = ((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell* pViewShell = static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         pViewShell->DeleteTable( pViewShell->GetViewData().GetTabNo(), true );
     }
 }
@@ -868,7 +868,7 @@ void ScUndoMakeScenario::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ((ScTabViewTarget&)rTarget).GetViewShell()->MakeScenario( aName, aComment, aColor, nFlags );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->MakeScenario( aName, aComment, aColor, nFlags );
     }
 }
 
@@ -1024,7 +1024,7 @@ void ScUndoImportTab::Redo()
 void ScUndoImportTab::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData().GetDispatcher().
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute(FID_INS_TABLE, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 
@@ -1158,7 +1158,7 @@ void ScUndoShowHideTab::Redo()
 void ScUndoShowHideTab::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData().GetDispatcher().
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute( bShow ? FID_TABLE_SHOW : FID_TABLE_HIDE,
                                 SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
@@ -1485,7 +1485,7 @@ SdrObject* ScUndoRenameObject::GetObject()
             while (pObject)
             {
                 if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                        ((SdrOle2Obj*)pObject)->GetPersistName() == aPersistName )
+                        static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == aPersistName )
                 {
                     return pObject;
                 }
@@ -1565,7 +1565,7 @@ void ScUndoLayoutRTL::Redo()
 void ScUndoLayoutRTL::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData().GetDispatcher().
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->GetViewData().GetDispatcher().
             Execute( FID_TAB_RTL, SfxCallMode::SLOT | SfxCallMode::RECORD);
 }
 

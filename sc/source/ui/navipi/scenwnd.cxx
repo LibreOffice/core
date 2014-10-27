@@ -246,7 +246,7 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 
         if ( pState->ISA(SfxStringItem) )
         {
-            OUString aNewEntry( ((const SfxStringItem*)pState)->GetValue() );
+            OUString aNewEntry( static_cast<const SfxStringItem*>(pState)->GetValue() );
 
             if ( !aNewEntry.isEmpty() )
                 aLbScenario.SelectEntry( aNewEntry );
@@ -255,7 +255,7 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
         }
         else if ( pState->ISA(SfxStringListItem) )
         {
-            aLbScenario.UpdateEntries( ((SfxStringListItem*)pState)->GetList() );
+            aLbScenario.UpdateEntries( static_cast<const SfxStringListItem*>(pState)->GetList() );
         }
     }
     else

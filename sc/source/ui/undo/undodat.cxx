@@ -223,7 +223,7 @@ void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
         if (bMake)
             rViewShell.MakeOutline( bColumns, true );
@@ -315,7 +315,7 @@ void ScUndoOutlineLevel::Redo()
 void ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, true );
 }
 
 bool ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -412,7 +412,7 @@ void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
         if (bShow)
             rViewShell.ShowMarkedOutlines( true );
@@ -503,7 +503,7 @@ void ScUndoRemoveAllOutlines::Redo()
 void ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveAllOutlines( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RemoveAllOutlines( true );
 }
 
 bool ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -606,7 +606,7 @@ void ScUndoAutoOutline::Redo()
 void ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->AutoOutline( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->AutoOutline( true );
 }
 
 bool ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
@@ -1241,7 +1241,7 @@ void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
-        ScTabViewShell& rViewShell = *((ScTabViewTarget&)rTarget).GetViewShell();
+        ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
 
         SCTAB nDummy;
         ScImportParam aNewParam(aImportParam);
@@ -1417,7 +1417,7 @@ void ScUndoRepeatDB::Redo()
 void ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->RepeatDB( true );
+        static_cast<ScTabViewTarget&>(rTarget).GetViewShell()->RepeatDB( true );
 }
 
 bool ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const

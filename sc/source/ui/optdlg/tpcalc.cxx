@@ -39,7 +39,7 @@ ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAt
     : SfxTabPage(pParent, "OptCalculatePage",
         "modules/scalc/ui/optcalculatepage.ui", &rCoreAttrs)
     , pOldOptions(new ScDocOptions(
-        ((const ScTpCalcItem&)rCoreAttrs.Get(
+        static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
             GetWhich(SID_SCDOCOPTIONS))).GetDocOptions()))
     , pLocalOptions(new ScDocOptions)
     , nWhichCalc(GetWhich(SID_SCDOCOPTIONS))

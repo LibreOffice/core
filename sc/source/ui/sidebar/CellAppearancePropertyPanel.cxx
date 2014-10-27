@@ -350,7 +350,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
             if(pSvxColorItem)
             {
-                maLineColor = ((const SvxColorItem*)pState)->GetValue();
+                maLineColor = static_cast<const SvxColorItem*>(pState)->GetValue();
                 if(maLineColor == COL_AUTO)
                     mbLineColorAvailable = false;
                 else

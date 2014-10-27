@@ -60,9 +60,9 @@ static void lcl_GetFieldData( ScHeaderFieldData& rData )
     if (pShell)
     {
         if (pShell->ISA(ScTabViewShell))
-            ((ScTabViewShell*)pShell)->FillFieldData(rData);
+            static_cast<ScTabViewShell*>(pShell)->FillFieldData(rData);
         else if (pShell->ISA(ScPreviewShell))
-            ((ScPreviewShell*)pShell)->FillFieldData(rData);
+            static_cast<ScPreviewShell*>(pShell)->FillFieldData(rData);
     }
 }
 

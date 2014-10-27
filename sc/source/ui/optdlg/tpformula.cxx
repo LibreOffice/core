@@ -291,7 +291,7 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     const SfxPoolItem* pItem = NULL;
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
-        aOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
+        aOpt = static_cast<const ScTpFormulaItem*>(pItem)->GetFormulaOptions();
 
     // formula grammar.
     ::formula::FormulaGrammar::Grammar eGram = aOpt.GetFormulaSyntax();

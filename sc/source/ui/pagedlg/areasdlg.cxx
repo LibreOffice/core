@@ -503,7 +503,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
          pCtr ==(Control *) pEdRepeatRow ||
          pCtr ==(Control *) pEdRepeatCol)
     {
-         pRefInputEdit = (formula::RefEdit*) pCtr;
+         pRefInputEdit = static_cast<formula::RefEdit*>(pCtr);
     }
     else if ( pCtr ==(Control *) pLbPrintArea)
     {

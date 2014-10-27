@@ -386,7 +386,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
         ScSplitPos eWhich = ( nPane == SC_VIEWPANE_ACTIVE ) ?
                                 pViewShell->GetViewData().GetActivePart() :
                                 (ScSplitPos) nPane;
-        ScGridWindow* pWindow = (ScGridWindow*)pViewShell->GetWindowByPos(eWhich);
+        ScGridWindow* pWindow = static_cast<ScGridWindow*>(pViewShell->GetWindowByPos(eWhich));
         ScDocument* pDoc = pViewShell->GetViewData().GetDocument();
         if (pWindow && pDoc)
         {

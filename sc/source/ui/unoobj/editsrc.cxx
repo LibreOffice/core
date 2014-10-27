@@ -202,7 +202,7 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = NULL;                       // ungueltig geworden

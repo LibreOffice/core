@@ -1531,7 +1531,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
 
         ScDocument& rDoc = pDocShell->GetDocument();
         boost::scoped_ptr<ScRangeList> pUndoRanges;
@@ -1571,7 +1571,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             ForgetCurrentAttrs();
@@ -2018,10 +2018,10 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                     {
                         case ATTR_VALUE_FORMAT:
                             //  default has no language set
-                            aAny <<= (sal_Int32)( ((const SfxUInt32Item&)rSet.Get(pEntry->nWID)).GetValue() );
+                            aAny <<= (sal_Int32)( static_cast<const SfxUInt32Item&>(rSet.Get(pEntry->nWID)).GetValue() );
                             break;
                         case ATTR_INDENT:
-                            aAny <<= (sal_Int16)( TwipsToHMM(((const SfxUInt16Item&)
+                            aAny <<= (sal_Int16)( TwipsToHMM(static_cast<const SfxUInt16Item&>(
                                             rSet.Get(pEntry->nWID)).GetValue()) );
                             break;
                         default:
@@ -2048,12 +2048,12 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                             {
                                 if (pEntry->nWID == SC_WID_UNO_TBLBORD2)
                                     ScHelperFunctions::AssignTableBorder2ToAny( aAny,
-                                            (const SvxBoxItem&)pPattern->GetItem(ATTR_BORDER),
-                                            (const SvxBoxInfoItem&)pPattern->GetItem(ATTR_BORDER_INNER) );
+                                            static_cast<const SvxBoxItem&>(pPattern->GetItem(ATTR_BORDER)),
+                                            static_cast<const SvxBoxInfoItem&>(pPattern->GetItem(ATTR_BORDER_INNER)) );
                                 else
                                     ScHelperFunctions::AssignTableBorderToAny( aAny,
-                                            (const SvxBoxItem&)pPattern->GetItem(ATTR_BORDER),
-                                            (const SvxBoxInfoItem&)pPattern->GetItem(ATTR_BORDER_INNER) );
+                                            static_cast<const SvxBoxItem&>(pPattern->GetItem(ATTR_BORDER)),
+                                            static_cast<const SvxBoxInfoItem&>(pPattern->GetItem(ATTR_BORDER_INNER)) );
                             }
                         }
                         break;
@@ -2122,8 +2122,8 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
             {
                 // language for number formats
                 SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                sal_uLong nOldFormat = ((const SfxUInt32Item&)rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
-                LanguageType eOldLang = ((const SvxLanguageItem&)rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
+                sal_uLong nOldFormat = static_cast<const SfxUInt32Item&>(rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
+                LanguageType eOldLang = static_cast<const SvxLanguageItem&>(rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
                 nOldFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
                 sal_Int32 nIntVal = 0;
@@ -2451,9 +2451,9 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         {
                             ScDocument& rDoc = pDocShell->GetDocument();
 
-                            sal_uLong nOldFormat = ((const SfxUInt32Item&)
+                            sal_uLong nOldFormat = static_cast<const SfxUInt32Item&>(
                                     pDataSet->Get( ATTR_VALUE_FORMAT )).GetValue();
-                            LanguageType eOldLang = ((const SvxLanguageItem&)
+                            LanguageType eOldLang = static_cast<const SvxLanguageItem&>(
                                     pDataSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
                             nOldFormat = rDoc.GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
@@ -2461,13 +2461,13 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         }
                         break;
                     case ATTR_INDENT:
-                        rAny <<= (sal_Int16)( TwipsToHMM(((const SfxUInt16Item&)
+                        rAny <<= (sal_Int16)( TwipsToHMM(static_cast<const SfxUInt16Item&>(
                                         pDataSet->Get(pEntry->nWID)).GetValue()) );
                         break;
                     case ATTR_STACKED:
                         {
-                            sal_Int32 nRot = ((const SfxInt32Item&)pDataSet->Get(ATTR_ROTATE_VALUE)).GetValue();
-                            bool bStacked = ((const SfxBoolItem&)pDataSet->Get(pEntry->nWID)).GetValue();
+                            sal_Int32 nRot = static_cast<const SfxInt32Item&>(pDataSet->Get(ATTR_ROTATE_VALUE)).GetValue();
+                            bool bStacked = static_cast<const SfxBoolItem&>(pDataSet->Get(pEntry->nWID)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( rAny );
                         }
                         break;
@@ -2531,7 +2531,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     rDoc.GetStorageGrammar() :
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
-                            const std::vector<sal_uInt32>& rIndex = ((const ScCondFormatItem&)
+                            const std::vector<sal_uInt32>& rIndex = static_cast<const ScCondFormatItem&>(
                                     pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
                             sal_uLong nIndex = 0;
                             if(!rIndex.empty())
@@ -2554,7 +2554,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     rDoc.GetStorageGrammar() :
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
-                            sal_uLong nIndex = ((const SfxUInt32Item&)
+                            sal_uLong nIndex = static_cast<const SfxUInt32Item&>(
                                     pPattern->GetItem(ATTR_VALIDDATA)).GetValue();
                             rAny <<= uno::Reference<beans::XPropertySet>(
                                     new ScTableValidationObj( &rDoc, nIndex, eGrammar ));
@@ -2750,7 +2750,7 @@ void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< 
 IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
 {
     if ( pDocShell && pHint && dynamic_cast<const SfxSimpleHint*>(pHint) &&
-            (((const SfxSimpleHint*)pHint)->GetId() & SC_HINT_DATACHANGED))
+            (static_cast<const SfxSimpleHint*>(pHint)->GetId() & SC_HINT_DATACHANGED))
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when
@@ -3533,7 +3533,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                         {
                             //  Date/Time Erkennung
 
-                            sal_uLong nIndex = (sal_uLong)((SfxUInt32Item*)rDoc.GetAttr(
+                            sal_uLong nIndex = (sal_uLong)static_cast<const SfxUInt32Item*>(rDoc.GetAttr(
                                         aIter.GetPos(), ATTR_VALUE_FORMAT))->GetValue();
                             short nTyp = rDoc.GetFormatTable()->GetType(nIndex);
                             if ((nTyp == NUMBERFORMAT_DATE) || (nTyp == NUMBERFORMAT_TIME) ||
@@ -4734,7 +4734,7 @@ uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( ScDocument
 {
     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
     if ( pObjSh && pObjSh->ISA(ScDocShell) )
-        return new ScCellRangeObj( (ScDocShell*) pObjSh, rR );
+        return new ScCellRangeObj( static_cast<ScDocShell*>(pObjSh), rR );
     return NULL;
 }
 
@@ -7652,7 +7652,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
                 ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
                 if (pBase->ISA(ScTableLink))
                 {
-                    ScTableLink* pTabLink = (ScTableLink*)pBase;
+                    ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
                     if ( aFileString.equals(pTabLink->GetFileName()) )
                         pTabLink->Update();                         // inkl. Paint&Undo
 
@@ -9008,12 +9008,12 @@ void ScCellsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
         aRanges.UpdateReference( rRef.GetMode(), &pDocShell->GetDocument(), rRef.GetRange(),
                                         rRef.GetDx(), rRef.GetDy(), rRef.GetDz() );
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -9698,7 +9698,7 @@ void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHi
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId == SFX_HINT_DYING )
             pDocShell = NULL;                       // ungueltig geworden
     }

@@ -63,7 +63,7 @@ void ScTpDefaultsOptions::Reset(const SfxItemSet* rCoreSet)
     const SfxPoolItem* pItem = NULL;
 
     if(SfxItemState::SET == rCoreSet->GetItemState(SID_SCDEFAULTSOPTIONS, false , &pItem))
-        aOpt = ((const ScTpDefaultsItem*)pItem)->GetDefaultsOptions();
+        aOpt = static_cast<const ScTpDefaultsItem*>(pItem)->GetDefaultsOptions();
 
     m_pEdNSheets->SetValue( static_cast<sal_uInt16>( aOpt.GetInitTabCount()) );
     m_pEdSheetPrefix->SetText( aOpt.GetInitTabPrefix() );

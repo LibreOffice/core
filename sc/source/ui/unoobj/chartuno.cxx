@@ -71,12 +71,12 @@ static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OU
                 {
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 && rDoc.IsChart(pObject) )
                     {
-                        uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                        uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
                         if ( xObj.is() )
                         {
                             OUString aObjName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
                             if ( aObjName == rName )
-                                return (SdrOle2Obj*)pObject;
+                                return static_cast<SdrOle2Obj*>(pObject);
                         }
                     }
                     pObject = aIter.Next();
@@ -135,7 +135,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
                     {
                         if ( nPos == nIndex )
                         {
-                            uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                            uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
                             if ( xObj.is() )
                                 aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
                             break;  // nicht weitersuchen
@@ -415,7 +415,7 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::Runti
                     if ( pObject->GetObjIdentifier() == OBJ_OLE2 && rDoc.IsChart(pObject) )
                     {
                         OUString aName;
-                        uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+                        uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
                         if ( xObj.is() )
                             aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 

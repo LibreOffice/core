@@ -1670,7 +1670,7 @@ void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( dynamic_cast<const ScDBRangeRefreshedHint*>(&rHint) )
     {
         ScDBData* pDBData = GetDBData_Impl();
-        const ScDBRangeRefreshedHint& rRef = (const ScDBRangeRefreshedHint&)rHint;
+        const ScDBRangeRefreshedHint& rRef = static_cast<const ScDBRangeRefreshedHint&>(rHint);
         ScImportParam aParam;
         pDBData->GetImportParam(aParam);
         if (aParam == rRef.GetImportParam())

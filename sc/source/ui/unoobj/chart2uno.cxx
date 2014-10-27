@@ -2899,7 +2899,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         if ( m_pDocument->HasUnoRefUndo() )
             pUndoRanges.reset(new ScRangeList(aRanges));
 
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
         bool bChanged = aRanges.UpdateReference(
             rRef.GetMode(), m_pDocument, rRef.GetRange(), rRef.GetDx(), rRef.GetDy(), rRef.GetDz());
 
@@ -2951,7 +2951,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
 {
     if ( m_pDocument && pHint && dynamic_cast<const SfxSimpleHint*>(pHint) &&
-            ((const SfxSimpleHint*)pHint)->GetId() & SC_HINT_DATACHANGED)
+            static_cast<const SfxSimpleHint*>(pHint)->GetId() & SC_HINT_DATACHANGED)
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when

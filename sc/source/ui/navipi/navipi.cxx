@@ -543,7 +543,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
 
 void ScNavigatorDialogWrapper::Resizing( Size& rSize )
 {
-    ((ScNavigatorDlg*)GetWindow())->Resizing(rSize);
+    static_cast<ScNavigatorDlg*>(GetWindow())->Resizing(rSize);
 }
 
 // class ScNavigatorPI
@@ -1190,7 +1190,7 @@ void ScNavigatorDlg::ShowScenarios( bool bShow, bool bSetSize )
     }
     else
     {
-        SfxNavigator* pNav = (SfxNavigator*)GetParent();
+        SfxNavigator* pNav = static_cast<SfxNavigator*>(GetParent());
         Size aFloating = pNav->GetFloatingSize();
         aFloating.Height() = aSize.Height();
         pNav->SetFloatingSize( aFloating );

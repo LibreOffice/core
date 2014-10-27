@@ -318,7 +318,7 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //! Ref-Update
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+            static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

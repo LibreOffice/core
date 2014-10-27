@@ -137,7 +137,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
             OSL_ENSURE( pInfoItem, "NumberInfoItem nicht gefunden!" );
 
-            aSet.Put (SvxNumberInfoItem( (const SvxNumberInfoItem&)*pInfoItem ) );
+            aSet.Put (SvxNumberInfoItem( static_cast<const SvxNumberInfoItem&>(*pInfoItem) ) );
             rTabPage.PageCreated(aSet);
         }
         else if (nPageId == m_nFontId)
@@ -147,7 +147,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
             OSL_ENSURE( pInfoItem, "FontListItem nicht gefunden!" );
 
-            aSet.Put (SvxFontListItem(((const SvxFontListItem&)*pInfoItem).GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(*pInfoItem).GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rTabPage.PageCreated(aSet);
         }
     }
@@ -161,9 +161,9 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
         }
         else if (nPageId == m_nHeaderId || nPageId == m_nFooterId)
         {
-            ((ScHFPage&)rTabPage).SetStyleDlg( this );
-            ((ScHFPage&)rTabPage).SetPageStyle( GetStyleSheet().GetName() );
-            ((ScHFPage&)rTabPage).DisableDeleteQueryBox();
+            static_cast<ScHFPage&>(rTabPage).SetStyleDlg( this );
+            static_cast<ScHFPage&>(rTabPage).SetPageStyle( GetStyleSheet().GetName() );
+            static_cast<ScHFPage&>(rTabPage).DisableDeleteQueryBox();
         }
         else if (nPageId == m_nBackgroundId)
         {

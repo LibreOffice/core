@@ -109,7 +109,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
-                if ( nPos >= size() || !(*this)[nPos]->IsEqual( *(ScAreaLink*)pBase ) )
+                if ( nPos >= size() || !(*this)[nPos]->IsEqual( *static_cast<ScAreaLink*>(pBase) ) )
                     return false;
 
                 ++nPos;
@@ -178,7 +178,7 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
                 if (!pColl)
                     pColl = new ScAreaLinkSaveCollection;
 
-                ScAreaLinkSaver* pSaver = new ScAreaLinkSaver( *(ScAreaLink*)pBase );
+                ScAreaLinkSaver* pSaver = new ScAreaLinkSaver( *static_cast<ScAreaLink*>(pBase ));
                 pColl->push_back(pSaver);
             }
         }

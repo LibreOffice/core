@@ -124,7 +124,7 @@ ScContentTree::ScContentTree( vcl::Window* pParent, const ResId& rResId ) :
     for (i=0; i<SC_CONTENT_COUNT; i++)
         pPosList[pTypeList[i]] = i;         // invers zum suchen
 
-    pParentWindow = (ScNavigatorDlg*)pParent;
+    pParentWindow = static_cast<ScNavigatorDlg*>(pParent);
 
     pRootNodes[0] = NULL;
     for (i=1; i<SC_CONTENT_COUNT; i++)
@@ -484,7 +484,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                     case SC_CONTENT_DRAWING:
                     {
                         vcl::Window* pWindow=(vcl::Window*)GetParent(pEntry);
-                        ScNavigatorDlg* pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
+                        ScNavigatorDlg* pScNavigatorDlg = static_cast<ScNavigatorDlg*>(pWindow);
                         ScTabViewShell* pScTabViewShell = NULL;
                         ScDrawView* pScDrawView = NULL;
                         if (pScNavigatorDlg!=NULL)
@@ -687,7 +687,7 @@ void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
             if (bRet)
             {
                 SvLBoxTab* pTab;
-                SvLBoxString* pItem = (SvLBoxString*)(GetItem( pEntry, aPos.X(), &pTab ));
+                SvLBoxString* pItem = static_cast<SvLBoxString*>(GetItem( pEntry, aPos.X(), &pTab ));
                 if( pItem )
                 {
                     aPos = GetEntryPosition( pEntry );
@@ -972,7 +972,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                                     if(pChild)
                                          pWindow=(vcl::Window*)GetParent(pChild);
                                     if(pWindow)
-                                            pScNavigatorDlg = (ScNavigatorDlg*)pWindow;
+                                            pScNavigatorDlg = static_cast<ScNavigatorDlg*>(pWindow);
                                     if (pScNavigatorDlg!=NULL)
                                           pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
                                     if(pScTabViewShell !=NULL)
@@ -1029,7 +1029,7 @@ void ScContentTree::GetLinkNames()
     {
         ::sfx2::SvBaseLink* pBase = *rLinks[i];
         if (pBase->ISA(ScAreaLink))
-            InsertContent( SC_CONTENT_AREALINK, ((ScAreaLink*)pBase)->GetSource() );
+            InsertContent( SC_CONTENT_AREALINK, static_cast<ScAreaLink*>(pBase)->GetSource() );
 
             //  in der Liste die Namen der Quellbereiche
     }
@@ -1052,7 +1052,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
         if (pBase->ISA(ScAreaLink))
         {
             if (nFound == nIndex)
-                return (const ScAreaLink*) pBase;
+                return static_cast<const ScAreaLink*>(pBase);
             ++nFound;
         }
     }
@@ -1672,7 +1672,7 @@ void ScContentTree::InitEntry(SvTreeListEntry* pEntry,
 {
     sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
-    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nColToHilite ));
     SvLBoxString* pStr = new SvLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }

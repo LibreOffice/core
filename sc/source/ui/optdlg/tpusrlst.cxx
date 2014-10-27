@@ -142,8 +142,8 @@ SfxTabPage* ScTpUserLists::Create( vcl::Window* pParent, const SfxItemSet* rAttr
 
 void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
 {
-    const ScUserListItem& rUserListItem = (const ScUserListItem&)
-                                           rCoreAttrs->Get( nWhichUserLists );
+    const ScUserListItem& rUserListItem = static_cast<const ScUserListItem&>(
+                                           rCoreAttrs->Get( nWhichUserLists ));
     const ScUserList*     pCoreList     = rUserListItem.GetUserList();
 
     OSL_ENSURE( pCoreList, "UserList not found :-/" );
@@ -198,8 +198,8 @@ bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
     if ( bModifyMode || bCancelMode )
         BtnClickHdl( mpBtnAdd );
 
-    const ScUserListItem& rUserListItem = (const ScUserListItem&)
-                                           GetItemSet().Get( nWhichUserLists );
+    const ScUserListItem& rUserListItem = static_cast<const ScUserListItem&>(
+                                           GetItemSet().Get( nWhichUserLists ));
 
     ScUserList* pCoreList       = rUserListItem.GetUserList();
     bool        bDataModified   = false;

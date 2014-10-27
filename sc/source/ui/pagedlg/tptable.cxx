@@ -70,9 +70,9 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 #define SCALE_HDL           LINK(this,ScTablePage,ScaleHdl)
 
 #define WAS_DEFAULT(w,s)    (SfxItemState::DEFAULT==(s).GetItemState((w),true))
-#define GET_BOOL(sid,set)   ((const SfxBoolItem&)((set).Get(GetWhich((sid))))).GetValue()
-#define GET_USHORT(sid,set) (sal_uInt16)((const SfxUInt16Item&)((set).Get(GetWhich((sid))))).GetValue()
-#define GET_SHOW(sid,set)   ( ScVObjMode( ((const ScViewObjectModeItem&)((set).Get(GetWhich((sid))))).GetValue() ) \
+#define GET_BOOL(sid,set)   static_cast<const SfxBoolItem&>((set).Get(GetWhich((sid)))).GetValue()
+#define GET_USHORT(sid,set) (sal_uInt16)static_cast<const SfxUInt16Item&>((set).Get(GetWhich((sid)))).GetValue()
+#define GET_SHOW(sid,set)   ( ScVObjMode( static_cast<const ScViewObjectModeItem&>((set).Get(GetWhich((sid)))).GetValue() ) \
                               == VOBJ_MODE_SHOW )
 // List box entries "Scaling mode"
 #define SC_TPTABLE_SCALE_PERCENT    0
@@ -166,7 +166,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
     if ( rCoreSet->GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
     {
-        sal_uInt16 nScale = ((const SfxUInt16Item&)rCoreSet->Get(nWhich)).GetValue();
+        sal_uInt16 nScale = static_cast<const SfxUInt16Item&>(rCoreSet->Get(nWhich)).GetValue();
         if( nScale > 0 )
             m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
         m_pEdScaleAll->SetValue( (nScale > 0) ? nScale : 100 );
@@ -191,7 +191,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
     if ( rCoreSet->GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
     {
-        sal_uInt16 nPages = ((const SfxUInt16Item&)rCoreSet->Get(nWhich)).GetValue();
+        sal_uInt16 nPages = static_cast<const SfxUInt16Item&>(rCoreSet->Get(nWhich)).GetValue();
         if( nPages > 0 )
             m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_TO_PAGES );
         m_pEdScalePageNum->SetValue( (nPages > 0) ? nPages : 1 );
