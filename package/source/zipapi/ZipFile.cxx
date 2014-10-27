@@ -1073,7 +1073,7 @@ sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
          ++ind)
     {
         sal_Int64 nLen = ::std::min(nBlockSize, nSize - ind * nBlockSize);
-        aCRC.updateSegment(aBuffer, 0, static_cast<sal_Int32>(nLen));
+        aCRC.updateSegment(aBuffer, static_cast<sal_Int32>(nLen));
     }
 
     return aCRC.getValue();
@@ -1102,7 +1102,7 @@ void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_I
         do
         {
             nLastInflated = aInflaterLocal.doInflateSegment( aData, 0, nBlockSize );
-            aCRC.updateSegment( aData, 0, nLastInflated );
+            aCRC.updateSegment( aData, nLastInflated );
             nInBlock += nLastInflated;
         } while( !aInflater.finished() && nLastInflated );
 

@@ -983,7 +983,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     ZipEntry * pEntry = new ZipEntry;
     sal_Int32 nBufferLength = m_pRootFolder->GetMediaType().getLength();
     OString sMediaType = OUStringToOString( m_pRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
-    uno::Sequence< sal_Int8 > aType( ( sal_Int8* )sMediaType.getStr(),
+    const uno::Sequence< sal_Int8 > aType( ( sal_Int8* )sMediaType.getStr(),
                                      nBufferLength );
 
     pEntry->sPath = sMime;
@@ -999,7 +999,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     {
         ZipOutputStream::setEntry(pEntry);
         aZipOut.writeLOC(pEntry);
-        aZipOut.rawWrite(aType, 0, nBufferLength);
+        aZipOut.rawWrite(aType);
         aZipOut.rawCloseEntry();
     }
     catch ( const ::com::sun::star::io::IOException & r )
@@ -1043,10 +1043,9 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Seq
     ZipOutputStream::setEntry(pEntry);
     aZipOut.writeLOC(pEntry);
     ZipOutputEntry aZipEntry(m_xContext, *pEntry, NULL);
-    aZipEntry.write(pBuffer->getSequence(), 0, nBufferLength);
+    aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
-    uno::Sequence< sal_Int8 > aCompressedData = aZipEntry.getData();
-    aZipOut.rawWrite(aCompressedData, 0, aCompressedData.getLength());
+    aZipOut.rawWrite(aZipEntry.getData());
     aZipOut.rawCloseEntry();
 }
 
@@ -1098,10 +1097,9 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     ZipOutputStream::setEntry(pEntry);
     aZipOut.writeLOC(pEntry);
     ZipOutputEntry aZipEntry(m_xContext, *pEntry, NULL);
-    aZipEntry.write(pBuffer->getSequence(), 0, nBufferLength);
+    aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
-    uno::Sequence< sal_Int8 > aCompressedData = aZipEntry.getData();
-    aZipOut.rawWrite(aCompressedData, 0, aCompressedData.getLength());
+    aZipOut.rawWrite(aZipEntry.getData());
     aZipOut.rawCloseEntry();
 }
 

@@ -50,7 +50,7 @@ public:
 
     void writeLOC( ZipEntry *pEntry, bool bEncrypt = false )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    void rawWrite( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+    void rawWrite( const css::uno::Sequence< sal_Int8 >& rBuffer )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     void rawCloseEntry( bool bEncrypt = false )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
