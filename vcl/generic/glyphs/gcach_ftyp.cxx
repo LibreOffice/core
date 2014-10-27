@@ -1605,8 +1605,6 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     ReqFeatureTagList aReqFeatureTagList;
     if( rFSD.mbVertical )
         aReqFeatureTagList.push_back( MKTAG("vert") );
-    sal_uLong nRequestedScript = 0;     //MKTAG("hani");//### TODO: where to get script?
-    sal_uLong nRequestedLangsys = 0;    //MKTAG("ZHT"); //### TODO: where to get langsys?
     // TODO: request more features depending on script and language system
 
     if( aReqFeatureTagList.empty()) // nothing to do
@@ -1634,11 +1632,8 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     pScriptHeader += 2;
     for( sal_uInt16 nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
-        const sal_uLong nScriptTag      = GetUInt( pScriptHeader+0 ); // e.g. hani/arab/kana/hang
         const sal_uInt16 nOfsScriptTable= GetUShort( pScriptHeader+4 );
         pScriptHeader += 6;
-        if( (nScriptTag != nRequestedScript) && (nRequestedScript != 0) )
-            continue;
 
         const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
         const sal_uInt16 nDefaultLangsysOfs = GetUShort( pScriptTable+0 );
@@ -1648,11 +1643,8 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
 
         for( sal_uInt16 nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
-            const sal_uLong nTag    = GetUInt( pScriptTable+0 );    // e.g. KOR/ZHS/ZHT/JAN
             const sal_uInt16 nOffset= GetUShort( pScriptTable+4 );
             pScriptTable += 6;
-            if( (nTag != nRequestedLangsys) && (nRequestedLangsys != 0) )
-                continue;
             nLangsysOffset = nOffset;
             break;
         }
