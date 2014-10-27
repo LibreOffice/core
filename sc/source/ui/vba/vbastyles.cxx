@@ -18,6 +18,7 @@
  */
 #include "vbastyles.hxx"
 #include "vbastyle.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 #include <ooo/vba/excel/XRange.hpp>
 
 using namespace ::ooo::vba;
@@ -80,9 +81,31 @@ public:
         }
         virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
+            try
+            {
                 if ( nIndex < m_xIndexAccess->getCount() )
                         return lcl_createAPIStyleToVBAObject( m_xIndexAccess->getByIndex( nIndex++ ), m_xParent, m_xContext, m_xModel );
-                throw container::NoSuchElementException();
+            }
+            catch (const container::NoSuchElementException&)
+            {
+                throw;
+            }
+            catch (const lang::WrappedTargetException&)
+            {
+                throw;
+            }
+            catch (const uno::RuntimeException&)
+            {
+                throw;
+            }
+            catch (const uno::Exception& e)
+            {
+                css::uno::Any a(cppu::getCaughtException());
+                throw css::lang::WrappedTargetException(
+                    "wrapped Exception " + e.Message,
+                    css::uno::Reference<css::uno::XInterface>(), a);
+            }
+            throw container::NoSuchElementException();
         }
 };
 
