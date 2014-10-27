@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_1de47f39",
+        "filename": "editeng/source/misc/SvXMLAutoCorrectTokenHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2014-10-27T15:35:03Z",
+      "side": 1,
+      "message": "In new file, use only first part of license header. See TEMPLATE.SOURCECODE.HEADER in core.git",
+      "revId": "c210a7e14959e868fcd71ae809735c11a85188a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_3de74342",
+        "filename": "editeng/source/misc/SvXMLAutoCorrectTokenHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2014-10-27T15:35:03Z",
+      "side": 1,
+      "message": "Missing vim modeline",
+      "revId": "c210a7e14959e868fcd71ae809735c11a85188a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_5ddaf779",
+        "filename": "editeng/source/misc/SvXMLAutoCorrectTokenHandler.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2014-10-27T15:35:03Z",
+      "side": 1,
+      "message": "Hopefully this does not need to be public.\nAnd if you would need public symbols, use EDITENG_DLLPUBLIC in editeng.",
+      "revId": "c210a7e14959e868fcd71ae809735c11a85188a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
