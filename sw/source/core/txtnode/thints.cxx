@@ -164,8 +164,8 @@ bool isSelfNestable(const sal_uInt16 nWhich)
         (RES_TXTATR_CJK_RUBY == nWhich) ||
         (RES_TXTATR_INPUTFIELD == nWhich))
         return false;
-   OSL_ENSURE((RES_TXTATR_META  == nWhich) ||
-           (RES_TXTATR_METAFIELD  == nWhich), "???");
+    assert((RES_TXTATR_META  == nWhich) ||
+           (RES_TXTATR_METAFIELD  == nWhich));
     return true;
 }
 
@@ -175,9 +175,9 @@ bool isSplittable(const sal_uInt16 nWhich)
     if ((RES_TXTATR_INETFMT  == nWhich) ||
         (RES_TXTATR_CJK_RUBY == nWhich))
         return true;
-    OSL_ENSURE((RES_TXTATR_META  == nWhich) ||
+    assert((RES_TXTATR_META  == nWhich) ||
            (RES_TXTATR_METAFIELD  == nWhich) ||
-           (RES_TXTATR_INPUTFIELD  == nWhich), "???");
+           (RES_TXTATR_INPUTFIELD  == nWhich));
     return false;
 }
 
@@ -246,7 +246,7 @@ MakeTxtAttrNesting(SwTxtNode & rNode, SwTxtAttrNesting & rNesting,
             break;
         }
         default:
-            OSL_FAIL("MakeTxtAttrNesting: what the hell is that?");
+            assert(!"MakeTxtAttrNesting: what the hell is that?");
             break;
     }
     return static_txtattr_cast<SwTxtAttrNesting*>(pNew);
@@ -362,12 +362,11 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
     const sal_Int32 nNewEnd  ( *rNewHint.GetEnd()   );
     const bool bNewSelfNestable( isSelfNestable(nNewWhich) );
 
-    OSL_ENSURE( (RES_TXTATR_INETFMT   == nNewWhich) ||
+    assert( (RES_TXTATR_INETFMT   == nNewWhich) ||
             (RES_TXTATR_CJK_RUBY  == nNewWhich) ||
             (RES_TXTATR_META      == nNewWhich) ||
             (RES_TXTATR_METAFIELD == nNewWhich) ||
-            (RES_TXTATR_INPUTFIELD == nNewWhich),
-        "TryInsertNesting: Expecting INETFMT or RUBY or META or METAFIELD or INPUTFIELD" );
+            (RES_TXTATR_INPUTFIELD == nNewWhich));
 
     NestList_t OverlappingExisting; // existing hints to be split
     NestList_t OverwrittenExisting; // existing hints to be replaced
@@ -403,7 +402,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                             static_txtattr_cast<SwTxtAttrNesting*>(pOther));
                         break;
                     default:
-                        OSL_FAIL("bad code monkey");
+                        assert(!"bad code monkey");
                         break;
                 }
             }
@@ -419,7 +418,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                 {
                     if (rNewHint.HasDummyChar())
                     {
-                        OSL_FAIL("ERROR: inserting duplicate CH_TXTATR hint");
+                        assert(!"ERROR: inserting duplicate CH_TXTATR hint");
                         return false;
                     } else if (nNewEnd < nOtherEnd) {
                         // other has dummy char, new is inside other, but
@@ -428,7 +427,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         // in SwXMeta::createEnumeration
                         // SplitNew is sorted, so this is the first split
                         sal_Int32& rStart(SplitNew.front()->GetStart());
-                        OSL_ENSURE(rStart == nNewStart, "how did that happen?");
+                        assert(rStart == nNewStart);
                         rStart = nNewStart + 1;
                     }
                 }
@@ -436,7 +435,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         }
     }
 
-   OSL_ENSURE(isSplittable(nNewWhich) || SplitNew.size() == 1,
+    assert((isSplittable(nNewWhich) || SplitNew.size() == 1) &&
             "splitting the unsplittable ???");
 
     // pass 2: split existing hints that overlap/nest with new hint
@@ -467,14 +466,14 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
             {
                 case POS_INSIDE:
                     {
-                        OSL_ENSURE(!bRemoveOverlap,
+                        assert(!bRemoveOverlap &&
                             "this one should be in OverwrittenExisting?");
                     }
                     break;
                 case POS_OUTSIDE:
                 case POS_EQUAL:
                     {
-                        OSL_FAIL("existing hint inside new hint: why?");
+                        assert(!"existing hint inside new hint: why?");
                     }
                     break;
                 case POS_OVERLAP_BEFORE:
@@ -551,7 +550,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         }
         else
         {
-           OSL_ENSURE((nOtherStart < nNewStart) && (nNewEnd < nOtherEnd), "huh?");
+           assert((nOtherStart < nNewStart) && (nNewEnd < nOtherEnd));
         // scenario: there is a RUBY, and contained within that a META;
         // now a RUBY is inserted within the META => the exising RUBY is split:
         // here it is not possible to simply insert the left/right fragment
