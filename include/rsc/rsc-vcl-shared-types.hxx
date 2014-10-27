@@ -116,7 +116,7 @@ enum class SymbolType : sal_uInt16
 
 
 // Border-Styles fuer SetBorder()
-enum class WindowBorderStyle : sal_uInt16
+enum class WindowBorderStyle : sal_Int16
 {
     NONE              = 0x0000,
     NORMAL            = 0x0001,

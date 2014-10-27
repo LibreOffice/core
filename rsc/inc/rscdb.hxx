@@ -38,7 +38,7 @@ class RscCont;
 class RscCmdLine;
 enum class SymbolType : sal_uInt16;
 enum class ToolBoxItemBits;
-enum class WindowBorderStyle : sal_uInt16;
+enum class WindowBorderStyle : sal_Int16;
 enum class TimeFieldFormat : sal_Int32;
 enum class KeyFuncType : sal_Int32;
 
