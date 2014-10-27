@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <assert.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -122,11 +123,9 @@ int __lxstat(int n, const char *path, struct stat *buf)
         p_lstat = (int (*)(int n, const char *path, struct stat *buf))
             dlsym (RTLD_NEXT, "__lxstat");
     ret = (*p_lstat)(n, path, buf);
-    if (buf != NULL)
-    {
-        buf->st_uid = 0; /* root */
-        buf->st_gid = 0; /* root */
-    }
+    assert(buf != NULL);
+    buf->st_uid = 0; /* root */
+    buf->st_gid = 0; /* root */
     return ret;
 }
 #else
