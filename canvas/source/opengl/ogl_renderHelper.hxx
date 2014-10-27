@@ -1,15 +1,18 @@
+#ifndef RENDER_HELPER
+#define RENDER_HELPER
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include "glm/gtx/transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
 namespace oglcanvas
 {
     class RenderHelper
     {
     public:
 
-        void renderVertexConstColor(GLfloat vertices[] , GLfloat color[4], GLenum mode) const ;
-        void renderVertexUVTex(GLfloat vertices[], GLfloat uvCoordinates[], GLfloat color[4], GLenum mode) const ;
-        void renderVertexTex(GLfloat vertices[], GLfloat, GLfloat, GLfloat color[4], GLenum mode) const;
+        void renderVertexConstColor(GLfloat vertices[], glm::vec4 color, GLenum mode) const;
+        void renderVertexUVTex(GLfloat vertices[], GLfloat uvCoordinates[], glm::vec4 color, GLenum mode) const;
+        void renderVertexTex(GLfloat vertices[], GLfloat, GLfloat, glm::vec4 color, GLenum mode) const;
 
         RenderHelper();
 
@@ -60,3 +63,6 @@ namespace oglcanvas
 
     };
 }
+
+
+#endif /* RENDER_HELPER */

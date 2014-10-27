@@ -54,14 +54,14 @@ namespace oglcanvas
         m_Model = mat;
         m_MVP = m_Projection * m_View * m_Model;
     }
-    void RenderHelper::renderVertexConstColor(GLfloat vertices[], GLfloat color[4], GLenum mode) const
+    void RenderHelper::renderVertexConstColor(GLfloat vertices[], glm::vec4 color, GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
         glUseProgram(m_texProgID);
 
-        glUniform4f(m_texColorUnf,color[0], color[1], color[2], color[3]);
+        glUniform4fv(m_texColorUnf, 4, glm::value_ptr(color));
         glEnableVertexAttribArray(m_texPosAttrb); //vertices
 
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
@@ -82,7 +82,7 @@ namespace oglcanvas
 
     }
     //Renders a TriangleStrip, Texture has to be stored in TextureUnit0
-    void RenderHelper::renderVertexUVTex(GLfloat vertices[], GLfloat uvCoordinates[], GLfloat color[4], GLenum mode) const
+    void RenderHelper::renderVertexUVTex(GLfloat vertices[], GLfloat uvCoordinates[], glm::vec4 color, GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -93,7 +93,7 @@ namespace oglcanvas
         glUseProgram(m_simpleProgID);
 
         glUniform1i(m_simpleTexUnf, 0); //Use texture Unit 0
-        glUniform4f(m_simpleColorUnf, color[0], color[1], color[2], color[3]);
+        glUniform4fv(m_simpleColorUnf, 4, glm::value_ptr(color));
         glUniformMatrix4fv(m_simpleMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_simplePosAttrb);
@@ -102,7 +102,7 @@ namespace oglcanvas
             m_simplePosAttrb,
             2,                            // size
             GL_FLOAT,                     // type
-            GL_FALSE,                     // normalized?
+            GL_FALSE,                     // normalized?v
             0,                            // stride
             (void*)0                      // array buffer offset
         );
@@ -137,7 +137,7 @@ namespace oglcanvas
 
     // Renders a Polygon, Texture has to be stored in TextureUnit0
     // Uses fWidth,fHeight to generate texture coordinates in vertex-shader.
-    void RenderHelper::renderVertexTex(GLfloat vertices[], GLfloat fWidth, GLfloat fHeight, GLfloat color[4], GLenum mode) const
+    void RenderHelper::renderVertexTex(GLfloat vertices[], GLfloat fWidth, GLfloat fHeight, glm::vec4 color, GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -147,7 +147,7 @@ namespace oglcanvas
         //Set Uniforms
         glUniform1i(m_manTexUnf, 0);
         glUniform2f(m_manCordUnf,fWidth,fHeight);
-        glUniform4f(m_manColorUnf, color[0], color[1], color[2], color[3] );
+        glUniform4fv(m_manColorUnf, 4,  glm::value_ptr(color));
         glUniformMatrix4fv(m_manMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_manPosAttrb);

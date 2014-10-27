@@ -173,7 +173,7 @@ namespace oglcanvas
                 glBlendFunc(GL_SRC_ALPHA,
                             GL_ONE_MINUS_SRC_ALPHA);
 
-                GLfloat color[] = {1, 1, 1, (float)mfAlpha};
+                glm::vec4 color  =  glm::vec4(1, 1, 1, (float)mfAlpha);
 
                 if( mxClip.is() )
                 {
@@ -230,9 +230,8 @@ namespace oglcanvas
                               (float) maSize.Width+4, -2,
                               -2, -2,
                               (float) maSize.Width+4, (float) maSize.Height+4 };
-        GLfloat color[] = {1, 0, 0, 1};
 
-        mRenderHelper.renderVertexConstColor(vertices, color, GL_LINE_STRIP);
+        mRenderHelper.renderVertexConstColor(vertices, glm::vec4(1, 0, 0, 1), GL_LINE_STRIP);
 
         std::vector<double> aVec;
         aVec.push_back(mfAlpha);
