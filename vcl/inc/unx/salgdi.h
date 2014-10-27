@@ -277,6 +277,8 @@ public:
         basegfx::B2DLineJoin,
         com::sun::star::drawing::LineCap) SAL_OVERRIDE;
     virtual bool            drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
+    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE { return false; };
+
 
 #if 1 // TODO: remove these obselete methods
     virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,
