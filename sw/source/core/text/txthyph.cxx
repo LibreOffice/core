@@ -119,7 +119,7 @@ bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot )
 {
     OSL_ENSURE( pRoot, "SetParaPortion: no root anymore" );
-    pInf->pPara = pRoot;
+    pInf->m_pPara = pRoot;
 }
 
 bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )

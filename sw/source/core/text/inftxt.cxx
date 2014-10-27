@@ -154,19 +154,19 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
 
 void SwTxtInfo::CtorInitTxtInfo( SwTxtFrm *pFrm )
 {
-    pPara = pFrm->GetPara();
-    nTxtStart = pFrm->GetOfst();
-    if( !pPara )
+    m_pPara = pFrm->GetPara();
+    m_nTxtStart = pFrm->GetOfst();
+    if (!m_pPara)
     {
-        OSL_ENSURE( pPara, "+SwTxtInfo::CTOR: missing paragraph information" );
+        SAL_WARN("sw.core", "+SwTxtInfo::CTOR: missing paragraph information");
         pFrm->Format();
-        pPara = pFrm->GetPara();
+        m_pPara = pFrm->GetPara();
     }
 }
 
 SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
-    : pPara( ((SwTxtInfo&)rInf).GetParaPortion() ),
-      nTxtStart( rInf.GetTxtStart() )
+    : m_pPara( const_cast<SwTxtInfo&>(rInf).GetParaPortion() )
+    , m_nTxtStart( rInf.GetTxtStart() )
 { }
 
 #if OSL_DEBUG_LEVEL > 0

@@ -121,21 +121,22 @@ class SwTxtInfo
 {
     // Implementation in txthyph.cxx
     friend void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot );
-    SwParaPortion *pPara;
-    sal_Int32 nTxtStart; // TxtOfst for Follows
+    SwParaPortion *m_pPara;
+    sal_Int32 m_nTxtStart; // TxtOfst for Follows
 
 protected:
     SwTxtInfo()
-        : pPara(0)
-        , nTxtStart(0)
-        {}
+        : m_pPara(0)
+        , m_nTxtStart(0)
+    {}
+
 public:
     void CtorInitTxtInfo( SwTxtFrm *pFrm );
     SwTxtInfo( const SwTxtInfo &rInf );
     SwTxtInfo( SwTxtFrm *pFrm ) { CtorInitTxtInfo( pFrm ); }
-    SwParaPortion *GetParaPortion() { return pPara; }
-    const SwParaPortion *GetParaPortion() const { return pPara; }
-    sal_Int32 GetTxtStart() const { return nTxtStart; }
+    SwParaPortion *GetParaPortion() { return m_pPara; }
+    const SwParaPortion *GetParaPortion() const { return m_pPara; }
+    sal_Int32 GetTxtStart() const { return m_nTxtStart; }
 
     friend SvStream & WriteSwTxtInfo( SvStream &rOS, const SwTxtInfo &rInf );
 };
