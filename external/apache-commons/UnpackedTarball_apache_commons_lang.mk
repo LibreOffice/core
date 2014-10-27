@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,apache_commons_lang))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,apache_commons_lang,$(APACHE_COMMONS_LANG_TARBALL),,apache-commons))
 
+$(eval $(call gb_UnpackedTarball_add_patches,apache_commons_lang,\
+        $(if $(filter TRUE,$(HAVE_JAVA6)) \
+		,external/apache-commons/patches/lang.patch \
+	) \
+))
+
 # vim: set noet sw=4 ts=4:
