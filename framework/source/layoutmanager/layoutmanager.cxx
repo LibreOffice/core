@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <services/layoutmanager.hxx>
 #include "helpers.hxx"
 
@@ -113,7 +115,11 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_bVisible( true )
         , m_bParentWindowVisible( false )
         , m_bMustDoLayout( true )
+#if HAVE_FEATURE_DESKTOP
         , m_bAutomaticToolbars( true )
+#else
+        , m_bAutomaticToolbars( false )
+#endif
         , m_bStoreWindowState( false )
         , m_bHideCurrentUI( false )
         , m_bGlobalSettings( false )
