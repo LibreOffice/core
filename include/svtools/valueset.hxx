@@ -177,7 +177,6 @@ to be set (before Show) with SetStyle().
 *************************************************************************/
 
 typedef std::vector<ValueSetItem*> ValueItemList;
-typedef boost::scoped_ptr<ScrollBar> ScrollBarPtr;
 typedef boost::scoped_ptr<ValueSetItem> ValueSetItemPtr;
 
 // - ValueSet types -
@@ -202,7 +201,7 @@ private:
     Timer           maTimer;
     ValueItemList   mItemList;
     ValueSetItemPtr mpNoneItem;
-    ScrollBarPtr    mpScrollBar;
+    boost::scoped_ptr<ScrollBar> mpScrollBar;
     Rectangle       maNoneItemRect;
     Rectangle       maItemListRect;
     long            mnItemWidth;

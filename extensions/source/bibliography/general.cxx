@@ -51,7 +51,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
-using namespace ::rtl;
 
 static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
 {

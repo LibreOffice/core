@@ -44,7 +44,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -167,7 +167,7 @@ public:
 
     ImpPDFTabDialog( vcl::Window* pParent,
                      Sequence< PropertyValue >& rFilterData,
-                     const Reference< XComponent >& rDoc
+                     const css::uno::Reference< XComponent >& rDoc
                      );
     virtual ~ImpPDFTabDialog();
 

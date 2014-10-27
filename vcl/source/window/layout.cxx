@@ -1460,7 +1460,7 @@ const vcl::Window *VclExpander::get_child() const
 {
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    assert(pWindowImpl->mpFirstChild == &m_aDisclosureButton);
+    assert(pWindowImpl->mpFirstChild == m_pDisclosureButton.get());
 
     return pWindowImpl->mpFirstChild->GetWindow(WINDOW_NEXT);
 }
@@ -1479,10 +1479,10 @@ Size VclExpander::calculateRequisition() const
     const vcl::Window *pChild = get_child();
     const vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
-    if (pChild && pChild->IsVisible() && m_aDisclosureButton.IsChecked())
+    if (pChild && pChild->IsVisible() && m_pDisclosureButton->IsChecked())
         aRet = getLayoutRequisition(*pChild);
 
-    Size aExpanderSize = getLayoutRequisition(m_aDisclosureButton);
+    Size aExpanderSize = getLayoutRequisition(*m_pDisclosureButton.get());
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -1516,7 +1516,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
     vcl::Window *pChild = get_child();
     vcl::Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
-    Size aButtonSize = getLayoutRequisition(m_aDisclosureButton);
+    Size aButtonSize = getLayoutRequisition(*m_pDisclosureButton.get());
     Size aLabelSize;
     Size aExpanderSize = aButtonSize;
     if (pLabel && pLabel->IsVisible())
@@ -1534,7 +1534,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     long nExtraExpanderHeight = aExpanderSize.Height() - aButtonSize.Height();
     Point aButtonPos(aChildPos.X(), aChildPos.Y() + nExtraExpanderHeight/2);
-    setLayoutAllocation(m_aDisclosureButton, aButtonPos, aButtonSize);
+    setLayoutAllocation(*m_pDisclosureButton.get(), aButtonPos, aButtonSize);
 
     if (pLabel && pLabel->IsVisible())
     {
@@ -1552,7 +1552,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     if (pChild && pChild->IsVisible())
     {
-        if (!m_aDisclosureButton.IsChecked())
+        if (!m_pDisclosureButton->IsChecked())
             aAllocation = Size();
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
     }
@@ -1577,7 +1577,7 @@ void VclExpander::StateChanged(StateChangedType nType)
     {
         vcl::Window *pChild = get_child();
         if (pChild)
-            pChild->Show(m_aDisclosureButton.IsChecked());
+            pChild->Show(m_pDisclosureButton->IsChecked());
     }
 }
 
@@ -1599,15 +1599,15 @@ IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
     : VclBin(pParent, nStyle)
     , m_bUserManagedScrolling(false)
-    , m_aVScroll(this, WB_HIDE | WB_VERT)
-    , m_aHScroll(this, WB_HIDE | WB_HORZ)
+    , m_pVScroll(new ScrollBar(this, WB_HIDE | WB_VERT))
+    , m_pHScroll(new ScrollBar(this, WB_HIDE | WB_HORZ))
     , m_aScrollBarBox(this, WB_HIDE)
 {
     SetType(WINDOW_SCROLLWINDOW);
 
     Link aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
-    m_aVScroll.SetScrollHdl(aLink);
-    m_aHScroll.SetScrollHdl(aLink);
+    m_pVScroll->SetScrollHdl(aLink);
+    m_pHScroll->SetScrollHdl(aLink);
 }
 
 IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
@@ -1625,14 +1625,14 @@ IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
 
     Point aWinPos;
 
-    if (m_aHScroll.IsVisible())
+    if (m_pHScroll->IsVisible())
     {
-        aWinPos.X() = -m_aHScroll.GetThumbPos();
+        aWinPos.X() = -m_pHScroll->GetThumbPos();
     }
 
-    if (m_aVScroll.IsVisible())
+    if (m_pVScroll->IsVisible())
     {
-        aWinPos.Y() = -m_aVScroll.GetThumbPos();
+        aWinPos.Y() = -m_pVScroll->GetThumbPos();
     }
 
     pChild->SetPosPixel(aWinPos);
@@ -1661,10 +1661,10 @@ Size VclScrolledWindow::calculateRequisition() const
         aRet = getLayoutRequisition(*pChild);
 
     if (GetStyle() & WB_VSCROLL)
-        aRet.Width() += getLayoutRequisition(m_aVScroll).Width();
+        aRet.Width() += getLayoutRequisition(*m_pVScroll.get()).Width();
 
     if (GetStyle() & WB_HSCROLL)
-        aRet.Height() += getLayoutRequisition(m_aHScroll).Height();
+        aRet.Height() += getLayoutRequisition(*m_pHScroll.get()).Height();
 
     return aRet;
 }
@@ -1677,18 +1677,18 @@ void VclScrolledWindow::InitScrollBars(const Size &rRequest)
 
     Size aOutSize(getVisibleChildSize());
 
-    if (m_aVScroll.IsVisible())
+    if (m_pVScroll->IsVisible())
     {
-        m_aVScroll.SetRangeMax(rRequest.Height());
-        m_aVScroll.SetVisibleSize(aOutSize.Height());
-        m_aVScroll.SetPageSize(16);
+        m_pVScroll->SetRangeMax(rRequest.Height());
+        m_pVScroll->SetVisibleSize(aOutSize.Height());
+        m_pVScroll->SetPageSize(16);
     }
 
-    if (m_aHScroll.IsVisible())
+    if (m_pHScroll->IsVisible())
     {
-        m_aHScroll.SetRangeMax(rRequest.Width());
-        m_aHScroll.SetVisibleSize(aOutSize.Width());
-        m_aHScroll.SetPageSize(16);
+        m_pHScroll->SetRangeMax(rRequest.Width());
+        m_pHScroll->SetVisibleSize(aOutSize.Width());
+        m_pHScroll->SetPageSize(16);
     }
 }
 
@@ -1706,51 +1706,51 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     // vert. ScrollBar
     if (GetStyle() & WB_AUTOVSCROLL)
     {
-        m_aVScroll.Show(nAvailHeight < aChildReq.Height());
+        m_pVScroll->Show(nAvailHeight < aChildReq.Height());
     }
 
-    if (m_aVScroll.IsVisible())
-        nAvailWidth -= getLayoutRequisition(m_aVScroll).Width();
+    if (m_pVScroll->IsVisible())
+        nAvailWidth -= getLayoutRequisition(*m_pVScroll.get()).Width();
 
     // horz. ScrollBar
     if (GetStyle() & WB_AUTOHSCROLL)
     {
         bool bShowHScroll = nAvailWidth < aChildReq.Width();
-        m_aHScroll.Show(bShowHScroll);
+        m_pHScroll->Show(bShowHScroll);
 
         if (bShowHScroll)
-            nAvailHeight -= getLayoutRequisition(m_aHScroll).Height();
+            nAvailHeight -= getLayoutRequisition(*m_pHScroll.get()).Height();
 
         if (GetStyle() & WB_AUTOVSCROLL)
-            m_aVScroll.Show(nAvailHeight < aChildReq.Height());
+            m_pVScroll->Show(nAvailHeight < aChildReq.Height());
     }
 
     Size aInnerSize(aChildAllocation);
     long nScrollBarWidth = 0, nScrollBarHeight = 0;
 
-    if (m_aVScroll.IsVisible())
+    if (m_pVScroll->IsVisible())
     {
-        nScrollBarWidth = getLayoutRequisition(m_aVScroll).Width();
+        nScrollBarWidth = getLayoutRequisition(*m_pVScroll.get()).Width();
         Point aScrollPos(rAllocation.Width() - nScrollBarWidth, 0);
         Size aScrollSize(nScrollBarWidth, rAllocation.Height());
-        setLayoutAllocation(m_aVScroll, aScrollPos, aScrollSize);
+        setLayoutAllocation(*m_pVScroll.get(), aScrollPos, aScrollSize);
         aChildAllocation.Width() -= nScrollBarWidth;
         aInnerSize.Width() -= nScrollBarWidth;
         aChildAllocation.Height() = aChildReq.Height();
     }
 
-    if (m_aHScroll.IsVisible())
+    if (m_pHScroll->IsVisible())
     {
-        nScrollBarHeight = getLayoutRequisition(m_aHScroll).Height();
+        nScrollBarHeight = getLayoutRequisition(*m_pHScroll.get()).Height();
         Point aScrollPos(0, rAllocation.Height() - nScrollBarHeight);
         Size aScrollSize(rAllocation.Width(), nScrollBarHeight);
-        setLayoutAllocation(m_aHScroll, aScrollPos, aScrollSize);
+        setLayoutAllocation(*m_pHScroll.get(), aScrollPos, aScrollSize);
         aChildAllocation.Height() -= nScrollBarHeight;
         aInnerSize.Height() -= nScrollBarHeight;
         aChildAllocation.Width() = aChildReq.Width();
     }
 
-    if (m_aVScroll.IsVisible() && m_aHScroll.IsVisible())
+    if (m_pVScroll->IsVisible() && m_pHScroll->IsVisible())
     {
         Point aBoxPos(aInnerSize.Width(), aInnerSize.Height());
         m_aScrollBarBox.SetPosSizePixel(aBoxPos, Size(nScrollBarWidth, nScrollBarHeight));
@@ -1774,18 +1774,18 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
 Size VclScrolledWindow::getVisibleChildSize() const
 {
     Size aRet(GetSizePixel());
-    if (m_aVScroll.IsVisible())
-        aRet.Width() -= m_aVScroll.GetSizePixel().Width();
-    if (m_aHScroll.IsVisible())
-        aRet.Height() -= m_aHScroll.GetSizePixel().Height();
+    if (m_pVScroll->IsVisible())
+        aRet.Width() -= m_pVScroll->GetSizePixel().Width();
+    if (m_pHScroll->IsVisible())
+        aRet.Height() -= m_pHScroll->GetSizePixel().Height();
     return aRet;
 }
 
 bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
 {
     bool bRet = VclBin::set_property(rKey, rValue);
-    m_aVScroll.Show((GetStyle() & WB_VSCROLL) != 0);
-    m_aHScroll.Show((GetStyle() & WB_HSCROLL) != 0);
+    m_pVScroll->Show((GetStyle() & WB_VSCROLL) != 0);
+    m_pHScroll->Show((GetStyle() & WB_HSCROLL) != 0);
     return bRet;
 }
 
@@ -1800,7 +1800,7 @@ bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
             {
-                nDone = HandleScrollCommand(rCEvt, &m_aHScroll, &m_aVScroll);
+                nDone = HandleScrollCommand(rCEvt, m_pHScroll.get(), m_pVScroll.get());
             }
         }
     }
