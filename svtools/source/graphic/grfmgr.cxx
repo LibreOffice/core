@@ -265,6 +265,7 @@ void GraphicObject::ImplAutoSwapIn()
             if( !mbAutoSwapped && mpMgr )
                 mpMgr->ImplGraphicObjectWasSwappedIn( *this );
         }
+        ImplAssignGraphicData();
     }
 }
 
