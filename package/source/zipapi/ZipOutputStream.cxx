@@ -71,10 +71,10 @@ void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, comphelper::Th
     m_aEntries.push_back(pEntry);
 }
 
-void ZipOutputStream::rawWrite( Sequence< sal_Int8 >& rBuffer, sal_Int32 /*nNewOffset*/, sal_Int32 nNewLength )
+void ZipOutputStream::rawWrite( const Sequence< sal_Int8 >& rBuffer )
     throw(IOException, RuntimeException)
 {
-    m_aChucker.WriteBytes( Sequence< sal_Int8 >(rBuffer.getConstArray(), nNewLength) );
+    m_aChucker.WriteBytes( rBuffer );
 }
 
 void ZipOutputStream::rawCloseEntry( bool bEncrypt )
@@ -100,8 +100,7 @@ void ZipOutputStream::finish()
     for (size_t i = 0; i < m_aEntries.size(); i++)
     {
         writeLOC(m_aEntries[i]->getZipEntry(), m_aEntries[i]->isEncrypt());
-        uno::Sequence< sal_Int8 > aCompressedData = m_aEntries[i]->getData();
-        rawWrite(aCompressedData, 0, aCompressedData.getLength());
+        rawWrite(m_aEntries[i]->getData());
         rawCloseEntry(m_aEntries[i]->isEncrypt());
 
         m_aEntries[i]->getZipPackageStream()->successfullyWritten(m_aEntries[i]->getZipEntry());

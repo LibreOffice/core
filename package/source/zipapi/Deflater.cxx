@@ -92,13 +92,11 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     }
 }
 
-void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
+void SAL_CALL Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer )
 {
-    OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));
-
     sInBuffer = rBuffer;
-    nOffset = nNewOffset;
-    nLength = nNewLength;
+    nOffset = 0;
+    nLength = rBuffer.getLength();
 }
 
 bool SAL_CALL Deflater::needsInput(  )

@@ -47,11 +47,10 @@ sal_Int32 SAL_CALL CRC32::getValue()
 }
 /** Update CRC32 with specified sequence of bytes
  */
-void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b,
-                                   sal_Int32 off, sal_Int32 len)
+void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b, sal_Int32 len)
         throw(RuntimeException)
 {
-    nCRC = rtl_crc32(nCRC, b.getConstArray()+off, len );
+    nCRC = rtl_crc32(nCRC, b.getConstArray(), len );
 }
 /** Update CRC32 with specified sequence of bytes
  */
@@ -70,7 +69,7 @@ sal_Int64 SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
     do
     {
         nLength = xStream->readBytes ( aSeq, n_ConstBufferSize );
-        updateSegment ( aSeq, 0, nLength );
+        updateSegment ( aSeq, nLength );
         nTotal += nLength;
     }
     while ( nLength == n_ConstBufferSize );

@@ -197,7 +197,7 @@ namespace XSLT
         // Compress the bytes
         Sequence<sal_Int8> output(oledata.getLength());
         boost::scoped_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater((sal_Int32) 3, false));
-        compresser->setInputSegment(oledata, 0, oledata.getLength());
+        compresser->setInputSegment(oledata);
         compresser->finish();
         int compressedDataLength = compresser->doDeflateSegment(output, 0, oledata.getLength());
         compresser.reset();
