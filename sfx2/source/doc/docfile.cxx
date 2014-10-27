@@ -1885,7 +1885,7 @@ void SfxMedium::Transfer_Impl()
             ::ucbhelper::Content aTransferContent;
 
             ::ucbhelper::Content aDestContent;
-            ::ucbhelper::Content::create( aDestURL, xComEnv, comphelper::getProcessComponentContext(), aDestContent );
+            (void)::ucbhelper::Content::create( aDestURL, xComEnv, comphelper::getProcessComponentContext(), aDestContent );
             // For checkin, we need the object URL, not the parent folder:
             if ( !IsInCheckIn( ) )
             {
@@ -1948,7 +1948,7 @@ void SfxMedium::Transfer_Impl()
 
                 CloseStreams_Impl();
 
-                ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent );
+                (void)::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent );
 
                 // check for external parameters that may customize the handling of NameClash situations
                 SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, false );
