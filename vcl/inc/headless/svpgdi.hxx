@@ -211,6 +211,7 @@ public:
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const sal_uInt8* const* pFlgAry ) SAL_OVERRIDE;
+    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE { return false; };
 
     virtual void            copyArea( long nDestX,
                                       long nDestY,

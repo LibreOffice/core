@@ -52,6 +52,12 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
     DrawGradientToMetafile( rPolyPoly, rGradient );
 
+    if ( mpGraphics || AcquireGraphics() )
+    {
+        if ( mpGraphics->DrawGradient( rPolyPoly, rGradient, this ) )
+            return;
+    }
+
     if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
