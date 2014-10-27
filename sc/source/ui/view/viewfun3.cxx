@@ -560,12 +560,12 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     {
         sal_Int64 nHandle = xTunnel->getSomething( ScTransferObj::getUnoTunnelId() );
         if ( nHandle )
-            pOwnClip = (ScTransferObj*) (sal_IntPtr) nHandle;
+            pOwnClip = reinterpret_cast<ScTransferObj*>( (sal_IntPtr) nHandle);
         else
         {
             nHandle = xTunnel->getSomething( ScDrawTransferObj::getUnoTunnelId() );
             if ( nHandle )
-                pDrawClip = (ScDrawTransferObj*) (sal_IntPtr) nHandle;
+                pDrawClip = reinterpret_cast<ScDrawTransferObj*>( (sal_IntPtr) nHandle );
         }
     }
 
@@ -1142,8 +1142,8 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             SCROW nRow2 = -1;
             while ( ( pPattern = aIter.GetNext( nCol, nRow1, nRow2 ) ) != NULL )
             {
-                pMergeFlag = (const ScMergeAttr*) &pPattern->GetItem(ATTR_MERGE);
-                pMergeFlagAttr = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
+                pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || ( pMergeFlagAttr && pMergeFlagAttr->IsOverlapped() ) )
                 {
                     ScRange aRange(nCol, nRow1, nStartTab);

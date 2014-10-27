@@ -75,9 +75,9 @@
 
 #define ZOOM_MIN    10
 
-#define GET_BOOL(set,which)   ((const SfxBoolItem&)(set)->Get((which))).GetValue()
-#define GET_USHORT(set,which) ((const SfxUInt16Item&)(set)->Get((which))).GetValue()
-#define GET_SHOW(set,which)   ( VOBJ_MODE_SHOW == ScVObjMode( ((const ScViewObjectModeItem&)(set)->Get((which))).GetValue()) )
+#define GET_BOOL(set,which)   static_cast<const SfxBoolItem&>((set)->Get((which))).GetValue()
+#define GET_USHORT(set,which) static_cast<const SfxUInt16Item&>((set)->Get((which))).GetValue()
+#define GET_SHOW(set,which)   ( VOBJ_MODE_SHOW == ScVObjMode( static_cast<const ScViewObjectModeItem&>((set)->Get((which))).GetValue()) )
 
 ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
 {
@@ -380,7 +380,7 @@ static void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
         {
             const CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
             if (!rCellInfo.bEmptyCellText)
-                if (((const ScProtectionAttr&)rCellInfo.pPatternAttr->
+                if (static_cast<const ScProtectionAttr&>(rCellInfo.pPatternAttr->
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet)).GetHidePrint())
                 {
                     pThisRowInfo->pCellInfo[nX+1].maCell.clear();
@@ -412,9 +412,9 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if (pStyleSheet)
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        bDoGrid  = ((const SfxBoolItem&)rSet.Get(ATTR_PAGE_GRID)).GetValue();
-        bNullVal = ((const SfxBoolItem&)rSet.Get(ATTR_PAGE_NULLVALS)).GetValue();
-        bFormula = ((const SfxBoolItem&)rSet.Get(ATTR_PAGE_FORMULAS)).GetValue();
+        bDoGrid  = static_cast<const SfxBoolItem&>(rSet.Get(ATTR_PAGE_GRID)).GetValue();
+        bNullVal = static_cast<const SfxBoolItem&>(rSet.Get(ATTR_PAGE_NULLVALS)).GetValue();
+        bFormula = static_cast<const SfxBoolItem&>(rSet.Get(ATTR_PAGE_FORMULAS)).GetValue();
     }
     else
     {
@@ -605,19 +605,19 @@ static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
     }
     else
     {
-        rParam.bEnable  = ((const SfxBoolItem&) pHFSet->Get(ATTR_PAGE_ON)).GetValue();
-        rParam.bDynamic = ((const SfxBoolItem&) pHFSet->Get(ATTR_PAGE_DYNAMIC)).GetValue();
-        rParam.bShared  = ((const SfxBoolItem&) pHFSet->Get(ATTR_PAGE_SHARED)).GetValue();
-        rParam.nHeight  = ((const SvxSizeItem&) pHFSet->Get(ATTR_PAGE_SIZE)).GetSize().Height();
-        const SvxLRSpaceItem* pHFLR = &(const SvxLRSpaceItem&) pHFSet->Get(ATTR_LRSPACE);
+        rParam.bEnable  = static_cast<const SfxBoolItem&>( pHFSet->Get(ATTR_PAGE_ON)).GetValue();
+        rParam.bDynamic = static_cast<const SfxBoolItem&>( pHFSet->Get(ATTR_PAGE_DYNAMIC)).GetValue();
+        rParam.bShared  = static_cast<const SfxBoolItem&>( pHFSet->Get(ATTR_PAGE_SHARED)).GetValue();
+        rParam.nHeight  = static_cast<const SvxSizeItem&>( pHFSet->Get(ATTR_PAGE_SIZE)).GetSize().Height();
+        const SvxLRSpaceItem* pHFLR = &static_cast<const SvxLRSpaceItem&>(pHFSet->Get(ATTR_LRSPACE));
         long nTmp;
         nTmp = pHFLR->GetLeft();
         rParam.nLeft = nTmp < 0 ? 0 : sal_uInt16(nTmp);
         nTmp = pHFLR->GetRight();
         rParam.nRight = nTmp < 0 ? 0 : sal_uInt16(nTmp);
-        rParam.pBorder  = (const SvxBoxItem*)   &pHFSet->Get(ATTR_BORDER);
-        rParam.pBack    = (const SvxBrushItem*) &pHFSet->Get(ATTR_BACKGROUND);
-        rParam.pShadow  = (const SvxShadowItem*)&pHFSet->Get(ATTR_SHADOW);
+        rParam.pBorder  = static_cast<const SvxBoxItem*>   (&pHFSet->Get(ATTR_BORDER));
+        rParam.pBack    = static_cast<const SvxBrushItem*> (&pHFSet->Get(ATTR_BACKGROUND));
+        rParam.pShadow  = static_cast<const SvxShadowItem*>(&pHFSet->Get(ATTR_SHADOW));
 
 //   now back in the dialog:
 //      rParam.nHeight += rParam.nDistance;             // not in the dialog any more ???
@@ -789,39 +789,39 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         return;
 
                                 // TabPage "Page"
-    const SvxLRSpaceItem* pLRItem = (const SvxLRSpaceItem*) &pParamSet->Get( ATTR_LRSPACE );
+    const SvxLRSpaceItem* pLRItem = static_cast<const SvxLRSpaceItem*>( &pParamSet->Get( ATTR_LRSPACE ) );
     long nTmp;
     nTmp = pLRItem->GetLeft();
     nLeftMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
     nTmp = pLRItem->GetRight();
     nRightMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
-    const SvxULSpaceItem* pULItem = (const SvxULSpaceItem*) &pParamSet->Get( ATTR_ULSPACE );
+    const SvxULSpaceItem* pULItem = static_cast<const SvxULSpaceItem*>( &pParamSet->Get( ATTR_ULSPACE ) );
     nTopMargin    = pULItem->GetUpper();
     nBottomMargin = pULItem->GetLower();
 
-    const SvxPageItem* pPageItem = (const SvxPageItem*) &pParamSet->Get( ATTR_PAGE );
+    const SvxPageItem* pPageItem = static_cast<const SvxPageItem*>( &pParamSet->Get( ATTR_PAGE ) );
     nPageUsage          = pPageItem->GetPageUsage();
     bLandscape          = pPageItem->IsLandscape();
     aFieldData.eNumType = pPageItem->GetNumType();
 
-    bCenterHor = ((const SfxBoolItem&) pParamSet->Get(ATTR_PAGE_HORCENTER)).GetValue();
-    bCenterVer = ((const SfxBoolItem&) pParamSet->Get(ATTR_PAGE_VERCENTER)).GetValue();
+    bCenterHor = static_cast<const SfxBoolItem&>( pParamSet->Get(ATTR_PAGE_HORCENTER)).GetValue();
+    bCenterVer = static_cast<const SfxBoolItem&>( pParamSet->Get(ATTR_PAGE_VERCENTER)).GetValue();
 
-    aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
+    aPageSize = static_cast<const SvxSizeItem&>( pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
     if ( !aPageSize.Width() || !aPageSize.Height() )
     {
         OSL_FAIL("PageSize Null ?!?!?");
         aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
     }
 
-    pBorderItem     = (const SvxBoxItem*)    &pParamSet->Get(ATTR_BORDER);
-    pBackgroundItem = (const SvxBrushItem*)  &pParamSet->Get(ATTR_BACKGROUND);
-    pShadowItem     = (const SvxShadowItem*) &pParamSet->Get(ATTR_SHADOW);
+    pBorderItem     = static_cast<const SvxBoxItem*>   (&pParamSet->Get(ATTR_BORDER) );
+    pBackgroundItem = static_cast<const SvxBrushItem*> (&pParamSet->Get(ATTR_BACKGROUND) );
+    pShadowItem     = static_cast<const SvxShadowItem*>(&pParamSet->Get(ATTR_SHADOW) );
 
                                 // TabPage "Headline"
 
-    aHdr.pLeft      = (const ScPageHFItem*) &pParamSet->Get(ATTR_PAGE_HEADERLEFT);      // Content
-    aHdr.pRight     = (const ScPageHFItem*) &pParamSet->Get(ATTR_PAGE_HEADERRIGHT);
+    aHdr.pLeft      = static_cast<const ScPageHFItem*>( &pParamSet->Get(ATTR_PAGE_HEADERLEFT) );      // Content
+    aHdr.pRight     = static_cast<const ScPageHFItem*>( &pParamSet->Get(ATTR_PAGE_HEADERRIGHT) );
 
     const SvxSetItem* pHeaderSetItem;
     const SfxItemSet* pHeaderSet = NULL;
@@ -830,14 +830,14 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     {
         pHeaderSet = &pHeaderSetItem->GetItemSet();
                                                         // Headline has space below
-        aHdr.nDistance  = ((const SvxULSpaceItem&) pHeaderSet->Get(ATTR_ULSPACE)).GetLower();
+        aHdr.nDistance  = static_cast<const SvxULSpaceItem&>(pHeaderSet->Get(ATTR_ULSPACE)).GetLower();
     }
     lcl_FillHFParam( aHdr, pHeaderSet );
 
                                 // TabPage "Footline"
 
-    aFtr.pLeft      = (const ScPageHFItem*) &pParamSet->Get(ATTR_PAGE_FOOTERLEFT);      // Content
-    aFtr.pRight     = (const ScPageHFItem*) &pParamSet->Get(ATTR_PAGE_FOOTERRIGHT);
+    aFtr.pLeft      = static_cast<const ScPageHFItem*>( &pParamSet->Get(ATTR_PAGE_FOOTERLEFT) );      // Content
+    aFtr.pRight     = static_cast<const ScPageHFItem*>( &pParamSet->Get(ATTR_PAGE_FOOTERRIGHT) );
 
     const SvxSetItem* pFooterSetItem;
     const SfxItemSet* pFooterSet = NULL;
@@ -846,7 +846,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     {
         pFooterSet = &pFooterSetItem->GetItemSet();
                                                         // Footline has space above
-        aFtr.nDistance  = ((const SvxULSpaceItem&) pFooterSet->Get(ATTR_ULSPACE)).GetUpper();
+        aFtr.nDistance  = static_cast<const SvxULSpaceItem&>(pFooterSet->Get(ATTR_ULSPACE)).GetUpper();
     }
     lcl_FillHFParam( aFtr, pFooterSet );
 
@@ -862,20 +862,20 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALE, false,
                                       (const SfxPoolItem**)&pScaleItem );
     if ( SfxItemState::DEFAULT == eState )
-        pScaleItem = (const SfxUInt16Item*)
-                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALE );
+        pScaleItem = static_cast<const SfxUInt16Item*>(
+                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALE ));
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALETO, false,
                                       (const SfxPoolItem**)&pScaleToItem );
     if ( SfxItemState::DEFAULT == eState )
-        pScaleToItem = (const ScPageScaleToItem*)
-                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETO );
+        pScaleToItem = static_cast<const ScPageScaleToItem*>(
+                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETO ));
 
     eState = pParamSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false,
                                       (const SfxPoolItem**)&pScaleToPagesItem );
     if ( SfxItemState::DEFAULT == eState )
-        pScaleToPagesItem = (const SfxUInt16Item*)
-                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETOPAGES );
+        pScaleToPagesItem = static_cast<const SfxUInt16Item*>(
+                    &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETOPAGES ));
 
     OSL_ENSURE( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
 
@@ -1683,7 +1683,7 @@ void ScPrintFunc::MakeEditEngine()
         //  Default-Set for alignment
         pEditDefaults = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
 
-        const ScPatternAttr& rPattern = (const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN);
+        const ScPatternAttr& rPattern = static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
         rPattern.FillEditItemSet( pEditDefaults );
         //  FillEditItemSet adjusts font height to 1/100th mm,
         //  but for header/footer twips is needed, as in the PatternAttr:
@@ -1849,7 +1849,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
 
     vcl::Font aMarkFont;
     ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
-    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
+    static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
     pDev->SetFont( aMarkFont );
     long nMarkLen = pDev->GetTextWidth(OUString("GW99999:"));
     // without Space-Char, because it rarle arrives there
@@ -2581,7 +2581,7 @@ void ScPrintFunc::ApplyPrintSettings()
                 aEnumSize.Height() = nTemp;
         }
         Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, true );
-        sal_uInt16 nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
+        sal_uInt16 nPaperBin = static_cast<const SvxPaperBinItem&>(pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
         pPrinter->SetPaper( ePaper );
         if ( PAPER_USER == ePaper )

@@ -44,7 +44,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (dynamic_cast<const SfxSimpleHint*>(&rHint))                       // ohne Parameter
     {
-        sal_uLong nSlot = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nSlot = static_cast<const SfxSimpleHint&>(rHint).GetId();
         switch ( nSlot )
         {
             case FID_DATACHANGED:
@@ -133,7 +133,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (dynamic_cast<const ScPaintHint*>(&rHint))                    // neu zeichnen
     {
-        ScPaintHint* pHint = (ScPaintHint*) &rHint;
+        const ScPaintHint* pHint = static_cast<const ScPaintHint*>(&rHint);
         sal_uInt16 nParts = pHint->GetParts();
         SCTAB nTab = GetViewData().GetTabNo();
         if (pHint->GetStartTab() <= nTab && pHint->GetEndTab() >= nTab)
@@ -170,7 +170,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         //  ScEditViewHint kommt nur an aktiver View an
 
-        ScEditViewHint* pHint = (ScEditViewHint*) &rHint;
+        const ScEditViewHint* pHint = static_cast<const ScEditViewHint*>(&rHint);
         SCTAB nTab = GetViewData().GetTabNo();
         if ( pHint->GetTab() == nTab )
         {
@@ -202,7 +202,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             //  aktuelle Tabelle zuerst holen (kann bei DeleteTab an ViewData geaendert werden)
         SCTAB nActiveTab = GetViewData().GetTabNo();
 
-        const ScTablesHint& rTabHint = (const ScTablesHint&)rHint;
+        const ScTablesHint& rTabHint = static_cast<const ScTablesHint&>(rHint);
         SCTAB nTab1 = rTabHint.GetTab1();
         SCTAB nTab2 = rTabHint.GetTab2();
         sal_uInt16 nId  = rTabHint.GetId();
@@ -290,7 +290,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (dynamic_cast<const ScIndexHint*>(&rHint))
     {
-        const ScIndexHint& rIndexHint = (const ScIndexHint&)rHint;
+        const ScIndexHint& rIndexHint = static_cast<const ScIndexHint&>(rHint);
         sal_uInt16 nId = rIndexHint.GetId();
         sal_uInt16 nIndex = rIndexHint.GetIndex();
         switch (nId)

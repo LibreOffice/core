@@ -164,7 +164,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
                     //  copy graphics within the same model - always needs new name
                     if ( pNeuObj->ISA(SdrGrafObj) && !bPasteIsMove )
-                        pNeuObj->SetName(((ScDrawLayer*)pDrawModel)->GetNewGraphicName());
+                        pNeuObj->SetName(static_cast<ScDrawLayer*>(pDrawModel)->GetNewGraphicName());
 
                     if (nDiffX!=0 || nDiffY!=0)
                         pNeuObj->NbcMove(Size(nDiffX,nDiffY));
@@ -437,7 +437,7 @@ bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     // path was the name of the graphic in history
 
-    ScDrawLayer* pLayer = (ScDrawLayer*) pScDrawView->GetModel();
+    ScDrawLayer* pLayer = static_cast<ScDrawLayer*>( pScDrawView->GetModel() );
     OUString aName = pLayer->GetNewGraphicName();                 // "Graphics"
     pGrafObj->SetName(aName);
 

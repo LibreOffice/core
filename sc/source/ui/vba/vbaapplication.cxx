@@ -468,7 +468,7 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException, std::excepti
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
     aArgs->Put(  aRef, 1 );
-    SbMethod* pMeth = (SbMethod*)pBasic->GetRtl()->Find( OUString("WaitUntil"), SbxCLASS_METHOD );
+    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( OUString("WaitUntil"), SbxCLASS_METHOD ));
 
     if ( pMeth )
     {
@@ -563,7 +563,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         uno::Reference< sheet::XSpreadsheet > xDoc = xSpreadsheet->getActiveSheet();
 
         ScTabViewShell* pShell = excel::getCurrentBestViewShell( mxContext );
-        ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow();
+        ScGridWindow* gridWindow = static_cast<ScGridWindow*>(pShell->GetWindow());
         try
         {
             uno::Reference< excel::XRange > xVbaSheetRange = ScVbaRange::getRangeObjectForName(
@@ -605,7 +605,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
     {
         uno::Reference< excel::XRange > xVbaRange( Reference, uno::UNO_QUERY );
         ScTabViewShell* pShell = excel::getCurrentBestViewShell( mxContext );
-        ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow();
+        ScGridWindow* gridWindow = static_cast<ScGridWindow*>(pShell->GetWindow());
         if ( xVbaRange.is() )
         {
             //TODO bScroll should be using, In this time, it doesenot have effection
@@ -1245,7 +1245,7 @@ ScVbaApplication::getDisplayFormulaBar()
         pViewShell->GetState( reqList );
         const SfxPoolItem *pItem=0;
         if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, false, &pItem ) == SfxItemState::SET )
-            bRes =   ((SfxBoolItem*)pItem)->GetValue();
+            bRes = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
     return bRes;
 }
@@ -1268,7 +1268,7 @@ uno::Any SAL_CALL
 ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeException, std::exception )
 {
     StarBASIC* pBasic = SfxGetpApp()->GetBasic();
-    SbMethod* pMeth = (SbMethod*)pBasic->GetRtl()->Find( OUString("FuncCaller"), SbxCLASS_METHOD );
+    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( OUString("FuncCaller"), SbxCLASS_METHOD ));
     uno::Any aRet;
     if ( pMeth )
     {

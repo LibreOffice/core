@@ -304,7 +304,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
     {
-        nFlag = ((ScMergeFlagAttr*) pDoc->
+        nFlag = static_cast<const ScMergeFlagAttr*>( pDoc->
                 GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
 
         if ( (nFlag & SC_MF_AUTO) == 0 )
@@ -317,7 +317,7 @@ void ScDBFunc::ToggleAutoFilter()
 
         for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
         {
-            nFlag = ((ScMergeFlagAttr*) pDoc->
+            nFlag = static_cast<const ScMergeFlagAttr*>( pDoc->
                     GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
             pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
         }
@@ -373,7 +373,7 @@ void ScDBFunc::ToggleAutoFilter()
 
             for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
             {
-                nFlag = ((ScMergeFlagAttr*) pDoc->
+                nFlag = static_cast<const ScMergeFlagAttr*>( pDoc->
                         GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
                 pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | SC_MF_AUTO ) );
             }
@@ -418,7 +418,7 @@ void ScDBFunc::HideAutoFilter()
 
     for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
     {
-        sal_Int16 nFlag = ((ScMergeFlagAttr*) rDoc.
+        sal_Int16 nFlag = static_cast<const ScMergeFlagAttr*>( rDoc.
                                 GetAttr( nCol, nRow1, nTab, ATTR_MERGE_FLAG ))->GetValue();
         rDoc.ApplyAttr( nCol, nRow1, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
     }

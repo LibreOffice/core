@@ -80,7 +80,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_TABLE_VISIBLE, &pItem ) )
-                        bVisible = ((const SfxBoolItem*)pItem)->GetValue();
+                        bVisible = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 }
 
                 if( ! bVisible )            // ausblenden
@@ -119,7 +119,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_TABLE_SHOW, &pItem ) )
                     {
-                        aName = ((const SfxStringItem*)pItem)->GetValue();
+                        aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         rNames.push_back(aName);
                         ShowTable( rNames );
 
@@ -185,8 +185,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         //  Tabellennr. von Basic: 1-basiert
 
-                        aName = ((const SfxStringItem*)pNameItem)->GetValue();
-                        nTabNr = ((const SfxUInt16Item*)pTabItem)->GetValue() - 1;
+                        aName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
+                        nTabNr = static_cast<const SfxUInt16Item*>(pTabItem)->GetValue() - 1;
                         if ( nTabNr < nTabCount )
                             bOk = InsertTable( aName, nTabNr );
                     }
@@ -325,10 +325,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OUString      aName;
 
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
-                        nTabNr = ((const SfxUInt16Item*)pItem)->GetValue();
+                        nTabNr = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
                     if( pReqArgs->HasItem( nSlot, &pItem ) )
-                        aName = ((const SfxStringItem*)pItem)->GetValue();
+                        aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                     switch ( nSlot )
                     {
@@ -441,16 +441,16 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
 
                     if( pReqArgs->HasItem( FID_TAB_MOVE, &pItem ) )
-                        aDocName = ((const SfxStringItem*)pItem)->GetValue();
+                        aDocName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     {
                         //  Tabelle ist 1-basiert
-                        nTab = ((const SfxUInt16Item*)pItem)->GetValue() - 1;
+                        nTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue() - 1;
                         if ( nTab >= nTableCount )
                             nTab = SC_TAB_APPEND;
                     }
                     if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
-                        bCpy = ((const SfxBoolItem*)pItem)->GetValue();
+                        bCpy = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                     if (!aDocName.isEmpty())
                     {
@@ -657,10 +657,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     const SfxPoolItem*  pItem;
                     Color               aColor;
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
-                        nTabNr = ((const SfxUInt16Item*)pItem)->GetValue();
+                        nTabNr = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
                     if( pReqArgs->HasItem( nSlot, &pItem ) )
-                        aColor = ((const SvxColorItem*)pItem)->GetValue();
+                        aColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
 
                     if ( nTabSelCount > 1 )
                     {

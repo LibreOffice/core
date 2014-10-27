@@ -197,7 +197,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_ATTR_INSERT:
             if ( pReqArgs )
             {
-                bIsInsertMode = ((const SfxBoolItem&)pReqArgs->Get(nSlot)).GetValue();
+                bIsInsertMode = static_cast<const SfxBoolItem&>(pReqArgs->Get(nSlot)).GetValue();
                 pTableView->SetInsertMode( bIsInsertMode );
                 if (pTopView)
                     pTopView->SetInsertMode( bIsInsertMode );
@@ -253,7 +253,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
-                    nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                    nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                 }
 
                 if ( nFormat )
@@ -337,8 +337,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 sal_uInt16 nFontWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_FONTINFO_CJK :
                                 ( ( nScript == SCRIPTTYPE_COMPLEX ) ? EE_CHAR_FONTINFO_CTL :
                                                                         EE_CHAR_FONTINFO );
-                const SvxFontItem& rItem = (const SvxFontItem&)
-                            pTableView->GetAttribs().Get(nFontWhich);
+                const SvxFontItem& rItem = static_cast<const SvxFontItem&>(
+                            pTableView->GetAttribs().Get(nFontWhich));
 
                 OUString aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
@@ -350,7 +350,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 if ( pItem )
                 {
-                    aString = ((const SfxStringItem*)pItem)->GetValue();
+                    aString = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
@@ -512,7 +512,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SfxItemState::SET )
                 {
-                    const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
+                    const SvxHyperlinkItem* pHyper = static_cast<const SvxHyperlinkItem*>(pItem);
                     const OUString& rName     = pHyper->GetName();
                     const OUString& rURL      = pHyper->GetURL();
                     const OUString& rTarget   = pHyper->GetTargetFrame();
@@ -752,7 +752,7 @@ const SvxURLField* ScEditShell::GetURLField()
         {
             const SvxFieldData* pField = pFieldItem->GetField();
             if ( pField && pField->ISA(SvxURLField) )
-                return (const SvxURLField*)pField;
+                return static_cast<const SvxURLField*>(pField);
         }
     }
 
@@ -885,7 +885,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
                 aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
-                if ( pCore && ((const SvxWeightItem*)pCore)->GetWeight() > WEIGHT_NORMAL )
+                if ( pCore && static_cast<const SvxWeightItem*>(pCore)->GetWeight() > WEIGHT_NORMAL )
                     bOld = true;
 
                 SvxScriptSetItem aSetItem( nSlot, rPool );
@@ -908,7 +908,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
                 aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
-                if ( pCore && ((const SvxPostureItem*)pCore)->GetValue() != ITALIC_NONE )
+                if ( pCore && static_cast<const SvxPostureItem*>(pCore)->GetValue() != ITALIC_NONE )
                     bOld = true;
 
                 SvxScriptSetItem aSetItem( nSlot, rPool );
@@ -930,7 +930,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ULINE_VAL_DOUBLE:
         case SID_ULINE_VAL_DOTTED:
             {
-                FontUnderline eOld = ((const SvxUnderlineItem&) pEditView->
+                FontUnderline eOld = static_cast<const SvxUnderlineItem&>( pEditView->
                                     GetAttribs().Get(EE_CHAR_UNDERLINE)).GetLineStyle();
                 FontUnderline eNew = eOld;
                 switch (nSlot)
@@ -963,7 +963,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_OVERLINE:
             {
-                FontUnderline eOld = ((const SvxOverlineItem&) pEditView->
+                FontUnderline eOld = static_cast<const SvxOverlineItem&>( pEditView->
                                     GetAttribs().Get(EE_CHAR_OVERLINE)).GetLineStyle();
                 FontUnderline eNew = ( eOld != UNDERLINE_NONE ) ? UNDERLINE_NONE : UNDERLINE_SINGLE;
                 aSet.Put( SvxOverlineItem( eNew, EE_CHAR_OVERLINE ) );
@@ -973,7 +973,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_STRIKEOUT:
             {
-                bool bOld = ((const SvxCrossedOutItem&)pEditView->GetAttribs().
+                bool bOld = static_cast<const SvxCrossedOutItem&>( pEditView->GetAttribs().
                                 Get(EE_CHAR_STRIKEOUT)).GetValue() != STRIKEOUT_NONE;
                 aSet.Put( SvxCrossedOutItem( bOld ? STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
                 rBindings.Invalidate( nSlot );
@@ -982,7 +982,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_SHADOWED:
             {
-                bool bOld = ((const SvxShadowedItem&)pEditView->GetAttribs().
+                bool bOld = static_cast<const SvxShadowedItem&>(pEditView->GetAttribs().
                                 Get(EE_CHAR_SHADOW)).GetValue();
                 aSet.Put( SvxShadowedItem( !bOld, EE_CHAR_SHADOW ) );
                 rBindings.Invalidate( nSlot );
@@ -991,7 +991,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_CONTOUR:
             {
-                bool bOld = ((const SvxContourItem&)pEditView->GetAttribs().
+                bool bOld = static_cast<const SvxContourItem&>(pEditView->GetAttribs().
                                 Get(EE_CHAR_OUTLINE)).GetValue();
                 aSet.Put( SvxContourItem( !bOld, EE_CHAR_OUTLINE ) );
                 rBindings.Invalidate( nSlot );
@@ -1000,7 +1000,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_SET_SUPER_SCRIPT:
             {
-                SvxEscapement eOld = (SvxEscapement) ((const SvxEscapementItem&)
+                SvxEscapement eOld = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                         pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT)).GetEnumValue();
                 SvxEscapement eNew = (eOld == SVX_ESCAPEMENT_SUPERSCRIPT) ?
                                         SVX_ESCAPEMENT_OFF : SVX_ESCAPEMENT_SUPERSCRIPT;
@@ -1010,7 +1010,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             break;
         case SID_SET_SUB_SCRIPT:
             {
-                SvxEscapement eOld = (SvxEscapement) ((const SvxEscapementItem&)
+                SvxEscapement eOld = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                         pEditView->GetAttribs().Get(EE_CHAR_ESCAPEMENT)).GetEnumValue();
                 SvxEscapement eNew = (eOld == SVX_ESCAPEMENT_SUBSCRIPT) ?
                                         SVX_ESCAPEMENT_OFF : SVX_ESCAPEMENT_SUBSCRIPT;
@@ -1093,7 +1093,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     }
     else
     {
-        FontUnderline eUnderline = ((const SvxUnderlineItem&)
+        FontUnderline eUnderline = static_cast<const SvxUnderlineItem&>(
                     aAttribs.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
         sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
@@ -1112,7 +1112,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     if ( pHdl && pHdl->IsFormulaMode() )
         rSet.ClearItem( EE_CHAR_WEIGHT );   // hervorgehobene Klammern hier nicht
 
-    SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+    SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                     aAttribs.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
     {
@@ -1183,7 +1183,7 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
                 sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
-                    nCount = ((const SfxUInt16Item*)pItem)->GetValue();
+                    nCount = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
                 for (sal_uInt16 i=0; i<nCount; i++)
                 {

@@ -117,7 +117,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                  * 1: ER    Click extends selection
                  * 2: ERG   Click defines further selection
                  */
-                sal_uInt16 nMode = ((const SfxUInt16Item&)pReqArgs->Get( nSlot )).GetValue();
+                sal_uInt16 nMode = static_cast<const SfxUInt16Item&>(pReqArgs->Get( nSlot )).GetValue();
 
                 switch ( nMode )
                 {
@@ -178,7 +178,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    OUString aStr( ((const SfxStringItem&)pReqArgs->
+                    OUString aStr( static_cast<const SfxStringItem&>(pReqArgs->
                                     Get( SID_ENTER_STRING )).GetValue() );
 
                     pTabViewShell->EnterData( GetViewData()->GetCurX(),
@@ -209,7 +209,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    OUString aStr = ((const SfxStringItem&)pReqArgs->
+                    OUString aStr = static_cast<const SfxStringItem&>(pReqArgs->
                                     Get( SID_INSERT_MATRIX )).GetValue();
                     ScDocument* pDoc = GetViewData()->GetDocument();
                     pTabViewShell->EnterMatrix( aStr, pDoc->GetGrammar() );
@@ -226,8 +226,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     break;
 
                 const ScInputStatusItem* pStatusItem
-                    = (const ScInputStatusItem*)&pReqArgs->
-                            Get( FID_INPUTLINE_STATUS );
+                    = static_cast<const ScInputStatusItem*>(&pReqArgs->
+                            Get( FID_INPUTLINE_STATUS ));
 
                 ScAddress aCursorPos = pStatusItem->GetPos();
                 OUString aString = pStatusItem->GetString();
@@ -476,9 +476,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             OUString aArgComment;
                             const SfxPoolItem* pItem;
                             if ( pReqArgs->GetItemState( SID_SCENARIOS, true, &pItem ) == SfxItemState::SET )
-                                aArgName = ((const SfxStringItem*)pItem)->GetValue();
+                                aArgName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                             if ( pReqArgs->GetItemState( SID_NEW_TABLENAME, true, &pItem ) == SfxItemState::SET )
-                                aArgComment = ((const SfxStringItem*)pItem)->GetValue();
+                                aArgComment = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                             aColor = Color( COL_LIGHTGRAY );        // Default
                             nFlags = 0;                             // not-TwoWay
@@ -525,7 +525,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_ROW_HEIGHT );
+                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_ROW_HEIGHT ));
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT,
@@ -567,7 +567,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_ROW_OPT_HEIGHT );
+                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_ROW_OPT_HEIGHT ));
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL,
@@ -608,7 +608,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_WIDTH );
+                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_COL_WIDTH ));
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT,
@@ -649,7 +649,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs )
                 {
-                    const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_OPT_WIDTH );
+                    const SfxUInt16Item&  rUInt16Item = static_cast<const SfxUInt16Item&>(pReqArgs->Get( FID_COL_OPT_WIDTH ));
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL,
@@ -752,7 +752,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     {
                         OSL_ENSURE(pItem && pItem->ISA(SfxBoolItem), "falsches Item");
-                        bMoveContents = ((const SfxBoolItem*)pItem)->GetValue();
+                        bMoveContents = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     }
 
                     if (pTabViewShell->MergeCells( bApi, bMoveContents, true, bCenter ))
@@ -799,7 +799,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     if ( pReqArgs )
                     {
-                        const SfxStringItem& rNameItem = (const SfxStringItem&)pReqArgs->Get( SID_AUTOFORMAT );
+                        const SfxStringItem& rNameItem = static_cast<const SfxStringItem&>(pReqArgs->Get( SID_AUTOFORMAT ));
                         ScAutoFormat* pFormat = ScGlobal::GetOrCreateAutoFormat();
                         ScAutoFormat::const_iterator it = pFormat->find(rNameItem.GetValue());
                         ScAutoFormat::const_iterator itBeg = pFormat->begin();

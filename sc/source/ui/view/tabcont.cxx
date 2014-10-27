@@ -501,7 +501,7 @@ static sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
     {
         if ( pShell->Type() == TYPE(ScDocShell) )
         {
-            if ( &((ScDocShell*)pShell)->GetDocument() == pDoc )
+            if ( &static_cast<ScDocShell*>(pShell)->GetDocument() == pDoc )
                 return nShellCnt;
 
             ++nShellCnt;

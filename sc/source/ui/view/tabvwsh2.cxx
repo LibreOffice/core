@@ -104,7 +104,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         if ( pArgs->GetItemState( SID_INSERT_DRAW, true, &pItem ) == SfxItemState::SET &&
              pItem->ISA( SvxDrawToolItem ) )
         {
-            SvxDrawToolEnum eSel = (SvxDrawToolEnum)((const SvxDrawToolItem*)pItem)->GetValue();
+            SvxDrawToolEnum eSel = (SvxDrawToolEnum)static_cast<const SvxDrawToolItem*>(pItem)->GetValue();
             switch (eSel)
             {
                 case SVX_SNAP_DRAW_SELECT:          nNewId = SID_OBJECT_SELECT;         break;
@@ -140,7 +140,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         const SfxPoolItem* pItem;
         if ( pArgs->GetItemState( SID_FM_CONTROL_IDENTIFIER, true, &pItem ) == SfxItemState::SET &&
              pItem->ISA( SfxUInt16Item ) )
-            nNewFormId = ((const SfxUInt16Item*)pItem)->GetValue();
+            nNewFormId = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     }
 
     OUString sStringItemValue;

@@ -602,11 +602,11 @@ void ScTabView::TestHintWindow()
     ScAddress aListValPos;
 
     ScDocument* pDoc = aViewData.GetDocument();
-    const SfxUInt32Item* pItem = (const SfxUInt32Item*)
+    const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(
                                         pDoc->GetAttr( aViewData.GetCurX(),
                                                        aViewData.GetCurY(),
                                                        aViewData.GetTabNo(),
-                                                       ATTR_VALIDDATA );
+                                                       ATTR_VALIDDATA ));
     if ( pItem->GetValue() )
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( pItem->GetValue() );

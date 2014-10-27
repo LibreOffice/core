@@ -189,7 +189,7 @@ void ScSimpleRefDlgWrapper::SetRefString(const OUString& rStr)
 {
     if(pWindow!=NULL)
     {
-        ((ScSimpleRefDlg*)pWindow)->SetRefString(rStr);
+        static_cast<ScSimpleRefDlg*>(pWindow)->SetRefString(rStr);
     }
 }
 
@@ -197,7 +197,7 @@ void ScSimpleRefDlgWrapper::SetCloseHdl( const Link& rLink )
 {
     if(pWindow!=NULL)
     {
-        ((ScSimpleRefDlg*)pWindow)->SetCloseHdl( rLink );
+        static_cast<ScSimpleRefDlg*>(pWindow)->SetCloseHdl( rLink );
     }
 }
 
@@ -206,7 +206,7 @@ void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
 {
     if(pWindow!=NULL)
     {
-        ((ScSimpleRefDlg*)pWindow)->SetUnoLinks( rDone, rAbort, rChange );
+        static_cast<ScSimpleRefDlg*>(pWindow)->SetUnoLinks( rDone, rAbort, rChange );
     }
 }
 
@@ -214,7 +214,7 @@ void ScSimpleRefDlgWrapper::SetFlags( bool bCloseOnButtonUp, bool bSingleCell, b
 {
     if(pWindow!=NULL)
     {
-        ((ScSimpleRefDlg*)pWindow)->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
+        static_cast<ScSimpleRefDlg*>(pWindow)->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
     }
 }
 
@@ -222,7 +222,7 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 {
     if(pWindow!=NULL)
     {
-        ((ScSimpleRefDlg*)pWindow)->StartRefInput();
+        static_cast<ScSimpleRefDlg*>(pWindow)->StartRefInput();
     }
 }
 
@@ -242,7 +242,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   vcl::Window* pParentP,
             NULL;
         if(pWindow!=NULL)
         {
-            ((ScAcceptChgDlg*)pWindow)->Initialize( pInfo );
+            static_cast<ScAcceptChgDlg*>(pWindow)->Initialize( pInfo );
         }
         if (pViewShell && !pWindow)
             pViewShell->GetViewFrame()->SetChildWindow( nId, false );
@@ -256,7 +256,7 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
 
     if(pWindow!=NULL && pViewShell)
     {
-        ((ScAcceptChgDlg*)pWindow)->ReInit(&pViewShell->GetViewData());
+        static_cast<ScAcceptChgDlg*>(pWindow)->ReInit(&pViewShell->GetViewData());
     }
 }
 

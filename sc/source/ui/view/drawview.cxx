@@ -369,7 +369,7 @@ void ScDrawView::MarkListHasChanged()
     ScModule* pScMod = SC_MOD();
     bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
 
-    ScClient* pClient = (ScClient*) pViewSh->GetIPClient();
+    ScClient* pClient = static_cast<ScClient*>( pViewSh->GetIPClient() );
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
     {
         //  beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
@@ -398,7 +398,7 @@ void ScDrawView::MarkListHasChanged()
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
         {
-            pOle2Obj = (SdrOle2Obj*) pObj;
+            pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
             if (!pDoc->IsChart(pObj) )
                 pViewSh->SetOleObjectShell(true);
             else
@@ -407,7 +407,7 @@ void ScDrawView::MarkListHasChanged()
         }
         else if (pObj->GetObjIdentifier() == OBJ_GRAF)
         {
-            pGrafObj = (SdrGrafObj*) pObj;
+            pGrafObj = static_cast<SdrGrafObj*>(pObj);
             pViewSh->SetGraphicShell(true);
             bSubShellSet = true;
         }
@@ -432,7 +432,7 @@ void ScDrawView::MarkListHasChanged()
             SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
             if ( pObj->ISA( SdrObjGroup ) )
             {
-                const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
+                const SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
                 const size_t nListCount = pLst->GetObjCount();
                 if ( nListCount == 0 )
                 {
@@ -509,7 +509,7 @@ void ScDrawView::MarkListHasChanged()
 
         if(OUTDEV_WINDOW == rOutDev.GetOutDevType())
         {
-            ((vcl::Window&)rOutDev).Update();
+            static_cast<vcl::Window&>(rOutDev).Update();
         }
     }
 
@@ -901,7 +901,7 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     // process members of a group shape separately
     if ( pObj->ISA( SdrObjGroup ) )
     {
-        SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
+        SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
         for ( size_t i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )
             SyncForGrid( pLst->GetObj( i ) );
     }
@@ -957,7 +957,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
 {
     if(dynamic_cast< SdrGrafObj* >(&rHitObject))
     {
-        SdrGrafObj* pNewGrafObj = (SdrGrafObj*)rHitObject.Clone();
+        SdrGrafObj* pNewGrafObj = static_cast<SdrGrafObj*>(rHitObject.Clone());
 
         pNewGrafObj->SetGraphic(rGraphic);
         BegUndo(rBeginUndoText);

@@ -403,9 +403,9 @@ static bool lcl_GetHyperlinkCell(
         else
         {
             const ScPatternAttr* pPattern = pDoc->GetPattern(aPos);
-            if ( !((SfxStringItem&)pPattern->GetItem(ATTR_HYPERLINK)).GetValue().isEmpty() )
+            if ( !static_cast<const SfxStringItem&>(pPattern->GetItem(ATTR_HYPERLINK)).GetValue().isEmpty() )
             {
-                rURL =  ((SfxStringItem&)pPattern->GetItem(ATTR_HYPERLINK)).GetValue();
+                rURL =  static_cast<const SfxStringItem&>(pPattern->GetItem(ATTR_HYPERLINK)).GetValue();
                 bFound = true;
             }
             else if (rCell.meType == CELLTYPE_EDIT)
@@ -1136,7 +1136,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
         const size_t nDefCount = SAL_N_ELEMENTS(nDefIDs);
         for (i=0; i<nDefCount; i++)
         {
-            OUString aEntry( (ScResId) nDefIDs[i] );
+            OUString aEntry( static_cast<ScResId>(nDefIDs[i]) );
             pFilterBox->InsertEntry( aEntry );
             long nTextWidth = pFilterBox->GetTextWidth( aEntry );
             if ( nTextWidth > nMaxText )
@@ -1254,7 +1254,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     else
     {
 
-        sal_uLong nIndex = ((SfxUInt32Item*)pDoc->GetAttr(
+        sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
                                 nCol, nRow, nTab, ATTR_VALIDDATA ))->GetValue();
         if ( nIndex )
         {
@@ -1850,10 +1850,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         SCsCOL nRealPosX;
         SCsROW nRealPosY;
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nRealPosX, nRealPosY, false );//the real row/col
-        ScMergeFlagAttr* pRealPosAttr = (ScMergeFlagAttr*)
-                                    pDoc->GetAttr( nRealPosX, nRealPosY, nTab, ATTR_MERGE_FLAG );
-        ScMergeFlagAttr* pAttr = (ScMergeFlagAttr*)
-                                    pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
+        const ScMergeFlagAttr* pRealPosAttr = static_cast<const ScMergeFlagAttr*>(
+                                    pDoc->GetAttr( nRealPosX, nRealPosY, nTab, ATTR_MERGE_FLAG ));
+        const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
+                                    pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG ));
         if( pRealPosAttr->HasAutoFilter() )
         {
             SC_MOD()->InputEnterHandler();
@@ -2158,8 +2158,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                                             GetStyleSheetPool());
         if ( pStylePool )
         {
-            SfxStyleSheet* pStyleSheet = (SfxStyleSheet*)
-                                         pStylePool->GetActualStyleSheet();
+            SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(
+                                         pStylePool->GetActualStyleSheet());
 
             if ( pStyleSheet )
             {
@@ -5215,10 +5215,10 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
         return false;
 
-    bool bBreak = ((SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
-                    ((SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
+    bool bBreak = static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() ||
+                    ((SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
                         GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK);
-    SvxCellHorJustify eHorJust = (SvxCellHorJustify)((SvxHorJustifyItem&)pPattern->
+    SvxCellHorJustify eHorJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(pPattern->
                         GetItem(ATTR_HOR_JUSTIFY)).GetValue();
 
         //  EditEngine
@@ -5750,7 +5750,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
     ScDocument* pDoc = pViewData->GetDocument();
     const ScPatternAttr* pPattern = pDoc->GetPattern(nX,nY,nTab);
-    const ScMergeFlagAttr& rMergeFlag = (const ScMergeFlagAttr&) pPattern->GetItem(ATTR_MERGE_FLAG);
+    const ScMergeFlagAttr& rMergeFlag = static_cast<const ScMergeFlagAttr&>( pPattern->GetItem(ATTR_MERGE_FLAG) );
     bool bOverlapped = rMergeFlag.IsOverlapped();
 
     //  left or above of the screen?
@@ -5760,7 +5760,7 @@ void ScGridWindow::UpdateCursorOverlay()
     {
         SCCOL nEndX = nX;
         SCROW nEndY = nY;
-        const ScMergeAttr& rMerge = (const ScMergeAttr&) pPattern->GetItem(ATTR_MERGE);
+        const ScMergeAttr& rMerge = static_cast<const ScMergeAttr&>( pPattern->GetItem(ATTR_MERGE) );
         if (rMerge.GetColMerge() > 1)
             nEndX += rMerge.GetColMerge()-1;
         if (rMerge.GetRowMerge() > 1)

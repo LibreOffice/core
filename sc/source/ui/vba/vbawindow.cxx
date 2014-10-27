@@ -102,7 +102,7 @@ public:
         ScModelObj* pModel = static_cast< ScModelObj* >( m_xModel.get() );
         if ( !pModel )
             throw uno::RuntimeException("Cannot obtain current document" );
-        ScDocShell* pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
+        ScDocShell* pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
         if ( !pDocShell )
             throw uno::RuntimeException("Cannot obtain docshell" );
         ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
@@ -411,7 +411,7 @@ ScVbaWindow::getWindowState() throw (uno::RuntimeException, std::exception)
     // !! TODO !! get view shell from controller
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
+    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
     if ( pWork )
     {
         if ( pWork -> IsMaximized())
@@ -430,7 +430,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
     // !! TODO !! get view shell from controller
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
-    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
+    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
     if ( pWork )
     {
         if ( nwindowState == xlMaximized)

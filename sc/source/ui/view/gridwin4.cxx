@@ -103,7 +103,7 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
 
     //  use ScPatternAttr::GetFont only for font size
     vcl::Font aAttrFont;
-    ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
+    static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
                                     GetFont(aAttrFont,SC_AUTOCOL_BLACK,pDev,&rZoomY);
 
     //  everything else from application font
@@ -130,7 +130,7 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
 
     long nButtonY = bTextBelow ? aInner.Bottom() : aOuter.Top();
 
-    ScDDComboBoxButton aComboButton((vcl::Window*)pDev);
+    ScDDComboBoxButton aComboButton(static_cast<vcl::Window*>(pDev));
     aComboButton.SetOptSizePixel();
     long nBWidth  = ( aComboButton.GetSizePixel().Width() * rZoomY.GetNumerator() )
                         / rZoomY.GetDenominator();
@@ -930,7 +930,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
 
         vcl::Font aFont;
         boost::scoped_ptr<ScEditEngineDefaulter> pEditEng;
-        const ScPatternAttr& rDefPattern = ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
+        const ScPatternAttr& rDefPattern = static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
         if ( nPageScript == SCRIPTTYPE_LATIN )
         {
             //  use single font and call DrawText directly
@@ -1438,7 +1438,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
             if (nX2 < nX1)                      // Rest von zusammengefasst
             {
                 SCCOL nStartX = nX1;
-                while ( ((const ScMergeFlagAttr*)pDoc->
+                while ( static_cast<const ScMergeFlagAttr*>(pDoc->
                             GetAttr(nStartX,nY,nTab,ATTR_MERGE_FLAG))->IsHorOverlapped() )
                     --nStartX;
                 if (nStartX <= nX2)
@@ -1457,8 +1457,8 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                     {
                         SCROW nThisY = nY;
                         const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
-                        const ScMergeFlagAttr* pMergeFlag = (const ScMergeFlagAttr*) &pPattern->
-                                                                        GetItem(ATTR_MERGE_FLAG);
+                        const ScMergeFlagAttr* pMergeFlag = static_cast<const ScMergeFlagAttr*>( &pPattern->
+                                                                        GetItem(ATTR_MERGE_FLAG) );
                         if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                         {
                             while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
@@ -1466,7 +1466,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                             {
                                 --nThisY;
                                 pPattern = pDoc->GetPattern( nX, nThisY, nTab );
-                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                                pMergeFlag = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
                             }
                         }
 
@@ -1478,7 +1478,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                             {
                                 --nThisX;
                                 pPattern = pDoc->GetPattern( nThisX, nThisY, nTab );
-                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                                pMergeFlag = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
                             }
                         }
 
@@ -1486,7 +1486,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                         {
                             if ( !pMergeFlag->IsOverlapped() )
                             {
-                                ScMergeAttr* pMerge = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+                                const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
                                 if (pMerge->GetColMerge() > 0 || pMerge->GetRowMerge() > 0)
                                 {
                                     Point aEndPos = pViewData->GetScrPos(

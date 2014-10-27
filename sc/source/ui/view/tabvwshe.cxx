@@ -228,7 +228,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                      SfxItemState::SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
                 {
                     OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
-                    const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
+                    const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>(pItem);
 
                     ScGlobal::SetSearchItem( *pSearchItem );
                     bool bSuccess = SearchAndReplace( pSearchItem, true, rReq.IsAPI() );
@@ -236,7 +236,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
                     {
-                        SvxSearchDialog* pSearchDlg = (SvxSearchDialog*)(pChildWindow->GetWindow());
+                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetWindow());
                         if( pSearchDlg )
                         {
                             ScTabView* pTabView = GetViewData().GetView();
@@ -262,7 +262,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             {
                 //  Search-Item merken
                 OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
-                ScGlobal::SetSearchItem( *(const SvxSearchItem*) pItem );
+                ScGlobal::SetSearchItem( *static_cast<const SvxSearchItem*>(pItem ));
             }
             else
             {
@@ -282,9 +282,9 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                     //  SearchItem fuellen
 
-                    aSearchItem.SetSearchString(((SfxStringItem*)pItem)->GetValue());
+                    aSearchItem.SetSearchString(static_cast<const SfxStringItem*>(pItem)->GetValue());
                     if(SfxItemState::SET == pReqArgs->GetItemState(FN_PARAM_1, false, &pItem))
-                        aSearchItem.SetReplaceString(((SfxStringItem*)pItem)->GetValue());
+                        aSearchItem.SetReplaceString(static_cast<const SfxStringItem*>(pItem)->GetValue());
 
                     if (nSlot == FID_SEARCH)
                         aSearchItem.SetCommand(SVX_SEARCHCMD_FIND);
@@ -306,7 +306,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                             SvxSearchDialogWrapper::GetChildWindowId());
                     if (pChildWindow)
                     {
-                        SvxSearchDialog* pSearchDlg = (SvxSearchDialog*)(pChildWindow->GetWindow());
+                        SvxSearchDialog* pSearchDlg = static_cast<SvxSearchDialog*>(pChildWindow->GetWindow());
                         if( pSearchDlg )
                         {
                             ScTabView* pTabView = GetViewData().GetView();

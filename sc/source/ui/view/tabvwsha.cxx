@@ -271,9 +271,9 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     if ( pStyleSheet )
                     {
                         SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
-                        sal_uInt16 nScale = ((const SfxUInt16Item&)
+                        sal_uInt16 nScale = static_cast<const SfxUInt16Item&>(
                                             rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
-                        sal_uInt16 nPages = ((const SfxUInt16Item&)
+                        sal_uInt16 nPages = static_cast<const SfxUInt16Item&>(
                                             rStyleSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
                         if ( nScale == 100 && nPages == 0 )
                             rSet.DisableItem( nWhich );
@@ -538,7 +538,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
         if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
         {
 
-            UpdateNumberFormatter((const SvxNumberInfoItem&)*pItem);
+            UpdateNumberFormatter(static_cast<const SvxNumberInfoItem&>(*pItem));
         }
 
         ApplyAttributes(pOutSet, pOldSet.get());
@@ -635,9 +635,9 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
         if (pDoc->IsTabProtected(nTab))
         {
-            const ScProtectionAttr* pProt = (const ScProtectionAttr*)
+            const ScProtectionAttr* pProt = static_cast<const ScProtectionAttr*>(
                                             pDoc->GetAttr( nPosX,nPosY,nTab,
-                                                           ATTR_PROTECTION);
+                                                           ATTR_PROTECTION));
             bHideFormula = pProt->GetHideFormula();
             bHideAll     = pProt->GetHideCell();
         }
@@ -746,7 +746,7 @@ void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
         case SID_GRID_VISIBLE:
             if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SfxItemState::SET )
             {
-                aGridOptions.SetGridVisible( ((const SfxBoolItem*)pItem)->GetValue() );
+                aGridOptions.SetGridVisible( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
                 aViewOptions.SetGridOptions(aGridOptions);
                 rBindings.Invalidate(SID_GRID_VISIBLE);
             }
@@ -755,7 +755,7 @@ void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
         case SID_GRID_USE:
             if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SfxItemState::SET )
             {
-                aGridOptions.SetUseGridSnap( ((const SfxBoolItem*)pItem)->GetValue() );
+                aGridOptions.SetUseGridSnap( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
                 aViewOptions.SetGridOptions(aGridOptions);
                 rBindings.Invalidate(SID_GRID_USE);
             }
@@ -764,7 +764,7 @@ void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
         case SID_HELPLINES_MOVE:
             if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SfxItemState::SET )
             {
-                aViewOptions.SetOption( VOPT_HELPLINES, ((const SfxBoolItem*)pItem)->GetValue() );
+                aViewOptions.SetOption( VOPT_HELPLINES, static_cast<const SfxBoolItem*>(pItem)->GetValue() );
                 rBindings.Invalidate(SID_HELPLINES_MOVE);
             }
             break;

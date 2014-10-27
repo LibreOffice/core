@@ -137,7 +137,7 @@ void ScTabViewShell::Activate(bool bMDI)
             SfxChildWindow* pChild = pThisFrame->GetChildWindow(FID_INPUTLINE_STATUS);
             if (pChild)
             {
-                ScInputWindow* pWin = (ScInputWindow*)pChild->GetWindow();
+                ScInputWindow* pWin = static_cast<ScInputWindow*>(pChild->GetWindow());
                 if (pWin && pWin->IsVisible())
                 {
 
@@ -148,7 +148,7 @@ void ScTabViewShell::Activate(bool bMDI)
                     SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
                     while ( pSh!=NULL && pOldHdl!=NULL)
                     {
-                        if (((ScTabViewShell*)pSh)->GetInputHandler() == pOldHdl)
+                        if (static_cast<ScTabViewShell*>(pSh)->GetInputHandler() == pOldHdl)
                         {
                             pOldHdl->ResetDelayTimer();
                             break;
@@ -198,7 +198,7 @@ void ScTabViewShell::Activate(bool bMDI)
             SfxChildWindow* pChild = pThisFrame->GetChildWindow(FID_CHG_ACCEPT);
             if (pChild)
             {
-                ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+                static_cast<ScAcceptChgDlgWrapper*>(pChild)->ReInitDlg();
             }
         }
 
@@ -1157,7 +1157,7 @@ void ScTabViewShell::StartSimpleRefDialog(
 
     SC_MOD()->SetRefDialog( nId, true, pViewFrm );
 
-    ScSimpleRefDlgWrapper* pWnd = (ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
+    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
     if (pWnd)
     {
         pWnd->SetCloseHdl( LINK( this, ScTabViewShell, SimpleRefClose ) );
@@ -1178,12 +1178,12 @@ void ScTabViewShell::StopSimpleRefDialog()
     SfxViewFrame* pViewFrm = GetViewFrame();
     sal_uInt16 nId = ScSimpleRefDlgWrapper::GetChildWindowId();
 
-    ScSimpleRefDlgWrapper* pWnd = (ScSimpleRefDlgWrapper*)pViewFrm->GetChildWindow( nId );
+    ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(pViewFrm->GetChildWindow( nId ));
     if (pWnd)
     {
         vcl::Window* pWin = pWnd->GetWindow();
         if (pWin && pWin->IsSystemWindow())
-            ((SystemWindow*)pWin)->Close();     // calls abort handler
+            static_cast<SystemWindow*>(pWin)->Close();     // calls abort handler
     }
 }
 
@@ -1697,7 +1697,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
-    ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this ),
+    ScDBFunc( &pViewFrame->GetWindow(), static_cast<ScDocShell&>(*pViewFrame->GetObjectShell()), this ),
     __INIT_ScTabViewShell
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
@@ -1711,7 +1711,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE;
     if ( pOldSh && pOldSh->ISA( ScPreviewShell ) )
     {
-        ScPreviewShell* pPreviewShell = ((ScPreviewShell*)pOldSh);
+        ScPreviewShell* pPreviewShell = static_cast<ScPreviewShell*>(pOldSh);
         nForceDesignMode = pPreviewShell->GetSourceDesignMode();
         ScPreview* p = pPreviewShell->GetPreview();
         if (p)
@@ -1850,15 +1850,15 @@ void ScTabViewShell::ExecTbx( SfxRequest& rReq )
     {
         case SID_TBXCTL_INSERT:
             if ( pItem )
-                nInsertCtrlState = ((const SfxUInt16Item*)pItem)->GetValue();
+                nInsertCtrlState = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             break;
         case SID_TBXCTL_INSCELLS:
             if ( pItem )
-                nInsCellsCtrlState = ((const SfxUInt16Item*)pItem)->GetValue();
+                nInsCellsCtrlState = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             break;
         case SID_TBXCTL_INSOBJ:
             if ( pItem )
-                nInsObjCtrlState = ((const SfxUInt16Item*)pItem)->GetValue();
+                nInsObjCtrlState = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             break;
         default:
             OSL_FAIL("Slot im Wald");

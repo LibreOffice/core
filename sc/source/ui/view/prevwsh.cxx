@@ -150,7 +150,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
-    pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
+    pDocShell( static_cast<ScDocShell*>(pViewFrame->GetObjectShell()) ),
     mpFrameWindow(NULL),
     nSourceDesignMode( SC_FORCEMODE_NONE ),
     nMaxVertPos(0),
@@ -164,7 +164,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         //! store live ScViewData instead, and update on ScTablesHint?
         //! or completely forget aSourceData on ScTablesHint?
 
-        ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
+        ScTabViewShell* pTabViewShell = static_cast<ScTabViewShell*>(pOldSh);
         const ScViewData& rData = pTabViewShell->GetViewData();
         rData.WriteUserDataSequence( aSourceData );
         pPreview->SetSelectedTabs(rData.GetMarkData());
@@ -250,7 +250,7 @@ bool ScPreviewShell::GetPageSize( Size& aPageSize )
     if (!pStyleSheet) return false;
     const SfxItemSet* pParamSet = &pStyleSheet->GetItemSet();
 
-    aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
+    aPageSize = static_cast<const SvxSizeItem&>( pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
     aPageSize.Width()  = (long) (aPageSize.Width()  * HMM_PER_TWIPS );
     aPageSize.Height() = (long) (aPageSize.Height() * HMM_PER_TWIPS );
     return true;
@@ -637,8 +637,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs )
                 {
 
-                    const SvxZoomItem& rZoomItem = (const SvxZoomItem&)
-                                                   pReqArgs->Get(SID_ATTR_ZOOM);
+                    const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(
+                                                   pReqArgs->Get(SID_ATTR_ZOOM));
 
                     eZoom = rZoomItem.GetType();
                     nZoom = rZoomItem.GetValue();
@@ -660,9 +660,9 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
 
                         if ( !bCancel )
                         {
-                            const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
+                            const SvxZoomItem&  rZoomItem = static_cast<const SvxZoomItem&>(
                                                     pDlg->GetOutputItemSet()->
-                                                        Get( SID_ATTR_ZOOM );
+                                                        Get( SID_ATTR_ZOOM ));
 
                             eZoom = rZoomItem.GetType();
                             nZoom = rZoomItem.GetValue();
@@ -724,7 +724,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 eZoom = SVX_ZOOM_PERCENT;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, true, &pItem ) )
                 {
-                    const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem*)pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem*>(pItem)->GetValue();
                     if( nCurrentZoom )
                     {
                         pPreview->SetZoom( nCurrentZoom );
@@ -744,7 +744,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
 
                 if ( pReqArgs && pStyleSheet && SfxItemState::SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, true, &pItem ) )
                 {
-                    const sal_uInt16 nCurrentZoom   = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom   = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
                     SfxItemSet& rSet            = pStyleSheet->GetItemSet();
                     rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nCurrentZoom ) );
                     ScPrintFunc aPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab );
@@ -859,7 +859,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                         if ( pStyleSheet )
                         {
                             SfxItemSet& rStyleSet   = pStyleSheet->GetItemSet();
-                            sal_uInt16 nCurrentZoom     = ((const SfxUInt16Item&)rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
+                            sal_uInt16 nCurrentZoom = static_cast<const SfxUInt16Item&>(rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
                             if( nCurrentZoom )
                             {
                                 SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM_SLIDER, MAXZOOM_SLIDER, SID_PREVIEW_SCALINGFACTOR );

@@ -114,7 +114,7 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
                 if ( eType == SC_CAT_MOVE )
                 {
                     ScRange aRange =
-                        ((const ScChangeActionMove*)pAction)->
+                        static_cast<const ScChangeActionMove*>(pAction)->
                         GetFromRange().MakeRange();
                     if ( aRange.In( aCellPos ) )
                     {
@@ -415,7 +415,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         SdrPageView* pPV = pDrView->GetSdrPageView();
         OSL_ENSURE( pPV, "SdrPageView* ist NULL" );
         if (pPV)
-            bDone = ((ScDrawPage*)pPV->GetPage())->RequestHelp( this, pDrView, rHEvt );
+            bDone = static_cast<ScDrawPage*>(pPV->GetPage())->RequestHelp( this, pDrView, rHEvt );
     }
 
     //  Wenn QuickHelp fuer AutoFill angezeigt wird, nicht wieder wegnehmen lassen

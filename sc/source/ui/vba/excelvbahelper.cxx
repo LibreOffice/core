@@ -218,7 +218,7 @@ getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
     ScModelObj* pModel = dynamic_cast< ScModelObj* >( xIf.get() );
     ScDocShell* pDocShell = NULL;
     if ( pModel )
-        pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
+        pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
     return pDocShell;
 
 }

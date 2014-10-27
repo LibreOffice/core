@@ -109,13 +109,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(FID_INSERT_FILE,true,&pItem) == SfxItemState::SET )
                 {
-                    OUString aFileName = ((const SfxStringItem*)pItem)->GetValue();
+                    OUString aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                         // Einfuege-Position
 
                     Point aInsertPos;
                     if ( pReqArgs->GetItemState(FN_PARAM_1,true,&pItem) == SfxItemState::SET )
-                        aInsertPos = ((const SfxPointItem*)pItem)->GetValue();
+                        aInsertPos = static_cast<const SfxPointItem*>(pItem)->GetValue();
                     else
                         aInsertPos = GetInsertPos();
 
@@ -123,7 +123,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                     bool bAsLink = false;
                     if ( pReqArgs->GetItemState(FN_PARAM_2,true,&pItem) == SfxItemState::SET )
-                        bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
+                        bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                         // ausfuehren
 
@@ -225,10 +225,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 OUString aAddress;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
-                    aAddress = ((const SfxStringItem*)pItem)->GetValue();
+                    aAddress = static_cast<const SfxStringItem*>(pItem)->GetValue();
                 else if ( nSlot == SID_JUMPTOMARK && pReqArgs->GetItemState(
                                             SID_JUMPTOMARK, true, &pItem ) == SfxItemState::SET )
-                    aAddress = ((const SfxStringItem*)pItem)->GetValue();
+                    aAddress = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 //  #i14927# SID_CURRENTCELL with a single cell must unmark if FN_PARAM_1
                 //  isn't set (for recorded macros, because IsAPI is no longer available).
@@ -236,7 +236,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 //  cell if there is a multi selection.
                 bool bUnmark = ( nSlot == SID_CURRENTCELL );
                 if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
-                    bUnmark = ((const SfxBoolItem*)pItem)->GetValue();
+                    bUnmark = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                 bool bAlignToCursor = true;
                 if (pReqArgs->GetItemState(FN_PARAM_2, true, &pItem) == SfxItemState::SET)
@@ -421,7 +421,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_CURRENTOBJECT:
             if ( pReqArgs )
             {
-                OUString aName = ((const SfxStringItem&)pReqArgs->Get(nSlot)).GetValue();
+                OUString aName = static_cast<const SfxStringItem&>(pReqArgs->Get(nSlot)).GetValue();
                 SelectObject( aName );
             }
             break;
@@ -430,7 +430,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             if ( pReqArgs )
             {
                 //  Tabelle fuer Basic ist 1-basiert
-                SCTAB nTab = ((const SfxUInt16Item&)pReqArgs->Get(nSlot)).GetValue() - 1;
+                SCTAB nTab = static_cast<const SfxUInt16Item&>(pReqArgs->Get(nSlot)).GetValue() - 1;
                 ScDocument* pDoc = GetViewData().GetDocument();
                 if ( nTab < pDoc->GetTableCount() )
                 {
@@ -447,11 +447,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_CURRENTDOC:
             if ( pReqArgs )
             {
-                OUString aStrDocName( ((const SfxStringItem&)pReqArgs->
+                OUString aStrDocName( static_cast<const SfxStringItem&>(pReqArgs->
                                         Get(nSlot)).GetValue() );
 
                 SfxViewFrame*   pViewFrame = NULL;
-                ScDocShell*     pDocSh = (ScDocShell*)SfxObjectShell::GetFirst();
+                ScDocShell*     pDocSh = static_cast<ScDocShell*>(SfxObjectShell::GetFirst());
                 bool            bFound = false;
 
                 // zu aktivierenden ViewFrame suchen
@@ -464,7 +464,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         bFound = ( NULL != pViewFrame );
                     }
 
-                    pDocSh = (ScDocShell*)SfxObjectShell::GetNext( *pDocSh );
+                    pDocSh = static_cast<ScDocShell*>(SfxObjectShell::GetNext( *pDocSh ));
                 }
 
                 if ( bFound )
@@ -522,7 +522,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                 {
-                    bool bItemValue = ((const SfxBoolItem*)pItem)->GetValue();
+                    bool bItemValue = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     bWantPageBreak = (nSlot == FID_PAGEBREAKMODE) == bItemValue;
                 }
 
@@ -545,7 +545,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 sal_uInt16 nChildId = ScFunctionChildWindow::GetChildWindowId();
                 if ( rReq.GetArgs() )
-                    pThisFrame->SetChildWindow( nChildId, ((const SfxBoolItem&) (rReq.GetArgs()->Get(FID_FUNCTION_BOX))).GetValue());
+                    pThisFrame->SetChildWindow( nChildId, static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(FID_FUNCTION_BOX)).GetValue());
                 else
                 {
                     pThisFrame->ToggleChildWindow( nChildId );
@@ -562,7 +562,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool bSet = !GetViewData().IsSyntaxMode();
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
-                    bSet = ((const SfxBoolItem*)pItem)->GetValue();
+                    bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 GetViewData().SetSyntaxMode( bSet );
                 PaintGrid();
                 rBindings.Invalidate( FID_TOGGLESYNTAX );
@@ -575,7 +575,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool bSet = !GetViewData().IsHeaderMode();
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
-                    bSet = ((const SfxBoolItem*)pItem)->GetValue();
+                    bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 GetViewData().SetHeaderMode( bSet );
                 RepeatResize();
                 rBindings.Invalidate( FID_TOGGLEHEADERS );
@@ -591,7 +591,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool bFormulaMode = !rOpts.GetOption( VOPT_FORMULAS );
                 const SfxPoolItem *pItem;
                 if( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
-                    bFormulaMode = ((const SfxBoolItem *)pItem)->GetValue();
+                    bFormulaMode = static_cast<const SfxBoolItem *>(pItem)->GetValue();
 
                 ScViewOptions rSetOpts = ScViewOptions( rOpts );
                 rSetOpts.SetOption( VOPT_FORMULAS, bFormulaMode );
@@ -612,7 +612,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool bSet = ( pWnd == NULL );
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
-                    bSet = ((const SfxBoolItem*)pItem)->GetValue();
+                    bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                 pThisFrame->SetChildWindow( nId, bSet );
                 rBindings.Invalidate( FID_TOGGLEINPUTLINE );
@@ -635,8 +635,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( pReqArgs )
                 {
-                    const SvxZoomItem& rZoomItem = (const SvxZoomItem&)
-                                                   pReqArgs->Get(SID_ATTR_ZOOM);
+                    const SvxZoomItem& rZoomItem = static_cast<const SvxZoomItem&>(
+                                                   pReqArgs->Get(SID_ATTR_ZOOM));
 
                     eNewZoomType = rZoomItem.GetType();
                     nZoom     = rZoomItem.GetValue();
@@ -676,9 +676,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         // so no need to check again pDlg
                         if ( !bCancel )
                         {
-                            const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
+                            const SvxZoomItem&  rZoomItem = static_cast<const SvxZoomItem&>(
                                                     pDlg->GetOutputItemSet()->
-                                                        Get( SID_ATTR_ZOOM );
+                                                        Get( SID_ATTR_ZOOM ));
 
                             eNewZoomType = rZoomItem.GetType();
                             nZoom     = rZoomItem.GetValue();
@@ -738,7 +738,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem) == SfxItemState::SET )
                 {
-                    const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
                     if( nCurrentZoom )
                     {
                         SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
@@ -934,7 +934,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                          pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET &&
                          pItem->ISA( SfxStringItem ) )
                     {
-                        OUString aComment = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aComment = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         pDocSh->SetChangeComment( pAction, aComment );
                         rReq.Done();
                     }
@@ -965,7 +965,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
                     if( pReqArgs->HasItem( FID_PROTECT_DOC, &pItem ) &&
-                        ((const SfxBoolItem*)pItem)->GetValue() == pDoc->IsDocProtected() )
+                        static_cast<const SfxBoolItem*>(pItem)->GetValue() == pDoc->IsDocProtected() )
                     {
                         rReq.Ignore();
                         break;
@@ -1034,7 +1034,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 bool bNewProtection = !bOldProtection;
                 if( pReqArgs->HasItem( FID_PROTECT_TABLE, &pItem ) )
-                    bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
+                    bNewProtection = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 if( bNewProtection == bOldProtection )
                 {
                     rReq.Ignore();

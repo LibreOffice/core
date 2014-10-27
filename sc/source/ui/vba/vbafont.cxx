@@ -104,8 +104,8 @@ ScVbaFont::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
         nValue = SUPERSCRIPT;
             nValue2 = SUPERSCRIPTHEIGHT;
     }
-    xProps->setPropertyValue("CharEscapement", ( uno::Any )nValue );
-     xProps->setPropertyValue("CharEscapementHeight", ( uno::Any )nValue2 );
+    xProps->setPropertyValue("CharEscapement", uno::Any(nValue) );
+     xProps->setPropertyValue("CharEscapementHeight", uno::Any(nValue2) );
 }
 
 uno::Any SAL_CALL
@@ -177,8 +177,8 @@ ScVbaFont::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeException,
             nValue2 = SUBSCRIPTHEIGHT;
     }
 
-     xProps->setPropertyValue("CharEscapementHeight", ( uno::Any )nValue2 );
-    xProps->setPropertyValue("CharEscapement", ( uno::Any )nValue );
+     xProps->setPropertyValue("CharEscapementHeight", uno::Any(nValue2) );
+    xProps->setPropertyValue("CharEscapement", uno::Any(nValue) );
 
 }
 
@@ -372,7 +372,7 @@ ScVbaFont::setUnderline( const uno::Any& aValue ) throw ( uno::RuntimeException,
             throw uno::RuntimeException("Unknown value for Underline" );
     }
 
-    mxFont->setPropertyValue("CharUnderline", ( uno::Any )nValue );
+    mxFont->setPropertyValue("CharUnderline", uno::Any(nValue) );
 
 }
 

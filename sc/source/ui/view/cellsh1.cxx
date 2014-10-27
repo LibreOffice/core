@@ -181,7 +181,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OUString aFlags;
 
                     if( pReqArgs->HasItem( FID_INS_CELL, &pItem ) )
-                        aFlags = ((const SfxStringItem*)pItem)->GetValue();
+                        aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( !aFlags.isEmpty() )
                     {
                         switch( aFlags[0] )
@@ -250,7 +250,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OUString aFlags;
 
                     if( pReqArgs->HasItem( FID_DELETE_CELL, &pItem ) )
-                        aFlags = ((const SfxStringItem*)pItem)->GetValue();
+                        aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( !aFlags.isEmpty() )
                     {
                         switch( aFlags[0] )
@@ -330,7 +330,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OUString aFlags('A');
 
                     if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
-                        aFlags = ((const SfxStringItem*)pItem)->GetValue();
+                        aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                     aFlags = aFlags.toAsciiUpperCase();
                     bool    bCont = true;
@@ -441,7 +441,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OUString aFlags('A');
 
                     if( pReqArgs->HasItem( FID_FILL_TAB, &pItem ) )
-                        aFlags = ((const SfxStringItem*)pItem)->GetValue();
+                        aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                     aFlags = aFlags.toAsciiUpperCase();
                     bool    bCont = true;
@@ -559,17 +559,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bDoIt=false;
 
                     if( pReqArgs->HasItem( FID_FILL_SERIES, &pItem ) )
-                        aFillDir = ((const SfxStringItem*)pItem)->GetValue();
+                        aFillDir = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
-                        aFillCmd = ((const SfxStringItem*)pItem)->GetValue();
+                        aFillCmd = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
-                        aFillDateCmd = ((const SfxStringItem*)pItem)->GetValue();
+                        aFillDateCmd = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_3, &pItem ) )
-                        aFillStep = ((const SfxStringItem*)pItem)->GetValue();
+                        aFillStep = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_4, &pItem ) )
-                        aFillStart = ((const SfxStringItem*)pItem)->GetValue();
+                        aFillStart = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
-                        aFillMax = ((const SfxStringItem*)pItem)->GetValue();
+                        aFillMax = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                     if( !aFillDir.isEmpty() )
                         switch( aFillDir[0] )
@@ -808,7 +808,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if( pReqArgs->HasItem( FID_FILL_AUTO, &pItem ) )
                     {
                         ScAddress aScAddress;
-                        OUString aArg = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aArg = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                         if( aScAddress.Parse( aArg, pDoc, pDoc->GetAddressConvention() ) & SCA_VALID )
                         {
@@ -1106,7 +1106,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( pReqArgs->HasItem( SID_OUTLINE_MAKE, &pItem ) )
                     {
-                        OUString aCol = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aCol = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         aCol = aCol.toAsciiUpperCase();
 
                         switch( aCol[0] )
@@ -1167,7 +1167,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( pReqArgs->HasItem( SID_OUTLINE_REMOVE, &pItem ) )
                     {
-                        OUString aCol = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aCol = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         aCol = aCol.toAsciiUpperCase();
 
                         switch (aCol[0])
@@ -1255,7 +1255,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
-                    nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                    nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                 }
 
                 if ( nFormat )
@@ -1303,7 +1303,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         OUString aFlags('A');
 
                         if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, &pItem ) )
-                            aFlags = ((const SfxStringItem*)pItem)->GetValue();
+                            aFlags = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                         aFlags = aFlags.toAsciiUpperCase();
                         bool    bCont = true;
@@ -1509,7 +1509,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
-                    sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                    sal_uLong nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                     bool bRet=true;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
@@ -1802,7 +1802,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pReqArgs->GetItemState( SCITEM_CONSOLIDATEDATA, true, &pItem ) )
                 {
                     const ScConsolidateParam& rParam =
-                            ((const ScConsolidateItem*)pItem)->GetData();
+                            static_cast<const ScConsolidateItem*>(pItem)->GetData();
 
                     pTabViewShell->Consolidate( rParam );
                     GetViewData()->GetDocument()->SetConsolidateDlgData( &rParam );
@@ -1818,13 +1818,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_INS_FUNCTION:
             {
-                const SfxBoolItem* pOkItem = (const SfxBoolItem*)&pReqArgs->Get( SID_DLG_RETOK );
+                const SfxBoolItem* pOkItem = static_cast<const SfxBoolItem*>(&pReqArgs->Get( SID_DLG_RETOK ));
 
                 if ( pOkItem->GetValue() )      // OK
                 {
                     OUString             aFormula;
-                    const SfxStringItem* pSItem      = (const SfxStringItem*)&pReqArgs->Get( SCITEM_STRING );
-                    const SfxBoolItem*   pMatrixItem = (const SfxBoolItem*)  &pReqArgs->Get( SID_DLG_MATRIX );
+                    const SfxStringItem* pSItem      = static_cast<const SfxStringItem*>(&pReqArgs->Get( SCITEM_STRING ));
+                    const SfxBoolItem*   pMatrixItem = static_cast<const SfxBoolItem*>(&pReqArgs->Get( SID_DLG_MATRIX ));
 
                     aFormula += pSItem->GetValue();
                     pScMod->ActivateInputWindow( &aFormula, pMatrixItem->GetValue() );
@@ -1844,13 +1844,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 OUString  aName, aSymbol, aAttrib;
 
                 if( pReqArgs->HasItem( FID_DEFINE_NAME, &pItem ) )
-                    aName = ((const SfxStringItem*)pItem)->GetValue();
+                    aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
-                    aSymbol = ((const SfxStringItem*)pItem)->GetValue();
+                    aSymbol = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
-                    aAttrib = ((const SfxStringItem*)pItem)->GetValue();
+                    aAttrib = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 if ( !aName.isEmpty() && !aSymbol.isEmpty() )
                 {
@@ -2043,7 +2043,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
 
                     if( pReqArgs->HasItem( SID_UPDATECHART, &pItem ) )
-                        bAll = ((const SfxBoolItem*)pItem)->GetValue();
+                        bAll = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 }
 
                 pTabViewShell->UpdateCharts( bAll );
@@ -2060,8 +2060,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if (pReqArgs)
             {
                 const ScTabOpItem& rItem =
-                        (const ScTabOpItem&)
-                            pReqArgs->Get( SID_TABOP );
+                        static_cast<const ScTabOpItem&>(
+                            pReqArgs->Get( SID_TABOP ));
 
                 pTabViewShell->TabOp( rItem.GetData() );
 
@@ -2073,8 +2073,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if (pReqArgs)
             {
                 const ScSolveItem& rItem =
-                        (const ScSolveItem&)
-                            pReqArgs->Get( SCITEM_SOLVEDATA );
+                        static_cast<const ScSolveItem&>(
+                            pReqArgs->Get( SCITEM_SOLVEDATA ));
 
                 pTabViewShell->Solve( rItem.GetData() );
 
@@ -2123,7 +2123,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_RANGE_NOTETEXT:
             if (pReqArgs)
             {
-                const SfxStringItem& rTextItem = (const SfxStringItem&)pReqArgs->Get( SID_RANGE_NOTETEXT );
+                const SfxStringItem& rTextItem = static_cast<const SfxStringItem&>(pReqArgs->Get( SID_RANGE_NOTETEXT ));
 
                 //  always cursor position
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
@@ -2135,9 +2135,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_INSERT_POSTIT:
             if ( pReqArgs )
             {
-                const SvxPostItAuthorItem&  rAuthorItem = (const SvxPostItAuthorItem&)pReqArgs->Get( SID_ATTR_POSTIT_AUTHOR );
-                const SvxPostItDateItem&    rDateItem   = (const SvxPostItDateItem&)  pReqArgs->Get( SID_ATTR_POSTIT_DATE );
-                const SvxPostItTextItem&    rTextItem   = (const SvxPostItTextItem&)  pReqArgs->Get( SID_ATTR_POSTIT_TEXT );
+                const SvxPostItAuthorItem&  rAuthorItem = static_cast<const SvxPostItAuthorItem&>(pReqArgs->Get( SID_ATTR_POSTIT_AUTHOR ));
+                const SvxPostItDateItem&    rDateItem   = static_cast<const SvxPostItDateItem&>(pReqArgs->Get( SID_ATTR_POSTIT_DATE ));
+                const SvxPostItTextItem&    rTextItem   = static_cast<const SvxPostItTextItem&>(pReqArgs->Get( SID_ATTR_POSTIT_TEXT ));
 
                 ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                 pTabViewShell->ReplaceNote( aPos, rTextItem.GetValue(), &rAuthorItem.GetValue(), &rDateItem.GetValue() );
@@ -2158,7 +2158,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bShow;
                     const SfxPoolItem* pItem;
                     if ( pReqArgs && (pReqArgs->GetItemState( FID_NOTE_VISIBLE, true, &pItem ) == SfxItemState::SET) )
-                        bShow = ((const SfxBoolItem*) pItem)->GetValue();
+                        bShow = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     else
                         bShow = !pNote->IsCaptionShown();
 
@@ -2320,7 +2320,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pReqArgs )
                 {
                     const SfxStringItem* pItem =
-                        (const SfxStringItem*)&pReqArgs->Get( SID_SELECT_SCENARIO );
+                        static_cast<const SfxStringItem*>(&pReqArgs->Get( SID_SELECT_SCENARIO ));
 
                     if( pItem )
                     {
@@ -2343,7 +2343,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if( pReqArgs->HasItem( SID_HYPERLINK_SETLINK, &pItem ) )
                 {
-                    const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
+                    const SvxHyperlinkItem* pHyper = static_cast<const SvxHyperlinkItem*>(pItem);
                     const OUString& rName   = pHyper->GetName();
                     const OUString& rURL    = pHyper->GetURL();
                     const OUString& rTarget = pHyper->GetTargetFrame();
@@ -2706,7 +2706,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
-        pTabViewShell->DoSubTotals( ((const ScSubTotalItem&) pArgs->Get( SCITEM_SUBTDATA )).
+        pTabViewShell->DoSubTotals( static_cast<const ScSubTotalItem&>( pArgs->Get( SCITEM_SUBTDATA )).
                         GetSubTotalData() );
         rReq.Done();
         return;
@@ -2749,7 +2749,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         {
             pOutSet = pDlg->GetOutputItemSet();
             aSubTotalParam =
-                ((const ScSubTotalItem&)
+                static_cast<const ScSubTotalItem&>(
                     pOutSet->Get( SCITEM_SUBTDATA )).
                         GetSubTotalData();
         }

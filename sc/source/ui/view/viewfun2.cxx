@@ -794,8 +794,8 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     if ( PasteFromClip( IDF_CONTENTS, pInsDoc.get(), PASTE_NOFUNC, false, false,
             false, INS_NONE, IDF_ATTRIB ) )
     {
-        const SfxUInt32Item* pItem = (SfxUInt32Item*) pInsDoc->GetAttr(
-            nCol, nRow, nTab, ATTR_VALUE_FORMAT );
+        const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>( pInsDoc->GetAttr(
+            nCol, nRow, nTab, ATTR_VALUE_FORMAT ) );
         if ( pItem )
         {   // set number format if incompatible
             // MarkData was already MarkToSimple'ed in PasteFromClip
@@ -2356,10 +2356,10 @@ void ScViewFunc::MoveTable(
         if ( pRetItem )
         {
             if ( pRetItem->ISA( SfxObjectItem ) )
-                pDestShell = PTR_CAST( ScDocShell, ((const SfxObjectItem*)pRetItem)->GetShell() );
+                pDestShell = PTR_CAST( ScDocShell, static_cast<const SfxObjectItem*>(pRetItem)->GetShell() );
             else if ( pRetItem->ISA( SfxViewFrameItem ) )
             {
-                SfxViewFrame* pFrm = ((const SfxViewFrameItem*)pRetItem)->GetFrame();
+                SfxViewFrame* pFrm = static_cast<const SfxViewFrameItem*>(pRetItem)->GetFrame();
                 if (pFrm)
                     pDestShell = PTR_CAST( ScDocShell, pFrm->GetObjectShell() );
             }
@@ -2882,7 +2882,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
             if( pBorderAttr )
             {
-                SvxBoxItem      aBoxItem( *(const SvxBoxItem*)pBorderAttr );
+                SvxBoxItem      aBoxItem( *static_cast<const SvxBoxItem*>(pBorderAttr) );
                 SvxBoxInfoItem  aBoxInfoItem( ATTR_BORDER_INNER );
 
                 SET_LINE_ATTRIBUTES(Top,BOX_LINE_TOP)
@@ -2899,18 +2899,18 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
                 pNewSet->Put( aBoxInfoItem );
             }
 
-            if( pTLBRItem && ((const SvxLineItem*)pTLBRItem)->GetLine() )
+            if( pTLBRItem && static_cast<const SvxLineItem*>(pTLBRItem)->GetLine() )
             {
-                SvxLineItem aTLBRItem( *(const SvxLineItem*)pTLBRItem );
+                SvxLineItem aTLBRItem( *static_cast<const SvxLineItem*>(pTLBRItem) );
                 UpdateLineAttrs( aLine, aTLBRItem.GetLine(), pLine, bColorOnly );
                 aTLBRItem.SetLine( &aLine );
                 pOldSet->Put( *pTLBRItem );
                 pNewSet->Put( aTLBRItem );
             }
 
-            if( pBLTRItem && ((const SvxLineItem*)pBLTRItem)->GetLine() )
+            if( pBLTRItem && static_cast<const SvxLineItem*>(pBLTRItem)->GetLine() )
             {
-                SvxLineItem aBLTRItem( *(const SvxLineItem*)pBLTRItem );
+                SvxLineItem aBLTRItem( *static_cast<const SvxLineItem*>(pBLTRItem) );
                 UpdateLineAttrs( aLine, aBLTRItem.GetLine(), pLine, bColorOnly );
                 aBLTRItem.SetLine( &aLine );
                 pOldSet->Put( *pBLTRItem );

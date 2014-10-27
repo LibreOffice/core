@@ -430,11 +430,11 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                                 if (nVisX <= nX2)
                                     bHOver = pThisRowInfo->pCellInfo[nVisX+1].bHOverlapped;
                                 else
-                                    bHOver = ((ScMergeFlagAttr*)mpDoc->GetAttr(
+                                    bHOver = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                                 nVisX,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG))
                                                 ->IsHorOverlapped();
                                 if (bHOver)
-                                    bHOver = ((ScMergeFlagAttr*)mpDoc->GetAttr(
+                                    bHOver = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                                 nXplus1,pThisRowInfo->nRowNo,nTab,ATTR_MERGE_FLAG))
                                                 ->IsHorOverlapped();
                             }
@@ -527,10 +527,10 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                                 bVOver = pRowInfo[nArrYplus1].pCellInfo[i+1].bVOverlapped;
                             else
                             {
-                                bVOver = ((ScMergeFlagAttr*)mpDoc->GetAttr(
+                                bVOver = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                             i,nYplus1,nTab,ATTR_MERGE_FLAG))
                                             ->IsVerOverlapped()
-                                    &&   ((ScMergeFlagAttr*)mpDoc->GetAttr(
+                                    &&   static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                             i,nVisY,nTab,ATTR_MERGE_FLAG))
                                             ->IsVerOverlapped();
                                     //! nVisY from Array ??
@@ -637,7 +637,7 @@ static sal_uInt16 lcl_GetRotateDir( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SC
     long nAttrRotate = pPattern->GetRotateVal( pCondSet );
     if ( nAttrRotate )
     {
-        SvxRotateMode eRotMode = (SvxRotateMode)((const SvxRotateModeItem&)
+        SvxRotateMode eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
                     pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
         if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
@@ -664,8 +664,8 @@ static const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCR
 {
     const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
-    const SvxBrushItem* pBackground = (const SvxBrushItem*)
-                            &pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
+    const SvxBrushItem* pBackground = static_cast<const SvxBrushItem*>(
+                            &pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
 
     sal_uInt16 nDir = lcl_GetRotateDir( pDoc, nCol, nRow, nTab );
 
@@ -679,7 +679,7 @@ static const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCR
             --nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
             pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
-            pBackground = (const SvxBrushItem*)&pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
+            pBackground = static_cast<const SvxBrushItem*>(&pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
         }
     }
     else if ( nDir == SC_ROTDIR_LEFT )
@@ -691,7 +691,7 @@ static const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCR
             ++nCol;
             pPattern = pDoc->GetPattern( nCol, nRow, nTab );
             pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
-            pBackground = (const SvxBrushItem*)&pPattern->GetItem( ATTR_BACKGROUND, pCondSet );
+            pBackground = static_cast<const SvxBrushItem*>(&pPattern->GetItem( ATTR_BACKGROUND, pCondSet ));
         }
     }
 
@@ -1017,8 +1017,8 @@ void ScOutputData::DrawBackground()
                         const ScPatternAttr* pP = pInfo->pPatternAttr;
                         if (pP)
                         {
-                            const ScProtectionAttr& rProt = (const ScProtectionAttr&)
-                                                                pP->GetItem(ATTR_PROTECTION);
+                            const ScProtectionAttr& rProt = static_cast<const ScProtectionAttr&>(
+                                                                pP->GetItem(ATTR_PROTECTION));
                             if (rProt.GetProtection() || rProt.GetHideCell())
                                 pBackground = ScGlobal::GetProtectedBrushItem();
                             else
@@ -1415,7 +1415,7 @@ static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
         const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
         const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
         if ( !pPattern->GetRotateVal( pCondSet ) ||
-                ((const SvxRotateModeItem&)pPattern->GetItem(
+                static_cast<const SvxRotateModeItem&>(pPattern->GetItem(
                     ATTR_ROTATE_MODE, pCondSet)).GetValue() == SVX_ROTATE_MODE_STANDARD )
             bFound = true;
     }
@@ -1424,12 +1424,12 @@ static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
         --nRow;
     const ::editeng::SvxBorderLine* pThisBottom;
     if ( ValidRow(nRow) )
-        pThisBottom = ((const SvxBoxItem*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER ))->GetBottom();
+        pThisBottom = static_cast<const SvxBoxItem*>(pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER ))->GetBottom();
     else
         pThisBottom = NULL;
     const ::editeng::SvxBorderLine* pNextTop;
     if ( nRow < MAXROW )
-        pNextTop = ((const SvxBoxItem*)pDoc->GetAttr( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
+        pNextTop = static_cast<const SvxBoxItem*>(pDoc->GetAttr( nCol, nRow+1, nTab, ATTR_BORDER ))->GetTop();
     else
         pNextTop = NULL;
 
@@ -1531,7 +1531,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                     //! LastPattern etc.
 
                     long nAttrRotate = pPattern->GetRotateVal( pCondSet );
-                    SvxRotateMode eRotMode = (SvxRotateMode)((const SvxRotateModeItem&)
+                    SvxRotateMode eRotMode = (SvxRotateMode)static_cast<const SvxRotateModeItem&>(
                                     pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
                     if ( nAttrRotate )
@@ -1596,8 +1596,8 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 
                         const SvxBrushItem* pBackground = pInfo->pBackground;
                         if (!pBackground)
-                            pBackground = (const SvxBrushItem*) &pPattern->GetItem(
-                                                ATTR_BACKGROUND, pCondSet );
+                            pBackground = static_cast<const SvxBrushItem*>( &pPattern->GetItem(
+                                                ATTR_BACKGROUND, pCondSet ));
                         if (bCellContrast)
                         {
                             //  high contrast for cell borders and backgrounds -> empty background
@@ -2248,10 +2248,10 @@ void ScOutputData::DrawChangeTrack()
                 }
             }
             if ( eActionType == SC_CAT_MOVE &&
-                    ((const ScChangeActionMove*)pAction)->
+                    static_cast<const ScChangeActionMove*>(pAction)->
                         GetFromRange().aStart.Tab() == nTab )
             {
-                ScRange aRange = ((const ScChangeActionMove*)pAction)->
+                ScRange aRange = static_cast<const ScChangeActionMove*>(pAction)->
                         GetFromRange().MakeRange();
                 if ( aRange.Intersects( aViewRange ) &&
                      ScViewUtil::IsActionShown( *pAction, *pSettings, *mpDoc ) )
@@ -2467,14 +2467,14 @@ void ScOutputData::DrawClipMarks()
                         long nStartPosX = nPosX;
                         long nStartPosY = nPosY;
 
-                        while ( nOverX > 0 && ( ((const ScMergeFlagAttr*)mpDoc->GetAttr(
+                        while ( nOverX > 0 && ( static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                 nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_HOR ) )
                         {
                             --nOverX;
                             nStartPosX -= nLayoutSign * (long) ( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
                         }
 
-                        while ( nOverY > 0 && ( ((const ScMergeFlagAttr*)mpDoc->GetAttr(
+                        while ( nOverY > 0 && ( static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                 nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_VER ) )
                         {
                             --nOverY;
@@ -2484,8 +2484,8 @@ void ScOutputData::DrawClipMarks()
                         long nOutWidth = (long) ( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
                         long nOutHeight = (long) ( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
 
-                        const ScMergeAttr* pMerge = (const ScMergeAttr*)
-                                    mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE );
+                        const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(
+                                    mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE ));
                         SCCOL nCountX = pMerge->GetColMerge();
                         for (SCCOL i=1; i<nCountX; i++)
                             nOutWidth += (long) ( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
@@ -2506,7 +2506,7 @@ void ScOutputData::DrawClipMarks()
                             SCCOL nOverX = nX;
                             SCROW nOverY = nY;
                             const ScMergeAttr* pMerge =
-                                    (ScMergeAttr*)&pInfo->pPatternAttr->GetItem(ATTR_MERGE);
+                                    static_cast<const ScMergeAttr*>(&pInfo->pPatternAttr->GetItem(ATTR_MERGE));
                             SCCOL nCountX = pMerge->GetColMerge();
                             for (SCCOL i=1; i<nCountX; i++)
                                 nOutWidth += (long) ( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );

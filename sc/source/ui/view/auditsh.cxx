@@ -97,8 +97,8 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
                     {
                         OSL_ENSURE( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
                                         "wrong items" );
-                        SCsCOL nCol = static_cast<SCsCOL>(((const SfxInt16Item*) pXItem)->GetValue());
-                        SCsROW nRow = static_cast<SCsROW>(((const SfxInt32Item*) pYItem)->GetValue());
+                        SCsCOL nCol = static_cast<SCsCOL>(static_cast<const SfxInt16Item*>(pXItem)->GetValue());
+                        SCsROW nRow = static_cast<SCsROW>(static_cast<const SfxInt32Item*>(pYItem)->GetValue());
                         ScViewFunc* pView = pViewData->GetView();
                         pView->MoveCursorAbs( nCol, nRow, SC_FOLLOW_LINE, false, false );
                         switch ( nFunction )

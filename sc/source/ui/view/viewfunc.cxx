@@ -197,7 +197,7 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     const ScPatternAttr* pSource = rDoc.GetPattern(
                             aFormatSource.Col(), aFormatSource.Row(), nTab );
-    if ( !((const ScMergeAttr&)pSource->GetItem(ATTR_MERGE)).IsMerged() )
+    if ( !static_cast<const ScMergeAttr&>(pSource->GetItem(ATTR_MERGE)).IsMerged() )
     {
         ScRange aRange( nCol, nRow, nTab, nCol, nRow, nTab );
         ScMarkData aMark;
@@ -512,7 +512,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         {
             i = *itr;
             aPos.SetTab( i );
-            sal_uLong nIndex = (sal_uLong) ((SfxUInt32Item*) pDoc->GetAttr(
+            sal_uLong nIndex = (sal_uLong) static_cast<const SfxUInt32Item*>( pDoc->GetAttr(
                 nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
             if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
                  ( ( rString[0] == '+' || rString[0] == '-' ) && nError && rString == aFormula ) )
@@ -859,8 +859,8 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
                                       GetViewData().GetCurY(),
                                       GetViewData().GetTabNo() );
 
-        rLineOuter = (const SvxBoxItem&)    (pAttrs->GetItem( ATTR_BORDER ));
-        rLineInner = (const SvxBoxInfoItem&)(pAttrs->GetItem( ATTR_BORDER_INNER ));
+        rLineOuter = static_cast<const SvxBoxItem&>    (pAttrs->GetItem( ATTR_BORDER ));
+        rLineInner = static_cast<const SvxBoxInfoItem&>(pAttrs->GetItem( ATTR_BORDER_INNER ));
         rLineInner.SetTable(false);
         rLineInner.SetDist(true);
         rLineInner.SetMinDist(false);
@@ -890,9 +890,9 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
     {   // don't reset to default SYSTEM GENERAL if not intended
         sal_uInt32 nOldFormat =
-            ((const SfxUInt32Item&)pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
+            static_cast<const SfxUInt32Item&>(pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
         sal_uInt32 nNewFormat =
-            ((const SfxUInt32Item&)pDialogSet->Get( ATTR_VALUE_FORMAT )).GetValue();
+            static_cast<const SfxUInt32Item&>(pDialogSet->Get( ATTR_VALUE_FORMAT )).GetValue();
         if ( nNewFormat != nOldFormat )
         {
             SvNumberFormatter* pFormatter =
@@ -917,10 +917,10 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         }
     }
 
-    const SvxBoxItem*     pOldOuter = (const SvxBoxItem*)     &pOldSet->Get( ATTR_BORDER );
-    const SvxBoxItem*     pNewOuter = (const SvxBoxItem*)     &pDialogSet->Get( ATTR_BORDER );
-    const SvxBoxInfoItem* pOldInner = (const SvxBoxInfoItem*) &pOldSet->Get( ATTR_BORDER_INNER );
-    const SvxBoxInfoItem* pNewInner = (const SvxBoxInfoItem*) &pDialogSet->Get( ATTR_BORDER_INNER );
+    const SvxBoxItem*     pOldOuter = static_cast<const SvxBoxItem*>     (&pOldSet->Get( ATTR_BORDER ));
+    const SvxBoxItem*     pNewOuter = static_cast<const SvxBoxItem*>     (&pDialogSet->Get( ATTR_BORDER ));
+    const SvxBoxInfoItem* pOldInner = static_cast<const SvxBoxInfoItem*> (&pOldSet->Get( ATTR_BORDER_INNER ));
+    const SvxBoxInfoItem* pNewInner = static_cast<const SvxBoxInfoItem*> (&pDialogSet->Get( ATTR_BORDER_INNER ));
     SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
     SfxItemPool*          pNewPool  = rNewSet.GetPool();
 
@@ -1346,7 +1346,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
                 new ScUndoSelectionStyle( pDocSh, aFuncMark, aMarkRange, aName, pUndoDoc ) );
         }
 
-        rDoc.ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, aFuncMark );
+        rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*pStyleSheet), aFuncMark );
 
         if (!AdjustBlockHeight())
             rViewData.GetDocShell()->PostPaint( aMarkRange, PAINT_GRID );
@@ -1382,7 +1382,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, bool bRecord
 
         ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
         for (; itr != itrEnd; ++itr)
-            rDoc.ApplyStyle( nCol, nRow, *itr, (ScStyleSheet&)*pStyleSheet );
+            rDoc.ApplyStyle( nCol, nRow, *itr, static_cast<ScStyleSheet&>(*pStyleSheet) );
 
         if (!AdjustBlockHeight())
             rViewData.GetDocShell()->PostPaintCell( nCol, nRow, nTab );
@@ -2179,12 +2179,12 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 
                     const ScPatternAttr* pPattern = rDoc.GetPattern( nCol, nRow, nTab );
                     const SvxMarginItem& rMItem =
-                            (const SvxMarginItem&)pPattern->GetItem(ATTR_MARGIN);
+                            static_cast<const SvxMarginItem&>(pPattern->GetItem(ATTR_MARGIN));
                     sal_uInt16 nMargin = rMItem.GetLeftMargin() + rMItem.GetRightMargin();
-                    if ( ((const SvxHorJustifyItem&) pPattern->
+                    if ( static_cast<const SvxHorJustifyItem&>( pPattern->
                             GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_LEFT )
                         nMargin = sal::static_int_cast<sal_uInt16>(
-                            nMargin + ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue() );
+                            nMargin + static_cast<const SfxUInt16Item&>(pPattern->GetItem(ATTR_INDENT)).GetValue() );
 
                     nWidth = (sal_uInt16)(nEdit * pDocSh->GetOutputFactor() / HMM_PER_TWIPS)
                                 + nMargin + STD_EXTRA_WIDTH;
@@ -2233,8 +2233,8 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
         {
             const ScPatternAttr* pPattern = rDoc.GetPattern( nCol, nRow, nTab );
             bool bNeedHeight =
-                    ((const SfxBoolItem&)pPattern->GetItem( ATTR_LINEBREAK )).GetValue() ||
-                    ((const SvxHorJustifyItem&)pPattern->
+                    static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_LINEBREAK )).GetValue() ||
+                    static_cast<const SvxHorJustifyItem&>(pPattern->
                         GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK;
             if (bNeedHeight)
                 AdjustRowHeight( nRow, nRow );

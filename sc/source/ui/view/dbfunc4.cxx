@@ -47,7 +47,7 @@ sal_uInt16 ScDBFunc::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bo
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
-                OUString aName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                OUString aName = static_cast<SdrOle2Obj*>(pObject)->GetPersistName();
                 bool bHit = true;
                 if ( !bAllCharts )
                 {

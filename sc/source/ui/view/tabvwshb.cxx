@@ -96,7 +96,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
         aRect.SetSize( aOleSize );
         pClient->SetObjArea( aRect );
 
-        ((ScClient*)pClient)->SetGrafEdit( NULL );
+        static_cast<ScClient*>(pClient)->SetGrafEdit( NULL );
     }
 }
 
@@ -164,7 +164,7 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             aRect.SetSize( aOleSize );
             pClient->SetObjArea( aRect );
 
-            ((ScClient*)pClient)->SetGrafEdit( NULL );
+            static_cast<ScClient*>(pClient)->SetGrafEdit( NULL );
 
             nErr = pClient->DoVerb( nVerb );
             bErrorShown = true;
@@ -229,7 +229,7 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
         if (pObj->GetObjIdentifier() == OBJ_OLE2)
-            pOle2Obj = (SdrOle2Obj*) pObj;
+            pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
     }
 
     if (pOle2Obj)
@@ -251,7 +251,7 @@ void ScTabViewShell::DeactivateOle()
     ScModule* pScMod = SC_MOD();
     bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
 
-    ScClient* pClient = (ScClient*) GetIPClient();
+    ScClient* pClient = static_cast<ScClient*>(GetIPClient());
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
         pClient->DeactivateObject();
 }
@@ -332,7 +332,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 if ( pClient && pClient->IsObjectInPlaceActive() )
                 {
                     const SfxRectangleItem& rRect =
-                        (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
+                        static_cast<const SfxRectangleItem&>(rReq.GetArgs()->Get(SID_OBJECTRESIZE));
                     Rectangle aRect( pWin->PixelToLogic( rRect.GetValue() ) );
 
                     if ( pView->AreObjectsMarked() )
@@ -348,7 +348,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
                             if (nSdrObjKind == OBJ_OLE2)
                             {
-                                if ( ( (SdrOle2Obj*) pObj)->GetObjRef().is() )
+                                if ( static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
                                 {
                                     pObj->SetLogicRect(aRect);
                                 }
@@ -512,7 +512,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                 sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
-                    nCount = ((const SfxUInt16Item*)pItem)->GetValue();
+                    nCount = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
                 // lock paint for more than one cell undo action (not for editing within a cell)
                 bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );

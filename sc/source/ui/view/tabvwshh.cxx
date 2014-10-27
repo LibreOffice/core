@@ -102,7 +102,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState( nSlotId, true, &pItem ) == SfxItemState::SET )
                 {
-                    long nNewVal = ((const SfxInt32Item*)pItem)->GetValue();
+                    long nNewVal = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                     if ( nNewVal < 0 )
                         nNewVal = 0;
 
@@ -154,7 +154,7 @@ static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pD
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if (pObj->GetObjIdentifier() == OBJ_OLE2)
             {
-                SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) pObj;
+                SdrOle2Obj* pOle2Obj = static_cast<SdrOle2Obj*>(pObj);
                 xRet = pOle2Obj->GetObjRef();
             }
         }

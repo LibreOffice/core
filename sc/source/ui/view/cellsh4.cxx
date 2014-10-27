@@ -44,9 +44,9 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     {
         const   SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
-            nRepeat = static_cast<SCsCOLROW>(((const SfxInt16Item*)pItem)->GetValue());
+            nRepeat = static_cast<SCsCOLROW>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
         if (pReqArgs->HasItem(FN_PARAM_2, &pItem))
-            bSel = ((const SfxBoolItem*)pItem)->GetValue();
+            bSel = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
     else
     {
@@ -212,7 +212,7 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
     {
         const SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
-            nRepeat = static_cast<SCsCOLROW>(((const SfxInt16Item*)pItem)->GetValue());
+            nRepeat = static_cast<SCsCOLROW>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
     }
 
     SCsROW nMovY = nRepeat;
@@ -400,7 +400,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     {
         const   SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_2, &pItem))
-            bSel = ((const SfxBoolItem*)pItem)->GetValue();
+            bSel = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
     else
     {

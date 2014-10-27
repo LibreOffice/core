@@ -164,7 +164,7 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Tabelle geloescht
     {
-        SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
+        SCTAB nDelTab = static_cast<const ScTabDeletedHint&>(rHint).GetTab();
         if (ValidTab(nDelTab))
         {
             // used to be: HidePagePgNum(nDelTab) - hide only if the deleted sheet is shown here
@@ -174,7 +174,7 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (dynamic_cast<const ScTabSizeChangedHint*>(&rHint))               // Groesse geaendert
     {
-        if ( nTab == ((ScTabSizeChangedHint&)rHint).GetTab() )
+        if ( nTab == static_cast<const ScTabSizeChangedHint&>(rHint).GetTab() )
             UpdateWorkArea();
     }
     else if ( const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint ) )
@@ -204,7 +204,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
 
         // Grafik vom Objekt besorgen
         if ( pObj->ISA( SdrGrafObj ) )
-            aGraphic = ( (SdrGrafObj*) pObj )->GetGraphic();
+            aGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
         else
         {
             const Graphic* pGraphic = static_cast<const SdrOle2Obj*>(pObj)->GetGraphic();

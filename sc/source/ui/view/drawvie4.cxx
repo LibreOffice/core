@@ -474,24 +474,24 @@ void ScDrawView::SetMarkedOriginalSize()
         if (nIdent == OBJ_OLE2)
         {
             // TODO/LEAN: working with visual area can switch object to running state
-            uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+             uno::Reference < embed::XEmbeddedObject > xObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), uno::UNO_QUERY );
             if ( xObj.is() )    // NULL for an invalid object that couldn't be loaded
             {
-                sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
+                sal_Int64 nAspect = static_cast<SdrOle2Obj*>(pObj)->GetAspect();
 
                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                 {
                     MapMode aMapMode( MAP_100TH_MM );
-                    aOriginalSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMapMode );
+                    aOriginalSize = static_cast<SdrOle2Obj*>(pObj)->GetOrigObjSize( &aMapMode );
                     bDo = true;
                 }
                 else
                 {
-                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
+                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( static_cast<SdrOle2Obj*>(pObj)->GetAspect() ) );
                     awt::Size aSz;
                     try
                     {
-                        aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
+                        aSz = xObj->getVisualAreaSize( static_cast<SdrOle2Obj*>(pObj)->GetAspect() );
                         aOriginalSize = OutputDevice::LogicToLogic(
                                             Size( aSz.Width, aSz.Height ),
                                             aUnit, MAP_100TH_MM );
@@ -505,7 +505,7 @@ void ScDrawView::SetMarkedOriginalSize()
         }
         else if (nIdent == OBJ_GRAF)
         {
-            const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
+            const Graphic& rGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
 
             MapMode aSourceMap = rGraphic.GetPrefMapMode();
             MapMode aDestMap( MAP_100TH_MM );

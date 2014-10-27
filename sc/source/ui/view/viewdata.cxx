@@ -951,11 +951,11 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bEditActive[eWhich] = true;
 
     const ScPatternAttr* pPattern = pDoc->GetPattern( nNewX, nNewY, nTabNo );
-    SvxCellHorJustify eJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
+    SvxCellHorJustify eJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                                     pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
 
     bool bBreak = ( eJust == SVX_HOR_JUSTIFY_BLOCK ) ||
-                    ((SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
+                    static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
 
     bool bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
 
@@ -980,7 +980,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         //  modify members nEditCol etc. only if also extending for needed area
         nEditCol = nNewX;
         nEditRow = nNewY;
-        const ScMergeAttr* pMergeAttr = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+        const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(&pPattern->GetItem(ATTR_MERGE));
         nEditEndCol = nEditCol;
         if (pMergeAttr->GetColMerge() > 1)
             nEditEndCol += pMergeAttr->GetColMerge() - 1;
@@ -1087,7 +1087,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         pNewEngine->InsertView(pEditView[eWhich]);
 
     //      background color of the cell
-    Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
+    Color aBackCol = static_cast<const SvxBrushItem&>(pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
 
     ScModule* pScMod = SC_MOD();
     if ( aBackCol.GetTransparency() > 0 )
@@ -1138,7 +1138,7 @@ void ScViewData::EditGrowX()
     bool bLayoutRTL = pLocalDoc->IsLayoutRTL( nTabNo );
 
     ScEditEngineDefaulter* pEngine =
-        (ScEditEngineDefaulter*) pCurView->GetEditEngine();
+        static_cast<ScEditEngineDefaulter*>( pCurView->GetEditEngine() );
     vcl::Window* pWin = pCurView->GetWindow();
 
     SCCOL nLeft = GetPosX(eHWhich);
@@ -1156,7 +1156,7 @@ void ScViewData::EditGrowX()
 
     //  get bGrow... variables the same way as in SetEditEngine
     const ScPatternAttr* pPattern = pLocalDoc->GetPattern( nEditCol, nEditRow, nTabNo );
-    SvxCellHorJustify eJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
+    SvxCellHorJustify eJust = (SvxCellHorJustify)static_cast<const SvxHorJustifyItem&>(
                                     pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
     bool bGrowCentered = ( eJust == SVX_HOR_JUSTIFY_CENTER );
     bool bGrowToLeft = ( eJust == SVX_HOR_JUSTIFY_RIGHT );      // visual left
@@ -1709,7 +1709,7 @@ SCROW ScViewData::PrevCellsY( ScVSplitPos eWhichY ) const
 
 bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const
 {
-    const ScMergeAttr* pMerge = (const ScMergeAttr*) pDoc->GetAttr( nX,nY,nTabNo, ATTR_MERGE );
+    const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>( pDoc->GetAttr( nX,nY,nTabNo, ATTR_MERGE ) );
     if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
     {
         long nOutWidth = 0;
@@ -1832,8 +1832,8 @@ bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
 
         if ( bRepair && ( bHOver || bVOver ) )
         {
-            const ScMergeAttr* pMerge = (const ScMergeAttr*)
-                                pDoc->GetAttr( rPosX, rPosY, nTabNo, ATTR_MERGE );
+            const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(
+                                pDoc->GetAttr( rPosX, rPosY, nTabNo, ATTR_MERGE ) );
             if ( ( bHOver && pMerge->GetColMerge() <= 1 ) ||
                  ( bVOver && pMerge->GetRowMerge() <= 1 ) )
             {
