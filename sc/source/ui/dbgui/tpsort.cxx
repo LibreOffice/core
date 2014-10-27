@@ -78,9 +78,9 @@ ScTabPageSortFields::ScTabPageSortFields(vcl::Window* pParent,
         aStrRow         ( SC_RESSTR( SCSTR_ROW ) ),
 
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
-        pDlg            ( (ScSortDlg*)(GetParentDialog()) ),
+        pDlg            ( static_cast<ScSortDlg*>(GetParentDialog()) ),
         pViewData       ( NULL ),
-        aSortData       ( ((const ScSortItem&)
+        aSortData       ( static_cast<const ScSortItem&>(
                            rArgSet.Get( nWhichSort )).
                                 GetSortData() ),
         nFieldCount     ( 0 ),
@@ -117,8 +117,8 @@ ScTabPageSortFields::~ScTabPageSortFields()
 
 void ScTabPageSortFields::Init()
 {
-    const ScSortItem& rSortItem = (const ScSortItem&)
-                                  GetItemSet().Get( nWhichSort );
+    const ScSortItem& rSortItem = static_cast<const ScSortItem&>(
+                                  GetItemSet().Get( nWhichSort ));
 
     pViewData = rSortItem.GetViewData();
     OSL_ENSURE( pViewData, "ViewData not found!" );
@@ -485,10 +485,10 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
     , aStrColLabel(SC_RESSTR(SCSTR_COL_LABEL))
     , aStrUndefined(SC_RESSTR(SCSTR_UNDEFINED))
     , nWhichSort(rArgSet.GetPool()->GetWhich(SID_SORT))
-    , aSortData(((const ScSortItem&)rArgSet.Get(nWhichSort)).GetSortData())
+    , aSortData(static_cast<const ScSortItem&>(rArgSet.Get(nWhichSort)).GetSortData())
     , pViewData(NULL)
     , pDoc(NULL)
-    , pDlg((ScSortDlg*)(GetParentDialog()))
+    , pDlg(static_cast<ScSortDlg*>(GetParentDialog()))
     , pColRes( NULL )
     , pColWrap( NULL )
 {
@@ -533,8 +533,8 @@ void ScTabPageSortOptions::Init()
     //! use CollatorWrapper from document?
     pColWrap = new CollatorWrapper( comphelper::getProcessComponentContext() );
 
-    const ScSortItem&   rSortItem = (const ScSortItem&)
-                                    GetItemSet().Get( nWhichSort );
+    const ScSortItem&   rSortItem = static_cast<const ScSortItem&>(
+                                    GetItemSet().Get( nWhichSort ));
 
     m_pLbOutPos->SetSelectHdl    ( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
     m_pBtnCopyResult->SetClickHdl( LINK( this, ScTabPageSortOptions, EnableHdl ) );

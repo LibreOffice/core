@@ -769,7 +769,7 @@ void ScColorScale2FrmtEntry::Init()
     {
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+            pColorTable = static_cast<const SvxColorListItem*>(pItem) ->GetColorList();
     }
     if ( pColorTable.is() )
     {
@@ -931,7 +931,7 @@ void ScColorScale3FrmtEntry::Init()
     {
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+            pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
     if ( pColorTable.is() )
     {

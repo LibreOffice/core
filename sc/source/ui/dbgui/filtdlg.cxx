@@ -60,7 +60,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     , aStrColumn(SC_RESSTR(SCSTR_COLUMN))
     , pOptionsMgr(NULL)
     , nWhichQuery(rArgSet.GetPool()->GetWhich(SID_QUERY))
-    , theQueryData(((const ScQueryItem&)rArgSet.Get(nWhichQuery)).GetQueryData())
+    , theQueryData(static_cast<const ScQueryItem&>(rArgSet.Get(nWhichQuery)).GetQueryData())
     , pOutItem(NULL)
     , pViewData(NULL)
     , pDoc(NULL)
@@ -170,8 +170,8 @@ ScFilterDlg::~ScFilterDlg()
 
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
-    const ScQueryItem& rQueryItem = (const ScQueryItem&)
-                                    rArgSet.Get( nWhichQuery );
+    const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
+                                    rArgSet.Get( nWhichQuery ));
 
     pBtnOk->SetClickHdl      ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     pBtnCancel->SetClickHdl  ( LINK( this, ScFilterDlg, EndDlgHdl ) );

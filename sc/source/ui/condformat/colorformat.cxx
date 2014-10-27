@@ -117,7 +117,7 @@ void ScDataBarSettingsDlg::Init()
     {
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+            pColorTable = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
     if ( pColorTable.is() )
     {

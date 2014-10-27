@@ -51,7 +51,7 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
         aStrColumn      ( SC_RESSTR(SCSTR_COLUMN) ),
 
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
-        theQueryData    ( ((const ScQueryItem&)
+        theQueryData    ( static_cast<const ScQueryItem&>(
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
         pOutItem        ( NULL ),
         pViewData       ( NULL ),
@@ -91,8 +91,8 @@ ScPivotFilterDlg::~ScPivotFilterDlg()
 
 void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 {
-    const ScQueryItem& rQueryItem = (const ScQueryItem&)
-                                    rArgSet.Get( nWhichQuery );
+    const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
+                                    rArgSet.Get( nWhichQuery ));
 
     m_pBtnCase->SetClickHdl    ( LINK( this, ScPivotFilterDlg, CheckBoxHdl ) );
 

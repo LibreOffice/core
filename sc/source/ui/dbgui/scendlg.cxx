@@ -64,7 +64,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( vcl::Window* pParent, const OUString& rName,
         const SfxPoolItem* pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem )
         {
-            XColorListRef pColorList = ((SvxColorListItem*)pItem)->GetColorList();
+            XColorListRef pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
             if (pColorList.is())
             {
                 m_pLbColor->SetUpdateMode( false );
@@ -147,7 +147,7 @@ void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& r
 IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 {
     OUString      aName = comphelper::string::strip(m_pEdName->GetText(), ' ');
-    ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->GetViewData().GetDocument();
+    ScDocument* pDoc    = static_cast<ScTabViewShell*>(SfxViewShell::Current())->GetViewData().GetDocument();
 
     m_pEdName->SetText( aName );
 

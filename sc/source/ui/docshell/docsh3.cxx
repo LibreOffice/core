@@ -353,8 +353,8 @@ void ScDocShell::CalcOutputFactor()
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
     long nPrinterWidth = 0;
     long nWindowWidth = 0;
-    const ScPatternAttr* pPattern = (const ScPatternAttr*)&aDocument.GetPool()->
-                                            GetDefaultItem(ATTR_PATTERN);
+    const ScPatternAttr* pPattern = static_cast<const ScPatternAttr*>(&aDocument.GetPool()->
+                                            GetDefaultItem(ATTR_PATTERN));
 
     vcl::Font aDefFont;
     OutputDevice* pRefDev = GetRefDevice();
@@ -482,7 +482,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
                 SfxViewShell* pSh = pFrame->GetViewShell();
                 if (pSh && pSh->ISA(ScTabViewShell))
                 {
-                    ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+                    ScTabViewShell* pViewSh = static_cast<ScTabViewShell*>(pSh);
                     ScInputHandler* pInputHdl = pScMod->GetInputHdl(pViewSh);
                     if (pInputHdl)
                         pInputHdl->UpdateRefDevice();
@@ -515,14 +515,14 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
     {
         OUString aStyle = aDocument.GetPageStyle( GetCurTab() );
         ScStyleSheetPool* pStPl = aDocument.GetStyleSheetPool();
-        SfxStyleSheet* pStyleSheet = (SfxStyleSheet*)pStPl->Find(aStyle, SFX_STYLE_FAMILY_PAGE);
+        SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(pStPl->Find(aStyle, SFX_STYLE_FAMILY_PAGE));
         if (pStyleSheet)
         {
             SfxItemSet& rSet = pStyleSheet->GetItemSet();
 
             if (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION)
             {
-                const SvxPageItem& rOldItem = (const SvxPageItem&)rSet.Get(ATTR_PAGE);
+                const SvxPageItem& rOldItem = static_cast<const SvxPageItem&>(rSet.Get(ATTR_PAGE));
                 bool bWasLand = rOldItem.IsLandscape();
                 bool bNewLand = ( pNewPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
                 if (bNewLand != bWasLand)
@@ -532,7 +532,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
                     rSet.Put( aNewItem );
 
                     //  Groesse umdrehen
-                    Size aOldSize = ((const SvxSizeItem&)rSet.Get(ATTR_PAGE_SIZE)).GetSize();
+                    Size aOldSize = static_cast<const SvxSizeItem&>(rSet.Get(ATTR_PAGE_SIZE)).GetSize();
                     Size aNewSize(aOldSize.Height(),aOldSize.Width());
                     SvxSizeItem aNewSItem(ATTR_PAGE_SIZE,aNewSize);
                     rSet.Put( aNewSItem );
@@ -587,7 +587,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
             if ( pAction->GetType() == SC_CAT_MOVE )
             {
                 ScRange aRange =
-                    ((const ScChangeActionMove*)pAction)->
+                    static_cast<const ScChangeActionMove*>(pAction)->
                     GetFromRange().MakeRange();
                 if ( aRange.In( rPos ) )
                 {
@@ -846,7 +846,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 case SC_CAT_DELETE_ROWS :
                 case SC_CAT_DELETE_TABS :
                 {
-                    const ScChangeActionDel* pDel = (const ScChangeActionDel*) pThisAction;
+                    const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(pThisAction);
                     if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                     {   // deleted Table enthaelt deleted Cols, die nicht
                         sal_uLong nStart, nEnd;
@@ -857,7 +857,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 break;
                 case SC_CAT_MOVE :
                 {
-                    const ScChangeActionMove* pMove = (const ScChangeActionMove*) pThisAction;
+                    const ScChangeActionMove* pMove = static_cast<const ScChangeActionMove*>(pThisAction);
                     pSourceTrack->AppendMove( pMove->GetFromRange().MakeRange(),
                         pMove->GetBigRange().MakeRange(), NULL );
                 }
@@ -913,7 +913,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 #if OSL_DEBUG_LEVEL > 0
                 OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
-                    ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue, &aDocument );
+                    static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( aValue, &aDocument );
                 OStringBuffer aError(OUStringToOString(aValue,
                     osl_getThreadTextEncoding()));
                 aError.append(" weggelassen");
@@ -978,9 +978,9 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
                             OUString aValue;
-                            ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue, &aDocument );
+                            static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewString( aValue, &aDocument );
                             sal_uInt8 eMatrix = MM_NONE;
-                            const ScCellValue& rCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
+                            const ScCellValue& rCell = static_cast<const ScChangeActionContent*>(pSourceAction)->GetNewCell();
                             if (rCell.meType == CELLTYPE_FORMULA)
                                 eMatrix = rCell.mpFormula->GetMatrixFlag();
                             switch ( eMatrix )
@@ -1030,7 +1030,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         break;
                         case SC_CAT_DELETE_ROWS:
                         {
-                            const ScChangeActionDel* pDel = (const ScChangeActionDel*) pSourceAction;
+                            const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(pSourceAction);
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
@@ -1050,7 +1050,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         break;
                         case SC_CAT_DELETE_COLS:
                         {
-                            const ScChangeActionDel* pDel = (const ScChangeActionDel*) pSourceAction;
+                            const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(pSourceAction);
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted Table enthaelt deleted Cols, die nicht
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
@@ -1060,7 +1060,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         break;
                         case SC_CAT_MOVE :
                         {
-                            const ScChangeActionMove* pMove = (const ScChangeActionMove*) pSourceAction;
+                            const ScChangeActionMove* pMove = static_cast<const ScChangeActionMove*>(pSourceAction);
                             ScRange aFromRange( pMove->GetFromRange().MakeRange() );
                             GetDocFunc().MoveBlock( aFromRange,
                                 aSourceRange.aStart, true, true, false, false );

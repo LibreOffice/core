@@ -492,10 +492,10 @@ void ScTPValidationValue::SetupRefDlg()
         if( pValidationDlg->SetupRefDlg() )
         {
             pValidationDlg->SetHandler( this );
-            pValidationDlg->SetSetRefHdl( (ScRefHandlerHelper::PFUNCSETREFHDLTYPE)( &ScTPValidationValue::SetReferenceHdl ) );
-            pValidationDlg->SetSetActHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::SetActiveHdl ) );
-            pValidationDlg->SetRefInputStartPreHdl( (ScRefHandlerHelper::PINPUTSTARTDLTYPE)( &ScTPValidationValue::RefInputStartPreHdl ) );
-            pValidationDlg->SetRefInputDonePostHdl( (ScRefHandlerHelper::PCOMMONHDLTYPE)( &ScTPValidationValue::RefInputDonePostHdl ) );
+            pValidationDlg->SetSetRefHdl( static_cast<ScRefHandlerHelper::PFUNCSETREFHDLTYPE>( &ScTPValidationValue::SetReferenceHdl ) );
+            pValidationDlg->SetSetActHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::SetActiveHdl ) );
+            pValidationDlg->SetRefInputStartPreHdl( static_cast<ScRefHandlerHelper::PINPUTSTARTDLTYPE>( &ScTPValidationValue::RefInputStartPreHdl ) );
+            pValidationDlg->SetRefInputDonePostHdl( static_cast<ScRefHandlerHelper::PCOMMONHDLTYPE>( &ScTPValidationValue::RefInputDonePostHdl ) );
 
             vcl::Window *pLabel = NULL;
 
@@ -672,17 +672,17 @@ void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet->GetItemState( FID_VALID_SHOWHELP, true, &pItem ) == SfxItemState::SET )
-        pTsbHelp->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
+        pTsbHelp->SetState( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
         pTsbHelp->SetState( TRISTATE_FALSE );
 
     if ( rArgSet->GetItemState( FID_VALID_HELPTITLE, true, &pItem ) == SfxItemState::SET )
-        pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        pEdtTitle->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
         pEdtTitle->SetText( EMPTY_OUSTRING );
 
     if ( rArgSet->GetItemState( FID_VALID_HELPTEXT, true, &pItem ) == SfxItemState::SET )
-        pEdInputHelp->SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        pEdInputHelp->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
         pEdInputHelp->SetText( EMPTY_OUSTRING );
 }
@@ -742,22 +742,22 @@ void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet->GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SfxItemState::SET )
-        m_pTsbShow->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_pTsbShow->SetState( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
         m_pTsbShow->SetState( TRISTATE_TRUE );   // check by default
 
     if ( rArgSet->GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SfxItemState::SET )
-        m_pLbAction->SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
+        m_pLbAction->SelectEntryPos( static_cast<const SfxAllEnumItem*>(pItem)->GetValue() );
     else
         m_pLbAction->SelectEntryPos( 0 );
 
     if ( rArgSet->GetItemState( FID_VALID_ERRTITLE, true, &pItem ) == SfxItemState::SET )
-        m_pEdtTitle->SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        m_pEdtTitle->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
         m_pEdtTitle->SetText( EMPTY_OUSTRING );
 
     if ( rArgSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SfxItemState::SET )
-        m_pEdError->SetText( ((const SfxStringItem*)pItem)->GetValue() );
+        m_pEdError->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
         m_pEdError->SetText( EMPTY_OUSTRING );
 

@@ -163,7 +163,7 @@ void ScRandomNumberGeneratorDialog::SetReference( const ScRange& rReferenceRange
 void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 {
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
-    sal_Int64 aSelectedId = (sal_Int64) mpDistributionCombo->GetEntryData(aSelectedIndex);
+    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>(mpDistributionCombo->GetEntryData(aSelectedIndex));
 
     sal_uInt32 seedValue;
 
@@ -347,7 +347,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseFocusHandler)
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter1ValueModified)
 {
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
-    sal_Int64 aSelectedId = (sal_Int64) mpDistributionCombo->GetEntryData(aSelectedIndex);
+    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
     if (aSelectedId == DIST_UNIFORM ||
         aSelectedId == DIST_UNIFORM_INTEGER)
     {
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter1ValueModified)
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter2ValueModified)
 {
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
-    sal_Int64 aSelectedId = (sal_Int64) mpDistributionCombo->GetEntryData(aSelectedIndex);
+    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
     if (aSelectedId == DIST_UNIFORM ||
         aSelectedId == DIST_UNIFORM_INTEGER)
     {
@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged)
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)
 {
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
-    sal_Int64 aSelectedId = (sal_Int64) mpDistributionCombo->GetEntryData(aSelectedIndex);
+    sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
 
     mpParameter1Value->SetMin(SAL_MIN_INT64);
     mpParameter1Value->SetMax(SAL_MAX_INT64);

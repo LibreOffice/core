@@ -44,7 +44,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
-            rSubTotalData   ( ((const ScSubTotalItem&)
+            rSubTotalData   ( static_cast<const ScSubTotalItem&>(
                               rArgSet.Get( nWhichSubTotals )).
                                 GetSubTotalData() ),
             nFieldCount     ( 0 )
@@ -85,8 +85,8 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
 
 void ScTpSubTotalGroup::Init()
 {
-    const ScSubTotalItem& rSubTotalItem = (const ScSubTotalItem&)
-                                          GetItemSet().Get( nWhichSubTotals );
+    const ScSubTotalItem& rSubTotalItem = static_cast<const ScSubTotalItem&>(
+                                          GetItemSet().Get( nWhichSubTotals ));
 
     pViewData   = rSubTotalItem.GetViewData();
     pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
@@ -122,7 +122,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     }
     mpLbFunctions->SelectEntryPos( 0 );
 
-    ScSubTotalParam theSubTotalData( ((const ScSubTotalItem&)
+    ScSubTotalParam theSubTotalData( static_cast<const ScSubTotalItem&>(
                                       rArgSet.Get( nWhichSubTotals )).
                                             GetSubTotalData() );
 
@@ -187,7 +187,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
         if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SfxItemState::SET )
-            theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
+            theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
     }
 
     boost::scoped_array<ScSubTotalFunc> pFunctions;
@@ -425,7 +425,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
-            rSubTotalData   ( ((const ScSubTotalItem&)
+            rSubTotalData   ( static_cast<const ScSubTotalItem&>(
                               rArgSet.Get( nWhichSubTotals )).
                                 GetSubTotalData() )
 {
@@ -448,8 +448,8 @@ ScTpSubTotalOptions::~ScTpSubTotalOptions()
 
 void ScTpSubTotalOptions::Init()
 {
-    const ScSubTotalItem& rSubTotalItem = (const ScSubTotalItem&)
-                                          GetItemSet().Get( nWhichSubTotals );
+    const ScSubTotalItem& rSubTotalItem = static_cast<const ScSubTotalItem&>(
+                                          GetItemSet().Get( nWhichSubTotals ));
 
     pViewData   = rSubTotalItem.GetViewData();
     pDoc        = ( pViewData ) ? pViewData->GetDocument() : NULL;
@@ -502,7 +502,7 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
         if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SfxItemState::SET )
-            theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
+            theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
     }
 
     theSubTotalData.bPagebreak      = pBtnPagebreak->IsChecked();

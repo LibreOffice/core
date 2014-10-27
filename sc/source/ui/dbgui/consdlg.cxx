@@ -63,13 +63,13 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::W
 
     :   ScAnyRefDlg ( pB, pCW, pParent, "ConsolidateDialog" , "modules/scalc/ui/consolidatedialog.ui" ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        theConsData     ( ((const ScConsolidateItem&)
+        theConsData     ( static_cast<const ScConsolidateItem&>(
                            rArgSet.Get( rArgSet.GetPool()->
                                             GetWhich( SID_CONSOLIDATE ) )
                                       ).GetData() ),
-        rViewData       ( ((ScTabViewShell*)SfxViewShell::Current())->
+        rViewData       ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                                 GetViewData() ),
-        pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
+        pDoc            ( static_cast<ScTabViewShell*>(SfxViewShell::Current())->
                                 GetViewData().GetDocument() ),
         pRangeUtil      ( new ScRangeUtil ),
         pAreaData       ( NULL ),
@@ -327,7 +327,7 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
     if ( pCtr ==(Control*)pEdDataArea ||
          pCtr ==(Control*)pEdDestArea)
     {
-        pRefInputEdit = (formula::RefEdit*)pCtr;
+        pRefInputEdit = static_cast<formula::RefEdit*>(pCtr);
     }
     else if(pCtr ==(Control*)pLbDataArea )
     {

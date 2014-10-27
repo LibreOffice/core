@@ -644,7 +644,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         //  modifying the document must be asynchronous
         //  (handled by AddInitial)
 
-        ScAutoStyleHint& rStlHint = (ScAutoStyleHint&)rHint;
+        const ScAutoStyleHint& rStlHint = static_cast<const ScAutoStyleHint&>(rHint);
         ScRange aRange = rStlHint.GetRange();
         OUString aName1 = rStlHint.GetStyle1();
         OUString aName2 = rStlHint.GetStyle2();
@@ -1094,7 +1094,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
-                sItStr = ((const SfxStringItem*)pItem)->GetValue();
+                sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
             }
 
             if (sItStr.isEmpty())
@@ -1167,7 +1167,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
-                aOptions.ReadFromString( ((const SfxStringItem*)pItem)->GetValue() );
+                aOptions.ReadFromString( static_cast<const SfxStringItem*>(pItem)->GetValue() );
                 bOptInit = true;
             }
 
@@ -1236,7 +1236,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
-                sItStr = ((const SfxStringItem*)pItem)->GetValue();
+                sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
             }
 
             if (sItStr.isEmpty())
@@ -1277,7 +1277,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if ( pSet && SfxItemState::SET ==
                      pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
                 {
-                    sItStr = ((const SfxStringItem*)pItem)->GetValue();
+                    sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
                 }
 
                 if (sItStr.isEmpty())
@@ -1936,8 +1936,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         if ( bTabProtect )
         {
             const ScProtectionAttr* pProtAttr =
-                (const ScProtectionAttr*) aDocument.GetAttr(
-                                                            nCol, nRow, nTab, ATTR_PROTECTION );
+                static_cast<const ScProtectionAttr*>( aDocument.GetAttr(
+                                                            nCol, nRow, nTab, ATTR_PROTECTION ));
             if ( pProtAttr->GetHideCell() ||
                     ( eType == CELLTYPE_FORMULA && bShowFormulas &&
                       pProtAttr->GetHideFormula() ) )
@@ -2038,7 +2038,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
         if ( bFixedWidth )
         {
             SvxCellHorJustify eHorJust = (SvxCellHorJustify)
-                ((const SvxHorJustifyItem*) aDocument.GetAttr( nCol, nRow,
+                static_cast<const SvxHorJustifyItem*>( aDocument.GetAttr( nCol, nRow,
                 nTab, ATTR_HOR_JUSTIFY ))->GetValue();
             lcl_ScDocShell_GetFixedWidthString( aString, aDocument, nTab, nCol,
                     !bString, eHorJust );
@@ -2276,7 +2276,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
-                sItStr = ((const SfxStringItem*)pItem)->GetValue();
+                sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
             }
 
             if ( sItStr.isEmpty() )
@@ -2306,7 +2306,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         if ( pSet && SfxItemState::SET ==
              pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
         {
-            sCharSet = ((const SfxStringItem*)pItem)->GetValue();
+            sCharSet = static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
 
         if (sCharSet.isEmpty())
@@ -2345,8 +2345,8 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = true;
             if ( bHasMemo )
             {
-                SfxStringItem* pNameItem =
-                    (SfxStringItem*) rMed.GetItemSet()->GetItem( SID_FILE_NAME );
+                const SfxStringItem* pNameItem =
+                    static_cast<const SfxStringItem*>( rMed.GetItemSet()->GetItem( SID_FILE_NAME ) );
                 INetURLObject aDbtFile( pNameItem->GetValue(), INET_PROT_FILE );
                 aDbtFile.setExtension(OUString("dbt"));
                 if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
@@ -2373,7 +2373,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
-                sItStr = ((const SfxStringItem*)pItem)->GetValue();
+                sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
             }
 
             if (sItStr.isEmpty())
@@ -2421,7 +2421,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             OUString sFilterOptions;
 
             if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
-                sFilterOptions = ((SfxStringItem*)pItem)->GetValue();
+                sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
             WaitObject aWait(GetActiveDialogParent());
             ScImportExport aImExport(&aDocument);

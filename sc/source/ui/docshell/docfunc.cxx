@@ -804,7 +804,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
                                 ATTR_VALUE_FORMAT,false,&pItem) )
         {
             aOldValue.mbHasFormat = true;
-            aOldValue.mnFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+            aOldValue.mnFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
         }
         else
             aOldValue.mbHasFormat = false;
@@ -1409,8 +1409,8 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
         return false;
     }
 
-    ScStyleSheet* pStyleSheet = (ScStyleSheet*) rDoc.GetStyleSheetPool()->Find(
-                                                rStyleName, SFX_STYLE_FAMILY_PARA );
+    ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>( rDoc.GetStyleSheetPool()->Find(
+                                                rStyleName, SFX_STYLE_FAMILY_PARA ));
     if (!pStyleSheet)
         return false;
 
@@ -1817,8 +1817,8 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             const ScMergeFlagAttr* pMergeFlagAttr = NULL;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != NULL )
             {
-                pMergeFlag = (const ScMergeAttr*) &pPattern->GetItem(ATTR_MERGE);
-                pMergeFlagAttr = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
+                pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
                 sal_Int16 nNewFlags = pMergeFlagAttr->GetValue() & ( SC_MF_HOR | SC_MF_VER );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == SC_MF_HOR || nNewFlags == SC_MF_VER )
                 {
@@ -2229,8 +2229,8 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             const ScMergeFlagAttr* pMergeFlagAttr = NULL;
             while ( ( pPattern = aTestIter.GetNext( nTestCol, nTestRow1, nTestRow2 ) ) != NULL )
             {
-                pMergeFlag = (const ScMergeAttr*) &pPattern->GetItem( ATTR_MERGE );
-                pMergeFlagAttr = (const ScMergeFlagAttr*) &pPattern->GetItem( ATTR_MERGE_FLAG );
+                pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
+                pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
                 sal_Int16 nNewFlags = pMergeFlagAttr->GetValue() & ( SC_MF_HOR | SC_MF_VER );
                 if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == SC_MF_HOR || nNewFlags == SC_MF_VER )
                 {

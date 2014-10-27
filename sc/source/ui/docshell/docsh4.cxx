@@ -100,13 +100,13 @@ using namespace ::com::sun::star;
 #include <boost/scoped_ptr.hpp>
 
 #define IS_SHARE_HEADER(set) \
-    ((SfxBoolItem&) \
-        ((SvxSetItem&)(set).Get(ATTR_PAGE_HEADERSET)).GetItemSet(). \
+    static_cast<const SfxBoolItem&>( \
+        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_HEADERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
 #define IS_SHARE_FOOTER(set) \
-    ((SfxBoolItem&) \
-        ((SvxSetItem&)(set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
+    static_cast<const SfxBoolItem&>( \
+        static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
 #define SC_PREVIEW_SIZE_X   10000
@@ -137,16 +137,16 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             pReqArgs->HasItem( SID_SC_SETTEXT, &pTextItem ) )
             {
                 //  Parameter sind 1-based !!!
-                SCCOL nCol = ((SfxInt16Item*)pColItem)->GetValue() - 1;
-                SCROW nRow = ((SfxInt32Item*)pRowItem)->GetValue() - 1;
-                SCTAB nTab = ((SfxInt16Item*)pTabItem)->GetValue() - 1;
+                SCCOL nCol = static_cast<const SfxInt16Item*>(pColItem)->GetValue() - 1;
+                SCROW nRow = static_cast<const SfxInt32Item*>(pRowItem)->GetValue() - 1;
+                SCTAB nTab = static_cast<const SfxInt16Item*>(pTabItem)->GetValue() - 1;
 
                 SCTAB nTabCount = aDocument.GetTableCount();
                 if ( ValidCol(nCol) && ValidRow(nRow) && ValidTab(nTab,nTabCount) )
                 {
                     if ( aDocument.IsBlockEditable( nTab, nCol,nRow, nCol, nRow ) )
                     {
-                        OUString aVal = ((const SfxStringItem*)pTextItem)->GetValue();
+                        OUString aVal = static_cast<const SfxStringItem*>(pTextItem)->GetValue();
                         aDocument.SetString( nCol, nRow, nTab, aVal );
 
                         PostPaintCell( nCol, nRow, nTab );
@@ -186,11 +186,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 OUString sTarget;
                 if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
-                    sTarget = ((const SfxStringItem*)pItem)->GetValue();
+                    sTarget = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 bool bIsNewArea = true;         // Default sal_True (keine Nachfrage)
                 if ( pReqArgs->GetItemState( FN_PARAM_2, true, &pItem ) == SfxItemState::SET )
-                    bIsNewArea = ((const SfxBoolItem*)pItem)->GetValue();
+                    bIsNewArea = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                 // bei Bedarf neuen Datenbankbereich anlegen
                 bool bMakeArea = false;
@@ -268,19 +268,19 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 bool bAddRange = (nSlot == SID_CHART_ADDSOURCE);
 
                 if( pReqArgs->HasItem( SID_CHART_NAME, &pItem ) )
-                    aChartName = ((const SfxStringItem*)pItem)->GetValue();
+                    aChartName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 if( pReqArgs->HasItem( SID_CHART_SOURCE, &pItem ) )
-                    aRangeName = ((const SfxStringItem*)pItem)->GetValue();
+                    aRangeName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                 {
-                    bColHeaders = ((const SfxBoolItem*)pItem)->GetValue();
+                    bColHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     bColInit = true;
                 }
                 if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                 {
-                    bRowHeaders = ((const SfxBoolItem*)pItem)->GetValue();
+                    bRowHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     bRowInit = true;
                 }
 
@@ -386,7 +386,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 bool bNewVal;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
-                    bNewVal = ((const SfxBoolItem*)pItem)->GetValue();
+                    bNewVal = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else
                     bNewVal = !aDocument.GetAutoCalc();     // Toggle fuer Menue
                 aDocument.SetAutoCalc( bNewVal );
@@ -547,7 +547,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_GET_COLORLIST:
             {
-                SvxColorListItem* pColItem = (SvxColorListItem*)GetItem(SID_COLOR_TABLE);
+                const SvxColorListItem* pColItem = static_cast<const SvxColorListItem*>(GetItem(SID_COLOR_TABLE));
                 XColorListRef pList = pColItem->GetColorList();
                 rReq.SetReturnValue(OfaRefItem<XColorList>(SID_GET_COLORLIST, pList));
             }
@@ -565,7 +565,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 vcl::Window* pParent = NULL;
                 const SfxPoolItem* pParentItem;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                    pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
+                    pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
 
                 // desired state
                 ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
@@ -624,7 +624,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 vcl::Window* pParent = NULL;
                 const SfxPoolItem* pParentItem;
                 if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                    pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
+                    pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
                 if ( ExecuteChangeProtectionDialog( pParent ) )
                 {
                     rReq.Done();
@@ -807,7 +807,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( pItem->ISA(SfxStringItem) )
                     {
-                        OUString aName = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
@@ -835,7 +835,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( pItem->ISA(SfxStringItem) )
                     {
-                        OUString aName = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
@@ -883,7 +883,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 if ( pItem->ISA(SfxUInt16Item) )
                 {
-                    sal_uInt16 nY2k = ((SfxUInt16Item*)pItem)->GetValue();
+                    sal_uInt16 nY2k = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                     // immer an den DocOptions setzen, damit das auch fuer SO50
                     // gespeichert wird (und alle Abfragen bisher auch darauf laufen).
                     // SetDocOptions propagiert das an den NumberFormatter
@@ -1112,7 +1112,7 @@ void UpdateAcceptChangesDialog()
     {
         SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
         if ( pChild )
-            ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+            static_cast<ScAcceptChgDlgWrapper*>(pChild)->ReInitDlg();
     }
 }
 
@@ -1260,8 +1260,8 @@ void ScDocShell::DoAutoStyle( const ScRange& rRange, const OUString& rStyle )
     ScStyleSheet* pStyleSheet =
         pStylePool->FindCaseIns( rStyle, SFX_STYLE_FAMILY_PARA );
     if (!pStyleSheet)
-        pStyleSheet = (ScStyleSheet*)
-            pStylePool->Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA );
+        pStyleSheet = static_cast<ScStyleSheet*>(
+            pStylePool->Find( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA ));
     if (pStyleSheet)
     {
         OSL_ENSURE(rRange.aStart.Tab() == rRange.aEnd.Tab(),
@@ -1365,8 +1365,8 @@ void ScDocShell::SetPrintZoom( SCTAB nTab, sal_uInt16 nScale, sal_uInt16 nPages 
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
         if (bUndo)
         {
-            sal_uInt16 nOldScale = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALE)).GetValue();
-            sal_uInt16 nOldPages = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
+            sal_uInt16 nOldScale = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
+            sal_uInt16 nOldPages = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
             GetUndoManager()->AddUndoAction( new ScUndoPrintZoom(
                             this, nTab, nOldScale, nOldPages, nScale, nPages ) );
         }
@@ -1396,9 +1396,9 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     if ( pStyleSheet )
     {
         SfxItemSet& rSet = pStyleSheet->GetItemSet();
-        bool bHeaders = ((const SfxBoolItem&)rSet.Get(ATTR_PAGE_HEADERS)).GetValue();
-        sal_uInt16 nOldScale = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALE)).GetValue();
-        sal_uInt16 nOldPages = ((const SfxUInt16Item&)rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
+        bool bHeaders = static_cast<const SfxBoolItem&>(rSet.Get(ATTR_PAGE_HEADERS)).GetValue();
+        sal_uInt16 nOldScale = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALE)).GetValue();
+        sal_uInt16 nOldPages = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_SCALETOPAGES)).GetValue();
         const ScRange* pRepeatCol = aDocument.GetRepeatColRange( nTab );
         const ScRange* pRepeatRow = aDocument.GetRepeatRowRange( nTab );
 
@@ -1608,7 +1608,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         SfxItemSet&  rStyleSet = pStyleSheet->GetItemSet();
 
                         SvxPageUsage eUsage =
-                            SvxPageUsage( ((const SvxPageItem&)
+                            SvxPageUsage( static_cast<const SvxPageItem&>(
                                             rStyleSet.Get( ATTR_PAGE )).
                                                 GetPageUsage() );
                         bool bShareHeader = IS_SHARE_HEADER(rStyleSet);
@@ -2042,13 +2042,13 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     const SvxSetItem*   pSetItem = NULL;
     const SfxItemSet*   pSet     = NULL;
 
-    pSetItem = (const SvxSetItem*) &pStyleSet->Get( ATTR_PAGE_HEADERSET );
+    pSetItem = static_cast<const SvxSetItem*>( &pStyleSet->Get( ATTR_PAGE_HEADERSET ) );
     pSet     = &pSetItem->GetItemSet();
-    rbHeader = ((const SfxBoolItem&)pSet->Get(ATTR_PAGE_ON)).GetValue();
+    rbHeader = static_cast<const SfxBoolItem&>(pSet->Get(ATTR_PAGE_ON)).GetValue();
 
-    pSetItem = (const SvxSetItem*) &pStyleSet->Get( ATTR_PAGE_FOOTERSET );
+    pSetItem = static_cast<const SvxSetItem*>( &pStyleSet->Get( ATTR_PAGE_FOOTERSET ) );
     pSet     = &pSetItem->GetItemSet();
-    rbFooter = ((const SfxBoolItem&)pSet->Get(ATTR_PAGE_ON)).GetValue();
+    rbFooter = static_cast<const SfxBoolItem&>(pSet->Get(ATTR_PAGE_ON)).GetValue();
 }
 
 bool ScDocShell::DdeGetData( const OUString& rItem,
@@ -2229,7 +2229,7 @@ ScDocShell* ScDocShell::GetShellByNum( sal_uInt16 nDocNo )      // static
         if ( pShell->Type() == TYPE(ScDocShell) )
         {
             if ( nShellCnt == nDocNo )
-                pFound = (ScDocShell*) pShell;
+                pFound = static_cast<ScDocShell*>(pShell);
             else
                 ++nShellCnt;
         }
