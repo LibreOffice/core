@@ -566,6 +566,8 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
+typedef rtl::Reference<DisclosureButton> DisclosureButtonPtr;
+
 #endif // INCLUDED_VCL_BUTTON_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

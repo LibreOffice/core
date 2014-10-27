@@ -40,7 +40,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
-using namespace rtl;
 using namespace cppu;
 
 AccEventListener::AccEventListener(com::sun::star::accessibility::XAccessible* pAcc,

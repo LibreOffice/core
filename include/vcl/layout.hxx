@@ -513,29 +513,29 @@ public:
     VclExpander(vcl::Window *pParent)
         : VclBin(pParent)
         , m_bResizeTopLevel(true)
-        , m_aDisclosureButton(this)
+        , m_pDisclosureButton(new DisclosureButton(this))
     {
-        m_aDisclosureButton.SetToggleHdl(LINK(this, VclExpander, ClickHdl));
-        m_aDisclosureButton.Show();
+        m_pDisclosureButton->SetToggleHdl(LINK(this, VclExpander, ClickHdl));
+        m_pDisclosureButton->Show();
     }
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     bool get_expanded() const
     {
-        return m_aDisclosureButton.IsChecked();
+        return m_pDisclosureButton->IsChecked();
     }
     void set_expanded(bool bExpanded)
     {
-        m_aDisclosureButton.Check(bExpanded);
+        m_pDisclosureButton->Check(bExpanded);
     }
     void set_label(const OUString& rLabel)
     {
-        m_aDisclosureButton.SetText(rLabel);
+        m_pDisclosureButton->SetText(rLabel);
     }
     OUString get_label() const
     {
-        return m_aDisclosureButton.GetText();
+        return m_pDisclosureButton->GetText();
     }
     virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
     void  SetExpandedHdl( const Link& rLink ) { maExpandedHdl = rLink; }
@@ -543,9 +543,10 @@ public:
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    void dispose() SAL_OVERRIDE { m_pDisclosureButton.clear(); VclBin::dispose(); }
 private:
     bool m_bResizeTopLevel;
-    DisclosureButton m_aDisclosureButton;
+    DisclosureButtonPtr m_pDisclosureButton;
     Link maExpandedHdl;
     DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
 };
@@ -557,8 +558,8 @@ public:
     virtual vcl::Window *get_child() SAL_OVERRIDE;
     virtual const vcl::Window *get_child() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    ScrollBar& getVertScrollBar() { return m_aVScroll; }
-    ScrollBar& getHorzScrollBar() { return m_aHScroll; }
+    ScrollBar& getVertScrollBar() { return *m_pVScroll.get(); }
+    ScrollBar& getHorzScrollBar() { return *m_pHScroll.get(); }
     Size getVisibleChildSize() const;
     //set to true to disable the built-in scrolling callbacks to allow the user
     //to override it
@@ -569,10 +570,11 @@ protected:
     DECL_LINK(ScrollBarHdl, void *);
     void InitScrollBars(const Size &rRequest);
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
+    void dispose() SAL_OVERRIDE { m_pVScroll.clear(); m_pHScroll.clear(); VclBin::dispose(); }
 private:
     bool m_bUserManagedScrolling;
-    ScrollBar m_aVScroll;
-    ScrollBar m_aHScroll;
+    ScrollBarPtr m_pVScroll;
+    ScrollBarPtr m_pHScroll;
     ScrollBarBox m_aScrollBarBox;
 };
 

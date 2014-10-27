@@ -54,6 +54,7 @@ PDFFilterResId::PDFFilterResId( sal_uInt32 nId ) : ResId( nId, getPDFFilterResMg
 
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 
 // tabbed PDF dialog implementation

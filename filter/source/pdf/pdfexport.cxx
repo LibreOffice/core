@@ -76,7 +76,6 @@
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::rtl;
 using namespace ::vcl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
