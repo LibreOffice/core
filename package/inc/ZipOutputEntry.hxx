@@ -59,7 +59,7 @@ public:
     bool isEncrypt() { return m_bEncryptCurrentEntry; }
 
     void closeEntry();
-    void write(const css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
+    void write(const css::uno::Sequence< sal_Int8 >& rBuffer);
 
 private:
     void doDeflate();

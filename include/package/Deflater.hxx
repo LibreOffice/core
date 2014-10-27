@@ -46,7 +46,7 @@ protected:
 public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel, bool bNowrap);
-    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
     void SAL_CALL setLevel( sal_Int32 nNewLevel );
     bool SAL_CALL needsInput(  );
     void SAL_CALL finish(  );

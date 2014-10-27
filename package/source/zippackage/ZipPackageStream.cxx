@@ -447,7 +447,10 @@ static void deflateZipEntry(ZipOutputEntry *pZipEntry,
     do
     {
         nLength = xInStream->readBytes(aSeq, n_ConstBufferSize);
-        pZipEntry->write(aSeq, 0, nLength);
+        if (nLength != n_ConstBufferSize)
+            aSeq.realloc(nLength);
+
+        pZipEntry->write(aSeq);
     }
     while (nLength == n_ConstBufferSize);
     pZipEntry->closeEntry();
@@ -722,7 +725,10 @@ bool ZipPackageStream::saveChild(
             do
             {
                 nLength = xStream->readBytes( aSeq, n_ConstBufferSize );
-                rZipOut.rawWrite(aSeq, 0, nLength);
+                if (nLength != n_ConstBufferSize)
+                    aSeq.realloc(nLength);
+
+                rZipOut.rawWrite(aSeq);
             }
             while ( nLength == n_ConstBufferSize );
 
@@ -781,7 +787,10 @@ bool ZipPackageStream::saveChild(
                 do
                 {
                     nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
-                    rZipOut.rawWrite(aSeq, 0, nLength);
+                    if (nLength != n_ConstBufferSize)
+                        aSeq.realloc(nLength);
+
+                    rZipOut.rawWrite(aSeq);
                 }
                 while ( nLength == n_ConstBufferSize );
                 rZipOut.rawCloseEntry(bToBeEncrypted);
@@ -800,8 +809,7 @@ bool ZipPackageStream::saveChild(
                     rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
                     ZipOutputEntry aZipEntry(m_xContext, *pTempEntry, this, bToBeEncrypted);
                     deflateZipEntry(&aZipEntry, xStream);
-                    uno::Sequence< sal_Int8 > aCompressedData = aZipEntry.getData();
-                    rZipOut.rawWrite(aCompressedData, 0, aCompressedData.getLength());
+                    rZipOut.rawWrite(aZipEntry.getData());
                     rZipOut.rawCloseEntry(bToBeEncrypted);
                 }
             }
