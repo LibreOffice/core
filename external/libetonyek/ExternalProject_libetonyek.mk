@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			--enable-static \
 			--disable-shared \
 			--without-docs \
-			--disable-debug \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \
 			--without-tools \
