@@ -370,7 +370,7 @@ connect_pipe( rtl_uString *pPipePath )
     if ( ( fd = socket( AF_UNIX, SOCK_STREAM, 0 ) ) < 0 )
         return fd;
 
-    fcntl( fd, F_SETFD, FD_CLOEXEC );
+    (void)fcntl( fd, F_SETFD, FD_CLOEXEC );
 
     addr.sun_family = AF_UNIX;
     strncpy( addr.sun_path, rtl_string_getStr( pPipeStr ), sizeof( addr.sun_path ) - 1 );
