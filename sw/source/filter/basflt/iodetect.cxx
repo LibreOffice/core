@@ -171,7 +171,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName)
             {
                 while ( pFilter )
                 {
-                    if( 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( xStor, *pFilter ) )
+                    if( !pFilter->GetUserData().isEmpty() && 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( xStor, *pFilter ) )
                     {
                         if (pFilter->IsOwnTemplateFormat())
                         {
