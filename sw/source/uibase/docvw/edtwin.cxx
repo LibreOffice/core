@@ -3898,7 +3898,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 case SwTab::COLSEL_VERT :
                     nPointer = POINTER_TAB_SELECT_W;
                     break;
-                case SwTab::COL_NONE: break; // prevent compiler warning
+                default: break; // prevent compiler warning
             }
 
             if ( USHRT_MAX != nPointer &&
