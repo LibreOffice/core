@@ -22,10 +22,15 @@ $(call gb_ExternalProject_get_state_target,apache_commons_codec,build) :
 		-Dbuild.label="build-$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)" \
 		$(if $(filter yes,$(JAVACISGCJ))\
 			,-Dbuild.compiler=gcj \
-			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
-				-Dant.build.javac.target=$(JAVA_TARGET_VER) \
+			,$(if $(filter TRUE,$(HAVE_JAVA6)) \
+				,-Dcompile.source=1.6 -Dcompile.target=1.6 \
+				,-Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) \
+			) \
 		) \
-		$(if $(debug),-Dbuild.debug="on") \
+		$(if $(filter TRUE,$(HAVE_JAVA6)) \
+			,$(if $(debug),-Dcompile.debug="true",-Dcompile.debug="false") \
+			,$(if $(debug),-Dbuild.debug="on") \
+                ) \
 		jar \
 	)
 
