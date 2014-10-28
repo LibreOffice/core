@@ -941,7 +941,7 @@ Sequence<Any> FTPContent::setPropertyValues(
     if(evt.getLength()) {
         // title has changed
         notifyPropertiesChange(evt);
-        exchange(new FTPContentIdentifier(m_aFTPURL.ident(false,false)));
+        (void)exchange(new FTPContentIdentifier(m_aFTPURL.ident(false,false)));
     }
 
     return ret;
