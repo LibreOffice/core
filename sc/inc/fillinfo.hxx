@@ -115,9 +115,9 @@ struct CellInfo : boost::noncopyable
 
     ScShadowPart                eHShadowPart : 4;           // shadow effective for drawing
     ScShadowPart                eVShadowPart : 4;
-    sal_uInt8                        nClipMark;
-    sal_uInt16                      nWidth;
-    sal_uInt8                        nRotateDir;
+    sal_uInt8                   nClipMark;
+    sal_uInt16                  nWidth;
+    sal_uInt8                   nRotateDir;
 
     bool                        bMarked : 1;
     bool                        bEmptyCellText : 1;
@@ -131,11 +131,6 @@ struct CellInfo : boost::noncopyable
     bool                        bPrinted : 1;               // when required (pagebreak mode)
     bool                        bHideGrid : 1;              // output-internal
     bool                        bEditEngine : 1;            // output-internal
-
-    CellInfo():
-        pColorScale(NULL),
-        pDataBar(NULL),
-        pIconSet(NULL) {}
 
     ~CellInfo()
     {
