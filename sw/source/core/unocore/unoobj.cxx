@@ -1973,7 +1973,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             if ( pEntry->nWID >= FN_UNO_RANGE_BEGIN &&
                  pEntry->nWID <= FN_UNO_RANGE_END )
             {
-                SwUnoCursorHelper::getCrsrPropertyValue(
+                (void)SwUnoCursorHelper::getCrsrPropertyValue(
                     *pEntry, rPaM, 0, pStates[i] );
             }
             else
