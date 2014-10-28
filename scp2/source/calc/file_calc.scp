@@ -41,11 +41,11 @@ File gid_File_Help_Scalc_Zip
 End
 #endif
 
-#ifndef MACOSX
+#if !defined MACOSX && !defined WNT
 File gid_File_Exe_Scalc
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(scalc);
+    Name = "scalc";
     Styles = (PACKED);
 End
 #endif

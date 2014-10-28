@@ -23,8 +23,8 @@ FolderItem gid_Folderitem_Scalc
     Name = "%PRODUCTNAME Calc";
     ModuleID = gid_Module_Prg_Calc_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Exe_Scalc;
-    IconFile = gid_File_Exe_Scalc;
+    FileID = auto_calc_brand_exe_scalc;
+    IconFile = auto_calc_brand_exe_scalc;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";

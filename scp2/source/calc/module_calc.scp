@@ -19,6 +19,7 @@
 #include "macros.inc"
 
 #include "AutoInstall/calc"
+#include "AutoInstall/calc_brand"
 
 Module gid_Module_Prg_Calc
     MOD_NAME_DESC ( MODULE_PRG_CALC );
@@ -59,7 +60,7 @@ Module gid_Module_Brand_Prg_Calc
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Exe_Scalc);
+    Files = (auto_calc_brand_ALL,gid_File_Exe_Scalc);
 End
 
 Module gid_Module_Langpack_Calc_Template
