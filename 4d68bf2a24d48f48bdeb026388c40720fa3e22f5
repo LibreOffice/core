@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_bd34534a",
+        "filename": "pyuno/CustomTarget_python_shell.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-28T09:07:14Z",
+      "side": 1,
+      "message": "I\u0027d say existence of PYTHON_FRAMEWORK_RELATIVE_PATH was already misguided since 6492c8576e0393f7ee548cd938e84c80e8d37127---why abstract over something constant?  Just edit mac.sh accordingly and get rid of PYTHON_FRAMEWORK_RELATIVE_PATH and (misnamed, as it also is about adding Contents/Resources/ to PYTHONPATH) PYTHON_FUNDAMENTALRC_RELATIVE_PATH.",
+      "revId": "4d68bf2a24d48f48bdeb026388c40720fa3e22f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
