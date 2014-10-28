@@ -1136,9 +1136,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                     rFrame ),
     theSlotId( nSlotId ),
     maCommand( rCommand ),
-    mrPaletteManager( rPaletteManager ),
-    mnColorSetCols( 10 )
-
+    mrPaletteManager( rPaletteManager )
 {
     get(mpPaletteListBox,     "palette_listbox");
     get(mpButtonAutoColor,    "auto_color_button");
@@ -1150,9 +1148,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mpColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
     mpRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
 
-    mpColorSet->SetColCount( mnColorSetCols );
     mpColorSet->layoutAllVisible(mrPaletteManager.GetColorCount());
-    mpRecentColorSet->SetColCount( mnColorSetCols );
     mpRecentColorSet->SetLineCount( 1 );
     mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
 

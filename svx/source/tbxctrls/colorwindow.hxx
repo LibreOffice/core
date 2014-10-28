@@ -47,8 +47,6 @@ private:
 
     PaletteManager&     mrPaletteManager;
 
-    const sal_uInt16    mnColorSetCols;
-
     DECL_LINK( SelectHdl, SvxColorValueSet* );
     DECL_LINK( SelectPaletteHdl, void *);
     DECL_LINK( AutoColorClickHdl, void * );

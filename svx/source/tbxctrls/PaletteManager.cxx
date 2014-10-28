@@ -24,13 +24,15 @@
 #include <svx/drawitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svtools/colrdlg.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 
 #define STR_DEFAULT_PAL         "Default palette"
 #define STR_DOC_COLORS          "Document colors"
 #define STR_DOC_COLOR_PREFIX    "Document Color "
 
 PaletteManager::PaletteManager() :
-    mnMaxRecentColors(10),
+    mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
     mnNumOfPalettes(2),
     mnCurrentPalette(0),
     mnColorCount(0),
