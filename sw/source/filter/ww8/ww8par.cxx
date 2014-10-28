@@ -503,7 +503,10 @@ void Sttb::Print( FILE* fp )
         for (sal_uInt16 index = 0; index < cData; ++index)
         {
             if (index >= dataItems.size())
+            {
                 fprintf(fp, "   Sttb truncated at entry %d(0x%x)\n", static_cast< int >( index ), static_cast< unsigned int >( index ));
+                break;
+            }
             fprintf(fp,"   string dataItem[ %d(0x%x) ] has name %s\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
