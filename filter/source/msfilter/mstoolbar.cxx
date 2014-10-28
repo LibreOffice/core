@@ -673,8 +673,11 @@ bool TBCCDData::Read( SvStream &rS)
 {
     nOffSet = rS.Tell();
     rS.ReadInt16( cwstrItems );
-    if ( cwstrItems )
+    if (cwstrItems > 0)
     {
+        //each WString is at least one byte
+        if (rS.remainingSize() < static_cast<size_t>(cwstrItems))
+            return false;
         for( sal_Int32 index=0; index < cwstrItems; ++index )
         {
             WString aString;
