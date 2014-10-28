@@ -2925,8 +2925,10 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
     else
     {
         if( rData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
-            rData.GetTransferableObjectDescriptor(
+        {
+            (void)rData.GetTransferableObjectDescriptor(
                                 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc );
+        }
 
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
             pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyOUStr );
@@ -2978,9 +2980,11 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
     else
     {
         TransferableObjectDescriptor aDesc;
-        if( rData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
-            ((TransferableDataHelper&)rData).GetTransferableObjectDescriptor(
-                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc );
+        if (rData.HasFormat(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR))
+        {
+            (void)const_cast<TransferableDataHelper&>(rData).GetTransferableObjectDescriptor(
+                                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc);
+        }
 
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
             rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_EMBED_SOURCE,
