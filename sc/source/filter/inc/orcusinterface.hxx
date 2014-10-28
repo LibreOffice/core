@@ -101,6 +101,25 @@ private:
     ScRange maRange;
 };
 
+class ScOrcusSheetProperties : public orcus::spreadsheet::iface::import_sheet_properties
+{
+    ScDocumentImport& mrDoc;
+    SCTAB mnTab;
+public:
+    ScOrcusSheetProperties(SCTAB nTab, ScDocumentImport& rDoc);
+    virtual ~ScOrcusSheetProperties();
+
+    virtual void set_column_width(orcus::spreadsheet::col_t col, double width, orcus::length_unit_t unit) SAL_OVERRIDE;
+
+    virtual void set_column_hidden(orcus::spreadsheet::col_t col, bool hidden) SAL_OVERRIDE;
+
+    virtual void set_row_height(orcus::spreadsheet::row_t row, double height, orcus::length_unit_t unit) SAL_OVERRIDE;
+
+    virtual void set_row_hidden(orcus::spreadsheet::row_t row, bool hidden) SAL_OVERRIDE;
+
+    virtual void set_merge_cell_range(const char* p_range, size_t n_range) SAL_OVERRIDE;
+};
+
 class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
 {
     ScDocumentImport& mrDoc;
@@ -108,6 +127,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     ScOrcusFactory& mrFactory;
     sc::SharedFormulaGroups maFormulaGroups;
     ScOrcusAutoFilter maAutoFilter;
+    ScOrcusSheetProperties maProperties;
 
     typedef std::map<size_t, ScRangeData*> SharedFormulaContainer;
     SharedFormulaContainer maSharedFormulas;
@@ -120,6 +140,7 @@ public:
     ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory);
 
     virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() SAL_OVERRIDE { return &maAutoFilter; }
+    virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() SAL_OVERRIDE;
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;

@@ -212,8 +212,51 @@ void ScOrcusFactory::setStatusIndicator(const uno::Reference<task::XStatusIndica
     mxStatusIndicator = rIndicator;
 }
 
+ScOrcusSheetProperties::ScOrcusSheetProperties(SCTAB nTab, ScDocumentImport& rDoc):
+    mrDoc(rDoc),
+    mnTab(nTab)
+{
+}
+
+ScOrcusSheetProperties::~ScOrcusSheetProperties()
+{
+}
+
+void ScOrcusSheetProperties::set_column_width(os::col_t col, double width, orcus::length_unit_t /*unit*/)
+{
+    mrDoc.getDoc().SetColWidthOnly(col, mnTab, width);
+}
+
+void ScOrcusSheetProperties::set_column_hidden(os::col_t col, bool hidden)
+{
+    if (hidden)
+        mrDoc.getDoc().SetColHidden(col, col, mnTab, hidden);
+}
+
+void ScOrcusSheetProperties::set_row_height(os::row_t row, double height, orcus::length_unit_t /*unit*/)
+{
+    mrDoc.getDoc().SetRowHeightOnly(row, row,mnTab, height);
+}
+
+void ScOrcusSheetProperties::set_row_hidden(os::row_t row, bool hidden)
+{
+    if (hidden)
+        mrDoc.getDoc().SetRowHidden(row, row, mnTab, hidden);
+}
+
+void ScOrcusSheetProperties::set_merge_cell_range(const char* /*p_range*/, size_t /*n_range*/)
+{
+}
+
 ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
-    mrDoc(rDoc), mnTab(nTab), mrFactory(rFactory), maAutoFilter(rDoc.getDoc()), mnCellCount(0) {}
+    mrDoc(rDoc),
+    mnTab(nTab),
+    mrFactory(rFactory),
+    maAutoFilter(rDoc.getDoc()),
+    maProperties(mnTab, mrDoc),
+    mnCellCount(0)
+{
+}
 
 void ScOrcusSheet::cellInserted()
 {
@@ -223,6 +266,11 @@ void ScOrcusSheet::cellInserted()
         mrFactory.incrementProgress();
         mnCellCount = 0;
     }
+}
+
+os::iface::import_sheet_properties* ScOrcusSheet::get_sheet_properties()
+{
+    return &maProperties;
 }
 
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
