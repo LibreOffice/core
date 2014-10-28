@@ -3664,8 +3664,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                          rSh.IsObjSelectable( aDocPos ) ) && !lcl_urlOverBackground( rSh, aDocPos ) )
                     {
                         SwMvContext aMvContext( &rSh );
-                        if( !rSh.IsFrmSelected() )
-                            rSh.GotoNextFly();
                         rSh.EnterSelFrmMode();
                         bCallBase = false;
                     }
