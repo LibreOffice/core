@@ -9,9 +9,24 @@
                                      /*  This array does not have two elements             */
                                      /*    Array Size is actually fData->fHeader->fCatCount         */
                                      /*    CAUTION:  see RBBITableBuilder::getTableSize()  */
+@@ -126,7 +126,7 @@
+     uint32_t         fRowLen;       /*  Length of a state table row, in bytes.            */
+     uint32_t         fFlags;        /*  Option Flags for this state table                 */
+     uint32_t         fReserved;     /*  reserved                                          */
+-    char             fTableData[4]; /*  First RBBIStateTableRow begins here.              */
++    char             fTableData[1]; /*  First RBBIStateTableRow begins here.              */
+                                     /*    (making it char[] simplifies ugly address       */
+                                     /*     arithmetic for indexing variable length rows.) */
+ };
 --- source/common/rbbitblb.cpp
 +++ source/common/rbbitblb.cpp
-@@ -1072,10 +1072,10 @@
+@@ -1067,15 +1067,15 @@
+         return 0;
+     }
+ 
+-    size    = sizeof(RBBIStateTable) - 4;    // The header, with no rows to the table.
++    size    = offsetof(RBBIStateTable, fTableData);    // The header, with no rows to the table.
+ 
      numRows = fDStates->size();
      numCols = fRB->fSetBuilder->getNumCharCategories();
  
