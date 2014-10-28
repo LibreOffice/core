@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_GRAPHICPROPERTIES_HXX
-#define INCLUDED_SVX_INC_SDR_PROPERTIES_GRAPHICPROPERTIES_HXX
+#ifndef INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
+#define INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
 
-#include <sdr/properties/rectangleproperties.hxx>
+#include <sdr/properties/textproperties.hxx>
 
 
 
@@ -28,40 +28,33 @@ namespace sdr
 {
     namespace properties
     {
-        class GraphicProperties : public RectangleProperties
+        class RectangleProperties : public TextProperties
         {
         protected:
-            // create a new itemset
-            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
-
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
         public:
             // basic constructor
-            explicit GraphicProperties(SdrObject& rObj);
+            explicit RectangleProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
-            GraphicProperties(const GraphicProperties& rProps, SdrObject& rObj);
+            RectangleProperties(const RectangleProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~GraphicProperties();
+            virtual ~RectangleProperties();
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
-
-            // force default attributes for a specific object type, called from
-            // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
-            virtual void ForceDefaultAttributes() SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr
 
 
 
-#endif // INCLUDED_SVX_INC_SDR_PROPERTIES_GRAPHICPROPERTIES_HXX
+#endif // INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

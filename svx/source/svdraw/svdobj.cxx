@@ -63,7 +63,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include <svx/sdr/properties/emptyproperties.hxx>
+#include <sdr/properties/emptyproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svddrag.hxx>

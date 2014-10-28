@@ -58,8 +58,8 @@
 #include <svtools/colorcfg.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/xgrscit.hxx>
-#include <svx/sdr/properties/e3dproperties.hxx>
-#include <svx/sdr/properties/e3dcompoundproperties.hxx>
+#include <sdr/properties/e3dproperties.hxx>
+#include <sdr/properties/e3dcompoundproperties.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>

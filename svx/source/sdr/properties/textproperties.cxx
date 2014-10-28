@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/properties/textproperties.hxx>
+#include <sdr/properties/textproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>

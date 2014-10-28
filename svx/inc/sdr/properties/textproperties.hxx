@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
-#define INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
+#ifndef INCLUDED_SVX_SDR_PROPERTIES_TEXTPROPERTIES_HXX
+#define INCLUDED_SVX_SDR_PROPERTIES_TEXTPROPERTIES_HXX
 
-#include <svx/sdr/properties/attributeproperties.hxx>
-#include <svx/svxdllapi.h>
+#include <svx/itextprovider.hxx>
+#include <sdr/properties/attributeproperties.hxx>
 
 
 
@@ -29,36 +29,64 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC E3dProperties : public AttributeProperties
+        class TextProperties : public AttributeProperties
         {
+        private:
+            // #i101556# versioning support
+            sal_uInt32                  maVersion;
+
         protected:
             // create a new itemset
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
 
+            // Do the ItemChange, may do special handling
+            virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = 0) SAL_OVERRIDE;
+
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
+            /// Get the TextProvider related to our SdrObject
+            virtual const svx::ITextProvider& getTextProvider() const;
+
         public:
             // basic constructor
-            explicit E3dProperties(SdrObject& rObj);
+            explicit TextProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
-            E3dProperties(const E3dProperties& rProps, SdrObject& rObj);
+            TextProperties(const TextProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~E3dProperties();
+            virtual ~TextProperties();
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr) SAL_OVERRIDE;
+
+            // force default attributes for a specific object type, called from
+            // DefaultProperties::GetObjectItemSet() if a new ItemSet is created
+            virtual void ForceDefaultAttributes() SAL_OVERRIDE;
+
+            // force all attributes which come from styles to hard attributes
+            // to be able to live without the style.
+            virtual void ForceStyleToHardAttributes() SAL_OVERRIDE;
+
+            // This is the notifyer from SfxListener
+            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
+
+            // Set single item at the local ItemSet. *Does not use* AllowItemChange(),
+            // ItemChange(), PostItemChange() and ItemSetChanged() calls.
+            void SetObjectItemNoBroadcast(const SfxPoolItem& rItem);
+
+            // #i101556# versioning support
+            virtual sal_uInt32 getVersion() const SAL_OVERRIDE;
         };
     } // end of namespace properties
 } // end of namespace sdr
 
 
 
-#endif // INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
+#endif // INCLUDED_SVX_SDR_PROPERTIES_TEXTPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

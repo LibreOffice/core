@@ -32,7 +32,7 @@
 #include "editeng/editstat.hxx"
 #include "editeng/outlobj.hxx"
 #include "svx/svdview.hxx"
-#include "svx/sdr/properties/textproperties.hxx"
+#include "sdr/properties/textproperties.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/svdhdl.hxx"
 #include "viewcontactoftableobj.hxx"

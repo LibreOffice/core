@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
-#define INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
+#ifndef INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
+#define INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
 
-#include <svx/sdr/properties/textproperties.hxx>
-#include <svx/svxdllapi.h>
+#include <sdr/properties/attributeproperties.hxx>
 
 
 
@@ -29,21 +28,24 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC RectangleProperties : public TextProperties
+        class E3dProperties : public AttributeProperties
         {
         protected:
+            // create a new itemset
+            virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) SAL_OVERRIDE;
+
             // react on ItemSet changes
             virtual void ItemSetChanged(const SfxItemSet& rSet) SAL_OVERRIDE;
 
         public:
             // basic constructor
-            explicit RectangleProperties(SdrObject& rObj);
+            explicit E3dProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
-            RectangleProperties(const RectangleProperties& rProps, SdrObject& rObj);
+            E3dProperties(const E3dProperties& rProps, SdrObject& rObj);
 
             // destructor
-            virtual ~RectangleProperties();
+            virtual ~E3dProperties();
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const SAL_OVERRIDE;
@@ -56,6 +58,6 @@ namespace sdr
 
 
 
-#endif // INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
+#endif // INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,6 @@
 #include <svl/smplhint.hxx>
 #include <svl/itemset.hxx>
 
-#include <svx/sdr/properties/attributeproperties.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbstit.hxx>
 #include <editeng/bulletitem.hxx>

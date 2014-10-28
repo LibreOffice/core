@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/sdr/properties/rectangleproperties.hxx>
+#include <sdr/properties/rectangleproperties.hxx>
 #include <svx/svdorect.hxx>
 
 

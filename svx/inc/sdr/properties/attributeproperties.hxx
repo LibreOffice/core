@@ -23,7 +23,6 @@
 #include <svl/lstner.hxx>
 #include <svl/stylesheetuser.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
-#include <svx/svxdllapi.h>
 
 
 
@@ -31,7 +30,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
+        class AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
             // add style sheet, do all the necessary handling
             void ImpAddStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr);
