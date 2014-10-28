@@ -41,7 +41,7 @@ Fraction::Fraction( long nNum, long nDen )
 {
     if ( nDen == 0 ) {
         valid = false;
-        SAL_WARN( "tools.fraction", "'Fraction(" + std::to_string(nNum) + ",0)' invalid fraction created" );
+        SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
         return;
     }
     value.assign( nNum, nDen);
@@ -57,7 +57,7 @@ Fraction::Fraction( double dVal )
         valid = true;
     } catch(const boost::bad_rational& unused) {
         valid = false;
-        SAL_WARN( "tools.fraction", "'Fraction(" + std::to_string(dVal) + ")' invalid fraction created" );
+        SAL_WARN( "tools.fraction", "'Fraction(" << dVal << ")' invalid fraction created" );
     }
 }
 
