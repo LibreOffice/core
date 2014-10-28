@@ -94,7 +94,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <svx/unoapi.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/vectortosequence.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
@@ -213,14 +213,14 @@ public:
 
 class BorderLines
 {
-    typedef ::comphelper::SequenceAsVector<
+    typedef ::std::vector<
         ::rtl::Reference<BorderLinePrimitive2D> > Lines_t;
     Lines_t m_Lines;
 public:
     void AddBorderLine(::rtl::Reference<BorderLinePrimitive2D> const& xLine);
     drawinglayer::primitive2d::Primitive2DSequence GetBorderLines_Clear()
     {
-        ::comphelper::SequenceAsVector<
+        ::std::vector<
             ::drawinglayer::primitive2d::Primitive2DReference> lines;
         for (Lines_t::const_iterator it = m_Lines.begin(); it != m_Lines.end();
                 ++it)
@@ -228,7 +228,7 @@ public:
             lines.push_back(it->get());
         }
         m_Lines.clear();
-        return lines.getAsConstList();
+        return comphelper::toSequence(lines);
     }
 };
 

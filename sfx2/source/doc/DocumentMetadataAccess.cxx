@@ -41,7 +41,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/makesequence.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/vectortosequence.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include <sfx2/docfile.hxx>
@@ -894,7 +894,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
             "type is null", *this, 0);
     }
 
-    ::comphelper::SequenceAsVector< uno::Reference< rdf::XURI > > ret;
+    ::std::vector< uno::Reference< rdf::XURI > > ret;
     const ::std::vector< uno::Reference< rdf::XURI > > parts(
         getAllParts(*m_pImpl) );
     ::std::remove_copy_if(parts.begin(), parts.end(),
@@ -902,7 +902,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
         ::boost::bind(
             ::std::logical_not<bool>(),
             ::boost::bind(&isPartOfType, ::boost::ref(*m_pImpl), _1, i_xType) ));
-    return ret.getAsConstList();
+    return ::comphelper::toSequence(ret);
 }
 
 uno::Reference<rdf::XURI> SAL_CALL

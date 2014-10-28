@@ -41,6 +41,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/vectortosequence.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 
 #include <oox/mathml/import.hxx>
@@ -4585,7 +4586,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (rDrawingObject.nPolyLineCount == 0)
             {
                 uno::Sequence< uno::Sequence<awt::Point> >aPointSequenceSequence(1);
-                aPointSequenceSequence[0] = rDrawingObject.aPolyLinePoints.getAsConstList();
+                aPointSequenceSequence[0] = comphelper::toSequence(rDrawingObject.aPolyLinePoints);
                 rDrawingObject.xPropertySet->setPropertyValue("PolyPolygon", uno::Any(aPointSequenceSequence));
             }
         }

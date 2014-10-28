@@ -25,7 +25,7 @@
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 
-#include <comphelper/sequenceasvector.hxx>
+#include <vector>
 
 // definition
 
@@ -51,7 +51,7 @@ class AcceleratorCache
         /** TODO document me
             commands -> keys
         */
-        typedef ::comphelper::SequenceAsVector< css::awt::KeyEvent > TKeyList;
+        typedef ::std::vector< css::awt::KeyEvent > TKeyList;
         typedef BaseHash< TKeyList > TCommand2Keys;
 
         /** TODO document me

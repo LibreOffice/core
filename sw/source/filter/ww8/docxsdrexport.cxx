@@ -47,7 +47,7 @@
 #include <docxexportfilter.hxx>
 #include <writerhelper.hxx>
 #include <comphelper/seqstream.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/vectortosequence.hxx>
 
 
 #include <IDocumentDrawModelAccess.hxx>
@@ -685,8 +685,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
                                                        XML_edited, "0",
                                                        FSEND);
                 drawing::PointSequenceSequence aSeqSeq = it->second.get< drawing::PointSequenceSequence >();
-                comphelper::SequenceAsVector<awt::Point> aPoints(aSeqSeq[0]);
-                for (comphelper::SequenceAsVector<awt::Point>::iterator i = aPoints.begin(); i != aPoints.end(); ++i)
+                std::vector<awt::Point> aPoints(comphelper::toVector(aSeqSeq[0]));
+                for (std::vector<awt::Point>::iterator i = aPoints.begin(); i != aPoints.end(); ++i)
                 {
                     awt::Point& rPoint = *i;
                     m_pImpl->m_pSerializer->singleElementNS(XML_wp, (i == aPoints.begin() ? XML_start : XML_lineTo),

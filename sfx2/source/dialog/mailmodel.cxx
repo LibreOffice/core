@@ -67,7 +67,6 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

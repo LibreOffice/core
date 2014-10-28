@@ -71,7 +71,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/vectortosequence.hxx>
 
 //UUUU
 #include <svx/unobrushitemhelper.hxx>
@@ -759,7 +759,7 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
 uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    comphelper::SequenceAsVector< OUString > aRet;
+    std::vector< OUString > aRet;
     if(pBasePool)
     {
         SfxStyleSheetIteratorPtr pIt = pBasePool->CreateIterator(eFamily, SFXSTYLEBIT_ALL);
@@ -774,7 +774,7 @@ uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::Runt
     else
         throw uno::RuntimeException();
 
-    return aRet.getAsConstList();
+    return comphelper::toSequence(aRet);
 }
 
 sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeException, std::exception )
