@@ -242,30 +242,29 @@ static void ProcessTables(TrueTypeCreator *);
 
 int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
 {
-    sal_uInt16 numTables, searchRange=1, entrySelector=0, rangeShift;
+    sal_uInt16 searchRange=1, entrySelector=0, rangeShift;
     sal_uInt32 s, offset, checkSumAdjustment = 0;
     sal_uInt32 *p;
-    int i=0, n;
     sal_uInt8 *head = NULL;     /* saved pointer to the head table data for checkSumAdjustment calculation */
 
-    if ((n = listCount(_this->tables)) == 0) return SF_TTFORMAT;
+    if (listIsEmpty(_this->tables)) return SF_TTFORMAT;
 
     ProcessTables(_this);
 
     /* ProcessTables() adds 'loca' and 'hmtx' */
 
-    n = listCount(_this->tables);
-    numTables = (sal_uInt16) n;
+    sal_uInt16 numTables = listCount(_this->tables);
 
-    TableEntry* te = (TableEntry*)scalloc(n, sizeof(TableEntry));
+    TableEntry* te = (TableEntry*)scalloc(numTables, sizeof(TableEntry));
+    TableEntry* e = te;
 
     listToFirst(_this->tables);
-    for (i = 0; i < n; i++) {
-        GetRawData((TrueTypeTable *) listCurrent(_this->tables), &te[i].data, &te[i].length, &te[i].tag);
-        listNext(_this->tables);
-    }
+    do {
+        GetRawData((TrueTypeTable *)listCurrent(_this->tables), &e->data, &e->length, &e->tag);
+        ++e;
+    } while (listNext(_this->tables));
 
-    qsort(te, n, sizeof(TableEntry), TableEntryCompareF);
+    qsort(te, numTables, sizeof(TableEntry), TableEntryCompareF);
 
     do {
         searchRange *= 2;
@@ -276,9 +275,9 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     entrySelector--;
     rangeShift = numTables * 16 - searchRange;
 
-    s = offset = 12 + 16 * n;
+    s = offset = 12 + 16 * numTables;
 
-    for (i = 0; i < n; i++) {
+    for (int i = 0; i < numTables; ++i) {
         s += (te[i].length + 3) & (sal_uInt32) ~3;
         /* if ((te[i].length & 3) != 0) s += (4 - (te[i].length & 3)) & 3; */
     }
@@ -293,7 +292,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     PutUInt16(rangeShift, ttf, 10, 1);
 
     /* Table Directory */
-    for (i = 0; i < n; i++) {
+    for (int i = 0; i < numTables; ++i) {
         PutUInt32(te[i].tag, ttf + 12, 16 * i, 1);
         PutUInt32(CheckSum((sal_uInt32 *) te[i].data, te[i].length), ttf + 12, 16 * i + 4, 1);
         PutUInt32(offset, ttf + 12, 16 * i + 8, 1);
@@ -311,7 +310,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     free(te);
 
     p = (sal_uInt32 *) ttf;
-    for (i = 0; i < (int)s / 4; i++) checkSumAdjustment += p[i];
+    for (int i = 0; i < (int)s / 4; ++i) checkSumAdjustment += p[i];
     PutUInt32(0xB1B0AFBA - checkSumAdjustment, head, 8, 1);
 
     *ptr = ttf;
