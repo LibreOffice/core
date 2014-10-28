@@ -3416,9 +3416,7 @@ namespace basegfx
             {
                 // prepare loop
                 bool bControlA(false);
-#if defined SAL_LOG_WARN
                 bool bControlB(false);
-#endif
 
                 // get next point and flag
                 aNewCoordinatePair = B2DPoint(pPointSequence->X, pPointSequence->Y);
@@ -3439,9 +3437,7 @@ namespace basegfx
                 if(b < nCount && com::sun::star::drawing::PolygonFlags_CONTROL == ePolygonFlag)
                 {
                     aControlB = aNewCoordinatePair;
-#if defined SAL_LOG_WARN
                     bControlB = true;
-#endif
 
                     // get next point and flag
                     aNewCoordinatePair = B2DPoint(pPointSequence->X, pPointSequence->Y);
@@ -3467,9 +3463,7 @@ namespace basegfx
                     && aControlA.equal(aRetval.getB2DPoint(aRetval.count() - 1)))
                 {
                     bControlA = false;
-#if defined SAL_LOG_WARN
                     bControlB = false;
-#endif
                 }
 
                 if(bControlA)
