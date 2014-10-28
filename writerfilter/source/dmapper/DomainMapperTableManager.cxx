@@ -787,12 +787,19 @@ void DomainMapperTableManager::endOfRowAction()
             for (sal_uInt32 i = 0; i < pCellWidths->size(); ++i)
                 nFullWidthRelative += (*pCellWidths.get())[i];
 
-        for (sal_uInt32 i = 0; i < pCellWidths->size() - 1; ++i)
+        size_t nWidthsBound = pCellWidths->size() - 1;
+        if (nWidthsBound)
         {
-            nSum += (*pCellWidths.get())[i];
-            pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
-            pSeparators[nPos].IsVisible = sal_True;
-            nPos++;
+            if (nFullWidthRelative == 0)
+                throw std::range_error("divide by zero");
+
+            for (sal_uInt32 i = 0; i < nWidthsBound; ++i)
+            {
+                nSum += (*pCellWidths.get())[i];
+                pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
+                pSeparators[nPos].IsVisible = sal_True;
+                nPos++;
+            }
         }
 
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
