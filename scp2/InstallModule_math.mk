@@ -9,7 +9,10 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/math))
 
-$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/math,math))
+$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/math,\
+	math \
+	math_brand \
+))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/math,\
 	ENABLE_MACOSX_SANDBOX \

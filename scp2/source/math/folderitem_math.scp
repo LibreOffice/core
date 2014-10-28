@@ -23,8 +23,8 @@ FolderItem gid_Folderitem_Smath
     Name = "%PRODUCTNAME Math";
     ModuleID = gid_Module_Prg_Math_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Exe_Smath;
-    IconFile = gid_File_Exe_Smath;
+    FileID = auto_math_brand_exe_smath;
+    IconFile = auto_math_brand_exe_smath;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";

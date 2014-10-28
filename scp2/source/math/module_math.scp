@@ -19,6 +19,7 @@
 #include "macros.inc"
 
 #include "AutoInstall/math"
+#include "AutoInstall/math_brand"
 
 Module gid_Module_Prg_Math
     MOD_NAME_DESC ( MODULE_PRG_MATH );
@@ -51,7 +52,7 @@ Module gid_Module_Brand_Prg_Math
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Exe_Smath);
+    Files = (auto_math_brand_ALL,gid_File_Exe_Smath);
 End
 
 Module gid_Module_Langpack_Math_Template
