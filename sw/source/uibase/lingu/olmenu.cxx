@@ -748,44 +748,46 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             {
             }
         } else {
-            linguistic::AddEntryToDic( xDictionary,
-                    m_xSpellAlt->getWord(), false, OUString(), LANGUAGE_NONE );
+            OUString sWord(m_xSpellAlt->getWord());
+            sal_Int16 nAddRes = linguistic::AddEntryToDic( xDictionary,
+                    sWord, false, OUString(), LANGUAGE_NONE );
+            if (DIC_ERR_NONE != nAddRes && !xDictionary->getEntry(sWord).is())
+            {
+                SvxDicError(&m_pSh->GetView().GetViewFrame()->GetWindow(), nAddRes);
+            }
         }
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == MN_ADD_TO_DIC_SINGLE)
     {
-            OUString aWord( m_xSpellAlt->getWord() );
-            OUString aDicName;
+        OUString sWord( m_xSpellAlt->getWord() );
+        OUString aDicName;
 
-            if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
+        if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
+        {
+            PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
+            aDicName = pMenu->GetItemText(nId);
+        }
+        else
+            aDicName = m_aDicNameSingle;
+
+        uno::Reference< linguistic2::XDictionary >      xDic;
+        uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
+        if (xDicList.is())
+            xDic = xDicList->getDictionaryByName( aDicName );
+
+        if (xDic.is())
+        {
+            sal_Int16 nAddRes = linguistic::AddEntryToDic(xDic, sWord, false, OUString(), LANGUAGE_NONE);
+            // save modified user-dictionary if it is persistent
+            uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
+            if (xSavDic.is())
+                xSavDic->store();
+
+            if (DIC_ERR_NONE != nAddRes && !xDic->getEntry(sWord).is())
             {
-                PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
-                aDicName = pMenu->GetItemText(nId);
+                SvxDicError(&m_pSh->GetView().GetViewFrame()->GetWindow(), nAddRes);
             }
-            else
-                aDicName = m_aDicNameSingle;
-
-            uno::Reference< linguistic2::XDictionary >      xDic;
-            uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
-            if (xDicList.is())
-                xDic = xDicList->getDictionaryByName( aDicName );
-
-            if (xDic.is())
-            {
-                sal_Int16 nAddRes = linguistic::AddEntryToDic( xDic, aWord, false, OUString(), LANGUAGE_NONE );
-                // save modified user-dictionary if it is persistent
-                uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
-                if (xSavDic.is())
-                    xSavDic->store();
-
-                if (DIC_ERR_NONE != nAddRes
-                    && !xDic->getEntry( aWord ).is())
-                {
-                    SvxDicError(
-                        &m_pSh->GetView().GetViewFrame()->GetWindow(),
-                        nAddRes );
-                }
-            }
+        }
     }
     else if ( nId == MN_EXPLANATION_LINK && !m_sExplanationLink.isEmpty() )
     {
