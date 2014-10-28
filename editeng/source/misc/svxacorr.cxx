@@ -1422,8 +1422,8 @@ SvxAutoCorrectLanguageLists& SvxAutoCorrect::_GetLanguageList(
                                                         LanguageType eLang )
 {
     LanguageTag aLanguageTag( eLang);
-    if(pLangTable->find(aLanguageTag) == pLangTable->end())
-        CreateLanguageFile(aLanguageTag, true);
+    if (pLangTable->find(aLanguageTag) == pLangTable->end())
+        (void)CreateLanguageFile(aLanguageTag, true);
     return *(pLangTable->find(aLanguageTag)->second);
 }
 
@@ -1453,7 +1453,7 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
 #endif
 }
 
-    // Adds a single word. The list will immediately be written to the file!
+// Adds a single word. The list will immediately be written to the file!
 bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
                                         LanguageType eLang )
 {
@@ -1472,7 +1472,7 @@ bool SvxAutoCorrect::AddCplSttException( const OUString& rNew,
             pLists = pLangTable->find(aLangTagUndetermined)->second;
     }
     OSL_ENSURE(pLists, "No auto correction data");
-    return pLists->AddToCplSttExceptList(rNew);
+    return pLists ? pLists->AddToCplSttExceptList(rNew) : false;
 }
 
 // Adds a single word. The list will immediately be written to the file!
@@ -1494,7 +1494,7 @@ bool SvxAutoCorrect::AddWrtSttException( const OUString& rNew,
             pLists = pLangTable->find(aLangTagUndetermined)->second;
     }
     OSL_ENSURE(pLists, "No auto correction file!");
-    return pLists->AddToWrdSttExceptList(rNew);
+    return pLists ? pLists->AddToWrdSttExceptList(rNew) : false;
 }
 
 bool SvxAutoCorrect::GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc,
