@@ -2579,6 +2579,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     vcl::Window* pParent, SvxEntries* entries,
     SvxConfigEntry* selection, bool bCreateMenu )
     : ModalDialog(pParent, "MoveMenuDialog", "cui/ui/movemenu.ui")
+    , mpEntries(0)
     , bModified(false)
 {
     get(m_pMenuBox, "namebox");
