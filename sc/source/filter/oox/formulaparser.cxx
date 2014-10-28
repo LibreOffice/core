@@ -747,7 +747,8 @@ size_t FormulaParserImpl::popOperandSize()
 
 ApiToken& FormulaParserImpl::getOperandToken( size_t nOpCountFromEnd, size_t nOpIndex, size_t nTokenIndex )
 {
-    OSL_ENSURE( getOperandSize( nOpCountFromEnd, nOpIndex ) > nTokenIndex,
+    SAL_WARN_IF(
+        getOperandSize( nOpCountFromEnd, nOpIndex ) <= nTokenIndex, "sc.filter",
         "FormulaParserImpl::getOperandToken - invalid parameters" );
     SizeTypeVector::const_iterator aIndexIt = maTokenIndexes.end();
     for( SizeTypeVector::const_iterator aEnd = maOperandSizeStack.end(), aIt = aEnd - nOpCountFromEnd + nOpIndex; aIt != aEnd; ++aIt )
