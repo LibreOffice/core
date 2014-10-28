@@ -92,6 +92,18 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
 	) \
 ))
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,base_brand, \
+	$(if $(filter WNT,$(OS)), \
+		sbase \
+	) \
+))
+
+$(eval $(call gb_Helper_register_executables_for_install,OOO,base, \
+	$(if $(filter WNT,$(OS)), \
+		odbcconfig \
+	) \
+))
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 ))
@@ -133,9 +145,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 	$(if $(filter WNT,$(OS)), \
-		odbcconfig \
 		quickstart \
-		sbase \
 		scalc \
 		sdraw \
 		senddoc \

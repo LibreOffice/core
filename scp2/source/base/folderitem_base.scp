@@ -23,8 +23,8 @@ FolderItem gid_Folderitem_Sbase
     Name = "%PRODUCTNAME Base";
     ModuleID = gid_Module_Prg_Base_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Exe_Sbase;
-    IconFile = gid_File_Exe_Sbase;
+    FileID = auto_base_brand_exe_sbase;
+    IconFile = auto_base_brand_exe_sbase;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";

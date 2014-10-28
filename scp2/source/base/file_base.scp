@@ -18,20 +18,11 @@
 
 #include "macros.inc"
 
-#ifndef MACOSX
+#if !defined MACOSX && !defined WNT
 File gid_File_Exe_Sbase
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(sbase);
-    Styles = (PACKED);
-End
-#endif
-
-#if defined WNT
-File gid_File_Exe_Odbcconfig
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(odbcconfig);
+    Name = "sbase";
     Styles = (PACKED);
 End
 #endif
