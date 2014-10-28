@@ -471,10 +471,6 @@ bool OpenCLDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
 
 bool OpenCLDevice::initOpenCLRunEnv( int argc )
 {
-    if ( MAX_CLKERNEL_NUM <= 0 )
-    {
-        return true;
-    }
     if ( ( argc > MAX_CLFILE_NUM ) || ( argc < 0 ) )
         return true;
 

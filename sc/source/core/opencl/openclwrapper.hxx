@@ -31,7 +31,6 @@ if( status != CL_SUCCESS )    \
 }
 
 #define MAX_CLFILE_NUM 50
-#define MAX_CLKERNEL_NUM 200
 
 #if defined(_MSC_VER)
 #ifndef strcasecmp
