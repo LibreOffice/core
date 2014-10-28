@@ -361,7 +361,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             OUString sPath;
             OUString sProperty;
 
-            ::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
+            (void)::utl::splitLastFromConfigurationPath(sName,sPath,sProperty);
             if (sPath.isEmpty() && sProperty.isEmpty())
             {
                 OSL_FAIL("ConfigItem::IsReadonly()\nsplitt failed\n");
