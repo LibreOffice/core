@@ -119,12 +119,26 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 
         const DriverAccess& operator()( const DriverAccess& _rDescriptor ) const
         {
-            if ( !_rDescriptor.xDriver.is() )
-                // we did not load this driver, yet
-                if ( _rDescriptor.xComponentFactory.is() )
-                    // we have a factory for it
-                    const_cast< DriverAccess& >( _rDescriptor ).xDriver.set(
-                        _rDescriptor.xComponentFactory->createInstanceWithContext( mxContext ), css::uno::UNO_QUERY);
+            // we did not load this driver, yet
+            if (!_rDescriptor.xDriver.is())
+            {
+                // we have a factory for it
+                if (_rDescriptor.xComponentFactory.is())
+                {
+                    DriverAccess& rDesc = const_cast<DriverAccess&>(_rDescriptor);
+                    try
+                    {
+                        //load driver
+                        rDesc.xDriver.set(
+                            rDesc.xComponentFactory->createInstanceWithContext(mxContext), css::uno::UNO_QUERY);
+                    }
+                    catch (const Exception&)
+                    {
+                        //failure, abandon driver
+                        rDesc.xComponentFactory.clear();
+                    }
+                }
+            }
             return _rDescriptor;
         }
 
