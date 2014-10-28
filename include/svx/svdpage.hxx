@@ -145,7 +145,7 @@ public:
     virtual SdrObject* NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
 
-    virtual void SetRectsDirty();
+    void SetRectsDirty();
 
     const Rectangle& GetAllObjSnapRect() const;
     const Rectangle& GetAllObjBoundRect() const;
