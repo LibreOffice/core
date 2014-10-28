@@ -20,24 +20,6 @@
 
 // crashreporter files
 
-File gid_Brand_File_Bin_Crashreport
-    BIN_FILE_BODY;
-    Name = EXENAME(crashrep);
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-End
-
-#ifdef WNT
-
-File gid_Brand_File_Bin_Crashreport_Com
-    BIN_FILE_BODY;
-    Name = "crashrep.com";
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-End
-
-#endif
-
 #ifdef WNT
 
 File gid_Brand_File_Lib_Dbghelp

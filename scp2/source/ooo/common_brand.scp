@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/crashrep"
+
 #include "config_folders.h"
 
 Module gid_Module_Root_Brand
@@ -51,9 +53,8 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Labels,
             gid_Brand_Dir_Share_Registry,
             gid_Brand_Dir_Share_Xdg);
-    Files = (gid_Brand_File_Bin_Crashreport,
+    Files = (auto_crashrep_ALL,
              gid_Brand_File_Bin_Crashreport_Script,
-             gid_Brand_File_Bin_Crashreport_Com,
              gid_Brand_File_Gdb_Trace,
              gid_Brand_File_Bin_Soffice,
              gid_Brand_File_Bin_Soffice_Bin,

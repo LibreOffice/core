@@ -84,9 +84,15 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 ))
 
+ifneq ($(ENABLE_CRASHDUMP),)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,crashrep, \
+	crashrep \
+	$(if $(filter WNT,$(OS)),crashrep_com) \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
-	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	gnome-open-url.bin \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
 	$(if $(ENABLE_NPAPI_FROM_BROWSER),pluginapp.bin) \
@@ -107,7 +113,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	xpdfimport \
 	$(if $(filter WNT,$(OS)), \
-		crashrep_com \
 		odbcconfig \
 		python \
 		quickstart \

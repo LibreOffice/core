@@ -9,6 +9,10 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/crashrep))
 
+$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/crashrep,\
+	crashrep \
+))
+
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/crashrep,\
     scp2/source/crashrep/file_crashrep \
 ))
