@@ -76,45 +76,6 @@ OString getCacheFolder()
     return rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
 }
 
-void clearCache()
-{
-#if 0
-    // We used to delete all files that did not end with the hash of
-    // the static kernel source string from oclkernels.hxx. But as
-    // those static kernels were not used for anything, it was
-    // pointless, that hash never changed. The static kernels are now
-    // removed, their hash is not part of the .bin file names any
-    // more.  So there is little this function can do until we come up
-    // with some other way to figure out which cached .bin files are
-    // "current".
-    OUString aCacheDirURL(rtl::OStringToOUString(OpenCLDevice::maCacheFolder, RTL_TEXTENCODING_UTF8));
-    osl::Directory aCacheDir(aCacheDirURL);
-    osl::FileBase::RC status = aCacheDir.open();
-    if(status != osl::FileBase::E_None)
-        return;
-
-    osl::DirectoryItem aItem;
-    while(osl::FileBase::E_None == aCacheDir.getNextItem(aItem))
-    {
-        osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileName|osl_FileStatus_Mask_FileURL);
-        status = aItem.getFileStatus(aFileStatus);
-        if(status != osl::FileBase::E_None)
-            continue;
-
-        OUString aFileName = aFileStatus.getFileName();
-        if(aFileName.endsWith(".bin"))
-        {
-            if ( file is in some way obsolete )
-            {
-                // delete the file
-                OUString aFileUrl = aFileStatus.getFileURL();
-                osl::File::remove(aFileUrl);
-            }
-        }
-    }
-#endif
-}
-
 }
 
 OString OpenCLDevice::maCacheFolder = getCacheFolder();
@@ -212,7 +173,6 @@ std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const 
 
 bool OpenCLDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
-    clearCache();
     osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     osl::FileBase::RC status = file.open(
             osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
