@@ -4265,8 +4265,15 @@ void WW8RStyle::ImportOldFormatStyles()
     }
 
     std::vector<pxoffset> aPAPXOffsets(stcp);
+    size_t nMaxByteCount = rSt.remainingSize();
     sal_uInt16 cbPapx(0);
-    rSt.ReadUInt16( cbPapx );
+    rSt.ReadUInt16(cbPapx);
+    if (cbPapx > nMaxByteCount)
+    {
+        SAL_WARN("sw.ww8", "WW8RStyle::ImportOldFormatStyles: truncating out of range "
+            << cbPapx << " to " << nMaxByteCount);
+        cbPapx = nMaxByteCount;
+    }
     nByteCount = 2;
     stcp=0;
     while (nByteCount < cbPapx)
