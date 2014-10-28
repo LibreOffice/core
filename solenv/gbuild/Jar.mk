@@ -19,7 +19,6 @@
 
 # Jar class
 
-gb_Jar_JAVACOMMAND := $(JAVAINTERPRETER)
 gb_Jar_JARCOMMAND := jar
 
 gb_Jar_LAYER_DIRS := \
