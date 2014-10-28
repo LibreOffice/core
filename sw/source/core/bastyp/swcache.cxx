@@ -33,7 +33,7 @@ void SwCache::Check()
     sal_uInt16 nCnt = 0;
     bool bFirstFound = false;
     SwCacheObj *pObj = pRealFirst;
-    SwCacheObj *pRekursive = pObj;
+    SwCacheObj *const pOldRealFirst = pRealFirst;
     while ( pObj )
     {
         // the object must be found also when moving backwards
@@ -48,7 +48,7 @@ void SwCache::Check()
         if ( !pObj->GetNext() )
             SAL_WARN_IF( pObj != pLast, "sw.core", "Last not Found." );
         pObj = pObj->GetNext();
-        SAL_WARN_IF( pObj == pRekursive, "sw.core", "Recursion in SwCache." );
+        SAL_WARN_IF(pObj == pOldRealFirst, "sw.core", "Recursion in SwCache.");
     }
     SAL_WARN_IF( !bFirstFound, "sw.core", "First not Found." );
     SAL_WARN_IF( nCnt + aFreePositions.size() != size(), "sw.core", "Lost Chain." );

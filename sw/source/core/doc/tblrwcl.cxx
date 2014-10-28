@@ -3047,7 +3047,7 @@ static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
     }
 }
 
-static bool lcl_DeleteBox_Rekursiv( CR_SetBoxWidth& rParam, SwTableBox& rBox,
+static bool lcl_DeleteBox_Recursive( CR_SetBoxWidth& rParam, SwTableBox& rBox,
                             bool bCheck )
 {
     bool bRet = true;
@@ -3075,9 +3075,13 @@ static bool lcl_DeleteBox_Rekursiv( CR_SetBoxWidth& rParam, SwTableBox& rBox,
         {
             SwTableLine& rLine = *rBox.GetTabLines()[ --i ];
             for( sal_uInt16 n = rLine.GetTabBoxes().size(); n; )
-                if( !::lcl_DeleteBox_Rekursiv( rParam,
+            {
+                if (!::lcl_DeleteBox_Recursive( rParam,
                                 *rLine.GetTabBoxes()[ --n ], bCheck ))
+                {
                     return false;
+                }
+            }
         }
     }
     return bRet;
@@ -3203,15 +3207,17 @@ static bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                      COLFUZZY > std::abs( rParam.bLeft
                                     ? nWidth - nDist
                                     : (nDist + nWidth - rParam.nTblWidth )))
-                    || !::lcl_DeleteBox_Rekursiv( rParam, *pBox, bCheck ) )
+                    || !::lcl_DeleteBox_Recursive(rParam, *pBox, bCheck))
+                {
                     return false;
+                }
 
                 if( pFmt->GetProtect().IsCntntProtected() )
                     return false;
             }
             else
             {
-                ::lcl_DeleteBox_Rekursiv( rParam, *pBox, bCheck );
+                ::lcl_DeleteBox_Recursive(rParam, *pBox, bCheck);
 
                 if( !rParam.bLeft )
                     --n, --nCntEnd;
