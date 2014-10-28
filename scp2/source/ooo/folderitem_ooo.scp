@@ -26,8 +26,8 @@ FolderItem gid_Folderitem_LibreOffice
 #else
     FolderID = gid_Folder_Staroffice51;
 #endif
-    FileID = gid_Brand_File_Bin_Soffice;
-    IconFile = gid_Brand_File_Bin_Soffice;
+    FileID = auto_brand_exe_soffice;
+    IconFile = auto_brand_exe_soffice;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
@@ -49,8 +49,8 @@ FolderItem gid_Folderitem_Soffice_Desktop
 #endif
     ModuleID = gid_Module_Root;
     FolderID = PREDEFINED_DESKTOP;
-    FileID = gid_Brand_File_Bin_Soffice;
-    IconFile = gid_Brand_File_Bin_Soffice;
+    FileID = auto_brand_exe_soffice;
+    IconFile = auto_brand_exe_soffice;
     IconID = 0;
     ComponentIDFile = "gid_Brand_File_Desktophelper_Txt";
     WkDir = gid_Brand_Dir_Program;

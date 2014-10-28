@@ -505,16 +505,6 @@ End
 #endif
 
 #ifdef WNT
-// TODO: some FolderItem reference this?
-File gid_Brand_File_Bin_Soffice
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(soffice);
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef WNT
 File gid_Brand_File_Desktophelper_Txt
     TXT_FILE_BODY;
     Styles = (PACKED);
