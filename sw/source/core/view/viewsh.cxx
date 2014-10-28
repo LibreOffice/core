@@ -993,13 +993,8 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
     if ( rRect == VisArea() )
         return;
 
-#if OSL_DEBUG_LEVEL > 1
-    if ( mbInEndAction )
-    {
-        //Is someone rescheduling again?
-        OSL_ENSURE( !this, "Scrolling during EndAction." );
-    }
-#endif
+    // Is someone spuriously rescheduling again?
+    SAL_WARN_IF(mbInEndAction, "sw.core", "Scrolling during EndAction");
 
     //First get the old visible page, so we don't have to look
     //for it afterwards.

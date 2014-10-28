@@ -265,19 +265,14 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, bool bTst, bool )
     // No check if FixSize since FtnContainer are variable up to their max. height.
     // If the max. height is LONG_MAX, take as much space as needed.
     // If the page is a special footnote page, take also as much as possible.
-#if OSL_DEBUG_LEVEL > 1
-    if ( !GetUpper() || !GetUpper()->IsFtnBossFrm() )
-    { OSL_ENSURE( !this, "no FtnBoss." );
-        return 0;
-    }
-#endif
+    assert(GetUpper() && GetUpper()->IsFtnBossFrm());
 
     SWRECTFN( this )
     if( (Frm().*fnRect->fnGetHeight)() > 0 &&
          nDist > ( LONG_MAX - (Frm().*fnRect->fnGetHeight)() ) )
         nDist = LONG_MAX - (Frm().*fnRect->fnGetHeight)();
 
-    SwFtnBossFrm *pBoss = (SwFtnBossFrm*)GetUpper();
+    SwFtnBossFrm *pBoss = static_cast<SwFtnBossFrm*>(GetUpper());
     if( IsInSct() )
     {
         SwSectionFrm* pSect = FindSctFrm();
@@ -943,16 +938,7 @@ void SwRootFrm::CheckFtnPageDescs( bool bEndNote )
  */
 SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
 {
-#if OSL_DEBUG_LEVEL > 1
-    if ( FindFtnCont() )
-    {   OSL_ENSURE( !this, "footnote container exists already." );
-    // Insert a footnote container which always sits right after
-    // the body text.
-    // FrmFmt is always the DefaultFrmFmt.
-
-        return 0;
-    }
-#endif
+    SAL_WARN_IF(FindFtnCont(), "sw.core", "footnote container exists already");
 
     SwFtnContFrm *pNew = new SwFtnContFrm( GetFmt()->GetDoc()->GetDfltFrmFmt(), this );
     SwLayoutFrm *pLay = FindBodyCont();

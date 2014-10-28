@@ -428,7 +428,7 @@ sal_Int32 SwFlyCntPortion::GetFlyCrsrOfst( const sal_uInt16 nOfst,
 
 sal_Int32 SwFlyCntPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 {
-    // OSL_ENSURE( !this, "SwFlyCntPortion::GetCrsrOfst: use GetFlyCrsrOfst()" );
+    // OSL_FAIL("SwFlyCntPortion::GetCrsrOfst: use GetFlyCrsrOfst()");
     return SwLinePortion::GetCrsrOfst( nOfst );
 }
 
