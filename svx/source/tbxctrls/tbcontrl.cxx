@@ -1242,11 +1242,15 @@ IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
         while in Dispatch()), accessing members will crash in this case. */
     pColorSet->SetNoSelection();
 
+    if ( pColorSet != mpRecentColorSet )
+    {
+         mrPaletteManager.AddRecentColor( aColor );
+         if ( !IsInPopupMode() )
+            mrPaletteManager.ReloadRecentColorSet( *mpRecentColorSet );
+    }
+
     if ( IsInPopupMode() )
         EndPopupMode();
-
-    if ( pColorSet != mpRecentColorSet )
-         mrPaletteManager.AddRecentColor( aColor );
 
     if ( maSelectedLink.IsSet() )
         maSelectedLink.Call(&aColor);
