@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_a708ca29",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-10-28T13:59:49Z",
+      "side": 1,
+      "message": "no, it\u0027s \"bLeft\" regardless of the value of eTblChgMode",
+      "revId": "ebc6108038f6852902d9fc06ef08803130048eeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_870dc639",
+        "filename": "sw/source/core/doc/tblrwcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3774,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-10-28T13:59:49Z",
+      "side": 1,
+      "message": "i\u0027m getting this instead:\n\"if (bLeft  \u0026\u0026 (bInsDel || (TBLFIX_CHGABS !\u003d eTblChgMode)))\"",
+      "revId": "ebc6108038f6852902d9fc06ef08803130048eeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_6713f25d",
+        "filename": "sw/source/core/doc/tblrwcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3888,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-10-28T13:59:49Z",
+      "side": 1,
+      "message": "here\u0027s a condition that *should* probably be the same as the above given the similarities between the CELL and COL cases, but it\u0027s actually different.",
+      "revId": "ebc6108038f6852902d9fc06ef08803130048eeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
