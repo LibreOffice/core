@@ -47,5 +47,6 @@ $(eval $(call gb_AutoInstall_add_module,winexplorerextwin64,SHLXTHDL_LIB_FILE_CO
 $(eval $(call gb_AutoInstall_add_module,winexplorerextwin64nt6,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,"VersionNT64 >= 600"))
 endif
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
+$(eval $(call gb_AutoInstall_add_module,writer_brand,,LIBO_EXECUTABLE))
 
 # vim: set noet sw=4 ts=4:

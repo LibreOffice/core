@@ -23,8 +23,8 @@ FolderItem gid_Folderitem_Swriter
     Name = "%PRODUCTNAME Writer";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Exe_Swriter;
-    IconFile = gid_File_Exe_Swriter;
+    FileID = auto_writer_brand_exe_swriter;
+    IconFile = auto_writer_brand_exe_swriter;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";

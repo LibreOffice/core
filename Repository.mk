@@ -128,6 +128,13 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,math_brand, \
 	) \
 ))
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
+	$(if $(filter WNT,$(OS)), \
+		sweb \
+		swriter \
+	) \
+))
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 ))
@@ -171,8 +178,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter WNT,$(OS)), \
 		quickstart \
 		senddoc \
-		sweb \
-		swriter \
 	) \
 ))
 

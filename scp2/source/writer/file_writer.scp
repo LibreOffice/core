@@ -18,20 +18,11 @@
 
 #include "macros.inc"
 
-#ifndef MACOSX
+#if !defined MACOSX && !defined WNT
 File gid_File_Exe_Swriter
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(swriter);
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef WNT
-File gid_File_Exe_Sweb
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(sweb);
+    Name = "swriter";
     Styles = (PACKED);
 End
 #endif
