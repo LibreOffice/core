@@ -1745,7 +1745,6 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 VirtualDevice                   aVirDev;
                 boost::scoped_array<long>       pDXAry(new long[ aStr.getLength() ]);
                 sal_Int32                       nNormSize( aVirDev.GetTextArray( aStr,pDXAry.get() ) );
-                sal_uInt16                          i;
 
                 if (aSrcFont.GetAlign()!=ALIGN_BASELINE)
                 {
@@ -1755,8 +1754,14 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                         aPt.Y()-=(long)aVirDev.GetFontMetric(aSrcFont).GetDescent();
                 }
 
-                for ( i = 0; i < aStr.getLength() - 1; i++ )
-                    pDXAry[ i ] = pDXAry[ i ] * ( (long)pA->GetWidth() ) / nNormSize;
+                sal_Int32 nLength = aStr.getLength() - 1;
+                if (nLength > 0)
+                {
+                    if (nNormSize == 0)
+                        throw std::runtime_error("divide by zero");
+                    for (sal_Int32 i = 0; i < nLength; ++i)
+                        pDXAry[ i ] = pDXAry[ i ] * ( (long)pA->GetWidth() ) / nNormSize;
+                }
 
                 SetAttrForText();
                 WriteTextArray( aPt, aStr, pDXAry.get() );
