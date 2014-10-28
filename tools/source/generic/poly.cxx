@@ -1551,6 +1551,12 @@ SvStream& ReadPolygon( SvStream& rIStream, Polygon& rPoly )
 
     {
         // Determine whether we need to write through operators
+        const size_t nMaxRecordsPossible = rIStream.remainingSize() / (2 * sizeof(sal_Int32));
+        if (nPoints > nMaxRecordsPossible)
+        {
+            SAL_WARN("tools", "Polygon claims " << nPoints << " records, but only " << nMaxRecordsPossible << " possible");
+            nPoints = nMaxRecordsPossible;
+        }
 #if (SAL_TYPES_SIZEOFLONG) == 4
 #ifdef OSL_BIGENDIAN
         if ( rIStream.GetNumberFormatInt() == NUMBERFORMAT_INT_BIGENDIAN )
