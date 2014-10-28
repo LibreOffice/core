@@ -55,7 +55,7 @@ Fraction::Fraction( double dVal )
         if ( HasOverflowValue() )
             throw boost::bad_rational();
         valid = true;
-    } catch(const boost::bad_rational& unused) {
+    } catch(const boost::bad_rational&) {
         valid = false;
         SAL_WARN( "tools.fraction", "'Fraction(" << dVal << ")' invalid fraction created" );
     }
