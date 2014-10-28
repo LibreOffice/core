@@ -919,12 +919,14 @@ rtl_cache_deactivate (
         /* cleanup cpu layer */
         if ((mag = cache->m_cpu_curr) != 0)
         {
+            // coverity[missing_lock]
             cache->m_cpu_curr = 0;
             rtl_cache_magazine_clear (cache, mag);
             rtl_cache_free (mag_cache, mag);
         }
         if ((mag = cache->m_cpu_prev) != 0)
         {
+            // coverity[missing_lock]
             cache->m_cpu_prev = 0;
             rtl_cache_magazine_clear (cache, mag);
             rtl_cache_free (mag_cache, mag);

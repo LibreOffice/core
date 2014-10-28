@@ -493,6 +493,7 @@ SAL_IMPLEMENT_MAIN()
 
             nIndex = 0;
             OUString aUnoUrlToken( aUnoUrl.getToken( 1, ';', nIndex ) );
+            // coverity[infinite_loop]
             for (;;)
             {
                 // accepting

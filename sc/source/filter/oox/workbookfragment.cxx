@@ -328,6 +328,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
             nSheetsLeft++;
         }
 
+        // coverity[infinite_loop]
         while( nSheetsLeft > 0)
         {
             // This is a much more controlled re-enterancy hazard than
