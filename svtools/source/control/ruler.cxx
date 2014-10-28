@@ -2376,7 +2376,7 @@ RulerType Ruler::GetType( const Point& rPos, sal_uInt16* pAryPos )
         mnUpdateFlags &= ~RULER_UPDATE_DRAW;
     }
 
-    ImplHitTest( rPos, &aHitTest );
+    (void)ImplHitTest(rPos, &aHitTest);
 
     // return values
     if ( pAryPos )
