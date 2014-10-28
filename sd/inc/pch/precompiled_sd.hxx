@@ -694,7 +694,6 @@
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
-#include <svx/sdr/properties/attributeproperties.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
