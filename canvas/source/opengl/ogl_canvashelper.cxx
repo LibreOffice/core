@@ -98,15 +98,16 @@ namespace oglcanvas
                             GLenum                           eSrcBlend,
                             GLenum                           eDstBlend,
                             const rendering::ARGBColor&      rColor,
-                            const geometry::RealPoint2D&     rPoint )
+                            const geometry::RealPoint2D&     rPoint,
+                            RenderHelper& mRenderHelper)
         {
-            TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rColor);
-
-            glBegin(GL_POINTS);
-            glVertex2d(rPoint.X, rPoint.Y);
-            glEnd();
-
+            mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            glm::vec4 color  = glm::vec4( (float) rColor.Red,
+                                (float) rColor.Green,
+                                (float) rColor.Blue,
+                                (float) rColor.Alpha);
+            GLfloat vertices[] = {(float) rPoint.X, (float) rPoint.Y};
+            mRenderHelper.renderVertexConstColor(vertices, color, GL_POINTS);
             return true;
         }
 
@@ -116,16 +117,17 @@ namespace oglcanvas
                            GLenum                           eDstBlend,
                            const rendering::ARGBColor&      rColor,
                            const geometry::RealPoint2D&     rStartPoint,
-                           const geometry::RealPoint2D&     rEndPoint )
+                           const geometry::RealPoint2D&     rEndPoint,
+                           RenderHelper& mRenderHelper)
         {
-            TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rColor);
-
-            glBegin(GL_LINES);
-            glVertex2d(rStartPoint.X, rStartPoint.Y);
-            glVertex2d(rEndPoint.X, rEndPoint.Y);
-            glEnd();
-
+            mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            glm::vec4 color  = glm::vec4( (float) rColor.Red,
+                                (float) rColor.Green,
+                                (float) rColor.Blue,
+                                (float) rColor.Alpha);
+            GLfloat vertices[] = {(float) rStartPoint.X, (float) rStartPoint.Y,
+                                  (float) rEndPoint.X, (float) rEndPoint.Y };
+            mRenderHelper.renderVertexConstColor(vertices, color, GL_LINES);
             return true;
         }
 
@@ -136,9 +138,12 @@ namespace oglcanvas
                                   const rendering::ARGBColor&            rColor,
                                   const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
         {
-            TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rColor);
-
+            //move renderPolyPolygon here?
+         //   mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            glm::vec4 color  = glm::vec4( (float) rColor.Red,
+                                (float) rColor.Green,
+                                (float) rColor.Blue,
+                                (float) rColor.Alpha);
             ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
             while( aCurr != aEnd )
@@ -154,8 +159,9 @@ namespace oglcanvas
                                   const rendering::ARGBColor&            rColor,
                                   const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
         {
+            //no texture bind ?
             TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rColor);
+            setupState(rTransform, eSrcBlend, eDstBlend);
 
             ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
@@ -177,8 +183,10 @@ namespace oglcanvas
                                           const rendering::Texture&                      rTexture,
                                           const ::basegfx::B2DPolyPolygonVector&         rPolyPolygons )
         {
+          //not complete
             TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
+          //  setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
+            setupState(rTransform, eSrcBlend, eDstBlend);
 
             // convert to weird canvas textur coordinate system (not
             // [0,1]^2, but path coordinate system)
@@ -251,7 +259,7 @@ namespace oglcanvas
                                 const CanvasBitmap&              rBitmap )
         {
             TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rColor);
+            setupState(rTransform, eSrcBlend, eDstBlend);
 
             return rBitmap.renderRecordedActions();
         }
@@ -263,14 +271,15 @@ namespace oglcanvas
                                     const rendering::ARGBColor&      rColor,
                                     const geometry::IntegerSize2D&   rPixelSize,
                                     const uno::Sequence<sal_Int8>&   rPixelData,
-                                    sal_uInt32                       nPixelCrc32 )
+                                    sal_uInt32                       nPixelCrc32,
+                                    RenderHelper&                    mRenderHelper)
+
         {
-            TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rColor);
+            mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
 
             const unsigned int nTexId=rHelper.getDeviceHelper()->getTextureCache().getTexture(
                 rPixelSize, rPixelData.getConstArray(), nPixelCrc32);
-
+            glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, nTexId);
             glEnable(GL_TEXTURE_2D);
             glTexParameteri(GL_TEXTURE_2D,
@@ -284,17 +293,19 @@ namespace oglcanvas
                         GL_ONE_MINUS_SRC_ALPHA);
 
             // blend against fixed vertex color; texture alpha is multiplied in
-            glColor4f(1,1,1,1);
+            glm::vec4 color  = glm::vec4(1, 1, 1, 1);
 
-            glBegin(GL_TRIANGLE_STRIP);
-            glTexCoord2f(0,0); glVertex2d(0,0);
-            glTexCoord2f(0,1); glVertex2d(0, rPixelSize.Height);
-            glTexCoord2f(1,0); glVertex2d(rPixelSize.Width,0);
-            glTexCoord2f(1,1); glVertex2d(rPixelSize.Width,rPixelSize.Height);
-            glEnd();
+            GLfloat vertices[] = {0, 0,
+                                  0, (float) rPixelSize.Height,
+                                  (float) rPixelSize.Width, 0,
+                                  (float) rPixelSize.Width, (float) rPixelSize.Height };
+            GLfloat uvCoordinates[] = {0, 0,
+                                       0, 1,
+                                       1, 0,
+                                       1, 1 };
+            mRenderHelper.renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
 
             glBindTexture(GL_TEXTURE_2D, 0);
-            glDisable(GL_TEXTURE_2D);
 
             return true;
         }
@@ -310,7 +321,8 @@ namespace oglcanvas
                                           const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
         {
             TransformationPreserver aPreserver;
-            setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
+         //   setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
+            setupState(rTransform, eSrcBlend, eDstBlend);
 
             const unsigned int nTexId=rHelper.getDeviceHelper()->getTextureCache().getTexture(
                 rPixelSize, rPixelData.getConstArray(), nPixelCrc32);
@@ -376,7 +388,9 @@ namespace oglcanvas
         mpDevice( NULL ),
         mpDeviceHelper( NULL ),
         mpRecordedActions()
-    {}
+    {
+       mRenderHelper.SetVP(1600, 900);//is this right?
+    }
 
     CanvasHelper::~CanvasHelper()
     {}
@@ -422,7 +436,7 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maFunction = ::boost::bind(&lcl_drawPoint,
                                             _1,_2,_3,_4,_5,
-                                            aPoint);
+                                            aPoint, boost::ref(mRenderHelper));
         }
     }
 
@@ -436,11 +450,11 @@ namespace oglcanvas
         {
             mpRecordedActions->push_back( Action() );
             Action& rAct=mpRecordedActions->back();
-
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maFunction = ::boost::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
-                                            aStartPoint,aEndPoint);
+                                            aStartPoint,aEndPoint,
+                                            boost::ref(mRenderHelper));
         }
     }
 
@@ -463,7 +477,7 @@ namespace oglcanvas
                                             geometry::RealPoint2D(
                                                 aBezierSegment.Px,
                                                 aBezierSegment.Py),
-                                            aEndPoint);
+                                            aEndPoint, boost::ref(mRenderHelper));
         }
     }
 
@@ -867,7 +881,8 @@ namespace oglcanvas
                                                     aSize, aARGBBytes,
                                                     rtl_crc32(0,
                                                               aARGBBytes.getConstArray(),
-                                                              aARGBBytes.getLength()));
+                                                              aARGBBytes.getLength()),
+                                                    boost::ref(mRenderHelper));
                 }
                 // TODO(F1): handle non-integer case
             }

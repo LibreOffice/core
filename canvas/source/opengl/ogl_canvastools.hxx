@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 #include <vector>
+#include <glm/glm.hpp>
 
 namespace com { namespace sun { namespace star { namespace rendering {
     struct ARGBColor;
@@ -23,14 +24,14 @@ namespace basegfx {
 
 namespace oglcanvas
 {
-    void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
-    void renderPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
-    void setupState( const ::basegfx::B2DHomMatrix&                rTransform,
-                     unsigned int                                  eSrcBlend,
-                     unsigned int                                  eDstBlend,
-                     const ::com::sun::star::rendering::ARGBColor& rColor );
+        void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
+        void renderPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
+        glm::mat4 setupState( const ::basegfx::B2DHomMatrix&                rTransform,
+                         unsigned int                                  eSrcBlend,
+                         unsigned int                                  eDstBlend );
 
-    void renderOSD( const std::vector<double>& rNumbers, double scale );
+        void renderOSD( const std::vector<double>& rNumbers, double scale );
+
 }
 
 #endif

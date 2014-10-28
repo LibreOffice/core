@@ -21,6 +21,7 @@
 #include <com/sun/star/rendering/ARGBColor.hpp>
 
 #include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -75,34 +76,21 @@ namespace oglcanvas
         }
     }
 
-    void setupState( const ::basegfx::B2DHomMatrix&   rTransform,
+    glm::mat4 setupState( const ::basegfx::B2DHomMatrix&   rTransform,
                      GLenum                           eSrcBlend,
-                     GLenum                           eDstBlend,
-                     const rendering::ARGBColor&      rColor )
+                     GLenum                           eDstBlend)
     {
-        double aGLTransform[] =
+        float aGLTransform[] =
             {
-                rTransform.get(0,0), rTransform.get(1,0), 0, 0,
-                rTransform.get(0,1), rTransform.get(1,1), 0, 0,
+                (float) rTransform.get(0,0), (float) rTransform.get(1,0), 0, 0,
+                (float) rTransform.get(0,1), (float) rTransform.get(1,1), 0, 0,
                 0,                   0,                   1, 0,
-                rTransform.get(0,2), rTransform.get(1,2), 0, 1
+                (float) rTransform.get(0,2), (float) rTransform.get(1,2), 0, 1
             };
-        glMultMatrixd(aGLTransform);
 
         glEnable(GL_BLEND);
         glBlendFunc(eSrcBlend, eDstBlend);
-
-        glColor4d(rColor.Red,
-                  rColor.Green,
-                  rColor.Blue,
-                  rColor.Alpha);
-
-        // GL 1.2:
-        // glBlendEquation( GLenum mode );
-        // glBlendColor( GLclampf red, GLclampf green,GLclampf blue, GLclampf alpha );
-        // glConvolutionFilter1D
-        // glConvolutionFilter2D
-        // glSeparableFilter2D
+        return glm::make_mat4(aGLTransform);
     }
 
     void renderOSD( const std::vector<double>& rNumbers, double scale )
