@@ -127,6 +127,17 @@
                    length(len), next(subNode) {}
          virtual UBool operator==(const Node &other) const;
          virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+--- source/common/uresbund.cpp
++++ source/common/uresbund.cpp
+@@ -53,7 +53,7 @@
+     UHashTok namekey, pathkey;
+     namekey.pointer = b->fName;
+     pathkey.pointer = b->fPath;
+-    return uhash_hashChars(namekey)+37*uhash_hashChars(pathkey);
++    return uhash_hashChars(namekey)+37U*uhash_hashChars(pathkey);
+ }
+ 
+ /* INTERNAL: compares two entries */
 --- source/common/ustring.cpp
 +++ source/common/ustring.cpp
 @@ -1486,7 +1486,7 @@
