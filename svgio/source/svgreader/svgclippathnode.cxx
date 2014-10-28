@@ -140,7 +140,7 @@ namespace svgio
 
                 if(aClipTarget.hasElements())
                 {
-                    // extract filled plygons as base for a mask PolyPolygon
+                    // extract filled polygons as base for a mask PolyPolygon
                     drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, true);
 
                     aExtractor.process(aClipTarget);
