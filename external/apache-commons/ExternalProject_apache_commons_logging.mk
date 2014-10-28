@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,apache_commons_logging,build) :
 			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
 				-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		) \
-		$(if $(debug),-Dbuild.debug="on") \
+		$(if $(debug),-Dcompile.debug="true",-Dcompile.debug="false") \
 		compile build-jar \
 	)
 
