@@ -20,6 +20,7 @@
 #include <TblStylePrHandler.hxx>
 #include <PropertyMap.hxx>
 #include <ooxml/resourceids.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "dmapperLoggers.hxx"
 
@@ -134,7 +135,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_TrPrBase:
         case NS_ooxml::LN_CT_TcPrBase:
         {
-            comphelper::SequenceAsVector<beans::PropertyValue> aSavedGrabBag;
+            std::vector<beans::PropertyValue> aSavedGrabBag;
             bool bGrabBag = rSprm.getId() == NS_ooxml::LN_CT_PPrBase ||
                 rSprm.getId() == NS_ooxml::LN_EG_RPrBase ||
                 rSprm.getId() == NS_ooxml::LN_CT_TblPrBase ||
@@ -204,7 +205,7 @@ beans::PropertyValue TblStylePrHandler::getInteropGrabBag(const OUString& aName)
     beans::PropertyValue aRet;
     aRet.Name = aName;
 
-    aRet.Value = uno::makeAny(m_aInteropGrabBag.getAsConstList());
+    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
     return aRet;
 }
 

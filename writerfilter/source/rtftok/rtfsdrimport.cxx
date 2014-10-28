@@ -25,6 +25,7 @@
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <oox/vml/vmlformatting.hxx>
@@ -298,7 +299,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     uno::Any aAny;
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;
-    comphelper::SequenceAsVector<beans::PropertyValue> aPath;
+    std::vector<beans::PropertyValue> aPath;
     // Default line color is black in Word, blue in Writer.
     uno::Any aLineColor = uno::makeAny(COL_BLACK);
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
@@ -380,7 +381,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             aLineWidth <<= i->second.toInt32()/360;
         else if (i->first == "pVerticies")
         {
-            comphelper::SequenceAsVector<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+            std::vector<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
             sal_Int32 nSize = 0; // Size of a token (its value is hardwired in the exporter)
             sal_Int32 nCount = 0; // Number of tokens
             sal_Int32 nCharIndex = 0; // Character index
@@ -415,12 +416,12 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             }
             while (nCharIndex >= 0);
             aPropertyValue.Name = "Coordinates";
-            aPropertyValue.Value <<= aCoordinates.getAsConstList();
+            aPropertyValue.Value <<= comphelper::containerToSequence(aCoordinates);
             aPath.push_back(aPropertyValue);
         }
         else if (i->first == "pSegmentInfo")
         {
-            comphelper::SequenceAsVector<drawing::EnhancedCustomShapeSegment> aSegments;
+            std::vector<drawing::EnhancedCustomShapeSegment> aSegments;
             sal_Int32 nSize = 0;
             sal_Int32 nCount = 0;
             sal_Int32 nCharIndex = 0;
@@ -483,7 +484,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             }
             while (nCharIndex >= 0);
             aPropertyValue.Name = "Segments";
-            aPropertyValue.Value <<= aSegments.getAsConstList();
+            aPropertyValue.Value <<= comphelper::containerToSequence(aSegments);
             aPath.push_back(aPropertyValue);
         }
         else if (i->first == "geoLeft")
@@ -799,7 +800,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     }
 
     // Creating CustomShapeGeometry property
-    comphelper::SequenceAsVector<beans::PropertyValue> aGeometry;
+    std::vector<beans::PropertyValue> aGeometry;
     if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
     {
         aViewBox.Width -= aViewBox.X;
@@ -811,11 +812,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     if (!aPath.empty())
     {
         aPropertyValue.Name = "Path";
-        aPropertyValue.Value <<= aPath.getAsConstList();
+        aPropertyValue.Value <<= comphelper::containerToSequence(aPath);
         aGeometry.push_back(aPropertyValue);
     }
     if (!aGeometry.empty() && xPropertySet.is() && !m_bTextFrame)
-        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(aGeometry.getAsConstList()));
+        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(comphelper::containerToSequence(aGeometry)));
 
     // Set position and size
     if (xShape.is())

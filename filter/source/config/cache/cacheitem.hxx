@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <vector>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/mutex.hxx>
 
@@ -49,7 +49,7 @@ struct BaseLock
 };
 
 
-typedef ::comphelper::SequenceAsVector< OUString > OUStringList;
+typedef ::std::vector< OUString > OUStringList;
 
 
 

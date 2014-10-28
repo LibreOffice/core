@@ -42,7 +42,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <dmapperLoggers.hxx>
 
@@ -966,14 +966,14 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
                         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
                         uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
-                        comphelper::SequenceAsVector<OUString> aPropertyNames;
+                        std::vector<OUString> aPropertyNames;
                         for (sal_Int32 i = 0; i < aProperties.getLength(); ++i)
                         {
                             aPropertyNames.push_back(aProperties[i].Name);
                         }
 
                         uno::Reference<beans::XPropertyState> xPropertyState(xStyle, uno::UNO_QUERY);
-                        uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(aPropertyNames.getAsConstList());
+                        uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(comphelper::containerToSequence(aPropertyNames));
                         for (sal_Int32 i = 0; i < aStates.getLength(); ++i)
                         {
                             if (aStates[i] == beans::PropertyState_DIRECT_VALUE)

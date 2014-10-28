@@ -24,7 +24,6 @@
 #include <memory>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <comphelper/sequenceasvector.hxx>
 
 namespace writerfilter {
 namespace dmapper
@@ -58,7 +57,7 @@ private:
     bool                                        m_aFilledLines[BORDER_COUNT];
     ::com::sun::star::table::BorderLine2        m_aBorderLines[BORDER_COUNT];
     OUString m_aInteropGrabBagName;
-    comphelper::SequenceAsVector<css::beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
     void appendGrabBag(const OUString& aKey, const OUString& aValue);
 
     // Properties

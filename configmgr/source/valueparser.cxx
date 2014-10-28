@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -150,7 +150,7 @@ bool parseValue(
     if ((text.length & 1) != 0) {
         return false;
     }
-    comphelper::SequenceAsVector< sal_Int8 > seq;
+    std::vector< sal_Int8 > seq;
     for (sal_Int32 i = 0; i != text.length;) {
         int n1;
         int n2;
@@ -161,7 +161,7 @@ bool parseValue(
         }
         seq.push_back(static_cast< sal_Int8 >((n1 << 4) | n2));
     }
-    *value = seq.getAsConstList();
+    *value = comphelper::containerToSequence(seq);
     return true;
 }
 
@@ -178,7 +178,7 @@ template< typename T > css::uno::Any parseSingleValue(
 template< typename T > css::uno::Any parseListValue(
     OString const & separator, xmlreader::Span const & text)
 {
-    comphelper::SequenceAsVector< T > seq;
+    std::vector< T > seq;
     xmlreader::Span sep;
     if (separator.isEmpty()) {
         sep = xmlreader::Span(RTL_CONSTASCII_STRINGPARAM(" "));
@@ -203,7 +203,7 @@ template< typename T > css::uno::Any parseListValue(
             t.length -= i + sep.length;
         }
     }
-    return css::uno::makeAny(seq.getAsConstList());
+    return css::uno::makeAny(comphelper::containerToSequence(seq));
 }
 
 css::uno::Any parseValue(

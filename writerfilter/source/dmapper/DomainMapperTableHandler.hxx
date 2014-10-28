@@ -21,7 +21,7 @@
 
 #include <TableManager.hxx>
 #include <PropertyMap.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <vector>
 
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 
@@ -83,7 +83,7 @@ class DomainMapperTableHandler : public TableDataHandler
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
 
-    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, comphelper::SequenceAsVector<css::beans::PropertyValue>& rFrameProperties);
+    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, std::vector<css::beans::PropertyValue>& rFrameProperties);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges);
     RowPropertyValuesSeq_t endTableGetRowProperties();
 

@@ -486,7 +486,6 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>

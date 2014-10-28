@@ -44,6 +44,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <officecfg/Setup.hxx>
 #include <unotools/configpaths.hxx>
 #include <svtools/acceleratorexecute.hxx>
@@ -91,7 +92,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
     SolarMutexGuard g;
     AcceleratorCache&          rCache = impl_getCFG();
     AcceleratorCache::TKeyList lKeys  = rCache.getAllKeys();
-    return lKeys.getAsConstList();
+    return comphelper::containerToSequence(lKeys);
 }
 
 OUString SAL_CALL XMLBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
@@ -166,7 +167,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
                 static_cast< ::cppu::OWeakObject* >(this));
 
     AcceleratorCache::TKeyList lKeys  = rCache.getKeysByCommand(sCommand);
-    return lKeys.getAsConstList();
+    return comphelper::containerToSequence(lKeys);
 }
 
 css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
@@ -543,7 +544,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     for ( pIt  = lSecondaryKeys.begin(); pIt != pEnd; ++pIt )
         lKeys.push_back(*pIt);
 
-    return lKeys.getAsConstList();
+    return comphelper::containerToSequence(lKeys);
 }
 
 OUString SAL_CALL XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
@@ -716,7 +717,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     for (pIt = lSecondaryKeys.begin(); pIt != lSecondaryKeys.end(); ++pIt)
         lKeys.push_back(*pIt);
 
-    return lKeys.getAsConstList();
+    return comphelper::containerToSequence(lKeys);
 }
 
 AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const AcceleratorCache::TKeyList& lKeys)

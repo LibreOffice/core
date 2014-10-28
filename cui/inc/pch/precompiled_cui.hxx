@@ -269,7 +269,6 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>

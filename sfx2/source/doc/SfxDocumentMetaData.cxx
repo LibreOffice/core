@@ -66,7 +66,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sax/tools/converter.hxx>
@@ -895,7 +895,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
 std::pair<css::uno::Sequence< OUString>, AttrVector> SAL_CALL
 propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 {
-    ::comphelper::SequenceAsVector< OUString > values;
+    ::std::vector< OUString > values;
     AttrVector attrs;
 
     css::uno::Reference<css::beans::XPropertySetInfo> xSetInfo
@@ -1000,7 +1000,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         attrs.push_back(as);
     }
 
-    return std::make_pair(values.getAsConstList(), attrs);
+    return std::make_pair(comphelper::containerToSequence(values), attrs);
 }
 
 // remove the given element from the DOM, and iff i_pAttrs != 0 insert new one
@@ -1721,7 +1721,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException, 
 {
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
-    ::comphelper::SequenceAsVector<css::beans::NamedValue> stats;
+    ::std::vector<css::beans::NamedValue> stats;
     for (size_t i = 0; s_stdStats[i] != 0; ++i) {
         const char * aName = s_stdStatAttrs[i];
         OUString text = getMetaAttr("meta:document-statistic", aName);
@@ -1740,7 +1740,7 @@ SfxDocumentMetaData::getDocumentStatistics() throw (css::uno::RuntimeException, 
         stats.push_back(stat);
     }
 
-    return stats.getAsConstList();
+    return ::comphelper::containerToSequence(stats);
 }
 
 void SAL_CALL

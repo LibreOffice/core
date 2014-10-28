@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/TypeDetection/UISort.hxx>
@@ -142,13 +143,10 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aFilter >> lConfig;
 
-        ::comphelper::SequenceAsVector< css::uno::Any > stlArguments(lArguments);
+        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer<::std::vector< css::uno::Any > >(lArguments));
         stlArguments.insert(stlArguments.begin(), css::uno::makeAny(lConfig));
 
-        css::uno::Sequence< css::uno::Any > lInitData;
-        stlArguments >> lInitData;
-
-        xInit->initialize(lInitData);
+        xInit->initialize(comphelper::containerToSequence(stlArguments));
     }
 
     return xFilter;
@@ -180,7 +178,7 @@ css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames(
     catch(const css::uno::Exception&)
         { lUNOFilters.clear(); }
 
-    return lUNOFilters.getAsConstList();
+    return comphelper::containerToSequence(lUNOFilters);
 }
 
 
@@ -234,7 +232,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // pack list of item names as an enum list
     // Attention: Do not return empty reference for empty list!
     // The outside check "hasMoreElements()" should be enough, to detect this state :-)
-    css::uno::Sequence< OUString > lSet = lEnumSet.getAsConstList();
+    css::uno::Sequence< OUString > lSet = comphelper::containerToSequence(lEnumSet);
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
@@ -477,7 +475,7 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
     // <- SAFE ----------------------
 
     css::uno::Reference< css::container::XNameAccess > xModuleConfig = officecfg::Setup::Office::Factories::get(xContext);
-    OUStringList lModules(xModuleConfig->getElementNames());
+    OUStringList lModules(comphelper::sequenceToContainer<OUStringList>(xModuleConfig->getElementNames()));
     return lModules;
 }
 
@@ -558,7 +556,8 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& 
             // Note: conversion of the returned Any to OUStringList throws
             // an IllegalArgumentException if the type does not match ...
             // but it resets the OUStringList to a length of 0 if the Any is empty!
-            OUStringList lSortedFilters(xModule->getByName(PROPNAME_SORTEDFILTERLIST));
+            OUStringList lSortedFilters(
+                    comphelper::sequenceToContainer<OUStringList>(xModule->getByName(PROPNAME_SORTEDFILTERLIST).get<css::uno::Sequence<OUString> >()));
             return lSortedFilters;
         }
     }

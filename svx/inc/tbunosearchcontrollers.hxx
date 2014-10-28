@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <comphelper/sequenceasvector.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -79,7 +78,7 @@ public:
 
 private:
 
-    typedef ::comphelper::SequenceAsVector< css::beans::PropertyValue > SearchToolbarControllersVec;
+    typedef ::std::vector< css::beans::PropertyValue > SearchToolbarControllersVec;
     typedef ::std::map< css::uno::Reference< css::frame::XFrame >, SearchToolbarControllersVec > SearchToolbarControllersMap;
     SearchToolbarControllersMap aSearchToolbarControllersMap;
     std::vector<OUString> m_aSearchStrings;

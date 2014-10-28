@@ -82,7 +82,7 @@
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -1668,7 +1668,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
     if(!IsValid())
         throw uno::RuntimeException();
 
-    ::comphelper::SequenceAsVector< OUString > ret;
+    ::std::vector< OUString > ret;
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
     for (IDocumentMarkAccess::const_iterator_t ppMark =
             pMarkAccess->getBookmarksBegin();
@@ -1680,7 +1680,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
             ret.push_back((*ppMark)->GetName()); // only add real bookmarks
         }
     }
-    return ret.getAsConstList();
+    return comphelper::containerToSequence(ret);
 }
 
 sal_Bool SwXBookmarks::hasByName(const OUString& rName)

@@ -25,7 +25,7 @@
 #include <DomainMapper.hxx>
 #include "LoggedResources.hxx"
 #include <memory>
-#include <comphelper/sequenceasvector.hxx>
+#include <vector>
 
 namespace writerfilter {
 namespace dmapper {
@@ -58,7 +58,7 @@ private:
 
     TblStyleType                m_nType;
     PropertyMapPtr              m_pProperties;
-    comphelper::SequenceAsVector<css::beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;

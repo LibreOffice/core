@@ -24,6 +24,7 @@
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
 #include <filter/msfilter/util.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace writerfilter {
 
@@ -135,7 +136,7 @@ void BorderHandler::lcl_sprm(Sprm & rSprm)
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         {
-            comphelper::SequenceAsVector<beans::PropertyValue> aSavedGrabBag;
+            std::vector<beans::PropertyValue> aSavedGrabBag;
             if (!m_aInteropGrabBagName.isEmpty())
             {
                 aSavedGrabBag = m_aInteropGrabBag;
@@ -202,7 +203,7 @@ beans::PropertyValue BorderHandler::getInteropGrabBag(const OUString& aName)
     else
         aRet.Name = aName;
 
-    aRet.Value = uno::makeAny(m_aInteropGrabBag.getAsConstList());
+    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
     return aRet;
 }
 

@@ -463,7 +463,6 @@
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>

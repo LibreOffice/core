@@ -34,7 +34,6 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <sfx2/sfxuno.hxx>
 
 #include <cppuhelper/interfacecontainer.hxx>

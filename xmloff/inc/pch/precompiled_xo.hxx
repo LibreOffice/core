@@ -492,7 +492,6 @@
 #include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>

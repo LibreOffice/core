@@ -49,6 +49,7 @@
 #include <rtl/math.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -508,9 +509,13 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
 
     if (xSetInfo->hasPropertyByName(aGrabBagPropName))
     {
-        comphelper::SequenceAsVector<beans::PropertyValue> aGrabBag(xSet->getPropertyValue(aGrabBagPropName));
+        //Add pProperty to the end of the Sequence for aGrabBagPropName
+        uno::Sequence<beans::PropertyValue> aTmp;
+        xSet->getPropertyValue(aGrabBagPropName) >>= aTmp;
+        std::vector<beans::PropertyValue> aGrabBag(comphelper::sequenceToContainer<std::vector<beans::PropertyValue> >(aTmp));
         aGrabBag.push_back(pProperty);
-        xSet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag.getAsConstList()));
+
+        xSet->setPropertyValue(aGrabBagPropName, uno::makeAny(comphelper::containerToSequence(aGrabBag)));
     }
 }
 

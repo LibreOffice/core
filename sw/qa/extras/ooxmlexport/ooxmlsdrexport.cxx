@@ -25,7 +25,6 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1503,7 +1502,8 @@ DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
     comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry["Path"]);
-    comphelper::SequenceAsVector<awt::Size> aSubViewSize(aPath["SubViewSize"]);
+    uno::Sequence<awt::Size>      aSubViewSize((aPath["SubViewSize"]).get<uno::Sequence<awt::Size> >() );
+
     // This was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aSubViewSize[0].Height);
 }

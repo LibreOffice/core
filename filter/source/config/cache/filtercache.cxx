@@ -40,7 +40,7 @@
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <unotools/configpaths.hxx>
@@ -940,7 +940,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
             css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() ) );
 
-        ::comphelper::SequenceAsVector< css::uno::Any > lParams;
+        ::std::vector< css::uno::Any > lParams;
         css::beans::NamedValue aParam;
 
         // set root path
@@ -958,9 +958,11 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
 
         // open it
         if (bReadOnly)
-            xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONACCESS, lParams.getAsConstList());
+            xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONACCESS,
+                    comphelper::containerToSequence(lParams));
         else
-            xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS, lParams.getAsConstList());
+            xCfg = xConfigProvider->createInstanceWithArguments(SERVICE_CONFIGURATIONUPDATEACCESS,
+                    comphelper::containerToSequence(lParams));
 
         // If configuration could not be opened ... but factory method does not throwed an exception
         // trigger throwing of our own CorruptedFilterConfigurationException.
@@ -1228,7 +1230,7 @@ void FilterCache::impl_validateAndOptimize()
 
         CacheItem&     rLoader   = pIt->second;
         css::uno::Any& rTypesReg = rLoader[PROPNAME_TYPES];
-        OUStringList   lTypesReg (rTypesReg);
+        OUStringList   lTypesReg (comphelper::sequenceToContainer<OUStringList>(rTypesReg.get<css::uno::Sequence<OUString> >()));
 
         for (OUStringList::const_iterator pTypesReg  = lTypesReg.begin();
                                           pTypesReg != lTypesReg.end()  ;
@@ -1242,7 +1244,7 @@ void FilterCache::impl_validateAndOptimize()
 
     CacheItem& rDefaultLoader = m_lFrameLoaders[sDefaultFrameLoader];
     rDefaultLoader[PROPNAME_NAME ] <<= sDefaultFrameLoader;
-    rDefaultLoader[PROPNAME_TYPES] <<= lTypes.getAsConstList();
+    rDefaultLoader[PROPNAME_TYPES] <<= comphelper::containerToSequence(lTypes);
 
     OUString sLogOut = sLog.makeStringAndClear();
     OSL_ENSURE(!nErrors, OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
@@ -1543,8 +1545,9 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     if (!(aVal >>= xUIName) && !xUIName.is())
         return;
 
-    const ::comphelper::SequenceAsVector< OUString >                 lLocales(xUIName->getElementNames());
-          ::comphelper::SequenceAsVector< OUString >::const_iterator pLocale ;
+    const ::std::vector< OUString >                 lLocales(comphelper::sequenceToContainer<::std::vector< OUString >>(
+                                                                xUIName->getElementNames()));
+          ::std::vector< OUString >::const_iterator pLocale ;
           ::comphelper::SequenceAsHashMap                                   lUINames;
 
     for (  pLocale  = lLocales.begin();
@@ -1935,7 +1938,7 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(sal_
     if ((nFlags & FLAGVAL_USESOPTIONS      ) == FLAGVAL_USESOPTIONS      ) lFlagNames.push_back(FLAGNAME_USESOPTIONS      );
     if ((nFlags & FLAGVAL_COMBINED         ) == FLAGVAL_COMBINED         ) lFlagNames.push_back(FLAGNAME_COMBINED         );
 
-    return lFlagNames.getAsConstList();
+    return comphelper::containerToSequence(lFlagNames);
 }
 
 /*-----------------------------------------------
@@ -2097,10 +2100,10 @@ void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
         case 2:     rItem[PROPNAME_CLIPBOARDFORMAT] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
                     break;
         // URLPattern
-        case 3:     rItem[PROPNAME_URLPATTERN] <<= impl_tokenizeString(sValue, (sal_Unicode)';').getAsConstList();
+        case 3:     rItem[PROPNAME_URLPATTERN] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, (sal_Unicode)';'));
                     break;
         // Extensions
-        case 4:     rItem[PROPNAME_EXTENSIONS] <<= impl_tokenizeString(sValue, (sal_Unicode)';').getAsConstList();
+        case 4:     rItem[PROPNAME_EXTENSIONS] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, (sal_Unicode)';'));
                     break;
     }
 }
@@ -2136,7 +2139,7 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
         case 4:     rItem[PROPNAME_FLAGS] <<= sValue.toInt32();
                     break;
         // UserData
-        case 5:     rItem[PROPNAME_USERDATA] <<= impl_tokenizeString(sValue, (sal_Unicode)';').getAsConstList();
+        case 5:     rItem[PROPNAME_USERDATA] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, (sal_Unicode)';'));
                     break;
         // FileFormatVersion
         case 6:     rItem[PROPNAME_FILEFORMATVERSION] <<= sValue.toInt32();
@@ -2282,7 +2285,8 @@ OUString FilterCache::impl_searchFrameLoaderForType(const OUString& sType) const
     {
         const OUString& sItem = pIt->first;
         ::comphelper::SequenceAsHashMap lProps(pIt->second);
-        OUStringList                    lTypes(lProps[PROPNAME_TYPES]);
+        OUStringList                    lTypes(
+                comphelper::sequenceToContainer<OUStringList>(lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >()));
 
         if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
@@ -2302,7 +2306,8 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
     {
         const OUString& sItem = pIt->first;
         ::comphelper::SequenceAsHashMap lProps(pIt->second);
-        OUStringList                    lTypes(lProps[PROPNAME_TYPES]);
+        OUStringList                    lTypes(
+                comphelper::sequenceToContainer<OUStringList>( lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >() ));
         if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
     }

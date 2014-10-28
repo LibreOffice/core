@@ -12,6 +12,7 @@
 
 #include <stack>
 #include <queue>
+#include <vector>
 #include <boost/optional.hpp>
 #include <boost/tuple/tuple.hpp>
 
@@ -21,7 +22,6 @@
 #include <oox/helper/graphichelper.hxx>
 #include <oox/mathml/importutils.hxx>
 #include <rtl/strbuf.hxx>
-#include <comphelper/sequenceasvector.hxx>
 
 #include <rtftok/RTFDocument.hxx>
 #include <rtfreferencetable.hxx>
@@ -159,7 +159,7 @@ public:
     sal_Int32 nDhgt;
     sal_Int32 nFLine;
     sal_Int32 nPolyLineCount;
-    comphelper::SequenceAsVector<css::awt::Point> aPolyLinePoints;
+    std::vector<css::awt::Point> aPolyLinePoints;
     bool bHadShapeText;
 };
 

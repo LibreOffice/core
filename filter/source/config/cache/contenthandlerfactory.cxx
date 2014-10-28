@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 
 
 namespace filter{
@@ -124,13 +125,10 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aHandler >> lConfig;
 
-        ::comphelper::SequenceAsVector< css::uno::Any > stlArguments(lArguments);
+        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer<::std::vector< css::uno::Any > >(lArguments));
         stlArguments.insert(stlArguments.begin(), css::uno::makeAny(lConfig));
 
-        css::uno::Sequence< css::uno::Any > lInitData;
-        stlArguments >> lInitData;
-
-        xInit->initialize(lInitData);
+        xInit->initialize(comphelper::containerToSequence(stlArguments));
     }
 
     return xHandler;

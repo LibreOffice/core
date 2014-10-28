@@ -26,7 +26,7 @@
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #ifdef __MINGW32__
@@ -85,7 +85,7 @@ namespace vista{
 static const ::sal_Int16 INVALID_CONTROL_ID     = -1;
 static const ::sal_Int16 INVALID_CONTROL_ACTION = -1;
 
-typedef ::comphelper::SequenceAsVector< OUString > TStringList;
+typedef ::std::vector< OUString > TStringList;
 
 // Guids used for IFileDialog::SetClientGuid
 static const GUID CLIENTID_FILEDIALOG_SIMPLE        = {0xB8628FD3, 0xA3F5, 0x4845, 0x9B, 0x62, 0xD5, 0x1E, 0xDF, 0x97, 0xC4, 0x83};
@@ -864,7 +864,7 @@ void VistaFilePickerImpl::impl_sta_getSelectedFiles(const RequestRef& rRequest)
         }
     }
 
-    rRequest->setArgument(PROP_SELECTED_FILES, lFiles.getAsConstList());
+    rRequest->setArgument(PROP_SELECTED_FILES, comphelper::containerToSequence(lFiles));
 }
 
 

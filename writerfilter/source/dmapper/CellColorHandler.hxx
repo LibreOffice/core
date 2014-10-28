@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <comphelper/sequenceasvector.hxx>
 
 namespace writerfilter {
 namespace dmapper
@@ -41,7 +40,7 @@ private:
     OutputFormat m_OutputFormat;
 
     OUString m_aInteropGrabBagName;
-    comphelper::SequenceAsVector<css::beans::PropertyValue> m_aInteropGrabBag;
+    std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
 
     // Properties
     virtual void lcl_attribute(Id Name, Value & val) SAL_OVERRIDE;

@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include "LoggedResources.hxx"
 #include <tools/fract.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <vector>
 
 namespace writerfilter {
 namespace dmapper {
@@ -32,7 +32,7 @@ namespace dmapper {
 class WrapPolygon
 {
 public:
-    typedef comphelper::SequenceAsVector<css::awt::Point> Points_t;
+    typedef std::vector<css::awt::Point> Points_t;
     typedef ::std::shared_ptr<WrapPolygon> Pointer_t;
 
 private:

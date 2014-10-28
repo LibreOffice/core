@@ -33,7 +33,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 
 #include "sax/tools/converter.hxx"
-#include "comphelper/sequenceasvector.hxx"
+#include <comphelper/sequence.hxx>
 #include "sal/log.hxx"
 
 
@@ -664,23 +664,23 @@ void doTestDecodeBase64(const uno::Sequence<sal_Int8>& aPass, char const*const p
 
 void ConverterTest::testBase64()
 {
-    comphelper::SequenceAsVector< sal_Int8 > tempSeq(4);
+    std::vector< sal_Int8 > tempSeq(4);
     for(sal_Int8 i = 0; i<4; ++i)
         tempSeq.push_back(i);
-    uno::Sequence< sal_Int8 > tempSequence = tempSeq.getAsConstList();
+    uno::Sequence< sal_Int8 > tempSequence = comphelper::containerToSequence(tempSeq);
     doTestEncodeBase64("AAAAAAABAgM=", tempSequence);
     doTestDecodeBase64(tempSequence, "AAAAAAABAgM=");
     tempSeq[0] = sal_Int8(5);
     tempSeq[1] = sal_Int8(2);
     tempSeq[2] = sal_Int8(3);
-    tempSequence = tempSeq.getAsConstList();
+    tempSequence = comphelper::containerToSequence(tempSeq);
     doTestEncodeBase64("BQIDAAABAgM=", tempSequence);
     doTestDecodeBase64(tempSequence, "BQIDAAABAgM=");
     tempSeq[0] = sal_Int8(sal_uInt8(200));
     tempSeq[1] = sal_Int8(31);
     tempSeq[2] = sal_Int8(77);
     tempSeq[3] = sal_Int8(111);
-    tempSequence = tempSeq.getAsConstList();
+    tempSequence = comphelper::containerToSequence(tempSeq);
     doTestEncodeBase64("yB9NbwABAgM=", tempSequence);
     doTestDecodeBase64(tempSequence, "yB9NbwABAgM=");
 }

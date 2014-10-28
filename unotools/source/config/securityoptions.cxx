@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <tools/urlobj.hxx>
 
 #include <unotools/pathoptions.hxx>
@@ -440,7 +440,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
         Sequence< Any >         lValues = GetProperties( lAllAuthors );
         if( lValues.getLength() == c2 )
         {
-            comphelper::SequenceAsVector< SvtSecurityOptions::Certificate > v;
+            std::vector< SvtSecurityOptions::Certificate > v;
             SvtSecurityOptions::Certificate aCert( 3 );
             for( i1 = 0, i2 = 0; i1 < c1; ++i1 )
             {
@@ -459,7 +459,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
                     v.push_back( aCert );
                 }
             }
-            m_seqTrustedAuthors = v.getAsConstList();
+            m_seqTrustedAuthors = comphelper::containerToSequence(v);
         }
     }
 }

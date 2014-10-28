@@ -22,7 +22,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <comphelper/sequenceasvector.hxx>
 #include <vector>
 
 #include <HashMaps.hxx>
@@ -55,7 +54,7 @@ typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
 {
 protected:
-    comphelper::SequenceAsVector< com::sun::star::beans::PropertyValue > aSequence;
+    std::vector< com::sun::star::beans::PropertyValue > aSequence;
     ManifestStack aStack;
     bool bIgnoreEncryptData;
     sal_Int32 nDerivedKeySize;
