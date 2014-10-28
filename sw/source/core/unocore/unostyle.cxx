@@ -1302,6 +1302,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
 
 SwXStyle::~SwXStyle()
 {
+    SolarMutexGuard aGuard;
     if(pBasePool)
         EndListening(*pBasePool);
     delete pPropImpl;
