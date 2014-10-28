@@ -1209,7 +1209,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mpButtonPicker->SetClickHdl( LINK( this, SvxColorWindow_Impl, OpenPickerClickHdl ) );
 
     mpColorSet->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
-    mpRecentColorSet->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectRecentHdl ) );
+    mpRecentColorSet->SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
     SetHelpId( HID_POPUP_COLOR );
     mpColorSet->SetHelpId( HID_POPUP_COLOR_CTRL );
     SetText( rWndTitle );
@@ -1234,35 +1234,19 @@ SfxPopupWindow* SvxColorWindow_Impl::Clone() const
     return new SvxColorWindow_Impl( maCommand, mrPaletteManager, theSlotId, GetFrame(), GetText(), GetParent() );
 }
 
-IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
+IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
 {
-    Color aColor = mpColorSet->GetItemColor( mpColorSet->GetSelectItemId() );
+    Color aColor = pColorSet->GetItemColor( pColorSet->GetSelectItemId() );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
-    mpColorSet->SetNoSelection();
+    pColorSet->SetNoSelection();
 
     if ( IsInPopupMode() )
         EndPopupMode();
 
-    if ( maSelectedLink.IsSet() )
-        maSelectedLink.Call(&aColor);
-
-    PaletteManager::DispatchColorCommand(maCommand, aColor);
-    mrPaletteManager.AddRecentColor(aColor);
-    return 0;
-}
-
-IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectRecentHdl)
-{
-    Color aColor = mpRecentColorSet->GetItemColor( mpRecentColorSet->GetSelectItemId() );
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
-        This instance may be deleted in the meantime (i.e. when a dialog is opened
-        while in Dispatch()), accessing members will crash in this case. */
-    mpRecentColorSet->SetNoSelection();
-
-    if ( IsInPopupMode() )
-        EndPopupMode();
+    if ( pColorSet != mpRecentColorSet )
+         mrPaletteManager.AddRecentColor( aColor );
 
     if ( maSelectedLink.IsSet() )
         maSelectedLink.Call(&aColor);
