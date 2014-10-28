@@ -86,7 +86,7 @@ void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sa
     }
 }
 
-void SvxColorValueSet::loadColorVector(const std::vector<Color>& rColorVector, const OUString& rNamePrefix, sal_uInt32 nStartIndex)
+void SvxColorValueSet::addEntriesForColorVector(const std::vector<Color>& rColorVector, const OUString& rNamePrefix, sal_uInt32 nStartIndex)
 {
     if(rNamePrefix.getLength() != 0)
     {
