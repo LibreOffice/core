@@ -1153,7 +1153,9 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
     else if( rData.HasFormat( nFmt = FORMAT_STRING ) ||
               rData.HasFormat( nFmt = FORMAT_FILE ) ||
              rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILENAME ))
-        rData.GetString( nFmt, sFileName );
+    {
+        (void)rData.GetString(nFmt, sFileName);
+    }
     else if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_SOLK ) ||
                 rData.HasFormat( nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK )||
                 rData.HasFormat( nFmt = SOT_FORMATSTR_ID_FILECONTENT ) ||
