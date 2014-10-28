@@ -3837,8 +3837,6 @@ bool WW8PLCFx_FLD::GetPara(long nIdx, WW8FieldDesc& rF)
 }
 
 // WW8PLCF_Book
-
-/*  to be optimized like this:    */
 void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen,
     sal_uInt16 nExtraLen, rtl_TextEncoding eCS, std::vector<OUString> &rArray,
     std::vector<ww::bytes>* pExtraArray, ::std::vector<OUString>* pValueArray)
@@ -3863,6 +3861,18 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 nStrings = nLen2;
 
             rStrm.ReadUInt16( nExtraLen );
+
+            size_t nMinRecordSize = nExtraLen;
+            if (bUnicode)
+                nMinRecordSize += sizeof(sal_uInt16);
+            else
+                nMinRecordSize += sizeof(sal_uInt8);
+            const size_t nMaxPossibleStrings = rStrm.remainingSize() / nMinRecordSize;
+            if (nStrings > nMaxPossibleStrings)
+            {
+                SAL_WARN("sw.ww8", "STTBF claims " << nStrings << " entries, but only " << nMaxPossibleStrings << "are possible");
+                nStrings = nMaxPossibleStrings;
+            }
 
             for (sal_uInt16 i=0; i < nStrings; ++i)
             {
