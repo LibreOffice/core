@@ -961,7 +961,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
             }
             else
             {
-                DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+                SAL_WARN("svx.sidebar", "GetModuleFieldUnit(): no module found");
             }
         }
     }

@@ -554,7 +554,7 @@ void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pSt
             }
             else
             {
-                DBG_ERRORFILE( "<PagePropertyPanel::MetricState(..)>: no module found" );
+                SAL_WARN("sw.ui", "<PagePropertyPanel::MetricState(..)>: no module found");
             }
         }
     }

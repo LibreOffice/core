@@ -526,7 +526,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
 
     if (nId >= nElementAkt)
     {
-        DBG_ERRORFILE( "*TokenPool::GetElementRek(): nId >= nElementAkt" );
+        SAL_WARN("sc.filter", "*TokenPool::GetElementRek(): nId >= nElementAkt");
 #ifdef DBG_UTIL
         m_nRek--;
 #endif
@@ -535,7 +535,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
 
     if (pType[ nId ] != T_Id)
     {
-        DBG_ERRORFILE( "-TokenPool::GetElementRek(): pType[ nId ] != T_Id" );
+        SAL_WARN("sc.filter", "-TokenPool::GetElementRek(): pType[ nId ] != T_Id");
 #ifdef DBG_UTIL
         m_nRek--;
 #endif
@@ -547,14 +547,14 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
     sal_uInt16 nFirstId = pElement[ nId ];
     if (nFirstId >= nP_Id)
     {
-        DBG_ERRORFILE( "TokenPool::GetElementRek: nFirstId >= nP_Id");
+        SAL_WARN("sc.filter", "TokenPool::GetElementRek: nFirstId >= nP_Id");
         nAnz = 0;
         bRet = false;
     }
     sal_uInt16* pAkt = nAnz ? &pP_Id[ nFirstId ] : NULL;
     if (nAnz > nP_Id - nFirstId)
     {
-        DBG_ERRORFILE( "TokenPool::GetElementRek: nAnz > nP_Id - nFirstId");
+        SAL_WARN("sc.filter", "TokenPool::GetElementRek: nAnz > nP_Id - nFirstId");
         nAnz = nP_Id - nFirstId;
         bRet = false;
     }
@@ -564,7 +564,7 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
         {// recursion or not?
             if (*pAkt >= nElementAkt)
             {
-                DBG_ERRORFILE( "TokenPool::GetElementRek: *pAkt >= nElementAkt");
+                SAL_WARN("sc.filter", "TokenPool::GetElementRek: *pAkt >= nElementAkt");
                 bRet = false;
             }
             else

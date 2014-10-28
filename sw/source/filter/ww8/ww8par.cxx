@@ -350,7 +350,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
         }
         else
         {
-            DBG_ERRORFILE( "WW8Hyperlink::ReadEmbeddedData - unknown content GUID" );
+            SAL_INFO("sw.ww8", "WW8Hyperlink::ReadEmbeddedData - unknown content GUID");
         }
     }
 

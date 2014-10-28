@@ -1059,7 +1059,7 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
             }
             else
             {
-                DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+                SAL_WARN("svx.sidebar", "GetModuleFieldUnit(): no module found");
             }
         }
     }

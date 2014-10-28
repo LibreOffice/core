@@ -1598,7 +1598,7 @@ void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
         }
         else
         {
-            DBG_ERRORFILE( "XclImpChartObj::ReadChartSubStream - missing chart substream" );
+            SAL_INFO("sc.filter", "XclImpChartObj::ReadChartSubStream - missing chart substream");
             return;
         }
     }

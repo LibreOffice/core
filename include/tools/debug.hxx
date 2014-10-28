@@ -33,7 +33,7 @@
     Because the assertion macro (DBG_ASSERT) has been used for
     true assertions as well as to log warnings, it maps to SAL_WARN instead of
     standard assert.  The warning and error macros (DBG_ASSERTWARNING,
-    DBG_WARNING, DBG_ERRORFILE) all map to
+    DBG_WARNING) all map to
     SAL_INFO.
 */
 
@@ -110,9 +110,6 @@ inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 #define DBG_WARNING( aWarning ) \
     SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aWarning)
 
-#define DBG_ERRORFILE( aError ) \
-    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", aError, __FILE__, __LINE__)
-
 #define DBG_TESTSOLARMUTEX()                \
 do                                          \
 {                                           \
@@ -125,7 +122,6 @@ do                                          \
 #define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
 #define DBG_ASSERT( sCon, aError ) ((void)0)
 #define DBG_WARNING( aWarning ) ((void)0)
-#define DBG_ERRORFILE( aError ) ((void)0)
 
 #define DBG_TESTSOLARMUTEX() ((void)0)
 

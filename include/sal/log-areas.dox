@@ -313,6 +313,7 @@ certain functionality.
 @li @c svx.form
 @li @c svx.opengl
 @li @c svx.sdr
+@li @c svx.sidebar
 @li @c svx.stbcrtls - StatusBarControl
 @li @c svx.svdraw
 @li @c svx.table
