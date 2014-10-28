@@ -34,12 +34,12 @@ if( status != CL_SUCCESS )    \
 
 #include <cstdio>
 
-typedef struct _KernelEnv
+struct KernelEnv
 {
     cl_context mpkContext;
     cl_command_queue mpkCmdQueue;
     cl_program mpkProgram;
-} KernelEnv;
+};
 
 namespace sc { namespace opencl {
 
