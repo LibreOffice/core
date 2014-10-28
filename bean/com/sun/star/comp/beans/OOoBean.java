@@ -803,7 +803,7 @@ public class OOoBean
         @throws NoDocumentException
             if no document is loaded
      */
-    private void storeToURL(
+    public void storeToURL(
             final String aURL,
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
@@ -1041,7 +1041,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible setAllBarsVisible}.
      */
-    private void applyToolVisibilities()
+    protected void applyToolVisibilities()
     {
         bIgnoreVisibility = true;
         setMenuBarVisible( bMenuBarVisible );
@@ -1061,7 +1061,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         which can be obtained from a frame, to control toolbars. See also
         {@link #setAllBarsVisible}.
      */
-    private boolean setToolVisible( String aProperty, String aResourceURL,
+    protected boolean setToolVisible( String aProperty, String aResourceURL,
         boolean bOldValue, boolean bNewValue )
 
         throws
@@ -1329,7 +1329,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         a new array is created, aArgument added and the new
         array returned.
     */
-    private com.sun.star.beans.PropertyValue[] addArgument(
+    protected com.sun.star.beans.PropertyValue[] addArgument(
                 com.sun.star.beans.PropertyValue aArguments[],
                 final com.sun.star.beans.PropertyValue aArgument )
     {

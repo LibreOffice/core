@@ -28,8 +28,8 @@ import com.sun.star.awt.*;
 class JavaWindowPeerFake
     implements XSystemDependentWindowPeer, XWindowPeer
 {
-     private int localSystemType;
-    private Any wrappedHandle;
+    protected int localSystemType;
+    protected Any wrappedHandle;
 
     /** Create the faked window peer.
      * @param _hWindow the system handle to the window.

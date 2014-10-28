@@ -253,7 +253,7 @@ public class LocalOfficeWindow
      * The second NamedValue  has the name "XEMBED" and the value is true, when the XEmbed
      * protocol shall be used fore embedding the native Window.
     */
-    private Any getWrappedWindowHandle()
+    protected Any getWrappedWindowHandle()
     {
 
         NamedValue window = new NamedValue(

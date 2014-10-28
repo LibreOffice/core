@@ -47,9 +47,9 @@ import com.sun.star.lib.util.NativeLibraryLoader;
 public class LocalOfficeConnection
     implements OfficeConnection
 {
-    private static final String      OFFICE_APP_NAME     = "soffice";
-
-    private static final String      OFFICE_ID_SUFFIX    = "_Office";
+    public static final String      OFFICE_APP_NAME     = "soffice";
+    public static final String       OFFICE_LIB_NAME     = "officebean";
+    public static final String      OFFICE_ID_SUFFIX    = "_Office";
 
     private Process                 mProcess;
     private XComponentContext       mContext;
@@ -745,7 +745,7 @@ public class LocalOfficeConnection
         private java.io.InputStream m_in;
         private java.io.PrintStream m_print;
 
-        private StreamProcessor(final java.io.InputStream in, final java.io.PrintStream out)
+        public StreamProcessor(final java.io.InputStream in, final java.io.PrintStream out)
         {
             super("StreamProcessor");
 
