@@ -311,8 +311,8 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
             timeval Timeout;
             // determine remaining timeout.
             gettimeofday (&Timeout, 0);
-            nTimeoutMS = m_aTimeout.tv_sec*1000 + m_aTimeout.tv_usec/1000
-                         - Timeout.tv_sec*1000 - Timeout.tv_usec/1000;
+            nTimeoutMS = (m_aTimeout.tv_sec - Timeout.tv_sec) * 1000
+                         + m_aTimeout.tv_usec/1000 - Timeout.tv_usec/1000;
             if( nTimeoutMS < 0 )
                 nTimeoutMS = 0;
         }
