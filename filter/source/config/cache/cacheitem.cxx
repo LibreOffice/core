@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <osl/diagnose.h>
+#include <comphelper/vectortosequence.hxx>
 
 
 namespace filter{
@@ -234,8 +235,8 @@ bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= uno_s2)
                )
             {
-                OUStringList stl_s1(uno_s1);
-                OUStringList stl_s2(uno_s2);
+                OUStringList stl_s1(comphelper::toVector(uno_s1));
+                OUStringList stl_s2(comphelper::toVector(uno_s2));
 
                 for (OUStringList::const_iterator it1  = stl_s1.begin();
                                                   it1 != stl_s1.end()  ;

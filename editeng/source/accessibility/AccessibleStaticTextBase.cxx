@@ -32,7 +32,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/vectortosequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
@@ -66,7 +66,7 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
-    typedef ::comphelper::SequenceAsVector< beans::PropertyValue > PropertyValueVector;
+    typedef ::std::vector< beans::PropertyValue > PropertyValueVector;
 
     class PropertyValueEqualFunctor : public ::std::binary_function< beans::PropertyValue, beans::PropertyValue, bool >
     {
@@ -1048,7 +1048,7 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        PropertyValueVector aDefAttrVec( mpImpl->GetParagraph( 0 ).getDefaultAttributes( RequestedAttributes ) );
+        PropertyValueVector aDefAttrVec( comphelper::toVector(mpImpl->GetParagraph( 0 ).getDefaultAttributes( RequestedAttributes )) );
 
         const sal_Int32 nParaCount = mpImpl->GetParagraphCount();
         for ( sal_Int32 nPara = 1; nPara < nParaCount; ++nPara )
@@ -1076,7 +1076,7 @@ namespace accessibility
             }
         }
 
-        return aDefAttrVec.getAsConstList();
+        return comphelper::toSequence(aDefAttrVec);
     }
 
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const uno::Sequence< OUString >& RequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
@@ -1106,7 +1106,7 @@ namespace accessibility
             }
         }
 
-        return ::comphelper::concatSequences( aRunAttrSeq, aDiffVec.getAsConstList() );
+        return ::comphelper::concatSequences( aRunAttrSeq, comphelper::toSequence(aDiffVec) );
     }
 
     Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const

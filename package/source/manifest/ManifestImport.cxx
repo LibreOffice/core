@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/vectortosequence.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -351,7 +352,7 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
                 isEmpty), aSequence.end());
 
             bIgnoreEncryptData = false;
-            rManVector.push_back ( aSequence.getAsConstList() );
+            rManVector.push_back ( comphelper::toSequence(aSequence) );
 
             aSequence.clear();
         }

@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/drawing/PointSequence.hpp>
+#include <comphelper/vectortosequence.hxx>
 
 #include <ooxml/resourceids.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
@@ -125,7 +126,7 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
 {
     drawing::PointSequenceSequence aPolyPolygon(1L);
-    drawing::PointSequence aPolygon = mPoints.getAsConstList();
+    drawing::PointSequence aPolygon = comphelper::toSequence(mPoints);
     aPolyPolygon[0] = aPolygon;
     return aPolyPolygon;
 }

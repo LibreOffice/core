@@ -81,7 +81,7 @@
 #include <vcl/outdev.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <filter/msfilter/util.hxx>
-#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/vectortosequence.hxx>
 
 using namespace ::com::sun::star;
 using namespace oox;
@@ -589,7 +589,7 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 
 uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
-    comphelper::SequenceAsVector<style::TabStop> aRet;
+    std::vector<style::TabStop> aRet;
     for (DeletableTabStop& rStop : m_aCurrentTabStops)
     {
         if (!rStop.bDeleted)
@@ -597,7 +597,7 @@ uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
     }
     m_aCurrentTabStops.clear();
     m_nCurrentTabStopIndex = 0;
-    return aRet.getAsConstList();
+    return comphelper::toSequence(aRet);
 }
 
 /*-------------------------------------------------------------------------

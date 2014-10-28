@@ -62,6 +62,7 @@
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/vectortosequence.hxx>
 #include <filter/msfilter/util.hxx>
 
 #include <TextEffectsHandler.hxx>
@@ -2502,7 +2503,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         resourcemodel::resolveSprmProps(*this, rSprm);
 
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
-        pPropMap->Insert(PROP_ROW_CNF_STYLE, uno::makeAny(uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList())), true, ROW_GRAB_BAG);
+        pPropMap->Insert(PROP_ROW_CNF_STYLE, uno::makeAny(uno::makeAny(comphelper::toSequence(m_pImpl->m_aInteropGrabBag))), true, ROW_GRAB_BAG);
         m_pImpl->getTableManager().insertRowProps(pPropMap);
 
         m_pImpl->disableInteropGrabBag();
@@ -2514,7 +2515,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         resourcemodel::resolveSprmProps(*this, rSprm);
 
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
-        pPropMap->Insert(PROP_CELL_CNF_STYLE, uno::makeAny(uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList())), true, CELL_GRAB_BAG);
+        pPropMap->Insert(PROP_CELL_CNF_STYLE, uno::makeAny(uno::makeAny(comphelper::toSequence(m_pImpl->m_aInteropGrabBag))), true, CELL_GRAB_BAG);
         m_pImpl->getTableManager().cellProps(pPropMap);
 
         m_pImpl->disableInteropGrabBag();
@@ -2524,7 +2525,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     {
         m_pImpl->enableInteropGrabBag("cnfStyle");
         resourcemodel::resolveSprmProps(*this, rSprm);
-        rContext->Insert(PROP_PARA_CNF_STYLE, uno::makeAny(m_pImpl->m_aInteropGrabBag.getAsConstList()), true, PARA_GRAB_BAG);
+        rContext->Insert(PROP_PARA_CNF_STYLE, uno::makeAny(comphelper::toSequence(m_pImpl->m_aInteropGrabBag)), true, PARA_GRAB_BAG);
         m_pImpl->disableInteropGrabBag();
     }
     break;

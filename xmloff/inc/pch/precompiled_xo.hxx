@@ -489,7 +489,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
