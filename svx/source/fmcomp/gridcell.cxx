@@ -3102,7 +3102,7 @@ void DbFilterField::Update()
             {
                 aStr = getFormattedValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
                 aStringList.push_back(aStr);
-                xListCursor->next();
+                (void)xListCursor->next();
             }
 
             // filling the entries for the combobox
