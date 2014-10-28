@@ -220,7 +220,6 @@ namespace oglcanvas
                 }
 
                 glBindTexture(GL_TEXTURE_2D, 0);
-                glDisable(GL_TEXTURE_2D);
             }
         // translate sprite to output position
         mRenderHelper.SetModelAndMVP(glm::translate(glm::vec3(maPosition.getX(), maPosition.getY(), 0)));
