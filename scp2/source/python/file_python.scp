@@ -43,18 +43,12 @@ End
 
 #ifndef SYSTEM_PYTHON
 
-#if !defined MACOSX
+#if !defined MACOSX && !defined WNT
 File gid_File_Py_Bin_Python
     BIN_FILE_BODY;
-#ifdef WNT
-    Name = EXENAME(python);
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-#else
     Name = "python_shell.filelist";
     Dir = FILELIST_DIR;
     Styles = (FILELIST, PACKED);
-#endif
 End
 #endif
 
@@ -102,7 +96,7 @@ End
 // python_wrapper.exe
 File gid_File_Py_Bin_Python
     BIN_FILE_BODY;
-    Name = EXENAME(python);
+    Name = "python.exe";
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
 End
@@ -132,7 +126,7 @@ End
 File gid_File_Py_Python_Bin
     BIN_FILE_BODY;
     Dir = gid_Dir_Py_PythonCore_Bin;
-    Name = EXENAME(python);
+    Name = "python.exe";
     Styles = (PACKED);
 End
 

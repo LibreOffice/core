@@ -102,6 +102,12 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,crashrep, \
 ))
 endif
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
+	$(if $(filter WNT,$(OS)), \
+		python \
+	) \
+))
+
 ifneq ($(ENABLE_PDFIMPORT),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 	xpdfimport \
@@ -127,7 +133,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 	$(if $(filter WNT,$(OS)), \
 		odbcconfig \
-		python \
 		quickstart \
 		sbase \
 		scalc \
