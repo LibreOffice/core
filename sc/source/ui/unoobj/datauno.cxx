@@ -2061,7 +2061,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
             {
                 // only here to set bIsAdvanced in ScDBData
                 ScRange aRange;
-                aNewData.GetAdvancedQuerySource(aRange);
+                (void)aNewData.GetAdvancedQuerySource(aRange);
                 aNewData.SetAdvancedQuerySource(&aRange);
             }
             else
