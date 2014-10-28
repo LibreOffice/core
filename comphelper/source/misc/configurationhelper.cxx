@@ -19,6 +19,7 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -36,8 +37,8 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
         css::configuration::theDefaultProvider::get( rxContext ) );
 
-    ::comphelper::SequenceAsVector< css::uno::Any > lParams;
-    css::beans::PropertyValue                       aParam ;
+    ::std::vector< css::uno::Any > lParams;
+    css::beans::PropertyValue      aParam ;
 
     // set root path
     aParam.Name    = "nodepath";
@@ -65,11 +66,11 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     if (bReadOnly)
         xCFG = xConfigProvider->createInstanceWithArguments(
                 OUString("com.sun.star.configuration.ConfigurationAccess"),
-                lParams.getAsConstList());
+                comphelper::containerToSequence(lParams));
     else
         xCFG = xConfigProvider->createInstanceWithArguments(
                 OUString("com.sun.star.configuration.ConfigurationUpdateAccess"),
-                lParams.getAsConstList());
+                comphelper::containerToSequence(lParams));
 
     return xCFG;
 }

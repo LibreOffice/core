@@ -33,7 +33,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -344,7 +344,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
 {
     ::comphelper::SequenceAsHashMap lSearchProps(lProperties);
     const css::uno::Sequence< OUString > lModules = getElementNames();
-    ::comphelper::SequenceAsVector< css::uno::Any > lResult;
+    ::std::vector< css::uno::Any > lResult;
 
     for (sal_Int32 i = 0; i < lModules.getLength(); ++i)
     {
@@ -359,7 +359,8 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
         }
     }
 
-    ::comphelper::OAnyEnumeration*                      pEnum = new ::comphelper::OAnyEnumeration(lResult.getAsConstList());
+    ::comphelper::OAnyEnumeration*                      pEnum =
+                 new ::comphelper::OAnyEnumeration(comphelper::containerToSequence(lResult));
     css::uno::Reference< css::container::XEnumeration > xEnum(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY_THROW);
     return xEnum;
 }

@@ -37,6 +37,7 @@
 #include <ConversionHelper.hxx>
 #include <util.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/sequence.hxx>
 
 #ifdef DEBUG_WRITERFILTER
 #include <PropertyMapHelper.hxx>
@@ -287,7 +288,7 @@ bool lcl_extractTableBorderProperty(PropertyMapPtr pTableProperties, const Prope
 
 }
 
-bool lcl_extractHoriOrient(comphelper::SequenceAsVector<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
+bool lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32& nHoriOrient)
 {
     // Shifts the frame left by the given value.
     for (size_t i = 0; i < rFrameProperties.size(); ++i)
@@ -301,7 +302,7 @@ bool lcl_extractHoriOrient(comphelper::SequenceAsVector<beans::PropertyValue>& r
     return false;
 }
 
-void lcl_DecrementHoriOrientPosition(comphelper::SequenceAsVector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
+void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
 {
     // Shifts the frame left by the given value.
     for (size_t i = 0; i < rFrameProperties.size(); ++i)
@@ -317,7 +318,7 @@ void lcl_DecrementHoriOrientPosition(comphelper::SequenceAsVector<beans::Propert
     }
 }
 
-TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, comphelper::SequenceAsVector<beans::PropertyValue>& rFrameProperties)
+TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, std::vector<beans::PropertyValue>& rFrameProperties)
 {
     // will receive the table style if any
     TableStyleSheetEntry* pTableStyle = nullptr;
@@ -983,7 +984,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
 #endif
 
     // If we want to make this table a floating one.
-    comphelper::SequenceAsVector<beans::PropertyValue> aFrameProperties = m_rDMapper_Impl.getTableManager().getCurrentTablePosition();
+    std::vector<beans::PropertyValue> aFrameProperties = comphelper::sequenceToContainer<std::vector<beans::PropertyValue> >
+            (m_rDMapper_Impl.getTableManager().getCurrentTablePosition());
     TableInfo aTableInfo;
     aTableInfo.nNestLevel = nestedTableLevel;
     aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo, aFrameProperties);
@@ -1115,9 +1117,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
             if (m_rDMapper_Impl.GetSectionContext() && nestedTableLevel <= 1)
-                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, aFrameProperties.getAsConstList(), nTableWidth));
+                m_rDMapper_Impl.m_aPendingFloatingTables.push_back(FloatingTableInfo(xStart, xEnd, comphelper::containerToSequence(aFrameProperties), nTableWidth));
             else
-                m_xText->convertToTextFrame(xStart, xEnd, aFrameProperties.getAsConstList());
+                m_xText->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
         }
     }
 

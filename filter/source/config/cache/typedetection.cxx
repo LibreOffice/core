@@ -33,6 +33,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 
 #define DEBUG_TYPE_DETECTION 0
 
@@ -679,8 +680,8 @@ bool TypeDetection::impl_getPreselectionForType(
 
         // otherwise we must know, if it matches to the given URL really.
         // especially if it matches by its extension or pattern registration.
-        OUStringList lExtensions(aType[PROPNAME_EXTENSIONS]);
-        OUStringList lURLPattern(aType[PROPNAME_URLPATTERN]);
+        OUStringList lExtensions(comphelper::sequenceToContainer<OUStringList>(aType[PROPNAME_EXTENSIONS].get<css::uno::Sequence<OUString> >() ));
+        OUStringList lURLPattern(comphelper::sequenceToContainer<OUStringList>(aType[PROPNAME_URLPATTERN].get<css::uno::Sequence<OUString> >() ));
 
         for (OUStringList::const_iterator pIt  = lExtensions.begin();
                                           pIt != lExtensions.end()  ;

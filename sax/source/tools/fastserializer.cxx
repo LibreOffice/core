@@ -22,7 +22,7 @@
 #include <com/sun/star/xml/sax/FastTokenHandler.hpp>
 #include <rtl/math.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <string.h>
 
@@ -31,7 +31,7 @@
 #include <set>
 #endif
 
-using ::comphelper::SequenceAsVector;
+using ::std::vector;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::xml::Attribute;
@@ -444,7 +444,7 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::ForSort::setCurrentElement( sal_Int32 nElement )
     {
-        SequenceAsVector< sal_Int32 > aOrder( maOrder );
+        vector< sal_Int32 > aOrder( comphelper::sequenceToContainer<vector<sal_Int32> >(maOrder) );
         if( std::find( aOrder.begin(), aOrder.end(), nElement ) != aOrder.end() )
         {
             mnCurrentElement = nElement;

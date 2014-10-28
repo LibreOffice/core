@@ -34,7 +34,7 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <unotools/docinfohelper.hxx>
 
 #include <string.h>
@@ -320,7 +320,7 @@ void SvXMLMetaExport::Export()
     uno::Reference< xml::sax::XSAXSerializable> xSAXable(mxDocProps,
         uno::UNO_QUERY);
     if (xSAXable.is()) {
-        ::comphelper::SequenceAsVector< beans::StringPair > namespaces;
+        ::std::vector< beans::StringPair > namespaces;
         const SvXMLNamespaceMap & rNsMap(mrExport.GetNamespaceMap());
         for (sal_uInt16 key = rNsMap.GetFirstKey();
              key != USHRT_MAX; key = rNsMap.GetNextKey(key)) {
@@ -336,7 +336,7 @@ void SvXMLMetaExport::Export()
             ns.Second = rNsMap.GetNameByKey(key);
             namespaces.push_back(ns);
         }
-        xSAXable->serialize(this, namespaces.getAsConstList());
+        xSAXable->serialize(this, comphelper::containerToSequence(namespaces));
     } else {
         // office:meta
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_OFFICE, XML_META,

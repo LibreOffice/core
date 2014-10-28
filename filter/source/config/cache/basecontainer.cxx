@@ -25,6 +25,7 @@
 #include <com/sun/star/document/FilterConfigRefresh.hpp>
 #include <com/sun/star/uno/Type.h>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
@@ -335,7 +336,7 @@ css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
     {
         FilterCache* pCache = impl_getWorkingCache();
         OUStringList lKeys  = pCache->getItemNames(m_eType);
-        lKeys >> lNames;
+        lNames = comphelper::containerToSequence(lKeys);
     }
     catch(const css::uno::Exception&)
     {
@@ -468,8 +469,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
              Further its easier to work directly with the return value
              instaed of checking of NULL returns! */
 
-    css::uno::Sequence< OUString > lSubSet;
-    lKeys >> lSubSet;
+    css::uno::Sequence< OUString > lSubSet = comphelper::containerToSequence(lKeys);
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSubSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }

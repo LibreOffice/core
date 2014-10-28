@@ -28,7 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -421,9 +421,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
                     }
                     sCommand = sCommand.replaceFirst("%1", sReplace);
                     Reference< XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
-                    SequenceAsVector< OUString > lList;
-                    SequenceAsVector< sal_Bool > lAlienList;
-                    SequenceAsVector< sal_Bool > lODFList;
+                    std::vector< OUString > lList;
+                    std::vector< sal_Bool > lAlienList;
+                    std::vector< sal_Bool > lODFList;
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
@@ -436,9 +436,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet* )
                             lODFList.push_back( isODFFormat( sFilter ) );
                         }
                     }
-                    pImpl->aFilterArr[nData] = lList.getAsConstList();
-                    pImpl->aAlienArr[nData] = lAlienList.getAsConstList();
-                    pImpl->aODFArr[nData] = lODFList.getAsConstList();
+                    pImpl->aFilterArr[nData] = comphelper::containerToSequence(lList);
+                    pImpl->aAlienArr[nData] = comphelper::containerToSequence(lAlienList);
+                    pImpl->aODFArr[nData] = comphelper::containerToSequence(lODFList);
                 }
             }
             aDocTypeLB->SelectEntryPos(0);

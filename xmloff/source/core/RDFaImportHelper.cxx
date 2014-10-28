@@ -22,7 +22,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/rdf/URI.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
@@ -337,7 +337,7 @@ void RDFaInserter::InsertRDFaEntry(
         return; // invalid
     }
 
-    ::comphelper::SequenceAsVector< uno::Reference< rdf::XURI > > predicates;
+    ::std::vector< uno::Reference< rdf::XURI > > predicates;
 
     predicates.reserve(i_rEntry.m_pRDFaAttributes->m_Properties.size());
 
@@ -374,7 +374,7 @@ void RDFaInserter::InsertRDFaEntry(
         // N.B.: this will call xMeta->ensureMetadataReference, which is why
         // this must be done _after_ importing the whole XML file,
         // to prevent collision between generated ids and ids in the file
-        m_xRepository->setStatementRDFa(xSubject, predicates.getAsConstList(),
+        m_xRepository->setStatementRDFa(xSubject, comphelper::containerToSequence(predicates),
             i_rEntry.m_xObject,
             i_rEntry.m_pRDFaAttributes->m_Content, xDatatype);
     }

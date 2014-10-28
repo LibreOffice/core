@@ -46,7 +46,6 @@
 #include <rtl/ustring.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/synchronousdispatch.hxx>

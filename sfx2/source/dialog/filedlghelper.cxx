@@ -93,6 +93,7 @@
 #include <helpid.hrc>
 #include <sfxlocal.hrc>
 #include <rtl/strbuf.hxx>
+#include <comphelper/sequence.hxx>
 
 #ifdef UNX
 #include <errno.h>
@@ -1295,7 +1296,7 @@ void FileDialogHelper_Impl::implStartExecute()
 }
 
 void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
-                      ::comphelper::SequenceAsVector< OUString >& lLastURLs )
+                      ::std::vector< OUString >& lLastURLs )
 {
     lLastURLs.clear();
     for(std::vector<OUString>::iterator i = rpURLList.begin(); i != rpURLList.end(); ++i)
@@ -2395,7 +2396,7 @@ OUString FileDialogHelper::GetPath() const
 Sequence < OUString > FileDialogHelper::GetMPath() const
 {
     if ( mpImp->mlLastURLs.size() > 0)
-        return mpImp->mlLastURLs.getAsConstList();
+        return comphelper::containerToSequence(mpImp->mlLastURLs);
 
     if ( mpImp->mxFileDlg.is() )
         return mpImp->mxFileDlg->getFiles();

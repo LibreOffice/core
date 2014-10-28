@@ -34,6 +34,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "dmapperLoggers.hxx"
 
@@ -264,7 +265,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     };
 
     PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    comphelper::SequenceAsVector<beans::PropertyValue> aNumberingProperties;
+    std::vector<beans::PropertyValue> aNumberingProperties;
 
     if( m_nIStartAt >= 0)
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_START_WITH, (sal_Int16)m_nIStartAt) );
@@ -348,7 +349,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
                 beans::PropertyValue( aPropNameSupplier.GetName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE )
                 );
 
-    return aNumberingProperties.getAsConstList();
+    return comphelper::containerToSequence(aNumberingProperties);
 }
 
 // Add the properties only if they do not already exist in the sequence.
