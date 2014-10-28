@@ -193,7 +193,7 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
     //  if (mpPrinter->IsA(SfxPrinter))
     {
         // Since we do not have RTTI we use a hard cast (...)
-        SetPrinter((SfxPrinter*) pNewPrinter);
+        SetPrinter(static_cast<SfxPrinter*>(pNewPrinter));
 
         // container owns printer
         mbOwnPrinter = false;
@@ -274,13 +274,13 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
     if( pSet )
     {
-        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
+        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && static_cast<const SfxBoolItem&>( pSet->Get( SID_PREVIEW ) ).GetValue() )
         {
             mpDoc->SetStarDrawPreviewMode( true );
         }
 
         if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
-            ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
+            static_cast<const SfxBoolItem&>( pSet->Get( SID_DOC_STARTPRESENTATION ) ).GetValue() )
         {
             bStartPresentation = true;
             mpDoc->SetStartWithPresentation( true );
@@ -402,7 +402,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     if( pSet )
     {
         if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
-            ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
+            static_cast<const SfxBoolItem&>( pSet->Get( SID_DOC_STARTPRESENTATION ) ).GetValue() )
         {
             mpDoc->SetStartWithPresentation( true );
 
@@ -435,13 +435,13 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
     {
-        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
+        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && static_cast<const SfxBoolItem&>( pSet->Get( SID_PREVIEW ) ).GetValue() )
         {
             mpDoc->SetStarDrawPreviewMode( true );
         }
 
         if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
-            ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
+            static_cast<const SfxBoolItem&>( pSet->Get( SID_DOC_STARTPRESENTATION ) ).GetValue() )
         {
             bStartPresentation = true;
             mpDoc->SetStartWithPresentation( true );
@@ -586,7 +586,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
         else if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
         {
             pFilter = new SdPPTFilter( rMedium, *this, true );
-            ((SdPPTFilter*)pFilter)->PreSaveBasic();
+            static_cast<SdPPTFilter*>(pFilter)->PreSaveBasic();
         }
         else if ( aTypeName.indexOf( "CGM_Computer_Graphics_Metafile" ) >= 0 )
         {
@@ -739,9 +739,9 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
             bFound = true;
             SdPage* pPage;
             if (bIsMasterPage)
-                pPage = (SdPage*) mpDoc->GetMasterPage(nPageNumber);
+                pPage = static_cast<SdPage*>( mpDoc->GetMasterPage(nPageNumber) );
             else
-                pPage = (SdPage*) mpDoc->GetPage(nPageNumber);
+                pPage = static_cast<SdPage*>( mpDoc->GetPage(nPageNumber) );
 
             // 1.) Change the view shell to the edit view, the notes view,
             // or the handout view.
@@ -842,7 +842,7 @@ bool DrawDocShell::IsMarked( SdrObject* pObject )
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
-        DrawViewShell* pDrViewSh = (DrawViewShell*) mpViewShell;
+        DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
         if (pObject )
         {
               bisMarked = pDrViewSh->GetView()->IsObjMarked(pObject);
@@ -860,7 +860,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
-        DrawViewShell* pDrViewSh = (DrawViewShell*) mpViewShell;
+        DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
 
         OUString aBookmark( rBookmark );
 
@@ -888,7 +888,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
             /********************
              * Skip to the page *
              ********************/
-            SdPage* pPage = (SdPage*) mpDoc->GetPage(nPgNum);
+            SdPage* pPage = static_cast<SdPage*>( mpDoc->GetPage(nPgNum) );
 
             PageKind eNewPageKind = pPage->GetPageKind();
 
@@ -952,7 +952,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
-        DrawViewShell* pDrViewSh = (DrawViewShell*) mpViewShell;
+        DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
 
         OUString aBookmark( rBookmark );
 
@@ -981,7 +981,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
              * Skip to the page *
              ********************/
             bFound = true;
-            SdPage* pPage = (SdPage*) mpDoc->GetPage(nPgNum);
+            SdPage* pPage = static_cast<SdPage*>( mpDoc->GetPage(nPgNum) );
 
             PageKind eNewPageKind = pPage->GetPageKind();
 
