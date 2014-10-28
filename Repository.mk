@@ -80,6 +80,17 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,brand, \
+	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
+	soffice_bin \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
+	$(if $(filter WNT,$(OS)), \
+		unoinfo \
+		unopkg \
+		unopkg_com \
+	) \
+))
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 ))
@@ -94,9 +105,7 @@ endif
 $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
 	gnome-open-url.bin \
-	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
 	$(if $(ENABLE_NPAPI_FROM_BROWSER),pluginapp.bin) \
-	soffice_bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_GTK),unxTRUE), \
 		xid-fullscreen-on-all-monitors \
 	) \
@@ -110,7 +119,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	vcldemo \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
 	xpdfimport \
 	$(if $(filter WNT,$(OS)), \
 		odbcconfig \
@@ -125,9 +133,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		smath \
 		sweb \
 		swriter \
-		unoinfo \
-		unopkg \
-		unopkg_com \
 	) \
 ))
 

@@ -27,6 +27,7 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/brand"
 #include "AutoInstall/crashrep"
 
 #include "config_folders.h"
@@ -54,15 +55,12 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Registry,
             gid_Brand_Dir_Share_Xdg);
     Files = (auto_crashrep_ALL,
+             auto_brand_ALL,
              gid_Brand_File_Bin_Crashreport_Script,
              gid_Brand_File_Gdb_Trace,
              gid_Brand_File_Bin_Soffice,
-             gid_Brand_File_Bin_Soffice_Bin,
              gid_Brand_File_Bin_Soffice_Bin_Manifest,
              gid_Brand_File_Bin_Unoinfo,
-             gid_Brand_File_Bin_Unopkgcom,
-             gid_Brand_File_Bin_Unopkgexe,
-             gid_Brand_File_Bin_Unopkg,
              gid_Brand_File_Bmp_IntroAboutShell,
              gid_Brand_File_Bmp_IntroAboutShell_custom,
 	     gid_Brand_File_Desktophelper_Txt,
@@ -504,35 +502,16 @@ File gid_Brand_File_Bin_Soffice
     Styles = (FILELIST, PACKED);
 End
 
-#else
+#endif
 
+#ifdef WNT
+// TODO: some FolderItem reference this?
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(soffice);
     Styles = (PACKED);
 End
-
-#endif
-
-#ifndef MACOSX
-File gid_Brand_File_Bin_Soffice_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "soffice.bin";
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Bin_QStart_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "oosplash";
-End
-
 #endif
 
 #ifdef WNT
@@ -545,30 +524,12 @@ File gid_Brand_File_Desktophelper_Txt
 End
 #endif
 
-#if !defined MACOSX
+#if !defined MACOSX && !defined WNT
 File gid_Brand_File_Bin_Unoinfo
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(unoinfo);
+    Name = "unoinfo";
     Styles = (PACKED);
-End
-#endif
-
-#ifdef WNT
-File gid_Brand_File_Bin_Unopkgcom
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "unopkg.com";
-End
-#endif
-
-#ifdef WNT
-File gid_Brand_File_Bin_Unopkgexe
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "unopkg.exe";
 End
 #endif
 
@@ -580,13 +541,6 @@ File gid_Brand_File_Script_Unopkg
     Name = "unopkg";
 End
 #endif
-
-File gid_Brand_File_Bin_Unopkg
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-    Name = "unopkg.bin";
-End
 
 File gid_Brand_File_Bmp_IntroAboutShell
     TXT_FILE_BODY;
