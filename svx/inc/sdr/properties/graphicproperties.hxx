@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_GRAPHICPROPERTIES_HXX
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_GRAPHICPROPERTIES_HXX
 
-#include <svx/sdr/properties/rectangleproperties.hxx>
+#include <sdr/properties/rectangleproperties.hxx>
 
 
 

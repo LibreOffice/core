@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_PAGEPROPERTIES_HXX
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_PAGEPROPERTIES_HXX
 
-#include <svx/sdr/properties/emptyproperties.hxx>
+#include <sdr/properties/emptyproperties.hxx>
 
 
 

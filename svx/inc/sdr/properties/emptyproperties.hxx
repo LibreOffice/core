@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SDR_PROPERTIES_EMPTYPROPERTIES_HXX
 
 #include <svx/sdr/properties/properties.hxx>
-#include <svx/svxdllapi.h>
 
 
 
@@ -29,7 +28,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC EmptyProperties : public BaseProperties
+        class EmptyProperties : public BaseProperties
         {
         protected:
             // the to be used ItemSet

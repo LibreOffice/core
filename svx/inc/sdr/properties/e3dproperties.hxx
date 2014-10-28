@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
 #define INCLUDED_SVX_SDR_PROPERTIES_E3DPROPERTIES_HXX
 
-#include <svx/sdr/properties/attributeproperties.hxx>
-#include <svx/svxdllapi.h>
+#include <sdr/properties/attributeproperties.hxx>
 
 
 
@@ -29,7 +28,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC E3dProperties : public AttributeProperties
+        class E3dProperties : public AttributeProperties
         {
         protected:
             // create a new itemset

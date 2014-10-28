@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_CUSTOMSHAPEPROPERTIES_HXX
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_CUSTOMSHAPEPROPERTIES_HXX
 
-#include <svx/sdr/properties/textproperties.hxx>
+#include <sdr/properties/textproperties.hxx>
 
 
 

@@ -18,7 +18,7 @@
  */
 
 
-#include "svx/sdr/properties/textproperties.hxx"
+#include "sdr/properties/textproperties.hxx"
 #include "editeng/outlobj.hxx"
 
 #include "cell.hxx"

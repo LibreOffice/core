@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
 #define INCLUDED_SVX_SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
 
-#include <svx/sdr/properties/textproperties.hxx>
-#include <svx/svxdllapi.h>
+#include <sdr/properties/textproperties.hxx>
 
 
 
@@ -29,7 +28,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC RectangleProperties : public TextProperties
+        class RectangleProperties : public TextProperties
         {
         protected:
             // react on ItemSet changes

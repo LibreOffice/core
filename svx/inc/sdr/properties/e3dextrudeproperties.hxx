@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_E3DEXTRUDEPROPERTIES_HXX
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_E3DEXTRUDEPROPERTIES_HXX
 
-#include <svx/sdr/properties/e3dcompoundproperties.hxx>
-#include <svx/svxdllapi.h>
+#include <sdr/properties/e3dcompoundproperties.hxx>
 
 
 
@@ -29,7 +28,7 @@ namespace sdr
 {
     namespace properties
     {
-        class SVX_DLLPUBLIC E3dExtrudeProperties : public E3dCompoundProperties
+        class E3dExtrudeProperties : public E3dCompoundProperties
         {
         protected:
             // Called after ItemChange() is done for all items.

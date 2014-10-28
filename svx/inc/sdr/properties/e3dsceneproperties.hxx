@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_PROPERTIES_E3DSCENEPROPERTIES_HXX
 #define INCLUDED_SVX_INC_SDR_PROPERTIES_E3DSCENEPROPERTIES_HXX
 
-#include <svx/sdr/properties/e3dproperties.hxx>
+#include <sdr/properties/e3dproperties.hxx>
 
 
 

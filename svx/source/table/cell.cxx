@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svx/sdr/properties/textproperties.hxx"
+#include "sdr/properties/textproperties.hxx"
 #include "editeng/outlobj.hxx"
 #include "editeng/writingmodeitem.hxx"
 #include "svx/svdotable.hxx"
