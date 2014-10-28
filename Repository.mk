@@ -102,6 +102,12 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,crashrep, \
 ))
 endif
 
+ifneq ($(ENABLE_PDFIMPORT),)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
+	xpdfimport \
+))
+endif
+
 $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
 	gnome-open-url.bin \
@@ -119,7 +125,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	vcldemo \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
-	xpdfimport \
 	$(if $(filter WNT,$(OS)), \
 		odbcconfig \
 		python \
