@@ -343,7 +343,7 @@ namespace svx
             return false;
 
         OUString sFieldDescription;
-        const_cast<TransferableDataHelper&>(_rData).GetString(nRecognizedFormat, sFieldDescription);
+        (void)const_cast<TransferableDataHelper&>(_rData).GetString(nRecognizedFormat, sFieldDescription);
 
         const sal_Unicode cSeparator = sal_Unicode(11);
         _rDatasource    = sFieldDescription.getToken(0, cSeparator);
