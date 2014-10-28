@@ -1148,10 +1148,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mpColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
     mpRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
 
-    mpColorSet->layoutAllVisible(mrPaletteManager.GetColorCount());
-    mpRecentColorSet->SetLineCount( 1 );
-    mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
-
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
         mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
@@ -1211,7 +1207,14 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SetText( rWndTitle );
 
     mrPaletteManager.ReloadColorSet(*mpColorSet);
+    mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
+
     mrPaletteManager.ReloadRecentColorSet(*mpRecentColorSet);
+    mpRecentColorSet->SetLineCount( 1 );
+    Size aSize = mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
+    mpRecentColorSet->set_height_request(aSize.Height());
+    mpRecentColorSet->set_width_request(aSize.Width());
+
     AddStatusListener( ".uno:ColorTableState" );
     AddStatusListener( maCommand );
 }
@@ -1293,8 +1296,6 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, OpenPickerClickHdl)
 
 void SvxColorWindow_Impl::Resize()
 {
-    mpColorSet->SetSizePixel( this->GetOutputSizePixel() );
-    mpRecentColorSet->SetSizePixel( this->GetOutputSizePixel() );
 }
 
 void SvxColorWindow_Impl::StartSelection()
@@ -1313,11 +1314,11 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
-            mrPaletteManager.ReloadColorSet(*mpColorSet);
-            mrPaletteManager.ReloadRecentColorSet(*mpRecentColorSet);
-
-            mpColorSet->layoutAllVisible(mrPaletteManager.GetColorCount());
-            mpRecentColorSet->layoutAllVisible(mrPaletteManager.GetRecentColorCount());
+            if ( mrPaletteManager.GetPalette() == 0 )
+            {
+                mrPaletteManager.ReloadColorSet(*mpColorSet);
+                mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
+            }
         }
         else if ( SfxItemState::DEFAULT <= eState )
         {
