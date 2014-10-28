@@ -32,12 +32,6 @@ if( status != CL_SUCCESS )    \
 
 #define MAX_CLFILE_NUM 50
 
-#if defined(_MSC_VER)
-#ifndef strcasecmp
-#define strcasecmp strcmp
-#endif
-#endif
-
 #include <cstdio>
 
 typedef struct _KernelEnv
