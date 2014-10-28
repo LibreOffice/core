@@ -19,6 +19,7 @@
 #include "macros.inc"
 
 #include "AutoInstall/impress"
+#include "AutoInstall/impress_brand"
 
 Module gid_Module_Prg_Impress
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS );
@@ -52,7 +53,7 @@ Module gid_Module_Brand_Prg_Impress
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Exe_Simpress);
+    Files = (auto_impress_brand_ALL,gid_File_Exe_Simpress);
 End
 
 Module gid_Module_Langpack_Impress_Template

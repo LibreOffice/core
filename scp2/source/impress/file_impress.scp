@@ -33,11 +33,11 @@ File gid_File_Help_Simpress_Zip
 End
 #endif
 
-#ifndef MACOSX
+#if !defined MACOSX && !defined WNT
 File gid_File_Exe_Simpress
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(simpress);
+    Name = "simpress";
     Styles = (PACKED);
 End
 #endif

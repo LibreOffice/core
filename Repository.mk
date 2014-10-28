@@ -116,6 +116,12 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,draw_brand, \
 	) \
 ))
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,impress_brand, \
+	$(if $(filter WNT,$(OS)), \
+		simpress \
+	) \
+))
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 ))
@@ -159,7 +165,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter WNT,$(OS)), \
 		quickstart \
 		senddoc \
-		simpress \
 		smath \
 		sweb \
 		swriter \

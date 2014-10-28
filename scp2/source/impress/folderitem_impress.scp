@@ -23,8 +23,8 @@ FolderItem gid_Folderitem_Simpress
     Name = "%PRODUCTNAME Impress";
     ModuleID = gid_Module_Prg_Impress_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Exe_Simpress;
-    IconFile = gid_File_Exe_Simpress;
+    FileID = auto_impress_brand_exe_simpress;
+    IconFile = auto_impress_brand_exe_simpress;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
