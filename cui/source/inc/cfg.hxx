@@ -214,11 +214,11 @@ class SvxConfigEntry
 private:
 
     /// common properties
-    sal_uInt16                      nId;
-    OUString             aHelpText;
-    OUString             aLabel;
-    OUString             aCommand;
-    OUString             aHelpURL;
+    sal_uInt16                  nId;
+    OUString                    aHelpText;
+    OUString                    aLabel;
+    OUString                    aCommand;
+    OUString                    aHelpURL;
 
     bool                        bPopUp;
     bool                        bStrEdited;
@@ -233,7 +233,7 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::graphic::XGraphic > xBackupGraphic;
 
-    SvxEntries                  *pEntries;
+    SvxEntries                  *mpEntries;
 
 public:
 
@@ -252,7 +252,7 @@ public:
             bIsParentData( false ),
             bIsVisible( true ),
             nStyle( 0 ),
-            pEntries( 0 )
+            mpEntries( 0 )
     {}
 
     ~SvxConfigEntry();
@@ -279,9 +279,9 @@ public:
     bool    IsBinding() const { return !bPopUp; }
     bool    IsSeparator() const { return nId == 0; }
 
-    SvxEntries* GetEntries() const { return pEntries; }
-    void    SetEntries( SvxEntries* entries ) { pEntries = entries; }
-    bool    HasEntries() const { return pEntries != NULL; }
+    SvxEntries* GetEntries() const { return mpEntries; }
+    void    SetEntries( SvxEntries* entries ) { mpEntries = entries; }
+    bool    HasEntries() const { return mpEntries != NULL; }
 
     void    SetMain( bool bValue = true ) { bIsMain = bValue; }
     bool    IsMain() { return bIsMain; }
@@ -501,7 +501,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
     PushButton*     m_pMoveUpButton;
     PushButton*     m_pMoveDownButton;
 
-    SvxEntries*     pEntries;
+    SvxEntries*     mpEntries;
     SvTreeListEntry*    pNewMenuEntry;
     bool            bModified;
 
@@ -518,7 +518,7 @@ public:
 
     virtual ~SvxMainMenuOrganizerDialog ();
 
-    SvxEntries*     GetEntries() { return pEntries;}
+    SvxEntries*     GetEntries() { return mpEntries;}
     void            SetEntries( SvxEntries* );
     SvxConfigEntry* GetSelectedEntry();
 };

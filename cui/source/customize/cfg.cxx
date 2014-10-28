@@ -2594,7 +2594,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         SvxConfigEntry* pEntry;
         SvTreeListEntry* pLBEntry;
 
-        pEntries = new SvxEntries();
+        mpEntries = new SvxEntries();
         SvxEntries::const_iterator iter = entries->begin();
 
         while ( iter != entries->end() )
@@ -2603,7 +2603,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
             pLBEntry =
                 m_pMenuListBox->InsertEntry( stripHotKey( pEntry->GetName() ) );
             pLBEntry->SetUserData( pEntry );
-            pEntries->push_back( pEntry );
+            mpEntries->push_back( pEntry );
 
             if ( pEntry == selection )
             {
@@ -2619,7 +2619,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         OUString prefix = CUI_RES( RID_SVXSTR_NEW_MENU );
 
         OUString newname = generateCustomName( prefix, entries );
-        OUString newurl = generateCustomMenuURL( pEntries );
+        OUString newurl = generateCustomMenuURL( mpEntries );
 
         SvxConfigEntry* pNewEntryData =
             new SvxConfigEntry( newname, newurl, true );
@@ -2632,7 +2632,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
         pNewMenuEntry->SetUserData( pNewEntryData );
 
-        pEntries->push_back( pNewEntryData );
+        mpEntries->push_back( pNewEntryData );
 
         m_pMenuNameEdit->SetText( newname );
         m_pMenuNameEdit->SetModifyHdl(
@@ -2786,25 +2786,25 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
     , bIsParentData( bParentData )
     , bIsVisible( true )
     , nStyle( 0 )
-    , pEntries( 0 )
+    , mpEntries( 0 )
 {
     if (bPopUp)
     {
-        pEntries = new SvxEntries();
+        mpEntries = new SvxEntries();
     }
 }
 
 SvxConfigEntry::~SvxConfigEntry()
 {
-    if ( pEntries != NULL )
+    if ( mpEntries != NULL )
     {
-        SvxEntries::const_iterator iter = pEntries->begin();
+        SvxEntries::const_iterator iter = mpEntries->begin();
 
-        for ( ; iter != pEntries->end(); ++iter )
+        for ( ; iter != mpEntries->end(); ++iter )
         {
             delete *iter;
         }
-        delete pEntries;
+        delete mpEntries;
     }
 }
 
