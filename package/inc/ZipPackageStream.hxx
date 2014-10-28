@@ -71,7 +71,10 @@ private:
     bool m_bUseWinEncoding;
     bool m_bRawStream;
 
+    /// Check that m_xStream implements io::XSeekable and return it
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnSeekStream();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
+        throw(::com::sun::star::uno::RuntimeException);
 
 public:
     bool IsEncrypted () const    { return m_bIsEncrypted;}
@@ -135,8 +138,6 @@ public:
                             const rtlRandomPool &rRandomPool ) SAL_OVERRIDE;
 
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawData()
-        throw(::com::sun::star::uno::RuntimeException);
     void successfullyWritten( ZipEntry *pEntry );
 
     static ::com::sun::star::uno::Sequence < sal_Int8 > static_getImplementationId();
