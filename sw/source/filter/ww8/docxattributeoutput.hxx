@@ -109,16 +109,11 @@ struct PageMargins
  * All the information that should be stashed away when we're in the middle of
  * of a table export and still have to do something else, e.g. export a shape.
  */
-class DocxTableExportContext
+struct DocxTableExportContext
 {
     ww8::WW8TableInfo::Pointer_t m_pTableInfo;
     bool m_bTableCellOpen;
     sal_uInt32 m_nTableDepth;
-public:
-    /// Stores the passed parameters and resets them to their default value.
-    DocxTableExportContext(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth);
-    /// Restores the remembered state.
-    void restore(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth);
 };
 
 /**
@@ -978,6 +973,11 @@ public:
     void GetSdtEndBefore(const SdrObject* pSdrObj);
     void SetStartedParaSdt(bool bStartedParaSdt);
     bool IsStartedParaSdt();
+
+    /// Stores the table export state to the passed context and resets own state.
+    void pushToTableExportContext(DocxTableExportContext& rContext);
+    /// Restores from the remembered state.
+    void popFromTableExportContext(DocxTableExportContext& rContext);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX

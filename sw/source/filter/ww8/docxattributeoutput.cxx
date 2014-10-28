@@ -497,9 +497,10 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                        otherwise the StartParagraph function will use the previous existing
                        table reference attributes since the variable is being shared.
                 */
-                DocxTableExportContext aDMLTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+                DocxTableExportContext aDMLTableExportContext;
+                pushToTableExportContext(aDMLTableExportContext);
                 m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
-                aDMLTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+                popFromTableExportContext(aDMLTableExportContext);
                 m_pSerializer->endElementNS(XML_mc, XML_Choice);
                 SetAlternateContentChoiceOpen( false );
 
@@ -510,9 +511,10 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 //reset the tableReference.
 
                 m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-                DocxTableExportContext aVMLTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+                DocxTableExportContext aVMLTableExportContext;
+                pushToTableExportContext(aVMLTableExportContext);
                 m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
-                aVMLTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+                popFromTableExportContext(aVMLTableExportContext);
                 m_rExport.mpTableInfo = pOldTableInfo;
 
                 m_pSerializer->endElementNS(XML_mc, XML_Fallback);
@@ -5093,47 +5095,49 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
 }
 
-DocxTableExportContext::DocxTableExportContext(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth)
+void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rContext)
 {
-    m_pTableInfo = pTableInfo;
-    pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+    rContext.m_pTableInfo = m_rExport.mpTableInfo;
+    m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 
-    m_bTableCellOpen = bTableCellOpen;
-    bTableCellOpen = false;
+    rContext.m_bTableCellOpen = m_tableReference->m_bTableCellOpen;
+    m_tableReference->m_bTableCellOpen = false;
 
-    m_nTableDepth = nTableDepth;
-    nTableDepth = 0;
+    rContext.m_nTableDepth = m_tableReference->m_nTableDepth;
+    m_tableReference->m_nTableDepth = 0;
 }
 
-void DocxTableExportContext::restore(ww8::WW8TableInfo::Pointer_t& pTableInfo, bool& bTableCellOpen, sal_uInt32& nTableDepth)
+void DocxAttributeOutput::popFromTableExportContext(DocxTableExportContext& rContext)
 {
-    pTableInfo = m_pTableInfo;
-    bTableCellOpen = m_bTableCellOpen;
-    nTableDepth = m_nTableDepth;
+    m_rExport.mpTableInfo = rContext.m_pTableInfo;
+    m_tableReference->m_bTableCellOpen = rContext.m_bTableCellOpen;
+    m_tableReference->m_nTableDepth = rContext.m_nTableDepth;
 }
 
 void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
 {
-    DocxTableExportContext aTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+    DocxTableExportContext aTableExportContext;
+    pushToTableExportContext(aTableExportContext);
 
     SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetCntntAnchor();
     sw::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
 
-    aTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+    popFromTableExportContext(aTableExportContext);
 }
 
 void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape)
 {
-    DocxTableExportContext aTableExportContext(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+    DocxTableExportContext aTableExportContext;
+    pushToTableExportContext(aTableExportContext);
 
     SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(xShape);
     const SwPosition* pAnchor = pTextBox->GetAnchor().GetCntntAnchor();
     sw::Frame aFrame(*pTextBox, *pAnchor);
     m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
 
-    aTableExportContext.restore(m_rExport.mpTableInfo, m_tableReference->m_bTableCellOpen, m_tableReference->m_nTableDepth);
+    popFromTableExportContext(aTableExportContext);
 }
 
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
