@@ -684,7 +684,7 @@ bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, c
         for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
             bRet = maList[ i ]->aBmpEx.Filter( eFilter, pFilterParam, pProgress );
 
-        maBitmapEx.Filter( eFilter, pFilterParam, pProgress );
+        (void)maBitmapEx.Filter(eFilter, pFilterParam, pProgress);
     }
     else
         bRet = false;
