@@ -49,27 +49,6 @@ if( status != CL_SUCCESS )    \
     return false;    \
 }
 
-#define CHECK_OPENCL_PTR(status,name)    \
-if( status != CL_SUCCESS )    \
-{    \
-    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE " when %s .\n", status, name);    \
-    return NULL;    \
-}
-
-#define CHECK_OPENCL_VOID(status,name)    \
-if( status != CL_SUCCESS )    \
-{    \
-    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE " when %s .\n", status, name);    \
-}
-
-#define CHECK_OPENCL_RELEASE(status,name)    \
-if ( name != NULL )    \
-    clReleaseMemObject( name );    \
-if( status != CL_SUCCESS )    \
-{    \
-    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE " when clReleaseMemObject( %s ).\n", status, #name);    \
-}
-
 #define MAX_KERNEL_STRING_LEN 64
 #define MAX_CLFILE_NUM 50
 #define MAX_CLKERNEL_NUM 200
