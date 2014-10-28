@@ -4227,8 +4227,16 @@ void WW8RStyle::ImportOldFormatStyles()
     sal_uInt16 nStyles=stcp;
 
     std::vector<pxoffset> aCHPXOffsets(stcp);
+    size_t nMaxByteCount = rSt.remainingSize();
     sal_uInt16 cbChpx(0);
-    rSt.ReadUInt16( cbChpx );
+    rSt.ReadUInt16(cbChpx);
+    if (cbPapx > nMaxByteCount)
+    {
+        SAL_WARN("sw.ww8", "WW8RStyle::ImportOldFormatStyles: truncating out of range "
+            << cbPapx << " to " << nMaxByteCount);
+        cbPapx = nMaxByteCount;
+    }
+
     nByteCount = 2;
     stcp=0;
     std::vector< std::vector<sal_uInt8> > aConvertedChpx;
