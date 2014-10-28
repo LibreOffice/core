@@ -736,16 +736,16 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
 
     for ( nX=nX1; nX<=nX2; nX++ )
     {
-        const Color* pCol1 = rFirst.pCellInfo[nX+1].pColorScale;
-        const Color* pCol2 = rOther.pCellInfo[nX+1].pColorScale;
+        const Color* pCol1 = rFirst.pCellInfo[nX+1].pColorScale.get();
+        const Color* pCol2 = rOther.pCellInfo[nX+1].pColorScale.get();
         if( (pCol1 && !pCol2) || (!pCol1 && pCol2) )
             return false;
 
         if (pCol1 && (*pCol1 != *pCol2))
             return false;
 
-        const ScDataBarInfo* pInfo1 = rFirst.pCellInfo[nX+1].pDataBar;
-        const ScDataBarInfo* pInfo2 = rOther.pCellInfo[nX+1].pDataBar;
+        const ScDataBarInfo* pInfo1 = rFirst.pCellInfo[nX+1].pDataBar.get();
+        const ScDataBarInfo* pInfo2 = rOther.pCellInfo[nX+1].pDataBar.get();
 
         if( (pInfo1 && !pInfo2) || (!pInfo1 && pInfo2) )
             return false;
@@ -754,8 +754,8 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
             return false;
 
         // each cell with an icon set should be painted the same way
-        const ScIconSetInfo* pIconSet1 = rFirst.pCellInfo[nX+1].pIconSet;
-        const ScIconSetInfo* pIconSet2 = rOther.pCellInfo[nX+1].pIconSet;
+        const ScIconSetInfo* pIconSet1 = rFirst.pCellInfo[nX+1].pIconSet.get();
+        const ScIconSetInfo* pIconSet2 = rOther.pCellInfo[nX+1].pIconSet.get();
 
         if(pIconSet1 || pIconSet2)
             return false;
@@ -1041,9 +1041,9 @@ void ScOutputData::DrawBackground()
                         pBackground = lcl_FindBackground( mpDoc, nX, nY, nTab );
                     }
 
-                    pColor = pInfo->pColorScale;
-                    const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar;
-                    const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet;
+                    pColor = pInfo->pColorScale.get();
+                    const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar.get();
+                    const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet.get();
                     drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
 
                     nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
@@ -1631,7 +1631,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                         else
                         {
                             Polygon aPoly( 4, aPoints );
-                            const Color* pColor = pInfo->pColorScale;
+                            const Color* pColor = pInfo->pColorScale.get();
 
                             //  ohne Pen wird bei DrawPolygon rechts und unten
                             //  ein Pixel weggelassen...

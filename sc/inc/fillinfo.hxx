@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SC_INC_FILLINFO_HXX
 #define INCLUDED_SC_INC_FILLINFO_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svx/framelinkarray.hxx>
 #include "global.hxx"
 #include "colorscale.hxx"
@@ -98,9 +102,9 @@ struct CellInfo : boost::noncopyable
 
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;
-    const Color*                pColorScale;
-    const ScDataBarInfo*        pDataBar;
-    const ScIconSetInfo*        pIconSet;
+    std::unique_ptr<const Color> pColorScale;
+    std::unique_ptr<const ScDataBarInfo> pDataBar;
+    std::unique_ptr<const ScIconSetInfo> pIconSet;
 
     const SvxBrushItem*         pBackground;
 
@@ -131,18 +135,6 @@ struct CellInfo : boost::noncopyable
     bool                        bPrinted : 1;               // when required (pagebreak mode)
     bool                        bHideGrid : 1;              // output-internal
     bool                        bEditEngine : 1;            // output-internal
-
-    CellInfo():
-        pColorScale(NULL),
-        pDataBar(NULL),
-        pIconSet(NULL) {}
-
-    ~CellInfo()
-    {
-        delete pColorScale;
-        delete pDataBar;
-        delete pIconSet;
-    }
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;

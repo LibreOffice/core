@@ -575,18 +575,18 @@ void ScDocument::FillInfo(
                                         }
                                         if(aData.pColorScale)
                                         {
-                                            pInfo->pColorScale = aData.pColorScale;
+                                            pInfo->pColorScale.reset(aData.pColorScale);
                                             bFound = true;
                                         }
 
                                         if(aData.pDataBar)
                                         {
-                                            pInfo->pDataBar = aData.pDataBar;
+                                            pInfo->pDataBar.reset(aData.pDataBar);
                                             bFound = true;
                                         }
                                         if(aData.pIconSet)
                                         {
-                                            pInfo->pIconSet = aData.pIconSet;
+                                            pInfo->pIconSet.reset(aData.pIconSet);
                                             bFound = true;
                                         }
                                     }
