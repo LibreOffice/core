@@ -816,14 +816,16 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
 
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
-                if (pObj->IsPolyObj())
+                long nOldWidth = aOld.GetWidth();
+                long nOldHeight = aOld.GetHeight();
+                if (pObj->IsPolyObj() && nOldWidth && nOldHeight)
                 {
                     // Polyline objects need special treatment.
                     Size aSizeMove(aNew.Left()-aOld.Left(), aNew.Top()-aOld.Top());
                     pObj->NbcMove(aSizeMove);
 
-                    double fXFrac = static_cast<double>(aNew.GetWidth()) / static_cast<double>(aOld.GetWidth());
-                    double fYFrac = static_cast<double>(aNew.GetHeight()) / static_cast<double>(aOld.GetHeight());
+                    double fXFrac = static_cast<double>(aNew.GetWidth()) / static_cast<double>(nOldWidth);
+                    double fYFrac = static_cast<double>(aNew.GetHeight()) / static_cast<double>(nOldHeight);
                     pObj->NbcResize(aNew.TopLeft(), Fraction(fXFrac), Fraction(fYFrac));
                 }
                 // order of these lines is important, modify rData.maLastRect carefully it is used as both
