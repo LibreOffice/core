@@ -64,8 +64,8 @@
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
 #include <numrule.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <paratr.hxx>
 
@@ -1360,7 +1360,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
 {
     bool bChapterNum = pHeadingStyleName != 0;
 
-    ::comphelper::SequenceAsVector<PropertyValue> aPropertyValues;
+    ::std::vector<PropertyValue> aPropertyValues;
     aPropertyValues.reserve(32);
     //fill all properties into the array
 
@@ -1530,7 +1530,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
                 makePropertyValue(aUString, UNO_NAME_HEADING_STYLE_NAME));
     }
 
-    return aPropertyValues.getAsConstList();
+    return ::comphelper::containerToSequence(aPropertyValues);
 }
 
 static PropertyValue const* lcl_FindProperty(

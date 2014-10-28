@@ -34,7 +34,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
 #include "formresid.hrc"
 #include "pcrservices.hxx"
@@ -262,11 +262,11 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
                     uno::UNO_QUERY_THROW );
 
                 m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );
-                comphelper::SequenceAsVector<
+                uno::Sequence<
                     uno::Reference< reflection::XConstantTypeDescription > >
                     cs(m_xTypeDescription->getConstants());
                 std::sort(cs.begin(), cs.end(), CompareConstants());
-                cs >> m_aConstants;
+                m_aConstants = cs;
             }
         }
     }

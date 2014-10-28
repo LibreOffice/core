@@ -99,7 +99,6 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <config_folders.h>
 #include <cppu/unotype.hxx>

@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <comphelper/sequenceasvector.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/comphelperdllapi.h>

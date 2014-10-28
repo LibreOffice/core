@@ -29,7 +29,6 @@
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <comphelper/sequenceasvector.hxx>
 
 class SfxFilterMatcher;
 class GraphicFilter;
@@ -56,7 +55,7 @@ namespace sfx2
         FileDialogHelper*           mpAntiImpl;
         vcl::Window*                     mpPreferredParentWindow;
 
-        ::comphelper::SequenceAsVector< OUString > mlLastURLs;
+        ::std::vector< OUString > mlLastURLs;
 
         OUString             maPath;
         OUString             maFileName;

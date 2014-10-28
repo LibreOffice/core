@@ -69,7 +69,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <com/sun/star/util/ElementChange.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -156,7 +156,7 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    comphelper::SequenceAsVector< css::uno::Type > types;
+    std::vector< css::uno::Type > types;
     types.push_back(cppu::UnoType< css::uno::XInterface >::get());
     types.push_back(cppu::UnoType< css::uno::XWeak >::get());
     types.push_back(cppu::UnoType< css::lang::XTypeProvider >::get());
@@ -199,7 +199,7 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
             cppu::UnoType< css::container::XHierarchicalNameAccess >::get());
     }
     addTypes(&types);
-    return types.getAsConstList();
+    return comphelper::containerToSequence(types);
 }
 
 css::uno::Sequence< sal_Int8 > Access::getImplementationId()
@@ -231,7 +231,7 @@ css::uno::Sequence< OUString > Access::getSupportedServiceNames()
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    comphelper::SequenceAsVector< OUString > services;
+    std::vector< OUString > services;
     services.push_back("com.sun.star.configuration.ConfigurationAccess");
     if (getRootAccess()->isUpdate()) {
         services.push_back(
@@ -254,7 +254,7 @@ css::uno::Sequence< OUString > Access::getSupportedServiceNames()
         }
     }
     addSupportedServiceNames(&services);
-    return services.getAsConstList();
+    return comphelper::containerToSequence(services);
 }
 
 void Access::dispose() throw (css::uno::RuntimeException, std::exception) {
@@ -402,14 +402,14 @@ css::uno::Sequence< OUString > Access::getElementNames()
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
-    comphelper::SequenceAsVector< OUString > names;
+    std::vector< OUString > names;
     for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
              children.begin());
          i != children.end(); ++i)
     {
         names.push_back((*i)->getNameInternal());
     }
-    return names.getAsConstList();
+    return comphelper::containerToSequence(names);
 }
 
 sal_Bool Access::hasByName(OUString const & aName)
@@ -541,14 +541,14 @@ css::uno::Sequence< css::beans::Property > Access::getProperties()
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
     std::vector< rtl::Reference< ChildAccess > > children(getAllChildren());
-    comphelper::SequenceAsVector< css::beans::Property > properties;
+    std::vector< css::beans::Property > properties;
     for (std::vector< rtl::Reference< ChildAccess > >::iterator i(
              children.begin());
          i != children.end(); ++i)
     {
         properties.push_back((*i)->asProperty());
     }
-    return properties.getAsConstList();
+    return comphelper::containerToSequence(properties);
 }
 
 css::beans::Property Access::getPropertyByName(OUString const & aName)
@@ -1651,7 +1651,7 @@ void Access::initBroadcasterAndChanges(
     std::vector< css::util::ElementChange > * allChanges)
 {
     assert(broadcaster != 0);
-    comphelper::SequenceAsVector< css::beans::PropertyChangeEvent > propChanges;
+    std::vector< css::beans::PropertyChangeEvent > propChanges;
     bool collectPropChanges = !propertiesChangeListeners_.empty();
     for (Modifications::Node::Children::const_iterator i(
              modifications.children.begin());
@@ -1994,7 +1994,7 @@ void Access::initBroadcasterAndChanges(
     }
     if (!propChanges.empty()) {
         css::uno::Sequence< css::beans::PropertyChangeEvent > seq(
-            propChanges.getAsConstList());
+            comphelper::containerToSequence(propChanges));
         for (PropertiesChangeListeners::iterator i(
                  propertiesChangeListeners_.begin());
              i != propertiesChangeListeners_.end(); ++i)
