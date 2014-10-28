@@ -11,6 +11,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SDTHELPER_HXX
 
 #include <boost/optional.hpp>
+#include <vector>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -57,7 +58,7 @@ class SdtHelper
     /// Locale string as it comes from the ooxml document.
     OUStringBuffer m_sLocale;
     /// Grab bag to store unsupported SDTs, aiming to save them back on export.
-    comphelper::SequenceAsVector<css::beans::PropertyValue> m_aGrabBag;
+    std::vector<css::beans::PropertyValue> m_aGrabBag;
 
     bool m_bHasElements;
     /// The last stored SDT element is outside paragraphs.

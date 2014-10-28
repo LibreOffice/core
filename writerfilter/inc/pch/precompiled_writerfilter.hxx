@@ -163,7 +163,6 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>

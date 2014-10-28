@@ -26,6 +26,10 @@
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 
+/** This should not be used. Use the functions in
+ * comphelper/vectortosequence.hxx
+ * @deprecated
+ */
 
 namespace comphelper{
 
