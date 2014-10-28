@@ -36,7 +36,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
@@ -75,11 +75,11 @@ void RootAccess::initBroadcaster(
     Modifications::Node const & modifications, Broadcaster * broadcaster)
 {
     assert(broadcaster != 0);
-    comphelper::SequenceAsVector< css::util::ElementChange > changes;
+    std::vector< css::util::ElementChange > changes;
     initBroadcasterAndChanges(
         modifications, broadcaster, changesListeners_.empty() ? 0 : &changes);
     if (!changes.empty()) {
-        css::util::ChangesSet set(changes.getAsConstList());
+        css::util::ChangesSet set(comphelper::containerToSequence(changes));
         for (ChangesListeners::iterator i(changesListeners_.begin());
              i != changesListeners_.end(); ++i)
         {
@@ -193,9 +193,9 @@ css::util::ChangesSet RootAccess::getPendingChanges()
     assert(thisIs(IS_UPDATE));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    comphelper::SequenceAsVector< css::util::ElementChange > changes;
+    std::vector< css::util::ElementChange > changes;
     reportChildChanges(&changes);
-    return changes.getAsConstList();
+    return comphelper::containerToSequence(changes);
 }
 
 RootAccess::~RootAccess()

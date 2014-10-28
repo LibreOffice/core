@@ -58,7 +58,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/xmltools.hxx>
 
@@ -1252,12 +1252,12 @@ librdf_Repository::getGraphNames()
 throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
-    ::comphelper::SequenceAsVector< uno::Reference<rdf::XURI> > ret;
+    ::std::vector< uno::Reference<rdf::XURI> > ret;
     std::transform(m_NamedGraphs.begin(), m_NamedGraphs.end(),
         std::back_inserter(ret),
         boost::bind(&rdf::XNamedGraph::getName,
             boost::bind(&NamedGraphMap_t::value_type::second, _1)));
-    return ret.getAsConstList();
+    return comphelper::containerToSequence(ret);
 }
 
 uno::Reference< rdf::XNamedGraph > SAL_CALL
@@ -1667,7 +1667,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "cannot create URI for XML ID", *this, uno::makeAny(iae));
     }
 
-    ::comphelper::SequenceAsVector< rdf::Statement > ret;
+    ::std::vector< rdf::Statement > ret;
     try
     {
         const uno::Reference<container::XEnumeration> xIter(
@@ -1693,7 +1693,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     return beans::Pair< uno::Sequence<rdf::Statement>, sal_Bool >(
-            ret.getAsConstList(), 0 != m_RDFaXHTMLContentSet.count(sXmlId));
+            comphelper::containerToSequence(ret), 0 != m_RDFaXHTMLContentSet.count(sXmlId));
 }
 
 extern "C"

@@ -10,7 +10,7 @@
 #include <config_folders.h>
 #include <rtl/bootstrap.hxx>
 #include <tools/stream.hxx>
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "drawingml/customshapeproperties.hxx"
 #include "oox/token/tokenmap.hxx"
@@ -22,7 +22,7 @@ namespace
 {
 
 // Parses a string like: Value = (any) { (long) 19098 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE, Name = "adj"
-void lcl_parseAdjustmentValue(comphelper::SequenceAsVector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues, const OString& rValue)
+void lcl_parseAdjustmentValue(std::vector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues, const OString& rValue)
 {
     sal_Int32 nIndex = 0;
     drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue;
@@ -49,7 +49,7 @@ void lcl_parseAdjustmentValue(comphelper::SequenceAsVector<drawing::EnhancedCust
 }
 
 // Parses a string like: { Value = (any) { (long) 19098 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE, Name = "adj" }, { Value = ..., State = ..., Name = ... }
-void lcl_parseAdjustmentValues(comphelper::SequenceAsVector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues, const OString& rValue)
+void lcl_parseAdjustmentValues(std::vector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
@@ -220,7 +220,7 @@ drawing::EnhancedCustomShapeTextFrame lcl_parseEnhancedCustomShapeTextFrame(cons
 
 // Parses a string like: Name = "Position", Handle = (long) 0, Value = (any) { ... }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 // where "{ ... }" may contain "," as well.
-void lcl_parseHandlePosition(comphelper::SequenceAsVector<beans::PropertyValue>& rHandle, const OString& rValue)
+void lcl_parseHandlePosition(std::vector<beans::PropertyValue>& rHandle, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     bool bIgnore = false;
@@ -261,7 +261,7 @@ void lcl_parseHandlePosition(comphelper::SequenceAsVector<beans::PropertyValue>&
 
 // Parses a string like: Name = "RangeYMaximum", Handle = (long) 0, Value = (any) { ... }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 // where "{ ... }" may contain "," as well.
-void lcl_parseHandleRange(comphelper::SequenceAsVector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
+void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
 {
     sal_Int32 nLevel = 0;
     bool bIgnore = false;
@@ -314,7 +314,7 @@ void lcl_parseHandleRange(comphelper::SequenceAsVector<beans::PropertyValue>& rH
 }
 
 // Parses a string like: Name = "RefY", Handle = (long) 0, Value = (any) { (long) 0 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
-void lcl_parseHandleRef(comphelper::SequenceAsVector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
+void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
 {
     static const char aExpectedXPrefix[] = "Name = \"RefX\", Handle = (long) 0, Value = (any) { (long) ";
     static const char aExpectedYPrefix[] = "Name = \"RefY\", Handle = (long) 0, Value = (any) { (long) ";
@@ -333,7 +333,7 @@ void lcl_parseHandleRef(comphelper::SequenceAsVector<beans::PropertyValue>& rHan
 
 uno::Sequence<beans::PropertyValue> lcl_parseHandle(const OString& rValue)
 {
-    comphelper::SequenceAsVector<beans::PropertyValue> aRet;
+    std::vector<beans::PropertyValue> aRet;
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
     for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
@@ -373,10 +373,10 @@ uno::Sequence<beans::PropertyValue> lcl_parseHandle(const OString& rValue)
             }
         }
     }
-    return aRet.getAsConstList();
+    return comphelper::containerToSequence(aRet);
 }
 
-void lcl_parseHandles(comphelper::SequenceAsVector< uno::Sequence<beans::PropertyValue> >& rHandles, const OString& rValue)
+void lcl_parseHandles(std::vector< uno::Sequence<beans::PropertyValue> >& rHandles, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
@@ -400,7 +400,7 @@ void lcl_parseHandles(comphelper::SequenceAsVector< uno::Sequence<beans::Propert
     }
 }
 
-void lcl_parseEquations(comphelper::SequenceAsVector<OUString>& rEquations, const OString& rValue)
+void lcl_parseEquations(std::vector<OUString>& rEquations, const OString& rValue)
 {
     bool bInString = false;
     sal_Int32 nStart = 0;
@@ -419,9 +419,9 @@ void lcl_parseEquations(comphelper::SequenceAsVector<OUString>& rEquations, cons
     }
 }
 
-void lcl_parsePathCoordinateValues(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathCoordinateValues(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
-    comphelper::SequenceAsVector<drawing::EnhancedCustomShapeParameterPair> aPairs;
+    std::vector<drawing::EnhancedCustomShapeParameterPair> aPairs;
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
     for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
@@ -442,13 +442,13 @@ void lcl_parsePathCoordinateValues(comphelper::SequenceAsVector<beans::PropertyV
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "Coordinates";
-    aPropertyValue.Value = uno::makeAny(aPairs.getAsConstList());
+    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aPairs));
     rPath.push_back(aPropertyValue);
 }
 
 // Parses a string like: Name = "Coordinates", Handle = (long) 0, Value = (any) { ... }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 // where "{ ... }" may contain "," as well.
-void lcl_parsePathCoordinates(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathCoordinates(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     bool bIgnore = false;
@@ -483,9 +483,9 @@ void lcl_parsePathCoordinates(comphelper::SequenceAsVector<beans::PropertyValue>
     }
 }
 
-void lcl_parsePathSegmentValues(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathSegmentValues(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
-    comphelper::SequenceAsVector<drawing::EnhancedCustomShapeSegment> aSegments;
+    std::vector<drawing::EnhancedCustomShapeSegment> aSegments;
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
     for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
@@ -506,13 +506,13 @@ void lcl_parsePathSegmentValues(comphelper::SequenceAsVector<beans::PropertyValu
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "Segments";
-    aPropertyValue.Value = uno::makeAny(aSegments.getAsConstList());
+    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aSegments));
     rPath.push_back(aPropertyValue);
 }
 
 // Parses a string like: Name = "Segments", Handle = (long) 0, Value = (any) { ... }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 // where "{ ... }" may contain "," as well.
-void lcl_parsePathSegments(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathSegments(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     bool bIgnore = false;
@@ -547,9 +547,9 @@ void lcl_parsePathSegments(comphelper::SequenceAsVector<beans::PropertyValue>& r
     }
 }
 
-void lcl_parsePathTextFrameValues(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathTextFrameValues(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
-    comphelper::SequenceAsVector<drawing::EnhancedCustomShapeTextFrame> aTextFrames;
+    std::vector<drawing::EnhancedCustomShapeTextFrame> aTextFrames;
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
     for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
@@ -570,13 +570,13 @@ void lcl_parsePathTextFrameValues(comphelper::SequenceAsVector<beans::PropertyVa
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "TextFrames";
-    aPropertyValue.Value = uno::makeAny(aTextFrames.getAsConstList());
+    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aTextFrames));
     rPath.push_back(aPropertyValue);
 }
 
 // Parses a string like: Name = "TextFrames", Handle = (long) 0, Value = (any) { ... }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 // where "{ ... }" may contain "," as well.
-void lcl_parsePathTextFrames(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathTextFrames(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     bool bIgnore = false;
@@ -611,9 +611,9 @@ void lcl_parsePathTextFrames(comphelper::SequenceAsVector<beans::PropertyValue>&
     }
 }
 
-void lcl_parsePathSubViewSizeValues(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathSubViewSizeValues(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
-    comphelper::SequenceAsVector<awt::Size> aSizes;
+    std::vector<awt::Size> aSizes;
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
     for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
@@ -634,11 +634,11 @@ void lcl_parsePathSubViewSizeValues(comphelper::SequenceAsVector<beans::Property
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "SubViewSize";
-    aPropertyValue.Value = uno::makeAny(aSizes.getAsConstList());
+    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aSizes));
     rPath.push_back(aPropertyValue);
 }
 
-void lcl_parsePathSubViewSize(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePathSubViewSize(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     bool bIgnore = false;
@@ -673,7 +673,7 @@ void lcl_parsePathSubViewSize(comphelper::SequenceAsVector<beans::PropertyValue>
     }
 }
 
-void lcl_parsePath(comphelper::SequenceAsVector<beans::PropertyValue>& rPath, const OString& rValue)
+void lcl_parsePath(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
     sal_Int32 nLevel = 0;
     sal_Int32 nStart = 0;
@@ -743,13 +743,13 @@ void CustomShapeProperties::initializePresetDataMap()
                 aStream.ReadLine(aLine);
                 if (aLine != "([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) {}")
                 {
-                    comphelper::SequenceAsVector<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+                    std::vector<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
                     OString aExpectedPrefix("([]com.sun.star.drawing.EnhancedCustomShapeAdjustmentValue) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
                     OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                     lcl_parseAdjustmentValues(aAdjustmentValues, aValue);
-                    aPropertyMap.setProperty(PROP_AdjustmentValues, aAdjustmentValues.getAsConstList());
+                    aPropertyMap.setProperty(PROP_AdjustmentValues, comphelper::containerToSequence(aAdjustmentValues));
                 }
                 else
                     aPropertyMap.setProperty(PROP_AdjustmentValues, uno::Sequence<OUString>(0));
@@ -759,13 +759,13 @@ void CustomShapeProperties::initializePresetDataMap()
                 aStream.ReadLine(aLine);
                 if (aLine != "([]string) {}")
                 {
-                    comphelper::SequenceAsVector<OUString> aEquations;
+                    std::vector<OUString> aEquations;
                     OString aExpectedPrefix("([]string) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
                     OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                     lcl_parseEquations(aEquations, aValue);
-                    aPropertyMap.setProperty(PROP_Equations, aEquations.getAsConstList());
+                    aPropertyMap.setProperty(PROP_Equations, comphelper::containerToSequence(aEquations));
                 }
                 else
                     aPropertyMap.setProperty(PROP_Equations, uno::Sequence<OUString>(0));
@@ -775,13 +775,13 @@ void CustomShapeProperties::initializePresetDataMap()
                 aStream.ReadLine(aLine);
                 if (aLine != "([][]com.sun.star.beans.PropertyValue) {}")
                 {
-                    comphelper::SequenceAsVector< uno::Sequence<beans::PropertyValue> > aHandles;
+                    std::vector< uno::Sequence<beans::PropertyValue> > aHandles;
                     OString aExpectedPrefix("([][]com.sun.star.beans.PropertyValue) { ");
                     assert(aLine.startsWith(aExpectedPrefix));
 
                     OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                     lcl_parseHandles(aHandles, aValue);
-                    aPropertyMap.setProperty(PROP_Handles, aHandles.getAsConstList());
+                    aPropertyMap.setProperty(PROP_Handles, comphelper::containerToSequence(aHandles));
                 }
                 else
                     aPropertyMap.setProperty(PROP_Handles, uno::Sequence<OUString>(0));
@@ -812,10 +812,10 @@ void CustomShapeProperties::initializePresetDataMap()
                 OString aExpectedPrefix("([]com.sun.star.beans.PropertyValue) { ");
                 assert(aLine.startsWith(aExpectedPrefix));
 
-                comphelper::SequenceAsVector<beans::PropertyValue> aPathValue;
+                std::vector<beans::PropertyValue> aPathValue;
                 OString aValue = aLine.copy(aExpectedPrefix.getLength(), aLine.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
                 lcl_parsePath(aPathValue, aValue);
-                aPropertyMap.setProperty(PROP_Path, aPathValue.getAsConstList());
+                aPropertyMap.setProperty(PROP_Path, comphelper::containerToSequence(aPathValue));
             }
             else if (aLine == "Type")
             {

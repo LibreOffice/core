@@ -32,7 +32,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include "filepickereventnotification.hxx"
 
-#include <comphelper/sequenceasvector.hxx>
+#include <comphelper/sequence.hxx>
 
 
 // namespace directives
@@ -382,9 +382,9 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
     if (c < 2)
         return lSource;
 
-    const OUString                                   sPath  = lSource[0];
-          ::comphelper::SequenceAsVector< OUString > lTarget;
-          ::sal_Int32                                       i      = 1;
+    const OUString                  sPath  = lSource[0];
+          ::std::vector< OUString > lTarget;
+          ::sal_Int32               i      = 1;
     for (i=1; i<c; ++i)
     {
         const OUString sFile = lSource[i];
@@ -406,7 +406,7 @@ uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::R
         }
     }
 
-    return lTarget.getAsConstList();
+    return comphelper::containerToSequence(lTarget);
 }
 
 

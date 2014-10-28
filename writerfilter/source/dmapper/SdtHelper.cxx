@@ -14,6 +14,7 @@
 #include <unotools/datetime.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <SdtHelper.hxx>
+#include <comphelper/sequence.hxx>
 
 namespace writerfilter
 {
@@ -123,7 +124,7 @@ void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue a
     aGrabBag["Locale"] <<= m_sLocale.makeStringAndClear();
     aGrabBag["CharFormat"] <<= aCharFormat.Value;
     // merge in properties like ooxml:CT_SdtPr_alias and friends.
-    aGrabBag.update(comphelper::SequenceAsHashMap(m_aGrabBag.getAsConstList()));
+    aGrabBag.update(comphelper::SequenceAsHashMap(comphelper::containerToSequence(m_aGrabBag)));
     // and empty the property list, so they won't end up on the next sdt as well
     m_aGrabBag.clear();
 
@@ -166,7 +167,7 @@ void SdtHelper::appendToInteropGrabBag(com::sun::star::beans::PropertyValue rVal
 
 com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
 {
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aRet = m_aGrabBag.getAsConstList();
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aRet = comphelper::containerToSequence(m_aGrabBag);
     m_aGrabBag.clear();
     return aRet;
 }

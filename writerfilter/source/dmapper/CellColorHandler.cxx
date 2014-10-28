@@ -24,6 +24,7 @@
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <sal/macros.h>
 #include <filter/msfilter/util.hxx>
+#include <comphelper/sequence.hxx>
 #include "dmapperLoggers.hxx"
 
 namespace writerfilter {
@@ -297,7 +298,7 @@ beans::PropertyValue CellColorHandler::getInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = m_aInteropGrabBagName;
-    aRet.Value = uno::makeAny(m_aInteropGrabBag.getAsConstList());
+    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
     return aRet;
 }
 
