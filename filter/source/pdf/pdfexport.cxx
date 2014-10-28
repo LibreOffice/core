@@ -1066,6 +1066,8 @@ void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
     int w = 0;
     while( ( w = pDev->GetTextWidth( aText ) ) > nTextWidth )
     {
+        if (w == 0)
+            break;
         long nNewHeight = aFont.GetHeight() * nTextWidth / w;
         if( nNewHeight == aFont.GetHeight() )
         {
