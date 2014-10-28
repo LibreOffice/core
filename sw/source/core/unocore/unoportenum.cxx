@@ -145,14 +145,13 @@ namespace
             ++ppMark)
         {
             ::sw::mark::IMark* const pBkmk = ppMark->get();
-            ::sw::mark::CrossRefBookmark *const pCrossRefMark(
-                    dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
             bool const hasOther = pBkmk->IsExpanded();
 
             const SwPosition& rStartPos = pBkmk->GetMarkStart();
             if(rStartPos.nNode == nOwnNode)
             {
                 // #i109272#: cross reference marks: need special handling!
+                ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
                 sal_uInt8 const nType = (hasOther || pCrossRefMark)
                     ? BKM_TYPE_START : BKM_TYPE_START_END;
                 rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
@@ -168,6 +167,7 @@ namespace
                 auto_ptr<SwPosition> pCrossRefEndPos;
                 SAL_WNODEPRECATED_DECLARATIONS_POP
                 const SwPosition* pEndPos = NULL;
+                ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
                 if(hasOther)
                 {
                     pEndPos = &rEndPos;
