@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba076199_dd16e7a6",
+        "filename": "pyuno/source/module/pyuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-28T09:16:31Z",
+      "side": 1,
+      "message": "pVal is unconditionally dereferenced further down, so val2str apparently requires its pVal argument to be non-null as a precondition, so this should be an assert rather than a SAL_WARN_IF",
+      "revId": "4df4e2ec1ed9a05230ebae97671abf6557a310e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba076199_fd11abb0",
+        "filename": "pyuno/source/module/pyuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-10-28T09:16:31Z",
+      "side": 1,
+      "message": "pTypeDescr is unconditionally dereferenced further down, so this code apparently requires pTypeDescr to be non-null as a postcondition of the TYPELIB_DANGER_GET call, so this should be an assert rather than a SAL_WARN_IF",
+      "revId": "4df4e2ec1ed9a05230ebae97671abf6557a310e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
