@@ -23,8 +23,8 @@ FolderItem gid_Folderitem_Sdraw
     Name = "%PRODUCTNAME Draw";
     ModuleID = gid_Module_Prg_Draw_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Exe_Sdraw;
-    IconFile = gid_File_Exe_Sdraw;
+    FileID = auto_draw_brand_exe_sdraw;
+    IconFile = auto_draw_brand_exe_sdraw;
     IconID = 0;
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";

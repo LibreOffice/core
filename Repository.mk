@@ -110,6 +110,12 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,calc_brand, \
 	) \
 ))
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,draw_brand, \
+	$(if $(filter WNT,$(OS)), \
+		sdraw \
+	) \
+))
+
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 ))
@@ -152,7 +158,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 	$(if $(filter WNT,$(OS)), \
 		quickstart \
-		sdraw \
 		senddoc \
 		simpress \
 		smath \
