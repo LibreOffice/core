@@ -1057,13 +1057,13 @@ void AxCommandButtonModel::convertProperties( PropertyMap& rPropMap, const Contr
 
 void AxCommandButtonModel::convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv )
 {
-    rPropSet.getProperty( maCaption, PROP_Label );
+    (void)rPropSet.getProperty(maCaption, PROP_Label);
     bool bRes = false;
     if ( rPropSet.getProperty( bRes, PROP_Enabled ) )
         setFlag( mnFlags, AX_FLAGS_ENABLED, bRes );
     if ( rPropSet.getProperty( bRes,  PROP_MultiLine ) )
         setFlag( mnFlags, AX_FLAGS_WORDWRAP, bRes );
-    rPropSet.getProperty( mbFocusOnClick, PROP_FocusOnClick );
+    (void)rPropSet.getProperty(mbFocusOnClick, PROP_FocusOnClick);
 
     rConv.convertToMSColor( rPropSet, PROP_TextColor, mnTextColor );
     rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
