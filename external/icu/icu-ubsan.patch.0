@@ -49,6 +49,17 @@
      table->fNumStates = fDStates->size();
      table->fFlags     = 0;
      if (fRB->fLookAheadHardBreak) {
+--- source/common/ucharstriebuilder.cpp
++++ source/common/ucharstriebuilder.cpp
+@@ -285,7 +285,7 @@
+ 
+ UCharsTrieBuilder::UCTLinearMatchNode::UCTLinearMatchNode(const UChar *units, int32_t len, Node *nextNode)
+         : LinearMatchNode(len, nextNode), s(units) {
+-    hash=hash*37+ustr_hashUCharsN(units, len);
++    hash=hash*37U+ustr_hashUCharsN(units, len);
+ }
+ 
+ UBool
 --- source/common/ucmndata.h
 +++ source/common/ucmndata.h
 @@ -50,7 +50,7 @@
@@ -60,6 +71,62 @@
  } UDataOffsetTOC;
  
  /**
+--- source/common/unicode/stringtriebuilder.h
++++ source/common/unicode/stringtriebuilder.h
+@@ -269,7 +269,7 @@
+         void setValue(int32_t v) {
+             hasValue=TRUE;
+             value=v;
+-            hash=hash*37+v;
++            hash=hash*37U+v;
+         }
+     protected:
+         UBool hasValue;
+@@ -296,7 +296,7 @@
+     class LinearMatchNode : public ValueNode {
+     public:
+         LinearMatchNode(int32_t len, Node *nextNode)
+-                : ValueNode((0x333333*37+len)*37+hashCode(nextNode)),
++                : ValueNode((0x333333U*37+len)*37+hashCode(nextNode)),
+                   length(len), next(nextNode) {}
+         virtual UBool operator==(const Node &other) const;
+         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
+@@ -330,7 +330,7 @@
+             equal[length]=NULL;
+             values[length]=value;
+             ++length;
+-            hash=(hash*37+c)*37+value;
++            hash=(hash*37U+c)*37+value;
+         }
+         // Adds a unit which leads to another match node.
+         void add(int32_t c, Node *node) {
+@@ -338,7 +338,7 @@
+             equal[length]=node;
+             values[length]=0;
+             ++length;
+-            hash=(hash*37+c)*37+hashCode(node);
++            hash=(hash*37U+c)*37+hashCode(node);
+         }
+     protected:
+         Node *equal[kMaxBranchLinearSubNodeLength];  // NULL means "has final value".
+@@ -353,7 +353,7 @@
+     class SplitBranchNode : public BranchNode {
+     public:
+         SplitBranchNode(UChar middleUnit, Node *lessThanNode, Node *greaterOrEqualNode)
+-                : BranchNode(((0x555555*37+middleUnit)*37+
++                : BranchNode(((0x555555U*37+middleUnit)*37+
+                               hashCode(lessThanNode))*37+hashCode(greaterOrEqualNode)),
+                   unit(middleUnit), lessThan(lessThanNode), greaterOrEqual(greaterOrEqualNode) {}
+         virtual UBool operator==(const Node &other) const;
+@@ -370,7 +370,7 @@
+     class BranchHeadNode : public ValueNode {
+     public:
+         BranchHeadNode(int32_t len, Node *subNode)
+-                : ValueNode((0x666666*37+len)*37+hashCode(subNode)),
++                : ValueNode((0x666666U*37+len)*37+hashCode(subNode)),
+                   length(len), next(subNode) {}
+         virtual UBool operator==(const Node &other) const;
+         virtual int32_t markRightEdgesFirst(int32_t edgeNumber);
 --- source/common/ustring.cpp
 +++ source/common/ustring.cpp
 @@ -1486,7 +1486,7 @@
