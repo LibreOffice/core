@@ -356,8 +356,16 @@ ScCTBWrapper::Read( SvStream &rS)
 {
     OSL_TRACE("ScCTBWrapper::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
-    if ( !ctbSet.Read( rS ) )
+    if (!ctbSet.Read(rS))
         return false;
+
+    //ScCTB is 1 TB which is min 15bytes, nViews TBVisualData which is min 20bytes
+    //and one 32bit number (4 bytes)
+    const size_t nMinRecordSize = 39;
+    const size_t nMaxPossibleRecords = rS.remainingSize()/nMinRecordSize;
+    if (ctbSet.ctb > nMaxPossibleRecords)
+        return false;
+
     for ( sal_uInt16 index = 0; index < ctbSet.ctb; ++index )
     {
         ScCTB aCTB( ctbSet.ctbViews );
