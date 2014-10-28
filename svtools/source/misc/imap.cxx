@@ -383,6 +383,9 @@ void IMapCircleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
         SCALEPOINT( aCenter, rFracX, rFracY );
     }
 
+    if (!aAverage.GetDenominator())
+        throw std::runtime_error("divide by zero");
+
     nRadius = ( nRadius * aAverage.GetNumerator() ) / aAverage.GetDenominator();
 }
 
