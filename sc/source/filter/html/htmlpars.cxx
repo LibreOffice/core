@@ -597,7 +597,7 @@ void ScHTMLLayoutParser::Adjust()
             }
         }
         // Real column
-        SeekOffset( pColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
+        (void)SeekOffset( pColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
         SCCOL nColBeforeSkip = pE->nCol;
         SkipLocked( pE, false );
         if ( pE->nCol != nColBeforeSkip )
