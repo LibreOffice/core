@@ -359,7 +359,7 @@ namespace svgio
 
         Display getDisplayFromContent(const OUString& aContent)
         {
-            if(aContent.getLength())
+            if(!aContent.isEmpty())
             {
                 if(aContent.startsWith("inline"))
                 {
@@ -476,7 +476,7 @@ namespace svgio
                 }
                 case SVGTokenDisplay:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         setDisplay(getDisplayFromContent(aContent));
                     }
