@@ -332,7 +332,7 @@ The code below would only be part of the solution.
                         delete m_pSpellState->pOtherCursor;
                         m_pSpellState->pOtherCursor = 0;
                         pWrtShell->SpellStart(DOCPOS_OTHERSTART, DOCPOS_CURR, DOCPOS_OTHERSTART );
-                        pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
+                        (void)pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
                     }
                     if(!aRet.size())
                     {
