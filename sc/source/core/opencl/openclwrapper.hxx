@@ -68,28 +68,6 @@ struct GPUEnv
     bool mnAmdFp64Flag;
 };
 
-struct SingleVectorFormula
-{
-    const double *mdpInputLeftData;
-    const double *mdpInputRightData;
-    size_t mnInputLeftDataSize;
-    size_t mnInputRightDataSize;
-    uint mnInputLeftStartPosition;
-    uint mnInputRightStartPosition;
-    int mnInputLeftOffset;
-    int mnInputRightOffset;
-};
-
-struct DoubleVectorFormula
-{
-    const double *mdpInputData;
-    size_t mnInputDataSize;
-    uint mnInputStartPosition;
-    uint mnInputEndPosition;
-    int mnInputStartOffset;
-    int mnInputEndOffset;
-};
-
 class OpenCLDevice
 {
 public:
