@@ -4210,8 +4210,8 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 
             if (!pEntry)
             {
-                throw uno::RuntimeException(OUString("Unknown property: ") + rPropName,
-                    static_cast<cppu::OWeakObject*>(this));
+                SAL_WARN("sw.core", "SwXAutoStyleFamily::Modify: Unknown property: " << rPropName);
+                continue;
             }
 
             const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
