@@ -41,14 +41,6 @@ typedef struct _KernelEnv
     cl_program mpkProgram;
 } KernelEnv;
 
-extern "C" {
-
-// user defined, this is function wrapper which is used to set the input
-// parameters, launch kernel and copy data from GPU to CPU or CPU to GPU.
-typedef int ( *cl_kernel_function )( void **userdata, KernelEnv *kenv );
-
-}
-
 namespace sc { namespace opencl {
 
 typedef unsigned int uint;
