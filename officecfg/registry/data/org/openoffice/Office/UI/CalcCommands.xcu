@@ -134,6 +134,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Protect Records...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertExternalDataSource" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -790,8 +793,8 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Record Changes</value>
         </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Record</value>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:InsObjCtrl" oor:op="replace">
@@ -806,8 +809,8 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sho~w Changes...</value>
         </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Sho~w...</value>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DefineLabelRange" oor:op="replace">
@@ -913,8 +916,8 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~List of Changes...</value>
         </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Accept or Reject...</value>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:UnderlineDouble" oor:op="replace">
@@ -928,6 +931,9 @@
       <node oor:name=".uno:CommentChange" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Comment on Change...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:UnderlineDotted" oor:op="replace">
