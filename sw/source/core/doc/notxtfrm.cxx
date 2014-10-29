@@ -878,7 +878,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW );
         }
 
-        bool bForceSwap = false, bContinue = true;
+        bool bContinue = true;
         const GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
@@ -917,7 +917,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( bContinue )
         {
-            const bool bSwapped = rGrfObj.IsSwappedOut();
             const bool bSwappedIn = pGrfNd->SwapIn( bPrn );
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
@@ -976,14 +975,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
                 ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, true );
             }
-
-            // When printing, we must not collect the graphics
-            if( bSwapped && bPrn )
-                bForceSwap = true;
         }
-
-        if( bForceSwap )
-            pGrfNd->SwapOut();
 
         if ( pShell->Imp()->GetDrawView()->IsAntiAliasing() )
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput );
