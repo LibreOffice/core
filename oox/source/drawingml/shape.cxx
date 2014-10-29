@@ -347,7 +347,7 @@ void Shape::addChildren(
         const Reference< XShapes >& rxShapes,
         const awt::Rectangle&,
         ShapeIdMap* pShapeMap,
-        basegfx::B2DHomMatrix& aTransformation )
+        const basegfx::B2DHomMatrix& aTransformation )
 {
     basegfx::B2DHomMatrix aChildTransformation;
 

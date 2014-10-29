@@ -216,7 +216,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap,
-                            basegfx::B2DHomMatrix& aTransformation );
+                            const basegfx::B2DHomMatrix& aTransformation );
 
     void                keepDiagramCompatibilityInfo( ::oox::core::XmlFilterBase& rFilterBase );
 
