@@ -22,7 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/window.hxx>
-
+#include <o3tl/numeric.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
@@ -384,7 +384,7 @@ void IMapCircleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
     }
 
     if (!aAverage.GetDenominator())
-        throw std::runtime_error("divide by zero");
+        throw o3tl::divide_by_zero();
 
     nRadius = ( nRadius * aAverage.GetNumerator() ) / aAverage.GetDenominator();
 }

@@ -92,6 +92,7 @@
 #include <rootfrm.hxx>
 #include <fldupde.hxx>
 #include <switerator.hxx>
+#include <o3tl/numeric.hxx>
 #include <boost/foreach.hpp>
 
 #ifdef DBG_UTIL
@@ -2948,7 +2949,7 @@ const SwTableBox* SwCollectTblLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 
 bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
 {
-    sal_uInt16 n;
+    size_t n;
 
     if( !aPosArr.empty() )
     {
@@ -2967,13 +2968,20 @@ bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
         aPosArr.erase( aPosArr.begin(), aPosArr.begin() + n );
         m_Boxes.erase(m_Boxes.begin(), m_Boxes.begin() + n);
 
-        // Adapt the positions to the new Size
-        for( n = 0; n < aPosArr.size(); ++n )
+        size_t nSize = aPosArr.size();
+        if (nSize)
         {
-            sal_uLong nSize = nWidth;
-            nSize *= ( aPosArr[ n ] - nOffset );
-            nSize /= nOldWidth;
-            aPosArr[ n ] = sal_uInt16( nSize );
+            if (nOldWidth == 0)
+                throw o3tl::divide_by_zero();
+
+            // Adapt the positions to the new Size
+            for( n = 0; n < nSize; ++n )
+            {
+                sal_uLong nSize = nWidth;
+                nSize *= ( aPosArr[ n ] - nOffset );
+                nSize /= nOldWidth;
+                aPosArr[ n ] = sal_uInt16( nSize );
+            }
         }
     }
     return !aPosArr.empty();

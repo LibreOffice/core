@@ -34,7 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/bigint.hxx>
-
+#include <o3tl/numeric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <boost/scoped_array.hpp>
@@ -1758,7 +1758,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 if (nLength > 0)
                 {
                     if (nNormSize == 0)
-                        throw std::runtime_error("divide by zero");
+                        throw o3tl::divide_by_zero();
                     for (sal_Int32 i = 0; i < nLength; ++i)
                         pDXAry[ i ] = pDXAry[ i ] * ( (long)pA->GetWidth() ) / nNormSize;
                 }

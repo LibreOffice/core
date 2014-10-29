@@ -30,6 +30,7 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <o3tl/numeric.hxx>
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
 #include <dmapper/DomainMapper.hxx>
@@ -791,7 +792,7 @@ void DomainMapperTableManager::endOfRowAction()
         if (nWidthsBound)
         {
             if (nFullWidthRelative == 0)
-                throw std::range_error("divide by zero");
+                throw o3tl::divide_by_zero();
 
             for (sal_uInt32 i = 0; i < nWidthsBound; ++i)
             {
