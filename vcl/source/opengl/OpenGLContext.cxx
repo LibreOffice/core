@@ -656,6 +656,8 @@ bool OpenGLContext::ImplInit()
         if( glXSwapInterval ) {
         int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
 
+        XLockDisplay(m_aGLWin.dpy);
+        XSync(m_aGLWin.dpy, false);
         // replace error handler temporarily
         oldHandler = XSetErrorHandler( oglErrorHandler );
 
@@ -674,6 +676,7 @@ bool OpenGLContext::ImplInit()
 
         // restore the error handler
         XSetErrorHandler( oldHandler );
+        XUnlockDisplay(m_aGLWin.dpy);
         }
     }
 
