@@ -612,24 +612,23 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
     // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
     // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
-    oslModule moduleRt = 0;
+    osl::Module moduleRt;
 #if defined(LINUX)
-    if ((moduleRt = osl_loadModule(sRuntimeLib.pData,
-                                   SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW)) == 0 )
+    if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW))
 #else
 #if defined(WNT)
     do_msvcr_magic(sRuntimeLib.pData);
 #endif
-    if ((moduleRt = osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT)) == 0)
+    if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_DEFAULT))
 #endif
-     {
-         JFW_ENSURE(false,
-                    "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
-                       " could not load Java runtime library: \n"
-                    + sRuntimeLib + "\n");
-         JFW_TRACE0("Could not load Java runtime library: " << sRuntimeLib);
-         return JFW_PLUGIN_E_VM_CREATION_FAILED;
-     }
+    {
+        JFW_ENSURE(false,
+                   "[Java framework]sunjavaplugin" SAL_DLLEXTENSION
+                      " could not load Java runtime library: \n"
+                   + sRuntimeLib + "\n");
+        JFW_TRACE0("Could not load Java runtime library: " << sRuntimeLib);
+        return JFW_PLUGIN_E_VM_CREATION_FAILED;
+    }
 
 #if defined UNX && !defined MACOSX
     //Setting the JAVA_HOME is needed for awt
@@ -641,8 +640,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
     OUString sSymbolCreateJava("JNI_CreateJavaVM");
 
-    JNI_CreateVM_Type * pCreateJavaVM = (JNI_CreateVM_Type *) osl_getFunctionSymbol(
-        moduleRt, sSymbolCreateJava.pData);
+    JNI_CreateVM_Type * pCreateJavaVM =
+        (JNI_CreateVM_Type *)moduleRt.getFunctionSymbol(sSymbolCreateJava);
     if (!pCreateJavaVM)
     {
         OSL_ASSERT(false);
@@ -653,9 +652,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         fprintf(stderr,"[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                 "Java runtime library: %s does not export symbol %s !\n",
                 sLib.getStr(), sSymbol.getStr());
-        osl_unloadModule(moduleRt);
         return JFW_PLUGIN_E_VM_CREATION_FAILED;
     }
+    moduleRt.release();
 
     // Valgrind typically emits many false errors when executing JIT'ed JVM
     // code, so force the JVM into interpreted mode:
