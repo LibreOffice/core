@@ -703,11 +703,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
                     break;
                 }
                 case OfficeDocumentReportTarget.STATE_IN_SECTION:
-                {
-                    states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_OTHER));
-                    startOther(attrs);
-                    break;
-                }
                 case OfficeDocumentReportTarget.STATE_IN_OTHER:
                 {
                     states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_OTHER));

@@ -139,22 +139,21 @@ public class FilterComponent
                     aNumberFormatter.setNumberFormat(xValueModel, CurFieldColumn.getDBFormatKey(), aNumberFormatter);
 
                     break;
+
                 case SO_FIRSTCONDITION:
                 case SO_SECONDCONDITION:
                 case SO_THIRDCONDITION:
                 case SO_FOURTHCONDITION:
-                    sControlName = getControlName(EventObject.Source);
-                    break;
-                case SOOPTORMODE:
-                case SOOPTANDMODE:
-                    return;
-
                 case SO_FIRSTBOOLFIELDNAME:
                 case SO_SECONDBOOLFIELDNAME:
                 case SO_THIRDBOOLFIELDNAME:
                 case SO_FOURTHBOOLFIELDNAME:
                     sControlName = getControlName(EventObject.Source);
                     break;
+
+                case SOOPTORMODE:
+                case SOOPTANDMODE:
+                    return;
 
                 default:
                     break;
