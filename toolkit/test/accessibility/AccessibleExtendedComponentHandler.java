@@ -72,7 +72,7 @@ class AccessibleExtendedComponentHandler
                         aChild = new StringNode ("Deprecated Foreground color: R"
                             +       (nColor>>16&0xff)
                             + "G" + (nColor>>8&0xff)
-                            + "B" + (nColor>>0&0xff)
+                            + "B" + (nColor&0xff)
                             + "A" + (nColor>>24&0xff),
                             aParent);
                         break;
@@ -81,7 +81,7 @@ class AccessibleExtendedComponentHandler
                         aChild = new StringNode ("Deprecated Background color: R"
                             +       (nColor>>16&0xff)
                             + "G" + (nColor>>8&0xff)
-                            + "B" + (nColor>>0&0xff)
+                            + "B" + (nColor&0xff)
                             + "A" + (nColor>>24&0xff),
                             aParent);
                         break;
