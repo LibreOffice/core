@@ -1050,10 +1050,15 @@ public:
     SdrObjUserData*             pNewData;
 
 private:
+
+    static SVX_DLLPRIVATE SdrObject* CreateObjectFromFactory(
+        sal_uInt32 nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel );
+
     SVX_DLLPRIVATE SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel);
 
 public:
     static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);
+    static SdrObject* MakeNewObject( sal_uInt32 nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage );
     static void InsertMakeObjectHdl(const Link& rLink);
     static void RemoveMakeObjectHdl(const Link& rLink);
     static void InsertMakeUserDataHdl(const Link& rLink);

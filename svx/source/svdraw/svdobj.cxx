@@ -3257,13 +3257,32 @@ SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNe
     pNewData=NULL;
 }
 
+SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel )
+{
+    boost::scoped_ptr<SdrObjFactory> pFact(new SdrObjFactory(nInventor, nIdentifier, pPage, pModel));
+
+    SdrLinkList& rLL = ImpGetUserMakeObjHdl();
+    unsigned n = rLL.GetLinkCount();
+    unsigned i = 0;
+    SdrObject* pObj = NULL;
+    while (i < n && !pObj)
+    {
+        rLL.GetLink(i).Call((void*)pFact.get());
+        pObj = pFact->pNewObj;
+        i++;
+    }
+
+    return pObj;
+}
+
 SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel)
 {
-    if(pModel == NULL && pPage != NULL)
+    if (!pModel && pPage)
         pModel = pPage->GetModel();
+
     SdrObject* pObj = NULL;
 
-    if(nInvent == SdrInventor)
+    if (nInvent == SdrInventor)
     {
         switch (nIdent)
         {
@@ -3304,31 +3323,110 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
         }
     }
 
-    if(pObj == NULL)
+    if (!pObj)
+        pObj = CreateObjectFromFactory(nInvent, nIdent, pPage, pModel);
+
+    if (!pObj)
     {
-        boost::scoped_ptr<SdrObjFactory> pFact(new SdrObjFactory(nInvent,nIdent,pPage,pModel));
-        SdrLinkList& rLL=ImpGetUserMakeObjHdl();
-        unsigned nAnz=rLL.GetLinkCount();
-        unsigned i=0;
-        while (i<nAnz && pObj==NULL) {
-            rLL.GetLink(i).Call((void*)pFact.get());
-            pObj=pFact->pNewObj;
-            i++;
+        // Well, if no one wants it...
+        return NULL;
+    }
+
+    if (pPage)
+        pObj->SetPage(pPage);
+    else if (pModel)
+        pObj->SetModel(pModel);
+
+    return pObj;
+}
+
+SdrObject* SdrObjFactory::MakeNewObject(
+    sal_uInt32 nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage )
+{
+    SdrModel* pModel = pPage ? pPage->GetModel() : NULL;
+
+    SdrObject* pObj = NULL;
+
+    bool bSetSnapRect = true;
+
+    if (nInventor == SdrInventor)
+    {
+        switch (nIdentifier)
+        {
+            case OBJ_MEASURE:
+            {
+                pObj = new SdrMeasureObj(rSnapRect.TopLeft(), rSnapRect.BottomRight());
+            }
+            break;
+            case OBJ_LINE:
+            {
+                basegfx::B2DPolygon aPoly;
+                aPoly.append(basegfx::B2DPoint(rSnapRect.Left(), rSnapRect.Top()));
+                aPoly.append(basegfx::B2DPoint(rSnapRect.Right(), rSnapRect.Bottom()));
+                pObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
+            }
+            break;
+            case OBJ_TEXT:
+            case OBJ_TEXTEXT:
+            case OBJ_TITLETEXT:
+            case OBJ_OUTLINETEXT:
+            {
+                pObj = new SdrRectObj(static_cast<SdrObjKind>(nIdentifier), rSnapRect);
+                bSetSnapRect = false;
+            }
+            break;
+            case OBJ_CIRC:
+            case OBJ_SECT:
+            case OBJ_CARC:
+            case OBJ_CCUT:
+            {
+                pObj = new SdrCircObj(static_cast<SdrObjKind>(nIdentifier), rSnapRect);
+                bSetSnapRect = false;
+            }
+            break;
+            case sal_uInt16(OBJ_NONE       ): pObj=new SdrObject;                   break;
+            case sal_uInt16(OBJ_GRUP       ): pObj=new SdrObjGroup;                 break;
+            case sal_uInt16(OBJ_POLY       ): pObj=new SdrPathObj(OBJ_POLY       ); break;
+            case sal_uInt16(OBJ_PLIN       ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
+            case sal_uInt16(OBJ_PATHLINE   ): pObj=new SdrPathObj(OBJ_PATHLINE   ); break;
+            case sal_uInt16(OBJ_PATHFILL   ): pObj=new SdrPathObj(OBJ_PATHFILL   ); break;
+            case sal_uInt16(OBJ_FREELINE   ): pObj=new SdrPathObj(OBJ_FREELINE   ); break;
+            case sal_uInt16(OBJ_FREEFILL   ): pObj=new SdrPathObj(OBJ_FREEFILL   ); break;
+            case sal_uInt16(OBJ_PATHPOLY   ): pObj=new SdrPathObj(OBJ_POLY       ); break;
+            case sal_uInt16(OBJ_PATHPLIN   ): pObj=new SdrPathObj(OBJ_PLIN       ); break;
+            case sal_uInt16(OBJ_EDGE       ): pObj=new SdrEdgeObj;                  break;
+            case sal_uInt16(OBJ_RECT       ): pObj=new SdrRectObj;                  break;
+            case sal_uInt16(OBJ_GRAF       ): pObj=new SdrGrafObj;                  break;
+            case sal_uInt16(OBJ_OLE2       ): pObj=new SdrOle2Obj;                  break;
+            case sal_uInt16(OBJ_FRAME      ): pObj=new SdrOle2Obj(true);            break;
+            case sal_uInt16(OBJ_CAPTION    ): pObj=new SdrCaptionObj;               break;
+            case sal_uInt16(OBJ_PAGE       ): pObj=new SdrPageObj;                  break;
+            case sal_uInt16(OBJ_UNO        ): pObj=new SdrUnoObj(OUString());       break;
+            case sal_uInt16(OBJ_CUSTOMSHAPE  ): pObj=new SdrObjCustomShape();       break;
+#if HAVE_FEATURE_AVMEDIA
+            case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
+#endif
+            case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
+            case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
         }
     }
 
-    if(pObj == NULL)
+    if (!pObj)
+        pObj = CreateObjectFromFactory(nInventor, nIdentifier, pPage, pModel);
+
+    if (!pObj)
     {
         // Well, if no one wants it...
+        return NULL;
     }
 
-    if(pObj != NULL)
-    {
-        if(pPage != NULL)
-            pObj->SetPage(pPage);
-        else if(pModel != NULL)
-            pObj->SetModel(pModel);
-    }
+    if (pPage)
+        pObj->SetPage(pPage);
+    else if (pModel)
+        pObj->SetModel(pModel);
+
+    if (bSetSnapRect)
+        pObj->SetSnapRect(rSnapRect);
 
     return pObj;
 }

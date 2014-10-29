@@ -500,42 +500,15 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
     if (!nType)
         return NULL;
 
-    SdrObject* pNewObj = 0;
-
     awt::Size aSize = xShape->getSize();
     aSize.Width += 1;
     aSize.Height += 1;
     awt::Point aPos = xShape->getPosition();
     Rectangle aRect( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) );
 
-    // special cases
-    if( nInventor == SdrInventor )
-    {
-        switch( nType )
-        {
-        case OBJ_MEASURE:
-            {
-                pNewObj = new SdrMeasureObj( aRect.TopLeft(), aRect.BottomRight() );
-                break;
-            }
-        case OBJ_LINE:
-            {
-                basegfx::B2DPolygon aPoly;
-                aPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Top()));
-                aPoly.append(basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
-                pNewObj = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPoly));
-                break;
-            }
-        }
-    }
-
-    if( pNewObj == NULL )
-        pNewObj = SdrObjFactory::MakeNewObject( nInventor, nType, mpPage );
-
+    SdrObject* pNewObj = SdrObjFactory::MakeNewObject(nInventor, nType, aRect, mpPage);
     if (!pNewObj)
         return NULL;
-
-    pNewObj->SetSnapRect(aRect);
 
     if( pNewObj->ISA(E3dPolyScene))
     {
