@@ -56,10 +56,15 @@ endif
 
 ifeq ($(OS),WNT)
 
+ifneq ($(ENABLE_CRASHDUMP),)
+$(eval $(call gb_Module_add_targets,desktop,\
+    Executable_crashrep_com \
+))
+endif
+
 $(eval $(call gb_Module_add_targets,desktop,\
     StaticLibrary_winextendloaderenv \
     StaticLibrary_winlauncher \
-    Executable_crashrep_com \
     Executable_quickstart \
     Executable_sbase \
     Executable_scalc \
