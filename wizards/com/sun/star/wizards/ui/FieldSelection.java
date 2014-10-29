@@ -67,14 +67,11 @@ public class FieldSelection
             int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
             switch (iKey)
             {
-
                 case SOFLDSLST:
-                    toggleListboxButtons((short) - 1, (short) - 1);
-                    break;
-
                 case SOSELFLDSLST:
                     toggleListboxButtons((short) - 1, (short) - 1);
                     break;
+
                 default:
                     break;
             }
@@ -100,28 +97,16 @@ public class FieldSelection
                 int iKey = CurUnoDialog.getControlKey(actionEvent.Source, CurUnoDialog.ControlList);
                 switch (iKey)
                 {
+                    case SOCMDMOVESEL:
+                    case SOCMDMOVEALL:
                     case SOFLDSLST:
                         selectFields(false);
                         break;
 
-                    case SOSELFLDSLST:
-                        deselectFields(false);
-                        break;
-
-                    case SOCMDMOVESEL:
-                        selectFields(false);
-                        break;
-
-                    case SOCMDMOVEALL:
-                        selectFields(true);
-                        break;
-
                     case SOCMDREMOVESEL:
-                        deselectFields(false);
-                        break;
-
+                    case SOSELFLDSLST:
                     case SOCMDREMOVEALL:
-                        deselectFields(true);
+                        deselectFields(false);
                         break;
 
                     case SOCMDMOVEUP:
