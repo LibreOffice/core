@@ -1985,7 +1985,8 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
 }
 
 CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
-    : VclVBox(pParent)
+    : Window(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER)
+    , m_pVBox(NULL)
     , m_pHeaderBar(NULL)
     , m_pBody(NULL)
     , m_pPropertiesWin(NULL)
@@ -1996,8 +1997,9 @@ CustomPropertiesControl::CustomPropertiesControl(vcl::Window* pParent)
 
 void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
 {
-    m_pHeaderBar = new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
-    m_pBody = new VclHBox(this);
+    m_pVBox = new VclVBox(this);
+    m_pHeaderBar = new HeaderBar(m_pVBox, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
+    m_pBody = new VclHBox(m_pVBox);
     FixedText* pName = rBuilder.get<FixedText>("name");
     FixedText* pType = rBuilder.get<FixedText>("type");
     FixedText* pValue = rBuilder.get<FixedText>("value");
@@ -2011,6 +2013,12 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
     set_vexpand(true);
     set_expand(true);
     set_fill(true);
+
+    m_pVBox->set_hexpand(true);
+    m_pVBox->set_vexpand(true);
+    m_pVBox->set_expand(true);
+    m_pVBox->set_fill(true);
+    m_pVBox->Show();
 
     m_pBody->set_hexpand(true);
     m_pBody->set_vexpand(true);
@@ -2048,9 +2056,14 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
     m_pVertScroll->SetScrollHdl( aScrollLink );
 }
 
-void CustomPropertiesControl::setAllocation(const Size &rAllocation)
+void CustomPropertiesControl::Resize()
 {
-    VclVBox::setAllocation(rAllocation);
+    Window::Resize();
+
+    if (!m_pVBox)
+        return;
+
+    m_pVBox->SetSizePixel(GetSizePixel());
 
     bool bWidgetsResized = m_pPropertiesWin->InitControls( m_pHeaderBar, m_pVertScroll );
     sal_Int32 nScrollOffset = m_pPropertiesWin->GetLineHeight();
@@ -2075,6 +2088,7 @@ CustomPropertiesControl::~CustomPropertiesControl()
     delete m_pPropertiesWin;
     delete m_pBody;
     delete m_pHeaderBar;
+    delete m_pVBox;
 }
 
 IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )

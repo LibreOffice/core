@@ -465,9 +465,10 @@ public:
 
 // class CustomPropertiesControl -----------------------------------------
 
-class CustomPropertiesControl : public VclVBox
+class CustomPropertiesControl : public vcl::Window
 {
 private:
+    VclVBox*                m_pVBox;
     HeaderBar*              m_pHeaderBar;
     VclHBox*                m_pBody;
     CustomPropertiesWindow* m_pPropertiesWin;
@@ -490,7 +491,7 @@ public:
                     GetCustomProperties() const
                         { return m_pPropertiesWin->GetCustomProperties(); }
     void    Init(VclBuilderContainer& rParent);
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 // class SfxCustomPropertiesPage -----------------------------------------
