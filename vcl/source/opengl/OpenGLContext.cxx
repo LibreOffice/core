@@ -541,6 +541,7 @@ bool OpenGLContext::ImplInit()
             None
         };
         m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], 0, GL_TRUE, nContextAttribs);
+        SAL_INFO_IF(m_aGLWin.ctx, "vcl.opengl", "created a 3.2 core context");
 
     }
 #endif
