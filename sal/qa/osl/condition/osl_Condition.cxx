@@ -23,7 +23,6 @@
 #include <stdlib.h>
 
 using namespace osl;
-using namespace rtl;
 
 enum ConditionType
 {

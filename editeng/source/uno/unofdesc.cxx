@@ -35,7 +35,6 @@
 #include <editeng/unofdesc.hxx>
 #include <editeng/svxfont.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 

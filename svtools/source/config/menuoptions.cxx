@@ -36,7 +36,6 @@
 
 
 using namespace ::utl                   ;
-using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 

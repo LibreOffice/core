@@ -35,7 +35,6 @@
 
 using namespace ::std;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::cppu;
 
 

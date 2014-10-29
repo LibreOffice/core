@@ -57,8 +57,6 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-using namespace ::rtl;
-
 
 
 SAL_IMPLEMENT_MAIN()

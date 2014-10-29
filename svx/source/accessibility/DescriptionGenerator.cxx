@@ -47,7 +47,6 @@
 #include "svx/unoapi.hxx"
 #include "lookupcolorname.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 

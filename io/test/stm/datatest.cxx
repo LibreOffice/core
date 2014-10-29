@@ -40,7 +40,6 @@
 
 #include <string.h>
 
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

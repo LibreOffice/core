@@ -38,7 +38,6 @@
 #include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY( SvxOrientationItem, SfxEnumItem, new SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) );

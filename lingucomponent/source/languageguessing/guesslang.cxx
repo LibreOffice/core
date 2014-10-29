@@ -45,7 +45,6 @@
 #include <textcat.h>
 #endif
 
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;

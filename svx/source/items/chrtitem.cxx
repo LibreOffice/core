@@ -28,7 +28,6 @@
 
 #include "svx/chrtitem.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 

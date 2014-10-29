@@ -42,7 +42,6 @@
 #include "hltpbase.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 /*************************************************************************
 |*

@@ -47,7 +47,6 @@
 
 //  namesapces
 
-using namespace ::rtl;
 using namespace ::std;
 
 //  globales

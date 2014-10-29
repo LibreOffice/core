@@ -31,7 +31,6 @@
 #include "unoprnms.hxx"
 #include "unosrch.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 #define WID_SEARCH_BACKWARDS    0

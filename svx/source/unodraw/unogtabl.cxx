@@ -30,7 +30,6 @@
 #include <svx/unomid.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::cppu;
 
 class SvxUnoGradientTable : public SvxUnoNameItemTable

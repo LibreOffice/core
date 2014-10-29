@@ -57,7 +57,6 @@
 
 
 using namespace ::ucbhelper;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;

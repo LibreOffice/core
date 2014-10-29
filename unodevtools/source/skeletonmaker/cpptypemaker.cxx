@@ -26,7 +26,6 @@
 #include "skeletoncommon.hxx"
 #include "skeletoncpp.hxx"
 
-using namespace ::rtl;
 using namespace ::codemaker::cpp;
 
 namespace skeletonmaker { namespace cpp {

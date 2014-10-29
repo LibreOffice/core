@@ -96,7 +96,6 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <comphelper/processfactory.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 // Register all Factorys

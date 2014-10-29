@@ -23,7 +23,6 @@
 #include <algorithm>
 
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::connection;

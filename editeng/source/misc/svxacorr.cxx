@@ -66,7 +66,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using namespace ::rtl;
 using namespace ::utl;
 
 static const int C_NONE             = 0x00;

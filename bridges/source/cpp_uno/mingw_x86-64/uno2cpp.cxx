@@ -37,7 +37,6 @@
 #include "callvirtualmethod.hxx"
 #include "share.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 // Macros for easier insertion of values to registers or stack

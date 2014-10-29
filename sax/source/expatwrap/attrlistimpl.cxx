@@ -24,7 +24,6 @@
 #include <cppuhelper/weak.hxx>
 
 using namespace ::std;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

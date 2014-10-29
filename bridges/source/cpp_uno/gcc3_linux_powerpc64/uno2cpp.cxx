@@ -34,7 +34,6 @@
 #include <string.h>
 
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 namespace ppc64

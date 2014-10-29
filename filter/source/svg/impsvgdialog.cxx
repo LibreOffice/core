@@ -21,7 +21,6 @@
 #include "impsvgdialog.hxx"
 #include <cstdio>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 

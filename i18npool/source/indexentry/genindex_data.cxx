@@ -29,8 +29,6 @@
 #define MAX_ADDRESS 0x30000
 #define MAX_INDEX MAX_ADDRESS/0x100
 
-using namespace ::rtl;
-
 /* Main Procedure */
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)

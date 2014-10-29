@@ -24,7 +24,6 @@
 
 #include <cppuhelper/factory.hxx>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::uno;

@@ -33,7 +33,6 @@
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 
 static sal_Bool tryService(const char * serviceName)
 {

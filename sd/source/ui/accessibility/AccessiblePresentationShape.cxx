@@ -26,7 +26,6 @@
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

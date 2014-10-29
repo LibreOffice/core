@@ -51,7 +51,6 @@
 #endif
 
 using namespace osl;
-using namespace rtl;
 using namespace sd;
 
 DiscoveryService::DiscoveryService()

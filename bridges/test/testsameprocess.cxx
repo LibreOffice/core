@@ -36,7 +36,6 @@
 
 
 using namespace ::test;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

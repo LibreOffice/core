@@ -28,7 +28,6 @@
 #include "skeletonjava.hxx"
 #include "skeletoncpp.hxx"
 
-using namespace ::rtl;
 using namespace ::skeletonmaker;
 using namespace ::unodevtools;
 

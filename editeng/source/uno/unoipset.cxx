@@ -30,7 +30,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 using ::std::vector;
 

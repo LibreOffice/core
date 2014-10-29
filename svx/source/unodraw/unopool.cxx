@@ -41,7 +41,6 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::cppu;
 
 SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel, sal_Int32 nServiceId)

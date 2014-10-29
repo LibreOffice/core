@@ -45,7 +45,6 @@
 #define SEPARATOR '\\'
 #endif
 
-using namespace ::rtl;
 using namespace ::osl;
 
 

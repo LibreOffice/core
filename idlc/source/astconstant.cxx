@@ -22,8 +22,6 @@
 
 #include <registry/writer.hxx>
 
-using namespace ::rtl;
-
 AstConstant::AstConstant(const ExprType type,
                          const NodeType nodeType,
                          AstExpression* pExpr,

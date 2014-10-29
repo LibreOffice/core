@@ -29,7 +29,6 @@
 #include <comphelper/serviceinfohelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 

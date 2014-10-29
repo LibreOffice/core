@@ -22,8 +22,6 @@
 
 #include <rtl/ustring.hxx>
 
-using namespace ::rtl;
-
 #ifdef __cplusplus
 extern "C"
 {

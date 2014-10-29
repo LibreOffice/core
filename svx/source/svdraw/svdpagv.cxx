@@ -42,12 +42,11 @@
 
 #include <algorithm>
 
-using namespace ::rtl;
-using namespace ::com::sun::star;
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
 
+using namespace ::com::sun::star;
 
 // interface to SdrPageWindow
 

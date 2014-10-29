@@ -93,7 +93,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 

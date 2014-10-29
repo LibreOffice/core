@@ -29,7 +29,6 @@
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));

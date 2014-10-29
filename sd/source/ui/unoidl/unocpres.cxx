@@ -35,7 +35,6 @@
 #include "unopage.hxx"
 #include "customshowlist.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 uno::Reference< uno::XInterface > createUnoCustomShow( SdCustomShow* pShow )

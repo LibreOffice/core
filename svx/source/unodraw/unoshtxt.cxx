@@ -53,7 +53,6 @@
 #include <svx/sdrpaintwindow.hxx>
 
 using namespace ::osl;
-using namespace ::rtl;
 
 using ::com::sun::star::uno::XInterface;
 

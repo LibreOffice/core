@@ -25,7 +25,6 @@
 #include "source.hxx"
 #include "target.hxx"
 
-using namespace ::rtl                       ;
 using namespace ::com::sun::star::uno       ;
 using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;

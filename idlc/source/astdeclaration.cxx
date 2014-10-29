@@ -21,8 +21,6 @@
 #include <idlc/astscope.hxx>
 #include <rtl/strbuf.hxx>
 
-using namespace ::rtl;
-
 static OString sGlobal("::");
 
 static OString convertName(const OString& name)

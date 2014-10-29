@@ -13,7 +13,6 @@
 #include <test/xmltesttools.hxx>
 
 using namespace css;
-using namespace rtl;
 
 class SdHTMLFilterTest : public SdModelTestBase, public XmlTestTools, public HtmlTestTools
 {

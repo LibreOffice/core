@@ -35,7 +35,6 @@
 
 
 using namespace ::cppu;
-using namespace ::rtl;
 using namespace ::osl;
 
 

@@ -24,8 +24,6 @@
 #include "rtl/process.h"
 #include "unodevtools/options.hxx"
 
-using namespace ::rtl;
-
 namespace unodevtools {
 
 

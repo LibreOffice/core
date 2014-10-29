@@ -23,7 +23,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using namespace ::rtl;
 
 const char aBlockList[] =  "_block-list";
 

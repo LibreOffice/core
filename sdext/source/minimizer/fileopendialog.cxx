@@ -46,7 +46,6 @@
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;

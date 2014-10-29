@@ -50,7 +50,6 @@
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 
-using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::linguistic;
 using namespace ::com::sun::star;

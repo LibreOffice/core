@@ -65,7 +65,6 @@ using namespace css::uno;
 using namespace css::registry;
 
 using namespace ::cppu;
-using namespace ::rtl;
 using namespace ::osl;
 
 namespace stoc_javaloader {

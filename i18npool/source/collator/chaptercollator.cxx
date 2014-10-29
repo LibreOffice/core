@@ -29,7 +29,6 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
 
 ChapterCollator::ChapterCollator( const Reference < XComponentContext >& rxContext ) : CollatorImpl(rxContext)
 {

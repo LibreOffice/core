@@ -55,7 +55,6 @@ struct InfoLogger
 #define INFO_LOGGER_F(s)
 #endif // SAL_LOG_INFO
 
-using namespace rtl;
 using namespace osl;
 
 /** Refcounted singleton implementation class. */

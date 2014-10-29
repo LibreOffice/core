@@ -51,7 +51,6 @@
 #include <vcl/svapp.hxx>
 #include <algorithm>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY(SvxLineSpacingItem, SfxPoolItem , new SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0));

@@ -30,7 +30,6 @@
 
 #include "msci.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 namespace

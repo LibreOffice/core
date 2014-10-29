@@ -38,7 +38,6 @@
 #define SERVICE_NAME "com.sun.star.connection.Acceptor"
 
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

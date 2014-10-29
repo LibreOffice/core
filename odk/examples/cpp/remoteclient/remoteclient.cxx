@@ -52,7 +52,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

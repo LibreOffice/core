@@ -27,9 +27,9 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <vector>
+
 using std::vector;
 
-using namespace ::rtl;
 
 // For iOS, where we must strive for a minimal executable size, we
 // keep the data produced by this utility not as large const tables in

@@ -23,7 +23,6 @@
 #include "DateTimeHelper.hxx"
 
 using namespace com::sun::star::util;
-using namespace rtl;
 
 using namespace http_dav_ucp;
 

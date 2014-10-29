@@ -19,8 +19,6 @@
 
 #include <test/htmltesttools.hxx>
 
-using namespace rtl;
-
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
 private:

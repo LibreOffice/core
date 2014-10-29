@@ -69,7 +69,6 @@
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using sfx2::sidebar::EnumContext;

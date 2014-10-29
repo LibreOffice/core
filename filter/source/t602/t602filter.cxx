@@ -37,7 +37,6 @@
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star;

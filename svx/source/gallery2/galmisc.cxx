@@ -49,7 +49,6 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 ResMgr* GetGalleryResMgr()

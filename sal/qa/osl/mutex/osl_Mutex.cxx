@@ -27,7 +27,6 @@
 #include <osl_Mutex_Const.h>
 
 using namespace osl;
-using namespace rtl;
 
 /** pause nSec seconds helper function.
 */

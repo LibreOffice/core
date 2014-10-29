@@ -55,7 +55,6 @@
 
 #include <stdio.h>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 #define VCLTOSVCOL( rCol ) (sal_uInt16)((((sal_uInt16)(rCol))<<8)|(rCol))

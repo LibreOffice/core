@@ -76,7 +76,6 @@
 #define EXPORT_FUNCTION_NAME    "GraphicExport"
 #endif
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 using comphelper::string::getTokenCount;

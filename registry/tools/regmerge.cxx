@@ -28,7 +28,6 @@
 #include <stdio.h>
 #include <string.h>
 
-using namespace rtl;
 using namespace registry::tools;
 
 class Options_Impl : public Options

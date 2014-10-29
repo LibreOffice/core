@@ -41,7 +41,6 @@
 #include "dialog.hrc"
 
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 
 #define USERITEM_NAME OUString("UserItem")
 

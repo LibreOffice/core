@@ -79,7 +79,6 @@
 #include <basic/sbstar.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 namespace sd {
 

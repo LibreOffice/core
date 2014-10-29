@@ -37,7 +37,6 @@
 #include <cppuhelper/implbase3.hxx>
 
 using namespace ::cppu;
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;

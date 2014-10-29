@@ -25,7 +25,6 @@ namespace framework
 {
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 //  constructor
 

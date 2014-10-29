@@ -36,7 +36,6 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 
 // cannot use NSFontDescriptor as it has no notion of explicit NSUn{bold,italic}FontMask
 @interface AquaA11yFontDescriptor : NSObject

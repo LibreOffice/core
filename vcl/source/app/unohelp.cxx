@@ -32,7 +32,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {

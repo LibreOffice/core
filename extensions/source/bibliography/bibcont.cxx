@@ -74,7 +74,6 @@ using namespace osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
-using namespace ::rtl;
 
 //split window size is a percent value
 #define WIN_MIN_HEIGHT 10

@@ -29,7 +29,6 @@
 #include "xmlfiltertabpagexslt.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;

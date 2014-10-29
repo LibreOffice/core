@@ -59,7 +59,6 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 

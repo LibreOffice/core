@@ -30,8 +30,6 @@
 
 #include <unicode/tblcoll.h>
 
-using namespace ::rtl;
-
 /* Main Procedure */
 
 void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)

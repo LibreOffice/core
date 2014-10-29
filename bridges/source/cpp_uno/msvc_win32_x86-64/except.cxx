@@ -255,7 +255,6 @@ void
 using namespace ::com::sun::star::uno;
 using namespace ::std;
 using namespace ::osl;
-using namespace ::rtl;
 
 namespace CPPU_CURRENT_NAMESPACE
 {

@@ -39,7 +39,6 @@
 
 #define NOT_LOADED  ((long)-1)
 
-using namespace ::rtl;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::task;
@@ -524,7 +523,7 @@ void SplashScreen::determineProgressRatioValues(
         Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
-        nScreenRatio  = nHeight ? sal_Int32( math::round( double( nWidth ) / double( nHeight ), 2 ) * 100 ) :  0;
+        nScreenRatio  = nHeight ? sal_Int32( rtl::math::round( double( nWidth ) / double( nHeight ), 2 ) * 100 ) :  0;
     }
 
     char szFullScreenProgressRatio[] = "FullScreenProgressRatio0";
@@ -543,7 +542,7 @@ void SplashScreen::determineProgressRatioValues(
         if ( !sFullScreenProgressRatio.isEmpty() )
         {
             double fRatio = sFullScreenProgressRatio.toDouble();
-            sal_Int32 nRatio = sal_Int32( math::round( fRatio, 2 ) * 100 );
+            sal_Int32 nRatio = sal_Int32( rtl::math::round( fRatio, 2 ) * 100 );
             if ( nRatio == nScreenRatio )
             {
                 OUString sFullScreenProgressPos = implReadBootstrapKey(

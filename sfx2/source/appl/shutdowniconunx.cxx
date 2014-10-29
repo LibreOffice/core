@@ -52,7 +52,6 @@
 #define SV_ICON_ID_DATABASE                    12
 #define SV_ICON_ID_FORMULA                     13
 
-using namespace ::rtl;
 using namespace ::osl;
 
 static ResMgr *pVCLResMgr;

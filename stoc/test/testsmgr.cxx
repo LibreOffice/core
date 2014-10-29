@@ -39,7 +39,6 @@ extern "C" void SAL_CALL test_ServiceManager();
 #endif
 
 
-using namespace ::rtl;
 OString userRegEnv("STAR_USER_REGISTRY=");
 
 OUString getExePath()

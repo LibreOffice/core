@@ -77,7 +77,6 @@
 #endif // ENABLE_TDE
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 /** Cached native widgets.
 

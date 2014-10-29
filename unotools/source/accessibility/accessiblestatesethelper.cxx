@@ -26,7 +26,6 @@
 #define BITFIELDSIZE 64
 
 using namespace ::utl;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

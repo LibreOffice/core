@@ -21,7 +21,6 @@
 
 #include <unowcntr.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 SvUnoWeakContainer::SvUnoWeakContainer() throw()

@@ -47,7 +47,6 @@ using namespace com::sun::star::util;
 
 using namespace ::comphelper;
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::std;
 
 // ---- XBatchExecution - UNSUPPORTED ----------------------------------------

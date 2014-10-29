@@ -23,8 +23,6 @@
 #include <registry/version.h>
 #include <registry/writer.hxx>
 
-using namespace ::rtl;
-
 AstStruct::AstStruct(
     const OString& name, std::vector< OString > const & typeParameters,
     AstStruct const* pBaseType, AstScope* pScope)

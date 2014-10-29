@@ -96,7 +96,6 @@
 
 #define STORE_UNICODE_MAGIC_MARKER  0xFE331188
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
