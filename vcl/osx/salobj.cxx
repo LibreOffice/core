@@ -38,7 +38,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
 {
     maSysData.nSize = sizeof( maSysData );
     maSysData.mpNSView = NULL;
-    maSysData.mbOpenGL = pWindowData->bOpenGL;
+    maSysData.mbOpenGL = false;
 
     NSRect aInitFrame = { NSZeroPoint, { 20, 20 } };
     mpClipView = [[NSClipView alloc] initWithFrame: aInitFrame ];
@@ -49,6 +49,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
     }
     if (pWindowData && pWindowData->bOpenGL)
     {
+        maSysData.mbOpenGL = true;
         NSOpenGLPixelFormat* pixFormat = NULL;
 
         if (pWindowData->bLegacy)
