@@ -57,10 +57,8 @@
 #endif
 
 #ifdef UNX
-    #define EXENAME(name)                     STRING(name)
     #define PROFILENAME(name)                 STRING(CONCAT2(name,rc))
 #else
-    #define EXENAME(name)                     STRING(CONCAT2(name,.exe))
     #define PROFILENAME(name)                 STRING(CONCAT2(name,.ini))
 #endif
 
