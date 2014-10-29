@@ -39,7 +39,6 @@
 
 using namespace com::sun::star;
 using namespace ::cppu;
-using namespace ::rtl;
 
 class SvxUnoXPropertyTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {

@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace css::uno;
 using namespace css::lang;

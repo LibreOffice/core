@@ -25,7 +25,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using namespace ::rtl;
 
 SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,

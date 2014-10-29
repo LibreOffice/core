@@ -63,7 +63,6 @@
 namespace svx{
     namespace DocRecovery{
 
-using namespace ::rtl;
 using namespace ::osl;
 
 RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,

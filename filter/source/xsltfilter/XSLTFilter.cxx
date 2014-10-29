@@ -74,7 +74,6 @@
 
 #define TRANSFORMATION_TIMEOUT_SEC 60
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::sax;

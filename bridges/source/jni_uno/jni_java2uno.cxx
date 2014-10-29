@@ -26,8 +26,6 @@
 
 #include "jni_bridge.h"
 
-using namespace ::rtl;
-
 namespace jni_uno
 {
 

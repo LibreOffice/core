@@ -28,7 +28,6 @@
 #include "cfgids.hxx"
 #include "FrameView.hxx"
 
-using namespace ::rtl;
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
 

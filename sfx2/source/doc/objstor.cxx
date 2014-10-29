@@ -138,7 +138,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::document;
-using namespace ::rtl;
 using namespace ::cppu;
 
 

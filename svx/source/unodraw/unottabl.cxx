@@ -30,7 +30,6 @@
 #include "UnoNameItemTable.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::cppu;
 
 class SvxUnoTransGradientTable : public SvxUnoNameItemTable

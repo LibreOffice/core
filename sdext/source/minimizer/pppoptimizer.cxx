@@ -22,7 +22,6 @@
 #include "impoptimizer.hxx"
 #include <osl/file.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;

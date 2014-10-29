@@ -35,7 +35,6 @@
 #include "lockfile.hxx"
 
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::utl;
 
 

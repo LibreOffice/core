@@ -37,7 +37,6 @@
 #endif
 
 using namespace osl;
-using namespace rtl;
 
 rtl::OUString   root;
 

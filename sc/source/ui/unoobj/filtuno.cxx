@@ -41,8 +41,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::com::sun::star;
-using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 #define SCFILTEROPTIONSOBJ_SERVICE      "com.sun.star.ui.dialogs.FilterOptionsDialog"

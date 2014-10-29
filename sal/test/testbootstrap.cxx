@@ -26,8 +26,6 @@
 
 #include <osl/process.h>
 
-using namespace ::rtl;
-
 int main( int argc, char *argv[] )
 {
     osl_setCommandArgs (argc, argv);

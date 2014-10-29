@@ -40,7 +40,6 @@
 #include <com/sun/star/text/XTextRange.hpp>
 
 using namespace ::sd;
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

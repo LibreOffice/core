@@ -25,7 +25,6 @@ using namespace ::connectivity::firebird;
 using namespace ::connectivity::sdbcx;
 
 using namespace ::osl;
-using namespace ::rtl;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

@@ -51,7 +51,6 @@
 #include "unowcntr.hxx"
 #include <vcl/svapp.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 // class SdLayer

@@ -34,9 +34,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::firebird;
-
-using namespace ::rtl;
-
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

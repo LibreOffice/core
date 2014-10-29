@@ -23,7 +23,6 @@
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::utl;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

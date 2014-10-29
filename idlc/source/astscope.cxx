@@ -23,8 +23,6 @@
 #include <idlc/errorhandler.hxx>
 
 
-using namespace ::rtl;
-
 bool isGlobal(const OString& scopedName)
 {
     return scopedName.isEmpty() || scopedName.startsWith(":");

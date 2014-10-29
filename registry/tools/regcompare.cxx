@@ -34,7 +34,6 @@
 #include <vector>
 #include <string>
 
-using namespace rtl;
 using namespace registry::tools;
 
 typedef std::set< OUString > StringSet;

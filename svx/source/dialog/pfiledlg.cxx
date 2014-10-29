@@ -31,7 +31,6 @@
 #include <svx/dialmgr.hxx>
 #include <list>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 sal_Char const sAudio[] = "audio";

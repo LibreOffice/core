@@ -28,8 +28,6 @@
 #include "skeletoncommon.hxx"
 #include "skeletonjava.hxx"
 
-using namespace ::rtl;
-
 namespace skeletonmaker { namespace java {
 
 void printType(

@@ -28,7 +28,6 @@
 
 
 using namespace ::std;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 

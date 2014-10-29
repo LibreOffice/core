@@ -103,7 +103,6 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xtable.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 SdrItemPool::SdrItemPool(

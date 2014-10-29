@@ -33,7 +33,6 @@
 #include <editeng/memberids.hrc>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::cppu;
 
 class SvxUnoBitmapTable : public SvxUnoNameItemTable

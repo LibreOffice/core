@@ -61,7 +61,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 using namespace ::std;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::awt;

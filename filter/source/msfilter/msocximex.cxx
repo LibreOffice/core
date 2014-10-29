@@ -28,7 +28,6 @@
 #include <filter/msfilter/msocximex.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 OUString sWW8_form( "WW-Standard" );
 

@@ -35,7 +35,6 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 }}}};
 
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;

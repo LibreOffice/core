@@ -86,7 +86,6 @@
 #include <editeng/outlobj.hxx>
 #include <svx/svdpage.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 static uno::Reference < beans::XPropertySet > lcl_getFrame_throw(const SdrOle2Obj* _pObject)

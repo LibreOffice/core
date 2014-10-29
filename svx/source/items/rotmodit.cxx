@@ -33,7 +33,6 @@
 
 #include "svx/rotmodit.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0));

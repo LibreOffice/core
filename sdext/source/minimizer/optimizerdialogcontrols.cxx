@@ -34,7 +34,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

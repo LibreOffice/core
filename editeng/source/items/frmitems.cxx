@@ -83,7 +83,6 @@
 #include <editeng/editerr.hxx>
 
 using namespace ::editeng;
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::table::BorderLineStyle;

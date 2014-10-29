@@ -33,7 +33,6 @@
 #define DEFAULT_AAMINHEIGHT 8
 #endif
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 bool SvtTabAppearanceCfg::bInitialized = false;

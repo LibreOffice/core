@@ -30,8 +30,6 @@
 
 #include "jni_bridge.h"
 
-using namespace ::rtl;
-
 namespace
 {
 extern "C"

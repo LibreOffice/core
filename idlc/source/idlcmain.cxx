@@ -23,8 +23,6 @@
 
 #include <string.h>
 
-using namespace ::rtl;
-
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     std::vector< std::string > args;

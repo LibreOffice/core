@@ -45,7 +45,6 @@
 #include <test/XTestFactory.hpp>
 
 using namespace ::test;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;

@@ -38,8 +38,6 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 
-using namespace ::rtl;
-
 AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
 {
     if (pScope == NULL) return NULL;

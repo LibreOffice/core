@@ -34,7 +34,6 @@
 
 #include "editeng/unonames.hxx"
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 

@@ -42,7 +42,6 @@
 
 // - Namespaces -
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 // - GalleryButton -

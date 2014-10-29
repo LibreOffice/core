@@ -32,8 +32,6 @@
 #include <registry/version.h>
 #include <registry/writer.hxx>
 
-using namespace ::rtl;
-
 bool AstModule::dump(RegistryKey& rKey)
 {
     OUString emptyStr;

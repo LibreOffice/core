@@ -21,7 +21,6 @@
 
 #include <unoservices.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 namespace xmlscript

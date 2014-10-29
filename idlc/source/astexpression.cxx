@@ -27,8 +27,6 @@
 #include <float.h>
 #include <memory>
 
-using namespace ::rtl;
-
 AstExpression::AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *pExpr2)
     : m_combOperator(c)
     , m_subExpr1(pExpr1)

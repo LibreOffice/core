@@ -42,7 +42,6 @@
 
 #include <string.h>
 
-using namespace ::rtl;
 using namespace ::osl;
 
 extern int yyparse();

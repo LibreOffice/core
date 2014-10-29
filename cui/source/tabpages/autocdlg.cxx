@@ -61,7 +61,6 @@ static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 OfaAutoCorrDlg::OfaAutoCorrDlg(vcl::Window* pParent, const SfxItemSet* _pSet )
     : SfxTabDialog(pParent, "AutoCorrectDialog", "cui/ui/autocorrectdialog.ui", _pSet)

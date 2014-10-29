@@ -25,8 +25,6 @@
 
 #include <registry/writer.hxx>
 
-using namespace ::rtl;
-
 void AstOperation::setExceptions(DeclList const * pExceptions)
 {
     if (pExceptions != 0) {

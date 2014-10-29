@@ -40,7 +40,6 @@
 #include "share.hxx"
 
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 

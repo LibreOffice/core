@@ -27,8 +27,6 @@
 #include "rtl/strbuf.hxx"
 #include "uno/sequence2.h"
 
-using namespace ::rtl;
-
 namespace jni_uno
 {
 

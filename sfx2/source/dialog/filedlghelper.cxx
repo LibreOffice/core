@@ -106,7 +106,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::rtl;
 using namespace ::cppu;
 
 #define IODLG_CONFIGNAME        OUString("FilePicker_Save")

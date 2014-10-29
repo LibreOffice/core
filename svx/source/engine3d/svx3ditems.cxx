@@ -28,7 +28,6 @@
 
 
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 // #i28528#

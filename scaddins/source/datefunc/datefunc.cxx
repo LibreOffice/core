@@ -28,7 +28,6 @@
 #include <tools/resmgr.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 #define ADDIN_SERVICE           "com.sun.star.sheet.AddIn"
 #define MY_SERVICE              "com.sun.star.sheet.addin.DateFunctions"

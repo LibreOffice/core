@@ -37,7 +37,6 @@
 
 #include <string.h>
 
-using namespace ::rtl;
 using namespace ::osl;
 
 StringList* pCreatedDirectories = NULL;

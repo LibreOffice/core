@@ -28,7 +28,6 @@
 
 #include <iostream>
 
-using namespace ::rtl;
 using namespace ::codemaker::java;
 
 namespace skeletonmaker { namespace java {

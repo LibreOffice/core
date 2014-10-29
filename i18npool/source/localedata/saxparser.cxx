@@ -44,7 +44,6 @@
 
 #include "LocaleNode.hxx"
 
-using namespace ::rtl;
 using namespace ::std;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

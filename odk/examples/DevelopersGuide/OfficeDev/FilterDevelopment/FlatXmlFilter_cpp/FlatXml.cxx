@@ -59,7 +59,6 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::beans;

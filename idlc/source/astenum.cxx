@@ -22,8 +22,6 @@
 #include <registry/version.h>
 #include <registry/writer.hxx>
 
-using namespace ::rtl;
-
 AstEnum::AstEnum(const OString& name, AstScope* pScope)
     : AstType(NT_enum, name, pScope)
     , AstScope(NT_enum)

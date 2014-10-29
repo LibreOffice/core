@@ -26,7 +26,6 @@
 #include "sdpage.hxx"
 
 using namespace ::sd;
-using namespace ::rtl;
 
 struct FadeEffectLBImpl
 {

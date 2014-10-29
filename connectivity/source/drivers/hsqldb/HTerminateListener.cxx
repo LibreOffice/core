@@ -29,7 +29,6 @@ namespace connectivity
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
-    using namespace ::rtl;
 
 // XEventListener
 void SAL_CALL OConnectionController::disposing( const EventObject& /*Source*/ )

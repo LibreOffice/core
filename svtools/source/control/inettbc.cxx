@@ -62,7 +62,6 @@
 #include <vector>
 #include <algorithm>
 
-using namespace ::rtl;
 using namespace ::ucbhelper;
 using namespace ::utl;
 using namespace ::com::sun::star;

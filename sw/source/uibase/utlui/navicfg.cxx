@@ -27,7 +27,6 @@
 #include <unomid.h>
 
 using namespace ::utl;
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 Sequence<OUString> SwNavigationConfig::GetPropertyNames()

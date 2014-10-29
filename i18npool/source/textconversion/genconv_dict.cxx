@@ -29,8 +29,6 @@
 
 #include <vector>
 
-using namespace ::rtl;
-
 void make_hhc_char(FILE *sfp, FILE *cfp);
 void make_stc_char(FILE *sfp, FILE *cfp);
 void make_stc_word(FILE *sfp, FILE *cfp);

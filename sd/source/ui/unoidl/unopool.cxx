@@ -26,7 +26,6 @@
 #include "unopool.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::comphelper;
 

@@ -35,7 +35,6 @@
 #include "drawdoc.hxx"
 #include "unokywds.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 
 const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()

@@ -21,8 +21,6 @@
 #include <idlc/errorhandler.hxx>
 #include "idlc/idlc.hxx"
 
-using namespace ::rtl;
-
 FeDeclarator::FeDeclarator(const OString& name, DeclaratorType declType, AstDeclaration* pComplPart)
     : m_pComplexPart(pComplPart)
     , m_name(name)

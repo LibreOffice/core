@@ -32,7 +32,6 @@
 #include "itemholder2.hxx"
 
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 
 #define CFG_READONLY_DEFAULT false
 

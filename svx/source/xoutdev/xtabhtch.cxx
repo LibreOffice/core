@@ -34,7 +34,6 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 XHatchList::XHatchList(const OUString& rPath, const OUString& rReferer)
   : XPropertyList( XHATCH_LIST, rPath, rReferer )

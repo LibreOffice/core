@@ -13,7 +13,6 @@ using namespace ::connectivity;
 using namespace ::connectivity::firebird;
 
 using namespace ::osl;
-using namespace ::rtl;
 using namespace ::std;
 
 using namespace ::com::sun::star;

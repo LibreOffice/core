@@ -31,7 +31,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
 #include <stdio.h>
-using namespace ::rtl;
+
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -16,7 +16,6 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
-using namespace ::rtl;
 
 namespace
 {

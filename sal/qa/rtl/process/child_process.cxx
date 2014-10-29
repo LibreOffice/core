@@ -22,8 +22,6 @@
 #include <rtl/process.h>
 #include <rtl_Process_Const.h>
 
-using namespace ::rtl;
-
 // ----------------------------------- Main -----------------------------------
 SAL_IMPLEMENT_MAIN_WITH_ARGS(, argv)
 {

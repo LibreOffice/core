@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 namespace sd { namespace tools {
 

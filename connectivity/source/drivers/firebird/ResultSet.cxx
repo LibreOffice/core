@@ -42,7 +42,6 @@ using namespace ::connectivity::firebird;
 using namespace ::cppu;
 using namespace ::dbtools;
 using namespace ::osl;
-using namespace ::rtl;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

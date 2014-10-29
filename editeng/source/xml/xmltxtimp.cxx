@@ -48,7 +48,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::text;
-using namespace ::rtl;
 using namespace cppu;
 using namespace xmloff::token;
 

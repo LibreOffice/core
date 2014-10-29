@@ -36,8 +36,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <unx/saldata.hxx>
 
-using namespace ::rtl;
-
 /**
   Conversion function between VCL ControlState together with
   ImplControlValue and Qt state flags.

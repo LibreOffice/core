@@ -30,7 +30,6 @@
 #include "svx/unofill.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::cppu;
 
 class SvxUnoHatchTable : public SvxUnoNameItemTable

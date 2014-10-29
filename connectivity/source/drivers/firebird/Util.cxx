@@ -12,8 +12,6 @@
 
 using namespace ::connectivity;
 
-using namespace ::rtl;
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;

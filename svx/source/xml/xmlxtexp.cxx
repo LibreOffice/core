@@ -59,7 +59,6 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
-using namespace ::rtl;
 using namespace cppu;
 
 using com::sun::star::embed::XTransactedObject;

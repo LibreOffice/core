@@ -20,8 +20,6 @@
 #include <idlc/errorhandler.hxx>
 #include <idlc/astinterface.hxx>
 
-using namespace ::rtl;
-
 static const sal_Char* errorCodeToMessage(ErrorCode eCode)
 {
     switch (eCode)

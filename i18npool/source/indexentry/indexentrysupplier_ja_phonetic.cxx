@@ -23,8 +23,6 @@
 #include <data/indexdata_ja_phonetic.h>
 #include <string.h>
 
-using namespace ::rtl;
-
 namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL IndexEntrySupplier_ja_phonetic::getIndexCharacter( const OUString& rIndexEntry,

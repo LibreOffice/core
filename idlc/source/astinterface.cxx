@@ -25,8 +25,6 @@
 #include <registry/version.h>
 #include <registry/writer.hxx>
 
-using namespace ::rtl;
-
 AstInterface::AstInterface(const OString& name,
                            AstInterface const * pInherits,
                            AstScope* pScope)

@@ -38,7 +38,6 @@
 #define ULONG_MAX 0xffffffff
 #endif
 
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 

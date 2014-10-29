@@ -32,7 +32,6 @@
 
 #include "svx/svdstr.hrc"
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <string.h>
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 void MapReturn(long d0, long d1, typelib_TypeClass eReturnType, long *pRegisterReturn)

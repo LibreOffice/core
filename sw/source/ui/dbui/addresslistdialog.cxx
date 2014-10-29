@@ -71,7 +71,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::rtl;
 
 #define ITEMID_NAME         1
 #define ITEMID_TABLE        2

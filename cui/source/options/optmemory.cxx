@@ -64,7 +64,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::utl;
-using namespace ::rtl;
 using namespace ::sfx2;
 
 

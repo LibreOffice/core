@@ -24,8 +24,6 @@
 
 using namespace connectivity::firebird;
 
-using namespace ::rtl;
-
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;

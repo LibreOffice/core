@@ -30,7 +30,6 @@
 #include <cassert>
 #include <iostream>
 
-using namespace ::rtl;
 using namespace ::codemaker::cpp;
 
 namespace skeletonmaker {

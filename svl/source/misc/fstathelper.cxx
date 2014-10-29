@@ -28,7 +28,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-using namespace ::rtl;
 
 bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
                                         Date* pDate, tools::Time* pTime )

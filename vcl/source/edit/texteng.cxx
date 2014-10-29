@@ -61,7 +61,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 
 TextEngine::TextEngine()
 {

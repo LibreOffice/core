@@ -70,7 +70,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::rtl;
 
 // - Redo
 // - Bei Tracking-Cancel DefaultSelection wieder herstellen

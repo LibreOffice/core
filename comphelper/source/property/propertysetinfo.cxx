@@ -20,7 +20,6 @@
 
 #include <comphelper/propertysetinfo.hxx>
 
-using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -44,7 +44,6 @@
 
 #include <set>
 
-using namespace ::rtl;
 using namespace ::osl;
 
 using ::com::sun::star::uno::Sequence;

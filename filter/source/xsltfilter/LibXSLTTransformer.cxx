@@ -48,7 +48,6 @@
 #include <OleHandler.hxx>
 #include <boost/scoped_ptr.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::beans;

@@ -34,7 +34,6 @@
 // - OPTIMIZERDIALOG -
 
 
-using namespace ::rtl;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::awt;

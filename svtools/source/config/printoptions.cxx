@@ -57,7 +57,6 @@ static sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 #define PROPERTYNAME_PDFASSTANDARDPRINTJOBFORMAT        OUString("PDFAsStandardPrintJobFormat")
 
 using namespace ::utl;
-using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 

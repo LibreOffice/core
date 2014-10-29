@@ -48,7 +48,6 @@
 #include <vcl/msgbox.hxx>
 #include <stdio.h>
 
-using namespace ::rtl                       ;
 using namespace ::osl                       ;
 using namespace ::comphelper                ;
 using namespace ::com::sun::star::uno       ;

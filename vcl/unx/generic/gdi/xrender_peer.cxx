@@ -26,8 +26,6 @@
 
 #include <xrender_peer.hxx>
 
-using namespace rtl;
-
 XRenderPeer::XRenderPeer()
     : mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
     , mpStandardFormatA8( NULL )

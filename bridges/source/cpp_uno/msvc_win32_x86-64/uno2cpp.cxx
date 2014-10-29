@@ -34,7 +34,6 @@
 #include <stdio.h>
 #endif
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
 namespace

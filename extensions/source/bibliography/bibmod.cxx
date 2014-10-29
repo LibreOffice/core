@@ -31,7 +31,6 @@ static PtrBibModul pBibModul=NULL;
 static sal_uInt32 nBibModulCount=0;
 #include <ucbhelper/content.hxx>
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
