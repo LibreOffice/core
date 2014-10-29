@@ -33,6 +33,7 @@ class SalGraphics;
 class SalBitmap;
 class SalPolyLine;
 class X11SalGraphics;
+class Gradient;
 
 class X11SalGraphicsImpl : public SalGraphicsImpl
 {
@@ -261,7 +262,7 @@ public:
                     long nWidth, long nHeight,
                     sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
-
+    virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) SAL_OVERRIDE;
 };
 
 #endif

@@ -24,6 +24,7 @@
 #include "gdiimpl.hxx"
 
 #include "vcl/salbtype.hxx"
+#include <vcl/gradient.hxx>
 
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"
@@ -1774,6 +1775,11 @@ long X11SalGraphicsImpl::GetGraphicsWidth() const
         return mrParent.m_pVDev->GetWidth();
     else
         return 0;
+}
+
+bool X11SalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/, const Gradient& /*rGradient*/)
+{
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
