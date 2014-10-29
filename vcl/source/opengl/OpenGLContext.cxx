@@ -646,30 +646,31 @@ bool OpenGLContext::ImplInit()
         // enable vsync
         typedef GLint (*glXSwapIntervalProc)(GLint);
         glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
-        if( glXSwapInterval ) {
-        int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
+        if( glXSwapInterval )
+        {
+            int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
 
-        XLockDisplay(m_aGLWin.dpy);
-        XSync(m_aGLWin.dpy, false);
-        // replace error handler temporarily
-        oldHandler = XSetErrorHandler( oglErrorHandler );
+            XLockDisplay(m_aGLWin.dpy);
+            XSync(m_aGLWin.dpy, false);
+            // replace error handler temporarily
+            oldHandler = XSetErrorHandler( oglErrorHandler );
 
-        errorTriggered = false;
+            errorTriggered = false;
 
-        glXSwapInterval( 1 );
+            glXSwapInterval( 1 );
 
-        // sync so that we possibly get an XError
-        glXWaitGL();
-        XSync(m_aGLWin.dpy, false);
+            // sync so that we possibly get an XError
+            glXWaitGL();
+            XSync(m_aGLWin.dpy, false);
 
-        if( errorTriggered )
-            SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
-        else
-            SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
+            if( errorTriggered )
+                SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
+            else
+                SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
 
-        // restore the error handler
-        XSetErrorHandler( oldHandler );
-        XUnlockDisplay(m_aGLWin.dpy);
+            // restore the error handler
+            XSetErrorHandler( oldHandler );
+            XUnlockDisplay(m_aGLWin.dpy);
         }
     }
 
@@ -729,7 +730,6 @@ void OpenGLContext::setWinSize(const Size& rSize)
     m_aGLWin.Width = rSize.Width();
     m_aGLWin.Height = rSize.Height();
 }
-
 
 void OpenGLContext::renderToFile()
 {
