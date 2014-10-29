@@ -220,13 +220,46 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         m_image.reset(new QImage( widgetRect.width(), widgetRect.height(), QImage::Format_ARGB32 ) );
     }
-    m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
+
+    // Default image color - just once
+    switch (type)
+    {
+        case ControlType::MenuPopup:
+            if( part == ControlPart::MenuItemCheckMark || part == ControlPart::MenuItemRadioMark )
+            {
+                // it is necessary to fill the background transparently first, as this
+                // is painted after menuitem highlight, otherwise there would be a grey area
+                m_image->fill( Qt::transparent );
+                break;
+            }
+            SAL_FALLTHROUGH; // QPalette::Window
+        case ControlType::Menubar:
+        case ControlType::WindowBackground:
+            m_image->fill( KApplication::palette().color(QPalette::Window).rgb() );
+            break;
+        case ControlType::Tooltip:
+            m_image->fill(KApplication::palette().color(QPalette::ToolTipBase).rgb());
+            break;
+        case ControlType::Pushbutton:
+            m_image->fill(KApplication::palette().color(QPalette::Button).rgb());
+            break;
+        case ControlType::Scrollbar:
+            if ((part == ControlPart::DrawBackgroundVert)
+                || (part == ControlPart::DrawBackgroundHorz))
+            {
+                m_image->fill( KApplication::palette().color(QPalette::Window).rgb() );
+                break;
+            }
+            SAL_FALLTHROUGH; // Qt::transparent
+        default:
+            m_image->fill( Qt::transparent );
+            break;
+    }
 
     QRegion* localClipRegion = nullptr;
 
     if (type == ControlType::Pushbutton)
     {
-        m_image->fill( Qt::transparent );
         QStyleOptionButton option;
         draw( QStyle::CE_PushButton, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
@@ -309,7 +342,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QRect menuItemRect( region2QRect( menuVal->maItemRect ));
             QRect rect( menuItemRect.topLeft() - widgetRect.topLeft(),
                 widgetRect.size().expandedTo( menuItemRect.size()));
-            m_image->fill( Qt::transparent );
             draw( QStyle::CE_MenuItem, &option, m_image.get(),
                   vclStateValue2StateFlag(nControlState, value), rect );
         }
@@ -328,7 +360,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if ( (type == ControlType::Toolbar) && (part == ControlPart::Button) )
     {
-        m_image->fill( Qt::transparent );
         QStyleOptionToolButton option;
 
         option.arrowType = Qt::NoArrow;
@@ -396,7 +427,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                       vclStateValue2StateFlag(nControlState, value) );
                 break;
             case ControlPart::ButtonDown:
-                m_image->fill( Qt::transparent );
                 option.subControls = QStyle::SC_ComboBoxArrow;
                 draw( QStyle::CC_ComboBox, &option, m_image.get(),
                       vclStateValue2StateFlag(nControlState, value) );
@@ -407,7 +437,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == ControlType::ListNode)
     {
-        m_image->fill( Qt::transparent );
         QStyleOption option;
         option.state = QStyle::State_Item | QStyle::State_Children;
 
@@ -419,7 +448,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == ControlType::Checkbox)
     {
-        m_image->fill( Qt::transparent );
         QStyleOptionButton option;
         draw( QStyle::CE_CheckBox, &option, m_image.get(),
                vclStateValue2StateFlag(nControlState, value) );
@@ -482,7 +510,6 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == ControlType::Radiobutton)
     {
-        m_image->fill( Qt::transparent );
         QStyleOptionButton option;
         draw( QStyle::CE_RadioButton, &option, m_image.get(),
               vclStateValue2StateFlag(nControlState, value) );
@@ -504,7 +531,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == ControlType::WindowBackground)
     {
-        m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
+        // Nothing to do - see "Default image color" switch ^^
     }
     else if (type == ControlType::Fixedline)
     {
