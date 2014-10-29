@@ -1329,9 +1329,14 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         // Only use the relative widths' fraction, that is used for the
         // absolute width.
         sal_uLong nAbsTabWidthL = nAbsTabWidth;
-        nRelTabWidth =
-            ( nRelAvail ? (sal_uInt16)((nAbsTabWidthL * nRelAvail) / nAbsAvail)
-                        : nAbsTabWidth );
+        if (nRelAvail)
+        {
+            if (nAbsAvail == 0)
+                throw o3tl::divide_by_zero();
+            nRelTabWidth = (sal_uInt16)((nAbsTabWidthL * nRelAvail) / nAbsAvail);
+        }
+        else
+            nRelTabWidth = nAbsTabWidth;
 
         // Are there columns width a percentage setting and some without one?
         sal_uLong nFixMax = nMax;
