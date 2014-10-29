@@ -35,9 +35,6 @@
 #include "salgdiimpl.hxx"
 #include "gdiimpl.hxx"
 
-// comment out to prevent use of beziers on GDI functions
-#define USE_GDI_BEZIERS
-
 #define DITHER_PAL_DELTA                51
 #define DITHER_PAL_STEPS                6
 #define DITHER_PAL_COUNT                (DITHER_PAL_STEPS*DITHER_PAL_STEPS*DITHER_PAL_STEPS)
