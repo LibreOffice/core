@@ -860,15 +860,16 @@ void TableLayouter::updateCells( Rectangle& rRectangle )
             if( xCell.is() )
             {
                 basegfx::B2IRectangle aCellArea;
-                getCellArea( xCell, aPos, aCellArea );
-
-                Rectangle aCellRect;
-                aCellRect.Left() = aCellArea.getMinX();
-                aCellRect.Right() = aCellArea.getMaxX();
-                aCellRect.Top() = aCellArea.getMinY();
-                aCellRect.Bottom() = aCellArea.getMaxY();
-                aCellRect.Move( rRectangle.Left(), rRectangle.Top() );
-                xCell->setCellRect( aCellRect );
+                if( getCellArea( xCell, aPos, aCellArea ) )
+                {
+                    Rectangle aCellRect;
+                    aCellRect.Left() = aCellArea.getMinX();
+                    aCellRect.Right() = aCellArea.getMaxX();
+                    aCellRect.Top() = aCellArea.getMinY();
+                    aCellRect.Bottom() = aCellArea.getMaxY();
+                    aCellRect.Move( rRectangle.Left(), rRectangle.Top() );
+                    xCell->setCellRect( aCellRect );
+                }
             }
         }
     }
