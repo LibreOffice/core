@@ -1340,10 +1340,21 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
+IMPL_LINK(VclFrame, WindowEventListener, VclSimpleEvent*, pEvent)
+{
+    if (pEvent && pEvent->GetId() == VCLEVENT_OBJECT_DYING)
+        designate_label(NULL);
+    return 0;
+}
+
 void VclFrame::designate_label(Window *pWindow)
 {
-    assert(pWindow->GetParent() == this);
+    assert(!pWindow || pWindow->GetParent() == this);
+    if (m_pLabel)
+        m_pLabel->RemoveEventListener(LINK(this, VclFrame, WindowEventListener));
     m_pLabel = pWindow;
+    if (m_pLabel)
+        m_pLabel->AddEventListener(LINK(this, VclFrame, WindowEventListener));
 }
 
 const Window *VclFrame::get_label_widget() const
