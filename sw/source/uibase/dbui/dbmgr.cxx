@@ -276,8 +276,27 @@ static bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     return bRet;
 }
 
-static bool lcl_GetColumnCnt(SwDSParam* pParam,
-    const OUString& rColumnName, long nLanguage, OUString& rResult, double* pNumber)
+static void lcl_GetColumnCnt(SwDSParam *pParam,
+                             const uno::Reference< XPropertySet > &rColumnProps,
+                             long nLanguage, OUString &rResult, double* pNumber)
+{
+    SwDBFormatData aFormatData;
+    if(!pParam->xFormatter.is())
+    {
+        uno::Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(
+                                    pParam->xConnection,pParam->sDataSource);
+        lcl_InitNumberFormatter(*pParam, xSource );
+    }
+    aFormatData.aNullDate = pParam->aNullDate;
+    aFormatData.xFormatter = pParam->xFormatter;
+
+    aFormatData.aLocale = LanguageTag( (LanguageType)nLanguage ).getLocale();
+
+    rResult = SwDBManager::GetDBField( rColumnProps, aFormatData, pNumber);
+}
+
+static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
+                             long nLanguage, OUString& rResult, double* pNumber)
 {
     uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
     uno::Reference<XNameAccess> xCols;
@@ -293,20 +312,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam,
     Any aCol = xCols->getByName(rColumnName);
     uno::Reference< XPropertySet > xColumnProps;
     aCol >>= xColumnProps;
-
-    SwDBFormatData aFormatData;
-    if(!pParam->xFormatter.is())
-    {
-        uno::Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(
-                                    pParam->xConnection,pParam->sDataSource);
-        lcl_InitNumberFormatter(*pParam, xSource );
-    }
-    aFormatData.aNullDate = pParam->aNullDate;
-    aFormatData.xFormatter = pParam->xFormatter;
-
-    aFormatData.aLocale = LanguageTag( (LanguageType)nLanguage ).getLocale();
-
-    rResult = SwDBManager::GetDBField( xColumnProps, aFormatData, pNumber);
+    lcl_GetColumnCnt( pParam, xColumnProps, nLanguage, rResult, pNumber );
     return true;
 };
 
@@ -1867,7 +1873,7 @@ bool SwDBManager::GetColumnCnt(const OUString& rSourceName, const OUString& rTab
 
 // reads the column data at the current position
 bool    SwDBManager::GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
-                                   OUString &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
+                                   OUString &rResult, double *pNumber)
 {
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
     {
@@ -1912,45 +1918,43 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
                 continue;
             }
 
+            // get the column type
+            sal_Int32 nColumnType = DataType::SQLNULL;
+            Any aCol = xCols->getByName( pColNames[nCol] );
+            uno::Reference<XPropertySet> xColumnProps;
+            aCol >>= xColumnProps;
+            Any aType = xColumnProps->getPropertyValue( "Type" );
+            aType >>= nColumnType;
             double aNumber = DBL_MAX;
-            if( lcl_GetColumnCnt(pImpl->pMergeData, rColName, nLanguage, aString, &aNumber) )
+
+            lcl_GetColumnCnt( pImpl->pMergeData, xColumnProps, nLanguage, aString, &aNumber );
+
+            sal_uInt32 nFmt = GetColumnFmt( pImpl->pMergeData->sDataSource,
+                                            pImpl->pMergeData->sCommand,
+                                            pColNames[nCol], pDocFormatter, nLanguage );
+            // aNumber is overwritten by SwDBField::FormatValue, so store initial status
+            bool colIsNumber = aNumber != DBL_MAX;
+            bool bValidValue = SwDBField::FormatValue( pDocFormatter, aString, nFmt,
+                                                       aNumber, nColumnType, NULL );
+            if( colIsNumber )
             {
-                // get the column type
-                sal_Int32 nColumnType = DataType::SQLNULL;
-                Any aCol = xCols->getByName( pColNames[nCol] );
-                uno::Reference<XPropertySet> xCol;
-                aCol >>= xCol;
-                Any aType = xCol->getPropertyValue( "Type" );
-                aType >>= nColumnType;
-
-                sal_uInt32 nFmt;
-                if( !GetMergeColumnCnt(pColNames[nCol], nLanguage, aString, &aNumber, &nFmt) )
-                    continue;
-
-                // aNumber is overwritten by SwDBField::FormatValue, so store initial status
-                bool colIsNumber = aNumber != DBL_MAX;
-                bool bValidValue = SwDBField::FormatValue( pDocFormatter, aString, nFmt,
-                                                           aNumber, nColumnType, NULL );
-                if( colIsNumber )
-                {
-                    if( bValidValue )
-                    {
-                        SwSbxValue aValue;
-                        if( !asString )
-                            aValue.PutDouble( aNumber );
-                        else
-                            aValue.PutString( aString );
-                        SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
-                        rCalc.VarChange( pColNames[nCol], aValue );
-                    }
-                }
-                else
+                if( bValidValue )
                 {
                     SwSbxValue aValue;
-                    aValue.PutString( aString );
-                    SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aString );
+                    if( !asString )
+                        aValue.PutDouble( aNumber );
+                    else
+                        aValue.PutString( aString );
+                    SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aNumber << " / " << aString );
                     rCalc.VarChange( pColNames[nCol], aValue );
                 }
+            }
+            else
+            {
+                SwSbxValue aValue;
+                aValue.PutString( aString );
+                SAL_INFO( "sw.dbmgr", "'" << pColNames[nCol] << "': " << aString );
+                rCalc.VarChange( pColNames[nCol], aValue );
             }
         }
         return bExistsNextRecord;

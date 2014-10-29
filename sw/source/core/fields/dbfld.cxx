@@ -322,13 +322,13 @@ void SwDBField::Evaluate()
     if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, true))
         return ;
 
-    sal_uInt32 nFmt;
+    sal_uInt32 nFmt = 0;
 
     // search corresponding column name
     OUString aColNm( static_cast<SwDBFieldType*>(GetTyp())->GetColumnName() );
 
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
-    pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue, &nFmt);
+    pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue);
     if( !( nSubType & nsSwExtendedSubType::SUB_OWN_FMT ) )
         SetFormat( nFmt = pMgr->GetColumnFmt( aTmpData.sDataSource, aTmpData.sCommand,
                                         aColNm, pDocFormatter, GetLanguage() ));

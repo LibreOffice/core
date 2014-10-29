@@ -311,7 +311,7 @@ public:
     void            CloseAll(bool bIncludingMerge = true);
 
     bool            GetMergeColumnCnt(const OUString& rColumnName, sal_uInt16 nLanguage,
-                                      OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
+                                      OUString &rResult, double *pNumber);
     bool            FillCalcWithMergeData(SvNumberFormatter *pDocFormatter,
                                           sal_uInt16 nLanguage, bool asString, SwCalc &aCalc);
     bool            ToNextMergeRecord();

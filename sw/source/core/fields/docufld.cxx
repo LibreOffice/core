@@ -1381,9 +1381,8 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                                                 sDataTableOrQuery, false))
                 {
                     double fNumber;
-                    sal_uInt32 nTmpFormat;
                     pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
-                        GetLanguage(), aContent, &fNumber, &nTmpFormat );
+                        GetLanguage(), aContent, &fNumber );
                     bValid = true;
                 }
                 else if( !sDBName.isEmpty() && !sDataSource.isEmpty() &&
