@@ -1364,18 +1364,16 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             {
                 SwDocStat selectionStats;
                 SwDocStat documentStats;
-                {
-                    rShell.CountWords(selectionStats);
-                    documentStats = rShell.GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
-                }
+                rShell.CountWords(selectionStats);
+                documentStats = rShell.GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
 
-                OUString wordCount(SW_RES(selectionStats.nWord ?
-                                          STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION));
-                wordCount = wordCount.replaceFirst("%1",
-                                OUString::number(selectionStats.nWord ? selectionStats.nWord : documentStats.nWord));
-                wordCount = wordCount.replaceFirst("%2",
-                                OUString::number(selectionStats.nChar ? selectionStats.nChar : documentStats.nChar));
-                rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
+                sal_uLong nWord = selectionStats.nWord ? selectionStats.nWord : documentStats.nWord;
+                sal_uLong nChar = selectionStats.nChar ? selectionStats.nChar : documentStats.nChar;
+                OUString aWordCount( SW_RES( selectionStats.nWord ? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION ) );
+                const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
+                aWordCount = aWordCount.replaceFirst( "%1", rLocaleData.getNum( nWord, 0 ) );
+                aWordCount = aWordCount.replaceFirst( "%2", rLocaleData.getNum( nChar, 0 ) );
+                rSet.Put( SfxStringItem( FN_STAT_WORDCOUNT, aWordCount ) );
 
                 SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
                 if (pWrdCnt)
