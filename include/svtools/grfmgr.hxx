@@ -431,14 +431,6 @@ public:
                                 sal_uLong nFlags = GRFMGR_DRAW_STANDARD
                             );
 
-    bool                    DrawWithPDFHandling(
-                                OutputDevice& rOutDev,
-                                const Point& rPt,
-                                const Size& rSz,
-                                const GraphicAttr* pGrfAttr = NULL,
-                                const sal_uLong nFlags = GRFMGR_DRAW_STANDARD
-                            );
-
     /** Draw the graphic repeatedly into the given output rectangle
 
         @param pOut

@@ -1824,15 +1824,8 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     // used, these coordinates have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
 
-    if (pGrf->GetGraphic().getSvgData().get())
-    {   // fdo#68927 - SVGs are rasterized badly by DrawWithPDFHandling
-        paintGraphicUsingPrimitivesHelper(*pOut,
-                *pGrf, pGrf->GetAttr(), aAlignedGrfRect);
-    }
-    else
-    {
-        pGrf->DrawWithPDFHandling( *pOut, aAlignedGrfRect.Pos(), aAlignedGrfRect.SSize() );
-    }
+    paintGraphicUsingPrimitivesHelper(*pOut,
+        *pGrf, pGrf->GetAttr(), aAlignedGrfRect);
 
     if ( bNotInside )
         pOut->Pop();

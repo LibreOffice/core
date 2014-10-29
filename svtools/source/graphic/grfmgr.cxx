@@ -33,8 +33,6 @@
 #include <vcl/virdev.hxx>
 #include <svtools/grfmgr.hxx>
 
-#include <vcl/pdfextoutdevdata.hxx>
-
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -602,67 +600,6 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
             mpSwapOutTimer->Start();
         else
             FireSwapOutRequest();
-    }
-
-    return bRet;
-}
-
-// #i105243#
-bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
-                                         const Point& rPt, const Size& rSz,
-                                         const GraphicAttr* pGrfAttr,
-                                         const sal_uLong nFlags )
-{
-    const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
-
-    // Notify PDF writer about linked graphic (if any)
-    bool bWritingPdfLinkedGraphic( false );
-    Point aPt( rPt );
-    Size aSz( rSz );
-    Rectangle aCropRect;
-    vcl::PDFExtOutDevData* pPDFExtOutDevData =
-            dynamic_cast<vcl::PDFExtOutDevData*>(rOutDev.GetExtOutDevData());
-    if( pPDFExtOutDevData )
-    {
-        // only delegate image handling to PDF, if no special treatment is necessary
-        if( GetGraphic().IsLink() &&
-            rSz.Width() > 0L &&
-            rSz.Height() > 0L &&
-            !aGrfAttr.IsSpecialDrawMode() &&
-            !aGrfAttr.IsMirrored() &&
-            !aGrfAttr.IsRotated() &&
-            !aGrfAttr.IsAdjusted() )
-        {
-            bWritingPdfLinkedGraphic = true;
-
-            if( aGrfAttr.IsCropped() )
-            {
-                tools::PolyPolygon aClipPolyPoly;
-                bool bRectClip;
-                const bool bCrop = ImplGetCropParams( &rOutDev,
-                                                      aPt, aSz,
-                                                      &aGrfAttr,
-                                                      aClipPolyPoly,
-                                                      bRectClip );
-                if ( bCrop && bRectClip )
-                {
-                    aCropRect = aClipPolyPoly.GetBoundRect();
-                }
-            }
-
-            pPDFExtOutDevData->BeginGroup();
-        }
-    }
-
-    bool bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
-
-    // Notify PDF writer about linked graphic (if any)
-    if( bWritingPdfLinkedGraphic )
-    {
-        pPDFExtOutDevData->EndGroup( const_cast< Graphic& >(GetGraphic()),
-                                     aGrfAttr.GetTransparency(),
-                                     Rectangle( aPt, aSz ),
-                                     aCropRect );
     }
 
     return bRet;
