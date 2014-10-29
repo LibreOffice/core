@@ -1085,6 +1085,9 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                             nRowCnt = nZwi;
                         }
 
+                        if (nColCnt == 0 || nRowCnt == 0)
+                            break;
+
                         aPartSize.Width() = (aPartSize.Width() - ((nColCnt - 1) * nGapX)) / nColCnt;
                         aPartSize.Height() = (aPartSize.Height() - ((nRowCnt - 1) * nGapY)) / nRowCnt;
 
