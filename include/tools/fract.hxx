@@ -31,17 +31,19 @@ class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
 {
 private:
     bool                        valid;
+    bool                        divisionByZero;
     boost::rational<sal_Int64>  value;
 
     bool            HasOverflowValue();
 
 public:
-                    Fraction() { valid = true; }
+                    Fraction() { valid = true; divisionByZero = false; }
                     Fraction( const Fraction & rFrac );
                     Fraction( long nNum, long nDen=1 );
                     Fraction( double dVal );
 
     bool            IsValid() const;
+    bool            IsDivideByZero() const;
 
     long            GetNumerator() const;
     long            GetDenominator() const;
@@ -77,32 +79,42 @@ public:
 inline Fraction::Fraction( const Fraction& rFrac )
 {
     valid = rFrac.valid;
-    if ( valid )
+    divisionByZero = rFrac.divisionByZero;
+    if ( valid || divisionByZero )
         value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
 }
 
 inline long Fraction::GetNumerator() const
 {
-    if ( !valid ) {
+    if ( valid ) {
+        return value.numerator();
+    } else if ( divisionByZero ) {
+        SAL_WARN( "tools.fraction", "'GetNumerator()' on divide by zero fraction" );
+        return value.numerator();
+    } else {
         SAL_WARN( "tools.fraction", "'GetNumerator()' on invalid fraction" );
         return 0;
     }
-    return value.numerator();
 }
 
 inline long Fraction::GetDenominator() const {
-    if ( !valid ) {
+    if ( valid ) {
+        return value.denominator();
+    } else if ( divisionByZero ) {
+        SAL_WARN( "tools.fraction", "'GetDenominator()' on divide by zero fraction" );
+        return 0;
+    } else {
         SAL_WARN( "tools.fraction", "'GetDenominator()' on invalid fraction" );
         return -1;
     }
-    return value.denominator();
 }
 
 inline Fraction& Fraction::operator=( const Fraction& rFrac )
 {
     if ( this != &rFrac ) {
         valid = rFrac.valid;
-        if ( valid )
+        divisionByZero = rFrac.divisionByZero;
+        if ( valid || divisionByZero )
             value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
     }
     return *this;
@@ -111,6 +123,11 @@ inline Fraction& Fraction::operator=( const Fraction& rFrac )
 inline bool Fraction::IsValid() const
 {
     return valid;
+}
+
+inline bool Fraction::IsDivideByZero() const
+{
+    return divisionByZero;
 }
 
 inline Fraction::operator long() const
