@@ -13,6 +13,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "svl/itempool.hxx"
+#include <editeng/acorrcfg.hxx>
 #include "editeng/eerdll.hxx"
 #include "editeng/eerdll2.hxx"
 #include "editeng/editeng.hxx"
@@ -28,6 +29,7 @@
 #include "editeng/flditem.hxx"
 #include "svl/srchitem.hxx"
 #include "rtl/strbuf.hxx"
+#include <test/callgrind.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -304,9 +306,7 @@ private:
 //before the two letters
 void Test::testAutocorrect()
 {
-    OUString sShareAutocorrFile;
-    OUString sUserAutocorrFile;
-    SvxAutoCorrect aAutoCorrect(sShareAutocorrFile, sUserAutocorrFile);
+    SvxAutoCorrect pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
     {
         OUString sInput("TEst-TEst");
@@ -314,7 +314,9 @@ void Test::testAutocorrect()
         OUString sExpected("Test-Test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        callgrindStart();
+        pAutoCorrect->DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        callgrindDump("autocorrect");
 
         CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
     }
@@ -325,7 +327,7 @@ void Test::testAutocorrect()
         OUString sExpected("Test/Test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        pAutoCorrect->DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
         CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
     }
@@ -337,7 +339,7 @@ void Test::testAutocorrect()
         OUString sExpected("foo");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        pAutoCorrect->DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
     }
