@@ -34,6 +34,7 @@
 
 class SalGraphics;
 class SalBitmap;
+class Gradient;
 
 class VCL_PLUGIN_PUBLIC SalGraphicsImpl
 {
@@ -197,7 +198,7 @@ public:
                     long nWidth, long nHeight,
                     sal_uInt8 nTransparency ) = 0;
 
-
+    virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
 };
 
 #endif

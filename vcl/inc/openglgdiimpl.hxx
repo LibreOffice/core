@@ -191,6 +191,8 @@ public:
                     long nX, long nY,
                     long nWidth, long nHeight,
                     sal_uInt8 nTransparency ) SAL_OVERRIDE;
+
+    virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) SAL_OVERRIDE;
 private:
 };
 

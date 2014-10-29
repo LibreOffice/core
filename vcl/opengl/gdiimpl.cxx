@@ -19,6 +19,8 @@
 
 #include "openglgdiimpl.hxx"
 
+#include <vcl/gradient.hxx>
+
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
 }
@@ -266,6 +268,12 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
                 long /*nX*/, long /*nY*/,
                 long /*nWidth*/, long /*nHeight*/,
                 sal_uInt8 /*nTransparency*/ )
+{
+    return false;
+}
+
+bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
+        const Gradient& /*rGradient*/)
 {
     return false;
 }

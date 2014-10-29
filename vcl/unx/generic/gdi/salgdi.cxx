@@ -482,4 +482,9 @@ bool X11SalGraphics::drawPolyLine(
             eLineJoin, eLineCap );
 }
 
+bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradient& rGradient)
+{
+    return mpImpl->drawGradient(rPoly, rGradient);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

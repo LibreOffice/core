@@ -237,7 +237,7 @@ public:
         const ::basegfx::B2DVector& rLineWidth,
         basegfx::B2DLineJoin,
         com::sun::star::drawing::LineCap) SAL_OVERRIDE;
-    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE { return false; };
+    virtual bool            drawGradient( const tools::PolyPolygon&, const Gradient& ) SAL_OVERRIDE;
 
 #if 1 // TODO: remove these obselete methods
     virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,
