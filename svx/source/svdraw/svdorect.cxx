@@ -145,15 +145,15 @@ XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
     aXPoly=aNeuPoly;
 
     // these angles always relate to the top left corner of aRect
-    if (aGeo.nShearAngle!=0) ShearXPoly(aXPoly,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotateXPoly(aXPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearXPoly(aXPoly,maRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nRotationAngle!=0) RotateXPoly(aXPoly,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     return aXPoly;
 }
 
 void SdrRectObj::RecalcXPoly()
 {
     delete mpXPoly;
-    mpXPoly = new XPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
+    mpXPoly = new XPolygon(ImpCalcXPoly(maRect,GetEckenradius()));
 }
 
 const XPolygon& SdrRectObj::GetXPoly() const
@@ -204,17 +204,21 @@ sal_uInt16 SdrRectObj::GetObjIdentifier() const
 
 void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
-    rRect=aRect;
-    if (aGeo.nShearAngle!=0) {
-        long nDst=Round((aRect.Bottom()-aRect.Top())*aGeo.nTan);
-        if (aGeo.nShearAngle>0) {
+    rRect = maRect;
+    if (aGeo.nShearAngle!=0)
+    {
+        long nDst=Round((maRect.Bottom()-maRect.Top())*aGeo.nTan);
+        if (aGeo.nShearAngle>0)
+        {
             Point aRef(rRect.TopLeft());
             rRect.Left()-=nDst;
             Point aTmpPt(rRect.TopLeft());
             RotatePoint(aTmpPt,aRef,aGeo.nSin,aGeo.nCos);
             aTmpPt-=rRect.TopLeft();
             rRect.Move(aTmpPt.X(),aTmpPt.Y());
-        } else {
+        }
+        else
+        {
             rRect.Right()-=nDst;
         }
     }
@@ -233,7 +237,7 @@ OUString SdrRectObj::TakeObjNameSingul() const
     if (aGeo.nShearAngle!=0) {
         nResId+=4;  // parallelogram or, maybe, rhombus
     } else {
-        if (aRect.GetWidth()==aRect.GetHeight()) nResId+=2; // square
+        if (maRect.GetWidth() == maRect.GetHeight()) nResId+=2; // square
     }
     if (GetEckenradius()!=0) nResId+=8; // rounded down
     sName.append(ImpGetResStr(nResId));
@@ -265,7 +269,7 @@ OUString SdrRectObj::TakeObjNamePlural() const
     }
     else
     {
-        if (aRect.GetWidth()==aRect.GetHeight())
+        if (maRect.GetWidth() == maRect.GetHeight())
             nResId+=2; // square
     }
 
@@ -283,7 +287,7 @@ SdrRectObj* SdrRectObj::Clone() const
 basegfx::B2DPolyPolygon SdrRectObj::TakeXorPoly() const
 {
     XPolyPolygon aXPP;
-    aXPP.Insert(ImpCalcXPoly(aRect,GetEckenradius()));
+    aXPP.Insert(ImpCalcXPoly(maRect,GetEckenradius()));
     return aXPP.getB2DPolyPolygon();
 }
 
@@ -332,7 +336,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
             OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for hilighting text in active text edit, this will collide with EditEngine paints (!)");
             // hack for calc grid sync to ensure the hatched area
             // for a textbox is displayed at correct position
-            pH = new ImpTextframeHdl(aRect + GetGridOffset() );
+            pH = new ImpTextframeHdl(maRect + GetGridOffset() );
             pH->SetObj((SdrObject*)this);
             pH->SetRotationAngle(aGeo.nRotationAngle);
             break;
@@ -340,34 +344,34 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
         case 1:
         {
             long a = GetEckenradius();
-            long b = std::max(aRect.GetWidth(),aRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
+            long b = std::max(maRect.GetWidth(),maRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
             if (a>b) a=b;
             if (a<0) a=0;
-            aPnt=aRect.TopLeft();
+            aPnt=maRect.TopLeft();
             aPnt.X()+=a;
             eKind = HDL_CIRC;
             break;
         }
-        case 2: aPnt=aRect.TopLeft();      eKind = HDL_UPLFT; break;
-        case 3: aPnt=aRect.TopCenter();    eKind = HDL_UPPER; break;
-        case 4: aPnt=aRect.TopRight();     eKind = HDL_UPRGT; break;
-        case 5: aPnt=aRect.LeftCenter();   eKind = HDL_LEFT ; break;
-        case 6: aPnt=aRect.RightCenter();  eKind = HDL_RIGHT; break;
-        case 7: aPnt=aRect.BottomLeft();   eKind = HDL_LWLFT; break;
-        case 8: aPnt=aRect.BottomCenter(); eKind = HDL_LOWER; break;
-        case 9: aPnt=aRect.BottomRight();  eKind = HDL_LWRGT; break;
+        case 2: aPnt=maRect.TopLeft();      eKind = HDL_UPLFT; break;
+        case 3: aPnt=maRect.TopCenter();    eKind = HDL_UPPER; break;
+        case 4: aPnt=maRect.TopRight();     eKind = HDL_UPRGT; break;
+        case 5: aPnt=maRect.LeftCenter();   eKind = HDL_LEFT ; break;
+        case 6: aPnt=maRect.RightCenter();  eKind = HDL_RIGHT; break;
+        case 7: aPnt=maRect.BottomLeft();   eKind = HDL_LWLFT; break;
+        case 8: aPnt=maRect.BottomCenter(); eKind = HDL_LOWER; break;
+        case 9: aPnt=maRect.BottomRight();  eKind = HDL_LWRGT; break;
     }
 
     if(!pH)
     {
         if(aGeo.nShearAngle)
         {
-            ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
+            ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
         }
 
         if(aGeo.nRotationAngle)
         {
-            RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         }
 
         pH = new SdrHdl(aPnt,eKind);
@@ -408,9 +412,9 @@ bool SdrRectObj::applySpecialDrag(SdrDragStat& rDrag)
         Point aPt(rDrag.GetNow());
 
         if(aGeo.nRotationAngle)
-            RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+            RotatePoint(aPt,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
 
-        sal_Int32 nRad(aPt.X() - aRect.Left());
+        sal_Int32 nRad(aPt.X() - maRect.Left());
 
         if (nRad < 0)
             nRad = 0;
@@ -446,9 +450,9 @@ OUString SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
             // -sin for reversal
             if(aGeo.nRotationAngle)
-                RotatePoint(aPt, aRect.TopLeft(), -aGeo.nSin, aGeo.nCos);
+                RotatePoint(aPt, maRect.TopLeft(), -aGeo.nSin, aGeo.nCos);
 
-            sal_Int32 nRad(aPt.X() - aRect.Left());
+            sal_Int32 nRad(aPt.X() - maRect.Left());
 
             if(nRad < 0)
                 nRad = 0;
@@ -541,13 +545,13 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(sal_uInt16 nPosNum) const
 
     Point aPt;
     switch (nPosNum) {
-        case 0: aPt=aRect.TopCenter();    aPt.Y()-=nWdt; break;
-        case 1: aPt=aRect.RightCenter();  aPt.X()+=nWdt; break;
-        case 2: aPt=aRect.BottomCenter(); aPt.Y()+=nWdt; break;
-        case 3: aPt=aRect.LeftCenter();   aPt.X()-=nWdt; break;
+        case 0: aPt=maRect.TopCenter();    aPt.Y()-=nWdt; break;
+        case 1: aPt=maRect.RightCenter();  aPt.X()+=nWdt; break;
+        case 2: aPt=maRect.BottomCenter(); aPt.Y()+=nWdt; break;
+        case 3: aPt=maRect.LeftCenter();   aPt.X()-=nWdt; break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPt,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -567,13 +571,13 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 
     Point aPt;
     switch (nPosNum) {
-        case 0: aPt=aRect.TopLeft();     aPt.X()-=nWdt; aPt.Y()-=nWdt; break;
-        case 1: aPt=aRect.TopRight();    aPt.X()+=nWdt; aPt.Y()-=nWdt; break;
-        case 2: aPt=aRect.BottomRight(); aPt.X()+=nWdt; aPt.Y()+=nWdt; break;
-        case 3: aPt=aRect.BottomLeft();  aPt.X()-=nWdt; aPt.Y()+=nWdt; break;
+        case 0: aPt=maRect.TopLeft();     aPt.X()-=nWdt; aPt.Y()-=nWdt; break;
+        case 1: aPt=maRect.TopRight();    aPt.X()+=nWdt; aPt.Y()-=nWdt; break;
+        case 2: aPt=maRect.BottomRight(); aPt.X()+=nWdt; aPt.Y()+=nWdt; break;
+        case 3: aPt=maRect.BottomLeft();  aPt.X()-=nWdt; aPt.Y()+=nWdt; break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPt,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPt,maRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aPt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     aPt-=GetSnapRect().Center();
     SdrGluePoint aGP(aPt);
     aGP.SetPercent(false);
@@ -582,7 +586,7 @@ SdrGluePoint SdrRectObj::GetCornerGluePoint(sal_uInt16 nPosNum) const
 
 SdrObject* SdrRectObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
-    XPolygon aXP(ImpCalcXPoly(aRect,GetEckenradius()));
+    XPolygon aXP(ImpCalcXPoly(maRect,GetEckenradius()));
     { // TODO: this is only for the moment, until we have the new TakeContour()
         aXP.Remove(0,1);
         aXP[aXP.GetPointCount()-1]=aXP[0];

@@ -43,17 +43,17 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
     Point aPnt;
     SdrHdlKind eKind=HDL_MOVE;
     switch (nHdlNum) {
-        case 0: aPnt=aRect.TopLeft();      eKind=HDL_UPLFT; break;
-        case 1: aPnt=aRect.TopCenter();    eKind=HDL_UPPER; break;
-        case 2: aPnt=aRect.TopRight();     eKind=HDL_UPRGT; break;
-        case 3: aPnt=aRect.LeftCenter();   eKind=HDL_LEFT ; break;
-        case 4: aPnt=aRect.RightCenter();  eKind=HDL_RIGHT; break;
-        case 5: aPnt=aRect.BottomLeft();   eKind=HDL_LWLFT; break;
-        case 6: aPnt=aRect.BottomCenter(); eKind=HDL_LOWER; break;
-        case 7: aPnt=aRect.BottomRight();  eKind=HDL_LWRGT; break;
+        case 0: aPnt=maRect.TopLeft();      eKind=HDL_UPLFT; break;
+        case 1: aPnt=maRect.TopCenter();    eKind=HDL_UPPER; break;
+        case 2: aPnt=maRect.TopRight();     eKind=HDL_UPRGT; break;
+        case 3: aPnt=maRect.LeftCenter();   eKind=HDL_LEFT ; break;
+        case 4: aPnt=maRect.RightCenter();  eKind=HDL_RIGHT; break;
+        case 5: aPnt=maRect.BottomLeft();   eKind=HDL_LWLFT; break;
+        case 6: aPnt=maRect.BottomCenter(); eKind=HDL_LOWER; break;
+        case 7: aPnt=maRect.BottomRight();  eKind=HDL_LWRGT; break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     if (eKind!=HDL_MOVE) {
         pH=new SdrHdl(aPnt,eKind);
         pH->SetObj((SdrObject*)this);
@@ -71,7 +71,7 @@ bool SdrTextObj::hasSpecialDrag() const
 
 Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
 {
-    Rectangle aTmpRect(aRect);
+    Rectangle aTmpRect(maRect);
     const SdrHdl* pHdl=rDrag.GetHdl();
     SdrHdlKind eHdl=pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
     bool bEcke=(eHdl==HDL_UPLFT || eHdl==HDL_UPRGT || eHdl==HDL_LWLFT || eHdl==HDL_LWRGT);
@@ -92,8 +92,8 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     if (bTop) aTmpRect.Top()   =aPos.Y();
     if (bBtm) aTmpRect.Bottom()=aPos.Y();
     if (bOrtho) { // Ortho
-        long nWdt0=aRect.Right() -aRect.Left();
-        long nHgt0=aRect.Bottom()-aRect.Top();
+        long nWdt0=maRect.Right() -maRect.Left();
+        long nHgt0=maRect.Bottom()-maRect.Top();
         long nXMul=aTmpRect.Right() -aTmpRect.Left();
         long nYMul=aTmpRect.Bottom()-aTmpRect.Top();
         long nXDiv=nWdt0;
@@ -125,13 +125,13 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
-                long nHgt0b=aRect.Bottom()-aRect.Top();
+                long nHgt0b=maRect.Bottom()-maRect.Top();
                 long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
                 aTmpRect.Top()-=(nNeed-nHgt0b)/2;
                 aTmpRect.Bottom()=aTmpRect.Top()+nNeed;
             }
             if ((bTop || bBtm) && nYDiv!=0) {
-                long nWdt0b=aRect.Right()-aRect.Left();
+                long nWdt0b=maRect.Right()-maRect.Left();
                 long nNeed=long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
                 aTmpRect.Left()-=(nNeed-nWdt0b)/2;
                 aTmpRect.Right()=aTmpRect.Left()+nNeed;
@@ -150,22 +150,22 @@ bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
     Rectangle aNewRect(ImpDragCalcRect(rDrag));
 
-    if(aNewRect.TopLeft() != aRect.TopLeft() && (aGeo.nRotationAngle || aGeo.nShearAngle))
+    if(aNewRect.TopLeft() != maRect.TopLeft() && (aGeo.nRotationAngle || aGeo.nShearAngle))
     {
         Point aNewPos(aNewRect.TopLeft());
 
         if(aGeo.nShearAngle)
-            ShearPoint(aNewPos,aRect.TopLeft(),aGeo.nTan);
+            ShearPoint(aNewPos,maRect.TopLeft(),aGeo.nTan);
 
         if(aGeo.nRotationAngle)
-            RotatePoint(aNewPos,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aNewPos,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
         aNewRect.SetPos(aNewPos);
     }
 
-    if(aNewRect != aRect)
+    if (aNewRect != maRect)
     {
-          NbcSetLogicRect(aNewRect);
+        NbcSetLogicRect(aNewRect);
     }
 
     return true;
@@ -187,7 +187,7 @@ bool SdrTextObj::BegCreate(SdrDragStat& rStat)
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
-    aRect = aRect1;
+    maRect = aRect1;
     return true;
 }
 
@@ -197,7 +197,7 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aRect1);
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
-    aRect=aRect1; // for ObjName
+    maRect = aRect1; // for ObjName
     SetBoundRectDirty();
     bSnapRectDirty=true;
     if (HAS_BASE(SdrRectObj,this)) {
@@ -208,8 +208,8 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
 
 bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    rStat.TakeCreateRect(aRect);
-    ImpJustifyRect(aRect);
+    rStat.TakeCreateRect(maRect);
+    ImpJustifyRect(maRect);
 
     // #115391#
     AdaptTextMinSize();

@@ -329,7 +329,7 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         // small correctures
         if (aGeo.nRotationAngle>=9000 && aGeo.nRotationAngle<27000)
         {
-            aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
+            maRect.Move(maRect.Left()-maRect.Right(),maRect.Top()-maRect.Bottom());
         }
 
         aGeo.nRotationAngle  = 0;

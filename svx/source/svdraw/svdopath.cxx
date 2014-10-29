@@ -1718,8 +1718,8 @@ void SdrPathObj::ImpForceLineAngle()
         aGeo.RecalcTan();
 
         // for SdrTextObj, keep aRect up to date
-        aRect = Rectangle(aPoint0, aPoint1);
-        aRect.Justify();
+        maRect = Rectangle(aPoint0, aPoint1);
+        maRect.Justify();
     }
 }
 
@@ -1784,7 +1784,7 @@ void SdrPathObj::ImpForceKind()
         // #i10659# for SdrTextObj, keep aRect up to date
         if(GetPathPoly().count())
         {
-            aRect = lcl_ImpGetBoundRect(GetPathPoly());
+            maRect = lcl_ImpGetBoundRect(GetPathPoly());
         }
     }
 
@@ -2529,7 +2529,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
             if(GetPathPoly().count())
             {
                 // #i10659# for SdrTextObj, keep aRect up to date
-                aRect = lcl_ImpGetBoundRect(GetPathPoly());
+                maRect = lcl_ImpGetBoundRect(GetPathPoly());
             }
         }
 

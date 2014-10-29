@@ -57,8 +57,8 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
     {
         // No rotation or shear.
 
-        aRect=rRect;
-        ImpJustifyRect(aRect);
+        maRect = rRect;
+        ImpJustifyRect(maRect);
 
         // #115391#
         AdaptTextMinSize();
@@ -70,19 +70,19 @@ void SdrTextObj::NbcSetSnapRect(const Rectangle& rRect)
 
 const Rectangle& SdrTextObj::GetLogicRect() const
 {
-    return aRect;
+    return maRect;
 }
 
 void SdrTextObj::NbcSetLogicRect(const Rectangle& rRect)
 {
     long nHDist=GetTextLeftDistance()+GetTextRightDistance();
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-    long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
-    long nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
+    long nTWdt0=maRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
+    long nTHgt0=maRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
     long nTWdt1=rRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
     long nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
-    aRect=rRect;
-    ImpJustifyRect(aRect);
+    maRect = rRect;
+    ImpJustifyRect(maRect);
 
     // #115391#
     AdaptTextMinSize();
@@ -102,7 +102,7 @@ long SdrTextObj::GetShearAngle(bool /*bVertical*/) const
 
 void SdrTextObj::NbcMove(const Size& rSiz)
 {
-    MoveRect(aRect,rSiz);
+    MoveRect(maRect,rSiz);
     MoveRect(aOutRect,rSiz);
     MoveRect(maSnapRect,rSiz);
     SetRectsDirty(true);
@@ -114,8 +114,8 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     bool bRota90Merk=bNoShearMerk && aGeo.nRotationAngle % 9000 ==0;
     long nHDist=GetTextLeftDistance()+GetTextRightDistance();
     long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-    long nTWdt0=aRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
-    long nTHgt0=aRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
+    long nTWdt0=maRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
+    long nTHgt0=maRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
     bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
     bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
@@ -133,17 +133,17 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     if (aGeo.nRotationAngle==0 && aGeo.nShearAngle==0) {
-        ResizeRect(aRect,rRef,xFact,yFact);
+        ResizeRect(maRect,rRef,xFact,yFact);
         if (bYMirr) {
-            aRect.Justify();
-            aRect.Move(aRect.Right()-aRect.Left(),aRect.Bottom()-aRect.Top());
+            maRect.Justify();
+            maRect.Move(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top());
             aGeo.nRotationAngle=18000;
             aGeo.RecalcSinCos();
         }
     }
     else
     {
-        Polygon aPol(Rect2Poly(aRect,aGeo));
+        Polygon aPol(Rect2Poly(maRect,aGeo));
 
         for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
         {
@@ -162,7 +162,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             aPol[4] = aPol0[1];
         }
 
-        Poly2Rect(aPol, aRect, aGeo);
+        Poly2Rect(aPol, maRect, aGeo);
     }
 
     if (bRota90Merk) {
@@ -183,10 +183,10 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         }
     }
 
-    ImpJustifyRect(aRect);
+    ImpJustifyRect(maRect);
 
-    long nTWdt1=aRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
-    long nTHgt1=aRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
+    long nTWdt1=maRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
+    long nTHgt1=maRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
 
     // #115391#
     AdaptTextMinSize();
@@ -203,14 +203,14 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 void SdrTextObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
-    long dx=aRect.Right()-aRect.Left();
-    long dy=aRect.Bottom()-aRect.Top();
-    Point aP(aRect.TopLeft());
+    long dx=maRect.Right()-maRect.Left();
+    long dy=maRect.Bottom()-maRect.Top();
+    Point aP(maRect.TopLeft());
     RotatePoint(aP,rRef,sn,cs);
-    aRect.Left()=aP.X();
-    aRect.Top()=aP.Y();
-    aRect.Right()=aRect.Left()+dx;
-    aRect.Bottom()=aRect.Top()+dy;
+    maRect.Left()=aP.X();
+    maRect.Top()=aP.Y();
+    maRect.Right()=maRect.Left()+dx;
+    maRect.Bottom()=maRect.Top()+dy;
     if (aGeo.nRotationAngle==0) {
         aGeo.nRotationAngle=NormAngle360(nAngle);
         aGeo.nSin=sn;
@@ -229,14 +229,14 @@ void SdrTextObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
     SetGlueReallyAbsolute(true);
 
     // when this is a SdrPathObj, aRect may be uninitialized
-    Polygon aPol(Rect2Poly(aRect.IsEmpty() ? GetSnapRect() : aRect, aGeo));
+    Polygon aPol(Rect2Poly(maRect.IsEmpty() ? GetSnapRect() : maRect, aGeo));
 
     sal_uInt16 nPointCount=aPol.GetSize();
     for (sal_uInt16 i=0; i<nPointCount; i++) {
          ShearPoint(aPol[i],rRef,tn,bVShear);
     }
-    Poly2Rect(aPol,aRect,aGeo);
-    ImpJustifyRect(aRect);
+    Poly2Rect(aPol,maRect,aGeo);
+    ImpJustifyRect(maRect);
     if (bTextFrame) {
         NbcAdjustTextFrameWidthAndHeight();
     }
@@ -256,7 +256,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
          std::abs(rRef1.X()-rRef2.X())==std::abs(rRef1.Y()-rRef2.Y()))) {
         bRota90Merk=aGeo.nRotationAngle % 9000 ==0;
     }
-    Polygon aPol(Rect2Poly(aRect,aGeo));
+    Polygon aPol(Rect2Poly(maRect,aGeo));
     sal_uInt16 i;
     sal_uInt16 nPntAnz=aPol.GetSize();
     for (i=0; i<nPntAnz; i++) {
@@ -269,7 +269,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     aPol[2]=aPol0[3];
     aPol[3]=aPol0[2];
     aPol[4]=aPol0[1];
-    Poly2Rect(aPol,aRect,aGeo);
+    Poly2Rect(aPol,maRect,aGeo);
 
     if (bRota90Merk) {
         bool bRota90=aGeo.nRotationAngle % 9000 ==0;
@@ -289,7 +289,7 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         aGeo.RecalcTan();
     }
 
-    ImpJustifyRect(aRect);
+    ImpJustifyRect(maRect);
     if (bTextFrame) {
         NbcAdjustTextFrameWidthAndHeight();
     }

@@ -109,7 +109,7 @@ SdrTextObj::SdrTextObj()
 
 SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
 :   SdrAttrObj(),
-    aRect(rNewRect),
+    maRect(rNewRect),
     mpText(NULL),
     pEdtOutl(NULL),
     pFormTextBoundRect(NULL),
@@ -122,7 +122,7 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     bNoRotate=false;
     bNoMirror=false;
     bDisableAutoWidthOnDragging=false;
-    ImpJustifyRect(aRect);
+    ImpJustifyRect(maRect);
 
     mbInEditMode = false;
     mbTextHidden = false;
@@ -161,7 +161,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
 
 SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
 :   SdrAttrObj(),
-    aRect(rNewRect),
+    maRect(rNewRect),
     mpText(NULL),
     pEdtOutl(NULL),
     pFormTextBoundRect(NULL),
@@ -174,7 +174,7 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     bNoRotate=false;
     bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
-    ImpJustifyRect(aRect);
+    ImpJustifyRect(maRect);
 
     mbInEditMode = false;
     mbTextHidden = false;
@@ -205,13 +205,13 @@ SdrTextObj::~SdrTextObj()
 void SdrTextObj::FitFrameToTextSize()
 {
     DBG_ASSERT(pModel!=NULL,"SdrTextObj::FitFrameToTextSize(): pModel=NULL!");
-    ImpJustifyRect(aRect);
+    ImpJustifyRect(maRect);
 
     SdrText* pText = getActiveText();
     if( pText!=NULL && pText->GetOutlinerParaObject() && pModel!=NULL)
     {
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
-        rOutliner.SetPaperSize(Size(aRect.Right()-aRect.Left(),aRect.Bottom()-aRect.Top()));
+        rOutliner.SetPaperSize(Size(maRect.Right()-maRect.Left(),maRect.Bottom()-maRect.Top()));
         rOutliner.SetUpdateMode(true);
         rOutliner.SetText(*pText->GetOutlinerParaObject());
         Size aNewSize(rOutliner.CalcTextSize());
@@ -219,10 +219,10 @@ void SdrTextObj::FitFrameToTextSize()
         aNewSize.Width()++; // because of possible rounding errors
         aNewSize.Width()+=GetTextLeftDistance()+GetTextRightDistance();
         aNewSize.Height()+=GetTextUpperDistance()+GetTextLowerDistance();
-        Rectangle aNewRect(aRect);
+        Rectangle aNewRect(maRect);
         aNewRect.SetSize(aNewSize);
         ImpJustifyRect(aNewRect);
-        if (aNewRect!=aRect) {
+        if (aNewRect!=maRect) {
             SetLogicRect(aNewRect);
         }
     }
@@ -573,7 +573,7 @@ void SdrTextObj::AdaptTextMinSize()
     {
         // Set minimum width.
         const long nDist = GetTextLeftDistance() + GetTextRightDistance();
-        const long nW = std::max<long>(0, aRect.GetWidth() - 1 - nDist); // text width without margins
+        const long nW = std::max<long>(0, maRect.GetWidth() - 1 - nDist); // text width without margins
 
         aSet.Put(makeSdrTextMinFrameWidthItem(nW));
 
@@ -588,7 +588,7 @@ void SdrTextObj::AdaptTextMinSize()
     {
         // Set Minimum height.
         const long nDist = GetTextUpperDistance() + GetTextLowerDistance();
-        const long nH = std::max<long>(0, aRect.GetHeight() - 1 - nDist); // text height without margins
+        const long nH = std::max<long>(0, maRect.GetHeight() - 1 - nDist); // text height without margins
 
         aSet.Put(makeSdrTextMinFrameHeightItem(nH));
 
@@ -662,7 +662,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
 
 void SdrTextObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
-    rRect=aRect;
+    rRect=maRect;
 }
 
 void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
@@ -671,7 +671,7 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
     long nRightDist=GetTextRightDistance();
     long nUpperDist=GetTextUpperDistance();
     long nLowerDist=GetTextLowerDistance();
-    Rectangle aAnkRect(aRect); // the rectangle in which we anchor
+    Rectangle aAnkRect(maRect); // the rectangle in which we anchor
     bool bFrame=IsTextFrame();
     if (!bFrame) {
         TakeUnrotatedSnapRect(aAnkRect);
@@ -1085,7 +1085,7 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
     // call parent
     SdrObject::operator=(rObj);
 
-    aRect     =rObj.aRect;
+    maRect = rObj.maRect;
     aGeo      =rObj.aGeo;
     eTextKind =rObj.eTextKind;
     bTextFrame=rObj.bTextFrame;
@@ -1122,9 +1122,9 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeXorPoly() const
 {
-    Polygon aPol(aRect);
-    if (aGeo.nShearAngle!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    Polygon aPol(maRect);
+    if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
 
     basegfx::B2DPolyPolygon aRetval;
     aRetval.append(aPol.getB2DPolygon());
@@ -1160,13 +1160,14 @@ basegfx::B2DPolyPolygon SdrTextObj::TakeContour() const
 
 void SdrTextObj::RecalcSnapRect()
 {
-    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0) {
-        Polygon aPol(aRect);
-        if (aGeo.nShearAngle!=0) ShearPoly(aPol,aRect.TopLeft(),aGeo.nTan);
-        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nRotationAngle!=0 || aGeo.nShearAngle!=0)
+    {
+        Polygon aPol(maRect);
+        if (aGeo.nShearAngle!=0) ShearPoly(aPol,maRect.TopLeft(),aGeo.nTan);
+        if (aGeo.nRotationAngle!=0) RotatePoly(aPol,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         maSnapRect=aPol.GetBoundRect();
     } else {
-        maSnapRect=aRect;
+        maSnapRect = maRect;
     }
 }
 
@@ -1179,14 +1180,14 @@ Point SdrTextObj::GetSnapPoint(sal_uInt32 i) const
 {
     Point aP;
     switch (i) {
-        case 0: aP=aRect.TopLeft(); break;
-        case 1: aP=aRect.TopRight(); break;
-        case 2: aP=aRect.BottomLeft(); break;
-        case 3: aP=aRect.BottomRight(); break;
-        default: aP=aRect.Center(); break;
+        case 0: aP=maRect.TopLeft(); break;
+        case 1: aP=maRect.TopRight(); break;
+        case 2: aP=maRect.BottomLeft(); break;
+        case 3: aP=maRect.BottomRight(); break;
+        default: aP=maRect.Center(); break;
     }
-    if (aGeo.nShearAngle!=0) ShearPoint(aP,aRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aP,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+    if (aGeo.nShearAngle!=0) ShearPoint(aP,maRect.TopLeft(),aGeo.nTan);
+    if (aGeo.nRotationAngle!=0) RotatePoint(aP,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     return aP;
 }
 
@@ -1471,7 +1472,7 @@ void SdrTextObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrAttrObj::SaveGeoData(rGeo);
     SdrTextObjGeoData& rTGeo=static_cast<SdrTextObjGeoData&>(rGeo);
-    rTGeo.aRect  =aRect;
+    rTGeo.aRect = maRect;
     rTGeo.aGeo   =aGeo;
 }
 
@@ -1492,6 +1493,11 @@ SdrFitToSizeType SdrTextObj::GetFitToSize() const
         eType = static_cast<const SdrTextFitToSizeTypeItem&>(GetObjectItem(SDRATTR_TEXT_FITTOSIZE)).GetValue();
 
     return eType;
+}
+
+const Rectangle& SdrTextObj::GetGeoRect() const
+{
+    return maRect;
 }
 
 void SdrTextObj::ForceOutlinerParaObject()
@@ -1607,7 +1613,7 @@ bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DP
     double fShearX = (aGeo.nShearAngle / 100.0) * F_PI180;
 
     // get aRect, this is the unrotated snaprect
-    Rectangle aRectangle(aRect);
+    Rectangle aRectangle(maRect);
 
     // fill other values
     basegfx::B2DTuple aScale(aRectangle.GetWidth(), aRectangle.GetHeight());

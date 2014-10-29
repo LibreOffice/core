@@ -282,8 +282,8 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
     Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
     mxTable->addModifyListener( xListener );
     mpLayouter = new TableLayouter( mxTable );
-    LayoutTable( mpTableObj->aRect, true, true );
-    mpTableObj->maLogicRect = mpTableObj->aRect;
+    LayoutTable( mpTableObj->maRect, true, true );
+    mpTableObj->maLogicRect = mpTableObj->maRect;
 }
 
 
@@ -316,8 +316,8 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         mxTable->addModifyListener( xListener );
         mxTableStyle = rSource.mxTableStyle;
         ApplyCellStyles();
-        mpTableObj->aRect = mpTableObj->maLogicRect;
-        LayoutTable( mpTableObj->aRect, false, false );
+        mpTableObj->maRect = mpTableObj->maLogicRect;
+        LayoutTable( mpTableObj->maRect, false, false );
 
         connectTableStyle();
     }
@@ -592,8 +592,8 @@ void SdrTableObjImpl::update()
 
         ApplyCellStyles();
 
-        mpTableObj->aRect = mpTableObj->maLogicRect;
-        LayoutTable( mpTableObj->aRect, false, false );
+        mpTableObj->maRect = mpTableObj->maLogicRect;
+        LayoutTable( mpTableObj->maRect, false, false );
 
         mpTableObj->SetRectsDirty();
         mpTableObj->ActionChanged();
@@ -1072,10 +1072,10 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     const sal_Int32 nColCount = mpImpl->getColumnCount();
     const sal_Int32 nRowCount = mpImpl->getRowCount();
 
-    sal_Int32 nX = rPos.X() + nTol - aRect.Left();
-    sal_Int32 nY = rPos.Y() + nTol - aRect.Top();
+    sal_Int32 nX = rPos.X() + nTol - maRect.Left();
+    sal_Int32 nY = rPos.Y() + nTol - maRect.Top();
 
-    if( (nX < 0) || (nX > (aRect.GetWidth() + nTol)) || (nY < 0) || (nY > (aRect.GetHeight() + nTol) ) )
+    if( (nX < 0) || (nX > (maRect.GetWidth() + nTol)) || (nY < 0) || (nY > (maRect.GetHeight() + nTol) ) )
         return SDRTABLEHIT_NONE;
 
     // get vertical edge number and check for a hit
@@ -1334,13 +1334,13 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 {
     if( (pEditStatus->GetStatusWord() & EE_STAT_TEXTHEIGHTCHANGED) && mpImpl && mpImpl->mpLayouter )
     {
-        Rectangle aRect0( aRect );
-        aRect = maLogicRect;
-        mpImpl->LayoutTable( aRect, false, false );
+        Rectangle aRect0( maRect );
+        maRect = maLogicRect;
+        mpImpl->LayoutTable( maRect, false, false );
         SetRectsDirty();
         ActionChanged();
         BroadcastObjectChange();
-        if( aRect0 != aRect )
+        if (aRect0 != maRect)
             SendUserCall(SDRUSERCALL_RESIZE,aRect0);
     }
 }
@@ -1401,8 +1401,8 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 
             if( !maLogicRect.IsEmpty() )
             {
-                aRect = maLogicRect;
-                mpImpl->LayoutTable( aRect, false, false );
+                maRect = maLogicRect;
+                mpImpl->LayoutTable( maRect, false, false );
             }
         }
     }
@@ -1583,7 +1583,7 @@ void SdrTableObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
 
 void SdrTableObj::TakeTextAnchorRect( const CellPos& rPos, Rectangle& rAnchorRect ) const
 {
-    Rectangle aAnkRect(aRect);
+    Rectangle aAnkRect(maRect);
 
     if( mpImpl )
     {
@@ -1736,7 +1736,7 @@ SdrTableObj& SdrTableObj::operator=(const SdrTableObj& rObj)
     TableModelNotifyGuard aGuard( mpImpl ? mpImpl->mxTable.get() : 0 );
 
     maLogicRect = rObj.maLogicRect;
-    aRect = rObj.aRect;
+    maRect = rObj.maRect;
     aGeo = rObj.aGeo;
     eTextKind = rObj.eTextKind;
     bTextFrame = rObj.bTextFrame;
@@ -1770,7 +1770,7 @@ basegfx::B2DPolyPolygon SdrTableObj::TakeContour() const
 
 const Rectangle& SdrTableObj::GetSnapRect() const
 {
-    return aRect;
+    return maRect;
 }
 
 
@@ -1936,9 +1936,9 @@ void SdrTableObj::NbcSetLogicRect(const Rectangle& rRect)
 {
     maLogicRect=rRect;
     ImpJustifyRect(maLogicRect);
-    const bool bWidth = maLogicRect.getWidth() != aRect.getWidth();
-    const bool bHeight = maLogicRect.getHeight() != aRect.getHeight();
-    aRect=maLogicRect;
+    const bool bWidth = maLogicRect.getWidth() != maRect.getWidth();
+    const bool bHeight = maLogicRect.getHeight() != maRect.getHeight();
+    maRect = maLogicRect;
     NbcAdjustTextFrameWidthAndHeight( !bHeight, !bWidth );
     SetRectsDirty();
 }
@@ -1960,7 +1960,7 @@ void SdrTableObj::NbcMove(const Size& rSiz)
     MoveRect(maLogicRect,rSiz);
     SdrTextObj::NbcMove( rSiz );
     if( mpImpl )
-        mpImpl->UpdateCells( aRect );
+        mpImpl->UpdateCells( maRect );
 }
 
 
@@ -1970,7 +1970,7 @@ void SdrTableObj::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
     Rectangle aOldRect( maLogicRect );
     ResizeRect(maLogicRect,rRef,xFact,yFact);
 
-    aRect = maLogicRect;
+    maRect = maLogicRect;
     NbcAdjustTextFrameWidthAndHeight( maLogicRect.GetHeight() == aOldRect.GetHeight(), maLogicRect.GetWidth() == aOldRect.GetWidth() );
     SetRectsDirty();
 }
@@ -1986,7 +1986,7 @@ bool SdrTableObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         Rectangle aBoundRect0;
         if (pUserCall!=NULL)
             aBoundRect0=GetLastBoundRect();
-        aRect=aNeuRect;
+        maRect = aNeuRect;
         SetRectsDirty();
         SetChanged();
         BroadcastObjectChange();
@@ -2146,7 +2146,7 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         nEdgeMin -= nEdge;
         nEdgeMax -= nEdge;
 
-        Point aPoint( aRect.TopLeft() );
+        Point aPoint( maRect.TopLeft() );
         aPoint.Y() += nEdge;
 
         TableEdgeHdl* pHdl= new TableEdgeHdl(aPoint,true,nEdgeMin,nEdgeMax,nColCount+1);
@@ -2165,7 +2165,7 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         nEdgeMin -= nEdge;
         nEdgeMax -= nEdge;
 
-        Point aPoint( aRect.TopLeft() );
+        Point aPoint( maRect.TopLeft() );
         aPoint.X() += nEdge;
 
         TableEdgeHdl* pHdl = new TableEdgeHdl(aPoint,false,nEdgeMin,nEdgeMax, nRowCount+1);
@@ -2211,15 +2211,15 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
 
     // add remaining handles
     SdrHdl* pH=0;
-    rHdlList.AddHdl( pH = new TableBorderHdl( aRect, !IsTextEditActive() ) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.TopLeft(),HDL_UPLFT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.TopCenter(),HDL_UPPER) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.TopRight(),HDL_UPRGT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.LeftCenter(),HDL_LEFT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.RightCenter(),HDL_RIGHT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.BottomLeft(),HDL_LWLFT) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.BottomCenter(),HDL_LOWER) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(aRect.BottomRight(),HDL_LWRGT) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new TableBorderHdl( maRect, !IsTextEditActive() ) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopLeft(),HDL_UPLFT) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopCenter(),HDL_UPPER) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopRight(),HDL_UPRGT) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.LeftCenter(),HDL_LEFT) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.RightCenter(),HDL_RIGHT) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomLeft(),HDL_LWLFT) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomCenter(),HDL_LOWER) ); pH->SetMoveOutside( true );
+    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomRight(),HDL_LWRGT) ); pH->SetMoveOutside( true );
 
     const size_t nHdlCount = rHdlList.GetHdlCount();
     for( size_t nHdl = 0; nHdl < nHdlCount; ++nHdl )
@@ -2313,7 +2313,7 @@ bool SdrTableObj::applySpecialDrag(SdrDragStat& rDrag)
         {
             const Rectangle aNewRectangle(ImpDragCalcRect(rDrag));
 
-            if(aNewRectangle != aRect)
+            if (aNewRectangle != maRect)
             {
                    NbcSetLogicRect(aNewRectangle);
             }
@@ -2387,7 +2387,7 @@ bool SdrTableObj::BegCreate(SdrDragStat& rStat)
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
-    aRect = aRect1;
+    maRect = aRect1;
     return true;
 }
 
@@ -2399,7 +2399,7 @@ bool SdrTableObj::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aRect1);
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
-    aRect=aRect1; // fuer ObjName
+    maRect = aRect1; // fuer ObjName
     SetBoundRectDirty();
     bSnapRectDirty=true;
     return true;
@@ -2409,8 +2409,8 @@ bool SdrTableObj::MovCreate(SdrDragStat& rStat)
 
 bool SdrTableObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
-    rStat.TakeCreateRect(aRect);
-    ImpJustifyRect(aRect);
+    rStat.TakeCreateRect(maRect);
+    ImpJustifyRect(maRect);
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
 
@@ -2481,7 +2481,7 @@ void SdrTableObj::RestGeoData(const SdrObjGeoData& rGeo)
     SdrTextObj::RestGeoData (rGeo);
 
     if( mpImpl )
-        mpImpl->LayoutTable( aRect, false, false );
+        mpImpl->LayoutTable(maRect, false, false);
     ActionChanged();
 }
 
@@ -2551,7 +2551,7 @@ void SdrTableObj::DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColu
     if( mpImpl && mpImpl->mpLayouter )
     {
         TableModelNotifyGuard aGuard( mpImpl->mxTable.get() );
-        mpImpl->mpLayouter->DistributeColumns( aRect, nFirstColumn, nLastColumn );
+        mpImpl->mpLayouter->DistributeColumns( maRect, nFirstColumn, nLastColumn );
     }
 }
 
@@ -2562,7 +2562,7 @@ void SdrTableObj::DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow )
     if( mpImpl && mpImpl->mpLayouter )
     {
         TableModelNotifyGuard aGuard( mpImpl->mxTable.get() );
-        mpImpl->mpLayouter->DistributeRows( aRect, nFirstRow, nLastRow );
+        mpImpl->mpLayouter->DistributeRows( maRect, nFirstRow, nLastRow );
     }
 }
 
@@ -2572,7 +2572,7 @@ void SdrTableObj::SetChanged()
 {
     if( mpImpl )
     {
-        mpImpl->LayoutTable( aRect, false, false );
+        mpImpl->LayoutTable( maRect, false, false );
     }
 
     ::SdrTextObj::SetChanged();

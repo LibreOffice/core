@@ -330,7 +330,7 @@ bool SdrCaptionObj::beginSpecialDrag(SdrDragStat& rDrag) const
                 return false;
 
             rDrag.SetNoSnap(true);
-            rDrag.SetActionRect(aRect);
+            rDrag.SetActionRect(maRect);
 
             Point aHit(rDrag.GetStart());
 
@@ -367,7 +367,7 @@ bool SdrCaptionObj::applySpecialDrag(SdrDragStat& rDrag)
 
         if(!pHdl)
         {
-            aRect.Move(aDelt.X(),aDelt.Y());
+            maRect.Move(aDelt.X(),aDelt.Y());
         }
         else
         {
@@ -436,7 +436,7 @@ void SdrCaptionObj::ImpRecalcTail()
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    ImpCalcTail(aPara,aTailPoly,aRect);
+    ImpCalcTail(aPara, aTailPoly, maRect);
     SetRectsDirty();
     SetXPolyDirty();
 }
@@ -544,14 +544,14 @@ void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, Polygon& rPoly, Rect
 
 bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
 {
-    if (aRect.IsEmpty()) return false; // Create currently only works with the given Rect
+    if (maRect.IsEmpty()) return false; // Create currently only works with the given Rect
 
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    aRect.SetPos(rStat.GetNow());
+    maRect.SetPos(rStat.GetNow());
     aTailPoly[0]=rStat.GetStart();
-    ImpCalcTail(aPara,aTailPoly,aRect);
-    rStat.SetActionRect(aRect);
+    ImpCalcTail(aPara,aTailPoly,maRect);
+    rStat.SetActionRect(maRect);
     return true;
 }
 
@@ -559,9 +559,9 @@ bool SdrCaptionObj::MovCreate(SdrDragStat& rStat)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    aRect.SetPos(rStat.GetNow());
-    ImpCalcTail(aPara,aTailPoly,aRect);
-    rStat.SetActionRect(aRect);
+    maRect.SetPos(rStat.GetNow());
+    ImpCalcTail(aPara,aTailPoly,maRect);
+    rStat.SetActionRect(maRect);
     SetBoundRectDirty();
     bSnapRectDirty=true;
     return true;
@@ -571,8 +571,8 @@ bool SdrCaptionObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
-    aRect.SetPos(rStat.GetNow());
-    ImpCalcTail(aPara,aTailPoly,aRect);
+    maRect.SetPos(rStat.GetNow());
+    ImpCalcTail(aPara,aTailPoly,maRect);
     SetRectsDirty();
     return (eCmd==SDRCREATE_FORCEEND || rStat.GetPointAnz()>=2);
 }
@@ -589,7 +589,7 @@ void SdrCaptionObj::BrkCreate(SdrDragStat& /*rStat*/)
 basegfx::B2DPolyPolygon SdrCaptionObj::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
     basegfx::B2DPolyPolygon aRetval;
-    const basegfx::B2DRange aRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+    const basegfx::B2DRange aRange(maRect.Left(), maRect.Top(), maRect.Right(), maRect.Bottom());
     aRetval.append(basegfx::tools::createPolygonFromRect(aRange));
     aRetval.append(aTailPoly.getB2DPolygon());
     return aRetval;
@@ -664,7 +664,7 @@ void SdrCaptionObj::NbcSetSnapRect(const Rectangle& rRect)
 
 const Rectangle& SdrCaptionObj::GetLogicRect() const
 {
-    return aRect;
+    return maRect;
 }
 
 void SdrCaptionObj::NbcSetLogicRect(const Rectangle& rRect)

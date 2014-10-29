@@ -279,14 +279,15 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
 
 void SdrCircObj::RecalcXPoly()
 {
-    const basegfx::B2DPolygon aPolyCirc(ImpCalcXPolyCirc(meCircleKind, aRect, nStartAngle, nEndAngle));
+    const basegfx::B2DPolygon aPolyCirc(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
     mpXPoly = new XPolygon(aPolyCirc);
 }
 
 OUString SdrCircObj::TakeObjNameSingul() const
 {
     sal_uInt16 nID=STR_ObjNameSingulCIRC;
-    if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearAngle==0) {
+    if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0)
+    {
         switch (meCircleKind) {
             case OBJ_CIRC: nID=STR_ObjNameSingulCIRC; break;
             case OBJ_SECT: nID=STR_ObjNameSingulSECT; break;
@@ -319,7 +320,8 @@ OUString SdrCircObj::TakeObjNameSingul() const
 OUString SdrCircObj::TakeObjNamePlural() const
 {
     sal_uInt16 nID=STR_ObjNamePluralCIRC;
-    if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearAngle==0) {
+    if (maRect.GetWidth() == maRect.GetHeight() && aGeo.nShearAngle==0)
+    {
         switch (meCircleKind) {
             case OBJ_CIRC: nID=STR_ObjNamePluralCIRC; break;
             case OBJ_SECT: nID=STR_ObjNamePluralSECT; break;
@@ -346,7 +348,7 @@ SdrCircObj* SdrCircObj::Clone() const
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
 {
-    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartAngle, nEndAngle));
+    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
     return basegfx::B2DPolyPolygon(aCircPolygon);
 }
 
@@ -405,57 +407,57 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
     switch (nHdlNum)
     {
         case 0:
-            aPnt = GetAnglePnt(aRect,nStartAngle);
+            aPnt = GetAnglePnt(maRect,nStartAngle);
             eLocalKind = HDL_CIRC;
             nPNum = 1;
             break;
         case 1:
-            aPnt = GetAnglePnt(aRect,nEndAngle);
+            aPnt = GetAnglePnt(maRect,nEndAngle);
             eLocalKind = HDL_CIRC;
             nPNum = 2L;
             break;
         case 2:
-            aPnt = aRect.TopLeft();
+            aPnt = maRect.TopLeft();
             eLocalKind = HDL_UPLFT;
             break;
         case 3:
-            aPnt = aRect.TopCenter();
+            aPnt = maRect.TopCenter();
             eLocalKind = HDL_UPPER;
             break;
         case 4:
-            aPnt = aRect.TopRight();
+            aPnt = maRect.TopRight();
             eLocalKind = HDL_UPRGT;
             break;
         case 5:
-            aPnt = aRect.LeftCenter();
+            aPnt = maRect.LeftCenter();
             eLocalKind = HDL_LEFT;
             break;
         case 6:
-            aPnt = aRect.RightCenter();
+            aPnt = maRect.RightCenter();
             eLocalKind = HDL_RIGHT;
             break;
         case 7:
-            aPnt = aRect.BottomLeft();
+            aPnt = maRect.BottomLeft();
             eLocalKind = HDL_LWLFT;
             break;
         case 8:
-            aPnt = aRect.BottomCenter();
+            aPnt = maRect.BottomCenter();
             eLocalKind = HDL_LOWER;
             break;
         case 9:
-            aPnt = aRect.BottomRight();
+            aPnt = maRect.BottomRight();
             eLocalKind = HDL_LWRGT;
             break;
     }
 
     if (aGeo.nShearAngle)
     {
-        ShearPoint(aPnt,aRect.TopLeft(),aGeo.nTan);
+        ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
     }
 
     if (aGeo.nRotationAngle)
     {
-        RotatePoint(aPnt,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+        RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
     }
 
     if (eLocalKind != HDL_MOVE)
@@ -502,15 +504,15 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
         Point aPt(rDrag.GetNow());
 
         if (aGeo.nRotationAngle!=0)
-            RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
+            RotatePoint(aPt,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
 
         if (aGeo.nShearAngle!=0)
-            ShearPoint(aPt,aRect.TopLeft(),-aGeo.nTan);
+            ShearPoint(aPt,maRect.TopLeft(),-aGeo.nTan);
 
-        aPt-=aRect.Center();
+        aPt -= maRect.Center();
 
-        long nWdt=aRect.Right()-aRect.Left();
-        long nHgt=aRect.Bottom()-aRect.Top();
+        long nWdt = maRect.Right() - maRect.Left();
+        long nHgt = maRect.Bottom() - maRect.Top();
 
         if(nWdt>=nHgt)
         {
@@ -687,7 +689,7 @@ bool SdrCircObj::BegCreate(SdrDragStat& rStat)
     Rectangle aRect1(rStat.GetStart(), rStat.GetNow());
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
-    aRect = aRect1;
+    maRect = aRect1;
     ImpSetCreateParams(rStat);
     return true;
 }
@@ -697,8 +699,8 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
     ImpSetCreateParams(rStat);
     ImpCircUser* pU=static_cast<ImpCircUser*>(rStat.GetUser());
     rStat.SetActionRect(pU->aR);
-    aRect=pU->aR; // for ObjName
-    ImpJustifyRect(aRect);
+    maRect = pU->aR; // for ObjName
+    ImpJustifyRect(maRect);
     nStartAngle=pU->nStart;
     nEndAngle=pU->nEnd;
     SetBoundRectDirty();
@@ -724,16 +726,16 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     if (meCircleKind==OBJ_CIRC) {
         bRet=rStat.GetPointAnz()>=2;
         if (bRet) {
-            aRect=pU->aR;
-            ImpJustifyRect(aRect);
+            maRect = pU->aR;
+            ImpJustifyRect(maRect);
         }
     } else {
         rStat.SetNoSnap(rStat.GetPointAnz()>=2);
         rStat.SetOrtho4Possible(rStat.GetPointAnz()<2);
         bRet=rStat.GetPointAnz()>=4;
         if (bRet) {
-            aRect=pU->aR;
-            ImpJustifyRect(aRect);
+            maRect = pU->aR;
+            ImpJustifyRect(maRect);
             nStartAngle=pU->nStart;
             nEndAngle=pU->nEnd;
         }
@@ -804,7 +806,7 @@ Pointer SdrCircObj::GetCreatePointer() const
 
 void SdrCircObj::NbcMove(const Size& aSiz)
 {
-    MoveRect(aRect,aSiz);
+    MoveRect(maRect,aSiz);
     MoveRect(aOutRect,aSiz);
     MoveRect(maSnapRect,aSiz);
     SetXPolyDirty();
@@ -875,9 +877,9 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     Point aTmpPt1;
     Point aTmpPt2;
     if (bFreeMirr) { // some preparations for using an arbitrary axis of reflection
-        Point aCenter(aRect.Center());
-        long nWdt=aRect.GetWidth()-1;
-        long nHgt=aRect.GetHeight()-1;
+        Point aCenter(maRect.Center());
+        long nWdt=maRect.GetWidth()-1;
+        long nHgt=maRect.GetHeight()-1;
         long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
         double a;
         // starting point
@@ -893,12 +895,12 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         if (nHgt==0) aTmpPt2.Y()=0;
         aTmpPt2+=aCenter;
         if (aGeo.nRotationAngle!=0) {
-            RotatePoint(aTmpPt1,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-            RotatePoint(aTmpPt2,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aTmpPt1,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            RotatePoint(aTmpPt2,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         }
         if (aGeo.nShearAngle!=0) {
-            ShearPoint(aTmpPt1,aRect.TopLeft(),aGeo.nTan);
-            ShearPoint(aTmpPt2,aRect.TopLeft(),aGeo.nTan);
+            ShearPoint(aTmpPt1,maRect.TopLeft(),aGeo.nTan);
+            ShearPoint(aTmpPt2,maRect.TopLeft(),aGeo.nTan);
         }
     }
     SdrTextObj::NbcMirror(rRef1,rRef2);
@@ -907,15 +909,15 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         MirrorPoint(aTmpPt2,rRef1,rRef2);
         // unrotate:
         if (aGeo.nRotationAngle!=0) {
-            RotatePoint(aTmpPt1,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
-            RotatePoint(aTmpPt2,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
+            RotatePoint(aTmpPt1,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
+            RotatePoint(aTmpPt2,maRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin for reversion
         }
         // unshear:
         if (aGeo.nShearAngle!=0) {
-            ShearPoint(aTmpPt1,aRect.TopLeft(),-aGeo.nTan); // -tan for reversion
-            ShearPoint(aTmpPt2,aRect.TopLeft(),-aGeo.nTan); // -tan for reversion
+            ShearPoint(aTmpPt1,maRect.TopLeft(),-aGeo.nTan); // -tan for reversion
+            ShearPoint(aTmpPt2,maRect.TopLeft(),-aGeo.nTan); // -tan for reversion
         }
-        Point aCenter(aRect.Center());
+        Point aCenter(maRect.Center());
         aTmpPt1-=aCenter;
         aTmpPt2-=aCenter;
         // because it's mirrored, the angles are swapped, too
@@ -963,36 +965,36 @@ void Union(Rectangle& rR, const Point& rP)
 
 void SdrCircObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
-    rRect=aRect;
+    rRect = maRect;
     if (meCircleKind!=OBJ_CIRC) {
-        const Point aPntStart(GetAnglePnt(aRect,nStartAngle));
-        const Point aPntEnd(GetAnglePnt(aRect,nEndAngle));
+        const Point aPntStart(GetAnglePnt(maRect,nStartAngle));
+        const Point aPntEnd(GetAnglePnt(maRect,nEndAngle));
         long a=nStartAngle;
         long e=nEndAngle;
-        rRect.Left  ()=aRect.Right();
-        rRect.Right ()=aRect.Left();
-        rRect.Top   ()=aRect.Bottom();
-        rRect.Bottom()=aRect.Top();
+        rRect.Left  ()=maRect.Right();
+        rRect.Right ()=maRect.Left();
+        rRect.Top   ()=maRect.Bottom();
+        rRect.Bottom()=maRect.Top();
         Union(rRect,aPntStart);
         Union(rRect,aPntEnd);
         if ((a<=18000 && e>=18000) || (a>e && (a<=18000 || e>=18000))) {
-            Union(rRect,aRect.LeftCenter());
+            Union(rRect,maRect.LeftCenter());
         }
         if ((a<=27000 && e>=27000) || (a>e && (a<=27000 || e>=27000))) {
-            Union(rRect,aRect.BottomCenter());
+            Union(rRect,maRect.BottomCenter());
         }
         if (a>e) {
-            Union(rRect,aRect.RightCenter());
+            Union(rRect,maRect.RightCenter());
         }
         if ((a<=9000 && e>=9000) || (a>e && (a<=9000 || e>=9000))) {
-            Union(rRect,aRect.TopCenter());
+            Union(rRect,maRect.TopCenter());
         }
         if (meCircleKind==OBJ_SECT) {
-            Union(rRect,aRect.Center());
+            Union(rRect,maRect.Center());
         }
         if (aGeo.nRotationAngle!=0) {
             Point aDst(rRect.TopLeft());
-            aDst-=aRect.TopLeft();
+            aDst-=maRect.TopLeft();
             Point aDst0(aDst);
             RotatePoint(aDst,Point(),aGeo.nSin,aGeo.nCos);
             aDst-=aDst0;
@@ -1034,8 +1036,8 @@ void SdrCircObj::NbcSetSnapRect(const Rectangle& rRect)
         NbcResize(maSnapRect.TopLeft(),Fraction(nWdt1,nWdt0),Fraction(nHgt1,nHgt0));
         NbcMove(Size(rRect.Left()-aSR0.Left(),rRect.Top()-aSR0.Top()));
     } else {
-        aRect=rRect;
-        ImpJustifyRect(aRect);
+        maRect=rRect;
+        ImpJustifyRect(maRect);
     }
     SetRectsDirty();
     SetXPolyDirty();
@@ -1054,9 +1056,9 @@ sal_uInt32 SdrCircObj::GetSnapPointCount() const
 Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
 {
     switch (i) {
-        case 1 : return GetAnglePnt(aRect,nStartAngle);
-        case 2 : return GetAnglePnt(aRect,nEndAngle);
-        default: return aRect.Center();
+        case 1 : return GetAnglePnt(maRect,nStartAngle);
+        case 2 : return GetAnglePnt(maRect,nEndAngle);
+        default: return maRect.Center();
     }
 }
 
@@ -1147,7 +1149,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
 SdrObject* SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     const bool bFill(OBJ_CARC == meCircleKind ? sal_False : sal_True);
-    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartAngle, nEndAngle));
+    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, maRect, nStartAngle, nEndAngle));
     SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier);
 
     if(bAddText)
