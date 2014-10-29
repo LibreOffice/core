@@ -92,7 +92,6 @@ namespace {
     static const char gsDefaultDeckId[] = "PropertyDeck";
 }
 
-
 SidebarController::SidebarController (
     SidebarDockingWindow* pParentWindow,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
@@ -124,12 +123,6 @@ SidebarController::SidebarController (
       mnWidthOnSplitterButtonDown(0),
       mpCloseIndicator()
 {
-    if (pParentWindow == NULL)
-    {
-        OSL_ASSERT(pParentWindow!=NULL);
-            return;
-    }
-
     // Listen for context change events.
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
@@ -163,15 +156,9 @@ SidebarController::SidebarController (
             xWeakController));
 }
 
-
-
-
 SidebarController::~SidebarController (void)
 {
 }
-
-
-
 
 SidebarController* SidebarController::GetSidebarControllerForFrame (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
@@ -186,9 +173,6 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
 
     return dynamic_cast<SidebarController*>(xController.get());
 }
-
-
-
 
 void SAL_CALL SidebarController::disposing (void)
 {
