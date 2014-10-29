@@ -8,6 +8,7 @@
  */
 
 #include "formulagroup.hxx"
+#include "formulagroupcl.hxx"
 #include "clkernelthread.hxx"
 #include "grouptokenconverter.hxx"
 #include "document.hxx"
@@ -3510,26 +3511,6 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(
     }
 }
 
-class FormulaGroupInterpreterOpenCL : public FormulaGroupInterpreter
-{
-public:
-    FormulaGroupInterpreterOpenCL() :
-        FormulaGroupInterpreter()
-    {
-    }
-    virtual ~FormulaGroupInterpreterOpenCL()
-    {
-    }
-
-    virtual ScMatrixRef inverseMatrix( const ScMatrix& rMat ) SAL_OVERRIDE;
-    virtual CompiledFormula* createCompiledFormula( ScDocument& rDoc,
-        const ScAddress& rTopPos,
-        ScFormulaCellGroup& rGroup,
-        ScTokenArray& rCode ) SAL_OVERRIDE;
-    virtual bool interpret( ScDocument& rDoc, const ScAddress& rTopPos,
-        ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode ) SAL_OVERRIDE;
-};
-
 ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
 {
     return NULL;
@@ -3729,42 +3710,5 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 }
 
 }} // namespace sc::opencl
-
-extern "C" {
-
-sc::FormulaGroupInterpreter*
-createFormulaGroupOpenCLInterpreter()
-{
-    return new sc::opencl::FormulaGroupInterpreterOpenCL();
-}
-
-size_t getOpenCLPlatformCount()
-{
-    return sc::opencl::getOpenCLPlatformCount();
-}
-
-void fillOpenCLInfo(
-    sc::OpenCLPlatformInfo* pInfos, size_t nInfoSize )
-{
-    const std::vector<sc::OpenCLPlatformInfo>& rPlatforms =
-        sc::opencl::fillOpenCLInfo();
-    size_t n = std::min(rPlatforms.size(), nInfoSize);
-    for (size_t i = 0; i < n; ++i)
-        pInfos[i] = rPlatforms[i];
-}
-
-bool switchOpenCLDevice(
-    const OUString* pDeviceId, bool bAutoSelect,
-    bool bForceEvaluation )
-{
-    return sc::opencl::switchOpenCLDevice(pDeviceId, bAutoSelect, bForceEvaluation);
-}
-
-void getOpenCLDeviceInfo( size_t* pDeviceId, size_t* pPlatformId )
-{
-    sc::opencl::getOpenCLDeviceInfo(*pDeviceId, *pPlatformId);
-}
-
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

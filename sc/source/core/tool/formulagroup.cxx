@@ -10,6 +10,7 @@
 #include <config_features.h>
 
 #include "formulagroup.hxx"
+#include "formulagroupcl.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
@@ -31,11 +32,7 @@
 
 #if HAVE_FEATURE_OPENCL
 
-extern "C" size_t getOpenCLPlatformCount(void);
-extern "C" void fillOpenCLInfo(sc::OpenCLPlatformInfo*, size_t);
-extern "C" bool switchOpenCLDevice(const OUString*, bool, bool);
-extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
-extern "C" void getOpenCLDeviceInfo(size_t*, size_t*);
+#include "openclwrapper.hxx"
 
 #endif
 
@@ -543,13 +540,14 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 #if !HAVE_FEATURE_OPENCL
     (void) rPlatforms;
 #else
-    size_t nPlatforms = ::getOpenCLPlatformCount();
+    size_t nPlatforms = sc::opencl::getOpenCLPlatformCount();
     if (!nPlatforms)
         return;
 
-    std::vector<OpenCLPlatformInfo> aPlatforms(nPlatforms);
-    ::fillOpenCLInfo(&aPlatforms[0], aPlatforms.size());
-    rPlatforms.swap(aPlatforms);
+    const std::vector<sc::OpenCLPlatformInfo>& rPlatformsFromWrapper =
+        sc::opencl::fillOpenCLInfo();
+
+    rPlatforms.assign(rPlatformsFromWrapper.begin(), rPlatformsFromWrapper.end());
 #endif
 }
 
@@ -571,7 +569,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         return true;
     }
 #if HAVE_FEATURE_OPENCL
-    bool bSuccess = ::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
+    bool bSuccess = sc::opencl::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
 #else
@@ -584,7 +582,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
 #if HAVE_FEATURE_OPENCL
     if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
     {
-        msInstance = ::createFormulaGroupOpenCLInterpreter();
+        msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
         return msInstance != NULL;
     }
 #else
@@ -606,7 +604,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     size_t aDeviceId = static_cast<size_t>(-1);
     size_t aPlatformId = static_cast<size_t>(-1);
 
-    ::getOpenCLDeviceInfo(&aDeviceId, &aPlatformId);
+    sc::opencl::getOpenCLDeviceInfo(aDeviceId, aPlatformId);
     rDeviceId = aDeviceId;
     rPlatformId = aPlatformId;
 #endif

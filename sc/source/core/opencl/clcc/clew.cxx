@@ -4,7 +4,7 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file license.txt)
 
-#include "clew.h"
+#include "clcc/clew.h"
 
 //! \file clew.c
 //! \brief OpenCL run-time loader source
