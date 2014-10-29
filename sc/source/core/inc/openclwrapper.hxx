@@ -88,7 +88,6 @@ public:
     static void setKernelEnv( KernelEnv *envInfo );
 };
 
-size_t getOpenCLPlatformCount();
 const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
 
 /**

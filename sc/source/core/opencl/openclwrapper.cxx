@@ -754,21 +754,6 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenCLPlatformInfo& rPlatfor
 
 }
 
-size_t getOpenCLPlatformCount()
-{
-    int status = clewInit(OPENCL_DLL_NAME);
-    if (status < 0)
-        return 0;
-
-    cl_uint nPlatforms;
-    cl_int nState = clGetPlatformIDs(0, NULL, &nPlatforms);
-
-    if (nState != CL_SUCCESS)
-        return 0;
-
-    return nPlatforms;
-}
-
 const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()
 {
     static std::vector<OpenCLPlatformInfo> aPlatforms;
