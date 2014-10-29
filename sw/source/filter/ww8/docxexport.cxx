@@ -716,10 +716,11 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     bool bStartedParaSdt = m_pAttrOutput->IsStartedParaSdt();
     m_pAttrOutput->SetStartedParaSdt(false);
 
-    m_pAttrOutput->switchHeaderFooter(true, m_nHeadersFootersInSection++);
+    DocxTableExportContext aTableExportContext;
+    m_pAttrOutput->pushToTableExportContext(aTableExportContext);
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
-    m_pAttrOutput->switchHeaderFooter(false, -1);
+    m_pAttrOutput->popFromTableExportContext(aTableExportContext);
     m_pAttrOutput->EndParaSdtBlock();
 
     //When the stream changes the cache which is maintained for the graphics in case of alternate content is not cleared.
