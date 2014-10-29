@@ -132,70 +132,27 @@ public class RecordParser extends QueryMetaData
         {
             case DataType.BIT: // ==  -7;
             case DataType.BOOLEAN:
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
             case DataType.TINYINT: // ==  -6;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
             case DataType.BIGINT: // ==  -5;
+            case DataType.NUMERIC: // ==   2;
+            case DataType.INTEGER: // ==   4;
+            case DataType.SMALLINT: // ==   5;
+            case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
+            case DataType.FLOAT: // ==   6;
+            case DataType.REAL: // ==   7;
+            case DataType.DOUBLE: // ==   8;
+            case DataType.DATE: // ==  91;
+            case DataType.TIME: // ==  92;
+            case DataType.TIMESTAMP: // ==  93;
                 oAny = getColumnDoubleValue(ColIndex, false);
                 break;
 
             case DataType.CHAR: // ==   1;
-                oAny = getColumnStringValue(ColIndex);
-                break;
-
             case DataType.VARCHAR: // ==  12;
-                oAny = getColumnStringValue(ColIndex);
-                //      double sResult = xResultSetRow.getClob(ColIndex);       //???
-                break;
-
             case DataType.LONGVARCHAR: // ==  -1;
                 oAny = getColumnStringValue(ColIndex);
-                //      double sResult = xResultSetRow.getCharacterStream(ColIndex);
                 break;
 
-            case DataType.NUMERIC: // ==   2;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.INTEGER: // ==   4;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.SMALLINT: // ==   5;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.FLOAT: // ==   6;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.REAL: // ==   7;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.DOUBLE: // ==   8;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.DATE: // ==  91;
-                oAny = getColumnDoubleValue(ColIndex, true);
-                break;
-
-            case DataType.TIME: // ==  92;
-                oAny = getColumnDoubleValue(ColIndex, false);
-                break;
-
-            case DataType.TIMESTAMP: // ==  93;
-                oAny = getColumnDoubleValue(ColIndex, true);
-                break;
         }
 
         // Is the index OK; increment?

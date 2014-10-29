@@ -256,11 +256,6 @@ public class FieldColumn
                     break;
 
                 case DataType.TINYINT: // ==  -6;
-                    StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 5;
-                    bIsNumberFormat = true;
-                    break;
-
                 case DataType.SMALLINT: // ==   5;
                     StandardFormatKey = iNumberFormatKey;
                     FieldWidth = 5;
@@ -304,23 +299,8 @@ public class FieldColumn
                     break;
 
                 case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
-                    StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
-                    bIsNumberFormat = true;
-                    break;
-
                 case DataType.FLOAT: // ==   6;
-                    StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
-                    bIsNumberFormat = true;
-                    break;
-
                 case DataType.REAL: // ==   7;
-                    StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
-                    bIsNumberFormat = true;
-                    break;
-
                 case DataType.DOUBLE: // ==   8;
                     StandardFormatKey = iNumberFormatKey;
                     FieldWidth = 10 + AnyConverter.toInt(m_xColPropertySet.getPropertyValue("Scale")) + 1;
@@ -416,29 +396,14 @@ public class FieldColumn
                 break;
 
             case DataType.VARCHAR: // ==  12;
-                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
-                break;
-
             case DataType.LONGVARCHAR: // ==  -1;
                 DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
                 break;
 
             case DataType.NUMERIC: // ==   2;
-                DefaultValue = Double.valueOf("9876.5");
-                break;
-
             case DataType.DECIMAL: // ==   3;  [mit Nachkommastellen]
-                DefaultValue = Double.valueOf("9876.5");
-                break;
-
             case DataType.FLOAT: // ==   6;
-                DefaultValue = Double.valueOf("9876.5");
-                break;
-
             case DataType.REAL: // ==   7;
-                DefaultValue = Double.valueOf("9876.5");
-                break;
-
             case DataType.DOUBLE: // ==   8;
                 DefaultValue = Double.valueOf("9876.54");
                 break;
