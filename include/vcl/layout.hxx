@@ -459,6 +459,7 @@ private:
 private:
     friend class VclBuilder;
     void designate_label(Window *pWindow);
+    DECL_LINK(WindowEventListener, VclSimpleEvent*);
 public:
     VclFrame(Window *pParent)
         : VclBin(pParent)
