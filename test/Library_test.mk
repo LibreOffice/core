@@ -19,6 +19,7 @@ $(eval $(call gb_Library_use_externals,test,\
 	boost_headers \
 	cppunit \
 	libxml2 \
+	valgrind \
 ))
 
 $(eval $(call gb_Library_use_libraries,test,\
@@ -40,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,test,\
 $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/bootstrapfixture \
     test/source/diff/diff \
+    test/source/callgrind \
     test/source/xmltesttools \
     test/source/htmltesttools \
     test/source/mtfxmldump \

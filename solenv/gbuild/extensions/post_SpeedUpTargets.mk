@@ -22,6 +22,8 @@ endif
 
 ifeq (,$(filter perfcheck,$(MAKECMDGOALS)))
 gb_Module_SKIPTARGETS += perfcheck
+else
+gb_Module_SKIPTARGETS += check slowcheck subsequentcheck
 endif
 
 ifneq ($(strip $(MAKECMDGOALS)),)
