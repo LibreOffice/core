@@ -424,7 +424,8 @@ public class XMLTools {
         * all necessary tags and character data was found.
         */
         public boolean checkTags() {
-            allOK &= isWellFormed() ;
+            if (!isWellFormed())
+                allOK = false ;
 
             Iterator<String> badTags = tags.keySet().iterator() ;
             Iterator<String> badChars = chars.keySet().iterator() ;

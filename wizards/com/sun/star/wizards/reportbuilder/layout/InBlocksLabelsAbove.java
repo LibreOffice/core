@@ -118,7 +118,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
             aRectFields = insertFormattedField(xSection, sFieldName, aRectFields, nFieldWidth, aSOTextField);
             nLastHeight = Math.max(nLastHeight, aRectFields.Height);
             int nNextX = aRectFields.X + nFieldWidth;
-            if (nNextX > (getPageWidth() - getRightPageIndent()) & nCount > 1)
+            if ((nNextX > (getPageWidth() - getRightPageIndent())) && nCount > 1)
             {
                 int nHeight = (aSOLabel.getHeight(LayoutConstants.LabelHeight) + Math.max(aSOTextField.getHeight(LayoutConstants.FormattedFieldHeight), nLastHeight));
                 nLastHeight = 0;
