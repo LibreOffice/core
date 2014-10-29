@@ -22,7 +22,7 @@
 /*
  *   mfe : maybe it would be wishful to include initialization
  *         of the global timer in dllmain or _init directly.
- *         But noneoftheless this (should) work too.
+ *         But none the less this (should) work too.
  */
 namespace osl
 {
