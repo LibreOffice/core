@@ -1844,10 +1844,7 @@ bool DrawFillAttributes(
     const SwRect& rPaintRect,
     OutputDevice& rOut)
 {
-    static bool bUseNew(true);
-    static bool bReturnWhenNew(true);
-
-    if(bUseNew && rFillAttributes.get() && rFillAttributes->isUsed())
+    if(rFillAttributes.get() && rFillAttributes->isUsed())
     {
         basegfx::B2DRange aPaintRange(
             rPaintRect.Left(),
@@ -1917,10 +1914,7 @@ bool DrawFillAttributes(
 
                     delete pProcessor;
 
-                    if(bReturnWhenNew)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
