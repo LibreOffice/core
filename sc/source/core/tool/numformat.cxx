@@ -29,22 +29,6 @@
 
 namespace sc {
 
-bool NumFmtUtil::isGeneral( sal_uLong nFormat )
-{
-    return (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0;
-}
-
-bool NumFmtUtil::isGeneral( const ScPatternAttr& rPat )
-{
-    const SfxPoolItem* pItem = NULL;
-    if (!rPat.GetItemSet().HasItem(ATTR_VALUE_FORMAT, &pItem))
-        // Assume it's 'General' when the number format is not explicitly set.
-        return true;
-
-    sal_uInt32 nNumFmt = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-    return isGeneral(nNumFmt);
-}
-
 bool NumFmtUtil::isLatinScript( const ScPatternAttr& rPat, ScDocument& rDoc )
 {
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();

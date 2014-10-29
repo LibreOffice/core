@@ -22,14 +22,6 @@ namespace sc {
 class SC_DLLPUBLIC NumFmtUtil
 {
 public:
-
-    /**
-     * Return whether or not given number format is a 'General' number format.
-     */
-    static bool isGeneral( sal_uLong nFormat );
-
-    static bool isGeneral( const ScPatternAttr& rPat );
-
     /**
      * Check if the attribute pattern has a number format that only produces
      * latin script output.

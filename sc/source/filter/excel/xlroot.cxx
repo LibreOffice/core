@@ -276,16 +276,6 @@ ScDocument* XclRoot::GetDocPtr() const
     return &mrData.mrDoc;
 }
 
-ScDocumentImport& XclRoot::GetDocImport()
-{
-    return mrData.maDocImport;
-}
-
-const ScDocumentImport& XclRoot::GetDocImport() const
-{
-    return mrData.maDocImport;
-}
-
 SfxObjectShell* XclRoot::GetDocShell() const
 {
     return GetDoc().GetDocumentShell();
