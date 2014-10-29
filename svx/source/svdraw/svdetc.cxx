@@ -386,8 +386,6 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
     return bRetval;
 }
 
-
-
 SdrEngineDefaults::SdrEngineDefaults():
     aFontName( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, LANGUAGE_SYSTEM, DEFAULTFONT_FLAGS_ONLYONE ).GetName() ),
     eFontFamily(FAMILY_ROMAN),
@@ -407,25 +405,19 @@ SdrEngineDefaults& SdrEngineDefaults::GetDefaults()
     return *rGlobalData.pDefaults;
 }
 
-
-
-SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel )
+SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rModel)
 {
-    SfxItemPool* pPool = &pModel->GetItemPool();
+    SfxItemPool* pPool = &rModel.GetItemPool();
     SdrOutliner* pOutl = new SdrOutliner( pPool, nOutlinerMode );
     pOutl->SetEditTextObjectPool( pPool );
-    pOutl->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>( pModel->GetStyleSheetPool() ) );
-    pOutl->SetDefTab( pModel->GetDefaultTabulator() );
-    pOutl->SetForbiddenCharsTable( pModel->GetForbiddenCharsTable() );
-    pOutl->SetAsianCompressionMode( pModel->GetCharCompressType() );
-    pOutl->SetKernAsianPunctuation( pModel->IsKernAsianPunctuation() );
-    pOutl->SetAddExtLeading( pModel->IsAddExtLeading() );
-
+    pOutl->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(rModel.GetStyleSheetPool()));
+    pOutl->SetDefTab(rModel.GetDefaultTabulator());
+    pOutl->SetForbiddenCharsTable(rModel.GetForbiddenCharsTable());
+    pOutl->SetAsianCompressionMode(rModel.GetCharCompressType());
+    pOutl->SetKernAsianPunctuation(rModel.IsKernAsianPunctuation());
+    pOutl->SetAddExtLeading(rModel.IsAddExtLeading());
     return pOutl;
 }
-
-
-
 
 SdrLinkList& ImpGetUserMakeObjHdl()
 {
@@ -438,8 +430,6 @@ SdrLinkList& ImpGetUserMakeObjUserDataHdl()
     SdrGlobalData& rGlobalData=GetSdrGlobalData();
     return rGlobalData.aUserMakeObjUserDataHdl;
 }
-
-
 
 ResMgr* ImpGetResMgr()
 {
@@ -454,14 +444,10 @@ ResMgr* ImpGetResMgr()
     return rGlobalData.pResMgr;
 }
 
-
-
 OUString ImpGetResStr(sal_uInt16 nResID)
 {
     return ResId(nResID, *ImpGetResMgr()).toString();
 }
-
-
 
 namespace sdr
 {
@@ -470,8 +456,6 @@ namespace sdr
         return ImpGetResStr(nResID);
     }
 }
-
-
 
 bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnlyEE)
 {

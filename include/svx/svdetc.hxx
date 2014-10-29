@@ -49,7 +49,7 @@ namespace com { namespace sun { namespace star { namespace lang {
 // Ist pMod<>NULL, dann wird der MapMode des uebergebenen
 // Models verwendet. Die resultierende Default-Fonthoehe bleibt
 // jedoch dieselbe (die logische Fonthoehe wird umgerechnet).
-SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pMod );
+SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rMod);
 
 // Globale Defaulteinstellungen fuer die DrawingEngine.
 // Diese Einstellungen sollte man direkt beim Applikationsstart
@@ -100,7 +100,7 @@ public:
     // Ist pMod<>NULL, dann wird der MapMode des uebergebenen
     // Models verwendet. Die resultierende Default-Fonthoehe bleibt
     // jedoch dieselbe (die logische Fonthoehe wird umgerechnet).
-    friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pMod );
+    friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner(sal_uInt16 nOutlinerMode, SdrModel& rMod);
 };
 
 class SfxItemSet;

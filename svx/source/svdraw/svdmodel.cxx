@@ -208,10 +208,10 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 
     // can't create DrawOutliner OnDemand, because I can't get the Pool,
     // then (only from 302 onwards!)
-    pDrawOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this );
+    pDrawOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
     ImpSetOutlinerDefaults(pDrawOutliner, true);
 
-    pHitTestOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this );
+    pHitTestOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
     ImpSetOutlinerDefaults(pHitTestOutliner, true);
 
     ImpCreateTables();

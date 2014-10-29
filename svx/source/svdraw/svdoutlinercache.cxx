@@ -45,7 +45,7 @@ SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
     }
     else
     {
-        pOutliner = SdrMakeOutliner( nOutlinerMode, mpModel );
+        pOutliner = SdrMakeOutliner(nOutlinerMode, *mpModel);
         Outliner& aDrawOutliner = mpModel->GetDrawOutliner();
         pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
         maActiveOutliners.push_back(pOutliner);

@@ -98,7 +98,7 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
 DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
             : E3dView(pSdrModel, pOut)
             , m_pMarkHandleProvider(NULL)
-            , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
+            , m_apOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel))
             , m_bRestoreMapMode( false )
 {
     SetBufferedOutputAllowed(true);

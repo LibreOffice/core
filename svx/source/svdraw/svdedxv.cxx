@@ -602,7 +602,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
         mxTextEditObj.reset( pObj );
         pTextEditOutliner=pGivenOutliner;
         if (pTextEditOutliner==NULL)
-            pTextEditOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, mxTextEditObj->GetModel() );
+            pTextEditOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, *mxTextEditObj->GetModel() );
 
         {
             SvtAccessibilityOptions aOptions;

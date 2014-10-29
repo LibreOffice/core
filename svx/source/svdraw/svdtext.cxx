@@ -173,7 +173,7 @@ void SdrText::ForceOutlinerParaObject( sal_uInt16 nOutlMode )
 {
     if( mpModel && !mpOutlinerParaObject )
     {
-        boost::scoped_ptr<Outliner> pOutliner(SdrMakeOutliner( nOutlMode, mpModel ));
+        boost::scoped_ptr<Outliner> pOutliner(SdrMakeOutliner(nOutlMode, *mpModel));
         if( pOutliner )
         {
             Outliner& aDrawOutliner = mpModel->GetDrawOutliner();

@@ -672,7 +672,7 @@ bool View::SdrBeginTextEdit(
         sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
 
     if( pOutl==NULL && pObj )
-        pOutl = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pObj->GetModel() );
+        pOutl = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pObj->GetModel());
 
     // make draw&impress specific initialisations
     if( pOutl )
@@ -1258,7 +1258,7 @@ bool View::ShouldToggleOn(
         return false;
 
     bool bToggleOn = false;
-    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel));
+    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
@@ -1330,7 +1330,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         ? false
         : ShouldToggleOn( bToggle, bHandleBullets );
 
-    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel));
+    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
     boost::scoped_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
 
     const size_t nMarkCount = GetMarkedObjectCount();

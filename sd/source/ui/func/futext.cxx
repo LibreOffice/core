@@ -1038,7 +1038,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                  nSdrObjKind == OBJ_OUTLINETEXT || !mxTextObj->IsEmptyPresObj() ) )
             {
                 // create new outliner (owned by SdrObjEditView)
-                SdrOutliner* pOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpDoc );
+                SdrOutliner* pOutl = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpDoc);
 
                 if (bEmptyOutliner)
                     mpView->SdrEndTextEdit(true);
