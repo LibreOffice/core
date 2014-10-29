@@ -369,6 +369,7 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
     return 0;
 }
 
+#ifdef DBG_UTIL
 GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
 {
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
@@ -381,6 +382,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
 
     int screen = XScreenNumberOfScreen( xattr.screen );
 
+    // TODO: moggi: Select colour channel depth based on visual attributes, not hardcoded */
     static int visual_attribs[] =
     {
         GLX_DOUBLEBUFFER,       True,
@@ -408,7 +410,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
     for(int i = 0; i < fbCount; ++i)
     {
         XVisualInfo* pVi = glXGetVisualFromFBConfig( dpy, pFBC[i] );
-        if(pVi)
+        if(pVi && pVi->visualid == xattr.visual->visualid)
         {
             // pick the one with the most samples per pixel
             int nSampleBuf = 0;
@@ -427,6 +429,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
 
     return pFBC;
 }
+#endif
 
 // we need them before glew can initialize them
 // glew needs an OpenGL context so we need to get the address manually
@@ -438,18 +441,14 @@ void initOpenGLFunctionPointers()
     glXCreateContextAttribsARB = (GLXContext(*) (Display*, GLXFBConfig, GLXContext, Bool, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreateContextAttribsARB");;
 }
 
-XVisualInfo* getVisualInfo(Display* dpy, Window win)
+Visual* getVisual(Display* dpy, Window win)
 {
     initOpenGLFunctionPointers();
 
-    int best_fbc = -1;
-    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc);
-
-    XVisualInfo* vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
-
-    XFree(pFBC);
-
-    return vi;
+    XWindowAttributes xattr;
+    XGetWindowAttributes( dpy, win, &xattr );
+    SAL_INFO("vcl.opengl", "using VisualID " << xattr.visual);
+    return xattr.visual;
 }
 
 }
@@ -495,14 +494,8 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
     m_aGLWin.win = win;
     m_aGLWin.screen = screen;
 
-    XVisualInfo* vi = getVisualInfo(dpy, win);
-    Visual* pVisual = NULL;
+    Visual* pVisual = getVisual(dpy, win);
 
-    if( vi )
-    {
-        SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
-        pVisual = vi->visual;
-    }
     initGLWindow(pVisual);
 
     return ImplInit();
@@ -855,6 +848,8 @@ void OpenGLContext::initGLWindow(Visual* pVisual)
     }
 
     // Check multi sample support
+    /* TODO: moggi: This is not necessarily correct in the DBG_UTIL path, as it picks
+     *      an FBConfig instead ... */
     int nSamples = 0;
     glXGetConfig(m_aGLWin.dpy, m_aGLWin.vi, GLX_SAMPLES, &nSamples);
     if( nSamples > 0 )
@@ -896,13 +891,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return aWinData;
 
-    XVisualInfo* vi = getVisualInfo(dpy, win);
-
-    if( vi )
-    {
-        SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
-        aWinData.pVisual = (void*)(vi->visual);
-    }
+    aWinData.pVisual = getVisual(dpy, win);
 
     return aWinData;
 }
