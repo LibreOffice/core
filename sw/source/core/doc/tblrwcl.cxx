@@ -55,6 +55,7 @@
 #include <poolfmt.hxx>
 #include <tblrwcl.hxx>
 #include <unochart.hxx>
+#include <o3tl/numeric.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/foreach.hpp>
@@ -1904,6 +1905,8 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
     {
         nRealSize = pCpyPara->nNewSize;
         nRealSize *= rFndBox.GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
+        if (pCpyPara->nOldSize == 0)
+            throw o3tl::divide_by_zero();
         nRealSize /= pCpyPara->nOldSize;
     }
 

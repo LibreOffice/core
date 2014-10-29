@@ -40,6 +40,7 @@
 #include "htmltbl.hxx"
 #include "ndindex.hxx"
 #include "switerator.hxx"
+#include <o3tl/numeric.hxx>
 #include <boost/foreach.hpp>
 #ifdef DBG_UTIL
 #include "tblrwcl.hxx"
@@ -1417,10 +1418,12 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
             }
             OSL_ENSURE( nCols==nFixedCols, "Missed a column!" );
         }
-        else
+        else if (nCols > 0)
         {
+            if (nMax == 0)
+                throw o3tl::divide_by_zero();
             // No. So distribute the space regularly among all columns.
-            for( sal_uInt16 i=0; i<nCols; i++ )
+            for (sal_uInt16 i=0; i < nCols; ++i)
             {
                 sal_uLong nColMax = GetColumn( i )->GetMax();
                 GetColumn( i )->SetAbsColWidth(

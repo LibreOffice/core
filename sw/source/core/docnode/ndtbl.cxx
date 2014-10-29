@@ -2968,14 +2968,14 @@ bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
         aPosArr.erase( aPosArr.begin(), aPosArr.begin() + n );
         m_Boxes.erase(m_Boxes.begin(), m_Boxes.begin() + n);
 
-        size_t nSize = aPosArr.size();
-        if (nSize)
+        size_t nArrSize = aPosArr.size();
+        if (nArrSize)
         {
             if (nOldWidth == 0)
                 throw o3tl::divide_by_zero();
 
             // Adapt the positions to the new Size
-            for( n = 0; n < nSize; ++n )
+            for( n = 0; n < nArrSize; ++n )
             {
                 sal_uLong nSize = nWidth;
                 nSize *= ( aPosArr[ n ] - nOffset );
