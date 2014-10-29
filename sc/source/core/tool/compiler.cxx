@@ -463,7 +463,6 @@ static bool lcl_parseExternalName(
     const sal_Unicode* const pStart = rSymbol.getStr();
     const sal_Unicode* p = pStart;
     sal_Int32 nLen = rSymbol.getLength();
-    sal_Unicode cPrev = 0;
     OUString aTmpFile, aTmpName;
     sal_Int32 i = 0;
     bool bInName = false;
@@ -479,7 +478,6 @@ static bool lcl_parseExternalName(
         if (!p || p == pStart)
             return false;
         i = sal_Int32(p - pStart);
-        cPrev = *(p-1);
     }
     for ( ; i < nLen; ++i, ++p)
     {
@@ -493,7 +491,7 @@ static bool lcl_parseExternalName(
             {
                 // Move to the next char and loop until the second single
                 // quote.
-                cPrev = c;
+                sal_Unicode cPrev = c;
                 ++i; ++p;
                 for (sal_Int32 j = i; j < nLen; ++j, ++p)
                 {
@@ -547,7 +545,6 @@ static bool lcl_parseExternalName(
                     return false;
                 }
 
-                cPrev = c;
                 continue;
             }
         }
@@ -599,7 +596,6 @@ static bool lcl_parseExternalName(
                 aTmpFile += OUString(c);
             }
         }
-        cPrev = c;
     }
 
     if (!bInName)
