@@ -1741,24 +1741,30 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
             switch( pSpace->GetLineSpaceRule() )
             {
                 case SVX_LINE_SPACE_AUTO:
-            if (pSpace->GetInterLineSpaceRule()==SVX_INTER_LINE_SPACE_PROP) {
+                    // shrink first line of paragraph too on spacing < 100%
+                    if (IsParaLine() &&
+                        pSpace->GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP)
+                    {
                         long nTmp = pSpace->GetPropLineSpace();
+                        // Word will render < 50% too but it's just not readable
+                        if( nTmp < 50 )
+                            nTmp = nTmp ? 50 : 100;
                         if (nTmp<100) { // code adaped from fixed line height
                             nTmp *= nLineHeight;
                             nTmp /= 100;
                             if( !nTmp )
                                 ++nTmp;
                             nLineHeight = (KSHORT)nTmp;
-                            /*
-                            //@TODO figure out how WW maps ascent and descent
-                            //in case of prop  line spacing <100%
                             KSHORT nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+#if 0
+                            // could do clipping here (like Word does)
+                            // but at 0.5 its unreadable either way...
                             if( nAsc < pCurr->GetAscent() ||
                                 nLineHeight - nAsc < pCurr->Height() -
                                 pCurr->GetAscent() )
                                 pCurr->SetClipping( true );
+#endif
                             pCurr->SetAscent( nAsc );
-                            */
                             pCurr->Height( nLineHeight );
                             pInf->GetParaPortion()->SetFixLineHeight();
                         }
@@ -1784,6 +1790,8 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                 break;
                 default: OSL_FAIL( ": unknown LineSpaceRule" );
             }
+            // Note: for the _first_ line the line spacing of the previous
+            // paragraph is applied in SwFlowFrm::CalcUpperSpace()
             if( !IsParaLine() )
                 switch( pSpace->GetInterLineSpaceRule() )
                 {
