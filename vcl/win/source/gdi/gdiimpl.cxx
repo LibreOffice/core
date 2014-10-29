@@ -78,6 +78,9 @@
 #define DITHER_EXTRA_COLORS             1
 #define DMAP( _def_nVal, _def_nThres )  ((pDitherDiff[_def_nVal]>(_def_nThres))?pDitherHigh[_def_nVal]:pDitherLow[_def_nVal])
 
+#define SAL_POLY_STACKBUF       32
+#define USE_GDI_BEZIERS
+
 namespace {
 
 // #100127# draw an array of points which might also contain bezier control points
@@ -1782,9 +1785,6 @@ void WinSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pP
     if ( pWinPointAryAry != aWinPointAryAry )
         delete [] pWinPointAryAry;
 }
-
-#define SAL_POLY_STACKBUF       32
-#define USE_GDI_BEZIERS
 
 bool WinSalGraphicsImpl::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
