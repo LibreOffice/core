@@ -225,7 +225,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                                 if(SdrInventor == nInv &&
                                     (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd))
                                 {
-                                    pCandidate = (SdrTextObj*)pObj;
+                                    pCandidate = static_cast<SdrTextObj*>(pObj);
                                 }
                             }
                         }
@@ -628,7 +628,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(pHdl && pHdl->GetObj() && pHdl->GetObj()->ISA(SdrEdgeObj) && 0 == pHdl->GetPolyNum())
                     {
-                        pEdgeObj = (SdrEdgeObj*)pHdl->GetObj();
+                        pEdgeObj = static_cast<SdrEdgeObj*>(pHdl->GetObj());
 
                         if(0L == pHdl->GetPointNum())
                         {
@@ -859,7 +859,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                                 if(SdrInventor == nInv && OBJ_TITLETEXT == nKnd)
                                 {
-                                    pCandidate = (SdrTextObj*)pObj;
+                                    pCandidate = static_cast<SdrTextObj*>(pObj);
                                 }
                             }
                         }
@@ -1027,7 +1027,7 @@ bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
 
     if (pPV)
     {
-        SdPage* pPage = (SdPage*) pPV->GetPage();
+        SdPage* pPage = static_cast<SdPage*>( pPV->GetPage() );
 
         if (pPage)
         {
@@ -1054,7 +1054,7 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
 
             if( rItem.ISA( SfxAllEnumItem ) )
             {
-                nSlotValue = ( ( const SfxAllEnumItem& ) rItem ).GetValue();
+                nSlotValue = static_cast<const SfxAllEnumItem&>( rItem ).GetValue();
             }
         }
     }

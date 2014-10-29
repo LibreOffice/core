@@ -237,7 +237,7 @@ void FuText::DoExecute( SfxRequest& )
         && SID_TEXTEDIT == nSlotId
         && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
 
-        && (sal_uInt16)((SfxUInt16Item&)pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+        && (sal_uInt16)static_cast<const SfxUInt16Item&>(pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
     {
         // Selection by doubleclick -> don't allow QuickDrag
         bQuickDrag = false;
@@ -825,7 +825,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     // one of the defaulted setted items from ImpSetAttributesForNewTextObject
                     // needs to be adapted to non-block mode.
                     const SfxItemSet& rSet = mpView->GetDefaultAttr();
-                    SvxFrameDirection eDirection = (SvxFrameDirection)((SvxFrameDirectionItem&)rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
+                    SvxFrameDirection eDirection = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
 
                     if(FRMDIR_HORI_RIGHT_TOP == eDirection || FRMDIR_VERT_TOP_RIGHT == eDirection)
                     {
@@ -845,7 +845,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     // Look in the object defaults if left-to-right is wanted. If
                     // yes, set text anchoring to right to let the box grow to left.
                     const SfxItemSet& rSet = mpView->GetDefaultAttr();
-                    SvxFrameDirection eDirection = (SvxFrameDirection)((SvxFrameDirectionItem&)rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
+                    SvxFrameDirection eDirection = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem&>(rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
 
                     if(FRMDIR_HORI_RIGHT_TOP == eDirection)
                     {
@@ -1120,7 +1120,7 @@ bool FuText::DeleteDefaultText()
 
     if ( mxTextObj.is() && mxTextObj->IsEmptyPresObj() )
     {
-        SdPage* pPage = (SdPage*) mxTextObj->GetPage();
+        SdPage* pPage = static_cast<SdPage*>( mxTextObj->GetPage() );
 
         if (pPage)
         {
@@ -1177,7 +1177,7 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
         if (pField && pField->ISA(SvxURLField))
         {
             // URL-Field
-            aHelpText = INetURLObject::decode( ((const SvxURLField*)pField)->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
+            aHelpText = INetURLObject::decode( static_cast<const SvxURLField*>(pField)->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
         }
         if (!aHelpText.isEmpty())
         {
@@ -1262,7 +1262,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
             && SID_TEXTEDIT == nSlotId
             && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
 
-            && (sal_uInt16) ((SfxUInt16Item&) pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
+            && (sal_uInt16) static_cast<const SfxUInt16Item&>( pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
         {
             // selection wit double click -> do not allow QuickDrag
             bQuickDrag = false;
@@ -1291,7 +1291,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
     {
         if(pObj->ISA(SdrTextObj))
         {
-            SdrTextObj* pText = (SdrTextObj*)pObj;
+            SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
             pText->SetLogicRect(rRectangle);
 
             bool bVertical = (SID_ATTR_CHAR_VERTICAL == nID || SID_TEXT_FITTOSIZE_VERTICAL == nID);

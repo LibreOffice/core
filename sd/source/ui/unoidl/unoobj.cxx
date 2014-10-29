@@ -435,7 +435,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SdXShape::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    sal_uIntPtr nObjId = (sal_uIntPtr)mpShape->getPropertyMapEntries();
+    sal_uIntPtr nObjId = reinterpret_cast<sal_uIntPtr>(mpShape->getPropertyMapEntries());
     SfxExtItemPropertySetInfo* pInfo = NULL;
 
     SdExtPropertySetInfoCache* pCache = (mpModel && mpModel->IsImpressDocument()) ?
@@ -993,7 +993,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
             // really delete SdrOutlinerObj at pObj
             pObj->NbcSetOutlinerParaObject(0L);
             if( bVertical && PTR_CAST( SdrTextObj, pObj ) )
-                ((SdrTextObj*)pObj)->SetVerticalWriting( true );
+                static_cast<SdrTextObj*>(pObj)->SetVerticalWriting( true );
 
             SdrGrafObj* pGraphicObj = PTR_CAST( SdrGrafObj, pObj );
             if( pGraphicObj )
@@ -1038,7 +1038,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
 
                 pOutliner->Clear();
                 pOutliner->SetVertical( bVertical );
-                pOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)pDoc->GetStyleSheetPool() );
+                pOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pDoc->GetStyleSheetPool()) );
                 pOutliner->SetStyleSheet( 0, pPage->GetTextStyleSheetForObject( pObj ) );
                 pOutliner->Insert( pPage->GetPresObjText( pPage->GetPresObjKind(pObj) ) );
                 pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );

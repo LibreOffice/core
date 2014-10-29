@@ -112,7 +112,7 @@ void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::
             mpSdCustomShow = new SdCustomShow( mpModel->GetDoc() );
 
         mpSdCustomShow->PagesVector().insert(mpSdCustomShow->PagesVector().begin() + Index,
-            (SdPage*) pPage->GetSdrPage());
+            static_cast<SdPage*>(pPage->GetSdrPage()));
     }
 
     if( mpModel )

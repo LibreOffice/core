@@ -78,7 +78,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         aNewAttr.Put( aEditAttr );
 
         // left border is offset
-        const long nOff = ( (SvxLRSpaceItem&)aNewAttr.Get( EE_PARA_LRSPACE ) ).GetTxtLeft();
+        const long nOff = static_cast<const SvxLRSpaceItem&>(aNewAttr.Get( EE_PARA_LRSPACE ) ).GetTxtLeft();
         // conversion since TabulatorTabPage always uses Twips!
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );
@@ -120,13 +120,13 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         const SfxPoolItem *pItem = 0;
         if( SfxItemState::SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART, false, &pItem ) )
         {
-            const bool bNewStart = ((SfxBoolItem*)pItem)->GetValue() ? sal_True : sal_False;
+            const bool bNewStart = static_cast<const SfxBoolItem*>(pItem)->GetValue() ? sal_True : sal_False;
             pOutliner->SetParaIsNumberingRestart( eSelection.nStartPara, bNewStart );
         }
 
         if( SfxItemState::SET == pArgs->GetItemState( ATTR_NUMBER_NEWSTART_AT, false, &pItem ) )
         {
-            const sal_Int16 nStartAt = ((SfxInt16Item*)pItem)->GetValue();
+            const sal_Int16 nStartAt = static_cast<const SfxInt16Item*>(pItem)->GetValue();
             pOutliner->SetNumberingStartValue( eSelection.nStartPara, nStartAt );
         }
     }

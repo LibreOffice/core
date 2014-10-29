@@ -197,7 +197,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     SvxNumRule* pNumRule = NULL;
     if ( pTmpItem )
     {
-        pNumRule = new SvxNumRule(*((SvxNumBulletItem*)pTmpItem)->GetNumRule());
+        pNumRule = new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule());
 
         // get numbering rule corresponding to <nIdx> and apply the needed number formats to <pNumRule>
         NBOTypeMgrBase* pNumRuleMgr =
@@ -208,7 +208,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
             sal_uInt16 nActNumLvl = (sal_uInt16)0xFFFF;
             const SfxPoolItem* pNumLevelItem = NULL;
             if(SfxItemState::SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pNumLevelItem))
-                nActNumLvl = ((const SfxUInt16Item*)pNumLevelItem)->GetValue();
+                nActNumLvl = static_cast<const SfxUInt16Item*>(pNumLevelItem)->GetValue();
 
             pNumRuleMgr->SetItems(&aNewAttr);
             SvxNumRule aTmpRule( *pNumRule );
@@ -350,7 +350,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             }
 
             if( pItem == NULL )
-                pItem = (SvxNumBulletItem*) aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+                pItem = static_cast<const SvxNumBulletItem*>( aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
 
             //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
 
@@ -358,7 +358,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
 
             if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
             {
-                SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,true);
+                const SvxNumBulletItem* pBulletItem = static_cast<const SvxNumBulletItem*>( aNewAttr.GetItem(EE_PARA_NUMBULLET,true) );
                 SvxNumRule* pLclRule = pBulletItem->GetNumRule();
                 if(pLclRule)
                 {

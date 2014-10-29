@@ -51,7 +51,7 @@ void SdPageFormatUndoAction::Undo()
 
     mpPage->SetBackgroundFullSize( mbOldFullSize );
     if( !mpPage->IsMasterPage() )
-        ( (SdPage&) mpPage->TRG_GetMasterPage() ).SetBackgroundFullSize( mbOldFullSize );
+        static_cast<SdPage&>( mpPage->TRG_GetMasterPage() ).SetBackgroundFullSize( mbOldFullSize );
 
 }
 
@@ -69,7 +69,7 @@ void SdPageFormatUndoAction::Redo()
 
     mpPage->SetBackgroundFullSize( mbNewFullSize );
     if( !mpPage->IsMasterPage() )
-        ( (SdPage&) mpPage->TRG_GetMasterPage() ).SetBackgroundFullSize( mbNewFullSize );
+        static_cast<SdPage&>( mpPage->TRG_GetMasterPage() ).SetBackgroundFullSize( mbNewFullSize );
 
 }
 

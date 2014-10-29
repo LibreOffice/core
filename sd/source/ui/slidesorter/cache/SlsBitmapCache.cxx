@@ -81,7 +81,7 @@ class CacheEntry;
 class CacheHash {
 public:
     size_t operator()(const BitmapCache::CacheKey& p) const
-    { return (size_t)p; }
+    { return reinterpret_cast<size_t>(p); }
 };
 
 class BitmapCache::CacheBitmapContainer

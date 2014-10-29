@@ -465,7 +465,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
             if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EM_MASTERPAGE &&
                 !pPage->IsMasterPage())
             {
-                pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
+                pPage = static_cast<SdPage*>(&(pPage->TRG_GetMasterPage()));
             }
 
             assert(pPage && "page not found");
@@ -586,7 +586,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
          between
        - the global outliner could be used in SdPage::CreatePresObj */
     boost::scoped_ptr< ::Outliner> pOutliner(new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT ));
-    pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
+    pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
     // set reference device
     pOutliner->SetRefDevice(SD_MOD()->GetRefDevice( *mpDocSh ));
@@ -646,7 +646,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
                 aStyleSheetName = aStyleSheetName.copy( 0, aStyleSheetName.getLength()-1 );
                 aStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth+1 );
                 SfxStyleSheetBasePool* pStylePool = mpDoc->GetStyleSheetPool();
-                SfxStyleSheet* pOutlStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() );
+                SfxStyleSheet* pOutlStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() ) );
                 rDocliner.SetStyleSheet( nTargetPos, pOutlStyle );
             }
 

@@ -463,7 +463,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     // evaluation of the ItemSets
     if (pArgs->GetItemState(ATTR_ANIMATION_ACTIVE) == SfxItemState::SET)
     {
-        bActive = ((SfxBoolItem&)pArgs->Get(ATTR_ANIMATION_ACTIVE)).GetValue();
+        bActive = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ANIMATION_ACTIVE)).GetValue();
         nAnimationSet = ATTR_SET;
     }
     else
@@ -471,7 +471,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_EFFECT) == SfxItemState::SET)
     {
-        eEffect = (presentation::AnimationEffect)((SfxAllEnumItem&) pArgs->
+        eEffect = (presentation::AnimationEffect)static_cast<const SfxAllEnumItem&>( pArgs->
                     Get(ATTR_ANIMATION_EFFECT)).GetValue();
         nEffectSet = ATTR_SET;
     }
@@ -480,7 +480,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_TEXTEFFECT) == SfxItemState::SET)
     {
-        eTextEffect = (presentation::AnimationEffect)((SfxAllEnumItem&) pArgs->
+        eTextEffect = (presentation::AnimationEffect)static_cast<const SfxAllEnumItem&>( pArgs->
                         Get(ATTR_ANIMATION_TEXTEFFECT)).GetValue();
         nTextEffectSet = ATTR_SET;
     }
@@ -489,7 +489,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_SPEED) == SfxItemState::SET)
     {
-        eSpeed  = (presentation::AnimationSpeed)((SfxAllEnumItem&) pArgs->
+        eSpeed  = (presentation::AnimationSpeed)static_cast<const SfxAllEnumItem&>( pArgs->
                     Get(ATTR_ANIMATION_SPEED)).GetValue();
         nSpeedSet = ATTR_SET;
     }
@@ -498,7 +498,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_FADEOUT) == SfxItemState::SET)
     {
-        bFadeOut = ((SfxBoolItem&)pArgs->Get(ATTR_ANIMATION_FADEOUT)).GetValue();
+        bFadeOut = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ANIMATION_FADEOUT)).GetValue();
         nFadeOutSet = ATTR_SET;
     }
     else
@@ -506,7 +506,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_INVISIBLE) == SfxItemState::SET)
     {
-        bInvisible = ((SfxBoolItem&)pArgs->Get(ATTR_ANIMATION_INVISIBLE)).GetValue();
+        bInvisible = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ANIMATION_INVISIBLE)).GetValue();
         nInvisibleSet = ATTR_SET;
     }
     else
@@ -514,7 +514,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_SOUNDON) == SfxItemState::SET)
     {
-        bSoundOn = ((SfxBoolItem&)pArgs->Get(ATTR_ANIMATION_SOUNDON)).GetValue();
+        bSoundOn = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ANIMATION_SOUNDON)).GetValue();
         nSoundOnSet = ATTR_SET;
     }
     else
@@ -522,7 +522,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_SOUNDFILE) == SfxItemState::SET)
     {
-        aSound =  ((SfxStringItem&)pArgs->Get(ATTR_ANIMATION_SOUNDFILE)).GetValue();
+        aSound = static_cast<const SfxStringItem&>(pArgs->Get(ATTR_ANIMATION_SOUNDFILE)).GetValue();
         nSoundFileSet = ATTR_SET;
     }
     else
@@ -530,7 +530,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_COLOR) == SfxItemState::SET)
     {
-        aFadeColor = ((SvxColorItem&)pArgs->Get(ATTR_ANIMATION_COLOR)).GetValue();
+        aFadeColor = static_cast<const SvxColorItem&>(pArgs->Get(ATTR_ANIMATION_COLOR)).GetValue();
         nFadeColorSet = ATTR_SET;
     }
     else
@@ -538,7 +538,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ANIMATION_PLAYFULL) == SfxItemState::SET)
     {
-        bPlayFull = ((SfxBoolItem&)pArgs->Get(ATTR_ANIMATION_PLAYFULL)).GetValue();
+        bPlayFull = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ANIMATION_PLAYFULL)).GetValue();
         nPlayFullSet = ATTR_SET;
     }
     else
@@ -546,7 +546,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION) == SfxItemState::SET)
     {
-        eClickAction = (presentation::ClickAction)((SfxAllEnumItem&)pArgs->
+        eClickAction = (presentation::ClickAction)static_cast<const SfxAllEnumItem&>(pArgs->
                     Get(ATTR_ACTION)).GetValue();
         nClickActionSet = ATTR_SET;
     }
@@ -555,7 +555,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_FILENAME) == SfxItemState::SET)
     {
-        aBookmark = ((SfxStringItem&)pArgs->
+        aBookmark = static_cast<const SfxStringItem&>(pArgs->
                         Get(ATTR_ACTION_FILENAME)).GetValue();
         nBookmarkSet = ATTR_SET;
     }
@@ -564,7 +564,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_EFFECT) == SfxItemState::SET)
     {
-        eSecondEffect = (presentation::AnimationEffect)((SfxAllEnumItem&) pArgs->
+        eSecondEffect = (presentation::AnimationEffect)static_cast<const SfxAllEnumItem&>( pArgs->
                     Get(ATTR_ACTION_EFFECT)).GetValue();
         nSecondEffectSet = ATTR_SET;
     }
@@ -573,7 +573,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_EFFECTSPEED) == SfxItemState::SET)
     {
-        eSecondSpeed  = (presentation::AnimationSpeed)((SfxAllEnumItem&) pArgs->
+        eSecondSpeed  = (presentation::AnimationSpeed)static_cast<const SfxAllEnumItem&>( pArgs->
                     Get(ATTR_ACTION_EFFECTSPEED)).GetValue();
         nSecondSpeedSet = ATTR_SET;
     }
@@ -582,7 +582,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_SOUNDON) == SfxItemState::SET)
     {
-        bSecondSoundOn = ((SfxBoolItem&)pArgs->Get(ATTR_ACTION_SOUNDON)).GetValue();
+        bSecondSoundOn = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ACTION_SOUNDON)).GetValue();
         nSecondSoundOnSet = ATTR_SET;
     }
     else
@@ -590,7 +590,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
     if (pArgs->GetItemState(ATTR_ACTION_PLAYFULL) == SfxItemState::SET)
     {
-        bSecondPlayFull = ((SfxBoolItem&)pArgs->Get(ATTR_ACTION_PLAYFULL)).GetValue();
+        bSecondPlayFull = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_ACTION_PLAYFULL)).GetValue();
         nSecondPlayFullSet = ATTR_SET;
     }
     else
@@ -641,7 +641,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                  (eKind1 == OBJ_PLIN) ||        // Polygon
                  (eKind1 == OBJ_PATHLINE)))     // Bezier curve
             {
-                pPath = (SdrPathObj*)pObject1;
+                pPath = static_cast<SdrPathObj*>(pObject1);
                 pRunningObj = pObject2;
             }
 
@@ -650,7 +650,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                  (eKind2 == OBJ_PLIN) ||        // Polygon
                  (eKind2 == OBJ_PATHLINE)))     // Bezier curve
             {
-                pPath = (SdrPathObj*)pObject2;
+                pPath = static_cast<SdrPathObj*>(pObject2);
                 pRunningObj = pObject1;
             }
 

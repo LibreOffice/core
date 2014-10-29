@@ -136,13 +136,13 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     if (pArgs)
     {
         if (pArgs->GetItemState(ATTR_PRESLAYOUT_LOAD) == SfxItemState::SET)
-            bLoad = ((SfxBoolItem&)pArgs->Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
+            bLoad = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
         if( pArgs->GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE ) == SfxItemState::SET )
-            bMasterPage = ( (SfxBoolItem&) pArgs->Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
+            bMasterPage = static_cast<const SfxBoolItem&>( pArgs->Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
         if( pArgs->GetItemState( ATTR_PRESLAYOUT_CHECK_MASTERS ) == SfxItemState::SET )
-            bCheckMasters = ( (SfxBoolItem&) pArgs->Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
+            bCheckMasters = static_cast<const SfxBoolItem&>( pArgs->Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
         if (pArgs->GetItemState(ATTR_PRESLAYOUT_NAME) == SfxItemState::SET)
-            aFile = ((SfxStringItem&)pArgs->Get(ATTR_PRESLAYOUT_NAME)).GetValue();
+            aFile = static_cast<const SfxStringItem&>(pArgs->Get(ATTR_PRESLAYOUT_NAME)).GetValue();
     }
     else
     {
@@ -157,13 +157,13 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             {
                 pDlg->GetAttr(aSet);
                 if (aSet.GetItemState(ATTR_PRESLAYOUT_LOAD) == SfxItemState::SET)
-                    bLoad = ((SfxBoolItem&)aSet.Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
+                    bLoad = static_cast<const SfxBoolItem&>(aSet.Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
                 if( aSet.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE ) == SfxItemState::SET )
-                    bMasterPage = ( (SfxBoolItem&) aSet.Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
+                    bMasterPage = static_cast<const SfxBoolItem&>(aSet.Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
                 if( aSet.GetItemState( ATTR_PRESLAYOUT_CHECK_MASTERS ) == SfxItemState::SET )
-                    bCheckMasters = ( (SfxBoolItem&) aSet.Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
+                    bCheckMasters = static_cast<const SfxBoolItem&>(aSet.Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
                 if (aSet.GetItemState(ATTR_PRESLAYOUT_NAME) == SfxItemState::SET)
-                    aFile = ((SfxStringItem&)aSet.Get(ATTR_PRESLAYOUT_NAME)).GetValue();
+                    aFile = static_cast<const SfxStringItem&>(aSet.Get(ATTR_PRESLAYOUT_NAME)).GetValue();
             }
             break;
 

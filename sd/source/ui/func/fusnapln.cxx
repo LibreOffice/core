@@ -163,8 +163,8 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
     }
     Point aHlpPos;
 
-    aHlpPos.X() = ((const SfxInt32Item&) pArgs->Get(ATTR_SNAPLINE_X)).GetValue();
-    aHlpPos.Y() = ((const SfxInt32Item&) pArgs->Get(ATTR_SNAPLINE_Y)).GetValue();
+    aHlpPos.X() = static_cast<const SfxInt32Item&>( pArgs->Get(ATTR_SNAPLINE_X)).GetValue();
+    aHlpPos.Y() = static_cast<const SfxInt32Item&>( pArgs->Get(ATTR_SNAPLINE_Y)).GetValue();
     pPV->PagePosToLogic(aHlpPos);
 
     if ( bCreateNew )
@@ -173,7 +173,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
         pPV = mpView->GetSdrPageView();
 
-        switch ( (SnapKind) ((const SfxAllEnumItem&)
+        switch ( (SnapKind) static_cast<const SfxAllEnumItem&>(
                  pArgs->Get(ATTR_SNAPLINE_KIND)).GetValue() )
         {
             case SK_HORIZONTAL  : eKind = SDRHELPLINE_HORIZONTAL;   break;

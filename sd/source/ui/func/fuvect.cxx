@@ -64,7 +64,7 @@ void FuVectorize::DoExecute( SfxRequest& )
         if( pObj && pObj->ISA( SdrGrafObj ) )
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr<AbstractSdVectorizeDlg> pDlg(pFact ? pFact->CreateSdVectorizeDlg( mpWindow, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0);
+            boost::scoped_ptr<AbstractSdVectorizeDlg> pDlg(pFact ? pFact->CreateSdVectorizeDlg( mpWindow, static_cast<SdrGrafObj*>( pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0);
             if( pDlg && pDlg->Execute() == RET_OK )
             {
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();
@@ -72,7 +72,7 @@ void FuVectorize::DoExecute( SfxRequest& )
 
                 if( pPageView && rMtf.GetActionSize() )
                 {
-                    SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
+                    SdrGrafObj* pVectObj = static_cast<SdrGrafObj*>( pObj->Clone() );
                     OUString aStr( mpView->GetDescriptionOfMarkedObjects() );
                     aStr += " " + SD_RESSTR( STR_UNDO_VECTORIZE );
                     mpView->BegUndo( aStr );

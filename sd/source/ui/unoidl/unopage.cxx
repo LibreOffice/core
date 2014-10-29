@@ -399,7 +399,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
         SdrObject* pObj = SvxFmDrawPage::_CreateSdrObject( xShape );
         if( pObj && ( (pObj->GetObjInventor() != SdrInventor) || (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
             if( pDoc )
             {
                 // #i119287# similar to the code in the SdrObject methods the graphic and ole
@@ -511,7 +511,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
         pPresObj = SvxFmDrawPage::_CreateSdrObject( xShape );
         if( pPresObj )
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
             if( pDoc )
                 pPresObj->NbcSetStyleSheet( pDoc->GetDefaultStyleSheet(), true );
             GetPage()->InsertPresObj( pPresObj, eObjKind );
@@ -686,7 +686,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
             if( eOri != GetPage()->GetOrientation() )
             {
-                SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+                SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
                 const PageKind ePageKind = GetPage()->GetPageKind();
 
                 sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
@@ -782,7 +782,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             SdrPage* pPage = GetPage();
             if( pPage )
             {
-                SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+                SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
                 if( pDoc->GetMasterPageCount() )
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
@@ -802,7 +802,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             SdrPage* pPage = GetPage();
             if( pPage )
             {
-                SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+                SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
                 if( pDoc->GetMasterPageCount() )
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
@@ -1096,7 +1096,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         break;
     case WID_PAGE_PREVIEW :
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
             if ( pDoc )
             {
                 ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
@@ -1133,7 +1133,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     case WID_PAGE_PREVIEWBITMAP :
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
             if ( pDoc )
             {
                 ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
@@ -1200,7 +1200,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         SdrPage* pPage = GetPage();
         if( pPage )
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
             if( pDoc->GetMasterPageCount() )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
@@ -1219,7 +1219,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         SdrPage* pPage = GetPage();
         if( pPage )
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*)pPage->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(pPage->GetModel());
             if( pDoc->GetMasterPageCount() )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
@@ -1681,7 +1681,7 @@ void SdGenericDrawPage::SetLftBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetLftBorder() )
     {
-        SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
         sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
@@ -1705,7 +1705,7 @@ void SdGenericDrawPage::SetRgtBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetRgtBorder() )
     {
-        SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
         sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
@@ -1729,7 +1729,7 @@ void SdGenericDrawPage::SetUppBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetUppBorder() )
     {
-        SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
         sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
@@ -1753,7 +1753,7 @@ void SdGenericDrawPage::SetLwrBorder( sal_Int32 nValue )
 {
     if( nValue != GetPage()->GetLwrBorder() )
     {
-        SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
         sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
@@ -1808,7 +1808,7 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
     {
         aSize.setWidth( nWidth );
 
-        SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
         sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
@@ -1837,7 +1837,7 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
     {
         aSize.setHeight( nHeight );
 
-        SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
+        SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(GetPage()->GetModel());
         const PageKind ePageKind = GetPage()->GetPageKind();
 
         sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
@@ -2386,7 +2386,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
         {
             SvxFmDrawPage::mpPage->TRG_ClearMasterPage();
 
-            SdPage* pSdPage = (SdPage*) pMasterPage->GetSdrPage();
+            SdPage* pSdPage = static_cast<SdPage*>(pMasterPage->GetSdrPage());
             SvxFmDrawPage::mpPage->TRG_SetMasterPage(*pSdPage);
 
             SvxFmDrawPage::mpPage->SetBorder(pSdPage->GetLftBorder(),pSdPage->GetUppBorder(),
@@ -2394,7 +2394,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
 
             SvxFmDrawPage::mpPage->SetSize( pSdPage->GetSize() );
             SvxFmDrawPage::mpPage->SetOrientation( pSdPage->GetOrientation() );
-            ((SdPage*)SvxFmDrawPage::mpPage)->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
+            static_cast<SdPage*>(SvxFmDrawPage::mpPage)->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
 
             // set notes master also
             SdPage* pNotesPage = GetModel()->GetDoc()->GetSdPage( (SvxFmDrawPage::mpPage->GetPageNum()-1)>>1, PK_NOTES );
@@ -2506,7 +2506,7 @@ void SdDrawPage::setBackground( const Any& rValue )
 
     if( pBack )
     {
-        pBack->fillItemSet( (SdDrawDocument*)GetPage()->GetModel(), aSet );
+        pBack->fillItemSet( static_cast<SdDrawDocument*>(GetPage()->GetModel()), aSet );
     }
     else
     {
@@ -2530,7 +2530,7 @@ void SdDrawPage::setBackground( const Any& rValue )
             pProp++;
         }
 
-        pBackground->fillItemSet( (SdDrawDocument*)GetPage()->GetModel(), aSet );
+        pBackground->fillItemSet( static_cast<SdDrawDocument*>(GetPage()->GetModel()), aSet );
     }
 
     if( aSet.Count() == 0 )
@@ -2574,7 +2574,7 @@ void SdDrawPage::getBackground( Any& rValue ) throw()
 {
     const SfxItemSet& rFillAttributes = GetPage()->getSdrPageProperties().GetItemSet();
 
-       if(drawing::FillStyle_NONE == ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+       if(drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
     {
         // no fill set (switched off by drawing::FillStyle_NONE), clear rValue to represent this
         rValue.clear();
@@ -2796,7 +2796,7 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
 
-    if( SvxFmDrawPage::mpPage && ((SdPage*)SvxFmDrawPage::mpPage)->GetPageKind() == PK_HANDOUT )
+    if( SvxFmDrawPage::mpPage && static_cast<SdPage*>(SvxFmDrawPage::mpPage)->GetPageKind() == PK_HANDOUT )
         comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.HandoutMasterPage" );
 
     return aSeq;
@@ -2898,7 +2898,7 @@ void SdMasterPage::setBackground( const Any& rValue )
 
             if( pBack )
             {
-                pBack->fillItemSet( (SdDrawDocument*)GetPage()->GetModel(), aSet );
+                pBack->fillItemSet( static_cast<SdDrawDocument*>(GetPage()->GetModel()), aSet );
             }
             else
             {
@@ -2921,11 +2921,11 @@ void SdMasterPage::setBackground( const Any& rValue )
                     pProp++;
                 }
 
-                pBackground->fillItemSet( (SdDrawDocument*)SvxFmDrawPage::mpPage->GetModel(), aSet );
+                pBackground->fillItemSet( static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel()), aSet );
             }
 
             // if we find the background style, copy the set to the background
-            SdDrawDocument* pDoc = (SdDrawDocument*)SvxFmDrawPage::mpPage->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel());
             SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
@@ -2969,7 +2969,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
         }
         else
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*)SvxFmDrawPage::mpPage->GetModel();
+            SdDrawDocument* pDoc = static_cast<SdDrawDocument*>(SvxFmDrawPage::mpPage->GetModel());
             SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
             if(pSSPool)
             {
@@ -2993,7 +2993,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
             // should NOT happen and is an error
             const SfxItemSet& rFallbackItemSet(SvxFmDrawPage::mpPage->getSdrPageProperties().GetItemSet());
 
-            if(drawing::FillStyle_NONE == ((const XFillStyleItem&)rFallbackItemSet.Get(XATTR_FILLSTYLE)).GetValue())
+            if(drawing::FillStyle_NONE == static_cast<const XFillStyleItem&>(rFallbackItemSet.Get(XATTR_FILLSTYLE)).GetValue())
             {
                 rValue <<= Reference< beans::XPropertySet >(
                     new SdUnoPageBackground(GetModel()->GetDoc(), &rFallbackItemSet));

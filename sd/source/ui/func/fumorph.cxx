@@ -49,7 +49,7 @@ using namespace com::sun::star;
 
 namespace sd {
 
-#define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
+#define  ITEMVALUE( ItemSet, Id, Cast ) ( static_cast<const Cast&>( (ItemSet).Get( (Id) ) ).GetValue() )
 TYPEINIT1( FuMorph, FuPoor );
 
 FuMorph::FuMorph (
@@ -113,14 +113,14 @@ void FuMorph::DoExecute( SfxRequest& )
             {
                 SdrObject* pObj = aIter1.Next();
                 if(pObj && pObj->ISA(SdrPathObj))
-                    aPolyPoly1.append(((SdrPathObj*)pObj)->GetPathPoly());
+                    aPolyPoly1.append(static_cast<SdrPathObj*>(pObj)->GetPathPoly());
             }
 
             while(aIter2.IsMore())
             {
                 SdrObject* pObj = aIter2.Next();
                 if(pObj && pObj->ISA(SdrPathObj))
-                    aPolyPoly2.append(((SdrPathObj*)pObj)->GetPathPoly());
+                    aPolyPoly2.append(static_cast<SdrPathObj*>(pObj)->GetPathPoly());
             }
 
             // perform morphing

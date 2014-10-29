@@ -425,7 +425,7 @@ void FuEditGluePoints::ReceiveRequest(SfxRequest& rReq)
         {
             const SfxItemSet* pSet = rReq.GetArgs();
             const SfxPoolItem& rItem = pSet->Get(SID_GLUE_PERCENT);
-            bool bPercent = ((const SfxBoolItem&) rItem).GetValue();
+            bool bPercent = static_cast<const SfxBoolItem&>(rItem).GetValue();
             mpView->SetMarkedGluePointsPercent(bPercent);
         }
         break;

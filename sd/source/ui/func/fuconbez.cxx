@@ -80,7 +80,7 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     {
         const SfxPoolItem*  pPoolItem = NULL;
         if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
-            maTargets = ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue();
+            maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
     }
 }
 
@@ -448,7 +448,7 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                 }
             }
 
-            ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+            static_cast<SdrPathObj*>(pObj)->SetPathPoly(aPoly);
         }
         else
         {

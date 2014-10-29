@@ -286,8 +286,8 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
         {
             if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
             {
-                XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)mpSet->GetItem(XATTR_FILLBMP_STRETCH);
-                XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)mpSet->GetItem(XATTR_FILLBMP_TILE);
+                const XFillBmpStretchItem* pStretchItem = static_cast<const XFillBmpStretchItem*>(mpSet->GetItem(XATTR_FILLBMP_STRETCH));
+                const XFillBmpTileItem* pTileItem = static_cast<const XFillBmpTileItem*>(mpSet->GetItem(XATTR_FILLBMP_TILE));
 
                 if( pStretchItem && pTileItem )
                 {

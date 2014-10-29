@@ -225,7 +225,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ? sal_True : sal_False ) );
 
     bool bFullSize = mpPage->IsMasterPage() ?
-        mpPage->IsBackgroundFullSize() : ((SdPage&)mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();
+        mpPage->IsBackgroundFullSize() : static_cast<SdPage&>(mpPage->TRG_GetMasterPage()).IsBackgroundFullSize();
 
     aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
 
@@ -257,7 +257,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
             // Only this page, get attributes for background fill
             const SfxItemSet& rBackgroundAttributes = mpPage->getSdrPageProperties().GetItemSet();
 
-            if(drawing::FillStyle_NONE != ((const XFillStyleItem&)rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+            if(drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
             {
                 // page attributes are used, take them
                 aMergedAttr.Put(rBackgroundAttributes);
@@ -265,7 +265,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
             else
             {
                 if(pStyleSheet
-                    && drawing::FillStyle_NONE != ((const XFillStyleItem&)pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+                    && drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
                 {
                     // if the page has no fill style, use the settings from the
                     // background stylesheet (if used)
@@ -337,9 +337,9 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
             }
 
             // if the background for this page was set to invisible, the background-object has to be deleted, too.
-            if( ( ( (XFillStyleItem*) pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ||
+            if( ( static_cast<const XFillStyleItem*>( pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ||
                 ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SfxItemState::DEFAULT ) &&
-                    ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ) )
+                    ( static_cast<const XFillStyleItem*>( aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ) )
                 mbPageBckgrdDeleted = true;
 
             bool bSetToAllPages = false;
@@ -420,7 +420,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
                     SdPage *pPage = mpDoc->GetSdPage(i, ePageKind);
 
                     const SfxItemSet& rFillAttributes = pPage->getSdrPageProperties().GetItemSet();
-                       if(drawing::FillStyle_NONE != ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+                       if(drawing::FillStyle_NONE != static_cast<const XFillStyleItem&>(rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
                     {
                         SdBackgroundObjUndoAction *pBackgroundObjUndoAction = new SdBackgroundObjUndoAction(*mpDoc, *pPage, rFillAttributes);
                         pUndoGroup->AddAction(pBackgroundObjUndoAction);
@@ -453,7 +453,7 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
             const SfxPoolItem *pItem;
             if( SfxItemState::SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) )
             {
-                sal_uInt32 nVal = ((SvxFrameDirectionItem*)pItem)->GetValue();
+                sal_uInt32 nVal = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
                 mpDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? ::com::sun::star::text::WritingMode_RL_TB : ::com::sun::star::text::WritingMode_LR_TB );
             }
 
@@ -491,15 +491,15 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     sal_Int32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
     bool                bScaleAll = true;
     Orientation         eOrientation = mpPage->GetOrientation();
-    SdPage*             pMasterPage = mpPage->IsMasterPage() ? mpPage : &(SdPage&)(mpPage->TRG_GetMasterPage());
+    SdPage*             pMasterPage = mpPage->IsMasterPage() ? mpPage : &static_cast<SdPage&>(mpPage->TRG_GetMasterPage());
     bool                bFullSize = pMasterPage->IsBackgroundFullSize();
-    sal_uInt16              nPaperBin = mpPage->GetPaperBin();
+    sal_uInt16          nPaperBin = mpPage->GetPaperBin();
 
     if( pArgs->GetItemState(SID_ATTR_PAGE, true, &pPoolItem) == SfxItemState::SET )
     {
-        mpDoc->SetPageNumType(((const SvxPageItem*) pPoolItem)->GetNumType());
+        mpDoc->SetPageNumType(static_cast<const SvxPageItem*>(pPoolItem)->GetNumType());
 
-        eOrientation = ((const SvxPageItem*) pPoolItem)->IsLandscape() ?
+        eOrientation = static_cast<const SvxPageItem*>(pPoolItem)->IsLandscape() ?
             ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
 
         if( mpPage->GetOrientation() != eOrientation )
@@ -510,7 +510,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
 
     if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, true, &pPoolItem) == SfxItemState::SET )
     {
-        aNewSize = ((const SvxSizeItem*) pPoolItem)->GetSize();
+        aNewSize = static_cast<const SvxSizeItem*>(pPoolItem)->GetSize();
 
         if( mpPage->GetSize() != aNewSize )
             bSetPageSizeAndBorder = true;
@@ -519,8 +519,8 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
                             true, &pPoolItem) == SfxItemState::SET )
     {
-        nLeft = ((const SvxLRSpaceItem*) pPoolItem)->GetLeft();
-        nRight = ((const SvxLRSpaceItem*) pPoolItem)->GetRight();
+        nLeft = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetLeft();
+        nRight = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetRight();
 
         if( mpPage->GetLftBorder() != nLeft || mpPage->GetRgtBorder() != nRight )
             bSetPageSizeAndBorder = true;
@@ -530,8 +530,8 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE),
                             true, &pPoolItem) == SfxItemState::SET )
     {
-        nUpper = ((const SvxULSpaceItem*) pPoolItem)->GetUpper();
-        nLower = ((const SvxULSpaceItem*) pPoolItem)->GetLower();
+        nUpper = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetUpper();
+        nLower = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetLower();
 
         if( mpPage->GetUppBorder() != nUpper || mpPage->GetLwrBorder() != nLower )
             bSetPageSizeAndBorder = true;
@@ -539,12 +539,12 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SfxItemState::SET )
     {
-        bScaleAll = ((const SfxBoolItem*) pPoolItem)->GetValue();
+        bScaleAll = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
     }
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT2), true, &pPoolItem) == SfxItemState::SET )
     {
-        bFullSize = ((const SfxBoolItem*) pPoolItem)->GetValue();
+        bFullSize = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
 
         if(pMasterPage->IsBackgroundFullSize() != bFullSize )
             bSetPageSizeAndBorder = true;
@@ -553,7 +553,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     // Paper Bin
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), true, &pPoolItem) == SfxItemState::SET )
     {
-        nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
+        nPaperBin = static_cast<const SvxPaperBinItem*>(pPoolItem)->GetValue();
 
         if( mpPage->GetPaperBin() != nPaperBin )
             bSetPageSizeAndBorder = true;

@@ -327,7 +327,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     else
     {
         SfxObjectShell* pShell = pClipTransferable->GetDocShell();
-        DrawDocShell* pDataDocSh = (DrawDocShell*)pShell;
+        DrawDocShell* pDataDocSh = static_cast<DrawDocShell*>(pShell);
         SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
 
         if (pDataDoc!=NULL

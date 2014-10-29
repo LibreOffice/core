@@ -210,7 +210,7 @@ bool FuConstructRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             pObj->SetMergedItemSet(aAttr);
 
             if( nSlotId == SID_DRAW_CAPTION_VERTICAL )
-                ( (SdrTextObj*) pObj)->SetVerticalWriting( true );
+                static_cast<SdrTextObj*>(pObj)->SetVerticalWriting( true );
         }
     }
     return bReturn;
@@ -490,11 +490,11 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
     else if (nSlotId == SID_DRAW_MEASURELINE)
     {
         // dimension line
-        SdPage* pPage = (SdPage*) mpView->GetSdrPageView()->GetPage();
+        SdPage* pPage = static_cast<SdPage*>( mpView->GetSdrPageView()->GetPage() );
         OUString aName(SD_RESSTR(STR_POOLSHEET_MEASURE));
-        SfxStyleSheet* pSheet = (SfxStyleSheet*) pPage->GetModel()->
+        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pPage->GetModel()->
                                      GetStyleSheetPool()->
-                                     Find(aName, SD_STYLE_FAMILY_GRAPHICS);
+                                     Find(aName, SD_STYLE_FAMILY_GRAPHICS));
         DBG_ASSERT(pSheet, "StyleSheet missing");
 
         if (pSheet)
@@ -601,7 +601,7 @@ void FuConstructRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
         // determine line width and calculate with it the line end width
         if( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
         {
-            long nValue = ( ( const XLineWidthItem& ) aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
+            long nValue = static_cast<const XLineWidthItem&>( aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
             if( nValue > 0 )
                 nWidth = nValue * 3;
         }
@@ -822,7 +822,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                     ::basegfx::B2DPolygon aB2DPolygon;
                     aB2DPolygon.append(::basegfx::B2DPoint(aStart.X(), nYMiddle));
                     aB2DPolygon.append(::basegfx::B2DPoint(aEnd.X(), nYMiddle));
-                    ((SdrPathObj*)pObj)->SetPathPoly(::basegfx::B2DPolyPolygon(aB2DPolygon));
+                    static_cast<SdrPathObj*>(pObj)->SetPathPoly(::basegfx::B2DPolyPolygon(aB2DPolygon));
                 }
                 else
                 {
@@ -837,8 +837,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 if(pObj->ISA(SdrMeasureObj))
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                    ((SdrMeasureObj*)pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
-                    ((SdrMeasureObj*)pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
+                    static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aStart.X(), nYMiddle), 0);
+                    static_cast<SdrMeasureObj*>(pObj)->SetPoint(Point(aEnd.X(), nYMiddle), 1);
                 }
                 else
                 {
@@ -879,8 +879,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
             {
                 if(pObj->ISA(SdrEdgeObj))
                 {
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(false, aStart);
-                    ((SdrEdgeObj*)pObj)->SetTailPoint(true, aEnd);
+                    static_cast<SdrEdgeObj*>(pObj)->SetTailPoint(false, aStart);
+                    static_cast<SdrEdgeObj*>(pObj)->SetTailPoint(true, aEnd);
                 }
                 else
                 {
@@ -896,7 +896,7 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                 {
                     bool bIsVertical(SID_DRAW_CAPTION_VERTICAL == nID);
 
-                    ((SdrTextObj*)pObj)->SetVerticalWriting(bIsVertical);
+                    static_cast<SdrTextObj*>(pObj)->SetVerticalWriting(bIsVertical);
 
                     if(bIsVertical)
                     {
@@ -910,8 +910,8 @@ SdrObject* FuConstructRectangle::CreateDefaultObject(const sal_uInt16 nID, const
                     //  String aText(SdResId(STR_POOLSHEET_TEXT));
                     //  ((SdrCaptionObj*)pObj)->SetText(aText);
 
-                    ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
-                    ((SdrCaptionObj*)pObj)->SetTailPos(
+                    static_cast<SdrCaptionObj*>(pObj)->SetLogicRect(aRect);
+                    static_cast<SdrCaptionObj*>(pObj)->SetTailPos(
                         aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));
                 }
                 else

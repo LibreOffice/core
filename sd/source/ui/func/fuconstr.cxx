@@ -327,7 +327,7 @@ void FuConstruct::SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj)
 void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         const bool bForceFillStyle, const bool bForceNoFillStyle )
 {
-    SdPage* pPage = (SdPage*)mpView->GetSdrPageView()->GetPage();
+    SdPage* pPage = static_cast<SdPage*>(mpView->GetSdrPageView()->GetPage());
     if ( pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD &&
          mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
@@ -337,16 +337,16 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         OUString aName( pPage->GetLayoutName() );
         sal_Int32 n = aName.indexOf(SD_LT_SEPARATOR) + strlen(SD_LT_SEPARATOR);
         aName = aName.copy(0, n) + SD_RESSTR(STR_LAYOUT_BACKGROUNDOBJECTS);
-        SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
+        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pPage->GetModel()->
                                                 GetStyleSheetPool()->
-                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
         DBG_ASSERT(pSheet, "StyleSheet missing");
         if (pSheet)
         {
             // applying style sheet for background objects
             pObj->SetStyleSheet(pSheet, false);
             SfxItemSet& rSet = pSheet->GetItemSet();
-            const XFillStyleItem& rFillStyle = (const XFillStyleItem&)rSet.Get(XATTR_FILLSTYLE);
+            const XFillStyleItem& rFillStyle = static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE));
             if ( bForceFillStyle )
             {
                 if (rFillStyle.GetValue() == drawing::FillStyle_NONE)
@@ -367,9 +367,9 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         if ( bForceNoFillStyle )
         {
             OUString aName(SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL));
-            SfxStyleSheet* pSheet = (SfxStyleSheet*)pPage->GetModel()->
+            SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pPage->GetModel()->
                                          GetStyleSheetPool()->
-                                         Find(aName, SD_STYLE_FAMILY_GRAPHICS);
+                                         Find(aName, SD_STYLE_FAMILY_GRAPHICS));
             DBG_ASSERT(pSheet, "Stylesheet missing");
             if (pSheet)
             {

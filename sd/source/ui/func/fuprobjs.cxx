@@ -73,7 +73,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
        if not, it is not allowed to edit the templates */
     SfxItemSet aSet(mpDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
     pOutlineViewShell->GetStatusBarState( aSet );
-    OUString aLayoutName = ((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+    OUString aLayoutName = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
     DBG_ASSERT(!aLayoutName.isEmpty(), "Layout not defined");
 
     bool    bUnique = false;
@@ -147,12 +147,11 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 // Undo-Action
                 StyleSheetUndoAction* pAction = new StyleSheetUndoAction
-                                                (mpDoc, (SfxStyleSheet*)pStyleSheet,
-                                                    pOutSet);
+                                                (mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet),                                                    pOutSet);
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
 
                 pStyleSheet->GetItemSet().Put( *pOutSet );
-                ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+                static_cast<SfxStyleSheet*>( pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
             }
         }
     }

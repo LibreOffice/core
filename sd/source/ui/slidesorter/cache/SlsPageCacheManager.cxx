@@ -50,7 +50,7 @@ public:
     } };
     /// Hash function that takes all members into account.
     class Hash {public: size_t operator() (const CacheDescriptor& rDescriptor) const {
-        return (size_t)rDescriptor.mpDocument.get() + rDescriptor.maPreviewSize.Width();
+        return reinterpret_cast<size_t>(rDescriptor.mpDocument.get()) + rDescriptor.maPreviewSize.Width();
     } };
 };
 

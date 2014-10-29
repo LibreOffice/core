@@ -486,7 +486,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
            follows. */
 
         sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
-        SdPage* pPreviousNotesPage = (SdPage*) mpDoc->GetPage( nStandardPageNum - 1 );
+        SdPage* pPreviousNotesPage = static_cast<SdPage*>( mpDoc->GetPage( nStandardPageNum - 1 ) );
         sal_uInt16 nNotesPageNum = nStandardPageNum + 1;
         OUString aStandardPageName;
         OUString aNotesPageName;
@@ -495,7 +495,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         * standard page
         **************************************************************/
         if( bDuplicate )
-            pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
+            pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->Clone() );
         else
             pStandardPage = mpDoc->AllocSdPage(false);
 
@@ -530,7 +530,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         SdPage* pNotesPage = NULL;
 
         if( bDuplicate )
-            pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
+            pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->Clone() );
         else
             pNotesPage = mpDoc->AllocSdPage(false);
 
@@ -689,7 +689,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
     SvxDrawPage* pSvxPage = SvxDrawPage::getImplementation( xPage );
     if( pSvxPage )
     {
-        SdPage* pPage = (SdPage*) pSvxPage->GetSdrPage();
+        SdPage* pPage = static_cast<SdPage*>( pSvxPage->GetSdrPage() );
         sal_uInt16 nPos = pPage->GetPageNum();
         nPos = ( nPos - 1 ) / 2;
         pPage = InsertSdPage( nPos, true );
@@ -1381,7 +1381,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                     {
                         if( 0 != (pItem = rPool.GetItem2( nWhichId, j ) ) )
                         {
-                            const SvxFontItem *pFont = (const SvxFontItem *)pItem;
+                            const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
 
                             aSeq[nSeqIndex++] <<= OUString(pFont->GetFamilyName());
                             aSeq[nSeqIndex++] <<= OUString(pFont->GetStyleName());
@@ -1391,7 +1391,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                         }
                     }
 
-                    const SvxFontItem& rFont = (const SvxFontItem&)rPool.GetDefaultItem( nWhichId );
+                    const SvxFontItem& rFont = static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
 
                     aSeq[nSeqIndex++] <<= OUString(rFont.GetFamilyName());
                     aSeq[nSeqIndex++] <<= OUString(rFont.GetStyleName());
@@ -1765,7 +1765,7 @@ vcl::PDFWriter::StructElement ImplRenderPaintProc::ImplBegStructureTag( SdrObjec
                 eElement = vcl::PDFWriter::Heading;
             else if ( nIdentifier == OBJ_OUTLINETEXT )
                 eElement = vcl::PDFWriter::Division;
-            else if ( !bIsTextObj || !((SdrTextObj&)rObject).HasText() )
+            else if ( !bIsTextObj || !static_cast<SdrTextObj&>(rObject).HasText() )
                 eElement = vcl::PDFWriter::Figure;
         }
     }
@@ -1926,7 +1926,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             pPV, pPDFExtOutDevData );
 
                         // background color for outliner :o
-                        SdPage* pPage = pPV ? (SdPage*)pPV->GetPage() : NULL;
+                        SdPage* pPage = pPV ? static_cast<SdPage*>(pPV->GetPage()) : NULL;
                         if( pPage )
                         {
                             SdrOutliner& rOutl = mpDoc->GetDrawOutliner( NULL );
@@ -2664,7 +2664,7 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
         SdDrawPage* pSvxPage = SdDrawPage::getImplementation( xPage );
         if( pSvxPage )
         {
-            SdPage* pPage = (SdPage*) pSvxPage->GetSdrPage();
+            SdPage* pPage = static_cast<SdPage*>(pSvxPage->GetSdrPage());
             if(pPage && ( pPage->GetPageKind() == PK_STANDARD ) )
             {
                 sal_uInt16 nPage = pPage->GetPageNum();
@@ -2846,7 +2846,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             bUnique = true;
             for( sal_Int32 nMaster = 1; nMaster < nMPageCount; nMaster++ )
             {
-                SdPage* pPage = (SdPage*)mpDoc->GetMasterPage((sal_uInt16)nMaster);
+                SdPage* pPage = static_cast<SdPage*>(mpDoc->GetMasterPage((sal_uInt16)nMaster));
                 if( pPage && pPage->GetName() == aPrefix )
                 {
                     bUnique = false;
@@ -2867,7 +2867,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         aLayoutName += SD_RESSTR(STR_LAYOUT_OUTLINE);
 
         // create styles
-        ((SdStyleSheetPool*)mpDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
+        static_cast<SdStyleSheetPool*>(mpDoc->GetStyleSheetPool())->CreateLayoutStyleSheets( aPrefix );
 
         // get the first page for initial size and border settings
         SdPage* pPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_STANDARD );
@@ -3080,11 +3080,11 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getElementNames()
         sal_uInt16 nPage;
         // standard pages
         for( nPage = 0; nPage < nMaxPages; nPage++ )
-            *pStr++ = ((SdPage*)mpDoc->GetPage( nPage ))->GetName();
+            *pStr++ = static_cast<SdPage*>(mpDoc->GetPage( nPage ))->GetName();
 
         // master pages
         for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
-            *pStr++ = ((SdPage*)mpDoc->GetMasterPage( nPage ))->GetName();
+            *pStr++ = static_cast<SdPage*>(mpDoc->GetMasterPage( nPage ))->GetName();
         return aSeq;
     }
 }
@@ -3137,7 +3137,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
     // standard pages
     for( nPage = 0; nPage < nMaxPages; nPage++ )
     {
-        pPage = (SdPage*)mpDoc->GetPage( nPage );
+        pPage = static_cast<SdPage*>(mpDoc->GetPage( nPage ));
         if( (pPage->GetName() == aName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }
@@ -3145,7 +3145,7 @@ SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
     // master pages
     for( nPage = 0; nPage < nMaxMasterPages; nPage++ )
     {
-        pPage = (SdPage*)mpDoc->GetMasterPage( nPage );
+        pPage = static_cast<SdPage*>(mpDoc->GetMasterPage( nPage ));
         if( (pPage->GetName() == aName) && (!bDraw || (pPage->GetPageKind() == PK_STANDARD)) )
             return pPage;
     }

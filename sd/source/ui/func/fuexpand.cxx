@@ -97,12 +97,12 @@ void FuExpandPage::DoExecute( SfxRequest& )
             pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
 
         pOutl->SetDefTab( mpDoc->GetDefaultTabulator() );
-        pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mpDoc->GetStyleSheetPool());
+        pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
         SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
         sal_uInt16 nActualPageNum = pActualPage->GetPageNum();
-        SdPage* pActualNotesPage = (SdPage*) mpDoc->GetPage(nActualPageNum + 1);
-        SdrTextObj* pActualOutline = (SdrTextObj*) pActualPage->GetPresObj(PRESOBJ_OUTLINE);
+        SdPage* pActualNotesPage = static_cast<SdPage*>(mpDoc->GetPage(nActualPageNum + 1));
+        SdrTextObj* pActualOutline = static_cast<SdrTextObj*>(pActualPage->GetPresObj(PRESOBJ_OUTLINE));
 
         if (pActualOutline)
         {
@@ -180,7 +180,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // create title text objects
-                    SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
+                    SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TITLE));
                     assert(pTextObj);
                     if (!pTextObj)
                         continue;
@@ -212,7 +212,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     SdrTextObj* pOutlineObj = NULL;
                     sal_Int32 nChildCount = pOutl->GetChildCount(pPara);
                     if (nChildCount > 0)
-                        pOutlineObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
+                        pOutlineObj = static_cast<SdrTextObj*>( pPage->GetPresObj(PRESOBJ_OUTLINE) );
                     if (pOutlineObj)
                     {
                         // create structuring text objects

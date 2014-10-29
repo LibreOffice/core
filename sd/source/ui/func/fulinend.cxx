@@ -85,7 +85,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
             else return; // Cancel
         }
 
-        const ::basegfx::B2DPolyPolygon aPolyPolygon = ( (SdrPathObj*) pNewObj )->GetPathPoly();
+        const ::basegfx::B2DPolyPolygon aPolyPolygon = static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly();
 
         // Delete the created poly-object
         SdrObject::Free( pConvPolyObj );

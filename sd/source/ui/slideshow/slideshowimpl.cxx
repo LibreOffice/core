@@ -2696,7 +2696,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
 
         case SID_NAVIGATOR_PAGE:
         {
-            PageJump    eJump = (PageJump)((SfxAllEnumItem&) pArgs->Get(SID_NAVIGATOR_PAGE)).GetValue();
+            PageJump    eJump = (PageJump)static_cast<const SfxAllEnumItem&>( pArgs->Get(SID_NAVIGATOR_PAGE)).GetValue();
             switch( eJump )
             {
                 case PAGE_FIRST:        gotoFirstSlide(); break;
@@ -2710,7 +2710,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
 
         case SID_NAVIGATOR_OBJECT:
         {
-            const OUString aTarget( ((SfxStringItem&) pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
+            const OUString aTarget( static_cast<const SfxStringItem&>(pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
 
             // is the bookmark a Slide?
             bool        bIsMasterPage;

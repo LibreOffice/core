@@ -574,22 +574,22 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         if (pObj->GetObjInventor() == SdrInventor &&
                         pObj->GetObjIdentifier() == OBJ_OLE2)
                         {
-                            if ( !( (SdrOle2Obj*) pObj)->GetObjRef().is() )
+                            if ( !static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
                             {
                                 // the empty OLE object gets a new IPObj
                                 bInsertNewObject = false;
                                 pObj->SetEmptyPresObj(false);
-                                ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
-                                ( (SdrOle2Obj*) pObj)->SetObjRef(xObj);
-                                ( (SdrOle2Obj*) pObj)->SetPersistName(aName);
-                                ( (SdrOle2Obj*) pObj)->SetName(aName);
-                                ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
-                                Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
+                                static_cast<SdrOle2Obj*>(pObj)->SetOutlinerParaObject(NULL);
+                                static_cast<SdrOle2Obj*>(pObj)->SetObjRef(xObj);
+                                static_cast<SdrOle2Obj*>(pObj)->SetPersistName(aName);
+                                static_cast<SdrOle2Obj*>(pObj)->SetName(aName);
+                                static_cast<SdrOle2Obj*>(pObj)->SetAspect(nAspect);
+                                Rectangle aRect = static_cast<SdrOle2Obj*>(pObj)->GetLogicRect();
 
                                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                                 {
                                     if( xIconMetaFile.is() )
-                                        ( (SdrOle2Obj*) pObj)->SetGraphicToObj( xIconMetaFile, aIconMediaType );
+                                        static_cast<SdrOle2Obj*>(pObj)->SetGraphicToObj( xIconMetaFile, aIconMediaType );
                                 }
                                 else
                                 {

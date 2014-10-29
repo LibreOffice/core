@@ -142,11 +142,11 @@ void FuScale::DoExecute( SfxRequest& rReq )
             if (!mpViewShell)
                 return;
 
-            switch (((const SvxZoomItem &) aArgs.Get (SID_ATTR_ZOOM)).GetType ())
+            switch (static_cast<const SvxZoomItem &>( aArgs.Get (SID_ATTR_ZOOM)).GetType ())
             {
                 case SVX_ZOOM_PERCENT:
                 {
-                    nValue = ((const SvxZoomItem &) aArgs.Get (SID_ATTR_ZOOM)).GetValue ();
+                    nValue = static_cast<const SvxZoomItem &>( aArgs.Get (SID_ATTR_ZOOM)).GetValue ();
 
                     mpViewShell->SetZoom( nValue );
 

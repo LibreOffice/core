@@ -97,7 +97,7 @@ public:
     // intern
     bool isValid() { return (SvxDrawPage::mpPage != NULL) && (mpModel != NULL); }
 
-    SdPage* GetPage() const { return (SdPage*)SvxDrawPage::mpPage; }
+    SdPage* GetPage() const { return static_cast<SdPage*>(SvxDrawPage::mpPage); }
     SdXImpressDocument* GetModel() const;
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();

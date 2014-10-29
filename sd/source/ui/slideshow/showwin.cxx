@@ -490,7 +490,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
                              std::max( aOutOrg.Y() + aOutSize.Height() - aGrfSize.Height() - aOffset.Height(), aOutOrg.Y() ) );
 
         if( maLogo.IsAnimated() )
-            maLogo.StartAnimation( this, aGrfPos, aGrfSize, (sal_IntPtr) this );
+            maLogo.StartAnimation( this, aGrfPos, aGrfSize, reinterpret_cast<sal_IntPtr>(this) );
         else
             maLogo.Draw( this, aGrfPos, aGrfSize );
     }

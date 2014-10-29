@@ -724,7 +724,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
         {
             SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell();
 
-            if( !pTransferDocShell || ( (DrawDocShell*) pTransferDocShell)->GetDoc()->GetPageCount() <= 1 )
+            if( !pTransferDocShell || static_cast<DrawDocShell*>(pTransferDocShell)->GetDoc()->GetPageCount() <= 1 )
             {
                 bool bIsPastingSupported (false);
 

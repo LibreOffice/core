@@ -85,7 +85,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
                 if ( pObj->ISA(SdrTextObj) )
                 {
-                    pTextObj = (SdrTextObj*) pObj;
+                    pTextObj = static_cast<SdrTextObj*>(pObj);
                 }
             }
         }
