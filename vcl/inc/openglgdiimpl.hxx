@@ -31,6 +31,51 @@ private:
 
     OpenGLContext maContext;
 
+    SalColor mnLineColor;
+    SalColor mnFillColor;
+
+    std::vector< GLuint > maShaders;
+
+    GLuint mnSolidProgram;
+    GLuint mnColorUniform;
+
+    GLuint mnTextureProgram;
+    GLuint mnSamplerUniform;
+
+    GLuint mnMaskedTextureProgram;
+    GLuint mnMaskedSamplerUniform;
+    GLuint mnMaskSamplerUniform;
+
+    GLuint mnMaskProgram;
+    GLuint mnMaskUniform;
+    GLuint mnMaskColorUniform;
+
+    GLuint CompileShader( GLenum nType, const char *aSrc );
+    GLuint CreateProgram( const char *aVertShaderSrc, const char *aFragShaderSrc );
+    bool CreateSolidProgram( void );
+    bool CreateTextureProgram( void );
+    bool CreateMaskedTextureProgram( void );
+    bool CreateMaskProgram( void );
+
+    void BeginSolid( SalColor nColor, sal_uInt8 nTransparency );
+    void BeginSolid( SalColor nColor );
+    void EndSolid( void );
+    void BeginInvert( void );
+    void EndInvert( void );
+
+    void DrawPoint( long nX, long nY );
+    void DrawLine( long nX1, long nY1, long nX2, long nY2 );
+    void DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
+    void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    void DrawRect( long nX, long nY, long nWidth, nHeight );
+    void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    void DrawPolyPolygon( const basegfx::B2DPolyPolygon& pPolyPolygon );
+    void DrawTextureRect( const SalTwoRect& pPosAry );
+    void DrawTexture( GLuint nTexture, const SalTwoRect& pPosAry );
+    void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& pPosAry );
+    void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& pPosAry );
+
+
 public:
     virtual ~OpenGLSalGraphicsImpl ();
 
