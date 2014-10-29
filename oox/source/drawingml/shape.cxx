@@ -229,7 +229,7 @@ void Shape::addShape(
         ::oox::core::XmlFilterBase& rFilterBase,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
-        basegfx::B2DHomMatrix& aTransformation,
+        const basegfx::B2DHomMatrix& aTransformation,
         FillProperties& rShapeOrParentShapeFillProps,
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
