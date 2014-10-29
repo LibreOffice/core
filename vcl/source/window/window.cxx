@@ -1187,6 +1187,8 @@ void Window::ImplInitWindowData( WindowType nType )
     // it will not *be* an OutputDevice
     mpOutputDevice = (OutputDevice*)this;
 
+    mnRefCnt = 0;
+
     mpWindowImpl = new WindowImpl( nType );
 
     meOutDevType        = OUTDEV_WINDOW;
