@@ -80,13 +80,7 @@ public class EventListener
                 break;
 
             case AccessibleEventId.ACTION_CHANGED:
-                aHandler = new EventHandler (aEvent, maTreeModel);
-                break;
-
             case AccessibleEventId.HYPERTEXT_CHANGED:
-                aHandler = new EventHandler (aEvent, maTreeModel);
-                break;
-
             case AccessibleEventId.ACTIVE_DESCENDANT_CHANGED:
             case AccessibleEventId.CARET_CHANGED:
             case AccessibleEventId.TEXT_CHANGED:

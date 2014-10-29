@@ -608,31 +608,17 @@ public class NumericalHelper
         switch (aTypeObject.iType)
         {
             case BYTE_TYPE:
-                retValue = aTypeObject.aValue.toString();
-                break;
             case CHAR_TYPE:
-                retValue = aTypeObject.aValue.toString();
-                break;
             case SHORT_TYPE:
-                retValue = aTypeObject.aValue.toString();
-                break;
             case INT_TYPE:
-                retValue = aTypeObject.aValue.toString();
-                break;
             case LONG_TYPE:
-                retValue = aTypeObject.aValue.toString();
-                break;
             case FLOAT_TYPE:
-                retValue = aTypeObject.aValue.toString();
-                break;
             case DOUBLE_TYPE:
+            case BOOLEAN_TYPE:
                 retValue = aTypeObject.aValue.toString();
                 break;
             case STRING_TYPE:
                 retValue = (String) aTypeObject.aValue;
-                break;
-            case BOOLEAN_TYPE:
-                retValue = aTypeObject.aValue.toString();
                 break;
             case SEQUENCE_TYPE:
                 retValue = new String(toByteArray((aValue)));
