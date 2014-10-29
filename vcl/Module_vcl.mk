@@ -22,6 +22,7 @@ $(eval $(call gb_Module_Module,vcl))
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_afm_hash \
     Library_vcl \
+	Package_opengl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
         Executable_ui-previewer \

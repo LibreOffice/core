@@ -50,8 +50,6 @@ private:
     GLuint mnMaskUniform;
     GLuint mnMaskColorUniform;
 
-    GLuint CompileShader( GLenum nType, const char *aSrc );
-    GLuint CreateProgram( const char *aVertShaderSrc, const char *aFragShaderSrc );
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateMaskedTextureProgram( void );

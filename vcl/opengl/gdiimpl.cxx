@@ -23,6 +23,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 #define GL_ATTRIB_POS 0
 #define GL_ATTRIB_TEX 1
 
@@ -136,99 +138,9 @@ void OpenGLSalGraphicsImpl::SetROPFillColor( SalROPColor /*nROPColor*/ )
 {
 }
 
-GLuint OpenGLSalGraphicsImpl::CompileShader( GLenum nType, const char *aSrc )
-{
-    GLint nStatus;
-    GLuint nShader;
-    GLint nLogLen( 0 );
-    char *aLog( NULL );
-
-    nShader = glCreateShader( nType );
-    glShaderSource( nShader, 1, (const GLchar **) &aSrc, NULL );
-    glCompileShader( nShader );
-    glGetShaderiv( nShader, GL_COMPILE_STATUS, &nStatus );
-    if( nStatus )
-        return nShader;
-
-    glGetShaderiv( nShader, GL_INFO_LOG_LENGTH, &nLogLen );
-    if( nLogLen > 1 )
-        aLog = new char[nLogLen];
-    if( aLog )
-        glGetShaderInfoLog( nShader, nLogLen, NULL, aLog );
-
-    SAL_WARN( "vcl.opengl", "::CompileShader failed: " << aLog );
-
-    delete aLog;
-    glDeleteShader( nShader );
-
-    return 0;
-}
-
-GLuint OpenGLSalGraphicsImpl::CreateProgram( const char *aVertShaderSrc, const char *aFragShaderSrc )
-{
-    GLuint nProgram;
-    GLuint nVertShader, nFragShader;
-    GLint nStatus;
-
-    nVertShader = CompileShader( GL_VERTEX_SHADER, aVertShaderSrc );
-    nFragShader = CompileShader( GL_FRAGMENT_SHADER, aFragShaderSrc );
-    if( !nVertShader || !nFragShader )
-    {
-        SAL_WARN( "vcl.opengl", "::CreateProgram couldn't compile the shaders" );
-        return 0;
-    }
-
-    nProgram = glCreateProgram();
-    if( nProgram == 0 )
-    {
-        SAL_WARN( "vcl.opengl", "::CreateProgram couldn't create GL program" );
-        return 0;
-    }
-
-    glAttachShader( nProgram, nVertShader );
-    glAttachShader( nProgram, nFragShader );
-    glLinkProgram( nProgram );
-    glGetProgramiv( nProgram, GL_LINK_STATUS, &nStatus );
-    if( !nStatus )
-    {
-        GLint nLogLen( 0 );
-        char *aLog( NULL );
-
-        glDeleteShader( nVertShader );
-        glDeleteShader( nFragShader );
-
-        glGetProgramiv( nProgram, GL_INFO_LOG_LENGTH, &nLogLen );
-        if( nLogLen > 0 )
-            aLog = new char[nLogLen];
-        if( aLog )
-            glGetProgramInfoLog( nProgram, nLogLen, NULL, aLog );
-
-        SAL_WARN( "vcl.opengl", "::CreateSolidShader couldn't link program: " << aLog );
-        delete aLog;
-
-        return 0;
-    }
-
-    maShaders.push_back( nVertShader );
-    maShaders.push_back( nFragShader );
-    return nProgram;
-}
-
 bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
 {
-    static const char aVertShaderSrc[] =
-        "attribute vec4 position;\n"
-        "void main() {\n"
-        "   gl_Position = position;\n"
-        "}\n";
-    static const char aFragShaderSrc[] =
-        "precision mediump float;\n"
-        "uniform vec4 color;\n"
-        "void main() {\n"
-        "   gl_FragColor = color;\n"
-        "}\n";
-
-    mnSolidProgram = CreateProgram( aVertShaderSrc, aFragShaderSrc );
+    mnSolidProgram = OpenGLHelper::LoadShaders( "solidVertexShader", "solidFragmentShader" );
     if( mnSolidProgram == 0 )
         return false;
 
@@ -239,23 +151,9 @@ bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
 
 bool OpenGLSalGraphicsImpl::CreateTextureProgram( void )
 {
-    static const char aVertShaderSrc[] =
-        "attribute vec4 position;\n"
-        "attribute vec2 tex_coord_in;\n"
-        "varying vec2 tex_coord;\n"
-        "void main() {\n"
-        "   gl_Position = position;\n"
-        "   tex_coord = tex_coord_in;\n"
-        "}\n";
     static const char aFragShaderSrc[] =
-        "precision mediump float;\n"
-        "varying vec2 tex_coord;\n"
-        "uniform sampler2D sampler;\n"
-        "void main() {\n"
-        "   gl_FragColor = texture2D(sampler, tex_coord);\n"
-        "}\n";
 
-    mnTextureProgram = CreateProgram( aVertShaderSrc, aFragShaderSrc );
+    mnTextureProgram = OpenGLHelper::( "textureVertexShader", "textureFragmentShader" );
     if( mnTextureProgram == 0 )
         return false;
 
@@ -267,27 +165,7 @@ bool OpenGLSalGraphicsImpl::CreateTextureProgram( void )
 
 bool OpenGLSalGraphicsImpl::CreateMaskedTextureProgram( void )
 {
-    static const char aVertShaderSrc[] =
-        "attribute vec4 position;\n"
-        "attribute vec2 tex_coord_in;\n"
-        "varying vec2 tex_coord;\n"
-        "void main() {\n"
-        "   gl_Position = position;\n"
-        "   tex_coord = tex_coord_in;\n"
-        "}\n";
-    static const char aFragShaderSrc[] =
-        "precision mediump float;\n"
-        "varying vec2 tex_coord;\n"
-        "uniform sampler2D sampler;\n"
-        "uniform sampler2D mask;\n"
-        "void main() {\n"
-        "   vec4 texel0, texel1;\n"
-        "   texel0 = texture2D(sampler, tex_coord);\n"
-        "   texel1 = texture2D(mask, tex_coord);\n"
-        "   gl_FragColor = texel0 * texel1.a;\n"
-        "}\n";
-
-    mnMaskedTextureProgram = CreateProgram( aVertShaderSrc, aFragShaderSrc );
+    mnMaskedTextureProgram = OpenGLHelper::LoadShaders( "maskedTextureVertexShader", "maskedTextureFragmentShader" );
     if( mnMaskedTextureProgram == 0 )
         return false;
 
@@ -300,26 +178,7 @@ bool OpenGLSalGraphicsImpl::CreateMaskedTextureProgram( void )
 
 bool OpenGLSalGraphicsImpl::CreateMaskProgram( void )
 {
-    static const char aVertShaderSrc[] =
-        "attribute vec4 position;\n"
-        "attribute vec2 tex_coord_in;\n"
-        "varying vec2 tex_coord;\n"
-        "void main() {\n"
-        "   gl_Position = position;\n"
-        "   tex_coord = tex_coord_in;\n"
-        "}\n";
-    static const char aFragShaderSrc[] =
-        "precision mediump float;\n"
-        "varying vec2 tex_coord;\n"
-        "uniform sampler2D sampler;\n"
-        "uniform vec4 color;\n"
-        "void main() {\n"
-        "   vec4 texel0;\n"
-        "   texel0 = texture2D(sampler, tex_coord);\n"
-        "   gl_FragColor = color * texel0.a;\n"
-        "}\n";
-
-    mnMaskedTextureProgram = CreateProgram( aVertShaderSrc, aFragShaderSrc );
+    mnMaskedTextureProgram = OpenGLHelper::LoadShaders( "maskVertexShader", "maskFragmentShader" );
     if( mnMaskedTextureProgram == 0 )
         return false;
 
