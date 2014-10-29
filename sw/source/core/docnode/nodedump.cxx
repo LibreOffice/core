@@ -213,35 +213,59 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer(w);
     writer.startElement("markManager");
-    writer.startElement("fieldmarks");
-    for (const_iterator_t it = m_vFieldmarks.begin(); it != m_vFieldmarks.end(); ++it)
+    if (!m_vBookmarks.empty())
     {
-        pMark_t pMark = *it;
-        writer.startElement("fieldmark");
-        writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
-        writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
-        writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
-        writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
-        OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
-        writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+        writer.startElement("bookmarks");
+        for (const_iterator_t it = m_vBookmarks.begin(); it != m_vBookmarks.end(); ++it)
+        {
+            pMark_t pMark = *it;
+            writer.startElement("bookmark");
+            writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
+            writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
+            writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
+            writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
+            OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+            writer.endElement();
+        }
         writer.endElement();
     }
-    writer.endElement();
 
-    writer.startElement("annotationmarks");
-    for (const_iterator_t it = m_vAnnotationMarks.begin(); it != m_vAnnotationMarks.end(); ++it)
+    if (!m_vFieldmarks.empty())
     {
-        pMark_t pMark = *it;
-        writer.startElement("annotationmark");
-        writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
-        writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
-        writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
-        writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
-        OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
-        writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+        writer.startElement("fieldmarks");
+        for (const_iterator_t it = m_vFieldmarks.begin(); it != m_vFieldmarks.end(); ++it)
+        {
+            pMark_t pMark = *it;
+            writer.startElement("fieldmark");
+            writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
+            writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
+            writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
+            writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
+            OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+            writer.endElement();
+        }
         writer.endElement();
     }
-    writer.endElement();
+
+    if (!m_vAnnotationMarks.empty())
+    {
+        writer.startElement("annotationmarks");
+        for (const_iterator_t it = m_vAnnotationMarks.begin(); it != m_vAnnotationMarks.end(); ++it)
+        {
+            pMark_t pMark = *it;
+            writer.startElement("annotationmark");
+            writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
+            writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
+            writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
+            writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
+            OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+            writer.endElement();
+        }
+        writer.endElement();
+    }
     writer.endElement();
 }
 } // namespace mark
