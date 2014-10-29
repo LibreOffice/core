@@ -3301,7 +3301,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                     // Point not in rectangle. Compare distances:
                     const Point aCalcRectCenter = aCalcRect.Center();
                     const Point aDiff = aCalcRectCenter - *pPoint;
-                    const sal_uInt64 nCurrentDist = aDiff.getX() * aDiff.getX() + aDiff.getY() * aDiff.getY(); // opt: no sqrt
+                    const sal_uInt64 nCurrentDist = sal_Int64(aDiff.getX()) * sal_Int64(aDiff.getX()) + sal_Int64(aDiff.getY()) * sal_Int64(aDiff.getY()); // opt: no sqrt
                     if ( !pMinFrm || nCurrentDist < nMinDist )
                     {
                         pMinFrm = pTmpFrm;
