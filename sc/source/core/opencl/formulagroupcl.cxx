@@ -3732,18 +3732,18 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT sc::FormulaGroupInterpreter* SAL_CALL
+sc::FormulaGroupInterpreter*
 createFormulaGroupOpenCLInterpreter()
 {
     return new sc::opencl::FormulaGroupInterpreterOpenCL();
 }
 
-SAL_DLLPUBLIC_EXPORT size_t getOpenCLPlatformCount()
+size_t getOpenCLPlatformCount()
 {
     return sc::opencl::getOpenCLPlatformCount();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(
+void fillOpenCLInfo(
     sc::OpenCLPlatformInfo* pInfos, size_t nInfoSize )
 {
     const std::vector<sc::OpenCLPlatformInfo>& rPlatforms =
@@ -3753,14 +3753,14 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL fillOpenCLInfo(
         pInfos[i] = rPlatforms[i];
 }
 
-SAL_DLLPUBLIC_EXPORT bool SAL_CALL switchOpenCLDevice(
+bool switchOpenCLDevice(
     const OUString* pDeviceId, bool bAutoSelect,
     bool bForceEvaluation )
 {
     return sc::opencl::switchOpenCLDevice(pDeviceId, bAutoSelect, bForceEvaluation);
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL getOpenCLDeviceInfo( size_t* pDeviceId, size_t* pPlatformId )
+void getOpenCLDeviceInfo( size_t* pDeviceId, size_t* pPlatformId )
 {
     sc::opencl::getOpenCLDeviceInfo(*pDeviceId, *pPlatformId);
 }

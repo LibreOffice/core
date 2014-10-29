@@ -655,6 +655,39 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/xmlsource/xmlsourcedlg \
 ))
 
+ifneq (,$(ENABLE_OPENCL))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/opencl/formulagroupcl \
+    sc/source/core/opencl/openclwrapper \
+    sc/source/core/opencl/opencl_device \
+    sc/source/core/opencl/opbase \
+    sc/source/core/opencl/op_financial \
+    sc/source/core/opencl/op_database \
+    sc/source/core/opencl/op_math \
+    sc/source/core/opencl/op_addin \
+    sc/source/core/opencl/op_statistical \
+    sc/source/core/opencl/op_array \
+    sc/source/core/opencl/op_logical \
+    sc/source/core/opencl/op_spreadsheet \
+    sc/source/core/opencl/clcc/clew \
+))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,sc,\
+    -ldl \
+	-lrt \
+))
+endif
+
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_libs,sc,\
+    -framework OpenCL \
+))
+endif
+
+endif
+
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
 
 $(eval $(call gb_SdiTarget_set_include,sc/sdi/scslots,\

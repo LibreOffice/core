@@ -30,7 +30,6 @@
 #include <cstdio>
 
 #if HAVE_FEATURE_OPENCL
-#ifdef DISABLE_DYNLOADING
 
 extern "C" size_t getOpenCLPlatformCount(void);
 extern "C" void fillOpenCLInfo(sc::OpenCLPlatformInfo*, size_t);
@@ -38,7 +37,6 @@ extern "C" bool switchOpenCLDevice(const OUString*, bool, bool);
 extern "C" sc::FormulaGroupInterpreter* createFormulaGroupOpenCLInterpreter();
 extern "C" void getOpenCLDeviceInfo(size_t*, size_t*);
 
-#endif
 #endif
 
 namespace sc {
@@ -511,52 +509,7 @@ public:
 
 #endif
 
-#if HAVE_FEATURE_OPENCL
-#ifndef DISABLE_DYNLOADING
-
-class FormulaGroupInterpreterOpenCLMissing : public FormulaGroupInterpreter
-{
-public:
-    FormulaGroupInterpreterOpenCLMissing() : FormulaGroupInterpreter() {}
-    virtual ~FormulaGroupInterpreterOpenCLMissing() {}
-    virtual ScMatrixRef inverseMatrix(const ScMatrix&) SAL_OVERRIDE { return ScMatrixRef(); }
-    virtual CompiledFormula* createCompiledFormula(ScDocument&, const ScAddress&, ScFormulaCellGroup&, ScTokenArray&) SAL_OVERRIDE { return NULL; }
-    virtual bool interpret(ScDocument&, const ScAddress&, ScFormulaCellGroupRef&,  ScTokenArray&) SAL_OVERRIDE { return false; }
-};
-
-static void SAL_CALL thisModule() {}
-
-typedef FormulaGroupInterpreter* (*__createFormulaGroupOpenCLInterpreter)(void);
-typedef size_t (*__getOpenCLPlatformCount)(void);
-typedef void (*__fillOpenCLInfo)(OpenCLPlatformInfo*, size_t);
-typedef bool (*__switchOpenCLDevice)(const OUString*, bool, bool);
-typedef void (*__getOpenCLDeviceInfo)(size_t*, size_t*);
-
-#endif
-#endif
-
 FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
-
-#if HAVE_FEATURE_OPENCL
-#ifndef DISABLE_DYNLOADING
-
-osl::Module* getOpenCLModule()
-{
-    static osl::Module aModule;
-    if (aModule.is())
-        // Already loaded.
-        return &aModule;
-
-    OUString aLibName(SVLIBRARY("scopencl"));
-    bool bLoaded = aModule.loadRelative(&thisModule, aLibName);
-    if (!bLoaded)
-        bLoaded = aModule.load(aLibName);
-
-    return bLoaded ? &aModule : NULL;
-}
-
-#endif
-#endif
 
 /// load and/or configure the correct formula group interpreter
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
@@ -590,35 +543,13 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 #if !HAVE_FEATURE_OPENCL
     (void) rPlatforms;
 #else
-#ifndef DISABLE_DYNLOADING
-    osl::Module* pModule = getOpenCLModule();
-    if (!pModule)
-        return;
-
-    oslGenericFunction fn = pModule->getFunctionSymbol("getOpenCLPlatformCount");
-    if (!fn)
-        return;
-
-    size_t nPlatforms = reinterpret_cast<__getOpenCLPlatformCount>(fn)();
-    if (!nPlatforms)
-        return;
-
-    fn = pModule->getFunctionSymbol("fillOpenCLInfo");
-    if (!fn)
-        return;
-
-    std::vector<OpenCLPlatformInfo> aPlatforms(nPlatforms);
-    reinterpret_cast<__fillOpenCLInfo>(fn)(&aPlatforms[0], aPlatforms.size());
-    rPlatforms.swap(aPlatforms);
-#else
-    size_t nPlatforms = getOpenCLPlatformCount();
+    size_t nPlatforms = ::getOpenCLPlatformCount();
     if (!nPlatforms)
         return;
 
     std::vector<OpenCLPlatformInfo> aPlatforms(nPlatforms);
     ::fillOpenCLInfo(&aPlatforms[0], aPlatforms.size());
     rPlatforms.swap(aPlatforms);
-#endif
 #endif
 }
 
@@ -640,23 +571,9 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         return true;
     }
 #if HAVE_FEATURE_OPENCL
-#ifndef DISABLE_DYNLOADING
-    osl::Module* pModule = getOpenCLModule();
-    if (!pModule)
-        return false;
-
-    oslGenericFunction fn = pModule->getFunctionSymbol("switchOpenCLDevice");
-    if (!fn)
-        return false;
-
-    bool bSuccess = reinterpret_cast<__switchOpenCLDevice>(fn)(&rDeviceId, bAutoSelect, bForceEvaluation);
+    bool bSuccess = ::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
-#else
-    bool bSuccess = switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
-    if(!bSuccess)
-        return false;
-#endif
 #else
     (void) bAutoSelect;
 #endif
@@ -667,24 +584,8 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
 #if HAVE_FEATURE_OPENCL
     if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
     {
-#ifdef DISABLE_DYNLOADING
-        msInstance = createFormulaGroupOpenCLInterpreter();
+        msInstance = ::createFormulaGroupOpenCLInterpreter();
         return msInstance != NULL;
-#else
-        // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
-        bSuccess = false;
-        fn = pModule->getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
-        if (fn)
-        {
-            msInstance = reinterpret_cast<__createFormulaGroupOpenCLInterpreter>(fn)();
-            bSuccess = msInstance != NULL;
-        }
-
-        if (!msInstance)
-            msInstance = new sc::FormulaGroupInterpreterOpenCLMissing();
-
-        return bSuccess;
-#endif
     }
 #else
     (void) bForceEvaluation;
@@ -705,21 +606,9 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     size_t aDeviceId = static_cast<size_t>(-1);
     size_t aPlatformId = static_cast<size_t>(-1);
 
-#ifndef DISABLE_DYNLOADING
-    osl::Module* pModule = getOpenCLModule();
-    if (!pModule)
-        return;
-
-    oslGenericFunction fn = pModule->getFunctionSymbol("getOpenCLDeviceInfo");
-    if (!fn)
-        return;
-
-    reinterpret_cast<__getOpenCLDeviceInfo>(fn)(&aDeviceId, &aPlatformId);
-#else
-     getOpenCLDeviceInfo(&aDeviceId, &aPlatformId);
-#endif
-     rDeviceId = aDeviceId;
-     rPlatformId = aPlatformId;
+    ::getOpenCLDeviceInfo(&aDeviceId, &aPlatformId);
+    rDeviceId = aDeviceId;
+    rPlatformId = aPlatformId;
 #endif
 }
 

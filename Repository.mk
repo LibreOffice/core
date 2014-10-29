@@ -226,7 +226,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	scfilt \
 	scui \
 	wpftcalc \
-	$(if $(ENABLE_OPENCL),scopencl) \
 	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
 ))

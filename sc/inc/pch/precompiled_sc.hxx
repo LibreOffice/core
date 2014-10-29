@@ -57,6 +57,7 @@
 #include <boost/unordered_set.hpp>
 #include <cassert>
 #include <climits>
+#include <cmath>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -430,6 +431,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <config_features.h>
+#include <config_folders.h>
 #include <config_mpl.h>
 #include <config_options.h>
 #include <config_orcus.h>
@@ -561,6 +563,7 @@
 #include <rsc/rscsfx.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/crc.h>
+#include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
@@ -627,6 +630,7 @@
 #include <sot/filelist.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

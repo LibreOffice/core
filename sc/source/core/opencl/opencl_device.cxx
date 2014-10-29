@@ -8,7 +8,8 @@
  */
 
 #ifdef _WIN32
-#include <windows.h>
+#include <prewin.h>
+#include <postwin.h>
 #elif defined __MACH__
 #include <mach/mach_time.h>
 #else

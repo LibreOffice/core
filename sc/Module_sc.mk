@@ -22,12 +22,6 @@ $(eval $(call gb_Module_add_l10n_targets,sc,\
 	UIConfig_scalc \
 ))
 
-ifneq (,$(ENABLE_OPENCL))
-$(eval $(call gb_Module_add_targets,sc,\
-	Library_scopencl \
-))
-endif
-
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,sc,\
 	Library_scqahelper \
