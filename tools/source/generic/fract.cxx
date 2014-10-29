@@ -41,15 +41,20 @@ Fraction::Fraction( long nNum, long nDen )
 {
     if ( nDen == 0 ) {
         valid = false;
-        SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
+        divisionByZero = true;
+        value.assign( nNum, 1 );
+        SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created - division by zero" );
         return;
     }
-    value.assign( nNum, nDen);
+
     valid = true;
+    divisionByZero = false;
+    value.assign( nNum, nDen);
 }
 
 Fraction::Fraction( double dVal )
 {
+    divisionByZero = false;
     try {
         value = rational_FromDouble<sal_Int64>( dVal );
         if ( HasOverflowValue() )
@@ -85,8 +90,10 @@ Fraction::operator double() const
 // which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
+    if ( !rVal.valid ) {
         valid = false;
+        divisionByZero = false;
+    }
     if ( !valid ) {
         SAL_WARN( "tools.fraction", "'operator +=' with invalid fraction" );
         return *this;
@@ -104,8 +111,10 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
+    if ( !rVal.valid ) {
         valid = false;
+        divisionByZero = false;
+    }
     if ( !valid ) {
         SAL_WARN( "tools.fraction", "'operator -=' with invalid fraction" );
         return *this;
@@ -123,8 +132,10 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
 
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
+    if ( !rVal.valid ) {
         valid = false;
+        divisionByZero = false;
+    }
     if ( !valid ) {
         SAL_WARN( "tools.fraction", "'operator *=' with invalid fraction" );
         return *this;
@@ -142,8 +153,10 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
 
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
+    if ( !rVal.valid ) {
         valid = false;
+        divisionByZero = false;
+    }
     if ( !valid ) {
         SAL_WARN( "tools.fraction", "'operator /=' with invalid fraction" );
         return *this;
@@ -224,19 +237,30 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
     sal_Int32 num(0), den(0);
     rIStream.ReadInt32( num );
     rIStream.ReadInt32( den );
-    if ( den <= 0 ) {
+    if ( den < 0 ) {
         SAL_WARN( "tools.fraction", "'ReadFraction()' read an invalid fraction" );
         rFract.valid = false;
+        rFract.divisionByZero = false;
+    } else if (den == 0) {
+        SAL_WARN( "tools.fraction", "'ReadFraction()' read an invalid fraction - division by zero" );
+        rFract.valid = false;
+        rFract.divisionByZero = true;
+        rFract.value.assign( num, 1 );
     } else {
-        rFract.value.assign( num, den );
         rFract.valid = true;
+        rFract.divisionByZero = false;
+        rFract.value.assign( num, den );
     }
     return rIStream;
 }
 
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
-    if ( !rFract.valid ) {
+    if ( rFract.divisionByZero ) {
+        SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction - division by zero" );
+        rOStream.WriteInt32( rFract.value.numerator() );
+        rOStream.WriteInt32( 0 );
+    } else if ( !rFract.valid ) {
         SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction" );
         rOStream.WriteInt32( 0 );
         rOStream.WriteInt32( -1 );
