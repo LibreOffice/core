@@ -122,6 +122,8 @@
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
 #include <reffld.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include <PostItMgr.hxx>
 
@@ -1362,13 +1364,20 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     documentStats = rShell.GetDoc()->getIDocumentStatistics().GetUpdatedDocStat( true /* complete-async */, false /* don't update fields */ );
                 }
 
-                OUString wordCount(SW_RES(selectionStats.nWord ?
-                                          STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION));
-                wordCount = wordCount.replaceFirst("%1",
-                                OUString::number(selectionStats.nWord ? selectionStats.nWord : documentStats.nWord));
-                wordCount = wordCount.replaceFirst("%2",
-                                OUString::number(selectionStats.nChar ? selectionStats.nChar : documentStats.nChar));
-                rSet.Put(SfxStringItem(FN_STAT_WORDCOUNT, wordCount));
+                SvNumberFormatter* pFormatter = rShell.GetNumberFormatter();
+                sal_uLong nFormat = pFormatter->GetFormatIndex( NF_NUMBER_1000INT, Application::GetSettings().GetLanguageTag().getLanguageType() );
+                const SvNumberformat* pFmt = pFormatter->GetEntry( nFormat );
+                ::Color *pDummy;
+                OUString aWordString, aCharString;
+                sal_uLong nWord = selectionStats.nWord ? selectionStats.nWord : documentStats.nWord;
+                sal_uLong nChar = selectionStats.nChar ? selectionStats.nChar : documentStats.nChar;
+                ((SvNumberformat*)pFmt)->GetOutputString( (double)nWord, aWordString, &pDummy );
+                ((SvNumberformat*)pFmt)->GetOutputString( (double)nChar, aCharString, &pDummy );
+
+                OUString aWordCount( SW_RES( selectionStats.nWord ? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION ) );
+                aWordCount = aWordCount.replaceFirst( "%1", aWordString );
+                aWordCount = aWordCount.replaceFirst( "%2", aCharString );
+                rSet.Put( SfxStringItem( FN_STAT_WORDCOUNT, aWordCount ) );
 
                 SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
                 if (pWrdCnt)
