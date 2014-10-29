@@ -722,7 +722,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     aTextSize2.Width()++; aTextSize2.Height()++; // because of the Rect-Ctor's odd behavior
     rRect=Rectangle(aTextPos,aTextSize2);
     rRect.Justify();
-    ((SdrMeasureObj*)this)->aRect=rRect;
+    ((SdrMeasureObj*)this)->maRect=rRect;
 
     if (aMPol.nTextWink!=aGeo.nDrehWink) {
         ((SdrMeasureObj*)this)->aGeo.nDrehWink=aMPol.nTextWink;

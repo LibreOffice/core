@@ -862,10 +862,10 @@ basegfx::B2DPolyPolygon SdrGrafObj::TakeXorPoly() const
         // take grown rectangle
         const sal_Int32 nHalfLineWidth(ImpGetLineWdt() / 2);
         const Rectangle aGrownRect(
-            aRect.Left() - nHalfLineWidth,
-            aRect.Top() - nHalfLineWidth,
-            aRect.Right() + nHalfLineWidth,
-            aRect.Bottom() + nHalfLineWidth);
+            maRect.Left() - nHalfLineWidth,
+            maRect.Top() - nHalfLineWidth,
+            maRect.Right() + nHalfLineWidth,
+            maRect.Bottom() + nHalfLineWidth);
 
         XPolygon aXPoly(ImpCalcXPoly(aGrownRect, GetEckenradius()));
         aRetval.append(aXPoly.getB2DPolygon());
@@ -1075,7 +1075,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
         case GRAPHIC_GDIMETAFILE:
         {
             // Sort into group and return ONLY those objects that can be created from the MetaFile.
-            ImpSdrGDIMetaFileImport aFilter(*GetModel(), GetLayer(), aRect);
+            ImpSdrGDIMetaFileImport aFilter(*GetModel(), GetLayer(), maRect);
             SdrObjGroup* pGrp = new SdrObjGroup();
 
             if(aFilter.DoImport(aMtf, *pGrp->GetSubList(), 0))
@@ -1087,13 +1087,13 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
                     if(aGeoStat.nShearWink)
                     {
                         aGeoStat.RecalcTan();
-                        pGrp->NbcShear(aRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+                        pGrp->NbcShear(maRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
                     }
 
                     if(aGeoStat.nDrehWink)
                     {
                         aGeoStat.RecalcSinCos();
-                        pGrp->NbcRotate(aRect.TopLeft(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+                        pGrp->NbcRotate(maRect.TopLeft(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
                     }
                 }
 
@@ -1265,7 +1265,7 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
         }
 
         if( bShrinkOnly )
-            aPos = aRect.TopLeft();
+            aPos = maRect.TopLeft();
 
         aPos.X() -= aSize.Width() / 2;
         aPos.Y() -= aSize.Height() / 2;

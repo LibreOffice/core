@@ -175,7 +175,7 @@ protected:
     // Das aRect ist gleichzeig auch das Rect vom RectObj und CircObj.
     // Bei bTextFrame=sal_True wird der Text in dieses Rect hineinformatiert.
     // Bei bTextFrame=sal_False wird der Text am Mittelpunkt des Rect zentriert.
-    Rectangle                   aRect;
+    Rectangle maRect;
 
     // Der GeoStat enthaelt den Drehwinkel und einen Shearwinkel
     GeoStat                     aGeo;
@@ -398,7 +398,7 @@ public:
     long GetMaxTextFrameWidth() const;
 
     SdrFitToSizeType GetFitToSize() const;
-    const Rectangle &GetGeoRect() const { return aRect; }
+    const Rectangle &GetGeoRect() const;
 
     // Feststellen, ob TextFontwork
     virtual bool IsFontwork() const;

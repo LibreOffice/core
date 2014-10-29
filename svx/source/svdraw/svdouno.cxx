@@ -329,7 +329,7 @@ void SdrUnoObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact,
         // small correctures
         if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000)
         {
-            aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
+            maRect.Move(maRect.Left()-maRect.Right(),maRect.Top()-maRect.Bottom());
         }
 
         aGeo.nDrehWink  = 0;

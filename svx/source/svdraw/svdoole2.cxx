@@ -1781,8 +1781,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 // objects' visual area. The scaling will not change, but it might exist already and must
                 // be used in calculations
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                Size aVisSize( boost::rational_cast<long>(aRect.GetWidth() / aScaleWidth),
-                                boost::rational_cast<long>(aRect.GetHeight() / aScaleHeight) );
+                Size aVisSize( boost::rational_cast<long>(maRect.GetWidth() / aScaleWidth),
+                                boost::rational_cast<long>(maRect.GetHeight() / aScaleHeight) );
 
                 aVisSize = OutputDevice::LogicToLogic( aVisSize, pModel->GetScaleUnit(), aMapUnit);
                 awt::Size aSz;
@@ -1805,14 +1805,14 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                     // server changed VisArea to its liking and the VisArea is different than the suggested one
                     // store the new value as given by the object
                     MapUnit aNewMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                    aRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aNewMapUnit, pModel->GetScaleUnit()));
+                    maRect.SetSize(OutputDevice::LogicToLogic( aAcceptedVisArea.GetSize(), aNewMapUnit, pModel->GetScaleUnit()));
                 }
 
                 // make the new object area known to the client
                 // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
                 // WHY this -> OSL_ASSERT( pClient );
                 if( pClient )
-                    pClient->SetObjArea(aRect);
+                    pClient->SetObjArea(maRect);
 
                 // we need a new replacement image as the object has resized itself
 
@@ -1833,7 +1833,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 {
                     if ( pClient )
                     {
-                        Rectangle aScaleRect(aRect.TopLeft(), aObjAreaSize);
+                        Rectangle aScaleRect(maRect.TopLeft(), aObjAreaSize);
                         pClient->SetObjAreaAndScale( aScaleRect, aScaleWidth, aScaleHeight);
                     }
                     else
@@ -1852,8 +1852,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             if( xVisualObject.is() )
             {
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                Point aTL( aRect.TopLeft() );
-                Point aBR( aRect.BottomRight() );
+                Point aTL( maRect.TopLeft() );
+                Point aBR( maRect.BottomRight() );
                 Point aTL2( OutputDevice::LogicToLogic( aTL, pModel->GetScaleUnit(), aMapUnit) );
                 Point aBR2( OutputDevice::LogicToLogic( aBR, pModel->GetScaleUnit(), aMapUnit) );
                 Rectangle aNewRect( aTL2, aBR2 );
@@ -2221,7 +2221,7 @@ bool SdrOle2Obj::CalculateNewScaling( boost::rational<long>& aScaleWidth, boost:
     MapMode aMapMode( pModel->GetScaleUnit() );
     aObjAreaSize = mpImpl->mxObjRef.GetSize( &aMapMode );
 
-    Size aSize = aRect.GetSize();
+    Size aSize = maRect.GetSize();
     aScaleWidth = boost::rational<long>(aSize.Width(),  aObjAreaSize.Width() );
     aScaleHeight = boost::rational<long>(aSize.Height(), aObjAreaSize.Height() );
 
