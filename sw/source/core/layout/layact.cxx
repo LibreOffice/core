@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <time.h>
+#include <ctime>
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "viewimp.hxx"
@@ -99,16 +99,11 @@ static void BreakPoint()
         } \
     }
 
-inline sal_uLong Ticks()
-{
-    return 1000 * clock() / CLOCKS_PER_SEC;
-}
-
 void SwLayAction::CheckWaitCrsr()
 {
     RESCHEDULE
     if ( !IsWait() && IsWaitAllowed() && IsPaint() &&
-         ((Ticks() - GetStartTicks()) >= CLOCKS_PER_SEC/2) )
+         ((std::clock() - GetStartTicks()) * 1000 / CLOCKS_PER_SEC >= CLOCKS_PER_SEC/2) )
     {
         pWait = new SwWait( *pRoot->GetFmt()->GetDoc()->GetDocShell(), true );
     }
@@ -288,7 +283,7 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     pOptTab( 0 ),
     pWait( 0 ),
     nPreInvaPage( USHRT_MAX ),
-    nStartTicks( Ticks() ),
+    nStartTicks( std::clock() ),
     nInputType( 0 ),
     nEndPage( USHRT_MAX ),
     nCheckPageNum( USHRT_MAX )
@@ -313,7 +308,7 @@ SwLayAction::~SwLayAction()
 void SwLayAction::Reset()
 {
     pOptTab = 0;
-    nStartTicks = Ticks();
+    nStartTicks = std::clock();
     nInputType = 0;
     nEndPage = nPreInvaPage = nCheckPageNum = USHRT_MAX;
     bPaint = bComplete = bWaitAllowed = bCheckPages = true;

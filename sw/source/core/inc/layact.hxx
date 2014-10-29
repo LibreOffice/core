@@ -18,6 +18,11 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_LAYACT_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYACT_HXX
+
+#include <sal/config.h>
+
+#include <ctime>
+
 #include "swtypes.hxx"
 #include "swrect.hxx"
 
@@ -62,7 +67,7 @@ class SwLayAction
     // The InternalAction can then take the appropriate steps.
     sal_uInt16 nPreInvaPage;
 
-    sal_uLong nStartTicks;      // The Action's starting time; if too much time passes the
+    std::clock_t nStartTicks;      // The Action's starting time; if too much time passes the
                                 // WaitCrsr can be enabled via CheckWaitCrsr()
 
     sal_uInt16 nInputType;      // Which input should terminate processing
@@ -111,7 +116,7 @@ class SwLayAction
     bool RemoveEmptyBrowserPages();
 
     inline void CheckIdleEnd();
-    inline sal_uLong GetStartTicks() { return nStartTicks; }
+    inline std::clock_t GetStartTicks() { return nStartTicks; }
 
 public:
     SwLayAction( SwRootFrm *pRt, SwViewImp *pImp );
