@@ -459,6 +459,10 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
 
 Size SwGrfNode::GetTwipSize() const
 {
+    if( !nGrfSize.Width() && !nGrfSize.Height() )
+    {
+        const_cast<SwGrfNode*>(this)->SwapIn(true);
+    }
     return nGrfSize;
 }
 

@@ -415,27 +415,6 @@ namespace sw
             virtual void Write(Writer &rWrt) = 0;
         };
 
-        /** Given a SwNoTxtNode (ole/graphic) get original size
-
-            Get the uncropped and unscaled size of the underlying graphic or
-            ole object associated with a given SwNoTxtNode.
-
-            This function will swap in the graphic if it is swapped out from
-            the graphic or object cache, but will swap it out if that was the
-            case, i.e.  rNd is logically unchanged before and after
-            GetSwappedInSize, though not physically const
-
-            @param rNd
-                the SwNoTxtNode whose objects original size we want
-
-            @return
-                the uncropped unscaled size of the SwNoTxtNode
-
-            @author
-                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        Size GetSwappedInSize(const SwNoTxtNode& rNd);
-
         struct CharRunEntry
         {
             sal_Int32 mnEndPos;

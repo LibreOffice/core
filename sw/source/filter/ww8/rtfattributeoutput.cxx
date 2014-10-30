@@ -3560,7 +3560,7 @@ static OString ExportPICT(const SwFlyFrmFmt* pFlyFrmFmt, const Size& rOrig, cons
 void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& rOLENode, const Size& rSize)
 {
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
-    Size aSize(sw::util::GetSwappedInSize(rOLENode));
+    Size aSize(rOLENode.GetTwipSize());
     Size aRendered(aSize);
     aRendered.Width() = rSize.Width();
     aRendered.Height() = rSize.Height();
@@ -3697,7 +3697,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     const SwCropGrf& rCr = (const SwCropGrf&)pGrfNode->GetAttr(RES_GRFATR_CROPGRF);
 
     //Get original size in twips
-    Size aSize(sw::util::GetSwappedInSize(*pGrfNode));
+    Size aSize(pGrfNode->GetTwipSize());
     Size aRendered(aSize);
 
     const SwFmtFrmSize& rS = pFlyFrmFmt->GetFrmSize();

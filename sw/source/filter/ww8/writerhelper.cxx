@@ -205,7 +205,6 @@ namespace sw
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     const SwNode &rNd = aIdx.GetNode();
-                    using sw::util::GetSwappedInSize;
                     // #i43447# - determine layout size
                     {
                         SwRect aLayRect( rFmt.FindLayoutRect() );
@@ -222,11 +221,11 @@ namespace sw
                     {
                         case ND_GRFNODE:
                             meWriterType = eGraphic;
-                            maSize = GetSwappedInSize(*rNd.GetNoTxtNode());
+                            maSize = rNd.GetNoTxtNode()->GetTwipSize();
                             break;
                         case ND_OLENODE:
                             meWriterType = eOle;
-                            maSize = GetSwappedInSize(*rNd.GetNoTxtNode());
+                            maSize = rNd.GetNoTxtNode()->GetTwipSize();
                             break;
                         default:
                             meWriterType = eTxtBox;
@@ -690,23 +689,6 @@ namespace sw
 
             aPoly.Move(-nMove, 0);
             return aPoly;
-        }
-
-        Size GetSwappedInSize(const SwNoTxtNode& rNd)
-        {
-            Size aGrTwipSz(rNd.GetTwipSize());
-            if ((!aGrTwipSz.Width() || !aGrTwipSz.Height()))
-            {
-                SwGrfNode *pGrfNode = const_cast<SwGrfNode*>(rNd.GetGrfNode());
-                if (pGrfNode && (GRAPHIC_NONE != pGrfNode->GetGrf().GetType()))
-                {
-                    pGrfNode->SwapIn();
-                    aGrTwipSz = pGrfNode->GetTwipSize();
-                }
-            }
-
-            OSL_ENSURE(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
-            return aGrTwipSz;
         }
 
         void RedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
