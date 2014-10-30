@@ -34,6 +34,8 @@
 #include "xeescher.hxx"
 #include "xeextlst.hxx"
 #include "tokenarray.hxx"
+#include <thread>
+#include <comphelper/threadpool.hxx>
 
 using namespace ::oox;
 
@@ -1777,7 +1779,7 @@ void XclExpRow::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
     InsertCell( xCell, maCellList.GetSize(), bIsMergedBase );
 }
 
-void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
+void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
 {
     size_t nPos, nSize;
 
@@ -1911,10 +1913,10 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
             ++nPos;
     }
 
-    // progress bar includes disabled rows
-    GetProgressBar().Progress();
+    // progress bar includes disabled rows; only update it in the lead thread.
+    if (bProgress)
+        GetProgressBar().Progress();
 }
-
 sal_uInt16 XclExpRow::GetFirstUsedXclCol() const
 {
     return maCellList.IsEmpty() ? 0 : maCellList.GetFirstRecord()->GetXclCol();
@@ -2038,15 +2040,58 @@ void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
         GetOrCreateRow(  ::std::max ( nFirstFreeScRow - 1, GetMaxPos().Row() ), true );
 }
 
+class RowFinalizeTask : public comphelper::ThreadTask
+{
+    bool mbProgress;
+    const ScfUInt16Vec& mrColXFIndexes;
+    std::vector< XclExpRow * > maRows;
+public:
+             RowFinalizeTask( const ScfUInt16Vec& rColXFIndexes,
+                              bool bProgress ) :
+                 mbProgress( bProgress ),
+                 mrColXFIndexes( rColXFIndexes ) {}
+    virtual ~RowFinalizeTask() {}
+    void     push_back( XclExpRow *pRow ) { maRows.push_back( pRow ); }
+    virtual void doWork()
+    {
+        for (size_t i = 0; i < maRows.size(); i++ )
+            maRows[ i ]->Finalize( mrColXFIndexes, mbProgress );
+    }
+};
+
 void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes )
 {
     // *** Finalize all rows *** ----------------------------------------------
 
     GetProgressBar().ActivateFinalRowsSegment();
 
-    RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
-    for (itr = itrBeg; itr != itrEnd; ++itr)
-        itr->second->Finalize(rColXFIndexes);
+    // This is staggeringly slow, and each element operates only
+    // on its own data.
+    size_t nRows = maRowMap.size();
+    size_t nThreads = std::max( std::thread::hardware_concurrency(), 1U );
+    if ( nThreads == 1 || nRows < 128 )
+    {
+        RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
+        for (itr = itrBeg; itr != itrEnd; ++itr)
+            itr->second->Finalize( rColXFIndexes, true );
+    }
+    else
+    {
+        comphelper::ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
+        std::vector<RowFinalizeTask*> pTasks(nThreads, NULL);
+        for ( size_t i = 0; i < nThreads; i++ )
+            pTasks[ i ] = new RowFinalizeTask( rColXFIndexes, i == 0 );
+
+        RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
+        size_t nIdx = 0;
+        for ( itr = itrBeg; itr != itrEnd; ++itr, ++nIdx )
+            pTasks[ nIdx % nThreads ]->push_back( itr->second.get() );
+
+        for ( size_t i = 0; i < nThreads; i++ )
+            rPool.pushTask( pTasks[ i ] );
+
+        rPool.waitUntilEmpty();
+    }
 
     // *** Default row format *** ---------------------------------------------
 
@@ -2059,6 +2104,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     XclExpRow* pPrev = NULL;
     typedef std::vector< XclExpRow* > XclRepeatedRows;
     XclRepeatedRows aRepeated;
+    RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         const RowRef& rRow = itr->second;
