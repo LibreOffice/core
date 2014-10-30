@@ -20,7 +20,7 @@
 #include "sal/config.h"
 
 #include <osl/diagnose.h>
-#include <osl/module.h>
+#include <osl/module.hxx>
 
 #include <uno/environment.hxx>
 #include <uno/lbnames.h>
@@ -65,13 +65,14 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
 
     fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
 #else
-    oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-    if (lib)
+    osl::Module lib(aLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
+    if (lib.is())
     {
+        lib.release();
+
         // ========================= LATEST VERSION =========================
         OUString aGetEnvName( COMPONENT_GETENV );
-        oslGenericFunction pSym =
-            osl_getFunctionSymbol( lib, aGetEnvName.pData );
+        oslGenericFunction pSym = lib.getFunctionSymbol(aGetEnvName);
         if (pSym)
         {
             Environment java_env, loader_env;
@@ -93,7 +94,7 @@ jboolean Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
             OUString aWriteInfoName( COMPONENT_WRITEINFO );
-            pSym = osl_getFunctionSymbol( lib, aWriteInfoName.pData );
+            pSym = lib.getFunctionSymbol(aWriteInfoName);
             if (pSym)
             {
                 if (loader_env.is() && java_env.is())
@@ -157,13 +158,14 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     jobject joSLL_cpp = 0;
 
 #ifndef DISABLE_DYNLOADING
-    oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-    if (lib)
+    osl::Module lib(aLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
+    if (lib.is())
     {
+        lib.release();
+
         // ========================= LATEST VERSION =========================
         OUString aGetEnvName( COMPONENT_GETENV );
-        oslGenericFunction pSym =
-            osl_getFunctionSymbol( lib, aGetEnvName.pData );
+        oslGenericFunction pSym = lib.getFunctionSymbol(aGetEnvName);
         if (pSym)
         {
             Environment java_env, loader_env;
@@ -186,7 +188,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
                 (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
             OUString aGetFactoryName( COMPONENT_GETFACTORY );
-            pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
+            pSym = lib.getFunctionSymbol(aGetFactoryName);
             if (pSym)
             {
                 if (loader_env.is() && java_env.is())
