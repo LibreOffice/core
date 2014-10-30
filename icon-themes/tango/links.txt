@@ -294,7 +294,7 @@ cmd/lc_fontcolor.png cmd/lc_color.png
 cmd/sc_fontcolor.png cmd/sc_color.png
 cmd/lc_circle.png cmd/lc_basicshapes.circle.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
-cmd/lc_square.png cmd/lc_basicshapes.square.png
+cmd/lc_square.png cmd/lc_basicshapes.quadrat.png
 cmd/lc_rect.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_square_rounded.png cmd/lc_basicshapes.round-quadrat.png
 cmd/lc_rect_rounded.png cmd/lc_basicshapes.round-rectangle.png
