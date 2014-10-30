@@ -214,7 +214,7 @@ namespace
                 sw::mark::IMark* pBkmk = const_cast<sw::mark::IMark*>(pIndex->GetMark());
                 if (!pBkmk)
                     continue;
-                IDocumentMarkAccess::MarkType eType = pMarkAccess->GetType(*pBkmk);
+                IDocumentMarkAccess::MarkType eType = IDocumentMarkAccess::GetType(*pBkmk);
                 // These are the types stored in the container otherwise accessible via getBookmarks*()
                 if (eType != IDocumentMarkAccess::BOOKMARK && eType != IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK && eType != IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK)
                     continue;
