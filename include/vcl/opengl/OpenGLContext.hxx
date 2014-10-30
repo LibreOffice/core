@@ -22,8 +22,11 @@
 #  include "GL/glxew.h"
 #  include <postx.h>
 #elif defined( _WIN32 )
+#ifndef INCLUDED_PRE_POST_WIN_H
+#define INCLUDED_PRE_POST_WIN_H
 #  include "prewin.h"
 #  include "postwin.h"
+#endif
 #endif
 
 #if defined( _WIN32 )
