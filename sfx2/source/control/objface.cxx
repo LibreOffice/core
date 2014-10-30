@@ -188,7 +188,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
             }
             else if ( 0 == pIter->GetNextSlot() )
             {
-                // Slots refering in circle to the next with the same
+                // Slots referring in circle to the next with the same
                 // Status method.
                 SfxSlot *pLastSlot = pIter;
                 for ( sal_uInt16 n = nIter; n < Count(); ++n )

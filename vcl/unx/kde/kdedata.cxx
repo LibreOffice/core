@@ -87,7 +87,7 @@ KDEXLib::~KDEXLib()
 {
     // on 64 bit linux using libXRandr.so.2 will crash in
     // XCloseDisplay when freeing extension data
-    // no known work around, therefor currently leak. Hopefully
+    // no known work around, therefore currently leak. Hopefully
     // this does not make problems since we're shutting down anyway
     // should we ever get a real kde plugin that uses the KDE event loop
     // we should use kde's method to signal screen changes similar

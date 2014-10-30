@@ -669,7 +669,7 @@ SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
 sal_uInt16 SwTOXAuthority::GetLevel() const
 {
     OUString sText(((SwAuthorityField*)m_rField.GetField())->GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
-    //#i18655# the level '0' is the heading level therefor the values are incremented here
+    //#i18655# the level '0' is the heading level therefore the values are incremented here
     sal_uInt16 nRet = 1;
     if( pTOXIntl->IsNumeric( sText ) )
     {

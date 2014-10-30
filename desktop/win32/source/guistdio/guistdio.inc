@@ -194,7 +194,7 @@ DWORD WINAPI InputThread( LPVOID pParam )
         //there could be more input coming. But if we read from the console
         //and the console input fits exactly in the buffer, then the next
         //ReadFile would block until the users presses return, etc.
-        //Therefor we check if last character is a new line.
+        //Therefore we check if last character is a new line.
         //To test this, set dwBufferSize to 4 and enter "no". This should produce
         //4 bytes with most code pages.
         if ( readAll == lastBufSize

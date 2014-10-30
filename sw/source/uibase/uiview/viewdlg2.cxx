@@ -184,7 +184,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         rSh.EnterSelFrmMode();
     }
 
-    // rember category
+    // remember category
     if (eType & nsSelectionType::SEL_GRF)
         SetOldGrfCat(rName);
     else if( eType & nsSelectionType::SEL_TBL)

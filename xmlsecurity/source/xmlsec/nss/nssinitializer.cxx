@@ -238,7 +238,7 @@ OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponen
 //ATTENTION: DO NOT call this function directly instead use initNSS
 //return true - whole initialization was successful
 //param out_nss_init = true: at least the NSS initialization (NSS_InitReadWrite
-//was successful and therefor NSS_Shutdown should be called when terminating.
+//was successful and therefore NSS_Shutdown should be called when terminating.
 bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContext > &rxContext, bool & out_nss_init )
 {
     bool return_value = true;

@@ -502,7 +502,7 @@ public:
      * This method returns the total count of objects in the logical data array
      * of the supplier. The implementation of this method may be very
      * "expensive", because it can be necessary to obtain all data in order
-     * to determine the count. Therefor the ResultSet implementation calls
+     * to determine the count. Therefore the ResultSet implementation calls
      * it very seldom.
      *
      * @return the total count of objects; will always be non-negative.

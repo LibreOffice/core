@@ -179,7 +179,7 @@ namespace dbaui
             // the catalog entry
             SvTreeListEntry* pCatalog = m_pTablesList->GetEntryPosByName(sCatalog, pRootEntry);
             if (!(pCatalog || sCatalog.isEmpty()))
-                // the table (resp. its catalog) refered in this filter entry does not exist anymore
+                // the table (resp. its catalog) referred in this filter entry does not exist anymore
                 continue;
 
             if (bAllSchemas && pCatalog)
@@ -191,7 +191,7 @@ namespace dbaui
             // the schema entry
             SvTreeListEntry* pSchema = m_pTablesList->GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
             if (!(pSchema || sSchema.isEmpty()))
-                // the table (resp. its schema) refered in this filter entry does not exist anymore
+                // the table (resp. its schema) referred in this filter entry does not exist anymore
                 continue;
 
             if (bAllTables && pSchema)

@@ -193,7 +193,7 @@ namespace sdr
                 mpPrimitiveAnimation = 0;
             }
 
-            // take care of remebered ObjectContact. Remove from
+            // take care of remembered ObjectContact. Remove from
             // OC first. The VC removal (below) CAN trigger a StopGettingViewed()
             // which (depending of it's implementation) may destroy other OCs. This
             // can trigger the deletion of the helper OC of a page visualising object
@@ -201,7 +201,7 @@ namespace sdr
             // to get asynchron later
             GetObjectContact().RemoveViewObjectContact(*this);
 
-            // take care of remebered ViewContact
+            // take care of remembered ViewContact
             GetViewContact().RemoveViewObjectContact(*this);
         }
 

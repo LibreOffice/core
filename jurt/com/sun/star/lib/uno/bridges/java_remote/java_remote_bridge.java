@@ -64,7 +64,7 @@ import com.sun.star.uno.Any;
 /**
  * This class implements a remote bridge.
  *
- * <p>Therefor various interfaces are implemented.</p>
+ * <p>Therefore various interfaces are implemented.</p>
  *
  * <p>The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.</p>

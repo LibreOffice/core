@@ -2291,9 +2291,9 @@ AC_ARG_WITH(macosx-sdk,
                           e. g.: --with-macosx-sdk=10.8
 
                           there are 3 options to control the MacOSX build:
-                          --with-macosx-sdk (refered as 'sdk' below)
-                          --with-macosx-version-min-required (refered as 'min' below)
-                          --with-macosx-version-max-allowed (refered as 'max' below)
+                          --with-macosx-sdk (referred as 'sdk' below)
+                          --with-macosx-version-min-required (referred as 'min' below)
+                          --with-macosx-version-max-allowed (referred as 'max' below)
 
                           the connection between these value and the default they take is as follow:
                           ( ? means not specified on the command line, s means the SDK version found,

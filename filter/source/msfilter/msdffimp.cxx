@@ -5742,7 +5742,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
     ---------------------------------
     remembering the Shape-Ids and the associated Blip-Numbers und TextBox-Infos
                     =========                    ============     =============
-    and remebering the File-Offsets for each Blip
+    and remembering the File-Offsets for each Blip
                        ============
 ******************************************************************************/
 void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
