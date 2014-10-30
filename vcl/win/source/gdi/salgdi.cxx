@@ -555,7 +555,23 @@ void ImplClearHDCCache( SalData* pData )
 }
 
 WinSalGraphics::WinSalGraphics():
-    mpImpl(new WinSalGraphicsImpl(*this))
+    mpImpl(new WinSalGraphicsImpl(*this)),
+    mhLocalDC(0),
+    mfCurrentFontScale(1.0),
+    mhRegion(0),
+    mhDefPen(0),
+    mhDefBrush(0),
+    mhDefFont(0),
+    mhDefPal(0),
+    mpStdClipRgnData(NULL),
+    mpLogFont(NULL),
+    mpFontCharSets(NULL),
+    mpFontAttrCache(NULL),
+    mnFontCharSetCount(0),
+    mpFontKernPairs(NULL),
+    mnFontKernPairCount(0),
+    mbFontKernInit(false),
+    mnPenWidth(GSL_PEN_WIDTH)
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
     {
@@ -565,23 +581,6 @@ WinSalGraphics::WinSalGraphics():
         mfFontScale[ i ] = 1.0;
     }
 
-    mfCurrentFontScale = 1.0;
-
-    mhLocalDC           = 0;
-    mhRegion            = 0;
-    mhDefPen            = 0;
-    mhDefBrush          = 0;
-    mhDefFont           = 0;
-    mhDefPal            = 0;
-    mpStdClipRgnData    = NULL;
-    mpLogFont           = NULL;
-    mpFontCharSets      = NULL;
-    mpFontAttrCache     = NULL;
-    mnFontCharSetCount  = 0;
-    mpFontKernPairs     = NULL;
-    mnFontKernPairCount = 0;
-    mbFontKernInit      = FALSE;
-    mnPenWidth          = GSL_PEN_WIDTH;
     static const char* pEnv = getenv("USE_OPENGL");
     if (pEnv)
     {
@@ -601,8 +600,7 @@ WinSalGraphics::~WinSalGraphics()
     }
 
     // delete cache data
-    if ( mpStdClipRgnData )
-        delete [] mpStdClipRgnData;
+    delete [] mpStdClipRgnData;
 
     delete mpLogFont;
 
