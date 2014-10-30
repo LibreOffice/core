@@ -115,6 +115,7 @@ ifneq ($(filter-out MACOSX WNT,$(OS)),)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_gnome_open_url \
+	Executable_uri_encode \
 	Library_recentfile \
 	Package_scripts \
 	Package_scripts_gnome \
@@ -126,7 +127,6 @@ endif
 ifneq ($(OS),WNT)
 
 $(eval $(call gb_Module_add_targets,shell,\
-	Executable_uri_encode \
 	Library_cmdmail \
 	Package_senddoc \
 ))

@@ -137,6 +137,10 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
+	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
+	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
+	$(if $(filter unx,$(GUIBASE)),uri-encode) \
+	ui-previewer \
 ))
 
 ifneq ($(ENABLE_CRASHDUMP),)
@@ -152,6 +156,15 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
 	) \
 ))
 
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,gnome, \
+	gnome-open-url.bin \
+	$(if $(ENABLE_GTK),\
+		xid-fullscreen-on-all-monitors \
+	) \
+))
+endif
+
 ifneq ($(ENABLE_PDFIMPORT),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 	xpdfimport \
@@ -160,16 +173,6 @@ endif
 
 $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
-	gnome-open-url.bin \
-	$(if $(ENABLE_NPAPI_FROM_BROWSER),pluginapp.bin) \
-	$(if $(filter $(GUIBASE)$(ENABLE_GTK),unxTRUE), \
-		xid-fullscreen-on-all-monitors \
-	) \
-	$(if $(filter $(GUIBASE)$(ENABLE_TDE),unxTRUE), \
-		tdefilepicker \
-	) \
-	uri-encode \
-	ui-previewer \
 	$(if $(filter LINUX MACOSX WNT,$(OS)), \
 		icontest) \
 	vcldemo \

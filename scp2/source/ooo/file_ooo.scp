@@ -122,17 +122,6 @@ File gid_File_Basic_Tutorials
     Name = "wizards_basicsrvtutorials.filelist";
 End
 
-File gid_File_Bin_UIPreviewer
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-  #ifdef UNX
-    Name = "ui-previewer";
-  #else
-    Name = "ui-previewer.exe";
-  #endif
-End
-
 #if defined UNX && !defined MACOSX
 
 File gid_File_Script_Gengal
@@ -144,17 +133,6 @@ End
 
 #endif
 
-#if defined ENABLE_NPAPI_FROM_BROWSER && defined UNX && !defined MACOSX
-
-File gid_File_Bin_Pluginapp
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pluginapp.bin";
-    Styles = (PACKED);
-End
-
-#endif
-
 #if defined UNX && ! defined MACOSX
 
 File gid_File_Bin_Gnome_Open_Url
@@ -162,13 +140,6 @@ File gid_File_Bin_Gnome_Open_Url
     Dir = FILELIST_DIR;
     Name = "shell_scripts_gnome.filelist";
     Styles = (FILELIST, PACKED);
-End
-
-File gid_File_Bin_Gnome_Open_Url_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "gnome-open-url.bin";
-    Styles = (PACKED);
 End
 
 File gid_File_shell_scripts
@@ -183,17 +154,6 @@ File gid_File_Bin_Kde_Open_Url
     Dir = FILELIST_DIR;
     Name = "shell_scripts_kde.filelist";
     Styles = (FILELIST, PACKED);
-End
-
-#endif
-
-#if defined UNX && ! defined MACOSX
-
-File gid_File_Bin_Uri_Encode
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "uri-encode";
-    Styles = (PACKED);
 End
 
 #endif

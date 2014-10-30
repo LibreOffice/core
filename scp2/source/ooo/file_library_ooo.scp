@@ -71,27 +71,6 @@ End
 
 #endif
 
-#if defined UNX && ! defined MACOSX
-#ifdef ENABLE_TDE
-File gid_File_Bin_TdeFilePicker
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "tdefilepicker";
-End
-#endif
-
-#ifdef ENABLE_GTK
-File gid_File_Bin_XidFullscreen
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "xid-fullscreen-on-all-monitors";
-End
-#endif
-
-#endif
-
 #if defined WNT && !defined _gcc3 && defined WITH_MOZAB4WIN
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80
