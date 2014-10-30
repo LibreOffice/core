@@ -2224,7 +2224,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
 
     for (unsigned i = 0; i < nChildren; i++)
     {
-        FormulaToken* pChild = ft->Children[i]->GetFormulaToken();
+        FormulaTreeNodeRef rChild = ft->Children[i];
+        if (!rChild)
+            throw Unhandled();
+        FormulaToken* pChild = rChild->GetFormulaToken();
         if (!pChild)
             throw Unhandled();
         OpCode opc = pChild->GetOpCode();
