@@ -92,7 +92,7 @@ ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
 
 ThreadPool::~ThreadPool()
 {
-    waitUntilWorkersDone();
+    waitAndCleanupWorkers();
 }
 
 struct ThreadPoolStatic : public rtl::StaticWithInit< boost::shared_ptr< ThreadPool >,
@@ -109,9 +109,7 @@ ThreadPool& ThreadPool::getSharedOptimalPool()
     return *ThreadPoolStatic::get().get();
 }
 
-/// wait until all the workers have completed and
-/// terminate all threads
-void ThreadPool::waitUntilWorkersDone()
+void ThreadPool::waitAndCleanupWorkers()
 {
     waitUntilEmpty();
 
@@ -169,7 +167,6 @@ void ThreadPool::waitUntilEmpty()
             pTask->doWork();
             delete pTask;
         }
-        mbTerminate = true;
     }
     else
     {

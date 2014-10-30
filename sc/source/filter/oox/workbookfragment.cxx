@@ -336,8 +336,9 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
             // bar updating.
             Application::Yield();
         }
-        // join all the threads:
-        aPool.waitUntilWorkersDone();
+        aPool.waitUntilEmpty();
+
+        // threads joined in ThreadPool destructor
     }
     else // single threaded iteration
     {

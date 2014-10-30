@@ -39,13 +39,18 @@ public:
                 ThreadPool( sal_Int32 nWorkers );
     virtual    ~ThreadPool();
 
+    /// push a new task onto the work queue
     void        pushTask( ThreadTask *pTask /* takes ownership */ );
+
+    /// wait until all queued tasks are completed
     void        waitUntilEmpty();
-    void        waitUntilWorkersDone();
 
 private:
     class ThreadWorker;
     friend class ThreadWorker;
+
+    /// wait until all work is completed, then join all threads
+    void        waitAndCleanupWorkers();
 
     ThreadTask *waitForWork( osl::Condition &rNewWork );
     ThreadTask *popWork();
