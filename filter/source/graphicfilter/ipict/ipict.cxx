@@ -990,15 +990,12 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         {
             for ( ny = 0; ny < nHeight; ny++ )
             {
-                if ( nRowBytes < 8 || nPackType == 1 )
+                for ( nx = 0; nx < nWidth; nx++ )
                 {
-                    for ( nx = 0; nx < nWidth; nx++ )
-                    {
-                        pPict->ReadUChar( nDummy ).ReadUChar( nRed ).ReadUChar( nGreen ).ReadUChar( nBlue );
-                        pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue) );
-                    }
-                    nDataSize += ( (sal_uLong)nWidth ) * 4;
+                    pPict->ReadUChar( nDummy ).ReadUChar( nRed ).ReadUChar( nGreen ).ReadUChar( nBlue );
+                    pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue) );
                 }
+                nDataSize += ( (sal_uLong)nWidth ) * 4;
             }
         }
         else if ( nPackType == 2 )
