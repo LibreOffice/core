@@ -672,34 +672,21 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 
     const SdrHitKind eHit = m_rView.PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-    if (eHit == SDRHIT_UNMARKEDOBJECT &&
-        nId != OBJ_CUSTOMSHAPE)
+    if (eHit == SDRHIT_UNMARKEDOBJECT && nId != OBJ_CUSTOMSHAPE)
     {
         // there is an object under the mouse cursor, but not a customshape
         m_pParent->getSectionWindow()->getViewsWindow()->BrkAction();
         return false;
     }
 
-    if( eHit != SDRHIT_UNMARKEDOBJECT || nId == OBJ_CUSTOMSHAPE)
+    // if no action, create object
+    if (!m_pParent->getSectionWindow()->getViewsWindow()->IsAction())
     {
-        // if no action, create object
-        if ( !m_pParent->getSectionWindow()->getViewsWindow()->IsAction() )
-        {
-            deactivateOle(true);
-            if ( m_pParent->getSectionWindow()->getViewsWindow()->HasSelection() )
-                m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(&m_rView);
-            m_rView.BegCreateObj(m_aMDPos);
-            m_pParent->getSectionWindow()->getViewsWindow()->createDefault();
-        }
-    }
-    else
-    {
-        if( !rMEvt.IsShift() )
-        {
-            // shift key pressed?
-            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(NULL);
-        }
-        m_pParent->getSectionWindow()->getViewsWindow()->BegMarkObj( m_aMDPos,&m_rView );
+        deactivateOle(true);
+        if ( m_pParent->getSectionWindow()->getViewsWindow()->HasSelection() )
+            m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(&m_rView);
+        m_rView.BegCreateObj(m_aMDPos);
+        m_pParent->getSectionWindow()->getViewsWindow()->createDefault();
     }
 
     return true;
