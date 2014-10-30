@@ -5630,14 +5630,7 @@ void OpMedian::GenSlidingWindowFunction(
             {
                 ss << "gid0; endFlag = "<< nCurWindowSize <<"-gid0;\n";
             }
-            if (pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-            {
-                ss << "gid0; endFlag = gid0+"<< nCurWindowSize <<";\n";
-            }
-            else
-            {
-                ss << "gid0; endFlag = gid0+"<< nCurWindowSize <<";\n";
-            }
+            ss << "gid0; endFlag = gid0+"<< nCurWindowSize <<";\n";
         }
         else
         {
