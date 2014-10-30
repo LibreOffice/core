@@ -24,6 +24,10 @@ $(eval $(call gb_Library_set_include,vclplug_gen,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,vclplug_gen,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,vclplug_gen))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gen,\
