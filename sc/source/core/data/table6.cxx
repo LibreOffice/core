@@ -52,6 +52,9 @@ bool lcl_GetTextWithBreaks( const EditTextObject& rData, ScDocument* pDoc, OUStr
 bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
                          const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
+    if (!ValidColRow( nCol, nRow))
+        return false;
+
     bool    bFound = false;
     bool    bDoSearch = true;
     bool    bDoBack = rSearchItem.GetBackward();
