@@ -1041,7 +1041,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     if( eVOrient != text::VertOrientation::TOP && eVOrient != text::VertOrientation::NONE)
                         aSet.Put(SwFmtVertOrient(0, text::VertOrientation::TOP));
 
-                    if(eHOrient != text::HoriOrientation::NONE || eHOrient != text::HoriOrientation::LEFT)
+                    if (eHOrient != text::HoriOrientation::NONE && eHOrient != text::HoriOrientation::LEFT)
                         aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
@@ -1053,7 +1053,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     if( eVOrient != text::VertOrientation::TOP)
                         aSet.Put(SwFmtVertOrient(0, text::VertOrientation::TOP));
 
-                    if(eHOrient != text::HoriOrientation::NONE || eHOrient != text::HoriOrientation::LEFT || eHOrient != text::HoriOrientation::RIGHT)
+                    if (eHOrient != text::HoriOrientation::NONE && eHOrient != text::HoriOrientation::LEFT && eHOrient != text::HoriOrientation::RIGHT)
                         aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
@@ -1065,7 +1065,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     if( eVOrient != text::VertOrientation::TOP)
                         aSet.Put(SwFmtVertOrient(0, text::VertOrientation::TOP));
 
-                    if(eHOrient != text::HoriOrientation::NONE || eHOrient != text::HoriOrientation::LEFT || eHOrient != text::HoriOrientation::RIGHT)
+                    if (eHOrient != text::HoriOrientation::NONE && eHOrient != text::HoriOrientation::LEFT && eHOrient != text::HoriOrientation::RIGHT)
                         aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
