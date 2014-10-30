@@ -3753,6 +3753,11 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_libcmis=no
     fi
+    if test "$with_system_libgltf" = "yes"; then
+        AC_MSG_ERROR([--with-system-libgltf conflicts with --enable-dbgutil])
+    else
+        with_system_libgltf=no
+    fi
     if test "$enable_win_mozab_driver" = "yes"; then
         AC_MSG_ERROR([--enable-win-mozab-driver conflicts with --enable-dbgutil])
     fi
