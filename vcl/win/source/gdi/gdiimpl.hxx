@@ -19,8 +19,9 @@
 
 #include "salgdiimpl.hxx"
 
-#include "win/svsys.h"
 #include <vcl/gradient.hxx>
+
+#include "svsys.h"
 
 class WinSalGraphics;
 
