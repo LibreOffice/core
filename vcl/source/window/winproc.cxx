@@ -1596,7 +1596,7 @@ void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight )
                     bStartTimer = false;
 
                 if( bStartTimer )
-                    pWindow->ImplGetWindowImpl()->mpFrameData->maResizeTimer.Start();
+                    pWindow->ImplGetWindowImpl()->mpFrameData->maResizeIdle.Start();
                 else
                     pWindow->ImplCallResize(); // otherwise menus cannot be positioned
             }

@@ -127,8 +127,8 @@ struct ImplOverlapData
 
 struct ImplFrameData
 {
-    Timer               maPaintTimer;           //< paint timer
-    Timer               maResizeTimer;          //< resize timer
+    Idle                maPaintIdle;            //< paint idle handler
+    Idle                maResizeIdle;          //< resize timer
     InputContext        maOldInputContext;      //< last set Input Context
     vcl::Window*        mpNextFrame;            //< next frame window
     vcl::Window*        mpFirstOverlap;         //< first overlap vcl::Window

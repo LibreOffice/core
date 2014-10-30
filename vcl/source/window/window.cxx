@@ -1029,11 +1029,11 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->mbSysObjFocus      = false;
         if (!ImplDoTiledRendering())
         {
-            mpWindowImpl->mpFrameData->maPaintTimer.SetTimeout( 30 );
-            mpWindowImpl->mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+            mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
+            mpWindowImpl->mpFrameData->maPaintIdle.SetIdleHdl( LINK( this, Window, ImplHandlePaintHdl ) );
         }
-        mpWindowImpl->mpFrameData->maResizeTimer.SetTimeout( 50 );
-        mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
+        mpWindowImpl->mpFrameData->maResizeIdle.SetPriority( VCL_IDLE_PRIORITY_RESIZE );
+        mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
 
         if ( pRealParent && IsTopWindow() )
@@ -2476,11 +2476,11 @@ Size Window::GetSizePixel() const
     }
 
     // #i43257# trigger pending resize handler to assure correct window sizes
-    if( mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
+    if( mpWindowImpl->mpFrameData->maResizeIdle.IsActive() )
     {
         ImplDelData aDogtag( this );
-        mpWindowImpl->mpFrameData->maResizeTimer.Stop();
-        mpWindowImpl->mpFrameData->maResizeTimer.GetTimeoutHdl().Call( NULL );
+        mpWindowImpl->mpFrameData->maResizeIdle.Stop();
+        mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( NULL );
         if( aDogtag.IsDead() )
             return Size(0,0);
     }

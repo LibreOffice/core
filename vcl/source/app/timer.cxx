@@ -336,4 +336,61 @@ AutoTimer& AutoTimer::operator=( const AutoTimer& rTimer )
     return *this;
 }
 
+Idle::Idle()
+    : Timer()
+{
+    SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+}
+
+Idle::Idle( IdlePriority ePriority )
+    : Timer()
+{
+    SetPriority( ePriority );
+}
+
+void Idle::SetPriority( IdlePriority ePriority )
+{
+    sal_uLong nTimeoutMS = 0;
+
+    // Ultimately this will just be a sort key in a work queue.
+    switch (ePriority) {
+    case VCL_IDLE_PRIORITY_HIGHEST:
+        nTimeoutMS = 0;
+        break;
+    case VCL_IDLE_PRIORITY_HIGH:
+        nTimeoutMS = 1;
+        break;
+    case VCL_IDLE_PRIORITY_REPAINT:
+        nTimeoutMS = 30;
+        break;
+    case VCL_IDLE_PRIORITY_RESIZE:
+        nTimeoutMS = 50;
+        break;
+    case VCL_IDLE_PRIORITY_MEDIUM:
+        nTimeoutMS = 50;
+        break;
+    case VCL_IDLE_PRIORITY_LOW:
+        nTimeoutMS = 100;
+        break;
+    case VCL_IDLE_PRIORITY_LOWER:
+        nTimeoutMS = 200;
+        break;
+    case VCL_IDLE_PRIORITY_LOWEST:
+    default:
+        nTimeoutMS = 400;
+        break;
+    }
+    SetTimeout( nTimeoutMS );
+}
+
+void Idle::DoIdle()
+{
+    maTimeoutHdl.Call( this );
+}
+
+
+Idle::~Idle()
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
