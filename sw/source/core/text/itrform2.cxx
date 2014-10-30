@@ -1743,7 +1743,8 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                 case SVX_LINE_SPACE_AUTO:
                     // shrink first line of paragraph too on spacing < 100%
                     if (IsParaLine() &&
-                        pSpace->GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP)
+                        pSpace->GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP
+                        && GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE))
                     {
                         long nTmp = pSpace->GetPropLineSpace();
                         // Word will render < 50% too but it's just not readable
