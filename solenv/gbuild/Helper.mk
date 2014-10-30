@@ -92,8 +92,14 @@ $(2)_$(1).clean : $(if $(4),$(4),$(call gb_$(2)_get_clean_target,$(1)))
 endef
 
 define gb_Helper_init_registries
+gb_Executable_VALIDGROUPS_INSTALLED := UREBIN SDK OOO
+gb_Executable_VALIDGROUPS_NOTINSTALLED := NONE
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
-gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO PRIVATELIBS_URE RTVERLIBS UNOVERLIBS EXTENSIONLIBS PLAINLIBS_SHLXTHDL
+gb_Library_VALIDGROUPS_INSTALLED := OOOLIBS PLAINLIBS_URE PLAINLIBS_OOO PRIVATELIBS_URE RTVERLIBS UNOVERLIBS PLAINLIBS_SHLXTHDL
+gb_Library_VALIDGROUPS_NOTINSTALLED := PLAINLIBS_NONE EXTENSIONLIBS
+gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_URE PLAINLIBS_OOO PRIVATELIBS_URE RTVERLIBS UNOVERLIBS PLAINLIBS_SHLXTHDL PLAINLIBS_NONE EXTENSIONLIBS
+gb_Jar_VALIDGROUPS_INSTALLED := URE OOO
+gb_Jar_VALIDGROUPS_NOTINSTALLED := OXT NONE
 gb_Jar_VALIDGROUPS := URE OOO OXT NONE
 
 $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
@@ -117,10 +123,7 @@ $(foreach group,$(gb_Executable_VALIDGROUPS),\
 
 endef
 
-define gb_Helper_register_executables
-ifeq ($$(filter $(1),$$(gb_Executable_VALIDGROUPS)),)
-$$(eval $$(call gb_Output_error,$(1) is not a valid group for executables. Valid groups are: $$(gb_Executable_VALIDGROUPS)))
-endif
+define gb_Helper__register_executables
 $(foreach group,$(gb_Executable_VALIDGROUPS),\
  $(foreach target,$(2),\
   $(if $(filter $(target),$(gb_Executable_$(group))),\
@@ -132,18 +135,28 @@ gb_Executable_$(1) += $(2)
 
 endef
 
+# $(call gb_Helper_register_executables,layer,exes)
+define gb_Helper_register_executables
+ifeq ($$(filter $(1),$$(gb_Executable_VALIDGROUPS_NOTINSTALLED)),)
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for executables that are not installed. Valid groups are: $$(gb_Executable_VALIDGROUPS_NOTINSTALLED). Use gb_Helper_register_executables_for_install for installed executables.))
+endif
+$(call gb_Helper__register_executables,$(1),$(2))
+
+endef
+
+# $(call gb_Helper_register_executables_for_install,layer,installmodule,exes)
 define gb_Helper_register_executables_for_install
 $(if $(3),,$(call gb_Output_error,gb_Helper_register_executables_for_install: no executables - need 3 parameters))
-$(call gb_Helper_register_executables,$(1),$(3))
+ifeq ($$(filter $(1),$$(gb_Executable_VALIDGROUPS_INSTALLED)),)
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for installed executables. Valid groups are: $$(gb_Executable_VALIDGROUPS_INSTALLED). Use gb_Helper_register_executables for executables that are not installed.))
+endif
+$(call gb_Helper__register_executables,$(1),$(3))
 
 gb_Executable_MODULE_$(2) += $(3)
 
 endef
 
-define gb_Helper_register_libraries
-ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS)),)
-$$(eval $$(call gb_Output_error,$(1) is not a valid group for libraries. Valid groups are: $$(gb_Library_VALIDGROUPS)))
-endif
+define gb_Helper__register_libraries
 $(foreach group,$(gb_Library_VALIDGROUPS),\
  $(foreach target,$(2),\
   $(if $(filter $(target),$(gb_Library_$(group))),\
@@ -155,12 +168,25 @@ gb_Library_$(1) += $(2)
 
 endef
 
+# $(call gb_Helper_register_libraries,layer,libs)
+define gb_Helper_register_libraries
+ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS_NOTINSTALLED)),)
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for libraries that are not installed. Valid groups are: $$(gb_Library_VALIDGROUPS_NOTINSTALLED). Use gb_Helper_register_libraries_for_install for installed libraries.))
+endif
+$(call gb_Helper__register_libraries,$(1),$(2))
+
+endef
+
 # the first argument is the group, which sets rpaths etc.
 # the second argument is the install module, which describes in which distro package/msi a lib should show up
 # UGLY: for versioned libraries "sdk" module is hard-coded for now
+# $(call gb_Helper_register_libraries_for_install,layer,installmodule,libs)
 define gb_Helper_register_libraries_for_install
 $(if $(3),,$(call gb_Output_error,gb_Helper_register_libraries_for_install: no libraries - need 3 parameters))
-$(call gb_Helper_register_libraries,$(1),$(3))
+ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS_INSTALLED)),)
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for installed libraries. Valid groups are: $$(gb_Library_VALIDGROUPS_INSTALLED). Use gb_Helper_register_libraries for libraries that are not installed.))
+endif
+$(call gb_Helper__register_libraries,$(1),$(3))
 
 gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(3))
 
@@ -169,10 +195,7 @@ $(if $(filter UNOVERLIBS RTVERLIBS,$(1)),\
 
 endef
 
-define gb_Helper_register_jars
-ifeq ($$(filter $(1),$$(gb_Jar_VALIDGROUPS)),)
-$$(eval $$(call gb_Output_error,$(1) is not a valid group for jars. Valid groups are: $$(gb_Jar_VALIDGROUPS)))
-endif
+define gb_Helper__register_jars
 $(foreach group,$(gb_Jar_VALIDGROUPS),\
  $(foreach target,$(2),\
   $(if $(filter $(target),$(gb_Jar_$(group))),\
@@ -184,10 +207,22 @@ gb_Jar_$(1) += $(2)
 
 endef
 
+# $(call gb_Helper_register_jars,layer,jars)
+define gb_Helper_register_jars
+ifeq ($$(filter $(1),$$(gb_Jar_VALIDGROUPS_NOTINSTALLED)),)
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for jars that are not installed. Valid groups are: $$(gb_Jar_VALIDGROUPS_NOTINSTALLED). Use gb_Helper_register_jars_for_install for installed jars.))
+endif
+$(call gb_Helper__register_jars,$(1),$(2))
+
+endef
+
 # $(call gb_Helper_register_jars_for_install,layer,installmodule,jars)
 define gb_Helper_register_jars_for_install
 $(if $(3),,$(call gb_Output_error,gb_Helper_register_jars_for_install: no jars - need 3 parameters))
-$(call gb_Helper_register_jars,$(1),$(3))
+ifeq ($$(filter $(1),$$(gb_Jar_VALIDGROUPS_INSTALLED)),)
+$$(eval $$(call gb_Output_error,$(1) is not a valid group for installed jars. Valid groups are: $$(gb_Jar_VALIDGROUPS_INSTALLED). Use gb_Helper_register_jars for jars that are not installed.))
+endif
+$(call gb_Helper__register_jars,$(1),$(3))
 
 gb_Jar_MODULE_$(2) += $(3)
 
