@@ -61,8 +61,23 @@
 #include <officecfg/Office/Common.hxx>
 
 X11SalGraphics::X11SalGraphics():
+    m_pFrame(NULL),
+    m_pVDev(NULL),
+    m_pColormap(NULL),
+    m_pDeleteColormap(NULL),
+    hDrawable_(None),
     m_nXScreen( 0 ),
-    pFontGC_(NULL)
+    m_pXRenderFormat(NULL),
+    m_aXRenderPicture(0),
+    pPaintRegion_(NULL),
+    mpClipRegion(NULL),
+    pFontGC_(NULL),
+    nTextColor_(MAKE_SALCOLOR(0x00, 0x00, 0x00)), //black
+    nTextPixel_(0),
+    hBrush_(None),
+    bWindow_(false),
+    bPrinter_(false),
+    bVirDev_(false)
 {
     bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
     if (bUseOpenGL)
@@ -70,34 +85,14 @@ X11SalGraphics::X11SalGraphics():
     else
         mpImpl.reset(new X11SalGraphicsImpl(*this));
 
-    m_pFrame            = NULL;
-    m_pVDev             = NULL;
-    m_pColormap         = NULL;
-    m_pDeleteColormap   = NULL;
-    hDrawable_          = None;
-    m_aXRenderPicture    = 0;
-    m_pXRenderFormat     = NULL;
-
-    mpClipRegion            = NULL;
-    pPaintRegion_       = NULL;
-
     for( int i = 0; i < MAX_FALLBACK; ++i )
         mpServerFont[i] = NULL;
-
-    nTextPixel_         = 0;
-    nTextColor_         = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
 
 #if ENABLE_GRAPHITE
     // check if graphite fonts have been disabled
     static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
     bDisableGraphite_   = pDisableGraphiteStr && (pDisableGraphiteStr[0]!='0');
 #endif
-
-    hBrush_             = None;
-
-    bWindow_            = false;
-    bPrinter_           = false;
-    bVirDev_            = false;
 }
 
 X11SalGraphics::~X11SalGraphics()
