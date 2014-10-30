@@ -2362,4 +2362,10 @@ bool WinSalGraphicsImpl::drawTransformedBitmap(
     return false;
 }
 
+bool WinSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
+        const Gradient& /*rGradient*/)
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
