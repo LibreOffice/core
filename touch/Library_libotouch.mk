@@ -25,12 +25,4 @@ $(eval $(call gb_Library_add_exception_objects,libotouch,\
 
 endif
 
-ifeq ($(OS),IOS)
-
-$(eval $(call gb_Library_add_objcxx_objects,libotouch,\
-	touch/source/ios/ios \
-))
-
-endif
-
 # vim: set noet sw=4 ts=4:
