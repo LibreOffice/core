@@ -41,11 +41,39 @@
 
 using namespace ::com::sun::star;
 
+struct SdrPageWindow::Impl
+{
+    // #110094# ObjectContact section
+    sdr::contact::ObjectContact*                        mpObjectContact;
+
+    // the SdrPageView this window belongs to
+    SdrPageView&                                        mrPageView;
+
+    // the PaintWindow to paint on. Here is access to OutDev etc.
+    // #i72752# change to pointer to allow patcing it in DrawLayer() if necessary
+    SdrPaintWindow*                                     mpPaintWindow;
+    SdrPaintWindow*                                     mpOriginalPaintWindow;
+
+    // UNO stuff for xControls
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > mxControlContainer;
+
+    Impl( SdrPageView& rPageView, SdrPaintWindow& rPaintWindow ) :
+        mpObjectContact(NULL),
+        mrPageView(rPageView),
+        mpPaintWindow(&rPaintWindow),
+        mpOriginalPaintWindow(NULL)
+    {
+    }
+
+    ~Impl()
+    {
+    }
+};
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SdrPageWindow::GetControlContainer( bool _bCreateIfNecessary ) const
 {
-    if ( !mxControlContainer.is() && _bCreateIfNecessary )
+    if (!mpImpl->mxControlContainer.is() && _bCreateIfNecessary)
     {
         SdrView& rView = GetPageView().GetView();
 
@@ -53,7 +81,7 @@ using namespace ::com::sun::star;
         if ( rPaintWindow.OutputToWindow() && !rView.IsPrintPreview() )
         {
             vcl::Window& rWindow = dynamic_cast< vcl::Window& >( rPaintWindow.GetOutputDevice() );
-            const_cast< SdrPageWindow* >( this )->mxControlContainer = VCLUnoHelper::CreateControlContainer( &rWindow );
+            const_cast< SdrPageWindow* >( this )->mpImpl->mxControlContainer = VCLUnoHelper::CreateControlContainer( &rWindow );
 
             // #100394# xC->setVisible triggers window->Show() and this has
             // problems when the view is not completely constructed which may
@@ -63,7 +91,7 @@ using namespace ::com::sun::star;
             // UnoControlContainer::setVisible(...) which calls createPeer(...).
             // This will now be called directly from here.
 
-            uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
+            uno::Reference< awt::XControl > xControl(mpImpl->mxControlContainer, uno::UNO_QUERY);
             if(xControl.is())
             {
                 uno::Reference< uno::XInterface > xContext = xControl->getContext();
@@ -78,9 +106,9 @@ using namespace ::com::sun::star;
         {
             // Printer and VirtualDevice, or rather: no OutDev
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance("com.sun.star.awt.UnoControlContainer"), uno::UNO_QUERY);
+            const_cast< SdrPageWindow* >( this )->mpImpl->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance("com.sun.star.awt.UnoControlContainer"), uno::UNO_QUERY);
             uno::Reference< awt::XControlModel > xModel(xFactory->createInstance("com.sun.star.awt.UnoControlContainerModel"), uno::UNO_QUERY);
-            uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
+            uno::Reference< awt::XControl > xControl(mpImpl->mxControlContainer, uno::UNO_QUERY);
             if (xControl.is())
                 xControl->setModel(xModel);
 
@@ -88,23 +116,20 @@ using namespace ::com::sun::star;
             Point aPosPix = rOutDev.GetMapMode().GetOrigin();
             Size aSizePix = rOutDev.GetOutputSizePixel();
 
-            uno::Reference< awt::XWindow > xContComp(mxControlContainer, uno::UNO_QUERY);
+            uno::Reference< awt::XWindow > xContComp(mpImpl->mxControlContainer, uno::UNO_QUERY);
             if( xContComp.is() )
                 xContComp->setPosSize(aPosPix.X(), aPosPix.Y(), aSizePix.Width(), aSizePix.Height(), awt::PosSize::POSSIZE);
         }
 
         FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
         if ( pViewAsFormView )
-            pViewAsFormView->InsertControlContainer(mxControlContainer);
+            pViewAsFormView->InsertControlContainer(mpImpl->mxControlContainer);
     }
-    return mxControlContainer;
+    return mpImpl->mxControlContainer;
 }
 
-SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindow)
-:   mpObjectContact(0L),
-    mrPageView(rPageView),
-    mpPaintWindow(&rPaintWindow),
-    mpOriginalPaintWindow(NULL)
+SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindow) :
+    mpImpl(new Impl(rPageView, rPaintWindow))
 {
 }
 
@@ -113,25 +138,42 @@ SdrPageWindow::~SdrPageWindow()
     // #i26631#
     ResetObjectContact();
 
-    if (mxControlContainer.is())
+    if (mpImpl->mxControlContainer.is())
     {
         SdrView& rView = GetPageView().GetView();
 
         // notify derived views
         FmFormView* pViewAsFormView = dynamic_cast< FmFormView* >( &rView );
         if ( pViewAsFormView )
-            pViewAsFormView->RemoveControlContainer(mxControlContainer);
+            pViewAsFormView->RemoveControlContainer(mpImpl->mxControlContainer);
 
         // dispose the control container
-        uno::Reference< lang::XComponent > xComponent(mxControlContainer, uno::UNO_QUERY);
+        uno::Reference< lang::XComponent > xComponent(mpImpl->mxControlContainer, uno::UNO_QUERY);
         xComponent->dispose();
     }
+
+    delete mpImpl;
 }
 
 // ObjectContact section
 sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 {
     return new sdr::contact::ObjectContactOfPageView(*this);
+}
+
+SdrPageView& SdrPageWindow::GetPageView() const
+{
+    return mpImpl->mrPageView;
+}
+
+SdrPaintWindow& SdrPageWindow::GetPaintWindow() const
+{
+    return *mpImpl->mpPaintWindow;
+}
+
+const SdrPaintWindow* SdrPageWindow::GetOriginalPaintWindow() const
+{
+    return mpImpl->mpOriginalPaintWindow;
 }
 
 // OVERLAY MANAGER
@@ -142,17 +184,17 @@ rtl::Reference< ::sdr::overlay::OverlayManager > SdrPageWindow::GetOverlayManage
 
 void SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
 {
-    mpOriginalPaintWindow = mpPaintWindow;
-    mpPaintWindow = &rPaintWindow;
+    mpImpl->mpOriginalPaintWindow = mpImpl->mpPaintWindow;
+    mpImpl->mpPaintWindow = &rPaintWindow;
 }
 
 void SdrPageWindow::unpatchPaintWindow()
 {
-    DBG_ASSERT(mpOriginalPaintWindow, "SdrPageWindow::unpatchPaintWindow: paint window not patched!" );
-    if ( mpOriginalPaintWindow )
+    DBG_ASSERT(mpImpl->mpOriginalPaintWindow, "SdrPageWindow::unpatchPaintWindow: paint window not patched!" );
+    if (mpImpl->mpOriginalPaintWindow)
     {
-        mpPaintWindow = mpOriginalPaintWindow;
-        mpOriginalPaintWindow = NULL;
+        mpImpl->mpPaintWindow = mpImpl->mpOriginalPaintWindow;
+        mpImpl->mpOriginalPaintWindow = NULL;
     }
 }
 
@@ -269,18 +311,18 @@ namespace
 
 
 
-void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
     // set Redirector
     GetObjectContact().SetViewObjectContactRedirector(pRedirector);
 
     // set PaintingPageView
-    const SdrView& rView = mrPageView.GetView();
+    const SdrView& rView = mpImpl->mrPageView.GetView();
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
     // get to be processed layers
     const bool bPrinter(GetPaintWindow().OutputToPrinter());
-    SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
+    SetOfByte aProcessLayers = bPrinter ? mpImpl->mrPageView.GetPrintableLayers() : mpImpl->mrPageView.GetVisibleLayers();
 
     // create PaintInfoRec; use Rectangle only temporarily
     const vcl::Region& rRegion = GetPaintWindow().GetRedrawRegion();
@@ -321,18 +363,18 @@ void SdrPageWindow::RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedire
 #endif // CLIPPER_TEST
 }
 
-void SdrPageWindow::RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageWindow::RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
     // set redirector
     GetObjectContact().SetViewObjectContactRedirector(pRedirector);
 
     // set PaintingPageView
-    const SdrView& rView = mrPageView.GetView();
+    const SdrView& rView = mpImpl->mrPageView.GetView();
     SdrModel& rModel = *((SdrModel*)rView.GetModel());
 
     // get the layers to process
     const bool bPrinter(GetPaintWindow().OutputToPrinter());
-    SetOfByte aProcessLayers = bPrinter ? mrPageView.GetPrintableLayers() : mrPageView.GetVisibleLayers();
+    SetOfByte aProcessLayers = bPrinter ? mpImpl->mrPageView.GetPrintableLayers() : mpImpl->mrPageView.GetVisibleLayers();
 
     // is the given layer visible at all?
     if(aProcessLayers.IsSet(*pId))
@@ -403,28 +445,36 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 }
 
 // ObjectContact section
-sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
+const sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 {
-    if(!mpObjectContact)
+    if (!mpImpl->mpObjectContact)
     {
-        ((SdrPageWindow*)this)->mpObjectContact = ((SdrPageWindow*)this)->CreateViewSpecificObjectContact();
+        ((SdrPageWindow*)this)->mpImpl->mpObjectContact = ((SdrPageWindow*)this)->CreateViewSpecificObjectContact();
     }
 
-    return *mpObjectContact;
+    return *mpImpl->mpObjectContact;
+}
+
+sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact()
+{
+    if (!mpImpl->mpObjectContact)
+        mpImpl->mpObjectContact = CreateViewSpecificObjectContact();
+
+    return *mpImpl->mpObjectContact;
 }
 
 bool SdrPageWindow::HasObjectContact() const
 {
-    return ( mpObjectContact != NULL );
+    return mpImpl->mpObjectContact != NULL;
 }
 
 // #i26631#
 void SdrPageWindow::ResetObjectContact()
 {
-    if(mpObjectContact)
+    if (mpImpl->mpObjectContact)
     {
-        delete mpObjectContact;
-        mpObjectContact = 0L;
+        delete mpImpl->mpObjectContact;
+        mpImpl->mpObjectContact = 0L;
     }
 }
 

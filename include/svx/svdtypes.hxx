@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_SVDTYPES_HXX
 #define INCLUDED_SVX_SVDTYPES_HXX
 
+#include <sal/types.h>
+
 /*
  * SdrObject
  */

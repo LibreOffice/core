@@ -850,7 +850,7 @@ vcl::Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl
 
 
 
-void SdrPaintView::ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const
+void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
 {
     if(mpPageView)
     {
@@ -1201,7 +1201,7 @@ void SdrPaintView::SetAnimationPause( bool bSet )
         {
             for(sal_uInt32 b(0L); b < mpPageView->PageWindowCount(); b++)
             {
-                const SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
+                SdrPageWindow& rPageWindow = *(mpPageView->GetPageWindow(b));
                 sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
                 sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
 
@@ -1321,7 +1321,7 @@ void SdrPaintView::SetAnimationTimer(sal_uInt32 nTime)
         // first, reset all timers at all windows to 0L
         for(sal_uInt32 a(0L); a < mpPageView->PageWindowCount(); a++)
         {
-            const SdrPageWindow& rPageWindow = *mpPageView->GetPageWindow(a);
+            SdrPageWindow& rPageWindow = *mpPageView->GetPageWindow(a);
             sdr::contact::ObjectContact& rObjectContact = rPageWindow.GetObjectContact();
             sdr::animation::primitiveAnimator& rAnimator = rObjectContact.getPrimitiveAnimator();
             rAnimator.SetTime(nTime);

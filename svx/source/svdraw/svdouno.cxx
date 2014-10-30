@@ -127,7 +127,7 @@ namespace
 
         for ( sal_uInt32 i = 0; i < pPageView->PageWindowCount(); ++i )
         {
-            const SdrPageWindow* pPageWindow = pPageView->GetPageWindow( i );
+            SdrPageWindow* pPageWindow = pPageView->GetPageWindow( i );
             DBG_ASSERT( pPageWindow, "lcl_ensureControlVisibility: invalid PageViewWindow!" );
             if ( !pPageWindow )
                 continue;

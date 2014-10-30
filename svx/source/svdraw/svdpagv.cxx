@@ -281,7 +281,8 @@ void SdrPageView::PrePaint()
     }
 }
 
-void SdrPageView::CompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector) const
+void SdrPageView::CompleteRedraw(
+    SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
     if(GetPage())
     {
@@ -317,13 +318,13 @@ void SdrPageView::setPreparedPageWindow(SdrPageWindow* pKnownTarget)
     mpPreparedPageWindow = pKnownTarget;
 }
 
-void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector, const Rectangle& rRect) const
+void SdrPageView::DrawLayer( SdrLayerID nID, OutputDevice* pGivenTarget, sdr::contact::ViewObjectContactRedirector* pRedirector, const Rectangle& rRect )
 {
     if(GetPage())
     {
         if(pGivenTarget)
         {
-            const SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
+            SdrPageWindow* pKnownTarget = FindPageWindow(*pGivenTarget);
 
             if(pKnownTarget)
             {
