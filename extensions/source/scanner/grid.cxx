@@ -306,8 +306,12 @@ Point GridWindow::transform( double x, double y )
 
 void GridWindow::transform( const Point& rOriginal, double& x, double& y )
 {
-    x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / (double)m_aGridArea.GetWidth() + m_fMinX;
-    y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)m_aGridArea.GetHeight() + m_fMinY;
+    const long nWidth = m_aGridArea.GetWidth();
+    const long nHeight = m_aGridArea.GetHeight();
+    if (!nWidth || nHeight)
+        return;
+    x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / (double)nWidth + m_fMinX;
+    y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)nHeight + m_fMinY;
 }
 
 void GridWindow::drawLine( double x1, double y1, double x2, double y2 )
