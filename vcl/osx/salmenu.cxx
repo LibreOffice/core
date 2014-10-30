@@ -742,7 +742,7 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
 
     DBG_ASSERT( nCommandKey, "unmapped accelerator key" );
 
-    nModifier=rKeyCode.GetAllModifier();
+    nModifier=rKeyCode.GetModifier();
 
     // should always use the command key
     int nItemModifier = 0;

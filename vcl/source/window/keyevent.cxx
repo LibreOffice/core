@@ -33,7 +33,7 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
     KeyEvent aClone(*this);
 
     sal_uInt16 nCode = maKeyCode.GetCode();
-    sal_uInt16 nMod  = maKeyCode.GetAllModifier();
+    sal_uInt16 nMod  = maKeyCode.GetModifier();
 
     switch (eMode)
     {

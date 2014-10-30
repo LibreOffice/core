@@ -139,7 +139,6 @@ namespace o3tl
 #define KEY_MOD2        ((sal_uInt16)0x4000)
 #define KEY_MOD3        ((sal_uInt16)0x8000)
 #define KEY_MODTYPE     ((sal_uInt16)0xF000)
-#define KEY_ALLMODTYPE  ((sal_uInt16)0xF000)
 
 #endif
 
