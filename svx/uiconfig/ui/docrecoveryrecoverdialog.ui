@@ -35,12 +35,11 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label">gtk-cancel</property>
+                <property name="label">Discard Recovery Data</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -76,6 +75,8 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Press 'Start Recovery' to start the recovery process of the documents listed below.
+
+Press 'Discard Recovery Data' to abandon attempting recovery of these document.
 
 The 'Status' column shows whether the document can be recovered.</property>
                     <property name="wrap">True</property>

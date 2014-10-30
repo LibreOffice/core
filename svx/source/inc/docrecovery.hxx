@@ -502,7 +502,7 @@ class RecoveryDialog : public Dialog
         vcl::Window*         m_pProgrParent;
         RecovDocList*   m_pFileListLB;
         PushButton*     m_pNextBtn;
-        CancelButton*   m_pCancelBtn;
+        PushButton*     m_pCancelBtn;
         OUString        m_aTitleRecoveryInProgress;
         OUString        m_aRecoveryOnlyFinish;
         OUString        m_aRecoveryOnlyFinishDescr;

@@ -24,7 +24,7 @@
 
 String RID_SVXSTR_QUERY_EXIT_RECOVERY
 {
-    Text [ en-US ] = "Are you sure you want to cancel the %PRODUCTNAME document recovery?";
+    Text [ en-US ] = "Are you sure you want to discard the %PRODUCTNAME document recovery data?";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
