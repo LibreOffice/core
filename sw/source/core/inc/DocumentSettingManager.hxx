@@ -85,6 +85,7 @@ class DocumentSettingManager :
     bool mbBackgroundParaOverDrawings;
     bool mbTabOverMargin;
     bool mbSurroundTextWrapSmall;
+    bool mbPropLineSpacingShrinksFirstLine; // fdo#79602
     bool mApplyParagraphMarkFormatToNumbering;
 
     bool mbLastBrowseMode                           : 1;
