@@ -84,7 +84,7 @@ using ::std::unique_ptr;
 
 //-----------------------------static data -----------------
 
-// Funktionen fuer den Zugriff auf das Document
+// document access functions
 
 void ScInterpreter::ReplaceCell( ScAddress& rPos )
 {
@@ -2598,11 +2598,10 @@ void ScInterpreter::ScExternal()
                 }
                 else
                 {
-                    // nach dem Laden Asyncs wieder anwerfen
+                    // enable asyncs after loading
                     if ( rArr.IsRecalcModeNormal() )
                         rArr.SetExclusiveRecalcModeOnLoad();
-                    // garantiert identischer Handle bei identischem Aufruf?!?
-                    // sonst schei*e ...
+                    // assure identical handler with identical call?
                     double nErg = 0.0;
                     ppParam[0] = &nErg;
                     pFuncData->Call(ppParam);
@@ -2617,9 +2616,7 @@ void ScInterpreter::ScExternal()
                         }
                         else
                         {
-                            // falls per cut/copy/paste
                             pMyFormulaCell->StartListening( *pAs );
-                            // in anderes Dokument?
                             if ( !pAs->HasDocument( pDok ) )
                                 pAs->AddDocument( pDok );
                         }
@@ -3097,7 +3094,7 @@ void ScInterpreter::ScMacro()
 {
 
 #if !HAVE_FEATURE_SCRIPTING
-    PushNoValue();      // ohne DocShell kein CallBasic
+    PushNoValue();      // without DocShell no CallBasic
     return;
 #else
     SbxBase::ResetError();
@@ -3108,18 +3105,18 @@ void ScInterpreter::ScMacro()
     SfxObjectShell* pDocSh = pDok->GetDocumentShell();
     if ( !pDocSh || !pDok->CheckMacroWarn() )
     {
-        PushNoValue();      // ohne DocShell kein CallBasic
+        PushNoValue();      // without DocShell no CallBasic
         return;
     }
 
-    //  keine Sicherheitsabfrage mehr vorneweg (nur CheckMacroWarn), das passiert im CallBasic
+    //  no security queue beforehand (just CheckMacroWarn), moved to  CallBasic
 
-    //  Wenn das Dok waehrend eines Basic-Calls geladen wurde,
-    //  ist das Sbx-Objekt evtl. nicht angelegt (?)
+    //  If the  Dok was loaded during a Basic-Calls,
+    //  is the  Sbx-Objekt created(?)
 //  pDocSh->GetSbxObject();
 
-    //  Funktion ueber den einfachen Namen suchen,
-    //  dann aBasicStr, aMacroStr fuer SfxObjectShell::CallBasic zusammenbauen
+    //  search function with the name,
+    //  then assemble  SfxObjectShell::CallBasic from aBasicStr, aMacroStr
 
     StarBASIC* pRoot;
 
@@ -3330,7 +3327,7 @@ void ScInterpreter::ScMacro()
                 SCCOL nColIdx;
                 SCROW nRowIdx;
                 if ( nDim == 1 )
-                {   // array( cols )  eine Zeile, mehrere Spalten
+                {   // array( cols )  one line, several columns
                     pDimArray->GetDim32( 1, nCs, nCe );
                     nC = static_cast<SCSIZE>(nCe - nCs + 1);
                     nRs = nRe = 0;
@@ -3355,8 +3352,8 @@ void ScInterpreter::ScMacro()
                     for ( SCSIZE j=0; j < nR; j++ )
                     {
                         sal_Int32 nIdx[ 2 ];
-                        // bei eindimensionalem array( cols ) wird nIdx[1]
-                        // von SbxDimArray::Get ignoriert
+                        //  in one-dimensional array( cols )  nIdx[1]
+                        // from SbxDimArray::Get is ignored
                         nIdx[ nRowIdx ] = nRs + static_cast<sal_Int32>(j);
                         for ( SCSIZE i=0; i < nC; i++ )
                         {
@@ -3588,7 +3585,7 @@ void ScInterpreter::ScColRowNameAuto()
     SCsCOL nStartCol;
     SCsROW nStartRow;
 
-    // evtl. Begrenzung durch definierte ColRowNameRanges merken
+    // maybe remember limit by using defined ColRowNameRange
     SCsCOL nCol2 = aAbs.aEnd.Col();
     SCsROW nRow2 = aAbs.aEnd.Row();
     // DataArea of the first cell
@@ -3605,26 +3602,26 @@ void ScInterpreter::ScColRowNameAuto()
         aAbs.aEnd.SetRow(nDARow2);
     }
 
-    //! korrespondiert mit ScCompiler::GetToken
+    //! corresponds with ScCompiler::GetToken
     if ( aRefData.Ref1.IsColRel() )
     {   // ColName
         aAbs.aEnd.SetCol(nStartCol);
-        // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
+        // maybe get previous limit by using defined ColRowNameRange
         if (aAbs.aEnd.Row() > nRow2)
             aAbs.aEnd.SetRow(nRow2);
         SCROW nMyRow;
         if ( aPos.Col() == nStartCol
           && nStartRow <= (nMyRow = aPos.Row()) && nMyRow <= aAbs.aEnd.Row())
-        {   // Formel in gleicher Spalte und innerhalb des Range
+        {   //Formula in the same column and within the range
             if ( nMyRow == nStartRow )
-            {   // direkt unter dem Namen den Rest nehmen
+            {   // take the rest under the name
                 nStartRow++;
                 if ( nStartRow > MAXROW )
                     nStartRow = MAXROW;
                 aAbs.aStart.SetRow(nStartRow);
             }
             else
-            {   // weiter unten vom Namen bis zur Formelzelle
+            {   // below the name to the formula cell
                 aAbs.aEnd.SetRow(nMyRow - 1);
             }
         }
@@ -3632,22 +3629,22 @@ void ScInterpreter::ScColRowNameAuto()
     else
     {   // RowName
         aAbs.aEnd.SetRow(nStartRow);
-        // evtl. vorherige Begrenzung durch definierte ColRowNameRanges erhalten
+        // maybe get previous limit by using defined ColRowNameRange
         if (aAbs.aEnd.Col() > nCol2)
             aAbs.aEnd.SetCol(nCol2);
         SCCOL nMyCol;
         if ( aPos.Row() == nStartRow
           && nStartCol <= (nMyCol = aPos.Col()) && nMyCol <= aAbs.aEnd.Col())
-        {   // Formel in gleicher Zeile und innerhalb des Range
+        {   //Formula in the same column and within the range
             if ( nMyCol == nStartCol )
-            {   // direkt neben dem Namen den Rest nehmen
+            {    // take the rest under the name
                 nStartCol++;
                 if ( nStartCol > MAXCOL )
                     nStartCol = MAXCOL;
                 aAbs.aStart.SetCol(nStartCol);
             }
             else
-            {   // weiter rechts vom Namen bis zur Formelzelle
+            {   // below the name to the formula cell
                 aAbs.aEnd.SetCol(nMyCol - 1);
             }
         }
@@ -3659,11 +3656,11 @@ void ScInterpreter::ScColRowNameAuto()
 // --- internals ------------------------------------------------------------
 
 void ScInterpreter::ScTTT()
-{   // Temporaerer Test-Tanz, zum auspropieren von Funktionen etc.
+{   // temporary test, testing functions etc.
     sal_uInt8 nParamCount = GetByte();
-    // do something, nParamCount bei Pops runterzaehlen!
+    // do something, count down nParamCount with Pops!
 
-    // Stack aufraeumen
+    // clean up Stack
     while ( nParamCount-- > 0)
         Pop();
     PushError(errNoValue);
