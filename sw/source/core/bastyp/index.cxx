@@ -35,6 +35,7 @@ SwIndex::SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx)
     , m_pIndexReg( pReg )
     , m_pNext( 0 )
     , m_pPrev( 0 )
+    , m_pMark( 0 )
 {
     Init(m_nIndex);
 }
@@ -43,6 +44,7 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nDiff )
     : m_pIndexReg( rIdx.m_pIndexReg )
     , m_pNext( 0 )
     , m_pPrev( 0 )
+    , m_pMark( 0 )
 {
     ChgValue( rIdx, rIdx.m_nIndex + nDiff );
 }
@@ -52,6 +54,7 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     , m_pIndexReg( rIdx.m_pIndexReg )
     , m_pNext( 0 )
     , m_pPrev( 0 )
+    , m_pMark( 0 )
 {
     ChgValue( rIdx, rIdx.m_nIndex );
 }
@@ -213,10 +216,14 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
     return *this;
 }
 
+void SwIndex::SetMark(const sw::mark::IMark* pMark)
+{
+    m_pMark = pMark;
+}
+
 // ----------
 // SwIndexReg
 // ----------
-
 SwIndexReg::SwIndexReg()
     : m_pFirst( 0 ), m_pLast( 0 )
 {
