@@ -3161,9 +3161,16 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
         return uno::makeAny( m_pImpl->m_bUseCommonEncryption );
     else if ( aPropertyName == "Size" )
     {
-        CheckInitOnDemand();
-
-        if ( !m_xSeekable.is() )
+        bool bThrow = false;
+        try
+        {
+            CheckInitOnDemand();
+        }
+        catch (const io::IOException&)
+        {
+            bThrow = true;
+        }
+        if (bThrow || !m_xSeekable.is())
             throw uno::RuntimeException();
 
         return uno::makeAny( m_xSeekable->getLength() );
