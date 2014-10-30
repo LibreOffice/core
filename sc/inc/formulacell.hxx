@@ -183,7 +183,7 @@ public:
 
     /** With formula string and grammar to compile with.
        formula::FormulaGrammar::GRAM_DEFAULT effectively isformula::FormulaGrammar::GRAM_NATIVE_UI that
-        also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefor uses the address
+        also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefore uses the address
         convention associated with rPos::nTab by default. */
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                     const OUString& rFormula,

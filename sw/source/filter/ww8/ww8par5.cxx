@@ -1916,7 +1916,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
 
         /* References to numbers in Word could be either to a numbered
         paragraph or to a chapter number. However Word does not seem to
-        have the capability we do, of refering to the chapter number some
+        have the capability we do, of referring to the chapter number some
         other bookmark is in. As a result, cross-references to chapter
         numbers in a word document will be cross-references to a numbered
         paragraph, being the chapter heading paragraph. As it happens, our

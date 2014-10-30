@@ -2197,7 +2197,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
     }
 
     /* if we have an userid option eg. "-userid:rh[/usr/home/rh/staroffice]",
-       this will supercede all other locations */
+       this will supersede all other locations */
     {
         sal_uInt32 n, nArgs = osl_getCommandArgCount();
 

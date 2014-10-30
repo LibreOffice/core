@@ -702,7 +702,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createClipDevice( const basegfx::B2IVect
 
     This method creates a second bitmap device instance, which renders
     to the same memory as the original, with the same pixel coordinate
-    pairs refering to the same pixels in the memory buffer, but with
+    pairs referring to the same pixels in the memory buffer, but with
     rendering clipped to a rectangular area. Useful to implement
     rectangular clips (usually faster than setting up a 1bpp clip
     mask).

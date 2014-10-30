@@ -85,7 +85,7 @@ Sub TestExtensions
     &apos;Try to create the service which is contained in the now removed extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
 
-    &apos;The service must not be available anymore. Therefor isNull must return true.
+    &apos;The service must not be available anymore. Therefore isNull must return true.
     LogTestResult( &quot;Extension &quot;+ cMessageExtensionUninstall, IsNull (oTestExtension) )
 
     Print #LocalTestLog, &quot;---&quot;

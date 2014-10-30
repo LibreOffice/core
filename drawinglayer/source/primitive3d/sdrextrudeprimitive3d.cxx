@@ -197,7 +197,7 @@ namespace drawinglayer
                         aNewLineGeometry.append(aReducedLoops);
 
                         // to create vertical edges at non-C1/C2 steady loops, use maCorrectedPolyPolygon
-                        // directly since the 3D Polygons do not suport this.
+                        // directly since the 3D Polygons do not support this.
                         //
                         // Unfortunately there is no bezier polygon provided by the chart module; one reason is
                         // that the API for extrude wants a 3D polygon geometry (for historical reasons, i guess)

@@ -2345,9 +2345,9 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
             if (pULSpaceItem)
             {
                 // Word positioned tables can have a position (like a
-                // fly-frame), but they also support flowing accross multiple
+                // fly-frame), but they also support flowing across multiple
                 // pages. If we decide to import this as a normal table (so it
-                // can flow accross multiple pages), then turn the vertical
+                // can flow across multiple pages), then turn the vertical
                 // orientation position of the fly into a table upper margin.
                 const SfxPoolItem* pItem = 0;
                 if (aFlySet.HasItem(RES_VERT_ORIENT, &pItem))

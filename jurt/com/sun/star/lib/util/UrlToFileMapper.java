@@ -57,7 +57,7 @@ public final class UrlToFileMapper {
                     return null;
                 }
             } catch (URISyntaxException ex) {
-                throw new RuntimeException(ex); // should never happend
+                throw new RuntimeException(ex); // should never happen
             }
         }
     }
