@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_8716e653",
+        "filename": "include/comphelper/vectortosequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-10-30T14:26:22Z",
+      "side": 1,
+      "message": "The vector\u003cT\u003e should be correctly sized before adding to it to prevent re-allocations.\nRather use the getArray() method on Sequence\u003cT\u003e and then access the elements directly, bypasses some of the overhead of the operator[] method.",
+      "revId": "781168e711522c01de88fe3a3a3778d8a056830e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_670c1243",
+        "filename": "include/comphelper/vectortosequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-10-30T14:26:22Z",
+      "side": 1,
+      "message": "the old code used getArray() on the Sequence\u003cT\u003e and then modified it directly to bypass some of the overhead",
+      "revId": "781168e711522c01de88fe3a3a3778d8a056830e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
