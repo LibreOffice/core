@@ -13,8 +13,10 @@ ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
     meStringConversion(STRING_CONVERSION_LOCALE_DEPENDENT),     // old LibreOffice behavior
     mbEmptyStringAsZero(false),
-    mbOpenCLEnabled(false),
-    mbOpenCLAutoSelect(true)
+    mbOpenCLEnabled(true),
+    mbOpenCLSubsetOnly(true),
+    mbOpenCLAutoSelect(true),
+    mnOpenCLMinimumFormulaGroupSize(20)
 {
 }
 
@@ -38,8 +40,10 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            meStringConversion == r.meStringConversion &&
            mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
            mbOpenCLEnabled == r.mbOpenCLEnabled &&
+           mbOpenCLSubsetOnly == r.mbOpenCLSubsetOnly &&
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
-           maOpenCLDevice == r.maOpenCLDevice;
+           maOpenCLDevice == r.maOpenCLDevice &&
+           mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
