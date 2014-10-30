@@ -49,8 +49,6 @@
 
 #include <vcl/svapp.hxx>
 
-
-
 // Size check
 #define NAVI_ENTRIES 20
 #if NAVI_ENTRIES != NID_COUNT
@@ -164,8 +162,7 @@ SwTbxAutoTextCtrl::SwTbxAutoTextCtrl(
     sal_uInt16 nId,
     ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pPopup(0),
-    pView(0)
+    pPopup(0)
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 }
@@ -177,46 +174,38 @@ SwTbxAutoTextCtrl::~SwTbxAutoTextCtrl()
 
 SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
 {
-    pView = ::GetActiveView();
+    SwView* pView = ::GetActiveView();
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
        !pView->GetWrtShell().HasReadonlySel() )
     {
-        ToolBox& rBox = GetToolBox();
+        Link aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 
-        Rectangle aItemRect( rBox.GetItemRect( GetId() ) );
-        Point aPt(rBox.OutputToScreenPixel(aItemRect.TopLeft()));
-        aPt.X() += aItemRect.GetWidth()/2;
-        aPt.Y() += aItemRect.GetHeight()/2;
-        if(pView)
+        pPopup = new PopupMenu;
+        SwGlossaryList* pGlossaryList = ::GetGlossaryList();
+        const size_t nGroupCount = pGlossaryList->GetGroupCount();
+        for(size_t i = 1; i <= nGroupCount; ++i)
         {
-            Link aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
-
-            pPopup = new PopupMenu;
-            SwGlossaryList* pGlossaryList = ::GetGlossaryList();
-            const size_t nGroupCount = pGlossaryList->GetGroupCount();
-            for(size_t i = 1; i <= nGroupCount; ++i)
+            OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
+            const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
+            if(nBlockCount)
             {
-                OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
-                const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
-                if(nBlockCount)
+                sal_uInt16 nIndex = static_cast<sal_uInt16>(100*i);
+                // but insert without extension
+                pPopup->InsertItem( i, sTitle);
+                PopupMenu* pSub = new PopupMenu;
+                pSub->SetSelectHdl(aLnk);
+                pPopup->SetPopupMenu(i, pSub);
+                for(sal_uInt16 j = 0; j < nBlockCount; j++)
                 {
-                    sal_uInt16 nIndex = static_cast<sal_uInt16>(100*i);
-                    // but insert without extension
-                    pPopup->InsertItem( i, sTitle);
-                    PopupMenu* pSub = new PopupMenu;
-                    pSub->SetSelectHdl(aLnk);
-                    pPopup->SetPopupMenu(i, pSub);
-                    for(sal_uInt16 j = 0; j < nBlockCount; j++)
-                    {
-                        OUString sLongName(pGlossaryList->GetBlockLongName(i - 1, j));
-                        OUString sShortName(pGlossaryList->GetBlockShortName(i - 1, j));
+                    OUString sLongName(pGlossaryList->GetBlockLongName(i - 1, j));
+                    OUString sShortName(pGlossaryList->GetBlockShortName(i - 1, j));
 
-                        OUString sEntry = sShortName + " - " + sLongName;
-                        pSub->InsertItem(++nIndex, sEntry);
-                    }
+                    OUString sEntry = sShortName + " - " + sLongName;
+                    pSub->InsertItem(++nIndex, sEntry);
                 }
             }
         }
+
         ToolBox* pToolBox = &GetToolBox();
         sal_uInt16 nId = GetId();
         pToolBox->SetItemDown( nId, true );
@@ -256,7 +245,7 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
     OUString sShortName =
         pGlossaryList->GetBlockShortName(nBlock - 1, nId - (100 * nBlock) - 1);
 
-    SwGlossaryHdl* pGlosHdl = pView->GetGlosHdl();
+    SwGlossaryHdl* pGlosHdl = ::GetActiveView()->GetGlosHdl();
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
     ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc();
