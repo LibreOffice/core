@@ -194,13 +194,12 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 
 ifneq (,$(filter ANDROID IOS,$(OS)))
 
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+# these are in NONE layer because
+# a) scp2 is not used on mobile b) layers don't mean anything on mobile
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
 	) \
-))
-
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	libotouch \
 ))
 
