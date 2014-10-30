@@ -141,7 +141,7 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     // CFAttributedStringCreate copies the attribues parameter
     mpAttrString = CFAttributedStringCreate( NULL, aCFText, mpTextStyle->GetStyleDict() );
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
-    SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(\"" << GetOUString(aCFText) << "\") = " << mpCTLine );
+    SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(\"" << GetOUString(aCFText) << "\") =p " << mpCTLine );
     CFRelease( aCFText);
 
     mnTrailingSpaceCount = 0;
@@ -176,48 +176,32 @@ void CTLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         delete[] iter->m_pAdjPositions;
         iter->m_pAdjPositions = new CGPoint[iter->m_nGlyphs];
 
+        SAL_INFO( "vcl.ct", "Apply DXArray Run status:"<< (void*)(uintptr_t)status);
+
         if(!(status & kCTRunStatusNonMonotonic))
         {
-            if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
+            /* simple 1 to 1 */
+            SAL_INFO( "vcl.ct", "nb glyph in vrun:" << iter->m_nGlyphs);
+            for(int i = 0 ; i < iter->m_nGlyphs; i++)
             {
-                /* simple 1 to 1 */
-                for(int i = 0 ; i < iter->m_nGlyphs; i++)
+                SAL_INFO( "vcl.ct", "StringIndices[ "<< i << " ] = " << iter->m_pStringIndices[i]);
+                int j = iter->m_pStringIndices[i];
+                if(j == 0)
                 {
-                    if(iter->m_pStringIndices[i] == 0)
-                    {
-                        iter->m_pAdjPositions[i].x = 0;
-                        SAL_INFO( "vcl.ct", "Apply DXArray["<< i << "]: 0.0 pos: " << iter->m_pPositions[i].x);
-                    }
-                    else
-                    {
-                        iter->m_pAdjPositions[i].x = rArgs.mpDXArray[iter->m_pStringIndices[i-1]];
-                        SAL_INFO( "vcl.ct", "Apply to i DXArray["<< iter->m_pStringIndices[i-1] << "]: " <<
-                                  rArgs.mpDXArray[iter->m_pStringIndices[i-1]] << " pos:( " << iter->m_pPositions[i].x << ", " << iter->m_pPositions[i].y);
-                    }
-                    iter->m_pAdjPositions[i].y = iter->m_pPositions[i].y;
+                    iter->m_pAdjPositions[i].x = 0;
+                    SAL_INFO( "vcl.ct", "m_pAdjPostion[" << i << "] = 0.0");
                 }
-            }
-            else
-            {
-                /* simple 1 to 1 */
-                for(int i = 0 ; i < iter->m_nGlyphs; i++)
+                else
                 {
-                    if(iter->m_pStringIndices[i] == 0)
-                    {
-                        iter->m_pAdjPositions[i].x = 0;
-                        SAL_INFO( "vcl.ct", "Apply DXArray["<< i << "]: 0.0 pos: " << iter->m_pPositions[i].x);
-                    }
-                    else
-                    {
-                        iter->m_pAdjPositions[i].x = rArgs.mpDXArray[iter->m_pStringIndices[i-1]];
-                        SAL_INFO( "vcl.ct", "Apply to i DXArray["<< iter->m_pStringIndices[i-1] << "]: " << rArgs.mpDXArray[iter->m_pStringIndices[i-1]] << " pos: " << iter->m_pPositions[i].x);
-                    }
-                    iter->m_pAdjPositions[i].y = iter->m_pPositions[i].y;
+                    iter->m_pAdjPositions[i].x = rArgs.mpDXArray[j - 1];
+                    SAL_INFO( "vcl.ct", "m_pAdjPostion[" << i << "] = rArgs.mpDXArray[ " << j - 1 << " ]= " << rArgs.mpDXArray[j -1]);
                 }
+                iter->m_pAdjPositions[i].y = iter->m_pPositions[i].y;
             }
         }
         else
         {
+            SAL_INFO( "vcl.ct", "drop DXArray info");
             delete[] iter->m_pAdjPositions;
             iter->m_pAdjPositions = NULL;
         }
@@ -379,7 +363,7 @@ bool CTLayout::DrawTextSpecial( SalGraphics& rGraphics, sal_uInt32 flags ) const
                 CFAttributedStringGetString(mpAttrString),
                 styledict);
         CTLineRef pCTLine = CTLineCreateWithAttributedString( pAttrStr );
-        SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(" << pAttrStr << ") = " << pCTLine );
+        SAL_INFO( "vcl.ct", "CTLineCreateWithAttributedString(" << GetOUString(CFAttributedStringGetString(mpAttrSring)) << ") = " << pCTLine );
         CFRelease( pAttrStr );
 
         /* draw the text in 'outline' */
@@ -777,8 +761,8 @@ DeviceCoordinate CTLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
         for( int i = 0; i != nGlyphCount; ++i )
         {
             const int nRelIdx = aIndexVec[i];
+            SAL_INFO( "vcl.ct", "pDXArray[ g:" << i << "-> c:" << nRelIdx << " ] = " << pDXArray[nRelIdx] << " + " << aSizeVec[i].width << " = " << pDXArray[nRelIdx] + aSizeVec[i].width);
             pDXArray[nRelIdx] += aSizeVec[i].width;
-            SAL_INFO( "vcl.ct", "Fill DXArray["<< nRelIdx << "]: " << pDXArray[nRelIdx] << " aSizeVer[" << i << "].width :" << aSizeVec[i].width);
         }
     }
     return nPixWidth;
