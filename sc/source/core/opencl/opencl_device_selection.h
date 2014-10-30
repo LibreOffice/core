@@ -602,7 +602,17 @@ inline ds_status readProfileFromFile(ds_profile* profile, ds_score_deserializer 
     }
 cleanup:
     if (contentStart != NULL) free(contentStart);
-    return status;
+    if (status != DS_SUCCESS)
+        return status;
+
+    // Check that all the devices present had valid cached scores. If
+    // not, return DS_INVALID_PROFILE and let the caller re-evaluate
+    // scores for present devices, and write a new profile file.
+    for (unsigned int i = 0; i < profile->numDevices; i++)
+        if (profile->devices[i].score == NULL)
+            return DS_INVALID_PROFILE;
+
+    return DS_SUCCESS;
 }
 
 inline ds_status getNumDeviceWithEmptyScore(ds_profile* profile, unsigned int* num)
