@@ -1378,8 +1378,16 @@ void SAL_CALL ZipPackage::commitChanges()
                     static_cast < OWeakObject * > ( this ), makeAny ( r ) );
         }
 
-        // connect to the temporary stream
-        ConnectTo( xTempInStream );
+        try
+        {
+            // connect to the temporary stream
+            ConnectTo( xTempInStream );
+        }
+        catch( const io::IOException& r )
+        {
+            throw WrappedTargetException(THROW_WHERE "Temporary file should be connectable!",
+                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+        }
 
         if ( m_eMode == e_IMode_XStream )
         {
