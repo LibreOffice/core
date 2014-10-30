@@ -165,13 +165,6 @@ File gid_File_Bin_Senddoc
     Name = "shell_senddoc.filelist";
     Styles = (FILELIST, PACKED);
 End
-#elif defined WNT
-File gid_File_Bin_Senddoc
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "senddoc.exe";
-    Styles = (PACKED);
-End
 #endif
 
 File gid_File_framework_dtd

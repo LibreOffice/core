@@ -18,10 +18,12 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/quickstart"
+
 Module gid_Module_Optional_Quickstart
     MOD_NAME_DESC ( MODULE_OPTIONAL_QUICKSTART );
     Sortkey = "1400";
     Default = YES;
     ParentID = gid_Module_Optional;
-    Files = (gid_File_Exe_Quickstart, gid_File_Tmp_Userinstall_Quickstart_Inf);
+    Files = (auto_quickstart_ALL, gid_File_Tmp_Userinstall_Quickstart_Inf);
 End

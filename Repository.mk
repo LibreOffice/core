@@ -141,7 +141,16 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
 	$(if $(filter unx,$(GUIBASE)),uri-encode) \
 	ui-previewer \
+	$(if $(filter WNT,$(OS)), \
+		senddoc \
+	) \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_executables_for_install,OOO,quickstart, \
+	quickstart \
+))
+endif
 
 ifneq ($(ENABLE_CRASHDUMP),)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,crashrep, \
@@ -178,10 +187,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	vcldemo \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
-	$(if $(filter WNT,$(OS)), \
-		quickstart \
-		senddoc \
-	) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
