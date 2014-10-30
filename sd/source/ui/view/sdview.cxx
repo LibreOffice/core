@@ -475,7 +475,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sdr::c
 
         if (pPgView)
         {
-            SdPage* pPage = (SdPage*) pPgView->GetPage();
+            SdPage* pPage = static_cast<SdPage*>( pPgView->GetPage() );
             if( pPage )
             {
                 SdrOutliner& rOutl = mrDoc.GetDrawOutliner(NULL);
@@ -570,7 +570,7 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
 
         if ( pObj && ( bCheckPresObjListOnly || pObj->IsEmptyPresObj() || pObj->GetUserCall() ) )
         {
-            pPage = (SdPage*) pObj->GetPage();
+            pPage = static_cast<SdPage*>( pObj->GetPage() );
             bMasterPage = pPage && pPage->IsMasterPage();
 
             if ( (bMasterPage && bOnMasterPage) || (!bMasterPage && bOnPage) )
@@ -676,7 +676,7 @@ bool View::SdrBeginTextEdit(
     // make draw&impress specific initialisations
     if( pOutl )
     {
-        pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mrDoc.GetStyleSheetPool());
+        pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDoc.GetStyleSheetPool() ));
         pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
         sal_uLong nCntrl = pOutl->GetControlWord();
         nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
@@ -843,18 +843,18 @@ void View::SetMarkedOriginalSize()
         {
             if( pObj->GetObjIdentifier() == OBJ_OLE2 )
             {
-                uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
+                uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObj)->GetObjRef();
                 if( xObj.is() )
                 {
                     // TODO/LEAN: working with VisualArea can switch object to running state
 
-                       sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
+                       sal_Int64 nAspect = static_cast<SdrOle2Obj*>(pObj)->GetAspect();
                     Size aOleSize;
 
                     if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
                         MapMode aMap100( MAP_100TH_MM );
-                        aOleSize = ((SdrOle2Obj*)pObj)->GetOrigObjSize( &aMap100 );
+                        aOleSize = static_cast<SdrOle2Obj*>(pObj)->GetOrigObjSize( &aMap100 );
                         bOK = true;
                     }
                     else
@@ -987,8 +987,8 @@ bool View::IsMorphingAllowed() const
             aSet1.Put(pObj1->GetMergedItemSet());
             aSet2.Put(pObj2->GetMergedItemSet());
 
-            const drawing::FillStyle eFillStyle1 = ( (const XFillStyleItem&) aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
-            const drawing::FillStyle eFillStyle2 = ( (const XFillStyleItem&) aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
+            const drawing::FillStyle eFillStyle1 = static_cast<const XFillStyleItem&>( aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
+            const drawing::FillStyle eFillStyle2 = static_cast<const XFillStyleItem&>( aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
 
             if( ( eFillStyle1 == drawing::FillStyle_NONE || eFillStyle1 == drawing::FillStyle_SOLID ) &&
                 ( eFillStyle2 == drawing::FillStyle_NONE || eFillStyle2 == drawing::FillStyle_SOLID ) )

@@ -104,7 +104,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     SD_MOD()->pTransferClip = pTransferable;
 
     mrDoc.CreatingDataObj( pTransferable );
-    pTransferable->SetWorkDocument( (SdDrawDocument*) GetMarkedObjModel() );
+    pTransferable->SetWorkDocument( static_cast<SdDrawDocument*>(GetMarkedObjModel()) );
     mrDoc.CreatingDataObj( NULL );
 
     // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
@@ -113,8 +113,8 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     TransferableObjectDescriptor    aObjDesc;
     SdrOle2Obj*                     pSdrOleObj = NULL;
     SdrPageView*                    pPgView = GetSdrPageView();
-    SdPage*                         pOldPage = pPgView ? ( (SdPage*) pPgView->GetPage() ) : NULL;
-    SdPage*                         pNewPage = (SdPage*) pTransferable->GetWorkDocument()->GetPage( 0 );
+    SdPage*                         pOldPage = pPgView ? static_cast<SdPage*>( pPgView->GetPage() ) : NULL;
+    SdPage*                         pNewPage = const_cast<SdPage*>(static_cast<const SdPage*>( pTransferable->GetWorkDocument()->GetPage( 0 ) ));
 
     if( pOldPage )
     {
@@ -126,14 +126,14 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {
         SdrObject* pObj = GetMarkedObjectByIndex(0);
 
-        if( pObj && pObj->ISA(SdrOle2Obj) && ((SdrOle2Obj*) pObj)->GetObjRef().is() )
+        if( pObj && pObj->ISA(SdrOle2Obj) && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
         {
             // If object has no persistence it must be copied as part of the document
             try
             {
-                uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+                uno::Reference< embed::XEmbedPersist > xPersObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), uno::UNO_QUERY );
                 if ( xPersObj.is() && xPersObj->hasEntry() )
-                     pSdrOleObj = (SdrOle2Obj*) pObj;
+                     pSdrOleObj = static_cast<SdrOle2Obj*>(pObj);
             }
             catch( uno::Exception& )
             {}
@@ -172,14 +172,14 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {
         SdrObject* pObj = GetMarkedObjectByIndex( 0 );
 
-        if( pObj && pObj->ISA( SdrOle2Obj ) && ( (SdrOle2Obj*) pObj )->GetObjRef().is() )
+        if( pObj && pObj->ISA( SdrOle2Obj ) && static_cast<SdrOle2Obj*>(pObj)->GetObjRef().is() )
         {
             // If object has no persistence it must be copied as part of the document
             try
             {
-                uno::Reference< embed::XEmbedPersist > xPersObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
+                uno::Reference< embed::XEmbedPersist > xPersObj( static_cast<SdrOle2Obj*>(pObj)->GetObjRef(), uno::UNO_QUERY );
                 if ( xPersObj.is() && xPersObj->hasEntry() )
-                     pSdrOleObj = (SdrOle2Obj*) pObj;
+                     pSdrOleObj = static_cast<SdrOle2Obj*>(pObj);
             }
             catch( uno::Exception& )
             {}
@@ -288,7 +288,7 @@ void View::DoPaste (vcl::Window* pWindow)
         const_cast< OutlinerView* >(pOLV)->PasteSpecial();
 
         SdrObject*  pObj = GetTextEditObject();
-        SdPage*     pPage = (SdPage*)( pObj ? pObj->GetPage() : NULL );
+        SdPage*     pPage = static_cast<SdPage*>( pObj ? pObj->GetPage() : NULL );
         ::Outliner* pOutliner = pOLV->GetOutliner();
 
         if( pOutliner)
@@ -332,7 +332,7 @@ void View::DoPaste (vcl::Window* pWindow)
         if( pWindow )
             aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
 
-        DrawViewShell* pDrViewSh = (DrawViewShell*) mpDocSh->GetViewShell();
+        DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
 
         if (pDrViewSh != NULL)
         {
@@ -555,7 +555,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
                     if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
                     {
-                        SdPage* pPage = (SdPage*) pPickObj->GetPage();
+                        SdPage* pPage = static_cast<SdPage*>( pPickObj->GetPage() );
 
                         if( pPage && pPage->IsMasterPage() )
                             bIsPresTarget = pPage->IsPresObj( pPickObj );
@@ -693,7 +693,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
 
                                 ReadXFillExchangeData( *xStm, aFillData );
-                                const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetColorValue() );
+                                const Color aColor( static_cast<const XFillColorItem&>( aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetColorValue() );
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, true );
                                 nRet = nDropAction;
                             }
@@ -797,7 +797,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         else if( mpViewSh->ISA( DrawViewShell ) )
                         {
                             // insert as normal URL button
-                            ( (DrawViewShell*) mpViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), OUString(), &aPos );
+                            static_cast<DrawViewShell*>( mpViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), OUString(), &aPos );
                             nRet = nDropAction;
                         }
                     }
@@ -819,7 +819,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
     {
         Point   aPos;
         OUString  aBookmark;
-        SdPage* pPage = (SdPage*) GetSdrPageView()->GetPage();
+        SdPage* pPage = static_cast<SdPage*>( GetSdrPageView()->GetPage() );
         sal_uInt16  nPgPos = 0xFFFF;
 
         if( pSdNavigatorDropEvent->mpTargetWindow )

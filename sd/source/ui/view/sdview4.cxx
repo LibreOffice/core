@@ -109,12 +109,12 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         if( IsUndoEnabled() )
             BegUndo(OUString(SdResId(STR_INSERTGRAPHIC)));
 
-        SdPage* pPage = (SdPage*) pPickObj->GetPage();
+        SdPage* pPage = static_cast<SdPage*>( pPickObj->GetPage() );
 
         if( bIsGraphic )
         {
             // We fill the object with the Bitmap
-            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+            pNewGrafObj = static_cast<SdrGrafObj*>( pPickObj->Clone() );
             pNewGrafObj->SetGraphic(rGraphic);
         }
         else

@@ -205,9 +205,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                     aAttrSet.GetItemState( SDRATTR_EDGELINE2DELTA ) >= SfxItemState::DEFAULT &&
                     aAttrSet.GetItemState( SDRATTR_EDGELINE3DELTA ) >= SfxItemState::DEFAULT )
                 {
-                    long nVal1 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE1DELTA ) ).GetValue();
-                    long nVal2 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE2DELTA ) ).GetValue();
-                    long nVal3 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE3DELTA ) ).GetValue();
+                    long nVal1 = static_cast<const SdrMetricItem&>( aAttrSet.Get( SDRATTR_EDGELINE1DELTA ) ).GetValue();
+                    long nVal2 = static_cast<const SdrMetricItem&>( aAttrSet.Get( SDRATTR_EDGELINE2DELTA ) ).GetValue();
+                    long nVal3 = static_cast<const SdrMetricItem&>( aAttrSet.Get( SDRATTR_EDGELINE3DELTA ) ).GetValue();
                     {
                         if( nVal1 != 0 || nVal2 != 0 || nVal3 != 0 )
                             bDisable = false;
@@ -280,7 +280,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         if( SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTLINE_TEXT_AUTOFIT ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            const bool bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
+            const bool bSet = static_cast<const SdrTextFitToSizeTypeItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
             rSet.Put(SfxBoolItem(SID_OUTLINE_TEXT_AUTOFIT, bSet));
         }
 

@@ -287,7 +287,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     }
 
     if( nPage != SDRPAGE_NOTFOUND )
-        pPage = (SdPage*) mrDoc.GetPage( nPage );
+        pPage = static_cast<SdPage*>( mrDoc.GetPage( nPage ) );
 
     SdTransferable* pOwnData = NULL;
     SdTransferable* pImplementation = SdTransferable::getImplementation( aDataHelper.GetTransferable() );
@@ -410,7 +410,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( !pPage && pPV->GetPage()->GetPageNum() != mnDragSrcPgNum )
                     {
-                        pPage = (SdPage*) pPV->GetPage();
+                        pPage = static_cast<SdPage*>( pPV->GetPage() );
                         bDropOnTabBar = false;
                     }
 
@@ -499,8 +499,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                         if(pRem->pClone->ISA(SdrEdgeObj))
                                         {
-                                            SdrEdgeObj* pOrigEdge = (SdrEdgeObj*)pRem->pOrig;
-                                            SdrEdgeObj* pCloneEdge = (SdrEdgeObj*)pRem->pClone;
+                                            SdrEdgeObj* pOrigEdge = static_cast<SdrEdgeObj*>(pRem->pOrig);
+                                            SdrEdgeObj* pCloneEdge = static_cast<SdrEdgeObj*>(pRem->pClone);
 
                                             // test first connection
                                             SdrObjConnection& rConn0 = pOrigEdge->GetConnection(false);
@@ -600,13 +600,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 if( !pSourceView->IsPresObjSelected() )
                 {
                     // model is owned by from AllocModel() created DocShell
-                    SdDrawDocument* pSourceDoc = (SdDrawDocument*) pSourceView->GetModel();
+                    SdDrawDocument* pSourceDoc = static_cast<SdDrawDocument*>( pSourceView->GetModel() );
                     pSourceDoc->CreatingDataObj( pOwnData );
-                    SdDrawDocument* pModel = (SdDrawDocument*) pSourceView->GetMarkedObjModel();
+                    SdDrawDocument* pModel = static_cast<SdDrawDocument*>( pSourceView->GetMarkedObjModel() );
                     bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
 
                     if( !pPage )
-                        pPage = (SdPage*) GetSdrPageView()->GetPage();
+                        pPage = static_cast<SdPage*>( GetSdrPageView()->GetPage() );
 
                     OUString aLayout = pPage->GetLayoutName();
                     sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
@@ -647,7 +647,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             bReturn = Paste(*pWorkModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
 
             if( !pPage )
-                pPage = (SdPage*) GetSdrPageView()->GetPage();
+                pPage = static_cast<SdPage*>( GetSdrPageView()->GetPage() );
 
             OUString aLayout = pPage->GetLayoutName();
             sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
@@ -777,7 +777,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
                                 if( bUndo )
-                                    AddUndo( new E3dAttributesUndoAction( mrDoc, (E3dObject*) pPickObj, aNewSet, aOldSet ) );
+                                    AddUndo( new E3dAttributesUndoAction( mrDoc, static_cast<E3dObject*>(pPickObj), aNewSet, aOldSet ) );
                                 pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 
@@ -889,7 +889,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
 
                     if( !pPage )
-                        pPage = (SdPage*) GetSdrPageView()->GetPage();
+                        pPage = static_cast<SdPage*>(GetSdrPageView()->GetPage());
 
                     OUString aLayout = pPage->GetLayoutName();
                     sal_Int32 nPos = aLayout.indexOf(SD_LT_SEPARATOR);
@@ -1314,11 +1314,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             XFillAttrSetItem*   pSetItem = aFillData.GetXFillAttrSetItem();
             SfxItemSet          rSet = pSetItem->GetItemSet();
-            drawing::FillStyle eFill= ( (XFillStyleItem&) rSet.Get( XATTR_FILLSTYLE ) ).GetValue();
+            drawing::FillStyle eFill = static_cast<const XFillStyleItem&>( rSet.Get( XATTR_FILLSTYLE ) ).GetValue();
 
             if( eFill == drawing::FillStyle_SOLID || eFill == drawing::FillStyle_NONE )
             {
-                const XFillColorItem&   rColItem = (XFillColorItem&) rSet.Get( XATTR_FILLCOLOR );
+                const XFillColorItem&   rColItem = static_cast<const XFillColorItem&>( rSet.Get( XATTR_FILLCOLOR ) );
                 Color                   aColor( rColItem.GetColorValue() );
                 OUString                aName( rColItem.GetName() );
                 SfxItemSet              aSet( mrDoc.GetPool() );

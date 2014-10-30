@@ -336,7 +336,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
             {
                 const SfxRectangleItem& rRect =
-                    (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
+                    static_cast<const SfxRectangleItem&>(rReq.GetArgs()->Get(SID_OBJECTRESIZE));
                 Rectangle aRect( GetActiveWindow()->PixelToLogic( rRect.GetValue() ) );
 
                 if ( mpDrawView->AreObjectsMarked() )
@@ -383,7 +383,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
                 if(pWindow)
                 {
-                    Svx3DWin* p3DWin = (Svx3DWin*)(pWindow->GetWindow());
+                    Svx3DWin* p3DWin = static_cast<Svx3DWin*>(pWindow->GetWindow());
                     if(p3DWin)
                         p3DWin->DocumentReload();
                 }
@@ -506,8 +506,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
     {
         case SID_ATTR_LONG_LRSPACE:
         {
-            const SvxLongLRSpaceItem& rLRSpace = (const SvxLongLRSpaceItem&)
-                    pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE));
+            const SvxLongLRSpaceItem& rLRSpace = static_cast<const SvxLongLRSpaceItem&>(
+                    pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_LRSPACE)));
 
             if( mpDrawView->IsTextEdit() )
             {
@@ -563,8 +563,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         }
         case SID_ATTR_LONG_ULSPACE:
         {
-            const SvxLongULSpaceItem& rULSpace = (const SvxLongULSpaceItem&)
-                    pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE));
+            const SvxLongULSpaceItem& rULSpace = static_cast<const SvxLongULSpaceItem&>(
+                    pArgs->Get(GetPool().GetWhich(SID_ATTR_LONG_ULSPACE)));
 
             if( mpDrawView->IsTextEdit() )
             {
@@ -625,8 +625,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             Rectangle aRect = maMarkRect;
             aRect.SetPos(aRect.TopLeft() + aPagePos);
 
-            const SvxObjectItem& rOI = (const SvxObjectItem&)
-                    pArgs->Get(GetPool().GetWhich(SID_RULER_OBJECT));
+            const SvxObjectItem& rOI = static_cast<const SvxObjectItem&>(
+                    pArgs->Get(GetPool().GetWhich(SID_RULER_OBJECT)));
 
             if ( rOI.GetStartX() != rOI.GetEndX() )
             {
@@ -652,8 +652,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         {
             if( mpDrawView->IsTextEdit() )
             {
-                const SvxTabStopItem& rItem = (const SvxTabStopItem&)
-                            pArgs->Get( EE_PARA_TABS );
+                const SvxTabStopItem& rItem = static_cast<const SvxTabStopItem&>(
+                            pArgs->Get( EE_PARA_TABS ));
 
                 SfxItemSet aEditAttr( GetPool(), EE_PARA_TABS, EE_PARA_TABS );
 
@@ -668,8 +668,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_LINESPACE:
         {
             sal_uInt16 nSlot = SID_ATTR_PARA_LINESPACE;
-            SvxLineSpacingItem aParaLineSP = (const SvxLineSpacingItem&)pArgs->Get(
-                GetPool().GetWhich(nSlot));
+            SvxLineSpacingItem aParaLineSP = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
+                GetPool().GetWhich(nSlot)));
 
             SfxItemSet aEditAttr( GetPool(), EE_PARA_SBL, EE_PARA_SBL );
             aParaLineSP.SetWhich( EE_PARA_SBL );
@@ -727,8 +727,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_ULSPACE:
         {
             sal_uInt16 nSlot = SID_ATTR_PARA_ULSPACE;
-            SvxULSpaceItem aULSP = (const SvxULSpaceItem&)pArgs->Get(
-                GetPool().GetWhich(nSlot));
+            SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>(pArgs->Get(
+                GetPool().GetWhich(nSlot)));
             SfxItemSet aEditAttr( GetPool(), EE_PARA_ULSPACE, EE_PARA_ULSPACE );
             aULSP.SetWhich( EE_PARA_ULSPACE );
 
@@ -742,8 +742,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_LRSPACE:
         {
             sal_uInt16 nSlot = SID_ATTR_PARA_LRSPACE;
-            SvxLRSpaceItem aLRSpace = (const SvxLRSpaceItem&)pArgs->Get(
-                GetPool().GetWhich(nSlot));
+            SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
+                GetPool().GetWhich(nSlot)));
 
             SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );
@@ -759,8 +759,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
             if( mpDrawView->IsTextEdit() )
             {
                 sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
-                const SvxLRSpaceItem& rItem = (const SvxLRSpaceItem&)
-                            pArgs->Get( nId );
+                const SvxLRSpaceItem& rItem = static_cast<const SvxLRSpaceItem&>(
+                            pArgs->Get( nId ));
 
                 static const sal_uInt16 aWhichTable[]=
                 {
@@ -779,9 +779,9 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         rItem.GetRight(), rItem.GetTxtLeft(),
                         rItem.GetTxtFirstLineOfst(), nId );
 
-                const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
-                const SvxLRSpaceItem& rOrigLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
-                const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
+                const sal_Int16 nOutlineLevel = static_cast<const SfxInt16Item&>(aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                const SvxLRSpaceItem& rOrigLRSpaceItem = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ));
+                const SvxNumBulletItem& rNumBulletItem = static_cast<const SvxNumBulletItem&>( aEditAttr.Get( EE_PARA_NUMBULLET ) );
                 if( nOutlineLevel != -1 &&
                     rNumBulletItem.GetNumRule() &&
                     rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
@@ -908,17 +908,17 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                 mpDrawView->GetAttributes( aEditAttr );
                 if( aEditAttr.GetItemState( EE_PARA_TABS ) >= SfxItemState::DEFAULT )
                 {
-                    const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( EE_PARA_TABS );
+                    const SvxTabStopItem& rItem = static_cast<const SvxTabStopItem&>( aEditAttr.Get( EE_PARA_TABS ) );
                     rSet.Put( rItem );
 
-                    const SvxLRSpaceItem& rLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
+                    const SvxLRSpaceItem& rLRSpaceItem = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
                     sal_uInt16 nId = SID_ATTR_PARA_LRSPACE;
                     SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
                             rLRSpaceItem.GetRight(), rLRSpaceItem.GetTxtLeft(),
                             rLRSpaceItem.GetTxtFirstLineOfst(), nId );
 
-                    const sal_Int16 nOutlineLevel = ((const SfxInt16Item&)aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
-                    const SvxNumBulletItem& rNumBulletItem = (const SvxNumBulletItem&) aEditAttr.Get( EE_PARA_NUMBULLET );
+                    const sal_Int16 nOutlineLevel = static_cast<const SfxInt16Item&>( aEditAttr.Get( EE_PARA_OUTLLEVEL )).GetValue();
+                    const SvxNumBulletItem& rNumBulletItem = static_cast<const SvxNumBulletItem&>( aEditAttr.Get( EE_PARA_NUMBULLET ) );
                     if( nOutlineLevel != -1 &&
                         rNumBulletItem.GetNumRule() &&
                         rNumBulletItem.GetNumRule()->GetLevelCount() > nOutlineLevel )
@@ -936,8 +936,8 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SfxItemState::SET )
                     {
-                        const SdrMetricItem& rTLDItem = (const SdrMetricItem&)
-                                                              aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
+                        const SdrMetricItem& rTLDItem = static_cast<const SdrMetricItem&>(
+                                                              aEditAttr.Get( SDRATTR_TEXT_LEFTDIST ));
                         long nLD = rTLDItem.GetValue();
                         aPos.X() += nLD;
                     }
@@ -948,8 +948,8 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SfxItemState::SET )
                     {
-                        const SdrMetricItem& rTLDItem = (const SdrMetricItem&)
-                                                              aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
+                        const SdrMetricItem& rTLDItem = static_cast<const SdrMetricItem&>(
+                                                              aEditAttr.Get( SDRATTR_TEXT_LEFTDIST ));
                         long nLD = rTLDItem.GetValue();
                         aLRSpace.SetLeft( aLRSpace.GetLeft() + nLD );
                     }
@@ -967,7 +967,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                 if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SfxItemState::DEFAULT )
                 {
-                    const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR );
+                    const SvxFrameDirectionItem& rItem = static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) );
                     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, rItem.GetValue() == ::com::sun::star::text::WritingMode_RL_TB));
                 }
             }

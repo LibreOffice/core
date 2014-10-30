@@ -152,7 +152,7 @@ private:
     ViewShellBase& mrBase;
     mutable ::osl::Mutex maMutex;
 
-    class ShellHash{public: size_t operator()(const SfxShell* p) const { return (size_t)p;} };
+    class ShellHash { public: size_t operator()(const SfxShell* p) const { return reinterpret_cast<size_t>(p);} };
     typedef ::boost::unordered_multimap<const SfxShell*,SharedShellFactory,ShellHash>
         FactoryList;
     FactoryList maShellFactories;

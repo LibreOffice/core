@@ -162,7 +162,7 @@ bool DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
                             (OBJ_TITLETEXT == nKnd || OBJ_OUTLINETEXT == nKnd || OBJ_TEXT == nKnd)
                             && bDidVisitOldObject)
                         {
-                            pCandidate = (SdrTextObj*)pObj;
+                            pCandidate = static_cast<SdrTextObj*>(pObj);
                         }
 
                         if(pObj == pOldObj)
@@ -248,7 +248,7 @@ void DrawViewShell::FreshNavigatrEntry()
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        SdNavigatorWin* pNavWin = (SdNavigatorWin*)( pWindow->GetContextWindow( SD_MOD() ) );
+        SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
         if( pNavWin )
             pNavWin->FreshEntry();
     }
@@ -260,7 +260,7 @@ void DrawViewShell::FreshNavigatrTree()
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        SdNavigatorWin* pNavWin = (SdNavigatorWin*)( pWindow->GetContextWindow( SD_MOD() ) );
+        SdNavigatorWin* pNavWin = static_cast<SdNavigatorWin*>( pWindow->GetContextWindow( SD_MOD() ) );
         if( pNavWin )
             pNavWin->FreshTree( GetDoc() );
     }
@@ -289,7 +289,7 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
         //else the corresponding entry is set false .
         FreshNavigatrTree();
         if ( mbPipette )
-            ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->PipetteClicked();
+            static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->PipetteClicked();
     }
 }
 
@@ -392,7 +392,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                 }
             }
 
-            ( (SvxBmpMask*) GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
+            static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                 SetColor( Color( (sal_uInt8) ( nRed / fDiv + .5 ),
                                  (sal_uInt8) ( nGreen / fDiv + .5 ),
                                  (sal_uInt8) ( nBlue / fDiv + .5 ) ) );
@@ -420,7 +420,7 @@ void DrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
             else if (rMEvt.IsLeft() && bIsSetPageOrg)
             {
                 mpDrawView->BrkAction();
-                SdPage* pPage = (SdPage*) mpDrawView->GetSdrPageView()->GetPage();
+                SdPage* pPage = static_cast<SdPage*>( mpDrawView->GetSdrPageView()->GetPage() );
                 Point aOrg(pPage->GetLftBorder(), pPage->GetUppBorder());
                 mpDrawView->GetSdrPageView()->SetPageOrigin(aOrg);
                 GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);

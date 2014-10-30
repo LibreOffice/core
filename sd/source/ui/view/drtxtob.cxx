@@ -135,7 +135,7 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     aNewAttr.Put(aCharAttrSet, false);
     rSet.Put(aNewAttr, false);
 
-    SvxKerningItem aKern = ( (const SvxKerningItem&) aCharAttrSet.Get( EE_CHAR_KERNING ) );
+    SvxKerningItem aKern = static_cast<const SvxKerningItem&>( aCharAttrSet.Get( EE_CHAR_KERNING ) );
     //aKern.SetWhich(SID_ATTR_CHAR_KERNING);
     rSet.Put(aKern);
 
@@ -375,7 +375,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             bLeftToRight = false;
                     }
                     else
-                        bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
+                        bLeftToRight = static_cast<const SvxWritingModeItem&>( aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
 
                     rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
                     rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
@@ -463,7 +463,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             for( sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
                 const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( nPara );
-                const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) rItems.Get( EE_PARA_ULSPACE );
+                const SvxULSpaceItem& rItem = static_cast<const SvxULSpaceItem&>( rItems.Get( EE_PARA_ULSPACE ) );
                 nUpper = std::max( nUpper, (long)rItem.GetUpper() );
             }
             if( nUpper == 0L )
@@ -477,9 +477,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
 
         // paragraph justification
-        SvxLRSpaceItem aLR = ( (const SvxLRSpaceItem&) aAttrSet.Get( EE_PARA_LRSPACE ) );
+        SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aAttrSet.Get( EE_PARA_LRSPACE ) );
         rSet.Put(aLR);
-        SvxAdjust eAdj = ( (const SvxAdjustItem&) aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
+        SvxAdjust eAdj = static_cast<const SvxAdjustItem&>( aAttrSet.Get( EE_PARA_JUST ) ).GetAdjust();
         switch( eAdj )
         {
             case SVX_ADJUST_LEFT:
@@ -513,7 +513,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         }
         else
         {
-            switch( ( ( (SvxFrameDirectionItem&) aAttrSet.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+            switch( static_cast<const SvxFrameDirectionItem&>( aAttrSet.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
             {
                 case FRMDIR_VERT_TOP_LEFT:
                 case FRMDIR_VERT_TOP_RIGHT:
@@ -553,7 +553,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             }
         }
 
-        SvxLRSpaceItem aLRSpace = ( (const SvxLRSpaceItem&) aAttrSet.Get( EE_PARA_LRSPACE ) );
+        SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>( aAttrSet.Get( EE_PARA_LRSPACE ) );
         aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
         rSet.Put(aLRSpace);
         Invalidate(SID_ATTR_PARA_LRSPACE);
@@ -564,7 +564,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             rSet.InvalidateItem(EE_PARA_LRSPACE);
             rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
         }
-        sal_uInt16 nLineSpace = (sal_uInt16) ( (const SvxLineSpacingItem&) aAttrSet.
+        sal_uInt16 nLineSpace = (sal_uInt16) static_cast<const SvxLineSpacingItem&>( aAttrSet.
                             Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )
         {
@@ -581,7 +581,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     }
 
     // justification (superscript, subscript) is also needed in outline-mode
-    SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+    SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )

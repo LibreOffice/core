@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 
 namespace sd {
 
-#define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define ITEMVALUE(ItemSet,Id,Cast)  static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
 
 /**
  * Handle SfxRequests for EffekteWindow
@@ -70,7 +70,7 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
             SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
             if( pWindow )
             {
-                Svx3DWin* p3DWin = (Svx3DWin*)( pWindow->GetWindow() );
+                Svx3DWin* p3DWin = static_cast<Svx3DWin*>( pWindow->GetWindow() );
                 if( p3DWin )
                     p3DWin->InitColorLB( GetDoc() );
             }
@@ -98,7 +98,7 @@ void DrawViewShell::Update3DWindow()
     SfxChildWindow* pWindow = GetViewFrame()->GetChildWindow( nId );
     if( pWindow )
     {
-        Svx3DWin* p3DWin = (Svx3DWin*) pWindow->GetWindow();
+        Svx3DWin* p3DWin = static_cast<Svx3DWin*>( pWindow->GetWindow() );
         if( p3DWin && p3DWin->IsUpdateMode() )
         {
             SfxItemSet aTmpItemSet = GetView()->Get3DAttributes();
@@ -115,7 +115,7 @@ void DrawViewShell::AssignFrom3DWindow()
     SfxChildWindow* pWin = GetViewFrame()->GetChildWindow( nId );
     if( pWin )
     {
-        Svx3DWin* p3DWin = (Svx3DWin*) pWin->GetWindow();
+        Svx3DWin* p3DWin = static_cast<Svx3DWin*>( pWin->GetWindow() );
         if( p3DWin && GetView() )
         {
             if(!GetView()->IsPresObjSelected())

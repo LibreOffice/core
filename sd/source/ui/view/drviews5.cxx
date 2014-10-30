@@ -80,7 +80,7 @@ void DrawViewShell::ModelHasChanged()
     ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
     if (pOutliner)
     {
-        SfxStyleSheetPool* pSPool = (SfxStyleSheetPool*) GetDocSh()->GetStyleSheetPool();
+        SfxStyleSheetPool* pSPool = static_cast<SfxStyleSheetPool*>( GetDocSh()->GetStyleSheetPool() );
         pOutliner->SetStyleSheetPool(pSPool);
     }
 }

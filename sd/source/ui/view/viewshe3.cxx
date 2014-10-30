@@ -99,7 +99,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
             if( pStyleSheet )
             {
                 if (pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
-                    pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
+                    pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
 
                 if( pStyleSheet )
                 {

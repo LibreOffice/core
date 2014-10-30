@@ -114,7 +114,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
         OUString aInputString;
 
         if(SfxItemState::SET == pSet->GetItemState(SID_ATTR_CHAR))
-            aInputString = ((SfxStringItem&)pSet->Get(SID_ATTR_CHAR)).GetValue();
+            aInputString = static_cast<const SfxStringItem&>(pSet->Get(SID_ATTR_CHAR)).GetValue();
 
         if(!aInputString.isEmpty())
         {
@@ -685,7 +685,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
 void DrawViewShell::FuSupport(SfxRequest& rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
-        GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
+        GetDocSh()->SetStyleFamily(static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
     // We do not execute a thing during a native slide show
     if(SlideShow::IsRunning(GetViewShellBase()) &&
@@ -775,7 +775,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             if ( rMarkList.GetMark(0) && !mpDrawView->IsAction() )
             {
-                SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
+                SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj());
                 const bool bUndo = mpDrawView->IsUndoEnabled();
                 if( bUndo )
                     mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_BEZCLOSE));
@@ -1423,13 +1423,13 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
                 if (pObj->GetObjInventor() == SdrInventor)
                 {
-                    if (pObj->GetObjIdentifier() == OBJ_GRAF && !((SdrGrafObj*) pObj)->IsLinkedGraphic())
+                    if (pObj->GetObjIdentifier() == OBJ_GRAF && !static_cast<SdrGrafObj*>(pObj)->IsLinkedGraphic())
                     {
-                        const Graphic& rGraphic = ((SdrGrafObj*) pObj)->GetGraphic();
+                        const Graphic& rGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
 
                         if( rGraphic.GetType() == GRAPHIC_BITMAP )
                         {
-                            SdrGrafObj* pNewObj = (SdrGrafObj*) pObj->Clone();
+                            SdrGrafObj* pNewObj = static_cast<SdrGrafObj*>( pObj->Clone() );
 
                             if( rGraphic.IsAnimated() )
                             {

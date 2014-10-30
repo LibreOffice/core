@@ -262,7 +262,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
 
                     case SID_BEZIER_CLOSE:
                     {
-                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
                         const bool bUndo = mpView->IsUndoEnabled();
                         if( bUndo )
                             mpView->BegUndo(SD_RESSTR(STR_UNDO_BEZCLOSE));

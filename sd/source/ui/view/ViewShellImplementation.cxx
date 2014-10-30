@@ -217,7 +217,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
             if (pArgs && pArgs->Count() == 1)
             {
-                bSetModified = ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
+                bSetModified = static_cast<const SfxBoolItem&>(pArgs->Get(SID_MODIFYPAGE)).GetValue();
             }
 
             pUndoManager->AddUndoAction( new UndoAutoLayoutPosAndSize( *pUndoPage ) );

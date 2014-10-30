@@ -166,7 +166,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
       mbWholeDocumentProcessed(false),
       mbPrepareSpellingPending(true)
 {
-    SetStyleSheetPool((SfxStyleSheetPool*) mpDrawDocument->GetStyleSheetPool());
+    SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mpDrawDocument->GetStyleSheetPool() ));
     SetEditTextObjectPool( &pDoc->GetItemPool() );
     SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
     SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
@@ -369,7 +369,7 @@ bool Outliner::SpellNextDocument()
     else
     {
         if (mpView->ISA(OutlineView))
-            ((OutlineView*)mpView)->PrepareClose(false);
+            static_cast<OutlineView*>(mpView)->PrepareClose(false);
         mpDrawDocument->GetDocSh()->SetWaitCursor( true );
 
         Initialize (true);
@@ -502,7 +502,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         if (pChildWin)
         {
             SvxSearchDialog* pSearchDlg =
-            ((SvxSearchDialog*)(pChildWin->GetWindow()));
+                static_cast<SvxSearchDialog*>(pChildWin->GetWindow());
             pSearchDlg->SetDocWin( pViewShell->GetActiveWindow() );
             pSearchDlg->SetSrchFlag();
         }
@@ -1319,7 +1319,7 @@ void Outliner::EnterEditMode (bool bGrabFocus)
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
     mbError = true;
-    OUString aError( SvtLanguageTable::GetLanguageString( (LanguageType)(sal_uLong)nLang ) );
+    OUString aError( SvtLanguageTable::GetLanguageString( (LanguageType)reinterpret_cast<sal_uLong>(nLang) ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;

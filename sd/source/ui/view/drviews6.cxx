@@ -93,7 +93,7 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     if ( GetViewFrame()->HasChildWindow(nId) )
-        pDlg = (SvxFontWorkDialog*)(GetViewFrame()->GetChildWindow(nId)->GetWindow());
+        pDlg = static_cast<SvxFontWorkDialog*>(GetViewFrame()->GetChildWindow(nId)->GetWindow());
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -201,8 +201,8 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
         {
             sal_uInt16 nCount = 0;
 
-            if( ( (SdrGrafObj*) pObj )->IsAnimated() )
-                nCount = ( (SdrGrafObj*) pObj )->GetGraphic().GetAnimation().Count();
+            if( static_cast<const SdrGrafObj*>(pObj)->IsAnimated() )
+                nCount = static_cast<const SdrGrafObj*>(pObj)->GetGraphic().GetAnimation().Count();
             if( nCount > 0 )
                 nValue = 2;
             else
@@ -272,8 +272,8 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
     {
         case ( SID_BMPMASK_PIPETTE ) :
         {
-            mbPipette = ( (const SfxBoolItem&) ( rReq.GetArgs()->
-                       Get( SID_BMPMASK_PIPETTE ) ) ).GetValue();
+            mbPipette = static_cast<const SfxBoolItem&>( rReq.GetArgs()->
+                       Get( SID_BMPMASK_PIPETTE ) ).GetValue();
         }
         break;
 
@@ -304,7 +304,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                 if( bCont )
                 {
                     const Graphic&  rOldGraphic = pNewObj->GetGraphic();
-                    const Graphic   aNewGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
+                    const Graphic   aNewGraphic( static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow(
                                                  SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                                  Mask( rOldGraphic ) );
 
@@ -313,7 +313,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
                         pNewObj->SetEmptyPresObj( false );
-                        pNewObj->SetGraphic( ( (SvxBmpMask*) GetViewFrame()->GetChildWindow(
+                        pNewObj->SetGraphic( static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow(
                                              SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                              Mask( pNewObj->GetGraphic() ) );
 
@@ -343,7 +343,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 
     if ( GetViewFrame()->HasChildWindow( nId ) )
     {
-        SvxBmpMask* pDlg = (SvxBmpMask*) ( GetViewFrame()->GetChildWindow( nId )->GetWindow() );
+        SvxBmpMask* pDlg = static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow( nId )->GetWindow() );
 
         if ( pDlg->NeedsColorList() )
             pDlg->SetColorList( GetDoc()->GetColorList() );
@@ -354,7 +354,7 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 
     // valid graphic object?
     if( pObj && pObj->ISA( SdrGrafObj ) &&
-        !((SdrGrafObj*) pObj)->IsEPS() &&
+        !static_cast<const SdrGrafObj*>(pObj)->IsEPS() &&
         !mpDrawView->IsTextEdit() )
     {
         bEnable = true;

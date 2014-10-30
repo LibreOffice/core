@@ -99,9 +99,9 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                     const SvxFieldData* pField = pFieldItem->GetField();
                     if (pField->ISA(SvxURLField))
                     {
-                        aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                        aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                        aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                        aHLinkItem.SetName(static_cast<const SvxURLField*>(pField)->GetRepresentation());
+                        aHLinkItem.SetURL(static_cast<const SvxURLField*>(pField)->GetURL());
+                        aHLinkItem.SetTargetFrame(static_cast<const SvxURLField*>(pField)->GetTargetFrame());
                         bField = true;
                     }
                 }
@@ -289,7 +289,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_LEFT)
                 {
@@ -306,7 +306,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_CENTER)
                 {
@@ -323,7 +323,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_RIGHT)
                 {
@@ -340,7 +340,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
 
-                SvxAdjustItem aItem= ( (const SvxAdjustItem&) aAttrs.Get( EE_PARA_JUST ) );
+                SvxAdjustItem aItem= static_cast<const SvxAdjustItem&>( aAttrs.Get( EE_PARA_JUST ) );
                 SvxAdjust eAdj = aItem.GetAdjust();
                 if ( eAdj == SVX_ADJUST_BLOCK)
                 {
@@ -356,7 +356,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                SvxLRSpaceItem aLRSpace = ( (const SvxLRSpaceItem&) aAttrs.Get( EE_PARA_LRSPACE ) );
+                SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>( aAttrs.Get( EE_PARA_LRSPACE ) );
                 aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
                 rSet.Put(aLRSpace);
                 bAttr = true;
@@ -367,7 +367,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                SvxLineSpacingItem aLineLR = ( (const SvxLineSpacingItem&) aAttrs.Get( EE_PARA_SBL ) );
+                SvxLineSpacingItem aLineLR = static_cast<const SvxLineSpacingItem&>( aAttrs.Get( EE_PARA_SBL ) );
                 rSet.Put(aLineLR);
                 bAttr = true;
                 Invalidate(SID_ATTR_PARA_LINESPACE);
@@ -377,7 +377,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                SvxULSpaceItem aULSP = ( (const SvxULSpaceItem&) aAttrs.Get( EE_PARA_ULSPACE ) );
+                SvxULSpaceItem aULSP = static_cast<const SvxULSpaceItem&>( aAttrs.Get( EE_PARA_ULSPACE ) );
                 aULSP.SetWhich(SID_ATTR_PARA_ULSPACE);
                 rSet.Put(aULSP);
                 bAttr = true;
@@ -422,7 +422,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 mpDrawView->GetAttributes( aAttrs );
                 if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
                 {
-                    bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+                    bool bValue = static_cast<const SfxBoolItem&>( aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
                     rSet.Put( SfxBoolItem( SID_HYPHENATION, bValue ) );
                 }
             }
@@ -444,7 +444,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     else
                     {
                         if (pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
-                            pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
+                            pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
 
                         if( pStyleSheet )
                         {
@@ -583,7 +583,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 pTmpItem=GetNumBulletItem(aNewAttr, nNumItemId);
 
                 if (pTmpItem)
-                    pNumRule.reset(new SvxNumRule(*((SvxNumBulletItem*)pTmpItem)->GetNumRule()));
+                    pNumRule.reset(new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pTmpItem)->GetNumRule()));
 
                 if ( pNumRule )
                 {
@@ -726,7 +726,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
         }
 
-        SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+        SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                         pSet->Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
         if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
         {

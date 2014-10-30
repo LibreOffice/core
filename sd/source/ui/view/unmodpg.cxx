@@ -98,7 +98,7 @@ void ModifyPageUndoAction::Undo()
 
             if (mpPage->GetPageKind() == PK_STANDARD)
             {
-                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNum() + 1);
+                SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
                 pNotesPage->SetName(maOldName);
             }
         }
@@ -141,7 +141,7 @@ void ModifyPageUndoAction::Redo()
 
             if (mpPage->GetPageKind() == PK_STANDARD)
             {
-                SdPage* pNotesPage = (SdPage*)mpDoc->GetPage(mpPage->GetPageNum() + 1);
+                SdPage* pNotesPage = static_cast<SdPage*>(mpDoc->GetPage(mpPage->GetPageNum() + 1));
                 pNotesPage->SetName(maNewName);
             }
         }

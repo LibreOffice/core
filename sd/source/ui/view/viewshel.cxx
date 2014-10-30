@@ -770,13 +770,13 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
             }
 
             if( pItem == NULL )
-                pItem = (SvxNumBulletItem*) aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+                pItem = static_cast<const SvxNumBulletItem*>( aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
             if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
             {
-                SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,true);
+                const SvxNumBulletItem* pBulletItem = static_cast<const SvxNumBulletItem*>(aNewAttr.GetItem(EE_PARA_NUMBULLET,true));
                 SvxNumRule* pRule = pBulletItem->GetNumRule();
                 if(pRule)
                 {
@@ -1098,7 +1098,7 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
 
     if(pReqArgs)
     {
-        SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_UNDO);
+        const SfxUInt16Item* pUIntItem = static_cast<const SfxUInt16Item*>(&pReqArgs->Get(SID_UNDO));
         nNumber = pUIntItem->GetValue();
     }
 
@@ -1145,7 +1145,7 @@ void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
 
     if(pReqArgs)
     {
-        SfxUInt16Item* pUIntItem = (SfxUInt16Item*)&pReqArgs->Get(SID_REDO);
+        const SfxUInt16Item* pUIntItem = static_cast<const SfxUInt16Item*>(&pReqArgs->Get(SID_REDO));
         nNumber = pUIntItem->GetValue();
     }
 

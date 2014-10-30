@@ -181,7 +181,7 @@ void DrawViewShell::SelectionHasChanged (void)
 
             if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
             {
-                pOleObj = (SdrOle2Obj*) pObj;
+                pOleObj = static_cast<SdrOle2Obj*>(pObj);
                 UpdateIMapDlg( pObj );
             }
             else if (nSdrObjKind == OBJ_GRAF)
@@ -717,7 +717,7 @@ ErrCode DrawViewShell::DoVerb(long nVerb)
 
             if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
             {
-                ActivateObject( (SdrOle2Obj*) pObj, nVerb);
+                ActivateObject( static_cast<SdrOle2Obj*>(pObj), nVerb);
             }
         }
     }

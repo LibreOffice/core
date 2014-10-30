@@ -388,9 +388,9 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
                     const SvxFieldData* pField = pFieldItem->GetField();
                     if ( pField->ISA(SvxURLField) )
                     {
-                        aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                        aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                        aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                        aHLinkItem.SetName(static_cast<const SvxURLField*>(pField)->GetRepresentation());
+                        aHLinkItem.SetURL(static_cast<const SvxURLField*>(pField)->GetURL());
+                        aHLinkItem.SetTargetFrame(static_cast<const SvxURLField*>(pField)->GetTargetFrame());
                     }
                 }
             }
@@ -435,7 +435,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
 void OutlineViewShell::FuSupport(SfxRequest &rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
-        GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
+        GetDocSh()->SetStyleFamily(static_cast<const SfxUInt16Item&>(rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
     bool bPreviewState = false;
     sal_uLong nSlot = rReq.GetSlot();
@@ -857,7 +857,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // if not, the templates must not be edited
     SfxItemSet aSet(*rSet.GetPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
     GetStatusBarState(aSet);
-    OUString aTest = ((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+    OUString aTest = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
     if (aTest.isEmpty())
     {
         bUnique = false;
@@ -1218,8 +1218,8 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != NULL)
                 pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
-                    ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(SID_SPELL_DIALOG))).GetValue());
+                    static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                        Get(SID_SPELL_DIALOG)).GetValue());
             else
                 pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
 
@@ -1237,7 +1237,7 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
     }
 
     if (bForwardCall)
-        ((DrawDocShell*)GetViewFrame()->GetObjectShell())->ExecuteSlot( rReq );
+        static_cast<DrawDocShell*>(GetViewFrame()->GetObjectShell())->ExecuteSlot( rReq );
 }
 
 /**
@@ -1530,7 +1530,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
                 if( pStyleSheet )
                 {
-                    pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
+                    pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
 
                     if (pStyleSheet)
                     {
@@ -1557,7 +1557,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                 {
                     SfxItemSet aSet(*rSet.GetPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
                     GetStatusBarState(aSet);
-                    OUString aRealStyle = ((SfxStringItem&) aSet.Get(SID_STATUS_LAYOUT)).GetValue();
+                    OUString aRealStyle = static_cast<const SfxStringItem&>(aSet.Get(SID_STATUS_LAYOUT)).GetValue();
                     if (aRealStyle.isEmpty())
                     {
                         // no unique layout name found
@@ -1742,7 +1742,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     bool bNewObject = false;
 
     sal_uInt16 eOutlinerMode = OUTLINERMODE_TITLEOBJECT;
-    pTO = (SdrTextObj*)pPage->GetPresObj( PRESOBJ_TEXT );
+    pTO = static_cast<SdrTextObj*>(pPage->GetPresObj( PRESOBJ_TEXT ));
     if( !pTO )
     {
         eOutlinerMode = OUTLINERMODE_OUTLINEOBJECT;
@@ -1878,7 +1878,7 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const OUString& rBaseURL, sal
                     aStyleSheetName = aStyleSheetName.copy(0, aStyleSheetName.getLength() - 1);
                 aStyleSheetName += OUString::number( nDepth );
                 SfxStyleSheetBasePool* pStylePool = GetDoc()->GetStyleSheetPool();
-                SfxStyleSheet* pStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pOutlSheet->GetFamily() );
+                SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pOutlSheet->GetFamily() ) );
                 DBG_ASSERT( pStyle, "AutoStyleSheetName - Style not found!" );
                 if ( pStyle )
                     rOutl.SetStyleSheet( nPara, pStyle );

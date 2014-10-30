@@ -108,7 +108,7 @@ void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
             bEnable = true;
     }
 
@@ -124,9 +124,9 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
         {
-            GraphicObject aFilterObj( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            GraphicObject aFilterObj( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
 
             if( SVX_GRAPHICFILTER_ERRCODE_NONE ==
                 SvxGraphicFilter::ExecuteGrfFilterSlot( rReq, aFilterObj ) )
@@ -135,7 +135,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
 
                 if( pPageView )
                 {
-                    SdrGrafObj* pFilteredObj = (SdrGrafObj*) pObj->Clone();
+                    SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>( pObj->Clone() );
                     OUString    aStr = mpView->GetDescriptionOfMarkedObjects();
                     aStr += " " + SD_RESSTR(STR_UNDO_GRAFFILTER);
                     mpView->BegUndo( aStr );

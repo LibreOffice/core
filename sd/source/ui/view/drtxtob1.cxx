@@ -153,8 +153,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         SfxItemSet aAttr( pStyleSheet->GetItemSet() );
                         SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
                         aAttr.Put( aTmpSet, false ); // sal_False= InvalidItems is not default, handle it as "holes"
-                        const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( EE_PARA_ULSPACE );
-                        boost::scoped_ptr<SvxULSpaceItem> pNewItem((SvxULSpaceItem*) rItem.Clone());
+                        const SvxULSpaceItem& rItem = static_cast<const SvxULSpaceItem&>( aAttr.Get( EE_PARA_ULSPACE ) );
+                        boost::scoped_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>(rItem.Clone()));
 
                         long nUpper = pNewItem->GetUpper();
                         if( nSlot == SID_PARASPACE_INCREASE )
@@ -194,8 +194,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SfxItemState::DEFAULT )
                 {
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
-                    const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );
-                    boost::scoped_ptr<SvxULSpaceItem> pNewItem((SvxULSpaceItem*) rItem.Clone());
+                    const SvxULSpaceItem& rItem = static_cast<const SvxULSpaceItem&>( aEditAttr.Get( EE_PARA_ULSPACE ) );
+                    boost::scoped_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>( rItem.Clone() ));
                     long nUpper = pNewItem->GetUpper();
 
                     if( nSlot == SID_PARASPACE_INCREASE )
@@ -264,8 +264,8 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_ATTR_PARA_LRSPACE:
         {
             sal_uInt16 nSpaceSlot = SID_ATTR_PARA_LRSPACE;
-            SvxLRSpaceItem aLRSpace = (const SvxLRSpaceItem&)pArgs->Get(
-                GetPool().GetWhich(nSpaceSlot));
+            SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
+                GetPool().GetWhich(nSpaceSlot)));
 
             SfxItemSet aEditAttr( GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
             aLRSpace.SetWhich( EE_PARA_LRSPACE );
@@ -327,7 +327,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 SdrPageView* pPageView = mpView->GetSdrPageView();
                 if (pPageView)
                 {
-                    SdPage* pPage = (SdPage*)pPageView->GetPage();
+                    SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
                     bMasterPage = pPage && (pPage->GetPageKind() == PK_STANDARD) && pPage->IsMasterPage();
                 }
 
@@ -391,7 +391,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case SID_GROW_FONT_SIZE:
         case SID_SHRINK_FONT_SIZE:
         {
-            const SvxFontListItem* pFonts = (const SvxFontListItem*)mpViewShell->GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST );
+            const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(mpViewShell->GetDocSh()->GetItem( SID_ATTR_CHAR_FONTLIST ));
             const FontList* pFontList = pFonts ? pFonts->GetFontList(): 0;
             if( pFontList )
             {
@@ -440,7 +440,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 {
                     case SID_ATTR_CHAR_WEIGHT:
                     {
-                        FontWeight eFW = ( (const SvxWeightItem&) aEditAttr.
+                        FontWeight eFW = static_cast<const SvxWeightItem&>( aEditAttr.
                                         Get( EE_CHAR_WEIGHT ) ).GetWeight();
                         aNewAttr.Put( SvxWeightItem( eFW == WEIGHT_NORMAL ?
                                             WEIGHT_BOLD : WEIGHT_NORMAL,
@@ -449,7 +449,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_POSTURE:
                     {
-                        FontItalic eFI = ( (const SvxPostureItem&) aEditAttr.
+                        FontItalic eFI = static_cast<const SvxPostureItem&>( aEditAttr.
                                         Get( EE_CHAR_ITALIC ) ).GetPosture();
                         aNewAttr.Put( SvxPostureItem( eFI == ITALIC_NORMAL ?
                                             ITALIC_NONE : ITALIC_NORMAL,
@@ -458,7 +458,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_UNDERLINE:
                     {
-                        FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.
+                        FontUnderline eFU = static_cast<const SvxUnderlineItem&>( aEditAttr.
                                         Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
                         aNewAttr.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ?
                                             UNDERLINE_NONE : UNDERLINE_SINGLE,
@@ -467,7 +467,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_OVERLINE:
                     {
-                        FontUnderline eFO = ( (const SvxOverlineItem&) aEditAttr.
+                        FontUnderline eFO = static_cast<const SvxOverlineItem&>( aEditAttr.
                                         Get( EE_CHAR_OVERLINE ) ).GetLineStyle();
                         aNewAttr.Put( SvxOverlineItem( eFO == UNDERLINE_SINGLE ?
                                             UNDERLINE_NONE : UNDERLINE_SINGLE,
@@ -476,25 +476,25 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     break;
                     case SID_ATTR_CHAR_CONTOUR:
                     {
-                        aNewAttr.Put( SvxContourItem( !( (const SvxContourItem&) aEditAttr.
+                        aNewAttr.Put( SvxContourItem( !static_cast<const SvxContourItem&>( aEditAttr.
                                         Get( EE_CHAR_OUTLINE ) ).GetValue(), EE_CHAR_OUTLINE ) );
                     }
                     break;
                     case SID_ATTR_CHAR_SHADOWED:
                     {
-                        aNewAttr.Put( SvxShadowedItem( !( (const SvxShadowedItem&) aEditAttr.
+                        aNewAttr.Put( SvxShadowedItem( !static_cast<const SvxShadowedItem&>( aEditAttr.
                                         Get( EE_CHAR_SHADOW ) ).GetValue(), EE_CHAR_SHADOW ) );
                     }
                     break;
                     case SID_ATTR_CHAR_CASEMAP:
                     {
-                        aNewAttr.Put( SvxCaseMapItem( ( (const SvxCaseMapItem&) aEditAttr.
+                        aNewAttr.Put( SvxCaseMapItem( static_cast<const SvxCaseMapItem&>( aEditAttr.
                                         Get( EE_CHAR_CASEMAP ) ) ) );
                     }
                     break;
                     case SID_ATTR_CHAR_STRIKEOUT:
                     {
-                        FontStrikeout eFSO = ( ( (const SvxCrossedOutItem&) aEditAttr.
+                        FontStrikeout eFSO = ( static_cast<const SvxCrossedOutItem&>( aEditAttr.
                                         Get( EE_CHAR_STRIKEOUT ) ).GetStrikeout() );
                         aNewAttr.Put( SvxCrossedOutItem( eFSO == STRIKEOUT_SINGLE ?
                                             STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
@@ -545,7 +545,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     case SID_SET_SUPER_SCRIPT:
                     {
                         SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-                        SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+                        SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                                         aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                         if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
@@ -558,7 +558,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     case SID_SET_SUB_SCRIPT:
                     {
                         SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-                        SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+                        SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                                         aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                         if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
@@ -593,7 +593,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
                 if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
-                    nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
+                    nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetEnumValue();
 
                 if( bLeftToRight )
                 {
@@ -670,7 +670,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             else if(nSlot ==  SID_SET_SUPER_SCRIPT )
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                 if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
@@ -684,7 +684,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             else if( nSlot ==  SID_SET_SUB_SCRIPT )
             {
                 SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-                SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
+                SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                                 aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
                 if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )

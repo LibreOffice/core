@@ -768,7 +768,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
                         aNewStyleSheetName = aNewStyleSheetName.copy(0, aNewStyleSheetName.getLength() - 1);
                     aNewStyleSheetName += OUString::number( nDepth+1 );
                     SfxStyleSheetBasePool* pStylePool = mrDoc.GetStyleSheetPool();
-                    pStyleSheet = (SfxStyleSheet*) pStylePool->Find( aNewStyleSheetName, pStyleSheet->GetFamily() );
+                    pStyleSheet = static_cast<SfxStyleSheet*>( pStylePool->Find( aNewStyleSheetName, pStyleSheet->GetFamily() ) );
                 }
             }
 
@@ -964,7 +964,7 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage* pPage)
         if (pObject->GetObjInventor() == SdrInventor &&
             pObject->GetObjIdentifier() == OBJ_TITLETEXT)
         {
-            pResult = (SdrTextObj*)pObject;
+            pResult = static_cast<SdrTextObj*>(pObject);
             break;
         }
     }
@@ -986,7 +986,7 @@ SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage* pPage)
         if (pObject->GetObjInventor() == SdrInventor &&
             pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
-            pResult = (SdrTextObj*)pObject;
+            pResult = static_cast<SdrTextObj*>(pObject);
             break;
         }
     }

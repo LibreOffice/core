@@ -229,7 +229,7 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
     if (!pPageView)
         return NULL;
 
-    SdPage* pPage = (SdPage*)pPageView->GetPage();
+    SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage());
     //only show these in a normal master page
     if (!pPage || (pPage->GetPageKind() != PK_STANDARD) || !pPage->IsMasterPage())
         return NULL;
@@ -859,7 +859,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                             // a page does have a AutoLayout "Title"
                             bDisable = false;
 
-                            SdPage& rRefMPage = (SdPage&)(pPage->TRG_GetMasterPage());
+                            SdPage& rRefMPage = static_cast<SdPage&>(pPage->TRG_GetMasterPage());
 
                             if(&rRefMPage == pMPage)
                             {
@@ -1785,8 +1785,8 @@ void DrawViewShell::Execute (SfxRequest& rReq)
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != NULL)
                 pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
-                    ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(SID_SPELL_DIALOG))).GetValue());
+                    static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                        Get(SID_SPELL_DIALOG)).GetValue());
             else
                 pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
 

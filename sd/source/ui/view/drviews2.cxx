@@ -202,7 +202,7 @@ public:
         SdrPageView* pPageView = m_pView->GetSdrPageView();
         if( pPageView )
         {
-            SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
+            SdrGrafObj* pNewObj = static_cast<SdrGrafObj*>( m_pObj->Clone() );
             OUString    aStr = m_pView->GetDescriptionOfMarkedObjects();
             aStr += " External Edit";
             m_pView->BegUndo( aStr );
@@ -249,7 +249,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 mpDrawView->BegUndo();
 
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                bool bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
+                bool bSet = static_cast<const SdrTextFitToSizeTypeItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;
 
                 mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
 
@@ -607,12 +607,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if ( pArgs )
             {
-                SvxZoomType eZT = ( ( const SvxZoomItem& ) pArgs->
+                SvxZoomType eZT = static_cast<const SvxZoomItem&>( pArgs->
                                             Get( SID_ATTR_ZOOM ) ).GetType();
                 switch( eZT )
                 {
                     case SVX_ZOOM_PERCENT:
-                        SetZoom( (long) ( ( const SvxZoomItem& ) pArgs->
+                        SetZoom( (long) static_cast<const SvxZoomItem&>( pArgs->
                                             Get( SID_ATTR_ZOOM ) ).GetValue() );
                         break;
 
@@ -850,7 +850,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // at the following mpDrawView->SetAttributes( *pSet, sal_True )
                 // they get lost and have to be restored.
                 std::vector<std::pair<SfxItemSet*,SdrObjUserCall*> > aAttrList;
-                SdPage* pPresPage = (SdPage*) mpDrawView->GetSdrPageView()->GetPage();
+                SdPage* pPresPage = static_cast<SdPage*>( mpDrawView->GetSdrPageView()->GetPage() );
 
                 for ( size_t i = 0; i < nCount; ++i )
                 {
@@ -979,9 +979,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+                    GraphicObject aGraphicObject( static_cast<SdrGrafObj*>( pObj )->GetGraphicObject() );
                     {
                         GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), "" );
                     }
@@ -998,9 +998,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+                    GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
                     SdExternalToolEdit* aExternalToolEdit = new SdExternalToolEdit( mpDrawView, pObj );
                     aExternalToolEdit->Edit( &aGraphicObject );
                 }
@@ -1017,9 +1017,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-                if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
-                    SdrGrafObj* pGraphicObj = (SdrGrafObj*) pObj;
+                    SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
                     CompressGraphicsDialog dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
                     if ( dialog.Execute() == RET_OK )
                     {
@@ -1450,7 +1450,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     while( bLoop && pDlg->Execute() == RET_OK )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName   = static_cast<const SdAttrLayerName &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( rLayerAdmin.GetLayer( aLayerName, false )
                             || aLayerName.isEmpty() )
@@ -1474,11 +1474,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     }
                     else
                     {
-                        aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                        aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                        bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                        bIsLocked    = ((SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
-                        bIsPrintable = ((SdAttrLayerPrintable &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
+                        aLayerTitle  = static_cast<const SdAttrLayerTitle &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                        aLayerDesc   = static_cast<const SdAttrLayerDesc &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                        bIsVisible   = static_cast<const SdAttrLayerVisible &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                        bIsLocked    = static_cast<const SdAttrLayerLocked &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue () ;
+                        bIsPrintable = static_cast<const SdAttrLayerPrintable &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue () ;
                     }
                 }
             }
@@ -1619,7 +1619,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     while( bLoop && ( (nRet = pDlg->Execute()) == RET_OK ) )
                     {
                         pDlg->GetAttr( aNewAttr );
-                        aLayerName   = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
+                        aLayerName   = static_cast<const SdAttrLayerName &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
                         if( (rLayerAdmin.GetLayer( aLayerName, false ) &&
                              aLayerName != aOldLayerName) || aLayerName.isEmpty() )
@@ -1637,11 +1637,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     switch (nRet)
                     {
                         case RET_OK :
-                            aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
-                            aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
-                            bIsVisible   = ((const SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
-                            bIsLocked    = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
-                            bIsPrintable = ((const SdAttrLayerLocked &) aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
+                            aLayerTitle  = static_cast<const SdAttrLayerTitle &>( aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
+                            aLayerDesc   = static_cast<const SdAttrLayerDesc &>( aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
+                            bIsVisible   = static_cast<const SdAttrLayerVisible &>( aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
+                            bIsLocked    = static_cast<const SdAttrLayerLocked &>( aNewAttr.Get (ATTR_LAYER_LOCKED)).GetValue ();
+                            bIsPrintable = static_cast<const SdAttrLayerLocked &>( aNewAttr.Get (ATTR_LAYER_PRINTABLE)).GetValue ();
                             break;
 
                         default :
@@ -1782,8 +1782,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (pReqArgs)
             {
-                SvxHyperlinkItem* pHLItem =
-                (SvxHyperlinkItem*) &pReqArgs->Get(SID_HYPERLINK_SETLINK);
+                const SvxHyperlinkItem* pHLItem =
+                    static_cast<const SvxHyperlinkItem*>( &pReqArgs->Get(SID_HYPERLINK_SETLINK) );
 
                 if (pHLItem->GetInsertMode() == HLINK_FIELD)
                 {
@@ -2568,7 +2568,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
                 if( pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
-                    pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
+                    pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
 
                 if( (pStyleSheet == NULL) && GetView()->IsTextEdit() )
                 {
@@ -2576,7 +2576,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     pStyleSheet = mpDrawView->GetStyleSheet();
                     if(pStyleSheet && pStyleSheet->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE)
-                        pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
+                        pStyleSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetPseudoStyleSheet();
                 }
 
                 if( pStyleSheet == NULL )
@@ -2651,8 +2651,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( rReq.GetArgs() )
             {
                 GetViewFrame()->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_FONTWORK))).GetValue());
+                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                                        Get(SID_FONTWORK)).GetValue());
             }
             else
             {
@@ -2669,8 +2669,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow(SvxColorChildWindow::GetChildWindowId(),
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_COLOR_CONTROL))).GetValue());
+                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                                        Get(SID_COLOR_CONTROL)).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow(SvxColorChildWindow::GetChildWindowId() );
 
@@ -2731,8 +2731,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_NAVIGATOR))).GetValue());
+                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                                        Get(SID_NAVIGATOR)).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
 
@@ -2771,8 +2771,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow(
                     AnimationChildWindow::GetChildWindowId(),
-                    ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(SID_ANIMATION_OBJECTS))).GetValue());
+                    static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                        Get(SID_ANIMATION_OBJECTS)).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow(
                     AnimationChildWindow::GetChildWindowId() );
@@ -2787,8 +2787,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow( Svx3DChildWindow::GetChildWindowId(),
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get( SID_3D_WIN ))).GetValue());
+                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
+                                        Get( SID_3D_WIN )).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow( Svx3DChildWindow::GetChildWindowId() );
 
@@ -3021,7 +3021,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
             }
             else
             {
-                FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
+                FontUnderline eFU = static_cast<const SvxUnderlineItem&>( aEditAttr.Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
                 aNewAttr.Put( SvxUnderlineItem( eFU != UNDERLINE_NONE ?UNDERLINE_NONE : UNDERLINE_SINGLE,  EE_CHAR_UNDERLINE ) );
             }//aNewAttr.Put( (const SvxUnderlineItem&)aEditAttr.Get( EE_CHAR_UNDERLINE ) );
         }
@@ -3069,7 +3069,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_SET_SUB_SCRIPT:
         {
             SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-            SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+            SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
             if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
                 aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
@@ -3081,7 +3081,7 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     case SID_SET_SUPER_SCRIPT:
         {
             SvxEscapementItem aItem( EE_CHAR_ESCAPEMENT );
-            SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+            SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
             if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
                 aItem.SetEscapement( SVX_ESCAPEMENT_OFF );
@@ -3189,7 +3189,7 @@ void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
                 SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
                 if( eConState != SfxItemState::DONTCARE )
                 {
-                    bContour = ( ( const SdrOnOffItem& )aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+                    bContour = static_cast<const SdrOnOffItem&>( aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
                 }
                 if (bContour) break;
 
@@ -3199,7 +3199,7 @@ void DrawViewShell::GetStatePropPanelAttr(SfxItemSet& rSet)
                 //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
                 if(SfxItemState::DONTCARE != eVState)
                 {
-                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)static_cast<const SdrTextVertAdjustItem&>(aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);

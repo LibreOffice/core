@@ -196,7 +196,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         sal_Int16 nDepth = pOutliner->GetDepth( nParaPos );
                         OUString aName = rPage.GetLayoutName() + " " +
                             OUString::number((nDepth <= 0) ? 1 : nDepth + 1);
-                        SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+                        SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
                         //We have no stylesheet if we access outline level 10
                         //in the master preview, there is no true style backing
                         //that entry
@@ -304,8 +304,8 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         {
                             OUString aName = rPage.GetLayoutName() + " " +
                                 OUString::number(nLevel);
-                            SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->
-                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+                            SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pStShPool->
+                                                Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
                             DBG_ASSERT(pSheet, "StyleSheet not found");
 
                             SfxItemSet aTempSet( pSheet->GetItemSet() );
@@ -375,7 +375,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     if ( mpDrawViewShell && dynamic_cast<const SdrHint*>(&rHint) )
     {
-        SdrHintKind eHintKind = ( (SdrHint&) rHint).GetKind();
+        SdrHintKind eHintKind = static_cast<const SdrHint&>(rHint).GetKind();
 
         if ( mnPOCHSmph == 0 && eHintKind == HINT_PAGEORDERCHG )
         {
@@ -389,7 +389,7 @@ void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         // switch to that page when it's not a master page
         if(HINT_SWITCHTOPAGE == eHintKind)
         {
-            const SdrPage* pPage = ((const SdrHint&)rHint).GetPage();
+            const SdrPage* pPage = static_cast<const SdrHint&>(rHint).GetPage();
 
             if(pPage && !pPage->IsMasterPage())
             {

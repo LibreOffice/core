@@ -201,7 +201,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         // Otherwise all pages of the document of the transferable are
         // inserted.
         SfxObjectShell* pShell = rTransferable.GetDocShell();
-        pDataDocSh = (DrawDocShell*) pShell;
+        pDataDocSh = static_cast<DrawDocShell*>(pShell);
         SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
 
         if (pDataDoc!=NULL && pDataDoc->GetSdPageCount(PK_STANDARD))

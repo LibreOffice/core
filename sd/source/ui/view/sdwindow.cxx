@@ -330,7 +330,7 @@ long Window::SetZoomFactor(long nZoom)
 
     // Update the view's snapping to the new zoom factor.
     if ( mpViewShell && mpViewShell->ISA(DrawViewShell) )
-        ((DrawViewShell*) mpViewShell)->GetView()->
+        static_cast<DrawViewShell*>(mpViewShell)->GetView()->
                                         RecalcLogicSnapMagnetic(*this);
 
     // Return the zoom factor just in case it has been changed above to lie
