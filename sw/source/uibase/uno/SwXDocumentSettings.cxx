@@ -1248,8 +1248,9 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE:
         {
-            sal_Bool bTmp = mpDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE);
-            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+            bool const bTmp(mpDoc->getIDocumentSettingAccess().get(
+                IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE));
+            rValue <<= bTmp;
         }
         break;
         default:
