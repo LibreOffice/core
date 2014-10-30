@@ -848,6 +848,7 @@ JNI_info::JNI_info(
         css::uno::TypeDescription XInterface_td(
             ::getCppuType(
                 (css::uno::Reference< css::uno::XInterface > const *)0 ) );
+        //coverity [ctor_dtor_leak]
         m_XInterface_type_info =
             new JNI_interface_type_info( jni, XInterface_td.get() );
     }
