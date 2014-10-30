@@ -117,8 +117,6 @@ struct GLWindow
     const GLubyte*          GLExtensions;
     bool bMultiSampleSupported;
 
-    bool HasGLExtension( const char* name ) { return checkExtension( (const GLubyte*) name, GLExtensions ); }
-
     GLWindow()
         :
 #if defined( _WIN32 )
