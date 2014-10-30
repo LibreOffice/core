@@ -71,7 +71,7 @@ struct SdrPageWindow::Impl
 };
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > SdrPageWindow::GetControlContainer( bool _bCreateIfNecessary ) const
+uno::Reference<awt::XControlContainer> SdrPageWindow::GetControlContainer( bool _bCreateIfNecessary ) const
 {
     if (!mpImpl->mxControlContainer.is() && _bCreateIfNecessary)
     {
@@ -97,8 +97,7 @@ struct SdrPageWindow::Impl
                 uno::Reference< uno::XInterface > xContext = xControl->getContext();
                 if(!xContext.is())
                 {
-                    xControl->createPeer( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > (),
-                        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > () );
+                    xControl->createPeer( uno::Reference<awt::XToolkit>(), uno::Reference<awt::XWindowPeer>() );
                 }
             }
         }
