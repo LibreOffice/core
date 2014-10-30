@@ -29,26 +29,13 @@
 #include "sallayout.hxx"
 
 #ifdef IOS
-#include "quartz/salgdi.h"
-#include <premac.h>
-#include <Foundation/Foundation.h>
-#include <CoreGraphics/CoreGraphics.h>
-#include <postmac.h>
-#endif
+#define SvpSalGraphics AquaSalGraphics
+#else
 
 class ServerFont;
 
-#ifdef IOS
-// To keep changes to the CoreText code shared with AOO to a minimum,
-// let's continue calling the SalGraphics subclass "AquaSalGraphics" even if it
-// is used by us also on iOS, where of course the term "Aqua" has no meaning at all.
-// (Note that even on OS X, using the term "Aqua" is a misunderstanding or obsolete.)
-#define SvpSalGraphics AquaSalGraphics
-#endif
-
 class SvpSalGraphics : public SalGraphics
 {
-#ifndef IOS
     basebmp::BitmapDeviceSharedPtr       m_aDevice;
     basebmp::BitmapDeviceSharedPtr       m_aOrigDevice;
 
@@ -83,42 +70,6 @@ private:
 
 public:
     void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
-
-#else
-    friend class CTLayout;
-
-    CGLayerRef                              mxLayer;
-    // mirror AquaSalVirtualDevice::mbForeignContext for SvpSalGraphics objects related to such
-    bool mbForeignContext;
-    CGContextRef                            mrContext;
-    int                                     mnContextStackDepth;
-    class XorEmulation*                     mpXorEmulation;
-    int                                     mnXorMode; // 0: off 1: on 2: invert only
-    int                                     mnWidth;
-    int                                     mnHeight;
-    int                                  mnBitmapDepth;  // zero unless bitmap
-
-    /// path representing current clip region
-    CGMutablePathRef                        mxClipPath;
-
-    /// Drawing colors
-    /// pen color RGBA
-    RGBAColor                               maLineColor;
-    /// brush color RGBA
-    RGBAColor                               maFillColor;
-
-    // Device Font settings
-    const CoreTextFontData*                 mpFontData;
-    CoreTextStyle*                          mpTextStyle;
-    RGBAColor                               maTextColor;
-    /// allows text to be rendered without antialiasing
-    bool                                    mbNonAntialiasedText;
-
-    /// is this a printer graphics
-    bool                                    mbPrinter;
-    /// is this a virtual device graphics
-    bool                                    mbVirDev;
-#endif
 
 protected:
     vcl::Region                               m_aClipRegion;
@@ -252,28 +203,10 @@ public:
     virtual void            BeginPaint() SAL_OVERRIDE { };
     virtual void            EndPaint() SAL_OVERRIDE { };
 
-#ifdef IOS
     void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 );
-
-    bool CheckContext();
-    CGContextRef GetContext();
-    bool GetRawFontData( const PhysicalFontFace* pFontData,
-                         std::vector<unsigned char>& rBuffer,
-                         bool* pJustCFF );
-    void                RefreshRect( const CGRect& ) { };
-    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
-    void                SetState();
-    void                UnsetState();
-    void                InvalidateContext();
-    bool                IsPenVisible() const    { return maLineColor.IsVisible(); }
-    bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
-    void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
-    CGPoint*            makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
-    bool IsFlipped() const { return false; }
-    void ApplyXorContext();
-    void Pattern50Fill();
-#endif
 };
+
+#endif
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPGDI_HXX
 

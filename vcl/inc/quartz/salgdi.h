@@ -136,15 +136,15 @@ private:
     CTFontContainer maFontContainer;
 };
 
-#ifdef MACOSX
-
 // - AquaSalGraphics -
 
 class AquaSalGraphics : public SalGraphics
 {
     friend class CTLayout;
 protected:
+#ifdef MACOSX
     AquaSalFrame*                           mpFrame;
+#endif
     CGLayerRef                              mxLayer;    // Quartz graphics layer
     CGContextRef                            mrContext;  // Quartz drawing context
     int                                     mnContextStackDepth;
@@ -179,8 +179,16 @@ protected:
     bool                                    mbPrinter;
     /// is this a virtual device graphics
     bool                                    mbVirDev;
+#ifdef MACOSX
     /// is this a window graphics
     bool                                    mbWindow;
+
+#else // IOS
+
+    // mirror AquaSalVirtualDevice::mbForeignContext for SvpSalGraphics objects related to such
+    bool mbForeignContext;
+
+#endif
 
 public:
                             AquaSalGraphics();
@@ -192,7 +200,7 @@ public:
     void                    SetWindowGraphics( AquaSalFrame* pFrame );
     void                    SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
     void                    SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
-
+#ifdef MACOSX
     void                    initResolution( NSWindow* );
     void                    copyResolution( AquaSalGraphics& );
     void                    updateResolution();
@@ -200,16 +208,18 @@ public:
     bool                    IsWindowGraphics()      const   { return mbWindow; }
     AquaSalFrame*           getGraphicsFrame() const { return mpFrame; }
     void                    setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
+#endif
 
     void                    ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 
     bool                    CheckContext();
     CGContextRef            GetContext();
+#ifdef MACOSX
     void                    UpdateWindow( NSRect& ); // delivered in NSView coordinates
-#if !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)
-    void                    RefreshRect( const CGRect& );
-#endif
     void                    RefreshRect( const NSRect& );
+#else
+    void                    RefreshRect( const CGRect& ) {}
+#endif
     void                    RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                    SetState();
@@ -292,6 +302,7 @@ public:
 
     CGPoint*                makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
+#ifdef MACOSX
     virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                   const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
     virtual bool            drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
@@ -300,6 +311,7 @@ public:
     virtual bool            getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                     const ImplControlValue& aValue, const OUString& aCaption,
                                                     Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
+#endif
 
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
@@ -397,8 +409,10 @@ public:
     virtual void            DrawServerFontLayout( const ServerFontLayout& ) SAL_OVERRIDE;
     virtual bool            supportsOperation( OutDevSupportType ) const SAL_OVERRIDE;
 
+#ifdef MACOSX
     // Query the platform layer for control support
     virtual bool            IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
+#endif
 
     virtual SystemGraphicsData
                             GetGraphicsData() const SAL_OVERRIDE;
@@ -410,7 +424,7 @@ public:
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
     // make some graphics seem to be vertically-mirrored from a VCL perspective
-    bool                    IsFlipped() const { return mbWindow; }
+    bool                    IsFlipped() const;
 
     void                    ApplyXorContext();
     void                    Pattern50Fill();
@@ -423,14 +437,7 @@ private:
 
 // --- some trivial inlines
 
-#if !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)
-
-inline void AquaSalGraphics::RefreshRect( const CGRect& rRect )
-{
-    RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
-}
-
-#endif
+#ifdef MACOSX
 
 inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 {

@@ -227,10 +227,11 @@ void CoreTextFontData::ReadMacCmapEncoding( void ) const
         return;
 }
 
-AquaSalGraphics::AquaSalGraphics()
+AquaSalGraphics::AquaSalGraphics():
 #ifdef MACOSX
-    : mpFrame( NULL )
-    , mxLayer( NULL )
+      mpFrame( NULL ),
+#endif
+      mxLayer( NULL )
     , mrContext( NULL )
 #if OSL_DEBUG_LEVEL > 0
     , mnContextStackDepth( 0 )
@@ -251,28 +252,10 @@ AquaSalGraphics::AquaSalGraphics()
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
     , mbVirDev( false )
+#ifdef MACOSX
     , mbWindow( false )
 #else
-    : mxLayer( NULL )
     , mbForeignContext( false )
-    , mrContext( NULL )
-#if OSL_DEBUG_LEVEL > 0
-    , mnContextStackDepth( 0 )
-#endif
-    , mpXorEmulation( NULL )
-    , mnXorMode( 0 )
-    , mnWidth( 0 )
-    , mnHeight( 0 )
-    , mnBitmapDepth( 0 )
-    , mxClipPath( NULL )
-    , maLineColor( COL_WHITE )
-    , maFillColor( COL_BLACK )
-    , mpFontData( NULL )
-    , mpTextStyle( NULL )
-    , maTextColor( COL_BLACK )
-    , mbNonAntialiasedText( false )
-    , mbPrinter( false )
-    , mbVirDev( false )
 #endif
 {
     SAL_INFO( "vcl.quartz", "AquaSalGraphics::AquaSalGraphics() this=" << this );
@@ -315,14 +298,10 @@ AquaSalGraphics::~AquaSalGraphics()
     }
 }
 
-#ifndef IOS
-
 SalGraphicsImpl* AquaSalGraphics::GetImpl() const
 {
     return NULL;
 }
-
-#endif
 
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
@@ -783,11 +762,46 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
     return aSysFontData;
 }
 
+bool AquaSalGraphics::IsFlipped() const
+{
+#ifdef MACOSX
+    return mbWindow;
+#else
+    return false;
+#endif
+}
+
+void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeight)
+{
+#ifdef MACOSX
+    if( ! mbWindow ) // view only on Window graphics
+        return;
+
+    if( mpFrame )
+    {
+        // update a little more around the designated rectangle
+        // this helps with antialiased rendering
+        // Rounding down x and width can accumulate a rounding error of up to 2
+        // The decrementing of x, the rounding error and the antialiasing border
+        // require that the width and the height need to be increased by four
+        const Rectangle aVclRect(Point(static_cast<long int>(lX-1),
+                    static_cast<long int>(lY-1) ),
+                 Size(  static_cast<long int>(lWidth+4),
+                    static_cast<long int>(lHeight+4) ) );
+        mpFrame->maInvalidRect.Union( aVclRect );
+    }
+#else
+    (void) lX;
+    (void) lY;
+    (void) lWidth;
+    (void) lHeight;
+    return;
+#endif
+}
+
 #ifdef IOS
 
-// Note that "SvpSalGraphics" is actually called AquaSalGraphics for iOS
-
-bool SvpSalGraphics::CheckContext()
+bool AquaSalGraphics::CheckContext()
 {
     if (mbForeignContext)
     {
@@ -799,7 +813,7 @@ bool SvpSalGraphics::CheckContext()
     return false;
 }
 
-CGContextRef SvpSalGraphics::GetContext()
+CGContextRef AquaSalGraphics::GetContext()
 {
     if ( !mrContext )
         CheckContext();

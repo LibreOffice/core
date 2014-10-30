@@ -738,12 +738,4 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 
 #endif
 
-#ifdef IOS
-
-void  SvpSalGraphics::RefreshRect(float /* lX */, float /* lY */, float /* lWidth */, float /* lHeight */)
-{
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
