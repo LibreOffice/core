@@ -1781,7 +1781,12 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aDigest = rtl_digest_createMD5();
 
     /* the size of the Codec default maximum */
-    checkEncryptionBufferSize( 0x4000 );
+    if (!checkEncryptionBufferSize(0x4000))
+    {
+        m_aFile.close();
+        m_bOpen = false;
+        return;
+    }
 
     if( xEnc.is() )
         prepareEncryption( xEnc );
