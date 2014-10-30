@@ -26,11 +26,7 @@
 
 #include "vcl/salbtype.hxx"
 
-#ifdef MACOSX
 #include "quartz/salgdi.h"
-#else
-#include "headless/svpgdi.hxx"
-#endif
 
 #include "salinst.hxx"
 #include "salvd.hxx"
