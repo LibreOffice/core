@@ -897,63 +897,6 @@
         </info>
       </prop>
     </group>
-    <group oor:name="_3D_Engine">
-      <info>
-        <desc>Specifies settings for the 3D engine.</desc>
-      </info>
-      <prop oor:name="Dithering" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: 3D-Engine/Dithering -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
-        <info>
-          <desc>Specifies if dithering is used to display more colors with few
-          colors available.</desc>
-          <label>Use Dithering</label>
-        </info>
-        <value>true</value>
-      </prop>
-      <prop oor:name="OpenGL" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: 3D-Engine/OpenGL -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
-        <info>
-          <desc>Specifies if 3D graphics from Draw and Impress will be displayed
-          on the user's system using an OpenGL capable hardware. If the system
-          does not have an OpenGL capable hardware, this setting will be
-          ignored. The 3D display is always done per software.</desc>
-          <label>Use OpenGL</label>
-        </info>
-        <value>false</value>
-      </prop>
-      <prop oor:name="OpenGL_Faster" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: 3D-Engine/OpenGL_Faster -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
-        <info>
-          <desc>Specifies whether all geometry data will be simultaneously
-          transferred in an array to the graphic driver. Not every graphic
-          driver correctly supports this OpenGL capability. For this reason,
-          this option can be deactivated in case of presentation errors of 3D
-          output. All geometry data will be then transferred as single
-          components. This option is only available if OpenGL is used, otherwise
-          it is disabled.</desc>
-          <label>Optimized output</label>
-        </info>
-        <value>true</value>
-      </prop>
-      <prop oor:name="ShowFull" oor:type="xs:boolean" oor:nillable="false">
-        <!-- OldPath: 3D-Engine/ShowFull -->
-        <!-- OldLocation: soffice.ini -->
-        <!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
-        <info>
-          <desc>Specifies interaction with full display. If a 3-D object is
-          rotated or moved, the full display is rotated or moved and not a grid
-          frame.</desc>
-          <label>Object refresh during interaction</label>
-        </info>
-        <value>false</value>
-      </prop>
-    </group>
     <group oor:name="Dictionaries">
       <info>
         <desc>Contains settings related to dictionaries.</desc>
