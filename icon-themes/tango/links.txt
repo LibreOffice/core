@@ -301,7 +301,7 @@ cmd/lc_rect_rounded.png cmd/lc_basicshapes.round-rectangle.png
 cmd/lc_drawtext.png cmd/lc_text.png
 cmd/sc_circle.png cmd/sc_basicshapes.circle.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
-cmd/sc_square.png cmd/sc_basicshapes.square.png
+cmd/sc_square.png cmd/sc_basicshapes.quadrat.png
 cmd/sc_rect.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_square_rounded.png cmd/sc_basicshapes.round-quadrat.png
 cmd/sc_rect_rounded.png cmd/sc_basicshapes.round-rectangle.png
