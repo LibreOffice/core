@@ -700,22 +700,6 @@ ConfigurationValue const ConfigurationValues[] =
     },
 
     {
-        SETTING_ENABLE_OPENGL,
-        "/apps/openoffice/use_opengl",
-        RTL_CONSTASCII_STRINGPARAM("OpenGL"),
-        false,
-        SETTINGS_LAST
-    },
-
-    {
-        SETTING_OPTIMIZE_OPENGL,
-        "/apps/openoffice/optimize_opengl",
-        RTL_CONSTASCII_STRINGPARAM("OpenGL_Faster"),
-        false,
-        SETTINGS_LAST
-    },
-
-    {
         SETTING_USE_SYSTEM_FONT,
         "/apps/openoffice/use_system_font",
         RTL_CONSTASCII_STRINGPARAM("AccessibilityIsSystemFont"),
