@@ -308,7 +308,7 @@ void GridWindow::transform( const Point& rOriginal, double& x, double& y )
 {
     const long nWidth = m_aGridArea.GetWidth();
     const long nHeight = m_aGridArea.GetHeight();
-    if (!nWidth || nHeight)
+    if (!nWidth || !nHeight)
         return;
     x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / (double)nWidth + m_fMinX;
     y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)nHeight + m_fMinY;
