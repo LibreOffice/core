@@ -411,7 +411,7 @@ public:
     SAL_DLLPRIVATE ::xmloff::RDFaImportHelper & GetRDFaImportHelper();
 
     // #i31958# XForms helper method
-    // (to be implemented by applications suporting XForms)
+    // (to be implemented by applications supporting XForms)
     virtual void initXForms();
 
     /** returns the upd and build id (f.e. "680m124$Build-8964" gives rMaster = 680 and rBuild = 8964)

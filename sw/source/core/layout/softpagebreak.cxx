@@ -69,7 +69,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                     pTab->FindMaster( false )->HasFollowFlowLine() )
                 {
                     // Now we have the row which causes a new page,
-                    // this row is a follow flow line and therefor cannot get
+                    // this row is a follow flow line and therefore cannot get
                     // the soft page break itself.
                     // Every first content frame of every cell frane in this row
                     // will get the soft page break

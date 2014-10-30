@@ -111,7 +111,7 @@ public:
                                 If one of the properties returned from the info service conflict with other handles
                                 alread present (e.g. through _rProperties), the property is handled as if -1 was returned.
                                 If NULL (or, for a special property, a call to getPreferredPropertyId returns -1),
-                                the aggregate property(ies) get a new handle which they can be refered by from outside.
+                                the aggregate property(ies) get a new handle which they can be referred by from outside.
         @param  _nFirstAggregateId
                                 if the object is about to create new handles for the aggregate properties, it uses
                                 id's ascending from this given id.

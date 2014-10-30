@@ -113,7 +113,7 @@ private:
     /** Put all the elements in the two given sequences of resource ids and
         copy them into one of the resource id result vectors maC1minusC2,
         maC2minusC1, and maC1andC2.  This is done by using only the resource
-        URLs for classification.  Therefor this method calls itself
+        URLs for classification.  Therefore this method calls itself
         recursively.
         @param rS1
             One sequence of XResourceId objects.

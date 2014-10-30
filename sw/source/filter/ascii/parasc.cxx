@@ -196,7 +196,7 @@ sal_uLong SwASCIIParser::CallParser()
                     // default has changed or not. Even a comparison with the
                     // HTMLi template does not work, because the defaults are
                     // not copied when a new doc is created. The result of
-                    // comparing pool defaults therefor would be that the
+                    // comparing pool defaults therefore would be that the
                     // defaults are exported always if the have changed for
                     // text documents in general. That's not sensible, as well
                     // as it is not sensible to export them always.

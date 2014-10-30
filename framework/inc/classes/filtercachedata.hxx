@@ -368,7 +368,7 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
 {
     public:
 
-        //  try to free all used memory REALY!
+        //  try to free all used memory REALLY!
 
         inline void free()
         {

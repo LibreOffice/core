@@ -93,7 +93,7 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Creates a new instance of a specified service.
      *
-     * <p>Therefor the associated factory of the service is looked up and used
+     * <p>Therefore the associated factory of the service is looked up and used
      * to instanciate a new component. </p>
      *
      * @param   serviceSpecifier    indicates the service or component name.
@@ -111,7 +111,7 @@ public class ServiceManager implements XMultiServiceFactory,
     /**
      * Creates a new instance of a specified service with the given parameters.
      *
-     * <p>Therefor the associated factory of the service is  looked up and used
+     * <p>Therefore the associated factory of the service is  looked up and used
      * to instanciate a new component.</p>
      *
      * @return  newly created component.

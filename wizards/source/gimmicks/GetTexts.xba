@@ -22,7 +22,7 @@
 &apos; This Macro extracts the Strings out of the currently activated document und inserts them into a logdocument
 &apos; The aim of the macro is to provide the programmer an insight into the StarOffice API
 &apos; It focusses on how document-Objects are accessed.
-&apos; Therefor not only texts of the document-body are retrieved but also Texts of general
+&apos; Therefore not only texts of the document-body are retrieved but also Texts of general
 &apos; document Objects like, Annotations, charts and general Document Information
 
 Public oLogDocument, oLogText, oLogCursor, oLogHeaderStyle, oLogBodyTextStyle as Object
@@ -200,7 +200,7 @@ Dim oCell as Object
 		oPara = ParaEnum.NextElement
 
 		&apos; Note: The Enumeration ParaEnum lists all tables and Paragraphs.
-		&apos; Therefor we have to find out what kind of object &quot;oPara&quot; actually is
+		&apos; Therefore we have to find out what kind of object &quot;oPara&quot; actually is
 		If oPara.supportsService(&quot;com.sun.star.text.Paragraph&quot;) Then
 			&apos; &quot;oPara&quot; is a Paragraph
 			oTextPortEnum = oPara.createEnumeration

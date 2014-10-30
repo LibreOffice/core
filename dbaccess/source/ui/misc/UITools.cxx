@@ -1189,7 +1189,7 @@ TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
         // such auto increment column later on
         // so until we know how to do it, we create a column without autoincrement
         //  if ( !aIter->second->bAutoIncrement )
-        {   // therefor we have searched
+        {   // therefore we have searched
             if ( aIter->second->nType == DataType::INTEGER )
             {
                 pTypeInfo = aIter->second; // alternative

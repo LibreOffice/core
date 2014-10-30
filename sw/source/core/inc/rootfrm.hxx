@@ -116,7 +116,7 @@ class SwRootFrm: public SwLayoutFrm
      * The macro and class can be found in the SwViewShell. These object can
      * be created nested (also for different kinds of Shells). They are
      * collected into the Array pCurrShells.
-     * Futhermore it can happen that a shell is activated while a curshell
+     * Furthermore it can happen that a shell is activated while a curshell
      * object is still 'active'. This one will be entered into pWaitingCurrShell
      * and will be activated by the last d'tor of CurrShell.
      * One other problem is the destruction of a shell while it is active.

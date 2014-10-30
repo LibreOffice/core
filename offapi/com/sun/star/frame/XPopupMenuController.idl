@@ -55,7 +55,7 @@ interface XPopupMenuController : com::sun::star::uno::XInterface
         <p>A controller should <b>never</b> update the pop-up menu structure on its
         own to prevent performance problems. A better way would be that a controller
         registers itself as status listener to for a command URL and immediately
-        deregister after that. Therefor status updates will not be send regularly
+        deregister after that. Therefore status updates will not be send regularly
         for a non visible pop-up menu.
         </p>
     */
