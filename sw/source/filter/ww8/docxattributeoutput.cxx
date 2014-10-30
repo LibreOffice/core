@@ -2950,45 +2950,6 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
                 (sal_uInt16)nTblSz, false);
 }
 
-/**
- * As we are exporting Header and footer in between when we are exporting document.xml.
- * In this case we are facing issue in table export for header and footer. Because
- * flags for table is getting shared in both export.
- * So we are switching between flags in between exporting "document.xml" and Header & footer
- * export.
- */
-void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 index)
-{
-    if( isHeaderFooter && index == 1)
-    {
-        m_oldTableReference->m_bTableCellOpen = m_tableReference->m_bTableCellOpen;
-        m_oldTableReference->m_nTableDepth = m_tableReference->m_nTableDepth;
-        m_oldTableReference->m_pOldTablepInner = m_tableReference->m_pOldTablepInner;
-        m_tableReference->m_bTableCellOpen = false;
-        m_tableReference->m_nTableDepth = 0;
-        m_pSectionInfo.reset();
-    }
-    else if( index == -1)
-    {
-       if (m_oldTableReference->m_pOldTablepInner)
-       {
-           m_tableReference->m_bTableCellOpen = m_oldTableReference->m_bTableCellOpen;
-           m_tableReference->m_nTableDepth = m_oldTableReference->m_nTableDepth;
-
-            //Reset the oldReference, after copying it back to the original.
-            m_oldTableReference->m_bTableCellOpen = false ;
-            m_oldTableReference->m_nTableDepth = 0;
-            m_oldTableReference->m_pOldTablepInner.reset();
-       }
-
-    }
-    else
-    {
-        m_tableReference->m_bTableCellOpen = false;
-        m_tableReference->m_nTableDepth = 0;
-    }
-}
-
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
     // In case any paragraph SDT's are open, close them here.
@@ -8350,7 +8311,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_anchorId( 1 ),
       m_nextFontId( 1 ),
       m_tableReference(new TableReference()),
-      m_oldTableReference(new TableReference()),
       m_bIgnoreNextFill(false),
       m_bBtLr(false),
       m_pTableStyleExport(new DocxTableStyleExport(rExport.pDoc, pSerializer)),

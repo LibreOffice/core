@@ -878,7 +878,6 @@ private:
     };
 
     boost::scoped_ptr<TableReference> m_tableReference;
-    boost::scoped_ptr<TableReference> m_oldTableReference;
 
     std::map< OUString, EmbeddedFontRef > fontFilesMap; // font file url to data
 
@@ -962,7 +961,6 @@ public:
     /// DMLTextExport
     virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) SAL_OVERRIDE;
     virtual oox::drawingml::DrawingML& GetDrawingML() SAL_OVERRIDE;
-    virtual void switchHeaderFooter(bool isHeaderFooter, sal_Int32 index);
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;
 
