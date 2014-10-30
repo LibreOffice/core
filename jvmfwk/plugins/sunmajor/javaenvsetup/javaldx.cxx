@@ -65,7 +65,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
 
     JavaInfo * pInfo = NULL;
-    errcode = jfw_getSelectedJRE( & pInfo);
+
+    try
+    {
+        errcode = jfw_getSelectedJRE( & pInfo);
+    }
+    catch (const std::exception&)
+    {
+        fprintf(stderr,"javaldx failed!\n");
+        return -1;
+    }
 
     if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
     {
