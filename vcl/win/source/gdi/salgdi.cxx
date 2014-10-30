@@ -586,7 +586,7 @@ WinSalGraphics::WinSalGraphics():
 WinSalGraphics::~WinSalGraphics()
 {
     // free obsolete GDI objects
-        ReleaseFonts();
+    ReleaseFonts();
 
     if ( mhRegion )
     {
