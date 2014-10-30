@@ -439,17 +439,16 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_struct_type_init(
         ppMembers, pParameterizedTypes);
 }
 
-
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType )
     SAL_THROW_EXTERN_C()
 {
+    // coverity[array_vs_singleton]
     typelib_static_mi_interface_type_init(
         ppRef, pTypeName, pBaseType == 0 ? 0 : 1, &pBaseType);
 }
-
 
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,

@@ -901,6 +901,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_newInterface(
     typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C()
 {
+    // coverity[array_vs_singleton]
     typelib_typedescription_newMIInterface(
         ppRet, pTypeName, 0, 0, 0, 0, 0, pBaseInterface == 0 ? 0 : 1,
         &pBaseInterface, nMembers, ppMembers);

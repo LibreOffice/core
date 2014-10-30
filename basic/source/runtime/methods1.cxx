@@ -839,6 +839,7 @@ RTLFUNC(Array)
         {
             ++index;
         }
+        // coverity[array_vs_singleton]
         pArray->Put( pNew, &index );
     }
 
@@ -1731,8 +1732,9 @@ RTLFUNC(Join)
         OUString aRetStr;
         short nLower, nUpper;
         pArr->GetDim( 1, nLower, nUpper );
-        for( short i = nLower ; i <= nUpper ; ++i )
+        for (short i = nLower; i <= nUpper; ++i)
         {
+            // coverity[array_vs_singleton]
             OUString aStr = pArr->Get( &i )->GetOUString();
             aRetStr += aStr;
             if( i != nUpper )

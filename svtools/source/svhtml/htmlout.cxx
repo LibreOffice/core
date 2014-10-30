@@ -455,6 +455,7 @@ static OString lcl_ConvertCharToHTML( sal_Unicode c,
             // If the character could not be converted to the destination
             // character set, the UNICODE character is exported as character
             // entity.
+            // coverity[array_vs_singleton]
             nLen = rtl_convertUnicodeToText(
                                 rContext.m_hConv, rContext.m_hContext, &c, 0,
                                 cBuffer, TXTCONV_BUFFER_SIZE,
