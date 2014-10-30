@@ -174,9 +174,6 @@ public:
     void    ForceSwapInObjects() const;
     void    ForceSwapOutObjects() const;
 
-    void    SwapInAll() const { ForceSwapInObjects(); }
-    void    SwapOutAll() const { ForceSwapOutObjects(); }
-
     /** Makes the object list flat, i.e. the object list content are
         then tree leaves
 
