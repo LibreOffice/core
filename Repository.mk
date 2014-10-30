@@ -67,6 +67,11 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svptest \
         svpclient \
         pixelctl ) \
+	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
+	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest) \
+	vcldemo \
+	tiledrendering \
+	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
@@ -179,15 +184,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 	xpdfimport \
 ))
 endif
-
-$(eval $(call gb_Helper_register_executables,OOO, \
-	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
-	$(if $(filter LINUX MACOSX WNT,$(OS)), \
-		icontest) \
-	vcldemo \
-	tiledrendering \
-	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
-))
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
