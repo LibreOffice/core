@@ -20,6 +20,7 @@
 #include "salgdiimpl.hxx"
 
 #include "win/svsys.h"
+#include <vcl/gradient.hxx>
 
 class WinSalGraphics;
 
@@ -207,7 +208,8 @@ public:
                     sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
 
-
+    virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
+            const Gradient& rGradient) SAL_OVERRIDE;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
