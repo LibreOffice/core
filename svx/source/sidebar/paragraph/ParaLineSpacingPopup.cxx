@@ -17,45 +17,48 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ParaLineSpacingPopup.hxx"
 #include "ParaLineSpacingControl.hxx"
-#include <boost/bind.hpp>
+
+#include <svx/ParaLineSpacingPopup.hxx>
 #include <unotools/viewoptions.hxx>
+#include <vcl/toolbox.hxx>
 
-namespace svx { namespace sidebar {
+using namespace svx;
 
-ParaLineSpacingPopup::ParaLineSpacingPopup(vcl::Window* pParent, const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator)
-    : Popup(
-        pParent,
-        rControlCreator,
-        OUString("Paragraph Line Spacing"))
+SFX_IMPL_TOOLBOX_CONTROL(ParaLineSpacingPopup, SvxLineSpacingItem);
+
+ParaLineSpacingPopup::ParaLineSpacingPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxToolBoxControl(nSlotId, nId, rTbx)
 {
-    SetPopupModeEndHandler(::boost::bind(&ParaLineSpacingPopup::PopupModeEndCallback, this));
+    rTbx.SetItemBits(nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits(nId));
 }
 
 ParaLineSpacingPopup::~ParaLineSpacingPopup()
 {
 }
 
-void ParaLineSpacingPopup::Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext)
+SfxPopupWindowType ParaLineSpacingPopup::GetPopupWindowType() const
 {
-    ProvideContainerAndControl();
-
-    ParaLineSpacingControl* pControl = dynamic_cast<ParaLineSpacingControl*>(mpControl.get());
-    if (pControl != NULL)
-        pControl->Rearrange(currSPState, currMetricUnit, currSPItem,currentContext);
+    return SFX_POPUPWINDOW_ONTIMEOUT;
 }
 
-void ParaLineSpacingPopup::PopupModeEndCallback()
+SfxPopupWindow* ParaLineSpacingPopup::CreatePopupWindow()
 {
-    ProvideContainerAndControl();
-    ParaLineSpacingControl* pControl = dynamic_cast<ParaLineSpacingControl*>(mpControl.get());
-    if (pControl == NULL)
-        return;
+    ParaLineSpacingControl* pControl = new ParaLineSpacingControl(GetSlotId(), m_xFrame, &GetToolBox(), /* WinBits - TODO? */(WinBits)0);
 
-    pControl->PopupModeEndCallback();
+    //pControl->StartPopupMode(&GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+    pControl->StartPopupMode(&GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
+    //pControl->StartSelection();
+
+    SetPopupWindow(pControl);
+    //pControl->SetSelectedHdl(LINK(this, ParaLineSpacingPopup, SelectedHdl));
+
+    return pControl;
 }
 
-} }
+void ParaLineSpacingPopup::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
+{
+    // FIXME - do we need to do anything here?
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

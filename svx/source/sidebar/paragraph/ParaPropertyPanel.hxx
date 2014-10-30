@@ -39,7 +39,6 @@
 
 #include "ParaBulletsPopup.hxx"
 #include "ParaNumberingPopup.hxx"
-#include "ParaLineSpacingPopup.hxx"
 
 class FloatingWindow;
 class ToolBox;
@@ -140,7 +139,6 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
-    ParaLineSpacingPopup maLineSpacePopup;
     ParaBulletsPopup maBulletsPopup;
     ParaNumberingPopup maNumberingPopup;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
@@ -175,7 +173,7 @@ private:
     void ReSize(bool bSize);
 
 
-    PopupControl* CreateLineSpacingControl (PopupContainer* pParent);
+    //PopupControl* CreateLineSpacingControl (PopupContainer* pParent);
     PopupControl* CreateBulletsPopupControl (PopupContainer* pParent);
     PopupControl* CreateNumberingPopupControl (PopupContainer* pParent);
     DECL_LINK(ClickLineSPDropDownHdl_Impl, ToolBox*);

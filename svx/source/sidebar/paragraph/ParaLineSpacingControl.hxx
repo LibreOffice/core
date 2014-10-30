@@ -19,24 +19,24 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
 
-#include "svx/sidebar/PopupControl.hxx"
 #include "svx/sidebar/ValueSetWithTextControl.hxx"
 #include <sfx2/bindings.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
-#include "ParaPropertyPanel.hxx"
 #include <vcl/fixed.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/tbxctrl.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx {
 
-class ParaLineSpacingControl:public svx::sidebar::PopupControl
+class ParaLineSpacingControl : public SfxPopupWindow
 {
 public:
-    ParaLineSpacingControl(vcl::Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel);
+    ParaLineSpacingControl(sal_uInt16 nId, const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow, WinBits nBits);
     virtual ~ParaLineSpacingControl();
+
     void Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext);
     //virtual void Paint(const Rectangle& rect);
 
@@ -57,13 +57,12 @@ private:
     bool                    mbUseLineSPCustom;
     bool                    mbLineSPDisable;
     SfxMapUnit              m_eLNSpaceUnit;
-    ParaPropertyPanel&      mrParaPropertyPanel;
     SfxBindings*            mpBindings;
 
     long                    nMinFixDist;
     Edit*                   pActLineDistFld;
 
-    ValueSetWithTextControl maLineSpacing;
+    svx::sidebar::ValueSetWithTextControl maLineSpacing;
 
     FixedText               maCustomFT;
     FixedText               maLSpacingFT;
@@ -102,7 +101,8 @@ private:
     DECL_LINK(LineSPDistAtHdl_Impl, void*);
     DECL_LINK(VSSelHdl, void*);
 };
-}}
+
+} // namespace svx
 
 #endif
 

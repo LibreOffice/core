@@ -19,7 +19,6 @@
 #include "ParaPropertyPanel.hxx"
 #include "ParaPropertyPanel.hrc"
 
-#include "ParaLineSpacingPopup.hxx"
 #include "ParaLineSpacingControl.hxx"
 #include "ParaBulletsPopup.hxx"
 #include "ParaBulletsControl.hxx"
@@ -225,7 +224,7 @@ void ParaPropertyPanel::ReSize(bool /* bSize */)
 
 void ParaPropertyPanel::EndSpacingPopupMode (void)
 {
-    maLineSpacePopup.Hide();
+    //maLineSpacePopup.Hide();
 }
 
 void ParaPropertyPanel::EndBulletsPopupMode (void)
@@ -504,8 +503,8 @@ IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
     if (aCommand == UNO_LINESPACING)
     {
         pBox->SetItemDown( nId, true );
-        maLineSpacePopup.Rearrange(meLnSpState,m_eMetricUnit,mpLnSPItem,maContext);
-        maLineSpacePopup.Show(*pBox);
+        //maLineSpacePopup.Rearrange(meLnSpState,m_eMetricUnit,mpLnSPItem,maContext);
+        //maLineSpacePopup.Show(*pBox);
     }
     return (0L);
 }
@@ -969,11 +968,11 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     return eUnit;
 }
 
-
+/*
 PopupControl* ParaPropertyPanel::CreateLineSpacingControl (PopupContainer* pParent)
 {
     return new ParaLineSpacingControl(pParent, *this);
-}
+}*/
 
 PopupControl* ParaPropertyPanel::CreateBulletsPopupControl (PopupContainer* pParent)
 {
@@ -1023,7 +1022,7 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       mxFrame(rxFrame),
       maContext(),
       mpBindings(pBindings),
-      maLineSpacePopup(this, ::boost::bind(&ParaPropertyPanel::CreateLineSpacingControl, this, _1)),
+      //maLineSpacePopup(this, ::boost::bind(&ParaPropertyPanel::CreateLineSpacingControl, this, _1)),
       maBulletsPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBulletsPopupControl, this, _1)),
       maNumberingPopup(this, ::boost::bind(&ParaPropertyPanel::CreateNumberingPopupControl, this, _1)),
       mxSidebar(rxSidebar)

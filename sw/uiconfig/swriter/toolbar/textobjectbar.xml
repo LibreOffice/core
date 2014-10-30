@@ -56,9 +56,7 @@
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:visible="false"/>

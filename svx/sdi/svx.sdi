@@ -10652,7 +10652,6 @@ SfxVoidItem Sortup SID_FM_SORTUP
     GroupId = GID_TABLE;
 ]
 
-
 SfxBoolItem SpacePara1 SID_ATTR_PARA_LINESPACE_10
 
 [

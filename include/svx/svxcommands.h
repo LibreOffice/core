@@ -95,6 +95,7 @@
 #define CMD_SID_ATTR_PARA_ADJUST_BLOCK              ".uno:JustifyPara"
 #define CMD_SID_LEAVE_GROUP                         ".uno:LeaveGroup"
 #define CMD_SID_ATTR_PARA_ADJUST_LEFT               ".uno:LeftPara"
+#define CMD_SID_ATTR_PARA_LINESPACE                 ".uno:LineSpacing"
 #define CMD_SID_FM_LISTBOX                          ".uno:ListBox"
 #define CMD_SID_FM_NUMERICFIELD                     ".uno:NumericField"
 #define CMD_SID_OBJECT_ALIGN                        ".uno:ObjectAlign"

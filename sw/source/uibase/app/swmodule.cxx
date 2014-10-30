@@ -23,8 +23,9 @@
 #include <swerror.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
-#include <svx/svdobj.hxx>
 #include <svtools/ehdl.hxx>
+#include <svx/ParaLineSpacingPopup.hxx>
+#include <svx/svdobj.hxx>
 #include <svx/fntszctl.hxx>
 #include <svx/fntctl.hxx>
 #include <svx/SmartTagCtl.hxx>
@@ -301,6 +302,7 @@ void SwDLL::RegisterControls()
     SwTbxInsertCtrl::RegisterControl(FN_INSERT_OBJ_CTRL, pMod );
     SwTbxFieldCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
+    svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
 
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_BASIC, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_SYMBOL, pMod );

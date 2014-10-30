@@ -51,13 +51,13 @@
 #define LSP_LV_GLOBAL_VALUE    "Line_Spacing_Lv"
 #define BEGIN_VALUE            28
 
+using namespace svx;
 using namespace svx::sidebar;
 
-ParaLineSpacingControl::ParaLineSpacingControl(vcl::Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel)
-    : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_LINESPACING))
-    , mbUseLineSPCustom             (false)
-    , mbLineSPDisable               (false)
-    , mrParaPropertyPanel(rPanel)
+ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow, WinBits nBits)
+    : SfxPopupWindow(nId, rFrame, pParentWindow, nBits)
+    , mbUseLineSPCustom(false)
+    , mbLineSPDisable(false)
     , mpBindings(NULL)
     , nMinFixDist(BEGIN_VALUE)
     , pActLineDistFld(&aLineDistAtPercentBox)
@@ -90,10 +90,9 @@ ParaLineSpacingControl::ParaLineSpacingControl(vcl::Window* pParent, svx::sideba
 {
     initial();
     FreeResource();
-    mpBindings = mrParaPropertyPanel.GetBindings();
-//  m_eLNSpaceUnit = mrParaPropertyPanel.maLNSpaceControl.GetCoreMetric();
     m_eLNSpaceUnit = SFX_MAPUNIT_100TH_MM;
 }
+
 ParaLineSpacingControl::~ParaLineSpacingControl()
 {
     delete[] mpImg;
@@ -714,10 +713,8 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
                 {
                     if(!(mbLineSPDisable))
                     {
-                        //maPos = mrParaPropertyPanel.maLinePos;
                         aLineDist.SelectEntryPos( maPos ) ;
                         aLineDist.SaveValue();
-                        //maValue = mrParaPropertyPanel.maLineValue;
 
                         SvxLineSpacingItem aSpacing(_DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
                         switch(maPos)
@@ -751,8 +748,7 @@ IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
                 break;
         }
     }
-    if(bClosePop)
-        mrParaPropertyPanel.EndSpacingPopupMode();
+
     return 0;
 }
 
@@ -776,7 +772,6 @@ void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEnt
     if( !aIsCustom )
     {
         mbUseLineSPCustom = DO_NOT_CUSTOM;
-        mrParaPropertyPanel.EndSpacingPopupMode();
     }
     maLineSpacing.SetNoSelection();
 }

@@ -19,29 +19,31 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGPOPUP_HXX
 
-#include "svx/sidebar/Popup.hxx"
-
 #include <boost/function.hpp>
-#include <svl/poolitem.hxx>
-#include <tools/fldunit.hxx>
+
 #include <editeng/lspcitem.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/tbxctrl.hxx>
+#include <svl/poolitem.hxx>
+#include <svx/svxdllapi.h>
+#include <tools/fldunit.hxx>
 
-namespace svx { namespace sidebar {
+namespace svx {
 
-class ParaLineSpacingPopup
-    : public Popup
+class SVX_DLLPUBLIC ParaLineSpacingPopup : public SfxToolBoxControl
 {
-public :
-    ParaLineSpacingPopup(vcl::Window* pParent, const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    ParaLineSpacingPopup(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~ParaLineSpacingPopup();
 
-    void Rearrange(SfxItemState currSPState, FieldUnit currMetricUnit, SvxLineSpacingItem* currSPItem, const ::sfx2::sidebar::EnumContext currentContext);
-private:
-    void PopupModeEndCallback();
+    virtual SfxPopupWindowType GetPopupWindowType() const SAL_OVERRIDE;
+    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
 };
 
-} } // end of namespace svx::sidebar
+} // namespace svx
 
 #endif
 
