@@ -36,6 +36,9 @@
 
 using namespace ::cppu;
 using namespace ::osl;
+#if OSL_DEBUG_LEVEL > 1
+using namespace ::rtl;
+#endif
 
 
 namespace cppu
