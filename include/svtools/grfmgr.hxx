@@ -420,7 +420,6 @@ public:
 
     bool                    IsInSwapIn() const { return mbIsInSwapIn; }
     bool                    IsInSwapOut() const { return mbIsInSwapOut; }
-    bool                    IsInSwap() const { return( mbIsInSwapOut || mbIsInSwapOut ); }
     bool                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
 
     bool                    Draw(
