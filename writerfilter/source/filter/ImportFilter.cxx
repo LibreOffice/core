@@ -225,6 +225,7 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    xSettings->setPropertyValue( "ClippedPictures", uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( "BackgroundParaOverDrawings", uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( "TabOverMargin", uno::makeAny( sal_True ) );
+   xSettings->setPropertyValue("PropLineSpacingShrinksFirstLine", uno::makeAny(sal_True));
 }
 
 void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )

@@ -1055,6 +1055,9 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         GetTextImport()->SetShowChanges( bShowRedlineChanges );
 }
 
+// Note: this will be called only if there are OOo elements in settings.xml.
+// So if a setting is missing there we can assume that it was written
+// by an OOo/LO version that is older than the introduction of the setting!
 void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aConfigProps)
 {
     // this method will modify the document directly -> lock SolarMutex
@@ -1104,6 +1107,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     aSet.insert("ClippedPictures");
     aSet.insert("BackgroundParaOverDrawings");
     aSet.insert("TabOverMargin");
+    aSet.insert("PropLineSpacingShrinksFirstLine");
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1138,6 +1142,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bClippedPictures = false;
     bool bBackgroundParaOverDrawings = false;
     bool bTabOverMargin = false;
+    bool bPropLineSpacingShrinksFirstLine = false;
 
     const PropertyValue* currentDatabaseDataSource = NULL;
     const PropertyValue* currentDatabaseCommand = NULL;
@@ -1225,6 +1230,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bBackgroundParaOverDrawings = true;
                 else if ( pValues->Name == "TabOverMargin" )
                     bTabOverMargin = true;
+                else if ( pValues->Name == "PropLineSpacingShrinksFirstLine" )
+                    bPropLineSpacingShrinksFirstLine = true;
             }
             catch( Exception& )
             {
@@ -1399,6 +1406,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if ( !bTabOverMargin )
         xProps->setPropertyValue("TabOverMargin", makeAny( false ) );
+
+    if (!bPropLineSpacingShrinksFirstLine)
+        xProps->setPropertyValue("PropLineSpacingShrinksFirstLine", makeAny(false));
 
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getPrinter( false );
