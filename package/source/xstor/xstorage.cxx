@@ -5990,7 +5990,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
         // the transacted version of the stream should be opened
 
         SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, false );
-        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+        assert(pElement && pElement->m_pStream && "In case element can not be created an exception must be thrown!");
 
         xResult = uno::Reference< embed::XExtendedStorageStream >(
                         pElement->m_pStream->GetStream( nOpenMode, true ),
