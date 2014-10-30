@@ -61,13 +61,15 @@
 #include <officecfg/Office/Common.hxx>
 
 X11SalGraphics::X11SalGraphics():
-    mpImpl(new X11SalGraphicsImpl(*this)),
     m_nXScreen( 0 ),
     pFontGC_(NULL)
 {
     bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
     if (bUseOpenGL)
         mpImpl.reset(new OpenGLSalGraphicsImpl());
+    else
+        mpImpl.reset(new X11SalGraphicsImpl(*this));
+
     m_pFrame            = NULL;
     m_pVDev             = NULL;
     m_pColormap         = NULL;
