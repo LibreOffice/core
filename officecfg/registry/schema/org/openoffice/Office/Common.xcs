@@ -2067,16 +2067,6 @@
         <desc>Contains settings which are used during the Office startup to
         check for unfinished work.</desc>
       </info>
-      <prop oor:name="DevelopmentChart" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Specifies that If this option is set to true, the new
-          development chart library is used instead of the standard one. Do not
-          set this option to true unless you know exactly what to do. This new
-          library will be unstable and incomplete most of the time. This flag
-          will be removed when the new library is in a stable state.</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
         <info>
           <desc>Contains the documents that were opened when the office
