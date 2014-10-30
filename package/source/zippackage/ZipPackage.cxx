@@ -1362,8 +1362,16 @@ void SAL_CALL ZipPackage::commitChanges()
     }
     // first the writeTempFile is called, if it returns a stream the stream should be written to the target
     // if no stream was returned, the file was written directly, nothing should be done
-
-    uno::Reference< io::XInputStream > xTempInStream = writeTempFile();
+    uno::Reference< io::XInputStream > xTempInStream;
+    try
+    {
+        xTempInStream = writeTempFile();
+    }
+    catch (const ucb::ContentCreationException& r)
+    {
+        throw WrappedTargetException(THROW_WHERE "Temporary file should be createable!",
+                    static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+    }
     if ( xTempInStream.is() )
     {
         uno::Reference< io::XSeekable > xTempSeek( xTempInStream, uno::UNO_QUERY_THROW );
