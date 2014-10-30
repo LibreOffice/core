@@ -758,8 +758,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             pPict->SeekRel( 6 );
             pPict->ReadUInt16( nColTabSize );
 
-            if ( ++nColTabSize > 256 )
+            if (nColTabSize > 255)
                 BITMAPERROR;
+
+            ++nColTabSize;
 
             pAcc->SetPaletteEntryCount( nColTabSize );
 
@@ -1001,6 +1003,11 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         }
         else if ( nPackType == 2 )
         {
+            const size_t nMaxPixels = pPict->remainingSize() / 3;
+            const size_t nMaxRows = nMaxPixels / nWidth;
+            if (nHeight > nMaxRows)
+                BITMAPERROR;
+
             for ( ny = 0; ny < nHeight; ny++ )
             {
                 for ( nx = 0; nx < nWidth; nx++ )
