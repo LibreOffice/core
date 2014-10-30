@@ -74,7 +74,7 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
-
+#include <o3tl/numeric.hxx>
 #include <o3tl/ptr_container.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/svdpage.hxx>
@@ -325,12 +325,18 @@ sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_Int32 nPosY ) const
 
 double XclImpChRoot::CalcRelativeFromHmmX( sal_Int32 nPosX ) const
 {
-    return static_cast< double >( nPosX ) / mxChData->maChartRect.GetWidth();
+    const long nWidth = mxChData->maChartRect.GetWidth();
+    if (!nWidth)
+        throw o3tl::divide_by_zero();
+    return static_cast<double>(nPosX) / nWidth;
 }
 
 double XclImpChRoot::CalcRelativeFromHmmY( sal_Int32 nPosY ) const
 {
-    return static_cast< double >( nPosY ) / mxChData->maChartRect.GetHeight();
+    const long nHeight = mxChData->maChartRect.GetHeight();
+    if (!nHeight)
+        throw o3tl::divide_by_zero();
+    return static_cast<double >(nPosY) / nHeight;
 }
 
 double XclImpChRoot::CalcRelativeFromChartX( sal_Int32 nPosX ) const
