@@ -21,6 +21,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <sal/log.hxx>
 #include <comphelper/random.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -30,13 +31,11 @@
 #define OUTPUTSIZE 15360
 
 #define STRINGIFY(...) #__VA_ARGS__"\n"
-//#define LOG_PRINTF(x) (std::cout << x << std::endl)
-#define LOG_PRINTF(x)
 
 #define DS_CHECK_STATUS(status, name) \
     if (CL_SUCCESS != status) \
     { \
-        LOG_PRINTF("[OCL] Error code is " << status << " at " << name); \
+    SAL_INFO("sc.opencl.device", "Error code is " << status << " at " name); \
     }
 
 namespace sc { namespace OpenCLDevice {
@@ -226,7 +225,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
     if (DS_DEVICE_OPENCL_DEVICE == device->type)
     {
         /* Evaluating an OpenCL device */
-        LOG_PRINTF("[DS] Device: \"" << device->oclDeviceName << "\" (OpenCL) evaluation...");
+        SAL_INFO("sc.opencl.device", "Device: \"" << device->oclDeviceName << "\" (OpenCL) evaluation...");
         cl_int clStatus;
         /* Check for 64-bit float extensions */
         size_t aDevExtInfoSize = 0;
@@ -290,7 +289,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
                 clStatus = clGetProgramBuildInfo(clProgram, device->oclDeviceID, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
                 buildLog = (char*)malloc(length);
                 clGetProgramBuildInfo(clProgram, device->oclDeviceID, CL_PROGRAM_BUILD_LOG, length, buildLog, &length);
-                LOG_PRINTF("[OCL] Build Errors" << std::endl << buildLog);
+                SAL_INFO("sc.opencl.device", "Build Errors:\n" << buildLog);
                 free(buildLog);
 
                 device->score = (void*)new LibreOfficeDeviceScore;
@@ -352,7 +351,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
     else
     {
         /* Evaluating an Native CPU device */
-        LOG_PRINTF("[DS] Device: \"CPU\" (Native) evaluation...");
+        SAL_INFO("sc.opencl.device", "Device: \"CPU\" (Native) evaluation...");
         timer kernelTime;
         timerStart(&kernelTime);
 
@@ -405,16 +404,16 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
         }
         else
         {
-            LOG_PRINTF("Unusual null score");
+            SAL_INFO("sc.opencl.device", "Unusual null score");
         }
 
         if (DS_DEVICE_OPENCL_DEVICE == device.type)
         {
-            LOG_PRINTF("[DS] Device[" << d << "] " << device.oclDeviceName << " (OpenCL) score is " << fScore);
+            SAL_INFO("sc.opencl.device", "Device[" << d << "] " << device.oclDeviceName << " (OpenCL) score is " << fScore);
         }
         else
         {
-            LOG_PRINTF("[DS] Device[" << d << "] CPU (Native) score is " << fScore);
+            SAL_INFO("sc.opencl.device", "Device[" << d << "] CPU (Native) score is " << fScore);
         }
         if (fScore < bestScore)
         {
@@ -424,11 +423,11 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
     }
     if (DS_DEVICE_OPENCL_DEVICE == profile->devices[*bestDeviceIdx].type)
     {
-        LOG_PRINTF("[DS] Selected Device[" << *bestDeviceIdx << "]: " << profile->devices[*bestDeviceIdx].oclDeviceName << "(OpenCL).");
+        SAL_INFO("sc.opencl.device", "Selected Device[" << *bestDeviceIdx << "]: " << profile->devices[*bestDeviceIdx].oclDeviceName << "(OpenCL).");
     }
     else
     {
-        LOG_PRINTF("[DS] Selected Device[" << *bestDeviceIdx << "]: CPU (Native).");
+        SAL_INFO("sc.opencl.device", "Selected Device[" << *bestDeviceIdx << "]: CPU (Native).");
     }
 
     return DS_SUCCESS;
@@ -476,13 +475,13 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
         else
         {
             status = DS_INVALID_PROFILE;
-            LOG_PRINTF("[DS] Performing forced profiling.");
+            SAL_INFO("sc.opencl.device", "Performing forced profiling.");
         }
         if (DS_SUCCESS != status)
         {
             if (!bForceSelection)
             {
-                LOG_PRINTF("[DS] Profile file not available (" << fileName << "); performing profiling.");
+                SAL_INFO("sc.opencl.device", "Profile file not available (" << fileName << "); performing profiling.");
             }
 
             /* Populate input data for micro-benchmark */
@@ -506,21 +505,21 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
                 status = writeProfileToFile(profile, serializeScore, fileName);
                 if (DS_SUCCESS == status)
                 {
-                    LOG_PRINTF("[DS] Scores written to file (" << fileName << ").");
+                    SAL_INFO("sc.opencl.device", "Scores written to file (" << fileName << ").");
                 }
                 else
                 {
-                    LOG_PRINTF("[DS] Error saving scores to file (" << fileName << "); scores not written to file.");
+                    SAL_INFO("sc.opencl.device", "Error saving scores to file (" << fileName << "); scores not written to file.");
                 }
             }
             else
             {
-                LOG_PRINTF("[DS] Unable to evaluate performance; scores not written to file.");
+                SAL_INFO("sc.opencl.device", "Unable to evaluate performance; scores not written to file.");
             }
         }
         else
         {
-            LOG_PRINTF("[DS] Profile read from file (" << fileName << ").");
+            SAL_INFO("sc.opencl.device", "Profile read from file (" << fileName << ").");
         }
 
         /* Pick best device */
@@ -534,20 +533,20 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
             int overrideDeviceIdx = matchDevice(profile, overrideDeviceStr);
             if (-1 != overrideDeviceIdx)
             {
-                LOG_PRINTF("[DS] Overriding Device Selection (SC_OPENCL_DEVICE_OVERRIDE=" << overrideDeviceStr << ").");
+                SAL_INFO("sc.opencl.device", "Overriding Device Selection (SC_OPENCL_DEVICE_OVERRIDE=" << overrideDeviceStr << ").");
                 bestDeviceIdx = overrideDeviceIdx;
                 if (DS_DEVICE_OPENCL_DEVICE == profile->devices[bestDeviceIdx].type)
                 {
-                    LOG_PRINTF("[DS] Selected Device[" << bestDeviceIdx << "]: " << profile->devices[bestDeviceIdx].oclDeviceName << " (OpenCL).");
+                    SAL_INFO("sc.opencl.device", "Selected Device[" << bestDeviceIdx << "]: " << profile->devices[bestDeviceIdx].oclDeviceName << " (OpenCL).");
                 }
                 else
                 {
-                    LOG_PRINTF("[DS] Selected Device[" << bestDeviceIdx << "]: CPU (Native).");
+                    SAL_INFO("sc.opencl.device", "Selected Device[" << bestDeviceIdx << "]: CPU (Native).");
                 }
             }
             else
             {
-                LOG_PRINTF("[DS] Ignoring invalid SC_OPENCL_DEVICE_OVERRIDE=" << overrideDeviceStr << ").");
+                SAL_INFO("sc.opencl.device", "Ignoring invalid SC_OPENCL_DEVICE_OVERRIDE=" << overrideDeviceStr << ").");
             }
         }
 
