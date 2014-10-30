@@ -177,7 +177,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   /* All SalFrameView the base class for all VCL system views inherits from
      NSView in order to get mouse and other events. This is the only way to
      get these events. In order to start a drag operation we need to provide
-     the mouse event which was the trigger. SalFrameView therefor implements
+     the mouse event which was the trigger. SalFrameView therefore implements
      a hook mechanism so that we can get mouse events for our purpose.
   */
   if (![mView respondsToSelector: @selector(registerMouseEventListener:)] ||

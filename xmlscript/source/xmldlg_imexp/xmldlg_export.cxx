@@ -1019,7 +1019,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     // In the future VBA support might require custom models ( and not the just the form
     // variant of a control that we currently use ) In this case the door is still open,
     // we just need to define a new way for the 'ServiceName' to be extracted from the
-    // incomming model. E.g. the use of supporting service
+    // incoming model. E.g. the use of supporting service
     // "com.sun.star.form.FormComponent", 'ServiceName' and XPersistObject
     // is only an implementation detail here, in the future some other
     // method ( perhaps a custom prop ) could be used instead.

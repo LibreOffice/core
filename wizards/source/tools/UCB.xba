@@ -90,7 +90,7 @@ Dim sFileArray(StartUbound,1) as String
 							&apos; Retrieve the Index in the Array, where a Filename is positioned
 							If Not IsMissing(sFileContent()) Then
 								If (FieldinArray(sFileContent(), Ubound(sFileContent), RealFileContent)) Then
-									&apos; The extension of the current file passes the filter and is therefor admitted to the
+									&apos; The extension of the current file passes the filter and is therefore admitted to the
 									&apos; fileList
 									If Not IsMissing(sExtension) Then
 										If sExtension &lt;&gt; &quot;&quot; Then

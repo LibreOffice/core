@@ -6863,7 +6863,7 @@ void ScInterpreter::ScDBCount()
         {   // count all matching records
             // TODO: currently the QueryIterators only return cell pointers of
             // existing cells, so if a query matches an empty cell there's
-            // nothing returned, and therefor not counted!
+            // nothing returned, and therefore not counted!
             // Since this has ever been the case and this code here only came
             // into existence to fix #i6899 and it never worked before we'll
             // have to live with it until we reimplement the iterators to also

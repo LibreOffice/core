@@ -1335,7 +1335,7 @@ void SectionPropertyMap::_ApplyProperties(
         beans::PropertyValue* pCharGrabBag = std::find_if(vPropVals.begin(),vPropVals.end(),NamedPropertyValue("CharInteropGrabBag") );
         if (pCharGrabBag!=vPropVals.end()) {
             (pCharGrabBag->Value)>>=vCharVals;
-            nProperties += vCharVals.getLength()-1; //-1 to accomodate for grab bag property in vPropVals
+            nProperties += vCharVals.getLength()-1; //-1 to accommodate for grab bag property in vPropVals
         }
         beans::PropertyValue* pParaGrabBag = std::find_if(vPropVals.begin(),vPropVals.end(),NamedPropertyValue("ParaInteropGrabBag") );
         if (pParaGrabBag!=vPropVals.end()) {

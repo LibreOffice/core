@@ -211,7 +211,7 @@ public: // module scope
 
 
     // Exception cannot be thrown through the C-XmlParser (possible resource leaks),
-    // therefor the exception must be saved somewhere.
+    // therefore the exception must be saved somewhere.
     SAXParseException   exception;
     css::uno::RuntimeException    rtexception;
     bool                bExceptionWasThrown;

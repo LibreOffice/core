@@ -209,7 +209,7 @@ namespace
 
             // now add the Conn itself
             OQueryTableConnection aNewConn(_pView, aNewConnData);
-            // refering to the local variable is not important, as NotifyQueryTabConn creates a new copy
+            // referring to the local variable is not important, as NotifyQueryTabConn creates a new copy
             // to add me (if not existent)
             _pView->NotifyTabConnection(aNewConn, false);
                 // don't create an Undo-Action for the new connection : the connection is

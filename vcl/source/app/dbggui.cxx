@@ -127,7 +127,7 @@ static const sal_Char* pDbgHelpText[] =
 "copies the text of the MessageBox to the clipboard. Because a MessageBox allows "
 "further event processing other errors caused by Paint, Activate/Deactivate, "
 "GetFocus/LoseFocus can cause more errors or incorrect errors and messages. "
-"Therefor the message should also be directed to a file/debugger in case of "
+"Therefore the message should also be directed to a file/debugger in case of "
 "problems in order to produce the (right) error messages.\n",
 "\n",
 "TestTool\n",

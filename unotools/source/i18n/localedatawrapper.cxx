@@ -300,7 +300,7 @@ void LocaleDataWrapper::invalidateData()
                 // and default for Language found.
                 if ( areChecksEnabled()
                         && aDebugLocale != "ar-SD"  // Sudan/ar
-                        && aDebugLocale != "en-CB"  // Carribean is not a country
+                        && aDebugLocale != "en-CB"  // Caribbean is not a country
 //                      && aDebugLocale != "en-BG"  // ?!? Bulgaria/en
 //                      && aDebugLocale != "es-BR"  // ?!? Brazil/es
                     )
