@@ -1627,10 +1627,13 @@ bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntr
 
 //  - return the replacement text (only for SWG-Format, all other
 //    can be taken from the word list!)
-bool SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                  const OUString&, OUString& )
+bool SvxAutoCorrect::GetLongText( const OUString&, OUString& )
 {
     return false;
+}
+
+void SvxAutoCorrect::refreshBlockList( const uno::Reference< embed::XStorage >& )
+{
 }
 
 // Text with attribution (only the SWG - SWG format!)
