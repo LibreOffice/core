@@ -44,18 +44,18 @@ using namespace ::com::sun::star;
 struct SdrPageWindow::Impl
 {
     // #110094# ObjectContact section
-    sdr::contact::ObjectContact*                        mpObjectContact;
+    mutable sdr::contact::ObjectContactOfPageView* mpObjectContact;
 
     // the SdrPageView this window belongs to
-    SdrPageView&                                        mrPageView;
+    SdrPageView& mrPageView;
 
     // the PaintWindow to paint on. Here is access to OutDev etc.
     // #i72752# change to pointer to allow patcing it in DrawLayer() if necessary
-    SdrPaintWindow*                                     mpPaintWindow;
-    SdrPaintWindow*                                     mpOriginalPaintWindow;
+    SdrPaintWindow* mpPaintWindow;
+    SdrPaintWindow* mpOriginalPaintWindow;
 
     // UNO stuff for xControls
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > mxControlContainer;
+    uno::Reference<awt::XControlContainer> mxControlContainer;
 
     Impl( SdrPageView& rPageView, SdrPaintWindow& rPaintWindow ) :
         mpObjectContact(NULL),
@@ -153,12 +153,6 @@ SdrPageWindow::~SdrPageWindow()
     }
 
     delete mpImpl;
-}
-
-// ObjectContact section
-sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
-{
-    return new sdr::contact::ObjectContactOfPageView(*this);
 }
 
 SdrPageView& SdrPageWindow::GetPageView() const
@@ -448,9 +442,7 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 const sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 {
     if (!mpImpl->mpObjectContact)
-    {
-        ((SdrPageWindow*)this)->mpImpl->mpObjectContact = ((SdrPageWindow*)this)->CreateViewSpecificObjectContact();
-    }
+        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(const_cast<SdrPageWindow&>(*this));
 
     return *mpImpl->mpObjectContact;
 }
@@ -458,7 +450,7 @@ const sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact()
 {
     if (!mpImpl->mpObjectContact)
-        mpImpl->mpObjectContact = CreateViewSpecificObjectContact();
+        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(*this);
 
     return *mpImpl->mpObjectContact;
 }
