@@ -7,9 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "threadpool.hxx"
+#include <comphelper/threadpool.hxx>
 
+#include <rtl/instance.hxx>
+#include <boost/shared_ptr.hpp>
+#include <thread>
 #include <algorithm>
+
+namespace comphelper {
 
 class ThreadPool::ThreadWorker : public salhelper::Thread
 {
@@ -17,7 +22,7 @@ class ThreadPool::ThreadWorker : public salhelper::Thread
     osl::Condition maNewWork;
 public:
     ThreadWorker( ThreadPool *pPool ) :
-        salhelper::Thread("sheet-import-thread-pool"),
+        salhelper::Thread("thread-pool"),
         mpPool( pPool ) {}
 
     virtual void execute() SAL_OVERRIDE
@@ -90,6 +95,20 @@ ThreadPool::~ThreadPool()
     waitUntilWorkersDone();
 }
 
+struct ThreadPoolStatic : public rtl::StaticWithInit< boost::shared_ptr< ThreadPool >,
+                                                      ThreadPoolStatic >
+{
+    boost::shared_ptr< ThreadPool > operator () () {
+        sal_Int32 nThreads = std::max( std::thread::hardware_concurrency(), 1U );
+        return boost::shared_ptr< ThreadPool >( new ThreadPool( nThreads ) );
+    };
+};
+
+ThreadPool& ThreadPool::getSharedOptimalPool()
+{
+    return *ThreadPoolStatic::get().get();
+}
+
 /// wait until all the workers have completed and
 /// terminate all threads
 void ThreadPool::waitUntilWorkersDone()
@@ -160,5 +179,7 @@ void ThreadPool::waitUntilEmpty()
     }
     assert( maTasks.empty() );
 }
+
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

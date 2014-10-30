@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_FILTER_OOX_THREADPOOL_HXX
-#define INCLUDED_SC_SOURCE_FILTER_OOX_THREADPOOL_HXX
+#ifndef INCLUDED_COMPHELPER_THREADPOOL_HXX
+#define INCLUDED_COMPHELPER_THREADPOOL_HXX
 
 #include <sal/config.h>
 #include <salhelper/thread.hxx>
@@ -16,8 +16,12 @@
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
+#include <comphelper/comphelperdllapi.h>
 
-class ThreadTask
+namespace comphelper
+{
+
+class COMPHELPER_DLLPUBLIC ThreadTask
 {
 public:
     virtual      ~ThreadTask() {}
@@ -25,11 +29,16 @@ public:
 };
 
 /// A very basic thread pool implementation
-class ThreadPool
+class COMPHELPER_DLLPUBLIC ThreadPool
 {
 public:
+    /// returns a pointer to a shared pool with optimal thread
+    /// count for the CPU
+    static      ThreadPool& getSharedOptimalPool();
+
                 ThreadPool( sal_Int32 nWorkers );
     virtual    ~ThreadPool();
+
     void        pushTask( ThreadTask *pTask /* takes ownership */ );
     void        waitUntilEmpty();
     void        waitUntilWorkersDone();
@@ -48,6 +57,8 @@ private:
     std::vector< ThreadTask * >   maTasks;
 };
 
-#endif // INCLUDED_SC_SOURCE_FILTER_OOX_THREADPOOL_HXX
+} // namespace comphelper
+
+#endif // INCLUDED_COMPHELPER_THREADPOOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

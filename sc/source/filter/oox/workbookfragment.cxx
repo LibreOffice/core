@@ -46,7 +46,6 @@
 #include "worksheethelper.hxx"
 #include "worksheetfragment.hxx"
 #include "sheetdatacontext.hxx"
-#include "threadpool.hxx"
 #include "officecfg/Office/Common.hxx"
 
 #include "document.hxx"
@@ -58,6 +57,7 @@
 
 #include <oox/core/fastparser.hxx>
 #include <salhelper/thread.hxx>
+#include <comphelper/threadpool.hxx>
 #include <osl/conditn.hxx>
 
 #include <algorithm>
@@ -207,7 +207,7 @@ namespace {
 typedef std::pair<WorksheetGlobalsRef, FragmentHandlerRef> SheetFragmentHandler;
 typedef std::vector<SheetFragmentHandler> SheetFragmentVector;
 
-class WorkerThread : public ThreadTask
+class WorkerThread : public comphelper::ThreadTask
 {
     sal_Int32 &mrSheetsLeft;
     WorkbookFragment& mrWorkbookHandler;
@@ -311,7 +311,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
         // test sequential read in this mode
         if( nThreads < 0)
             nThreads = 0;
-        ThreadPool aPool( nThreads );
+        comphelper::ThreadPool aPool( nThreads );
 
         sal_Int32 nSheetsLeft = 0;
         ProgressBarTimer aProgressUpdater;
