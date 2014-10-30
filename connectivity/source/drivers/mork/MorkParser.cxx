@@ -296,7 +296,10 @@ bool MorkParser::parseCell()
             {
                 Text += NextChar;
             }
-            else nextChar();
+            else
+            {
+                (void)nextChar();
+            }
         }
         break;
         case '$':
