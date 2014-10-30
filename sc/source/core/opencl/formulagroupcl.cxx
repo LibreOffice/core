@@ -77,10 +77,6 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
             static_cast<const formula::SingleVectorRefToken*>(ref);
         pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
         szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
-#if 0
-        std::cerr << "Marshal a Single vector of size " << pSVR->GetArrayLength();
-        std::cerr << " at argument "<< argno << "\n";
-#endif
     }
     else if (ref->GetType() == formula::svDoubleVectorRef)
     {
@@ -3572,9 +3568,7 @@ DynamicKernel* DynamicKernel::create( ScDocument& /* rDoc */,
     }
     catch (const UnhandledToken& ut)
     {
-        std::cerr << "\nDynamic formula compiler: unhandled token: ";
-        std::cerr << ut.mMessage << " at ";
-        std::cerr << ut.mFile << ":" << ut.mLineNumber << "\n";
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
 #else
@@ -3584,7 +3578,7 @@ DynamicKernel* DynamicKernel::create( ScDocument& /* rDoc */,
     }
     catch (...)
     {
-        std::cerr << "Dynamic formula compiler: unhandled compiler error\n";
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
         return NULL;
     }
     return pDynamicKernel;
@@ -3662,8 +3656,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     }
     catch (const UnhandledToken& ut)
     {
-        std::cerr << "\nDynamic formula compiler: unhandled token: ";
-        std::cerr << ut.mMessage << "\n";
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled token: " << ut.mMessage << " at " << ut.mFile << ":" << ut.mLineNumber);
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
         return true;
@@ -3673,10 +3666,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     }
     catch (const OpenCLError& oce)
     {
-        std::cerr << "Dynamic formula compiler: OpenCL error: ";
-        std::cerr << oce.mError;
-        std::cerr << " at ";
-        std::cerr << oce.mFile << ":" << oce.mLineNumber << "\n";
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: OpenCL error: " << oce.mError << " at " << oce.mFile << ":" << oce.mLineNumber);
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
         return true;
@@ -3686,9 +3676,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     }
     catch (const Unhandled& uh)
     {
-        std::cerr << "Dynamic formula compiler: unhandled case:";
-        std::cerr << " at ";
-        std::cerr << uh.mFile << ":" << uh.mLineNumber << "\n";
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled case at " << uh.mFile << ":" << uh.mLineNumber);
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
         return true;
@@ -3698,7 +3686,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     }
     catch (...)
     {
-        std::cerr << "Dynamic formula compiler: unhandled compiler error\n";
+        SAL_WARN("sc.opencl", "Dynamic formula compiler: unhandled compiler error");
 #ifdef NO_FALLBACK_TO_SWINTERP
         assert(false);
         return true;
