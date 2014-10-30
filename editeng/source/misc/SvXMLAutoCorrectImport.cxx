@@ -56,6 +56,7 @@ SvXMLWordListContext::SvXMLWordListContext(
    SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
+    rLocalRef.rAutoCorrect.refreshBlockList( rLocalRef.xStorage );
 }
 
 com::sun::star::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFastChildContext(
@@ -94,7 +95,7 @@ SvXMLWordContext::SvXMLWordContext(
     if( !bOnlyTxt )
     {
         const OUString sLongSave( sRight );
-        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.xStorage, sWrong, sRight ) &&
+        if( !rLocalRef.rAutoCorrect.GetLongText( sWrong, sRight ) &&
             !sLongSave.isEmpty() )
         {
             sRight = sLongSave;

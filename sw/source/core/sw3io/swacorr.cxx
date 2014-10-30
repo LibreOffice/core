@@ -37,20 +37,24 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
  *
  * @param rShort - the stream name (encrypted)
  */
-bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
-                                 const OUString& rShort, OUString& rLong )
+bool SwAutoCorrect::GetLongText( const OUString& rShort, OUString& rLong )
 {
     sal_uLong nRet = 0;
+    assert( m_pTextBlocks );
+    nRet = m_pTextBlocks->GetText( rShort, rLong );
+    return !IsError( nRet ) && !rLong.isEmpty();
+}
+
+void SwAutoCorrect::refreshBlockList( const uno::Reference< embed::XStorage >& rStg )
+{
     if (rStg.is())
     {
         // mba: relative URLs don't make sense here
-        SwXMLTextBlocks aBlk( rStg, OUString() );
-        nRet = aBlk.GetText( rShort, rLong );
+        m_pTextBlocks.reset( new SwXMLTextBlocks( rStg, OUString() ) );
     }
     else {
-       OSL_ENSURE( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
+       OSL_ENSURE( rStg.is(), "Someone passed SwAutoCorrect::refreshBlockList a dud storage!");
     }
-    return !IsError( nRet ) && !rLong.isEmpty();
 }
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)

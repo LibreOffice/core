@@ -24,15 +24,20 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
 
+#include "SwXMLTextBlocks.hxx"
+
 class SwAutoCorrect : public SvxAutoCorrect
 {
     using  SvxAutoCorrect::PutText;
 
+    std::unique_ptr<SwXMLTextBlocks> m_pTextBlocks;
+
 protected:
     // Return replacement text (only for SWG-format, all others can be obtained from wordlist!).
     // rShort is stream-name - encrypted!
-    virtual bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                              const OUString& rShort, OUString& rLong ) SAL_OVERRIDE;
+    virtual bool GetLongText( const OUString& rShort, OUString& rLong ) SAL_OVERRIDE;
+
+    virtual void refreshBlockList( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& ) SAL_OVERRIDE;
 
     // Text with attributes (only SWG-format!).
     // rShort is stream-name - encrypted!
