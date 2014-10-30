@@ -1281,6 +1281,36 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
         case TYELLOW:
             AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_YELLOW);
             break;
+        case TSILVER:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_SILVER);
+            break;
+        case TGRAY:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_GRAY);
+            break;
+        case TMAROON:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_MAROON);
+            break;
+        case TOLIVE:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_OLIVE);
+            break;
+        case TLIME:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_LIME);
+            break;
+        case TAQUA:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_AQUA);
+            break;
+        case TTEAL:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_TEAL);
+            break;
+        case TNAVY:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_NAVY);
+            break;
+        case TFUCHSIA:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_FUCHSIA);
+            break;
+        case TPURPLE:
+            AddAttribute(XML_NAMESPACE_MATH, XML_COLOR, XML_PURPLE);
+            break;
         case TSIZE:
             {
                 const SmFontNode *pFontNode = static_cast<const SmFontNode *>(pNode);

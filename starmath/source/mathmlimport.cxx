@@ -724,6 +724,9 @@ void SmXMLContext_Helper::RetrieveAttrs(const uno::Reference<
             case XML_TOK_COLOR:
                 sColor = sValue;
                 break;
+            case XML_TOK_MATHCOLOR:
+                sColor = sValue;
+                break;
             default:
                 break;
         }
@@ -964,6 +967,9 @@ void SmXMLStyleContext_Impl::StartElement(const uno::Reference<
                 sFontFamily = sValue;
                 break;
             case XML_TOK_COLOR:
+                sColor = sValue;
+                break;
+            case XML_TOK_MATHCOLOR:
                 sColor = sValue;
                 break;
             default:
@@ -2093,6 +2099,7 @@ static __FAR_DATA SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
     { XML_NAMESPACE_MATH,   XML_FONTSIZE,        XML_TOK_FONTSIZE      },
     { XML_NAMESPACE_MATH,   XML_FONTFAMILY,      XML_TOK_FONTFAMILY    },
     { XML_NAMESPACE_MATH,   XML_COLOR,           XML_TOK_COLOR },
+    { XML_NAMESPACE_MATH,   XML_MATHCOLOR,       XML_TOK_MATHCOLOR },
     XML_TOKEN_MAP_END
 };
 
@@ -2150,12 +2157,19 @@ static __FAR_DATA SvXMLTokenMapEntry aColorTokenMap[] =
     { XML_NAMESPACE_MATH,   XML_RED,          TRED},
     { XML_NAMESPACE_MATH,   XML_GREEN,        TGREEN},
     { XML_NAMESPACE_MATH,   XML_BLUE,         TBLUE},
-    { XML_NAMESPACE_MATH,   XML_AQUA,         TCYAN},
-    { XML_NAMESPACE_MATH,   XML_FUCHSIA,      TMAGENTA},
+    { XML_NAMESPACE_MATH,   XML_AQUA,         TAQUA},
+    { XML_NAMESPACE_MATH,   XML_FUCHSIA,      TFUCHSIA},
     { XML_NAMESPACE_MATH,   XML_YELLOW,       TYELLOW},
+    { XML_NAMESPACE_MATH,   XML_NAVY,         TNAVY},
+    { XML_NAMESPACE_MATH,   XML_TEAL,         TTEAL},
+    { XML_NAMESPACE_MATH,   XML_MAROON,       TMAROON},
+    { XML_NAMESPACE_MATH,   XML_PURPLE,       TPURPLE},
+    { XML_NAMESPACE_MATH,   XML_OLIVE,        TOLIVE},
+    { XML_NAMESPACE_MATH,   XML_GRAY,         TGRAY},
+    { XML_NAMESPACE_MATH,   XML_SILVER,       TSILVER},
+    { XML_NAMESPACE_MATH,   XML_LIME,         TLIME},
     XML_TOKEN_MAP_END
 };
-
 
 ////////////////////////////////////////////////////////////
 

@@ -2060,6 +2060,36 @@ void SmFontNode::CreateTextFromNode(String &rText)
         case TYELLOW:
             APPEND(rText,"color yellow ");
             break;
+        case TTEAL:
+            APPEND(rText,"color teal");
+            break;
+        case TSILVER:
+            APPEND(rText,"color silver");
+            break;
+        case TGRAY:
+            APPEND(rText,"color gray");
+            break;
+        case TMAROON:
+            APPEND(rText,"color maroon");
+            break;
+        case TPURPLE:
+            APPEND(rText,"color purple");
+            break;
+        case TLIME:
+            APPEND(rText,"color lime");
+            break;
+        case TOLIVE:
+            APPEND(rText,"color olive");
+            break;
+        case TNAVY:
+            APPEND(rText,"color navy");
+            break;
+        case TAQUA:
+            APPEND(rText,"color aqua");
+            break;
+        case TFUCHSIA:
+            APPEND(rText,"color fuchsia");
+            break;
         case TSANS:
             APPEND(rText,"font sans ");
             break;
@@ -2125,12 +2155,22 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
         case TBLACK :   SetColor(Color(COL_BLACK));     break;
         case TWHITE :   SetColor(Color(COL_WHITE));     break;
-        case TRED :     SetColor(Color(COL_RED));       break;
+        case TRED :     SetColor(Color(COL_LIGHTRED));      break;
         case TGREEN :   SetColor(Color(COL_GREEN));     break;
-        case TBLUE :    SetColor(Color(COL_BLUE));      break;
-        case TCYAN :    SetColor(Color(COL_CYAN));      break;
-        case TMAGENTA : SetColor(Color(COL_MAGENTA));   break;
+        case TBLUE :    SetColor(Color(COL_LIGHTBLUE));     break;
+        case TCYAN :    SetColor(Color(COL_LIGHTCYAN));     break; // as in Calc
+        case TMAGENTA : SetColor(Color(COL_LIGHTMAGENTA));  break; // as in Calc
         case TYELLOW :  SetColor(Color(COL_YELLOW));    break;
+        case TTEAL :    SetColor(Color(COL_CYAN));  break;
+        case TSILVER :  SetColor(Color(COL_LIGHTGRAY));  break;
+        case TGRAY :    SetColor(Color(COL_GRAY));  break;
+        case TMAROON :  SetColor(Color(COL_RED));  break;
+        case TPURPLE :  SetColor(Color(COL_MAGENTA));  break;
+        case TLIME :    SetColor(Color(COL_LIGHTGREEN));  break;
+        case TOLIVE :   SetColor(Color(COL_BROWN));  break;
+        case TNAVY :    SetColor(Color(COL_BLUE));  break;
+        case TAQUA :    SetColor(Color(COL_LIGHTCYAN));  break;
+        case TFUCHSIA : SetColor(Color(COL_LIGHTMAGENTA));  break;
 
         default:
             DBG_ASSERT(sal_False, "Sm: unbekannter Fall");
