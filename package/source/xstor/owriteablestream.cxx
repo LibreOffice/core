@@ -2174,7 +2174,15 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
-    CheckInitOnDemand();
+    try
+    {
+        CheckInitOnDemand();
+    }
+    catch( const io::IOException& r )
+    {
+        throw lang::WrappedTargetRuntimeException("OWriteStream::getOutputStream: Could not create backing temp file",
+                static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+    }
 
     if ( !m_pImpl )
     {
