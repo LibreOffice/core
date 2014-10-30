@@ -420,7 +420,7 @@ bool PPTWriter::ImplCloseDocument()
         mpExEmbed->Seek( STREAM_SEEK_TO_END );
         sal_uInt32 nExEmbedSize = mpExEmbed->Tell();
 
-        // nEnviroment : whole size of the environment container
+        // nEnvironment : whole size of the environment container
         sal_uInt32 nEnvironment = maFontCollection.GetCount() * 76      // 68 bytes per Fontenityatom and 8 Bytes per header
                                 + 8                                     // 1 FontCollection container
                                 + 20                                    // SrKinsoku container

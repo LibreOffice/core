@@ -114,7 +114,7 @@ service AccessibleTableView
 
     /** This interface gives access to any cell that is at least partially
         visible on the screen. So this interface gives access to the same
-        things like the XAccessibleContext interface. Therefor it use more
+        things like the XAccessibleContext interface. Therefore it use more
         usable methods. Also it gives access to some table specific data.
      */
     interface ::com::sun::star::accessibility::XAccessibleTable;

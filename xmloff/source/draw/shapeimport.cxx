@@ -100,7 +100,7 @@ struct XMLShapeImportHelperImpl
 
     std::vector<ConnectionHint> maConnections;
 
-    // #88546# possibility to swich progress bar handling on/off
+    // #88546# possibility to switch progress bar handling on/off
     bool                        mbHandleProgressBar;
 
     // stores the capability of the current model to create presentation shapes

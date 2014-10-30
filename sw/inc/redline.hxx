@@ -246,7 +246,7 @@ public:
 
     void SetComment( const OUString& rS ) { pRedlineData->SetComment( rS ); }
 
-    /** ExtraData gets copied, the pointer is therefor not taken over by
+    /** ExtraData gets copied, the pointer is therefore not taken over by
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
         { pRedlineData->SetExtraData( pData ); }
@@ -316,7 +316,7 @@ public:
     SwTableRowRedline(const SwRedlineData& rData, const SwTableLine& rTableLine);
     virtual ~SwTableRowRedline();
 
-    /** ExtraData gets copied, the pointer is therefor not taken over by
+    /** ExtraData gets copied, the pointer is therefore not taken over by
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
         { m_aRedlineData.SetExtraData( pData ); }
@@ -339,7 +339,7 @@ public:
     SwTableCellRedline(const SwRedlineData& rData, const SwTableBox& rTableBox);
     virtual ~SwTableCellRedline();
 
-    /** ExtraData gets copied, the pointer is therefor not taken over by
+    /** ExtraData gets copied, the pointer is therefore not taken over by
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
         { m_aRedlineData.SetExtraData( pData ); }

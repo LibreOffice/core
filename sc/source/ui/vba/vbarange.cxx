@@ -3980,7 +3980,7 @@ ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeExcepti
         }
         return;
     }
-    double nHeight = 0; // Incomming height is in points
+    double nHeight = 0; // Incoming height is in points
         _rowheight >>= nHeight;
     nHeight = lcl_Round2DecPlaces( nHeight );
     RangeHelper thisRange( mxRange );

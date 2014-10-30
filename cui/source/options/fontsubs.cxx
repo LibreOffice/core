@@ -244,7 +244,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
     {
         SvTreeListEntry* pEntry;
         // nCol is stupidly the nCol'th text column, not counted!
-        // Therefor "0" as column.
+        // Therefore "0" as column.
         sal_uLong nPos = m_pCheckLB->GetEntryPos(m_pFont1CB->GetText(), 0);
 
         if (pWin == m_pApply)

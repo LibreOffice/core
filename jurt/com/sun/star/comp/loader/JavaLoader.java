@@ -50,7 +50,7 @@ import com.sun.star.uno.AnyConverter;
  * The <code>JavaLoader</code> class provides the functionality of the
  * <code>com.sun.star.loader.Java</code> service.
  *
- * <p>Therefor the <code>JavaLoader</code> activates external UNO components
+ * <p>Therefore the <code>JavaLoader</code> activates external UNO components
  * which are implemented in Java.</p>
  *
  * <p>The loader is used by the <code>ServiceManger</code>.</p>

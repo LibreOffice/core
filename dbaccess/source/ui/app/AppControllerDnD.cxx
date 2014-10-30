@@ -329,7 +329,7 @@ const SharedConnection& OApplicationController::ensureConnection( ::dbtools::SQL
     // because every access (read *or* write) to  m_xDataSourceConnection
     // is mutexed.
     // See http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
-    // for what I'm refering to.
+    // for what I'm referring to.
     // We cannot use the TLS (thread-local storage) solution
     // since support for TLS is not up to the snuff on Windows :-(
 

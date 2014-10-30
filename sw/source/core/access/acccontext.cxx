@@ -1110,7 +1110,7 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
          !SwAccessibleChild( GetFrm() ).IsVisibleChildrenOnly() )
     {
         // If the object could have existed before, than there is nothing to do,
-        // because no wrapper exists now and therefor no one is interested to
+        // because no wrapper exists now and therefore no one is interested to
         // get notified of the movement.
         if( rChildFrmOrObj.GetSwFrm() )
         {
@@ -1197,7 +1197,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
     if( IsShowing( *(GetMap()), rChildFrmOrObj ) )
     {
         // If the object could have existed before, than there is nothing to do,
-        // because no wrapper exists now and therefor no one is interested to
+        // because no wrapper exists now and therefore no one is interested to
         // get notified of the movement.
         if( bNew || (bVisibleChildrenOnly && !IsShowing( rOldFrm )) )
         {

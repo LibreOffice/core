@@ -453,7 +453,7 @@ public class ToDo {
                                             ToDoImpl.INT_COLUMN_STARTDATE );
                                     }
 
-                                    // Get the GregorianCalender format for the
+                                    // Get the GregorianCalendar format for the
                                     // start date
                                     gregCalPreviousStartDate =
                                         this.getGregorianCalendarFromString(

@@ -331,7 +331,7 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
 // ODBC Environment (common for all Connections):
 SQLHANDLE ORealObdcDriver::EnvironmentHandle(OUString &_rPath)
 {
-    // Is (for this instance) already a Enviroment made?
+    // Is (for this instance) already a Environment made?
     if (!m_pDriverHandle)
     {
         SQLHANDLE h = SQL_NULL_HANDLE;

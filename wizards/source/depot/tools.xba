@@ -138,7 +138,7 @@ End Sub
 
 
 &apos; Updates the cell with the CurrentValue after checking if the
-&apos; Newdate is later than the one that is refered to in the annotation
+&apos; Newdate is later than the one that is referred to in the annotation
 &apos; of the cell
 Sub InsertCurrentValue(CurValue as Double, iRow as Integer, Newdate as Date)
 Dim oCell as Object
@@ -207,7 +207,7 @@ Dim iLastRow as Integer
 End Function
 
 
-Function CheckDocLocale(LocLanguage as String, LocCountry as String)			
+Function CheckDocLocale(LocLanguage as String, LocCountry as String)
 Dim bIsDocLanguage as Boolean
 Dim bIsDocCountry as Boolean
 	bIsDocLanguage = Instr(1, LocLanguage, sDocLanguage, SBBINARY) &lt;&gt; 0

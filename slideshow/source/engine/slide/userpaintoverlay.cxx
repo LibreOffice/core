@@ -171,7 +171,7 @@ namespace slideshow
             {
                 this->mbIsEraseAllModeActivated= rEraseAllInk;
                 // if the erase all mode is activated it will remove all ink from slide,
-                // therefor destroy all the polygons stored
+                // therefore destroy all the polygons stored
                 if(mbIsEraseAllModeActivated)
                 {
                     // The Erase Mode should be desactivated

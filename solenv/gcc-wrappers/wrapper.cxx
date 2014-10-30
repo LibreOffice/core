@@ -199,7 +199,7 @@ int startprocess(string command, string args) {
         NULL, // Thread Handle not Inheritable
         TRUE, // Handles are Inherited
         0, // No creation flags
-        NULL, // Enviroment for process
+        NULL, // Environment for process
         NULL, // Use same starting directory
         &si, // Startup Info
         &pi) // Process Information
