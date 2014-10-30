@@ -34,6 +34,7 @@
 
 #include "salgdiimpl.hxx"
 #include "gdiimpl.hxx"
+#include "openglgdiimpl.hxx"
 
 #define DITHER_PAL_DELTA                51
 #define DITHER_PAL_STEPS                6
@@ -581,6 +582,11 @@ WinSalGraphics::WinSalGraphics():
     mnFontKernPairCount = 0;
     mbFontKernInit      = FALSE;
     mnPenWidth          = GSL_PEN_WIDTH;
+    static const char* pEnv = getenv("USE_OPENGL");
+    if (pEnv)
+    {
+        mpImpl.reset(new OpenGLSalGraphicsImpl());
+    }
 }
 
 WinSalGraphics::~WinSalGraphics()
