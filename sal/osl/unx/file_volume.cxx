@@ -156,20 +156,9 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 
 #include <sys/param.h>
 
-/* statvfs() replaced statfs() in 2.99.9 */
-# if __NetBSD_Version__ >= 299000900
-       /* 2.0D or later */
 #   define __OSL_STATFS_STRUCT              struct statvfs
 #   define __OSL_STATFS(dir, sfs)           statvfs((dir), (sfs))
 #   define __OSL_STATFS_ISREMOTE(a)         (((a).f_flag & ST_LOCAL) == 0)
-
-# else
-       /* version before 2.0D */
-#   define __OSL_STATFS_STRUCT              struct statfs
-#   define __OSL_STATFS(dir, sfs)           statfs((dir), (sfs))
-#   define __OSL_STATFS_ISREMOTE(a)         (((a).f_type & MNT_LOCAL) == 0)
-
-# endif /* >2.0D */
 
 #   define __OSL_STATFS_BLKSIZ(a)           ((sal_uInt64)((a).f_bsize))
 #   define __OSL_STATFS_TYPENAME(a)         ((a).f_fstypename)
