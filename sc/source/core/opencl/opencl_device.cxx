@@ -249,6 +249,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             //buildOption = "-D KHR_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16";
             tmpStr.append(" -DKHR_DP_EXTENSION");
             buildOption = tmpStr.c_str();
+            SAL_INFO("sc.opencl.device", "... has cl_khr_fp64");
         }
         else if ((std::string(aExtInfo)).find("cl_amd_fp64") != std::string::npos)
         {
@@ -256,6 +257,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             //buildOption = "-D AMD_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16";
             tmpStr.append(" -DAMD_DP_EXTENSION");
             buildOption = tmpStr.c_str();
+            SAL_INFO("sc.opencl.device", "... has cl_amd_fp64");
         }
         delete[] aExtInfo;
 
@@ -265,6 +267,7 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             device->score = (void*)new LibreOfficeDeviceScore;
             ((LibreOfficeDeviceScore*)device->score)->fTime = DBL_MAX;
             ((LibreOfficeDeviceScore*)device->score)->bNoCLErrors = true;
+            SAL_INFO("sc.opencl.device", "... no fp64 support");
         }
         else
         {
