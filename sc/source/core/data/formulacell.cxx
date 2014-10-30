@@ -3687,7 +3687,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     mxGroup->meCalcState = sc::GroupCalcRunning;
     if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aCode))
     {
-        SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << mxGroup->meCalcState << ") failed, disabling");
+        SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << (int) mxGroup->meCalcState << ") failed, disabling");
         mxGroup->meCalcState = sc::GroupCalcDisabled;
         return false;
     }
