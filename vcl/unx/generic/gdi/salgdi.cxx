@@ -58,13 +58,15 @@
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
 
+#include <officecfg/Office/Common.hxx>
+
 X11SalGraphics::X11SalGraphics():
     mpImpl(new X11SalGraphicsImpl(*this)),
     m_nXScreen( 0 ),
     pFontGC_(NULL)
 {
-    static const char* pOpenGL = getenv("USE_OPENGL");
-    if (pOpenGL)
+    bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
+    if (bUseOpenGL)
         mpImpl.reset(new OpenGLSalGraphicsImpl());
     m_pFrame            = NULL;
     m_pVDev             = NULL;
