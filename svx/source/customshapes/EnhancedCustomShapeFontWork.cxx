@@ -41,6 +41,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editeng.hxx>
+#include <o3tl/numeric.hxx>
 #include <svx/svdmodel.hxx>
 #include <vector>
 #include <numeric>
@@ -741,22 +742,27 @@ void FitTextOutlinesToShapeOutlines( const tools::PolyPolygon& aOutlines2d, FWDa
                                 InsertMissingOutlinePoints( rOutlinePoly, vDistances, rTextAreaBoundRect, aLocalPoly );
                                 InsertMissingOutlinePoints( rOutlinePoly2, vDistances2, rTextAreaBoundRect, aLocalPoly );
 
-                                sal_uInt16 j, _nPointCount = aLocalPoly.GetSize();
-                                for ( j = 0; j < _nPointCount; j++ )
+                                sal_uInt16 _nPointCount = aLocalPoly.GetSize();
+                                if (_nPointCount)
                                 {
-                                    Point& rPoint = aLocalPoly[ j ];
-                                    rPoint.X() -= nLeft;
-                                    rPoint.Y() -= nTop;
-                                    double fX = (double)rPoint.X() / (double)nWidth;
-                                    double fY = (double)rPoint.Y() / (double)nHeight;
+                                    if (!nWidth || !nHeight)
+                                        throw o3tl::divide_by_zero();
+                                    for (sal_uInt16 j = 0; j < _nPointCount; ++j)
+                                    {
+                                        Point& rPoint = aLocalPoly[ j ];
+                                        rPoint.X() -= nLeft;
+                                        rPoint.Y() -= nTop;
+                                        double fX = (double)rPoint.X() / (double)nWidth;
+                                        double fY = (double)rPoint.Y() / (double)nHeight;
 
-                                    double fx1, fy1, fx2, fy2;
-                                    GetPoint( rOutlinePoly, vDistances, fX, fx1, fy1 );
-                                    GetPoint( rOutlinePoly2, vDistances2, fX, fx2, fy2 );
-                                    double fWidth = fx2 - fx1;
-                                    double fHeight= fy2 - fy1;
-                                    rPoint.X() = (sal_Int32)( fx1 + fWidth * fY );
-                                    rPoint.Y() = (sal_Int32)( fy1 + fHeight* fY );
+                                        double fx1, fy1, fx2, fy2;
+                                        GetPoint( rOutlinePoly, vDistances, fX, fx1, fy1 );
+                                        GetPoint( rOutlinePoly2, vDistances2, fX, fx2, fy2 );
+                                        double fWidth = fx2 - fx1;
+                                        double fHeight= fy2 - fy1;
+                                        rPoint.X() = (sal_Int32)( fx1 + fWidth * fY );
+                                        rPoint.Y() = (sal_Int32)( fy1 + fHeight* fY );
+                                    }
                                 }
 
                                 // write back polygon
