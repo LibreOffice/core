@@ -21,9 +21,8 @@
 #include <vcl/bitmapscalesuper.hxx>
 
 #include <algorithm>
-#include <thread>
-#include <osl/thread.hxx>
 #include <boost/scoped_array.hpp>
+#include <comphelper/threadpool.hxx>
 
 namespace {
 
@@ -85,15 +84,14 @@ struct ScaleRangeContext {
 
 typedef void (*ScaleRangeFn)(ScaleContext &rCtx, long nStartY, long nEndY);
 
-// FIXME: should really be pooled & managed intelligently etc.
-class ScaleThread : public osl::Thread
+class ScaleTask : public comphelper::ThreadTask
 {
     ScaleRangeFn mpFn;
     std::vector< ScaleRangeContext > maStrips;
 public:
-    ScaleThread( ScaleRangeFn pFn ) : mpFn( pFn ) {}
+    ScaleTask( ScaleRangeFn pFn ) : mpFn( pFn ) {}
     void push( ScaleRangeContext &aRC ) { maStrips.push_back( aRC ); }
-    virtual void SAL_CALL run() SAL_OVERRIDE
+    virtual void doWork() SAL_OVERRIDE
     {
         std::vector< ScaleRangeContext >::iterator it;
         for (it = maStrips.begin(); it != maStrips.end(); ++it)
@@ -1001,35 +999,29 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
         else
         {
             // partition and queue work
-            sal_uInt32 nThreads = std::max(std::thread::hardware_concurrency(), 1U);
+            comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
+            sal_uInt32 nThreads = rShared.getWorkerCount();
+            assert( nThreads > 0 );
             sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
             sal_uInt32 nStripsPerThread = nStrips / nThreads;
             SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread" << " we have " << nThreads << " CPU threads ");
             long nStripY = nStartY;
-            std::vector<ScaleThread *> aThreads;
             for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
             {
-                ScaleThread *pThread = new ScaleThread( pScaleRangeFn );
+                ScaleTask *pTask = new ScaleTask( pScaleRangeFn );
                 for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
                 {
                     ScaleRangeContext aRC( aContext, nStripY );
-                    pThread->push( aRC );
+                    pTask->push( aRC );
                     nStripY += SCALE_THREAD_STRIP;
                 }
-                pThread->create(); // set it running
-                aThreads.push_back( pThread );
+                rShared.pushTask( pTask );
             }
             // finish any remaining bits here
             pScaleRangeFn( aContext, nStripY, nEndY );
 
-            // join threads...
-            for ( std::vector<ScaleThread *>::iterator it = aThreads.begin();
-                  it != aThreads.end(); ++it )
-            {
-                (*it)->join();
-                delete *it;
-            }
-            SAL_INFO("vcl.gdi", "Joined all scaling threads");
+            rShared.waitUntilEmpty();
+            SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
         }
 
         bRet = true;
