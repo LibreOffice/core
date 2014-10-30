@@ -589,26 +589,21 @@ public class APIDescGetter extends DescGetter
             {
                 InputStream in = con.getInputStream();
                 java.io.BufferedReader buf = new java.io.BufferedReader(new InputStreamReader(in));
-                boolean found = false;
-
-                while (buf.ready() && !found)
+                while (true)
                 {
                     String entry = buf.readLine();
-
-                    if (entry != null)
+                    if (entry == null)
+                        break;
+                    if (entry.endsWith(sEndsWithCSVName))
                     {
-                        if (entry.endsWith(sEndsWithCSVName))
-                        {
-                            System.out.println("FOUND  ####");
-                            InputStream input =
-                                this.getClass().getResourceAsStream("/objdsc/" +
-                                    module +
-                                    "/" +
-                                    entry);
-                            csvFile =
-                                new BufferedReader(new InputStreamReader(input));
-                            found = true;
-                        }
+                        System.out.println("FOUND  ####");
+                        InputStream input =
+                            this.getClass().getResourceAsStream("/objdsc/" +
+                                module +
+                                "/" +
+                                entry);
+                        csvFile = new BufferedReader(new InputStreamReader(input));
+                        break;
                     }
                 }
 
