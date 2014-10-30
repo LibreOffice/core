@@ -275,8 +275,9 @@ public:
 
     sal_Unicode GetQuote( sal_Unicode cInsChar, bool bSttQuote,
                             LanguageType eLang ) const;
-    virtual bool GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg,
-                              const OUString& rShort, OUString& rLong );
+    virtual bool GetLongText( const OUString& rShort, OUString& rLong );
+
+    virtual void refreshBlockList( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg);
 
     TYPEINFO();
 
