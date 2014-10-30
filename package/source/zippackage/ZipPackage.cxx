@@ -38,6 +38,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <ucbhelper/content.hxx>
@@ -869,7 +870,8 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 
     if ( ( nIndex = aName.getLength() ) == 1 && *aName.getStr() == '/' )
         return sal_True;
-    else
+
+    try
     {
         nStreamIndex = aName.lastIndexOf ( '/' );
         bool bFolder = nStreamIndex == nIndex-1;
@@ -935,8 +937,19 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 return sal_True;
             }
         }
-        return sal_False;
     }
+    catch (const uno::RuntimeException &)
+    {
+        throw;
+    }
+    catch (const uno::Exception&)
+    {
+        uno::Any e(::cppu::getCaughtException());
+        throw lang::WrappedTargetRuntimeException(
+            OUString("ZipPackage::hasByHierarchicalName"),
+            0, uno::makeAny(e));
+    }
+    return sal_False;
 }
 
 uno::Reference< XInterface > SAL_CALL ZipPackage::createInstance()
