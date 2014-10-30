@@ -106,24 +106,27 @@ SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
     return rStream;
 }
 
-
 SfxUShortRangesItem::SfxUShortRangesItem()
 :   _pRanges(0)
 {
 }
 
-
 SfxUShortRangesItem::SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream )
 :   SfxPoolItem( nWID )
 {
     sal_uInt16 nCount(0);
-    rStream.ReadUInt16( nCount );
+    rStream.ReadUInt16(nCount);
+    const size_t nMaxEntries = rStream.remainingSize() / sizeof(sal_uInt16);
+    if (nCount > nMaxEntries)
+    {
+        nCount = nMaxEntries;
+        SAL_WARN("svl.items", "SfxUShortRangesItem: truncated Stream");
+    }
     _pRanges = new sal_uInt16[nCount + 1];
     for ( sal_uInt16 n = 0; n < nCount; ++n )
         rStream.ReadUInt16( _pRanges[n] );
     _pRanges[nCount] = 0;
 }
-
 
 SfxUShortRangesItem::SfxUShortRangesItem( const SfxUShortRangesItem& rItem )
 :   SfxPoolItem( rItem )
@@ -132,7 +135,6 @@ SfxUShortRangesItem::SfxUShortRangesItem( const SfxUShortRangesItem& rItem )
     _pRanges = new sal_uInt16[nCount];
     memcpy( _pRanges, rItem._pRanges, sizeof(sal_uInt16) * nCount );
 }
-
 
 SfxUShortRangesItem::~SfxUShortRangesItem()
 {
