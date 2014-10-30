@@ -857,7 +857,8 @@ public:
     void                AppendCell( XclExpCellRef xCell, bool bIsMergedBase );
 
     /** Converts all XF identifiers into the Excel XF indexes. */
-    void                Finalize( const ScfUInt16Vec& rColXFIndexes );
+    void                Finalize( const ScfUInt16Vec& rColXFIndexes,
+                                  bool bUpdateProgress );
 
     /** Returns the column index of the first used cell in this row.
         @descr  This function can only be called after Finalize(). */
