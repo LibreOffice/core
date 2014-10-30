@@ -32,6 +32,10 @@ using namespace basegfx;
 
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
+#ifdef IOS
+#define SvpSalGraphics AquaSalGraphics
+#endif
+
 #ifndef IOS
 
 namespace {

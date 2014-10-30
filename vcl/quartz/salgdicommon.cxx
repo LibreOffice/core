@@ -36,6 +36,7 @@
 
 #ifdef IOS
 #include "saldatabasic.hxx"
+#include <vcl/sysdata.hxx>
 #endif
 
 #if defined(IOS) && defined(DBG_UTIL)

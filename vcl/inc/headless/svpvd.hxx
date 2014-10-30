@@ -24,10 +24,6 @@
 
 #include <list>
 
-#ifdef IOS
-#define SvpSalGraphics AquaSalGraphics
-#endif
-
 class SvpSalGraphics;
 
 class SvpSalVirtualDevice : public SalVirtualDevice
