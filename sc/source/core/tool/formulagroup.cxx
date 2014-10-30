@@ -478,7 +478,7 @@ public:
     {
         const char *pValue = getenv("FORMULA_GROUP_DUMMY");
         meMode = static_cast<Mode>(OString(pValue, strlen(pValue)).toInt32());
-        fprintf(stderr, "Using Dummy Formula Group interpreter mode %d\n", (int)meMode);
+        SAL_INFO("sc.formulagroup", "Using Dummy Formula Group interpreter mode " << (int)meMode);
     }
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& /*rMat*/)
@@ -527,7 +527,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 
         if ( !msInstance ) // software fallback
         {
-            fprintf(stderr, "Create S/W interp\n");
+            SAL_INFO("sc.formulagroup", "Create S/W interpreter");
             msInstance = new sc::FormulaGroupInterpreterSoftware();
         }
     }
