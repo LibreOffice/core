@@ -435,7 +435,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // The page-up key switches layers or pages depending on the
                 // modifier key.
-                if ( ! rKEvt.GetKeyCode().GetAllModifier())
+                if ( ! rKEvt.GetKeyCode().GetModifier())
                 {
                     // With no modifier pressed we move to the previous
                     // slide.
@@ -482,7 +482,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 // The page-down key switches layers or pages depending on the
                 // modifier key.
-                if ( ! rKEvt.GetKeyCode().GetAllModifier())
+                if ( ! rKEvt.GetKeyCode().GetModifier())
                 {
                     // With no modifier pressed we move to the next slide.
                     mpView->SdrEndTextEdit();

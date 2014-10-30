@@ -172,7 +172,7 @@ namespace svt { namespace table
         const _ActionMapEntry* pActions = aKnownActions;
         for ( ; pActions->eAction != invalidTableControlAction; ++pActions )
         {
-            if ( ( pActions->nKeyCode == nKeyCode ) && ( pActions->nKeyModifier == rKeyCode.GetAllModifier() ) )
+            if ( ( pActions->nKeyCode == nKeyCode ) && ( pActions->nKeyModifier == rKeyCode.GetModifier() ) )
             {
                 bHandled = _rControl.dispatchAction( pActions->eAction );
                 break;

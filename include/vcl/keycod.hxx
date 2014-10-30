@@ -54,8 +54,6 @@ public:
 
     sal_uInt16      GetModifier() const
                     { return (nCode & KEY_MODTYPE); }
-    sal_uInt16      GetAllModifier() const
-                    { return (nCode & KEY_ALLMODTYPE); }
     bool            IsShift() const
                     { return ((nCode & KEY_SHIFT) != 0); }
     bool            IsMod1() const
