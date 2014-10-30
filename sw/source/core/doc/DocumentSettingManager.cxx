@@ -80,6 +80,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbBackgroundParaOverDrawings(false),
     mbTabOverMargin(false),
     mbSurroundTextWrapSmall(false),
+    mbPropLineSpacingShrinksFirstLine(true),
     mApplyParagraphMarkFormatToNumbering(false),
     mbLastBrowseMode( false )
 
@@ -154,6 +155,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case BACKGROUND_PARA_OVER_DRAWINGS: return mbBackgroundParaOverDrawings;
         case TAB_OVER_MARGIN: return mbTabOverMargin;
         case SURROUND_TEXT_WRAP_SMALL: return mbSurroundTextWrapSmall;
+        case PROP_LINE_SPACING_SHRINKS_FIRST_LINE: return mbPropLineSpacingShrinksFirstLine;
 
         case BROWSE_MODE: return mbLastBrowseMode; // Attention: normally the SwViewShell has to be asked!
         case HTML_MODE: return mbHTMLMode;
@@ -314,6 +316,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case SURROUND_TEXT_WRAP_SMALL:
             mbSurroundTextWrapSmall = value;
+            break;
+
+        case PROP_LINE_SPACING_SHRINKS_FIRST_LINE:
+            mbPropLineSpacingShrinksFirstLine = value;
             break;
 
         // COMPATIBILITY FLAGS END

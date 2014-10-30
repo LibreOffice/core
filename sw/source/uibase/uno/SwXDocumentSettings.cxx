@@ -126,7 +126,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_EMBED_SYSTEM_FONTS,
     HANDLE_TAB_OVER_MARGIN,
     HANDLE_SURROUND_TEXT_WRAP_SMALL,
-    HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
+    HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING,
+    HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE,
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -198,6 +199,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("SurroundTextWrapSmall"), HANDLE_SURROUND_TEXT_WRAP_SMALL, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("ApplyParagraphMarkFormatToNumbering"), HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, cppu::UnoType<bool>::get(), 0, 0},
+        { OUString("PropLineSpacingShrinksFirstLine"),       HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE,         cppu::UnoType<bool>::get(),           0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -805,6 +807,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, bTmp);
         }
         break;
+        case HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE, bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1232,6 +1244,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = mpDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_PROP_LINE_SPACING_SHRINKS_FIRST_LINE:
+        {
+            sal_Bool const bTmp(mpDoc->getIDocumentSettingAccess().get(
+                IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE));
+            rValue <<= bTmp;
         }
         break;
         default:

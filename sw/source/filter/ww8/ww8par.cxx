@@ -1945,6 +1945,7 @@ void SwWW8ImplReader::ImportDop()
     rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::CLIPPED_PICTURES, true);
     rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::TAB_OVER_MARGIN, true);
     rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL, true);
+    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::PROP_LINE_SPACING_SHRINKS_FIRST_LINE, true);
 
     // COMPATIBILITY FLAGS END
 
