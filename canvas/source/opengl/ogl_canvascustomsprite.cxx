@@ -151,10 +151,17 @@ namespace oglcanvas
             if( !maCanvasHelper.renderRecordedActions() )
                 return false;
 
+            const glm::mat4 translate = glm::translate(glm::vec3(maPosition.getX(), maPosition.getY(), 0));
             if( pBufferContext )
             {
-                //no transformation
-                mRenderHelper.SetModelAndMVP(glm::mat4());
+                const glm::mat4 aGLTransform = glm::mat4(
+                        maTransformation.m00, maTransformation.m10, 0, 0,
+                        maTransformation.m01, maTransformation.m11, 0, 0,
+                        0,                    0,                    1, 0,
+                        maTransformation.m02, maTransformation.m12, 0, 1
+                    );
+
+                mRenderHelper.SetModelAndMVP(translate * aGLTransform);
                 // content ended up in background buffer - compose to
                 // screen now. Calls below switches us back to window
                 // context, and binds to generated, dynamic texture
@@ -178,7 +185,7 @@ namespace oglcanvas
                 if( mxClip.is() )
                 {
                     const double fWidth=maSize.Width;
-                        const double fHeight=maSize.Height;
+                    const double fHeight=maSize.Height;
 
                     // TODO(P3): buffer triangulation
                     const ::basegfx::B2DPolygon& rTriangulatedPolygon(
@@ -222,7 +229,7 @@ namespace oglcanvas
                 glBindTexture(GL_TEXTURE_2D, 0);
             }
         // translate sprite to output position
-        mRenderHelper.SetModelAndMVP(glm::translate(glm::vec3(maPosition.getX(), maPosition.getY(), 0)));
+        mRenderHelper.SetModelAndMVP(translate);
         GLfloat vertices[] = {-2, -2,
                               -2, (float) maSize.Height+4,
                               (float) maSize.Width+4, (float) maSize.Height+4,
