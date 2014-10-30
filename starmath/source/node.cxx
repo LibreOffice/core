@@ -2015,12 +2015,6 @@ void SmAttributNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     ExtendBy(*pAttr, RCP_THIS, true);
 }
 
-
-/**************************************************************************/
-
-
-
-
 void SmFontNode::CreateTextFromNode(OUString &rText)
 {
     switch (GetToken().eType)
@@ -2092,6 +2086,36 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
         case TYELLOW:
             rText += "color yellow ";
             break;
+        case TTEAL:
+            rText += "color teal";
+            break;
+        case TSILVER:
+            rText += "color silver";
+            break;
+        case TGRAY:
+            rText += "color gray";
+            break;
+        case TMAROON:
+            rText += "color maroon";
+            break;
+        case TPURPLE:
+            rText += "color purple";
+            break;
+        case TLIME:
+            rText += "color lime";
+            break;
+        case TOLIVE:
+            rText += "color olive";
+            break;
+        case TNAVY:
+            rText += "color navy";
+            break;
+        case TAQUA:
+            rText += "color aqua";
+            break;
+        case TFUCHSIA:
+            rText += "color fuchsia";
+            break;
         case TSANS:
             rText += "font sans ";
             break;
@@ -2106,7 +2130,6 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
     }
     GetSubNode(1)->CreateTextFromNode(rText);
 }
-
 
 void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
@@ -2132,7 +2155,6 @@ void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     Flags() |= FLG_FONT;
 }
 
-
 void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode = GetSubNode(1);
@@ -2157,12 +2179,22 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
         case TBLACK :   SetColor(Color(COL_BLACK));     break;
         case TWHITE :   SetColor(Color(COL_WHITE));     break;
-        case TRED :     SetColor(Color(COL_RED));       break;
+        case TRED :     SetColor(Color(COL_LIGHTRED));      break;
         case TGREEN :   SetColor(Color(COL_GREEN));     break;
-        case TBLUE :    SetColor(Color(COL_BLUE));      break;
-        case TCYAN :    SetColor(Color(COL_CYAN));      break;
-        case TMAGENTA : SetColor(Color(COL_MAGENTA));   break;
+        case TBLUE :    SetColor(Color(COL_LIGHTBLUE));     break;
+        case TCYAN :    SetColor(Color(COL_LIGHTCYAN));     break; // as in Calc
+        case TMAGENTA : SetColor(Color(COL_LIGHTMAGENTA));  break; // as in Calc
         case TYELLOW :  SetColor(Color(COL_YELLOW));    break;
+        case TTEAL :    SetColor(Color(COL_CYAN));  break;
+        case TSILVER :  SetColor(Color(COL_LIGHTGRAY));  break;
+        case TGRAY :    SetColor(Color(COL_GRAY));  break;
+        case TMAROON :  SetColor(Color(COL_RED));  break;
+        case TPURPLE :  SetColor(Color(COL_MAGENTA));  break;
+        case TLIME :    SetColor(Color(COL_LIGHTGREEN));  break;
+        case TOLIVE :   SetColor(Color(COL_BROWN));  break;
+        case TNAVY :    SetColor(Color(COL_BLUE));  break;
+        case TAQUA :    SetColor(Color(COL_LIGHTCYAN));  break;
+        case TFUCHSIA : SetColor(Color(COL_LIGHTMAGENTA));  break;
 
         default:
             SAL_WARN("starmath", "unknown case");
