@@ -137,6 +137,7 @@ namespace sw { namespace mark
         , m_pPos1(new SwPosition(*(aPaM.GetPoint())))
         , m_aName(rName)
     {
+        m_pPos1->nContent.SetMark(this);
         lcl_FixPosition(*m_pPos1);
         if (aPaM.HasMark() && (*aPaM.GetMark() != *aPaM.GetPoint()))
         {
@@ -156,11 +157,13 @@ namespace sw { namespace mark
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
+        m_pPos1->nContent.SetMark(this);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
+        m_pPos2->nContent.SetMark(this);
     }
 
     OUString MarkBase::ToString( ) const
