@@ -301,9 +301,6 @@ public:
 
 class SVX_DLLPUBLIC SdrUndoDelObj : public SdrUndoRemoveObj
 {
-private:
-    void TryToFlushGraphicContent();
-
 public:
     SdrUndoDelObj(SdrObject& rNewObj, bool bOrdNumDirect = false);
 
