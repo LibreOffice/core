@@ -51,8 +51,6 @@ class SVX_DLLPUBLIC SdrPageWindow
 
     Impl* mpImpl;
 
-    sdr::contact::ObjectContact* CreateViewSpecificObjectContact();
-
     SdrPageWindow( const SdrPageWindow& ); // disabled
     SdrPageWindow& operator= ( const SdrPageWindow& ); // disabled
 
