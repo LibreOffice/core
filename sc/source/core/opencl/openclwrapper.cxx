@@ -158,11 +158,11 @@ std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const 
             if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
             {
                 aGeneratedFiles.push_back(boost::shared_ptr<osl::File>(pNewFile));
-                SAL_INFO("sc.opencl", "Opening binary file '" << fileName << "' for reading: success");
+                SAL_INFO("sc.opencl.file", "Opening binary file '" << fileName << "' for reading: success");
             }
             else
             {
-                SAL_INFO("sc.opencl", "Opening binary file '" << fileName << "' for reading: FAIL");
+                SAL_INFO("sc.opencl.file", "Opening binary file '" << fileName << "' for reading: FAIL");
                 delete pNewFile;
                 break;
             }
@@ -238,9 +238,9 @@ bool OpenCLDevice::generatBinFromKernelSource( cl_program program, const char * 
             OString fileName = createFileName(mpArryDevsID[i], clFileName);
             if ( !writeBinaryToFile( fileName,
                         binaries[i], binarySizes[i] ) )
-                SAL_INFO("sc.opencl", "Writing binary file '" << fileName << "': FAIL");
+                SAL_INFO("sc.opencl.file", "Writing binary file '" << fileName << "': FAIL");
             else
-                SAL_INFO("sc.opencl", "Writing binary file '" << fileName << "': success");
+                SAL_INFO("sc.opencl.file", "Writing binary file '" << fileName << "': success");
         }
     }
 
