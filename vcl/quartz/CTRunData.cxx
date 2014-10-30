@@ -9,6 +9,7 @@
 
 #include <sal/types.h>
 #include <cassert>
+#include "quartz/utils.h"
 
 #include "CTRunData.hxx"
 
@@ -57,6 +58,11 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
         m_pPositions = new CGPoint[m_nGlyphs];
         ownership_flags |= CTRUNDATA_F_OWN_POSITIONS;
         CTRunGetPositions( pRun, aAll, (CGPoint*)m_pPositions );
+    }
+    for(int i = 0; i < m_nGlyphs; i++)
+    {
+        SAL_INFO( "vcl.ct", "CTRunData Adv:" << (double)m_pAdvances[i].width << " s-idx:" << m_pStringIndices[i] << " pos:(" <<
+                  m_pPositions[i].x << ":" << m_pPositions[i].y << ")");
     }
 }
 
