@@ -391,7 +391,7 @@ public:
 protected:
 
     // used to paint the form layer after the PreRender device is flushed (painted) to the window.
-    void ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const;
+    void ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow );
 
     vcl::Region OptimizeDrawLayersRegion(OutputDevice* pOut, const vcl::Region& rReg, bool bDisableIntersect);
 

@@ -20,77 +20,51 @@
 #ifndef INCLUDED_SVX_SDRPAGEWINDOW_HXX
 #define INCLUDED_SVX_SDRPAGEWINDOW_HXX
 
-#include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/util/XModeChangeListener.hpp>
-#include <cppuhelper/implbase4.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdtypes.hxx>
-#include <svx/sdrpagewindow.hxx>
 #include <svx/svxdllapi.h>
+#include <rtl/ref.hxx>
 
-#include <vector>
-
+#include <com/sun/star/awt/XControlContainer.hpp>
 
 // predeclarations
 
 namespace vcl { class Region; }
-class SdrUnoObj;
-class SdrPageView;
 
-// #110094#
 namespace sdr
 {
     namespace contact
     {
         class ObjectContact;
         class ViewObjectContactRedirector;
-    } // end of namespace contact
+    }
+}
 
-    namespace overlay
-    {
-        class OverlayManager;
-    } // end of namespace overlay
-} // end of namespace sdr
-
-namespace basegfx
-{
-    class B2DRange;
-} // end of namespace basegfx
+namespace basegfx { class B2DRange; }
 
 class SdrPaintWindow;
-class Link;
-
-
+class SdrPageView;
 
 class SVX_DLLPUBLIC SdrPageWindow
 {
-    // #110094# ObjectContact section
-    sdr::contact::ObjectContact*                        mpObjectContact;
+    struct Impl;
 
-    // the SdrPageView this window belongs to
-    SdrPageView&                                        mrPageView;
-
-    // the PaintWindow to paint on. Here is access to OutDev etc.
-    // #i72752# change to pointer to allow patcing it in DrawLayer() if necessary
-    SdrPaintWindow*                                     mpPaintWindow;
-    SdrPaintWindow*                                     mpOriginalPaintWindow;
-
-    // UNO stuff for xControls
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > mxControlContainer;
+    Impl* mpImpl;
 
     sdr::contact::ObjectContact* CreateViewSpecificObjectContact();
+
+    SdrPageWindow( const SdrPageWindow& ); // disabled
+    SdrPageWindow& operator= ( const SdrPageWindow& ); // disabled
 
 public:
     SdrPageWindow(SdrPageView& rNewPageView, SdrPaintWindow& rPaintWindow);
     ~SdrPageWindow();
 
     // data read accesses
-    SdrPageView& GetPageView() const { return mrPageView; }
-    SdrPaintWindow& GetPaintWindow() const { return *mpPaintWindow; }
-    const SdrPaintWindow* GetOriginalPaintWindow() const { return mpOriginalPaintWindow; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > GetControlContainer( bool _bCreateIfNecessary = true ) const;
+    SdrPageView& GetPageView() const;
+    SdrPaintWindow& GetPaintWindow() const;
+    const SdrPaintWindow* GetOriginalPaintWindow() const;
+    css::uno::Reference<css::awt::XControlContainer> GetControlContainer( bool _bCreateIfNecessary = true ) const;
 
     // OVERLAYMANAGER
     rtl::Reference< ::sdr::overlay::OverlayManager > GetOverlayManager() const;
@@ -102,14 +76,15 @@ public:
     // the repaint method. For migration from pPaintProc, use one more parameter
     void PrePaint();
     void PrepareRedraw(const vcl::Region& rReg);
-    void RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const;
-    void RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector) const;
+    void RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedirector );
+    void RedrawLayer( const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector );
 
     // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
     void InvalidatePageWindow(const basegfx::B2DRange& rRange);
 
     // #110094# ObjectContact section
-    sdr::contact::ObjectContact& GetObjectContact() const;
+    const sdr::contact::ObjectContact& GetObjectContact() const;
+    sdr::contact::ObjectContact& GetObjectContact();
     /// determines whether there already exists an ObjectContact
     bool                         HasObjectContact() const;
 
@@ -120,11 +95,6 @@ public:
     */
     void    SetDesignMode( bool _bDesignMode ) const;
 };
-
-// typedefs for a list of SdrPageWindow
-typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
-
-
 
 #endif // INCLUDED_SVX_SDRPAGEWINDOW_HXX
 

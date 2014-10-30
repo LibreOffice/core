@@ -87,7 +87,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
                             const SwRect& aPaintRect,
                             const Color* _pPageBackgrdColor,
                             const bool _bIsPageRightToLeft,
-                            sdr::contact::ViewObjectContactRedirector* pRedirector ) const
+                            sdr::contact::ViewObjectContactRedirector* pRedirector )
 {
     if ( HasDrawView() )
     {
