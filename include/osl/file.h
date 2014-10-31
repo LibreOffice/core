@@ -1309,7 +1309,9 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_removeFile(
     osl_File_E_NAMETOOLONG file name too long<br>
     osl_File_E_NOENT no such file or directory<br>
     osl_File_E_ISDIR is a directory<br>
-    osl_File_E_ROFS read-only file system<p>
+    osl_File_E_ROFS read-only file system<br>
+    osl_File_E_BUSY if the implementation internally requires resources that are
+        (temporarily) unavailable (added with LibreOffice 4.4)
 
     @see    osl_moveFile()
     @see    osl_removeFile()
@@ -1339,6 +1341,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_copyFile(
     osl_File_E_NAMETOOLONG file name too long<br>
     osl_File_E_NOENT no such file or directory<br>
     osl_File_E_ROFS read-only file system<br>
+    osl_File_E_BUSY if the implementation internally requires resources that are
+        (temporarily) unavailable (added with LibreOffice 4.4)
 
     @see osl_copyFile()
 */

@@ -810,6 +810,8 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 
     if ( DestFileExists )
     {
+        //TODO: better pick a temp file name instead of adding .osl-tmp:
+
         strncpy(pszTmpDestFile, pszDestFileName, size_tmp_dest_buff - 1);
 
         if ((strlen(pszTmpDestFile) + strlen(TMP_DEST_FILE_EXTENSION)) >= size_tmp_dest_buff)
@@ -817,9 +819,22 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 
         strncat(pszTmpDestFile, TMP_DEST_FILE_EXTENSION, strlen(TMP_DEST_FILE_EXTENSION));
 
-        /* FIXME: what if pszTmpDestFile already exists? */
-        /*        with getcanonical??? */
-        nRet=rename(pszDestFileName,pszTmpDestFile);
+        if (rename(pszDestFileName,pszTmpDestFile) != 0)
+        {
+            if (errno == ENOENT)
+            {
+                DestFileExists = 0;
+            }
+            else
+            {
+                int e = errno;
+                SAL_INFO(
+                    "sal.osl",
+                    "rename(" << pszDestFileName << ", " << pszTmpDestFile
+                        << ") failed with errno " << e);
+                return osl_File_E_BUSY; // for want of a better error code
+            }
+        }
     }
 
     /* mfe: should be S_ISREG */
