@@ -211,24 +211,24 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
     FieldDeletionModify aModify(pDlg.get());
     SwInputField *const pInputField(dynamic_cast<SwInputField*>(pFld));
     SwSetExpField *const pSetExpFld(dynamic_cast<SwSetExpField*>(pFld));
-    if (pInputField)
+    if (pInputField && pInputField->GetFmtFld())
     {
         // Register for possible input field deletion while dialog is open
         pInputField->GetFmtFld()->Add(&aModify);
     }
-    else if (pSetExpFld)
+    else if (pSetExpFld && pSetExpFld->GetFmtFld())
     {
         pSetExpFld->GetFmtFld()->Add(&aModify);
     }
 
     bool bRet = RET_CANCEL == pDlg->Execute();
 
-    if (pInputField)
+    if (pInputField && pInputField->GetFmtFld())
     {
         // Dialog closed, remove modification listener
         pInputField->GetFmtFld()->Remove(&aModify);
     }
-    else if (pSetExpFld)
+    else if (pSetExpFld && pSetExpFld->GetFmtFld())
     {
         pSetExpFld->GetFmtFld()->Remove(&aModify);
     }
