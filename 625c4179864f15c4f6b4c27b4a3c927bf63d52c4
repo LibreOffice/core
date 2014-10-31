@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_2a76df3e",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T11:39:13Z",
+      "side": 1,
+      "message": "if lastCommitId not in colsResult would be more pythonic",
+      "revId": "625c4179864f15c4f6b4c27b4a3c927bf63d52c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_0a731b4f",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T11:39:13Z",
+      "side": 1,
+      "message": "If you have python2.7+ you may want to use optparse",
+      "revId": "625c4179864f15c4f6b4c27b4a3c927bf63d52c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_ea8e8726",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T11:39:13Z",
+      "side": 1,
+      "message": "if curTestComment not in allTests",
+      "revId": "625c4179864f15c4f6b4c27b4a3c927bf63d52c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_ca93c34e",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T11:39:13Z",
+      "side": 1,
+      "message": "Same as before",
+      "revId": "625c4179864f15c4f6b4c27b4a3c927bf63d52c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_aa988f6b",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T11:39:13Z",
+      "side": 1,
+      "message": "sorted(testDict.keys()) should be faster",
+      "revId": "625c4179864f15c4f6b4c27b4a3c927bf63d52c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_6aa3b79f",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T11:39:13Z",
+      "side": 1,
+      "message": "Would be less expensive to add deltas to add list and do the string formatting at the end",
+      "revId": "625c4179864f15c4f6b4c27b4a3c927bf63d52c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_8a9dcb5b",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T11:39:13Z",
+      "side": 1,
+      "message": "Adding parens to print will work with python 3 too",
+      "revId": "625c4179864f15c4f6b4c27b4a3c927bf63d52c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
