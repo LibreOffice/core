@@ -314,12 +314,12 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childposition.docx")
 {
-    // Problem was parent transformation was ingnored fully, but translate component
+    // Problem was parent transformation was ignored fully, but translate component
     // which specify the position must be also applied for children of the group.
 
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2122), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2120 : -2122), xChildGroup->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11336 : 11333), xChildGroup->getPosition().Y);
 
     xGroup.set(xChildGroup, uno::UNO_QUERY);
@@ -328,7 +328,7 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childpo
     CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 11336 : 11333), xChildGroup->getPosition().Y);
 
     xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2119 : -2122), xChildGroup->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? -2120 : -2122), xChildGroup->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(mbExported ? 14026 : 14023), xChildGroup->getPosition().Y);
 }
 

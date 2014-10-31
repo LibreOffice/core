@@ -27,6 +27,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 
 #include "dmapperLoggers.hxx"
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include <iostream>
 using namespace std;
@@ -152,9 +153,9 @@ sal_Int16 PositionHandler::orientation() const
 void PositionHandler::setPositionOffset(const OUString & sText, bool vertical)
 {
     if( vertical )
-        savedPositionOffsetV = ConversionHelper::convertEMUToMM100( sText.toInt32());
+        savedPositionOffsetV = oox::drawingml::convertEmuToHmm(sText.toInt32());
     else
-        savedPositionOffsetH = ConversionHelper::convertEMUToMM100( sText.toInt32());
+        savedPositionOffsetH = oox::drawingml::convertEmuToHmm(sText.toInt32());
 }
 
 int PositionHandler::getPositionOffset(bool vertical)

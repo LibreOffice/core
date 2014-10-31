@@ -423,11 +423,6 @@ sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)
     return convertTwipToMM100( _t );
 }
 
-sal_Int32 convertEMUToMM100(sal_Int32 _t)
-{
-    return _t / 360;
-}
-
 sal_Int16 convertTableJustification( sal_Int32 nIntValue )
 {
     sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;

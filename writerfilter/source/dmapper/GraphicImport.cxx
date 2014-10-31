@@ -544,12 +544,12 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         case NS_ooxml::LN_CT_Border_shadow:
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue ? true : false;
         break;
-        case NS_ooxml::LN_CT_Border_frame: // ignored
+        case NS_ooxml::LN_CT_Border_frame:
             break;
-        case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
-        case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
+        case NS_ooxml::LN_CT_PositiveSize2D_cx:
+        case NS_ooxml::LN_CT_PositiveSize2D_cy:
         {
-            sal_Int32 nDim = ConversionHelper::convertEMUToMM100( nIntValue );
+            sal_Int32 nDim = oox::drawingml::convertEmuToHmm(nIntValue);
             if( nName == NS_ooxml::LN_CT_PositiveSize2D_cx )
                 m_pImpl->setXSize(nDim);
             else
@@ -858,16 +858,16 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             }
         break;
         case NS_ooxml::LN_CT_Inline_distT:
-            m_pImpl->nTopMargin = ConversionHelper::convertEMUToMM100(nIntValue);
+            m_pImpl->nTopMargin = oox::drawingml::convertEmuToHmm(nIntValue);
         break;
         case NS_ooxml::LN_CT_Inline_distB:
-            m_pImpl->nBottomMargin = ConversionHelper::convertEMUToMM100(nIntValue);
+            m_pImpl->nBottomMargin = oox::drawingml::convertEmuToHmm(nIntValue);
         break;
         case NS_ooxml::LN_CT_Inline_distL:
-            m_pImpl->nLeftMargin = ConversionHelper::convertEMUToMM100(nIntValue);
+            m_pImpl->nLeftMargin = oox::drawingml::convertEmuToHmm(nIntValue);
         break;
         case NS_ooxml::LN_CT_Inline_distR:
-            m_pImpl->nRightMargin = ConversionHelper::convertEMUToMM100(nIntValue);
+            m_pImpl->nRightMargin = oox::drawingml::convertEmuToHmm(nIntValue);
         break;
         case NS_ooxml::LN_CT_GraphicalObjectData_uri:
             rValue.getString();
