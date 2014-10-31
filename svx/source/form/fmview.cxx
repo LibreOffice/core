@@ -114,7 +114,7 @@ void FmFormView::Init()
         // mode by default (though a newly created model returns true for GetOpenInDesignMode).
         // We _want_ to have this because it makes a lot of hacks following the original fix
         DBG_ASSERT( !bInitDesignMode, "FmFormView::Init: doesn't the model default to FALSE anymore?" );
-            // if this asserts, either the on-contruction default in the model has changed (then this here
+            // if this asserts, either the on-construction default in the model has changed (then this here
             // may not be necessary anymore), or we're not dealing with a new document ....
         bInitDesignMode = true;
     }

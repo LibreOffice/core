@@ -948,7 +948,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  But we ust break further searches if target was already found.
         //  Order of using flags is fix: SELF - CHILDREN - SIBLINGS - PARENT
         //  TASK and CREATE are handled special.
-        //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
+        //  But note: Such flags are not valid for the desktop - especially SIBLINGS or PARENT.
 
         // II.I) SELF
         //  Check for right name. If it's the searched one return ourself - otherwise
@@ -1083,7 +1083,7 @@ void SAL_CALL Desktop::disposing()
     @interface  XComponent
     @short      add/remove listener for dispose events
     @descr      Add an event listener to this object, if you wish to get information
-                about our dieing!
+                about our dying!
                 You must releas ethis listener reference during your own disposing() method.
 
     @attention  Our container is threadsafe himeslf. So we don't need any lock here.
@@ -1187,7 +1187,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // Don't check incoming request!
-    // If somewhere starts interaction without right parameter - he maked something wrong.
+    // If somewhere starts interaction without right parameter - he made something wrong.
     // loadComponentFromURL() waits for thjese event - otherwise it yield for ever!
 
     // get packed request and work on it first

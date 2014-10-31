@@ -88,7 +88,7 @@ public:
 
     /** Invalidate the preview bitmaps for all slides that belong to the
         specified document.  This is necessary after model changes that
-        affect e.g. page number fiels.
+        affect e.g. page number fields.
     */
     void InvalidateAllPreviewBitmaps (DocumentKey pDocument);
 

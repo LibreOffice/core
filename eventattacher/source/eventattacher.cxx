@@ -584,7 +584,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
 
     // Sign in, Call the fitting addListener method
     // First Introspection, as the Methods can be analyzed in the same way
-    // For better perfomance it is implemented here again or make the Impl-Method
+    // For better performance it is implemented here again or make the Impl-Method
     // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
@@ -727,7 +727,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
 
     // Sign in, Call the fitting addListener method
     // First Introspection, as the Methods can be analyzed in the same way
-    // For better perfomance it is implemented here again or make the Impl-Method
+    // For better performance it is implemented here again or make the Impl-Method
     // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
@@ -790,7 +790,7 @@ void EventAttacherImpl::removeListener
 
     // Sign off, Call the fitting removeListener method
     // First Introspection, as the Methods can be analyzed in the same way
-    // For better perfomance it is implemented here again or make the Impl-Method
+    // For better performance it is implemented here again or make the Impl-Method
     // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )

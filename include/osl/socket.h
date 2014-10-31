@@ -812,7 +812,7 @@ SAL_DLLPUBLIC oslSocketType SAL_CALL osl_getSocketType(
 SAL_DLLPUBLIC void SAL_CALL osl_getLastSocketErrorDescription(
         oslSocket Socket, rtl_uString **strError);
 
-/** returns a constant decribing the last error for the socket system.
+/** returns a constant describing the last error for the socket system.
     @return <code>osl_Socket_E_NONE</code> if no error occurred,
             <code>osl_invalid_SocketError</code> if an unknown (unmapped)
             error occurred, otherwise an enum describing the    error.

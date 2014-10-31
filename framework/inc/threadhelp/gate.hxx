@@ -35,7 +35,7 @@ namespace framework{
                     As a special feature you can open the gate a little bit by sing openGap().
                     Then all currently waiting threads are running immediately - but new ones are blocked!
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are marked private!
 
     @implements     IGate
     @base           IGate

@@ -341,7 +341,7 @@ private:
     std::vector<glm::vec2> TexCoords;
 };
 
-/** This class is to be derived to make any operation (tranform) you may need in order to construct your transitions
+/** This class is to be derived to make any operation (transform) you may need in order to construct your transitions
 */
 class Operation : private boost::noncopyable
 {

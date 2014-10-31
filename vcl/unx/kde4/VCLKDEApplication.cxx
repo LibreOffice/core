@@ -45,7 +45,7 @@ bool VCLKDEApplication::x11EventFilter(XEvent* ev)
 // because of showing a Qt dialog
 void VCLKDEApplication::preDialogSetup()
 {
-    // KFileDialog intergration requires using event loop with QClipboard.
+    // KFileDialog integration requires using event loop with QClipboard.
     // Opening the KDE file dialog here can lead to QClipboard
     // asking for clipboard contents. If LO core is the owner of the clipboard
     // content, without event loop use this will block for 5 seconds and timeout,

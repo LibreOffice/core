@@ -155,7 +155,7 @@ class XSecController : public cppu::WeakImplHelper4
  *  XSecController -- the xml security framework controller
  *
  *   FUNCTION
- *  Controlls the whole xml security framework to create signatures or to
+ *  Controls the whole xml security framework to create signatures or to
  *  verify signatures.
  *
  *   NOTES

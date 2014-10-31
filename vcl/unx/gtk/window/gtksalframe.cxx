@@ -3392,7 +3392,7 @@ void GtkSalFrame::damaged (const basegfx::B2IBox& rDamageRect)
 }
 
 #if GTK_CHECK_VERSION(3,0,0)
-// FIXME: This is incredibly lame ... but so is cairo's insistance on -exactly-
+// FIXME: This is incredibly lame ... but so is cairo's insistence on -exactly-
 // its own stride - neither more nor less - particularly not more aligned
 // we like 8byte aligned, it likes 4 - most odd.
 void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )

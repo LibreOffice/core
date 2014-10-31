@@ -1044,7 +1044,7 @@ namespace sdr { namespace contact {
             // Somebody requested a control for a new device, which means either of
             // - our PageView's paint window changed since we were last here
             // - we don't belong to a page view, and are simply painted onto different devices
-            // The first sounds strange (doens't it?), the second means we could perhaps
+            // The first sounds strange (doesn't it?), the second means we could perhaps
             // optimize this in the future - there is no need to re-create the control every time,
             // is it?
             // #i74523# / 2007-02-15 / frank.schoenheit@sun.com

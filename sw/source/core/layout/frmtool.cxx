@@ -786,7 +786,7 @@ SwCntntNotify::~SwCntntNotify()
             pCell = pCell->GetUpper();
         OSL_ENSURE( pCell->IsCellFrm(), "Where's my cell?" );
         if ( text::VertOrientation::NONE != pCell->GetFmt()->GetVertOrient().GetVertOrient() )
-            pCell->InvalidatePrt(); //for the vertical allign.
+            pCell->InvalidatePrt(); //for the vertical align.
     }
 
     // OD 2004-02-26 #i25029#
@@ -1200,7 +1200,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //of paragraphs, which must be moved expensively until it reaches a tolarable
     //reduced level.
     //We'd like to think that 20 Paragraphs fit on one page.
-    //So that it does not become in extremly situations so violent we calculate depending
+    //So that it does not become in extremely situations so violent we calculate depending
     //on the node something to it.
     //If in the DocStatistik a usable given pagenumber
     //(Will be cared for while writing), so it will be presumed that this will be

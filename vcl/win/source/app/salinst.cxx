@@ -742,7 +742,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
                 // otherwise it happens with short timeouts and long callbacks
                 // that no other events will ever be processed, as the queue
                 // is full of SAL_MSG_TIMER_CALLBACKs.
-                // It is impossible to limit the amount of them being emited
+                // It is impossible to limit the amount of them being emitted
                 // in the first place, as they are emited asynchronously, but
                 // here we are already fully synchronized.
             }

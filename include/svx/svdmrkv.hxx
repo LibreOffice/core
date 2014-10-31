@@ -440,7 +440,7 @@ public:
 
     // Entering (Editing) of a maybe marked object group. If there are several
     // object groups marked, the most upper group is selected. After that
-    // all member objects of the group are directly accessable. All other
+    // all member objects of the group are directly accessible. All other
     // objects may not be processed in the meantime (until the next
     // LeaveGroup()). With markings which overlaps pages, every page is processed
     // separately. The method returns sal_True, if at least one group was entered.

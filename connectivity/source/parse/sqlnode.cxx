@@ -552,7 +552,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                 {
                     // skip field
                     ++i;
-                    // if the following node is the comparision operator'=',
+                    // if the following node is the comparison operator'=',
                     // we filter it as well
                     if (SQL_ISRULE(this, comparison_predicate))
                     {

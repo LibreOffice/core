@@ -256,7 +256,7 @@ public:
                    const sal_uInt16 nCompress, const sal_uInt16 nFontHeight,
                    Point* pPoint = NULL ) const;
 
-/** Performes a kashida justification on the kerning array
+/** Performs a kashida justification on the kerning array
 
     @descr  Add some extra space for kashida justification to the
             positions in the kerning array.

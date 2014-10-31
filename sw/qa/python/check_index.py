@@ -77,7 +77,7 @@ class CheckIndex(unittest.TestCase):
         xCursor.gotoStartOfParagraph(True)
         xCursor.setPropertyValue("ParaStyleName","Heading 1")
 
-    # try agian with update
+    # try again with update
         xIndex.update()
         listener.assertRefreshed()
         xCursor.gotoRange(xIndex.getAnchor().getEnd(), False)

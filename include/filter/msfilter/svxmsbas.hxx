@@ -61,7 +61,7 @@ public:
     sal_uLong SaveOrDelMSVBAStorage( bool bSaveInto, const OUString& rStorageName );
 
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
-    // If it exist, then return the WarningId for loosing the information.
+    // If it exist, then return the WarningId for losing the information.
     static sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
     static OUString GetMSBasicStorageName();

@@ -120,7 +120,7 @@ private:
     /** creates settings file and fills it with default values.
 
         When this function is called then it creates the
-        settings file at the possition determined by the bootstrap parameters
+        settings file at the position determined by the bootstrap parameters
         (UNO_JAVA_JFW_USER_DATA, UNO_JAVA_JFW_SHARED_DATA) and m_layer, unless
         the file already exists (see createSettingsDocument).
 

@@ -40,7 +40,7 @@ namespace drawinglayer
             it also contains a discrete border size (aka Pixels) which will be added
             if used. This makes it a view-dependent primitive. It also gets a filled
             background and the decomposition will try to create a graphic representation
-            if te content (defined by the URL), e.g. a still frome for animated stuff.
+            if the content (defined by the URL), e.g. a still frame for animated stuff.
          */
         class DRAWINGLAYER_DLLPUBLIC MediaPrimitive2D : public BufferedDecompositionPrimitive2D
         {

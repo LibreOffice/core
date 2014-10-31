@@ -215,7 +215,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     {
         // create the master page for the report-header.
         // If there is a page-header or footer in the report that gets
-        // surpressed on the report-header, we have to insert a pagebreak
+        // suppressed on the report-header, we have to insert a pagebreak
         // afterwards.
 
         final String activePageFooter;

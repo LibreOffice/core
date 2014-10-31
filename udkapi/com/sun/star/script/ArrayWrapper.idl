@@ -29,10 +29,10 @@ module com {  module sun {  module star { module script {
     array with 0 or 1 based indices. UNO does not natively represent
     Multi-Dimensional arrays, instead a sequence can have elements that are
     themselves sequences (an array of arrays ). <p>Some languages ( example
-    BASIC ) can natively represent both Multi-Dimentional arrays and array of
+    BASIC ) can natively represent both Multi-Dimensional arrays and array of
     arrays.
     Those languages could represent a sequence of sequences as either a
-    Multi-Dimentional array or array of arrays. This structure allows a
+    Multi-Dimensional array or array of arrays. This structure allows a
     preference for a Multi-Dimensional array representation to be specified.</p>
 */
 

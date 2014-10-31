@@ -111,7 +111,7 @@ void ExternalToolEdit::Edit( GraphicObject* pGraphicObject )
     // Write the Graphic to the file now
     XOutBitmap::WriteGraphic(aGraphic, aTempFileName, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE | XOUTBMP_DONT_EXPAND_FILENAME);
 
-    // There is a possiblity that sPath extension might have been changed if the
+    // There is a possibility that sPath extension might have been changed if the
     // provided extension is not writable
     m_aFileName = aTempFileName;
 

@@ -2201,7 +2201,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             break;
 
         case 0xfe92: { // Image Data
-            // At the latest we now need the temprary BMP file and
+            // At the latest we now need the temporary BMP file and
             // inside this file we need the header and the palette.
             if (p->pBMP==NULL) {
                 p->pBMP=new SvMemoryStream();

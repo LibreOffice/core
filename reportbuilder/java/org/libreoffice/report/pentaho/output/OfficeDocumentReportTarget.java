@@ -141,7 +141,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final String FAILED = "Failed";
     public static final String VERTICAL_POS = "vertical-pos";
     private static final String ZERO_CM = "0cm";
-    /** the verison of the ODF specification to which generated documents
+    /** the version of the ODF specification to which generated documents
      *  shall conform. */
     public static final String ODF_VERSION = "1.2";
 

@@ -43,7 +43,7 @@ namespace drawinglayer
         class SdrTextPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            // The text model data; this sould later just be the OutlinerParaObject or
+            // The text model data; this should later just be the OutlinerParaObject or
             // something equal
             ::tools::WeakReference< SdrText >       mrSdrText;
 

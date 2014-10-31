@@ -173,7 +173,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     maPrePostMapMode()
 {
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Changed> during contruction of <SwViewShell> instance
+    // <SwDrawContact::Changed> during construction of <SwViewShell> instance
     mbInConstructor = true;
 
     mbPaintInProgress = mbViewLocked = mbInEndAction = mbFrameView =
@@ -249,7 +249,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     maPrePostMapMode()
 {
     // OD 2004-06-01 #i26791# - in order to suppress event handling in
-    // <SwDrawContact::Changed> during contruction of <SwViewShell> instance
+    // <SwDrawContact::Changed> during construction of <SwViewShell> instance
     mbInConstructor = true;
 
     mbPaintWorks = mbEnableSmooth = true;

@@ -1191,7 +1191,7 @@ void Outliner::PrepareSearchAndReplace (void)
         EnterEditMode(false);
 
         mpDrawDocument->GetDocSh()->SetWaitCursor( false );
-        // Start seach at the right end of the current object's text
+        // Start search at the right end of the current object's text
         // depending on the search direction.
         OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != NULL)
@@ -1494,7 +1494,7 @@ void Outliner::PrepareConversion (void)
         EnterEditMode ();
 
         mpDrawDocument->GetDocSh()->SetWaitCursor( false );
-        // Start seach at the right end of the current object's text
+        // Start search at the right end of the current object's text
         // depending on the search direction.
     }
     else

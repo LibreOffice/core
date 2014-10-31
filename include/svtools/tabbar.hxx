@@ -119,7 +119,7 @@ QueryDrop       - Dieser Handler wird von StarView immer dann gerufen, wenn
 
 Drop            - Im Drop-Handler muessen dann die Pages verschoben werden,
                   oder die neuen Pages eingefuegt werden. Die entsprechende
-                  Drop-Postion kann mit ShowDropPos() ermittelt werden.
+                  Drop-Position kann mit ShowDropPos() ermittelt werden.
 
 Folgende Methoden werden fuer Drag and Drop gebraucht und muessen von
 den Handlern gerufen werden:

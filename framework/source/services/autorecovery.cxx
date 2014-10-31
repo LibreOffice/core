@@ -585,7 +585,7 @@ private:
 
         @descr  ... but only keys related to the AutoSave mechanism.
                 Means: State and Timer intervall.
-                E.g. the recovery list isnt adressed here.
+                E.g. the recovery list is not addressed here.
 
         @throw  [com.sun.star.uno.RuntimeException]
                 if config could not be opened or readed successfully!
@@ -971,7 +971,7 @@ private:
         @param  xNewFrame
                 must be set only in case WE create a new frame (e.g. for loading documents
                 on session restore or recovery). Then search for a frame using rInfo.Document must
-                be supressed and xFrame must be preferred instead .-)
+                be suppressed and xFrame must be preferred instead .-)
 
         @param  rInfo
                 used e.g. to find the frame corresponding to a document.
@@ -1006,7 +1006,7 @@ private:
     void st_impl_removeFile(const OUString& sURL);
 
     /** try to remove ".lock" file from disc if office will be terminated
-        not using the offical way .-)
+        not using the official way .-)
 
         This method has to be handled "optional". So every error inside
         has to be ignored ! This method CANT FAIL ... it can forget something only .-)
@@ -1346,7 +1346,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     // This can be done immediately ... must not been done asynchronous.
     if ((eNewJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
     {
-        // it's important to set a flag internally, so AutoRecovery will be supressed - even if it's requested.
+        // it's important to set a flag internally, so AutoRecovery will be suppressed - even if it's requested.
         m_eJob |= eNewJob;
         implts_stopTimer();
         implts_stopListening();

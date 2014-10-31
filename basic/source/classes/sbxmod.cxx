@@ -529,7 +529,7 @@ const SbxObject* SbModule::FindType( const OUString& aTypeName ) const
 }
 
 
-// From the code generator: deletion of images and the oposite of validation for entries
+// From the code generator: deletion of images and the opposite of validation for entries
 
 void SbModule::StartDefinitions()
 {

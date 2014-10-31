@@ -107,7 +107,7 @@ bool RtlConstAsciiMacro::VisitCXXConstructExpr( CXXConstructExpr* expr )
     searchingForString = false;
     if( !suitableString )
         return true;
-    // Seach for '(' (don't just remove a given length to handle possible whitespace).
+    // Search for '(' (don't just remove a given length to handle possible whitespace).
     const char* text = compiler.getSourceManager().getCharacterData( start );
     const char* pos = text;
     while( *pos != '(' )

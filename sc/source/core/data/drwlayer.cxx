@@ -782,7 +782,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             // associated rotated shape ( note: we do this by actually setting the LogicRect for the shape temporarily to the
             // *full* size then grabbing the SnapRect ( which gives the transformed rotated dimensions ), it would be
             // wonderful if we could do this mathematically without having to temporarily tweak the object... othoh this way
-            // is gauranteed to get consistent results )
+            // is guaranteed to get consistent results )
             ResizeLastRectFromAnchor( pObj, rData, true, bNegativePage, bCanResize, false );
             // aFullRect contains the unrotated size and position of the shape ( regardless of any hidden row/columns )
             Rectangle aFullRect = rData.maLastRect;

@@ -2748,7 +2748,7 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
 
 LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
 {
-    //map the simple ones via LanguageTypes, and the hard ones explictly
+    //map the simple ones via LanguageTypes, and the hard ones explicitly
     LanguageType nLang(LANGUAGE_DONTKNOW);
 
     switch (nLanguage)
