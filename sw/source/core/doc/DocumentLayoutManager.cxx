@@ -412,7 +412,7 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
 
         if( !m_rSwdoc.IsCopyIsMove() || &m_rSwdoc != pSrcDoc )
         {
-            if( m_rSwdoc.IsInReading() )
+            if( m_rSwdoc.IsInReading() || m_rSwdoc.IsInMailMerge() )
                 pDest->SetName( OUString() );
             else
             {
