@@ -268,6 +268,8 @@ rtl_arena_hash_rescale (
     sal_Size         new_size
 )
 {
+    assert(new_size != 0);
+
     rtl_arena_segment_type ** new_table;
     sal_Size                  new_bytes;
 
