@@ -43,6 +43,8 @@
 #include <unx/salinst.h>
 #include <unx/x11/xlimits.hxx>
 
+#include <opengl/salbmp.hxx>
+
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
 #endif
@@ -53,7 +55,11 @@
 
 SalBitmap* X11SalInstance::CreateSalBitmap()
 {
-    return new X11SalBitmap();
+    static const char* pOpenGL = getenv("USE_OPENGL");
+    if (pOpenGL)
+        return new OpenGLSalBitmap();
+    else
+        return new X11SalBitmap();
 }
 
 ImplSalBitmapCache* X11SalBitmap::mpCache = NULL;

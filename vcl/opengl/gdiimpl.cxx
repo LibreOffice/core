@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include "opengl/salbmp.hxx"
 
 #define GL_ATTRIB_POS 0
 #define GL_ATTRIB_TEX 1
@@ -654,8 +655,9 @@ void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* /*
 void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
-    GLuint nTexture = rBitmap.GetTexture();
+    GLuint nTexture = rBitmap.GetTexture( maContext );
 
+    SAL_INFO( "vcl.opengl", "::drawBitmap" );
     maContext.makeCurrent();
     DrawTexture( nTexture, rPosAry );
 }
@@ -675,9 +677,10 @@ void OpenGLSalGraphicsImpl::drawBitmap(
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const OpenGLSalBitmap& rMask = static_cast<const OpenGLSalBitmap&>(rMaskBitmap);
-    const GLuint nTexture( rBitmap.GetTexture() );
-    const GLuint nMask( rMask.GetTexture() );
+    const GLuint nTexture( rBitmap.GetTexture( maContext ) );
+    const GLuint nMask( rMask.GetTexture( maContext ) );
 
+    SAL_INFO( "vcl.opengl", "::drawBitmap" );
     maContext.makeCurrent();
     DrawTextureWithMask( nTexture, nMask, rPosAry );
 }
@@ -688,22 +691,16 @@ void OpenGLSalGraphicsImpl::drawMask(
             SalColor nMaskColor )
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
-    const GLuint nTexture( rBitmap.GetTexture() );
+    const GLuint nTexture( rBitmap.GetTexture( maContext ) );
 
+    maContext.makeCurrent();
     DrawMask( nTexture, nMaskColor, rPosAry );
 }
 
 SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
-    GLuint nTexture;
-
-    /*glGenTexture( 1, &nTexture );
-    glBindTexture( GL_TEXTURE_2D, nTexture );
-    glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, nX, nY, nWidth, nHeight, 0 );
-    glBindTexture( GL_TEXTURE_2D, 0 );*/
-
     OpenGLSalBitmap* pBitmap = new OpenGLSalBitmap;
-    if( !pBitmap->Create( nX, nY, nWidth, nHeight ) )
+    if( !pBitmap->Create( maContext, nX, nY, nWidth, nHeight ) )
     {
         delete pBitmap;
         pBitmap = NULL;
@@ -796,8 +793,8 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const OpenGLSalBitmap& rAlpha = static_cast<const OpenGLSalBitmap&>(rAlphaBitmap);
-    const GLuint nTexture( rBitmap.GetTexture() );
-    const GLuint nAlpha( rAlpha.GetTexture() );
+    const GLuint nTexture( rBitmap.GetTexture( maContext ) );
+    const GLuint nAlpha( rAlpha.GetTexture( maContext ) );
 
     maContext.makeCurrent();
     DrawTextureWithMask( nTexture, nAlpha, rPosAry );
