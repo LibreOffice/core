@@ -51,7 +51,6 @@
 
 
 #include <IDocumentDrawModelAccess.hxx>
-#include <writerhelper.hxx>
 
 using namespace com::sun::star;
 using namespace oox;

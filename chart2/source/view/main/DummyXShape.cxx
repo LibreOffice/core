@@ -30,8 +30,6 @@
 #include <editeng/unoprnms.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <algorithm>
-
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 

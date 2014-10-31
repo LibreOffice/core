@@ -47,7 +47,6 @@
 #include <ooxml/resourceids.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
-#include <oox/token/tokens.hxx>
 #include <dmapper/GraphicHelpers.hxx>
 
 #include <rtfsdrimport.hxx>

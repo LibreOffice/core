@@ -62,7 +62,6 @@
 #include <svx/xflftrit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
-#include <drawdoc.hxx>
 
 // The Format names in the list of all names have the
 // following family as their first character:

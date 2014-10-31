@@ -45,7 +45,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/application/MacroMigrationWizard.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -55,7 +54,6 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>

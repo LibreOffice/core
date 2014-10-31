@@ -78,7 +78,6 @@
 #include <iterator>
 #include <boost/scoped_array.hpp>
 #include "mtftools.hxx"
-#include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;

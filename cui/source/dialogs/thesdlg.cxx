@@ -31,7 +31,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <thesdlg.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svxerr.hxx>

@@ -22,17 +22,16 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <errno.h>
 
 #if defined(SAL_W32)
 #include <io.h>
 #include <direct.h>
-#include <errno.h>
 #endif
 
 #ifdef SAL_UNX
 #include <unistd.h>
 #include <sys/stat.h>
-#include <errno.h>
 #endif
 
 #include <string.h>

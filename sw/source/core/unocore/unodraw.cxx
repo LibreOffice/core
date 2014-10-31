@@ -68,7 +68,6 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <switerator.hxx>
-#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 

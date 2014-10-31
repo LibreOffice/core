@@ -22,18 +22,17 @@
 #include "rtl/ustring.hxx"
 #include "osl/thread.h"
 #include "osl/file.hxx"
+#include <errno.h>
 
 #include <string.h>
 #if defined(SAL_W32)
 #include <io.h>
 
 #include <direct.h>
-#include <errno.h>
 #endif
 
 #ifdef UNX
 #include <sys/stat.h>
-#include <errno.h>
 #include <unistd.h>
 #endif
 
