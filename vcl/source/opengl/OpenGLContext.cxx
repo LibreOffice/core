@@ -52,7 +52,11 @@ OpenGLContext::OpenGLContext():
     m_pChildWindow(nullptr),
     mbInitialized(false),
     mnRefCount(0),
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1070
+    mbRequestLegacyContext(true),
+#else
     mbRequestLegacyContext(false),
+#endif
     mbUseDoubleBufferedRendering(true),
     mbVCLOnly(false),
     mnFramebufferCount(0),

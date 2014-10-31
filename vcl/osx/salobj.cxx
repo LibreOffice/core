@@ -72,6 +72,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
             };
             pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];
         }
+#if ( ! defined( MACOSX ) ) || ( defined( MACOSX ) && ( MACOSX_SDK_VERSION >= 1070 ) )
         else
         {
             NSOpenGLPixelFormatAttribute aAttributes[] =
@@ -88,6 +89,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
             };
             pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];
         }
+#endif
 
         maSysData.mpNSView = [[NSOpenGLView alloc] initWithFrame: aInitFrame pixelFormat:pixFormat];
     }

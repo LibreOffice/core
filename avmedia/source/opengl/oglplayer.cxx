@@ -237,7 +237,11 @@ awt::Size SAL_CALL OGLPlayer::getPreferredPlayerWindowSize() throw ( uno::Runtim
 
 static bool lcl_CheckOpenGLRequirements()
 {
+#if ( defined( MACOSX ) && ( MACOSX_SDK_VERSION < 1070 ) )
+    return false;
+#else
     return OpenGLHelper::getGLVersion() >= 3.0;
+#endif
 }
 
 uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
