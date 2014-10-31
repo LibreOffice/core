@@ -56,7 +56,7 @@ Module gid_Module_Brand_Prg_Wrt
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (auto_writer_brand_ALL,gid_File_Exe_Swriter);
+    Files = (auto_writer_brand_ALL);
 End
 
 Module gid_Module_Langpack_Writer_Template

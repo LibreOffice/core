@@ -33,15 +33,6 @@ File gid_File_Help_Simpress_Zip
 End
 #endif
 
-#if !defined MACOSX && !defined WNT
-File gid_File_Exe_Simpress
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "simpress";
-    Styles = (PACKED);
-End
-#endif
-
 // configuration files for custom animation effects
 
 File gid_File_sd_xml

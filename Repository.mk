@@ -804,9 +804,35 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	) \
 ))
 
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	xmlsec \
 ))
+
+$(eval $(call gb_Helper_register_packages_for_install,base_brand,\
+	desktop_sbase_sh \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,calc_brand,\
+	desktop_scalc_sh \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,draw_brand,\
+	desktop_sdraw_sh \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,impress_brand,\
+	desktop_simpress_sh \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,math_brand,\
+	desktop_smath_sh \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,writer_brand,\
+	desktop_swriter_sh \
+))
+endif # GUIBASE=unx
 
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\

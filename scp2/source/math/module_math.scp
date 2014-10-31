@@ -52,7 +52,7 @@ Module gid_Module_Brand_Prg_Math
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (auto_math_brand_ALL,gid_File_Exe_Smath);
+    Files = (auto_math_brand_ALL);
 End
 
 Module gid_Module_Langpack_Math_Template

@@ -53,7 +53,7 @@ Module gid_Module_Brand_Prg_Impress
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (auto_impress_brand_ALL,gid_File_Exe_Simpress);
+    Files = (auto_impress_brand_ALL);
 End
 
 Module gid_Module_Langpack_Impress_Template

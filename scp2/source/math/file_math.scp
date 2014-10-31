@@ -35,11 +35,3 @@ File gid_File_Help_Smath_Zip
 End
 #endif
 
-#if !defined MACOSX && !defined WNT
-File gid_File_Exe_Smath
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "smath";
-    Styles = (PACKED);
-End
-#endif

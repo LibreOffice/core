@@ -18,15 +18,6 @@
 
 #include "macros.inc"
 
-#if !defined MACOSX && !defined WNT
-File gid_File_Exe_Sbase
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "sbase";
-    Styles = (PACKED);
-End
-#endif
-
 STD_RES_FILE( gid_File_Res_Abp, abp)
 
 STD_RES_FILE( gid_File_Res_Dbp, dbp)
