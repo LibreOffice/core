@@ -32,7 +32,6 @@
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hdl>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 

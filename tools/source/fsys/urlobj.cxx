@@ -34,8 +34,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-#include <rtl/character.hxx>
-
 #include <algorithm>
 #include <limits>
 #include <memory>

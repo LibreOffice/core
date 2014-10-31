@@ -33,7 +33,6 @@
 
 #include "ChartModel.hxx"
 #include <unonames.hxx>
-#include <DataSeriesHelper.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>

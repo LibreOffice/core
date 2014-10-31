@@ -88,8 +88,6 @@ sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath )
 #else // this is UNX
 
 
-#include <sal/types.h>
-
 sal_Bool IsReadonlyAccordingACL( const sal_Unicode* )
 {
     // to be implemented

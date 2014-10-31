@@ -81,7 +81,6 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <ndtxt.hxx>
-#include <drawdoc.hxx>
 
 #include <svtools/borderhelper.hxx>
 

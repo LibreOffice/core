@@ -31,7 +31,6 @@
 #include <iostream>
 #endif
 #include <connectivity/PColumn.hxx>
-#include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>

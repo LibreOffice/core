@@ -208,8 +208,6 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#include <svl/zforlist.hxx>
-
 #define SC_DOC_NEW          0xFFFF
 
 #define SC_MACROCALL_ALLOWED        0
