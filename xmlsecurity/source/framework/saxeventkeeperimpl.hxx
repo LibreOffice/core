@@ -165,7 +165,7 @@ private:
     std::vector< sal_Int32 > m_vReleasedElementMarkBuffers;
 
     /*
-     * a flag to indicate whether the ElementMark releasing process is runing.
+     * a flag to indicate whether the ElementMark releasing process is running.
      * When a releasing request comes, the assigned ElementMark is added to
      * the m_vReleasedElementMarkBuffers first, then this flag is checked.
      * If the ElementMark releasing process is not running, then call that

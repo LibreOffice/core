@@ -429,7 +429,7 @@ public:
     /** Constructor.
 
         @param nMask
-        Set of flags decribing the demanded information.
+        Set of flags describing the demanded information.
     */
 
     VolumeInfo( sal_uInt32 nMask )

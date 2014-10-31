@@ -2684,7 +2684,7 @@ void WW8Export::WriteMainText()
                     // ccpText includes Footnote and KF-text
                     // therefore pFib->ccpText may get updated as well
     // save the StyleId of the last paragraph. Because WW97 take the style
-    // from the last CR, that will be writen after footer/Header/footnotes/
+    // from the last CR, that will be written after footer/Header/footnotes/
     // annotation usw.
     const SwTxtNode* pLastNd = pCurPam->GetMark()->nNode.GetNode().GetTxtNode();
     if( pLastNd )

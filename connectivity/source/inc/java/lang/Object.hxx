@@ -76,7 +76,7 @@ namespace connectivity
         // The Java handle to this class
         jobject object;
 
-        // Class definiton
+        // Class definition
         // New in SJ2:
         static jclass theClass; // The class needs to be requested only once!
 

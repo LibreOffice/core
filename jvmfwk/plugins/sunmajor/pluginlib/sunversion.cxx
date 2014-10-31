@@ -55,7 +55,7 @@ SunVersion::SunVersion(const char * szVer):
 }
 
 
-/**Format major.minor.maintainance_update
+/**Format major.minor.maintenance_update
  */
 bool SunVersion::init(const char *szVersion)
 {

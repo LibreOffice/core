@@ -547,7 +547,7 @@ $(WORKDIR)/Headers/% :
 #   files.
 # - TARGETTYPE is the type of linktarget as some platforms need very different
 #   command to link different targettypes.
-# - LIBRARY_X64 is only relevent for building a x64 library on windows.
+# - LIBRARY_X64 is only relevant for building a x64 library on windows.
 #
 # Since most variables are set on the linktarget and not on the object, the
 # object learns about these setting via GNU makes scoping of target variables.

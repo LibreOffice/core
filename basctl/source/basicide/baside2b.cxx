@@ -839,7 +839,7 @@ void EditorWindow::HandleCodeCompletion()
         {
             if( i->tokenType == TT_WHITESPACE ) // a whitespace: stop; if there is no ws, it goes to the beginning of the line
                 break;
-            if( i->tokenType == TT_IDENTIFIER || i->tokenType == TT_KEYWORDS ) // extract the identifers(methods, base variable)
+            if( i->tokenType == TT_IDENTIFIER || i->tokenType == TT_KEYWORDS ) // extract the identifiers(methods, base variable)
             /* an example: Dim aLocVar2 as com.sun.star.beans.PropertyValue
              * here, aLocVar2.Name, and PropertyValue's Name field is treated as a keyword(?!)
              * */

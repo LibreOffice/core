@@ -527,7 +527,7 @@ public:
      * @param rName name for the expression.
      * @param rPos base position.
      * @param rExpr formula expression to be associated with the name.  The
-     *              current grammer is used to compile this expression.
+     *              current grammar is used to compile this expression.
      *
      * @return true if inserted successfully, false otherwise.
      */
@@ -1598,7 +1598,7 @@ public:
     SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize = true) const;
 
     // returns whether to export a Default style for this col or not
-    // nDefault is setted to one possition in the current row where the Default style is
+    // nDefault is setted to one position in the current row where the Default style is
     bool            GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault);
 
     bool            UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bShow );

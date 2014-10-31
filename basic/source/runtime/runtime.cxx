@@ -3347,7 +3347,7 @@ void SbiRuntime::StepBASED( sal_uInt32 nOp1 )
     SbxVariable* p1 = new SbxVariable;
     SbxVariableRef x2 = PopVar();
 
-    // #109275 Check compatiblity mode
+    // #109275 Check compatibility mode
     bool bCompatible = ((nOp1 & 0x8000) != 0);
     sal_uInt16 uBase = static_cast<sal_uInt16>(nOp1 & 1);       // Can only be 0 or 1
     p1->PutInteger( uBase );
@@ -3390,7 +3390,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         {
             // emulate pcode here
             StepARGC();
-            // psuedo StepLOADSC
+            // pseudo StepLOADSC
             OUString sArg = aName.copy( 1, aName.getLength() - 2 );
             SbxVariable* p = new SbxVariable;
             p->PutString( sArg );

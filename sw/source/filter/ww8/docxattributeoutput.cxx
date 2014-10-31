@@ -1046,7 +1046,7 @@ void DocxAttributeOutput::EndRun()
             }
 
             // Remove the field from the stack if only the start has to be written
-            // Unknown fields sould be removed too
+            // Unknown fields should be removed too
             if ( !pIt->bClose || ( pIt->eType == ww::eUNKNOWN ) )
             {
                 if (pIt->pField)

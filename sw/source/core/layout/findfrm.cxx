@@ -1019,7 +1019,7 @@ SwFrm *SwFrm::_FindPrev()
     if ( IsTabFrm() )
     {
         //The first Cntnt of the table gets picked up and his predecessor is
-        //returnd. To be able to deactivate the special case for tables
+        //returned. To be able to deactivate the special case for tables
         //(see below) bIgnoreTab will be set.
         if ( ((SwTabFrm*)this)->IsFollow() )
             return ((SwTabFrm*)this)->FindMaster();

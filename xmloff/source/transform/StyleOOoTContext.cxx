@@ -336,7 +336,7 @@ XMLTypedPropertiesOOoTContext_Impl
                 XML_PROP_TYPE_END==m_aPropTypes[1] ||
                 (i<MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_aPropTypes[i]) ) )
     {
-        OString aTmp("Didnt't find property: ");
+        OString aTmp("Didn't find property: ");
         const OUString& rPrefix =
             GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix );
         aTmp += OString( rPrefix.getStr(), rPrefix.getLength(),

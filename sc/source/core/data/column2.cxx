@@ -1798,7 +1798,7 @@ const ScPostIt* ScColumn::GetCellNote( sc::ColumnBlockConstPosition& rBlockPos, 
 
 void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)
 {
-    //pNote->UpdateCaptionPos(ScAddress(nCol, nRow, nTab)); // TODO notes usefull ? slow import with many notes
+    //pNote->UpdateCaptionPos(ScAddress(nCol, nRow, nTab)); // TODO notes useful ? slow import with many notes
     maCellNotes.set(nRow, pNote);
 }
 

@@ -233,7 +233,7 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
 }
 
 // Unclear how this was intended to be refreshed when the
-// grammer or sheet count is changed ? Ideally this would be
+// grammar or sheet count is changed ? Ideally this would be
 // a method on Document that would globally cache these.
 std::vector<OUString> &ScCompiler::GetSetupTabNames() const
 {

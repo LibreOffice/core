@@ -696,7 +696,7 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     }
     else
     {
-        // #124826# avoid resource leak ! happens when runing without desktop access (remote desktop, service, may be screensavers)
+        // #124826# avoid resource leak ! happens when running without desktop access (remote desktop, service, may be screensavers)
         DeleteBitmap( hBmpBitmap );
     }
 

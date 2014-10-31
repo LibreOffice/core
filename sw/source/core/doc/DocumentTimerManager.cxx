@@ -129,7 +129,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
                 m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().IsFieldsDirty()
                 // If we switch the field name the Fields are not updated.
-                // So the "backgorund update" should always be carried out
+                // So the "background update" should always be carried out
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
             if ( m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().IsInUpdateFlds() ||

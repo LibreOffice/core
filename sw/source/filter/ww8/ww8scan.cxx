@@ -75,7 +75,7 @@ namespace SL
 namespace
 {
     /**
-        winword strings are typically Belt and Braces strings preceeded with a
+        winword strings are typically Belt and Braces strings preceded with a
         pascal style count, and ending with a c style 0 terminator. 16bit chars
         and count for ww8+ and 8bit chars and count for ww7-. The count and 0
         can be checked for integrity to catch errors (e.g. lotus created
@@ -1013,7 +1013,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
             aShortSprm[1] = (sal_uInt8)(   nPrm         >> 8 );
             p->nSprmsLen = ( nPrm ) ? 2 : 0;        // length
 
-            // store Postion of internal mini storage in Data Pointer
+            // store Position of internal mini storage in Data Pointer
             p->pMemPos = aShortSprm;
         }
         else
@@ -1113,7 +1113,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     // store Sprm Length in member:
                     p->nSprmsLen = ( nPrm ) ? 3 : 0;
 
-                    // store Postion of internal mini storage in Data Pointer
+                    // store Position of internal mini storage in Data Pointer
                     p->pMemPos = aShortSprm;
                 }
             }
@@ -6499,7 +6499,7 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
       footnote *and endnote!!* separator,continuation separator, and
       continuation notice entry, the documentation does not mention the
       endnote separators, the documentation also gets the index numbers
-      backwards when specifiying which bits to test. The bottom six bits
+      backwards when specifying which bits to test. The bottom six bits
       of this value must be tested and skipped over. Each section's
       grpfIhdt is then tested for the existence of the appropriate headers
       and footers, at the end of each section the nIdxOffset must be updated

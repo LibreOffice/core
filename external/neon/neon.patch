@@ -180,7 +180,7 @@
  }
  
  /*
-+ * Simplification wrapper arround AcquireCredentialsHandle as most of
++ * Simplification wrapper around AcquireCredentialsHandle as most of
 + * the parameters do not change.
 + */
 +static int acquireCredentialsHandleForUsername(CredHandle * credentials, char *package, const char *username, const char *password)
@@ -219,7 +219,7 @@
 +
 +
 +/*
-  * Wrapper arround initializeSecurityContext.  Supplies several
+  * Wrapper around initializeSecurityContext.  Supplies several
   * default parameters as well as logging in case of errors.
   */
 @@ -483,7 +522,7 @@

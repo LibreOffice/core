@@ -2320,7 +2320,7 @@ AC_ARG_WITH(macosx-sdk,
 
 
                           see: http://developer.apple.com/library/mac/#technotes/tn2064/_index.html
-                          for a detailled technical explanation of these variables
+                          for a detailed technical explanation of these variables
 
                           Note: MACOSX_DEPLOYMENT_TARGET will be set to the value of 'min'.
     ],
@@ -2566,7 +2566,7 @@ dnl  Checks if ccache is available
 dnl ===================================================================
 if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
     case "%$CC%$CXX%" in
-    # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some verison number etc),
+    # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some version number etc),
     # assume that's good then
     *%ccache[[-_' ']]*|*/ccache[[-_' ']]*)
         AC_MSG_NOTICE([ccache seems to be included in a pre-defined CC and/or CXX])
@@ -3570,7 +3570,7 @@ if test "$_os" = "WINNT"; then
                     WINDOWS_SDK_ACCEPTABLE_VERSIONS=$with_windows_sdk
                     ;;
                 *)
-                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work witn VS $MSVSVER])
+                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work with VS $MSVSVER])
                     ;;
                 esac
             fi
@@ -8383,7 +8383,7 @@ if test "$with_system_curl" = "yes"; then
     if test -n "$CURL_PKG_ERRORS"; then
         AC_PATH_PROG(CURLCONFIG, curl-config)
         if test -z "$CURLCONFIG"; then
-            AC_MSG_ERROR([curl developement files not found])
+            AC_MSG_ERROR([curl development files not found])
         fi
         CURL_LIBS=`$CURLCONFIG --libs`
         CURL_CFLAGS=$("$CURLCONFIG" --cflags | sed -e "s/-I/${ISYSTEM?}/g")

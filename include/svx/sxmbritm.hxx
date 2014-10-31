@@ -25,7 +25,7 @@
 
 // dimension line below the reference edge
 // for dimensioning the lower edge of the object
-// (redundant to turn the referece edge through 180deg +
+// (redundant to turn the reference edge through 180deg +
 // TextUpsideDown, but easily operated)
 // laesst sich auch draggen, indem man den Masslinienabstand
 // (SdrMeasureLineDistItem) ueber die Bezugskante hinwegdraggt

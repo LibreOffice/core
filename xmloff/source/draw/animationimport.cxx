@@ -882,7 +882,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                 }
 
             }
-            // fall through intented!
+            // fall through intended!
             case ANA_Target:
             {
                 {

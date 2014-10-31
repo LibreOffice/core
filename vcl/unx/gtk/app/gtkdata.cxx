@@ -646,7 +646,7 @@ void GtkData::Init()
 
     g_set_application_name(SalGenericSystem::getFrameClassName());
 
-    // Set consistant name of the root accessible
+    // Set consistent name of the root accessible
     OUString aAppName = Application::GetAppName();
     if( !aAppName.isEmpty() )
     {

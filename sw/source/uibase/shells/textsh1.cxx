@@ -1002,7 +1002,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else if ( pDlg && pDlg->Execute() == RET_OK )
             {
-                // Apply defaults if nessecary.
+                // Apply defaults if necessary.
                 pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 sal_uInt16 nNewDist;
                 if( SfxItemState::SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, false, &pItem ) &&

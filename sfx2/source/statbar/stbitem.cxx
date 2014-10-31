@@ -543,7 +543,7 @@ void SfxStatusBarControl::Command( const CommandEvent& )
 
 /*  [Description]
 
-    This virtual method is called when a CommandEvent is recived by
+    This virtual method is called when a CommandEvent is received by
     SfxStatusBarControl.
 
     The default implementation is empty.

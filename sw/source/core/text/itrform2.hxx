@@ -87,7 +87,7 @@ class SwTxtFormatter : public SwTxtPainter
     // Is overloaded by SwTxtFormatter because of UpdatePos
     void CalcAdjustLine( SwLineLayout *pCurr );
 
-    // consideres line spacing attributes
+    // considers line spacing attributes
     void CalcRealHeight( bool bNewLine = false );
 
     // Transfers the data to rInf

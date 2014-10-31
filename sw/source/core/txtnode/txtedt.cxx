@@ -1385,7 +1385,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         {
             aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
 
-            // fdo#71558 notify mispelled word to accessibility
+            // fdo#71558 notify misspelled word to accessibility
             SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if( pViewSh )
                 pViewSh->InvalidateAccessibleParaAttrs( *this );

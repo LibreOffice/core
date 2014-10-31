@@ -274,7 +274,7 @@ inline SbxFlagBits& operator&= (SbxFlagBits& lhs, SbxFlagBits rhs)
 
 #define SBXCR_SBX            0x20584253        // SBX(blank)
 
-// List of predefined SBX-IDs. New SBX-IDs must be precisly defined so that
+// List of predefined SBX-IDs. New SBX-IDs must be precisely defined so that
 // they are unique within the Stream and appropriate Factory.
 
 #define SBXID_VALUE         0x4E4E  // NN: SbxValue

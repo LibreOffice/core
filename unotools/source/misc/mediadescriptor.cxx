@@ -681,7 +681,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
             }
     }
 
-    // If opening of the stream in read/write mode wasnt allowed
+    // If opening of the stream in read/write mode was not allowed
     // or failed by an error - we must try it in readonly mode.
     if (!xInputStream.is())
     {

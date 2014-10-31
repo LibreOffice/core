@@ -136,13 +136,13 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         for ( sal_Int32 i=1; i <= nStringLen; i++, nDelCnt += nDelR0 )
         {
             if ( cString[i-1] == c )
-                nP = 0;     // Replace from this postion with 0
+                nP = 0;     // Replace from this position with 0
             // Deletion to determine the Pattern + Replace
             npDistance[i] = nDelCnt + nP;
             if ( bSplitCount )
             {
                 if ( nReplacePos < 0 && nP )
-                {   // this Postion will be replaced
+                {   // this Position will be replaced
                     nRepS++;
                     nReplacePos = i;
                 }

@@ -76,7 +76,7 @@ Any lines in [square brackets] are optional, and should be omitted if not needed
 * pointer_dismissed         // This dismiss the pointer red dot on screen, should be called when user stop touching screen
 * pointer_coordination      // This update pointer's position to current (x,y)
   current_x                 // note that x, y are in percentage (from 0.0 to 1.0) with respect to the slideshow size
-  current_y                 // unless screenupdater's perfomance is significantly improved, we should consider limit the update frequency on the
+  current_y                 // unless screenupdater's performance is significantly improved, we should consider limit the update frequency on the
                             // remote-end
 
 

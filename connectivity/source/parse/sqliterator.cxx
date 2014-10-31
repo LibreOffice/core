@@ -629,7 +629,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
         }
         else if ( SQL_ISRULE( pTableListElement, table_ref ) )
         {
-            // Table refereneces can be made up of table names, table names (+),'('joined_table')'(+)
+            // Table references can be made up of table names, table names (+),'('joined_table')'(+)
             pTableName = pTableListElement->getChild(0);
             if( isTableNode( pTableName ) )
             {   // Found table names

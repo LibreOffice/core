@@ -1346,7 +1346,7 @@ void Window::ImplSetReallyVisible()
     }
 }
 
-void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatiblity ok
+void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
     DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
     if( !pDel->mpWindow )

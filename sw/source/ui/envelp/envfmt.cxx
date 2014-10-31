@@ -59,7 +59,7 @@ namespace {
     ///                specification is two consecutive entries that specify
     ///                the start and end points of the range.
     /// @returns A vector containing one element for each item covered by the
-    ///          ranges. This is not gauranteed to be sorted and may contain
+    ///          ranges. This is not guaranteed to be sorted and may contain
     ///          duplicates if the original ranges contained overlaps.
     static std::vector<sal_uInt16> lcl_convertRangesToList(const sal_uInt16 aRanges[]) {
         std::vector<sal_uInt16> aVec;

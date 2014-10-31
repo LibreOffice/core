@@ -459,7 +459,7 @@ public:
 
     // insert before pBehind or at the end of the chain below mpUpper
     void InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind );
-    // insert after pBefore or at the beginnig of the chain below mpUpper
+    // insert after pBefore or at the beginning of the chain below mpUpper
     void InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore );
     // insert before pBehind or at the end of the chain while considering
     // the siblings of pSct

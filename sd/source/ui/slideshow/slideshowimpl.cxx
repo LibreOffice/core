@@ -1759,7 +1759,7 @@ void SlideshowImpl::startUpdateTimer()
 /** this timer is called 20ms after a new slide was displayed.
     This is used to unfreeze user input that was disabled after
     slide change to skip input that was buffered during slide
-    transition preperation */
+    transition preparation */
 IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl)
 {
     mbInputFreeze = false;
@@ -2631,7 +2631,7 @@ void SAL_CALL SlideshowImpl::activate() throw (RuntimeException, std::exception)
 
                 if( pDispatcher )
                 {
-                    // filter all forbiden slots
+                    // filter all forbbiden slots
                     pDispatcher->SetSlotFilter( SFX_SLOT_FILTER_ENABLED, sizeof(pAllowed) / sizeof(sal_uInt16), pAllowed );
                 }
 

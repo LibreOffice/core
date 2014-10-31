@@ -676,7 +676,7 @@ Any SAL_CALL UniversalContentBroker::execute(
                 // Unreachable
             }
 
-            // Copy infos into the new stucture
+            // Copy infos into the new structure
             aTransferArg.Operation = aArg.Operation;
             aTransferArg.SourceURL = aArg.SourceURL;
             aTransferArg.TargetURL = aArg.TargetURL;

@@ -3654,7 +3654,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
     if (pNote)
     {
         // TODO : notes
-        //is it still usefull, as this call back is only called from ScXMLExport::WriteAnnotation
+        //is it still useful, as this call back is only called from ScXMLExport::WriteAnnotation
         // and should be in sync with pCurrentCell
         SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(pCurrentCell->maCellAddress);
         Reference<drawing::XShape> xCurrentShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
