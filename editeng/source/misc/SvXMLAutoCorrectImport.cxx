@@ -58,7 +58,7 @@ SvXMLWordListContext::SvXMLWordListContext(
 {
 }
 
-com::sun::star::uno::Reference<XFastContextHandler> SvXMLWordListContext::createFastChildContext(
+com::sun::star::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
@@ -139,7 +139,7 @@ SvXMLExceptionListContext::SvXMLExceptionListContext(
 {
 }
 
-com::sun::star::uno::Reference<xml::sax::XFastContextHandler> SvXMLExceptionListContext::createFastChildContext(
+com::sun::star::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExceptionListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
     throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
