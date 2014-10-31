@@ -20,10 +20,15 @@ class ThreadPool::ThreadWorker : public salhelper::Thread
 {
     ThreadPool    *mpPool;
     osl::Condition maNewWork;
+    bool           mbWorking;
 public:
+
     ThreadWorker( ThreadPool *pPool ) :
         salhelper::Thread("thread-pool"),
-        mpPool( pPool ) {}
+        mpPool( pPool ),
+        mbWorking( false )
+    {
+    }
 
     virtual void execute() SAL_OVERRIDE
     {
@@ -45,6 +50,9 @@ public:
 
         while( !pRet )
         {
+            if (mbWorking)
+                mpPool->stopWork();
+            mbWorking = false;
             maNewWork.reset();
 
             if( mpPool->mbTerminate )
@@ -57,6 +65,13 @@ public:
             aGuard.reset(); // lock
 
             pRet = mpPool->popWork();
+        }
+
+        if (pRet)
+        {
+            if (!mbWorking)
+                mpPool->startWork();
+            mbWorking = true;
         }
 
         return pRet;
@@ -78,12 +93,13 @@ public:
 };
 
 ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
+    mnThreadsWorking( 0 ),
     mbTerminate( false )
 {
     for( sal_Int32 i = 0; i < nWorkers; i++ )
         maWorkers.push_back( new ThreadWorker( this ) );
 
-    maTasksEmpty.reset();
+    maTasksComplete.reset();
 
     osl::MutexGuard aGuard( maGuard );
     for( size_t i = 0; i < maWorkers.size(); i++ )
@@ -136,10 +152,11 @@ void ThreadPool::pushTask( ThreadTask *pTask )
 {
     osl::MutexGuard aGuard( maGuard );
     maTasks.insert( maTasks.begin(), pTask );
+
     // horrible beyond belief:
     for( size_t i = 0; i < maWorkers.size(); i++ )
         maWorkers[ i ]->signalNewWork();
-    maTasksEmpty.reset();
+    maTasksComplete.reset();
 }
 
 ThreadTask *ThreadPool::popWork()
@@ -151,8 +168,19 @@ ThreadTask *ThreadPool::popWork()
         return pTask;
     }
     else
-        maTasksEmpty.set();
-    return NULL;
+        return NULL;
+}
+
+void ThreadPool::startWork()
+{
+    mnThreadsWorking++;
+}
+
+void ThreadPool::stopWork()
+{
+    assert( mnThreadsWorking > 0 );
+    if ( --mnThreadsWorking == 0 )
+        maTasksComplete.set();
 }
 
 void ThreadPool::waitUntilEmpty()
@@ -171,7 +199,7 @@ void ThreadPool::waitUntilEmpty()
     else
     {
         aGuard.clear();
-        maTasksEmpty.wait();
+        maTasksComplete.wait();
         aGuard.reset();
     }
     assert( maTasks.empty() );
