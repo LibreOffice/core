@@ -41,7 +41,6 @@
 #include <swatrset.hxx>
 #include <frmatr.hxx>
 #include "unostyle.hxx"
-#include "viewsh.hxx"
 #include "docsh.hxx"
 #include <crsrsh.hxx>
 #include "fesh.hxx"

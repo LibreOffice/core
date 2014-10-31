@@ -33,7 +33,6 @@
 
 #include <vcl/settings.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/settings.hxx>
 
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>

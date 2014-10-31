@@ -8,7 +8,6 @@
  */
 
 #include <column.hxx>
-#include <clipcontext.hxx>
 #include <clipparam.hxx>
 #include <cellvalue.hxx>
 #include <attarray.hxx>

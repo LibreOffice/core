@@ -18,7 +18,6 @@
  */
 #include <DocumentStylePoolManager.hxx>
 #include <doc.hxx>
-#include <poolfmt.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>

@@ -121,12 +121,10 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
-#include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xgrscit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbmpit.hxx>
-#include <svx/xflbmsxy.hxx>
 #include <svx/xflbmsxy.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xsflclit.hxx>
@@ -139,7 +137,6 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xfltrit.hxx>
 #include <swunohelper.hxx>
-#include <drawdoc.hxx>
 #include <fefly.hxx>
 
 using namespace ::com::sun::star;

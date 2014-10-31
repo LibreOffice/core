@@ -64,7 +64,6 @@
 #include "chgviset.hxx"
 #include "XMLStylesImportHelper.hxx"
 #include "sheetdata.hxx"
-#include "unonames.hxx"
 #include "rangeutl.hxx"
 #include "postit.hxx"
 #include "formulaparserpool.hxx"

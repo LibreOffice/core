@@ -44,7 +44,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.h>
 #include <osl/process.h>
-#include <connectivity/dbexception.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
