@@ -383,6 +383,8 @@ public:
                         {
                             pS = 0;
                             pD = rT.GetDoubleRef();
+                            // aDub intentionally not initialized, unnecessary
+                            // because unused.
                         }
                     }
                 SingleDoubleRefModifier( ScSingleRefData& rS )
