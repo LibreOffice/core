@@ -24,6 +24,7 @@
 #include "osl/thread.h"
 #include <osl/signal.h>
 #include "rtl/alloc.h"
+#include <rtl/string.hxx>
 
 #include "system.h"
 #include "file_impl.hxx"
@@ -795,31 +796,16 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     return tErr;
 }
 
-#define TMP_DEST_FILE_EXTENSION ".osl-tmp"
-
 static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, int DestFileExists)
 {
     int      nRet=0;
-    sal_Char pszTmpDestFile[PATH_MAX];
-    size_t   size_tmp_dest_buff = sizeof(pszTmpDestFile);
 
-    /* Quick fix for #106048, the whole copy file function seems
-       to be erroneous anyway and needs to be rewritten.
-    */
-    memset(pszTmpDestFile, 0, size_tmp_dest_buff);
-
+    rtl::OString tmpDestFile;
     if ( DestFileExists )
     {
         //TODO: better pick a temp file name instead of adding .osl-tmp:
-
-        strncpy(pszTmpDestFile, pszDestFileName, size_tmp_dest_buff - 1);
-
-        if ((strlen(pszTmpDestFile) + strlen(TMP_DEST_FILE_EXTENSION)) >= size_tmp_dest_buff)
-            return osl_File_E_NAMETOOLONG;
-
-        strncat(pszTmpDestFile, TMP_DEST_FILE_EXTENSION, strlen(TMP_DEST_FILE_EXTENSION));
-
-        if (rename(pszDestFileName,pszTmpDestFile) != 0)
+        tmpDestFile = rtl::OString(pszSourceFileName) + ".osl-tmp";
+        if (rename(pszDestFileName, tmpDestFile.getStr()) != 0)
         {
             if (errno == ENOENT)
             {
@@ -830,7 +816,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
                 int e = errno;
                 SAL_INFO(
                     "sal.osl",
-                    "rename(" << pszDestFileName << ", " << pszTmpDestFile
+                    "rename(" << pszDestFileName << ", " << tmpDestFile
                         << ") failed with errno " << e);
                 return osl_File_E_BUSY; // for want of a better error code
             }
@@ -857,7 +843,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
     if ( nRet > 0 && DestFileExists == 1 )
     {
         unlink(pszDestFileName);
-        rename(pszTmpDestFile,pszDestFileName);
+        rename(tmpDestFile.getStr(), pszDestFileName);
     }
 
     if ( nRet > 0 )
@@ -867,7 +853,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 
     if ( DestFileExists == 1 )
     {
-        unlink(pszTmpDestFile);
+        unlink(tmpDestFile.getStr());
     }
 
     return osl_File_E_None;
