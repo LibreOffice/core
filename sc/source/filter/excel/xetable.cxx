@@ -34,6 +34,7 @@
 #include "xeescher.hxx"
 #include "xeextlst.hxx"
 #include "tokenarray.hxx"
+#include <thread>
 #include <comphelper/threadpool.hxx>
 
 using namespace ::oox;
@@ -2053,8 +2054,8 @@ public:
     void     push_back( XclExpRow *pRow ) { maRows.push_back( pRow ); }
     virtual void doWork()
     {
-        for (size_t i = 0; i < aRows.size(); i++ )
-            maRows[ i ]->Finalize( mrColXFIndexes );
+        for (size_t i = 0; i < maRows.size(); i++ )
+            maRows[ i ]->Finalize( mrColXFIndexes, mbProgress );
     }
 };
 
@@ -2067,27 +2068,26 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     // This is staggeringly slow, and each element operates only
     // on its own data.
     size_t nRows = maRowMap.size();
-    size_t nThreads = std::max(  std::thread::hardware_concurrency(), 1U );
+    size_t nThreads = std::max( std::thread::hardware_concurrency(), 1U );
     if ( nThreads == 1 || nRows < 128 )
     {
         RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
-        for (size_t i = 0, itr = itrBeg; itr != itrEnd; ++itr, ++i)
-            itr->second->Finalize( rColXFIndexes );
+        for (itr = itrBeg; itr != itrEnd; ++itr)
+            itr->second->Finalize( rColXFIndexes, true );
     }
     else
     {
-        ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
-        ThreadTask *pTasks[ nThreads ];
-        for (size_t i = 0; i < nThreads; i++)
+        comphelper::ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
+        RowFinalizeTask *pTasks[ nThreads ];
+        for ( size_t i = 0; i < nThreads; i++ )
             pTasks[ i ] = new RowFinalizeTask( rColXFIndexes, i == 0 );
 
         RowMap::iterator itr, itrBeg = maRowMap.begin(), itrEnd = maRowMap.end();
-        for (size_t i = 0, itr = itrBeg; itr != itrEnd; ++itr, ++i)
-        {
-            pTasks[ i % nThreads ]->push_back( itr->second );
-        }
+        size_t nIdx = 0;
+        for ( itr = itrBeg; itr != itrEnd; ++itr, ++nIdx )
+            pTasks[ nIdx % nThreads ]->push_back( itr->second.get() );
 
-        for (size_t i = 0; i < nThreads; i++)
+        for ( size_t i = 0; i < nThreads; i++ )
             rPool.pushTask( pTasks[ i ] );
 
         rPool.waitUntilEmpty();
