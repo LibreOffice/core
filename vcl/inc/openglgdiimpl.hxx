@@ -50,6 +50,9 @@ private:
     GLuint mnMaskUniform;
     GLuint mnMaskColorUniform;
 
+    inline GLfloat GetWidth() const;
+    inline GLfloat GetHeight() const;
+
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateMaskedTextureProgram( void );

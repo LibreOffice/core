@@ -76,7 +76,17 @@ sal_uInt16 OpenGLSalGraphicsImpl::GetBitCount() const
 // get the width of the device
 long OpenGLSalGraphicsImpl::GetGraphicsWidth() const
 {
-    return 0;
+    return maContext.getOpenGLWindow().Width;
+}
+
+inline GLfloat OpenGLSalGraphicsImpl::GetWidth() const
+{
+    return maContext.getOpenGLWindow().Width;
+}
+
+inline GLfloat OpenGLSalGraphicsImpl::GetHeight() const
+{
+    return maContext.getOpenGLWindow().Height;
 }
 
 // set the clip region to empty
@@ -277,8 +287,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
-        pVertices[j] = pPtAry[i].mnX;
-        pVertices[j+1] = pPtAry[i].mnY;
+        pVertices[j] = (2 * pPtAry[i].mnX) / GetWidth() - 1.0;
+        pVertices[j+1] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );

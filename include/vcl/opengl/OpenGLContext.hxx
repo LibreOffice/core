@@ -177,7 +177,7 @@ public:
 
     void setWinPosAndSize(const Point &rPos, const Size& rSize);
     void setWinSize(const Size& rSize);
-    GLWindow& getOpenGLWindow() { return m_aGLWin;}
+    const GLWindow& getOpenGLWindow() const { return m_aGLWin;}
 
     SystemChildWindow* getChildWindow();
     const SystemChildWindow* getChildWindow() const;
