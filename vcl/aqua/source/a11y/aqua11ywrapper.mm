@@ -694,7 +694,7 @@ static BOOL isPopupMenuOpen = NO;
 -(BOOL)accessibilityIsIgnored {
     // #i90575# guard NSAccessibility protocol against unwanted access
     if ( isPopupMenuOpen ) {
-        return nil;
+        return FALSE;
     }
     BOOL ignored = NO;
     sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
