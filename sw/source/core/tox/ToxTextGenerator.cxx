@@ -25,7 +25,6 @@
 #include "doc.hxx"
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentStylePoolAccess.hxx>
 #include "fmtinfmt.hxx"
 #include "ndtxt.hxx"
 #include "pagedesc.hxx"

@@ -31,7 +31,6 @@
 #include <SwUndoField.hxx>
 #include <flddat.hxx>
 #include <cntfrm.hxx>
-#include <dbfld.hxx>
 #include <section.hxx>
 #include <docufld.hxx>
 #include <switerator.hxx>

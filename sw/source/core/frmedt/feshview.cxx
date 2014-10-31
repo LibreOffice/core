@@ -40,7 +40,6 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <IDocumentLayoutAccess.hxx>
 #include <cmdid.h>
 #include <drawdoc.hxx>
 #include <textboxhelper.hxx>
@@ -83,7 +82,6 @@
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <switerator.hxx>
-#include <drawdoc.hxx>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

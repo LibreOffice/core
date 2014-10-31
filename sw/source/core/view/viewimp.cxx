@@ -18,7 +18,6 @@
  */
 
 #include "crsrsh.hxx"
-#include "drawdoc.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "viewimp.hxx"

@@ -117,7 +117,6 @@ using org::libreoffice::touch::ByteBufferWrapper;
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
-#include "toolkit/awt/scrollabledialog.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/scrollabledialog.hxx>

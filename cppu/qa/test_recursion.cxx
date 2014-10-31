@@ -25,8 +25,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "sal/types.h"
-
 #include "Rec.hpp"
 
 namespace

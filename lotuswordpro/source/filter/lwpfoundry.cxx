@@ -518,7 +518,6 @@ LwpStyleManager::~LwpStyleManager()
     m_StyleList.clear();
 }
 
-#include "xfilter/xfstylemanager.hxx"
 /*
 VO_PARASTYLE/VO_CHARACTERSTYLE call this method to add its created style to XFStyleManager
 1. Add the style to XFStyleManager, and return the <office:styles> style name
