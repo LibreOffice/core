@@ -65,6 +65,28 @@ using namespace formula;
 
 namespace sc { namespace opencl {
 
+namespace {
+
+#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+std::string linenumberify(const std::string s)
+{
+    std::stringstream ss;
+    int linenumber = 1;
+    size_t start = 0;
+    size_t newline;
+    while ((newline = s.find('\n', start)) != std::string::npos)
+    {
+        ss << "/*" << std::setw(4) << linenumber++ << "*/ " << s.substr(start, newline-start+1);
+        start = newline + 1;
+    }
+    if (start < s.size())
+        ss << "/*" << std::setw(4) << linenumber++ << "*/ " << s.substr(start, std::string::npos);
+    return ss.str();
+}
+#endif
+
+} // anonymous namespace
+
 /// Map the buffer used by an argument and do necessary argument setting
 size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 {
@@ -3293,7 +3315,7 @@ public:
             area << "sc.opencl.source." << mKernelSignature.substr(1, std::string::npos);
         else
             area << "sc.opencl.source." << mKernelSignature;
-        SAL_INFO(area.str().c_str(), "Program to be compiled:\n" << mFullProgramSrc);
+        SAL_INFO(area.str().c_str(), "Program to be compiled:\n" << linenumberify(mFullProgramSrc));
 #endif
     }
     /// Produce kernel hash
