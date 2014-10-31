@@ -970,7 +970,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
             if( aRect.IsInside( rCEvt.GetMousePosPixel() ) )
             {
                 const CommandWheelData* pData = rCEvt.GetWheelData();
-                if( pData && (pData->GetMode() == COMMAND_WHEEL_SCROLL) && !pData->IsHorz() )
+                if( pData && (pData->GetMode() == CommandWheelMode::SCROLL) && !pData->IsHorz() )
                     Execute( CSVCMD_SETLINEOFFSET, GetFirstVisLine() - pData->GetNotchDelta() );
             }
         }

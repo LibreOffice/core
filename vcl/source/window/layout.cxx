@@ -1809,7 +1809,7 @@ bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
         if ( rCEvt.GetCommand() == COMMAND_WHEEL )
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
-            if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
+            if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
             {
                 nDone = HandleScrollCommand(rCEvt, m_pHScroll.get(), m_pVScroll.get());
             }

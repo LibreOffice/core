@@ -2294,7 +2294,7 @@ bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
         case COMMAND_WHEEL:
         {
             const CommandWheelData* pData = rCmd.GetWheelData();
-            if( pData && (COMMAND_WHEEL_SCROLL == pData->GetMode()) && !pData->IsHorz() )
+            if( pData && (CommandWheelMode::SCROLL == pData->GetMode()) && !pData->IsHorz() )
             {
                 sal_uLong nScrollLines = pData->GetScrollLines();
                 if( nScrollLines == COMMAND_WHEEL_PAGESCROLL )

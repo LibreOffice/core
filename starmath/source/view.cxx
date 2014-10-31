@@ -581,7 +581,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
             case COMMAND_WHEEL:
             {
                 const CommandWheelData* pWData = rCEvt.GetWheelData();
-                if  ( pWData && COMMAND_WHEEL_ZOOM == pWData->GetMode() )
+                if  ( pWData && CommandWheelMode::ZOOM == pWData->GetMode() )
                 {
                     sal_uInt16 nTmpZoom = GetZoom();
                     if( 0L > pWData->GetDelta() )

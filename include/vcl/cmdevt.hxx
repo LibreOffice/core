@@ -108,40 +108,45 @@ inline CommandInputContextData::CommandInputContextData( LanguageType eLang )
 // - CommandWheelData -
 
 
-#define COMMAND_WHEEL_SCROLL            ((sal_uInt16)0x0001)
-#define COMMAND_WHEEL_ZOOM              ((sal_uInt16)0x0002)
-#define COMMAND_WHEEL_ZOOM_SCALE        ((sal_uInt16)0x0003)
-#define COMMAND_WHEEL_DATAZOOM          ((sal_uInt16)0x0004)
+enum class CommandWheelMode
+{
+    NONE              = 0,
+    SCROLL            = 1,
+    ZOOM              = 2,
+    ZOOM_SCALE        = 3,
+    DATAZOOM          = 4
+};
 
+// Magic value used in mnLines field in CommandWheelData
 #define COMMAND_WHEEL_PAGESCROLL        ((sal_uLong)0xFFFFFFFF)
 
 class VCL_DLLPUBLIC CommandWheelData
 {
 private:
-    long            mnDelta;
-    long            mnNotchDelta;
-    sal_uLong           mnLines;
-    sal_uInt16          mnMode;
-    sal_uInt16          mnCode;
-    bool            mbHorz;
-    bool            mbDeltaIsPixel;
+    long              mnDelta;
+    long              mnNotchDelta;
+    sal_uLong         mnLines;
+    CommandWheelMode  mnWheelMode;
+    sal_uInt16        mnCode;
+    bool              mbHorz;
+    bool              mbDeltaIsPixel;
 
 public:
                     CommandWheelData();
                     CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                       sal_uLong nScrollLines,
-                                      sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
+                                      CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
                                       bool bHorz = false, bool bDeltaIsPixel = false );
 
     long            GetDelta() const { return mnDelta; }
     long            GetNotchDelta() const { return mnNotchDelta; }
-    sal_uLong           GetScrollLines() const { return mnLines; }
+    sal_uLong       GetScrollLines() const { return mnLines; }
     bool            IsHorz() const { return mbHorz; }
     bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
 
-    sal_uInt16          GetMode() const { return mnMode; }
+    CommandWheelMode GetMode() const { return mnWheelMode; }
 
-    sal_uInt16          GetModifier() const
+    sal_uInt16      GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
     bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
@@ -158,7 +163,7 @@ inline CommandWheelData::CommandWheelData()
     mnDelta         = 0;
     mnNotchDelta    = 0;
     mnLines         = 0;
-    mnMode          = 0;
+    mnWheelMode     = CommandWheelMode::NONE;
     mnCode          = 0;
     mbHorz          = false;
     mbDeltaIsPixel  = false;
@@ -166,13 +171,13 @@ inline CommandWheelData::CommandWheelData()
 
 inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                            sal_uLong nScrollLines,
-                                           sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
+                                           CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
                                            bool bHorz, bool bDeltaIsPixel )
 {
     mnDelta         = nWheelDelta;
     mnNotchDelta    = nWheelNotchDelta;
     mnLines         = nScrollLines;
-    mnMode          = nWheelMode;
+    mnWheelMode     = nWheelMode;
     mnCode          = nKeyModifier;
     mbHorz          = bHorz;
     mbDeltaIsPixel  = bDeltaIsPixel;

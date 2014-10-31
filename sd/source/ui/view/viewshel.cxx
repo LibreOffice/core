@@ -619,7 +619,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 {
                     // We ignore zooming with control+mouse wheel.
                     const CommandWheelData* pData = rCEvt.GetWheelData();
-                    if( pData && !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) && !pData->IsHorz() )
+                    if( pData && !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) && !pData->IsHorz() )
                     {
                         long nDelta = pData->GetDelta();
                         if( nDelta > 0 )

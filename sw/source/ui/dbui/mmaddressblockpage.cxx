@@ -986,7 +986,7 @@ void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
         case COMMAND_AUTOSCROLL:
         {
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
-            if(pWheelData && !pWheelData->IsHorz() && COMMAND_WHEEL_ZOOM != pWheelData->GetMode())
+            if(pWheelData && !pWheelData->IsHorz() && CommandWheelMode::ZOOM != pWheelData->GetMode())
             {
                 HandleScrollCommand( rCEvt, 0, &m_aVScroll );
             }

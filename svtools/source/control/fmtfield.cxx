@@ -788,7 +788,7 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
         if (pCommand->GetCommand() == COMMAND_WHEEL)
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-            if ((pData->GetMode() == COMMAND_WHEEL_SCROLL) && ImplGetFormatter()->IsTextFormat(m_nFormatKey))
+            if ((pData->GetMode() == CommandWheelMode::SCROLL) && ImplGetFormatter()->IsTextFormat(m_nFormatKey))
             {
                 // same as above : prevent the base class from doing Up/Down-calls
                 // (normally I should put this test into the Up/Down methods itself, shouldn't I ?)

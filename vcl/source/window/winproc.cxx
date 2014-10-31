@@ -1385,19 +1385,19 @@ static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent
     if( aDogTag.IsDead() )
         return false;
 
-    sal_uInt16 nMode;
+    CommandWheelMode nMode;
     sal_uInt16 nCode = rEvt.mnCode;
     bool bHorz = rEvt.mbHorz;
     bool bPixel = rEvt.mbDeltaIsPixel;
     if ( scaleDirectly )
-        nMode = COMMAND_WHEEL_ZOOM_SCALE;
+        nMode = CommandWheelMode::ZOOM_SCALE;
     else if ( nCode & KEY_MOD1 )
-        nMode = COMMAND_WHEEL_ZOOM;
+        nMode = CommandWheelMode::ZOOM;
     else if ( nCode & KEY_MOD2 )
-        nMode = COMMAND_WHEEL_DATAZOOM;
+        nMode = CommandWheelMode::DATAZOOM;
     else
     {
-        nMode = COMMAND_WHEEL_SCROLL;
+        nMode = CommandWheelMode::SCROLL;
         // #i85450# interpret shift-wheel as horizontal wheel action
         if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
             bHorz = true;

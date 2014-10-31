@@ -916,8 +916,8 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
     bool bDone = false;
     const CommandWheelData* pData = rCEvt.GetWheelData();
-    if ( pData && (pData->GetMode() == COMMAND_WHEEL_ZOOM ||
-                   pData->GetMode() == COMMAND_WHEEL_ZOOM_SCALE ) )
+    if ( pData && (pData->GetMode() == CommandWheelMode::ZOOM ||
+                   pData->GetMode() == CommandWheelMode::ZOOM_SCALE ) )
     {
         if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
         {
@@ -927,7 +927,7 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
             const Fraction& rOldY = aViewData.GetZoomY();
             long nOld = (long)(( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator());
             long nNew = nOld;
-            if ( pData->GetMode() == COMMAND_WHEEL_ZOOM_SCALE )
+            if ( pData->GetMode() == CommandWheelMode::ZOOM_SCALE )
             {
                 nNew = 100 * (long) ((nOld / 100.0) * (pData->GetDelta() / 100.0));
             } else

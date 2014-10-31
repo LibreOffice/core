@@ -1726,7 +1726,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
     else if ( rCEvt.GetCommand() == COMMAND_WHEEL )
     {
         const CommandWheelData* pData = rCEvt.GetWheelData();
-        if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
+        if ( pData->GetMode() == CommandWheelMode::SCROLL )
         {
             long nNotchDelta = pData->GetNotchDelta();
             if ( nNotchDelta < 0 )

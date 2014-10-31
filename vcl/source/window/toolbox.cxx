@@ -4396,7 +4396,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
         if ( (mnCurLine > 1) || (mnCurLine+mnVisLines-1 < mnCurLines) )
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
-            if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
+            if ( pData->GetMode() == CommandWheelMode::SCROLL )
             {
                 if ( (mnCurLine > 1) && (pData->GetDelta() > 0) )
                     ShowLine( false );

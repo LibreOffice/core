@@ -787,7 +787,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
             {
                 const CommandWheelData* pData = rCmd.GetWheelData();
 
-                if ( pData && (COMMAND_WHEEL_SCROLL == pData->GetMode()) )
+                if ( pData && (CommandWheelMode::SCROLL == pData->GetMode()) )
                 {
                     if (!pData->IsDeltaPixel())
                     {

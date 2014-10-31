@@ -219,7 +219,7 @@ bool Deck::ProcessWheelEvent(CommandEvent* pCommandEvent)
     const CommandWheelData* pData = pCommandEvent->GetWheelData();
     if (pData==NULL
         || pData->GetModifier()
-        || pData->GetMode() != COMMAND_WHEEL_SCROLL
+        || pData->GetMode() != CommandWheelMode::SCROLL
         || pData->IsHorz())
         return false;
 

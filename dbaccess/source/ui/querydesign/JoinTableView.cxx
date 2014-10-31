@@ -1242,7 +1242,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
             if (pCommand->GetCommand() == COMMAND_WHEEL)
             {
                 const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-                if (pData->GetMode() == COMMAND_WHEEL_SCROLL)
+                if (pData->GetMode() == CommandWheelMode::SCROLL)
                 {
                     if (pData->GetDelta() > 0)
                         ScrollPane(-10 * pData->GetScrollLines(), pData->IsHorz(), true);

@@ -1194,7 +1194,7 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
 {
     bool bOk = false;
     const CommandWheelData* pWData = rCEvt.GetWheelData();
-    if (pWData && COMMAND_WHEEL_ZOOM == pWData->GetMode())
+    if (pWData && CommandWheelMode::ZOOM == pWData->GetMode())
     {
         long nFact = m_pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
@@ -1205,7 +1205,7 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = true;
     }
-    else if (pWData && COMMAND_WHEEL_ZOOM_SCALE == pWData->GetMode())
+    else if (pWData && CommandWheelMode::ZOOM_SCALE == pWData->GetMode())
     {
         // mobile touch zoom (pinch) section
         // remember the center location to reach in logic
@@ -1240,7 +1240,7 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
 
             // scrolling the deltaX deltaY
             Point deltaPoint( deltaX, deltaY );
-            CommandWheelData cmd( 0, 0, 0, COMMAND_WHEEL_SCROLL, 0, false, true);
+            CommandWheelData cmd( 0, 0, 0, CommandWheelMode::SCROLL, 0, false, true);
             CommandEvent event(deltaPoint , COMMAND_WHEEL, true, &cmd );
             m_pEditWin->HandleScrollCommand(event, m_pHScrollbar, m_pVScrollbar);
         }
@@ -1249,13 +1249,13 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     }
     else
     {
-        if (pWData && pWData->GetMode()==COMMAND_WHEEL_SCROLL)
+        if (pWData && pWData->GetMode()==CommandWheelMode::SCROLL)
         {
             // This influences whether quick help is shown
             m_bWheelScrollInProgress=true;
         }
 
-        if (pWData && (COMMAND_WHEEL_SCROLL==pWData->GetMode()) &&
+        if (pWData && (CommandWheelMode::SCROLL==pWData->GetMode()) &&
                 (COMMAND_WHEEL_PAGESCROLL == pWData->GetScrollLines()))
         {
             if (pWData->GetDelta()<0)

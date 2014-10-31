@@ -382,7 +382,7 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
     const CommandWheelData* pWData = rCEvt.GetWheelData();
     if (pWData)
     {
-        if (COMMAND_WHEEL_ZOOM == pWData->GetMode())
+        if (CommandWheelMode::ZOOM == pWData->GetMode())
             bCommandHandled = true;     // no zooming in Command window
         else
             bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar, pVScrollBar);

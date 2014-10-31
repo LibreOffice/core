@@ -419,7 +419,7 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
         case COMMAND_AUTOSCROLL:
         {
             const CommandWheelData* pWData = rCEvt.GetWheelData();
-            if( !pWData || COMMAND_WHEEL_ZOOM != pWData->GetMode() )
+            if( !pWData || CommandWheelMode::ZOOM != pWData->GetMode() )
             {
                 ((SwSrcEditWindow*)GetParent())->HandleWheelCommand( rCEvt );
             }
@@ -766,7 +766,7 @@ void SwSrcEditWindow::Command( const CommandEvent& rCEvt )
         case COMMAND_AUTOSCROLL:
         {
             const CommandWheelData* pWData = rCEvt.GetWheelData();
-            if( !pWData || COMMAND_WHEEL_ZOOM != pWData->GetMode() )
+            if( !pWData || CommandWheelMode::ZOOM != pWData->GetMode() )
                 HandleScrollCommand( rCEvt, pHScrollbar, pVScrollbar );
         }
         break;

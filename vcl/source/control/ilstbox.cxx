@@ -2500,7 +2500,7 @@ bool ImplListBox::Notify( NotifyEvent& rNEvt )
         if ( rCEvt.GetCommand() == COMMAND_WHEEL )
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
-            if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
+            if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
             {
                 nDone = HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
             }
@@ -2521,7 +2521,7 @@ bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == COMMAND_WHEEL )
     {
         const CommandWheelData* pData = rCEvt.GetWheelData();
-        if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
+        if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
         {
             sal_uInt16 nKey = ( pData->GetDelta() < 0 ) ? KEY_DOWN : KEY_UP;
             KeyEvent aKeyEvent( 0, vcl::KeyCode( nKey ) );

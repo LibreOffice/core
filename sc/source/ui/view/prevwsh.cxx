@@ -496,7 +496,7 @@ bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
 {
     bool bDone = false;
     const CommandWheelData* pData = rCEvt.GetWheelData();
-    if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
+    if ( pData && pData->GetMode() == CommandWheelMode::ZOOM )
     {
         long nOld = pPreview->GetZoom();
         long nNew = nOld;

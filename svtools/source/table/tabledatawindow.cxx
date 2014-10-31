@@ -219,7 +219,7 @@ namespace svt { namespace table
             if ( rCEvt.GetCommand() == COMMAND_WHEEL )
             {
                 const CommandWheelData* pData = rCEvt.GetWheelData();
-                if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
+                if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
                 {
                     nDone = HandleScrollCommand( rCEvt, m_rTableControl.getHorzScrollbar(), m_rTableControl.getVertScrollbar() );
                 }

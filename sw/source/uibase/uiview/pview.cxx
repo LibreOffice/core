@@ -1780,7 +1780,7 @@ bool SwPagePreview::HandleWheelCommands( const CommandEvent& rCEvt )
 {
     bool bOk = false;
     const CommandWheelData* pWData = rCEvt.GetWheelData();
-    if( pWData && COMMAND_WHEEL_ZOOM == pWData->GetMode() )
+    if( pWData && CommandWheelMode::ZOOM == pWData->GetMode() )
     {
         //only the Preference shouldn't control the Zoom, it is better to detect AT tools running. So the bridge can be used here
         if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())

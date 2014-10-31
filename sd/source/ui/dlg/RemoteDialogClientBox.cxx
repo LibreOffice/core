@@ -613,7 +613,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
              ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) )
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
-            if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
+            if ( pData->GetMode() == CommandWheelMode::SCROLL )
             {
                 long nThumbPos = m_aScrollBar.GetThumbPos();
                 if ( pData->GetDelta() < 0 )
