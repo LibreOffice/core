@@ -93,16 +93,10 @@ enum IdlePriority {
 
 // To port from Timer -> Idle switch class name,
 // s/Timeout/DoIdle/ etc. and select priority
-<<<<<<< HEAD
 class VCL_DLLPUBLIC Idle : public Timer
 {
  public:
     Idle();
-=======
-class VCL_DLLPUBLIC Idle : private Timer
-{
- public:
->>>>>>> applied patch from Michael Meeks
     Idle( IdlePriority ePriority );
     virtual ~Idle();
 
@@ -116,11 +110,7 @@ class VCL_DLLPUBLIC Idle : private Timer
     void            Start() { Timer::Start(); }
     void            Stop()  { Timer::Stop();  }
 
-<<<<<<< HEAD
     virtual void    DoIdle();
-=======
-    virtual void    DoIdle() = 0;
->>>>>>> applied patch from Michael Meeks
 
     virtual void    Timeout() SAL_OVERRIDE { DoIdle(); }
 };
