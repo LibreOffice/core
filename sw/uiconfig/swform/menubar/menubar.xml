@@ -144,6 +144,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FullScreen"/>
@@ -215,6 +216,7 @@
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertGraphic"/>
+          <menu:menuitem menu:id=".uno:Gallery"/>
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
           <menu:menu menu:id=".uno:Scan">
             <menu:menupopup>
@@ -435,8 +437,6 @@
       <menu:menuitem menu:id=".uno:ChapterNumberingDialog"/>
       <menu:menuitem menu:id=".uno:LineNumberingDialog"/>
       <menu:menuitem menu:id=".uno:FootnoteDialog"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:BibliographyComponent"/>
       <menu:menuitem menu:id=".uno:AddressBookSource"/>

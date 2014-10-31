@@ -131,6 +131,7 @@
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ZoomMenu">
@@ -187,6 +188,7 @@
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertGraphic"/>
+          <menu:menuitem menu:id=".uno:Gallery"/>
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
           <menu:menu menu:id=".uno:Scan">
             <menu:menupopup>
@@ -261,7 +263,6 @@
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:BmpMask"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
