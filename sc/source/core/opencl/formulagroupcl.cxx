@@ -3287,8 +3287,8 @@ public:
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
             DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
         mFullProgramSrc = decl.str();
-        std::stringstream area;
 #ifdef SAL_DETAIL_ENABLE_LOG_INFO
+        std::stringstream area;
         if (mKernelSignature[0] == '_')
             area << "sc.opencl.source." << mKernelSignature.substr(1, std::string::npos);
         else
