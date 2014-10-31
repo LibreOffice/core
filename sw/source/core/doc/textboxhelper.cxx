@@ -29,6 +29,9 @@
 #include <unoprnms.hxx>
 #include <dflyobj.hxx>
 #include <mvsave.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <cntfrm.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
@@ -130,6 +133,36 @@ std::set<const SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
     }
 
     return aRet;
+}
+
+std::set<const SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwNode& rNode)
+{
+    const SwDoc* pDoc = rNode.GetDoc();
+    const SwCntntNode* pCntntNode = 0;
+    const SwCntntFrm* pCntntFrm = 0;
+    if (pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
+        (pCntntNode = rNode.GetCntntNode()) &&
+        (pCntntFrm = pCntntNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout())))
+    {
+        // We can use the layout information to iterate over only the frames which are anchored to us.
+        std::set<const SwFrmFmt*> aRet;
+        const SwSortedObjs* pSortedObjs = pCntntFrm->GetDrawObjs();
+        if (pSortedObjs)
+        {
+            for (size_t i = 0; i < pSortedObjs->size(); ++i)
+            {
+                SwAnchoredObject* pAnchoredObject = (*pSortedObjs)[i];
+                SwFrmFmt* pTextBox = findTextBox(&pAnchoredObject->GetFrmFmt());
+                if (pTextBox)
+                    aRet.insert(pTextBox);
+            }
+        }
+        return aRet;
+    }
+    else
+        // If necessary, here we could manually limit the returned set to the
+        // ones which are anchored to rNode, but currently no need to do so.
+        return findTextBoxes(pDoc);
 }
 
 std::map<SwFrmFmt*, SwFrmFmt*> SwTextBoxHelper::findShapes(const SwDoc* pDoc)

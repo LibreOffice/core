@@ -29,6 +29,7 @@ class SwFmtCntnt;
 class SwDoc;
 class Rectangle;
 class _ZSortFly;
+class SwNode;
 
 /**
  * A TextBox is a TextFrame, that is tied to a drawinglayer shape.
@@ -68,6 +69,13 @@ public:
 
     /// Look up TextFrames in a document, which are in fact TextBoxes.
     static std::set<const SwFrmFmt*> findTextBoxes(const SwDoc* pDoc);
+    /**
+     * Look up TextFrames in a document, which are in fact TextBoxes.
+     *
+     * If rNode has a matching SwCntntFrm, then only TextBoxes of rNode are
+     * returned.
+     */
+    static std::set<const SwFrmFmt*> findTextBoxes(const SwNode& rNode);
     /// Build a textbox -> shape format map.
     static std::map<SwFrmFmt*, SwFrmFmt*> findShapes(const SwDoc* pDoc);
     /// Count number of shapes in the document, excluding TextBoxes.

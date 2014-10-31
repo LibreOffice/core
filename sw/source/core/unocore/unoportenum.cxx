@@ -1281,7 +1281,7 @@ static void lcl_CreatePortions(
     PortionStack_t PortionStack;
     PortionStack.push( PortionList_t(&i_rPortions, (const SwTxtAttr *)0) );
 
-    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pUnoCrsr->GetNode());
 
     bool bAtEnd( false );
     while (!bAtEnd) // every iteration consumes at least current character!
