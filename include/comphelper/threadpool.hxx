@@ -54,10 +54,14 @@ private:
 
     ThreadTask *waitForWork( osl::Condition &rNewWork );
     ThreadTask *popWork();
+    void        startWork();
+    void        stopWork();
 
-    osl::Mutex maGuard;
-    osl::Condition maTasksEmpty;
-    bool mbTerminate;
+    osl::Mutex     maGuard;
+    sal_Int32      mnThreadsWorking;
+    /// signalled when all in-progress tasks are complete
+    osl::Condition maTasksComplete;
+    bool           mbTerminate;
     std::vector< rtl::Reference< ThreadWorker > > maWorkers;
     std::vector< ThreadTask * >   maTasks;
 };
