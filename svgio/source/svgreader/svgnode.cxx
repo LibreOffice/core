@@ -496,6 +496,12 @@ namespace svgio
                 return;
             }
 
+            const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
+            if(pStyles && (Visibility_hidden == pStyles->getVisibility() || Visibility_collapse == pStyles->getVisibility()))
+            {
+                return;
+            }
+
             if(!bReferenced)
             {
                 if(SVGTokenDefs == getType() ||
@@ -534,16 +540,20 @@ namespace svgio
 
                     if(pCandidate && Display_none != pCandidate->getDisplay())
                     {
-                        drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
-
-                        pCandidate->decomposeSvgNode(aNewTarget, bReferenced);
-
-                        if(aNewTarget.hasElements())
+                        const SvgStyleAttributes* pChildStyles = pCandidate->getSvgStyleAttributes();
+                        if(pChildStyles && Visibility_hidden != pChildStyles->getVisibility())
                         {
-                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
+                            drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
+
+                            pCandidate->decomposeSvgNode(aNewTarget, bReferenced);
+
+                            if(aNewTarget.hasElements())
+                            {
+                                drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
+                            }
                         }
                     }
-                    else
+                    else if(!pCandidate)
                     {
                         OSL_ENSURE(false, "Null-Pointer in child node list (!)");
                     }
@@ -551,8 +561,6 @@ namespace svgio
 
                 if(rTarget.hasElements())
                 {
-                    const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
-
                     if(pStyles)
                     {
                         // check if we have Title or Desc

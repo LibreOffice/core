@@ -153,6 +153,14 @@ namespace svgio
             BaselineShift_Length
         };
 
+        enum Visibility
+        {
+            Visibility_visible,
+            Visibility_hidden,
+            Visibility_collapse,
+            Visibility_inherit
+        };
+
         class SvgStyleAttributes
         {
         private:
@@ -185,6 +193,7 @@ namespace svgio
             TextAnchor                  maTextAnchor;
             SvgPaint                    maColor;
             SvgNumber                   maOpacity;
+            Visibility                  maVisibility;
             OUString               maTitle;
             OUString               maDesc;
 
@@ -401,6 +410,9 @@ namespace svgio
             SvgNumber getOpacity() const { return maOpacity; }
             void setOpacity(const SvgNumber& rOpacity = SvgNumber()) { maOpacity = rOpacity; }
 
+            /// Visibility
+            Visibility getVisibility() const { return maVisibility; }
+            void setVisibility(Visibility eVisibility = Visibility_visible) { maVisibility = eVisibility; }
             // Title content
             const OUString& getTitle() const { return maTitle; }
             void setTitle(const OUString& rNew) { maTitle = rNew; }

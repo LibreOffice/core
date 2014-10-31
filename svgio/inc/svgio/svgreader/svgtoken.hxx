@@ -102,6 +102,7 @@ namespace svgio
             SVGTokenPatternContentUnits,
             SVGTokenPatternTransform,
             SVGTokenOpacity,
+            SVGTokenVisibility,
             SVGTokenTitle,
             SVGTokenDesc,
 
