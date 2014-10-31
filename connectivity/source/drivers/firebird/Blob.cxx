@@ -11,9 +11,10 @@
 #include "Connection.hxx"
 #include "Util.hxx"
 
-#include <connectivity/dbexception.hxx>
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <connectivity/dbexception.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::connectivity::firebird;
 
@@ -247,8 +248,31 @@ sal_Int32 SAL_CALL Blob::available()
     throw (NotConnectedException,  IOException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(Blob_BASE::rBHelper.bDisposed);
-    ensureBlobIsOpened();
+
+    try
+    {
+        checkDisposed(Blob_BASE::rBHelper.bDisposed);
+        ensureBlobIsOpened();
+    }
+    catch (const NotConnectedException&)
+    {
+        throw;
+    }
+    catch (const IOException&)
+    {
+        throw;
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception& e)
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::lang::WrappedTargetRuntimeException(
+            "wrapped Exception " + e.Message,
+            css::uno::Reference<css::uno::XInterface>(), a);
+    }
 
     return m_nBlobLength - m_nBlobPosition;
 }
@@ -256,7 +280,29 @@ sal_Int32 SAL_CALL Blob::available()
 void SAL_CALL Blob::closeInput()
     throw(NotConnectedException, IOException, RuntimeException, std::exception)
 {
-    closeBlob();
+    try
+    {
+        closeBlob();
+    }
+    catch (const NotConnectedException&)
+    {
+        throw;
+    }
+    catch (const IOException&)
+    {
+        throw;
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception& e)
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::lang::WrappedTargetRuntimeException(
+            "wrapped Exception " + e.Message,
+            css::uno::Reference<css::uno::XInterface>(), a);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
