@@ -537,7 +537,10 @@
       </node>
       <node oor:name=".uno:WrapText" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Automatic Row Break</value>
+          <value xml:lang="en-US">Wrap Text</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DefinePrintArea" oor:op="replace">
