@@ -843,7 +843,14 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
     if ( nRet > 0 && DestFileExists == 1 )
     {
         unlink(pszDestFileName);
-        rename(tmpDestFile.getStr(), pszDestFileName);
+        if (rename(tmpDestFile.getStr(), pszDestFileName) != 0)
+        {
+            int e = errno;
+            SAL_WARN(
+                "sal.osl",
+                "rename(" << tmpDestFile << ", " << pszDestFileName
+                << ") failed with errno " << e);
+        }
     }
 
     if ( nRet > 0 )
