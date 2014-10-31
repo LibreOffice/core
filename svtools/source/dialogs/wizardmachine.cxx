@@ -86,7 +86,7 @@ namespace svt
 
         WizardState                     nFirstUnknownPage;
             // the WizardDialog does not allow non-linear transitions (e.g. it's
-            // not possible to add pages in a non-linear order), so we need some own maintainance data
+            // not possible to add pages in a non-linear order), so we need some own maintenance data
 
         bool                            m_bAutoNextButtonState;
 

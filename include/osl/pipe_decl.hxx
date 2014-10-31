@@ -124,7 +124,7 @@ public:
     inline oslPipeError SAL_CALL accept(StreamPipe& Connection);
 
 
-    /** Delivers a constant decribing the last error for the pipe system.
+    /** Delivers a constant describing the last error for the pipe system.
         @return ENONE if no error occurred, invalid_PipeError if
         an unknown (unmapped) error occurred, otherwise an enum describing the
         error.

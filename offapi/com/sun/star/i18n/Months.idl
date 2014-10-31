@@ -33,7 +33,7 @@ published constants Months
     /// January
     const short JANUARY     = 0;
     /// February
-    const short FEBURARY    = 1;
+    const short FEBRUARY    = 1;
     /// March
     const short MARCH       = 2;
     /// April

@@ -29,7 +29,7 @@ namespace dbaui
     class OFieldDescGenWin;
     class OTableDesignHelpBar;
     class OFieldDescription;
-    // derivitive of TabPage is a trick of TH,
+    // derivative of TabPage is a trick of TH,
     // to notice a change in system colours
     class OTableFieldDescWin : public TabPage
                                 ,public IClipboardTest

@@ -426,7 +426,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessWorkingDir(
 /** Get the locale the process is currently running in.
 
     The unix implementation caches the value it returns, so if you have to change the locale
-    your are running in, you will have to use osl_setProcessLocale therefor.
+    your are running in, you will have to use osl_setProcessLocale therefore.
 
     @param  ppLocale [out] a pointer that receives the currently selected locale structure
     @see osl_setProcessLocale

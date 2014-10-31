@@ -1674,7 +1674,7 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
 {
     (void)bCallDelete;
 
-    // #TODO - equivelant for 'SwTableRowRedline'
+    // #TODO - equivalent for 'SwTableRowRedline'
     bool bMerged = false;
     /*
     _CHECK_REDLINE( this )
@@ -1682,18 +1682,18 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
     {
-        // #TODO - equivelant for 'SwTableRowRedline'
+        // #TODO - equivalent for 'SwTableRowRedline'
         /*
         pNewRedl->InvalidateRange();
         */
 
-        // Make equivelant of 'AppendRedline' checks inside here too
+        // Make equivalent of 'AppendRedline' checks inside here too
 
         mpExtraRedlineTbl->Insert( pNewRedl );
     }
     else
     {
-        // TO DO - equivelant for 'SwTableRowRedline'
+        // TO DO - equivalent for 'SwTableRowRedline'
         /*
         if( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
         {
@@ -1707,7 +1707,7 @@ bool DocumentRedlineManager::AppendTableRowRedline( SwTableRowRedline* pNewRedl,
         delete pNewRedl, pNewRedl = 0;
         */
     }
-    // #TODO - equivelant for 'SwTableRowRedline'
+    // #TODO - equivalent for 'SwTableRowRedline'
     /*
     _CHECK_REDLINE( this )
     */
@@ -1719,7 +1719,7 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
 {
     (void)bCallDelete;
 
-    // #TODO - equivelant for 'SwTableCellRedline'
+    // #TODO - equivalent for 'SwTableCellRedline'
     bool bMerged = false;
     /*
     _CHECK_REDLINE( this )
@@ -1727,18 +1727,18 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
 
     if (IsRedlineOn() && !IsShowOriginal(meRedlineMode))
     {
-        // #TODO - equivelant for 'SwTableCellRedline'
+        // #TODO - equivalent for 'SwTableCellRedline'
         /*
         pNewRedl->InvalidateRange();
         */
 
-        // Make equivelant of 'AppendRedline' checks inside here too
+        // Make equivalent of 'AppendRedline' checks inside here too
 
         mpExtraRedlineTbl->Insert( pNewRedl );
     }
     else
     {
-        // TO DO - equivelant for 'SwTableCellRedline'
+        // TO DO - equivalent for 'SwTableCellRedline'
         /*
         if( bCallDelete && nsRedlineType_t::REDLINE_DELETE == pNewRedl->GetType() )
         {
@@ -1752,7 +1752,7 @@ bool DocumentRedlineManager::AppendTableCellRedline( SwTableCellRedline* pNewRed
         delete pNewRedl, pNewRedl = 0;
         */
     }
-    // #TODO - equivelant for 'SwTableCellRedline'
+    // #TODO - equivalent for 'SwTableCellRedline'
     /*
     _CHECK_REDLINE( this )
     */

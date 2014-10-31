@@ -212,7 +212,7 @@ if (!$rc) {
     $state = 0;
 }
 
-# test no infinit recursion
+# test no infinite recursion
 if ($ENV{OS} eq "WNT") {
     $rc = system "./testbootstrap",
     '"***RECURSION DETECTED***"',

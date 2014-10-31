@@ -236,7 +236,7 @@ namespace {
 /*  [Description]
 
     Checks if 'rCmd' of the event 'rEvent' is (without '(') and then assemble
-    this data into a <ApplicationEvent>, which is then excecuted through
+    this data into a <ApplicationEvent>, which is then executed through
     <Application::AppEvent()>. If 'rCmd' is the given event 'rEvent', then
     TRUE is returned, otherwise FALSE.
 

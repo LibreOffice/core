@@ -103,7 +103,7 @@ namespace
             if ( pProfileByEnv )
             {
                 sProductPath = OUString( pProfileByEnv, rtl_str_getLength( pProfileByEnv ), osl_getThreadTextEncoding() );
-                // asume that this is fine, no further checks
+                // assume that this is fine, no further checks
             }
             else
             {

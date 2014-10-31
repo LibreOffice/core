@@ -169,7 +169,7 @@ ZipPackage::~ZipPackage( void )
     // it should disconnect all the children from itself during destruction automatically.
     // So there is no need in explicit m_pRootFolder->releaseUpwardRef() call here any more
     // since m_pRootFolder has no parent and cleaning of its children will be done automatically
-    // during m_pRootFolder dieing by refcount.
+    // during m_pRootFolder dying by refcount.
 }
 
 bool ZipPackage::isLocalFile() const

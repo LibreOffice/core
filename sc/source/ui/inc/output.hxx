@@ -158,7 +158,7 @@ private:
     SCCOL nX2;
     SCROW nY2;
     SCCOL nVisX1;               // Start-/End coordinates
-    SCROW nVisY1;               //  ( visable range )
+    SCROW nVisY1;               //  ( visible range )
     SCCOL nVisX2;
     SCROW nVisY2;
     ScOutputType eType;         // Screen/Printer ...

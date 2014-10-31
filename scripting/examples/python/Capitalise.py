@@ -74,5 +74,5 @@ def capitalisePython( ):
 
 
 # lists the scripts, that shall be visible inside OOo. Can be omitted, if
-# all functions shall be visible, however here getNewString shall be surpressed
+# all functions shall be visible, however here getNewString shall be suppressed
 g_exportedScripts = capitalisePython,

@@ -1571,7 +1571,7 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
  * @handler: an #EmpathyFTHandler
  *
  * Cancels an ongoing handler operation. Note that this doesn't destroy
- * the object, which will keep all the properties, altough it won't be able
+ * the object, which will keep all the properties, although it won't be able
  * to do any more I/O.
  */
 void

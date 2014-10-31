@@ -227,7 +227,7 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 }
 
 /**
- * DragType is set on dependance if a Drag is even possible. For example,
+ * DragType is set on dependence if a Drag is even possible. For example,
  * under certain circumstances, it is not allowed to drag graphics (#31038#).
  */
 NavigatorDragType SdNavigatorWin::GetNavigatorDragType()

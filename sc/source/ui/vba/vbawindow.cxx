@@ -329,7 +329,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException, std::exception)
                 static OUString sDot(".");
                 // starts with title
                 if ( sName.startsWith( sTitle ) )
-                    // extention starts immediately after
+                    // extension starts immediately after
                     if ( sName.match( sDot, sTitle.getLength() ) )
                         sTitle = sName;
             }

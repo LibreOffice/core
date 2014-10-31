@@ -791,7 +791,7 @@ void OImageControlControl::implClearGraphics( bool _bForce )
                 // the ImageURL is already empty, so simply setting a new empty one would not suffice
                 // (since it would be ignored)
                 xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( "private:emptyImage" ) ) );
-                    // (the concrete URL we're passing here doens't matter. It's important that
+                    // (the concrete URL we're passing here doesn't matter. It's important that
                     // the model cannot resolve it to a a valid resource describing an image stream
         }
 

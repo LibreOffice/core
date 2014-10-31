@@ -103,7 +103,7 @@ public class MultiTypeInterfaceContainer
         // equals. For example:
         // Type a= new Type(XInterface.class);
         // Type b= new Type(XInterface.class);
-        // Allthough a != b , the map interprets both as being the same.
+        // Although a != b , the map interprets both as being the same.
         InterfaceContainer cont= map.get(ckey);
         if (cont != null)
         {

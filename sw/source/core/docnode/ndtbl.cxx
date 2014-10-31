@@ -1808,7 +1808,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
     // Remove the Crsr from the to-be-deleted Section.
     // The Cursor is placed after the table, except for
     //  - when there's another Line, we place it in that one
-    //  - when a Line preceeds it, we place it in that one
+    //  - when a Line precedes it, we place it in that one
     {
         SwTableNode* pTblNd = rCursor.GetNode().FindTableNode();
 

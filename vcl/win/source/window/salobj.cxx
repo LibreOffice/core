@@ -98,7 +98,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
             pSalData->mnSalObjWantKeyEvt = 0;
 
 
-        // check if we need to proces data for a SalObject-window
+        // check if we need to process data for a SalObject-window
         WinSalObject* pObject;
         if ( pData->message == WM_SETFOCUS )
         {

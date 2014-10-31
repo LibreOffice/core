@@ -159,7 +159,7 @@ private:
  *  'ScanRecordType()' method can recognise it - but further processing
  *  is impossible.
  *
- *  The 3 bytes in postion 2 to 4 normally contain the size of the
+ *  The 3 bytes in position 2 to 4 normally contain the size of the
  *  record without the pre-tag and the size field itself,
  *  so the remaining size after the 4 byte header.
  *

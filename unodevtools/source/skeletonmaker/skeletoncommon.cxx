@@ -516,7 +516,7 @@ void checkAddInTypes(
             throw CannotDumpException(
                 "the return type of the calc add-in function '" + name
                 + ":" + i->name
-                + "' is invalid. Please check your IDL defintion.");
+                + "' is invalid. Please check your IDL definition.");
         }
 
         bHasXPropertySet = false;

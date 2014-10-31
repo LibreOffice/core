@@ -433,7 +433,7 @@ private:
                 for the detected content type (must be done before by calling
                 impl_detectTypeAndFilter()). Because such handler does not depend
                 from a real target frame, location of such frame will be
-                supressed here.
+                suppressed here.
                 In case handle failed all new created resources will be
                 removed before a suitable exception is thrown.
                 (Excepting a RuntimeException occurrence!)

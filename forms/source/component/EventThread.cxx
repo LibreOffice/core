@@ -191,7 +191,7 @@ void OComponentEventThread::run()
 
             {
                 MutexRelease aReleaseOnce(m_aMutex);
-                // Because a queryHardRef can throw an Exception, it shoudln't be called when
+                // Because a queryHardRef can throw an Exception, it should not be called when
                 // the mutex is locked.
                 Reference<XControl>  xControl;
                 if ( xControlAdapter.is() )

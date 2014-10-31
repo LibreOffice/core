@@ -2137,7 +2137,7 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
 void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 {
     //! step size adjustable
-    //  step size is also minumum
+    //  step size is also minimum
     sal_uInt16 nStepX = STD_COL_WIDTH / 5;
     sal_uInt16 nStepY = ScGlobal::nStdRowHeight;
 
@@ -2553,7 +2553,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
             if (nPrecision)
                 --nPrecision;           // decrement
             else
-                bError = true;          // 0 is minumum
+                bError = true;          // 0 is minimum
         }
     }
 

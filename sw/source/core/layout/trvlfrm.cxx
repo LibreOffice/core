@@ -436,7 +436,7 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         ((SwCrsrMoveState*)pCMS)->bFillRet = false;
     Point aOldPoint = rPoint;
 
-    // search for page containing rPoint. The borders around the pages are considerd
+    // search for page containing rPoint. The borders around the pages are considered
     const SwPageFrm* pPage = GetPageAtPos( rPoint, 0, true );
 
     // #i95626#

@@ -301,7 +301,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
     }
 
     sal_uLong nLevelEntryData = 0; //automatic
-    if( m_pParent->m_aJobData.m_nPDFDevice == 2 ) //explicitly PDF
+    if( m_pParent->m_aJobData.m_nPDFDevice == 2 ) //explicit PDF
         nLevelEntryData = 10;
     else if (m_pParent->m_aJobData.m_nPSLevel > 0) //explicit PS Level
         nLevelEntryData = m_pParent->m_aJobData.m_nPSLevel+1;

@@ -706,7 +706,7 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
                     SdrMark* pM = rMark.GetMark(nm);
                     SdrObject* pObj = pM->GetMarkedSdrObj();
 
-                    // extra undo actions for changed connector which now may hold its layed out path (SJ)
+                    // extra undo actions for changed connector which now may hold its laid out path (SJ)
                     std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
                     AddUndoActions( vConnectorUndoActions );
 

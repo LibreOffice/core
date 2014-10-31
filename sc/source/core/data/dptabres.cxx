@@ -1027,7 +1027,7 @@ void ScDPResultMember::InitFrom( const vector<ScDPDimension*>& ppDim, const vect
     //  skip child dimension if details are not shown
     if ( GetDPMember() && !GetDPMember()->getShowDetails() )
     {
-        // Show DataLayout dimention
+        // Show DataLayout dimension
         nMemberStep = 1;
         while ( nPos < ppDim.size() )
         {
@@ -1071,7 +1071,7 @@ void ScDPResultMember::LateInitFrom(
     //  skip child dimension if details are not shown
     if ( GetDPMember() && !GetDPMember()->getShowDetails() )
     {
-        // Show DataLayout dimention
+        // Show DataLayout dimension
         nMemberStep = 1;
         while ( !rParams.IsEnd( nPos ) )
         {

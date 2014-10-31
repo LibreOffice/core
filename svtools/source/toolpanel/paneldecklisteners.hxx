@@ -50,7 +50,7 @@ namespace svt
         void    LayouterChanged( const PDeckLayouter& i_rNewLayouter );
         void    Dying();
 
-        // listener maintainance
+        // listener maintenance
         void    AddListener( IToolPanelDeckListener& i_rListener );
         void    RemoveListener( IToolPanelDeckListener& i_rListener );
 

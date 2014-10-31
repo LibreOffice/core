@@ -627,7 +627,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 if( cBreak=='>' && (cChar=='\\' || cChar=='\'' ||
                                     cChar=='\"' || cChar==' ') )
                 {
-                    // ' and " have to be escaped withing tags to separate
+                    // ' and " have to be escaped within tags to separate
                     // them from ' and " enclosing options.
                     // \ has to be escaped as well.
                     // Space is protected because it's not a delimiter between
