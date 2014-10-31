@@ -20,7 +20,6 @@
 #include <TblStylePrHandler.hxx>
 #include <PropertyMap.hxx>
 #include <ooxml/resourceids.hxx>
-#include <dmapperLoggers.hxx>
 #include <resourcemodel/QNameToString.hxx>
 
 #include "dmapperLoggers.hxx"

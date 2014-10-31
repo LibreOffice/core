@@ -60,7 +60,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentStatistics.hxx>
-#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentExternalData.hxx>
 #include <viewopt.hxx>

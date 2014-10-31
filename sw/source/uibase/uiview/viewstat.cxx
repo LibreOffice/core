@@ -57,7 +57,6 @@
 
 #include <cmdid.h>
 #include <IDocumentRedlineAccess.hxx>
-#include <doc.hxx>
 
 //UUUU
 #include <doc.hxx>

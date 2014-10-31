@@ -62,7 +62,6 @@
 #include <refhint.hxx>
 #include <listenerquery.hxx>
 #include <bcaslot.hxx>
-#include "rangelst.hxx"
 
 #include <svl/sharedstringpool.hxx>
 

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PVFUNDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PVFUNDLG_HXX
 
-#include <boost/scoped_ptr.hpp>
-
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 

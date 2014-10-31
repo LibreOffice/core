@@ -68,7 +68,6 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <switerator.hxx>
 #include <algorithm>
-#include <drawdoc.hxx>
 #include <txtfly.hxx>
 
 using namespace ::com::sun::star;

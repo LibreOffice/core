@@ -19,16 +19,17 @@
 
 
 #if defined WNT
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
-#include <curl/curl.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#   ifdef _MSC_VER
+#       pragma warning(push, 1) /* disable warnings within system headers */
+#   endif
+#   include <curl/curl.h>
+#   ifdef _MSC_VER
+#       pragma warning(pop)
+#   endif
 #else
-#include <curl/curl.h>
+#   include <curl/curl.h>
 #endif
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
