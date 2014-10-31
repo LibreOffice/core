@@ -225,7 +225,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     : mpVirDev( NULL ),
     meRefDevMode( REFDEV_NONE )
 {
-    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8, "vcl.gdi",
+    SAL_WARN_IF( nBitCount > 1 && nBitCount != 8 && nBitCount != rCompDev.GetBitCount(), "vcl.gdi",
                  "VirtualDevice::VirtualDevice(): Only 0, 1 or 8 allowed for BitCount, not " << nBitCount );
     SAL_INFO( "vcl.gdi", "VirtualDevice::VirtualDevice( " << nBitCount << " )" );
 
