@@ -206,7 +206,7 @@ void Proxy::do_dispatch_throw(
                     if (mtd->pParams[j].bOut) {
                         css::uno::TypeDescription pt(mtd->pParams[j].pTypeRef);
                         if (mtd->pParams[j].bIn) {
-                            uno_assignData(
+                            (void) uno_assignData(
                                 arguments[j], pt.get(), i++->getValue(pt),
                                 pt.get(), 0, 0, 0);
                         } else {
