@@ -139,7 +139,8 @@ SCTAB ScNamedRangeObj::GetTab_Impl()
         ScDocument& rDoc = pDocShell->GetDocument();
         SCTAB nTab;
         OUString sName = mxSheet->getName();
-        rDoc.GetTable(sName, nTab);
+        bool bFound = rDoc.GetTable(sName, nTab);
+        assert(bFound); (void)bFound;   // fouled up?
         return nTab;
     }
     else
