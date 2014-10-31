@@ -2051,6 +2051,29 @@ public class TextPortionEnumerationTest
 // this one gets eaten, but we still need to test inserting it (#i106930#)
 //            .appendChild( url6.dup().appendChild( new TextNode("") ) )
             .appendChild( new TextNode("89") );
+        // inside (left-edge)
+        TreeNode url7 = new HyperlinkNode( mkName("url") );
+        inserter.insertRange( new Range(0, 1, url7) );
+        root = new TreeNode()
+            .appendChild( url7.dup().appendChild( new TextNode("1") ) )
+            .appendChild( url2.dup().appendChild( new TextNode("2") ) )
+            .appendChild( url1.dup().appendChild( new TextNode("3") ) )
+            .appendChild( url4.dup().appendChild( new TextNode("4") ) )
+            .appendChild( url5.dup().appendChild( new TextNode("56") ) )
+            .appendChild( url4.dup().appendChild( new TextNode("7") ) )
+            .appendChild( new TextNode("89") );
+        // inside (right-edge)
+        TreeNode url8 = new HyperlinkNode( mkName("url") );
+        inserter.insertRange( new Range(5, 6, url8) );
+        root = new TreeNode()
+            .appendChild( url7.dup().appendChild( new TextNode("1") ) )
+            .appendChild( url2.dup().appendChild( new TextNode("2") ) )
+            .appendChild( url1.dup().appendChild( new TextNode("3") ) )
+            .appendChild( url4.dup().appendChild( new TextNode("4") ) )
+            .appendChild( url5.dup().appendChild( new TextNode("5") ) )
+            .appendChild( url8.dup().appendChild( new TextNode("6") ) )
+            .appendChild( url4.dup().appendChild( new TextNode("7") ) )
+            .appendChild( new TextNode("89") );
         doTest(root, false);
     }
 

@@ -550,23 +550,31 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         }
         else
         {
-           assert((nOtherStart < nNewStart) && (nNewEnd < nOtherEnd));
+           assert((nOtherStart < nNewStart) || (nNewEnd < nOtherEnd));
         // scenario: there is a RUBY, and contained within that a META;
         // now a RUBY is inserted within the META => the exising RUBY is split:
         // here it is not possible to simply insert the left/right fragment
         // of the existing RUBY because they <em>overlap</em> with the META!
             Delete( *itOther ); // this also does NoteInHistory!
-            *(*itOther)->GetEnd() = nNewStart;
-            bool bSuccess( TryInsertNesting(rNode, **itOther) );
-            OSL_ENSURE(bSuccess, "recursive call 1 failed?");
-            SwTxtAttrNesting * const pOtherRight(
-                MakeTxtAttrNesting(
-                    rNode, **itOther, nNewEnd, nOtherEnd ) );
-            bSuccess = TryInsertNesting(rNode, *pOtherRight);
-            OSL_ENSURE(bSuccess, "recursive call 2 failed?");
-            (void)bSuccess;
+            if (nNewEnd < nOtherEnd)
+            {
+                SwTxtAttrNesting * const pOtherRight(
+                    MakeTxtAttrNesting(
+                        rNode, **itOther, nNewEnd, nOtherEnd ) );
+                bool const bSuccess( TryInsertNesting(rNode, *pOtherRight) );
+                SAL_WARN_IF(!bSuccess, "sw.core", "recursive call 1 failed?");
+            }
+            if (nOtherStart < nNewStart)
+            {
+                *(*itOther)->GetEnd() = nNewStart;
+                bool const bSuccess( TryInsertNesting(rNode, **itOther) );
+                SAL_WARN_IF(!bSuccess, "sw.core", "recursive call 2 failed?");
+            }
+            else
+            {
+                rNode.DestroyAttr(*itOther);
+            }
         }
-
     }
 
     return true;
