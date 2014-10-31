@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_0a467bbf",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T14:14:47Z",
+      "side": 1,
+      "message": "Instead of passing the boolean to see if it was ok or not the pythonic way would be to raise an exception in case of error.",
+      "revId": "d47e26c191892daa7889e5cce6221f8294b683b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_ea11e7b0",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T14:14:47Z",
+      "side": 1,
+      "message": "with open(foo) as f:\n  f.write(newResult)\nis more tidy",
+      "revId": "d47e26c191892daa7889e5cce6221f8294b683b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_ca1623a7",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T14:14:47Z",
+      "side": 1,
+      "message": "mLine \u003d \u0027\\t\u0027.join([\"commit\", \"date\"] + allTests) + \u0027\\n\u0027",
+      "revId": "d47e26c191892daa7889e5cce6221f8294b683b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_aa0bef7c",
+        "filename": "bin/parse-perfcheck.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2014-10-31T14:14:47Z",
+      "side": 1,
+      "message": "no need for .keys(), for k in colsResult will give you the same",
+      "revId": "d47e26c191892daa7889e5cce6221f8294b683b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
