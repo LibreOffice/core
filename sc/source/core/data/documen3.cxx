@@ -137,7 +137,8 @@ void ScDocument::SetAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& 
         {
             const ScRangeName* pName = itr->second;
             SCTAB nTab;
-            GetTable(itr->first, nTab);
+            bool bFound = GetTable(itr->first, nTab);
+            assert(bFound); (void)bFound;   // fouled up?
             if (pName->empty())
                 SetRangeName( nTab, NULL );
             else
