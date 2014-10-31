@@ -69,7 +69,6 @@
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
-#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 

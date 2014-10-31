@@ -42,8 +42,6 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
-#include <boost/scoped_ptr.hpp>
-
 class SwGrfNode;
 class SdrObject;
 

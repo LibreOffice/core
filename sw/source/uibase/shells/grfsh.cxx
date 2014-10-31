@@ -69,8 +69,6 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-#include <doc.hxx>
-#include <docsh.hxx>
 #include <svx/drawitem.hxx>
 #define SwGrfShell
 

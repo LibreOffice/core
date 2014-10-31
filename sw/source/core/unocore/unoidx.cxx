@@ -60,7 +60,6 @@
 #include <SwStyleNameMapper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
-#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 

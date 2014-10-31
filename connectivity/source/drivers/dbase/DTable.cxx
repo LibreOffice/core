@@ -37,7 +37,6 @@
 #include <stdio.h>
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbexception.hxx>
-#include <connectivity/dbconversion.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/string.hxx>

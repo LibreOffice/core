@@ -32,7 +32,6 @@
 #include <DocumentOutlineNodesManager.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <DocumentRedlineManager.hxx>
-#include <DocumentFieldsManager.hxx>
 #include <DocumentStatisticsManager.hxx>
 #include <DocumentStateManager.hxx>
 #include <DocumentStylePoolManager.hxx>

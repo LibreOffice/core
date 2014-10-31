@@ -151,8 +151,6 @@
 #include <unotools/confignode.hxx>
 #include <helpids.hrc>
 
-#include <ReportControllerObserver.hxx>
-
 #define MAX_ROWS_FOR_PREVIEW    20
 
 #define RPTUI_ID_LRSPACE    XATTR_FILL_FIRST - 8

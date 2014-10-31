@@ -24,7 +24,6 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/xflbmpit.hxx>
 #include <svx/xflbmsxy.hxx>
-#include <svx/xflbmsxy.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xsflclit.hxx>
 #include <svx/xflbmsli.hxx>
