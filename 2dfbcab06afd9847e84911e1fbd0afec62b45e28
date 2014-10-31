@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_aa59af90",
+        "filename": "solenv/gbuild/Library.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-10-31T18:57:54Z",
+      "side": 1,
+      "message": "Maybe use TAB here as others do?\n\nMaybe forwarding only add_objcxxflags_exception_objects is enough?",
+      "revId": "2dfbcab06afd9847e84911e1fbd0afec62b45e28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
