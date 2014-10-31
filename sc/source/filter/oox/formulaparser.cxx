@@ -2046,7 +2046,27 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
             mnMemFuncSize = 2;
             mnRefIdSize = 0;
         break;
-        case BIFF_UNKNOWN: break;
+        case BIFF_UNKNOWN:
+            mpImportStrToken = NULL;
+            mpImportSpaceToken = NULL;
+            mpImportSheetToken = NULL;
+            mpImportEndSheetToken = NULL;
+            mpImportNlrToken = NULL;
+            mpImportRefToken = NULL;
+            mpImportAreaToken = NULL;
+            mpImportRef3dToken = NULL;
+            mpImportArea3dToken = NULL;
+            mpImportNameXToken = NULL;
+            mpImportFuncToken = NULL;
+            mpImportFuncVarToken = NULL;
+            mpImportFuncCEToken = NULL;
+            mnAttrDataSize = 0;
+            mnArraySize = 0;
+            mnNameSize = 0;
+            mnMemAreaSize = 0;
+            mnMemFuncSize = 0;
+            mnRefIdSize = 0;
+        break;
     }
 }
 
