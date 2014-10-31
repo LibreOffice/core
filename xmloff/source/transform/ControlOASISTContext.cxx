@@ -123,6 +123,7 @@ void XMLControlOASISTransformerContext::StartElement(
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                     }
                 }
+                break;
             case XML_ATACTION_URI_OASIS:
                 {
                     OUString aAttrValue( rAttrValue );
