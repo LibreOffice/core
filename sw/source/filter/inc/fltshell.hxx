@@ -186,7 +186,6 @@ public:
     void KillUnlockedAttrs(const SwPosition& pPos);
     SfxPoolItem* GetFmtStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos = 0);
     const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, sal_uInt16 nWhich);
-    const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, sal_uInt16 nWhich);
     void Delete(const SwPaM &rPam);
 
     bool empty() const { return maEntries.empty(); }

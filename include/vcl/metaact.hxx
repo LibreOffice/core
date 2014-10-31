@@ -89,10 +89,7 @@ public:
     void                Delete() { if ( 0 == --mnRefCount ) delete this; }
 
 public:
-    OUString            GetTypeName() { return TypeName( mnType ); }
-
     static MetaAction*  ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData );
-    static OUString     TypeName( sal_uInt16 nType );
 };
 
 class VCL_DLLPUBLIC MetaPixelAction : public MetaAction

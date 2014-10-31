@@ -273,12 +273,6 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
     return pAction;
 }
 
-OUString MetaAction::TypeName( sal_uInt16 nType )
-{
-    const char *name = meta_action_name( nType );
-    return OUString( name, strlen( name ), RTL_TEXTENCODING_ASCII_US );
-}
-
 MetaPixelAction::MetaPixelAction() :
     MetaAction(META_PIXEL_ACTION)
 {}

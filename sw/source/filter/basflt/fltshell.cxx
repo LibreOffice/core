@@ -737,20 +737,6 @@ const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, s
     return 0;
 }
 
-const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, sal_uInt16 nWhich)
-{
-    SfxPoolItem* pHt = GetFmtStackAttr(nWhich);
-    if (pHt)
-        return (const SfxPoolItem*)pHt;
-
-    // the attribute does not exist on the stack; query the document
-    SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
-
-    if (!pNd)           // no ContentNode, take the default attribute
-        return &pDoc->GetAttrPool().GetDefaultItem(nWhich);
-    return &pNd->GetAttr(nWhich);
-}
-
 void SwFltControlStack::Delete(const SwPaM &rPam)
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
