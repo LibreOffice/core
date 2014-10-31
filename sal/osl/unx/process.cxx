@@ -215,8 +215,8 @@ static void ChildStatusProc(void *pData)
         SAL_WARN("sal.osl", "executeProcess socketpair() errno " << status);
     }
 
-    fcntl(channel[0], F_SETFD, FD_CLOEXEC);
-    fcntl(channel[1], F_SETFD, FD_CLOEXEC);
+    (void) fcntl(channel[0], F_SETFD, FD_CLOEXEC);
+    (void) fcntl(channel[1], F_SETFD, FD_CLOEXEC);
 
     /* Create redirected IO pipes */
     if ( status == 0 && data.m_pInputWrite && pipe( stdInput ) == -1 )
