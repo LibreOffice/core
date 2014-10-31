@@ -2534,8 +2534,10 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
                 aRef.append( " 0 R>>\n"
                              "endobj\n\n"
                              );
-                updateObject( nRefObject );
-                writeBuffer( aRef.getStr(), aRef.getLength() );
+                if (updateObject(nRefObject))
+                {
+                    writeBuffer( aRef.getStr(), aRef.getLength() );
+                }
 
                 i_rEle.m_aKids.push_back( PDFStructureElementKid( nRefObject ) );
             }
@@ -2573,38 +2575,44 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
     if( !aLayout.isEmpty() )
     {
         aAttribObjects.push_back( createObject() );
-        updateObject( aAttribObjects.back() );
-        OStringBuffer aObj( 64 );
-        aObj.append( aAttribObjects.back() );
-        aObj.append( " 0 obj\n"
-                     "<</O/Layout\n" );
-        aLayout.append( ">>\nendobj\n\n" );
-        writeBuffer( aObj.getStr(), aObj.getLength() );
-        writeBuffer( aLayout.getStr(), aLayout.getLength() );
+        if (updateObject( aAttribObjects.back() ))
+        {
+            OStringBuffer aObj( 64 );
+            aObj.append( aAttribObjects.back() );
+            aObj.append( " 0 obj\n"
+                         "<</O/Layout\n" );
+            aLayout.append( ">>\nendobj\n\n" );
+            writeBuffer( aObj.getStr(), aObj.getLength() );
+            writeBuffer( aLayout.getStr(), aLayout.getLength() );
+        }
     }
     if( !aList.isEmpty() )
     {
         aAttribObjects.push_back( createObject() );
-        updateObject( aAttribObjects.back() );
-        OStringBuffer aObj( 64 );
-        aObj.append( aAttribObjects.back() );
-        aObj.append( " 0 obj\n"
-                     "<</O/List\n" );
-        aList.append( ">>\nendobj\n\n" );
-        writeBuffer( aObj.getStr(), aObj.getLength() );
-        writeBuffer( aList.getStr(), aList.getLength() );
+        if (updateObject( aAttribObjects.back() ))
+        {
+            OStringBuffer aObj( 64 );
+            aObj.append( aAttribObjects.back() );
+            aObj.append( " 0 obj\n"
+                         "<</O/List\n" );
+            aList.append( ">>\nendobj\n\n" );
+            writeBuffer( aObj.getStr(), aObj.getLength() );
+            writeBuffer( aList.getStr(), aList.getLength() );
+        }
     }
     if( !aTable.isEmpty() )
     {
         aAttribObjects.push_back( createObject() );
-        updateObject( aAttribObjects.back() );
-        OStringBuffer aObj( 64 );
-        aObj.append( aAttribObjects.back() );
-        aObj.append( " 0 obj\n"
-                     "<</O/Table\n" );
-        aTable.append( ">>\nendobj\n\n" );
-        writeBuffer( aObj.getStr(), aObj.getLength() );
-        writeBuffer( aTable.getStr(), aTable.getLength() );
+        if (updateObject( aAttribObjects.back() ))
+        {
+            OStringBuffer aObj( 64 );
+            aObj.append( aAttribObjects.back() );
+            aObj.append( " 0 obj\n"
+                         "<</O/Table\n" );
+            aTable.append( ">>\nendobj\n\n" );
+            writeBuffer( aObj.getStr(), aObj.getLength() );
+            writeBuffer( aTable.getStr(), aTable.getLength() );
+        }
     }
 
     OStringBuffer aRet( 64 );
