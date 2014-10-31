@@ -3287,7 +3287,14 @@ public:
         decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
             DK->GenSlidingWindowDeclRef(false) << ";\n}\n";
         mFullProgramSrc = decl.str();
-        SAL_INFO("sc.opencl.source", "Program to be compiled:\n" << mFullProgramSrc);
+        std::stringstream area;
+#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+        if (mKernelSignature[0] == '_')
+            area << "sc.opencl.source." << mKernelSignature.substr(1, std::string::npos);
+        else
+            area << "sc.opencl.source." << mKernelSignature;
+        SAL_INFO(area.str().c_str(), "Program to be compiled:\n" << mFullProgramSrc);
+#endif
     }
     /// Produce kernel hash
     std::string GetMD5()
