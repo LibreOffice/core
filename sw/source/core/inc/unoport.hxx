@@ -145,12 +145,12 @@ protected:
 
     css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> SAL_CALL GetPropertyValuesTolerant_Impl(
         const css::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly )
-            throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
+            throw (css::uno::RuntimeException, std::exception);
 
     virtual ~SwXTextPortion();
 
     //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 public:
     SwXTextPortion(const SwUnoCrsr* pPortionCrsr, ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > const& rParent, SwTextPortionType   eType   );

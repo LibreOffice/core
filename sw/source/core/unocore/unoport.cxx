@@ -21,6 +21,7 @@
 
 #include <cmdid.h>
 #include <osl/mutex.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
@@ -43,6 +44,7 @@
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -620,7 +622,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         bool bDirectValuesOnly )
-    throw (beans::UnknownPropertyException, uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -628,78 +630,94 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
-    sal_Int32 nProps = rPropertyNames.getLength();
-    const OUString *pProp = rPropertyNames.getConstArray();
-
-    SfxItemSet *pSet = 0;
-
-    const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
-
-    uno::Sequence< beans::PropertyState > aPropertyStates =
-        SwUnoCursorHelper::GetPropertyStates(
-            *pUnoCrsr, *m_pPropSet,
-            rPropertyNames,
-            SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
-    const beans::PropertyState* pPropertyStates = aPropertyStates.getConstArray();
-
     std::vector< beans::GetDirectPropertyTolerantResult > aResultVector;
-    for (sal_Int32 i = 0;  i < nProps;  ++i)
-    {
-        beans::GetDirectPropertyTolerantResult aResult;
-        try
-        {
-            aResult.Name = pProp[i];
-            if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
-            {
-                if( bDirectValuesOnly )
-                    continue;
-                else
-                    aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
-            }
-            else
-            {
-                const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
-                if (!pEntry)
-                    throw beans::UnknownPropertyException( "Unknown property: " + pProp[i], static_cast < cppu::OWeakObject * > ( this ) );
-                aResult.State  = pPropertyStates[i];
 
-                aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
-                //#i104499# ruby portion attributes need special handling:
-                if( pEntry->nWID == RES_TXTATR_CJK_RUBY &&
-                    m_ePortionType == PORTION_RUBY_START )
+    try
+    {
+        sal_Int32 nProps = rPropertyNames.getLength();
+        const OUString *pProp = rPropertyNames.getConstArray();
+
+        SfxItemSet *pSet = 0;
+
+        const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
+
+
+        uno::Sequence< beans::PropertyState > aPropertyStates =
+            SwUnoCursorHelper::GetPropertyStates(
+                *pUnoCrsr, *m_pPropSet,
+                rPropertyNames,
+                SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT );
+        const beans::PropertyState* pPropertyStates = aPropertyStates.getConstArray();
+
+        for (sal_Int32 i = 0;  i < nProps;  ++i)
+        {
+            beans::GetDirectPropertyTolerantResult aResult;
+            try
+            {
+                aResult.Name = pProp[i];
+                if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
                 {
-                        aResult.State = beans::PropertyState_DIRECT_VALUE;
+                    if( bDirectValuesOnly )
+                        continue;
+                    else
+                        aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
                 }
-                if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == aResult.State)
+                else
                 {
-                    // get property value
-                    // (compare to SwXTextPortion::getPropertyValue(s))
-                    GetPropertyValue( aResult.Value, *pEntry, pUnoCrsr, pSet );
-                    aResult.Result = beans::TolerantPropertySetResultType::SUCCESS;
-                    aResultVector.push_back( aResult );
+                    const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( pProp[i] );
+                    if (!pEntry)
+                        throw beans::UnknownPropertyException( "Unknown property: " + pProp[i], static_cast < cppu::OWeakObject * > ( this ) );
+                    aResult.State  = pPropertyStates[i];
+
+                    aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
+                    //#i104499# ruby portion attributes need special handling:
+                    if( pEntry->nWID == RES_TXTATR_CJK_RUBY &&
+                        m_ePortionType == PORTION_RUBY_START )
+                    {
+                            aResult.State = beans::PropertyState_DIRECT_VALUE;
+                    }
+                    if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == aResult.State)
+                    {
+                        // get property value
+                        // (compare to SwXTextPortion::getPropertyValue(s))
+                        GetPropertyValue( aResult.Value, *pEntry, pUnoCrsr, pSet );
+                        aResult.Result = beans::TolerantPropertySetResultType::SUCCESS;
+                        aResultVector.push_back( aResult );
+                    }
                 }
             }
+            catch (const beans::UnknownPropertyException &)
+            {
+                // should not occur because property was searched for before
+                OSL_FAIL( "unexpected exception caught" );
+                aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            }
+            catch (const lang::IllegalArgumentException &)
+            {
+                aResult.Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
+            }
+            catch (const beans::PropertyVetoException &)
+            {
+                aResult.Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
+            }
+            catch (const lang::WrappedTargetException &)
+            {
+                aResult.Result = beans::TolerantPropertySetResultType::WRAPPED_TARGET;
+            }
         }
-        catch (beans::UnknownPropertyException &)
-        {
-            // should not occur because property was searched for before
-            OSL_FAIL( "unexpected exception caught" );
-            aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
-        }
-        catch (lang::IllegalArgumentException &)
-        {
-            aResult.Result = beans::TolerantPropertySetResultType::ILLEGAL_ARGUMENT;
-        }
-        catch (beans::PropertyVetoException &)
-        {
-            aResult.Result = beans::TolerantPropertySetResultType::PROPERTY_VETO;
-        }
-        catch (lang::WrappedTargetException &)
-        {
-            aResult.Result = beans::TolerantPropertySetResultType::WRAPPED_TARGET;
-        }
+        delete pSet;
     }
-    delete pSet;
+    catch (const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const uno::Exception& e)
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::lang::WrappedTargetRuntimeException(
+            "wrapped Exception " + e.Message,
+            css::uno::Reference<css::uno::XInterface>(), a);
+    }
 
     uno::Sequence< beans::GetDirectPropertyTolerantResult > aResult( aResultVector.size() );
     std::vector< beans::GetDirectPropertyTolerantResult >::const_iterator aIt = aResultVector.begin();
