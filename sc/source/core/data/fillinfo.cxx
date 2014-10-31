@@ -1120,8 +1120,6 @@ ScTableInfo::ScTableInfo()
     , mnArrCount(0)
     , mbPageMode(false)
 {
-    for( sal_uInt16 nIdx = 0; nIdx < ROWINFO_MAX; ++nIdx )
-        mpRowInfo[ nIdx ].pCellInfo = 0;
 }
 
 ScTableInfo::~ScTableInfo()
