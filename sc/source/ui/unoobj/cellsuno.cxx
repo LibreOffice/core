@@ -1401,6 +1401,15 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     bGotDataChangedHint( false ),
     aValueListeners( 0 )
 {
+    // this is a hack to get m_wThis initialized; ideally there would be
+    // factory functions doing this but there are so many subclasses of this...
+    ++m_refCount;
+    {
+        m_wThis = uno::Reference<uno::XInterface>(
+                    static_cast<cppu::OWeakObject*>(this));
+    }
+    --m_refCount;
+
     ScRange aCellRange(rR);
     aCellRange.Justify();
     aRanges.Append( aCellRange );
@@ -1430,6 +1439,15 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     bGotDataChangedHint( false ),
     aValueListeners( 0 )
 {
+    // this is a hack to get m_wThis initialized; ideally there would be
+    // factory functions doing this but there are so many subclasses of this...
+    ++m_refCount;
+    {
+        m_wThis = uno::Reference<uno::XInterface>(
+                    static_cast<cppu::OWeakObject*>(this));
+    }
+    --m_refCount;
+
     if (pDocShell)  // Null if created with createInstance
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -1529,6 +1547,11 @@ const ScMarkData* ScCellRangesBase::GetMarkData()
 
 void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
@@ -1541,12 +1564,9 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( aRanges.UpdateReference( rRef.GetMode(), &rDoc, rRef.GetRange(),
                                     rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) )
         {
-            // i#90076; the object "this" was destroyed after calling ScTableSheetObj::getImplementation
-            // this hack make sure that the object lives a bit longer
-            uno::Reference<uno::XInterface> xInterface((cppu::OWeakObject*)this, uno::UNO_QUERY);
             if (  rRef.GetMode() == URM_INSDEL
                && aRanges.size() == 1
-               && ScTableSheetObj::getImplementation( xInterface )
+               && ScTableSheetObj::getImplementation(xThis)
                )
             {
                 // #101755#; the range size of a sheet does not change
