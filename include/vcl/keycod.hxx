@@ -38,12 +38,11 @@ private:
     KeyFuncType     eFunc;
 
 public:
-                KeyCode() { nKeyCodeAndModifiers = 0; eFunc = KeyFuncType::DONTKNOW; }
-                KeyCode( const ResId& rResId );
-                KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier = 0 )
-                    { nKeyCodeAndModifiers = nKey | nModifier; eFunc = KeyFuncType::DONTKNOW; }
-                KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 );
-                KeyCode( KeyFuncType eFunction );
+                    KeyCode() { nKeyCodeAndModifiers = 0; eFunc = KeyFuncType::DONTKNOW; }
+                    KeyCode( const ResId& rResId );
+                    KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier = 0 );
+                    KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 );
+                    KeyCode( KeyFuncType eFunction );
 
     sal_uInt16      GetFullCode() const { return nKeyCodeAndModifiers; }
     KeyFuncType     GetFullFunction() const { return eFunc; }
@@ -78,8 +77,17 @@ public:
 
 } // namespace vcl
 
+inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier )
+{
+    assert(nKey <= KEY_CODE);
+    assert(nModifier >= KEY_MODTYPE);
+    nKeyCodeAndModifiers = nKey | nModifier;
+    eFunc = KeyFuncType::DONTKNOW;
+}
+
 inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 )
 {
+    assert(nKey <= KEY_CODE);
     nKeyCodeAndModifiers = nKey;
     if( bShift )
         nKeyCodeAndModifiers |= KEY_SHIFT;
