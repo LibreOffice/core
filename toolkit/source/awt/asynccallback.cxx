@@ -22,7 +22,6 @@
 #include <boost/noncopyable.hpp>
 #include "vcl/svapp.hxx"
 #include "osl/mutex.hxx"
-#include "sal/config.h"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/implbase2.hxx"

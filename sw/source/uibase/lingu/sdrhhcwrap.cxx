@@ -44,7 +44,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <docary.hxx>
 #include <edtwin.hxx>
-#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 

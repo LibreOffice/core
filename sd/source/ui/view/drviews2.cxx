@@ -34,8 +34,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <config_features.h>
-
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>

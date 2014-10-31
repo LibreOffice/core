@@ -140,7 +140,6 @@
 #include "GroupsSorting.hxx"
 #include "PageNumber.hxx"
 #include "UndoEnv.hxx"
-#include "ReportControllerObserver.hxx"
 
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>

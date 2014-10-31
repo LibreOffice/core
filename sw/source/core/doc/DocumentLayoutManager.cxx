@@ -38,7 +38,6 @@
 #include <dcontact.hxx>
 #include <unoframe.hxx>
 #include <docary.hxx>
-#include <dcontact.hxx>
 #include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;

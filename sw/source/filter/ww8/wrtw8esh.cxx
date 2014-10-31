@@ -96,7 +96,6 @@
 #include "sfx2/sfxsids.hrc"
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
-#include <drawdoc.hxx>
 
 #include <algorithm>
 
