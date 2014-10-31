@@ -725,6 +725,7 @@ IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu )
                 SetCurrentObjState( bNewState );
                 UpdateInfo( false );
             }
+            break;
 
             case( MN_FRAME_TO_TOP ):
                 pView->PutMarkedToTop();
