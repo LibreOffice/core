@@ -979,6 +979,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 pTargetView->AttrChangedNotify( &pTargetView->GetWrtShell() );
                 pTargetShell = pTargetView->GetWrtShellPtr();
                 pTargetDoc = pTargetShell->GetDoc();
+                pTargetDoc->SetInMailMerge(true);
 
                 //copy the styles from the source to the target document
                 pTargetView->GetDocShell()->_LoadStyles( *pSourceDocSh, sal_True );
@@ -1312,6 +1313,13 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+            if (rMergeDescriptor.bCreateSingleFile)
+            {
+                // sw::DocumentLayoutManager::CopyLayoutFmt() did not generate
+                // unique fly names, do it here once.
+                pTargetDoc->SetInMailMerge(false);
+                pTargetDoc->SetAllUniqueFlyNames();
+            }
 
             for( sal_uInt16 i = 0; i < 25; i++)
                 Application::Reschedule();

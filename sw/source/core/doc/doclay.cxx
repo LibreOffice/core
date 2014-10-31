@@ -411,7 +411,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         if( !mbCopyIsMove || this != pSrcDoc )
         {
-            if( mbInReading )
+            if( mbInReading || IsInMailMerge())
                 pDest->SetName( aEmptyStr );
             else
             {

@@ -260,6 +260,7 @@ SwDoc::SwDoc()
     mbCopyIsMove(false),
     mbVisibleLinks(true),
     mbInReading(false),
+    mbInMailMerge(false),
     mbInXMLImport(false),
     mbUpdateTOX(false),
     mbInLoadAsynchron(false),
