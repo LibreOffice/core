@@ -65,7 +65,7 @@ private:
     void DrawLine( long nX1, long nY1, long nX2, long nY2 );
     void DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
-    void DrawRect( long nX, long nY, long nWidth, nHeight );
+    void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& pPolyPolygon );
     void DrawTextureRect( const SalTwoRect& pPosAry );

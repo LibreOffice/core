@@ -86,7 +86,6 @@ void OpenGLSalGraphicsImpl::ResetClipRegion()
 }
 
 // set the line color to transparent (= don't draw lines)
-
 void OpenGLSalGraphicsImpl::SetLineColor()
 {
     if( mnLineColor != SALCOLOR_NONE )
@@ -151,9 +150,7 @@ bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
 
 bool OpenGLSalGraphicsImpl::CreateTextureProgram( void )
 {
-    static const char aFragShaderSrc[] =
-
-    mnTextureProgram = OpenGLHelper::( "textureVertexShader", "textureFragmentShader" );
+    mnTextureProgram = OpenGLHelper::LoadShaders( "textureVertexShader", "textureFragmentShader" );
     if( mnTextureProgram == 0 )
         return false;
 
@@ -358,7 +355,7 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& pPol
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, pVertices.size(), GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices.size() );
+    glVertexAttribPointer( GL_ATTRIB_POS, pVertices.size(), GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices.data() );
     glDrawArrays( GL_TRIANGLES, 0, pVertices.size() / 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
@@ -611,7 +608,7 @@ void OpenGLSalGraphicsImpl::copyArea(
 
 // CopyBits and DrawBitmap --> RasterOp and ClipRegion
 // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* /*pSrcGraphics*/ )
 {
     // TODO Check if SalGraphicsImpl is the same
     const bool bSameGraphics( false );
@@ -720,7 +717,7 @@ void OpenGLSalGraphicsImpl::invert(
     else // just invert
     {
         BeginInvert();
-        DrawPolygon( 4, aPoints );
+        DrawRect( nX, nY, nWidth, nHeight );
         EndInvert();
     }
 }
