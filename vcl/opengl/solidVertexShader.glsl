@@ -10,7 +10,7 @@
 attribute vec4 position;
 void main() {
    gl_Position = position;
-};
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
