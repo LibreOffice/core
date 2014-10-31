@@ -5972,7 +5972,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     sal_uLong nLenShapePropTbl = 0;
     sal_uLong nReadSpCont = 0;
 
-    // Store file offset of the shape containers or respectivly the group(!).
+    // Store file offset of the shape containers or respectively the group(!).
     sal_uLong nStartOffs = (ULONG_MAX > nPosGroup) ?
                             nPosGroup : nStartShapeCont - DFF_COMMON_RECORD_HEADER_SIZE;
     SvxMSDffShapeInfo aInfo( nStartOffs );

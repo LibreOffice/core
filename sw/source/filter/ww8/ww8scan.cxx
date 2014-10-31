@@ -75,7 +75,7 @@ namespace SL
 namespace
 {
     /**
-        winword strings are typically Belt and Braces strings preceeded with a
+        winword strings are typically Belt and Braces strings preceded with a
         pascal style count, and ending with a c style 0 terminator. 16bit chars
         and count for ww8+ and 8bit chars and count for ww7-. The count and 0
         can be checked for integrity to catch errors (e.g. lotus created

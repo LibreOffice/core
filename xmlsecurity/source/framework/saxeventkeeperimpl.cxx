@@ -301,7 +301,7 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
             }
 
             /*
-             * destory the ElementMark
+             * destroy the ElementMark
              */
             delete (*ii);
 

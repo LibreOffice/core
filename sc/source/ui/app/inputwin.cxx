@@ -1086,7 +1086,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
     // Capture the vertical position of this window in the toolbar, when we increase
-    // the size of the toolbar to accomadate expanded line input we need to take this
+    // the size of the toolbar to accomodate expanded line input we need to take this
     // into account
     if ( !nVertOffset )
         nVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();

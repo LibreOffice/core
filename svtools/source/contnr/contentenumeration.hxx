@@ -40,7 +40,7 @@ namespace svt
     {
     private:
         OUString maFilename;     // only filename in upper case - for compare purposes
-        OUString maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
+        OUString maTitle;        //  -> be careful when changing maTitle to update maFilename only when new
         OUString maLowerTitle;
 
 

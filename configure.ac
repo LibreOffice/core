@@ -3564,7 +3564,7 @@ if test "$_os" = "WINNT"; then
                     WINDOWS_SDK_ACCEPTABLE_VERSIONS=$with_windows_sdk
                     ;;
                 *)
-                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work witn VS $MSVSVER])
+                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work with VS $MSVSVER])
                     ;;
                 esac
             fi

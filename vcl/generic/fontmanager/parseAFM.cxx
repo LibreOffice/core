@@ -38,7 +38,7 @@
  *  10/20/2005 pl       - performance increase:
  *                         - use one table lookup in token() routine
  *                           instead of many conditions
- *                         - return token length in toke() routine
+ *                         - return token length in token() routine
  *                         - use hash lookup instead of binary search
  *                           in recognize() routine
  */

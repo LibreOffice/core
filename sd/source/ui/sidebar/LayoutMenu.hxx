@@ -93,7 +93,7 @@ public:
     virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
 
     /** Call this method when the set of displayed layouts is not up-to-date
-        anymore.  It will re-assemple this set according to the current
+        anymore.  It will re-assemble this set according to the current
         settings.
     */
     void InvalidateContent (void);

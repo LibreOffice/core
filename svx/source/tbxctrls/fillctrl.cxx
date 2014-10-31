@@ -826,7 +826,7 @@ IMPL_LINK(FillControl, SelectFillAttrHdl, ListBox *, pBox)
         // two undo entries. Reason for this is that indeed two actions are executed, the fill style
         // and the fill attribute change. The sidebar already handles both separately, so
         // changing the fill style already changes the object and adds a default fill attribute for
-        // the newly choosen fill style.
+        // the newly chosen fill style.
         // This control uses the older user's two-step action to select a fill style and a fill attribute. In
         // this case a lot of things may go wrong (e.g. the user stops that action and does something
         // different), thus the solution of the sidebar should be preferred from my POV in the future

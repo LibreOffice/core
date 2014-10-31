@@ -868,7 +868,7 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
         else
         {
             // Only at the End!
-            // If pCurr does not have a width, it can however aready have content.
+            // If pCurr does not have a width, it can however already have content.
             // E.g. for non-displayable characters
             if (rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDSTART)
                 pPor = new SwFieldMarkPortion();

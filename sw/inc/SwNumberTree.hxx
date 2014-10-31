@@ -413,7 +413,7 @@ protected:
     */
     mutable SwNumberTree::tSwNumTreeNumber mnNumber;
 
-    // boolean indicating, that a node of a not counted parent node is continueing
+    // boolean indicating, that a node of a not counted parent node is continuing
     // the numbering of parent's previous node sub tree.
     // Example:
     //   1. kshdkjfs

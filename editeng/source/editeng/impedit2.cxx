@@ -647,7 +647,7 @@ void ImpEditEngine::SetText(const OUString& rText)
     // RemoveText deletes the undo list!
     EditPaM aStartPaM = RemoveText();
     bool bUndoCurrentlyEnabled = IsUndoEnabled();
-    // The text inserted manually can not be made reversable by the user
+    // The text inserted manually can not be made reversible by the user
     EnableUndo( false );
 
     EditSelection aEmptySel( aStartPaM, aStartPaM );

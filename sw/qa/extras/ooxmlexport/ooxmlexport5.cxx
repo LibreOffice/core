@@ -692,7 +692,7 @@ DECLARE_OOXMLEXPORT_TEST(testFD083057, "fdo83057.docx")
 
     // A fly frame was attached to a para which started with a hint (run) containing an SDT.
     // This SDT was handled while exporting the FLYFRAME and also the text of the run.
-    // So, eventhough the original file had only one sdt in the header, the RT file had two;
+    // So, even though the original file had only one sdt in the header, the RT file had two;
     // one for a separate run as expected, and one incorrectly exported in the alternateContent (FLYFRAME)
 
     // Assert that the file has only one sdt, in a separate run

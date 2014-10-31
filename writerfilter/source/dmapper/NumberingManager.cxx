@@ -735,7 +735,7 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         {
             //this strings contains the definition of the level
             //the level number is marked as %n
-            //these numbers can be mixed randomly toghether with separators pre- and suffixes
+            //these numbers can be mixed randomly together with separators pre- and suffixes
             //the Writer supports only a number of upper levels to show, separators is always a dot
             //and each level can have a prefix and a suffix
             if(pCurrentLvl.get())

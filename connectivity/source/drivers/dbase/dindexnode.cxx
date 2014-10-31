@@ -434,8 +434,8 @@ bool ONDXPage::Delete(sal_uInt16 nNodePos)
 
 ONDXNode ONDXPage::Split(ONDXPage& rPage)
 {
-    DBG_ASSERT(IsFull(), "Falsches Splitting");
-    /*  devide one page into two
+    DBG_ASSERT(IsFull(), "Incorrect Splitting");
+    /*  divide one page into two
         leaf:
             Page 1 is (n - (n/2))
             Page 2 is (n/2)

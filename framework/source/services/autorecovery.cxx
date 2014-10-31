@@ -585,7 +585,7 @@ private:
 
         @descr  ... but only keys related to the AutoSave mechanism.
                 Means: State and Timer intervall.
-                E.g. the recovery list isnt adressed here.
+                E.g. the recovery list is not addressed here.
 
         @throw  [com.sun.star.uno.RuntimeException]
                 if config could not be opened or readed successfully!
@@ -1006,7 +1006,7 @@ private:
     void st_impl_removeFile(const OUString& sURL);
 
     /** try to remove ".lock" file from disc if office will be terminated
-        not using the offical way .-)
+        not using the official way .-)
 
         This method has to be handled "optional". So every error inside
         has to be ignored ! This method CANT FAIL ... it can forget something only .-)

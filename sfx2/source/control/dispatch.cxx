@@ -498,7 +498,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, sal_uInt16 nMode)
 /** This handler is called after <SfxDispatcher::Invalidate()> or after
     changes on the stack (<SfxDispatcher::Push()> and <SfxDispatcher::Pop())
 
-    It flushes the Stack, if it is dirty, thus it actually excecutes the
+    It flushes the Stack, if it is dirty, thus it actually executes the
     pending Push and Pop commands.
 */
 IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
@@ -1714,7 +1714,7 @@ bool SfxDispatcher::_TryIntercept_Impl
 
     @param nSlot Slot-Id to search for
     @param rServer <SfxSlotServer>-Instance to fill
-    @param bModal Dispite ModalMode
+    @param bModal Despite ModalMode
 
     @return         true
                     The Slot was found, rServer is valid.

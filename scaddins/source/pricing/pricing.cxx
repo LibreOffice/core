@@ -475,7 +475,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
 }
 
 // actual function implementation starts here
-// auxillary input handling functions
+// auxiliary input handling functions
 namespace {
 
 bool getinput_putcall(bs::types::PutCall& pc, const OUString& str) {
