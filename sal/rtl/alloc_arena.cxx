@@ -392,6 +392,7 @@ rtl_arena_hash_remove (
                 if (!(arena->m_flags & RTL_ARENA_FLAG_RESCALE))
                 {
                     sal_Size ave = nseg >> arena->m_hash_shift;
+                    assert(ave != 0);
                     sal_Size new_size = arena->m_hash_size << (highbit(ave) - 1);
 
                     arena->m_flags |= RTL_ARENA_FLAG_RESCALE;
