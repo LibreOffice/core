@@ -36,7 +36,8 @@ OpenGLContext::OpenGLContext():
     mpWindow(NULL),
     m_pChildWindow(NULL),
     mbInitialized(false),
-    mbRequestLegacyContext(false)
+    mbRequestLegacyContext(false),
+    mbUseDoubleBufferedRendering(true)
 {
 }
 
@@ -69,6 +70,11 @@ OpenGLContext::~OpenGLContext()
 void OpenGLContext::requestLegacyContext()
 {
     mbRequestLegacyContext = true;
+}
+
+void OpenGLContext::requestSingleBufferedRendering()
+{
+    mbUseDoubleBufferedRendering = false;
 }
 
 #if defined( _WIN32 )
@@ -213,6 +219,7 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat)
     // We Support Multisampling On This Hardware.
     int iAttributes[] =
     {
+        WGL_DOUBLE_BUFFER_ARB,GL_TRUE,
         WGL_DRAW_TO_WINDOW_ARB,GL_TRUE,
         WGL_SUPPORT_OPENGL_ARB,GL_TRUE,
         WGL_ACCELERATION_ARB,WGL_FULL_ACCELERATION_ARB,
@@ -220,11 +227,13 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat)
         WGL_ALPHA_BITS_ARB,8,
         WGL_DEPTH_BITS_ARB,24,
         WGL_STENCIL_BITS_ARB,0,
-        WGL_DOUBLE_BUFFER_ARB,GL_TRUE,
         WGL_SAMPLE_BUFFERS_ARB,GL_TRUE,
         WGL_SAMPLES_ARB,8,
         0,0
     };
+
+    if (!mbUseDoubleBufferedRendering)
+        iAttributes[1] = GL_FALSE;
 
     bool bArbMultisampleSupported = true;
 
@@ -370,7 +379,7 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 }
 
 #ifdef DBG_UTIL
-GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
+GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering)
 {
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return NULL;
@@ -395,6 +404,10 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
         GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
         None
     };
+
+    if (!bUseDoubleBufferedRendering)
+        visual_attribs[1] = False;
+
     int fbCount = 0;
     GLXFBConfig* pFBC = glXChooseFBConfig( dpy,
             screen,
@@ -530,7 +543,7 @@ bool OpenGLContext::ImplInit()
     if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
-        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc);
+        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering);
         if (!pFBC)
             return false;
 

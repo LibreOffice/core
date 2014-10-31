@@ -155,6 +155,7 @@ public:
     ~OpenGLContext();
 
     void requestLegacyContext();
+    void requestSingleBufferedRendering();
 
     bool init(vcl::Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
@@ -207,6 +208,7 @@ private:
     boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;
     bool mbRequestLegacyContext;
+    bool mbUseDoubleBufferedRendering;
 };
 
 #endif
