@@ -34,36 +34,35 @@ namespace vcl
 class VCL_DLLPUBLIC KeyCode
 {
 private:
-    sal_uInt16      nCode;
-    KeyFuncType eFunc;
+    sal_uInt16      nKeyCodeAndModifiers;
+    KeyFuncType     eFunc;
 
 public:
-                KeyCode() { nCode = 0; eFunc = KeyFuncType::DONTKNOW; }
+                KeyCode() { nKeyCodeAndModifiers = 0; eFunc = KeyFuncType::DONTKNOW; }
                 KeyCode( const ResId& rResId );
                 KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier = 0 )
-                    { nCode = nKey | nModifier; eFunc = KeyFuncType::DONTKNOW; }
+                    { nKeyCodeAndModifiers = nKey | nModifier; eFunc = KeyFuncType::DONTKNOW; }
                 KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 );
                 KeyCode( KeyFuncType eFunction );
 
-    sal_uInt16      GetFullCode() const { return nCode; }
-    KeyFuncType GetFullFunction() const { return eFunc; }
-    bool        IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
+    sal_uInt16      GetFullCode() const { return nKeyCodeAndModifiers; }
+    KeyFuncType     GetFullFunction() const { return eFunc; }
 
     sal_uInt16      GetCode() const
-                    { return (nCode & KEY_CODE); }
+                    { return (nKeyCodeAndModifiers & KEY_CODE); }
 
     sal_uInt16      GetModifier() const
-                    { return (nCode & KEY_MODTYPE); }
+                    { return (nKeyCodeAndModifiers & KEY_MODTYPE); }
     bool            IsShift() const
-                    { return ((nCode & KEY_SHIFT) != 0); }
+                    { return ((nKeyCodeAndModifiers & KEY_SHIFT) != 0); }
     bool            IsMod1() const
-                    { return ((nCode & KEY_MOD1) != 0); }
+                    { return ((nKeyCodeAndModifiers & KEY_MOD1) != 0); }
     bool            IsMod2() const
-                    { return ((nCode & KEY_MOD2) != 0); }
+                    { return ((nKeyCodeAndModifiers & KEY_MOD2) != 0); }
     bool            IsMod3() const
-                    { return ((nCode & KEY_MOD3) != 0); }
+                    { return ((nKeyCodeAndModifiers & KEY_MOD3) != 0); }
     sal_uInt16      GetGroup() const
-                    { return (nCode & KEYGROUP_TYPE); }
+                    { return (nKeyCodeAndModifiers & KEYGROUP_TYPE); }
 
     OUString        GetName( vcl::Window* pWindow = NULL ) const;
 
@@ -81,22 +80,22 @@ public:
 
 inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 )
 {
-    nCode = nKey;
+    nKeyCodeAndModifiers = nKey;
     if( bShift )
-        nCode |= KEY_SHIFT;
+        nKeyCodeAndModifiers |= KEY_SHIFT;
     if( bMod1 )
-        nCode |= KEY_MOD1;
+        nKeyCodeAndModifiers |= KEY_MOD1;
     if( bMod2 )
-        nCode |= KEY_MOD2;
+        nKeyCodeAndModifiers |= KEY_MOD2;
     if( bMod3 )
-        nCode |= KEY_MOD3;
+        nKeyCodeAndModifiers |= KEY_MOD3;
     eFunc = KeyFuncType::DONTKNOW;
 }
 
 inline bool vcl::KeyCode::operator ==( const vcl::KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KeyFuncType::DONTKNOW) && (rKeyCode.eFunc == KeyFuncType::DONTKNOW) )
-        return (nCode == rKeyCode.nCode);
+        return (nKeyCodeAndModifiers == rKeyCode.nKeyCodeAndModifiers);
     else
         return (GetFunction() == rKeyCode.GetFunction());
 }
@@ -104,21 +103,14 @@ inline bool vcl::KeyCode::operator ==( const vcl::KeyCode& rKeyCode ) const
 inline bool vcl::KeyCode::operator !=( const vcl::KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KeyFuncType::DONTKNOW) && (rKeyCode.eFunc == KeyFuncType::DONTKNOW) )
-        return (nCode != rKeyCode.nCode);
+        return (nKeyCodeAndModifiers != rKeyCode.nKeyCodeAndModifiers);
     else
         return (GetFunction() != rKeyCode.GetFunction());
 }
 
-inline bool vcl::KeyCode::IsDefinedKeyCodeEqual( const vcl::KeyCode& rKeyCode ) const
-{
-    if ( (eFunc == KeyFuncType::DONTKNOW) && (rKeyCode.eFunc == KeyFuncType::DONTKNOW) )
-        return (GetFullCode() == rKeyCode.GetFullCode());
-    return (GetFunction() == rKeyCode.GetFunction());
-}
-
 inline vcl::KeyCode& vcl::KeyCode::operator = ( const vcl::KeyCode& rKeyCode )
 {
-    nCode = rKeyCode.nCode;
+    nKeyCodeAndModifiers = rKeyCode.nKeyCodeAndModifiers;
     eFunc = rKeyCode.eFunc;
 
     return *this;

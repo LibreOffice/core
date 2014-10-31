@@ -1453,7 +1453,7 @@ bool ImplCallHotKey( const vcl::KeyCode& rKeyCode )
     ImplHotKey*     pHotKeyData = pSVData->maAppData.mpFirstHotKey;
     while ( pHotKeyData )
     {
-        if ( pHotKeyData->maKeyCode.IsDefinedKeyCodeEqual( rKeyCode ) )
+        if ( pHotKeyData->maKeyCode == rKeyCode )
         {
             pHotKeyData->maLink.Call( pHotKeyData->mpUserData );
             return true;

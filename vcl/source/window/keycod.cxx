@@ -71,12 +71,12 @@ bool ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, 
 vcl::KeyCode::KeyCode( KeyFuncType eFunction )
 {
     sal_uInt16 nDummy;
-    ImplGetKeyCode( eFunction, nCode, nDummy, nDummy, nDummy );
+    ImplGetKeyCode( eFunction, nKeyCodeAndModifiers, nDummy, nDummy, nDummy );
     eFunc = eFunction;
 }
 
 vcl::KeyCode::KeyCode( const ResId& rResId )
-    : nCode(0)
+    : nKeyCodeAndModifiers(0)
     , eFunc(KeyFuncType::DONTKNOW)
 {
     rResId.SetRT( RSC_KEYCODE );
@@ -94,10 +94,10 @@ vcl::KeyCode::KeyCode( const ResId& rResId )
         if ( eFunc != KeyFuncType::DONTKNOW )
         {
             sal_uInt16 nDummy;
-            ImplGetKeyCode( eFunc, nCode, nDummy, nDummy, nDummy );
+            ImplGetKeyCode( eFunc, nKeyCodeAndModifiers, nDummy, nDummy, nDummy );
         }
         else
-            nCode = sal::static_int_cast<sal_uInt16>(nKeyCode | nModifier);
+            nKeyCodeAndModifiers = sal::static_int_cast<sal_uInt16>(nKeyCode | nModifier);
     }
 }
 
