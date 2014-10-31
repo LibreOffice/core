@@ -14,7 +14,6 @@ $(eval $(call gb_installmodule_use_auto_install_libs,scp2/quickstart,\
 ))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/quickstart,\
-    scp2/source/quickstart/file_quickstart \
     scp2/source/quickstart/registryitem_quickstart \
 ))
 
