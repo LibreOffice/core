@@ -6904,6 +6904,9 @@ bool PDFWriterImpl::emitAdditionalStreams()
 
         checkAndEnableStreamEncryption( rStream.m_nStreamObject );
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xStream( new PDFStreamIf( this ) );
+        assert(rStream.m_pStream);
+        if (!rStream.m_pStream)
+            return false;
         rStream.m_pStream->write( xStream );
         xStream.clear();
         delete rStream.m_pStream;
