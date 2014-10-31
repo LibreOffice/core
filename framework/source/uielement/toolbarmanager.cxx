@@ -243,6 +243,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
 
 ToolBarManager::~ToolBarManager()
 {
+    assert(!m_aAsyncUpdateControllersTimer.IsActive());
     OSL_ASSERT( m_pToolBar == 0 );
     OSL_ASSERT( !m_bAddedToTaskPaneList );
 }
@@ -475,7 +476,9 @@ throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
+    {
         m_aAsyncUpdateControllersTimer.Start();
+    }
 }
 
 void SAL_CALL ToolBarManager::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
@@ -563,9 +566,6 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
     {
         SolarMutexGuard g;
 
-        // stop timer to prevent timer events after dispose
-        m_aAsyncUpdateControllersTimer.Stop();
-
         RemoveControllers();
 
         if ( m_xDocImageManager.is() )
@@ -628,6 +628,10 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
         m_xGlobalAcceleratorManager.clear();
         m_xModuleAcceleratorManager.clear();
         m_xDocAcceleratorManager.clear();
+
+        // stop timer to prevent timer events after dispose
+        // do it last because other calls could restart timer in StateChanged()
+        m_aAsyncUpdateControllersTimer.Stop();
 
         m_bDisposed = true;
     }
@@ -1412,7 +1416,9 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     if( m_pToolBar->WillUsePopupMode() )
         UpdateControllers();
     else if ( m_pToolBar->IsReallyVisible() )
+    {
         m_aAsyncUpdateControllersTimer.Start();
+    }
 
     // Try to retrieve UIName from the container property set and set it as the title
     // if it is not empty.
@@ -2038,7 +2044,9 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
     else if ( *pStateChangedType == StateChangedType::VISIBLE )
     {
         if ( m_pToolBar->IsReallyVisible() )
+        {
             m_aAsyncUpdateControllersTimer.Start();
+        }
     }
     else if ( *pStateChangedType == StateChangedType::INITSHOW )
     {
