@@ -434,7 +434,6 @@ void Idle::DoIdle()
     maTimeoutHdl.Call( this );
 }
 
-
 Idle::~Idle()
 {
 }
