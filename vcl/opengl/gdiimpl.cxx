@@ -453,6 +453,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY )
 {
     if( mnLineColor != SALCOLOR_NONE )
     {
+        maContext.makeCurrent();
         BeginSolid( mnLineColor );
         DrawPoint( nX, nY );
         EndSolid();
@@ -463,6 +464,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
 {
     if( nSalColor != SALCOLOR_NONE )
     {
+        maContext.makeCurrent();
         BeginSolid( nSalColor );
         DrawPoint( nX, nY );
         EndSolid();
@@ -473,6 +475,7 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     if( mnLineColor != SALCOLOR_NONE )
     {
+        maContext.makeCurrent();
         BeginSolid( mnLineColor );
         DrawLine( nX1, nY1, nX2, nY2 );
         EndSolid();
@@ -481,6 +484,8 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
+    maContext.makeCurrent();
+
     if( mnFillColor != SALCOLOR_NONE )
     {
         BeginSolid( mnFillColor );
@@ -505,6 +510,8 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
 
 void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
+    maContext.makeCurrent();
+
     if( mnLineColor != SALCOLOR_NONE && nPoints > 1 )
     {
         BeginSolid( mnLineColor );
@@ -529,6 +536,8 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
         return;
     }
 
+    maContext.makeCurrent();
+
     if( mnFillColor != SALCOLOR_NONE )
     {
         BeginSolid( mnFillColor );
@@ -548,6 +557,8 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
 {
     if( nPoly <= 0 )
         return;
+
+    maContext.makeCurrent();
 
     if( mnFillColor != SALCOLOR_NONE )
     {
@@ -645,6 +656,7 @@ void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitm
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     GLuint nTexture = rBitmap.GetTexture();
 
+    maContext.makeCurrent();
     DrawTexture( nTexture, rPosAry );
 }
 
@@ -666,6 +678,7 @@ void OpenGLSalGraphicsImpl::drawBitmap(
     const GLuint nTexture( rBitmap.GetTexture() );
     const GLuint nMask( rMask.GetTexture() );
 
+    maContext.makeCurrent();
     DrawTextureWithMask( nTexture, nMask, rPosAry );
 }
 
@@ -702,6 +715,7 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
 {
     char pixel[3];
 
+    maContext.makeCurrent();
     glReadPixels( nX, nY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
     return MAKE_SALCOLOR( pixel[0], pixel[1], pixel[2] );
 }
@@ -715,6 +729,8 @@ void OpenGLSalGraphicsImpl::invert(
     // TODO Figure out what are those:
     //   * SAL_INVERT_50 (50/50 pattern?)
     //   * SAL_INVERT_TRACKFRAME (dash-line rectangle?)
+
+    maContext.makeCurrent();
 
     if( nFlags & SAL_INVERT_TRACKFRAME )
     {
@@ -734,6 +750,8 @@ void OpenGLSalGraphicsImpl::invert(
 
 void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags )
 {
+    maContext.makeCurrent();
+
     if( nFlags & SAL_INVERT_TRACKFRAME )
     {
 
@@ -781,6 +799,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
     const GLuint nTexture( rBitmap.GetTexture() );
     const GLuint nAlpha( rAlpha.GetTexture() );
 
+    maContext.makeCurrent();
     DrawTextureWithMask( nTexture, nAlpha, rPosAry );
     return true;
 }
