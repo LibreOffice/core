@@ -1166,7 +1166,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryWithFlags(
     osl_File_E_BUSY device or resource busy<br>
     osl_File_E_ROFS read-only file system<br>
     osl_File_E_LOOP too many symbolic links encountered<br>
-    osl_File_E_BUSY device or resource busy<br>
     osl_File_E_EXIST file exists<br>
     osl_File_E_IO on I/O errors<br>
     osl_File_E_MULTIHOP multihop attempted<br>
