@@ -25,9 +25,11 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star::beans;
@@ -1275,7 +1277,7 @@ void SAL_CALL CachedContentResultSet
 // XContentAccess methods. ( inherited ) ( -- position dependent )
 
 
-#define XCONTENTACCESS_queryXXX( queryXXX, XXX, TYPE )              \
+#define XCONTENTACCESS_queryXXX( queryXXX, XXX, TYPE )      \
 impl_EnsureNotDisposed();                                   \
 ReacquireableGuard aGuard( m_aMutex );                      \
 sal_Int32 nRow = m_nRow;                                    \
@@ -1283,32 +1285,45 @@ sal_Int32 nFetchSize = m_nFetchSize;                        \
 sal_Int32 nFetchDirection = m_nFetchDirection;              \
 if( !m_aCache##XXX.hasRow( nRow ) )                         \
 {                                                           \
-    if( !m_aCache##XXX.hasCausedException( nRow ) )         \
-{                                                           \
-        if( !m_xFetchProviderForContentAccess.is() )        \
-        {                                                   \
-            OSL_FAIL( "broadcaster was disposed already" );\
-            throw RuntimeException();                       \
-        }                                                   \
-        aGuard.clear();                                     \
-        if( impl_isForwardOnly() )                          \
-            applyPositionToOrigin( nRow );                  \
-                                                            \
-        FETCH_XXX( m_aCache##XXX, m_xFetchProviderForContentAccess, fetch##XXX##s ); \
-    }                                                       \
-    aGuard.reacquire();                                     \
-    if( !m_aCache##XXX.hasRow( nRow ) )                     \
+    try                                                     \
     {                                                       \
-        aGuard.clear();                                     \
-        applyPositionToOrigin( nRow );                      \
-        TYPE aRet = ContentResultSetWrapper::queryXXX();    \
-        if( m_xContentIdentifierMapping.is() )              \
-            return m_xContentIdentifierMapping->map##XXX( aRet );\
-        return aRet;                                        \
+        if( !m_aCache##XXX.hasCausedException( nRow ) )     \
+        {                                                   \
+            if( !m_xFetchProviderForContentAccess.is() )    \
+            {                                               \
+                OSL_FAIL( "broadcaster was disposed already" ); \
+                throw RuntimeException();                   \
+            }                                               \
+            aGuard.clear();                                 \
+            if( impl_isForwardOnly() )                      \
+                applyPositionToOrigin( nRow );              \
+                                                            \
+            FETCH_XXX( m_aCache##XXX, m_xFetchProviderForContentAccess, fetch##XXX##s ); \
+        }                                                   \
+        aGuard.reacquire();                                 \
+        if( !m_aCache##XXX.hasRow( nRow ) )                 \
+        {                                                   \
+            aGuard.clear();                                 \
+            applyPositionToOrigin( nRow );                  \
+            TYPE aRet = ContentResultSetWrapper::queryXXX();\
+            if( m_xContentIdentifierMapping.is() )          \
+                return m_xContentIdentifierMapping->map##XXX( aRet );\
+            return aRet;                                    \
+        }                                                   \
+    }                                                       \
+    catch (const RuntimeException&)                         \
+    {                                                       \
+        throw;                                              \
+    }                                                       \
+    catch (const Exception& e)                              \
+    {                                                       \
+        Any a(cppu::getCaughtException());                  \
+        throw WrappedTargetRuntimeException(                \
+            "wrapped Exception " + e.Message,               \
+            Reference<XInterface>(), a);                    \
     }                                                       \
 }                                                           \
 return m_aCache##XXX.get##XXX( nRow );
-
 
 // virtual
 OUString SAL_CALL CachedContentResultSet
