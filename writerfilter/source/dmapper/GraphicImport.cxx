@@ -46,7 +46,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 

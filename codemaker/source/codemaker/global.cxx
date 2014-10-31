@@ -24,17 +24,16 @@
 #include "osl/file.hxx"
 
 #include <string.h>
-#if defined(SAL_W32)
-#include <io.h>
-
-#include <direct.h>
 #include <errno.h>
+
+#if defined(SAL_W32)
+#   include <io.h>
+#   include <direct.h>
 #endif
 
 #ifdef UNX
-#include <sys/stat.h>
-#include <errno.h>
-#include <unistd.h>
+#   include <sys/stat.h>
+#   include <unistd.h>
 #endif
 
 #include "codemaker/global.hxx"

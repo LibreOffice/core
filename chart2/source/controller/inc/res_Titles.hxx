@@ -22,7 +22,6 @@
 #include "TitleDialogData.hxx"
 #include <vcl/builder.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/fixed.hxx>
 
 namespace chart
 {

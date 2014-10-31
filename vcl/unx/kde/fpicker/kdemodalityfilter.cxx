@@ -20,13 +20,12 @@
 #include <cstddef>
 
 #include <kdemodalityfilter.hxx>
+#include <kdialogbase.h>
 
 #if ENABLE_TDE
-#include <tdeapplication.h>
-#include <kdialogbase.h>
+#   include <tdeapplication.h>
 #else // ENABLE_TDE
-#include <kapplication.h>
-#include <kdialogbase.h>
+#   include <kapplication.h>
 #endif // ENABLE_TDE
 
 #include <netwm.h>

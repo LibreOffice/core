@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-
 #include <test/cppuhelper/propertysetmixin/CppSupplier.hpp>
 #include <test/cppuhelper/propertysetmixin/JavaSupplier.hpp>
 #include <test/cppuhelper/propertysetmixin/XSupplier.hpp>

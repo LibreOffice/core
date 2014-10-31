@@ -36,7 +36,6 @@
 #include <rtl/instance.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include "oox/core/fastparser.hxx"
-#include "oox/core/filterdetect.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/recordparser.hxx"
 #include "oox/core/relationshandler.hxx"

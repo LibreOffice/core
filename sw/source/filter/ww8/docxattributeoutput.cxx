@@ -38,8 +38,6 @@
 #include "textboxhelper.hxx"
 #include "wrtww8.hxx"
 
-#include "wrtww8.hxx"
-
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/flagguard.hxx>

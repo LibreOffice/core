@@ -22,7 +22,6 @@
 #include "helper/shared_test_impl.hxx"
 
 #include "docsh.hxx"
-#include "postit.hxx"
 #include "patattr.hxx"
 #include "scitems.hxx"
 #include "document.hxx"

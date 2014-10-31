@@ -29,7 +29,6 @@
 #include "Interface1.hpp"
 
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
 
 namespace
 {

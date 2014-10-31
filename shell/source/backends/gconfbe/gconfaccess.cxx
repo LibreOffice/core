@@ -29,7 +29,6 @@
 #include "osl/thread.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
-#include "sal/macros.h"
 
 #include "gconfaccess.hxx"
 
