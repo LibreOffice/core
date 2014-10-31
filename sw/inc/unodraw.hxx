@@ -34,6 +34,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <svl/itemprop.hxx>
+#include <set>
 
 class SdrMarkList;
 class SdrView;
@@ -116,6 +117,9 @@ public:
     SwFmDrawPage*   GetSvxPage();
     // renamed and outlined to detect where it's called
     void    InvalidateSwDoc(); // {pDoc = 0;}
+    SwDoc* GetDoc();
+    /// Same as getByIndex(nIndex), except that it also takes a set of formats to ignore, so the method itself doesn't have to generate such a list.
+    css::uno::Any getByIndex(sal_Int32 nIndex, std::set<const SwFrmFmt*>* pTextBoxes) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
 };
 
 class SwShapeDescriptor_Impl;

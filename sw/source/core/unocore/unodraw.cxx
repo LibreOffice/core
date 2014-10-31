@@ -404,9 +404,10 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     SolarMutexGuard aGuard;
     ::std::insert_iterator<shapescontainer_t> pInserter = ::std::insert_iterator<shapescontainer_t>(m_aShapes, m_aShapes.begin());
     sal_Int32 nCount = pDrawPage->getCount();
+    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDrawPage->GetDoc());
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
-        uno::Reference<drawing::XShape> xShape = uno::Reference<drawing::XShape>(pDrawPage->getByIndex(nIdx), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape = uno::Reference<drawing::XShape>(pDrawPage->getByIndex(nIdx, &aTextBoxes), uno::UNO_QUERY);
         *pInserter++ = uno::makeAny(xShape);
     }
 }
@@ -545,6 +546,12 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
         throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                uno::RuntimeException, std::exception )
 {
+    return getByIndex(nIndex, 0);
+}
+
+uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex, std::set<const SwFrmFmt*>* pTextBoxes)
+    throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+{
     SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
@@ -552,11 +559,17 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     ((SwXDrawPage*)this)->GetSvxPage();
-    std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
-    if (aTextBoxes.empty())
+    std::set<const SwFrmFmt*> aTextBoxes;
+    if (!pTextBoxes)
+    {
+        // We got no set, so let's generate one.
+        aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+        pTextBoxes = &aTextBoxes;
+    }
+    if (pTextBoxes->empty())
         return pDrawPage->getByIndex( nIndex );
     else
-        return SwTextBoxHelper::getByIndex(pDrawPage->GetSdrPage(), nIndex, aTextBoxes);
+        return SwTextBoxHelper::getByIndex(pDrawPage->GetSdrPage(), nIndex, *pTextBoxes);
 }
 
 uno::Type  SwXDrawPage::getElementType(void) throw( uno::RuntimeException, std::exception )
@@ -862,6 +875,11 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
 void SwXDrawPage::InvalidateSwDoc()
 {
     pDoc = 0;
+}
+
+SwDoc* SwXDrawPage::GetDoc()
+{
+    return pDoc;
 }
 
 TYPEINIT1(SwXShape, SwClient);
