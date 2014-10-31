@@ -123,6 +123,7 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     {
         case FILTER_OOXML:
             initializeMaxPos( OOX_MAXTAB, OOX_MAXCOL, OOX_MAXROW );
+            maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
         break;
         case FILTER_BIFF: switch( getBiff() )
         {
@@ -149,7 +150,10 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
             case BIFF_UNKNOWN: break;
         }
         break;
-        case FILTER_UNKNOWN: break;
+        case FILTER_UNKNOWN:
+            initializeMaxPos( 0, 0, 0 );
+            maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
+        break;
     }
 }
 
