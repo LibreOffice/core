@@ -108,6 +108,13 @@ public:
     virtual ~ViewContactOfInnerPageBorder();
 };
 
+/**
+ * This view contact corresponds with all SdrObject instances in a single
+ * SdrPage.  Its GetObjectCount() returns the number of SdrObject instances
+ * in the SdrPage that it represents, and its GetViewContact() returns the
+ * view contact of the SdrObject instance associated with the identifier
+ * passed to the method.
+ */
 class ViewContactOfPageHierarchy : public ViewContactOfPageSubObject
 {
 protected:
