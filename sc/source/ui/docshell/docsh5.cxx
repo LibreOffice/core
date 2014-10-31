@@ -122,7 +122,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     //  benannter DB-Bereich dort gesucht werden.
     ScDBCollection* pColl = aDocument.GetDBCollection();
     ScDBData* pData = aDocument.GetDBAtArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
-    if (!pData && pColl)
+    if (!pData)
         pData = pColl->GetDBNearCursor(nCol, nRow, nTab );
 
     bool bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
