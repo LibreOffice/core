@@ -436,6 +436,7 @@ private:
     bool mbCopyIsMove            : 1;    ///< TRUE: Copy is a hidden Move.
     bool mbVisibleLinks          : 1;    ///< TRUE: Links are inserted visibly.
     bool mbInReading             : 1;    ///< TRUE: Document is in the process of being read.
+    bool mbInMailMerge           : 1;    //< TRUE: Document is in the process of being written by mail merge.
     bool mbInXMLImport           : 1;    ///< TRUE: During xml import, attribute portion building is not necessary.
     bool mbUpdateTOX             : 1;    ///< TRUE: After loading document, update TOX.
     bool mbInLoadAsynchron       : 1;    ///< TRUE: Document is in the process of being loaded asynchronously.
@@ -1427,6 +1428,9 @@ public:
 
     bool IsInReading() const                    { return mbInReading; }
     void SetInReading( bool bNew )              { mbInReading = bNew; }
+
+    bool IsInMailMerge() const                  { return mbInMailMerge; }
+    void SetInMailMerge( bool bNew )            { mbInMailMerge = bNew; }
 
     bool IsClipBoard() const                    { return mbClipBoard; }
     /// N.B.: must be called right after constructor! (@see GetXmlIdRegistry)
