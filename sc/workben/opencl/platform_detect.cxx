@@ -7,13 +7,17 @@
 
 using namespace std;
 
+#ifdef WIN32
+#define OPENCL_DLL_NAME "OpenCL.dll"
+#elif defined(MACOSX)
+#define OPENCL_DLL_NAME NULL
+#else
+#define OPENCL_DLL_NAME "libOpenCL.so"
+#endif
+
 int main()
 {
-    const char* dllname = "libOpenCL.so"; // on Linux
-//  const char* dllname = "OpenCL.dll"; // from GPU driver.
-//  const char* dllname = "amdocl.dll"; // from AMD SDK
-//  const char* dllname = "intelocl.dll"; // from Intel SDK
-    int status = clewInit(dllname);
+    int status = clewInit(OPENCL_DLL_NAME);
     if (status < 0)
     {
         cout << "failed to load" << endl;
