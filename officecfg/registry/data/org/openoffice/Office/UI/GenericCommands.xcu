@@ -4398,7 +4398,7 @@
       </node>
       <node oor:name=".uno:Gallery" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Gallery</value>
+          <value xml:lang="en-US">Clip Art ~Gallery</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>

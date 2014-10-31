@@ -149,8 +149,9 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
-      <menu:menuitem menu:id=".uno:Sidebar"/>
-      <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Gallery"/>
+            <menu:menuitem menu:id=".uno:Sidebar"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
             <menu:menu menu:id=".uno:ZoomMenu">
                 <menu:menupopup>
@@ -214,6 +215,7 @@
             <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertGraphic"/>
+                    <menu:menuitem menu:id=".uno:Gallery"/>
                     <menu:menuitem menu:id=".uno:InsertAVMedia"/>
                     <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
                 </menu:menupopup>
@@ -420,8 +422,6 @@
                     <menu:menuitem menu:id=".uno:AutoComplete"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>
