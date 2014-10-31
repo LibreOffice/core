@@ -211,7 +211,6 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( xObj ),
-    pGraphic(0),
     bOLESizeInvalid( false ),
     mpObjectLink( NULL )
 {
@@ -225,7 +224,6 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_OLENODE, pGrfColl, pAutoAttr ),
     aOLEObj( rString, nAspect ),
-    pGraphic(0),
     bOLESizeInvalid( false ),
     mpObjectLink( NULL )
 {
@@ -235,14 +233,13 @@ SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
 SwOLENode::~SwOLENode()
 {
     DisconnectFileLink_Impl();
-    delete pGraphic;
 }
 
 const Graphic* SwOLENode::GetGraphic()
 {
     if ( aOLEObj.GetOleRef().is() )
         return aOLEObj.xOLERef.GetGraphic();
-    return pGraphic;
+    return 0;
 }
 
 SwCntntNode *SwOLENode::SplitCntntNode( const SwPosition & )
