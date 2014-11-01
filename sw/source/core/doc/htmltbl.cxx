@@ -1455,9 +1455,14 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         }
 
         sal_uLong nAbsTabWidthL = nAbsTabWidth;
-        nRelTabWidth =
-            ( nRelAvail ? (sal_uInt16)((nAbsTabWidthL * nRelAvail) / nAbsAvail)
-                        : nAbsTabWidth );
+        if (nRelAvail)
+        {
+            if (nAbsAvail == 0)
+                throw o3tl::divide_by_zero();
+            nRelTabWidth = (sal_uInt16)((nAbsTabWidthL * nRelAvail) / nAbsAvail);
+        }
+        else
+            nRelTabWidth = nAbsTabWidth;
         double nW = nAbsTabWidth - nMin;
         double nD = (nMax==nMin ? 1 : nMax-nMin);
         sal_uInt16 nAbs = 0, nRel = 0;
