@@ -71,9 +71,7 @@ static string g_strPStackFileName;
 static string g_strChecksumFileName;
 static string g_strProgramDir;
 
-static char g_szStackFile[L_tmpnam] = "";
-static char g_szDescriptionFile[2048] = "";
-static char g_szReportFile[2048] = "";
+//static char g_szStackFile[L_tmpnam] = "";
 
 #define REPORT_SERVER   (g_strReportServer.c_str())
 #define REPORT_PORT     g_uReportPort
@@ -163,87 +161,124 @@ static size_t fcopy( FILE *fpout, FILE *fpin )
    from which it can be reviewed and sent
 */
 
-bool write_report( const boost::unordered_map< string, string >& rSettings )
+char* write_report( const boost::unordered_map< string, string >& rSettings )
 {
-    FILE    *fp = fopen( tmpnam( g_szReportFile ), "w" );
-    const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
+    char * report_filename;
 
-    fprintf( fp,
-       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-       "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
-       "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
-       "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.1\" feedback=\"%s\" email=\"%s\">\n"
-       "<reportmail:title>%s</reportmail:title>\n"
-       "<reportmail:attachment name=\"description.txt\" media-type=\"text/plain\" class=\"UserComment\"/>\n"
-       "<reportmail:attachment name=\"stack.txt\" media-type=\"text/plain\" class=\"pstack output\"/>\n"
-       "</reportmail:mail>\n"
-       "<officeinfo:officeinfo xmlns:officeinfo=\"http://openoffice.org/2002/officeinfo\" build=\"%s\" platform=\"%s\" language=\"%s\" exceptiontype=\"%d\" product=\"%s\" procpath=\"%s\"/>\n"
-       ,
-       pszUserType ? xml_encode( pszUserType ).c_str() : "",
-       xml_encode(rSettings.find( "CONTACT" )->second).c_str(),
-       xml_encode(rSettings.find( "EMAIL" )->second).c_str(),
-       xml_encode(rSettings.find( "TITLE" )->second).c_str(),
-       g_buildid.length() ? xml_encode( g_buildid ).c_str() : "unknown",
-       _INPATH,
-       g_strDefaultLanguage.c_str(),
-       g_signal,
-       g_strProductKey.length() ? xml_encode(g_strProductKey).c_str() : "unknown",
-       xml_encode(getprogramdir()).c_str()
-       );
+    report_filename = (char*)calloc(1, 2048);
 
-    struct utsname  info;
-
-    memset( &info, 0, sizeof(info) );
-    uname( &info );
-
-    fprintf( fp,
-       "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
-       "<systeminfo:System name=\"%s\" version=\"%s\" build=\"%s\" locale=\"%s\"/>\n"
-       ,
-       xml_encode( info.sysname ).c_str(),
-       xml_encode( info.version ).c_str(),
-       xml_encode( info.release ).c_str(),
-       xml_encode( getlocale() ).c_str()
-       );
-    fprintf( fp, "<systeminfo:CPU type=\"%s\"/>\n", xml_encode( info.machine ).c_str() );
-    fprintf( fp, "</systeminfo:systeminfo>\n" );
-
-    FILE *fpxml = fopen( g_strXMLFileName.c_str(), "r" );
-    if ( fpxml )
+    if(!report_filename)
     {
-        fcopy( fp, fpxml );
-        fclose( fpxml );
+        return NULL;
     }
+    strncpy( report_filename, P_tmpdir, 2047 );
+    strncat( report_filename, "/crashreport.XXXXXX", 2047 - strlen(report_filename));
 
-    FILE *fpchk = fopen( g_strChecksumFileName.c_str(), "r" );
-    if ( fpchk )
+    int fd = mkstemp(report_filename);
+    if(fd == -1)
     {
-        fcopy( fp, fpchk );
-        fclose( fpchk );
+        free(report_filename);
+        return NULL;
     }
+    else
+    {
+        FILE* fp = fdopen(fd, "w");
 
-    fprintf( fp, "</errormail:errormail>\n" );
+        const char* pszUserType = getenv( "STAROFFICE_USERTYPE" );
 
-    fclose( fp );
+        fprintf( fp,
+                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                 "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
+                 "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
+                 "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.1\" feedback=\"%s\" email=\"%s\">\n"
+                 "<reportmail:title>%s</reportmail:title>\n"
+                 "<reportmail:attachment name=\"description.txt\" media-type=\"text/plain\" class=\"UserComment\"/>\n"
+                 "<reportmail:attachment name=\"stack.txt\" media-type=\"text/plain\" class=\"pstack output\"/>\n"
+                 "</reportmail:mail>\n"
+                 "<officeinfo:officeinfo xmlns:officeinfo=\"http://openoffice.org/2002/officeinfo\" build=\"%s\" platform=\"%s\" language=\"%s\" exceptiontype=\"%d\" product=\"%s\" procpath=\"%s\"/>\n"
+                 ,
+                 pszUserType ? xml_encode( pszUserType ).c_str() : "",
+                 xml_encode(rSettings.find( "CONTACT" )->second).c_str(),
+                 xml_encode(rSettings.find( "EMAIL" )->second).c_str(),
+                 xml_encode(rSettings.find( "TITLE" )->second).c_str(),
+                 g_buildid.length() ? xml_encode( g_buildid ).c_str() : "unknown",
+                 _INPATH,
+                 g_strDefaultLanguage.c_str(),
+                 g_signal,
+                 g_strProductKey.length() ? xml_encode(g_strProductKey).c_str() : "unknown",
+                 xml_encode(getprogramdir()).c_str()
+            );
 
-    return true;
+        struct utsname  info;
+
+        memset( &info, 0, sizeof(info) );
+        uname( &info );
+
+        fprintf( fp,
+                 "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
+                 "<systeminfo:System name=\"%s\" version=\"%s\" build=\"%s\" locale=\"%s\"/>\n"
+                 ,
+                 xml_encode( info.sysname ).c_str(),
+                 xml_encode( info.version ).c_str(),
+                 xml_encode( info.release ).c_str(),
+                 xml_encode( getlocale() ).c_str()
+            );
+        fprintf( fp, "<systeminfo:CPU type=\"%s\"/>\n", xml_encode( info.machine ).c_str() );
+        fprintf( fp, "</systeminfo:systeminfo>\n" );
+
+        FILE *fpxml = fopen( g_strXMLFileName.c_str(), "r" );
+        if ( fpxml )
+        {
+            fcopy( fp, fpxml );
+            fclose( fpxml );
+        }
+
+        FILE *fpchk = fopen( g_strChecksumFileName.c_str(), "r" );
+        if ( fpchk )
+        {
+            fcopy( fp, fpchk );
+            fclose( fpchk );
+        }
+
+        fprintf( fp, "</errormail:errormail>\n" );
+
+        fclose( fp );
+    }
+    return report_filename;
 }
 
 
-bool write_description( const boost::unordered_map< string, string >& rSettings )
+char* write_description( const boost::unordered_map< string, string >& rSettings )
 {
-    bool    bSuccess = false;
-    FILE    *fp = fopen( tmpnam( g_szDescriptionFile ), "w" );
+    char * description_filename;
 
-    if ( fp )
+    description_filename = (char*)calloc(1, 2048);
+
+    if(!description_filename)
     {
-        bSuccess = true;
-        fprintf( fp, "\xEF\xBB\xBF" );
-        fprintf( fp, "%s\n", rSettings.find( "DESCRIPTION" )->second.c_str() );
-        fclose( fp );
+        return NULL;
     }
+    strncpy( description_filename, P_tmpdir, 2047 );
+    strncat( description_filename, "/crashreport.XXXXXX", 2047 - strlen(description_filename));
 
-    return bSuccess;
+    int fd = mkstemp(description_filename);
+    if(fd == -1)
+    {
+        free(description_filename);
+        return NULL;
+    }
+    else
+    {
+        FILE* fp = fdopen(fd, "w");
+
+        if ( fp )
+        {
+            fprintf( fp, "\xEF\xBB\xBF" );
+            fprintf( fp, "%s\n", rSettings.find( "DESCRIPTION" )->second.c_str() );
+            fclose( fp );
+        }
+    }
+    return description_filename;
 }
 
 #if 0
@@ -372,7 +407,7 @@ bool SendHTTPRequest(
     return success;
 }
 
-static void WriteSOAPRequest( FILE *fp )
+static void WriteSOAPRequest( FILE *fp, char* report_filename, char* description_filename )
 {
     fprintf( fp,
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -390,7 +425,7 @@ static void WriteSOAPRequest( FILE *fp )
     fprintf( fp, "<body xsi:type=\"xsd:string\">This is an autogenerated crash report mail.</body>\n" );
     fprintf( fp, "<hash xsi:type=\"apache:Map\">\n" );
 
-    FILE    *fpin = fopen( g_szReportFile, "r" );
+    FILE    *fpin = fopen( report_filename, "r" );
     if ( fpin )
     {
         fprintf( fp,
@@ -402,7 +437,7 @@ static void WriteSOAPRequest( FILE *fp )
         fclose( fpin );
     }
 
-    fpin = fopen( g_szDescriptionFile, "r" );
+    fpin = fopen( description_filename, "r" );
     if ( fpin )
     {
         fprintf( fp,
@@ -414,6 +449,10 @@ static void WriteSOAPRequest( FILE *fp )
         fclose( fpin );
     }
 
+// nowhere g_szStackfile actualy populated with something
+// so this endup trying to open "" which is ging to fail
+// so what's the point ?
+#if 0
     fpin = fopen( g_szStackFile, "r" );
     if ( fpin )
     {
@@ -425,7 +464,7 @@ static void WriteSOAPRequest( FILE *fp )
         fprintf( fp, "]]></value></item>\n" );
         fclose( fpin );
     }
-
+#endif
     fprintf( fp,
         "</hash>\n"
         "</rds:submitReport>\n"
@@ -458,30 +497,38 @@ bool send_crash_report( const boost::unordered_map< string, string >& rSettings 
     bool bUseProxy = !strcasecmp( "true", rSettings.find( "USEPROXY" )->second.c_str() );
 
 
-    write_description( rSettings );
-    write_report( rSettings );
-
+    char* description_filename = write_description( rSettings );
+    char* report_filename = write_report( rSettings );
     bool bSuccess = false;
 
-    FILE    *fptemp = tmpfile();
-    if ( fptemp )
+    if(description_filename && report_filename)
     {
-        WriteSOAPRequest( fptemp );
-        fseek( fptemp, 0, SEEK_SET );
+        FILE* fptemp = tmpfile();
+        if ( fptemp )
+        {
+            WriteSOAPRequest( fptemp, report_filename, description_filename );
+            fseek( fptemp, 0, SEEK_SET );
 
-        bSuccess = SendHTTPRequest(
-            fptemp,
-            REPORT_SERVER, REPORT_PORT,
-            bUseProxy ? pProxyServer : NULL,
-            uProxyPort ? uProxyPort : 8080
-            );
+            bSuccess = SendHTTPRequest(
+                    fptemp,
+                    REPORT_SERVER, REPORT_PORT,
+                    bUseProxy ? pProxyServer : NULL,
+                    uProxyPort ? uProxyPort : 8080
+                );
 
-        fclose( fptemp );
-
+            fclose( fptemp );
+        }
     }
-
-    unlink( g_szDescriptionFile );
-    unlink( g_szReportFile );
+    if(description_filename)
+    {
+        unlink( description_filename);
+        free( description_filename);
+    }
+    if(report_filename)
+    {
+        unlink( report_filename);
+        free( report_filename);
+    }
 
     return bSuccess;
 }
@@ -980,25 +1027,28 @@ int main( int argc, char** argv )
             read_settings_from_environment( aDialogSettings );
 
             write_crash_data();
-            write_report( aDialogSettings );
-
-            string  sPreviewFile = get_home_dir();
-            sPreviewFile += "/";
-            sPreviewFile += string(PRVFILE);
-
-            FILE *fpout = fopen( sPreviewFile.c_str(), "w+" );
-            if ( fpout )
+            char* report_filename = write_report( aDialogSettings );
+            if(report_filename)
             {
-                FILE *fpin = fopen( g_szReportFile, "r" );
-                if ( fpin )
-                {
-                    fcopy( fpout, fpin );
-                    fclose( fpin );
-                }
-                fclose( fpout );
-            }
+                string  sPreviewFile = get_home_dir();
+                sPreviewFile += "/";
+                sPreviewFile += string(PRVFILE);
 
-            unlink( g_szReportFile );
+                FILE *fpout = fopen( sPreviewFile.c_str(), "w+" );
+                if ( fpout )
+                {
+                    FILE *fpin = fopen( report_filename, "r" );
+                    if ( fpin )
+                    {
+                        fcopy( fpout, fpin );
+                        fclose( fpin );
+                    }
+                    fclose( fpout );
+                }
+
+                unlink( report_filename );
+                free(report_filename);
+            }
         }
 
         if ( g_bLoadReport )
@@ -1007,7 +1057,7 @@ int main( int argc, char** argv )
             unlink( g_strChecksumFileName.c_str() );
         }
 
-        unlink( g_szStackFile );
+//        unlink( g_szStackFile );
 
         return 0;
     }
