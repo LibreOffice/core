@@ -351,7 +351,7 @@ void SwAddressPreview::Paint(const Rectangle&)
 void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Window::MouseButtonDown(rMEvt);
-    if(rMEvt.IsLeft() && ( pImpl->nRows || pImpl->nColumns))
+    if (rMEvt.IsLeft() && pImpl->nRows && pImpl->nColumns)
     {
         //determine the selected address
         const Point& rMousePos = rMEvt.GetPosPixel();
