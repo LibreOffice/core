@@ -741,20 +741,27 @@ void DomainMapperTableManager::endOfRowAction()
         sal_Int16 nLastRelPos = 0;
         sal_uInt32 nBorderGridIndex = m_nGridBefore;
 
-        ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
-        for( sal_uInt32 nBorder = 0; nBorder < m_nCell.back( ) - 1; ++nBorder )
+        size_t nWidthsBound =  m_nCell.back( ) - 1;
+        if (nWidthsBound)
         {
-            double fGridWidth = 0.;
-            for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
-                fGridWidth += (*pTableGrid.get())[nBorderGridIndex++];
+            if (nFullWidthRelative == 0)
+                throw std::range_error("divide by zero");
 
-            sal_Int16 nRelPos =
-                sal::static_int_cast< sal_Int16 >((fGridWidth * 10000) / nFullWidthRelative);
+            ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
+            for( sal_uInt32 nBorder = 0; nBorder < nWidthsBound; ++nBorder )
+            {
+                double fGridWidth = 0.;
+                for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
+                    fGridWidth += (*pTableGrid.get())[nBorderGridIndex++];
 
-            pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
-            pSeparators[nBorder].IsVisible = sal_True;
-            nLastRelPos = nLastRelPos + nRelPos;
-            ++aSpansIter;
+                sal_Int16 nRelPos =
+                    sal::static_int_cast< sal_Int16 >((fGridWidth * 10000) / nFullWidthRelative);
+
+                pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
+                pSeparators[nBorder].IsVisible = sal_True;
+                nLastRelPos = nLastRelPos + nRelPos;
+                ++aSpansIter;
+            }
         }
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
         pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::makeAny( aSeparators ) );
