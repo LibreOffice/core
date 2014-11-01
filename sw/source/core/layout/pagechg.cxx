@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/EmbedStates.hpp>
 #include <ndole.hxx>
-#include <docary.hxx>
 #include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtclds.hxx>
-#include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
-#include <fmtfordr.hxx>
-#include <fmtfld.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <ftninfo.hxx>
@@ -41,20 +36,10 @@
 #include "viewimp.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "flyfrm.hxx"
-#include "doc.hxx"
 #include <IDocumentSettingAccess.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include "fesh.hxx"
-#include "dview.hxx"
-#include "dflyobj.hxx"
 #include "dcontact.hxx"
-#include "frmtool.hxx"
-#include "fldbas.hxx"
 #include "hints.hxx"
-#include "swtable.hxx"
 
 #include "ftnidx.hxx"
 #include "bodyfrm.hxx"
@@ -65,12 +50,9 @@
 #include "flyfrms.hxx"
 #include "htmltbl.hxx"
 #include "pagedesc.hxx"
-#include "poolfmt.hxx"
 #include <editeng/frmdiritem.hxx>
-#include <swfntcch.hxx>
 #include <sortedobjs.hxx>
 #include <switerator.hxx>
-#include <vcl/svapp.hxx>
 #include <txtfly.hxx>
 
 using namespace ::com::sun::star;
