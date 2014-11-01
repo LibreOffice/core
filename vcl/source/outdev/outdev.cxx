@@ -401,59 +401,6 @@ bool OutputDevice::SupportsOperation( OutDevSupportType eType ) const
     return bHasSupport;
 }
 
-// Helper private function
-
-void OutputDevice::ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
-                                  short nOrientation ) const
-{
-    if ( (nOrientation >= 0) && !(nOrientation % 900) )
-    {
-        if ( (nOrientation >= 3600) )
-            nOrientation %= 3600;
-
-        if ( nOrientation )
-        {
-            rX -= nOriginX;
-            rY -= nOriginY;
-
-            if ( nOrientation == 900 )
-            {
-                long nTemp = rX;
-                rX = rY;
-                rY = -nTemp;
-            }
-            else if ( nOrientation == 1800 )
-            {
-                rX = -rX;
-                rY = -rY;
-            }
-            else /* ( nOrientation == 2700 ) */
-            {
-                long nTemp = rX;
-                rX = -rY;
-                rY = nTemp;
-            }
-
-            rX += nOriginX;
-            rY += nOriginY;
-        }
-    }
-    else
-    {
-        double nRealOrientation = nOrientation*F_PI1800;
-        double nCos = cos( nRealOrientation );
-        double nSin = sin( nRealOrientation );
-
-        // Translation...
-        long nX = rX-nOriginX;
-        long nY = rY-nOriginY;
-
-        // Rotation...
-        rX = +((long)(nCos*nX + nSin*nY)) + nOriginX;
-        rY = -((long)(nSin*nX - nCos*nY)) + nOriginY;
-    }
-}
-
 // Frame public functions
 
 void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
