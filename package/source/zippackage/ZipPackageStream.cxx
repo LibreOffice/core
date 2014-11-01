@@ -797,7 +797,7 @@ bool ZipPackageStream::saveChild(
             }
             else
             {
-                bParallelDeflate = false;
+                bParallelDeflate = true;
                 if (bParallelDeflate)
                 {
                     // Start a new thread deflating this zip entry
