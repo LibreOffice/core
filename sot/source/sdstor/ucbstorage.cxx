@@ -2835,7 +2835,12 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         }
 
         pElement->m_xStream->PrepareCachedForReopen( nMode );
-        pElement->m_xStream->Init();
+        bool bInited = pElement->m_xStream->Init();
+        if (!bInited)
+        {
+            SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
+            return NULL;
+        }
 
         pElement->m_bIsStorage = true;
         return pElement->m_xStream->CreateStorage();  // can only be created in transacted mode
