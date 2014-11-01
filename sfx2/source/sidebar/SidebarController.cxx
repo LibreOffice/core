@@ -888,7 +888,7 @@ void SidebarController::ShowPopupMenu (
         ++iItem,++nIndex)
     {
         const sal_Int32 nMenuIndex (nIndex+MID_FIRST_PANEL);
-        pMenu->InsertItem(nMenuIndex, iItem->msDisplayName, MIB_RADIOCHECK);
+        pMenu->InsertItem(nMenuIndex, iItem->msDisplayName, MenuItemBits::RADIOCHECK);
         pMenu->CheckItem(nMenuIndex, iItem->mbIsCurrentDeck ? sal_True : sal_False);
         pMenu->EnableItem(nMenuIndex, (iItem->mbIsEnabled&&iItem->mbIsActive) ? sal_True : sal_False);
 
@@ -896,12 +896,12 @@ void SidebarController::ShowPopupMenu (
         if (iItem->mbIsCurrentDeck)
         {
             // Don't allow the currently visible deck to be disabled.
-            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MIB_RADIOCHECK);
+            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MenuItemBits::RADIOCHECK);
             pCustomizationMenu->CheckItem(nSubMenuIndex, true);
         }
         else
         {
-            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MIB_CHECKABLE);
+            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MenuItemBits::CHECKABLE);
             pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsActive ? sal_True : sal_False);
         }
     }
@@ -962,7 +962,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
                     SwitchToDeck(mpTabBar->GetDeckIdForIndex(nIndex - MID_FIRST_PANEL));
                 }
                 else if (nIndex >=MID_FIRST_HIDE)
-                    if (pMenu->GetItemBits(nIndex) == MIB_CHECKABLE)
+                    if (pMenu->GetItemBits(nIndex) == MenuItemBits::CHECKABLE)
                         mpTabBar->ToggleHideFlag(nIndex-MID_FIRST_HIDE);
             }
             catch (RuntimeException&)

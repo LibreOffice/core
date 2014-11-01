@@ -698,20 +698,20 @@ Size ToolbarMenu::implCalcSize()
             if( pEntry->HasCheck() && !pEntry->mbHasImage )
             {
                 if( this->IsNativeControlSupported( CTRL_MENU_POPUP,
-                                                     (pEntry->mnBits & MIB_RADIOCHECK)
+                                                     (pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                      ? PART_MENU_ITEM_CHECK_MARK
                                                      : PART_MENU_ITEM_RADIO_MARK ) )
                 {
                     long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
                     ImplGetNativeCheckAndRadioSize( this, nCheckHeight, nRadioHeight, nMaxCheckWidth );
 
-                    long nCtrlHeight = (pEntry->mnBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                    long nCtrlHeight = (pEntry->mnBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
                     nMaxTextWidth += nCtrlHeight + gfxExtra;
                 }
                 else if( pEntry->mbChecked )
                 {
                     long nSymbolWidth = (nFontHeight*25)/40;
-                    if ( pEntry->mnBits & MIB_RADIOCHECK )
+                    if ( pEntry->mnBits & MenuItemBits::RADIOCHECK )
                         nSymbolWidth = nFontHeight/2;
 
                     nMaxTextWidth += nSymbolWidth;
@@ -894,7 +894,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
             bool bDrawItemRect = true;
 
             Rectangle aItemRect( Point( nX, nY ), Size( aSz.Width(), pEntry->maSize.Height() ) );
-            if ( pEntry->mnBits & MIB_POPUPSELECT )
+            if ( pEntry->mnBits & MenuItemBits::POPUPSELECT )
             {
                 long nFontHeight = GetTextHeight();
                 aItemRect.Right() -= nFontHeight + nFontHeight/4;
@@ -1400,11 +1400,11 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                     if( !pEntry->mbHasImage )
                     {
                         if( this->IsNativeControlSupported( CTRL_MENU_POPUP,
-                                                             (pEntry->mnBits & MIB_RADIOCHECK)
+                                                             (pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                              ? PART_MENU_ITEM_CHECK_MARK
                                                              : PART_MENU_ITEM_RADIO_MARK ) )
                         {
-                            ControlPart nPart = ((pEntry->mnBits & MIB_RADIOCHECK)
+                            ControlPart nPart = ((pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                  ? PART_MENU_ITEM_RADIO_MARK
                                                  : PART_MENU_ITEM_CHECK_MARK);
 
@@ -1419,7 +1419,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             if ( bHighlighted )
                                 nState |= CTRL_STATE_SELECTED;
 
-                            long nCtrlHeight = (pEntry->mnBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                            long nCtrlHeight = (pEntry->mnBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight)/2;
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
 
@@ -1433,7 +1433,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                             SymbolType eSymbol;
                             Size aSymbolSize;
-                            if ( pEntry->mnBits & MIB_RADIOCHECK )
+                            if ( pEntry->mnBits & MenuItemBits::RADIOCHECK )
                             {
                                 eSymbol = SymbolType::RADIOCHECKMARK;
                                 aSymbolSize = Size( nFontHeight/2, nFontHeight/2 );

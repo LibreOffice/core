@@ -85,7 +85,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
         PopupMenu* pSbMenu = this;
         if ( 1 < aActionComponentsSequence.getLength() )
         {
-            InsertItem(nMenuId, aSmartTagCaption, 0, OString(), nMenuPos++);
+            InsertItem(nMenuId, aSmartTagCaption, MenuItemBits::NONE, OString(), nMenuPos++);
             pSbMenu = new PopupMenu;
             SetPopupMenu( nMenuId++, pSbMenu );
         }
@@ -93,7 +93,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
         // sub-menu starts with smart tag caption and separator
         const OUString aSmartTagCaption2 = aSmartTagCaption + ": " + aRangeText;
         sal_uInt16 nSubMenuPos = 0;
-        pSbMenu->InsertItem(nMenuId++, aSmartTagCaption2, MIB_NOSELECT, OString(), nSubMenuPos++);
+        pSbMenu->InsertItem(nMenuId++, aSmartTagCaption2, MenuItemBits::NOSELECT, OString(), nSubMenuPos++);
         pSbMenu->InsertSeparator(OString(), nSubMenuPos++);
 
         // Add subitem for every action reference for the current smart tag type:
@@ -113,7 +113,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
                                                                                 xController,
                                                                                 mxTextRange );
 
-                pSbMenu->InsertItem(nSubMenuId++, aActionCaption, 0, OString(), nSubMenuPos++);
+                pSbMenu->InsertItem(nSubMenuId++, aActionCaption, MenuItemBits::NONE, OString(), nSubMenuPos++);
                 InvokeAction aEntry( xAction, xSmartTagProperties, nActionID );
                 maInvokeActions.push_back( aEntry );
             }

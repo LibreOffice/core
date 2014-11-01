@@ -101,7 +101,7 @@ IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent *, pEvent)
             if (pDoc->GetName(i, aString))
             {
                 sal_uInt16 nId = static_cast<sal_uInt16>(i)+1;
-                aPopup.InsertItem(nId, aString, MIB_CHECKABLE);
+                aPopup.InsertItem(nId, aString, MenuItemBits::CHECKABLE);
                 if (nId == nCurPageId)
                     aPopup.CheckItem(nId);
             }

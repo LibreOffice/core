@@ -99,7 +99,7 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     pData->nId              = 0;
     pData->sIdent           = rIdent;
     pData->eType            = MenuItemType::SEPARATOR;
-    pData->nBits            = 0;
+    pData->nBits            = MenuItemBits::NONE;
     pData->pSubMenu         = NULL;
     pData->pAutoSubMenu     = NULL;
     pData->nUserValue       = 0;
@@ -113,7 +113,7 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     SalItemParams aSalMIData;
     aSalMIData.nId = 0;
     aSalMIData.eType = MenuItemType::SEPARATOR;
-    aSalMIData.nBits = 0;
+    aSalMIData.nBits = MenuItemBits::NONE;
     aSalMIData.pMenu = NULL;
     aSalMIData.aText = OUString();
     aSalMIData.aImage = Image();

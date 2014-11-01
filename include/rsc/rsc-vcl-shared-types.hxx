@@ -33,19 +33,24 @@ enum class KeyFuncType : sal_Int32 { DONTKNOW, NEW, OPEN, SAVE,
 
 enum class MenuItemType { DONTKNOW, STRING, IMAGE, STRINGIMAGE, SEPARATOR };
 
-typedef sal_uInt16 MenuItemBits;
-
-#define MIB_CHECKABLE           ((MenuItemBits)0x0001)
-#define MIB_RADIOCHECK          ((MenuItemBits)0x0002)
-#define MIB_AUTOCHECK           ((MenuItemBits)0x0004)
-#define MIB_ABOUT               ((MenuItemBits)0x0008)
-#define MIB_HELP                ((MenuItemBits)0x0010)
-#define MIB_POPUPSELECT         ((MenuItemBits)0x0020)
-
-// These have been said to be a prelimitary (sic) solution since 2007
-#define MIB_NOSELECT            ((MenuItemBits)0x0040)
-#define MIB_ICON            ((MenuItemBits)0x0080)
-#define MIB_TEXT            ((MenuItemBits)0x0100)
+enum class MenuItemBits : sal_Int16
+{
+    NONE                = 0x0000,
+    CHECKABLE           = 0x0001,
+    RADIOCHECK          = 0x0002,
+    AUTOCHECK           = 0x0004,
+    ABOUT               = 0x0008,
+    HELP                = 0x0010,
+    POPUPSELECT         = 0x0020,
+    // These have been said to be a prelimitary (sic) solution since 2007
+    NOSELECT            = 0x0040,
+    ICON                = 0x0080,
+    TEXT                = 0x0100,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<MenuItemBits> : is_typed_flags<MenuItemBits, 0x1ff> {};
+}
 
 enum class ToolBoxItemBits
 {

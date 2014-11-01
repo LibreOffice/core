@@ -134,7 +134,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                             else
                                 aStrBuf.appendAscii( "false" );
                             OUString aCommand( aStrBuf.makeStringAndClear() );
-                            pVCLPopupMenu->InsertItem( nId, aDisplayName, MIB_CHECKABLE );
+                            pVCLPopupMenu->InsertItem( nId, aDisplayName, MenuItemBits::CHECKABLE );
                             if ( !bFirstItemInserted )
                             {
                                 bFirstItemInserted = true;
@@ -159,7 +159,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                 if ( bAllOneState && ( nCount > 1 ))
                 {
                     // Insert special item for all command
-                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwlResId(STR_MENU_HEADFOOTALL).toString(), 0, OString(), 0 );
+                    pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwlResId(STR_MENU_HEADFOOTALL).toString(), MenuItemBits::NONE, OString(), 0 );
 
                     OUStringBuffer aStrBuf( aCmd );
                     aStrBuf.appendAscii( "?On:bool=" );

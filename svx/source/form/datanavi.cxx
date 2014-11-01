@@ -1384,7 +1384,7 @@ namespace svxform
 
         Menu* pMenu = m_pInstanceBtn->GetPopupMenu();
         sal_uInt16 nInstancesDetailsId = pMenu->GetItemId("instancesdetails");
-        pMenu->SetItemBits(nInstancesDetailsId, MIB_CHECKABLE );
+        pMenu->SetItemBits(nInstancesDetailsId, MenuItemBits::CHECKABLE );
         pMenu->CheckItem(nInstancesDetailsId, m_bShowDetails );
 
         m_pTabCtrl->SetCurPageId( static_cast< sal_uInt16 >( nPageId ) );

@@ -177,7 +177,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
                 if ( ( nOldY <= nMouseY ) && ( nY > nMouseY ) && pMenu->ImplIsSelectable( n ) )
                 {
                     bool bPopupArea = true;
-                    if ( pItemData->nBits & MIB_POPUPSELECT )
+                    if ( pItemData->nBits & MenuItemBits::POPUPSELECT )
                     {
                         // only when clicked over the arrow...
                         Size aSz = GetOutputSizePixel();
@@ -212,7 +212,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
                         {
                             ChangeHighlightItem( (sal_uInt16)n, true );
                         }
-                        else if ( pItemData->nBits & MIB_POPUPSELECT )
+                        else if ( pItemData->nBits & MenuItemBits::POPUPSELECT )
                         {
                             if ( bPopupArea && ( pActivePopup != pItemData->pSubMenu ) )
                                 HighlightChanged( NULL );
@@ -507,7 +507,7 @@ void MenuFloatingWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             EndExecute();
         }
-        else if ( ( pData->nBits & MIB_POPUPSELECT ) && ( nHighlightedItem == _nMBDownPos ) && ( rMEvt.GetClicks() == 2 ) )
+        else if ( ( pData->nBits & MenuItemBits::POPUPSELECT ) && ( nHighlightedItem == _nMBDownPos ) && ( rMEvt.GetClicks() == 2 ) )
         {
             // not when clicked over the arrow...
             Size aSz = GetOutputSizePixel();
@@ -738,7 +738,7 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, bool bHighlight )
                 bool bDrawItemRect = true;
 
                 Rectangle aItemRect( Point( nX+nOuterSpaceX, nY ), Size( aSz.Width()-2*nOuterSpaceX, pData->aSz.Height() ) );
-                if ( pData->nBits & MIB_POPUPSELECT )
+                if ( pData->nBits & MenuItemBits::POPUPSELECT )
                 {
                     long nFontHeight = GetTextHeight();
                     aItemRect.Right() -= nFontHeight + nFontHeight/4;
@@ -827,7 +827,7 @@ Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
             if ( pData->eType != MenuItemType::SEPARATOR )
             {
                 aRect = Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) );
-                if ( pData->nBits & MIB_POPUPSELECT )
+                if ( pData->nBits & MenuItemBits::POPUPSELECT )
                 {
                     long nFontHeight = GetTextHeight();
                     aRect.Right() -= nFontHeight + nFontHeight/4;

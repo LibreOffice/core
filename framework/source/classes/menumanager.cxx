@@ -133,7 +133,7 @@ MenuManager::MenuManager(
         if (!bShowMenuImages)
         {
             MenuItemBits nBits = pMenu->GetItemBits( nItemId );
-            bShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+            bShowMenuImages = ( ( nBits & MenuItemBits::ICON ) == MenuItemBits::ICON );
         }
 
         PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nItemId );
@@ -659,7 +659,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XCompone
             const sal_uInt32 nCount = aNewWindowListVector.size();
             for ( sal_uInt32 i = 0; i < nCount; i++ )
             {
-                pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MIB_RADIOCHECK );
+                pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MenuItemBits::RADIOCHECK );
                 if ( nItemId == nActiveItemId )
                     pMenu->CheckItem( nItemId );
                 ++nItemId;
@@ -935,7 +935,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame, Menu* _pMenu,bool
             if (!bTmpShowMenuImages)
             {
                 MenuItemBits nBits =  _pMenu->GetItemBits( nId );
-                bTmpShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+                bTmpShowMenuImages = ( ( nBits & MenuItemBits::ICON ) == MenuItemBits::ICON );
             }
 
             if ( bTmpShowMenuImages )

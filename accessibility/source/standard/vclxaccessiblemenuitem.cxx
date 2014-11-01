@@ -190,9 +190,9 @@ sal_Int16 VCLXAccessibleMenuItem::getAccessibleRole(  ) throw (RuntimeException,
     {
         sal_uInt16 nItemId = m_pParent->GetItemId( m_nItemPos );
         MenuItemBits nItemBits = m_pParent->GetItemBits(nItemId);
-        if(  nItemBits & MIB_RADIOCHECK)
+        if(  nItemBits & MenuItemBits::RADIOCHECK)
             nRole = AccessibleRole::RADIO_MENU_ITEM;
-        else if( nItemBits & MIB_CHECKABLE)
+        else if( nItemBits & MenuItemBits::CHECKABLE)
             nRole = AccessibleRole::CHECK_MENU_ITEM;
     }
     return nRole;

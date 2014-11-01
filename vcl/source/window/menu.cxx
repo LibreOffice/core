@@ -184,13 +184,13 @@ void Menu::CreateAutoMnemonics()
     for ( n = 0; n < pItemList->size(); n++ )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( n );
-        if ( ! (pData->nBits & MIB_NOSELECT ) )
+        if ( ! (pData->nBits & MenuItemBits::NOSELECT ) )
             aMnemonicGenerator.RegisterMnemonic( pData->aText );
     }
     for ( n = 0; n < pItemList->size(); n++ )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( n );
-        if ( ! (pData->nBits & MIB_NOSELECT ) )
+        if ( ! (pData->nBits & MenuItemBits::NOSELECT ) )
             pData->aText = aMnemonicGenerator.CreateMnemonic( pData->aText );
     }
 }
@@ -276,10 +276,10 @@ void Menu::Highlight()
 void Menu::ImplSelect()
 {
     MenuItemData* pData = GetItemList()->GetData( nSelectedId );
-    if ( pData && (pData->nBits & MIB_AUTOCHECK) )
+    if ( pData && (pData->nBits & MenuItemBits::AUTOCHECK) )
     {
         bool bChecked = IsItemChecked( nSelectedId );
-        if ( pData->nBits & MIB_RADIOCHECK )
+        if ( pData->nBits & MenuItemBits::RADIOCHECK )
         {
             if ( !bChecked )
                 CheckItem( nSelectedId, true );
@@ -434,7 +434,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
     if ( nObjMask & RSC_MENUITEM_ID )
         nItemId = sal::static_int_cast<sal_uInt16>(ReadLongRes());
 
-    MenuItemBits nStatus = 0;
+    MenuItemBits nStatus = MenuItemBits::NONE;
     if ( nObjMask & RSC_MENUITEM_STATUS )
         nStatus = sal::static_int_cast<MenuItemBits>(ReadLongRes());
 
@@ -745,7 +745,7 @@ void Menu::SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits )
 
 MenuItemBits Menu::GetItemBits( sal_uInt16 nItemId ) const
 {
-    MenuItemBits nBits = 0;
+    MenuItemBits nBits = MenuItemBits::NONE;
     MenuItemData* pData = pItemList->GetData( nItemId );
     if ( pData )
         nBits = pData->nBits;
@@ -869,8 +869,8 @@ void Menu::CheckItem( sal_uInt16 nItemId, bool bCheck )
         return;
 
     // if radio-check, then uncheck previous
-    if ( bCheck && (pData->nBits & MIB_AUTOCHECK) &&
-         (pData->nBits & MIB_RADIOCHECK) )
+    if ( bCheck && (pData->nBits & MenuItemBits::AUTOCHECK) &&
+         (pData->nBits & MenuItemBits::RADIOCHECK) )
     {
         MenuItemData*   pGroupData;
         sal_uInt16          nGroupPos;
@@ -881,7 +881,7 @@ void Menu::CheckItem( sal_uInt16 nItemId, bool bCheck )
         while ( nGroupPos )
         {
             pGroupData = pItemList->GetDataFromPos( nGroupPos-1 );
-            if ( pGroupData->nBits & MIB_RADIOCHECK )
+            if ( pGroupData->nBits & MenuItemBits::RADIOCHECK )
             {
                 if ( IsItemChecked( pGroupData->nId ) )
                 {
@@ -901,7 +901,7 @@ void Menu::CheckItem( sal_uInt16 nItemId, bool bCheck )
             while ( nGroupPos < nItemCount )
             {
                 pGroupData = pItemList->GetDataFromPos( nGroupPos );
-                if ( pGroupData->nBits & MIB_RADIOCHECK )
+                if ( pGroupData->nBits & MenuItemBits::RADIOCHECK )
                 {
                     if ( IsItemChecked( pGroupData->nId ) )
                     {
@@ -1342,7 +1342,7 @@ bool Menu::ImplIsSelectable( sal_uInt16 nPos ) const
 
     MenuItemData* pData = pItemList->GetDataFromPos( nPos );
     // check general visibility first
-    if ( pData && ( pData->nBits & MIB_NOSELECT ) )
+    if ( pData && ( pData->nBits & MenuItemBits::NOSELECT ) )
         bSelectable = false;
 
     return bSelectable;
@@ -1863,11 +1863,11 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                     if( ! ( ( pData->eType == MenuItemType::IMAGE ) || ( pData->eType == MenuItemType::STRINGIMAGE ) ) )
                     {
                         if ( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
-                                                             (pData->nBits & MIB_RADIOCHECK)
+                                                             (pData->nBits & MenuItemBits::RADIOCHECK)
                                                              ? PART_MENU_ITEM_CHECK_MARK
                                                              : PART_MENU_ITEM_RADIO_MARK ) )
                         {
-                            ControlPart nPart = ((pData->nBits & MIB_RADIOCHECK)
+                            ControlPart nPart = ((pData->nBits & MenuItemBits::RADIOCHECK)
                                                  ? PART_MENU_ITEM_RADIO_MARK
                                                  : PART_MENU_ITEM_CHECK_MARK);
 
@@ -1882,7 +1882,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                             if ( bHighlighted )
                                 nState |= CTRL_STATE_SELECTED;
 
-                            long nCtrlHeight = (pData->nBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                            long nCtrlHeight = (pData->nBits & MenuItemBits::RADIOCHECK) ? nCheckHeight : nRadioHeight;
                             aTmpPos.X() = aOuterCheckRect.Left() + (aOuterCheckRect.GetWidth() - nCtrlHeight)/2;
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
 
@@ -1903,7 +1903,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
 
                             SymbolType eSymbol;
                             Size aSymbolSize;
-                            if ( pData->nBits & MIB_RADIOCHECK )
+                            if ( pData->nBits & MenuItemBits::RADIOCHECK )
                             {
                                 eSymbol = SymbolType::RADIOCHECKMARK;
                                 aSymbolSize = Size( nFontHeight/2, nFontHeight/2 );
@@ -2035,7 +2035,7 @@ void Menu::ImplPaint( vcl::Window* pWin, sal_uInt16 nBorder, long nStartY, MenuI
                         aTmpPos.Y() = aPos.Y();
                         aTmpPos.Y() += nExtra/2;
                         aTmpPos.Y() += ( pData->aSz.Height() / 2 ) - ( nFontHeight/4 );
-                        if ( pData->nBits & MIB_POPUPSELECT )
+                        if ( pData->nBits & MenuItemBits::POPUPSELECT )
                         {
                             pWin->SetTextColor( rSettings.GetMenuTextColor() );
                             Point aTmpPos2( aPos );
@@ -2862,7 +2862,7 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
         {
             OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
-                0xFFFF, MenuItemType::STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
+                0xFFFF, MenuItemType::STRING, MenuItemBits::NONE, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
             size_t nPos = 0;
             pData = pItemList->GetData( pData->nId, nPos );
             assert(pData);
