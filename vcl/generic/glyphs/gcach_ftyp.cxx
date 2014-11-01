@@ -1641,15 +1641,12 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
         pScriptTable += 4;
         sal_uInt16 nLangsysOffset = 0;
 
-        for( sal_uInt16 nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
+        if (nCntLangSystem != 0)
         {
-            const sal_uInt16 nOffset= GetUShort( pScriptTable+4 );
-            pScriptTable += 6;
-            nLangsysOffset = nOffset;
-            break;
+            nLangsysOffset = GetUShort( pScriptTable+4 );
         }
 
-        if( (nDefaultLangsysOfs != 0) && (nDefaultLangsysOfs != nLangsysOffset) )
+        if (nDefaultLangsysOfs != 0 && nDefaultLangsysOfs != nLangsysOffset)
         {
             const FT_Byte* pLangSys = pGsubBase + nOfsScriptList + nOfsScriptTable + nDefaultLangsysOfs;
             const sal_uInt16 nReqFeatureIdx = GetUShort( pLangSys+2 );
