@@ -59,6 +59,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/generic/gen \
     tools/source/generic/line \
     tools/source/generic/link \
+    tools/source/generic/point \
     tools/source/generic/poly \
     tools/source/generic/poly2 \
     tools/source/generic/svborder \
