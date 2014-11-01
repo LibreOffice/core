@@ -238,9 +238,9 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             return new TextTabStopListContext( *this, maTabList );
         case A_TOKEN( defRPr ):         // CT_TextCharacterProperties
             return new TextCharacterPropertiesContext( *this, rAttribs, mrTextParagraphProperties.getTextCharacterProperties() );
-        case OOX_TOKEN( doc, jc ):
+        case W_TOKEN( jc ):
             {
-                OptValue< OUString > oParaAdjust = rAttribs.getString( OOX_TOKEN(doc, val) );
+                OptValue< OUString > oParaAdjust = rAttribs.getString( W_TOKEN(val) );
                 if( oParaAdjust.has() && !oParaAdjust.get().isEmpty() )
                 {
                     const OUString& sParaAdjust = oParaAdjust.get();
@@ -255,12 +255,12 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 }
             }
             break;
-        case OOX_TOKEN( doc, spacing ):
+        case W_TOKEN( spacing ):
             {
                 // Spacing before
-                if( !rAttribs.getBool(OOX_TOKEN(doc, beforeAutospacing), false) )
+                if( !rAttribs.getBool(W_TOKEN(beforeAutospacing), false) )
                 {
-                    OptValue<sal_Int32> oBefore = rAttribs.getInteger(OOX_TOKEN(doc, before));
+                    OptValue<sal_Int32> oBefore = rAttribs.getInteger(W_TOKEN(before));
                     if (oBefore.has())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
@@ -270,7 +270,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                     else
                     {
-                        OptValue<sal_Int32> oBeforeLines = rAttribs.getInteger(OOX_TOKEN(doc, beforeLines));
+                        OptValue<sal_Int32> oBeforeLines = rAttribs.getInteger(W_TOKEN(beforeLines));
                         if (oBeforeLines.has())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaTopMargin();
@@ -282,9 +282,9 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 }
 
                 // Spacing after
-                if( !rAttribs.getBool(OOX_TOKEN(doc, afterAutospacing), false) )
+                if( !rAttribs.getBool(W_TOKEN(afterAutospacing), false) )
                 {
-                    OptValue<sal_Int32> oAfter = rAttribs.getInteger(OOX_TOKEN(doc, after));
+                    OptValue<sal_Int32> oAfter = rAttribs.getInteger(W_TOKEN(after));
                     if (oAfter.has())
                     {
                         TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
@@ -294,7 +294,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                     }
                     else
                     {
-                        OptValue<sal_Int32> oAfterLines = rAttribs.getInteger(OOX_TOKEN(doc, afterLines));
+                        OptValue<sal_Int32> oAfterLines = rAttribs.getInteger(W_TOKEN(afterLines));
                         if (oAfterLines.has())
                         {
                             TextSpacing& rSpacing = mrTextParagraphProperties.getParaBottomMargin();
@@ -306,8 +306,8 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
                 }
 
                 // Line spacing
-                OptValue<OUString> oLineRule = rAttribs.getString(OOX_TOKEN(doc, lineRule));
-                OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(OOX_TOKEN(doc, line));
+                OptValue<OUString> oLineRule = rAttribs.getString(W_TOKEN(lineRule));
+                OptValue<sal_Int32> oLineSpacing = rAttribs.getInteger(W_TOKEN(line));
                 if (oLineSpacing.has())
                 {
                     if( !oLineRule.has() || oLineRule.get() == "auto" )

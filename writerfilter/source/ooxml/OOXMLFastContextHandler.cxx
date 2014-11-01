@@ -1030,13 +1030,13 @@ void OOXMLFastContextHandlerProperties::handleXNotes()
 {
     switch (mnToken)
     {
-    case NMSP_doc|XML_footnoteReference:
+    case W_TOKEN(footnoteReference):
         {
             OOXMLFootnoteHandler aFootnoteHandler(this);
             mpPropertySet->resolve(aFootnoteHandler);
         }
         break;
-    case NMSP_doc|XML_endnoteReference:
+    case W_TOKEN(endnoteReference):
         {
             OOXMLEndnoteHandler aEndnoteHandler(this);
             mpPropertySet->resolve(aEndnoteHandler);
@@ -1051,13 +1051,13 @@ void OOXMLFastContextHandlerProperties::handleHdrFtr()
 {
     switch (mnToken)
     {
-    case NMSP_doc|XML_footerReference:
+    case W_TOKEN(footerReference):
         {
             OOXMLFooterHandler aFooterHandler(this);
             mpPropertySet->resolve(aFooterHandler);
         }
         break;
-    case NMSP_doc|XML_headerReference:
+    case W_TOKEN(headerReference):
         {
             OOXMLHeaderHandler aHeaderHandler(this);
             mpPropertySet->resolve(aHeaderHandler);

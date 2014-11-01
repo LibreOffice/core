@@ -81,7 +81,7 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper& rParent,
             }
         break;
         case XML_span:
-        case OOX_TOKEN(doc, r):
+        case W_TOKEN(r):
         break;
         default:
             OSL_ENSURE( false, "TextPortionContext::TextPortionContext - unknown element" );
@@ -98,7 +98,7 @@ ContextHandlerRef TextPortionContext::onCreateContext( sal_Int32 nElement, const
 
 void TextPortionContext::onCharacters( const OUString& rChars )
 {
-    if (getNamespace(getCurrentElement()) == NMSP_doc && getCurrentElement() != OOX_TOKEN(doc, t))
+    if (getNamespace(getCurrentElement()) == NMSP_doc && getCurrentElement() != W_TOKEN(t))
         return;
 
     switch( getCurrentElement() )
@@ -116,24 +116,24 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
 {
     switch (getCurrentElement())
     {
-        case OOX_TOKEN(doc, b):
+        case W_TOKEN(b):
             maFont.mobBold = true;
         break;
-        case OOX_TOKEN(doc, sz):
-            maFont.monSize = rAttribs.getInteger( OOX_TOKEN(doc, val) );
+        case W_TOKEN(sz):
+            maFont.monSize = rAttribs.getInteger( W_TOKEN(val) );
         break;
-        case OOX_TOKEN(doc, br):
+        case W_TOKEN(br):
             mrTextBox.appendPortion( maParagraph, maFont, "\n" );
         break;
-        case OOX_TOKEN(doc, color):
-            maFont.moColor = rAttribs.getString( OOX_TOKEN(doc, val) );
+        case W_TOKEN(color):
+            maFont.moColor = rAttribs.getString( W_TOKEN(val) );
         break;
-        case OOX_TOKEN(doc, spacing):
-            maFont.monSpacing = rAttribs.getInteger(OOX_TOKEN(doc, val));
+        case W_TOKEN(spacing):
+            maFont.monSpacing = rAttribs.getInteger(W_TOKEN(val));
         break;
-        case OOX_TOKEN(doc, r):
-        case OOX_TOKEN(doc, rPr):
-        case OOX_TOKEN(doc, t):
+        case W_TOKEN(r):
+        case W_TOKEN(rPr):
+        case W_TOKEN(t):
         break;
         default:
             SAL_INFO("oox", "unhandled: 0x" << std::hex<< getCurrentElement());
@@ -143,7 +143,7 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
 
 void TextPortionContext::onEndElement()
 {
-    if (getNamespace(getCurrentElement()) == NMSP_doc && getCurrentElement() != OOX_TOKEN(doc, t))
+    if (getNamespace(getCurrentElement()) == NMSP_doc && getCurrentElement() != W_TOKEN(t))
         return;
 
     /*  A child element without own child elements may contain a single space
@@ -223,24 +223,24 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
     {
         case VML_TOKEN( textbox ):
             if( nElement == XML_div ) return this;
-            else if (nElement == OOX_TOKEN(doc, txbxContent)) return this;
+            else if (nElement == W_TOKEN(txbxContent)) return this;
         break;
         case XML_div:
             if( nElement == XML_font ) return new TextPortionContext( *this, mrTextBox, maParagraph, TextFontModel(), nElement, rAttribs );
         break;
-        case OOX_TOKEN(doc, txbxContent):
-            if (nElement == OOX_TOKEN(doc, p)) return this;
+        case W_TOKEN(txbxContent):
+            if (nElement == W_TOKEN(p)) return this;
         break;
-        case OOX_TOKEN(doc, p):
-        case OOX_TOKEN(doc, sdtContent):
-        case OOX_TOKEN(doc, smartTag):
-            if (nElement == OOX_TOKEN(doc, r))
+        case W_TOKEN(p):
+        case W_TOKEN(sdtContent):
+        case W_TOKEN(smartTag):
+            if (nElement == W_TOKEN(r))
                 return new TextPortionContext( *this, mrTextBox, maParagraph, TextFontModel(), nElement, rAttribs );
             else
                 return this;
         break;
-        case OOX_TOKEN(doc, pPr):
-        case OOX_TOKEN(doc, sdt):
+        case W_TOKEN(pPr):
+        case W_TOKEN(sdt):
             return this;
         break;
         default:
@@ -254,15 +254,15 @@ void TextBoxContext::onStartElement(const AttributeList& rAttribs)
 {
     switch (getCurrentElement())
     {
-        case OOX_TOKEN(doc, jc):
-            maParagraph.moParaAdjust = rAttribs.getString( OOX_TOKEN(doc, val) );
+        case W_TOKEN(jc):
+            maParagraph.moParaAdjust = rAttribs.getString( W_TOKEN(val) );
         break;
     }
 }
 
 void TextBoxContext::onEndElement()
 {
-    if (getCurrentElement() == OOX_TOKEN(doc, p))
+    if (getCurrentElement() == W_TOKEN(p))
     {
         mrTextBox.appendPortion( maParagraph, TextFontModel(), "\n" );
         maParagraph = TextParagraphModel();

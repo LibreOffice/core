@@ -136,67 +136,67 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
         case A_TOKEN( gradFill ):
             return new GradientFillContext( *this, rAttribs, mrTextCharacterProperties.maGradientProps );
 
-        case OOX_TOKEN( doc, rFonts ):
-            if( rAttribs.hasAttribute(OOX_TOKEN(doc, ascii)) )
+        case W_TOKEN( rFonts ):
+            if( rAttribs.hasAttribute(W_TOKEN(ascii)) )
             {
-                mrTextCharacterProperties.maLatinFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, ascii), OUString()));
+                mrTextCharacterProperties.maLatinFont.setAttributes(rAttribs.getString(W_TOKEN(ascii), OUString()));
             }
-            if (rAttribs.hasAttribute(OOX_TOKEN(doc, asciiTheme)))
+            if (rAttribs.hasAttribute(W_TOKEN(asciiTheme)))
             {
-                mrTextCharacterProperties.maLatinThemeFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, asciiTheme), OUString()));
+                mrTextCharacterProperties.maLatinThemeFont.setAttributes(rAttribs.getString(W_TOKEN(asciiTheme), OUString()));
             }
-            if( rAttribs.hasAttribute(OOX_TOKEN(doc, cs)) )
+            if( rAttribs.hasAttribute(W_TOKEN(cs)) )
             {
-                mrTextCharacterProperties.maComplexFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, cs), OUString()));
+                mrTextCharacterProperties.maComplexFont.setAttributes(rAttribs.getString(W_TOKEN(cs), OUString()));
             }
-            if (rAttribs.hasAttribute(OOX_TOKEN(doc, cstheme)))
+            if (rAttribs.hasAttribute(W_TOKEN(cstheme)))
             {
-                mrTextCharacterProperties.maComplexThemeFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, cstheme), OUString()));
+                mrTextCharacterProperties.maComplexThemeFont.setAttributes(rAttribs.getString(W_TOKEN(cstheme), OUString()));
             }
-            if( rAttribs.hasAttribute(OOX_TOKEN(doc, eastAsia)) )
+            if( rAttribs.hasAttribute(W_TOKEN(eastAsia)) )
             {
-                mrTextCharacterProperties.maAsianFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, eastAsia), OUString()));
+                mrTextCharacterProperties.maAsianFont.setAttributes(rAttribs.getString(W_TOKEN(eastAsia), OUString()));
             }
-            if (rAttribs.hasAttribute(OOX_TOKEN(doc, eastAsiaTheme)))
+            if (rAttribs.hasAttribute(W_TOKEN(eastAsiaTheme)))
             {
-                mrTextCharacterProperties.maAsianThemeFont.setAttributes(rAttribs.getString(OOX_TOKEN(doc, eastAsiaTheme), OUString()));
-            }
-            break;
-        case OOX_TOKEN( doc, b ):
-            mrTextCharacterProperties.moBold = rAttribs.getBool(OOX_TOKEN( doc, val ), true);
-            break;
-        case OOX_TOKEN( doc, i ):
-            mrTextCharacterProperties.moItalic = rAttribs.getBool(OOX_TOKEN( doc, val ), true);
-            break;
-        case OOX_TOKEN( doc, bCs ):
-            break;
-        case OOX_TOKEN( doc, color ):
-            if (rAttribs.getInteger(OOX_TOKEN(doc, val)).has())
-            {
-                mrTextCharacterProperties.maCharColor.setSrgbClr(rAttribs.getIntegerHex(OOX_TOKEN(doc, val)).get());
+                mrTextCharacterProperties.maAsianThemeFont.setAttributes(rAttribs.getString(W_TOKEN(eastAsiaTheme), OUString()));
             }
             break;
-        case OOX_TOKEN( doc, sz ):
-            if (rAttribs.getInteger(OOX_TOKEN(doc, val)).has())
+        case W_TOKEN( b ):
+            mrTextCharacterProperties.moBold = rAttribs.getBool(W_TOKEN( val ), true);
+            break;
+        case W_TOKEN( i ):
+            mrTextCharacterProperties.moItalic = rAttribs.getBool(W_TOKEN( val ), true);
+            break;
+        case W_TOKEN( bCs ):
+            break;
+        case W_TOKEN( color ):
+            if (rAttribs.getInteger(W_TOKEN(val)).has())
             {
-                sal_Int32 nVal = rAttribs.getInteger(OOX_TOKEN(doc, val)).get();
+                mrTextCharacterProperties.maCharColor.setSrgbClr(rAttribs.getIntegerHex(W_TOKEN(val)).get());
+            }
+            break;
+        case W_TOKEN(  sz ):
+            if (rAttribs.getInteger(W_TOKEN(val)).has())
+            {
+                sal_Int32 nVal = rAttribs.getInteger(W_TOKEN(val)).get();
                 // wml has half points, dml has hundred points
                 mrTextCharacterProperties.moHeight = nVal * 50;
             }
             break;
-        case OOX_TOKEN( doc, szCs ):
+        case W_TOKEN( szCs ):
             break;
-        case OOX_TOKEN( doc, caps ):
+        case W_TOKEN( caps ):
             {
-                if( rAttribs.getBool(OOX_TOKEN( doc, val ), true) )
+                if( rAttribs.getBool(W_TOKEN( val ), true) )
                     mrTextCharacterProperties.moCaseMap = XML_all;
                 else
                     mrTextCharacterProperties.moCaseMap = XML_none;
             }
             break;
-        case OOX_TOKEN( doc, smallCaps ):
+        case W_TOKEN( smallCaps ):
             {
-                if( rAttribs.getBool(OOX_TOKEN( doc, val ), true) )
+                if( rAttribs.getBool(W_TOKEN( val ), true) )
                     mrTextCharacterProperties.moCaseMap = XML_small;
                 else
                     mrTextCharacterProperties.moCaseMap = XML_none;
