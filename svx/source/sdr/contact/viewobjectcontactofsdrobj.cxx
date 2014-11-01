@@ -32,137 +32,133 @@
 
 #include "fmobj.hxx"
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+const SdrObject& ViewObjectContactOfSdrObj::getSdrObject() const
 {
-    namespace contact
+    return static_cast< ViewContactOfSdrObj& >(GetViewContact()).GetSdrObject();
+}
+
+ViewObjectContactOfSdrObj::ViewObjectContactOfSdrObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
+:   ViewObjectContact(rObjectContact, rViewContact)
+{
+}
+
+ViewObjectContactOfSdrObj::~ViewObjectContactOfSdrObj()
+{
+}
+
+bool ViewObjectContactOfSdrObj::isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const
+{
+    return aLayers.IsSet(getSdrObject().GetLayer());
+}
+
+bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
+{
+    const SdrObject& rObject = getSdrObject();
+
+    // Test layer visibility
+    if(!isPrimitiveVisibleOnAnyLayer(rDisplayInfo.GetProcessLayers()))
     {
-        const SdrObject& ViewObjectContactOfSdrObj::getSdrObject() const
+        return false;
+    }
+
+    if(GetObjectContact().isOutputToPrinter() )
+    {
+        // Test if print output but not printable
+        if( !rObject.IsPrintable())
+            return false;
+    }
+    else
+    {
+        // test is object is not visible on screen
+        if( !rObject.IsVisible() )
+            return false;
+    }
+
+    // Test for hidden object on MasterPage
+    if(rDisplayInfo.GetSubContentActive() && rObject.IsNotVisibleAsMaster())
+    {
+        return false;
+    }
+
+    // Test for Calc object hiding (for OLE and Graphic it's extra, see there)
+    const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+
+    if(pSdrPageView)
+    {
+        const SdrView& rSdrView = pSdrPageView->GetView();
+        const bool bHideOle(rSdrView.getHideOle());
+        const bool bHideChart(rSdrView.getHideChart());
+        const bool bHideDraw(rSdrView.getHideDraw());
+        const bool bHideFormControl(rSdrView.getHideFormControl());
+
+        if(bHideOle || bHideChart || bHideDraw || bHideFormControl)
         {
-            return static_cast< ViewContactOfSdrObj& >(GetViewContact()).GetSdrObject();
-        }
-
-        ViewObjectContactOfSdrObj::ViewObjectContactOfSdrObj(ObjectContact& rObjectContact, ViewContact& rViewContact)
-        :   ViewObjectContact(rObjectContact, rViewContact)
-        {
-        }
-
-        ViewObjectContactOfSdrObj::~ViewObjectContactOfSdrObj()
-        {
-        }
-
-        bool ViewObjectContactOfSdrObj::isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const
-        {
-            return aLayers.IsSet(getSdrObject().GetLayer());
-        }
-
-        bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
-        {
-            const SdrObject& rObject = getSdrObject();
-
-            // Test layer visibility
-            if(!isPrimitiveVisibleOnAnyLayer(rDisplayInfo.GetProcessLayers()))
+            if(OBJ_OLE2 == rObject.GetObjIdentifier())
             {
-                return false;
-            }
-
-            if(GetObjectContact().isOutputToPrinter() )
-            {
-                // Test if print output but not printable
-                if( !rObject.IsPrintable())
-                    return false;
-            }
-            else
-            {
-                // test is object is not visible on screen
-                if( !rObject.IsVisible() )
-                    return false;
-            }
-
-            // Test for hidden object on MasterPage
-            if(rDisplayInfo.GetSubContentActive() && rObject.IsNotVisibleAsMaster())
-            {
-                return false;
-            }
-
-            // Test for Calc object hiding (for OLE and Graphic it's extra, see there)
-            const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
-
-            if(pSdrPageView)
-            {
-                const SdrView& rSdrView = pSdrPageView->GetView();
-                const bool bHideOle(rSdrView.getHideOle());
-                const bool bHideChart(rSdrView.getHideChart());
-                const bool bHideDraw(rSdrView.getHideDraw());
-                const bool bHideFormControl(rSdrView.getHideFormControl());
-
-                if(bHideOle || bHideChart || bHideDraw || bHideFormControl)
+                if(static_cast<const SdrOle2Obj&>(rObject).IsChart())
                 {
-                    if(OBJ_OLE2 == rObject.GetObjIdentifier())
+                    // chart
+                    if(bHideChart)
                     {
-                        if(static_cast<const SdrOle2Obj&>(rObject).IsChart())
-                        {
-                            // chart
-                            if(bHideChart)
-                            {
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            // OLE
-                            if(bHideOle)
-                            {
-                                return false;
-                            }
-                        }
+                        return false;
                     }
-                    else if(OBJ_GRAF == rObject.GetObjIdentifier())
+                }
+                else
+                {
+                    // OLE
+                    if(bHideOle)
                     {
-                        // graphic handled like OLE
-                        if(bHideOle)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        const bool bIsFormControl = dynamic_cast< const FmFormObj * >( &rObject ) != 0;
-                        if(bIsFormControl && bHideFormControl)
-                        {
-                            return false;
-                        }
-                        // any other draw object
-                        if(!bIsFormControl && bHideDraw)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }
-
-            return true;
-        }
-
-        boost::optional<const OutputDevice&> ViewObjectContactOfSdrObj::getPageViewOutputDevice() const
-        {
-            ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &GetObjectContact() );
-            if ( pPageViewContact )
+            else if(OBJ_GRAF == rObject.GetObjIdentifier())
             {
-                // if the PageWindow has a patched PaintWindow, use the original PaintWindow
-                // this ensures that our control is _not_ re-created just because somebody
-                // (temporarily) changed the window to paint onto.
-                // #i72429# / 2007-02-20 / frank.schoenheit (at) sun.com
-                SdrPageWindow& rPageWindow( pPageViewContact->GetPageWindow() );
-                if ( rPageWindow.GetOriginalPaintWindow() )
-                    return rPageWindow.GetOriginalPaintWindow()->GetOutputDevice();
-
-                return rPageWindow.GetPaintWindow().GetOutputDevice();
+                // graphic handled like OLE
+                if(bHideOle)
+                {
+                    return false;
+                }
             }
-            return boost::optional<const OutputDevice&>();
+            else
+            {
+                const bool bIsFormControl = dynamic_cast< const FmFormObj * >( &rObject ) != 0;
+                if(bIsFormControl && bHideFormControl)
+                {
+                    return false;
+                }
+                // any other draw object
+                if(!bIsFormControl && bHideDraw)
+                {
+                    return false;
+                }
+            }
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    }
+
+    return true;
+}
+
+boost::optional<const OutputDevice&> ViewObjectContactOfSdrObj::getPageViewOutputDevice() const
+{
+    ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &GetObjectContact() );
+    if ( pPageViewContact )
+    {
+        // if the PageWindow has a patched PaintWindow, use the original PaintWindow
+        // this ensures that our control is _not_ re-created just because somebody
+        // (temporarily) changed the window to paint onto.
+        // #i72429# / 2007-02-20 / frank.schoenheit (at) sun.com
+        SdrPageWindow& rPageWindow( pPageViewContact->GetPageWindow() );
+        if ( rPageWindow.GetOriginalPaintWindow() )
+            return rPageWindow.GetOriginalPaintWindow()->GetOutputDevice();
+
+        return rPageWindow.GetPaintWindow().GetOutputDevice();
+    }
+    return boost::optional<const OutputDevice&>();
+}
+
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
