@@ -195,8 +195,10 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
         {
             long nX2 = nX+nWidth;
             long nY2 = nY+nHeight;
-            ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
-            ImplRotatePos( nBaseX, nBaseY, nX2, nY2, mpFontEntry->mnOrientation );
+
+            Point aBasePt( nBaseX, nBaseY );
+            aBasePt.RotateAround( nX, nY, mpFontEntry->mnOrientation );
+            aBasePt.RotateAround( nX2, nY2, mpFontEntry->mnOrientation );
             nWidth = nX2-nX;
             nHeight = nY2-nY;
         }

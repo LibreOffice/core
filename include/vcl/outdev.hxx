@@ -478,10 +478,6 @@ public:
     void                        SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }
     vcl::ExtOutDevData*         GetExtOutDevData() const { return mpExtOutDevData; }
 
-private:
-
-    SAL_DLLPRIVATE void         ImplRotatePos( long nOriginX, long nOriginY, long& rX, long &rY,
-                                               short nOrientation ) const;
     ///@}
 
 

@@ -78,7 +78,7 @@ inline bool Pair::operator != ( const Pair& rPair ) const
 
 // Point
 
-class SAL_WARN_UNUSED Point : public Pair
+class SAL_DLLPUBLIC_EXPORT SAL_WARN_UNUSED Point : public Pair
 {
 public:
                         Point();
@@ -95,6 +95,9 @@ public:
     bool                IsBelow( const Point& rPoint ) const;
     bool                IsLeft( const Point& rPoint ) const;
     bool                IsRight( const Point& rPoint ) const;
+
+    void                RotateAround( long& rX, long& rY, short nOrientation ) const;
+
 
     Point&              operator += ( const Point& rPoint );
     Point&              operator -= ( const Point& rPoint );
