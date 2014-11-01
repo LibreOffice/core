@@ -1577,14 +1577,20 @@ bool OutputDevice::ImplNewFont() const
         mnTextOffX = 0;
         mnTextOffY = +pFontEntry->maMetric.mnAscent + mnEmphasisAscent;
         if ( pFontEntry->mnOrientation )
-            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
+        {
+            Point aOriginPt(0, 0);
+            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
+        }
     }
     else // eAlign == ALIGN_BOTTOM
     {
         mnTextOffX = 0;
         mnTextOffY = -pFontEntry->maMetric.mnDescent + mnEmphasisDescent;
         if ( pFontEntry->mnOrientation )
-            ImplRotatePos( 0, 0, mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
+        {
+            Point aOriginPt(0, 0);
+            aOriginPt.RotateAround( mnTextOffX, mnTextOffY, pFontEntry->mnOrientation );
+        }
     }
 
     mbTextLines     = ((maFont.GetUnderline() != UNDERLINE_NONE) && (maFont.GetUnderline() != UNDERLINE_DONTKNOW)) ||
@@ -1958,7 +1964,10 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
             Point aAdjPoint = aOffset;
             aAdjPoint.X() += aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2;
             if ( mpFontEntry->mnOrientation )
-                ImplRotatePos( 0, 0, aAdjPoint.X(), aAdjPoint.Y(), mpFontEntry->mnOrientation );
+            {
+                Point aOriginPt(0, 0);
+                aOriginPt.RotateAround( aAdjPoint.X(), aAdjPoint.Y(), mpFontEntry->mnOrientation );
+            }
             aOutPoint += aAdjPoint;
             aOutPoint -= Point( nEmphasisWidth2, nEmphasisHeight2 );
             ImplDrawEmphasisMark( rSalLayout.DrawBase().X(),

@@ -69,7 +69,10 @@ void OutputDevice::ImplDrawWavePixel( long nOriginX, long nOriginY,
                                       long nPixWidth, long nPixHeight )
 {
     if ( nOrientation )
-        ImplRotatePos( nOriginX, nOriginY, nCurX, nCurY, nOrientation );
+    {
+        Point aPoint( nOriginX, nOriginY );
+        aPoint.RotateAround( nCurX, nCurY, nOrientation );
+    }
 
     if ( bDrawPixAsRect )
     {
@@ -104,8 +107,9 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         long nEndY = nStartY;
         if ( nOrientation )
         {
-            ImplRotatePos( nBaseX, nBaseY, nStartX, nStartY, nOrientation );
-            ImplRotatePos( nBaseX, nBaseY, nEndX, nEndY, nOrientation );
+            Point aOriginPt( nBaseX, nBaseY );
+            aOriginPt.RotateAround( nStartX, nStartY, nOrientation );
+            aOriginPt.RotateAround( nEndX, nEndY, nOrientation );
         }
         mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY, this );
     }
@@ -619,7 +623,10 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     const OUString aStrikeoutText(aChars, nStrikeStrLen);
 
     if( mpFontEntry->mnOrientation )
-        ImplRotatePos( 0, 0, nDistX, nDistY, mpFontEntry->mnOrientation );
+    {
+        Point aOriginPt(0, 0);
+        aOriginPt.RotateAround( nDistX, nDistY, mpFontEntry->mnOrientation );
+    }
 
     nBaseX += nDistX;
     nBaseY += nDistY;
@@ -1008,7 +1015,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos )
         double nO = atan2( -nEndY + nStartY, ((nDX == 0L) ? 0.000000001 : nDX) );
         nO /= F_PI1800;
         nOrientation = (short)nO;
-        ImplRotatePos( nStartX, nStartY, nEndX, nEndY, -nOrientation );
+        aStartPt.RotateAround( nEndX, nEndY, -nOrientation );
     }
 
     long nWaveHeight;
