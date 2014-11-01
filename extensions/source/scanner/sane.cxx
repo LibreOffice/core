@@ -583,7 +583,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
         }
     }
     if( ( nOption = GetOptionByName( "resolution" ) ) != -1 )
-        GetOptionValue( nOption, fResl );
+        (void)GetOptionValue( nOption, fResl );
 
     sal_uInt8* pBuffer = NULL;
 
