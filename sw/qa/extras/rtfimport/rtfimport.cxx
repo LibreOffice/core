@@ -2003,6 +2003,12 @@ DECLARE_RTFIMPORT_TEST(testFdo82076, "fdo82076.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Footnote"), getProperty<OUString>(getRun(getParagraphOfText(1, xCell->getText()), 2), "TextPortionType"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo82512, "fdo82512.rtf")
+{
+    // This was style::BreakType_NONE, column break was before the 3rd paragraph, not before the 2nd one.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

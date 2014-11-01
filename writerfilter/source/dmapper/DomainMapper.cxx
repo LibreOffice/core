@@ -2683,8 +2683,16 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                 case 0x07:
                     m_pImpl->getTableManager().text(data_, len);
                 case 0x0d:
+                {
+                    PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+                    if (pContext && m_pImpl->isBreakDeferred(COLUMN_BREAK))
+                    {
+                        pContext->Insert(PROP_BREAK_TYPE, uno::makeAny(style::BreakType_COLUMN_BEFORE));
+                        m_pImpl->clearDeferredBreak(COLUMN_BREAK);
+                    }
                     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
                     return;
+                }
                 case 0x13:
                     m_pImpl->PushFieldContext();
                     return;
