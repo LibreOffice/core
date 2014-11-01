@@ -46,6 +46,11 @@ public:
     static float getGLVersion();
 
     static void checkGLError(const char* aFile, size_t nLine);
+
+    /**
+     * checks if the system supports all features that are necessary for the OpenGL VCL support
+     */
+    static bool supportsVCLOpenGL();
 };
 
 #define CHECK_GL_ERROR() OpenGLHelper::checkGLError(__FILE__, __LINE__)
