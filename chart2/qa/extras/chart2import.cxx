@@ -91,7 +91,7 @@ public:
     CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
-    CPPUNIT_TEST(testTextCanOverlapXLSX);
+    // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
