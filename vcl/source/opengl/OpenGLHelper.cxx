@@ -358,4 +358,9 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
     }
 }
 
+bool OpenGLHelper::supportsVCLOpenGL()
+{
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

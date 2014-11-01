@@ -60,6 +60,8 @@
 
 #include <officecfg/Office/Common.hxx>
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 X11SalGraphics::X11SalGraphics():
     m_pFrame(NULL),
     m_pVDev(NULL),
@@ -79,7 +81,8 @@ X11SalGraphics::X11SalGraphics():
     bPrinter_(false),
     bVirDev_(false)
 {
-    bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
+    static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
+    bool bUseOpenGL = bOpenGLPossible ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
     if (bUseOpenGL)
         mpImpl.reset(new OpenGLSalGraphicsImpl());
     else
