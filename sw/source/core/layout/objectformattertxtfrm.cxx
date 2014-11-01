@@ -18,14 +18,12 @@
  */
 
 #include <objectformattertxtfrm.hxx>
-#include <anchoredobject.hxx>
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
 #include <rowfrm.hxx>
 #include <layouter.hxx>
-#include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <fmtfollowtextflow.hxx>
