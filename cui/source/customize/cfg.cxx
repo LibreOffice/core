@@ -343,13 +343,15 @@ generateCustomMenuURL(
     OUString url(CUSTOM_MENU_STR );
     url += OUString::number( suffix );
 
+    if (!entries)
+        return url;
+
     // now check is there is an already existing entry with this url
     SvxEntries::const_iterator iter = entries->begin();
 
-    SvxConfigEntry* pEntry;
     while ( iter != entries->end() )
     {
-        pEntry = *iter;
+        SvxConfigEntry* pEntry = *iter;
 
         if ( url.equals( pEntry->GetCommand() ) )
         {
