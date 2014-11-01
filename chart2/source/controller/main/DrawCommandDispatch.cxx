@@ -474,7 +474,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                                 basegfx::B2DPolygon aPoly;
                                 aPoly.append( basegfx::B2DPoint( aStart.X(), nYMiddle ) );
                                 aPoly.append( basegfx::B2DPoint( aEnd.X(), nYMiddle ) );
-                                ( dynamic_cast< SdrPathObj* >( pObj ) )->SetPathPoly( basegfx::B2DPolyPolygon( aPoly ) );
+                                dynamic_cast<SdrPathObj&>(*pObj).SetPathPoly(basegfx::B2DPolyPolygon(aPoly));
                                 SfxItemSet aSet( pDrawModelWrapper->GetItemPool() );
                                 setLineEnds( aSet );
                                 pObj->SetMergedItemSet( aSet );
