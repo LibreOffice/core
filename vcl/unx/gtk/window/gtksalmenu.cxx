@@ -565,7 +565,7 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         GVariant *pCheckValue = NULL;
         GVariant *pCurrentState = g_action_group_get_action_state( mpActionGroup, aCommand );
 
-        if ( bits & MIB_RADIOCHECK )
+        if ( bits & MenuItemBits::RADIOCHECK )
             pCheckValue = bCheck ? g_variant_new_string( aCommand ) : g_variant_new_string( "" );
         else
         {
@@ -659,7 +659,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
     GVariant *pTarget = NULL;
 
     if ( g_action_group_has_action( mpActionGroup, aCommand ) == FALSE ) {
-        if ( ( nBits & MIB_CHECKABLE ) || bIsSubmenu )
+        if ( ( nBits & MenuItemBits::CHECKABLE ) || bIsSubmenu )
         {
             // Item is a checkmark button.
             GVariantType* pStateType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_BOOLEAN );
@@ -667,7 +667,7 @@ void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
 
             g_lo_action_group_insert_stateful( pActionGroup, aCommand, nId, bIsSubmenu, NULL, pStateType, NULL, pState );
         }
-        else if ( nBits & MIB_RADIOCHECK )
+        else if ( nBits & MenuItemBits::RADIOCHECK )
         {
             // Item is a radio button.
             GVariantType* pParameterType = g_variant_type_new( (gchar*) G_VARIANT_TYPE_STRING );

@@ -510,14 +510,14 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow( svt::ToolboxCont
     SetHelpId( HID_POPUP_FONTWORK_CHARSPACE );
     SetSelectHdl( LINK( this, FontworkCharacterSpacingWindow, SelectHdl ) );
 
-    appendEntry( 0, SVX_RESSTR( STR_CHARS_SPACING_VERY_TIGHT ), MIB_RADIOCHECK );
-    appendEntry( 1, SVX_RESSTR( STR_CHARS_SPACING_TIGHT      ), MIB_RADIOCHECK );
-    appendEntry( 2, SVX_RESSTR( STR_CHARS_SPACING_NORMAL     ), MIB_RADIOCHECK );
-    appendEntry( 3, SVX_RESSTR( STR_CHARS_SPACING_LOOSE      ), MIB_RADIOCHECK );
-    appendEntry( 4, SVX_RESSTR( STR_CHARS_SPACING_VERY_LOOSE ), MIB_RADIOCHECK );
-    appendEntry( 5, SVX_RESSTR( STR_CHARS_SPACING_CUSTOM     ), MIB_RADIOCHECK );
+    appendEntry( 0, SVX_RESSTR( STR_CHARS_SPACING_VERY_TIGHT ), MenuItemBits::RADIOCHECK );
+    appendEntry( 1, SVX_RESSTR( STR_CHARS_SPACING_TIGHT      ), MenuItemBits::RADIOCHECK );
+    appendEntry( 2, SVX_RESSTR( STR_CHARS_SPACING_NORMAL     ), MenuItemBits::RADIOCHECK );
+    appendEntry( 3, SVX_RESSTR( STR_CHARS_SPACING_LOOSE      ), MenuItemBits::RADIOCHECK );
+    appendEntry( 4, SVX_RESSTR( STR_CHARS_SPACING_VERY_LOOSE ), MenuItemBits::RADIOCHECK );
+    appendEntry( 5, SVX_RESSTR( STR_CHARS_SPACING_CUSTOM     ), MenuItemBits::RADIOCHECK );
     appendSeparator();
-    appendEntry( 6, SVX_RESSTR( STR_CHARS_SPACING_KERN_PAIRS ), MIB_CHECKABLE  );
+    appendEntry( 6, SVX_RESSTR( STR_CHARS_SPACING_KERN_PAIRS ), MenuItemBits::CHECKABLE  );
 
     SetOutputSizePixel( getMenuSize() );
 

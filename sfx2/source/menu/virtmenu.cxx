@@ -862,7 +862,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                 nItemId = START_ITEMID_WINDOWLIST;
                 for ( sal_uInt32 i = 0; i < aNewWindowListVector.size(); i++ )
                 {
-                    pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MIB_RADIOCHECK );
+                    pMenu->InsertItem( nItemId, aNewWindowListVector.at( i ), MenuItemBits::RADIOCHECK );
                     if ( nItemId == nActiveItemId )
                         pMenu->CheckItem( nItemId );
                     ++nItemId;

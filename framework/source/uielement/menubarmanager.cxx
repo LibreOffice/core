@@ -472,8 +472,8 @@ throw ( RuntimeException, std::exception )
 
                     MenuItemBits nBits = m_pVCLMenu->GetItemBits( pMenuItemHandler->nItemId );
                     //If not already designated RadioButton set as CheckMark
-                    if (!(nBits & MIB_RADIOCHECK))
-                        m_pVCLMenu->SetItemBits( pMenuItemHandler->nItemId, nBits | MIB_CHECKABLE );
+                    if (!(nBits & MenuItemBits::RADIOCHECK))
+                        m_pVCLMenu->SetItemBits( pMenuItemHandler->nItemId, nBits | MenuItemBits::CHECKABLE );
                 }
                 else if ( Event.State >>= aItemText )
                 {
@@ -721,7 +721,7 @@ void MenuBarManager::CheckAndAddMenuExtension( Menu* pMenu )
         if ( nBeforePos != MENU_APPEND )
             nInsertPos = nBeforePos;
 
-        pMenu->InsertItem(nNewItemId, aMenuItem.aLabel, 0, OString(), nInsertPos);
+        pMenu->InsertItem(nNewItemId, aMenuItem.aLabel, MenuItemBits::NONE, OString(), nInsertPos);
         pMenu->SetItemCommand( nNewItemId, aMenuItem.aURL );
     }
 }
@@ -1227,7 +1227,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         if (!bItemShowMenuImages)
         {
             MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
-            bItemShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
+            bItemShowMenuImages = ( ( nBits & MenuItemBits::ICON ) == MenuItemBits::ICON );
         }
         if ( pPopup )
         {
@@ -1685,11 +1685,11 @@ void MenuBarManager::FillMenu(
                     {
                         MenuItemBits nBits = pMenu->GetItemBits( nId );
                         if ( nStyle & ::com::sun::star::ui::ItemStyle::ICON )
-                           nBits |= MIB_ICON;
+                           nBits |= MenuItemBits::ICON;
                         if ( nStyle & ::com::sun::star::ui::ItemStyle::TEXT )
-                           nBits |= MIB_TEXT;
+                           nBits |= MenuItemBits::TEXT;
                         if ( nStyle & ::com::sun::star::ui::ItemStyle::RADIO_CHECK )
-                           nBits |= MIB_RADIOCHECK;
+                           nBits |= MenuItemBits::RADIOCHECK;
                         pMenu->SetItemBits( nId, nBits );
                     }
 

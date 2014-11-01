@@ -187,7 +187,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         else // nNumSynonyms == 0
         {
             const OUString aItemText( SfxResId(STR_MENU_NO_SYNONYM_FOUND).toString() );
-            pThesSubMenu->InsertItem( 1, aItemText, MIB_NOSELECT );
+            pThesSubMenu->InsertItem( 1, aItemText, MenuItemBits::NOSELECT );
         }
         pThesSubMenu->InsertSeparator();
         const OUString sThesaurus( SfxResId(STR_MENU_THESAURUS).toString() );

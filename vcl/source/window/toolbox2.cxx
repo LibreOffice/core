@@ -1840,7 +1840,7 @@ void ToolBox::UpdateCustomMenu()
             if( it->IsClipped() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString());
+                pMenu->InsertItem( id, it->maText, it->maImage, MenuItemBits::NONE, OString());
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem ( id, it->meState == TRISTATE_TRUE );
             }
@@ -1856,7 +1856,7 @@ void ToolBox::UpdateCustomMenu()
             if( it->IsItemHidden() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImage, 0, OString() );
+                pMenu->InsertItem( id, it->maText, it->maImage, MenuItemBits::NONE, OString() );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == TRISTATE_TRUE );
             }

@@ -840,8 +840,8 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
             {
                 OUString aAlternate( pAlt[nW] );
-                aPopupMenu.InsertItem( MN_ALTSTART+nW, aAlternate, 0, OString(), nW );
-                pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, 0, OString(), nW );
+                aPopupMenu.InsertItem( MN_ALTSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
+                pAutoMenu->InsertItem( MN_AUTOSTART+nW, aAlternate, MenuItemBits::NONE, OString(), nW );
             }
             aPopupMenu.InsertSeparator(OString(), nWords);
         }

@@ -729,7 +729,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
                     {   // (only the first 16 items to keep the menu rather small)
                         aName = xCurCol->getPropertyValue(FM_PROP_LABEL);
                         pShowColsMenu->InsertItem(nHiddenCols + 1, ::comphelper::getString(aName),
-                            0, OString(), nHiddenCols);
+                            MenuItemBits::NONE, OString(), nHiddenCols);
                             // the ID is arbitrary, but should be unique within the whole menu
                     }
                     ++nHiddenCols;

@@ -220,16 +220,16 @@ public:
     virtual void        RequestHelp( const HelpEvent& rHEvt );
 
     void                InsertItem( sal_uInt16 nItemId, const OUString& rStr,
-                                    MenuItemBits nItemBits = 0,
+                                    MenuItemBits nItemBits = MenuItemBits::NONE,
                                     const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
-                                    MenuItemBits nItemBits = 0,
+                                    MenuItemBits nItemBits = MenuItemBits::NONE,
                                     const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
     void                InsertItem( sal_uInt16 nItemId,
                                     const OUString& rString, const Image& rImage,
-                                    MenuItemBits nItemBits = 0,
+                                    MenuItemBits nItemBits = MenuItemBits::NONE,
                                     const OString &rIdent = OString(),
                                     sal_uInt16 nPos = MENU_APPEND );
     void                InsertItem( const ResId& rResId, sal_uInt16 nPos = MENU_APPEND );

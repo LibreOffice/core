@@ -72,7 +72,7 @@ void FontNameMenu::Fill( const FontList* pList )
                     break;
                 j--;
             }
-            InsertItem( i+1, rName, MIB_RADIOCHECK | MIB_AUTOCHECK, OString(), j );
+            InsertItem( i+1, rName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK, OString(), j );
         }
     }
 
@@ -171,7 +171,7 @@ void FontSizeMenu::Fill( const vcl::FontInfo& rInfo, const FontList* pList )
                 long      nSize = aFontSizeNames.GetIndexSize( i );
                 mpHeightAry[nPos] = nSize;
                 nPos++; // Id is nPos+1
-                InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+                InsertItem( nPos, aSizeName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
             }
         }
         else
@@ -185,7 +185,7 @@ void FontSizeMenu::Fill( const vcl::FontInfo& rInfo, const FontList* pList )
                 {
                     mpHeightAry[nPos] = *pTempAry;
                     nPos++; // Id is nPos+1
-                    InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+                    InsertItem( nPos, aSizeName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
                 }
                 pTempAry++;
             }
@@ -199,7 +199,7 @@ void FontSizeMenu::Fill( const vcl::FontInfo& rInfo, const FontList* pList )
     {
         mpHeightAry[nPos] = *pTempAry;
         nPos++; // Id is nPos+1
-        InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MIB_RADIOCHECK | MIB_AUTOCHECK );
+        InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
         pTempAry++;
     }
 

@@ -217,7 +217,7 @@ bool MenuBarMerger::MergeMenuItems(
             }
             else
             {
-                pMenu->InsertItem(nItemId, rMenuItem.aTitle, 0, OString(), nPos+nModIndex+nIndex);
+                pMenu->InsertItem(nItemId, rMenuItem.aTitle, MenuItemBits::NONE, OString(), nPos+nModIndex+nIndex);
                 pMenu->SetItemCommand( nItemId, rMenuItem.aURL );
                 if ( !rMenuItem.aSubMenu.empty() )
                 {

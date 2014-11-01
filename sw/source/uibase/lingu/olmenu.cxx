@@ -203,7 +203,7 @@ void SwSpellPopup::fillLangPopupMenu(
         {
             OSL_ENSURE( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
                     "nItemId outside of expected range!" );
-            pPopupMenu->InsertItem( nItemId, aEntryTxt, MIB_RADIOCHECK );
+            pPopupMenu->InsertItem( nItemId, aEntryTxt, MenuItemBits::RADIOCHECK );
             if (aEntryTxt == aCurLang)
             {
                 //make a check mark for the current language
@@ -214,12 +214,12 @@ void SwSpellPopup::fillLangPopupMenu(
         }
     }
 
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_NONE )), MenuItemBits::RADIOCHECK );
     if ( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) == aCurLang )
         pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET, true );
 
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), 0 );
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )), 0 );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), MenuItemBits::NONE );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )), MenuItemBits::NONE );
 }
 
 OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
@@ -310,7 +310,7 @@ SwSpellPopup::SwSpellPopup(
         for (sal_uInt16 i = 0; i < nStringCount; ++i)
         {
             const OUString aEntry = m_aSuggestions[ i ];
-            InsertItem(nItemId, aEntry, 0, OString(), i);
+            InsertItem(nItemId, aEntry, MenuItemBits::NONE, OString(), i);
             SetHelpId( nItemId, HID_LINGU_REPLACE);
             if (!aSuggestionImageUrl.isEmpty())
                 SetItemImage( nItemId, aImage );
@@ -327,7 +327,7 @@ SwSpellPopup::SwSpellPopup(
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
-    InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, 0, OString(), nItemPos);
+    InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
     EnableItem( MN_AUTOCORR, bEnable );
@@ -470,7 +470,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     sal_uInt16 nPos = 0;
     OUString aMessageText( rResult.aErrors[ nErrorInResult ].aShortComment );
     InsertSeparator(OString(), nPos++);
-    InsertItem(MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, OString(), nPos++);
+    InsertItem(MN_SHORT_COMMENT, aMessageText, MenuItemBits::NOSELECT, OString(), nPos++);
     if (bUseImagesInMenus)
         SetItemImage( MN_SHORT_COMMENT, m_aInfo16 );
 
@@ -491,7 +491,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
 
     if ( !m_sExplanationLink.isEmpty( ) )
     {
-        InsertItem(MN_EXPLANATION_LINK, SW_RESSTR(STR_EXPLANATION_LINK), MIB_TEXT | MIB_HELP, OString(), nPos++);
+        InsertItem(MN_EXPLANATION_LINK, SW_RESSTR(STR_EXPLANATION_LINK), MenuItemBits::TEXT | MenuItemBits::HELP, OString(), nPos++);
     }
 
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -517,7 +517,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
         for (sal_uInt16 i = 0;  i < nStringCount;  ++i)
         {
             const OUString aEntry = m_aSuggestions[ i ];
-            InsertItem(nItemId, aEntry, 0, OString(), nPos++);
+            InsertItem(nItemId, aEntry, MenuItemBits::NONE, OString(), nPos++);
             SetHelpId( nItemId, HID_LINGU_REPLACE );
             if (!aSuggestionImageUrl.isEmpty())
                 SetItemImage( nItemId, aImage );
@@ -531,7 +531,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
-    InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, OString(), nItemPos );
+    InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos );
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
     EnableItem( MN_AUTOCORR, false );

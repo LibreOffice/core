@@ -60,7 +60,7 @@ struct MenuItemData
     MenuItemData()
         : nId(0)
         , eType(MenuItemType::DONTKNOW)
-        , nBits(0)
+        , nBits(MenuItemBits::NONE)
         , pSubMenu(NULL)
         , pAutoSubMenu(NULL)
         , nUserValue(0)
@@ -76,7 +76,7 @@ struct MenuItemData
     MenuItemData( const OUString& rStr, const Image& rImage )
         : nId(0)
         , eType(MenuItemType::DONTKNOW)
-        , nBits(0)
+        , nBits(MenuItemBits::NONE)
         , pSubMenu(NULL)
         , pAutoSubMenu(NULL)
         , aText(rStr)
@@ -94,7 +94,7 @@ struct MenuItemData
     ~MenuItemData();
     bool HasCheck() const
     {
-        return bChecked || ( nBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
+        return bChecked || ( nBits & ( MenuItemBits::RADIOCHECK | MenuItemBits::CHECKABLE | MenuItemBits::AUTOCHECK ) );
     }
 };
 

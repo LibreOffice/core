@@ -800,15 +800,15 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
 
         // Konstanten in Tabelle stellen
         nCheckableId = pHS->getID( "MIB_CHECKABLE" );
-        SETCONST( pFlag, nCheckableId, MIB_CHECKABLE );
+        SETCONST( pFlag, nCheckableId, MenuItemBits::CHECKABLE );
         nAutoCheckId = pHS->getID( "MIB_AUTOCHECK" );
-        SETCONST( pFlag, nAutoCheckId, MIB_AUTOCHECK );
+        SETCONST( pFlag, nAutoCheckId, MenuItemBits::AUTOCHECK );
         nRadioCheckId = pHS->getID( "MIB_RADIOCHECK" );
-        SETCONST( pFlag, nRadioCheckId, MIB_RADIOCHECK );
+        SETCONST( pFlag, nRadioCheckId, MenuItemBits::RADIOCHECK );
         nAboutId = pHS->getID( "MIB_ABOUT" );
-        SETCONST( pFlag, nAboutId, MIB_ABOUT );
+        SETCONST( pFlag, nAboutId, MenuItemBits::ABOUT );
         nHelpId = pHS->getID( "MIB_HELP" );
-        SETCONST( pFlag, nHelpId, MIB_HELP );
+        SETCONST( pFlag, nHelpId, MenuItemBits::HELP );
 
         // Variable einfuegen
         nVarId = aNmTb.Put( "_MenuItemFlags", VARNAME );

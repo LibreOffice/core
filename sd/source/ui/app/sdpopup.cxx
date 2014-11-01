@@ -50,7 +50,7 @@ SdFieldPopup::~SdFieldPopup()
 void SdFieldPopup::Fill( LanguageType eLanguage )
 {
     sal_uInt16 nID = 1;
-    sal_uInt16 nStyle = MIB_RADIOCHECK | MIB_AUTOCHECK;
+    MenuItemBits nStyle = MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK;
     InsertItem( nID++, SD_RESSTR( STR_FIX ), nStyle );
     InsertItem( nID++, SD_RESSTR( STR_VAR ), nStyle );
     InsertSeparator();

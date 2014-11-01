@@ -185,7 +185,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                     long      nSize = aFontSizeNames.GetIndexSize( i );
                     m_pHeightArray[nPos] = nSize;
                     nPos++; // Id is nPos+1
-                    pVCLPopupMenu->InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+                    pVCLPopupMenu->InsertItem( nPos, aSizeName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
                     fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
                     // Create dispatchable .uno command and set it
@@ -204,7 +204,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                     {
                         m_pHeightArray[nPos] = *pTempAry;
                         nPos++; // Id is nPos+1
-                        pVCLPopupMenu->InsertItem( nPos, aSizeName, MIB_RADIOCHECK | MIB_AUTOCHECK );
+                        pVCLPopupMenu->InsertItem( nPos, aSizeName, MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
                         fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
                         // Create dispatchable .uno command and set it
@@ -223,7 +223,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             m_pHeightArray[nPos] = *pTempAry;
             nPos++; // Id is nPos+1
-            pVCLPopupMenu->InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MIB_RADIOCHECK | MIB_AUTOCHECK );
+            pVCLPopupMenu->InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, true, false ), MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK );
             fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
             // Create dispatchable .uno command and set it

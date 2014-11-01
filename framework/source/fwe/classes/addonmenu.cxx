@@ -256,7 +256,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                 if ( pAddonPopupMenu->GetItemCount() > 0 )
                 {
                     pAddonPopupMenu->SetCommandURL( aURL );
-                    pMergeMenuBar->InsertItem( nId, aTitle, 0, OString(), nInsertPos++ );
+                    pMergeMenuBar->InsertItem( nId, aTitle, MenuItemBits::NONE, OString(), nInsertPos++ );
                     pMergeMenuBar->SetPopupMenu( nId, pAddonPopupMenu );
 
                     // Store the command URL into the VCL menu bar for later identification
@@ -328,7 +328,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
             }
 
             sal_uInt16 nId = nUniqueMenuId++;
-            pCurrentMenu->InsertItem(nId, aTitle, 0, OString(), nInsPos);
+            pCurrentMenu->InsertItem(nId, aTitle, MenuItemBits::NONE, OString(), nInsPos);
             nInsPos = AddonMenuManager::GetNextPos( nInsPos );
 
             ++nElements;

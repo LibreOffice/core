@@ -66,9 +66,9 @@ public:
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
 
-    void            appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits = 0 );
-    void            appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits = 0 );
-    void            appendEntry( int nEntryId, Control* pControl, MenuItemBits nItemBits = 0 );
+    void            appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits = MenuItemBits::NONE );
+    void            appendEntry( int nEntryId, const OUString& rStr, const Image& rImage, MenuItemBits nItemBits = MenuItemBits::NONE );
+    void            appendEntry( int nEntryId, Control* pControl, MenuItemBits nItemBits = MenuItemBits::NONE );
     void            appendSeparator();
 
     /** creates an empty ValueSet that is initialized and can be inserted with appendEntry. */

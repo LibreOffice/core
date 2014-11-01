@@ -1205,7 +1205,7 @@ namespace sfx2
         for ( size_t i=0; i<m_aPanelRepository.size(); ++i, ++nIndex )
         {
             const PanelDescriptor& rPanelDesc( m_aPanelRepository[i] );
-            pMenu->InsertItem( nIndex, rPanelDesc.pPanel->GetDisplayName(), MIB_CHECKABLE );
+            pMenu->InsertItem( nIndex, rPanelDesc.pPanel->GetDisplayName(), MenuItemBits::CHECKABLE );
             pMenu->CheckItem( nIndex, !rPanelDesc.bHidden );
         }
         pMenu->InsertSeparator();
@@ -1213,9 +1213,9 @@ namespace sfx2
 #if OSL_DEBUG_LEVEL > 0
         if (SvtMiscOptions().IsExperimentalMode())
         {
-            pMenu->InsertItem( MID_LAYOUT_TABS, OUString("Tab-Layout (exp.)"), MIB_CHECKABLE );
+            pMenu->InsertItem( MID_LAYOUT_TABS, OUString("Tab-Layout (exp.)"), MenuItemBits::CHECKABLE );
             pMenu->CheckItem( MID_LAYOUT_TABS, impl_getLayout() != LAYOUT_DRAWERS );
-            pMenu->InsertItem( MID_LAYOUT_DRAWERS, OUString("Drawer-Layout"), MIB_CHECKABLE );
+            pMenu->InsertItem( MID_LAYOUT_DRAWERS, OUString("Drawer-Layout"), MenuItemBits::CHECKABLE );
             pMenu->CheckItem( MID_LAYOUT_DRAWERS, impl_getLayout() == LAYOUT_DRAWERS );
 
             pMenu->InsertSeparator();

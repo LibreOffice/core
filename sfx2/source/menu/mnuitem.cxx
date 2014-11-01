@@ -201,7 +201,7 @@ void SfxMenuControl::StateChanged
                     "SfxBoolItem not allowed for SID_OBJECTMENUx" );
         bCheck = static_cast<const SfxBoolItem*>(pState)->GetValue();
         Menu* pMenu = pOwnMenu->GetSVMenu();
-        pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MIB_CHECKABLE);
+        pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MenuItemBits::CHECKABLE);
     }
     else if ( pState->ISA(SfxEnumItemInterface) &&
               static_cast<const SfxEnumItemInterface *>(pState)->HasBoolValue() )
@@ -211,7 +211,7 @@ void SfxMenuControl::StateChanged
                     "SfxEnumItem not allowed for SID_OBJECTMENUx" );
         bCheck = static_cast<const SfxEnumItemInterface *>(pState)->GetBoolValue();
         Menu* pMenu = pOwnMenu->GetSVMenu();
-        pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MIB_CHECKABLE);
+        pMenu->SetItemBits( GetId() , pMenu->GetItemBits( GetId() ) | MenuItemBits::CHECKABLE);
     }
     else if ( ( b_ShowStrings || bIsObjMenu ) && pState->ISA(SfxStringItem) )
     {

@@ -2711,7 +2711,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
     if (rClass == "GtkMenuItem")
     {
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
-        pParent->InsertItem(nNewId, sLabel, MIB_TEXT, rID);
+        pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
     }
     else if (rClass == "GtkSeparatorMenuItem")
     {

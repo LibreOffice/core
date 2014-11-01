@@ -97,7 +97,7 @@ public:
 
     bool HasCheck() const
     {
-        return mbChecked || ( mnBits & ( MIB_RADIOCHECK | MIB_CHECKABLE | MIB_AUTOCHECK ) );
+        return mbChecked || ( mnBits & ( MenuItemBits::RADIOCHECK | MenuItemBits::CHECKABLE | MenuItemBits::AUTOCHECK ) );
     }
 };
 
