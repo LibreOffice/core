@@ -141,6 +141,8 @@ Calendar_gregorian::init(const Era *_eraArray)
 {
     cCalendar = "com.sun.star.i18n.Calendar_gregorian";
 
+    fieldSet = 0;
+
     // #i102356# With icu::Calendar::createInstance(UErrorCode) in a Thai
     // th_TH system locale we accidentally used a Buddhist calendar. Though
     // the ICU documentation says that should be the case only for
