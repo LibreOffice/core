@@ -1211,7 +1211,7 @@ ImplFontOptions* PrintFontManager::getFontOptions(
             FC_AUTOHINT, 0, &autohint);
         FcResult eHinting = FcPatternGetBool(pResult,
             FC_HINTING, 0, &hinting);
-        /*FcResult eHintStyle =*/ FcPatternGetInteger(pResult,
+        (void) FcPatternGetInteger(pResult,
             FC_HINT_STYLE, 0, &hintstyle);
 
         pOptions = new FontConfigFontOptions;
