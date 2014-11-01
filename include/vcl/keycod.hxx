@@ -80,7 +80,7 @@ public:
 inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier )
 {
     assert(nKey <= KEY_CODE);
-    assert(nModifier >= 0x1000 && nModifier <= 0xf000);
+    assert(nModifier == 0 || (nModifier >= 0x1000 && nModifier <= 0xf000));
     nKeyCodeAndModifiers = nKey | nModifier;
     eFunc = KeyFuncType::DONTKNOW;
 }
