@@ -63,6 +63,7 @@ Fraction::Fraction( double dVal )
 
 bool Fraction::HasOverflowValue()
 {
+    //coverity[constant_expression_result]
     return value.numerator() < std::numeric_limits<long>::min() ||
         value.numerator() > std::numeric_limits<long>::max() ||
         value.denominator() < std::numeric_limits<long>::min() ||
