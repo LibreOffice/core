@@ -387,15 +387,15 @@ void ScPivotLayoutDialog::ItemInserted(ScItemValue* pItemValue, ScPivotLayoutTre
 
 void ScPivotLayoutDialog::UpdateSourceRange()
 {
-    ScSheetSourceDesc aSourceSheet = *maPivotTableObject.GetSheetDesc();
+    ScSheetSourceDesc* aSourceSheet = const_cast<ScSheetSourceDesc*> (maPivotTableObject.GetSheetDesc());
 
     if (mpSourceRadioNamedRange->IsChecked())
     {
         OUString aEntryString = mpSourceListBox->GetSelectEntry();
         ScRange aSourceRange = lclGetRangeForNamedRange(aEntryString, mpDocument);
-        if (!aSourceRange.IsValid() || aSourceSheet.GetSourceRange() == aSourceRange)
+        if (!aSourceRange.IsValid() || aSourceSheet->GetSourceRange() == aSourceRange)
             return;
-        aSourceSheet.SetRangeName(aEntryString);
+        aSourceSheet->SetRangeName(aEntryString);
     }
     else if (mpSourceRadioSelection->IsChecked())
     {
@@ -427,11 +427,11 @@ void ScPivotLayoutDialog::UpdateSourceRange()
             return;
         }
 
-        if (aSourceSheet.GetSourceRange() == aSourceRange)
+        if (aSourceSheet->GetSourceRange() == aSourceRange)
                 return;
 
-        aSourceSheet.SetSourceRange(aSourceRange);
-        if (aSourceSheet.CheckSourceRange() != 0)
+        aSourceSheet->SetSourceRange(aSourceRange);
+        if (aSourceSheet->CheckSourceRange() != 0)
         {
             mpSourceEdit->SetRefValid(false);
             return;
@@ -442,7 +442,7 @@ void ScPivotLayoutDialog::UpdateSourceRange()
         return;
     }
 
-    maPivotTableObject.SetSheetDesc(aSourceSheet);
+    maPivotTableObject.SetSheetDesc(*aSourceSheet);
     maPivotTableObject.FillOldParam(maPivotParameters);
     maPivotTableObject.FillLabelData(maPivotParameters);
 
