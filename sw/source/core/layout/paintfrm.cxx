@@ -18,16 +18,13 @@
  */
 
 #include <vcl/lazydelete.hxx>
-#include <vcl/gradient.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/opaqitem.hxx>
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/framelink.hxx>
-#include <svx/xflgrit.hxx>
 #include <drawdoc.hxx>
 #include <tgrditem.hxx>
 #include <switerator.hxx>
@@ -42,7 +39,6 @@
 #include <viewimp.hxx>
 #include <dflyobj.hxx>
 #include <flyfrm.hxx>
-#include <frmtool.hxx>
 #include <viewopt.hxx>
 #include <dview.hxx>
 #include <dcontact.hxx>
@@ -71,16 +67,13 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 
 #include <ndole.hxx>
 #include <PostItMgr.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
-#include <ndtxt.hxx>
 
 #include <svtools/borderhelper.hxx>
 
