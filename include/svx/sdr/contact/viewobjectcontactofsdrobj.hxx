@@ -28,42 +28,39 @@ class SdrObject;
 class SetOfByte;
 class OutputDevice;
 
+namespace sdr { namespace contact {
 
-namespace sdr
+class SVX_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
 {
-    namespace contact
-    {
-        class SVX_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
-        {
-            /** Test whether the primitive is visible on any layer from @c aLayers
+    /** Test whether the primitive is visible on any layer from @c aLayers
 
-                This should be overridden by ViewObjectContacts of SDR classes
-                that have subparts which can be on different layers (that is,
-                SdrObjGroup .-)
-              */
-            virtual bool isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const;
+        This should be overridden by ViewObjectContacts of SDR classes
+        that have subparts which can be on different layers (that is,
+        SdrObjGroup .-)
+      */
+    virtual bool isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const;
 
-        protected:
-            const SdrObject& getSdrObject() const;
+protected:
+    const SdrObject& getSdrObject() const;
 
-        public:
-            ViewObjectContactOfSdrObj(ObjectContact& rObjectContact, ViewContact& rViewContact);
-            virtual ~ViewObjectContactOfSdrObj();
+public:
+    ViewObjectContactOfSdrObj(ObjectContact& rObjectContact, ViewContact& rViewContact);
+    virtual ~ViewObjectContactOfSdrObj();
 
-            virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+    virtual bool isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
 
-            /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
+    /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
 
-                Since #i72752#, the PaintWindow (and thus the OutputDevice) associated with a PageView is not
-                constant over its lifetime. Instead, during some paint operations, the PaintWindow/OutputDevice
-                might be temporarily patched.
+        Since #i72752#, the PaintWindow (and thus the OutputDevice) associated with a PageView is not
+        constant over its lifetime. Instead, during some paint operations, the PaintWindow/OutputDevice
+        might be temporarily patched.
 
-                This method cares for this, by retrieving the very original OutputDevice.
-            */
-            boost::optional<const OutputDevice&> getPageViewOutputDevice() const;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+        This method cares for this, by retrieving the very original OutputDevice.
+    */
+    boost::optional<const OutputDevice&> getPageViewOutputDevice() const;
+};
+
+}}
 
 
 
