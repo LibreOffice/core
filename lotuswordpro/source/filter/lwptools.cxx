@@ -826,7 +826,10 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
             default:
             {
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
+                {
+                    delete pTimeStyle;
                     return NULL;
+                }
                 else//TEXT
                 {
                     sal_Unicode buffer[1024];
