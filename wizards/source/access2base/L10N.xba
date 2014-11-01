@@ -76,6 +76,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRTABLEDEFDELETED		:	sLocal = &quot;Pre-existing table &apos;%0&apos; has been deleted&quot;
 				Case &quot;ERR&quot; &amp; ERRTABLECREATION		:	sLocal = &quot;Table &apos;%0&apos; could not be created&quot;
 				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Field &apos;%0&apos; could not be created&quot;
+				Case &quot;ERR&quot; &amp; ERRSUBFORMNOTFOUND		:	sLocal = &quot;Subform &apos;%0&apos; not found in parent form &apos;%1&apos;&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Object&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;
@@ -144,7 +145,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRINDEXVALUE			:	sLocal = &quot;Indice invalide ou dimension erronée du tableau pour la propriété &apos;%0&apos;&quot;
 				Case &quot;ERR&quot; &amp; ERRCOLLECTION			:	sLocal = &quot;Indice de tableau invalide&quot;
 				Case &quot;ERR&quot; &amp; ERRPROPERTYNOTARRAY	:	sLocal = &quot;L&apos;argument n°%0 doit être un tableau&quot;
-				Case &quot;ERR&quot; &amp; ERRCONTROLNOTFOUND		:	sLocal = &quot;Contrôle &apos;%0&apos; non trouvé dans le parent (formulaire ou contrôle de table) &apos;%1&apos;&quot;
+				Case &quot;ERR&quot; &amp; ERRCONTROLNOTFOUND		:	sLocal = &quot;Contrôle &apos;%0&apos; non trouvé dans le parent (formulaire, contrôle de table ou dialogue) &apos;%1&apos;&quot;
 				Case &quot;ERR&quot; &amp; ERRNOACTIVEFORM		:	sLocal = &quot;Pas de formulaire ou de contrôle actif&quot;
 				Case &quot;ERR&quot; &amp; ERRDATABASEFORM		:	sLocal = &quot;Le formulaire &apos;%0&apos; n&apos;a pas de données sous-jacentes&quot;
 				Case &quot;ERR&quot; &amp; ERRFOCUSINGRID			:	sLocal = &quot;Contrôle &apos;%0&apos; non trouvé dans le contrôle de table &apos;%1&apos;&quot;
@@ -181,6 +182,7 @@ Dim sLocal As String
 				Case &quot;ERR&quot; &amp; ERRTABLEDEFDELETED		:	sLocal = &quot;La table existante &apos;%0&apos; a été supprimée&quot;
 				Case &quot;ERR&quot; &amp; ERRTABLECREATION		:	sLocal = &quot;La table &apos;%0&apos; n&apos;a pas pu être créée&quot;
 				Case &quot;ERR&quot; &amp; ERRFIELDCREATION		:	sLocal = &quot;Le champ &apos;%0&apos; n&apos;a pas pu être créé&quot;
+				Case &quot;ERR&quot; &amp; ERRSUBFORMNOTFOUND		:	sLocal = &quot;Sous-formulaire &apos;%0&apos; non trouvé dans le formulaire parent &apos;%1&apos;&quot;
 				&apos;----------------------------------------------------------------------------------------------------------------------
 				Case &quot;OBJECT&quot;						:	sLocal = &quot;Objet&quot;
 				Case &quot;TABLE&quot;						:	sLocal = &quot;Table&quot;

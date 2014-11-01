@@ -545,7 +545,7 @@ Const cstNull = -1
 	If IsMissing(pvOption) Then
 		pvOption = cstNull
 	Else
-		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), dbSQLPassThrough) Then Goto Exit_Function
+		If Not Utils._CheckArgument(pvOption, 2, Utils._AddNumeric(), Array(dbSQLPassThrough, cstNull)) Then Goto Exit_Function
 	End If
 	If _DbConnect &lt;&gt; DBCONNECTBASE And _DbConnect &lt;&gt; DBCONNECTFORM Then Goto Error_NotApplicable
 

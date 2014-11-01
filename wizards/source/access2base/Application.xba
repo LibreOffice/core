@@ -70,6 +70,7 @@ Global Const ERRQUERYDEFDELETED		=	1549
 Global Const ERRTABLEDEFDELETED		=	1550
 Global Const ERRTABLECREATION		=	1551
 Global Const ERRFIELDCREATION		=	1552
+Global Const ERRSUBFORMNOTFOUND		=	1553
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Global Const DBCONNECTBASE			=	1			&apos;	Connection from Base document (OpenConnection)
@@ -1185,9 +1186,11 @@ Public Function _CurrentDb(ByVal Optional piDocEntry As Integer, ByVal Optional 
 REM Without arguments same as CurrentDb() except that it generates an error if database not connected (internal use)
 REM With 2 arguments return the corresponding entry in Root
 
+Dim oCurrentDb As Object
 	If IsEmpty(_A2B_) Then GoTo Trace_Error
-	If IsMissing(piDocEntry)	Then Set _CurrentDb = Application.CurrentDb() _
-								Else Set _CurrentDb = _A2B_._CurrentDb(piDocEntry, piDbEntry)
+	If IsMissing(piDocEntry)	Then Set oCurrentDb = Application.CurrentDb() _
+								Else Set oCurrentDb = _A2B_._CurrentDb(piDocEntry, piDbEntry)
+	If IsNull(oCurrentDb) Then Goto Trace_Error Else Set _CurrentDb = oCurrentDb
 
 Exit_Function:
 	Exit Function	

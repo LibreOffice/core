@@ -37,6 +37,66 @@ REM VBA allows call to actions with missing arguments e.g. OpenForm(&quot;aaa&qu
 REM in StarBasic IsMissing requires Variant parameters
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function ApplyFilter( _
+					ByVal Optional pvFilter As Variant _
+					, ByVal Optional pvSQL As Variant _
+					, ByVal Optional pvControlName As Variant _
+					) As Boolean
+&apos;	Set filter on open table, query, form or subform (if pvControlName present)
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;ApplyFilter&quot;
+	Utils._SetCalledSub(cstThisSub)
+	ApplyFilter = False
+	
+	If IsMissing(pvFilter) And IsMissing(pvSQL) Then Call _TraceArguments()
+	If IsMissing(pvFilter) Then pvFilter = &quot;&quot;
+	If Not Utils._CheckArgument(pvFilter, 1, vbString) Then Goto Exit_Function
+	If IsMissing(pvSQL) Then pvSQL = &quot;&quot;
+	If Not Utils._CheckArgument(pvSQL, 1, vbString) Then Goto Exit_Function
+	If IsMissing(pvControlName) Then pvControlName = &quot;&quot;
+	If Not Utils._CheckArgument(pvControlName, 1, vbString) Then Goto Exit_Function
+
+Dim sFilter As String, oWindow As Object, oDatabase As Object, oTarget As Object
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+
+	If pvSQL &lt;&gt; &quot;&quot; _
+			Then sFilter = oDatabase._ReplaceSquareBrackets(pvSQL) _
+			Else sFilter = oDatabase._ReplaceSquareBrackets(pvFilter)
+
+	Set oWindow = _SelectWindow()
+	With oWindow
+		Select Case .WindowType
+			Case acForm
+				Set oTarget = _DatabaseForm(._Name, pvControlName)
+			Case acQuery, acTable
+				If pvControlName &lt;&gt; &quot;&quot; Then Goto Exit_Function
+				Set oTarget = oWindow.Frame.Controller.FormOperations.Cursor
+			Case Else		&apos;	Ignore action
+				Goto Exit_Function
+		End Select
+	End With
+
+	With oTarget
+		.Filter = sFilter
+		.ApplyFilter = True
+		.reload()
+	End With
+	ApplyFilter = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function		
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRACTION, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	ApplyFilter	V1.2.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function mClose(Optional ByVal pvObjectType As Variant _
 					, Optional ByVal pvObjectName As Variant _
 					, Optional ByVal pvSave As Variant _
@@ -1768,6 +1828,59 @@ Error_Function:
 End Function		&apos;	SetHiddenAttribute	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Function SetOrderBy( _
+					ByVal Optional pvOrder As Variant _
+					, ByVal Optional pvControlName As Variant _
+					) As Boolean
+&apos;	Sort ann open table, query, form or subform (if pvControlName present)
+
+	If _ErrorHandler() Then On Local Error Goto Error_Function
+Const cstThisSub = &quot;SetOrderBy&quot;
+	Utils._SetCalledSub(cstThisSub)
+	SetOrderBy = False
+	
+	If IsMissing(pvOrder) Then pvOrder = &quot;&quot;
+	If Not Utils._CheckArgument(pvOrder, 1, vbString) Then Goto Exit_Function
+	If IsMissing(pvControlName) Then pvControlName = &quot;&quot;
+	If Not Utils._CheckArgument(pvControlName, 1, vbString) Then Goto Exit_Function
+
+Dim sOrder As String, oWindow As Object, oDatabase As Object, oTarget As Object
+	Set oDatabase = Application._CurrentDb()
+	If oDatabase._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
+
+	sOrder = oDatabase._ReplaceSquareBrackets(pvOrder)
+
+	Set oWindow = _SelectWindow()
+	With oWindow
+		Select Case .WindowType
+			Case acForm
+				Set oTarget = _DatabaseForm(._Name, pvControlName)
+			Case acQuery, acTable
+				If pvControlName &lt;&gt; &quot;&quot; Then Goto Exit_Function
+				Set oTarget = oWindow.Frame.Controller.FormOperations.Cursor
+			Case Else		&apos;	Ignore action
+				Goto Exit_Function
+		End Select
+	End With
+
+	With oTarget
+		.Order = sOrder
+		.reload()
+	End With
+	SetOrderBy = True
+
+Exit_Function:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Function		
+Error_NotApplicable:
+	TraceError(TRACEFATAL, ERRACTION, Utils._CalledSub(), 0, 1, cstThisSub)
+	Goto Exit_Function
+Error_Function:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl)
+	GoTo Exit_Function
+End Function		&apos;	SetOrderBy	V1.2.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function ShowAllrecords() As Boolean
 &apos;	Removes any existing filter that exists on the current table, query or form
 
@@ -1823,6 +1936,50 @@ Dim bFound As Boolean
 	_CheckColumnType = bFound
 	
 End Function		&apos;	_CheckColumnType	V0.9.1
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _DatabaseForm(psForm As String, psControl As String)
+&apos;Return DatabaseForm element of Form object (based on psForm which is known as a real form name)
+&apos;or of SubForm object (based on psControl which is checked for being a subform)
+
+Dim oForm As Object, oControl As Object, sControls() As String, iControlCount As Integer
+Dim bFound As Boolean, i As Integer, sName As String
+
+	Set oForm = Application.Forms(psForm)
+	If psControl &lt;&gt; &quot;&quot; Then				&apos;	Search subform
+		With oForm.DatabaseForm
+			iControlCount = .getCount()
+			bFound = False
+			If iControlCount &gt; 0 Then
+				sControls() = .getElementNames()
+				sName = UCase(Utils._Trim(psControl))
+				For i = 0 To iControlCount - 1
+					If UCase(sControls(i)) = sName Then
+						bFound = True
+						Exit For
+					End If
+				Next i
+			End If
+		End With
+		If bFound Then sName = sControls(i) Else Goto Trace_NotFound
+		Set oControl = oForm.Controls(sName)
+		If oControl._SubType &lt;&gt; CTLSUBFORM Then Goto Trace_SubFormNotFound
+		Set _DatabaseForm = oControl.Form.DatabaseForm
+	Else
+		Set _DatabaseForm = oForm.DatabaseForm
+	End If
+
+Exit_Function:
+	Exit Function		
+Trace_NotFound:
+	TraceError(TRACEFATAL, ERRCONTROLNOTFOUND, Utils._CalledSub(), 0, , Array(psControl, psForm))
+	Goto Exit_Function
+Trace_SubFormNotFound:
+	TraceError(TRACEFATAL, ERRSUBFORMNOTFOUND, Utils._CalledSub(), 0, , Array(psControl, psForm))
+	Goto Exit_Function
+End Function		&apos;	_DatabaseForm	V1.2.0
+
+
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _getTempDirectoryURL()	As String

@@ -183,14 +183,6 @@ Const cstBase = &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;
 		With CurrentDoc(0)
 			If Not .Active Then GoTo Trace_Error
 			If IsNull(.Document) Then GoTo Trace_Error
-			If Not  Utils._hasUNOProperty(ThisComponent, &quot;URL&quot;) Then Goto Trace_Error
-			If Utils._ImplementationName(ThisComponent) &lt;&gt; cstBase Or .Document.URL &lt;&gt; ThisComponent.URL Then	&apos;	Give the parent a try
-				If Not  Utils._hasUNOProperty(ThisComponent, &quot;Parent&quot;) Then Goto Trace_Error
-				If IsNull(ThisComponent.Parent) Then Goto Trace_Error
-				If Utils._ImplementationName(ThisComponent.Parent) &lt;&gt; cstBase Then Goto Trace_Error
-				If Not  Utils._hasUNOProperty(ThisComponent.Parent, &quot;URL&quot;) Then Goto Trace_Error
-				If .Document.URL &lt;&gt; ThisComponent.Parent.URL Then Goto Trace_Error
-			End If
 		End With
 		CurrentDocIndex = 0
 	End If
