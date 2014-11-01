@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_cd3bdd9b",
+        "filename": "svgio/inc/svgio/svgreader/svgstyleattributes.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 415,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2014-11-01T18:44:34Z",
+      "side": 1,
+      "message": "Tiniest nit - I\u0027d leave the default argument out. myObject.setVisibility() does not really tell me what happens, myObject.setVisibility(Visibility_visible) though does. FWICT, the code so far does not use the case, anyway.",
+      "revId": "75a12436818a31289e5724f269c17332d0161410",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
