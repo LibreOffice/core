@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a0c5dc1_8da965e2",
+        "filename": "crashrep/source/unx/main.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-11-01T14:55:23Z",
+      "side": 1,
+      "message": "no.. just that wird g_szStakeFile was used in a apparently buggy way... so incredibly so that I felt I must have miss something.. /me hoping that in review someone will remember what it was supposed to do",
+      "parentUuid": "9a0c5dc1_2a937ffc",
+      "revId": "2434ea8c5721d9b7dca4b958d7ca414e59bbaf3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0c5dc1_0a90bbeb",
         "filename": "crashrep/source/unx/main.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-11-01T07:15:51Z",
       "side": 1,
       "message": "shouldn\u0027t it free the allocated memory here and return null if mkstemp() fails?",
+      "revId": "2434ea8c5721d9b7dca4b958d7ca414e59bbaf3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_4dac8ded",
+        "filename": "crashrep/source/unx/main.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-11-01T14:55:23Z",
+      "side": 1,
+      "message": "yes, done",
+      "parentUuid": "9a0c5dc1_0a90bbeb",
       "revId": "2434ea8c5721d9b7dca4b958d7ca414e59bbaf3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9a0c5dc1_2db9592f",
+        "filename": "crashrep/source/unx/main.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-11-01T14:55:23Z",
+      "side": 1,
+      "message": "ditto done",
+      "parentUuid": "9a0c5dc1_eabb2774",
+      "revId": "2434ea8c5721d9b7dca4b958d7ca414e59bbaf3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a0c5dc1_cac063e3",
         "filename": "crashrep/source/unx/main.cxx",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2014-11-01T07:15:51Z",
       "side": 1,
       "message": "just delete this code if you believe it\u0027s doing nothing - we can recover from version control if necesssary",
+      "revId": "2434ea8c5721d9b7dca4b958d7ca414e59bbaf3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_6d963196",
+        "filename": "crashrep/source/unx/main.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-11-01T14:55:23Z",
+      "side": 1,
+      "message": "I usually do, but this is puzzling to me, so I wanted to\nkeep it visible in case someone remeber how that was\nsupposed to work",
+      "parentUuid": "9a0c5dc1_cac063e3",
       "revId": "2434ea8c5721d9b7dca4b958d7ca414e59bbaf3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
