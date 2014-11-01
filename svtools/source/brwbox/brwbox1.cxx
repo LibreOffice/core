@@ -19,6 +19,7 @@
 
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
+#include <o3tl/numeric.hxx>
 #include "datwin.hxx"
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
@@ -2418,7 +2419,6 @@ long BrowseBox::GetTitleHeight() const
     return nTitleLines ? nTitleLines * nHeight + 4 : 0;
 }
 
-
 long BrowseBox::CalcReverseZoom(long nVal)
 {
     if (IsZoom())
@@ -2426,6 +2426,8 @@ long BrowseBox::CalcReverseZoom(long nVal)
         const Fraction& rZoom = GetZoom();
         double n = (double)nVal;
         n *= (double)rZoom.GetDenominator();
+        if (!rZoom.GetNumerator())
+            throw o3tl::divide_by_zero();
         n /= (double)rZoom.GetNumerator();
         nVal = n>0 ? (long)(n + 0.5) : -(long)(-n + 0.5);
     }
@@ -2444,8 +2446,6 @@ void BrowseBox::CursorMoved()
             Any()
         );
 }
-
-
 
 void BrowseBox::LoseFocus()
 {

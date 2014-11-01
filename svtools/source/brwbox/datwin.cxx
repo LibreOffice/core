@@ -19,9 +19,8 @@
 
 
 #include "datwin.hxx"
-
+#include <o3tl/numeric.hxx>
 #include <vcl/svapp.hxx>
-
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
@@ -101,8 +100,6 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     rDev.SetFillColor( aOldFillColor );
 }
 
-
-
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
                               const OUString& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
 :   _nId( nItemId ),
@@ -114,6 +111,8 @@ BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
     double n = (double)_nWidth;
     n *= (double)rCurrentZoom.GetDenominator();
     n /= (double)rCurrentZoom.GetNumerator();
+    if (!rCurrentZoom.GetNumerator())
+        throw o3tl::divide_by_zero();
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
@@ -121,18 +120,16 @@ BrowserColumn::~BrowserColumn()
 {
 }
 
-
-
 void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
 {
     _nWidth = nNewWidthPixel;
     double n = (double)_nWidth;
     n *= (double)rCurrentZoom.GetDenominator();
+    if (!rCurrentZoom.GetNumerator())
+        throw o3tl::divide_by_zero();
     n /= (double)rCurrentZoom.GetNumerator();
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
-
-
 
 void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos, bool bCurs  )
 {
