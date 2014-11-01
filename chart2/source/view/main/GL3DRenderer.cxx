@@ -356,7 +356,9 @@ void OpenGL3DRenderer::init()
     CHECK_GL_ERROR();
     glCullFace(GL_BACK);
     CHECK_GL_ERROR();
+#if !defined(ANDROID) && !defined(IOS)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
     // Enable depth test
     CHECK_GL_ERROR();
     glEnable(GL_DEPTH_TEST);
@@ -2158,7 +2160,11 @@ void OpenGL3DRenderer::ClearBuffer()
     glDisable(GL_DEPTH_TEST);
     CHECK_GL_ERROR();
 
+#if defined(IOS) || defined(ANDROID)
+    glClearDepthf(1.0f);
+#else
     glClearDepth(1.0f);
+#endif
     CHECK_GL_ERROR();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     CHECK_GL_ERROR();
