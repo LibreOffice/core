@@ -187,6 +187,11 @@ sub collect_definitions
         if ( $oneitem eq "Directory" ) { if ( $itemkey =~ "DosName" ) { $itemkey =~ s/DosName/HostName/; } }
         if (( $oneitem eq "Directory" ) || ( $oneitem eq "File" ) || ( $oneitem eq "Unixlink" )) { if ( $itemvalue eq "PD_PROGDIR" ) { $itemvalue = "PREDEFINED_PROGDIR"; }}
         if (( $itemkey eq "Styles" ) && ( $itemvalue =~ /^\s*(\w+)(\s*\;\s*)$/ )) { $itemvalue = "($1)$2"; }
+        elsif ( $itemkey eq "Files" ) # filter out empty file records, as they mess up assignment to modules
+        {
+            $itemvalue =~ /^\(([^)]*)\)$/;
+            $itemvalue = '(' . join( ',', grep( !/^$/, split( ',', $1 ) ) ) . ')';
+        }
 
         $oneitemhash{$itemkey} = $itemvalue;
         }
