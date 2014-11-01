@@ -22,32 +22,24 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-
-// predeclarations
 class SdrOle2Obj;
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+class ViewObjectContactOfSdrOle2Obj : public ViewObjectContactOfSdrObj
 {
-    namespace contact
-    {
-        class ViewObjectContactOfSdrOle2Obj : public ViewObjectContactOfSdrObj
-        {
-        protected:
-            const SdrOle2Obj& getSdrOle2Object() const;
+protected:
+    const SdrOle2Obj& getSdrOle2Object() const;
 
-            // This method is responsible for creating the graphical visualisation data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
+    // This method is responsible for creating the graphical visualisation data
+    virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const SAL_OVERRIDE;
 
-        public:
-            ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact);
-            virtual ~ViewObjectContactOfSdrOle2Obj();
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+public:
+    ViewObjectContactOfSdrOle2Obj(ObjectContact& rObjectContact, ViewContact& rViewContact);
+    virtual ~ViewObjectContactOfSdrOle2Obj();
+};
 
-
+}}
 
 #endif // INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFSDROLE2OBJ_HXX
 
