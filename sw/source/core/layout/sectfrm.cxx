@@ -17,40 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/smplhint.hxx>
 #include <svl/itemiter.hxx>
-#include <hints.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <fmtclbl.hxx>
 #include "sectfrm.hxx"
 #include "section.hxx"
-#include "frmtool.hxx"
-#include "doc.hxx"
 #include <IDocumentSettingAccess.hxx>
-#include "cntfrm.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
-#include "fmtpdsc.hxx"
-#include "fmtcntnt.hxx"
-#include "ndindex.hxx"
-#include "ftnidx.hxx"
 #include "txtfrm.hxx"
 #include "fmtclds.hxx"
 #include "colfrm.hxx"
 #include "tabfrm.hxx"
-#include "flyfrm.hxx"
 #include "ftnfrm.hxx"
 #include "layouter.hxx"
 #include "dbg_lay.hxx"
-#include "viewsh.hxx"
 #include "viewopt.hxx"
 #include "viewimp.hxx"
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <fmtftntx.hxx>
-#include <dflyobj.hxx>
 #include <flyfrms.hxx>
 #include <sortedobjs.hxx>
 
