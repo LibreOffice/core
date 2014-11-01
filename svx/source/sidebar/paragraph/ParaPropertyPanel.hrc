@@ -37,22 +37,6 @@
 #define ED_SBINDE_LINEDISTPERCENT          2
 #define ED_SBINDE_LINEDISTPOINT            3
 
-#define FT_CUSTOM                          14
-#define FT_LINE_SPACING                    15
-#define FT_OF                              16
-#define LINE_SPACING                       29
-#define STR_SPACING1                       30
-#define STR_SPACING115                     31
-#define STR_SPACING15                      32
-#define STR_SPACING2                       33
-#define STR_LCVALUE                        36
-#define STR_LS_SINGLE                      37
-#define STR_LS_115                         38
-#define STR_LS_15                          39
-#define STR_LS_DOUBLE                      40
-#define STR_LSPACING                       41
-#define STR_LS_OF                          42
-
 //============================== Help ID ==============================
 #define HID_POPUP_BULLET_CB_BULLET_MORE "HID_POPUP_BULLET_CB_BULLET_MORE"
 #define HID_POPUP_BULLET_VS_VALUES      "HID_POPUP_BULLET_VS_VALUES"

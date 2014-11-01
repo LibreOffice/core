@@ -62,36 +62,10 @@ private:
     long                    nMinFixDist;
     Edit*                   pActLineDistFld;
 
-    svx::sidebar::ValueSetWithTextControl maLineSpacing;
+    ListBox*                mpLineDist;
 
-    FixedText               maCustomFT;
-    FixedText               maLSpacingFT;
-    ListBox                 aLineDist;
-
-    FixedText               maOfFT;
-    MetricField             aLineDistAtPercentBox;
-    MetricField             aLineDistAtMetricBox;
-
-    Image                   maSpacing1;
-    Image                   maSpacing115;
-    Image                   maSpacing15;
-    Image                   maSpacing2;
-
-    Image                   maSelSpacing1;
-    Image                   maSelSpacing115;
-    Image                   maSelSpacing15;
-    Image                   maSelSpacing2;
-    Image                   maSelSelHanging;
-    Image                   maImgCus;
-    Image                   maImgCusGrey;
-    OUString                maStrCus;
-
-    Image*                  mpImg;
-    Image*                  mpImgSel;
-    OUString*               mpStr;
-    OUString*               mpStrTip;
-    OUString                maLine;
-    OUString                maOf;
+    MetricField*            mpLineDistAtPercentBox;
+    MetricField*            mpLineDistAtMetricBox;
 
     sal_Int64               maValue;
     sal_uInt16              maPos;
