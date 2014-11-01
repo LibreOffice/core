@@ -1108,7 +1108,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     if ( !IsDropDownBox() )
     {
         Size aOutSz = mpImplLB->GetMainWindow().GetOutputSizePixel();
-        rnCols = (sal_uInt16)(aOutSz.Width()/nCharWidth);
+        rnCols = (nCharWidth > 0) ? (sal_uInt16)(aOutSz.Width()/nCharWidth) : 1;
         rnLines = (sal_uInt16)(aOutSz.Height()/mpImplLB->GetEntryHeight());
     }
     else
