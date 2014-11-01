@@ -699,7 +699,7 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
                         for( nSpanInfoRow = nPropSrcRow - 1; nSpanInfoRow >= 0; --nSpanInfoRow )
                         {
                             CellRef xMergeInfoCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nSpanInfoRow ).get() ) );
-                            if( !xMergeInfoCell->isMerged() )
+                            if (xMergeInfoCell.is() && !xMergeInfoCell->isMerged())
                             {
                                 nColSpan = xMergeInfoCell->getColumnSpan();
                                 nRowSpan = xMergeInfoCell->getRowSpan();
