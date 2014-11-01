@@ -441,25 +441,13 @@ void GraphicObject::SetSwapStreamHdl()
     }
 }
 
-// #i122985# it is not correct to set the swap-timeout to a hard-coded 5000ms
-// as it was before.  Added code and experimented what to do as a good
-// compromise, see description.
 static sal_uInt32 GetCacheTimeInMs()
 {
     const sal_uInt32 nSeconds =
         officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
             comphelper::getProcessComponentContext());
 
-
-    // The default is 10 minutes. The minimum is one minute, thus 60
-    // seconds. When the minimum should match to the former hard-coded
-    // 5 seconds, we have a divisor of 12 to use. For the default of 10
-    // minutes this would mean 50 seconds. Compared to before this is
-    // ten times more (would allow better navigation by switching
-    // through pages) and is controllable by the user by setting the
-    // tools/options/memory/Remove_from_memory_after setting. Seems to
-    // be a good compromise to me.
-    return nSeconds * 1000 / 12;
+    return nSeconds * 1000;
 }
 
 void GraphicObject::SetSwapStreamHdl(const Link& rHdl)
