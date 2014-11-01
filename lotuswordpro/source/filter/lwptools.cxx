@@ -603,7 +603,10 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
             default:
             {
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
+                {
+                    delete pDateStyle;
                     return NULL;
+                }
                 else//TEXT
                 {
                     //UChar buffer[1024];
