@@ -1212,6 +1212,7 @@ namespace svgio
             maTextAnchor(TextAnchor_notset),
             maColor(),
             maOpacity(1.0),
+            maVisibility(Visibility_visible),
             maTitle(),
             maDesc(),
             maClipPathXLink(),
@@ -1733,6 +1734,29 @@ namespace svgio
                     if(readSingleNumber(aContent, aNum))
                     {
                         setOpacity(SvgNumber(basegfx::clamp(aNum.getNumber(), 0.0, 1.0), aNum.getUnit(), aNum.isSet()));
+                    }
+                    break;
+                }
+                case SVGTokenVisibility:
+                {
+                    if(!aContent.isEmpty())
+                    {
+                        if(aContent.startsWith("visible"))
+                        {
+                            setVisibility(Visibility_visible);
+                        }
+                        else if(aContent.startsWith("hidden"))
+                        {
+                            setVisibility(Visibility_hidden);
+                        }
+                        else if(aContent.startsWith("collapse"))
+                        {
+                            setVisibility(Visibility_collapse);
+                        }
+                        else if(aContent.startsWith("inherit"))
+                        {
+                            setVisibility(Visibility_inherit);
+                        }
                     }
                     break;
                 }

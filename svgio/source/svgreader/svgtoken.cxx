@@ -91,6 +91,7 @@ namespace svgio
         static OUString aSVGStrPatternContentUnits("patternContentUnits");
         static OUString aSVGStrPatternTransform("patternTransform");
         static OUString aSVGStrOpacity("opacity");
+        static OUString aSVGStrVisibility("visibility");
         static OUString aSVGStrTitle("title");
         static OUString aSVGStrDesc("desc");
 
@@ -236,6 +237,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPatternContentUnits, SVGTokenPatternContentUnits));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrPatternTransform, SVGTokenPatternTransform));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrOpacity, SVGTokenOpacity));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrVisibility, SVGTokenVisibility));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTitle, SVGTokenTitle));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDesc, SVGTokenDesc));
 
