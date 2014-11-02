@@ -184,12 +184,12 @@ void OutputDevice::PaintLineGeometryWithEvtlExpand(
 
             for(sal_uInt32 c(0); c < aLinePolyPolygon.count(); c++)
             {
-                basegfx::B2DPolyPolygon aLineTraget;
+                basegfx::B2DPolyPolygon aLineTarget;
                 basegfx::tools::applyLineDashing(
                     aLinePolyPolygon.getB2DPolygon(c),
                     fDotDashArray,
-                    &aLineTraget);
-                aResult.append(aLineTraget);
+                    &aLineTarget);
+                aResult.append(aLineTarget);
             }
 
             aLinePolyPolygon = aResult;
