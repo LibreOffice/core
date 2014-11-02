@@ -182,7 +182,7 @@ bool WGLisExtensionSupported(const char *extension)
     }
 }
 
-bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat)
+bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat, bool bUseDoubleBufferedRendering)
 {
     HWND hWnd = NULL;
     GLWindow glWin;
@@ -232,7 +232,7 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat)
         0,0
     };
 
-    if (!mbUseDoubleBufferedRendering)
+    if (!bUseDoubleBufferedRendering)
         iAttributes[1] = GL_FALSE;
 
     bool bArbMultisampleSupported = true;
@@ -600,7 +600,7 @@ bool OpenGLContext::ImplInit()
 
     //  we must check whether can set the MSAA
     int WindowPix = 0;
-    bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix);
+    bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix, mbUseDoubleBufferedRendering);
     if (bMultiSampleSupport && WindowPix != 0)
     {
         m_aGLWin.bMultiSampleSupported = true;
