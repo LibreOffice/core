@@ -17,38 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <hints.hxx>
 #include <comphelper/flagguard.hxx>
-#include <tools/bigint.hxx>
 #include <tools/line.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/outdev.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtsrnd.hxx>
 #include <pagedesc.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
-#include <cntfrm.hxx>
 #include <ftnfrm.hxx>
 #include <flyfrm.hxx>
 #include <tabfrm.hxx>
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <txtfrm.hxx>
-#include <viewsh.hxx>
 #include <viewopt.hxx>
-#include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <viscrs.hxx>
-#include <frmfmt.hxx>
-#include <swtable.hxx>
 #include <dflyobj.hxx>
 #include <crstate.hxx>
-#include <frmtool.hxx>
-#include <ndtxt.hxx>
 #include <dcontact.hxx>
 #include <sortedobjs.hxx>
 #include <txatbase.hxx>
@@ -57,8 +47,6 @@
 
 #include <cfloat>
 #include <swselectionlist.hxx>
-
-#include <basegfx/numeric/ftools.hxx>
 
 namespace {
     bool lcl_GetCrsrOfst_Objects( const SwPageFrm* pPageFrm, bool bSearchBackground,

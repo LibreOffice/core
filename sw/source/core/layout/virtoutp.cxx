@@ -17,14 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/window.hxx>
-
-#include "hintids.hxx"
-#include "viewsh.hxx"
 #include "virtoutp.hxx"
 #include "viewopt.hxx"
 #include "rootfrm.hxx"
-#include "setmapvirtdev.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
 

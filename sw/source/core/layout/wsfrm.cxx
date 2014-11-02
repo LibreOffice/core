@@ -17,35 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <hints.hxx>
-#include <vcl/outdev.hxx>
 #include <svl/itemiter.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/keepitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <fmtornt.hxx>
 #include <pagefrm.hxx>
 #include <section.hxx>
 #include <rootfrm.hxx>
-#include <cntfrm.hxx>
-#include <dcontact.hxx>
 #include <anchoreddrawobject.hxx>
 #include <fmtanchr.hxx>
-#include <viewsh.hxx>
 #include <viewimp.hxx>
 #include "viewopt.hxx"
-#include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <fesh.hxx>
 #include <docsh.hxx>
-#include <flyfrm.hxx>
-#include <frmtool.hxx>
 #include <ftninfo.hxx>
-#include <dflyobj.hxx>
 #include <fmtclbl.hxx>
-#include <fmtfordr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtpdsc.hxx>
 #include <txtftn.hxx>
@@ -53,18 +41,15 @@
 #include <fmtsrnd.hxx>
 #include <ftnfrm.hxx>
 #include <tabfrm.hxx>
-#include <htmltbl.hxx>
 #include <flyfrms.hxx>
 #include <sectfrm.hxx>
 #include <fmtclds.hxx>
 #include <txtfrm.hxx>
-#include <ndtxt.hxx>
 #include <bodyfrm.hxx>
 #include <cellfrm.hxx>
 #include <dbg_lay.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <sortedobjs.hxx>
-#include <svx/xdef.hxx>
 
 using namespace ::com::sun::star;
 
