@@ -983,9 +983,8 @@ SalGraphics* WinSalFrame::AcquireGraphics()
 
         if ( !mpGraphics2 )
         {
-            mpGraphics2 = new WinSalGraphics(WinSalGraphics::WINDOW, true);
+            mpGraphics2 = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd);
             mpGraphics2->setHDC(0);
-            mpGraphics2->mhWnd       = mhWnd;
         }
 
         HDC hDC = (HDC)(sal_IntPtr)SendMessageW( pSalData->mpFirstInstance->mhComWnd,
@@ -1015,9 +1014,8 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             HDC hDC = GetDC( mhWnd );
             if ( hDC )
             {
-                mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true);
+                mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd);
                 mpGraphics->setHDC(hDC);
-                mpGraphics->mhWnd     = mhWnd;
                 if ( pSalData->mhDitherPal )
                 {
                     mpGraphics->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
@@ -1512,7 +1510,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     {
         if( pThis->mpGraphics2 )
         {
-            pThis->mpGraphics2->mhWnd = hWnd;
+            pThis->mpGraphics2->setHWND(hWnd);
 
             if( bNeedCacheDC )
             {
@@ -1550,7 +1548,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
         if( pThis->mpGraphics )
         {
             // re-create DC
-            pThis->mpGraphics->mhWnd = hWnd;
+            pThis->mpGraphics->setHWND(hWnd);
             pThis->mpGraphics->setHDC( GetDC( hWnd ) );
             if ( GetSalData()->mhDitherPal )
             {
