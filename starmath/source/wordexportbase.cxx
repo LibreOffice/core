@@ -10,8 +10,6 @@
 
 #include "wordexportbase.hxx"
 
-#include <rtl/ustring.hxx>
-
 SmWordExportBase::SmWordExportBase(const SmNode* pIn)
     : m_pTree(pIn)
 {

@@ -7,9 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <editeng/lrspitem.hxx>
@@ -18,38 +16,26 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/svdogrp.hxx>
 #include <oox/token/tokens.hxx>
-#include <oox/export/drawingml.hxx>
-#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 #include <oox/token/properties.hxx>
-
-#include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
-#include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtcntnt.hxx>
 #include <ndtxt.hxx>
 #include <txatbase.hxx>
 #include <fmtautofmt.hxx>
 #include <fmtfsize.hxx>
-
 #include <drawdoc.hxx>
 #include <docxsdrexport.hxx>
-#include <docxexport.hxx>
 #include <docxattributeoutput.hxx>
 #include <docxexportfilter.hxx>
-#include <writerhelper.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequenceasvector.hxx>
-
-
 #include <IDocumentDrawModelAccess.hxx>
 
 using namespace com::sun::star;

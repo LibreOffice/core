@@ -17,19 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
 #include <cstring>
-
 #include "rtfattributeoutput.hxx"
 #include "rtfsdrexport.hxx"
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"
 #include "fmtcntnt.hxx"
 #include "fchrfmt.hxx"
-
-#include <rtl/ustring.hxx>
-#include <rtl/tencinfo.h>
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -66,15 +60,11 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/opaqitem.hxx>
-#include <svx/svdmodel.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
-#include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/rtfutil.hxx>
-#include <svtools/miscopt.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/xflgrit.hxx>
-
 #include <drawdoc.hxx>
 #include <docufld.hxx>
 #include <fmtclds.hxx>
@@ -83,13 +73,11 @@
 #include <fmtrowsplt.hxx>
 #include <fmtline.hxx>
 #include <fmtanchr.hxx>
-#include <frmatr.hxx>
 #include <htmltbl.hxx>
 #include <ndgrf.hxx>
 #include <ndtxt.hxx>
 #include <pagedesc.hxx>
 #include <swmodule.hxx>
-#include <swtable.hxx>
 #include <txtftn.hxx>
 #include <txtinet.hxx>
 #include <grfatr.hxx>
@@ -97,15 +85,11 @@
 #include <lineinfo.hxx>
 #include <rtf.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>
-
 #include <com/sun/star/i18n/ScriptType.hpp>
 
-
 using ::editeng::SvxBorderLine;
-
 using namespace nsSwDocInfoSubType;
 using namespace nsFieldFlags;
 using namespace sw::util;

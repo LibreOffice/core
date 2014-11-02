@@ -7,19 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
-
-#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/unoprnms.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/datetime.hxx>
-
 #include <DomainMapper_Impl.hxx>
-#include <StyleSheetTable.hxx>
 #include <SdtHelper.hxx>
 
 namespace writerfilter

@@ -10,7 +10,6 @@
 
 #include "rtfexport.hxx"
 
-#include <rtl/ustring.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 

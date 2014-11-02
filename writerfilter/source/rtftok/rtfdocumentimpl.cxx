@@ -8,49 +8,33 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
-#include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <rtl/tencinfo.h>
 #include <svl/lngmisc.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <rtl/ustring.hxx>
-#include <svtools/grfmgr.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/settings.hxx>
 #include <filter/msfilter/util.hxx>
-#include <filter/msfilter/escherex.hxx>
 #include <comphelper/string.hxx>
 #include <tools/globname.hxx>
 #include <tools/datetimeutils.hxx>
-#include <tools/mapunit.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-
 #include <oox/mathml/import.hxx>
 #include <ooxml/resourceids.hxx>
-#include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <dmapper/GraphicHelpers.hxx>
-
 #include <rtfsdrimport.hxx>
-#include <rtftokenizer.hxx>
 #include <rtflookahead.hxx>
 #include <rtfcharsets.hxx>
 #include <rtfreferenceproperties.hxx>

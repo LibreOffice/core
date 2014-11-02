@@ -8,7 +8,6 @@
  */
 
 #include <textboxhelper.hxx>
-#include <frmfmt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcnct.hxx>
@@ -18,13 +17,10 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
-#include <docary.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>
 #include <unodraw.hxx>
-#include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
-#include <unomid.h>
 #include <cmdid.h>
 #include <unoprnms.hxx>
 #include <dflyobj.hxx>
@@ -36,7 +32,6 @@
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svl/itemiter.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -46,7 +41,6 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 using namespace com::sun::star;

@@ -17,21 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/ustring.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <osl/module.hxx>
 #include <RtfFilter.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <rtftok/RTFDocument.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <unotools/localfilehelper.hxx>
-#include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 

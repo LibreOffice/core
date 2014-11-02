@@ -11,14 +11,8 @@
 #include "docxhelper.hxx"
 #include <doc.hxx>
 #include <docsh.hxx>
-
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <rtl/strbuf.hxx>
-
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.h>
-
 #include <boost/optional.hpp>
 
 using namespace com::sun::star;

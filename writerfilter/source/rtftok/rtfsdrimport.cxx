@@ -12,9 +12,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -24,24 +22,17 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-
 #include <ooxml/resourceids.hxx>
-#include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>
-#include <tools/mapunit.hxx>
-#include <comphelper/sequenceasvector.hxx>
-
 #include <dmapper/DomainMapper.hxx>
 #include "../dmapper/GraphicHelpers.hxx"
 #include <rtfsdrimport.hxx>
 #include <rtfreferenceproperties.hxx>
-
 #include <oox/vml/vmlformatting.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
-
 #include <boost/logic/tribool.hpp>
 
 using namespace com::sun::star;

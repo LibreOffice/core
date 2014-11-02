@@ -17,14 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_version.h>
 #include "rtfexportfilter.hxx"
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
@@ -32,8 +29,6 @@
 #include <fmtpdsc.hxx>
 #include <section.hxx>
 #include <pagedesc.hxx>
-#include <swtable.hxx>
-#include <frmatr.hxx>
 #include <ftninfo.hxx>
 #include <fmthdft.hxx>
 #include <editeng/colritem.hxx>
@@ -44,23 +39,15 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/protitem.hxx>
-
-#include <docary.hxx>
 #include <numrule.hxx>
 #include <lineinfo.hxx>
 #include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
-
 #include "ww8par.hxx"
-
 #include <comphelper/string.hxx>
-#include <rtl/ustring.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/docinfohelper.hxx>
-#include <vcl/svapp.hxx>
-
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #endif

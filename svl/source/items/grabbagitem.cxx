@@ -8,11 +8,7 @@
  */
 
 #include <svl/grabbagitem.hxx>
-#include <svl/poolitem.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
-
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 TYPEINIT1_AUTOFACTORY(SfxGrabBagItem, SfxPoolItem);

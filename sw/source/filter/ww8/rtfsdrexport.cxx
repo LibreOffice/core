@@ -19,8 +19,6 @@
 
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
-#include "rtfexportfilter.hxx"
-
 #include <svtools/rtfkeywd.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <editeng/editobj.hxx>
@@ -29,7 +27,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
-
 #include <algorithm>
 
 using namespace sw::util;

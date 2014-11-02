@@ -7,15 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <TablePositionHandler.hxx>
-#include <DomainMapperTableHandler.hxx>
-#include <PropertyMap.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include "dmapperLoggers.hxx"
-
 #include <comphelper/sequenceashashmap.hxx>
 
 namespace writerfilter
