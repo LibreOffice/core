@@ -602,12 +602,6 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
         mpWinFontEntry[ i ] = NULL;
         mfFontScale[ i ] = 1.0;
     }
-
-    static const char* pEnv = getenv("USE_OPENGL");
-    if (pEnv)
-    {
-        mpImpl.reset(new OpenGLSalGraphicsImpl());
-    }
 }
 
 WinSalGraphics::~WinSalGraphics()
