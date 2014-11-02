@@ -1265,14 +1265,14 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
         FT_FuncFix2,        //  108 Cell()               <- new
         FT_FuncFix1,        //  109 Trim()               <- new
         FT_FuncFix1,        //  110 Clean()              <- new
-        FT_FuncFix1,        //  111 S()                  <- change in Bez.
-        FT_FuncFix1,        //  112 N()                  <- change in Bez.
+        FT_FuncFix1,        //  111 S()                  <- change in name
+        FT_FuncFix1,        //  112 N()                  <- change in name
         FT_FuncFix2,        //  113 Exact()              <- new
-        FT_NotImpl,         //  114 App                  <- change in Bez.
+        FT_NotImpl,         //  114 App                  <- change in name
         FT_FuncFix1,        //  115 @@()                 <- new
         FT_FuncFix3,        //  116 Rate()               <- new
-        FT_FuncFix3,        //  117 Term()               <- change in Anz.
-        FT_FuncFix3,        //  118 Cterm()              <- change in Anz.
+        FT_FuncFix3,        //  117 Term()               <- change in quantity
+        FT_FuncFix3,        //  118 Cterm()              <- change in quantity
         FT_FuncFix3,        //  119 Sln()                <- new
         FT_FuncFix4,        //  120 Syd()                <- new
         FT_FuncFix4,        //  121 Ddb()                <- new
@@ -1755,7 +1755,7 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
         NULL,                       //   69 Is Text?
         NULL,                       //   70 Len()
         NULL,                       //   71 Val()
-        NULL,                       //   72 String()    ocFixed ersatzweise + Spezialfall
+        NULL,                       //   72 String()    ocFixed as substitute + special case
         NULL,                       //   73 Mid()
         NULL,                       //   74 Char()
         NULL,                       //   75 Ascii()
