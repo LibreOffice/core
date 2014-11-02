@@ -72,7 +72,7 @@ Dim sFilter As String, oWindow As Object, oDatabase As Object, oTarget As Object
 				Set oTarget = _DatabaseForm(._Name, pvControlName)
 			Case acQuery, acTable
 				If pvControlName &lt;&gt; &quot;&quot; Then Goto Exit_Function
-				Set oTarget = oWindow.Frame.Controller.FormOperations.Cursor
+				Set oTarget = .Frame.Controller.FormOperations.Cursor
 			Case Else		&apos;	Ignore action
 				Goto Exit_Function
 		End Select
@@ -764,13 +764,14 @@ Public Function GoToRecord(Optional ByVal pvObjectType As Variant _
 	
 	Utils._SetCalledSub(&quot;GoToRecord&quot;)
 	If IsMissing(pvObjectName) Then pvObjectName = &quot;&quot;
-	If IsMissing(pvObjectType) Then
-		If pvObjectName &lt;&gt; &quot;&quot; Then pvObjectType = acDataForm Else pvObjectType = acActiveDataObject
-	End If
+	If IsMissing(pvObjectType) Then pvObjectType = acActiveDataObject
+&apos;	If IsMissing(pvObjectType) Then
+&apos;		If pvObjectName &lt;&gt; &quot;&quot; Then pvObjectType = acDataForm Else pvObjectType = acActiveDataObject
+&apos;	End If
 	If IsMissing(pvRecord) Then pvRecord = acNext
 	If IsMissing(pvOffset) Then pvOffset = 1
 	If Not (Utils._CheckArgument(pvObjectType, 1, Utils._AddNumeric() _
-				, Array(acActiveDataObject, acDataForm)) _
+				, Array(acActiveDataObject, acDataForm, acDataQuery, acDataTable)) _
 		And Utils._CheckArgument(pvObjectName, 2, vbString) _
 		And Utils._CheckArgument(pvRecord, 3, Utils._AddNumeric() _
 				, Array(acFirst, acGoTo, acLast, acNewRec, acNext, acPrevious)) _
@@ -779,22 +780,22 @@ Public Function GoToRecord(Optional ByVal pvObjectType As Variant _
 	If pvObjectType = acActiveDataObject And pvObjectName &lt;&gt; &quot;&quot; Then Goto Error_Target
 	If pvOffset &lt; 0 And pvRecord &lt;&gt; acGoTo Then Goto Error_Offset
 	
-Dim ofForm As Object, oGeneric As Object
+Dim ofForm As Object, oGeneric As Object, oResultSet As Object, oWindow As Object
 Dim i As Integer, iCount As Integer, bFound As Boolean, lOffset As Long
 Dim sObjectName, iLengthName As Integer
 	Select Case pvObjectType
-		Case acActiveDataObject			&apos;	Determine active form
-			iCount = Application._CountOpenForms()
-			If iCount = 0 Then Goto Error_ActiveForm
-			bFound = False
-			For i = 0 To iCount - 1			&apos;	Determine form having the focus
-				Set ofForm = Application.Forms(i)
-				If ofForm.Component.CurrentController.Frame.IsActive() Then
-					bFound = True
-					Exit For
-				End If
-			Next i
-			If Not bFound Then Goto Error_ActiveForm
+		Case acActiveDataObject
+			Set oWindow = _SelectWindow()
+			With oWindow
+				Select Case .WindowType
+					Case acForm
+						Set oResultSet = _DatabaseForm(._Name, &quot;&quot;)
+					Case acQuery, acTable
+						Set oResultSet = .Frame.Controller.FormOperations.Cursor
+					Case Else		&apos;	Ignore action
+						Goto Exit_Function
+				End Select
+			End With
 		Case acDataForm
 			&apos;	pvObjectName can be &quot;myForm&quot;, &quot;Forms!myForm&quot;, &quot;Forms!myForm!mySubform&quot; or &quot;Forms!myForm!mySubform.Form&quot;
 			sObjectName = UCase(pvObjectName)
@@ -816,12 +817,17 @@ Dim sObjectName, iLengthName As Integer
 				Case Else
 					Set ofForm = Application.Forms(pvObjectName)						
 			End Select
-		Case Else						&apos;	Not supported
+			Set oResultSet = ofForm.DatabaseForm
+		Case acDataQuery
+			Set oWindow = _SelectWindow(acQuery, pvObjectName)
+			Set oResultSet = oWindow.Frame.Controller.FormOperations.Cursor
+		Case acDataTable
+			Set oWindow = _SelectWindow(acTable, pvObjectName)
+			Set oResultSet = oWindow.Frame.Controller.FormOperations.Cursor
+		Case Else
 	End Select
 	
 	&apos;	Check if current row updated =&gt; Save it
-Dim oResultSet As Object
-	Set oResultSet = ofForm.DatabaseForm
 	If oResultSet.IsNew Then
 		oResultSet.insertRow()
 	ElseIf oResultSet.IsModified Then
@@ -857,9 +863,6 @@ Exit_Function:
 Error_Function:
 	TraceError(TRACEABORT, Err, &quot;GoToRecord&quot;, Erl)
 	GoTo Exit_Function
-Error_ActiveForm:
-	TraceError(TRACEERRORS, ERRNOACTIVEFORM, Utils._CalledSub(), 0)
-	Goto Exit_Function
 Error_Target:
 	TraceError(TRACEFATAL, ERRWRONGARGUMENT, Utils._CalledSub(), 0, 1, Array(2, pvObjectName))
 	Goto Exit_Function
@@ -1857,7 +1860,7 @@ Dim sOrder As String, oWindow As Object, oDatabase As Object, oTarget As Object
 				Set oTarget = _DatabaseForm(._Name, pvControlName)
 			Case acQuery, acTable
 				If pvControlName &lt;&gt; &quot;&quot; Then Goto Exit_Function
-				Set oTarget = oWindow.Frame.Controller.FormOperations.Cursor
+				Set oTarget = .Frame.Controller.FormOperations.Cursor
 			Case Else		&apos;	Ignore action
 				Goto Exit_Function
 		End Select
