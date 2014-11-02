@@ -194,14 +194,13 @@ public:
     HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
-    explicit WinSalGraphics();
     explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen);
     virtual ~WinSalGraphics();
 
-    bool isPrinter();
-    bool isVirtualDevice();
-    bool isWindow();
-    bool isScreen();
+    bool isPrinter() const;
+    bool isVirtualDevice() const;
+    bool isWindow() const;
+    bool isScreen() const;
 
 protected:
     virtual bool        setClipRegion( const vcl::Region& );
