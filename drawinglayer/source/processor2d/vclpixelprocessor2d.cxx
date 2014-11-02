@@ -173,10 +173,7 @@ namespace drawinglayer
             aLocalPolygon.transform(maCurrentTransformation);
 
             // try drawing; if it did not work, use standard fallback
-            if(mpOutputDevice->TryDrawPolyLineDirect(
-                aLocalPolygon,
-                0.0,
-                fTransparency))
+            if(mpOutputDevice->DrawPolyLineDirect( aLocalPolygon, 0.0, fTransparency))
             {
                 return true;
             }
@@ -258,7 +255,7 @@ namespace drawinglayer
                 {
                     bHasPoints = true;
 
-                    if(mpOutputDevice->TryDrawPolyLineDirect(
+                    if(mpOutputDevice->DrawPolyLineDirect(
                         aSingle,
                         fLineWidth,
                         fTransparency,
