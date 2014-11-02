@@ -144,6 +144,8 @@ public:
 
 class WinSalGraphics : public SalGraphics
 {
+    friend class WinSalGraphicsImpl;
+    friend class ScopedFont;
 private:
     boost::scoped_ptr<SalGraphicsImpl> mpImpl;
 
@@ -154,21 +156,6 @@ private:
     bool                    mbScreen : 1;           // is Screen compatible
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
-public:
-    HDC getHDC() const { return mhLocalDC; }
-    void setHDC(HDC aNew) { mhLocalDC = aNew; }
-
-    enum Type
-    {
-        PRINTER,
-        VIRTUAL_DEVICE,
-        WINDOW,
-        SCREEN
-    };
-
-public:
-
-    HWND gethWnd();
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
@@ -190,6 +177,30 @@ public:
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     sal_uIntPtr                 mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
+
+public:
+    HDC getHDC() const { return mhLocalDC; }
+    void setHDC(HDC aNew) { mhLocalDC = aNew; }
+
+    HPALETTE getDefPal() const;
+    void setDefPal(HPALETTE hDefPal);
+
+    HRGN getRegion() const;
+
+    void InitGraphics();
+    void DeInitGraphics();
+
+    enum Type
+    {
+        PRINTER,
+        VIRTUAL_DEVICE,
+        WINDOW,
+        SCREEN
+    };
+
+public:
+
+    HWND gethWnd();
 
     HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
@@ -391,8 +402,6 @@ public:
 };
 
 // Init/Deinit Graphics
-void    ImplSalInitGraphics( WinSalGraphics* );
-void    ImplSalDeInitGraphics( WinSalGraphics* );
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( SalColor nSalColor );
 void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,

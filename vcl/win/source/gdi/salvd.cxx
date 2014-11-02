@@ -109,10 +109,10 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         pVirGraphics->setHDC(hDC);
         if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
         {
-            pVirGraphics->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+            pVirGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
             RealizePalette( hDC );
         }
-        ImplSalInitGraphics( pVirGraphics );
+        pVirGraphics->InitGraphics();
 
         pVDev->setHDC(hDC);
         pVDev->mhBmp        = hBmp;
@@ -163,9 +163,9 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
         *ppVirDev = mpNext;
 
     // destroy saved DC
-    if( mpGraphics->mhDefPal )
-        SelectPalette( mpGraphics->getHDC(), mpGraphics->mhDefPal, TRUE );
-    ImplSalDeInitGraphics( mpGraphics );
+    if( mpGraphics->getDefPal() )
+        SelectPalette( mpGraphics->getHDC(), mpGraphics->getDefPal(), TRUE );
+    mpGraphics->InitGraphics();
     if( mhDefBmp )
         SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
     if( !mbForeignDC )
