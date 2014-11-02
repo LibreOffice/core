@@ -69,6 +69,8 @@ namespace sdr
             // #i123539# get rid of buffered chart content (if there) on change
             virtual void ActionChanged() SAL_OVERRIDE;
 
+            virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const SAL_OVERRIDE;
+
         protected:
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data, just wraps to call createPrimitive2DSequenceWithParameters(false)

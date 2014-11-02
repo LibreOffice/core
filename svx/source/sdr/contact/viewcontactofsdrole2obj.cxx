@@ -91,12 +91,11 @@ namespace sdr
             const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
 
             // this may be refined more granular; if no content, attributes may get simpler
-            const bool bHasContent(true);
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
                     rItemSet,
                     GetOle2Obj().getText(0),
-                    bHasContent));
+                    true));
             drawinglayer::primitive2d::Primitive2DReference xContent;
 
             if(GetOle2Obj().IsChart())
@@ -168,6 +167,35 @@ namespace sdr
                     aAttribute));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+        }
+
+        basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const
+        {
+            // this may be refined more granular; if no content, attributes may get simpler
+            const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute =
+                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+                    GetOle2Obj().GetMergedItemSet(),
+                    GetOle2Obj().getText(0),
+                    true);
+
+            basegfx::B2DHomMatrix aObjectMatrix = createObjectTransform();
+
+            drawinglayer::primitive2d::Primitive2DReference xContent =
+                new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
+                    GetOle2Obj(),
+                    aObjectMatrix,
+                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion());
+
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::SdrOle2Primitive2D(
+                    drawinglayer::primitive2d::Primitive2DSequence(&xContent, 1),
+                    aObjectMatrix,
+                    aAttribute));
+
+            drawinglayer::primitive2d::Primitive2DSequence xSeq =
+                drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+
+            return drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSeq, rViewInfo2D);
         }
 
         void ViewContactOfSdrOle2Obj::ActionChanged()

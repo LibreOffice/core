@@ -308,6 +308,12 @@ namespace sdr
             return rSource;
         }
 
+        basegfx::B2DRange ViewContact::getRange( const drawinglayer::geometry::ViewInformation2D& /*rViewInfo2D*/ ) const
+        {
+            // Return empty range.
+            return basegfx::B2DRange();
+        }
+
         void ViewContact::flushViewObjectContacts(bool bWithHierarchy)
         {
             if(bWithHierarchy)

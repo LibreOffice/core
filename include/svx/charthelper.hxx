@@ -35,7 +35,7 @@ public:
     static bool isGL3DDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram);
 
     /// Use chart's XUpdatable::update() to update values.
-    static void updateChart(const css::uno::Reference< css::frame::XModel >& rXModel);
+    static void updateChart( const css::uno::Reference< css::frame::XModel >& rXModel, bool bHardUpdate );
 
     // try to access rXModel in case of a chart to to get the chart content
     // as sequence of primitives. Return range of primitives (chart size) in rRange;

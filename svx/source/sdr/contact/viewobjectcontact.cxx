@@ -206,15 +206,23 @@ const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
 {
     if(maObjectRange.isEmpty())
     {
-        // if range is not computed (new or LazyInvalidate objects), force it
-        const DisplayInfo aDisplayInfo;
-        const drawinglayer::primitive2d::Primitive2DSequence xSequence(getPrimitive2DSequence(aDisplayInfo));
-
-        if(xSequence.hasElements())
+        const drawinglayer::geometry::ViewInformation2D& rViewInfo2D = GetObjectContact().getViewInformation2D();
+        basegfx::B2DRange aTempRange = GetViewContact().getRange(rViewInfo2D);
+        if (!aTempRange.isEmpty())
         {
-            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-            const_cast< ViewObjectContact* >(this)->maObjectRange =
-                drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSequence, rViewInformation2D);
+            const_cast< ViewObjectContact* >(this)->maObjectRange = aTempRange;
+        }
+        else
+        {
+            // if range is not computed (new or LazyInvalidate objects), force it
+            const DisplayInfo aDisplayInfo;
+            const drawinglayer::primitive2d::Primitive2DSequence xSequence(getPrimitive2DSequence(aDisplayInfo));
+
+            if(xSequence.hasElements())
+            {
+                const_cast< ViewObjectContact* >(this)->maObjectRange =
+                    drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xSequence, rViewInfo2D);
+            }
         }
     }
 
@@ -257,7 +265,7 @@ void ViewObjectContact::triggerLazyInvalidate()
         // drawn by the drawinglayer
         ViewContactOfSdrOle2Obj* pViewContact = dynamic_cast<ViewContactOfSdrOle2Obj*>(&GetViewContact());
         if (pViewContact && pViewContact->GetOle2Obj().IsReal3DChart())
-            ChartHelper::updateChart(pViewContact->GetOle2Obj().getXModel());
+            ChartHelper::updateChart(pViewContact->GetOle2Obj().getXModel(), false);
 #endif
 
         // force ObjectRange
@@ -415,7 +423,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::getPrimitive2D
             const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
             // check geometrical visibility
-            if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
+            bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
+            if(!bVisible)
             {
                 // not visible, release
                 xRetval.realloc(0);
