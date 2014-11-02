@@ -710,8 +710,8 @@ public:
     void                        DrawPolyLine(
                                     const basegfx::B2DPolygon&,
                                     double fLineWidth = 0.0,
-                                    basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
-                                    css::drawing::LineCap = css::drawing::LineCap_BUTT);
+                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_ROUND,
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
 
     /** Render the given polygon as a line stroke
 
