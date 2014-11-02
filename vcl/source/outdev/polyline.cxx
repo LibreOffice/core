@@ -52,33 +52,25 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if ( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA( (mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
-                       mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
-                       ROP_OVERPAINT == GetRasterOp() &&
-                       IsLineColor());
-
     // use b2dpolygon drawing if possible
-    if(bTryAA)
+    if ( DrawPolyLineDirect( rPoly.getB2DPolygon() ) )
     {
-        if ( TryDrawPolyLineDirectNoAACheck( rPoly.getB2DPolygon() ) )
+        basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
+        const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+
+        // transform the polygon
+        aB2DPolyLine.transform( aTransform );
+
+        if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
         {
-            basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
-            const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-            const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
+            aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
+        }
 
-            // transform the polygon
-            aB2DPolyLine.transform( aTransform );
-
-            if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
-            {
-                aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
-            }
-
-            if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth,
-                                         basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
-            {
-                return;
-            }
+        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth,
+                                     basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, this))
+        {
+            return;
         }
     }
 
@@ -162,17 +154,9 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
     if( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
-                      mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
-                      ROP_OVERPAINT == GetRasterOp() &&
-                      IsLineColor());
-
     // use b2dpolygon drawing if possible
-    if(bTryAA)
-    {
-        if ( TryDrawPolyLineDirectNoAACheck(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap) )
-            return;
-    }
+    if ( DrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap) )
+        return;
 
     // #i101491#
     // no output yet; fallback to geometry decomposition and use filled polygon paint
@@ -208,13 +192,18 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         SetFillColor(aOldFillColor);
         InitFillColor();
 
+        const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+                          mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
+                          ROP_OVERPAINT == GetRasterOp() &&
+                          IsLineColor());
+
         if(bTryAA)
         {
             // when AA it is necessary to also paint the filled polygon's outline
             // to avoid optical gaps
             for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
             {
-                TryDrawPolyLineDirectNoAACheck(aAreaPolyPolygon.getB2DPolygon(a));
+                drawPolyLineDirectNoAACheck(aAreaPolyPolygon.getB2DPolygon(a));
             }
         }
     }
@@ -278,7 +267,7 @@ void OutputDevice::drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo)
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
-bool OutputDevice::TryDrawPolyLineDirectNoAACheck( const basegfx::B2DPolygon& rB2DPolygon,
+bool OutputDevice::drawPolyLineDirectNoAACheck( const basegfx::B2DPolygon& rB2DPolygon,
                                               double fLineWidth,
                                               double fTransparency,
                                               basegfx::B2DLineJoin eLineJoin,
@@ -316,7 +305,7 @@ bool OutputDevice::TryDrawPolyLineDirectNoAACheck( const basegfx::B2DPolygon& rB
                                      this);
 }
 
-bool OutputDevice::TryDrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
+bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                                           double fLineWidth,
                                           double fTransparency,
                                           basegfx::B2DLineJoin eLineJoin,
@@ -346,7 +335,7 @@ bool OutputDevice::TryDrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon
 
     if(bTryAA)
     {
-        if(TryDrawPolyLineDirectNoAACheck(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
+        if(drawPolyLineDirectNoAACheck(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
         {
             // worked, add metafile action (if recorded) and return true
             if( mpMetaFile )
