@@ -1045,14 +1045,10 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
 
 static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
 {
-    WinSalGraphics* pGraphics = new WinSalGraphics;
+    WinSalGraphics* pGraphics = new WinSalGraphics(WinSalGraphics::PRINTER, false);
     pGraphics->SetLayout( 0 );
     pGraphics->setHDC(hDC);
     pGraphics->mhWnd    = 0;
-    pGraphics->mbPrinter = TRUE;
-    pGraphics->mbVirDev = FALSE;
-    pGraphics->mbWindow = FALSE;
-    pGraphics->mbScreen = FALSE;
     ImplSalInitGraphics( pGraphics );
     return pGraphics;
 }

@@ -983,13 +983,9 @@ SalGraphics* WinSalFrame::AcquireGraphics()
 
         if ( !mpGraphics2 )
         {
-            mpGraphics2 = new WinSalGraphics;
+            mpGraphics2 = new WinSalGraphics(WinSalGraphics::WINDOW, true);
             mpGraphics2->setHDC(0);
             mpGraphics2->mhWnd       = mhWnd;
-            mpGraphics2->mbPrinter   = FALSE;
-            mpGraphics2->mbVirDev    = FALSE;
-            mpGraphics2->mbWindow    = TRUE;
-            mpGraphics2->mbScreen    = TRUE;
         }
 
         HDC hDC = (HDC)(sal_IntPtr)SendMessageW( pSalData->mpFirstInstance->mhComWnd,
@@ -1019,13 +1015,9 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             HDC hDC = GetDC( mhWnd );
             if ( hDC )
             {
-                mpGraphics = new WinSalGraphics;
+                mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true);
                 mpGraphics->setHDC(hDC);
                 mpGraphics->mhWnd     = mhWnd;
-                mpGraphics->mbPrinter = FALSE;
-                mpGraphics->mbVirDev  = FALSE;
-                mpGraphics->mbWindow  = TRUE;
-                mpGraphics->mbScreen  = TRUE;
                 if ( pSalData->mhDitherPal )
                 {
                     mpGraphics->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );

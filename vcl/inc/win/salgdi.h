@@ -148,10 +148,22 @@ private:
     boost::scoped_ptr<SalGraphicsImpl> mpImpl;
 
     HDC                     mhLocalDC;              // HDC
+    bool                    mbPrinter : 1;          // is Printer
+    bool                    mbVirDev : 1;           // is VirDev
+    bool                    mbWindow : 1;           // is Window
+    bool                    mbScreen : 1;           // is Screen compatible
 
 public:
     HDC getHDC() const { return mhLocalDC; }
     void setHDC(HDC aNew) { mhLocalDC = aNew; }
+
+    enum Type
+    {
+        PRINTER,
+        VIRTUAL_DEVICE,
+        WINDOW,
+        SCREEN
+    };
 
 public:
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
@@ -179,17 +191,17 @@ public:
     sal_uIntPtr                 mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
 
-    /// bitfield
-    bool                    mbPrinter : 1;          // is Printer
-    bool                    mbVirDev : 1;           // is VirDev
-    bool                    mbWindow : 1;           // is Window
-    bool                    mbScreen : 1;           // is Screen compatible
-
     HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
     explicit WinSalGraphics();
+    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen);
     virtual ~WinSalGraphics();
+
+    bool isPrinter();
+    bool isVirtualDevice();
+    bool isWindow();
+    bool isScreen();
 
 protected:
     virtual bool        setClipRegion( const vcl::Region& );

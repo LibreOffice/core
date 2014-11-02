@@ -394,7 +394,7 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
     HRGN    hInvalidateRgn = 0;
 
     // do we have to invalidate also the overlapping regions?
-    if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mrParent.mbWindow )
+    if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mrParent.isWindow() )
     {
         // compute and invalidate those parts that were either off-screen or covered by other windows
         //  while performing the above BitBlt
@@ -688,7 +688,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
 
 void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
-    bool bTryDirectPaint(!mrParent.mbPrinter && !mbXORMode);
+    bool bTryDirectPaint(!mrParent.isPrinter() && !mbXORMode);
 
     if(bTryDirectPaint)
     {
@@ -709,7 +709,7 @@ void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& 
 
     // fall back old stuff
     ImplDrawBitmap(mrParent.getHDC(), rPosAry, static_cast<const WinSalBitmap&>(rSalBitmap),
-        mrParent.mbPrinter,
+        mrParent.isPrinter(),
         mbXORMode ? SRCINVERT : SRCCOPY );
 }
 
@@ -717,7 +717,7 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               SalColor nTransparentColor )
 {
-    DBG_ASSERT( !mrParent.mbPrinter, "No transparency print possible!" );
+    DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
@@ -771,8 +771,8 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
-    DBG_ASSERT( !mrParent.mbPrinter, "No transparency print possible!" );
-    bool bTryDirectPaint(!mrParent.mbPrinter && !mbXORMode);
+    DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
+    bool bTryDirectPaint(!mrParent.isPrinter() && !mbXORMode);
 
     if(bTryDirectPaint)
     {
@@ -891,7 +891,7 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
                             SalColor nMaskColor )
 {
-    DBG_ASSERT( !mrParent.mbPrinter, "No transparency print possible!" );
+    DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
 
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
@@ -921,7 +921,7 @@ void WinSalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
 
 SalBitmap* WinSalGraphicsImpl::getBitmap( long nX, long nY, long nDX, long nDY )
 {
-    DBG_ASSERT( !mrParent.mbPrinter, "No ::GetBitmap() from printer possible!" );
+    DBG_ASSERT( !mrParent.isPrinter(), "No ::GetBitmap() from printer possible!" );
 
     WinSalBitmap* pSalBitmap = NULL;
 
@@ -1374,7 +1374,7 @@ void WinSalGraphicsImpl::SetLineColor( SalColor nSalColor )
 
     // search for stock pen (only screen, because printer have problems,
     // when we use stock objects)
-    if ( !mrParent.mbPrinter )
+    if ( !mrParent.isPrinter() )
     {
         SalData* pSalData = GetSalData();
         for ( sal_uInt16 i = 0; i < pSalData->mnStockPenCount; i++ )
@@ -1391,7 +1391,7 @@ void WinSalGraphicsImpl::SetLineColor( SalColor nSalColor )
     // create new pen
     if ( !hNewPen )
     {
-        if ( !mrParent.mbPrinter )
+        if ( !mrParent.isPrinter() )
         {
             if ( GetSalData()->mhDitherPal && ImplIsSysColorEntry( nSalColor ) )
                 nPenColor = PALRGB_TO_RGB( nPenColor );
@@ -1454,7 +1454,7 @@ void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
 
     // search for stock brush (only screen, because printer have problems,
     // when we use stock objects)
-    if ( !mrParent.mbPrinter )
+    if ( !mrParent.isPrinter() )
     {
         for ( sal_uInt16 i = 0; i < pSalData->mnStockBrushCount; i++ )
         {
@@ -1470,7 +1470,7 @@ void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
     // create new brush
     if ( !hNewBrush )
     {
-        if ( mrParent.mbPrinter || !pSalData->mhDitherDIB )
+        if ( mrParent.isPrinter() || !pSalData->mhDitherDIB )
             hNewBrush = CreateSolidBrush( nBrushColor );
         else
         {
@@ -1580,7 +1580,7 @@ void WinSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
                                 SALCOLOR_GREEN( nSalColor ),
                                 SALCOLOR_BLUE( nSalColor ) );
 
-    if ( !mrParent.mbPrinter &&
+    if ( !mrParent.isPrinter() &&
          GetSalData()->mhDitherPal &&
          ImplIsSysColorEntry( nSalColor ) )
         nCol = PALRGB_TO_RGB( nCol );
@@ -1622,7 +1622,7 @@ void WinSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
     LineTo( mrParent.getHDC(), (int)nX2, (int)nY2 );
 
-    if ( bPaintEnd && !mrParent.mbPrinter )
+    if ( bPaintEnd && !mrParent.isPrinter() )
     {
         if ( mbXORMode )
         {
@@ -1641,7 +1641,7 @@ void WinSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     if ( !mbPen )
     {
-        if ( !mrParent.mbPrinter )
+        if ( !mrParent.isPrinter() )
         {
             PatBlt( mrParent.getHDC(), (int)nX, (int)nY, (int)nWidth, (int)nHeight,
                     mbXORMode ? PATINVERT : PATCOPY );
@@ -1692,7 +1692,7 @@ void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAr
     if ( !Polyline( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
         Polyline( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
 
-    if ( bPaintEnd && !mrParent.mbPrinter )
+    if ( bPaintEnd && !mrParent.isPrinter() )
     {
         if ( mbXORMode )
         {
@@ -2030,7 +2030,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly
             Gdiplus::DllExports::GdipSetSmoothingMode(pGraphics, Gdiplus::SmoothingModeNone);
         }
 
-        if(mrParent.mbPrinter)
+        if(mrParent.isPrinter())
         {
             // #i121591#
             // Normally GdiPlus should not be used for printing at all since printers cannot
