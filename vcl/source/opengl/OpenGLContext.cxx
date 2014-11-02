@@ -160,7 +160,7 @@ bool WGLisExtensionSupported(const char *extension)
         supported = (char*)glGetString(GL_EXTENSIONS);
     // If That Failed Too, Must Be No Extensions Supported
     if (supported == NULL)
-        return 0;
+        return false;
 
     // Begin Examination At Start Of String, Increment By 1 On False Match
     for (const char* p = supported; ; p++)
