@@ -932,7 +932,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              book page:
+        switch( nOp )   //                                      book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
@@ -1539,7 +1539,7 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz )
     if( nAnz > 0 && eId == ocExternal )
     {
         TokenId             n = eParam[ nAnz - 1 ];
-//##### GRUETZE FUER BASIC-FUNCS RICHTEN!
+//##### ADJUST GRUETZE (?) FOR BASIC-FUNCS!
         if( const OUString* pExt = aPool.GetExternal( n ) )
         {
             if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclMacroName( *pExt ) )

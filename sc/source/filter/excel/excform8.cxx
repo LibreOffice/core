@@ -177,7 +177,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
         aSRD.InitFlags();
         aCRD.InitFlags();
 
-        switch( nOp )   //                              book page:
+        switch( nOp )   //                                  book page:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
@@ -208,7 +208,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aPool << aStack << ocDiv << nMerk0;
                 aPool >> aStack;
                 break;
-            case 0x07: // Exponentiation                            [313 265]
+            case 0x07: // Exponentiation                        [313 265]
                 // raise SECOND-TOP to power of TOP
                 aStack >> nMerk0;
                 aPool << aStack << ocPow << nMerk0;
