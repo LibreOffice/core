@@ -737,7 +737,7 @@ private:
     // #i101491#
     // Helper which holds the old line geometry creation and is extended to use AA when
     // switched on. Advantage is that line geometry is only temporarily used for paint
-    SAL_DLLPRIVATE void         DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo);
+    SAL_DLLPRIVATE void         drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo);
 
 
     // #i101491#

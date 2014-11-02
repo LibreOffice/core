@@ -126,7 +126,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyLineAction( rPoly, rLineInfo ) );
 
-    DrawPolyLineWithLineInfo(rPoly, rLineInfo);
+    drawPolyLine(rPoly, rLineInfo);
 }
 
 void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
@@ -226,11 +226,11 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         if( fLineWidth != 0.0 )
             aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
 
-        DrawPolyLineWithLineInfo( aToolsPolygon, aLineInfo );
+        drawPolyLine( aToolsPolygon, aLineInfo );
     }
 }
 
-void OutputDevice::DrawPolyLineWithLineInfo(const Polygon& rPoly, const LineInfo& rLineInfo)
+void OutputDevice::drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo)
 {
     sal_uInt16 nPoints(rPoly.GetSize());
 
