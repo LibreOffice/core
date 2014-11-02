@@ -1232,7 +1232,7 @@ void SwCntntFrm::MakeAll()
             // - current frame width is 0.
             // - current printing area width is 0.
             // - frame width is adjusted to a value greater than 0.
-            // - printing area flag is sal_True.
+            // - printing area flag is true.
             // Thus, it's assured that the printing area is adjusted, if the
             // frame area width changes its width from 0 to something greater
             // than 0.
@@ -1309,7 +1309,7 @@ void SwCntntFrm::MakeAll()
                 (Prt().*fnRect->fnGetPos)() != aOldPrtPos )
             {
                 // In this Prepare, an _InvalidateSize() might happen.
-                // mbValidSize becomes sal_False and Format() gets called.
+                // mbValidSize becomes false and Format() gets called.
                 Prepare( PREP_POS_CHGD, (const void*)&bFormatted, false );
                 if ( bWidow && GetFollow() )
                 {
@@ -1920,7 +1920,7 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                 }
                 // OD 11.04.2003 #108824# - If last follow frame of <this> text
                 // frame isn't valid, a formatting of the next content frame
-                // doesn't makes sense. Thus, return sal_True.
+                // doesn't makes sense. Thus, return true.
                 if ( IsAnFollow( pFrm ) && !pFrm->IsValid() )
                 {
                     OSL_FAIL( "Only a warning for task 108824:/n<SwCntntFrm::_WouldFit(..) - follow not valid!" );

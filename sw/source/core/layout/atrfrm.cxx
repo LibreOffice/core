@@ -438,7 +438,7 @@ sal_uInt16  SwFmtFillOrder::GetValueCount() const
 SwFmtHeader::SwFmtHeader( SwFrmFmt *pHeaderFmt )
     : SfxPoolItem( RES_HEADER ),
     SwClient( pHeaderFmt ),
-    bActive( pHeaderFmt ? sal_True : sal_False )
+    bActive( pHeaderFmt )
 {
 }
 
@@ -483,7 +483,7 @@ void SwFmtHeader::RegisterToFormat( SwFmt& rFmt )
 SwFmtFooter::SwFmtFooter( SwFrmFmt *pFooterFmt )
     : SfxPoolItem( RES_FOOTER ),
     SwClient( pFooterFmt ),
-    bActive( pFooterFmt ? sal_True : sal_False )
+    bActive( pFooterFmt )
 {
 }
 
@@ -765,11 +765,11 @@ SwColumn::SwColumn() :
 
 bool SwColumn::operator==( const SwColumn &rCmp ) const
 {
-    return (nWish    == rCmp.GetWishWidth() &&
+    return  nWish    == rCmp.GetWishWidth() &&
             GetLeft()  == rCmp.GetLeft() &&
             GetRight() == rCmp.GetRight() &&
             GetUpper() == rCmp.GetUpper() &&
-            GetLower() == rCmp.GetLower()) ? sal_True : sal_False;
+            GetLower() == rCmp.GetLower();
 }
 
 SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )

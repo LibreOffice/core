@@ -2462,7 +2462,7 @@ bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
             if( !pNd->HasContour() )
             {
                 // OD 16.04.2003 #i13147# - no <CreateContour> for a graphic
-                // during paint. Thus, return (value of <bRet> should be <sal_False>).
+                // during paint. Thus, return (value of <bRet> should be <false>).
                 if ( pGrfNd && _bForPaint )
                 {
                     OSL_FAIL( "SwFlyFrm::GetContour() - No Contour found at <SwNoTxtNode> during paint." );

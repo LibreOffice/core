@@ -1046,7 +1046,7 @@ SwFrm *SwFrm::_FindPrev()
         {
             SwFrm* pRet;
             const bool bBody = pThis->IsInDocBody();
-            const bool bFtn  = bBody ? sal_False : pThis->IsInFtn();
+            const bool bFtn  = !bBody && pThis->IsInFtn();
             if ( bBody || bFtn )
             {
                 while ( pPrvCnt )

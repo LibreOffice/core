@@ -98,9 +98,7 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
         mnFlyAnchorOfstNoWrap = 0;
     }
 
-    bHadFollow = pF->IsCntntFrm() ?
-                    (((SwCntntFrm*)pF)->GetFollow() ? sal_True : sal_False) :
-                    sal_False;
+    bHadFollow = pF->IsCntntFrm() && ((SwCntntFrm*)pF)->GetFollow();
 }
 
 SwFrmNotify::~SwFrmNotify()
@@ -1225,11 +1223,11 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 {
     pDoc->getIDocumentTimerAccess().BlockIdling();
     SwRootFrm* pLayout = pLay->getRootFrm();
-    const bool bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
+    const bool bOldCallbackActionEnabled = pLayout && pLayout->IsCallbackActionEnabled();
     if( bOldCallbackActionEnabled )
         pLayout->SetCallbackActionEnabled( false );
 
-    //In the generation of the Layout will be bPage with sal_True handed over.
+    //In the generation of the Layout bPages=true will be handed over.
     //Then will be new pages generated all x paragraphs already times in advance.
     //On breaks and/or pagedescriptorchanges the correspondig will be generated
     //immediately.
@@ -1253,7 +1251,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     SwActualSection *pActualSection = 0;
     SwLayHelper *pPageMaker;
 
-    //If the layout will be created (bPages == sal_True) we do head on the progress
+    //If the layout will be created (bPages == true) we do head on the progress
     //Flys and DrawObjekte are not connected immediately, this
     //happens only at the end of the function.
     if ( bPages )
@@ -1740,7 +1738,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 if( pTmp )
                 {
                     SwFrm* pOldUp = pTmp->GetFrm().GetUpper();
-                    // MoveFwd==sal_True means that we are still on the same page.
+                    // MoveFwd==true means that we are still on the same page.
                     // But since we want to move if possible!
                     bool bTmpOldLock = pTmp->IsJoinLocked();
                     pTmp->LockJoin();

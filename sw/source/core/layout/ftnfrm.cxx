@@ -68,7 +68,7 @@ bool SwFtnFrm::operator<( const SwTxtFtn* pTxtFtn ) const
 |*  bool lcl_NextFtnBoss( SwFtnBossFrm* pBoss, SwPageFrm* pPage)
 |*  sets pBoss on the next SwFtnBossFrm, which can either be a column
 |*  or a page (without columns). If the page changes meanwhile,
-|*  pPage contains the new page and this function returns sal_True.
+|*  pPage contains the new page and this function returns true.
 |*
 |*/
 

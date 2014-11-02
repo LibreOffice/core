@@ -95,7 +95,7 @@ void SwFlowFrm::SetFollow(SwFlowFrm *const pFollow)
     }
 }
 
-/// @return sal_True if any follow has the JoinLocked flag
+/// @return true if any follow has the JoinLocked flag
 bool SwFlowFrm::HasLockedFollow() const
 {
     const SwFlowFrm* pFrm = GetFollow();
@@ -112,7 +112,7 @@ bool SwFlowFrm::IsKeepFwdMoveAllowed()
 {
     // If all the predecessors up to the first of the chain have
     // the 'keep' attribute set, and the first of the chain's
-    // IsFwdMoveAllowed returns sal_False, then we're not allowed to move.
+    // IsFwdMoveAllowed returns false, then we're not allowed to move.
     SwFrm *pFrm = &m_rThis;
     if ( !pFrm->IsInFtn() )
         do
@@ -428,7 +428,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
 bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
                            SwFrm *pOldParent )
 {
-    //returns sal_True if there's a LayoutFrm in the chain.
+    // returns true if there's a LayoutFrm in the chain.
     bool bRet = false;
 
     // The chain beginning with pStart is inserted before pSibling
@@ -1010,7 +1010,7 @@ SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 
 bool SwFlowFrm::IsPrevObjMove() const
 {
-    //sal_True The FlowFrm must respect the a border of the predecessor, also needs
+    // true:   The FlowFrm must respect the a border of the predecessor, also needs
     //         to insert a break if required.
 
     //!!!!!!!!!!!Hack!!!!!!!!!!!
@@ -1067,9 +1067,9 @@ bool SwFlowFrm::IsPrevObjMove() const
 
 /**
 |*      If there's a hard page break before the Frm AND there's a
-|*      predecessor on the same page, sal_True is returned (we need to create a
-|*      new PageBreak). Otherwise, returns sal_False.
-|*      If bAct is set to sal_True, this function returns sal_True if
+|*      predecessor on the same page, true is returned (we need to create a
+|*      new PageBreak). Otherwise, returns false.
+|*      If bAct is set to true, this function returns true if
 |*      there's a PageBreak.
 |*      Of course, we don't evaluate the hard page break for follows.
 |*      The page break is in it's own FrmFmt (BEFORE) or in the FrmFmt of the
@@ -1126,9 +1126,9 @@ bool SwFlowFrm::IsPageBreak( bool bAct ) const
 
 /**
 |*      If there's a hard column break before the Frm AND there is
-|*      a predecessor in the same column, we return sal_True (we need to create
-|*      a ColBreak). Otherwise, we return sal_False.
-|*      If bAct is set to sal_True, we return sal_True if there's a ColBreak.
+|*      a predecessor in the same column, we return true (we need to create
+|*      a ColBreak). Otherwise, we return false.
+|*      If bAct is set to true, we return true if there's a ColBreak.
 |*      Of course, we don't evaluate the hard column break for follows.
 |*
 |*      The column break is in it's own FrmFmt (BEFORE) or in the FrmFmt of the
@@ -1190,7 +1190,7 @@ bool SwFlowFrm::HasParaSpaceAtPages( bool bSct ) const
                 ( pTmp->IsFtnFrm() && !((SwFtnFrm*)pTmp)->GetMaster() ) )
                 return true;
             if( pTmp->IsPageFrm() )
-                return ( pTmp->GetPrev() && !IsPageBreak(true) ) ? sal_False : sal_True;
+                return !( pTmp->GetPrev() && !IsPageBreak(true) );
             if( pTmp->IsColumnFrm() && pTmp->GetPrev() )
                 return IsColBreak( true );
             if( pTmp->IsSctFrm() && ( !bSct || pTmp->GetPrev() ) )

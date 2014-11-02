@@ -484,7 +484,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     pTimerAccess->StopIdling();
     // For creating the Flys by MakeFrms()
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
-    bCallbackActionEnabled = false; // needs to be set to sal_True before leaving!
+    bCallbackActionEnabled = false; // needs to be set to true before leaving!
 
     SwDrawModel* pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )

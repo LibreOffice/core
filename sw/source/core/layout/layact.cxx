@@ -470,7 +470,7 @@ void SwLayAction::InternalAction()
         pPage = (SwPageFrm*)pPage->GetNext();
 
     IDocumentLayoutAccess *pLayoutAccess = pRoot->GetFmt()->getIDocumentLayoutAccess();
-    bool bNoLoop = pPage ? SwLayouter::StartLoopControl( pRoot->GetFmt()->GetDoc(), pPage ) : sal_False;
+    bool bNoLoop = pPage && SwLayouter::StartLoopControl( pRoot->GetFmt()->GetDoc(), pPage );
     sal_uInt16 nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
     {
@@ -1836,8 +1836,8 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
     }
 }
 
-/// Returns sal_True if all Cntnts of the Fly have been processed completely.
-/// Returns sal_False if processing has been interrupted prematurely.
+/// Returns true if all Cntnts of the Fly have been processed completely.
+/// Returns false if processing has been interrupted prematurely.
 bool SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
 {
     const SwCntntFrm *pCntnt = pFly->ContainsCntnt();
@@ -2234,8 +2234,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
                 if ( bCrsrShell )
                     // If the Crsr was visible, we need to make it visible again.
-                    // Otherwise, EndCrsrMove with sal_True for IdleEnd
-                    ((SwCrsrShell*)pSh)->EndCrsrMove( sal_True^aBools[nBoolIdx] );
+                    // Otherwise, EndCrsrMove with true for IdleEnd
+                    ((SwCrsrShell*)pSh)->EndCrsrMove( !aBools[nBoolIdx] );
                 if( bUnlock )
                 {
                     if( bCrsrShell )
