@@ -19,18 +19,10 @@
 
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
-#include "cntfrm.hxx"
-#include "viewsh.hxx"
-#include "doc.hxx"
 #include <IDocumentFieldsAccess.hxx>
-#include "docsh.hxx"
 #include "viewimp.hxx"
 #include "swtable.hxx"
 #include "dflyobj.hxx"
-#include "flyfrm.hxx"
-#include "frmtool.hxx"
-#include "frmfmt.hxx"
-#include "dcontact.hxx"
 #include <anchoreddrawobject.hxx>
 #include <fmtanchr.hxx>
 #include "viewopt.hxx"
@@ -38,13 +30,10 @@
 #include "dbg_lay.hxx"
 #include <ftnidx.hxx>
 #include <svl/itemiter.hxx>
-#include <docary.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <vcl/outdev.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtsrnd.hxx>
@@ -52,7 +41,6 @@
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
 #include <swtblfmt.hxx>
-#include <ndtxt.hxx>
 #include "tabfrm.hxx"
 #include "rowfrm.hxx"
 #include "cellfrm.hxx"
