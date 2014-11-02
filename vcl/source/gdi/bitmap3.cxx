@@ -2602,7 +2602,7 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, const int nNewSize, BitmapR
                 (sal_uInt8) MinMax( aValueRed / aSum, 0, 255 ),
                 (sal_uInt8) MinMax( aValueGreen / aSum, 0, 255 ),
                 (sal_uInt8) MinMax( aValueBlue / aSum, 0, 255 ) );
-            pWriteAcc->SetPixel( x, y, aResultColor );
+            pWriteAcc->SetPixel( y, x, aResultColor );
         }
     }
     aNewBitmap.ReleaseAccess( pWriteAcc );
