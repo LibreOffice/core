@@ -44,7 +44,7 @@ SfxPopupWindowType ParaLineSpacingPopup::GetPopupWindowType() const
 
 SfxPopupWindow* ParaLineSpacingPopup::CreatePopupWindow()
 {
-    ParaLineSpacingControl* pControl = new ParaLineSpacingControl(GetSlotId(), m_xFrame, &GetToolBox(), /* WinBits - TODO? */(WinBits)0);
+    ParaLineSpacingControl* pControl = new ParaLineSpacingControl(GetSlotId());
 
     //pControl->StartPopupMode(&GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
     pControl->StartPopupMode(&GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);

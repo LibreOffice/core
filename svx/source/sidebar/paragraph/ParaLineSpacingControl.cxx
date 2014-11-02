@@ -23,9 +23,9 @@
 #include <svx/dialmgr.hxx>
 #include <unotools/viewoptions.hxx>
 #include <editeng/kernitem.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svtools/unitconv.hxx>
 #include <vcl/settings.hxx>
 
@@ -54,16 +54,21 @@
 using namespace svx;
 using namespace svx::sidebar;
 
-ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId, const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow, WinBits nBits)
+ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     : SfxPopupWindow(nId, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui")
     , mbUseLineSPCustom(false)
     , mbLineSPDisable(false)
-    , mpBindings(NULL)
     , nMinFixDist(BEGIN_VALUE)
 //    , maLineSpacing(ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES( LINE_SPACING ) )
     , maValue( 0 )
     , maPos( 0 )
 {
+    mpSpacing1Button = get<PushButton>("spacing_1");
+    mpSpacing115Button = get<PushButton>("spacing_115");
+    mpSpacing15Button = get<PushButton>("spacing_15");
+    mpSpacing2Button = get<PushButton>("spacing_2");
+    mpSpacingLastButton = get<PushButton>("spacing_last");
+
     mpLineDist = get<ListBox>("line_dist");
     mpLineDistAtPercentBox = get<MetricField>("percent_box");
     mpLineDistAtMetricBox = get<MetricField>("metric_box");
@@ -80,35 +85,17 @@ ParaLineSpacingControl::~ParaLineSpacingControl()
 
 void ParaLineSpacingControl::initial()
 {
-//    maLineSpacing.SetStyle( maLineSpacing.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT  );
-//
-//    maLineSpacing.SetControlBackground(
-//        GetSettings().GetStyleSettings().GetHighContrastMode()
-//        ? GetSettings().GetStyleSettings().GetMenuColor()
-//        : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-//    maLineSpacing.SetColor(
-//        GetSettings().GetStyleSettings().GetHighContrastMode()
-//        ? GetSettings().GetStyleSettings().GetMenuColor()
-//        : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-//    maLineSpacing.SetBackground(
-//        GetSettings().GetStyleSettings().GetHighContrastMode()
-//        ? GetSettings().GetStyleSettings().GetMenuColor()
-//        : sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Paint_PanelBackground ));
-
-//    for (int i=0;i<4;i++)
-//        maLineSpacing.AddItem(mpImg[i], &mpImgSel[i],mpStr[i],&mpStrTip[i]);
-
-//    maLineSpacing.AddItem( maImgCus, 0, maStrCus, 0 );
-
-    SetAllNoSel();
-    Link aLink = LINK(this, ParaLineSpacingControl,VSSelHdl );
-//    maLineSpacing.SetSelectHdl(aLink);
-//    maLineSpacing.StartSelection();
-//    maLineSpacing.Show();
+    Link aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
+    mpSpacing1Button->SetClickHdl(aLink);
+    mpSpacing115Button->SetClickHdl(aLink);
+    mpSpacing15Button->SetClickHdl(aLink);
+    mpSpacing2Button->SetClickHdl(aLink);
+    mpSpacingLastButton->SetClickHdl(aLink);
 
     aLink = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
     mpLineDist->SetSelectHdl(aLink);
     mpLineDist->SelectEntryPos( LLINESPACE_1 ) ;
+
     aLink = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
     mpLineDistAtPercentBox->SetModifyHdl( aLink );
     mpLineDistAtMetricBox->SetModifyHdl( aLink );
@@ -213,7 +200,6 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 
     SetFieldUnit(*mpLineDistAtMetricBox, currMetricUnit);
 
-//  mpLineSPPage->SetAllNoSel();
     mpLineDist->Enable();
     pActLineDistFld->Enable();
     pActLineDistFld->SetText( "" );
@@ -459,12 +445,6 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
 //    maLineSpacing.StartSelection();
 }
 
-void ParaLineSpacingControl::SetAllNoSel()
-{
-//    maLineSpacing.SelectItem(1);
-//    maLineSpacing.SetNoSelection();
-}
-
 IMPL_LINK( ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, pBox )
 {
 //    maLineSpacing.SetNoSelection();
@@ -589,7 +569,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             break;
     }
 
-    mpBindings->GetDispatcher()->Execute(
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
 
     mbUseLineSPCustom = USE_CUSTOM;
@@ -638,66 +618,57 @@ void ParaLineSpacingControl::SetLineSpace( SvxLineSpacingItem& rLineSpace,
     }
 }
 
-IMPL_LINK(ParaLineSpacingControl, VSSelHdl, void *, pControl)
+IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, void *, pControl)
 {
-//    maLineSpacing.SetNoSelection();
-//    bool bClosePop = true;
-//    if(pControl == &maLineSpacing)
-//    {
-//        sal_uInt16 iPos = maLineSpacing.GetSelectItemId();
-//        switch ( iPos )
-//        {
-//            case 1:
-//                ExecuteLineSpacing( false, 0 );
-//                break;
-//            case 2:
-//                ExecuteLineSpacing( false, 3 );
-//                break;
-//            case 3:
-//                ExecuteLineSpacing( false, 1 );
-//                break;
-//            case 4:
-//                ExecuteLineSpacing( false, 2 );
-//                break;
-//            case 5:
-//                {
-//                    if(!(mbLineSPDisable))
-//                    {
-//                        mpLineDist->SelectEntryPos( maPos ) ;
-//                        mpLineDist->SaveValue();
-//
-//                        SvxLineSpacingItem aSpacing(_DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
-//                        switch(maPos)
-//                        {
-//                        case LLINESPACE_1:
-//                        case LLINESPACE_15:
-//                        case LLINESPACE_2:
-//                            SetLineSpace( aSpacing, maPos );
-//                            break;
-//
-//                        case LLINESPACE_PROP:
-//                            SetLineSpace( aSpacing, maPos,
-//                                mpLineDistAtPercentBox->Denormalize( (long)maValue ) );
-//                            break;
-//
-//                        case LLINESPACE_MIN:
-//                        case LLINESPACE_DURCH:
-//                        case LLINESPACE_FIX:
-//                            SetLineSpace( aSpacing, maPos, (long)maValue );
-//                            break;
-//                        }
-//
-//                        mpBindings->GetDispatcher()->Execute(
-//                            SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
-//
-//                        ExecuteLineSpacing( USE_CUSTOM, 0 );
-//                    }
-//                    else
-//                        bClosePop = false;
-//                }
-//                break;
-//        }
-//    }
+    if (pControl == mpSpacing1Button)
+    {
+        ExecuteLineSpacing(false, LLINESPACE_1);
+    }
+    else if (pControl == mpSpacing115Button)
+    {
+        ExecuteLineSpacing(false, LLINESPACE_PROP);
+    }
+    else if (pControl == mpSpacing15Button)
+    {
+        ExecuteLineSpacing(false, LLINESPACE_15);
+    }
+    else if (pControl == mpSpacing2Button)
+    {
+        ExecuteLineSpacing( false, 2 );
+    }
+    else
+    {
+        if(!(mbLineSPDisable))
+        {
+            mpLineDist->SelectEntryPos( maPos ) ;
+            mpLineDist->SaveValue();
+
+            SvxLineSpacingItem aSpacing(_DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
+            switch(maPos)
+            {
+                case LLINESPACE_1:
+                case LLINESPACE_15:
+                case LLINESPACE_2:
+                    SetLineSpace(aSpacing, maPos);
+                    break;
+
+                case LLINESPACE_PROP:
+                    SetLineSpace(aSpacing, maPos, mpLineDistAtPercentBox->Denormalize((long)maValue));
+                    break;
+
+                case LLINESPACE_MIN:
+                case LLINESPACE_DURCH:
+                case LLINESPACE_FIX:
+                    SetLineSpace(aSpacing, maPos, (long)maValue);
+                    break;
+            }
+
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+                    SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
+
+            ExecuteLineSpacing(USE_CUSTOM, 0);
+        }
+    }
 
     return 0;
 }
@@ -715,7 +686,7 @@ void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEnt
         else
             SetLineSpace( aSpacing, nPos );
 
-        mpBindings->GetDispatcher()->Execute(
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
     }
 

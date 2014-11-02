@@ -34,33 +34,34 @@ namespace svx {
 class ParaLineSpacingControl : public SfxPopupWindow
 {
 public:
-    ParaLineSpacingControl(sal_uInt16 nId, const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParentWindow, WinBits nBits);
+    ParaLineSpacingControl(sal_uInt16 nId);
     virtual ~ParaLineSpacingControl();
 
     void Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext);
-    //virtual void Paint(const Rectangle& rect);
 
-    //add
     short GetLastCustomState();
     long  GetLastCustomValue();
-    //add end
 
     void ExecuteLineSpace();
     void SetLineSpace( SvxLineSpacingItem& rLineSpace,
                         int eSpace, long lValue = 0 );
 
     void ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEntry );
-    void SetAllNoSel();
     void PopupModeEndCallback();
 
 private:
     bool                    mbUseLineSPCustom;
     bool                    mbLineSPDisable;
     SfxMapUnit              m_eLNSpaceUnit;
-    SfxBindings*            mpBindings;
 
     long                    nMinFixDist;
     Edit*                   pActLineDistFld;
+
+    PushButton*             mpSpacing1Button;
+    PushButton*             mpSpacing115Button;
+    PushButton*             mpSpacing15Button;
+    PushButton*             mpSpacing2Button;
+    PushButton*             mpSpacingLastButton;
 
     ListBox*                mpLineDist;
 
@@ -73,7 +74,7 @@ private:
     void initial();
     DECL_LINK(LineSPDistHdl_Impl, ListBox*);
     DECL_LINK(LineSPDistAtHdl_Impl, void*);
-    DECL_LINK(VSSelHdl, void*);
+    DECL_LINK(PredefinedValuesHandler, void*);
 };
 
 } // namespace svx
