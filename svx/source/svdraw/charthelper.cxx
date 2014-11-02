@@ -24,7 +24,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/util/XUpdatable2.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
@@ -67,7 +67,7 @@ bool ChartHelper::isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram
     return false;
 }
 
-void ChartHelper::updateChart(const uno::Reference< ::frame::XModel >& rXModel)
+void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel, bool bHardUpdate )
 {
     if (!rXModel.is())
         return;
@@ -76,10 +76,15 @@ void ChartHelper::updateChart(const uno::Reference< ::frame::XModel >& rXModel)
     {
         const uno::Reference< lang::XMultiServiceFactory > xChartFact(rXModel, uno::UNO_QUERY_THROW);
         const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
-        const uno::Reference< util::XUpdatable > xUpdatable(xChartView, uno::UNO_QUERY_THROW);
+        const uno::Reference<util::XUpdatable2> xUpdatable(xChartView, uno::UNO_QUERY_THROW);
 
         if (xUpdatable.is())
-            xUpdatable->update();
+        {
+            if (bHardUpdate)
+                xUpdatable->updateHard();
+            else
+                xUpdatable->updateSoft();
+        }
     }
     catch(uno::Exception&)
     {
@@ -96,7 +101,7 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
     if (!rXModel.is())
         return aRetval;
 
-    updateChart(rXModel);
+    updateChart(rXModel, true);
 
     try
     {

@@ -152,6 +152,8 @@ namespace sdr
             // for 3D scenes
             virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
 
+            virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const;
+
             // delete all existing VOCs including DrawHierarchy which will invalidate all
             // visualisations, too. Used mostly at object removal from DrawHierarchy to
             // delete all existing VOCs by purpose, but can also be used for other purposes.

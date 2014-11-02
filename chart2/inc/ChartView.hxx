@@ -37,7 +37,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/util/XUpdatable2.hpp>
 #include <com/sun/star/qa/XDumper.hpp>
 
 #include <vector>
@@ -96,7 +96,7 @@ class ChartView : public ::cppu::WeakImplHelper10<
         ,::com::sun::star::lang::XUnoTunnel
         ,::com::sun::star::util::XModifyListener
         ,::com::sun::star::util::XModeChangeBroadcaster
-        ,::com::sun::star::util::XUpdatable
+        ,::com::sun::star::util::XUpdatable2
         ,::com::sun::star::beans::XPropertySet
         ,::com::sun::star::lang::XMultiServiceFactory
         ,::com::sun::star::qa::XDumper
@@ -169,6 +169,10 @@ public:
     // ::com::sun::star::util::XUpdatable
     virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    // util::XUpdatable2
+    virtual void SAL_CALL updateSoft() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL updateHard() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -217,7 +221,7 @@ private: //methods
     void impl_refreshAddIn();
     bool impl_AddInDrawsAllByItself();
 
-    void impl_updateView();
+    void impl_updateView( bool bCheckLockedCtrler = true );
 
     void render();
 

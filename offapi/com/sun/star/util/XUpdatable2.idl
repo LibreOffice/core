@@ -1,0 +1,43 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_util_XUpdatable2_idl__
+#define __com_sun_star_util_XUpdatable2_idl__
+
+#include <com/sun/star/util/XUpdatable.idl>
+
+module com {  module sun {  module star { module util {
+
+/**
+ * This interface extends XUpdatable in order to provide more fine-tuned
+ * update modes.  When performing a <i>soft</i> update, the implementor may
+ * decide not to update in certain cases, such as when the controller is
+ * locked.  When performing a <i>hard</i> update, on the other hand, the
+ * implementor should perform update more aggressively even when the
+ * controller is locked.
+ */
+interface XUpdatable2: com::sun::star::util::XUpdatable
+{
+    /**
+     * Perform update, but update may not always be performed especially when
+     * the controller is locked.
+     */
+    void updateSoft();
+
+    /**
+     * Perform update, even when the controller is locked.
+     */
+    void updateHard();
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

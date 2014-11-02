@@ -23,6 +23,7 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <sdr/contact/objectcontactofpageview.hxx>
+#include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdobj.hxx>
@@ -136,6 +137,17 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
                 }
             }
         }
+    }
+
+    // Check if this object is in the visible range.
+    const drawinglayer::geometry::ViewInformation2D& rViewInfo = GetObjectContact().getViewInformation2D();
+    basegfx::B2DRange aObjRange = GetViewContact().getRange(rViewInfo);
+    if (!aObjRange.isEmpty())
+    {
+        const basegfx::B2DRange& rViewRange = rViewInfo.getViewport();
+        bool bVisible = rViewRange.isEmpty() || rViewRange.overlaps(aObjRange);
+        if (!bVisible)
+            return false;
     }
 
     return true;

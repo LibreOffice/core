@@ -4138,6 +4138,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	XURLTransformer \
 	XUniqueIDFactory \
 	XUpdatable \
+	XUpdatable2 \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/view,\
 	DocumentZoomType \

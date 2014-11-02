@@ -2639,7 +2639,7 @@ void SAL_CALL ChartView::disposing( const lang::EventObject& /* rSource */ )
 {
 }
 
-void ChartView::impl_updateView()
+void ChartView::impl_updateView( bool bCheckLockedCtrler )
 {
     if( !m_pDrawModelWrapper )
         return;
@@ -2650,7 +2650,7 @@ void ChartView::impl_updateView()
         return;
     }
 
-    if (mrChartModel.hasControllersLocked())
+    if (bCheckLockedCtrler && mrChartModel.hasControllersLocked())
         return;
 
     if( m_bViewDirty && !m_bInViewUpdate )
@@ -2834,7 +2834,7 @@ void SAL_CALL ChartView::removeModeChangeApproveListener( const uno::Reference< 
 // ____ XUpdatable ____
 void SAL_CALL ChartView::update() throw (uno::RuntimeException, std::exception)
 {
-    impl_updateView();
+    impl_updateView(true);
 
     //#i100778# migrate all imported or old documents to a plot area sizing exclusive axes (in case the save settings allow for this):
     //Although in general it is a bad idea to change the model from within the view this is exceptionally the best place to do this special conversion.
@@ -2843,6 +2843,16 @@ void SAL_CALL ChartView::update() throw (uno::RuntimeException, std::exception)
     //Those data is important for the correct axis lable sizes which are needed during conversion.
     if( DiagramHelper::switchDiagramPositioningToExcludingPositioning( mrChartModel, true, false ) )
         impl_updateView();
+}
+
+void SAL_CALL ChartView::updateSoft() throw (uno::RuntimeException, std::exception)
+{
+    update();
+}
+
+void SAL_CALL ChartView::updateHard() throw (uno::RuntimeException, std::exception)
+{
+    impl_updateView(false);
 }
 
 // ____ XPropertySet ____
