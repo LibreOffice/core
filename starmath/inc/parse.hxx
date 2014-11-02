@@ -27,7 +27,7 @@
 
 #include "types.hxx"
 
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class SmNode;
 
@@ -157,7 +157,7 @@ struct SmErrorDesc
 
 
 typedef ::std::stack< SmNode* > SmNodeStack;
-typedef ::std::vector< SmErrorDesc* > SmErrDescList;
+typedef boost::ptr_vector< SmErrorDesc > SmErrDescList;
 
 /**************************************************************************/
 

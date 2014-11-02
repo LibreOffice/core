@@ -2406,8 +2406,6 @@ SmNode *SmParser::Parse(const OUString &rBuffer)
     m_nColOff       = 0;
     m_nCurError     = -1;
 
-    for ( size_t i = 0, n = m_aErrDescList.size(); i < n; ++i )
-        delete m_aErrDescList[ i ];
     m_aErrDescList.clear();
 
     while ( !m_aNodeStack.empty() )
@@ -2430,8 +2428,6 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
     m_nColOff       = 0;
     m_nCurError     = -1;
 
-    for ( size_t i = 0, n = m_aErrDescList.size(); i < n; ++i )
-        delete m_aErrDescList[ i ];
     m_aErrDescList.clear();
 
     while ( !m_aNodeStack.empty() )
@@ -2485,11 +2481,11 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
 const SmErrorDesc *SmParser::NextError()
 {
     if ( !m_aErrDescList.empty() )
-        if (m_nCurError > 0) return m_aErrDescList[ --m_nCurError ];
+        if (m_nCurError > 0) return &m_aErrDescList[ --m_nCurError ];
         else
         {
             m_nCurError = 0;
-            return m_aErrDescList[ m_nCurError ];
+            return &m_aErrDescList[ m_nCurError ];
         }
     else return NULL;
 }
@@ -2498,11 +2494,11 @@ const SmErrorDesc *SmParser::NextError()
 const SmErrorDesc *SmParser::PrevError()
 {
     if ( !m_aErrDescList.empty() )
-        if (m_nCurError < (int) (m_aErrDescList.size() - 1)) return m_aErrDescList[ ++m_nCurError ];
+        if (m_nCurError < (int) (m_aErrDescList.size() - 1)) return &m_aErrDescList[ ++m_nCurError ];
         else
         {
             m_nCurError = (int) (m_aErrDescList.size() - 1);
-            return m_aErrDescList[ m_nCurError ];
+            return &m_aErrDescList[ m_nCurError ];
         }
     else return NULL;
 }
@@ -2511,10 +2507,10 @@ const SmErrorDesc *SmParser::PrevError()
 const SmErrorDesc *SmParser::GetError(size_t i)
 {
     if ( i < m_aErrDescList.size() )
-        return m_aErrDescList[ i ];
+        return &m_aErrDescList[ i ];
 
     if ( (size_t)m_nCurError < m_aErrDescList.size() )
-        return m_aErrDescList[ m_nCurError ];
+        return &m_aErrDescList[ m_nCurError ];
 
     return NULL;
 }
