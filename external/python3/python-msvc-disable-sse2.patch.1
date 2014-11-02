@@ -10,3 +10,14 @@ fdo#82430 disable SSE2 default of MSVC2012
      </ClCompile>
    </ItemDefinitionGroup>
    <ItemGroup>
+--- python3/PCbuild/make_buildinfo.c.orig	2014-11-03 00:48:58.841000000 +0100
++++ python3/PCbuild/make_buildinfo.c	2014-11-03 00:49:16.266200000 +0100
+@@ -109,7 +109,7 @@
+ 
+ int main(int argc, char*argv[])
+ {
+-    char command[CMD_SIZE] = "cl.exe -c -D_WIN32 -DUSE_DL_EXPORT -D_WINDOWS -DWIN32 -D_WINDLL ";
++    char command[CMD_SIZE] = "cl.exe -arch:SSE -c -D_WIN32 -DUSE_DL_EXPORT -D_WINDOWS -DWIN32 -D_WINDLL ";
+     char tmppath[CMD_SIZE] = "";
+     int do_unlink, result;
+     char *tmpdir = NULL;
