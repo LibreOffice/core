@@ -17,34 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ftnfrm.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
-#include <cntfrm.hxx>
-#include <doc.hxx>
-#include <node.hxx>
-#include <dview.hxx>
 #include <dcontact.hxx>
-#include <dflyobj.hxx>
 #include <flyfrm.hxx>
 #include <txtfrm.hxx>
 #include <cellfrm.hxx>
 #include <swtable.hxx>
 #include <fmtfsize.hxx>
-#include <ftnidx.hxx>
-#include <txtftn.hxx>
-#include <ndtxt.hxx>
-#include <ndindex.hxx>
-#include <frmtool.hxx>
-#include <pagedesc.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <fmtclds.hxx>
-#include <viewsh.hxx>
 #include <viewimp.hxx>
 #include <sortedobjs.hxx>
 #include <hints.hxx>
-#include <switerator.hxx>
 
     // No inline cause we need the function pointers
 long SwFrm::GetTopMargin() const
