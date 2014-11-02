@@ -114,7 +114,7 @@ struct ScLookupCacheMapImpl
     void clear()
     {
         freeCaches();
-        // Zap map.
+        // free mapping
         ScLookupCacheMap aTmp;
         aCacheMap.swap( aTmp);
     }
@@ -330,11 +330,11 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 
 IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 {
-    if ( ScDdeLink::IsInUpdate() )      // nicht verschachteln
+    if ( ScDdeLink::IsInUpdate() )      // do not nest
     {
-        aTrackTimer.Start();            // spaeter nochmal versuchen
+        aTrackTimer.Start();            // try again later
     }
-    else if (pShell)                    // ausfuehren
+    else if (pShell)                    // execute
     {
         TrackFormulas();
         pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
@@ -363,7 +363,7 @@ void ScDocument::SetExpandRefs( bool bVal )
 
 void ScDocument::StartTrackTimer()
 {
-    if (!aTrackTimer.IsActive())        // nicht ewig aufschieben
+    if (!aTrackTimer.IsActive())        // do not postpone for forever
         aTrackTimer.Start();
 }
 
@@ -388,10 +388,9 @@ ScDocument::~ScDocument()
 
     ScAddInAsync::RemoveDocument( this );
     ScAddInListener::RemoveDocument( this );
-    DELETEZ( pChartListenerCollection);   // vor pBASM wg. evtl. Listener!
+    DELETEZ( pChartListenerCollection);   // before pBASM because of potential Listener!
     DELETEZ( pLookupCacheMapImpl);  // before pBASM because of listeners
-    // BroadcastAreas vor allen Zellen zerstoeren um unnoetige
-    // Einzel-EndListenings der Formelzellen zu vermeiden
+    // destroy BroadcastAreas first to avoid un-needed Single-EndListenings of Formula-Cells
     delete pBASM;       // BroadcastAreaSlotMachine
     pBASM = NULL;
 
@@ -421,11 +420,11 @@ ScDocument::~ScDocument()
     ImplDeleteOptions();
     delete pConsolidateDlgData;
     delete pClipData;
-    delete pDetOpList;                  // loescht auch die Eintraege
+    delete pDetOpList;                  // also deletes entries
     delete pChangeTrack;
     delete pEditEngine;
     delete pNoteEngine;
-    delete pChangeViewSettings;         // und weg damit
+    delete pChangeViewSettings;         // and delete
     delete pVirtualDevice_100th_mm;
 
     delete pDPCollection;
@@ -463,13 +462,13 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     SharePooledResources(pSourceDoc);
 
-    //  bedingte Formate / Gueltigkeiten
-    //! Vorlagen kopieren?
+    //  conditional Formats / validations
+    // TODO: Copy Templates?
     const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList;
     if ( pSourceValid )
         pValidationList = new ScValidationDataList(this, *pSourceValid);
 
-                        // Links in Stream speichern
+                        // store Links in Stream
     delete pClipData;
     if (pSourceDoc->GetDocLinkManager().hasDdeLinks())
     {
@@ -591,7 +590,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 
 void ScDocument::EnsureTable( SCTAB nTab )
 {
-    bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+    bool bExtras = !bIsUndo;        // Column-Widths, Row-Heights, Flags
     if (static_cast<size_t>(nTab) >= maTabs.size())
         maTabs.resize(nTab+1, NULL);
 
@@ -728,8 +727,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             if (nNewPos == SC_TAB_APPEND || nNewPos >= nTabCount)
                 nNewPos = nTabCount-1;
 
-            //  Referenz-Updaterei
-            //! mit UpdateReference zusammenfassen!
+            // Update Reference
+            // TODO: combine with UpdateReference!
 
             sc::RefUpdateMoveTabContext aCxt(nOldPos, nNewPos);
 
@@ -792,8 +791,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     OUString aName;
     GetName(nOldPos, aName);
 
-    //  vorneweg testen, ob der Prefix als gueltig erkannt wird
-    //  wenn nicht, nur doppelte vermeiden
+    //  check first if Prefix is valid; if not, then only avoid duplicates
     bool bPrefix = ValidTabName( aName );
     OSL_ENSURE(bPrefix, "invalid table name");
     SCTAB nDummy;
@@ -885,7 +883,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nNewPos]->UpdateReference(aRefCxt, NULL);
 
         sc::RefUpdateInsertTabContext aInsTabCxt(nNewPos, 1);
-        maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // alle abs. um eins hoch!!
+        maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // move all paragraphs up by one!!
         maTabs[nOldPos]->UpdateInsertTab(aInsTabCxt);
 
         maTabs[nOldPos]->UpdateCompile();
@@ -921,9 +919,9 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bResultsOnly )
 {
-    sal_uLong nRetVal = 1;                      // 0 => Fehler 1 = ok
+    sal_uLong nRetVal = 1;                  // 0 => error 1 = ok
                                             // 3 => NameBox
-                                            // 4 => beides
+                                            // 4 => both
 
     if (pSrcDoc->pShell->GetMedium())
     {
@@ -938,7 +936,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
 
     bool bValid = true;
-    if (bInsertNew)             // neu einfuegen
+    if (bInsertNew)             // re-insert
     {
         OUString aName;
         pSrcDoc->GetName(nSrcPos, aName);
@@ -949,7 +947,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         maTabs[nDestPos]->SetLayoutRTL(pSrcDoc->maTabs[nSrcPos]->IsLayoutRTL());
         maTabs[nDestPos]->SetLoadingRTL(pSrcDoc->maTabs[nSrcPos]->IsLoadingRTL());
     }
-    else                        // bestehende Tabelle ersetzen
+    else                        // replace existing tables
     {
         if (ValidTab(nDestPos) && nDestPos < static_cast<SCTAB>(maTabs.size()) && maTabs[nDestPos])
         {
@@ -963,12 +961,12 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     {
         bool bOldAutoCalcSrc = false;
         bool bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+        SetAutoCalc( false );   // avoid repeated calculations
         SetNoListening( true );
         if ( bResultsOnly )
         {
             bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
-            pSrcDoc->SetAutoCalc( true );   // falls was berechnet werden muss
+            pSrcDoc->SetAutoCalc( true );   // in case something needs calculation
         }
 
         {
@@ -1009,7 +1007,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             pSrcDoc->SetAutoCalc( bOldAutoCalcSrc );
         SetAutoCalc( bOldAutoCalc );
 
-        //  Drawing kopieren
+        //  copy Drawing
 
         if (bInsertNew)
             TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
@@ -1219,10 +1217,10 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
     ScChangeTrack* pTrack = GetChangeTrack();
     ScChangeViewSettings* pSettings = GetChangeViewSettings();
     if ( !pTrack || !pTrack->GetFirst() || !pSettings || !pSettings->ShowChanges() )
-        return false;           // nix da oder abgeschaltet
+        return false;           // missing or turned-off
     ScActionColorChanger aColorChanger(*pTrack);
-    //  Clipping passiert von aussen
-    //! ohne Clipping, nur betroffene Zeilen painten ??!??!?
+    //  Clipping happens from outside
+    //! TODO: without Clipping; only paint affected cells ??!??!?
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
     {
@@ -1307,7 +1305,7 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
                         aRange.aEnd.SetCol( aRange.aStart.Col() );
                     if ( aRange.In( aCellPos ) )
                     {
-                        pFound = pAction;       // der letzte gewinnt
+                        pFound = pAction;       // the last wins
                         switch ( eType )
                         {
                             case SC_CAT_CONTENT :
@@ -1339,12 +1337,12 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
         if ( pFound )
         {
             if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
-                pFound = pFoundContent;     // Content gewinnt
+                pFound = pFoundContent;     // Content wins
             if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
                     pFoundMove->GetActionNumber() >
                     pFound->GetActionNumber() )
-                pFound = pFoundMove;        // Move gewinnt
-            //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
+                pFound = pFoundMove;        // Move wins
+            //  for deleted columns: arrow on left side of row
             if ( pFound->GetType() == SC_CAT_DELETE_COLS )
                 bLeftEdge = true;
             DateTime aDT = pFound->GetDateTime();
