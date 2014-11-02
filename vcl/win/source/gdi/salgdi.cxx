@@ -554,12 +554,13 @@ void ImplClearHDCCache( SalData* pData )
     }
 }
 
-WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen):
+WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd):
     mpImpl(new WinSalGraphicsImpl(*this)),
     mhLocalDC(0),
     mbPrinter(eType == WinSalGraphics::PRINTER),
     mbVirDev(eType == WinSalGraphics::VIRTUAL_DEVICE),
     mbWindow(eType == WinSalGraphics::WINDOW),
+    mhWnd(hWnd),
     mbScreen(bScreen),
     mfCurrentFontScale(1.0),
     mhRegion(0),
@@ -636,6 +637,11 @@ bool WinSalGraphics::isScreen() const
 HWND WinSalGraphics::gethWnd()
 {
     return mhWnd;
+}
+
+void WinSalGraphics::setHWND(HWND hWnd)
+{
+    mhWnd = hWnd;
 }
 
 void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )

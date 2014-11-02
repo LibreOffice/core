@@ -152,6 +152,7 @@ private:
     bool                    mbVirDev : 1;           // is VirDev
     bool                    mbWindow : 1;           // is Window
     bool                    mbScreen : 1;           // is Screen compatible
+    HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
 public:
     HDC getHDC() const { return mhLocalDC; }
@@ -166,7 +167,6 @@ public:
     };
 
 public:
-    HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
     HWND gethWnd();
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
@@ -194,13 +194,15 @@ public:
     HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
-    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen);
+    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd);
     virtual ~WinSalGraphics();
 
     bool isPrinter() const;
     bool isVirtualDevice() const;
     bool isWindow() const;
     bool isScreen() const;
+
+    void setHWND(HWND hWnd);
 
 protected:
     virtual bool        setClipRegion( const vcl::Region& );
