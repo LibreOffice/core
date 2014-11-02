@@ -164,6 +164,8 @@ public:
 // only in vcl's platform code
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     bool init(Display* dpy, Window win, int screen);
+#elif defined( _WIN32 )
+    bool init( HDC hDC, HWND hWnd );
 #endif
 
     void makeCurrent();
