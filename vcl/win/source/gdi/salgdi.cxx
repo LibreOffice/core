@@ -464,34 +464,34 @@ void ImplUpdateSysColorEntries()
     ImplInsertSysColorEntry( COLOR_INACTIVECAPTIONTEXT );
 }
 
-void ImplSalInitGraphics( WinSalGraphics* pData )
+void WinSalGraphics::InitGraphics()
 {
     // calculate the minimal line width for the printer
-    if ( pData->isPrinter() )
+    if ( isPrinter() )
     {
-        int nDPIX = GetDeviceCaps( pData->getHDC(), LOGPIXELSX );
+        int nDPIX = GetDeviceCaps( getHDC(), LOGPIXELSX );
         if ( nDPIX <= 300 )
-            pData->mnPenWidth = 0;
+            mnPenWidth = 0;
         else
-            pData->mnPenWidth = nDPIX/300;
+            mnPenWidth = nDPIX/300;
     }
 
-    ::SetTextAlign( pData->getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
-    ::SetBkMode( pData->getHDC(), WIN32_TRANSPARENT );
-    ::SetROP2( pData->getHDC(), R2_COPYPEN );
+    ::SetTextAlign( getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
+    ::SetBkMode( getHDC(), WIN32_TRANSPARENT );
+    ::SetROP2( getHDC(), R2_COPYPEN );
 }
 
-void ImplSalDeInitGraphics( WinSalGraphics* pData )
+void WinSalGraphics::DeInitGraphics()
 {
     // clear clip region
-    SelectClipRgn( pData->getHDC(), 0 );
+    SelectClipRgn( getHDC(), 0 );
     // select default objects
-    if ( pData->mhDefPen )
-        SelectPen( pData->getHDC(), pData->mhDefPen );
-    if ( pData->mhDefBrush )
-        SelectBrush( pData->getHDC(), pData->mhDefBrush );
-    if ( pData->mhDefFont )
-        SelectFont( pData->getHDC(), pData->mhDefFont );
+    if ( mhDefPen )
+        SelectPen( getHDC(), mhDefPen );
+    if ( mhDefBrush )
+        SelectBrush( getHDC(), mhDefBrush );
+    if ( mhDefFont )
+        SelectFont( getHDC(), mhDefFont );
 }
 
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
@@ -642,6 +642,21 @@ HWND WinSalGraphics::gethWnd()
 void WinSalGraphics::setHWND(HWND hWnd)
 {
     mhWnd = hWnd;
+}
+
+HPALETTE WinSalGraphics::getDefPal() const
+{
+    return mhDefPal;
+}
+
+void WinSalGraphics::setDefPal(HPALETTE hDefPal)
+{
+    mhDefPal = hDefPal;
+}
+
+HRGN WinSalGraphics::getRegion() const
+{
+    return mhRegion;
 }
 
 void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
