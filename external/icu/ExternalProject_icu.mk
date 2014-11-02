@@ -22,7 +22,7 @@ ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" \
-		&& CFLAGS="$(SOLARINC)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$(SOLARINC)" \
+		&& CFLAGS="-arch:SSE $(SOLARINC)" CPPFLAGS="$(SOLARINC)" CXXFLAGS="-arch:SSE $(SOLARINC)" \
 			./runConfigureICU \
 			$(if $(MSVC_USE_DEBUG_RUNTIME),--enable-debug --disable-release) \
 			Cygwin/MSVC \
