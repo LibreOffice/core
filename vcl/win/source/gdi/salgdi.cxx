@@ -36,6 +36,10 @@
 #include "gdiimpl.hxx"
 #include "openglgdiimpl.hxx"
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
+#include <officecfg/Office/Common.hxx>
+
 #define DITHER_PAL_DELTA                51
 #define DITHER_PAL_STEPS                6
 #define DITHER_PAL_COUNT                (DITHER_PAL_STEPS*DITHER_PAL_STEPS*DITHER_PAL_STEPS)
@@ -578,6 +582,13 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mbFontKernInit(false),
     mnPenWidth(GSL_PEN_WIDTH)
 {
+    static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
+    bool bUseOpenGL = bOpenGLPossible ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
+    if (bUseOpenGL)
+        mpImpl.reset(new OpenGLSalGraphicsImpl());
+    else
+        mpImpl.reset(new WinSalGraphicsImpl(*this));
+
     for( int i = 0; i < MAX_FALLBACK; ++i )
     {
         mhFonts[ i ] = 0;
