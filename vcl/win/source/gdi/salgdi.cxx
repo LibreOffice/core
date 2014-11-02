@@ -467,7 +467,7 @@ void ImplUpdateSysColorEntries()
 void ImplSalInitGraphics( WinSalGraphics* pData )
 {
     // calculate the minimal line width for the printer
-    if ( pData->mbPrinter )
+    if ( pData->isPrinter() )
     {
         int nDPIX = GetDeviceCaps( pData->getHDC(), LOGPIXELSX );
         if ( nDPIX <= 300 )
@@ -557,6 +557,48 @@ void ImplClearHDCCache( SalData* pData )
 WinSalGraphics::WinSalGraphics():
     mpImpl(new WinSalGraphicsImpl(*this)),
     mhLocalDC(0),
+    mbPrinter(false),
+    mbVirDev(false),
+    mbWindow(false),
+    mbScreen(false),
+    mfCurrentFontScale(1.0),
+    mhRegion(0),
+    mhDefPen(0),
+    mhDefBrush(0),
+    mhDefFont(0),
+    mhDefPal(0),
+    mpStdClipRgnData(NULL),
+    mpLogFont(NULL),
+    mpFontCharSets(NULL),
+    mpFontAttrCache(NULL),
+    mnFontCharSetCount(0),
+    mpFontKernPairs(NULL),
+    mnFontKernPairCount(0),
+    mbFontKernInit(false),
+    mnPenWidth(GSL_PEN_WIDTH)
+{
+    for( int i = 0; i < MAX_FALLBACK; ++i )
+    {
+        mhFonts[ i ] = 0;
+        mpWinFontData[ i ]  = NULL;
+        mpWinFontEntry[ i ] = NULL;
+        mfFontScale[ i ] = 1.0;
+    }
+
+    static const char* pEnv = getenv("USE_OPENGL");
+    if (pEnv)
+    {
+        mpImpl.reset(new OpenGLSalGraphicsImpl());
+    }
+}
+
+WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen):
+    mpImpl(new WinSalGraphicsImpl(*this)),
+    mhLocalDC(0),
+    mbPrinter(eType == WinSalGraphics::PRINTER),
+    mbVirDev(eType == WinSalGraphics::VIRTUAL_DEVICE),
+    mbWindow(eType == WinSalGraphics::WINDOW),
+    mbScreen(bScreen),
     mfCurrentFontScale(1.0),
     mhRegion(0),
     mhDefPen(0),
@@ -607,6 +649,26 @@ WinSalGraphics::~WinSalGraphics()
     delete mpFontCharSets;
 
     delete mpFontKernPairs;
+}
+
+bool WinSalGraphics::isPrinter()
+{
+    return mbPrinter;
+}
+
+bool WinSalGraphics::isVirtualDevice()
+{
+    return mbVirDev;
+}
+
+bool WinSalGraphics::isWindow()
+{
+    return mbWindow;
+}
+
+bool WinSalGraphics::isScreen()
+{
+    return mbScreen;
 }
 
 HWND WinSalGraphics::gethWnd()
