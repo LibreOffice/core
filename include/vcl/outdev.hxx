@@ -726,7 +726,7 @@ public:
     void                        DrawPolyLine( const Polygon& rPoly,
                                               const LineInfo& rLineInfo );
 
-    bool                        TryDrawPolyLineDirect(
+    bool                        DrawPolyLineDirect(
                                     const basegfx::B2DPolygon& rB2DPolygon,
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,
@@ -742,7 +742,7 @@ private:
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool         TryDrawPolyLineDirectNoAACheck(
+    SAL_DLLPRIVATE bool         drawPolyLineDirectNoAACheck(
                                     const basegfx::B2DPolygon& rB2DPolygon,
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,
