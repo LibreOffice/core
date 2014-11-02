@@ -726,12 +726,15 @@ public:
     void                        DrawPolyLine( const Polygon& rPoly,
                                               const LineInfo& rLineInfo );
 
+    // #i101491#
+    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool.
     bool                        DrawPolyLineDirect(
                                     const basegfx::B2DPolygon& rB2DPolygon,
                                     double fLineWidth = 0.0,
                                     double fTransparency = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
+                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT,
+                                    bool bBypassAACheck = false );
 private:
 
     // #i101491#
@@ -739,15 +742,6 @@ private:
     // switched on. Advantage is that line geometry is only temporarily used for paint
     SAL_DLLPRIVATE void         drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo);
 
-
-    // #i101491#
-    // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool         drawPolyLineDirectNoAACheck(
-                                    const basegfx::B2DPolygon& rB2DPolygon,
-                                    double fLineWidth = 0.0,
-                                    double fTransparency = 0.0,
-                                    basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
-                                    css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
     ///@}
 
 
