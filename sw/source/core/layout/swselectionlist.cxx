@@ -18,7 +18,6 @@
  */
 
 #include <swselectionlist.hxx>
-#include <layfrm.hxx>
 #include <flyfrm.hxx>
 #include <ftnfrm.hxx>
 
