@@ -19,6 +19,13 @@ $(eval $(call gb_Library_set_include,sal,\
 	-I$(SRCDIR)/sal/inc \
 ))
 
+ifeq ($(HAVE_POSIX_MEMALIGN),YES)
+$(eval $(call gb_Library_add_defs,sal,-DHAVE_POSIX_MEMALIGN))
+endif
+ifeq ($(HAVE_MEMALIGN),YES)
+$(eval $(call gb_Library_add_defs,sal,-DHAVE_MEMALIGN))
+endif
+
 $(eval $(call gb_Library_add_defs,sal,\
 	$(if $(filter $(ALLOC),SYS_ALLOC TCMALLOC JEMALLOC)$(filter-out X$(ENABLE_RUNTIME_OPTIMIZATIONS),XTRUE), \
 		-DFORCE_SYSALLOC \
