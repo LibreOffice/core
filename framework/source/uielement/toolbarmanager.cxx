@@ -243,7 +243,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
 
 ToolBarManager::~ToolBarManager()
 {
-    assert(!m_aAsyncUpdateControllersTimer.IsActive());
+    assert(!m_aAsyncUpdateControllersIdle.IsActive());
     OSL_ASSERT( m_pToolBar == 0 );
     OSL_ASSERT( !m_bAddedToTaskPaneList );
 }
@@ -629,7 +629,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
 
         // stop timer to prevent timer events after dispose
         // do it last because other calls could restart timer in StateChanged()
-        m_aAsyncUpdateControllersTimer.Stop();
+        m_aAsyncUpdateControllersIdle.Stop();
 
         m_bDisposed = true;
     }

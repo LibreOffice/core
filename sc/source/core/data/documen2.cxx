@@ -364,7 +364,7 @@ void ScDocument::SetExpandRefs( bool bVal )
 
 void ScDocument::StartTrackTimer()
 {
-    if (!aTrackIdle.IsActive())        // don't postpone forever
+    if (!aTrackIdle.IsActive())        // do not postpone for forever
         aTrackIdle.Start();
 }
 
