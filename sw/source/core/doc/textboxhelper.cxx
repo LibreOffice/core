@@ -134,9 +134,8 @@ std::set<const SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwNode& rNode)
     const SwDoc* pDoc = rNode.GetDoc();
     const SwCntntNode* pCntntNode = 0;
     const SwCntntFrm* pCntntFrm = 0;
-    if (pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
-        (pCntntNode = rNode.GetCntntNode()) &&
-        (pCntntFrm = pCntntNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout())))
+    bool bHaveViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    if (bHaveViewShell && (pCntntNode = rNode.GetCntntNode()) && (pCntntFrm = pCntntNode->getLayoutFrm(pDoc->getIDocumentLayoutAccess().GetCurrentLayout())))
     {
         // We can use the layout information to iterate over only the frames which are anchored to us.
         std::set<const SwFrmFmt*> aRet;
