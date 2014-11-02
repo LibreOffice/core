@@ -79,15 +79,12 @@ public:
 
 inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, sal_uInt16 nModifier )
 {
-    assert(nKey <= KEY_CODE);
-    assert(nModifier == 0 || (nModifier >= 0x1000 && nModifier <= 0xf000));
     nKeyCodeAndModifiers = nKey | nModifier;
     eFunc = KeyFuncType::DONTKNOW;
 }
 
 inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 )
 {
-    assert(nKey <= KEY_CODE);
     nKeyCodeAndModifiers = nKey;
     if( bShift )
         nKeyCodeAndModifiers |= KEY_SHIFT;
