@@ -513,6 +513,16 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
 
     return ImplInit();
 }
+#elif defined( _WIN32 )
+bool OpenGLContext::init(HDC hDC, HWND hWnd)
+{
+    if (mbInitialized)
+        return false;
+
+    m_aGLWin.hDC = hDC;
+    m_aGLWin.hWnd = hWnd;
+    return ImplInit();
+}
 #endif
 
 bool OpenGLContext::ImplInit()
@@ -524,7 +534,6 @@ bool OpenGLContext::ImplInit()
     m_aGLWin.Height = 0;
 
 #if defined( WNT )
-    m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
 #elif defined( MACOSX )
 
 #elif defined( IOS )
@@ -778,6 +787,7 @@ bool OpenGLContext::initWindow()
         m_aGLWin.hWnd = sysData->hWnd;
     }
 
+    m_aGLWin.hDC = GetDC(m_aGLWin.hWnd);
     return true;
 }
 
