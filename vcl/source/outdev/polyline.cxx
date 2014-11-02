@@ -197,14 +197,11 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                           ROP_OVERPAINT == GetRasterOp() &&
                           IsLineColor());
 
-        if(bTryAA)
+        // when AA it is necessary to also paint the filled polygon's outline
+        // to avoid optical gaps
+        for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            // when AA it is necessary to also paint the filled polygon's outline
-            // to avoid optical gaps
-            for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
-            {
-                drawPolyLineDirectNoAACheck(aAreaPolyPolygon.getB2DPolygon(a));
-            }
+            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, bTryAA );
         }
     }
     else
@@ -267,49 +264,12 @@ void OutputDevice::drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo)
         mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
-bool OutputDevice::drawPolyLineDirectNoAACheck( const basegfx::B2DPolygon& rB2DPolygon,
-                                              double fLineWidth,
-                                              double fTransparency,
-                                              basegfx::B2DLineJoin eLineJoin,
-                                              css::drawing::LineCap eLineCap)
-{
-    const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
-    basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
-
-    // transform the line width if used
-    if( fLineWidth != 0.0 )
-    {
-        aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, 0.0 );
-    }
-
-    // transform the polygon
-    basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
-    aB2DPolygon.transform(aTransform);
-
-    if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE) &&
-       aB2DPolygon.count() < 1000)
-    {
-        // #i98289#, #i101491#
-        // better to remove doubles on device coordinates. Also assume from a given amount
-        // of points that the single edges are not long enough to smooth
-        aB2DPolygon.removeDoublePoints();
-        aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
-    }
-
-    // draw the polyline
-    return mpGraphics->DrawPolyLine( aB2DPolygon,
-                                     fTransparency,
-                                     aB2DLineWidth,
-                                     eLineJoin,
-                                     eLineCap,
-                                     this);
-}
-
 bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
-                                          double fLineWidth,
-                                          double fTransparency,
-                                          basegfx::B2DLineJoin eLineJoin,
-                                          css::drawing::LineCap eLineCap)
+                                       double fLineWidth,
+                                       double fTransparency,
+                                       basegfx::B2DLineJoin eLineJoin,
+                                       css::drawing::LineCap eLineCap,
+                                       bool bBypassAACheck )
 {
     // AW: Do NOT paint empty PolyPolygons
     if(!rB2DPolygon.count())
@@ -328,14 +288,46 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
     if( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
+    const bool bTryAA( bBypassAACheck ||
+                      ((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
                       mpGraphics->supportsOperation(OutDevSupport_B2DDraw) &&
                       ROP_OVERPAINT == GetRasterOp() &&
-                      IsLineColor());
+                      IsLineColor()));
 
     if(bTryAA)
     {
-        if(drawPolyLineDirectNoAACheck(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
+        const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
+        basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
+
+        // transform the line width if used
+        if( fLineWidth != 0.0 )
+        {
+            aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, 0.0 );
+        }
+
+        // transform the polygon
+        basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
+        aB2DPolygon.transform(aTransform);
+
+        if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE) &&
+           aB2DPolygon.count() < 1000)
+        {
+            // #i98289#, #i101491#
+            // better to remove doubles on device coordinates. Also assume from a given amount
+            // of points that the single edges are not long enough to smooth
+            aB2DPolygon.removeDoublePoints();
+            aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
+        }
+
+        // draw the polyline
+        bool bDrawSuccess = mpGraphics->DrawPolyLine( aB2DPolygon,
+                                                      fTransparency,
+                                                      aB2DLineWidth,
+                                                      eLineJoin,
+                                                      eLineCap,
+                                                      this );
+
+        if( bDrawSuccess )
         {
             // worked, add metafile action (if recorded) and return true
             if( mpMetaFile )
