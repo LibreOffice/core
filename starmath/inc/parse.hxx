@@ -26,6 +26,7 @@
 
 #include "types.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class SmNode;
@@ -169,7 +170,7 @@ struct SmTokenTableEntry
     sal_uInt16      nLevel;
 };
 
-class SmParser
+class SmParser : boost::noncopyable
 {
     OUString        m_aBufferString;
     SmToken         m_aCurToken;
@@ -189,10 +190,6 @@ class SmParser
 
     //! locale where '.' is decimal separator!
     ::com::sun::star::lang::Locale m_aDotLoc;
-
-    // declare copy-constructor and assignment-operator private
-    SmParser(const SmParser &);
-    SmParser & operator = (const SmParser &);
 
 protected:
 #if OSL_DEBUG_LEVEL > 1
