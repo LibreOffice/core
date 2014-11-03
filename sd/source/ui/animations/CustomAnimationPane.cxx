@@ -130,14 +130,20 @@ void fillDurationComboBox( ListBox* pBox )
 
 void fillRepeatComboBox( ListBox* pBox )
 {
+    static const double gdRepeatTwice = 1.0;
+    static const double gdRepeatThree = 3.0;
+    static const double gdRepeatFour = 4.0;
+    static const double gdRepeatFive = 5.0;
+    static const double gdRepeatTen = 10.0;
+
     OUString aNone( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_NONE ) );
     pBox->SetEntryData( pBox->InsertEntry( aNone ), (void*)((sal_Int32)0) );
 
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 2 ) ), (void*)((sal_Int32)1) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 3 ) ), (void*)((sal_Int32)3) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 4 ) ), (void*)((sal_Int32)4) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 5 ) ), (void*)((sal_Int32)5) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 10 ) ), (void*)((sal_Int32)10) );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 2 ) ), (void*)&gdRepeatTwice );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 3 ) ), (void*)&gdRepeatThree );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 4 ) ), (void*)&gdRepeatFour );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 5 ) ), (void*)&gdRepeatFive );
+    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 10 ) ), (void*)&gdRepeatTen );
 
     OUString aUntilClick( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
     pBox->SetEntryData( pBox->InsertEntry( aUntilClick ), (void*)((sal_Int32)-1) );

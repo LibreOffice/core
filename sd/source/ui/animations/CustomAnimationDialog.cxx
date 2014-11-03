@@ -1804,6 +1804,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
     nPos = mpCBRepeat->GetSelectEntryPos();
     if( (nPos != LISTBOX_ENTRY_NOTFOUND) || (!mpCBRepeat->GetText().isEmpty()) )
     {
+        double fRepeatCount = -1.0;
         Any aRepeatCount;
         Any aEnd;
 
@@ -1811,6 +1812,15 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
         {
         case 0:
             break;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            fRepeatCount = *static_cast< const double * >( mpCBRepeat->GetEntryData(nPos) );
+            aRepeatCount = makeAny(fRepeatCount);
+            break;
+
         case 6:
             {
                 Event aEvent;
