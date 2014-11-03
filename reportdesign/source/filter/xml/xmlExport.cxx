@@ -924,9 +924,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                 if ( xReportElement.is() )
                                     exportReportElement(xReportElement);
 
-                                if ( eToken == XML_GROUP && xSection.is() )
-                                    exportContainer(xSection);
-                                else if ( eToken == XML_SUB_DOCUMENT && xReportDefinition.is() )
+                                if (eToken == XML_SUB_DOCUMENT && xReportDefinition.is())
                                 {
                                     SvXMLElementExport aOfficeElement( *this, XML_NAMESPACE_OFFICE, XML_BODY, true, true );
                                     SvXMLElementExport aElem( *this, true,
