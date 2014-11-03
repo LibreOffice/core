@@ -41,6 +41,7 @@ SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp ) :
     mrImport( rImp ),
+    mnPrefix ( 0 ),
     mpRewindMap( 0 )
 {
 }
