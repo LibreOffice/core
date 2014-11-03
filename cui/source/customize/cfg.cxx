@@ -2635,7 +2635,8 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
 
         pNewMenuEntry->SetUserData( pNewEntryData );
 
-        mpEntries->push_back( pNewEntryData );
+        if (mpEntries)
+            mpEntries->push_back(pNewEntryData);
 
         m_pMenuNameEdit->SetText( newname );
         m_pMenuNameEdit->SetModifyHdl(
