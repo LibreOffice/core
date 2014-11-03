@@ -1955,6 +1955,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
         {
         case 0:
             break;
+
         case 6:
             {
                 Event aEvent;
@@ -1968,7 +1969,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             break;
         default:
             {
-                OUString aText( mpCBRepeat->GetText() );
+                OUString aText(mpCBRepeat->GetEntry(nPos));
                 if( !aText.isEmpty() )
                     aRepeatCount <<= aText.toDouble();
             }
