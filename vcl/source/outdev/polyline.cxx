@@ -111,7 +111,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW) &&
        LINE_SOLID == rLineInfo.GetStyle())
     {
-        DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin(), rLineInfo.GetLineCap());
+        DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), 0.0, rLineInfo.GetLineJoin(), rLineInfo.GetLineCap());
         return;
     }
 
@@ -123,6 +123,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
 
 void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
                                  double fLineWidth,
+                                 double fTransparency,
                                  basegfx::B2DLineJoin eLineJoin,
                                  css::drawing::LineCap eLineCap)
 {
@@ -201,7 +202,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         // to avoid optical gaps
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, bTryAA );
+            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), fTransparency, 0.0, basegfx::B2DLINEJOIN_NONE, css::drawing::LineCap_BUTT, bTryAA );
         }
     }
     else

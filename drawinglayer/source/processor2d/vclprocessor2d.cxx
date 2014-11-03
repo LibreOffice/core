@@ -1317,7 +1317,7 @@ namespace drawinglayer
                         {
                             mpOutputDevice->DrawPolyLine(
                                 aHairlinePolyPolygon.getB2DPolygon(a),
-                                fDiscreteLineWidth,
+                                fDiscreteLineWidth, 0.0,
                                 rLineAttribute.getLineJoin(),
                                 rLineAttribute.getLineCap());
                         }
