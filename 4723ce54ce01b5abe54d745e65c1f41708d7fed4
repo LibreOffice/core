@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_b0e6bee6",
+        "filename": "crashrep/source/unx/main.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T14:36:29Z",
+      "side": 1,
+      "message": "apparently the code initializing g_szStackFile was removed 10 years ago...",
+      "revId": "4723ce54ce01b5abe54d745e65c1f41708d7fed4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
