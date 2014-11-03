@@ -192,7 +192,7 @@ namespace
     };
 } // end of anonymous namespace
 
-void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
+void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore)
 {
     // get the currently used memory footprint of all swapped in bitmap graphics
     // of this graphic manager. Remember candidates in a vector. The size in bytes is
@@ -205,7 +205,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
     for (size_t i = 0, n = maObjList.size(); i < n; ++i)
     {
         pObj = maObjList[i];
-        if (pObj->meType == GRAPHIC_BITMAP && !pObj->IsSwappedOut() && pObj->GetSizeBytes())
+        if (pObj->meType == GRAPHIC_BITMAP && !pObj->IsSwappedOut() && pObj->GetSizeBytes() && pObj != pGraphicToIgnore)
         {
             aCandidates.push_back(pObj);
             size_t const nSize = pObj->GetSizeBytes();

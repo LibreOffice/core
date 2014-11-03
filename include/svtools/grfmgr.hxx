@@ -615,7 +615,7 @@ private:
     // For 32Bit systems this leads to situations where graphics will be missing. This method will actively swap out
     // the longest swapped in graphics until a maximum memory boundary (derived from user settings in tools/options/memory)
     // is no longer exceeded
-    void SVT_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics();
+    void SVT_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore);
 public:
 
                         GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
