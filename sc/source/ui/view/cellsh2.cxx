@@ -976,6 +976,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pDlg->SaveParameters();
                         aImport.SetExtOptions( aOptions );
                         aImport.SetApi( false );
+                        aImport.SetImportBroadcast( true );
                         aStream.Seek( 0 );
                         aImport.ImportStream( aStream, OUString(), FORMAT_STRING );
 
