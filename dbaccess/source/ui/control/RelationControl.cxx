@@ -348,7 +348,7 @@ namespace dbaui
         OUString aText = const_cast< ORelationControl*>(this)->GetCellText( m_nDataPos, nColumnId );
 
         Point aPos( rRect.TopLeft() );
-        Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
+        Size aTextSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight() );
 
         if( aPos.X() < rRect.Right() || aPos.X() + aTextSize.Width() > rRect.Right() ||
             aPos.Y() < rRect.Top() || aPos.Y() + aTextSize.Height() > rRect.Bottom() )
