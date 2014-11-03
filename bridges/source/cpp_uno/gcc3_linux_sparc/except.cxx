@@ -257,7 +257,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     {
         throw RuntimeException(
             OUString("no rtti for type ") +
-            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName )
              );
     }
     }
