@@ -651,7 +651,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             Reference< XDictionaryEntry > xTmp( lcl_GetRulingDictionaryEntry( aChkWord, nLanguage ) );
             if (xTmp.is())
             {
-                if (xTmp->isNegative())    // positive entry found
+                if (xTmp->isNegative())    // negative entry found
                 {
                     eFailureType = SpellFailure::IS_NEGATIVE_WORD;
 
@@ -671,6 +671,46 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                     eFailureType = -1;  // no failure
                 }
             }
+            else
+            {
+                setCharClass(LanguageTag(nLanguage));
+                sal_uInt16 ct = capitalType(aChkWord, pCharClass);
+                if (ct == CAPTYPE_INITCAP || ct == CAPTYPE_ALLCAP)
+                {
+                    Reference< XDictionaryEntry > xTmp2( lcl_GetRulingDictionaryEntry( makeLowerCase(aChkWord, pCharClass), nLanguage ) );
+                    if (xTmp2.is())
+                    {
+                        if (xTmp2->isNegative())    // negative entry found
+                        {
+                            eFailureType = SpellFailure::IS_NEGATIVE_WORD;
+
+                            // replacement text to be added to suggestions, if not empty
+                            OUString aAddRplcTxt( xTmp2->getReplacementText() );
+
+                            // replacement text must not be in negative dictionary itself
+                            if (!aAddRplcTxt.isEmpty() &&
+                                !SearchDicList( xDList, aAddRplcTxt, nLanguage, false, true ).is())
+                            {
+                                switch ( ct )
+                                {
+                                    case CAPTYPE_INITCAP:
+                                        aProposalList.Prepend( pCharClass->titlecase(aAddRplcTxt) );
+                                        break;
+                                    case CAPTYPE_ALLCAP:
+                                        aProposalList.Prepend( pCharClass->uppercase(aAddRplcTxt) );
+                                    default:
+                                        aProposalList.Prepend( aAddRplcTxt );
+                                }
+                            }
+                        }
+                        else    // positive entry found
+                        {
+                            xRes = NULL;
+                            eFailureType = -1;  // no failure
+                        }
+                    }
+                }
+            }
         }
 
         if (eFailureType != -1)     // word misspelled or found in negative user-dictionary
@@ -683,7 +723,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             Sequence< OUString > aProposals = aProposalList.GetSequence();
 
             // remove entries listed in negative dictionaries
-            // (we don't want to display suggestions that will be regarded as misspelledlater on)
+            // (we don't want to display suggestions that will be regarded as misspelled later on)
             if (bCheckDics  &&  xDList.is())
                 SeqRemoveNegEntries( aProposals, xDList, nLanguage );
 
