@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_d0781292",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-11-03T08:59:32Z",
+      "side": 1,
+      "message": "count might be better than number",
+      "revId": "31b036b0c3d607b5f5de8f8ecdf73ce6f61aa5de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
