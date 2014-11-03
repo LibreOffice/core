@@ -354,19 +354,16 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
 // #i75163#
 void OutputDevice::ImplInvalidateViewTransform()
 {
-    if(mpOutDevData)
+    if(mpOutDevData->mpViewTransform)
     {
-        if(mpOutDevData->mpViewTransform)
-        {
-            delete mpOutDevData->mpViewTransform;
-            mpOutDevData->mpViewTransform = NULL;
-        }
+        delete mpOutDevData->mpViewTransform;
+        mpOutDevData->mpViewTransform = NULL;
+    }
 
-        if(mpOutDevData->mpInverseViewTransform)
-        {
-            delete mpOutDevData->mpInverseViewTransform;
-            mpOutDevData->mpInverseViewTransform = NULL;
-        }
+    if(mpOutDevData->mpInverseViewTransform)
+    {
+        delete mpOutDevData->mpInverseViewTransform;
+        mpOutDevData->mpInverseViewTransform = NULL;
     }
 }
 

@@ -96,7 +96,6 @@ OutputDevice::OutputDevice() :
     mpGetDevFontList                = NULL;
     mpGetDevSizeList                = NULL;
     mpOutDevStateStack              = new boost::ptr_deque<OutDevState>();
-    mpOutDevData                    = NULL;
     mpPDFWriter                     = NULL;
     mpAlphaVDev                     = NULL;
     mpExtOutDevData                 = NULL;
@@ -191,16 +190,12 @@ OutputDevice::~OutputDevice()
         mpUnoGraphicsList = NULL;
     }
 
-    if ( mpOutDevData )
-    {
-        if ( mpOutDevData->mpRotateDev )
-            delete mpOutDevData->mpRotateDev;
+    delete mpOutDevData->mpRotateDev;
 
-        // #i75163#
-        ImplInvalidateViewTransform();
+    // #i75163#
+    ImplInvalidateViewTransform();
 
-        delete mpOutDevData;
-    }
+    delete mpOutDevData;
 
     // for some reason, we haven't removed state from the stack properly
     if ( !mpOutDevStateStack->empty() )
@@ -783,7 +778,7 @@ bool OutputDevice::HasMirroredGraphics() const
 
 bool OutputDevice::ImplIsRecordLayout() const
 {
-    return mpOutDevData && mpOutDevData->mpRecordLayout;
+    return mpOutDevData->mpRecordLayout;
 }
 
 // EPS public function

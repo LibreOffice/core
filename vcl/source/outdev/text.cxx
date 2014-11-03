@@ -233,7 +233,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     }
 
     // cache virtual device for rotation
-    if ( !mpOutDevData->mpRotateDev )
+    if (!mpOutDevData->mpRotateDev)
         mpOutDevData->mpRotateDev = new VirtualDevice( *this, 1 );
     VirtualDevice* pVDev = mpOutDevData->mpRotateDev;
 
@@ -849,7 +849,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     }
 
 
-    if( mpOutDevData && mpOutDevData->mpRecordLayout )
+    if (mpOutDevData->mpRecordLayout)
     {
         pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
@@ -867,7 +867,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
         vcl::Region aClip( GetClipRegion() );
         if( meOutDevType == OUTDEV_WINDOW )
             aClip.Intersect( Rectangle( Point(), GetOutputSize() ) );
-        if( mpOutDevData && mpOutDevData->mpRecordLayout )
+        if (mpOutDevData->mpRecordLayout)
         {
             mpOutDevData->mpRecordLayout->m_aLineIndices.push_back( mpOutDevData->mpRecordLayout->m_aDisplayText.getLength() );
             aClip.Intersect( mpOutDevData->maRecordRect );
@@ -1805,7 +1805,7 @@ void OutputDevice::DrawText( const Rectangle& rRect, const OUString& rOrigStr, s
                              MetricVector* pVector, OUString* pDisplayText,
                              ::vcl::ITextLayout* _pTextLayout )
 {
-    if( mpOutDevData && mpOutDevData->mpRecordLayout )
+    if (mpOutDevData->mpRecordLayout)
     {
         pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
         pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
