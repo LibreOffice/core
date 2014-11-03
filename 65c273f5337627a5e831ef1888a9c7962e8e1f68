@@ -1,0 +1,276 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9045fa18",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "\"yous\"? ... do you mean \"use\"?",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_306c0e9c",
+        "filename": "sw/inc/editsh.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "the name and description are misleading - it actually only returns RES_CHRATR_* items from auto-formats, not any formatting item.",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_704ba62c",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "this is pointlessly complicated - just use SwPaM::GetStart() and SwPaM::GetEnd()",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_30552ec6",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "if you\u0027re only interested in SwTxtNode then it\u0027s easier to do \"if (pNd-\u003eIsTxtNode())\" than a switch...",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5048a22d",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "please don\u0027t introduce new C-style casts, use C++ casts instead",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_f05d56ed",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "uhm... what is that supposed to do? surely you want the item with id nWhich?",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_10522ade",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "stylistic hint: if you write \"if (!pTxtNod-\u003eHasHints()) continue;\" you can lose another level of indentation, and it\u0027s easier to read",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_10690a8c",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "RES_CHRATR items may also occur in RES_TXTATR_CHARFMT and RES_TXTATR_INETFMT hints - is it deliberate that those are omitted here?",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_d06252ad",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "RES_TXTATR_AUTOFMT *must* have pAttrEnd !\u003d 0 so no need to check for this",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_905cdaee",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "why does that need to be a scoped_ptr? just use a stack variable, no pointer needed.",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_f00436c7",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "it\u0027s ugly to return a vector of pointers that the caller has to delete manually - better return vector\u003cstd::unique_ptr\u003cSwPaM\u003e\u003e",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_d00932df",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "don\u0027t you need to check that the attrset contains item with id nWhich before adding it?",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3003eeba",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "before calling CharFmt::GetItemSet() you need to check if it\u0027s one of the 3 supported RES_TXTATR_* because the darn thing just casts it to SwFmtCharFmt which is undefined behavior",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9013ba0d",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "this is going to crash on many RES_TXTATR_*, because only 3 or so have pAutoSet !\u003d 0",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7020464a",
+        "filename": "sw/source/uibase/shells/txtattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "with the inconsistent handling of RES_TXTATR_CHARFMT and RES_TXTATR_INETFMT in the 2 functions the loop below is not going to work - it would be a better design to have just one function that returns a vector\u003cpair\u003cSwPaM, SfxPoolItem\u003e\u003e",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1017caee",
+        "filename": "sw/source/uibase/shells/txtattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T12:19:36Z",
+      "side": 1,
+      "message": "please test if this actually works if you select a mixture of western and CJK or CTL text - it\u0027s not obvious to me, perhaps it would increase the font size of the wrong script type? or more likely, if you have different sizes for different script types on the same text range it would set them all to the same size?",
+      "revId": "65c273f5337627a5e831ef1888a9c7962e8e1f68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
