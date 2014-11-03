@@ -2078,7 +2078,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     else
     {
         comphelper::ThreadPool &rPool = comphelper::ThreadPool::getSharedOptimalPool();
-        RowFinalizeTask *pTasks[ nThreads ];
+        std::vector<RowFinalizeTask*> pTasks(nThreads, NULL);
         for ( size_t i = 0; i < nThreads; i++ )
             pTasks[ i ] = new RowFinalizeTask( rColXFIndexes, i == 0 );
 
