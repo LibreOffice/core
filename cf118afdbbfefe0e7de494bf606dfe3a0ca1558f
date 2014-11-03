@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_90b4dad1",
+        "filename": "unotest/source/python/org/libreoffice/unotest.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-03T14:25:03Z",
+      "side": 1,
+      "message": "this is broken - see my recent fix on master",
+      "revId": "cf118afdbbfefe0e7de494bf606dfe3a0ca1558f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
