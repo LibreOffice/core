@@ -500,64 +500,26 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     OUString getImplementationName_XMLBasicImporter()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "com.sun.star.comp.xmlscript.XMLBasicImporter" );
     }
 
     Sequence< OUString > getSupportedServiceNames_XMLBasicImporter()
     {
-        static Sequence< OUString >* pNames = 0;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< OUString > aNames(1);
-                aNames.getArray()[0] = "com.sun.star.document.XMLBasicImporter";
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        Sequence< OUString > aNames(1);
+        aNames.getArray()[0] = "com.sun.star.document.XMLBasicImporter";
+        return aNames;
     }
 
     OUString getImplementationName_XMLOasisBasicImporter()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicImporter" );
     }
 
     Sequence< OUString > getSupportedServiceNames_XMLOasisBasicImporter()
     {
-        static Sequence< OUString >* pNames = 0;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< OUString > aNames(1);
-                aNames.getArray()[0] = "com.sun.star.document.XMLOasisBasicImporter";
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        Sequence< OUString > aNames(1);
+        aNames.getArray()[0] = "com.sun.star.document.XMLOasisBasicImporter";
+        return aNames;
     }
 
     // XMLBasicImporterBase

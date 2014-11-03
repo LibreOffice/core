@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.DataSource" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.DataSource";
 }  // anonymous namespace
 
 namespace chart
@@ -69,7 +69,7 @@ Sequence< OUString > DataSource::getSupportedServiceNames_Static()
     return aServices;
 }
 
-APPHELPER_XSERVICEINFO_IMPL( DataSource, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( DataSource, OUString(lcl_aServiceName) );
 
 } // namespace chart
 

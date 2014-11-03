@@ -44,7 +44,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.Grid" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Grid";
 
 struct StaticGridWrapperPropertyArray_Initializer
 {
@@ -185,7 +185,7 @@ Sequence< OUString > GridWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( GridWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( GridWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

@@ -89,7 +89,7 @@ uno::Reference<form::XForm> FormControlHelper::FormControlHelper_Impl::getForm()
         if (xFormsSupplier.is())
         {
             uno::Reference<container::XNameContainer> xFormsNamedContainer(xFormsSupplier->getForms());
-            static OUString sDOCXForm("DOCX-Standard");
+            static const char sDOCXForm[] = "DOCX-Standard";
 
             OUString sFormName(sDOCXForm);
             sal_uInt16 nUnique = 0;
@@ -270,7 +270,7 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> const& xT
     if (! xFormComps.is())
         return false;
 
-    static OUString sControl("Control");
+    static const char sControl[] = "Control";
 
     sal_Int32 nControl = 0;
     bool bDone = false;

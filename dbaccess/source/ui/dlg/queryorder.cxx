@@ -205,8 +205,8 @@ OUString DlgOrderCrit::GetOrderList( ) const
 {
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
     OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : OUString();
-    static const OUString sDESC(" DESC ");
-    static const OUString sASC(" ASC ");
+    static const char sDESC[] = " DESC ";
+    static const char sASC[] = " ASC ";
 
     Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
 

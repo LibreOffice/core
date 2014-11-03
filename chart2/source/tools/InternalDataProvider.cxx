@@ -59,14 +59,14 @@ namespace
 {
 
 // note: in xmloff this name is used to indicate usage of own data
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.InternalDataProvider" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.InternalDataProvider";
 
-static const OUString lcl_aCategoriesRangeName( "categories" );
-static const OUString lcl_aCategoriesLevelRangeNamePrefix( "categoriesL " ); //L <-> level
-static const OUString lcl_aCategoriesPointRangeNamePrefix( "categoriesP " ); //P <-> point
-static const OUString lcl_aCategoriesRoleName( "categories" );
-static const OUString lcl_aLabelRangePrefix( "label " );
-static const OUString lcl_aCompleteRange( "all" );
+static const char lcl_aCategoriesRangeName[] = "categories";
+static const char lcl_aCategoriesLevelRangeNamePrefix[] = "categoriesL "; //L <-> level
+static const char lcl_aCategoriesPointRangeNamePrefix[] = "categoriesP "; //P <-> point
+static const char lcl_aCategoriesRoleName[] = "categories";
+static const char lcl_aLabelRangePrefix[] = "label ";
+static const char lcl_aCompleteRange[] = "all";
 
 typedef ::std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
@@ -780,7 +780,7 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
 {
     Sequence< beans::PropertyValue > aArguments( 4 );
     aArguments[0] = beans::PropertyValue(
-        "CellRangeRepresentation", -1, uno::makeAny( lcl_aCompleteRange ),
+        "CellRangeRepresentation", -1, uno::makeAny( OUString(lcl_aCompleteRange) ),
         beans::PropertyState_DIRECT_VALUE );
     aArguments[1] = beans::PropertyValue(
         "DataRowSource", -1, uno::makeAny(
@@ -821,7 +821,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
     else if( aRangeRepresentation.match( lcl_aLabelRangePrefix ))
     {
         // label
-        sal_Int32 nIndex = aRangeRepresentation.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
+        sal_Int32 nIndex = aRangeRepresentation.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
         return createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIndex ));
     }
     else if ( aRangeRepresentation == "last" )
@@ -868,7 +868,7 @@ sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUSt
     }
     else if( aRange.match( lcl_aLabelRangePrefix ))
     {
-        sal_Int32 nIndex = aRange.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
+        sal_Int32 nIndex = aRange.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
         bResult = (nIndex < (m_bDataInColumns ? m_aInternalData.getColumnCount(): m_aInternalData.getRowCount()));
     }
     else
@@ -887,7 +887,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
 
     if( aRange.match( lcl_aLabelRangePrefix ) )
     {
-        sal_Int32 nIndex = aRange.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
+        sal_Int32 nIndex = aRange.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
         vector< uno::Any > aComplexLabel = m_bDataInColumns
             ? m_aInternalData.getComplexColumnLabel( nIndex )
             : m_aInternalData.getComplexRowLabel( nIndex );
@@ -896,7 +896,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     }
     else if( aRange.match( lcl_aCategoriesPointRangeNamePrefix ) )
     {
-        sal_Int32 nPointIndex = aRange.copy( lcl_aCategoriesPointRangeNamePrefix.getLength() ).toInt32();
+        sal_Int32 nPointIndex = aRange.copy( strlen(lcl_aCategoriesPointRangeNamePrefix) ).toInt32();
         vector< uno::Any > aComplexCategory = m_bDataInColumns
             ? m_aInternalData.getComplexRowLabel( nPointIndex )
             : m_aInternalData.getComplexColumnLabel( nPointIndex );
@@ -905,7 +905,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     }
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
-        sal_Int32 nLevel = aRange.copy( lcl_aCategoriesLevelRangeNamePrefix.getLength() ).toInt32();
+        sal_Int32 nLevel = aRange.copy( strlen(lcl_aCategoriesLevelRangeNamePrefix) ).toInt32();
         vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         if( nLevel < lcl_getInnerLevelCount( aCategories ) )
         {
@@ -960,7 +960,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     vector< uno::Any > aNewVector( ContainerHelper::SequenceToVector(aNewData) );
     if( aRange.match( lcl_aLabelRangePrefix ) )
     {
-        sal_uInt32 nIndex = aRange.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
+        sal_uInt32 nIndex = aRange.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
         if( m_bDataInColumns )
             m_aInternalData.setComplexColumnLabel( nIndex, aNewVector );
         else
@@ -968,7 +968,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     }
     else if( aRange.match( lcl_aCategoriesPointRangeNamePrefix ) )
     {
-        sal_Int32 nPointIndex = aRange.copy( lcl_aCategoriesLevelRangeNamePrefix.getLength()).toInt32();
+        sal_Int32 nPointIndex = aRange.copy( strlen(lcl_aCategoriesLevelRangeNamePrefix)).toInt32();
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabel( nPointIndex, aNewVector );
         else
@@ -976,7 +976,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     }
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
-        sal_Int32 nLevel = aRange.copy( lcl_aCategoriesLevelRangeNamePrefix.getLength()).toInt32();
+        sal_Int32 nLevel = aRange.copy( strlen(lcl_aCategoriesLevelRangeNamePrefix)).toInt32();
         vector< vector< uno::Any > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
 
         //ensure equal length
@@ -1204,7 +1204,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
     }
     else if( aRangeRepresentation.match( lcl_aLabelRangePrefix ))
     {
-        sal_Int32 nIndex = aRangeRepresentation.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
+        sal_Int32 nIndex = aRangeRepresentation.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
         aRange.aUpperLeft.bIsEmpty = false;
         aRange.aLowerRight.bIsEmpty = true;
         if( m_bDataInColumns )
@@ -1265,7 +1265,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
     if( !aRange.aLowerRight.bIsEmpty &&
         ( aRange.aUpperLeft.nColumn != aRange.aLowerRight.nColumn ) &&
         ( aRange.aUpperLeft.nRow != aRange.aLowerRight.nRow ) )
-        return lcl_aCompleteRange;
+        return OUString(lcl_aCompleteRange);
 
     // attention: this data provider has the limitation that it stores
     // internally if data comes from columns or rows. It is intended for
@@ -1276,7 +1276,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
     if( m_bDataInColumns )
     {
         if( aRange.aUpperLeft.nColumn == 0 )
-            return lcl_aCategoriesRangeName;
+            return OUString(lcl_aCategoriesRangeName);
         if( aRange.aUpperLeft.nRow == 0 )
             return lcl_aLabelRangePrefix + OUString::number( aRange.aUpperLeft.nColumn - 1 );
 
@@ -1285,7 +1285,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
 
     // data in rows
     if( aRange.aUpperLeft.nRow == 0 )
-        return lcl_aCategoriesRangeName;
+        return OUString(lcl_aCategoriesRangeName);
     if( aRange.aUpperLeft.nColumn == 0 )
         return lcl_aLabelRangePrefix + OUString::number( aRange.aUpperLeft.nRow - 1 );
 
@@ -1549,7 +1549,7 @@ Sequence< OUString > InternalDataProvider::getSupportedServiceNames_Static()
     return aServices;
 }
 
-APPHELPER_XSERVICEINFO_IMPL( InternalDataProvider, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( InternalDataProvider, OUString(lcl_aServiceName) );
 
 } //  namespace chart
 

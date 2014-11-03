@@ -242,9 +242,9 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
     ::sfx2::FileDialogHelper        aDlg( (o_pbLink)
             ? ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW
             : ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    static const OUString           aWildcard( "*."  );
+    static const char               aWildcard[] = "*.";
     FilterNameVector                aFilters;
-    const OUString                  aSeparator( ";"  );
+    static const char               aSeparator[] = ";";
     OUString                        aAllTypes;
 
     aDlg.SetTitle( AVMEDIA_RESSTR( (o_pbLink)

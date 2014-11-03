@@ -41,7 +41,7 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ChartLine" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.ChartLine";
 
 struct StaticMinMaxLineWrapperDefaults_Initializer
 {
@@ -418,7 +418,7 @@ Sequence< OUString > MinMaxLineWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( MinMaxLineWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( MinMaxLineWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

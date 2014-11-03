@@ -127,7 +127,7 @@ WrappedStackedTextProperty::~WrappedStackedTextProperty()
 
 namespace
 {
-static const OUString lcl_aServiceName("com.sun.star.comp.chart.Title");
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Title";
 
 enum
 {
@@ -523,7 +523,7 @@ Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( TitleWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( TitleWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

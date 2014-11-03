@@ -152,8 +152,8 @@ namespace sfx2
     void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const OUString& _rLogicalClassName,
         FilterClass& /* [out] */ _rClass )
     {
-        static const OUString sDisplaNameNodeName( "DisplayName"  );
-        static const OUString sSubFiltersNodeName( "Filters"  );
+        static const char sDisplaNameNodeName[] = "DisplayName";
+        static const char sSubFiltersNodeName[] = "Filters";
 
             // the description node for the current class
         OConfigurationNode aClassDesc = _rClassesNode.openNode( _rLogicalClassName );
@@ -403,11 +403,9 @@ namespace sfx2
 
     static const sal_Unicode s_cWildcardSeparator( ';' );
 
-
-    const OUString& getSeparatorString()
+    static OUString getSeparatorString()
     {
-        static OUString s_sSeparatorString( &s_cWildcardSeparator, 1 );
-        return s_sSeparatorString;
+        return OUString(";");
     }
 
 
@@ -1177,9 +1175,9 @@ namespace sfx2
                                   const OUString& _rExtension,
                                   bool _bForOpen, FileDialogHelper_Impl& _rFileDlgImpl )
     {
-        static OUString sAllFilter( "(*.*)" );
-        static OUString sOpenBracket( " ("  );
-        static OUString sCloseBracket( ")" );
+        static const char sAllFilter[] = "(*.*)";
+        static const char sOpenBracket[] = " (";
+        static const char sCloseBracket[] = ")";
         OUString sRet = _rDisplayText;
 
         if ( sRet.indexOf( sAllFilter ) == -1 )

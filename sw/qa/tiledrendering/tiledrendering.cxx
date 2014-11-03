@@ -148,7 +148,7 @@ IMPL_LINK ( TiledRenderingDialog,  ChooseDocumentHdl, Button *, EMPTYARG )
 
 void TiledRenderingApp::Open(OUString & aFileUrl)
 {
-    static const OUString TARGET("_default");
+    static const char TARGET[] = "_default";
     static const Sequence<beans::PropertyValue> PROPS (0);
     if(xComponent.get())
     {

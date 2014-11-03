@@ -40,7 +40,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.Area" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Area";
 
 struct StaticAreaWrapperPropertyArray_Initializer
 {
@@ -179,7 +179,7 @@ Sequence< OUString > AreaWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( AreaWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( AreaWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

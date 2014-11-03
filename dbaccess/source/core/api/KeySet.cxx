@@ -221,7 +221,7 @@ namespace
 {
     void appendOneKeyColumnClause( const OUString &tblName, const OUString &colName, const connectivity::ORowSetValue &_rValue, OUStringBuffer &o_buf )
     {
-        static const OUString s_sDot(".");
+        static const char s_sDot[] = ".";
         OUString fullName;
         if (tblName.isEmpty())
             fullName = colName;
@@ -255,7 +255,7 @@ OUStringBuffer OKeySet::createKeyFilter()
 {
     connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->get().begin();
 
-    static const OUString aAnd(" AND ");
+    static const char aAnd[] = " AND ";
     const OUString aQuote    = getIdentifierQuoteString();
     OUStringBuffer aFilter;
     // create the where clause
@@ -471,9 +471,9 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
 
     // list all columns that should be set
     const OUString aQuote    = getIdentifierQuoteString();
-    static OUString aAnd(" AND ");
-    static OUString aOr(" OR ");
-    static OUString aEqual(" = ?");
+    static const char aAnd[] = " AND ";
+    static const char aOr[] = " OR ";
+    static const char aEqual[] = " = ?";
 
     // use keys for exact positioning
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
@@ -486,7 +486,7 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     {
         aCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aEqual + aAnd);
     }
-    aCondition.setLength(aCondition.getLength() - aAnd.getLength());
+    aCondition.setLength(aCondition.getLength() - strlen(aAnd));
     // sCon is (parenthesised) the condition to locate ONE row
     // e.g. ( colName1 = ? AND colName2 = ? AND colName3 = ? )
     const OUString sCon( aCondition.makeStringAndClear() );
@@ -728,9 +728,9 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
 
     // set values and column names
     OUStringBuffer aValues(" VALUES ( ");
-    static OUString aPara("?,");
+    static const char aPara[] = "?,";
     OUString aQuote = getIdentifierQuoteString();
-    static OUString aComma(",");
+    static const char aComma[] = ",";
 
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
@@ -967,7 +967,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
 
     // list all columns that should be set
     OUString aQuote  = getIdentifierQuoteString();
-    static OUString aAnd(" AND ");
+    static const char aAnd[] = " AND ";
 
     // use keys and indexes for exact positioning
     Reference<XNameAccess> xKeyColumns = getKeyColumns();

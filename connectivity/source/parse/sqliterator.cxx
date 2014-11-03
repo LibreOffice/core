@@ -262,9 +262,9 @@ namespace
     {
         OUString sComposedName;
 
-        static const OUString s_sTableTypeView("VIEW");
-        static const OUString s_sTableTypeTable("TABLE");
-        static const OUString s_sWildcard(  "%" );
+        static const char s_sTableTypeView[] = "VIEW";
+        static const char s_sTableTypeTable[] = "TABLE";
+        static const char s_sWildcard[] = "%" ;
 
         // we want all catalogues, all schemas, all tables
         Sequence< OUString > sTableTypes(3);

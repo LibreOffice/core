@@ -44,7 +44,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.WallOrFloor" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.WallOrFloor";
 
 struct StaticWallFloorWrapperPropertyArray_Initializer
 {
@@ -166,7 +166,7 @@ Sequence< OUString > WallFloorWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( WallFloorWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( WallFloorWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

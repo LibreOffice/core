@@ -682,7 +682,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
         OUString         sFormatDescription;
         LanguageType    eFormatLanguage = LANGUAGE_DONTKNOW;
-        static const OUString s_aLocaleProp ("Locale");
+        static const char s_aLocaleProp[] = "Locale";
         Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
         if (hasProperty(s_aLocaleProp, xFormat))
         {
@@ -694,7 +694,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
                 eFormatLanguage = LanguageTag::convertToLanguageType( *pLocale, false);
             }
         }
-        static const OUString s_aFormatStringProp ("FormatString");
+        static const char s_aFormatStringProp[] = "FormatString";
         if (hasProperty(s_aFormatStringProp, xFormat))
             xFormat->getPropertyValue(s_aFormatStringProp) >>= sFormatDescription;
         _rxOutStream->writeUTF(sFormatDescription);

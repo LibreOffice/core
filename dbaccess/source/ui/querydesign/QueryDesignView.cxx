@@ -71,8 +71,8 @@ using namespace ::com::sun::star::container;
 // please look at the book LargeScale C++ to know why
 namespace
 {
-    static const OUString C_AND(" AND ");
-    static const OUString C_OR(" OR ");
+    static const char C_AND[] = " AND ";
+    static const char C_OR[] = " OR ";
 
     // forward declarations
     bool InsertJoin(    const OQueryDesignView* _pView,
@@ -108,8 +108,7 @@ namespace
         if ( _bQuote && !_sAliasName.isEmpty() )
         {
             sRet = ::dbtools::quoteName(_sQuote,_sAliasName);
-            const static OUString sTableSeparater('.');
-            sRet += sTableSeparater;
+            sRet += ".";
         }
         return sRet;
     }
@@ -639,8 +638,8 @@ namespace
 
             OJoinTableView::OTableWindowMap& rTabList = _pView->getTableView()->GetTabWinMap();
 
-            const static OUString sFieldSeparator(", ");
-            const static OUString s_sAs(" AS ");
+            static const char sFieldSeparator[] = ", ";
+            static const char s_sAs[] = " AS ";
 
             aIter = _rFieldList.begin();
             for(;aIter != aEnd;++aIter)

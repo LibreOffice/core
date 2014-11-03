@@ -51,9 +51,9 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-    static const OUString s_sTableTypeView("VIEW");
-    static const OUString s_sTableTypeTable("TABLE");
-    static const OUString s_sAll("%");
+    static const char s_sTableTypeView[] = "VIEW";
+    static const char s_sTableTypeTable[] = "TABLE";
+    static const char s_sAll[] = "%";
 
     Sequence< OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;

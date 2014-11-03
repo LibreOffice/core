@@ -185,7 +185,7 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 
 void OLEHandler::saveInteropProperties(uno::Reference<text::XTextDocument> const& xTextDocument, const OUString& sObjectName, const OUString& sOldObjectName)
 {
-    static const OUString sEmbeddingsPropName = "EmbeddedObjects";
+    static const char sEmbeddingsPropName[] = "EmbeddedObjects";
 
     // get interop grab bag from document
     uno::Reference< beans::XPropertySet > xDocProps( xTextDocument, uno::UNO_QUERY );
@@ -293,9 +293,9 @@ OUString OLEHandler::copyOLEOStream(
 
             saveInteropProperties( xTextDocument, aURL );
 
-            static const OUString sProtocol("vnd.sun.star.EmbeddedObject:");
+            static const char sProtocol[] = "vnd.sun.star.EmbeddedObject:";
             OUString aPersistName( xEmbeddedResolver->resolveEmbeddedObjectURL( aURL ) );
-            sRet = aPersistName.copy( sProtocol.getLength() );
+            sRet = aPersistName.copy( strlen(sProtocol) );
 
         }
         uno::Reference< lang::XComponent > xComp( xEmbeddedResolver, uno::UNO_QUERY_THROW );

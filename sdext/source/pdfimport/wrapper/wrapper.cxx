@@ -681,10 +681,10 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     static const OString aPbmMarker( "PBM" );
     static const OString aPpmMarker( "PPM" );
     static const OString aPngMarker( "PNG" );
-    static const OUString aJpegFile( "DUMMY.JPEG" );
-    static const OUString aPbmFile( "DUMMY.PBM" );
-    static const OUString aPpmFile( "DUMMY.PPM" );
-    static const OUString aPngFile( "DUMMY.PNG" );
+    static const char aJpegFile[] = "DUMMY.JPEG";
+    static const char aPbmFile[] = "DUMMY.PBM";
+    static const char aPpmFile[] = "DUMMY.PPM";
+    static const char aPngFile[] = "DUMMY.PNG";
 
     OString aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );

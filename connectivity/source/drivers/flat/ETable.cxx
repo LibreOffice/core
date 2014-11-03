@@ -332,14 +332,12 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                 if(io_nPrecisions)
                 {
                     io_nType = DataType::DECIMAL;
-                    static const OUString s_sDECIMAL("DECIMAL");
-                    o_sTypeName = s_sDECIMAL;
+                    o_sTypeName = "DECIMAL";
                 }
                 else
                 {
                     io_nType = DataType::DOUBLE;
-                    static const OUString s_sDOUBLE("DOUBLE");
-                    o_sTypeName = s_sDOUBLE;
+                    o_sTypeName = "DOUBLE";
                 }
             }
             else
@@ -356,33 +354,21 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
             {
                 case NUMBERFORMAT_DATE:
                     io_nType = DataType::DATE;
-                    {
-                        static const OUString s_sDATE("DATE");
-                        o_sTypeName = s_sDATE;
-                    }
+                    o_sTypeName = "DATE";
                     break;
                 case NUMBERFORMAT_DATETIME:
                     io_nType = DataType::TIMESTAMP;
-                    {
-                        static const OUString s_sTIMESTAMP("TIMESTAMP");
-                        o_sTypeName = s_sTIMESTAMP;
-                    }
+                    o_sTypeName = "TIMESTAMP";
                     break;
                 case NUMBERFORMAT_TIME:
                     io_nType = DataType::TIME;
-                    {
-                        static const OUString s_sTIME("TIME");
-                        o_sTypeName = s_sTIME;
-                    }
+                    o_sTypeName = "TIME";
                     break;
                 default:
                     io_nType = DataType::VARCHAR;
                     io_nPrecisions = 0; // nyi: Data can be longer!
                     io_nScales = 0;
-                    {
-                        static const OUString s_sVARCHAR("VARCHAR");
-                        o_sTypeName = s_sVARCHAR;
-                    }
+                    o_sTypeName = "VARCHAR";
             };
             nFlags |= ColumnSearch::CHAR;
         }
@@ -477,7 +463,7 @@ OUString OFlatTable::getEntry()
 
         INetURLObject aURL;
         xDir->beforeFirst();
-        static const OUString s_sSeparator("/");
+        static const char s_sSeparator[] = "/";
         while(xDir->next())
         {
             sName = xRow->getString(1);

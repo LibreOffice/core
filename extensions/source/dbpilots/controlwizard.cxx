@@ -571,7 +571,7 @@ namespace dbp
             if (xColumns.is())
             {
                 m_aContext.aFieldNames = xColumns->getElementNames();
-                static const OUString s_sFieldTypeProperty("Type");
+                static const char s_sFieldTypeProperty[] = "Type";
                 const OUString* pBegin = m_aContext.aFieldNames.getConstArray();
                 const OUString* pEnd   = pBegin + m_aContext.aFieldNames.getLength();
                 for(;pBegin != pEnd;++pBegin)

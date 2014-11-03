@@ -48,10 +48,9 @@ SaxAttrList::~SaxAttrList()
 }
 
 namespace {
-    static const OUString& getCDATAString()
+    static OUString getCDATAString()
     {
-        static OUString aStr( "CDATA" );
-        return aStr;
+        return OUString( "CDATA" );
     }
 }
 

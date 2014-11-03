@@ -1084,8 +1084,8 @@ inline OUString getDirFromFile(const OUString& usFilePath)
 void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
 // Get Java from PATH environment variable
-    static OUString sCurDir(".");
-    static OUString sParentDir("..");
+    static const char sCurDir[] = ".";
+    static const char sParentDir[] = "..";
     char *szPath= getenv("PATH");
     if(szPath)
     {

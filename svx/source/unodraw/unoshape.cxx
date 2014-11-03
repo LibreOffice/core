@@ -3146,8 +3146,7 @@ uno::Sequence<uno::Any> SvxShape::getPropertyDefaults(
 OUString SAL_CALL SvxShape::getImplementationName()
     throw(uno::RuntimeException, std::exception)
 {
-    static OUString aServiceName("SvxShape");
-    return aServiceName;
+    return OUString("SvxShape");
 }
 
 #define STAR_NAMESPACE "com.sun.star."
@@ -4007,8 +4006,7 @@ void SAL_CALL SvxShapeText::release() throw()
 
 OUString SAL_CALL SvxShapeText::getImplementationName() throw( uno::RuntimeException, std::exception )
 {
-    static OUString aServiceName("SvxShapeText");
-    return aServiceName;
+    return OUString("SvxShapeText");
 }
 
 

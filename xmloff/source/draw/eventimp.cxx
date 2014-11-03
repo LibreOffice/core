@@ -155,7 +155,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
     , meDirection(ED_none), mnStartScale(100), meSpeed(AnimationSpeed_MEDIUM)
     , mnVerb(0), mbPlayFull(false)
 {
-    static const OUString sXMLClickName( "click" );
+    static const char sXMLClickName[] = "click";
 
     if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {

@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.ErrorBar" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.ErrorBar";
 
 bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
 {
@@ -468,7 +468,7 @@ uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ErrorBar, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( ErrorBar, OUString(lcl_aServiceName) );
 
 // needed by MSC compiler
 using impl::ErrorBar_Base;

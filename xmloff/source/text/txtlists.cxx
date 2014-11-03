@@ -442,7 +442,7 @@ XMLTextListsHelper::MakeNumRule(
     bool* o_pRestartNumbering,
     bool* io_pSetDefaults)
 {
-    static OUString s_NumberingRules( "NumberingRules");
+    static const char s_NumberingRules[] = "NumberingRules";
     uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
     if ( !i_StyleName.isEmpty() && i_StyleName != i_ParentStyleName )
     {

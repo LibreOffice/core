@@ -2169,10 +2169,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
         bool bAutoStyles, bool bIsProgress,
         bool bPrvChrIsSpc )
 {
-    static const OUString sMeta("InContentMetadata");
-    static const OUString sFieldMarkName("__FieldMark_");
-    static OUString sAnnotation("Annotation");
-    static OUString sAnnotationEnd("AnnotationEnd");
+    static const char sMeta[] = "InContentMetadata";
+    static const char sFieldMarkName[] = "__FieldMark_";
+    static const char sAnnotation[] = "Annotation";
+    static const char sAnnotationEnd[] = "AnnotationEnd";
 
     bool bPrevCharIsSpace = bPrvChrIsSpc;
 
@@ -3717,7 +3717,7 @@ void XMLTextParagraphExport::exportMeta(
     const Reference<XPropertySet> & i_xPortion,
     bool i_bAutoStyles, bool i_isProgress)
 {
-    static OUString sMeta("InContentMetadata");
+    static const char sMeta[] = "InContentMetadata";
 
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2

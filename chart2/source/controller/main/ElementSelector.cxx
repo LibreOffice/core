@@ -47,7 +47,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ElementSelectorToolbarController" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.ElementSelectorToolbarController";
 }
 
 SelectorListBox::SelectorListBox( vcl::Window* pParent, WinBits nStyle )
@@ -246,7 +246,7 @@ Reference< ::com::sun::star::accessibility::XAccessible > SelectorListBox::Creat
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ElementSelectorToolbarController, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( ElementSelectorToolbarController, OUString(lcl_aServiceName) );
 
 Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {

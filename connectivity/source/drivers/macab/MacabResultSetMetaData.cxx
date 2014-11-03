@@ -44,7 +44,7 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
-    static const OUString aName("Name");
+    static const char aName[] = "Name";
     MacabRecords *aRecords;
     MacabHeader *aHeader;
 

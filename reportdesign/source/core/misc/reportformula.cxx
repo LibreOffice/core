@@ -31,22 +31,8 @@ namespace rptui
     namespace
     {
 
-        const OUString&  lcl_getExpressionPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
-        {
-            static OUString s_sPrefix( "rpt:" );
-            if ( _pTakeLengthOrNull )
-                *_pTakeLengthOrNull = s_sPrefix.getLength();
-            return s_sPrefix;
-        }
-
-
-        const OUString&  lcl_getFieldPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
-        {
-            static OUString s_sPrefix( "field:" );
-            if ( _pTakeLengthOrNull )
-                *_pTakeLengthOrNull = s_sPrefix.getLength();
-            return s_sPrefix;
-        }
+        static const char sExpressionPrefix[] = "rpt:";
+        static const char sFieldPrefix[] =  "field:";
     }
 
 
@@ -67,17 +53,17 @@ namespace rptui
         {
         case Expression:
         {
-            if ( _rFieldOrExpression.startsWith( lcl_getExpressionPrefix() ) )
+            if ( _rFieldOrExpression.startsWith( sExpressionPrefix ) )
                 m_sCompleteFormula = _rFieldOrExpression;
             else
-                m_sCompleteFormula = lcl_getExpressionPrefix() + _rFieldOrExpression;
+                m_sCompleteFormula = sExpressionPrefix + _rFieldOrExpression;
         }
         break;
 
         case Field:
         {
             OUStringBuffer aBuffer;
-            aBuffer.append( lcl_getFieldPrefix() );
+            aBuffer.append( sFieldPrefix );
             aBuffer.appendAscii( "[" );
             aBuffer.append( _rFieldOrExpression );
             aBuffer.appendAscii( "]" );
@@ -100,18 +86,19 @@ namespace rptui
     {
         m_sCompleteFormula = _rFormula;
 
-        sal_Int32 nPrefixLen( -1 );
         // is it an ordinary expression?
-        if ( m_sCompleteFormula.startsWith( lcl_getExpressionPrefix( &nPrefixLen ) ) )
+        if ( m_sCompleteFormula.startsWith( sExpressionPrefix ) )
         {
+            sal_Int32 nPrefixLen = strlen(sExpressionPrefix);
             m_eType = Expression;
             m_sUndecoratedContent = m_sCompleteFormula.copy( nPrefixLen );
             return;
         }
 
         /// does it refer to a field?
-        if ( m_sCompleteFormula.startsWith( lcl_getFieldPrefix( &nPrefixLen ) ) )
+        if ( m_sCompleteFormula.startsWith( sFieldPrefix ) )
         {
+            sal_Int32 nPrefixLen = strlen(sFieldPrefix);
             if  (   ( m_sCompleteFormula.getLength() >= nPrefixLen + 2 )
                 &&  ( m_sCompleteFormula[ nPrefixLen ] == '[' )
                 &&  ( m_sCompleteFormula[ m_sCompleteFormula.getLength() - 1 ] == ']' )

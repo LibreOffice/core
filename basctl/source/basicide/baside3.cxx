@@ -702,8 +702,6 @@ void DialogWindow::UpdateBrowser()
     rLayout.UpdatePropertyBrowser();
 }
 
-static OUString aResourceResolverPropName( "ResourceResolver" );
-
 bool DialogWindow::SaveDialog()
 {
     bool bDone = false;
@@ -771,7 +769,7 @@ bool DialogWindow::SaveDialog()
             {
                 try
                 {
-                    Any aResourceResolver = xDialogModelPropSet->getPropertyValue( aResourceResolverPropName );
+                    Any aResourceResolver = xDialogModelPropSet->getPropertyValue( "ResourceResolver" );
                     aResourceResolver >>= xStringResourceResolver;
                 }
                 catch(const beans::UnknownPropertyException& )

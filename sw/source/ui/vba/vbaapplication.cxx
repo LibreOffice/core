@@ -59,8 +59,7 @@ SfxObjectShell* SwVbaApplication::GetDocShell( const uno::Reference< frame::XMod
 OUString SAL_CALL
 SwVbaApplication::getName() throw (uno::RuntimeException, std::exception)
 {
-    static OUString appName("Microsoft Word" );
-    return appName;
+    return OUString("Microsoft Word" );
 }
 
 uno::Reference< word::XDocument > SAL_CALL

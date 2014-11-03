@@ -25,8 +25,8 @@
 namespace
 {
 
-static const OUString lcl_aServiceName_DateScaling( "com.sun.star.chart2.DateScaling" );
-static const OUString lcl_aServiceName_InverseDateScaling( "com.sun.star.chart2.InverseDateScaling" );
+static const char lcl_aServiceName_DateScaling[] = "com.sun.star.chart2.DateScaling";
+static const char lcl_aServiceName_InverseDateScaling[] = "com.sun.star.chart2.InverseDateScaling";
 
 static const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
 }
@@ -100,16 +100,18 @@ uno::Reference< XScaling > SAL_CALL DateScaling::getInverseScaling()
 OUString SAL_CALL DateScaling::getServiceName()
     throw (uno::RuntimeException, std::exception)
 {
-    return lcl_aServiceName_DateScaling;
+    return OUString(lcl_aServiceName_DateScaling);
 }
 
 uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_DateScaling, 1 );
+    uno::Sequence< OUString > aSeq(1);
+    aSeq.getArray()[0] = lcl_aServiceName_DateScaling;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DateScaling, lcl_aServiceName_DateScaling )
+APPHELPER_XSERVICEINFO_IMPL( DateScaling, OUString(lcl_aServiceName_DateScaling) )
 
 InverseDateScaling::InverseDateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShifted )
         : m_aNullDate( rNullDate )
@@ -179,16 +181,18 @@ uno::Reference< XScaling > SAL_CALL InverseDateScaling::getInverseScaling()
 OUString SAL_CALL InverseDateScaling::getServiceName()
     throw (uno::RuntimeException, std::exception)
 {
-    return lcl_aServiceName_InverseDateScaling;
+    return OUString(lcl_aServiceName_InverseDateScaling);
 }
 
 uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_InverseDateScaling, 1 );
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq.getArray()[0] = lcl_aServiceName_InverseDateScaling;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( InverseDateScaling, lcl_aServiceName_InverseDateScaling )
+APPHELPER_XSERVICEINFO_IMPL( InverseDateScaling, OUString(lcl_aServiceName_InverseDateScaling) )
 
 } //namespace chart
 

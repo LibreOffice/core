@@ -156,8 +156,7 @@ ErrObject::Raise( const uno::Any& Number, const uno::Any& Source, const uno::Any
 OUString SAL_CALL
 ErrObject::getDefaultPropertyName(  ) throw (uno::RuntimeException, std::exception)
 {
-    static OUString sDfltPropName( "Number" );
-    return sDfltPropName;
+    return OUString( "Number" );
 }
 
 void ErrObject::setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description, const uno::Any& HelpFile, const uno::Any& HelpContext )

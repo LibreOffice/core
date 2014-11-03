@@ -167,7 +167,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    static const OUString aTable("TABLE");
+    static const char aTable[] = "TABLE";
 
     bool bTableFound = true;
     sal_Int32 nLength = types.getLength();
@@ -296,7 +296,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
         if(bNewRow)
         {
-            aRow.push_back(new ORowSetValueDecorator(aTable));
+            aRow.push_back(new ORowSetValueDecorator(OUString(aTable)));
             aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
 
             aRows.push_back(aRow);
@@ -499,8 +499,7 @@ OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, Runt
 
 OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
-    static const OUString sQuote("\"");
-    return sQuote;
+    return OUString("\"");
 }
 
 OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException, std::exception)
@@ -853,8 +852,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 
 OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    static const OUString aValue(  "sdbc:file:" );
-    return aValue;
+    return OUString(  "sdbc:file:" );
 }
 
 OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException, std::exception)

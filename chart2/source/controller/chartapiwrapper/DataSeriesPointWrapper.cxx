@@ -65,7 +65,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.DataSeries" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.DataSeries";
 
 enum
 {
@@ -881,7 +881,7 @@ uno::Sequence< OUString > DataSeriesPointWrapper::getSupportedServiceNames_Stati
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DataSeriesPointWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( DataSeriesPointWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

@@ -79,40 +79,34 @@ namespace drawinglayer
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
             // the local UNO API strings
-            const OUString& getNamePropertyObjectTransformation()
+            static OUString getNamePropertyObjectTransformation()
             {
-                static OUString s_sNameProperty("ObjectTransformation");
-                return s_sNameProperty;
+                return OUString("ObjectTransformation");
             }
 
-            const OUString& getNamePropertyViewTransformation()
+            static OUString getNamePropertyViewTransformation()
             {
-                static OUString s_sNameProperty("ViewTransformation");
-                return s_sNameProperty;
+                return OUString("ViewTransformation");
             }
 
-            const OUString& getNamePropertyViewport()
+            static OUString getNamePropertyViewport()
             {
-                static OUString s_sNameProperty("Viewport");
-                return s_sNameProperty;
+                return OUString("Viewport");
             }
 
-            const OUString& getNamePropertyTime()
+            static OUString getNamePropertyTime()
             {
-                static OUString s_sNameProperty("Time");
-                return s_sNameProperty;
+                return OUString("Time");
             }
 
-            const OUString& getNamePropertyVisualizedPage()
+            static OUString getNamePropertyVisualizedPage()
             {
-                static OUString s_sNameProperty("VisualizedPage");
-                return s_sNameProperty;
+                return OUString("VisualizedPage");
             }
 
-            const OUString& getNamePropertyReducedDisplayQuality()
+            static OUString getNamePropertyReducedDisplayQuality()
             {
-                static OUString s_sNameProperty("ReducedDisplayQuality");
-                return s_sNameProperty;
+                return OUString("ReducedDisplayQuality");
             }
 
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)

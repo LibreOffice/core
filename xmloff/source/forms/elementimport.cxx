@@ -450,10 +450,10 @@ namespace xmloff
     {
         // no optimization here. If this method gets called, the XML stream did not contain a name for the
         // element, which is a heavy error. So in this case we don't care for performance
-        static const OUString sUnnamedName("unnamed");
+        static const char sUnnamedName[] = "unnamed";
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::implGetDefaultName: no parent container!");
         if (!m_xParentContainer.is())
-            return sUnnamedName;
+            return OUString(sUnnamedName);
         Sequence< OUString > aNames = m_xParentContainer->getElementNames();
 
         OUString sReturn;
@@ -478,7 +478,7 @@ namespace xmloff
             return sReturn;
         }
         OSL_FAIL("OElementImport::implGetDefaultName: did not find a free name!");
-        return sUnnamedName;
+        return OUString(sUnnamedName);
     }
 
     PropertyGroups::const_iterator OElementImport::impl_matchPropertyGroup( const PropertyGroups& i_propertyGroups ) const
@@ -1546,12 +1546,12 @@ namespace xmloff
             const Reference< XAttributeList >& _rxAttrList)
     {
         // is it the "option" sub tag of a listbox ?
-        static const OUString s_sOptionElementName("option");
+        static const char s_sOptionElementName[] = "option";
         if (s_sOptionElementName == _rLocalName)
             return new OListOptionImport(GetImport(), _nPrefix, _rLocalName, this);
 
         // is it the "item" sub tag of a combobox ?
-        static const OUString s_sItemElementName("item");
+        static const char s_sItemElementName[] = "item";
         if (s_sItemElementName == _rLocalName)
             return new OComboItemImport(GetImport(), _nPrefix, _rLocalName, this);
 

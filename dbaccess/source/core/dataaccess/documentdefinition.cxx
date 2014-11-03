@@ -1365,7 +1365,7 @@ bool ODocumentDefinition::saveAs()
                         try
                         {
                             Reference< XStorage> xStorage = getContainerStorage();
-                            const static OUString sBaseName("Obj");
+                            static const char sBaseName[] = "Obj";
 
                             OUString sPersistentName = ::dbtools::createUniqueName(xStorage,sBaseName);
                             xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);

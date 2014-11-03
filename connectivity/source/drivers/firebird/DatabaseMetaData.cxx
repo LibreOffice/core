@@ -1034,7 +1034,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
-    static const OUString wld("%");
+    static const char wld[] = "%";
     OUStringBuffer queryBuf(
             "SELECT "
             "priv.RDB$RELATION_NAME, "  // 1 Table name
@@ -1295,7 +1295,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     uno::Reference< XResultSet > xResultSet = pResultSet;
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
-    static const OUString wld("%");
+    static const char wld[] = "%";
     OUStringBuffer queryBuf(
             "SELECT "
             "RDB$RELATION_NAME, "
@@ -1662,7 +1662,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
     // TODO: column specific privileges are included, we may need
     // to have WHERE RDB$FIELD_NAME = NULL or similar.
-    static const OUString wld("%");
+    static const char wld[] = "%";
     OUStringBuffer queryBuf(
             "SELECT "
             "priv.RDB$RELATION_NAME, "  // 1

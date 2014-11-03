@@ -51,9 +51,7 @@ KabDatabaseMetaData::~KabDatabaseMetaData()
 
 const OUString & KabDatabaseMetaData::getAddressBookTableName()
 {
-    static const OUString aAddressBookTableName
-        (OUString::createFromAscii( i18n("Address Book") ));
-
+    static const OUString aAddressBookTableName("Address Book");
     return aAddressBookTableName;
 }
 

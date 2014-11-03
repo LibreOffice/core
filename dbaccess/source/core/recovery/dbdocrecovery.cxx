@@ -106,23 +106,9 @@ namespace dbaccess
             return true;
         }
 
-        static const OUString& lcl_getRecoveryDataSubStorageName()
-        {
-            static const OUString s_sRecDataStorName( "recovery" );
-            return s_sRecDataStorName;
-        }
+        static const char sRecoveryDataSubStorageName[] = "recovery";
 
-        static const OUString& lcl_getObjectMapStreamName()
-        {
-            static const OUString s_sObjectMapStreamName( "storage-component-map.ini" );
-            return s_sObjectMapStreamName;
-        }
-
-        static const OUString& lcl_getMapStreamEncodingName()
-        {
-            static const OUString s_sMapStreamEncodingName( "UTF-8" );
-            return s_sMapStreamEncodingName;
-        }
+        static const char sObjectMapStreamName[] = "storage-component-map.ini";
 
         static void lcl_writeObjectMap_throw( const Reference<XComponentContext> & i_rContext, const Reference< XStorage >& i_rStorage,
             const MapStringToCompDesc& i_mapStorageToCompDesc )
@@ -131,7 +117,7 @@ namespace dbaccess
                 // nothing to do
                 return;
 
-            StorageTextOutputStream aTextOutput( i_rContext, i_rStorage, lcl_getObjectMapStreamName() );
+            StorageTextOutputStream aTextOutput( i_rContext, i_rStorage, sObjectMapStreamName );
 
             aTextOutput.writeLine( "[storages]" );
 
@@ -171,17 +157,17 @@ namespace dbaccess
             MapStringToCompDesc& o_mapStorageToObjectName )
         {
             ENSURE_OR_THROW( i_rStorage.is(), "invalid storage" );
-            if ( !i_rStorage->hasByName( lcl_getObjectMapStreamName() ) )
+            if ( !i_rStorage->hasByName( sObjectMapStreamName ) )
             {   // nothing to do, though suspicious
                 OSL_FAIL( "lcl_readObjectMap_throw: if there's no map file, then there's expected to be no storage, too!" );
                 return;
             }
 
             Reference< XStream > xIniStream( i_rStorage->openStreamElement(
-                lcl_getObjectMapStreamName(), ElementModes::READ ), UNO_SET_THROW );
+                sObjectMapStreamName, ElementModes::READ ), UNO_SET_THROW );
 
             Reference< XTextInputStream2 > xTextInput = TextInputStream::create( i_rxContext );
-            xTextInput->setEncoding( lcl_getMapStreamEncodingName() );
+            xTextInput->setEncoding( "UTF-8" );
             xTextInput->setInputStream( xIniStream->getInputStream() );
 
             OUString sCurrentSection;
@@ -258,9 +244,9 @@ namespace dbaccess
         ENSURE_OR_THROW( i_rTargetStorage.is(), "invalid document storage" );
 
         // create a sub storage for recovery data
-        if ( i_rTargetStorage->hasByName( lcl_getRecoveryDataSubStorageName() ) )
-            i_rTargetStorage->removeElement( lcl_getRecoveryDataSubStorageName() );
-        Reference< XStorage > xRecoveryStorage = i_rTargetStorage->openStorageElement( lcl_getRecoveryDataSubStorageName(), ElementModes::READWRITE );
+        if ( i_rTargetStorage->hasByName( sRecoveryDataSubStorageName ) )
+            i_rTargetStorage->removeElement( sRecoveryDataSubStorageName );
+        Reference< XStorage > xRecoveryStorage = i_rTargetStorage->openStorageElement( sRecoveryDataSubStorageName, ElementModes::READWRITE );
 
         // store recovery data for open sub components of the given controller(s)
         if ( !i_rControllers.empty() )
@@ -312,12 +298,12 @@ namespace dbaccess
         ENSURE_OR_THROW( i_rDocumentStorage.is(), "illegal document storage" );
         Reference< XDatabaseDocumentUI > xDocumentUI( i_rTargetController, UNO_QUERY_THROW );
 
-        if ( !i_rDocumentStorage->hasByName( lcl_getRecoveryDataSubStorageName() ) )
+        if ( !i_rDocumentStorage->hasByName( sRecoveryDataSubStorageName ) )
             // that's allowed
             return;
 
         // the "recovery" sub storage
-        Reference< XStorage > xRecoveryStorage = i_rDocumentStorage->openStorageElement( lcl_getRecoveryDataSubStorageName(), ElementModes::READ );
+        Reference< XStorage > xRecoveryStorage = i_rDocumentStorage->openStorageElement( sRecoveryDataSubStorageName, ElementModes::READ );
 
         // read the map from sub storages to object names
         MapCompTypeToCompDescs aMapCompDescs;
@@ -385,7 +371,7 @@ namespace dbaccess
         // now that we successfully recovered, removed the "recovery" sub storage
         try
         {
-            i_rDocumentStorage->removeElement( lcl_getRecoveryDataSubStorageName() );
+            i_rDocumentStorage->removeElement( sRecoveryDataSubStorageName );
         }
         catch( const Exception& )
         {

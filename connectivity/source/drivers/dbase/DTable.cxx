@@ -622,7 +622,7 @@ OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName 
         OUString sName;
         OUString sExt;
         INetURLObject aURL;
-        static const OUString s_sSeparator("/");
+        static const char s_sSeparator[] = "/";
         xDir->beforeFirst();
         while(xDir->next())
         {
@@ -1149,7 +1149,7 @@ bool ODbaseTable::CreateImpl()
     return true;
 }
 
-void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName)
+void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId, const OUString& _sColumnName)
 {
     try
     {

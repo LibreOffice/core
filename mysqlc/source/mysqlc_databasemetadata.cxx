@@ -812,8 +812,7 @@ OUString SAL_CALL ODatabaseMetaData::getDriverVersion()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("ODatabaseMetaData::getDriverVersion");
-    static const OUString sVersion( "0.9.2" );
-    return sVersion;
+    return OUString( "0.9.2" );
 }
 
 OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion()

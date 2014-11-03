@@ -95,8 +95,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 // Some constants
-const static OUString DELIM("::");
-const static sal_Int32 DELIMLEN = DELIM.getLength();
+static const char DELIM[] = "::";
+static const sal_Int32 DELIMLEN = strlen(DELIM);
 
 bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
@@ -1058,17 +1058,7 @@ namespace evtlstner
 {
     OUString SAL_CALL getImplementationName()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "ooo.vba.EventListener"  );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "ooo.vba.EventListener"  );
     }
 
     uno::Reference< XInterface > SAL_CALL create(
@@ -1087,17 +1077,7 @@ namespace ooevtdescgen
 {
     OUString SAL_CALL getImplementationName()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "ooo.vba.VBAToOOEventDesc"  );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "ooo.vba.VBAToOOEventDesc"  );
     }
 
     uno::Reference< XInterface > SAL_CALL create(

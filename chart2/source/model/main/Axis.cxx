@@ -59,7 +59,7 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.Axis" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Axis";
 
 enum
 {
@@ -637,7 +637,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( Axis, Axis_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Axis, Axis_Base, ::property::OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( Axis, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( Axis, OUString(lcl_aServiceName) );
 
 } //  namespace chart
 

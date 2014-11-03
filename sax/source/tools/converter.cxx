@@ -416,16 +416,14 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
         rBuffer.appendAscii( psUnit );
 }
 
-static const OUString& getTrueString()
+static OUString getTrueString()
 {
-    static const OUString sTrue( "true" );
-    return sTrue;
+    return OUString( "true" );
 }
 
-static const OUString& getFalseString()
+static OUString getFalseString()
 {
-    static const OUString sFalse( "false" );
-    return sFalse;
+    return OUString( "false" );
 }
 
 /** convert string to boolean */
