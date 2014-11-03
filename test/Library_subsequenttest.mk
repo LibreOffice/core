@@ -34,6 +34,8 @@ $(eval $(call gb_Library_use_externals,subsequenttest,\
 	cppunit \
 ))
 
+$(eval $(call gb_Library_set_performance_test,subsequenttest, 0))
+
 $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/unoapi_test \
     test/source/calc_unoapi_test \
@@ -68,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
     test/source/text/xtextcontent \
     test/source/util/xreplaceable \
     test/source/util/xsearchable \
+    test/source/sheet/perf/xcalcsearch \
 ))
 
 # vim: set noet sw=4 ts=4:
