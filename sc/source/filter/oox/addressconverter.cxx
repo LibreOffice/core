@@ -147,7 +147,10 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
                 initializeMaxPos( BIFF8_MAXTAB, BIFF8_MAXCOL, BIFF8_MAXROW );
                 maLinkChars.set( '\x04', '\x01', 0xFFFF, '\x02', '\x00' );
             break;
-            case BIFF_UNKNOWN: break;
+            case BIFF_UNKNOWN:
+                initializeMaxPos( 0, 0, 0 );
+                maLinkChars.set( 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF );
+            break;
         }
         break;
         case FILTER_UNKNOWN:
