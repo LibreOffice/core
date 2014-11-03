@@ -441,6 +441,7 @@ namespace DOM
         ::rtl::Reference< CAttr > const pCAttr(
             dynamic_cast< CAttr* >(GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()));
+        if (!pCAttr.is()) { throw RuntimeException(); }
         pCAttr->m_bUnlinked = true;
         return pCAttr.get();
     };
