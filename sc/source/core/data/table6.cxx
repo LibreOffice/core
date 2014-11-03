@@ -276,14 +276,22 @@ void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bFo
 bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                      const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
+    SCCOL nLastCol;
+    SCROW nLastRow;
+    GetLastDataPos(nLastCol, nLastRow);
+    return Search(rSearchItem, rCol, rRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
+}
+
+bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
+                     const SCCOL& nLastCol, const SCROW& nLastRow,
+                     const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
+{
     bool bFound = false;
     bool bAll =  (rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL)
                ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL);
     SCCOL nCol = rCol;
     SCROW nRow = rRow;
-    SCCOL nLastCol;
-    SCROW nLastRow;
-    GetLastDataPos(nLastCol, nLastRow);
+
     bool bSkipFiltered = !rSearchItem.IsSearchFiltered();
     if (!bAll && rSearchItem.GetBackward())
     {
@@ -429,9 +437,13 @@ bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMar
     SCROW nRow = -1;
     bool bEverFound = false;
 
+    SCCOL nLastCol;
+    SCROW nLastRow;
+    GetLastDataPos(nLastCol, nLastRow);
+
     do
     {
-        bFound = Search(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
+        bFound = Search(rSearchItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
         if (bFound)
         {
             bEverFound = true;
