@@ -3653,6 +3653,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
         return false;
 
+    if (GetSharedLength() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
+    {
+        mxGroup->meCalcState = sc::GroupCalcDisabled;
+        return false;
+    }
+
     switch (pCode->GetVectorState())
     {
         case FormulaVectorEnabled:
