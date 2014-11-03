@@ -272,6 +272,23 @@ static bool is_kde4_desktop( Display* pDisplay )
     return false;
 }
 
+static bool is_kde5_desktop( Display* pDisplay )
+{
+    if ( NULL != getenv( "KDE_FULL_SESSION" ) )
+    {
+        OUString aVer( "5" );
+
+        const char *pVer = getenv( "KDE_SESSION_VERSION" );
+        if ( pVer && aVer.equalsIgnoreAsciiCaseAscii( pVer ) )
+            return true;
+    }
+
+    if ( KDEVersion( pDisplay ) == 5 )
+        return true;
+
+    return false;
+}
+
 extern "C"
 {
 
@@ -285,6 +302,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
         if ( aOver.equalsIgnoreAsciiCase( "tde" ) )
             return DESKTOP_TDE;
+        if ( aOver.equalsIgnoreAsciiCase( "kde5" ) )
+            return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
             return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
@@ -371,6 +390,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
 
     // these guys can be slower, with X property fetches,
     // round-trips etc. and so are done later.
+    else if ( is_kde5_desktop( pDisplay ) )
+        ret = DESKTOP_KDE4;
     else if ( is_kde4_desktop( pDisplay ) )
         ret = DESKTOP_KDE4;
     else if ( is_gnome_desktop( pDisplay ) )
