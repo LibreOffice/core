@@ -261,7 +261,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     }
     else
     {
-        if (!aScaleX.GetNumerator() || ! aScaleY.GetNumerator())
+        if (!aScaleX.GetNumerator() || !aScaleY.GetNumerator())
             throw o3tl::divide_by_zero();
 
         rMapRes.mfOffsetX *= aScaleX.GetDenominator();

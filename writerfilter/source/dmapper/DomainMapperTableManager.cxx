@@ -745,7 +745,7 @@ void DomainMapperTableManager::endOfRowAction()
         if (nWidthsBound)
         {
             if (nFullWidthRelative == 0)
-                throw std::range_error("divide by zero");
+                throw o3tl::divide_by_zero();
 
             ::std::vector< sal_Int32 >::const_iterator aSpansIter = pCurrentSpans->begin( );
             for( sal_uInt32 nBorder = 0; nBorder < nWidthsBound; ++nBorder )
