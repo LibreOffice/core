@@ -160,6 +160,9 @@ void GraphicObject::ImplAssignGraphicData()
     mbAnimated = maGraphic.IsAnimated();
     mbEPS = maGraphic.IsEPS();
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
+
+    // Handle evtl. needed AfterDataChanges
+    ImplAfterDataChange();
 }
 
 void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OString* pID, const GraphicObject* pCopyObj )
@@ -260,9 +263,6 @@ void GraphicObject::ImplAutoSwapIn()
             if( !mbAutoSwapped && mpMgr )
                 mpMgr->ImplGraphicObjectWasSwappedIn( *this );
         }
-
-        // Handle evtl. needed AfterDataChanges
-        ImplAfterDataChange();
     }
 }
 
@@ -800,8 +800,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();
 
-    // Handle evtl. needed AfterDataChanges
-    ImplAfterDataChange();
+
 }
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
@@ -1132,9 +1131,6 @@ bool GraphicObject::SwapIn()
     if( bRet )
     {
         ImplAssignGraphicData();
-
-        // Handle evtl. needed AfterDataChanges
-        ImplAfterDataChange();
     }
 
     return bRet;
