@@ -613,11 +613,27 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 pWhich = "shadow";
                 break;
             case RES_PAGEDESC:
+            {
                 pWhich = "page description";
                 const SwFmtPageDesc* pFmt = static_cast<const SwFmtPageDesc*>(pItem);
                 if (pFmt->GetPageDesc())
                     oValue = "name: " + OUStringToOString(pFmt->GetPageDesc()->GetName(), RTL_TEXTENCODING_UTF8);
                 break;
+            }
+            case RES_FRMATR_STYLE_NAME:
+            {
+                pWhich = "frame style name";
+                const SfxStringItem* pStringItem = static_cast<const SfxStringItem*>(pItem);
+                oValue = "name: " + OUStringToOString(pStringItem->GetValue(), RTL_TEXTENCODING_UTF8);
+                break;
+            }
+            case RES_FRMATR_CONDITIONAL_STYLE_NAME:
+            {
+                pWhich = "frame conditional style name";
+                const SfxStringItem* pStringItem = static_cast<const SfxStringItem*>(pItem);
+                oValue = "name: " + OUStringToOString(pStringItem->GetValue(), RTL_TEXTENCODING_UTF8);
+                break;
+            }
         }
         if (pWhich)
             writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
