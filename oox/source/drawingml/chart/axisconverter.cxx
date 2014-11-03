@@ -259,7 +259,7 @@ void AxisConverter::convertFromModel(
                     // do not overlap text unless all labels are visible
                     aAxisProp.setProperty( PROP_TextOverlap, mrModel.mnTickLabelSkip == 1 );
                     // do not break text into several lines
-                    aAxisProp.setProperty( PROP_TextBreak, false );
+                    aAxisProp.setProperty( PROP_TextBreak, mrModel.mnTickLabelSkip == 1 );
                     // do not stagger labels in two lines
                     aAxisProp.setProperty( PROP_ArrangeOrder, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
                     //! TODO #i58731# show n-th category
