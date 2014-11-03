@@ -110,9 +110,9 @@ BrowserColumn::BrowserColumn( sal_uInt16 nItemId, const class Image &rImage,
 {
     double n = (double)_nWidth;
     n *= (double)rCurrentZoom.GetDenominator();
-    n /= (double)rCurrentZoom.GetNumerator();
     if (!rCurrentZoom.GetNumerator())
         throw o3tl::divide_by_zero();
+    n /= (double)rCurrentZoom.GetNumerator();
     _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
 }
 
