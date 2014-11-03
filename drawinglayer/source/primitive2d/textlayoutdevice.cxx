@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <algorithm>
+
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scoped_disposing_ptr.hxx>
@@ -394,7 +398,7 @@ namespace drawinglayer
             vcl::Font aRetval(
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
-                Size(bFontIsScaled ? nWidth : 0, nHeight));
+                Size(bFontIsScaled ? std::max<sal_uInt32>(nWidth, 1) : 0, nHeight));
 #endif
             // define various other FontAttribute
             aRetval.SetAlign(ALIGN_BASELINE);
