@@ -265,7 +265,6 @@ inline bool IsInch(FieldUnit eU) {
 }
 
 class SVX_DLLPUBLIC SdrFormatter {
-    Fraction  aScale;
     long      nMul_;
     long      nDiv_;
     short     nKomma_;
