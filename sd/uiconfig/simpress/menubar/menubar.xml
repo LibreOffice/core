@@ -202,12 +202,11 @@
             <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
             <menu:menuitem menu:id=".uno:AnimationObjects"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:InsertGraphic"/>
             <menu:menu menu:id=".uno:GraphicMenu">
                 <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertGraphic"/>
                     <menu:menuitem menu:id=".uno:Gallery"/>
                     <menu:menuitem menu:id=".uno:PhotoAlbumDialog"/>
-                    <menu:menuitem menu:id=".uno:InsertAVMedia"/>
                     <menu:menu menu:id=".uno:Scan">
                         <menu:menupopup>
                             <menu:menuitem menu:id=".uno:TwainSelect"/>
@@ -215,6 +214,7 @@
                         </menu:menupopup>
                     </menu:menu>
                     <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
+                    <menu:menuitem menu:id=".uno:InsertAVMedia"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:InsertTable"/>
