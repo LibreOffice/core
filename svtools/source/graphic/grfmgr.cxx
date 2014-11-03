@@ -70,7 +70,7 @@ void GraphicObject::ImplAfterDataChange()
 
     // check memory footprint of all GraphicObjects managed and evtl. take action
     if (mpMgr)
-        mpMgr->ImplCheckSizeOfSwappedInGraphics();
+        mpMgr->ImplCheckSizeOfSwappedInGraphics(this);
 }
 
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
