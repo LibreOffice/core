@@ -124,9 +124,4 @@ bool ORowSetCacheIterator::isNull() const
     return  bRet;
 }
 
-::osl::Mutex* ORowSetCacheIterator::getMutex() const
-{
-    return m_pRowSet ? m_pRowSet->getMutex() : NULL;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,22 +42,6 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-#ifdef DBG_UTIL
-    const char* OCellListSource::checkConsistency_static( const void* _pThis )
-    {
-        return static_cast< const OCellListSource* >( _pThis )->checkConsistency( );
-    }
-
-    const char* OCellListSource::checkConsistency( ) const
-    {
-        const char* pAssertion = NULL;
-
-        // TODO: place any checks here to ensure consistency of this instance
-
-        return pAssertion;
-    }
-#endif
-
     OCellListSource::OCellListSource( const Reference< XSpreadsheetDocument >& _rxDocument )
         :OCellListSource_Base( m_aMutex )
         ,OCellListSource_PBase( OCellListSource_Base::rBHelper )

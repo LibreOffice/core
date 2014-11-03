@@ -73,7 +73,6 @@ namespace dbaccess
 
         void setBookmark(const ::com::sun::star::uno::Any&  _rBookmark);
         ::com::sun::star::uno::Any getBookmark() const { return m_aIter->second.aBookmark; }
-        ::osl::Mutex*   getMutex() const;
 
         ORowSetCacheMap::iterator getIter() const { return m_aIter; }
     };

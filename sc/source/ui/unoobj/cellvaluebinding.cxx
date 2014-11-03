@@ -47,25 +47,6 @@ namespace calc
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::binding;
 
-#ifdef DBG_UTIL
-    const char* OCellValueBinding::checkConsistency_static( const void* _pThis )
-    {
-        return static_cast< const OCellValueBinding* >( _pThis )->checkConsistency( );
-    }
-
-    const char* OCellValueBinding::checkConsistency( ) const
-    {
-        const char* pAssertion = NULL;
-        if ( m_xCellText.is() && !m_xCell.is() )
-            // there are places (e.g. getSupportedTypes) which rely on the fact
-            // that m_xCellText.is() implies m_xCell.is()
-            pAssertion = "cell references inconsistent!";
-
-        // TODO: place any additional checks here to ensure consistency of this instance
-        return pAssertion;
-    }
-#endif
-
     OCellValueBinding::OCellValueBinding( const Reference< XSpreadsheetDocument >& _rxDocument, bool _bListPos )
         :OCellValueBinding_Base( m_aMutex )
         ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )

@@ -141,12 +141,6 @@ namespace calc
         OCellValueBinding();                                        // never implemented
         OCellValueBinding( const OCellValueBinding& );              // never implemented
         OCellValueBinding& operator=( const OCellValueBinding& );   // never implemented
-
-#ifdef DBG_UTIL
-    private:
-        static  const char* checkConsistency_static( const void* _pThis );
-                const char* checkConsistency( ) const;
-#endif
     };
 
 }   // namespace calc

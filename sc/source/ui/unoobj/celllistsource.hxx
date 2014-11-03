@@ -146,12 +146,6 @@ namespace calc
         OCellListSource();                                      // never implemented
         OCellListSource( const OCellListSource& );              // never implemented
         OCellListSource& operator=( const OCellListSource& );   // never implemented
-
-#ifdef DBG_UTIL
-    private:
-        static  const char* checkConsistency_static( const void* _pThis );
-                const char* checkConsistency( ) const;
-#endif
     };
 
 }   // namespace calc

@@ -169,14 +169,13 @@ apitest::XTextContent::testAttach()
 apitest::XTextContent::testGetAnchor()
 apitest::XTextField::testGetPresentation()
 basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon const&)
-calc::OCellListSource::checkConsistency_static(void const*)
-calc::OCellValueBinding::checkConsistency_static(void const*)
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::BaseGFXHelper::B2IRectangleToAWTRectangle(basegfx::B2IRange const&)
 chart::ChartTypeUnoDlg::Create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 chart::InternalData::isDefaultData()
 chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
+comphelper::ThreadPool::getSharedOptimalPool()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
