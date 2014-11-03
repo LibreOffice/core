@@ -41,8 +41,8 @@ namespace sw { namespace mark
                 // ensure that m_pPos2 is null by only passing start to super
                 SwPaM(*rPaM.Start()), rCode, rName, rShortName)
     {
-        OSL_ENSURE( IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( rPaM ),
-                    "<CrossRefBookmark::CrossRefBookmark(..)>"
+        assert( IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark(rPaM)
+                 && "<CrossRefBookmark::CrossRefBookmark(..)>"
                     "- creation of cross-reference bookmark with an illegal PaM that does not expand over exactly one whole paragraph.");
         if(rName.isEmpty())
             m_aName = MarkBase::GenerateNewName(rPrefix);
@@ -51,10 +51,10 @@ namespace sw { namespace mark
 
     void CrossRefBookmark::SetMarkPos(const SwPosition& rNewPos)
     {
-        OSL_PRECOND(rNewPos.nNode.GetNode().GetTxtNode(),
+        assert(rNewPos.nNode.GetNode().GetTxtNode() &&
             "<sw::mark::CrossRefBookmark::SetMarkPos(..)>"
             " - new bookmark position for cross-reference bookmark doesn't mark text node");
-        OSL_PRECOND(rNewPos.nContent.GetIndex() == 0,
+        assert(rNewPos.nContent.GetIndex() == 0 &&
             "<sw::mark::CrossRefBookmark::SetMarkPos(..)>"
             " - new bookmark position for cross-reference bookmark doesn't mark start of text node");
         MarkBase::SetMarkPos(rNewPos);
@@ -62,7 +62,7 @@ namespace sw { namespace mark
 
     SwPosition& CrossRefBookmark::GetOtherMarkPos() const
     {
-        OSL_PRECOND(false,
+        assert(false &&
             "<sw::mark::CrossRefBookmark::GetOtherMarkPos(..)>"
             " - this should never be called!");
         for (;;) { std::abort(); } // avoid "must return a value" warnings

@@ -49,13 +49,13 @@ namespace sw {
             virtual void SetMarkPos(const SwPosition& rNewPos) SAL_OVERRIDE;
             virtual void SetOtherMarkPos(const SwPosition&) SAL_OVERRIDE
             {
-                OSL_PRECOND(false,
+                assert(false &&
                     "<CrossRefBookmark::SetOtherMarkPos(..)>"
                     " - misusage of CrossRefBookmark: other bookmark position isn't allowed to be set." );
             }
             virtual void ClearOtherMarkPos() SAL_OVERRIDE
             {
-                OSL_PRECOND(false,
+                assert(false &&
                     "<SwCrossRefBookmark::ClearOtherMarkPos(..)>"
                     " - misusage of CrossRefBookmark: other bookmark position isn't allowed to be set or cleared." );
             }
