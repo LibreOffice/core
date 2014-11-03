@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_f07316b3",
+        "filename": "include/rtl/character.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-03T09:02:27Z",
+      "side": 1,
+      "message": "this definition of whitespace ASCII character looks too arbitrary to warrant inclusion in sal; a more useful definition would probably be to model on Unicode, i.e., all of U+0009 (\u0027\\t\u0027) to U+000D (\u0027\\r\u0027) plus U+0020 (\u0027 \u0027)",
+      "revId": "9909d7af37128d8e66a3a62add00c0574f75c185",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
