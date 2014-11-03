@@ -55,6 +55,7 @@
 #include <libxml/xmlwriter.h>
 #include <boost/optional.hpp>
 #include <rtl/strbuf.hxx>
+#include <comphelper/anytostring.hxx>
 
 using namespace com::sun::star;
 
@@ -244,6 +245,26 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w ) const
             writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
             OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
+
+            if (sw::mark::IFieldmark* pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(pMark.get()))
+            {
+                sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
+                if (pParameters)
+                {
+                    writer.startElement("parameters");
+                    for (sw::mark::IFieldmark::parameter_map_t::iterator parameter = pParameters->begin(); parameter != pParameters->end(); ++parameter)
+                    {
+                        writer.startElement("parameter");
+                        OString aName = OUStringToOString(parameter->first, RTL_TEXTENCODING_UTF8);
+                        writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
+                        OString aValue = OUStringToOString(comphelper::anyToString(parameter->second), RTL_TEXTENCODING_UTF8);
+                        writer.writeFormatAttribute("value", "%s", BAD_CAST(aValue.getStr()));
+                        writer.endElement();
+                    }
+                    writer.endElement();
+                }
+            }
+
             writer.endElement();
         }
         writer.endElement();
