@@ -779,7 +779,6 @@
 #include <svx/sdtditm.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/shapepropertynotifier.hxx>
-#include <svx/sidebar/ColorControl.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
