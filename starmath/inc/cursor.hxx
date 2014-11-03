@@ -12,6 +12,8 @@
 #include "node.hxx"
 #include "caret.hxx"
 
+#include <list>
+
 /** Factor to multiple the squared horizontal distance with
  * Used for Up and Down movement.
  */
