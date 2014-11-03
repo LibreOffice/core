@@ -1052,7 +1052,7 @@ enum cmapType {
  * getGlyph12() function and friends by:
  * @author HDU
  */
-static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32 c) {
+static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32, sal_uInt32 c) {
     if (c <= 255) {
         return *(cmap + 6 + c);
     } else {
@@ -1067,7 +1067,7 @@ typedef struct _subHeader2 {
     sal_uInt16 idRangeOffset;
 } subHeader2;
 
-static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, sal_uInt32 c) {
+static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
     sal_uInt16 *CMAP2 = (sal_uInt16 *) cmap;
     sal_uInt8 theHighByte;
 
@@ -1115,7 +1115,7 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, sal_uInt32 c) {
     }
 }
 
-static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32 c) {
+static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
     sal_uInt16 firstCode, lastCode, count;
     sal_uInt16 *CMAP6 = (sal_uInt16 *) cmap;
 
@@ -1150,7 +1150,7 @@ static sal_uInt16 GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSe
     return (sal_uInt16)lastfound;
 }
 
-static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
+static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
     sal_uInt16  i;
     int ToReturn;
     sal_uInt16  segCount;
@@ -1172,22 +1172,25 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
     }
     startCode = endCode + segCount + 1;
 
-    if(Int16FromMOTA(startCode[i]) > c) {
+    if((reinterpret_cast<sal_uInt8*>(&startCode[i]) - cmap >= nMaxCmapSize - 2) || Int16FromMOTA(startCode[i]) > c) {
         return MISSING_GLYPH_INDEX;
     }
     idDelta = startCode + segCount;
     idRangeOffset = idDelta + segCount;
     /*glyphIndexArray = idRangeOffset + segCount;*/
 
-    if(Int16FromMOTA(idRangeOffset[i]) != 0) {
-        c = Int16FromMOTA(*(&(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])))));
+    if((reinterpret_cast<sal_uInt8*>(&idRangeOffset[i]) - cmap < nMaxCmapSize - 2) && Int16FromMOTA(idRangeOffset[i]) != 0) {
+        sal_uInt16 * pGlyphOffset = &(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])));
+        if(reinterpret_cast<sal_uInt8*>(pGlyphOffset) - cmap >= nMaxCmapSize - 2)
+            return MISSING_GLYPH_INDEX;
+        c = Int16FromMOTA(*pGlyphOffset);
     }
 
     ToReturn = (Int16FromMOTA(idDelta[i]) + c) & 0xFFFF;
     return ToReturn;
 }
 
-static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32 cChar) {
+static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32, sal_uInt32 cChar) {
     const sal_uInt32* pCMAP12 = (const sal_uInt32*)pCmap;
     int nLength = Int32FromMOTA( pCMAP12[1] );
     int nGroups = Int32FromMOTA( pCMAP12[3] );
@@ -2304,8 +2307,9 @@ int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphA
         case CMAP_MS_Johab:     TranslateString16(str, cp, nchars); break;
     }
 
+    const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
     for (i = 0; i < nchars; i++) {
-        cp[i] = (sal_uInt16)ttf->mapper(ttf->cmap, cp[i]);
+        cp[i] = (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, cp[i]);
         if (cp[i]!=0 && bvertical)
             cp[i] = (sal_uInt16)UseGSUB(ttf,cp[i]);
     }
@@ -2316,10 +2320,12 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
 {
     switch (ttf->cmapType) {
         case CMAP_MS_Symbol:
-
+        {
+            const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
             if( ttf->mapper == getGlyph0 && ( ch & 0xf000 ) == 0xf000 )
                 ch &= 0x00ff;
-            return (sal_uInt16)ttf->mapper(ttf->cmap, ch );
+            return (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, ch );
+        }
 
         case CMAP_MS_Unicode:   break;
         case CMAP_MS_ShiftJIS:  ch = TranslateChar12(ch); break;
@@ -2329,7 +2335,8 @@ sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, bool bvertical)
         case CMAP_MS_Johab:     ch = TranslateChar16(ch); break;
         default:                return 0;
     }
-    ch = (sal_uInt16)ttf->mapper(ttf->cmap, ch);
+    const sal_uInt32 nMaxCmapSize = ttf->ptr + ttf->fsize - ttf->cmap;
+    ch = (sal_uInt16)ttf->mapper(ttf->cmap, nMaxCmapSize, ch);
     if (ch!=0 && bvertical)
         ch = (sal_uInt16)UseGSUB(ttf,ch);
     return ch;

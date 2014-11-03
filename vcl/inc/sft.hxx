@@ -564,7 +564,7 @@ namespace vcl
         sal_uInt32  numOfLongVerMetrics;                   /* if this number is not 0, font has vertical metrics information */
         const sal_uInt8* cmap;
         int         cmapType;
-        sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32); /* character to glyphID translation function                          */
+        sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32, sal_uInt32); /* character to glyphID translation function                          */
         const sal_uInt8   **tables;                        /* array of pointers to raw subtables in SFNT file                    */
         sal_uInt32  *tlens;                                /* array of table lengths                                             */
         int         kerntype;                              /* Defined in the KernType enum                                       */
