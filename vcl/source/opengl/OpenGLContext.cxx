@@ -540,10 +540,10 @@ bool OpenGLContext::init(HDC hDC, HWND hWnd)
 bool OpenGLContext::ImplInit()
 {
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
-    if(m_pWindow)
+    /*if(m_pWindow)
         m_pWindow->setPosSizePixel(0,0,0,0);
     m_aGLWin.Width = 0;
-    m_aGLWin.Height = 0;
+    m_aGLWin.Height = 0;*/
 
 #if defined( WNT )
 #elif defined( MACOSX )
@@ -682,6 +682,11 @@ bool OpenGLContext::ImplInit()
 
     m_aGLWin.GLExtensions = glGetString( GL_EXTENSIONS );
     SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
+
+    XWindowAttributes xWinAttr;
+    XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr );
+    m_aGLWin.Width = xWinAttr.width;
+    m_aGLWin.Height = xWinAttr.height;
 
     if( m_aGLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
     {

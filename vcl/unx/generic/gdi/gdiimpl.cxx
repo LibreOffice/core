@@ -153,6 +153,12 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 {
 }
 
+void X11SalGraphicsImpl::Init( SalFrame* /*pFrame*/ )
+{
+    mnPenPixel = mrParent.GetPixel( mnPenColor );
+    mnBrushPixel = mrParent.GetPixel( mnBrushColor );
+}
+
 XID X11SalGraphicsImpl::GetXRenderPicture()
 {
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();

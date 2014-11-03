@@ -108,6 +108,8 @@ public:
 
     virtual ~X11SalGraphicsImpl();
 
+    virtual void Init( SalFrame* pFrame ) SAL_OVERRIDE;
+
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
     //
     // get the depth of the device

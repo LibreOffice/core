@@ -25,11 +25,14 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 
+class SalFrame;
+
 class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
 private:
 
     OpenGLContext maContext;
+    SalFrame* mpFrame;
 
     SalColor mnLineColor;
     SalColor mnFillColor;
@@ -83,6 +86,8 @@ public:
     OpenGLContext& GetOpenGLContext() { return maContext; }
 
     virtual void freeResources() SAL_OVERRIDE;
+
+    virtual void Init( SalFrame* pFrame ) SAL_OVERRIDE;
 
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
     //
