@@ -3641,12 +3641,6 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     if (rGraphic.GetType()==GRAPHIC_NONE)
         return;
 
-    if (rGraphic.IsSwapOut())
-    {
-        // always swapin via the Node
-        const_cast<SwGrfNode*>(pGrfNode)->SwapIn();
-    }
-
     GfxLink aGraphicLink;
     const sal_Char* pBLIPType = 0;
     if (rGraphic.IsLink())

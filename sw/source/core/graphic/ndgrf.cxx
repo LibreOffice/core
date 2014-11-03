@@ -396,6 +396,18 @@ void SwGrfNode::SetGraphic(const Graphic& rGraphic, const OUString& rLink)
     onGraphicChanged();
 }
 
+const Graphic& SwGrfNode::GetGrf() const
+{
+    const_cast<SwGrfNode*>(this)->SwapIn();
+    return maGrfObj.GetGraphic();
+}
+
+const GraphicObject& SwGrfNode::GetGrfObj() const
+{
+    const_cast<SwGrfNode*>(this)->SwapIn();
+    return maGrfObj;
+}
+
 const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
 {
     if(!mpReplacementGraphic)

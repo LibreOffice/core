@@ -725,8 +725,6 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         else
         {
             Graphic& rGrf = const_cast<Graphic&>(rGrfNd.GetGrf());
-            // always swapin via the Node
-            const_cast<SwGrfNode&>(rGrfNd).SwapIn();
 
             GDIMetaFile aMeta;
             switch (rGrf.GetType())

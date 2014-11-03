@@ -123,8 +123,8 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
 public:
     virtual ~SwGrfNode();
-    const Graphic&          GetGrf() const      { return maGrfObj.GetGraphic(); }
-    const GraphicObject&    GetGrfObj() const   { return maGrfObj; }
+    const Graphic&          GetGrf() const;
+    const GraphicObject&    GetGrfObj() const;
     const GraphicObject* GetReplacementGrfObj() const;
     virtual SwCntntNode *SplitCntntNode( const SwPosition & ) SAL_OVERRIDE;
 
