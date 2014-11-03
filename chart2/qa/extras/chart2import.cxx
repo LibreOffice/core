@@ -56,7 +56,8 @@ public:
     void testFdo54361();
     void testFdo54361_1();
     void testAutoBackgroundXLSX();
-    // void testTextCanOverlapXLSX(); // TODO : temporarily disabled.
+    void testTextCanOverlapXLSX();
+    void testTextBreakXLSX();
     void testNumberFormatsXLSX();
 
     void testTransparentBackground(OUString const & filename);
@@ -87,7 +88,8 @@ public:
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testFdo54361_1);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
-    // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
+    CPPUNIT_TEST(testTextCanOverlapXLSX);
+    CPPUNIT_TEST(testTextBreakXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
@@ -659,6 +661,25 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     CPPUNIT_ASSERT(textCanOverlap);
 }
 */
+
+void Chart2ImportTest::testTextBreakXLSX()
+{
+    // fdo#85491 : To check textbreak value is imported correclty.
+    load("/chart2/qa/extras/data/xlsx/", "chart-label-text-break.xlsx");
+    uno::Reference< chart::XDiagram > mxDiagram;
+    uno::Reference< beans::XPropertySet > xAxisProp;
+    bool textBreak = false;
+    uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    mxDiagram.set(xChartDoc->getDiagram());
+    CPPUNIT_ASSERT(mxDiagram.is());
+    uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
+    CPPUNIT_ASSERT(xAxisXSupp.is());
+    xAxisProp = xAxisXSupp->getXAxis();
+    xAxisProp->getPropertyValue("TextBreak") >>= textBreak;
+    // Expected value of 'TextBreak' is true
+    CPPUNIT_ASSERT(textBreak);
+}
 
 void Chart2ImportTest::testNumberFormatsXLSX()
 {
