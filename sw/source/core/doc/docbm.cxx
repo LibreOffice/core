@@ -318,7 +318,7 @@ IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
         return NAVIGATOR_REMINDER;
     else
     {
-        OSL_FAIL("IDocumentMarkAccess::GetType(..)"
+        assert(false && "IDocumentMarkAccess::GetType(..)"
             " - unknown MarkType. This needs to be fixed!");
         return UNO_BOOKMARK;
     }
@@ -372,9 +372,9 @@ namespace sw { namespace mark
             "MarkManager::makeMark(..)"
             " - more than USHRT_MAX marks are not supported correctly");
         // There should only be one CrossRefBookmark per Textnode per Type
-        OSL_PRECOND(
+        assert((
             (eType != CROSSREF_NUMITEM_BOOKMARK && eType != CROSSREF_HEADING_BOOKMARK)
-            || (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.GetPoint(), eType) == m_vBookmarks.end()),
+            || (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.GetPoint(), eType) == m_vBookmarks.end())) &&
             "MarkManager::makeMark(..)"
             " - creating duplicate CrossRefBookmark");
 
@@ -410,7 +410,7 @@ namespace sw { namespace mark
                 pMark = boost::shared_ptr<IMark>(new AnnotationMark( rPaM, rName ));
                 break;
         }
-        OSL_ENSURE(pMark.get(),
+        assert(pMark.get() &&
             "MarkManager::makeMark(..)"
             " - Mark was not created.");
         MarkBase* pMarkBase = dynamic_cast<MarkBase*>(pMark.get());
@@ -514,7 +514,7 @@ namespace sw { namespace mark
         ::sw::mark::IMark* const io_pMark,
         const SwPaM& rPaM)
     {
-        OSL_PRECOND(io_pMark->GetMarkPos().GetDoc() == m_pDoc,
+        assert(io_pMark->GetMarkPos().GetDoc() == m_pDoc &&
             "<MarkManager::repositionMark(..)>"
             " - Mark is not in my doc.");
         MarkBase* const pMarkBase = dynamic_cast< MarkBase* >(io_pMark);
@@ -537,7 +537,7 @@ namespace sw { namespace mark
         ::sw::mark::IMark* io_pMark,
         const OUString& rNewName )
     {
-        OSL_PRECOND(io_pMark->GetMarkPos().GetDoc() == m_pDoc,
+        assert(io_pMark->GetMarkPos().GetDoc() == m_pDoc &&
             "<MarkManager::renameMark(..)>"
             " - Mark is not in my doc.");
         if ( io_pMark->GetName() == rNewName )
@@ -849,7 +849,8 @@ namespace sw { namespace mark
                     }
                     else
                     {
-                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
+                        assert(false &&
+                            "<MarkManager::deleteMark(..)> - Bookmark not found in Bookmark container.");
                     }
                 }
                 break;
@@ -865,7 +866,8 @@ namespace sw { namespace mark
                     }
                     else
                     {
-                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
+                        assert(false &&
+                            "<MarkManager::deleteMark(..)> - Fieldmark not found in Fieldmark container.");
                     }
                 }
                 break;
@@ -879,7 +881,8 @@ namespace sw { namespace mark
                     }
                     else
                     {
-                        OSL_ENSURE( false, "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
+                        assert(false &&
+                            "<MarkManager::deleteMark(..)> - Annotation Mark not found in Annotation Mark container.");
                     }
                 }
                 break;
@@ -917,7 +920,7 @@ namespace sw { namespace mark
 
     void MarkManager::deleteMark(const IMark* const pMark)
     {
-        OSL_PRECOND(pMark->GetMarkPos().GetDoc() == m_pDoc,
+        assert(pMark->GetMarkPos().GetDoc() == m_pDoc &&
             "<MarkManager::deleteMark(..)>"
             " - Mark is not in my doc.");
         // finds the last Mark that is starting before pMark
@@ -1244,7 +1247,7 @@ void SaveBookmark::SetInDoc(
             {
                 ::sfx2::Metadatable * const pMeta(
                     dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
-                OSL_ENSURE(pMeta, "metadata undo, but not metadatable?");
+                assert(pMeta && "metadata undo, but not metadatable?");
                 if (pMeta)
                 {
                     pMeta->RestoreMetadata(m_pMetadataUndo);

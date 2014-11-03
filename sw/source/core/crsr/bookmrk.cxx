@@ -275,14 +275,14 @@ namespace sw { namespace mark
     ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
+        assert(pDoc);
         return pDoc->GetXmlIdRegistry();
     }
 
     bool Bookmark::IsInClipboard() const
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        OSL_ENSURE(pDoc, "Bookmark::IsInClipboard: no doc?");
+        assert(pDoc);
         return pDoc->IsClipBoard();
     }
 
@@ -294,14 +294,14 @@ namespace sw { namespace mark
     bool Bookmark::IsInContent() const
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        OSL_ENSURE(pDoc, "Bookmark::IsInContent: no doc?");
+        assert(pDoc);
         return !pDoc->IsInHeaderFooter( SwNodeIndex(GetMarkPos().nNode) );
     }
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
-        OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
+        assert(pDoc);
         const uno::Reference< rdf::XMetadatable> xMeta(
                 SwXBookmark::CreateXBookmark(*pDoc, this), uno::UNO_QUERY);
         return xMeta;
