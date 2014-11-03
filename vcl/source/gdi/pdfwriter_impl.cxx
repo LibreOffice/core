@@ -3844,7 +3844,7 @@ void PDFWriterImpl::appendBuiltinFontsToDict( OStringBuffer& rDict ) const
 
 bool PDFWriterImpl::emitFonts()
 {
-    if( ! m_pReferenceDevice->AcquireGraphics() )
+    if (!m_pReferenceDevice->AcquireGraphics())
         return false;
 
     OStringBuffer aLine( 1024 );
@@ -7006,7 +7006,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
     return nFontID;
 }
 
-void PDFWriterImpl::registerGlyphs( int nGlyphs,
+bool PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     sal_GlyphId* pGlyphs,
                                     sal_Int32* pGlyphWidths,
                                     sal_Ucs* pUnicodes,
@@ -7058,7 +7058,8 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                 rNewGlyph.m_nFontID = pMappedFontObjects[i];
                 rNewGlyph.m_nSubsetGlyphID = nNewId;
             }
-            getReferenceDevice()->AcquireGraphics();
+            if (!getReferenceDevice()->AcquireGraphics())
+                return false;
             const bool bVertical = ((pGlyphs[i] & GF_ROTMASK) != 0);
             pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
                                                           nFontGlyphId,
@@ -7081,7 +7082,8 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
 
             const Ucs2SIntMap* pEncoding = NULL;
             const Ucs2OStrMap* pNonEncoded = NULL;
-            getReferenceDevice()->AcquireGraphics();
+            if (!getReferenceDevice()->AcquireGraphics())
+                return false;
             pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
 
             Ucs2SIntMap::const_iterator enc_it;
@@ -7154,6 +7156,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                                                             m_pReferenceDevice->mpGraphics );
         }
     }
+    return true;
 }
 
 void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool bTextLines )
@@ -7804,7 +7807,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         writeBuffer( "Q\n", 2 );
         pop();
     }
-
 }
 
 void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
