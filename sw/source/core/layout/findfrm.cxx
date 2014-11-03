@@ -1435,10 +1435,8 @@ SwCellFrm* SwCellFrm::GetFollowCell() const
 
     // find most upper row frame
     const SwFrm* pRow = GetUpper();
-    if (!pRow)
-        return NULL;
 
-    while (!pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm())
+    while (pRow && (!pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm()))
         pRow = pRow->GetUpper();
 
     if (!pRow)
