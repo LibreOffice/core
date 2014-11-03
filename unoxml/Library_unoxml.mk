@@ -71,7 +71,6 @@ $(eval $(call gb_Library_add_exception_objects,unoxml,\
     unoxml/source/events/mutationevent \
     unoxml/source/events/uievent \
     unoxml/source/events/mouseevent \
-    unoxml/source/events/testlistener \
     unoxml/source/service/services \
 ))
 

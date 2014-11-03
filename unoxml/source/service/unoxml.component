@@ -25,9 +25,6 @@
   <implementation name="com.sun.star.comp.xml.dom.SAXDocumentBuilder">
     <service name="com.sun.star.xml.dom.SAXDocumentBuilder"/>
   </implementation>
-  <implementation name="com.sun.star.comp.xml.dom.events.TestListener">
-    <service name="com.sun.star.comp.xml.dom.events.TestListener"/>
-  </implementation>
   <implementation name="com.sun.star.comp.xml.xpath.XPathAPI">
     <service name="com.sun.star.xml.xpath.XPathAPI"/>
   </implementation>

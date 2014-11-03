@@ -32,10 +32,8 @@
 #include "../dom/documentbuilder.hxx"
 #include "../dom/saxbuilder.hxx"
 #include "../xpath/xpathapi.hxx"
-#include "../events/testlistener.hxx"
 
 using namespace ::DOM;
-using namespace ::DOM::events;
 using namespace ::XPath;
 using namespace css::uno;
 using namespace css::lang;
@@ -74,13 +72,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL unoxml_component_getFactory(const sal_Char *
                 cppu::createSingleFactory(
                     xServiceManager, CXPathAPI::_getImplementationName(),
                     CXPathAPI::_getInstance, CXPathAPI::_getSupportedServiceNames()));
-        }
-        else if (CTestListener::_getImplementationName().equalsAscii( pImplementationName ) )
-        {
-            xFactory = Reference< XSingleServiceFactory >(
-                cppu::createSingleFactory(
-                    xServiceManager, CTestListener::_getImplementationName(),
-                    CTestListener::_getInstance, CTestListener::_getSupportedServiceNames()));
         }
 
         // Factory is valid - service was found.
