@@ -741,7 +741,7 @@ FILE_LOCAL int evalchar(int skip)
                    (--count >= 0))
             {
                 value *= 16;
-                value += (c >= '0') ? (c - '0') : ((c & 0xF) + 9);
+                value += (c - '0');
             }
             unget();
             break;

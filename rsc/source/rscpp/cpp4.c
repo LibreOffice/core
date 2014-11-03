@@ -49,8 +49,7 @@ void InitCpp4()
  * the formal parameter name is encountered in the replacement
  * string, it is replaced by a character in the range 128 to
  * 128+NPARAM (this allows up to 32 parameters within the
- * Dec Multinational range).  If cpp is ported to an EBCDIC
- * machine, you will have to make other arrangements.
+ * Dec Multinational range).
  *
  * There is some special case code to distinguish
  *      #define foo     bar
