@@ -29,6 +29,8 @@
 #include <svx/PaletteManager.hxx>
 #include <vcl/lstbox.hxx>
 
+class BorderColorStatus;
+
 class SvxColorWindow_Impl : public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
@@ -46,6 +48,7 @@ private:
     Link                maSelectedLink;
 
     PaletteManager&     mrPaletteManager;
+    BorderColorStatus&  mrBorderColorStatus;
 
     DECL_LINK( SelectHdl, SvxColorValueSet* );
     DECL_LINK( SelectPaletteHdl, void *);
@@ -59,6 +62,7 @@ protected:
 public:
     SvxColorWindow_Impl( const OUString& rCommand,
                          PaletteManager& rPaletteManager,
+                         BorderColorStatus& rBorderColorStatus,
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,

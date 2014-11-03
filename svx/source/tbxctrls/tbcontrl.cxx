@@ -1126,6 +1126,7 @@ void SvxFontNameBox_Impl::Select()
 
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           PaletteManager&            rPaletteManager,
+                                          BorderColorStatus&         rBorderColorStatus,
                                           sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
@@ -1136,7 +1137,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                     rFrame ),
     theSlotId( nSlotId ),
     maCommand( rCommand ),
-    mrPaletteManager( rPaletteManager )
+    mrPaletteManager( rPaletteManager ),
+    mrBorderColorStatus( rBorderColorStatus )
 {
     get(mpPaletteListBox,     "palette_listbox");
     get(mpButtonAutoColor,    "auto_color_button");
@@ -1217,6 +1219,11 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
     AddStatusListener( ".uno:ColorTableState" );
     AddStatusListener( maCommand );
+    if ( maCommand == ".uno:FrameLineColor" )
+    {
+        AddStatusListener( ".uno:BorderTLBR" );
+        AddStatusListener( ".uno:BorderBLTR" );
+    }
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1230,7 +1237,7 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 
 SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 {
-    return new SvxColorWindow_Impl( maCommand, mrPaletteManager, theSlotId, GetFrame(), GetText(), GetParent() );
+    return new SvxColorWindow_Impl( maCommand, mrPaletteManager, mrBorderColorStatus, theSlotId, GetFrame(), GetText(), GetParent() );
 }
 
 IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
@@ -1310,39 +1317,132 @@ bool SvxColorWindow_Impl::Close()
 
 void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if (( SfxItemState::DISABLED != eState ) && pState )
+    if ( nSID == SID_COLOR_TABLE )
     {
-        if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
+        if ( SfxItemState::DEFAULT == eState && mrPaletteManager.GetPalette() == 0 )
         {
-            if ( mrPaletteManager.GetPalette() == 0 )
-            {
-                mrPaletteManager.ReloadColorSet(*mpColorSet);
-                mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
-            }
+            mrPaletteManager.ReloadColorSet(*mpColorSet);
+            mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
         }
-        else if ( SfxItemState::DEFAULT <= eState )
-        {
-            mpColorSet->SetNoSelection();
+    }
+    else
+    {
+        mpColorSet->SetNoSelection();
+        Color aColor( COL_TRANSPARENT );
 
-            Color aColor;
+        if ( nSID == SID_FRAME_LINECOLOR
+          || nSID == SID_ATTR_BORDER_DIAG_TLBR
+          || nSID == SID_ATTR_BORDER_DIAG_BLTR )
+        {
+            mrBorderColorStatus.StateChanged( nSID, eState, pState );
+            aColor = mrBorderColorStatus.GetColor();
+        }
+        else if ( SfxItemState::DEFAULT <= eState && pState )
+        {
             if ( pState->ISA( SvxColorItem ) )
                 aColor = static_cast<const SvxColorItem*>(pState)->GetValue();
             else if ( pState->ISA( XLineColorItem ) )
                 aColor = static_cast<const XLineColorItem*>(pState)->GetColorValue();
             else if ( pState->ISA( XFillColorItem ) )
                 aColor = static_cast<const XFillColorItem*>(pState)->GetColorValue();
+        }
 
-            for ( size_t i = 1; i <= mpColorSet->GetItemCount(); ++i )
+        if ( aColor == COL_TRANSPARENT )
+            return;
+
+        for ( size_t i = 1; i <= mpColorSet->GetItemCount(); ++i )
+        {
+            if ( aColor == mpColorSet->GetItemColor(i) )
             {
-                if ( aColor == mpColorSet->GetItemColor(i) )
-                {
-                    mpColorSet->SelectItem(i);
-                    return;
-                }
+                mpColorSet->SelectItem(i);
+                break;
             }
         }
     }
 }
+
+
+BorderColorStatus::BorderColorStatus() :
+    maColor( COL_TRANSPARENT ),
+    maTLBRColor( COL_TRANSPARENT ),
+    maBLTRColor( COL_TRANSPARENT )
+{
+}
+
+BorderColorStatus::~BorderColorStatus()
+{
+}
+
+void BorderColorStatus::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem *pState )
+{
+    if ( SfxItemState::DEFAULT <= eState && pState )
+    {
+        if ( nSID == SID_FRAME_LINECOLOR && pState->ISA( SvxColorItem ) )
+        {
+            maColor = static_cast< const SvxColorItem* >(pState)->GetValue();
+        }
+        else if ( pState->ISA( SvxLineItem ) )
+        {
+            const SvxBorderLine* pLine = static_cast< const SvxLineItem* >(pState)->GetLine();
+            Color aColor ( COL_TRANSPARENT );
+            if ( pLine )
+                aColor = pLine->GetColor();
+
+            if ( nSID == SID_ATTR_BORDER_DIAG_TLBR )
+                maTLBRColor = aColor;
+            else if ( nSID == SID_ATTR_BORDER_DIAG_BLTR )
+                maBLTRColor = aColor;
+        }
+    }
+    else if ( nSID == SID_FRAME_LINECOLOR )
+        maColor = COL_TRANSPARENT;
+    else if ( nSID == SID_ATTR_BORDER_DIAG_TLBR )
+        maTLBRColor = COL_TRANSPARENT;
+    else if ( nSID == SID_ATTR_BORDER_DIAG_BLTR )
+        maBLTRColor = COL_TRANSPARENT;
+}
+
+Color BorderColorStatus::GetColor()
+{
+    bool bHasColor = maColor != COL_TRANSPARENT;
+    bool bHasTLBRColor = maTLBRColor != COL_TRANSPARENT;
+    bool bHasBLTRColor = maBLTRColor != COL_TRANSPARENT;
+
+    if ( !bHasColor && bHasTLBRColor && !bHasBLTRColor )
+        return maTLBRColor;
+    else if ( !bHasColor && !bHasTLBRColor && bHasBLTRColor )
+        return maBLTRColor;
+    else if ( bHasColor && bHasTLBRColor && !bHasBLTRColor )
+    {
+        if ( maColor == maTLBRColor )
+            return maColor;
+        else
+            return maBLTRColor;
+    }
+    else if ( bHasColor && !bHasTLBRColor && bHasBLTRColor )
+    {
+        if ( maColor == maBLTRColor )
+            return maColor;
+        else
+            return maTLBRColor;
+    }
+    else if ( !bHasColor && bHasTLBRColor && bHasBLTRColor )
+    {
+        if ( maTLBRColor == maBLTRColor )
+            return maTLBRColor;
+        else
+            return maColor;
+    }
+    else if ( bHasColor && bHasTLBRColor && bHasBLTRColor )
+    {
+        if ( maColor == maTLBRColor && maColor == maBLTRColor )
+            return maColor;
+        else
+            return COL_TRANSPARENT;
+    }
+    return maColor;
+}
+
 
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow ) :
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
@@ -2357,6 +2457,8 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
 
         case SID_FRAME_LINECOLOR:
             addStatusListener( OUString( ".uno:FrameLineColor" ));
+            addStatusListener( OUString( ".uno:BorderTLBR" ));
+            addStatusListener( OUString( ".uno:BorderBLTR" ));
             mPaletteManager.SetLastColor( COL_BLUE );
             break;
 
@@ -2399,6 +2501,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
         new SvxColorWindow_Impl(
                             m_aCommandURL,
                             mPaletteManager,
+                            maBorderColorStatus,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
@@ -2435,7 +2538,8 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
         FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
-    pColorWin->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
+    if ( !bSidebarType )
+        pColorWin->SetSelectedHdl( LINK( this, SvxColorToolBoxControl, SelectedHdl ) );
     return pColorWin;
 }
 
@@ -2449,34 +2553,29 @@ IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, pColor)
 void SvxColorToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    ToolBox& rTbx = GetToolBox();
-    sal_uInt16 nId = GetId();
-    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
-    rTbx.SetItemState( nId, ( SfxItemState::DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
-
     if ( nSID == SID_ATTR_CHAR_COLOR_EXT || nSID == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
-    {
-        if ( pState && SfxItemState::DONTCARE != eState )
-        {
-            const SfxBoolItem* pBool = static_cast< const SfxBoolItem* >( pState );
-            rTbx.CheckItem( nId, pBool && pBool->GetValue() );
-        }
-    }
-    else if ( bSidebarType && SfxItemState::DEFAULT <= eState )
-    {
-        Color aColor;
-        if ( pState->ISA( SvxColorItem ) )
-            aColor = static_cast< const SvxColorItem* >(pState)->GetValue();
-        else if ( pState->ISA( XLineColorItem ) )
-            aColor = static_cast< const XLineColorItem* >(pState)->GetColorValue();
-        else if ( pState->ISA( XFillColorItem ) )
-            aColor = static_cast< const XFillColorItem* >(pState)->GetColorValue();
-
-        pBtnUpdater->Update( aColor );
-    }
+        SfxToolBoxControl::StateChanged( nSID, eState, pState );
     else if ( bSidebarType )
     {
-        pBtnUpdater->Update( COL_TRANSPARENT );
+        Color aColor( COL_TRANSPARENT );
+
+        if ( nSID == SID_FRAME_LINECOLOR
+          || nSID == SID_ATTR_BORDER_DIAG_TLBR
+          || nSID == SID_ATTR_BORDER_DIAG_BLTR )
+        {
+            maBorderColorStatus.StateChanged( nSID, eState, pState );
+            aColor = maBorderColorStatus.GetColor();
+        }
+        else if ( SfxItemState::DEFAULT <= eState && pState )
+        {
+            if ( pState->ISA( SvxColorItem ) )
+                aColor = static_cast< const SvxColorItem* >(pState)->GetValue();
+            else if ( pState->ISA( XLineColorItem ) )
+                aColor = static_cast< const XLineColorItem* >(pState)->GetColorValue();
+            else if ( pState->ISA( XFillColorItem ) )
+                aColor = static_cast< const XFillColorItem* >(pState)->GetColorValue();
+        }
+        pBtnUpdater->Update( aColor );
     }
 }
 

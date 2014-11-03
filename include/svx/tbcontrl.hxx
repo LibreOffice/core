@@ -42,6 +42,7 @@
         SvxColorToolBoxControl
         ----------------------
         Item type:      SvxColorItem
+                        SvxLineItem
                         SfxBoolItem
                         XLineColorItem
                     and XFillColorItem
@@ -216,6 +217,19 @@ public:
 };
 
 
+class BorderColorStatus
+{
+    Color maColor;
+    Color maTLBRColor;
+    Color maBLTRColor;
+public:
+    BorderColorStatus();
+    ~BorderColorStatus();
+    void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    Color GetColor();
+};
+
+
 // class SvxColorToolBoxControl --------------------------------------
 
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
@@ -224,6 +238,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
     PaletteManager                      mPaletteManager;
+    BorderColorStatus maBorderColorStatus;
     bool bSidebarType;
     DECL_LINK( SelectedHdl, Color* );
 public:
