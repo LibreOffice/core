@@ -1262,7 +1262,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
         {
             aSequenceMapping.realloc(0);
             DataSourceHelper::setRangeSegmentation(
-                m_spChart2ModelContact->getChartModel(), aSequenceMapping, bNewUseColumns , bHasCategories, bFirstCellAsLabel );
+                m_spChart2ModelContact->getChartModel(), aSequenceMapping, bNewUseColumns , bFirstCellAsLabel , bHasCategories);
         }
     }
 }
