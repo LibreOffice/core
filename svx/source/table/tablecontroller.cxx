@@ -677,6 +677,9 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
             {
                 CellRef xSourceCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nPropSrcRow ).get() ) );
 
+                if (!xSourceCell.is())
+                    continue;
+
                 // When we insert new ROWs, we want to copy COLUMN spans.
                 if( nColSpan == 0 )
                 {
