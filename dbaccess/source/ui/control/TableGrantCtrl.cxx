@@ -405,7 +405,7 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
         sal_Int32 nWidth = GetDataWindow().GetTextWidth( aText );
         sal_Int32 nHeight = GetDataWindow().GetTextHeight();
 
-        if( aPos.X() < rRect.Right() || aPos.X() + nWidth > rRect.Right() ||
+        if( aPos.X() < rRect.Left() || aPos.X() + nWidth > rRect.Right() ||
             aPos.Y() < rRect.Top() || aPos.Y() + nHeight > rRect.Bottom() )
         {
             rDev.SetClipRegion(vcl::Region(rRect));
