@@ -27,15 +27,12 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/fixed.hxx>
-#include <svx/tbxcolorupdate.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/colritem.hxx>
 #include <editeng/lineitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svx/sidebar/ColorControl.hxx>
 #include <boost/bind.hpp>
 #include <svx/sidebar/PopupContainer.hxx>
 #include "CellLineStyleControl.hxx"
@@ -49,43 +46,10 @@ using namespace css::uno;
 
 const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
 const char UNO_LINESTYLE[] = ".uno:LineStyle";
-const char UNO_FRAMELINECOLOR[] = ".uno:FrameLineColor";
-
-// helpers
-
-namespace
-{
-    Color GetTransparentColor(void)
-    {
-        return COL_TRANSPARENT;
-    }
-} // end of anonymous namespace
 
 // namespace open
 
 namespace sc { namespace sidebar {
-
-svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateLineColorPopupControl(svx::sidebar::PopupContainer* pParent)
-{
-    return new svx::sidebar::ColorControl(
-        pParent,
-        mpBindings,
-        ScResId(RID_POPUPPANEL_CELLAPPEARANCE_LINECOLOR),
-        ScResId(VS_LINECOLOR),
-        ::boost::bind(GetTransparentColor),
-        ::boost::bind(&CellAppearancePropertyPanel::SetLineColor, this, _1, _2),
-        pParent,
-        0);
-}
-
-void CellAppearancePropertyPanel::SetLineColor(
-    const OUString& /*rsColorName*/,
-    const Color aColor)
-{
-    const SvxColorItem aColorItem(aColor, SID_FRAME_LINECOLOR);
-    mpBindings->GetDispatcher()->Execute(SID_FRAME_LINECOLOR, SfxCallMode::RECORD, &aColorItem, 0L);
-    maLineColor = aColor;
-}
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
@@ -119,7 +83,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
 
-    maLineColorControl(SID_FRAME_LINECOLOR, *pBindings, *this),
     maLineStyleControl(SID_FRAME_LINESTYLE, *pBindings, *this),
     maBorderOuterControl(SID_ATTR_BORDER_OUTER, *pBindings, *this),
     maBorderInnerControl(SID_ATTR_BORDER_INNER, *pBindings, *this),
@@ -138,9 +101,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maIMGLineStyle8(ScResId(IMG_LINE_STYLE8)),
     maIMGLineStyle9(ScResId(IMG_LINE_STYLE9)),
 
-    maLineColor(COL_BLACK),
-    maTLBRColor(COL_BLACK),
-    maBLTRColor(COL_BLACK),
     mnIn(0),
     mnOut(0),
     mnDis(0),
@@ -150,7 +110,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mnBLTRIn(0),
     mnBLTROut(0),
     mnBLTRDis(0),
-    mbLineColorAvailable(true),
     mbBorderStyleAvailable(true),
     mbLeft(false),
     mbRight(false),
@@ -163,7 +122,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     mbTLBR(false),
     mbBLTR(false),
 
-    maLineColorPopup(this, ::boost::bind(&CellAppearancePropertyPanel::CreateLineColorPopupControl, this, _1)),
     mpCellLineStylePopup(),
     mpCellBorderStylePopup(),
 
@@ -176,9 +134,6 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     get(mpTBLineColor,  "borderlinecolor");
     get(mpCBXShowGrid,  "cellgridlines");
 
-    mpLineColorUpdater.reset( new ::svx::ToolboxButtonColorUpdater(SID_FRAME_LINECOLOR,
-        mpTBLineColor->GetItemId( UNO_FRAMELINECOLOR ),
-        mpTBLineColor) );
     mpCellBorderUpdater.reset( new CellBorderUpdater(
         mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE ), *mpTBCellBorder) );
 
@@ -206,11 +161,6 @@ void CellAppearancePropertyPanel::Initialize()
     mpTBLineStyle->SetSelectHdl ( aLink );
     mpTBLineStyle->Disable();
 
-    const sal_uInt16 nIdBorderLinecolor = mpTBLineColor->GetItemId( UNO_FRAMELINECOLOR );
-    mpTBLineColor->SetItemBits( nIdBorderLinecolor, mpTBLineColor->GetItemBits( nIdBorderLinecolor ) | ToolBoxItemBits::DROPDOWNONLY );
-    aLink = LINK(this, CellAppearancePropertyPanel, TbxLineColorSelectHdl);
-    mpTBLineColor->SetDropdownClickHdl ( aLink );
-    mpTBLineColor->SetSelectHdl ( aLink );
     mpTBLineColor->Disable();
 
     aLink = LINK(this, CellAppearancePropertyPanel, CBOXGridShowClkHdl);
@@ -218,18 +168,6 @@ void CellAppearancePropertyPanel::Initialize()
 
     mpTBLineColor->SetAccessibleRelationLabeledBy(mpTBLineColor);
     mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
-}
-
-IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-
-    if(aCommand == UNO_FRAMELINECOLOR)
-    {
-        maLineColorPopup.Show(*pToolBox);
-        maLineColorPopup.SetCurrentColor(maLineColor, mbLineColorAvailable);
-    }
-    return 0;
 }
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox)
@@ -335,40 +273,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
     switch(nSID)
     {
-    case SID_FRAME_LINECOLOR:
-        if( eState == SfxItemState::DONTCARE)
-        {
-            mbLineColorAvailable = true;
-            maLineColor.SetColor( COL_TRANSPARENT );
-            UpdateControlState();
-            break;
-        }
-
-        if(eState >= SfxItemState::DEFAULT && pState && pState->ISA(SvxColorItem) )
-        {
-            const SvxColorItem* pSvxColorItem = dynamic_cast< const SvxColorItem* >(pState);
-
-            if(pSvxColorItem)
-            {
-                maLineColor = static_cast<const SvxColorItem*>(pState)->GetValue();
-                if(maLineColor == COL_AUTO)
-                    mbLineColorAvailable = false;
-                else
-                {
-                    mbLineColorAvailable = true;
-                //  mpLineColorUpdater->Update(maLineColor);
-                }
-
-                UpdateControlState();
-                break;
-            }
-        }
-
-        mbLineColorAvailable = false;
-        maLineColor.SetColor(COL_AUTO);
-        //  mpLineColorUpdater->Update(maLineColor);
-        UpdateControlState();
-        break;
     case SID_FRAME_LINESTYLE:
         if( eState == SfxItemState::DONTCARE )
         {
@@ -486,7 +390,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         if( eState == SfxItemState::DONTCARE )
         {
             mbTLBR = true;
-            maTLBRColor.SetColor(COL_TRANSPARENT);
             mnTLBRIn = mnTLBROut = mnTLBRDis = 0;
             UpdateControlState();
             break;
@@ -507,7 +410,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                 else
                 {
                     mbTLBR = true;
-                    maTLBRColor = aLine->GetColor();
                     mnTLBRIn = aLine->GetInWidth();
                     mnTLBROut = aLine->GetOutWidth();
                     mnTLBRDis = aLine->GetDistance();
@@ -528,7 +430,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         if( eState == SfxItemState::DONTCARE )
         {
             mbBLTR = true;
-            maBLTRColor.SetColor( COL_TRANSPARENT );
             mnBLTRIn = mnBLTROut = mnBLTRDis = 0;
             UpdateControlState();
             break;
@@ -549,7 +450,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                 else
                 {
                     mbBLTR = true;
-                    maBLTRColor = aLine->GetColor();
                     mnBLTRIn = aLine->GetInWidth();
                     mnBLTROut = aLine->GetOutWidth();
                     mnBLTRDis = aLine->GetDistance();
@@ -618,37 +518,6 @@ void CellAppearancePropertyPanel::UpdateControlState()
     {
         mpTBLineColor->Enable();
         mpTBLineStyle->Enable();
-
-        //set line color state
-        if( mbLineColorAvailable && !mbTLBR && !mbBLTR )
-            mpLineColorUpdater->Update(maLineColor);
-        else if( !mbLineColorAvailable && mbTLBR && !mbBLTR )
-            mpLineColorUpdater->Update(maTLBRColor);
-        else if ( !mbLineColorAvailable && !mbTLBR && mbBLTR )
-            mpLineColorUpdater->Update(maBLTRColor);
-        else if( !mbLineColorAvailable && mbTLBR && mbBLTR)
-        {
-            if( maTLBRColor == maBLTRColor)
-                mpLineColorUpdater->Update(maBLTRColor);
-            else
-                mpLineColorUpdater->Update(COL_TRANSPARENT);
-        }
-        else if( mbLineColorAvailable && mbTLBR && !mbBLTR )
-        {
-            if( maTLBRColor == maLineColor)
-                mpLineColorUpdater->Update(maLineColor);
-            else
-                mpLineColorUpdater->Update(COL_TRANSPARENT);
-        }
-        else if( mbLineColorAvailable && !mbTLBR && mbBLTR )
-        {
-            if( maBLTRColor == maLineColor)
-                mpLineColorUpdater->Update(maLineColor);
-            else
-                mpLineColorUpdater->Update(COL_TRANSPARENT);
-        }
-        else
-            mpLineColorUpdater->Update(COL_TRANSPARENT);
 
         //set line style state
         if( mbBorderStyleAvailable && !mbTLBR && !mbBLTR )

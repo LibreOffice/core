@@ -23,10 +23,12 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <boost/scoped_ptr.hpp>
-#include <svx/sidebar/ColorPopup.hxx>
 
 class FixedText;
-namespace svx { class ToolboxButtonColorUpdater; }
+namespace svx { namespace sidebar {
+    class PopupControl;
+    class PopupContainer;
+}}
 namespace sc { namespace sidebar {
     class CellLineStylePopup;
     class CellBorderStylePopup;
@@ -73,11 +75,9 @@ private:
     ToolBox*                                mpTBCellBorder;
     ToolBox*                                mpTBLineStyle;
     ToolBox*                                mpTBLineColor;
-    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpLineColorUpdater;
     ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
     CheckBox*                               mpCBXShowGrid;
 
-    ::sfx2::sidebar::ControllerItem         maLineColorControl;
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
     ::sfx2::sidebar::ControllerItem         maBorderInnerControl;
@@ -97,11 +97,6 @@ private:
     Image                                   maIMGLineStyle8;
     Image                                   maIMGLineStyle9;
 
-    // cell line color(s)
-    Color                                   maLineColor;
-    Color                                   maTLBRColor;
-    Color                                   maBLTRColor;
-
     // BorderStyle defines
     sal_uInt16                              mnIn;
     sal_uInt16                              mnOut;
@@ -114,7 +109,6 @@ private:
     sal_uInt16                              mnBLTRDis;
 
     /// bitfield
-    bool                                    mbLineColorAvailable : 1;
     bool                                    mbBorderStyleAvailable : 1;
 
     // CellBorder defines
@@ -132,7 +126,6 @@ private:
     bool                                    mbBLTR : 1;
 
     // popups
-    svx::sidebar::ColorPopup                maLineColorPopup;
     ::boost::scoped_ptr< CellLineStylePopup > mpCellLineStylePopup;
     ::boost::scoped_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
 
@@ -140,14 +133,9 @@ private:
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
-    DECL_LINK(TbxLineColorSelectHdl, ToolBox*);
     DECL_LINK(TbxCellBorderSelectHdl, ToolBox*);
     DECL_LINK(TbxLineStyleSelectHdl, ToolBox*);
     DECL_LINK(CBOXGridShowClkHdl, void*);
-
-    // for line color picker
-    svx::sidebar::PopupControl* CreateLineColorPopupControl(svx::sidebar::PopupContainer* pParent);
-    void SetLineColor(const OUString& rsColorName, const Color aColor);
 
     // for CellLineStyle popup
     svx::sidebar::PopupControl* CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent);

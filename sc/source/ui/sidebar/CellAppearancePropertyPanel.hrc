@@ -72,6 +72,4 @@
 #define STR_BORDER_7            47
 #define STR_BORDER_8            48
 
-#define VS_LINECOLOR            1
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
