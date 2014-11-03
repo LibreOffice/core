@@ -134,23 +134,19 @@ void fillDurationComboBox( ListBox* pBox )
 void fillRepeatComboBox( ListBox* pBox )
 {
     OUString aNone( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_NONE ) );
-    pBox->SetEntryData( pBox->InsertEntry( aNone ), (void*)((sal_Int32)0) );
-
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 2 ) ), (void*)((sal_Int32)1) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 3 ) ), (void*)((sal_Int32)3) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 4 ) ), (void*)((sal_Int32)4) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 5 ) ), (void*)((sal_Int32)5) );
-    pBox->SetEntryData( pBox->InsertEntry( OUString::number( 10 ) ), (void*)((sal_Int32)10) );
+    pBox->InsertEntry(aNone);
+    pBox->InsertEntry(OUString::number(2));
+    pBox->InsertEntry(OUString::number(3));
+    pBox->InsertEntry(OUString::number(4));
+    pBox->InsertEntry(OUString::number(5));
+    pBox->InsertEntry(OUString::number(10));
 
     OUString aUntilClick( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
-    pBox->SetEntryData( pBox->InsertEntry( aUntilClick ), (void*)((sal_Int32)-1) );
+    pBox->InsertEntry(aUntilClick);
 
     OUString aEndOfSlide( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE ) );
-    pBox->SetEntryData( pBox->InsertEntry( aEndOfSlide ), (void*)((sal_Int32)-2) );
+    pBox->InsertEntry(aEndOfSlide);
 }
-
-
-
 
 CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase,
                                           const cssu::Reference<css::frame::XFrame>& rxFrame,
