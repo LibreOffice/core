@@ -24,6 +24,8 @@ $(eval $(call gb_Library_set_include,editeng,\
     -I$(SRCDIR)/editeng/inc \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,editeng,editeng/generated))
+
 $(eval $(call gb_Library_set_precompiled_header,editeng,$(SRCDIR)/editeng/inc/pch/precompiled_editeng))
 
 $(eval $(call gb_Library_add_defs,editeng,\
@@ -140,6 +142,7 @@ $(eval $(call gb_Library_use_libraries,editeng,\
     cppu \
     sal \
     salhelper \
+    sax \
     i18nlangtag \
     i18nutil \
 	$(gb_UWINAPI) \
