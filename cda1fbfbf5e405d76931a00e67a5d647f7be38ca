@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_b0dc7e47",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T12:24:40Z",
+      "side": 1,
+      "message": "So, since this \"also fix\" is unrelated to the main patch, it would be better to do it in a separate patch, right?",
+      "revId": "cda1fbfbf5e405d76931a00e67a5d647f7be38ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
