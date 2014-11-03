@@ -430,6 +430,9 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
 
     switch ( eFlags )
     {
+        default:
+            assert(false && "unknown pool family");
+            //fall-through
         case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
         {
             pHashPointer = bProgName ? &pParaProgMap : &pParaUIMap;
@@ -464,11 +467,6 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         {
             pHashPointer = bProgName ? &pNumRuleProgMap : &pNumRuleUIMap;
             vIndexes.push_back( boost::make_tuple(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray) );
-        }
-        break;
-        default:
-        {
-            assert(false && "unknown pool family");
         }
         break;
     }
