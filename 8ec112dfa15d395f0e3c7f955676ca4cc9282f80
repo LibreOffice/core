@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_d0d49248",
+        "filename": "sw/inc/swacorr.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T11:26:52Z",
+      "side": 1,
+      "message": "Could you use a more descriptive name for the variable?",
+      "revId": "8ec112dfa15d395f0e3c7f955676ca4cc9282f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_90ce1ab3",
+        "filename": "sw/source/core/sw3io/swacorr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T11:26:52Z",
+      "side": 1,
+      "message": "Why did you remove the IsError check?",
+      "revId": "8ec112dfa15d395f0e3c7f955676ca4cc9282f80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
