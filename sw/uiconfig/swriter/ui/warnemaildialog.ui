@@ -11,13 +11,13 @@
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">warning</property>
     <property name="buttons">ok</property>
-    <property name="text" translatable="yes">E-Mails could not be sent</property>
-    <property name="secondary_text" translatable="yes">The following error occurred</property>
+    <property name="text" translatable="yes">E-mails could not be sent</property>
+    <property name="secondary_text" translatable="yes">The following error occurred:</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">24</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
