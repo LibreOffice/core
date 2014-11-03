@@ -163,7 +163,7 @@ OUString OReportEngineJFree::getNewOutputName()
         if ( !m_xReport.is() || !m_xActiveConnection.is() )
             throw lang::IllegalArgumentException();
 
-        static const OUString s_sMediaType("MediaType");
+        static const char s_sMediaType[] = "MediaType";
         try
         {
             MimeConfigurationHelper aConfighelper(m_xContext);
@@ -229,11 +229,11 @@ OUString OReportEngineJFree::getNewOutputName()
             OUStringBuffer sAuthor(aUserOpts.GetFirstName());
             sAuthor.appendAscii(" ");
             sAuthor.append(aUserOpts.GetLastName());
-            static const OUString s_sAuthor("Author");
+            static const char s_sAuthor[] = "Author";
             aConvertedProperties[nPos].Name = s_sAuthor;
             aConvertedProperties[nPos++].Value <<= sAuthor.makeStringAndClear();
 
-            static const OUString s_sTitle("Title");
+            static const char s_sTitle[] = "Title";
             aConvertedProperties[nPos].Name = s_sTitle;
             aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
 

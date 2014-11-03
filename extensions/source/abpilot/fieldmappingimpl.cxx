@@ -50,18 +50,8 @@ namespace abp
     using namespace ::com::sun::star::ui::dialogs;
 
 
-    static const OUString& lcl_getDriverSettingsNodeName()
-    {
-        static const OUString s_sDriverSettingsNodeName( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" );
-        return s_sDriverSettingsNodeName;
-    }
-
-
-    static const OUString& lcl_getAddressBookNodeName()
-    {
-        static const OUString s_sAddressBookNodeName( "/org.openoffice.Office.DataAccess/AddressBook" );
-        return s_sAddressBookNodeName;
-    }
+    static const char sDriverSettingsNodeName[] = "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver";
+    static const char sAddressBookNodeName[] = "/org.openoffice.Office.DataAccess/AddressBook";
 
 
     namespace fieldmapping
@@ -169,7 +159,7 @@ namespace abp
 
 
                 // access the configuration information which the driver uses for determining it's column names
-                OUString sDriverAliasesNodeName = lcl_getDriverSettingsNodeName();
+                OUString sDriverAliasesNodeName = sDriverSettingsNodeName;
                 sDriverAliasesNodeName += OUString( "/ColumnAliases" );
 
                 // create a config node for this
@@ -224,7 +214,6 @@ namespace abp
             MapString2String aFieldAssignment( _rFieldAssignment );
 
             // access the configuration information which the driver uses for determining it's column names
-            const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
@@ -301,7 +290,6 @@ namespace abp
             const OUString& _rDataSourceName, const OUString& _rTableName )
         {
             // access the configuration information which the driver uses for determining it's column names
-            const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
@@ -319,7 +307,6 @@ namespace abp
         void markPilotSuccess( const Reference< XComponentContext >& _rxContext )
         {
             // access the configuration information which the driver uses for determining it's column names
-            const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(

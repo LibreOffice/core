@@ -48,15 +48,13 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-static const OUString& GetPathToImpressConfigurationRoot (void)
+static OUString GetPathToImpressConfigurationRoot()
 {
-    static const OUString sPathToImpressConfigurationRoot ("/org.openoffice.Office.Impress/");
-    return sPathToImpressConfigurationRoot;
+    return OUString("/org.openoffice.Office.Impress/");
 }
-static const OUString& GetPathToSetNode (void)
+static OUString GetPathToSetNode()
 {
-    static const OUString sPathToSetNode("MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages");
-    return sPathToSetNode;
+    return OUString("MultiPaneGUI/ToolPanel/RecentlyUsedMasterPages");
 }
 
 } // end of anonymous namespace

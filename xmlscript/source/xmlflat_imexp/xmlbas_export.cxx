@@ -42,64 +42,26 @@ namespace xmlscript
 
     OUString getImplementationName_XMLBasicExporter()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLBasicExporter" );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "com.sun.star.comp.xmlscript.XMLBasicExporter" );
     }
 
     Sequence< OUString > getSupportedServiceNames_XMLBasicExporter()
     {
-        static Sequence< OUString >* pNames = 0;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< OUString > aNames(1);
-                aNames.getArray()[0] = "com.sun.star.document.XMLBasicExporter";
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        Sequence< OUString > aNames(1);
+        aNames.getArray()[0] = "com.sun.star.document.XMLBasicExporter";
+        return aNames;
     }
 
     OUString getImplementationName_XMLOasisBasicExporter()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" );
     }
 
     Sequence< OUString > getSupportedServiceNames_XMLOasisBasicExporter()
     {
-        static Sequence< OUString >* pNames = 0;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< OUString > aNames(1);
-                aNames.getArray()[0] = "com.sun.star.document.XMLOasisBasicExporter";
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        Sequence< OUString > aNames(1);
+        aNames.getArray()[0] = "com.sun.star.document.XMLOasisBasicExporter";
+        return aNames;
     }
 
     // XMLBasicExporterBase

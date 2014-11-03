@@ -856,7 +856,7 @@ void TPGalleryThemeProperties::FillFilterList()
     }
 
     // media filters
-    static const OUString aWildcard( "*." );
+    static const char aWildcard[] = "*.";
     ::avmedia::FilterNameVector     aFilters;
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 

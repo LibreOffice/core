@@ -454,8 +454,8 @@ void SAL_CALL Listener::propertyChange (
 {
     ThrowIfDisposed();
 
-    static const OUString sCurrentPagePropertyName ("CurrentPage");
-    static const OUString sEditModePropertyName ("IsMasterPageMode");
+    static const char sCurrentPagePropertyName[] = "CurrentPage";
+    static const char sEditModePropertyName[] = "IsMasterPageMode";
 
     if (rEvent.PropertyName.equals(sCurrentPagePropertyName))
     {

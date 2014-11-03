@@ -196,7 +196,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
         ::dbtools::OPropertyMap& rProp = OMetaConnection::getPropMap();
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
-        // and precsions and scale
+        // and precisions and scale
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
@@ -229,7 +229,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
                 OUString sTypeName;
                 descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
-                static OUString s_sAutoIncrement("auto_increment");
+                static const char s_sAutoIncrement[] = "auto_increment";
                 if ( bAutoIncrement )
                 {
                     if ( sTypeName.indexOf(s_sAutoIncrement) == -1 )
@@ -308,8 +308,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, 
 
 OUString OMySQLTable::getTypeCreatePattern() const
 {
-    static const OUString s_sCreatePattern("(M,D)");
-    return s_sCreatePattern;
+    return OUString("(M,D)");
 }
 
 void OMySQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName)

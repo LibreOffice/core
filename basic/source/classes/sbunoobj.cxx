@@ -4242,7 +4242,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     (void)pBasic;
     (void)bWrite;
 
-    static OUString aTypeTypeString( "type" );
+    static const char aTypeTypeString[] = "type";
 
     // 2 parameters needed
     if ( rPar.Count() != 3 )

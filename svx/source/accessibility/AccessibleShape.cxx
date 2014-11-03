@@ -563,8 +563,8 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     if ( mxShape.is() )
     {
 
-        static const OUString sBoundRectName ("BoundRect");
-        static const OUString sAnchorPositionName ("AnchorPosition");
+        static const char sBoundRectName[] = "BoundRect";
+        static const char sAnchorPositionName[] = "AnchorPosition";
 
         // Get the shape's bounding box in internal coordinates (in 100th of
         // mm).  Use the property BoundRect.  Only if that is not supported ask
@@ -986,8 +986,7 @@ uno::Sequence<OUString> SAL_CALL
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleShape");
-    aServiceNames[nCount] = sAdditionalServiceName;
+    aServiceNames[nCount] = "com.sun.star.drawing.AccessibleShape";
 
     return aServiceNames;
 }
@@ -1060,7 +1059,7 @@ void SAL_CALL
     AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
     throw (uno::RuntimeException, std::exception)
 {
-    static const OUString sShapeModified ("ShapeModified");
+    static const char sShapeModified[] = "ShapeModified";
 
     // First check if the event is for us.
     uno::Reference<drawing::XShape> xShape (

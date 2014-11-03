@@ -32,11 +32,11 @@ using namespace ::com::sun::star;
 
 typedef std::vector< beans::PropertyValue > VecPropValues;
 
-static OUString OPERATOR("Operator");
-static OUString FORMULA1("Formula1");
-static OUString FORMULA2("Formula2");
-static OUString STYLENAME("StyleName");
-static OUString sStyleNamePrefix("Excel_CondFormat");
+static const char OPERATOR[] = "Operator";
+static const char FORMULA1[] = "Formula1";
+static const char FORMULA2[] = "Formula2";
+static const char STYLENAME[] = "StyleName";
+static const char sStyleNamePrefix[] = "Excel_CondFormat";
 
 void SAL_CALL
 ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)

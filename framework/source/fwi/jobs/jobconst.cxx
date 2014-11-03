@@ -23,20 +23,17 @@ namespace framework{
 
 const OUString JobConst::ANSWER_DEACTIVATE_JOB()
 {
-    static const OUString PROP("Deactivate");
-    return PROP;
+    return OUString("Deactivate");
 }
 
 const OUString JobConst::ANSWER_SAVE_ARGUMENTS()
 {
-    static const OUString PROP("SaveArguments");
-    return PROP;
+    return OUString("SaveArguments");
 }
 
 const OUString JobConst::ANSWER_SEND_DISPATCHRESULT()
 {
-    static const OUString PROP("SendDispatchResult");
-    return PROP;
+    return OUString("SendDispatchResult");
 }
 
 } // namespace framework

@@ -681,8 +681,7 @@ throw(RuntimeException, std::exception)
         checkActionIndex_Impl( nIndex );
         EnsureIsAlive();
 
-        static const OUString sActionDesc( "Select" );
-        return sActionDesc;
+        return OUString( "Select" );
     }
 
     Reference< XAccessibleKeyBinding > AccessibleIconChoiceCtrlEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)

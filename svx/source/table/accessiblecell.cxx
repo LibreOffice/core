@@ -521,8 +521,7 @@ Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames(void) throw
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleCell");
-    aServiceNames[nCount] = sAdditionalServiceName;
+    aServiceNames[nCount] = "com.sun.star.drawing.AccessibleCell";
 
     return aServiceNames;
 }

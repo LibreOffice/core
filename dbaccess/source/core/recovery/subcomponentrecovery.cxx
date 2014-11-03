@@ -81,30 +81,24 @@ namespace dbaccess
     // helper
     namespace
     {
-        static const OUString& lcl_getComponentStorageBaseName( const SubComponentType i_eType )
+        static OUString lcl_getComponentStorageBaseName( const SubComponentType i_eType )
         {
-            static const OUString s_sFormBaseName( "form" );
-            static const OUString s_sReportBaseName( "report" );
-            static const OUString s_sTableBaseName( "table" );
-            static const OUString s_sQueryBaseName( "query" );
-
             switch ( i_eType )
             {
             case FORM:
-                return s_sFormBaseName;
+                return OUString("form");
             case REPORT:
-                return s_sReportBaseName;
+                return OUString("report");
             case TABLE:
-                return s_sTableBaseName;
+                return OUString("table");
             case QUERY:
-                return s_sQueryBaseName;
+                return OUString("query");
             default:
                 break;
             }
 
             OSL_FAIL( "lcl_getComponentStorageBaseName: unimplemented case!" );
-            static const OUString s_sFallback;
-            return s_sFallback;
+            return OUString();
         }
 
         static SubComponentType lcl_databaseObjectToSubComponentType( const sal_Int32 i_nObjectType )
@@ -166,17 +160,8 @@ namespace dbaccess
             return xCommandProcessor;
         }
 
-        static const OUString& lcl_getSettingsStreamName()
-        {
-            static const OUString s_sStatementStreamName( "settings.xml" );
-            return s_sStatementStreamName;
-        }
-
-        static const OUString& lcl_getCurrentQueryDesignName()
-        {
-            static const OUString s_sQuerySettingsName( "ooo:current-query-design" );
-            return s_sQuerySettingsName;
-        }
+        static const char sSettingsStreamName[] = "settings.xml";
+        static const char sCurrentQueryDesignName[] = "ooo:current-query-design";
     }
 
     // SettingsExportContext
@@ -362,31 +347,24 @@ namespace dbaccess
     // SubComponentRecovery
     const OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
     {
-        static const OUString s_sFormsStorageName( "forms" );
-        static const OUString s_sReportsStorageName( "reports" );
-        static const OUString s_sTablesStorageName( "tables" );
-        static const OUString s_sQueriesStorageName( "queries" );
-        static const OUString s_sRelationsStorageName( "relations" );
-
         switch ( i_eType )
         {
         case FORM:
-            return s_sFormsStorageName;
+            return OUString("forms");
         case REPORT:
-            return s_sReportsStorageName;
+            return OUString("reports");
         case TABLE:
-            return s_sTablesStorageName;
+            return OUString("tables");
         case QUERY:
-            return s_sQueriesStorageName;
+            return OUString("queries");
         case RELATION_DESIGN:
-            return s_sRelationsStorageName;
+            return OUString("relations");
         default:
             break;
         }
 
         OSL_FAIL( "SubComponentRecovery::getComponentsStorageName: unimplemented case!" );
-        static const OUString s_sFallback;
-        return s_sFallback;
+        return OUString();
     }
 
     void SubComponentRecovery::saveToRecoveryStorage( const Reference< XStorage >& i_rRecoveryStorage,
@@ -498,7 +476,7 @@ namespace dbaccess
         OSL_VERIFY( xDesignerProps->getPropertyValue( "CurrentQueryDesign" ) >>= aCurrentQueryDesign );
 
         // write the query design
-        StorageXMLOutputStream aDesignOutput( m_rContext, i_rObjectStorage, lcl_getSettingsStreamName() );
+        StorageXMLOutputStream aDesignOutput( m_rContext, i_rObjectStorage, sSettingsStreamName );
         SettingsExportContext aSettingsExportContext( m_rContext, aDesignOutput );
 
         const OUString sWhitespace( " " );
@@ -507,7 +485,7 @@ namespace dbaccess
         aDesignOutput.ignorableWhitespace( sWhitespace );
 
         XMLSettingsExportHelper aSettingsExporter( aSettingsExportContext );
-        aSettingsExporter.exportAllSettings( aCurrentQueryDesign, lcl_getCurrentQueryDesignName() );
+        aSettingsExporter.exportAllSettings( aCurrentQueryDesign, sCurrentQueryDesignName );
 
         aDesignOutput.ignorableWhitespace( sWhitespace );
         aDesignOutput.endElement();
@@ -579,13 +557,13 @@ namespace dbaccess
         Reference< XComponent > xSubComponent;
 
         // first read the settings query design settings from the storage
-        StorageXMLInputStream aDesignInput( m_rContext, i_rRecoveryStorage, lcl_getSettingsStreamName() );
+        StorageXMLInputStream aDesignInput( m_rContext, i_rRecoveryStorage, sSettingsStreamName );
 
         ::rtl::Reference< SettingsDocumentHandler > pDocHandler( new SettingsDocumentHandler );
         aDesignInput.import( pDocHandler.get() );
 
         const ::comphelper::NamedValueCollection& rSettings( pDocHandler->getSettings() );
-        const Any aCurrentQueryDesign = rSettings.get( lcl_getCurrentQueryDesignName() );
+        const Any aCurrentQueryDesign = rSettings.get( sCurrentQueryDesignName );
 #if OSL_DEBUG_LEVEL > 0
         Sequence< PropertyValue > aQueryDesignLayout;
         OSL_VERIFY( aCurrentQueryDesign >>= aQueryDesignLayout );

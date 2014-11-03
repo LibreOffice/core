@@ -97,8 +97,7 @@ namespace dbaui
     }
     OUString SAL_CALL OConnectionLineAccess::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
     {
-        static OUString sDescription("Relation");
-        return sDescription;
+        return OUString("Relation");
     }
     Reference< XAccessibleRelationSet > SAL_CALL OConnectionLineAccess::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
     {

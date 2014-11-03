@@ -450,7 +450,7 @@ bool isEnabled( const OUString& sAdminTime ,
         we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
         to "~" ...
      */
-    static OUString PATTERN_ISO8601("\?\?\?\?-\?\?-\?\?*");
+    static const char PATTERN_ISO8601[] = "\?\?\?\?-\?\?-\?\?*";
     WildCard aISOPattern(PATTERN_ISO8601);
 
     bool bValidAdmin = aISOPattern.Matches(sAdminTime);

@@ -24,10 +24,10 @@
 namespace
 {
 
-static const OUString lcl_aServiceName_Logarithmic( "com.sun.star.chart2.LogarithmicScaling" );
-static const OUString lcl_aServiceName_Exponential( "com.sun.star.chart2.ExponentialScaling" );
-static const OUString lcl_aServiceName_Linear( "com.sun.star.chart2.LinearScaling" );
-static const OUString lcl_aServiceName_Power( "com.sun.star.chart2.PowerScaling" );
+static const char lcl_aServiceName_Logarithmic[] = "com.sun.star.chart2.LogarithmicScaling";
+static const char lcl_aServiceName_Exponential[] = "com.sun.star.chart2.ExponentialScaling";
+static const char lcl_aServiceName_Linear[] = "com.sun.star.chart2.LinearScaling";
+static const char lcl_aServiceName_Power[] = "com.sun.star.chart2.PowerScaling";
 
 }
 
@@ -81,7 +81,9 @@ LogarithmicScaling::getServiceName()
 
 uno::Sequence< OUString > LogarithmicScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_Logarithmic, 1 );
+    uno::Sequence< OUString > aSeq(1);
+    aSeq.getArray()[0] = lcl_aServiceName_Logarithmic;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -102,8 +104,7 @@ ExponentialScaling::~ExponentialScaling()
 {
 }
 
-    double SAL_CALL
-ExponentialScaling::doScaling( double value )
+double SAL_CALL ExponentialScaling::doScaling( double value )
     throw (uno::RuntimeException, std::exception)
 {
     double fResult;
@@ -114,15 +115,13 @@ ExponentialScaling::doScaling( double value )
     return fResult;
 }
 
-    uno::Reference< XScaling > SAL_CALL
-ExponentialScaling::getInverseScaling()
+uno::Reference< XScaling > SAL_CALL ExponentialScaling::getInverseScaling()
     throw (uno::RuntimeException, std::exception)
 {
     return new LogarithmicScaling( m_fBase );
 }
 
-    OUString SAL_CALL
-ExponentialScaling::getServiceName()
+OUString SAL_CALL ExponentialScaling::getServiceName()
     throw (uno::RuntimeException, std::exception)
 {
     return lcl_aServiceName_Exponential;
@@ -130,7 +129,9 @@ ExponentialScaling::getServiceName()
 
 uno::Sequence< OUString > ExponentialScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_Exponential, 1 );
+    uno::Sequence< OUString > aSeq(1);
+    aSeq.getArray()[0] = lcl_aServiceName_Exponential;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -172,8 +173,7 @@ uno::Reference< XScaling > SAL_CALL
     return new LinearScaling( 1.0 / m_fSlope, m_fOffset / m_fSlope );
 }
 
-    OUString SAL_CALL
-LinearScaling::getServiceName()
+OUString SAL_CALL LinearScaling::getServiceName()
     throw (uno::RuntimeException, std::exception)
 {
     return lcl_aServiceName_Linear;
@@ -181,7 +181,9 @@ LinearScaling::getServiceName()
 
 uno::Sequence< OUString > LinearScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_Linear, 1 );
+    uno::Sequence< OUString > aSeq(1);
+    aSeq.getArray()[0] = lcl_aServiceName_Linear;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -230,7 +232,9 @@ PowerScaling::getServiceName()
 
 uno::Sequence< OUString > PowerScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_Power, 1 );
+    uno::Sequence< OUString > aSeq(1);
+    aSeq.getArray()[0] = lcl_aServiceName_Power;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

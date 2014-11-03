@@ -32,12 +32,7 @@ namespace dbtools
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-
-    static const OUString& getActiveConnectionPropertyName()
-    {
-        static const OUString s_sActiveConnectionPropertyName( "ActiveConnection" );
-        return s_sActiveConnectionPropertyName;
-    }
+    static const char ACTIVE_CONNECTION_PROPERTY_NAME[] = "ActiveConnection";
 
 
     //= OAutoConnectionDisposer
@@ -56,7 +51,7 @@ namespace dbtools
 
         try
         {
-            xProps->setPropertyValue( getActiveConnectionPropertyName(), makeAny( _rxConnection ) );
+            xProps->setPropertyValue( ACTIVE_CONNECTION_PROPERTY_NAME, makeAny( _rxConnection ) );
             m_xOriginalConnection = _rxConnection;
             startPropertyListening( xProps );
         }
@@ -71,7 +66,7 @@ namespace dbtools
     {
         try
         {
-            _rxRowSet->addPropertyChangeListener( getActiveConnectionPropertyName(), this );
+            _rxRowSet->addPropertyChangeListener( ACTIVE_CONNECTION_PROPERTY_NAME, this );
             m_bPropertyListening = true;
         }
         catch( const Exception& )
@@ -91,7 +86,7 @@ namespace dbtools
             OSL_ENSURE( _rxEventSource.is(), "OAutoConnectionDisposer::stopPropertyListening: invalid event source (no XPropertySet)!" );
             if ( _rxEventSource.is() )
             {
-                _rxEventSource->removePropertyChangeListener( getActiveConnectionPropertyName(), this );
+                _rxEventSource->removePropertyChangeListener( ACTIVE_CONNECTION_PROPERTY_NAME, this );
                 m_bPropertyListening = false;
             }
         }
@@ -135,7 +130,7 @@ namespace dbtools
 
     void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException, std::exception)
     {
-        if ( _rEvent.PropertyName.equals( getActiveConnectionPropertyName() ) )
+        if ( _rEvent.PropertyName == ACTIVE_CONNECTION_PROPERTY_NAME )
         {   // somebody set a new ActiveConnection
 
             Reference< XConnection > xNewConnection;

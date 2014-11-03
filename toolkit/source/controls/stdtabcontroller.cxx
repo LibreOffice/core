@@ -111,7 +111,7 @@ bool StdTabController::ImplCreateComponentSequence(
             if ( pTabs )
             {
                 // opt: Constant String for TabStop name
-                static const OUString aTabStopName( "Tabstop" );
+                static const char aTabStopName[] = "Tabstop";
 
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
                 Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();

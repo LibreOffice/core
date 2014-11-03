@@ -76,14 +76,7 @@ namespace pq_sdbc_driver
 
 OUString DriverGetImplementationName()
 {
-    static OUString *p;
-    if (! p )
-    {
-        MutexGuard guard( osl::Mutex::getGlobalMutex() );
-        static OUString instance( "org.openoffice.comp.connectivity.pq.Driver.noext" );
-        p = &instance;
-    }
-    return *p;
+    return OUString( "org.openoffice.comp.connectivity.pq.Driver.noext" );
 }
 
 Sequence< OUString > DriverGetSupportedServiceNames()

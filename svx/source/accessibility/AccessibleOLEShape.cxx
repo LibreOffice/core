@@ -132,8 +132,7 @@ OUString SAL_CALL
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleOLEShape");
-    aServiceNames[nCount] = sAdditionalServiceName;
+    aServiceNames[nCount] = "com.sun.star.drawing.AccessibleOLEShape";
 
     return aServiceNames;
 }

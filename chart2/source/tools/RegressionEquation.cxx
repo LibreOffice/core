@@ -45,8 +45,8 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aImplementationName( "com.sun.star.comp.chart2.RegressionEquation" );
-static const OUString lcl_aServiceName( "com.sun.star.chart2.RegressionEquation" );
+static const char lcl_aImplementationName[] =  "com.sun.star.comp.chart2.RegressionEquation";
+static const char lcl_aServiceName[] =  "com.sun.star.chart2.RegressionEquation";
 
 enum
 {

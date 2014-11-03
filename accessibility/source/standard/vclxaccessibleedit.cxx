@@ -275,8 +275,7 @@ OUString VCLXAccessibleEdit::getAccessibleActionDescription ( sal_Int32 nIndex )
     if ( nIndex < 0 || nIndex >= getAccessibleActionCount() )
         throw IndexOutOfBoundsException();
 
-    static const OUString sAction( "activate" );
-    return sAction;
+    return OUString( "activate" );
 }
 
 

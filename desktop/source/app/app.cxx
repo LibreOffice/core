@@ -1075,9 +1075,9 @@ void impl_checkRecoveryState(bool& bCrashed           ,
 bool impl_callRecoveryUI(bool bEmergencySave     ,
                          bool bExistsRecoveryData)
 {
-    static OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
-    static OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
-    static OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
+    static const char SERVICENAME_RECOVERYUI[] = "com.sun.star.comp.svx.RecoveryUI";
+    static const char COMMAND_EMERGENCYSAVE[] = "vnd.sun.star.autorecovery:/doEmergencySave";
+    static const char COMMAND_RECOVERY[] = "vnd.sun.star.autorecovery:/doAutoRecovery";
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 

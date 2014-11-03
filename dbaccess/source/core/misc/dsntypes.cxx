@@ -298,17 +298,17 @@ bool ODsnTypeCollection::isEmbeddedDatabase( const OUString& _sURL ) const
 OUString ODsnTypeCollection::getEmbeddedDatabase() const
 {
     OUString sEmbeddedDatabaseURL;
-    static const OUString s_sNodeName("org.openoffice.Office.DataAccess"); ///Installed
+    static const char s_sNodeName[] = "org.openoffice.Office.DataAccess"; ///Installed
     const ::utl::OConfigurationTreeRoot aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(m_xContext, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
     if ( aInstalled.isValid() )
     {
         if ( aInstalled.hasByName("EmbeddedDatabases/DefaultEmbeddedDatabase/Value") )
         {
-            static const OUString s_sValue("EmbeddedDatabases/DefaultEmbeddedDatabase/Value");
+            static const char s_sValue[] = "EmbeddedDatabases/DefaultEmbeddedDatabase/Value";
 
             aInstalled.getNodeValue(s_sValue) >>= sEmbeddedDatabaseURL;
             if ( !sEmbeddedDatabaseURL.isEmpty() )
-                aInstalled.getNodeValue(s_sValue + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
+                aInstalled.getNodeValue(OUString(s_sValue) + "/" + sEmbeddedDatabaseURL + "/URL") >>= sEmbeddedDatabaseURL;
         }
     }
     if ( sEmbeddedDatabaseURL.isEmpty() )

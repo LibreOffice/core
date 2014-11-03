@@ -69,8 +69,8 @@ bool LocalizationMgr::isLibraryLocalized ()
 
 void LocalizationMgr::handleTranslationbar ()
 {
-    static OUString const aLayoutManagerName("LayoutManager");
-    static OUString const aToolBarResName("private:resource/toolbar/translationbar");
+    static const char aLayoutManagerName[] = "LayoutManager";
+    static const char aToolBarResName[] = "private:resource/toolbar/translationbar";
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
@@ -902,7 +902,7 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
 void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName,
     const OUString& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
-    static OUString aResourceResolverPropName( "ResourceResolver" );
+    static const char aResourceResolverPropName[] = "ResourceResolver";
 
     // Get library
     Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, true ) );

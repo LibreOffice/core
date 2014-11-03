@@ -49,10 +49,10 @@ using namespace ::com::sun::star::uno;
 namespace migration
 {
 
-static OUString sExtensionSubDir( "/user/uno_packages/" );
-static OUString sSubDirName( "cache" );
-static OUString sDescriptionXmlFile( "/description.xml" );
-static OUString sExtensionRootSubDirName( "/uno_packages" );
+static const char sExtensionSubDir[] = "/user/uno_packages/";
+static const char sSubDirName[] = "cache";
+static const char sDescriptionXmlFile[] = "/description.xml";
+static const char sExtensionRootSubDirName[] = "/uno_packages";
 
 
 // component operations

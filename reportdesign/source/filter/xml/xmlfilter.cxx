@@ -505,7 +505,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         aArgs[0] <<= beans::NamedValue(OUString("Storage"),uno::makeAny(xStorage));
         xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(OUString("com.sun.star.document.ImportEmbeddedObjectResolver"),aArgs) , uno::UNO_QUERY);
 
-        static const OUString s_sOld("OldFormat");
+        static const char s_sOld[] = "OldFormat";
         static comphelper::PropertyMapEntry const pMap[] =
         {
             { OUString("OldFormat") , 1,    cppu::UnoType<sal_Bool>::get(),                 beans::PropertyAttribute::BOUND,     0 },
@@ -523,9 +523,9 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         xProp->setPropertyValue("StreamRelPath", uno::makeAny(sHierarchicalDocumentName));
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
-        static const OUString s_sMeta("meta.xml");
-        static const OUString s_sStreamName("StreamName");
-        xProp->setPropertyValue(s_sStreamName, uno::makeAny(s_sMeta));
+        static const char s_sMeta[] = "meta.xml";
+        static const char s_sStreamName[] = "StreamName";
+        xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString(s_sMeta)));
         sal_Int32 nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"meta.xml"
@@ -1047,7 +1047,7 @@ bool ORptFilter::isOldFormat() const
     uno::Reference<beans::XPropertySet> xProp = getImportInfo();
     if ( xProp.is() )
     {
-        const static OUString s_sOld("OldFormat");
+        static const char s_sOld[] = "OldFormat";
         if ( xProp->getPropertySetInfo()->hasPropertyByName(s_sOld))
         {
             xProp->getPropertyValue(s_sOld) >>= bOldFormat;

@@ -7197,7 +7197,7 @@ void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_In
         else
             nHeight = nTableBottom - nLastPosition;
 
-        static const OUString  sWidth( "Height" );
+        static const char sWidth[] = "Height";
         Reference< XPropertySet > xPropSet( xTableRows->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nHeight ) );
     }
@@ -7221,7 +7221,7 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::se
         else
             nWidth = nTableRight - nLastPosition;
 
-        static const OUString  sWidth( "Width" );
+        static const char sWidth[] = "Width";
         Reference< XPropertySet > xPropSet( xTableColumns->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nWidth ) );
     }
@@ -7256,16 +7256,16 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         const sal_Int32 nRightDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
         const sal_Int32 nUpperDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
         const sal_Int32 nLowerDist(static_cast<const SdrMetricItem&>(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
-        static const OUString  sTopBorder( "TextUpperDistance" );
-        static const OUString  sBottomBorder( "TextLowerDistance" );
-        static const OUString  sLeftBorder( "TextLeftDistance" );
-        static const OUString  sRightBorder( "TextRightDistance" );
+        static const char sTopBorder[] = "TextUpperDistance";
+        static const char sBottomBorder[] = "TextLowerDistance";
+        static const char sLeftBorder[] = "TextLeftDistance";
+        static const char sRightBorder[] = "TextRightDistance";
         xPropSet->setPropertyValue( sTopBorder, Any( nUpperDist ) );
         xPropSet->setPropertyValue( sRightBorder, Any( nRightDist ) );
         xPropSet->setPropertyValue( sLeftBorder, Any( nLeftDist ) );
         xPropSet->setPropertyValue( sBottomBorder, Any( nLowerDist ) );
 
-        static const OUString  sTextVerticalAdjust( "TextVerticalAdjust" );
+        static const char  sTextVerticalAdjust[] = "TextVerticalAdjust";
         const SdrTextVertAdjust eTextVertAdjust(static_cast<const SdrTextVertAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
         drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
         if ( eTextVertAdjust == SDRTEXTVERTADJUST_CENTER )
@@ -7277,8 +7277,8 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         //set textHorizontalAdjust and TextWritingMode attr
         const sal_Int32 eHA(static_cast<const SdrTextHorzAdjustItem&>(pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
         const SvxFrameDirection eDirection = (const SvxFrameDirection)(static_cast<const SvxFrameDirectionItem&>(pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
-        static const OUString  sHorizontalAdjust( "TextHorizontalAdjust" );
-        static const OUString  sWritingMode( "TextWritingMode" );
+        static const char  sHorizontalAdjust[] = "TextHorizontalAdjust";
+        static const char  sWritingMode[] = "TextWritingMode";
         xPropSet->setPropertyValue(  sHorizontalAdjust , Any( eHA ) );
         if ( eDirection == FRMDIR_VERT_TOP_RIGHT )
         {//vertical writing
@@ -7291,7 +7291,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         {
             case drawing::FillStyle_SOLID :
                 {
-                    static const OUString sFillColor( "FillColor" );
+                    static const char sFillColor[] = "FillColor";
                     eFS = com::sun::star::drawing::FillStyle_SOLID;
                     Color aFillColor( static_cast<const XFillColorItem&>(pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
                     sal_Int32 nFillColor( aFillColor.GetColor() );
@@ -7315,7 +7315,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     aGradient.EndIntensity = aXGradient.GetEndIntens();
                     aGradient.StepCount = aXGradient.GetSteps();
 
-                    static const OUString sFillGradient( "FillGradient" );
+                    static const char sFillGradient[] = "FillGradient";
                     xPropSet->setPropertyValue( sFillGradient, Any( aGradient ) );
                 }
                 break;
@@ -7350,12 +7350,12 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             break;
 
         }
-        static const OUString sFillStyle( "FillStyle" );
+        static const char sFillStyle[] = "FillStyle";
         xPropSet->setPropertyValue( sFillStyle, Any( eFS ) );
         if ( eFillStyle != drawing::FillStyle_NONE )
         {
             sal_Int16 nFillTransparence( static_cast<const XFillTransparenceItem&>(pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
-            static const OUString sFillTransparence( "FillTransparence" );
+            static const char sFillTransparence[] = "FillTransparence";
             xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
         }
     }
@@ -7394,12 +7394,12 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
         std::vector< sal_Int32 >::const_iterator aIter( vPositions.begin() );
         while( aIter != vPositions.end() )
         {
-            static const OUString sTopBorder( "TopBorder" );
-            static const OUString sBottomBorder( "BottomBorder" );
-            static const OUString sLeftBorder( "LeftBorder" );
-            static const OUString sRightBorder( "RightBorder" );
-            static const OUString  sDiagonalTLBR( "DiagonalTLBR" );
-            static const OUString  sDiagonalBLTR( "DiagonalBLTR" );
+            static const char sTopBorder[] = "TopBorder";
+            static const char sBottomBorder[] = "BottomBorder";
+            static const char sLeftBorder[] = "LeftBorder";
+            static const char sRightBorder[] = "RightBorder";
+            static const char sDiagonalTLBR[] = "DiagonalTLBR";
+            static const char sDiagonalBLTR[] = "DiagonalBLTR";
 
             sal_Int32 nPosition = *aIter & 0xffffff;
             sal_Int32 nFlags = *aIter &~0xffffff;

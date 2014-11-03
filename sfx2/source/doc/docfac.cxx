@@ -188,15 +188,15 @@ void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
 void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OUString& rTemplateName )
 {
     static const int nMaxPathSize = 16000;
-    static OUString SERVICE_FILTER_FACTORY("com.sun.star.document.FilterFactory");
-    static OUString SERVICE_TYPE_DECTECTION("com.sun.star.document.TypeDetection");
+    static const char SERVICE_FILTER_FACTORY[] = "com.sun.star.document.FilterFactory";
+    static const char SERVICE_TYPE_DECTECTION[] = "com.sun.star.document.TypeDetection";
 
-    static OUString CONF_ROOT("/org.openoffice.Setup");
-    static OUString CONF_PATH = "Office/Factories/" + rServiceName;
-    static OUString PROP_DEF_TEMPL_CHANGED("ooSetupFactorySystemDefaultTemplateChanged");
-    static OUString PROP_ACTUAL_FILTER("ooSetupFactoryActualFilter");
+    static const char CONF_ROOT[] = "/org.openoffice.Setup";
+    OUString CONF_PATH = "Office/Factories/" + rServiceName;
+    static const char PROP_DEF_TEMPL_CHANGED[] = "ooSetupFactorySystemDefaultTemplateChanged";
+    static const char PROP_ACTUAL_FILTER[] = "ooSetupFactoryActualFilter";
 
-    static OUString DEF_TPL_STR("/soffice.");
+    static const char DEF_TPL_STR[] = "/soffice.";
 
     OUString sURL;
     OUString sPath;

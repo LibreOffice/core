@@ -15,10 +15,7 @@
 
 #include "CovarianceDialog.hxx"
 
-namespace
-{
-    static const OUString strCovarianceTemplate("=COVAR(%VAR1%; %VAR2%)");
-}
+static const char strCovarianceTemplate[] = "=COVAR(%VAR1%; %VAR2%)";
 
 ScCovarianceDialog::ScCovarianceDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,

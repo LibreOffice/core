@@ -75,14 +75,14 @@ void SfxStylesInfo_Impl::setModel(const ::com::sun::star::uno::Reference< ::com:
     m_xDoc = xModel;
 }
 
-static OUString CMDURL_SPART  (".uno:StyleApply?Style:string=");
-static OUString CMDURL_FPART2 ("&FamilyName:string=");
+static const char CMDURL_SPART [] = ".uno:StyleApply?Style:string=";
+static const char CMDURL_FPART2[] = "&FamilyName:string=";
 
-static OUString CMDURL_STYLEPROT_ONLY (".uno:StyleApply?");
-static OUString CMDURL_SPART_ONLY     ("Style:string=");
-static OUString CMDURL_FPART_ONLY     ("FamilyName:string=");
+static const char CMDURL_STYLEPROT_ONLY[] = ".uno:StyleApply?";
+static const char CMDURL_SPART_ONLY    [] = "Style:string=";
+static const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
 
-static OUString STYLEPROP_UINAME ("DisplayName");
+static const char STYLEPROP_UINAME[] = "DisplayName";
 
 OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUString& sStyle)
 {
@@ -96,9 +96,9 @@ OUString SfxStylesInfo_Impl::generateCommand(const OUString& sFamily, const OUSt
 
 bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
 {
-    static sal_Int32 LEN_STYLEPROT = CMDURL_STYLEPROT_ONLY.getLength();
-    static sal_Int32 LEN_SPART     = CMDURL_SPART_ONLY.getLength();
-    static sal_Int32 LEN_FPART     = CMDURL_FPART_ONLY.getLength();
+    static const sal_Int32 LEN_STYLEPROT = strlen(CMDURL_STYLEPROT_ONLY);
+    static const sal_Int32 LEN_SPART     = strlen(CMDURL_SPART_ONLY);
+    static const sal_Int32 LEN_FPART     = strlen(CMDURL_FPART_ONLY);
 
     if (!aStyle.sCommand.startsWith(CMDURL_STYLEPROT_ONLY))
         return false;
@@ -205,7 +205,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
 
 ::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& sFamily)
 {
-    static OUString PROP_UINAME ("DisplayName");
+    static const char PROP_UINAME[] = "DisplayName";
 
     css::uno::Sequence< OUString > lStyleNames;
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);

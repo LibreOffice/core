@@ -871,7 +871,7 @@ void TVChildTarget::subst( OUString& instpath ) const
 
 // class ExtensionIteratorBase
 
-static OUString aHelpMediaType("application/vnd.sun.star.help");
+static const char aHelpMediaType[] = "application/vnd.sun.star.help";
 
 ExtensionIteratorBase::ExtensionIteratorBase( const OUString& aLanguage )
         : m_eState( USER_EXTENSIONS )

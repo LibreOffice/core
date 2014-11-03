@@ -81,10 +81,9 @@ namespace drawinglayer
     {
         uno::Sequence< OUString > XPrimitive2DRenderer_getSupportedServiceNames()
         {
-            static OUString aServiceName("com.sun.star.graphic.Primitive2DTools" );
-            static uno::Sequence< OUString > aServiceNames( &aServiceName, 1 );
-
-            return( aServiceNames );
+            OUString aServiceName("com.sun.star.graphic.Primitive2DTools" );
+            uno::Sequence< OUString > aServiceNames( &aServiceName, 1 );
+            return aServiceNames;
         }
 
         OUString XPrimitive2DRenderer_getImplementationName()

@@ -153,8 +153,8 @@ Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException, std::excep
 
 Sequence< OUString > FontIdentificator_getSupportedServiceNames()
 {
-    static OUString aServiceName( "com.sun.star.awt.FontIdentificator" );
-    static Sequence< OUString > aServiceNames( &aServiceName, 1 );
+    OUString aServiceName( "com.sun.star.awt.FontIdentificator" );
+    Sequence< OUString > aServiceNames( &aServiceName, 1 );
     return aServiceNames;
 }
 

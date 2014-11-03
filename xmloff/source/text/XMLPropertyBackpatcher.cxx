@@ -171,10 +171,9 @@ XMLTextImportHelper::MakeBackpatcherImpl()
     return ::boost::shared_ptr<BackpatcherImpl>(new BackpatcherImpl);
 }
 
-static OUString const& GetSequenceNumber()
+static OUString GetSequenceNumber()
 {
-    static OUString s_SequenceNumber("SequenceNumber");
-    return s_SequenceNumber;
+    return OUString("SequenceNumber");
 }
 
 
@@ -213,7 +212,7 @@ XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
 
 XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
 {
-    static OUString s_SourceName("SourceName");
+    static const char s_SourceName[] = "SourceName";
     if (!m_pBackpatcherImpl->m_pSequenceNameBackpatcher.get())
     {
         m_pBackpatcherImpl->m_pSequenceNameBackpatcher.reset(

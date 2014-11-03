@@ -57,28 +57,24 @@ using namespace ::com::sun::star::container;
 
 namespace
 {
-    const OUString& lcl_getNamePropertyName( )
+    static OUString lcl_getNamePropertyName( )
     {
-        static OUString s_sNamePropertyName( "Name" );
-        return s_sNamePropertyName;
+        return OUString( "Name" );
     }
-    const OUString& lcl_getDescPropertyName( )
+    static OUString lcl_getDescPropertyName( )
     {
-        static OUString s_sDescPropertyDesc( "HelpText" );
-        return s_sDescPropertyDesc;
+        return OUString( "HelpText" );
     }
-    const OUString& lcl_getLabelPropertyName( )
+    static OUString lcl_getLabelPropertyName( )
     {
-        static OUString s_sLabelPropertyLabel( "Label" );
-        return s_sLabelPropertyLabel;
+        return OUString( "Label" );
     }
-    const OUString& lcl_getLabelControlPropertyName( )
+    static OUString lcl_getLabelControlPropertyName( )
     {
-        static OUString s_sLabelControlPropertyLabel("LabelControl");
-        return s_sLabelControlPropertyLabel;
+        return OUString("LabelControl");
     }
     // return the property which should be used as AccessibleName
-    const OUString& lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
+    const OUString lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
     {
         if ( _rxPSI.is() && _rxPSI->hasPropertyByName( lcl_getLabelPropertyName() ) )
             return lcl_getLabelPropertyName();
