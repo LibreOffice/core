@@ -16,7 +16,8 @@ ScCalcConfig::ScCalcConfig() :
     mbOpenCLEnabled(true),
     mbOpenCLSubsetOnly(true),
     mbOpenCLAutoSelect(true),
-    mnOpenCLMinimumFormulaGroupSize(20)
+    mnOpenCLMinimumFormulaGroupSize(4),
+    maOpenCLSubsetFunctions {ocAverage, ocMax, ocMin, ocSum, ocSumIfs}
 {
 }
 
@@ -43,7 +44,8 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            mbOpenCLSubsetOnly == r.mbOpenCLSubsetOnly &&
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
            maOpenCLDevice == r.maOpenCLDevice &&
-           mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize;
+           mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
+           maOpenCLSubsetFunctions == r.maOpenCLSubsetFunctions;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

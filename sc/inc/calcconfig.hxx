@@ -11,7 +11,11 @@
 #define INCLUDED_SC_INC_CALCCONFIG_HXX
 
 #include "scdllapi.h"
+
+#include <set>
+
 #include <formula/grammar.hxx>
+#include <formula/opcode.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -46,6 +50,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool mbOpenCLAutoSelect:1;
     OUString maOpenCLDevice;
     int mnOpenCLMinimumFormulaGroupSize;
+    std::set<OpCodeEnum> maOpenCLSubsetFunctions;
 
     ScCalcConfig();
 
