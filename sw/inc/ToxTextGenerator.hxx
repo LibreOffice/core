@@ -54,7 +54,7 @@ class ToxTabStopTokenHandler;
  *
  * You can control its behavior by calling @link SetTabstopPolicy() and specifying the desired behavior.
  */
-class SW_DLLPUBLIC ToxTextGenerator
+class ToxTextGenerator
 {
 public:
     ToxTextGenerator(const SwForm& toxForm, boost::shared_ptr<ToxTabStopTokenHandler> tabStopHandler);

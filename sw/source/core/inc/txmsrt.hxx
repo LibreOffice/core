@@ -118,7 +118,7 @@ public:
 /**
  * Class for sorting directories
  */
-struct SW_DLLPUBLIC SwTOXSortTabBase
+struct SwTOXSortTabBase
 {
     SwTOXSources aTOXSources;
     ::com::sun::star::lang::Locale aLocale;

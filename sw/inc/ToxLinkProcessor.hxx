@@ -24,7 +24,7 @@ namespace sw {
 /** A helper class for ToxTextGenerator.
  * It collects information about encountered link tokens and allows access in a processed form.
  */
-class SW_DLLPUBLIC ToxLinkProcessor {
+class ToxLinkProcessor {
 public:
     ToxLinkProcessor() {}
     virtual ~ToxLinkProcessor() {}

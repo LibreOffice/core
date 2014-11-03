@@ -28,7 +28,7 @@ namespace sw {
  * @internal
  * This is an interface class. It allows to mock the class in unit tests
  */
-class SW_DLLPUBLIC ToxTabStopTokenHandler
+class ToxTabStopTokenHandler
 {
 public:
     virtual ~ToxTabStopTokenHandler() {}
@@ -50,7 +50,7 @@ public:
 };
 
 /** The default implementation of ToxTabStopTokenHandler */
-class SW_DLLPUBLIC DefaultToxTabStopTokenHandler : public ToxTabStopTokenHandler
+class DefaultToxTabStopTokenHandler : public ToxTabStopTokenHandler
 {
 public:
 
