@@ -1067,7 +1067,7 @@ typedef struct _subHeader2 {
     sal_uInt16 idRangeOffset;
 } subHeader2;
 
-static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
+static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
     sal_uInt16 *CMAP2 = (sal_uInt16 *) cmap;
     sal_uInt8 theHighByte;
 
@@ -1075,14 +1075,20 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
     subHeader2* subHeader2s;
     sal_uInt16* subHeader2Keys;
     sal_uInt16 firstCode;
-    int k;
+    int k = -1;
     sal_uInt32 ToReturn;
 
     theHighByte = (sal_uInt8)((c >> 8) & 0x00ff);
     theLowByte = (sal_uInt8)(c & 0x00ff);
     subHeader2Keys = CMAP2 + 3;
     subHeader2s = (subHeader2 *)(subHeader2Keys + 256);
-    k = Int16FromMOTA(subHeader2Keys[theHighByte]) / 8;
+    if(reinterpret_cast<sal_uInt8*>(&subHeader2Keys[theHighByte]) - cmap < nMaxCmapSize - 2)
+    {
+        k = Int16FromMOTA(subHeader2Keys[theHighByte]) / 8;
+        // check if the subheader record fits into available space
+        if((k >= 0) && (reinterpret_cast<sal_uInt8*>(&subHeader2s[k]) - cmap >= int(nMaxCmapSize - sizeof(subHeader2))))
+            k = -1;
+    }
 
     if(k == 0) {
         firstCode = Int16FromMOTA(subHeader2s[k].firstCode);
