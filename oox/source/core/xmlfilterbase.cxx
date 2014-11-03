@@ -250,14 +250,12 @@ namespace {
 
 OUString getTransitionalRelationshipOfficeDocType(const OUString& rPart)
 {
-    static const OUString aBase("http://schemas.openxmlformats.org/officeDocument/2006/relationships/");
-    return aBase + rPart;
+    return OUString("http://schemas.openxmlformats.org/officeDocument/2006/relationships/") + rPart;
 }
 
 OUString getStrictRelationshipOfficeDocType(const OUString& rPart)
 {
-    static const OUString aBase("http://purl.oclc.org/ooxml/officeDocument/relationships/");
-    return aBase + rPart;
+    return OUString("http://purl.oclc.org/ooxml/officeDocument/relationships/") + rPart;
 }
 
 }

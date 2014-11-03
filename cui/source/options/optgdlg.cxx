@@ -987,12 +987,11 @@ struct LanguageConfig_Impl
 static bool bLanguageCurrentDoc_Impl = false;
 
 // some things we'll need...
-static const OUString sAccessSrvc("com.sun.star.configuration.ConfigurationAccess");
-static const OUString sAccessUpdSrvc("com.sun.star.configuration.ConfigurationUpdateAccess");
-static const OUString sInstalledLocalesPath("org.openoffice.Setup/Office/InstalledLocales");
-static OUString sUserLocalePath("org.openoffice.Office.Linguistic/General");
-//static const OUString sUserLocalePath("org.openoffice.Office/Linguistic");
-static const OUString sUserLocaleKey("UILocale");
+static const char sAccessSrvc[] = "com.sun.star.configuration.ConfigurationAccess";
+static const char sAccessUpdSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
+static const char sInstalledLocalesPath[] = "org.openoffice.Setup/Office/InstalledLocales";
+static const char sUserLocalePath[] = "org.openoffice.Office.Linguistic/General";
+static const char sUserLocaleKey[] = "UILocale";
 static Sequence< OUString > seqInstalledLanguages;
 
 static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocaleWrapper )
@@ -1059,7 +1058,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
         Reference< XNameAccess > theNameAccess;
 
         // find out which locales are currently installed and add them to the listbox
-        theArgs[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(sInstalledLocalesPath)));
+        theArgs[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(OUString(sInstalledLocalesPath))));
     theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
@@ -1078,7 +1077,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
         // find out whether the user has a specific locale specified
         Sequence< Any > theArgs2(1);
-        theArgs2[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(sUserLocalePath)));
+        theArgs2[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(OUString(sUserLocalePath))));
         theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
@@ -1236,7 +1235,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             com::sun::star::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
         Sequence< Any > theArgs(1);
-        theArgs[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(sUserLocalePath)));
+        theArgs[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(OUString(sUserLocalePath))));
         Reference< XPropertySet >xProp(
             theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
         if ( !m_sUserLocaleValue.equals(aLangString))

@@ -267,14 +267,14 @@ void OCollectionView::initCurrentPath()
         if ( m_xContent.is() )
         {
             const OUString sCID = m_xContent->getIdentifier()->getContentIdentifier();
-            const static OUString s_sFormsCID("private:forms");
-            const static OUString s_sReportsCID("private:reports");
-            m_bCreateForm = s_sFormsCID == sCID ;
+            static const char s_sFormsCID[] = "private:forms";
+            static const char s_sReportsCID[] = "private:reports";
+            m_bCreateForm = s_sFormsCID == sCID;
             OUString sPath("/");
-            if ( m_bCreateForm && sCID.getLength() != s_sFormsCID.getLength())
-                sPath = sCID.copy(s_sFormsCID.getLength());
-            else if ( !m_bCreateForm && sCID.getLength() != s_sReportsCID.getLength() )
-                sPath = sCID.copy(s_sReportsCID.getLength() - 2);
+            if ( m_bCreateForm && sCID.getLength() != (sal_Int32)strlen(s_sFormsCID))
+                sPath = sCID.copy(strlen(s_sFormsCID));
+            else if ( !m_bCreateForm && sCID.getLength() != (sal_Int32)strlen(s_sReportsCID) )
+                sPath = sCID.copy(strlen(s_sReportsCID) - 2);
 
             m_pFTCurrentPath->SetText(sPath);
             Reference<XChild> xChild(m_xContent,UNO_QUERY);

@@ -138,35 +138,29 @@ namespace dbaxml
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
         // into one of these types)
-        static const OUString s_sTypeBoolean ("boolean");
-        static const OUString s_sTypeShort   ("short");
-        static const OUString s_sTypeInteger ("int");
-        static const OUString s_sTypeLong    ("long");
-        static const OUString s_sTypeDouble  ("double");
-        static const OUString s_sTypeString  ("string");
 
         // handle the type description
         switch (_rType.getTypeClass())
         {
             case TypeClass_STRING:
-                return s_sTypeString;
+                return OUString("string");
             case TypeClass_DOUBLE:
-                return s_sTypeDouble;
+                return OUString("double");
             case TypeClass_BOOLEAN:
-                return s_sTypeBoolean;
+                return OUString("boolean");
             case TypeClass_BYTE:
             case TypeClass_SHORT:
-                return s_sTypeShort;
+                return OUString("short");
             case TypeClass_LONG:
-                return s_sTypeInteger;
+                return OUString("int");
             case TypeClass_HYPER:
-                return s_sTypeLong;
+                return OUString("long");
             case TypeClass_ENUM:
-                return s_sTypeInteger;
+                return OUString("int");
 
             default:
                 OSL_FAIL( "lcl_implGetPropertyXMLType: unsupported value type!" );
-                return s_sTypeDouble;
+                return OUString("double");
         }
     }
 

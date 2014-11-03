@@ -135,7 +135,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
     if ( pContext )
         return pContext;
 
-    static const OUString s_sStringConcat(" & ");
+    static const char s_sStringConcat[] = " & ";
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
     Reference<XComponentContext> xContext = m_rImport.GetComponentContext();
 
@@ -164,11 +164,11 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
                                                 0x0020, true );
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sPageText += s_sStringConcat + " PageNumber()";
+            m_sPageText += OUString(s_sStringConcat) + " PageNumber()";
             m_bFormattedField = true;
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sPageText += s_sStringConcat + " PageCount()";
+            m_sPageText += OUString(s_sStringConcat) + " PageCount()";
             m_bFormattedField = true;
             break;
         default:
@@ -212,11 +212,10 @@ void OXMLFixedContent::Characters( const OUString& rChars )
     m_sLabel += rChars;
     if ( !rChars.isEmpty() )
     {
-        static const OUString s_Quote("\"");
+        static const char s_Quote[] = "\"";
         if ( !m_sPageText.isEmpty() )
         {
-            static const OUString s_sStringConcat(" & ");
-            m_sPageText += s_sStringConcat;
+            m_sPageText += " & ";
         }
 
         m_sPageText += s_Quote + rChars + s_Quote;

@@ -758,7 +758,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
 
 OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString& _sDriverClass)
 {
-    static const OUString s_sNodeName("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths");
+    static const char s_sNodeName[] = "org.openoffice.Office.DataAccess/JDBC/DriverClassPaths";
     ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
         m_pDriver->getContext(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
     OUString sURL;

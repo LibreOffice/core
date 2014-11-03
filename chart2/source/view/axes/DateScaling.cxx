@@ -25,8 +25,8 @@
 namespace
 {
 
-static const OUString lcl_aServiceName_DateScaling( "com.sun.star.chart2.DateScaling" );
-static const OUString lcl_aServiceName_InverseDateScaling( "com.sun.star.chart2.InverseDateScaling" );
+static const char lcl_aServiceName_DateScaling[] = "com.sun.star.chart2.DateScaling";
+static const char lcl_aServiceName_InverseDateScaling[] = "com.sun.star.chart2.InverseDateScaling";
 
 static const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
 }
@@ -105,7 +105,9 @@ OUString SAL_CALL DateScaling::getServiceName()
 
 uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_DateScaling, 1 );
+    uno::Sequence< OUString > aSeq(1);
+    aSeq.getArray()[0] = lcl_aServiceName_DateScaling;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -184,7 +186,9 @@ OUString SAL_CALL InverseDateScaling::getServiceName()
 
 uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< OUString >( & lcl_aServiceName_InverseDateScaling, 1 );
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq.getArray()[0] = lcl_aServiceName_InverseDateScaling;
+    return aSeq;
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

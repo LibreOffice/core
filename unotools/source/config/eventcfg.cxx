@@ -38,10 +38,10 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_EVENTS OUString("Office.Events/ApplicationEvents")
-#define PATHDELIMITER OUString("/")
-#define SETNODE_BINDINGS OUString("Bindings")
-#define PROPERTYNAME_BINDINGURL OUString("BindingURL")
+static const char ROOTNODE_EVENTS[] = "Office.Events/ApplicationEvents";
+#define PATHDELIMITER "/"
+#define SETNODE_BINDINGS "Bindings"
+#define PROPERTYNAME_BINDINGURL "BindingURL"
 
 const char* pEventAsciiNames[] =
 {
@@ -169,8 +169,8 @@ void GlobalEventConfig_Impl::Commit()
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
-    static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + "BindingType['");
-    static const OUString sPostfix("']" + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
+    static const char sPrefix[] = SETNODE_BINDINGS PATHDELIMITER "BindingType['";
+    static const char sPostfix[] = "']" PATHDELIMITER PROPERTYNAME_BINDINGURL;
     //step through the list of events
     for(int i=0;it!=it_end;++it,++i)
     {

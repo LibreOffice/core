@@ -291,10 +291,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbDirIsReadO
 
             if( xContentAccess.is() )
             {
-                static const OUString s_sTitle("Title");
-                static const OUString s_sIsReadOnly("IsReadOnly");
-                static const OUString s_sSDG_EXT("sdg");
-                static const OUString s_sSDV_EXT("sdv");
+                static const char s_sTitle[] = "Title";
+                static const char s_sIsReadOnly[] = "IsReadOnly";
+                static const char s_sSDG_EXT[] = "sdg";
+                static const char s_sSDV_EXT[] = "sdv";
 
                 while( xResultSet->next() )
                 {

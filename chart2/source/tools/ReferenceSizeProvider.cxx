@@ -133,7 +133,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
     if( ! xProp.is())
         return;
 
-    static const OUString aRefSizeName( "ReferencePageSize" );
+    static const char aRefSizeName[] = "ReferencePageSize";
 
     try
     {
@@ -168,7 +168,7 @@ void ReferenceSizeProvider::getAutoResizeFromPropSet(
     const Reference< beans::XPropertySet > & xProp,
     ReferenceSizeProvider::AutoResizeState & rInOutState )
 {
-    static const OUString aRefSizeName( "ReferencePageSize" );
+    static const char aRefSizeName[] = "ReferencePageSize";
     AutoResizeState eSingleState = AUTO_RESIZE_UNKNOWN;
 
     if( xProp.is())

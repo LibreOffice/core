@@ -788,7 +788,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
 
                     if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
                     {
-                        static const OUString aStarDot( "*." );
+                        static const char aStarDot[] = "*.";
 
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
@@ -1805,7 +1805,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     OString aFilterName = OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
     gtk_file_filter_set_name( filter, aFilterName.getStr() );
 
-    static const OUString aStarDot( "*." );
+    static const char aStarDot[] = "*.";
     OUString aTokens;
 
     bool bAllGlob = rType.equalsAscii( "*.*" ) || rType.equalsAscii( "*" );

@@ -193,17 +193,15 @@ static void lcl_throwElementExistException( )
 }
 
 
-static const OUString& getTabIndexPropertyName( )
+static OUString getTabIndexPropertyName( )
 {
-    static const OUString s_sTabIndexProperty( "TabIndex" );
-    return s_sTabIndexProperty;
+    return OUString( "TabIndex" );
 }
 
 
-static const OUString& getStepPropertyName( )
+static OUString getStepPropertyName( )
 {
-    static const OUString s_sStepProperty( "Step" );
-    return s_sStepProperty;
+    return OUString( "Step" );
 }
 
 

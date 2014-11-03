@@ -798,7 +798,7 @@ Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
 // XInitialization base functionality for derived classes
 
 
-static OUString aNameBaseDefaultStr("strings");
+static const char aNameBaseDefaultStr[] = "strings";
 
 void StringResourcePersistenceImpl::implInitializeCommonParameters
     ( const Sequence< Any >& aArguments )
@@ -1809,7 +1809,7 @@ OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
      * also appends Variant, which can't be blindly changed as it would
      * violate the naming scheme in use. */
 
-    static OUString aUnder("_");
+    static const char aUnder[] = "_";
 
     OSL_ENSURE( pLocaleItem,
         "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL" );
@@ -2183,8 +2183,8 @@ void implWriteStringWithEncoding( const OUString& aStr,
 bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocaleItem,
     const Reference< io::XOutputStream >& xOutputStream, const OUString& aComment )
 {
-    static OUString aAssignmentStr("=");
-    static OUString aLineFeedStr("\n");
+    static const char aAssignmentStr[] = "=";
+    static const char aLineFeedStr[] = "\n";
 
     if( !xOutputStream.is() || pLocaleItem == NULL )
         return false;

@@ -82,12 +82,6 @@ using namespace ::comphelper;
 typedef ::boost::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 typedef ::std::list< DispatchInformation > DispatchInfoList;
 
-const OUString& getConfirmDeletionURL()
-{
-    static const OUString sConfirmDeletionURL(  ".uno:FormSlots/ConfirmDeletion" );
-    return sConfirmDeletionURL;
-}
-
 namespace dbaui
 {
 
@@ -659,7 +653,7 @@ Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, co
         fillSupportedFeatures();
 
     // URL's we can handle ourself?
-    if  (   aURL.Complete.equals( getConfirmDeletionURL() )
+    if  (   aURL.Complete == ".uno:FormSlots/ConfirmDeletion"
         ||  (   ( m_aSupportedFeatures.find( aURL.Complete ) != m_aSupportedFeatures.end() )
             &&  !isUserDefinedFeature( aURL.Complete )
             )

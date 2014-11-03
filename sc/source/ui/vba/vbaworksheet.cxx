@@ -110,7 +110,7 @@ static void getNewSpreadsheetName (OUString &aNewName, const OUString& aOldName,
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( "getNewSpreadsheetName() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );
-    static OUString aUnderScore( "_" );
+    static const char aUnderScore[] =  "_";
     int currentNum =2;
     aNewName = aOldName + aUnderScore + OUString::number(currentNum) ;
     SCTAB nTab = 0;

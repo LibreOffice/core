@@ -258,7 +258,7 @@ getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw
  uno::Reference< frame::XModel >
 getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    static const OUString sThisExcelDoc( "ThisExcelDoc"  );
+    static const char sThisExcelDoc[] = "ThisExcelDoc";
     uno::Reference< frame::XModel > xModel;
     try
     {
@@ -274,7 +274,7 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) t
  uno::Reference< frame::XModel >
 getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
-    static const OUString sThisWordDoc( "ThisWordDoc"  );
+    static const char sThisWordDoc[] = "ThisWordDoc";
     uno::Reference< frame::XModel > xModel;
     try
     {

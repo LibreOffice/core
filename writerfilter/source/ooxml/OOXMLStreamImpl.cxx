@@ -89,10 +89,10 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                                     const OUString & rId,
                                     OUString & rDocumentTarget)
 {
-    static OUString sId("Id");
-    static OUString sTarget("Target");
-    static OUString sTargetMode("TargetMode");
-    static OUString sExternal("External");
+    static const char sId[] = "Id";
+    static const char sTarget[] = "Target";
+    static const char sTargetMode[] = "TargetMode";
+    static const char sExternal[] = "External";
     if (maIdCache.empty())
     {
         // Cache is empty? Then let's build it!
@@ -132,49 +132,49 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
     // add mspath to represent the 'source' of this stream
     uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( OUString( "file:///"  ) + msPath );
 
-    static OUString sType("Type");
-    static OUString sDocumentType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument");
-    static OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
-    static OUString sNumberingType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering");
-    static OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
-    static OUString sFootnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes");
-    static OUString sEndnotesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes");
-    static OUString sCommentsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
-    static OUString sThemeType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme");
-    static OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
-    static OUString sCustomPropsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps");
-    static OUString sActiveXType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
-    static OUString sActiveXBinType("http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary");
-    static OUString sGlossaryType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument");
-    static OUString sWebSettings("http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
-    static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
-    static OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
-    static OUString sEmbeddingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
-    static OUString sFooterType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer");
-    static OUString sHeaderType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/header");
-    static OUString sOleObjectType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject");
-    static OUString sSignatureType("http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin");
+    static const char sType[] = "Type";
+    static const char sDocumentType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument";
+    static const char sStylesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
+    static const char sNumberingType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering";
+    static const char sFonttableType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable";
+    static const char sFootnotesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes";
+    static const char sEndnotesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes";
+    static const char sCommentsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
+    static const char sThemeType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
+    static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
+    static const char sCustomPropsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps";
+    static const char sActiveXType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control";
+    static const char sActiveXBinType[] = "http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary";
+    static const char sGlossaryType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument";
+    static const char sWebSettings[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
+    static const char sSettingsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
+    static const char sChartType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart";
+    static const char sEmbeddingsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+    static const char sFooterType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer";
+    static const char sHeaderType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header";
+    static const char sOleObjectType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+    static const char sSignatureType[] = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin";
     // OOXML strict
-    static OUString sDocumentTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument");
-    static OUString sStylesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/styles");
-    static OUString sNumberingTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/numbering");
-    static OUString sFonttableTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable");
-    static OUString sFootnotesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes");
-    static OUString sEndnotesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes");
-    static OUString sCommentsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/comments");
-    static OUString sThemeTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/theme");
-    static OUString sCustomTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/customXml");
-    static OUString sCustomPropsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/customXmlProps");
-    static OUString sActiveXTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/control");
-    static OUString sGlossaryTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/glossaryDocument");
-    static OUString sWebSettingsStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings");
-    static OUString sSettingsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/settings");
-    static OUString sChartTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/chart");
-    static OUString sEmbeddingsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/package");
-    static OUString sFootersTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/footer");
-    static OUString sHeaderTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/header");
-    static OUString sOleObjectTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject");
-    static OUString sVBAProjectType("http://schemas.microsoft.com/office/2006/relationships/vbaProject");
+    static const char sDocumentTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument";
+    static const char sStylesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
+    static const char sNumberingTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/numbering";
+    static const char sFonttableTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
+    static const char sFootnotesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/footnotes";
+    static const char sEndnotesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/endnotes";
+    static const char sCommentsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/comments";
+    static const char sThemeTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/theme";
+    static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
+    static const char sCustomPropsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXmlProps";
+    static const char sActiveXTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/control";
+    static const char sGlossaryTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/glossaryDocument";
+    static const char sWebSettingsStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
+    static const char sSettingsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
+    static const char sChartTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/chart";
+    static const char sEmbeddingsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/package";
+    static const char sFootersTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/footer";
+    static const char sHeaderTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/header";
+    static const char sOleObjectTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject";
+    static const char sVBAProjectType[] = "http://schemas.microsoft.com/office/2006/relationships/vbaProject";
 
     OUString sStreamType;
     OUString sStreamTypeStrict;

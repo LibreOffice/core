@@ -76,8 +76,7 @@ private:
 public:
     static OUString propName()
     {
-        static OUString sPropName("CharUnderline");
-        return sPropName;
+        return OUString("CharUnderline");
     }
 
     static UnderLineMapper& instance()

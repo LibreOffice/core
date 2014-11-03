@@ -151,7 +151,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
             Reference<XPropertySet> xDialogProp(xDialogModel,UNO_QUERY);
             if ( xDialogProp.is() )
             {
-                static const OUString s_sResourceResolver("ResourceResolver");
+                static const char s_sResourceResolver[] = "ResourceResolver";
                 Reference<XPropertySet> xThis(*this,UNO_QUERY);
                 xThis->setPropertyValue(s_sResourceResolver,xDialogProp->getPropertyValue(s_sResourceResolver));
                 xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)));

@@ -222,7 +222,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
     if ( nCheckStatus & 2 )
         return ( nCheckStatus & 1 ) != 0;
 
-    static const OUString  sTextPath( "TextPath" );
+    static const char sTextPath[] = "TextPath";
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -247,8 +247,8 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 
 static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
-    static const OUString  sTextPath( "TextPath" );
-    static const OUString  sSameLetterHeights( "SameLetterHeights" );
+    static const char  sTextPath[] = "TextPath";
+    static const char  sSameLetterHeights[] = "SameLetterHeights";
 
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )

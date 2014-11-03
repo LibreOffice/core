@@ -30,11 +30,11 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-static const OUString lcl_aServiceNameCartesian2d( "com.sun.star.chart2.CartesianCoordinateSystem2d" );
-static const OUString lcl_aServiceNameCartesian3d( "com.sun.star.chart2.CartesianCoordinateSystem3d" );
+static const char lcl_aServiceNameCartesian2d[] = "com.sun.star.chart2.CartesianCoordinateSystem2d";
+static const char lcl_aServiceNameCartesian3d[] = "com.sun.star.chart2.CartesianCoordinateSystem3d";
 
-static const OUString lcl_aImplementationNameCartesian2d( "com.sun.star.comp.chart2.CartesianCoordinateSystem2d" );
-static const OUString lcl_aImplementationNameCartesian3d( "com.sun.star.comp.chart2.CartesianCoordinateSystem3d" );
+static const char lcl_aImplementationNameCartesian2d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem2d";
+static const char lcl_aImplementationNameCartesian3d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem3d";
 }
 
 namespace chart

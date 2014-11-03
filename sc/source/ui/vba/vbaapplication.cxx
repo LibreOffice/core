@@ -698,8 +698,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, s
 OUString SAL_CALL
 ScVbaApplication::getName() throw (uno::RuntimeException, std::exception)
 {
-    static OUString appName("Microsoft Excel" );
-    return appName;
+    return OUString("Microsoft Excel" );
 }
 
 // #TODO #FIXME get/setDisplayAlerts are just stub impl

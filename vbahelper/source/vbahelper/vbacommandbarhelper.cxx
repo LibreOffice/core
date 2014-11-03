@@ -215,8 +215,8 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
     }
 
     // the customize toolbars creating during importing, should found there.
-    static OUString sToolbarPrefix(  "private:resource/toolbar/custom_"  );
-    sResourceUrl = sToolbarPrefix.concat( sName );
+    static const char sToolbarPrefix[] = "private:resource/toolbar/custom_";
+    sResourceUrl = sToolbarPrefix + sName;
     if( hasToolbar( sResourceUrl, sName ) )
         return sResourceUrl;
 

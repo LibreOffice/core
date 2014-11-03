@@ -3633,7 +3633,7 @@ namespace
     {
         try
         {
-            static OUString s_sFormsCheckRequiredFields( "FormsCheckRequiredFields"  );
+            static const char s_sFormsCheckRequiredFields[] = "FormsCheckRequiredFields";
 
             // first, check whether the form has a property telling us the answer
             // this allows people to use the XPropertyContainer interface of a form to control

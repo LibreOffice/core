@@ -435,7 +435,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         if ( bOk )
         {
             // HACK for access
-            static const OUString s_sVarChar("VarChar");
+            static const char s_sVarChar[] = "VarChar";
             do
             {
                 sal_Int32 nPos = 1;

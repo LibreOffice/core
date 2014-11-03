@@ -565,8 +565,8 @@ namespace svgio
                 if(nPos < nLen)
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
-                    static OUString aStrGrad("grad");
-                    static OUString aStrRad("rad");
+                    static const char aStrGrad[] = "grad";
+                    static const char aStrRad[] = "rad";
 
                     switch(aChar)
                     {
@@ -576,7 +576,7 @@ namespace svgio
                             if(rCandidate.matchIgnoreAsciiCase(aStrGrad, nPos))
                             {
                                 // angle in grad
-                                nPos += aStrGrad.getLength();
+                                nPos += strlen(aStrGrad);
                                 aType = grad;
                             }
                             break;
@@ -587,7 +587,7 @@ namespace svgio
                             if(rCandidate.matchIgnoreAsciiCase(aStrRad, nPos))
                             {
                                 // angle in radians
-                                nPos += aStrRad.getLength();
+                                nPos += strlen(aStrRad);
                                 aType = rad;
                             }
                             break;
@@ -860,12 +860,12 @@ namespace svgio
                 }
                 else
                 {
-                    static OUString aStrRgb("rgb");
+                    static const char aStrRgb[] = "rgb";
 
                     if(rCandidate.matchIgnoreAsciiCase(aStrRgb, 0))
                     {
                         // rgb definition
-                        sal_Int32 nPos(aStrRgb.getLength());
+                        sal_Int32 nPos(strlen(aStrRgb));
                         skip_char(rCandidate, ' ', '(', nPos, nLen);
                         double fR(0.0);
 
@@ -986,12 +986,12 @@ namespace svgio
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
                     const sal_Int32 nInitPos(nPos);
-                    static OUString aStrMatrix("matrix");
-                    static OUString aStrTranslate("translate");
-                    static OUString aStrScale("scale");
-                    static OUString aStrRotate("rotate");
-                    static OUString aStrSkewX("skewX");
-                    static OUString aStrSkewY("skewY");
+                    static const char aStrMatrix[] = "matrix";
+                    static const char aStrTranslate[] = "translate";
+                    static const char aStrScale[] = "scale";
+                    static const char aStrRotate[] = "rotate";
+                    static const char aStrSkewX[] = "skewX";
+                    static const char aStrSkewY[] = "skewY";
 
                     switch(aChar)
                     {
@@ -1000,7 +1000,7 @@ namespace svgio
                             if(rCandidate.match(aStrMatrix, nPos))
                             {
                                 // matrix element
-                                nPos += aStrMatrix.getLength();
+                                nPos += strlen(aStrMatrix);
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aVal;
                                 basegfx::B2DHomMatrix aNew;
@@ -1054,7 +1054,7 @@ namespace svgio
                             if(rCandidate.match(aStrTranslate, nPos))
                             {
                                 // translate element
-                                nPos += aStrTranslate.getLength();
+                                nPos += strlen(aStrTranslate);
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aTransX;
 
@@ -1078,7 +1078,7 @@ namespace svgio
                             if(rCandidate.match(aStrScale, nPos))
                             {
                                 // scale element
-                                nPos += aStrScale.getLength();
+                                nPos += strlen(aStrScale);
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aScaleX;
 
@@ -1098,7 +1098,7 @@ namespace svgio
                             else if(rCandidate.match(aStrSkewX, nPos))
                             {
                                 // skewx element
-                                nPos += aStrSkewX.getLength();
+                                nPos += strlen(aStrSkewX);
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewX(0.0);
 
@@ -1113,7 +1113,7 @@ namespace svgio
                             else if(rCandidate.match(aStrSkewY, nPos))
                             {
                                 // skewy element
-                                nPos += aStrSkewY.getLength();
+                                nPos += strlen(aStrSkewY);
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewY(0.0);
 
@@ -1132,7 +1132,7 @@ namespace svgio
                             if(rCandidate.match(aStrRotate, nPos))
                             {
                                 // rotate element
-                                nPos += aStrRotate.getLength();
+                                nPos += strlen(aStrRotate);
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fAngle(0.0);
 
@@ -1187,12 +1187,12 @@ namespace svgio
 
         bool readLocalUrl(const OUString& rCandidate, OUString& rURL)
         {
-            static OUString aStrUrl("url");
+            static const char aStrUrl[] = "url";
 
             if(rCandidate.startsWith(aStrUrl))
             {
                 const sal_Int32 nLen(rCandidate.getLength());
-                sal_Int32 nPos(aStrUrl.getLength());
+                sal_Int32 nPos(strlen(aStrUrl));
 
                 skip_char(rCandidate, '(', '#', nPos, nLen);
                 OUStringBuffer aTokenValue;
@@ -1424,12 +1424,12 @@ namespace svgio
             }
             else
             {
-                static OUString aStrData("data:");
+                static const char aStrData[] = "data:";
 
                 if(rCandidate.match(aStrData, 0))
                 {
                     // embedded data
-                    sal_Int32 nPos(aStrData.getLength());
+                    sal_Int32 nPos(strlen(aStrData));
                     sal_Int32 nLen(rCandidate.getLength());
                     OUStringBuffer aBuffer;
 
@@ -1441,18 +1441,18 @@ namespace svgio
 
                     if(!rMimeType.isEmpty() && nPos < nLen)
                     {
-                        static OUString aStrImage("image");
+                        static const char aStrImage[] = "image";
 
                         if(rMimeType.match(aStrImage, 0))
                         {
                             // image data
                             OUString aData(rCandidate.copy(nPos));
-                            static OUString aStrBase64("base64");
+                            static const char aStrBase64[] = "base64";
 
                             if(aData.match(aStrBase64, 0))
                             {
                                 // base64 encoded
-                                nPos = aStrBase64.getLength();
+                                nPos = strlen(aStrBase64);
                                 nLen = aData.getLength();
 
                                 skip_char(aData, ' ', ',', nPos, nLen);

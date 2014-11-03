@@ -157,9 +157,9 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
 
     // set values and column names
     OUStringBuffer aValues(" VALUES ( ");
-    static OUString aPara("?,");
+    static const char aPara[] = "?,";
     OUString aQuote = getIdentifierQuoteString();
-    static OUString aComma(",");
+    static const char aComma[] = ",";
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
@@ -227,8 +227,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
 
     OUString aColumnName;
 
-    static OUString aPara("?,");
-    static OUString aAnd(" AND ");
+    static const char aPara[] = "?,";
+    static const char aAnd[] = " AND ";
 
     OUString aQuote  = getIdentifierQuoteString();
 

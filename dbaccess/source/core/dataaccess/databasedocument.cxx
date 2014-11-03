@@ -367,7 +367,7 @@ namespace
     }
 }
 
-static OUString sPictures( "Pictures" );
+static const char sPictures[] = "Pictures";
 
 // base documents seem to have a different behaviour to other documents, the
 // root storage contents at least seem to be re-used over different saves, thus if there is a

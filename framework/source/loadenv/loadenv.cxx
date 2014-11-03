@@ -737,8 +737,8 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>&, OUStrin
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException, beans::IllegalTypeException, std::exception)
 {
-    static OUString TYPEPROP_PREFERREDFILTER("PreferredFilter");
-    static OUString FILTERPROP_FLAGS        ("Flags");
+    static const char TYPEPROP_PREFERREDFILTER[] = "PreferredFilter";
+    static const char FILTERPROP_FLAGS        [] = "Flags";
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
@@ -1673,7 +1673,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
-    static OUString PACKAGE_SETUP_MODULES("/org.openoffice.Setup/Office/Factories");
+    static const char PACKAGE_SETUP_MODULES[] = "/org.openoffice.Setup/Office/Factories";
 
     // no window -> action not possible
     if (!xWindow.is())

@@ -183,10 +183,10 @@ void XMLTextMarkImportContext::EndElement()
 {
     SvXMLImportContext::EndElement();
 
-    static const OUString sAPI_reference_mark( "com.sun.star.text.ReferenceMark");
-    static const OUString sAPI_bookmark( "com.sun.star.text.Bookmark");
-    static const OUString sAPI_fieldmark( "com.sun.star.text.Fieldmark");
-    static const OUString sAPI_formfieldmark( "com.sun.star.text.FormFieldmark");
+    static const char sAPI_reference_mark[] = "com.sun.star.text.ReferenceMark";
+    static const char sAPI_bookmark[] = "com.sun.star.text.Bookmark";
+    static const char sAPI_fieldmark[] = "com.sun.star.text.Fieldmark";
+    static const char sAPI_formfieldmark[] = "com.sun.star.text.FormFieldmark";
 
     if (!m_sBookmarkName.isEmpty())
     {
@@ -213,7 +213,7 @@ void XMLTextMarkImportContext::EndElement()
                         // export point bookmark
                         const Reference<XInterface> xContent(
                             CreateAndInsertMark(GetImport(),
-                                        (bImportAsField?sAPI_formfieldmark:sAPI_bookmark),
+                                        (bImportAsField ? OUString(sAPI_formfieldmark) : OUString(sAPI_bookmark)),
                                 m_sBookmarkName,
                                 m_rHelper.GetCursorAsRange()->getStart(),
                                 m_sXmlId) );
@@ -291,7 +291,7 @@ void XMLTextMarkImportContext::EndElement()
                             // insert reference
                             const Reference<XInterface> xContent(
                                 CreateAndInsertMark(GetImport(),
-                                                (bImportAsField?sAPI_fieldmark:sAPI_bookmark),
+                                                (bImportAsField ? OUString(sAPI_fieldmark) : OUString(sAPI_bookmark)),
                                     m_sBookmarkName,
                                     xInsertionCursor,
                                     m_sXmlId) );

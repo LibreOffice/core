@@ -1254,7 +1254,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
 void
 GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< OUString >& rvEmbedImgUrls )
 {
-    static OUString sImageURL( "ImageURL" );
+    static const char sImageURL[] = "ImageURL";
     Reference< XPropertySet > xProps( xIf, UNO_QUERY );
     if ( xProps.is() )
     {

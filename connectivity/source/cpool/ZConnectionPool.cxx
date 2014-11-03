@@ -48,16 +48,8 @@ void SAL_CALL OPoolTimer::onShot()
 {
     m_pPool->invalidatePooledConnections();
 }
-namespace
-{
 
-    static const OUString& getTimeoutNodeName()
-    {
-        static OUString s_sNodeName( "Timeout" );
-        return s_sNodeName;
-    }
-
-}
+static const char TIMEOUT_NODENAME[] = "Timeout";
 
 //= OConnectionPool
 
@@ -78,9 +70,9 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
 
     Reference<XPropertySet> xProp(m_xDriverNode,UNO_QUERY);
     if(xProp.is())
-        xProp->addPropertyChangeListener(getTimeoutNodeName(),this);
+        xProp->addPropertyChangeListener(TIMEOUT_NODENAME,this);
 
-    OPoolCollection::getNodeValue(getTimeoutNodeName(),m_xDriverNode) >>= m_nALiveCount;
+    OPoolCollection::getNodeValue(TIMEOUT_NODENAME, m_xDriverNode) >>= m_nALiveCount;
     calculateTimeOuts();
 
     m_xInvalidator = new OPoolTimer(this,::salhelper::TTimeValue(m_nTimeOut,0));
@@ -161,7 +153,7 @@ void OConnectionPool::clear(bool _bDispose)
         xComponent->removeEventListener(this);
     Reference< XPropertySet >  xProp(m_xDriverNode, UNO_QUERY);
     if (xProp.is())
-        xProp->removePropertyChangeListener(getTimeoutNodeName(),this);
+        xProp->removePropertyChangeListener(TIMEOUT_NODENAME, this);
 
 m_xDriverNode.clear();
 m_xDriver.clear();
@@ -302,7 +294,7 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
 
 void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    if(getTimeoutNodeName() == evt.PropertyName)
+    if(TIMEOUT_NODENAME == evt.PropertyName)
     {
         evt.NewValue >>= m_nALiveCount;
         calculateTimeOuts();

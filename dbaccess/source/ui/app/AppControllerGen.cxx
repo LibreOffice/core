@@ -662,7 +662,7 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
 
     if ( _xLayoutManager.is() )
     {
-        static OUString s_sStatusbar("private:resource/statusbar/statusbar");
+        static const char s_sStatusbar[] = "private:resource/statusbar/statusbar";
         _xLayoutManager->createElement( s_sStatusbar );
         _xLayoutManager->requestElement( s_sStatusbar );
 

@@ -437,8 +437,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
     // Information for a single SQL type
     if(xRs.is())
     {
-        static const OUString aB1(" [ ");
-        static const OUString aB2(" ]");
+        static const char aB1[] = " [ ";
+        static const char aB2[] = " ]";
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;

@@ -1307,8 +1307,7 @@ namespace sdr { namespace contact {
         try
         {
             Reference< XPropertySet > xModelProperties( pUnoObject->GetUnoControlModel(), UNO_QUERY_THROW );
-            static const OUString s_sPrintablePropertyName( "Printable" );
-            OSL_VERIFY( xModelProperties->getPropertyValue( s_sPrintablePropertyName ) >>= bIsPrintable );
+            OSL_VERIFY( xModelProperties->getPropertyValue( "Printable" ) >>= bIsPrintable );
         }
         catch( const Exception& )
         {

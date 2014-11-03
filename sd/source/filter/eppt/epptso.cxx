@@ -3575,9 +3575,9 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
 {
     try
     {
-        static const OUString  sModel( "Model" );
-        static const OUString sWidth( "Width" );
-        static const OUString sHeight( "Height" );
+        static const char sModel[] = "Model";
+        static const char sWidth[] = "Width";
+        static const char sHeight[] = "Height";
 
         uno::Reference< table::XTable > xTable;
         if ( mXPropSet->getPropertyValue( sModel ) >>= xTable )
@@ -3717,10 +3717,10 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                     }
                 }
 
-                static const OUString sTopBorder( "TopBorder" );
-                static const OUString sBottomBorder( "BottomBorder" );
-                static const OUString sLeftBorder( "LeftBorder" );
-                static const OUString sRightBorder( "RightBorder" );
+                static const char sTopBorder[] = "TopBorder";
+                static const char sBottomBorder[] = "BottomBorder";
+                static const char sLeftBorder[] = "LeftBorder";
+                static const char sRightBorder[] = "RightBorder";
 
                 // creating horz lines
                 for( sal_Int32 nLine = 0; nLine < ( xRows->getCount() + 1 ); nLine++ )
