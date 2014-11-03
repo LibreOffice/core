@@ -65,19 +65,30 @@ class SwTxtNode;
 #define EXPANDFIELDS   0x0001
 #define EXPANDFOOTNOTE 0x0002
 #define HIDEINVISIBLE  0x0004
-#define HIDEREDLINED   0x0008
+#define HIDEDELETIONS  0x0008
 /// do not expand to content, but replace with ZWSP
 #define REPLACEMODE    0x0010
 
 class ModelToViewHelper
 {
-    /** For each field in the model string, there is an entry in the conversion
-        map. The first value of the ConversionMapEntry points to the field
-        position in the model string, the second value points to the associated
-        position in the view string. The last entry in the conversion map
-        denotes the lengths of the model resp. view string.
+    /** For each expanded/hidden portion in the model string, there is an entry in
+        the conversion map. The first value of the ConversionMapEntry points to
+        the start position in the model string, the second value points to the
+        associated start position in the view string. The last entry in the
+        conversion map denotes the lengths of the model resp. view string.
     */
-    typedef std::pair< sal_Int32 , sal_Int32 > ConversionMapEntry;
+    struct ConversionMapEntry
+    {
+        ConversionMapEntry(sal_Int32 nModelPos, sal_Int32 nViewPos, bool bVisible)
+            : m_nModelPos(nModelPos)
+            , m_nViewPos(nViewPos)
+            , m_bVisible(bVisible)
+        {
+        }
+        sal_Int32 m_nModelPos;
+        sal_Int32 m_nViewPos;
+        bool m_bVisible;
+    };
     typedef std::vector< ConversionMapEntry > ConversionMap;
     typedef std::vector<sal_Int32> Positions;
 
