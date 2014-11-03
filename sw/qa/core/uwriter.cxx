@@ -321,7 +321,7 @@ void SwDocTest::testModelToViewHelper()
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEDELETIONS);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(
                 OUString("AAAABB " + OUString(CH_TXTATR_BREAKWORD) + " CCCCC " + OUString(CH_TXTATR_BREAKWORD) + " DDDDD"),
@@ -349,14 +349,14 @@ void SwDocTest::testModelToViewHelper()
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEDELETIONS | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(
                 OUString("AAAABB foo CCCCC foo DDDDD"), sViewText);
         }
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                EXPANDFIELDS | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
+                EXPANDFIELDS | HIDEDELETIONS | EXPANDFOOTNOTE | REPLACEMODE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(
                OUString("AAAABB " + OUString(CHAR_ZWSP) + " CCCCC " + OUString(CHAR_ZWSP) + " DDDDD"),
@@ -372,7 +372,7 @@ void SwDocTest::testModelToViewHelper()
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE | HIDEREDLINED);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE | HIDEDELETIONS);
             OUString sViewText = aModelToViewHelper.getViewText();
             OUStringBuffer aBuffer;
             aBuffer.append("AAAACCCCC ");
@@ -382,13 +382,13 @@ void SwDocTest::testModelToViewHelper()
         }
 
         {
-            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE);
+            ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEDELETIONS | EXPANDFOOTNOTE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(OUString("AAAACCCCC foo DDDDD"), sViewText);
         }
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode,
-                EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED | EXPANDFOOTNOTE | REPLACEMODE);
+                EXPANDFIELDS | HIDEINVISIBLE | HIDEDELETIONS | EXPANDFOOTNOTE | REPLACEMODE);
             OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT_EQUAL(sViewText,
                 OUString("AAAACCCCC " + OUString(CHAR_ZWSP) + " DDDDD"));
@@ -669,8 +669,26 @@ void SwDocTest::testSwScanner()
 
         aDocStat.Reset();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //word-counting the text should only count the non-deleted text, and this whole chunk should be ignored
-        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(0));
-        CPPUNIT_ASSERT_EQUAL(aDocStat.nChar, static_cast<sal_uLong>(0));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), aDocStat.nChar);
+
+        // https://bugs.libreoffice.org/show_bug.cgi?id=68347 we do want to count
+        // redline *added* text though
+        m_pDoc->SetRedlineMode(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE|nsRedlineMode_t::REDLINE_SHOW_INSERT);
+        aPaM.DeleteMark();
+        aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), 0);
+        m_pDoc->InsertString(aPaM, "redline-new-text ");
+        aDocStat.Reset();
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->SetWordCountDirty(true);
+        pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nWord);
+        //redline-new-text Lorem ipsum
+        //+++++++++++++++++     ------
+        //select start of original text and part of deleted text
+        aDocStat.Reset();
+        pTxtNode->CountWords(aDocStat, 17, 25);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(5), aDocStat.nChar);
     }
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=38983
