@@ -29,13 +29,8 @@ $(eval $(call gb_Library_use_custom_headers,scfilt,\
 ))
 
 $(eval $(call gb_Library_use_externals,scfilt,\
-	orcus \
-	orcus-parser \
 	boost_headers \
-	boost_system \
-	boost_iostreams \
 	mdds_headers \
-	zlib \
 ))
 
 $(eval $(call gb_Library_use_libraries,scfilt,\
@@ -230,14 +225,10 @@ ifeq ($(ENABLE_ORCUS),TRUE)
 $(eval $(call gb_Library_use_externals,scfilt,\
 	orcus \
 	orcus-parser \
+	boost_system \
+	boost_iostreams \
 	zlib \
 ))
-
-ifneq ($(SYSTEM_ZLIB),)
-$(eval $(call gb_Library_add_defs,scfilt,\
-	-DSYSTEM_ZLIB \
-))
-endif
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/orcus/interface \
