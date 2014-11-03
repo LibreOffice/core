@@ -709,6 +709,7 @@ public:
 
     void                        DrawPolyLine(
                                     const basegfx::B2DPolygon&,
+                                    double fTransparency = 0.0,
                                     double fLineWidth = 0.0,
                                     basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_ROUND,
                                     css::drawing::LineCap eLineCap = css::drawing::LineCap_BUTT);
