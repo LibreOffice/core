@@ -697,7 +697,7 @@ struct Convention_A1 : public ScCompiler::Convention
             KParseTokens::ASC_UNDERSCORE | KParseTokens::ASC_DOLLAR;
         static const sal_Int32 nContFlags = nStartFlags | KParseTokens::ASC_DOT;
         // '?' allowed in range names because of Xcl :-/
-        static const OUString aAddAllowed("?#");
+        static const char aAddAllowed[] = "?#";
         return pCharClass->parseAnyToken( rFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }

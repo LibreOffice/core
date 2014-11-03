@@ -218,7 +218,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         bool bNew = sPersistentName.isEmpty();
         if ( bNew )
         {
-            const static OUString sBaseName("Obj");
+            static const char sBaseName[] = "Obj";
 
             sPersistentName = sBaseName;
             sPersistentName += OUString::number(rDefinitions.size() + 1);

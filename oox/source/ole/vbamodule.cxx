@@ -144,7 +144,7 @@ void VbaModule::createEmptyModule( const Reference< container::XNameContainer >&
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
 {
     OUStringBuffer aSourceCode;
-    const static OUString sUnmatchedRemovedTag( "Rem removed unmatched Sub/End: " );
+    static const char sUnmatchedRemovedTag[] = "Rem removed unmatched Sub/End: ";
     if( !maStreamName.isEmpty() && (mnOffset != SAL_MAX_UINT32) )
     {
         BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );

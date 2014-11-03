@@ -278,7 +278,7 @@ namespace connectivity
                             OUString sAdd;
                             if ( RTL_TEXTENCODING_UTF8 == (*aLookup).getEncoding() )
                             {
-                                static const OUString s_sCharSetOp("useUnicode=true&");
+                                static const char s_sCharSetOp[] = "useUnicode=true&";
                                 if ( !sCuttedUrl.matchIgnoreAsciiCase(s_sCharSetOp) )
                                 {
                                     sAdd = s_sCharSetOp;

@@ -46,12 +46,11 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-static OUString m_aMultiClick( "MultiClick" );
-static OUString m_aDragMethodEquals( "DragMethod=" );
-static OUString m_aDragParameterEquals( "DragParameter=" );
-static OUString m_aProtocol( "CID/" );
-static OUString m_aEmptyString;
-static OUString m_aPieSegmentDragMethodServiceName( "PieSegmentDraging" );
+static const char m_aMultiClick[] = "MultiClick";
+static const char m_aDragMethodEquals[] = "DragMethod=";
+static const char m_aDragParameterEquals[] = "DragParameter=";
+static const char m_aProtocol[] = "CID/";
+static const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDraging");
 
 namespace
 {
@@ -507,7 +506,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(aRet.getLength()>m_aProtocol.getLength())
+    if(aRet.getLength() > (sal_Int32)strlen(m_aProtocol))
         aRet.appendAscii("/");
 
     if(!rParentParticle.isEmpty())
@@ -525,18 +524,16 @@ OUString ObjectIdentifier::createParticleForDiagram(
           const Reference< XDiagram >& /*xDiagram*/
         , ChartModel& /*xChartModel*/ )
 {
-    static OUString aRet("D=0");
     //todo: if more than one diagram is implemeted, add the correct diagram index here
-    return aRet;
+    return OUString("D=0");
 }
 
 OUString ObjectIdentifier::createParticleForDiagram(
           const Reference< XDiagram >& /*xDiagram*/
         , const Reference< frame::XModel >& /*xChartModel*/ )
 {
-    static OUString aRet("D=0");
     //todo: if more than one diagram is implemeted, add the correct diagram index here
-    return aRet;
+    return OUString("D=0");
 }
 
 OUString ObjectIdentifier::createParticleForCoordinateSystem(
@@ -698,7 +695,7 @@ OUString ObjectIdentifier::createClassifiedIdentifier(
         , const OUString& rParticleID )//e.g. SeriesID
 {
     return createClassifiedIdentifierWithParent(
-        eObjectType, rParticleID, m_aEmptyString );
+        eObjectType, rParticleID, OUString() );
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
@@ -714,7 +711,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(aRet.getLength()>m_aProtocol.getLength())
+    if(aRet.getLength() > (sal_Int32)strlen(m_aProtocol))
         aRet.appendAscii("/");
     aRet.append(rParentPartical);
     if(!rParentPartical.isEmpty())
@@ -896,7 +893,7 @@ bool ObjectIdentifier::isMultiClickObject( const OUString& rClassifiedIdentifier
     //was selected before;
 
     //!!!!! by definition the name of a MultiClickObject starts with "CID/MultiClick:"
-    bool bRet = rClassifiedIdentifier.match( m_aMultiClick, m_aProtocol.getLength() );
+    bool bRet = rClassifiedIdentifier.match( m_aMultiClick, strlen(m_aProtocol) );
     return bRet;
 }
 

@@ -248,9 +248,7 @@ void SAL_CALL MutableTreeDataModel::removeEventListener( const Reference< XEvent
 
 OUString SAL_CALL MutableTreeDataModel::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    static const OUString aImplName( "toolkit.MutableTreeDataModel" );
-    return aImplName;
+    return OUString( "toolkit.MutableTreeDataModel" );
 }
 
 sal_Bool SAL_CALL MutableTreeDataModel::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
@@ -528,9 +526,7 @@ OUString SAL_CALL MutableTreeNode::getCollapsedGraphicURL(  ) throw (RuntimeExce
 
 OUString SAL_CALL MutableTreeNode::getImplementationName(  ) throw (RuntimeException, std::exception)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
-    static const OUString aImplName( "toolkit.MutableTreeNode" );
-    return aImplName;
+    return OUString( "toolkit.MutableTreeNode" );
 }
 
 sal_Bool SAL_CALL MutableTreeNode::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)

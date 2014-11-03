@@ -42,34 +42,29 @@ using namespace ::osl;
 using namespace connectivity;
 
 
-static const OUString& getConnectionPoolNodeName()
+static OUString getConnectionPoolNodeName()
 {
-    static OUString s_sNodeName(  "org.openoffice.Office.DataAccess/ConnectionPool" );
-    return s_sNodeName;
+    return OUString(  "org.openoffice.Office.DataAccess/ConnectionPool" );
 }
 
-static const OUString& getEnablePoolingNodeName()
+static OUString getEnablePoolingNodeName()
 {
-    static OUString s_sNodeName(  "EnablePooling" );
-    return s_sNodeName;
+    return OUString(  "EnablePooling" );
 }
 
-static const OUString& getDriverNameNodeName()
+static OUString getDriverNameNodeName()
 {
-    static OUString s_sNodeName(  "DriverName" );
-    return s_sNodeName;
+    return OUString(  "DriverName" );
 }
 
-static const OUString& getDriverSettingsNodeName()
+static OUString getDriverSettingsNodeName()
 {
-    static OUString s_sNodeName(  "DriverSettings" );
-    return s_sNodeName;
+    return OUString(  "DriverSettings" );
 }
 
-static const OUString& getEnableNodeName()
+static OUString getEnableNodeName()
 {
-    static OUString s_sNodeName(  "Enable" );
-    return s_sNodeName;
+    return OUString(  "Enable" );
 }
 
 

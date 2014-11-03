@@ -49,8 +49,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static OUString aVndSunStarUNO( "vnd.sun.star.UNO:" );
-static OUString aVndSunStarScript( "vnd.sun.star.script:" );
+static const char aVndSunStarUNO[] = "vnd.sun.star.UNO:";
+static const char aVndSunStarScript[] = "vnd.sun.star.script:";
 
 _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
     : pAssignPB(NULL)
@@ -464,13 +464,11 @@ void IconLBoxString::Paint(
         OUString aPureMethod;
         if( bUNO )
         {
-            sal_Int32 nBegin = aVndSunStarUNO.getLength();
-            aPureMethod = aURL.copy( nBegin );
+            aPureMethod = aURL.copy( strlen(aVndSunStarUNO) );
         }
         else
         {
-            sal_Int32 nBegin = aVndSunStarScript.getLength();
-            aPureMethod = aURL.copy( nBegin );
+            aPureMethod = aURL.copy( strlen(aVndSunStarScript) );
             aPureMethod = aPureMethod.copy( 0, aPureMethod.indexOf( '?' ) );
         }
 
@@ -868,8 +866,7 @@ AssignComponentDialog::AssignComponentDialog( vcl::Window * pParent, const OUStr
     OUString aMethodName;
     if( maURL.startsWith( aVndSunStarUNO ) )
     {
-        sal_Int32 nBegin = aVndSunStarUNO.getLength();
-        aMethodName = maURL.copy( nBegin );
+        aMethodName = maURL.copy( strlen(aVndSunStarUNO) );
     }
     mpMethodEdit->SetText( aMethodName, Selection( 0, SELECTION_MAX ) );
 }

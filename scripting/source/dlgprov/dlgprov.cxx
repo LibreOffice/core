@@ -88,7 +88,7 @@ namespace dlgprov
 {
 
 
-static OUString aResourceResolverPropName("ResourceResolver");
+static const char aResourceResolverPropName[] = "ResourceResolver";
 
     Reference< resource::XStringResourceManager > lcl_getStringResourceManager(const Reference< XComponentContext >& i_xContext,const OUString& i_sURL)
     {
@@ -166,37 +166,18 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
     static OUString getImplementationName_DialogProviderImpl()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "com.sun.star.comp.scripting.DialogProvider"  );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "com.sun.star.comp.scripting.DialogProvider"  );
     }
 
 
 
     static Sequence< OUString > getSupportedServiceNames_DialogProviderImpl()
     {
-        static Sequence< OUString >* pNames = 0;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< OUString > aNames(3);
-                aNames[0] = "com.sun.star.awt.DialogProvider";
-                aNames[1] = "com.sun.star.awt.DialogProvider2";
-                aNames[2] = "com.sun.star.awt.ContainerWindowProvider";
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        Sequence< OUString > aNames(3);
+        aNames[0] = "com.sun.star.awt.DialogProvider";
+        aNames[1] = "com.sun.star.awt.DialogProvider2";
+        aNames[2] = "com.sun.star.awt.ContainerWindowProvider";
+        return aNames;
     }
 
 
@@ -645,8 +626,8 @@ static OUString aResourceResolverPropName("ResourceResolver");
     // XDialogProvider
 
 
-    static OUString aDecorationPropName("Decoration");
-    static OUString aTitlePropName("Title");
+    static const char aDecorationPropName[] = "Decoration";
+    static const char aTitlePropName[] = "Title";
 
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const OUString& URL, const Reference< XInterface >& xHandler,

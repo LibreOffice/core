@@ -46,7 +46,7 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.Title" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Title";
 
 enum
 {

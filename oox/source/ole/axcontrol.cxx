@@ -2520,8 +2520,8 @@ HtmlSelectModel::HtmlSelectModel()
 bool
 HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
-    static OUString sMultiple( "<SELECT MULTIPLE" );
-    static OUString sSelected( "OPTION SELECTED" );
+    static const char sMultiple[] = "<SELECT MULTIPLE";
+    static const char sSelected[] = "OPTION SELECTED";
 
     OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
 

@@ -57,8 +57,8 @@ static sal_Int16 lclAnovaLabels[] =
     0
 };
 
-static const OUString strWildcardRange("%RANGE%");
-static const OUString strWildcardNumber("%NUMBER%");
+static const char strWildcardRange[] = "%RANGE%";
+static const char strWildcardNumber[] = "%NUMBER%";
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,

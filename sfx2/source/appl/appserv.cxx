@@ -906,10 +906,9 @@ namespace
         return _pFallback;
     }
 
-    const OUString& lcl_getBasicIDEServiceName()
+    static OUString lcl_getBasicIDEServiceName()
     {
-        static const OUString s_sBasicName( "com.sun.star.script.BasicIDE"  );
-        return s_sBasicName;
+        return OUString( "com.sun.star.script.BasicIDE");
     }
 
     SfxViewFrame* lcl_getBasicIDEViewFrame( SfxObjectShell* i_pBasicIDE )

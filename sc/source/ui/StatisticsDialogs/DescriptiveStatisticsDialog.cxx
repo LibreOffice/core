@@ -54,8 +54,8 @@ static const StatisticCalculation lclCalcDefinitions[] =
     { 0,                         NULL }
 };
 
-static const OUString strWildcardRange("%RANGE%");
-static const OUString strWildcardNumber("%NUMBER%");
+static const char strWildcardRange[] = "%RANGE%";
+static const char strWildcardNumber[] = "%NUMBER%";
 
 }
 

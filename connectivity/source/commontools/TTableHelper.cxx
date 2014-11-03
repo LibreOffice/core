@@ -122,14 +122,10 @@ namespace connectivity
                 Reference<XMultiServiceFactory> xFac(_xConnection,UNO_QUERY);
                 if ( xFac.is() )
                 {
-                    static const OUString s_sTableRename("TableRenameServiceName");
-                    m_xRename.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableRename)),UNO_QUERY);
-                    static const OUString s_sTableAlteration("TableAlterationServiceName");
-                    m_xAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableAlteration)),UNO_QUERY);
-                    static const OUString s_sKeyAlteration("KeyAlterationServiceName");
-                    m_xKeyAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sKeyAlteration)),UNO_QUERY);
-                    static const OUString s_sIndexAlteration("IndexAlterationServiceName");
-                    m_xIndexAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sIndexAlteration)),UNO_QUERY);
+                    m_xRename.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"TableRenameServiceName")),UNO_QUERY);
+                    m_xAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"TableAlterationServiceName")),UNO_QUERY);
+                    m_xKeyAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"KeyAlterationServiceName")),UNO_QUERY);
+                    m_xIndexAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,"IndexAlterationServiceName")),UNO_QUERY);
                 }
             }
             catch(const Exception&)

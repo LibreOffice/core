@@ -128,7 +128,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
         Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
         Reference< XPropertySetInfo > xPropertyInfo( xModelProps->getPropertySetInfo(), UNO_SET_THROW );
 
-        static const OUString sRefDevicePropName( "ReferenceDevice" );
+        static const char sRefDevicePropName[] = "ReferenceDevice";
         if ( xPropertyInfo->hasPropertyByName( sRefDevicePropName ) )
         {
             VCLXDevice* pUnoRefDevice = new VCLXDevice;

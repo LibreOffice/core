@@ -325,8 +325,8 @@ MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::PropertyV
 
 bool MediaDescriptor::isStreamReadOnly() const
 {
-    static OUString CONTENTSCHEME_FILE( "file" );
-    static OUString CONTENTPROP_ISREADONLY( "IsReadOnly" );
+    static const char CONTENTSCHEME_FILE[] = "file";
+    static const char CONTENTPROP_ISREADONLY[] = "IsReadOnly";
     static bool READONLY_FALLBACK = false;
 
     bool bReadOnly = READONLY_FALLBACK;

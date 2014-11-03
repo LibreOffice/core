@@ -347,7 +347,7 @@ OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, 
     return aRet;
 }
 
-static const OUString pDefCatName("Add-In");
+static const char pDefCatName[] = "Add-In";
 
 OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName ) throw( uno::RuntimeException, std::exception )
 {

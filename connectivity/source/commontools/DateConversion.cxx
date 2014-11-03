@@ -288,10 +288,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             // and again a special treatment, this time for percent formats
             if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
             {   // formatting should be "percent", but the String provides just a simple number -> adjust
-                OUString sExpanded(rString);
-                static OUString s_sPercentSymbol( "%" );
-                    // need a method to add a sal_Unicode to a string, 'til then we use a static string
-                sExpanded += s_sPercentSymbol;
+                OUString sExpanded = rString + "%";
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);
             }
 

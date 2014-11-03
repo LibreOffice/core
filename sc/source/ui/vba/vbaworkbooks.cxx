@@ -235,7 +235,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         sProps.realloc( 3 );
         sProps[ nIndex ].Name = "FilterOptions";
         sal_Int16 delims[] = { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
-        static OUString sRestOfFormat(",34,0,1" );
+        static const char sRestOfFormat[] = ",34,0,1";
 
         OUString sFormat;
         sal_Int16 nFormat = 0; // default indicator

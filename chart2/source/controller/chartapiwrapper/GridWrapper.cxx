@@ -44,7 +44,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.Grid" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Grid";
 
 struct StaticGridWrapperPropertyArray_Initializer
 {

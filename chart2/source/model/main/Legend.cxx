@@ -47,7 +47,7 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.Legend" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Legend";
 
 enum
 {

@@ -40,19 +40,19 @@
 namespace framework{
 
 /** address job configuration inside argument set provided on method execute(). */
-static const OUString PROP_JOBCONFIG("JobConfig");
+static const char PROP_JOBCONFIG[] = "JobConfig";
 
 /** address job configuration property "Command". */
-static const OUString PROP_COMMAND("Command");
+static const char PROP_COMMAND[] = "Command";
 
 /** address job configuration property "Arguments". */
-static const OUString PROP_ARGUMENTS("Arguments");
+static const char PROP_ARGUMENTS[] = "Arguments";
 
 /** address job configuration property "DeactivateJobIfDone". */
-static const OUString PROP_DEACTIVATEJOBIFDONE("DeactivateJobIfDone");
+static const char PROP_DEACTIVATEJOBIFDONE[] = "DeactivateJobIfDone";
 
 /** address job configuration property "CheckExitCode". */
-static const OUString PROP_CHECKEXITCODE("CheckExitCode");
+static const char PROP_CHECKEXITCODE[] = "CheckExitCode";
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ShellJob                   ,
                                    ::cppu::OWeakObject        ,

@@ -49,21 +49,7 @@ namespace dbaccess
         Reference< XTextOutputStream2 >  xTextOutput;
     };
 
-    // helper
-    namespace
-    {
-        static const OUString& lcl_getTextStreamEncodingName()
-        {
-            static const OUString s_sMapStreamEncodingName( "UTF-8" );
-            return s_sMapStreamEncodingName;
-        }
-
-        static const OUString& lcl_getLineFeed()
-        {
-            static const OUString s_sLineFeed( '\n' );
-            return s_sLineFeed;
-        }
-    }
+    static const char sLineFeed[] = "\n";
 
     // StorageTextOutputStream
     StorageTextOutputStream::StorageTextOutputStream(   const Reference<XComponentContext>& i_rContext,
@@ -74,7 +60,7 @@ namespace dbaccess
         ,m_pData( new StorageTextOutputStream_Data )
     {
         m_pData->xTextOutput = TextOutputStream::create( i_rContext );
-        m_pData->xTextOutput->setEncoding( lcl_getTextStreamEncodingName() );
+        m_pData->xTextOutput->setEncoding( "UTF-8" );
         m_pData->xTextOutput->setOutputStream( getOutputStream() );
     }
 
@@ -85,12 +71,12 @@ namespace dbaccess
     void StorageTextOutputStream::writeLine( const OUString& i_rLine )
     {
         m_pData->xTextOutput->writeString( i_rLine );
-        m_pData->xTextOutput->writeString( lcl_getLineFeed() );
+        m_pData->xTextOutput->writeString( sLineFeed );
     }
 
     void StorageTextOutputStream::writeLine()
     {
-        m_pData->xTextOutput->writeString( lcl_getLineFeed() );
+        m_pData->xTextOutput->writeString( sLineFeed );
     }
 
 } // namespace dbaccess

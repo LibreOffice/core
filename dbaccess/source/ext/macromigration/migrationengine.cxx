@@ -168,32 +168,22 @@ namespace dbmm
 
     namespace
     {
-        static const OUString& lcl_getScriptsStorageName()
-        {
-            static const OUString s_sScriptsStorageName( "Scripts" );
-            return s_sScriptsStorageName;
-        }
+        static const char sScriptsStorageName[] = "Scripts";
 
-        static const OUString& lcl_getScriptsSubStorageName( const ScriptType _eType )
+        static OUString lcl_getScriptsSubStorageName( const ScriptType _eType )
         {
-            static const OUString s_sBeanShell ( "beanshell" );
-            static const OUString s_sJavaScript( "javascript" );
-            static const OUString s_sPython    ( "python" );      // TODO: is this correct?
-            static const OUString s_sJava      ( "java" );
-
             switch ( _eType )
             {
-            case eBeanShell:    return s_sBeanShell;
-            case eJavaScript:   return s_sJavaScript;
-            case ePython:       return s_sPython;
-            case eJava:         return s_sJava;
+            case eBeanShell:    return OUString("beanshell");
+            case eJavaScript:   return OUString("javascript");
+            case ePython:       return OUString("python"); // TODO: is this correct?
+            case eJava:         return OUString("java");
             default:
                 break;
             }
 
             OSL_FAIL( "lcl_getScriptsSubStorageName: illegal type!" );
-            static OUString s_sEmpty;
-            return s_sEmpty;
+            return OUString();
         }
 
         static bool lcl_getScriptTypeFromLanguage( const OUString& _rLanguage, ScriptType& _out_rScriptType )
@@ -650,15 +640,15 @@ namespace dbmm
 
             // the "Scripts" storage exist, or if it does not (yet) exist and we are in write mode
             // => open the storage
-            if  (   (   xDocStorage->hasByName( lcl_getScriptsStorageName() )
-                    &&  xDocStorage->isStorageElement( lcl_getScriptsStorageName() )
+            if  (   (   xDocStorage->hasByName( sScriptsStorageName )
+                    &&  xDocStorage->isStorageElement( sScriptsStorageName )
                     )
-                ||  !xDocStorage->hasByName( lcl_getScriptsStorageName() )
+                ||  !xDocStorage->hasByName( sScriptsStorageName )
                 )
             {
                 m_xScriptsStorage.set(
                     xDocStorage->openStorageElement(
-                        lcl_getScriptsStorageName(), ElementModes::READWRITE
+                        sScriptsStorageName, ElementModes::READWRITE
                     ),
                     UNO_QUERY_THROW
                 );
@@ -725,7 +715,7 @@ namespace dbmm
         {
             Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY_THROW );
             Reference< XStorage > xDocStorage( xStorageDoc->getDocumentStorage(), UNO_QUERY_THROW );
-            xDocStorage->removeElement( lcl_getScriptsStorageName() );
+            xDocStorage->removeElement( sScriptsStorageName );
         }
         catch( const Exception& )
         {

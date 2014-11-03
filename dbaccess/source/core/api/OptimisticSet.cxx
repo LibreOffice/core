@@ -179,7 +179,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
     // list all columns that should be set
-    static OUString s_sPara(" = ?");
+    static const char s_sPara[] = " = ?";
     OUString aQuote  = getIdentifierQuoteString();
 
     ::std::map< OUString,bool > aResultSetChanged;
@@ -223,8 +223,8 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     if( aKeyConditions.empty() )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_CONDITION_FOR_PK ), SQL_GENERAL_ERROR, m_xConnection );
 
-    static const OUString s_sUPDATE("UPDATE ");
-    static const OUString s_sSET(" SET ");
+    static const char s_sUPDATE[] = "UPDATE ";
+    static const char s_sSET[] = " SET ";
 
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
@@ -291,8 +291,8 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), SQL_GENERAL_ERROR, m_xConnection );
 
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    static const OUString s_sINSERT("INSERT INTO ");
-    static const OUString s_sVALUES(") VALUES ( ");
+    static const char s_sINSERT[] = "INSERT INTO ";
+    static const char s_sVALUES[] = ") VALUES ( ";
     TSQLStatements::iterator aSqlIter = aSql.begin();
     TSQLStatements::iterator aSqlEnd  = aSql.end();
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)

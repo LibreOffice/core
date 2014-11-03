@@ -50,7 +50,7 @@ XMLTextListItemContext::XMLTextListItemContext(
       mnSubListCount( 0 ),
       mxNumRulesOverride()
 {
-    static OUString s_NumberingRules("NumberingRules");
+    static const char s_NumberingRules[] = "NumberingRules";
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {

@@ -425,19 +425,18 @@ struct AnnotatingVisitor
 
     OUString getOdfAlign( TextAlign eAlign )
     {
-        static OUString aStart("start");
-        static OUString aEnd("end");
-        // static OUString aJustify("justify");
-        static OUString aCenter("center");
+        static const char aStart[] = "start";
+        static const char aEnd[] = "end";
+        static const char aCenter[] = "center";
         switch(eAlign)
         {
             default:
             case BEFORE:
-                return aStart;
+                return OUString(aStart);
             case CENTER:
-                return aCenter;
+                return OUString(aCenter);
             case AFTER:
-                return aEnd;
+                return OUString(aEnd);
         }
     }
 

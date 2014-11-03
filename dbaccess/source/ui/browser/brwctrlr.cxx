@@ -2031,7 +2031,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if ( xCols.is() && xCols->hasByName(sName) )
             {
                 Reference<XPropertySet> xProp(xCols->getByName(sName),UNO_QUERY);
-                static OUString sAgg("AggregateFunction");
+                static const char sAgg[] = "AggregateFunction";
                 if ( xProp->getPropertySetInfo()->hasPropertyByName(sAgg) )
                     xProp->getPropertyValue(sAgg) >>= bHaving;
             }

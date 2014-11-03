@@ -77,58 +77,49 @@ namespace drawinglayer
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
             // the local UNO API strings
-            const OUString& getNamePropertyObjectTransformation()
+            static OUString getNamePropertyObjectTransformation()
             {
-                static OUString s_sNameProperty("ObjectTransformation");
-                return s_sNameProperty;
+                return OUString("ObjectTransformation");
             }
 
-            const OUString& getNamePropertyOrientation()
+            static OUString getNamePropertyOrientation()
             {
-                static OUString s_sNameProperty("Orientation");
-                return s_sNameProperty;
+                return OUString("Orientation");
             }
 
-            const OUString& getNamePropertyProjection()
+            static OUString getNamePropertyProjection()
             {
-                static OUString s_sNameProperty("Projection");
-                return s_sNameProperty;
+                return OUString("Projection");
             }
 
-            const OUString& getNamePropertyProjection_30()
+            static OUString getNamePropertyProjection_30()
             {
-                static OUString s_sNameProperty("Projection30");
-                return s_sNameProperty;
+                return OUString("Projection30");
             }
 
-            const OUString& getNamePropertyProjection_31()
+            static OUString getNamePropertyProjection_31()
             {
-                static OUString s_sNameProperty("Projection31");
-                return s_sNameProperty;
+                return OUString("Projection31");
             }
 
-            const OUString& getNamePropertyProjection_32()
+            static OUString getNamePropertyProjection_32()
             {
-                static OUString s_sNameProperty("Projection32");
-                return s_sNameProperty;
+                return OUString("Projection32");
             }
 
-            const OUString& getNamePropertyProjection_33()
+            static OUString getNamePropertyProjection_33()
             {
-                static OUString s_sNameProperty("Projection33");
-                return s_sNameProperty;
+                return OUString("Projection33");
             }
 
-            const OUString& getNamePropertyDeviceToView()
+            static OUString getNamePropertyDeviceToView()
             {
-                static OUString s_sNameProperty("DeviceToView");
-                return s_sNameProperty;
+                return OUString("DeviceToView");
             }
 
-            const OUString& getNamePropertyTime()
+            static OUString getNamePropertyTime()
             {
-                static OUString s_sNamePropertyTime("Time");
-                return s_sNamePropertyTime;
+                return OUString("Time");
             }
 
             // a central PropertyValue parsing method to allow transportatin of

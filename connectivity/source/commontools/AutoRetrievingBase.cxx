@@ -29,8 +29,8 @@ namespace connectivity
         if ( sStmt.startsWith("INSERT") )
         {
             sStatement = m_sGeneratedValueStatement;
-            static const OUString sColumn("$column");
-            static const OUString sTable("$table");
+            static const char sColumn[] = "$column";
+            static const char sTable[] = "$table";
             sal_Int32 nIndex = 0;
             nIndex = sStatement.indexOf(sColumn,nIndex);
             if ( -1 != nIndex )
@@ -49,7 +49,7 @@ namespace connectivity
 
                 nIntoIndex = 0;
                 OUString sTableName = sStmt.getToken(0,' ',nIntoIndex);
-                sStatement = sStatement.replaceAt(nIndex,sTable.getLength(),sTableName);
+                sStatement = sStatement.replaceAt(nIndex, strlen(sTable), sTableName);
             }
         }
         return sStatement;
