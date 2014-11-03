@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7072867e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T12:01:49Z",
+      "side": 1,
+      "message": "Is this really needed? Is there any use case where this would be handled differently from !IsValid()?",
+      "revId": "931a08bf2cec27ee42cf7ec7d8fae0f1bf9ced3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_50f662d8",
+        "filename": "include/tools/fract.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T12:01:49Z",
+      "side": 1,
+      "message": "It seems to me that this is unnecessary overcomplication. Do we really need a separate check for division by 0? The fraction is already invalid and cannot be used anyway.",
+      "revId": "931a08bf2cec27ee42cf7ec7d8fae0f1bf9ced3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_b040fe08",
+        "filename": "include/tools/fract.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T12:01:49Z",
+      "side": 1,
+      "message": "This condition does not make any sense to me. I think it should be (valid \u0026\u0026 !divisionByZero). Or am I missing something?",
+      "revId": "931a08bf2cec27ee42cf7ec7d8fae0f1bf9ced3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_b00ebee3",
+        "filename": "tools/source/generic/fract.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T12:01:49Z",
+      "side": 1,
+      "message": "So if I do 1/0 + 2/0, the result will be invalid, but not marked as a division by 0. Again, does it really make sense to track that separately?",
+      "revId": "931a08bf2cec27ee42cf7ec7d8fae0f1bf9ced3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_f02b1632",
+        "filename": "tools/source/generic/fract.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T12:01:49Z",
+      "side": 1,
+      "message": "The value of denominator does not matter here. So we can just write out 0, can we not?",
+      "revId": "931a08bf2cec27ee42cf7ec7d8fae0f1bf9ced3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
