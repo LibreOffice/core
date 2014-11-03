@@ -991,7 +991,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                     if ((*aDataItr)->pAccShape)
                     {
                         (*aDataItr)->pAccShape->SetState(AccessibleStateType::SELECTED);
-                        (*aDataItr)->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                        (*aDataItr)->pAccShape->SetState(AccessibleStateType::FOCUSED);
                         bResult = true;
                         vecSelectedShapeAdd.push_back((*aDataItr));
                     }
