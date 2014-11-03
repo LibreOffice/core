@@ -1987,6 +1987,11 @@ bool PrintFontManager::createFontSubset(
 #endif
         // create subset file at requested path
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
+        if (!pOutFile)
+        {
+            CloseTTFont( pTTFont );
+            return false;
+        }
         // create font subset
         const char* pGlyphSetName = NULL; // TODO: better name?
         const bool bOK = rInfo.CreateFontSubset(
