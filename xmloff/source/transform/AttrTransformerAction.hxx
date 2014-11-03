@@ -69,9 +69,6 @@ enum XMLAttrTransformerAction
     XML_ATACTION_MOVE_TO_ELEM,          // turn attr into an elem
                                         // - param1: namespace +
                                         //           token of local name
-    XML_ATACTION_MOVE_FROM_ELEM,        // turn elem into an attr:
-                                        // - param1: namespace +
-                                        //           token of local name
     XML_ATACTION_NEG_PERCENT,           // replace % val with 100-%
     XML_ATACTION_RENAME_NEG_PERCENT,    // replace % val with 100-%, rename attr
                                         // - param1: namespace +
@@ -113,9 +110,6 @@ enum XMLAttrTransformerAction
     XML_ATACTION_RENAME_RNG2ISO_DATETIME,// converts . into , in datetimes and renames the attribute
                                          // - param1: namespace +
                                          //           token of local name
-    XML_ATACTION_MOVE_FROM_ELEM_RNG2ISO_DATETIME, // turn elem into an attr and convert . to , in datetimes
-                                        // - param1: namespace +
-                                        //           token of local name
     XML_ATACTION_SVG_WIDTH_HEIGHT_OOO,   // replace "inch" with "in" and subtracts 1/100th mm
     XML_ATACTION_SVG_WIDTH_HEIGHT_OASIS, // replace "in" with "inch" and adds 1/100th mm
     XML_ATACTION_DRAW_MIRROR_OOO,        // renames draw:mirror to style:mirror and adapts values

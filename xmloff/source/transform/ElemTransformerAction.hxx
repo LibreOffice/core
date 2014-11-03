@@ -81,6 +81,12 @@ enum XMLElemTransformerAction
                                         // and put them together into the
                                         // current element
                                         // the child elements are removed
+    XML_ETACTION_MOVE_TO_ATTR,          // turn elem into an attr:
+                                        // - param1: namespace +
+                                        //           token of local name
+    XML_ETACTION_MOVE_TO_ATTR_RNG2ISO_DATETIME, // turn elem into an attr and convert . to , in datetimes
+                                        // - param1: namespace +
+                                        //           token of local name
     XML_ETACTION_USER_DEFINED=0x40000000,// user defined actions start here
     XML_ETACTION_END=XML_TACTION_END
 };

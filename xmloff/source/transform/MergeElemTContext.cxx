@@ -232,7 +232,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
             {
                 switch( (*aIter).second.m_nActionType )
                 {
-                case XML_ATACTION_MOVE_FROM_ELEM_RNG2ISO_DATETIME:
+                case XML_ETACTION_MOVE_TO_ATTR_RNG2ISO_DATETIME:
                     {
                         XMLPersTextContentTContext *pTC =
                             new XMLPersTextContentRNGTransformTContext(
@@ -244,7 +244,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
                         pContext = pTC;
                     }
                     break;
-                case XML_ATACTION_MOVE_FROM_ELEM:
+                case XML_ETACTION_MOVE_TO_ATTR:
                     {
                         XMLPersTextContentTContext *pTC =
                             new XMLPersTextContentTContext(
