@@ -1025,7 +1025,19 @@ namespace accessibility
     void SAL_CALL AccessibleEditableTextPara::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException, std::exception)
     {
         if( getNotifierClientId() != -1 )
-            ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
+        {
+            const sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
+            if ( !nListenerCount )
+            {
+                // no listeners anymore
+                // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+                // and at least to us not firing any events anymore, in case somebody calls
+                // NotifyAccessibleEvent, again
+                ::comphelper::AccessibleEventNotifier::TClientId nId( getNotifierClientId() );
+                mnNotifierClientId = -1;
+                ::comphelper::AccessibleEventNotifier::revokeClient( nId );
+            }
+        }
     }
 
     // XAccessibleComponent
