@@ -20,6 +20,7 @@
 $(eval $(call gb_Module_Module,editeng))
 
 $(eval $(call gb_Module_add_targets,editeng,\
+        CustomTarget_generated \
 	Library_editeng \
 ))
 

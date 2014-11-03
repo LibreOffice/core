@@ -16,6 +16,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <sax/fastattribs.hxx>
 
 using namespace ::css::xml::sax;
 using namespace ::xmloff::token;
@@ -30,10 +31,11 @@ enum SvXMLAutoCorrectToken : sal_Int32
 };
 
 class SvXMLAutoCorrectTokenHandler : public
-        cppu::WeakImplHelper1< css::xml::sax::XFastTokenHandler >
+        cppu::WeakImplHelper1< css::xml::sax::XFastTokenHandler >,
+        public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    SvXMLAutoCorrectTokenHandler();
+    explicit SvXMLAutoCorrectTokenHandler();
     virtual ~SvXMLAutoCorrectTokenHandler();
 
     //XFastTokenHandler
@@ -41,6 +43,9 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token )
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // Much faster direct C++ shortcut to the method that matters
+    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const SAL_OVERRIDE;
 };
 
 #endif // EDITENG_SOURCE_MISC_SVXMLAUTOCORRECTTOKENHANDLER_HXX
