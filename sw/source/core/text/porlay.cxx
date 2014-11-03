@@ -2107,8 +2107,11 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
         {
             const SwRangeRedline* pRed = rIDRA.GetRedlineTbl()[ nAct ];
 
-            if ( pRed->Start()->nNode > rNode.GetIndex() )
+            if (pRed->Start()->nNode > rNode.GetIndex())
                 break;
+
+            if (pRed->GetType() != nsRedlineType_t::REDLINE_DELETE)
+                continue;
 
             sal_Int32 nRedlStart;
             sal_Int32 nRedlnEnd;

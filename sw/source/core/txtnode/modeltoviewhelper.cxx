@@ -94,7 +94,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
     if (eMode & HIDEINVISIBLE)
         SwScriptInfo::selectHiddenTextProperty(rNode, aHiddenMulti);
 
-    if (eMode & HIDEREDLINED)
+    if (eMode & HIDEDELETIONS)
         SwScriptInfo::selectRedLineDeleted(rNode, aHiddenMulti);
 
     std::vector<block> aBlocks;
@@ -203,43 +203,55 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
         }
     }
 
+    //store the end of each range in the model and where that end of range
+    //maps to in the view
     sal_Int32 nOffset = 0;
     for (std::vector<block>::iterator i = aBlocks.begin(); i != aBlocks.end(); ++i)
     {
+        const sal_Int32 nBlockLen = i->m_nLen;
+        if (!nBlockLen)
+            continue;
+        const sal_Int32 nBlockStart = i->m_nStart;
+        const sal_Int32 nBlockEnd = nBlockStart + nBlockLen;
+
         if (!i->m_bVisible)
         {
-            const sal_Int32 nHiddenStart = i->m_nStart;
-            const sal_Int32 nHiddenLen = i->m_nLen;
+            sal_Int32 const modelBlockPos(nBlockEnd);
+            sal_Int32 const viewBlockPos(nBlockStart + nOffset);
+            m_aMap.push_back(ConversionMapEntry(modelBlockPos, viewBlockPos, false));
 
-            m_aRetText = m_aRetText.replaceAt( nOffset + nHiddenStart, nHiddenLen, OUString() );
-            m_aMap.push_back( ConversionMapEntry( nHiddenStart, nOffset + nHiddenStart ) );
-            nOffset -= nHiddenLen;
+            m_aRetText = m_aRetText.replaceAt(nOffset + nBlockStart, nBlockLen, OUString());
+            nOffset -= nBlockLen;
         }
         else
         {
             for (FieldResultSet::iterator j = i->m_aAttrs.begin(); j != i->m_aAttrs.end(); ++j)
             {
-                sal_Int32 const viewPos(nOffset + j->m_nFieldPos);
-                m_aRetText = m_aRetText.replaceAt(viewPos, 1, j->m_sExpand);
-                m_aMap.push_back( ConversionMapEntry(j->m_nFieldPos, viewPos) );
+                sal_Int32 const modelFieldPos(j->m_nFieldPos);
+                sal_Int32 const viewFieldPos(j->m_nFieldPos + nOffset);
+                m_aMap.push_back( ConversionMapEntry(modelFieldPos, viewFieldPos, true) );
+
+                m_aRetText = m_aRetText.replaceAt(viewFieldPos, 1, j->m_sExpand);
+                nOffset += j->m_sExpand.getLength() - 1;
+
                 switch (j->m_eType)
                 {
                     case FieldResult::FIELD:
-                        m_FieldPositions.push_back(viewPos);
+                        m_FieldPositions.push_back(viewFieldPos);
                     break;
                     case FieldResult::FOOTNOTE:
-                        m_FootnotePositions.push_back(viewPos);
+                        m_FootnotePositions.push_back(viewFieldPos);
                     break;
                     case FieldResult::NONE: /*ignore*/
                     break;
                 }
-                nOffset += j->m_sExpand.getLength() - 1;
             }
+
+            sal_Int32 const modelEndBlock(nBlockEnd);
+            sal_Int32 const viewFieldPos(nBlockEnd + nOffset);
+            m_aMap.push_back(ConversionMapEntry(modelEndBlock, viewFieldPos, true));
         }
     }
-
-    if ( !m_aMap.empty() )
-        m_aMap.push_back( ConversionMapEntry( rNodeText.getLength()+1, m_aRetText.getLength()+1 ) );
 }
 
 /** Converts a model position into a view position
@@ -248,15 +260,21 @@ sal_Int32 ModelToViewHelper::ConvertToViewPosition( sal_Int32 nModelPos ) const
 {
     // Search for entry after nPos:
     ConversionMap::const_iterator aIter;
+
     for ( aIter = m_aMap.begin(); aIter != m_aMap.end(); ++aIter )
     {
-        if ( (*aIter).first >= nModelPos )
+        if (aIter->m_nModelPos >= nModelPos)
         {
-            const sal_Int32 nPosModel  = (*aIter).first;
-            const sal_Int32 nPosExpand = (*aIter).second;
+            //if it's an invisible portion, map all contained positions
+            //to the anchor viewpos
+            if (!aIter->m_bVisible)
+                return aIter->m_nViewPos;
 
-            const sal_Int32 nDistToNextModel  = nPosModel - nModelPos;
-            return nPosExpand - nDistToNextModel;
+            //if it's a visible portion, then the view position is the anchor
+            //viewpos - the offset of the input modelpos from the anchor
+            //modelpos
+            const sal_Int32 nOffsetFromEnd = aIter->m_nModelPos - nModelPos;
+            return aIter->m_nViewPos - nOffsetFromEnd;
         }
     }
 
@@ -274,10 +292,10 @@ ModelToViewHelper::ModelPosition ModelToViewHelper::ConvertToModelPosition( sal_
     ConversionMap::const_iterator aIter;
     for ( aIter = m_aMap.begin(); aIter != m_aMap.end(); ++aIter )
     {
-        if ( (*aIter).second > nViewPos )
+        if (aIter->m_nViewPos > nViewPos)
         {
-            const sal_Int32 nPosModel  = (*aIter).first;
-            const sal_Int32 nPosExpand = (*aIter).second;
+            const sal_Int32 nPosModel  = aIter->m_nModelPos;
+            const sal_Int32 nPosExpand = aIter->m_nViewPos;
 
             // If nViewPos is in front of first field, we are finished.
             if ( aIter == m_aMap.begin() )
@@ -286,8 +304,8 @@ ModelToViewHelper::ModelPosition ModelToViewHelper::ConvertToModelPosition( sal_
             --aIter;
 
             // nPrevPosModel is the field position
-            const sal_Int32 nPrevPosModel  = (*aIter).first;
-            const sal_Int32 nPrevPosExpand = (*aIter).second;
+            const sal_Int32 nPrevPosModel  = aIter->m_nModelPos;
+            const sal_Int32 nPrevPosExpand = aIter->m_nViewPos;
 
             const sal_Int32 nLengthModel  = nPosModel - nPrevPosModel;
             const sal_Int32 nLengthExpand = nPosExpand - nPrevPosExpand;
