@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_f0dc361a",
+        "filename": "sw/source/core/sw3io/swacorr.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-03T14:29:08Z",
+      "side": 1,
+      "message": "The allocated memory is leaked. You should change the type of the variable from plain pointer to std::unique_ptr.",
+      "revId": "a81dfe4f9b656fa3354493a7592d659776b867b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
