@@ -29,6 +29,11 @@
 // This module contains no tests, this is for the build system.
 #include <cppunit/plugin/TestPlugIn.h>
 
+#ifdef _MSC_VER
+// deprecation warnings do not matter here
+#pragma warning (disable : 4996)
+#endif
+
 #include "allheaders.hxx"
 
 CPPUNIT_PLUGIN_IMPLEMENT();
