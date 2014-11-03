@@ -159,17 +159,16 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << ")\n";
                 if( !(vSubArguments[1+j]->IsMixedArgument()))
                 {
-                    ss << "{";
+                    ss << "        {\n";
                     ss << "            tmp = ";
                     vSubArguments[1+j]->GenDeclRef(ss);
                     ss << "[rowNum];\n";
-                    ss << "}";
+                    ss << "        }\n";
 
                 }
                 else
                 {
-                                    ss << "{";
-
+                    ss << "        {\n";
                     ss << "            tmp = isNan(";
                     vSubArguments[1+j]->GenNumDeclRef(ss);
                     ss << "[rowNum])?";
@@ -177,11 +176,11 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                     ss << "[rowNum]:";
                     vSubArguments[1+j]->GenStringDeclRef(ss);
                     ss << "[rowNum];\n";
-                    ss << "}";
+                    ss << "        }\n";
 
                 }
             }
-            ss << "    return tmp;\n";
+            ss << "        return tmp;\n";
             ss << "    }\n";
             ss << "    for (int i = ";
             if (!pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()) {
@@ -218,7 +217,8 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
             ss << 1+i;
             ss << ";\n";
             ss << "            }\n";
-            ss << "        }else\n";
+            ss << "        }\n";
+            ss << "        else\n";
             ss << "        {\n";
             ss << "            if(tmp0 == tmp";
             ss << 1+i;
@@ -259,7 +259,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
                 }
 
             }
-            ss << "    return tmp;\n";
+            ss << "        return tmp;\n";
             ss << "    }\n";
 
         }
