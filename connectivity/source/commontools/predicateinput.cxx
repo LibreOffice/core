@@ -156,8 +156,8 @@ namespace dbtools
                         )
                     )
                 {
-                    static const OUString sSingleQuote( "'" );
-                    static const OUString sDoubleQuote( "''" );
+                    static const char sSingleQuote[] = "'";
+                    static const char sDoubleQuote[] =  "''";
 
                     sal_Int32 nIndex = -1;
                     sal_Int32 nTemp = 0;
@@ -304,8 +304,8 @@ namespace dbtools
             if ( bValidQuotedText )
             {
                 sValue = sValue.copy( 1, sValue.getLength() - 2 );
-                static const OUString sSingleQuote( "'" );
-                static const OUString sDoubleQuote( "''" );
+                static const char sSingleQuote[] = "'";
+                static const char sDoubleQuote[] = "''";
 
                 sal_Int32 nIndex = -1;
                 sal_Int32 nTemp = 0;

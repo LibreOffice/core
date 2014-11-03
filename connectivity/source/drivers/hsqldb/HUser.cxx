@@ -119,16 +119,16 @@ void OHSQLUser::findPrivilegesAndGrantPrivileges(const OUString& objName, sal_In
 
     if ( xRes.is() )
     {
-        static const OUString sSELECT(  "SELECT" );
-        static const OUString sINSERT(  "INSERT" );
-        static const OUString sUPDATE(  "UPDATE" );
-        static const OUString sDELETE(  "DELETE" );
-        static const OUString sREAD(  "READ" );
-        static const OUString sCREATE(  "CREATE" );
-        static const OUString sALTER(  "ALTER" );
-        static const OUString sREFERENCE(  "REFERENCE" );
-        static const OUString sDROP(  "DROP" );
-        static const OUString sYes(  "YES" );
+        static const char sSELECT   [] = "SELECT";
+        static const char sINSERT   [] = "INSERT";
+        static const char sUPDATE   [] = "UPDATE";
+        static const char sDELETE   [] = "DELETE";
+        static const char sREAD     [] = "READ";
+        static const char sCREATE   [] = "CREATE";
+        static const char sALTER    [] = "ALTER";
+        static const char sREFERENCE[] = "REFERENCE";
+        static const char sDROP     [] = "DROP";
+        static const char sYes      [] = "YES";
 
         nRightsWithGrant = nRights = 0;
 

@@ -1264,10 +1264,10 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
                        const OUString& rTargetFrameName,
                        bool bMap )
 {
-    static OUString s_HyperLinkURL("HyperLinkURL");
-    static OUString s_HyperLinkName("HyperLinkName");
-    static OUString s_HyperLinkTarget("HyperLinkTarget");
-    static OUString s_ServerMap("ServerMap");
+    static const char s_HyperLinkURL[] = "HyperLinkURL";
+    static const char s_HyperLinkName[] = "HyperLinkName";
+    static const char s_HyperLinkTarget[] = "HyperLinkTarget";
+    static const char s_ServerMap[] = "ServerMap";
     if( !xPropSet.is() )
         return;
 

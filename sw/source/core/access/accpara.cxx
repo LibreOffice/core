@@ -1916,7 +1916,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
 
     // #i92233#
-    static OUString sMMToPixelRatio("MMToPixelRatio");
+    static const char sMMToPixelRatio[] = "MMToPixelRatio";
     bool bProvideMMToPixelRatio( false );
     {
         if ( aRequestedAttributes.getLength() == 0 )

@@ -61,7 +61,7 @@ using ::com::sun::star::chart::XDateCategories;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.ChartData" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.ChartData";
 
 uno::Sequence< uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const uno::Sequence< uno::Sequence< double > >& rData )
 {
@@ -726,7 +726,7 @@ uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ChartDataWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( ChartDataWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

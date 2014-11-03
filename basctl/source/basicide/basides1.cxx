@@ -1053,12 +1053,10 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
 
 void Shell::ManageToolbars()
 {
-    static OUString aLayoutManagerName( "LayoutManager" );
-    static OUString aMacroBarResName( "private:resource/toolbar/macrobar" );
-    static OUString aDialogBarResName( "private:resource/toolbar/dialogbar" );
-    static OUString aInsertControlsBarResName( "private:resource/toolbar/insertcontrolsbar" );
-    static OUString aFormControlsBarResName( "private:resource/toolbar/formcontrolsbar" );
-    (void)aInsertControlsBarResName;
+    static const char aMacroBarResName[] = "private:resource/toolbar/macrobar";
+    static const char aDialogBarResName[] = "private:resource/toolbar/dialogbar";
+    static const char aInsertControlsBarResName[] = "private:resource/toolbar/insertcontrolsbar";
+    static const char aFormControlsBarResName[] = "private:resource/toolbar/formcontrolsbar";
 
     if( !pCurWin )
         return;
@@ -1068,7 +1066,7 @@ void Shell::ManageToolbars()
     if ( xFrameProps.is() )
     {
         Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-        uno::Any a = xFrameProps->getPropertyValue( aLayoutManagerName );
+        uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
         a >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {

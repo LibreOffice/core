@@ -23,145 +23,145 @@ namespace svgio
 {
     namespace svgreader
     {
-        static OUString aSVGStrWidth("width");
-        static OUString aSVGStrHeight("height");
-        static OUString aSVGStrViewBox("viewBox");
-        static OUString aSVGStrTransform("transform");
-        static OUString aSVGStrStyle("style");
-        static OUString aSVGStrDisplay("display"); // #i121656#
-        static OUString aSVGStrD("d");
-        static OUString aSVGStrX("x");
-        static OUString aSVGStrY("y");
-        static OUString aSVGStrXmlns("xmlns");
-        static OUString aSVGStrVersion("version");
-        static OUString aSVGStrId("id");
-        static OUString aSVGStrRx("rx");
-        static OUString aSVGStrRy("ry");
-        static OUString aSVGStrPoints("points");
-        static OUString aSVGStrDx("dx");
-        static OUString aSVGStrDy("dy");
-        static OUString aSVGStrRotate("rotate");
-        static OUString aSVGStrTextLength("textLength");
-        static OUString aSVGStrLengthAdjust("lengthAdjust");
-        static OUString aSVGStrFont("font");
-        static OUString aSVGStrFontFamily("font-family");
-        static OUString aSVGStrFontSize("font-size");
-        static OUString aSVGStrFontSizeAdjust("font-size-adjust");
-        static OUString aSVGStrFontStretch("font-stretch");
-        static OUString aSVGStrFontStyle("font-style");
-        static OUString aSVGStrFontVariant("font-variant");
-        static OUString aSVGStrFontWeight("font-weight");
-        static OUString aSVGStrDirection("direction");
-        static OUString aSVGStrLetterSpacing("letter-spacing");
-        static OUString aSVGStrTextDecoration("text-decoration");
-        static OUString aSVGStrUnicodeBidi("unicode-bidi");
-        static OUString aSVGStrWordSpacing("word-spacing");
-        static OUString aSVGStrTspan("tspan");
-        static OUString aSVGStrTref("tref");
-        static OUString aSVGStrTextPath("textPath");
-        static OUString aSVGStrStartOffset("startOffset");
-        static OUString aSVGStrMethod("method");
-        static OUString aSVGStrSpacing("spacing");
-        static OUString aSVGStrTextAlign("text-align");
-        static OUString aSVGStrPathLength("pathLength");
-        static OUString aSVGStrType("type");
-        static OUString aSVGStrClass("class");
-        static OUString aSVGStrTextAnchor("text-anchor");
-        static OUString aSVGStrXmlSpace("xml:space");
-        static OUString aSVGStrColor("color");
-        static OUString aSVGStrClipPathNode("clipPath");
-        static OUString aSVGStrClipPathProperty("clip-path");
-        static OUString aSVGStrMask("mask");
-        static OUString aSVGStrClipPathUnits("clipPathUnits");
-        static OUString aSVGStrMaskUnits("maskUnits");
-        static OUString aSVGStrMaskContentUnits("maskContentUnits");
-        static OUString aSVGStrClipRule("clip-rule");
-        static OUString aSVGStrMarker("marker");
-        static OUString aSVGStrMarkerStart("marker-start");
-        static OUString aSVGStrMarkerMid("marker-mid");
-        static OUString aSVGStrMarkerEnd("marker-end");
-        static OUString aSVGStrRefX("refX");
-        static OUString aSVGStrRefY("refY");
-        static OUString aSVGStrMarkerUnits("markerUnits");
-        static OUString aSVGStrMarkerWidth("markerWidth");
-        static OUString aSVGStrMarkerHeight("markerHeight");
-        static OUString aSVGStrOrient("orient");
-        static OUString aSVGStrPattern("pattern");
-        static OUString aSVGStrPatternUnits("patternUnits");
-        static OUString aSVGStrPatternContentUnits("patternContentUnits");
-        static OUString aSVGStrPatternTransform("patternTransform");
-        static OUString aSVGStrOpacity("opacity");
-        static OUString aSVGStrVisibility("visibility");
-        static OUString aSVGStrTitle("title");
-        static OUString aSVGStrDesc("desc");
+        static const char aSVGStrWidth[] = "width";
+        static const char aSVGStrHeight[] = "height";
+        static const char aSVGStrViewBox[] = "viewBox";
+        static const char aSVGStrTransform[] = "transform";
+        static const char aSVGStrStyle[] = "style";
+        static const char aSVGStrDisplay[] = "display"; // #i121656#
+        static const char aSVGStrD[] = "d";
+        static const char aSVGStrX[] = "x";
+        static const char aSVGStrY[] = "y";
+        static const char aSVGStrXmlns[] = "xmlns";
+        static const char aSVGStrVersion[] = "version";
+        static const char aSVGStrId[] = "id";
+        static const char aSVGStrRx[] = "rx";
+        static const char aSVGStrRy[] = "ry";
+        static const char aSVGStrPoints[] = "points";
+        static const char aSVGStrDx[] = "dx";
+        static const char aSVGStrDy[] = "dy";
+        static const char aSVGStrRotate[] = "rotate";
+        static const char aSVGStrTextLength[] = "textLength";
+        static const char aSVGStrLengthAdjust[] = "lengthAdjust";
+        static const char aSVGStrFont[] = "font";
+        static const char aSVGStrFontFamily[] = "font-family";
+        static const char aSVGStrFontSize[] = "font-size";
+        static const char aSVGStrFontSizeAdjust[] = "font-size-adjust";
+        static const char aSVGStrFontStretch[] = "font-stretch";
+        static const char aSVGStrFontStyle[] = "font-style";
+        static const char aSVGStrFontVariant[] = "font-variant";
+        static const char aSVGStrFontWeight[] = "font-weight";
+        static const char aSVGStrDirection[] = "direction";
+        static const char aSVGStrLetterSpacing[] = "letter-spacing";
+        static const char aSVGStrTextDecoration[] = "text-decoration";
+        static const char aSVGStrUnicodeBidi[] = "unicode-bidi";
+        static const char aSVGStrWordSpacing[] = "word-spacing";
+        static const char aSVGStrTspan[] = "tspan";
+        static const char aSVGStrTref[] = "tref";
+        static const char aSVGStrTextPath[] = "textPath";
+        static const char aSVGStrStartOffset[] = "startOffset";
+        static const char aSVGStrMethod[] = "method";
+        static const char aSVGStrSpacing[] = "spacing";
+        static const char aSVGStrTextAlign[] = "text-align";
+        static const char aSVGStrPathLength[] = "pathLength";
+        static const char aSVGStrType[] = "type";
+        static const char aSVGStrClass[] = "class";
+        static const char aSVGStrTextAnchor[] = "text-anchor";
+        static const char aSVGStrXmlSpace[] = "xml:space";
+        static const char aSVGStrColor[] = "color";
+        static const char aSVGStrClipPathNode[] = "clipPath";
+        static const char aSVGStrClipPathProperty[] = "clip-path";
+        static const char aSVGStrMask[] = "mask";
+        static const char aSVGStrClipPathUnits[] = "clipPathUnits";
+        static const char aSVGStrMaskUnits[] = "maskUnits";
+        static const char aSVGStrMaskContentUnits[] = "maskContentUnits";
+        static const char aSVGStrClipRule[] = "clip-rule";
+        static const char aSVGStrMarker[] = "marker";
+        static const char aSVGStrMarkerStart[] = "marker-start";
+        static const char aSVGStrMarkerMid[] = "marker-mid";
+        static const char aSVGStrMarkerEnd[] = "marker-end";
+        static const char aSVGStrRefX[] = "refX";
+        static const char aSVGStrRefY[] = "refY";
+        static const char aSVGStrMarkerUnits[] = "markerUnits";
+        static const char aSVGStrMarkerWidth[] = "markerWidth";
+        static const char aSVGStrMarkerHeight[] = "markerHeight";
+        static const char aSVGStrOrient[] = "orient";
+        static const char aSVGStrPattern[] = "pattern";
+        static const char aSVGStrPatternUnits[] = "patternUnits";
+        static const char aSVGStrPatternContentUnits[] = "patternContentUnits";
+        static const char aSVGStrPatternTransform[] = "patternTransform";
+        static const char aSVGStrOpacity[] = "opacity";
+        static const char aSVGStrVisibility[] = "visibility";
+        static const char aSVGStrTitle[] = "title";
+        static const char aSVGStrDesc[] = "desc";
 
-        static OUString aSVGStrPreserveAspectRatio("preserveAspectRatio");
-        static OUString aSVGStrDefer("defer");
-        static OUString aSVGStrNone("none");
-        static OUString aSVGStrXMinYMin("xMinYMin");
-        static OUString aSVGStrXMidYMin("xMidYMin");
-        static OUString aSVGStrXMaxYMin("xMaxYMin");
-        static OUString aSVGStrXMinYMid("xMinYMid");
-        static OUString aSVGStrXMidYMid("xMidYMid");
-        static OUString aSVGStrXMaxYMid("xMaxYMid");
-        static OUString aSVGStrXMinYMax("xMinYMax");
-        static OUString aSVGStrXMidYMax("xMidYMax");
-        static OUString aSVGStrXMaxYMax("xMaxYMax");
-        static OUString aSVGStrMeet("meet");
-        static OUString aSVGStrSlice("slice");
+        static const char aSVGStrPreserveAspectRatio[] = "preserveAspectRatio";
+        static const char aSVGStrDefer[] = "defer";
+        static const char aSVGStrNone[] = "none";
+        static const char aSVGStrXMinYMin[] = "xMinYMin";
+        static const char aSVGStrXMidYMin[] = "xMidYMin";
+        static const char aSVGStrXMaxYMin[] = "xMaxYMin";
+        static const char aSVGStrXMinYMid[] = "xMinYMid";
+        static const char aSVGStrXMidYMid[] = "xMidYMid";
+        static const char aSVGStrXMaxYMid[] = "xMaxYMid";
+        static const char aSVGStrXMinYMax[] = "xMinYMax";
+        static const char aSVGStrXMidYMax[] = "xMidYMax";
+        static const char aSVGStrXMaxYMax[] = "xMaxYMax";
+        static const char aSVGStrMeet[] = "meet";
+        static const char aSVGStrSlice[] = "slice";
 
-        static OUString aSVGStrDefs("defs");
-        static OUString aSVGStrG("g");
-        static OUString aSVGStrSvg("svg");
-        static OUString aSVGStrSymbol("symbol");
-        static OUString aSVGStrUse("use");
+        static const char aSVGStrDefs[] = "defs";
+        static const char aSVGStrG[] = "g";
+        static const char aSVGStrSvg[] = "svg";
+        static const char aSVGStrSymbol[] = "symbol";
+        static const char aSVGStrUse[] = "use";
 
-        static OUString aSVGStrCircle("circle");
-        static OUString aSVGStrEllipse("ellipse");
-        static OUString aSVGStrLine("line");
-        static OUString aSVGStrPath("path");
-        static OUString aSVGStrPolygon("polygon");
-        static OUString aSVGStrPolyline("polyline");
-        static OUString aSVGStrRect("rect");
-        static OUString aSVGStrImage("image");
+        static const char aSVGStrCircle[] = "circle";
+        static const char aSVGStrEllipse[] = "ellipse";
+        static const char aSVGStrLine[] = "line";
+        static const char aSVGStrPath[] = "path";
+        static const char aSVGStrPolygon[] = "polygon";
+        static const char aSVGStrPolyline[] = "polyline";
+        static const char aSVGStrRect[] = "rect";
+        static const char aSVGStrImage[] = "image";
 
-        static OUString aSVGStrLinearGradient("linearGradient");
-        static OUString aSVGStrRadialGradient("radialGradient");
-        static OUString aSVGStrStop("stop");
-        static OUString aSVGStrOffset("offset");
-        static OUString aSVGStrX1("x1");
-        static OUString aSVGStrY1("y1");
-        static OUString aSVGStrX2("x2");
-        static OUString aSVGStrY2("y2");
-        static OUString aSVGStrCx("cx");
-        static OUString aSVGStrCy("cy");
-        static OUString aSVGStrFx("fx");
-        static OUString aSVGStrFy("fy");
-        static OUString aSVGStrR("r");
-        static OUString aSVGStrGradientUnits("gradientUnits");
-        static OUString aSVGStrGradientTransform("gradientTransform");
-        static OUString aSVGStrSpreadMethod("spreadMethod");
-        static OUString aSVGStrXlinkHref("xlink:href");
-        static OUString aSVGStrStopColor("stop-color");
-        static OUString aSVGStrStopOpacity("stop-opacity");
+        static const char aSVGStrLinearGradient[] = "linearGradient";
+        static const char aSVGStrRadialGradient[] = "radialGradient";
+        static const char aSVGStrStop[] = "stop";
+        static const char aSVGStrOffset[] = "offset";
+        static const char aSVGStrX1[] = "x1";
+        static const char aSVGStrY1[] = "y1";
+        static const char aSVGStrX2[] = "x2";
+        static const char aSVGStrY2[] = "y2";
+        static const char aSVGStrCx[] = "cx";
+        static const char aSVGStrCy[] = "cy";
+        static const char aSVGStrFx[] = "fx";
+        static const char aSVGStrFy[] = "fy";
+        static const char aSVGStrR[] = "r";
+        static const char aSVGStrGradientUnits[] = "gradientUnits";
+        static const char aSVGStrGradientTransform[] = "gradientTransform";
+        static const char aSVGStrSpreadMethod[] = "spreadMethod";
+        static const char aSVGStrXlinkHref[] = "xlink:href";
+        static const char aSVGStrStopColor[] = "stop-color";
+        static const char aSVGStrStopOpacity[] = "stop-opacity";
 
-        static OUString aSVGStrFill("fill");
-        static OUString aSVGStrFillOpacity("fill-opacity");
-        static OUString aSVGStrFillRule("fill-rule");
+        static const char aSVGStrFill[] = "fill";
+        static const char aSVGStrFillOpacity[] = "fill-opacity";
+        static const char aSVGStrFillRule[] = "fill-rule";
 
-        static OUString aSVGStrStroke("stroke");
-        static OUString aSVGStrStrokeDasharray("stroke-dasharray");
-        static OUString aSVGStrStrokeDashoffset("stroke-dashoffset");
-        static OUString aSVGStrStrokeLinecap("stroke-linecap");
-        static OUString aSVGStrStrokeLinejoin("stroke-linejoin");
-        static OUString aSVGStrStrokeMiterlimit("stroke-miterlimit");
-        static OUString aSVGStrStrokeOpacity("stroke-opacity");
-        static OUString aSVGStrStrokeWidth("stroke-width");
+        static const char aSVGStrStroke[] = "stroke";
+        static const char aSVGStrStrokeDasharray[] = "stroke-dasharray";
+        static const char aSVGStrStrokeDashoffset[] = "stroke-dashoffset";
+        static const char aSVGStrStrokeLinecap[] = "stroke-linecap";
+        static const char aSVGStrStrokeLinejoin[] = "stroke-linejoin";
+        static const char aSVGStrStrokeMiterlimit[] = "stroke-miterlimit";
+        static const char aSVGStrStrokeOpacity[] = "stroke-opacity";
+        static const char aSVGStrStrokeWidth[] = "stroke-width";
 
-        static OUString aSVGStrText("text");
-        static OUString aSVGStrBaselineShift("baseline-shift");
+        static const char aSVGStrText[] = "text";
+        static const char aSVGStrBaselineShift[] = "baseline-shift";
 
-        static OUString aSVGStrFlowRoot("flowRoot");
+        static const char aSVGStrFlowRoot[] = "flowRoot";
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
         {
@@ -350,14 +350,14 @@ namespace svgio
             }
         }
 
-        const OUString& getStrTitle()
+        const OUString getStrTitle()
         {
-            return aSVGStrTitle;
+            return OUString(aSVGStrTitle);
         }
 
-        const OUString& getStrDesc()
+        const OUString getStrDesc()
         {
-            return aSVGStrDesc;
+            return OUString(aSVGStrDesc);
         }
     } // end of namespace svgreader
 } // end of namespace svgio

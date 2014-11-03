@@ -442,8 +442,8 @@ namespace dbaui
     Sequence< OUString > OTableSubscriptionPage::collectDetailedSelection() const
     {
         Sequence< OUString > aTableFilter;
-        static const OUString sDot(".");
-        static const OUString sWildcard("%");
+        static const char sDot[] = ".";
+        static const char sWildcard[] = "%";
 
         OUString sComposedName;
         const SvTreeListEntry* pAllObjectsEntry = m_pTablesList->getAllObjectsEntry();

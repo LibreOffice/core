@@ -15,10 +15,7 @@
 
 #include "CorrelationDialog.hxx"
 
-namespace
-{
-    static const OUString strCorrelationTemplate("=CORREL(%VAR1%; %VAR2%)");
-}
+static const char strCorrelationTemplate[] = "=CORREL(%VAR1%; %VAR2%)";
 
 ScCorrelationDialog::ScCorrelationDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
@@ -40,7 +37,7 @@ const OUString ScCorrelationDialog::getLabel()
 
 const OUString ScCorrelationDialog::getTemplate()
 {
-    return strCorrelationTemplate;
+    return OUString(strCorrelationTemplate);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

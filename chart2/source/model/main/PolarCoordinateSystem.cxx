@@ -30,11 +30,11 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-static const OUString lcl_aServiceNamePolar2d( "com.sun.star.chart2.PolarCoordinateSystem2d" );
-static const OUString lcl_aServiceNamePolar3d( "com.sun.star.chart2.PolarCoordinateSystem3d" );
+static const char lcl_aServiceNamePolar2d[] = "com.sun.star.chart2.PolarCoordinateSystem2d";
+static const char lcl_aServiceNamePolar3d[] = "com.sun.star.chart2.PolarCoordinateSystem3d";
 
-static const OUString lcl_aImplementationNamePolar2d( "com.sun.star.comp.chart2.PolarCoordinateSystem2d" );
-static const OUString lcl_aImplementationNamePolar3d( "com.sun.star.comp.chart2.PolarCoordinateSystem3d" );
+static const char lcl_aImplementationNamePolar2d[] = "com.sun.star.comp.chart2.PolarCoordinateSystem2d";
+static const char lcl_aImplementationNamePolar3d[] = "com.sun.star.comp.chart2.PolarCoordinateSystem3d";
 }
 
 namespace chart
@@ -108,7 +108,7 @@ Sequence< OUString > PolarCoordinateSystem2d::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem2d, lcl_aImplementationNamePolar2d )
+APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem2d, OUString(lcl_aImplementationNamePolar2d) )
 
 // ==== PolarCoordinateSystem3d ====
 
@@ -130,7 +130,7 @@ Sequence< OUString > PolarCoordinateSystem3d::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem3d, lcl_aImplementationNamePolar3d )
+APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem3d, OUString(lcl_aImplementationNamePolar3d) )
 
 }  // namespace chart
 

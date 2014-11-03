@@ -47,7 +47,7 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.Legend" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Legend";
 
 enum
 {
@@ -301,7 +301,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( Legend, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( Legend, OUString(lcl_aServiceName) );
 
 // needed by MSC compiler
 using impl::Legend_Base;

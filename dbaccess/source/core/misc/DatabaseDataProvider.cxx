@@ -293,7 +293,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
     osl::MutexGuard g(m_aMutex);
     uno::Reference< chart2::data::XDataSequence > xData = m_xInternal->createDataSequenceByRangeRepresentation(_sRangeRepresentation);
     uno::Reference<beans::XPropertySet> xProp(xData,uno::UNO_QUERY);
-    const static OUString s_sNumberFormatKey("NumberFormatKey");
+    static const char s_sNumberFormatKey[] = "NumberFormatKey";
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(s_sNumberFormatKey) )
     {
         xProp->setPropertyValue(s_sNumberFormatKey,impl_getNumberFormatKey_nothrow(_sRangeRepresentation));

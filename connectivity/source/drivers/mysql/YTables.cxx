@@ -51,9 +51,9 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-    static const OUString s_sTableTypeView("VIEW");
-    static const OUString s_sTableTypeTable("TABLE");
-    static const OUString s_sAll("%");
+    static const char s_sTableTypeView[] = "VIEW";
+    static const char s_sTableTypeTable[] = "TABLE";
+    static const char s_sAll[] = "%";
 
     Sequence< OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
@@ -164,15 +164,15 @@ void OTables::dropObject(sal_Int32 _nPos,const OUString& _sElementName)
 OUString OTables::adjustSQL(const OUString& _sSql)
 {
     OUString sSQL = _sSql;
-    static const OUString s_sUNSIGNED("UNSIGNED");
+    static const char s_sUNSIGNED[] = "UNSIGNED";
     sal_Int32 nIndex = sSQL.indexOf(s_sUNSIGNED);
     while(nIndex != -1 )
     {
         sal_Int32 nParen = sSQL.indexOf(')',nIndex);
-        sal_Int32 nPos = nIndex + s_sUNSIGNED.getLength();
+        sal_Int32 nPos = nIndex + strlen(s_sUNSIGNED);
         OUString sNewUnsigned( sSQL.copy(nPos,nParen - nPos + 1));
-        sSQL = sSQL.replaceAt(nIndex,s_sUNSIGNED.getLength()+sNewUnsigned.getLength(),sNewUnsigned + s_sUNSIGNED);
-        nIndex = sSQL.indexOf(s_sUNSIGNED,nIndex + s_sUNSIGNED.getLength()+sNewUnsigned.getLength());
+        sSQL = sSQL.replaceAt(nIndex, strlen(s_sUNSIGNED) + sNewUnsigned.getLength(), sNewUnsigned + s_sUNSIGNED);
+        nIndex = sSQL.indexOf(s_sUNSIGNED,nIndex + strlen(s_sUNSIGNED) + sNewUnsigned.getLength());
     }
     return sSQL;
 }
@@ -180,7 +180,7 @@ OUString OTables::adjustSQL(const OUString& _sSql)
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
-    static const OUString s_sCreatePattern("(M,D)");
+    static const char s_sCreatePattern[] = "(M,D)";
     const OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,this,s_sCreatePattern));
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )

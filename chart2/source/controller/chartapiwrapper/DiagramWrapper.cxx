@@ -79,7 +79,7 @@ using ::osl::MutexGuard;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.Diagram" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Diagram";
 
 enum
 {
@@ -2081,7 +2081,7 @@ uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DiagramWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( DiagramWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

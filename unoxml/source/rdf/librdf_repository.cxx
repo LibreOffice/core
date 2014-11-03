@@ -1503,11 +1503,11 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
 throw (uno::RuntimeException, lang::IllegalArgumentException,
     rdf::RepositoryException, std::exception)
 {
-    static const OUString s_cell("com.sun.star.table.Cell");
-    static const OUString s_cellprops("com.sun.star.text.CellProperties"); // for writer
-    static const OUString s_paragraph("com.sun.star.text.Paragraph");
-    static const OUString s_bookmark("com.sun.star.text.Bookmark");
-    static const OUString s_meta("com.sun.star.text.InContentMetadata");
+    static const char s_cell[] = "com.sun.star.table.Cell";
+    static const char s_cellprops[] = "com.sun.star.text.CellProperties"; // for writer
+    static const char s_paragraph[] = "com.sun.star.text.Paragraph";
+    static const char s_bookmark[] = "com.sun.star.text.Bookmark";
+    static const char s_meta[] = "com.sun.star.text.InContentMetadata";
 
     if (!i_xSubject.is()) {
         throw lang::IllegalArgumentException(

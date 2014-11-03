@@ -39,7 +39,7 @@ KabResultSetMetaData::~KabResultSetMetaData()
 void KabResultSetMetaData::setKabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
-    static const OUString aName("Name");
+    static const char aName[] = "Name";
 
     for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
     {

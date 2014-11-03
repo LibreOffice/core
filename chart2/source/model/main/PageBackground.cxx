@@ -40,7 +40,7 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.PageBackground" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.PageBackground";
 
 struct StaticPageBackgroundDefaults_Initializer
 {
@@ -223,7 +223,7 @@ uno::Sequence< OUString > PageBackground::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PageBackground, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( PageBackground, OUString(lcl_aServiceName) );
 
 using impl::PageBackground_Base;
 

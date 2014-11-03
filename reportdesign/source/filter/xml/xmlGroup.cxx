@@ -92,15 +92,15 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                         if ( nLen )
                         {
 
-                            const static OUString s_sChanged("rpt:HASCHANGED(\"");
+                            static const char s_sChanged[] = "rpt:HASCHANGED(\"";
                             sal_Int32 nPos = sValue.indexOf(s_sChanged);
                             if ( nPos == -1 )
                                 nPos = 5;
                             else
                             {
-                                nPos = s_sChanged.getLength();
-                                static OUString s_sQuote("\"\"");
-                                static OUString s_sSingleQuote("\"");
+                                nPos = strlen(s_sChanged);
+                                static const char s_sQuote[] = "\"\"";
+                                static const char s_sSingleQuote[] = "\"";
                                 sal_Int32 nIndex = sValue.indexOf(s_sQuote,nPos);
                                 while ( nIndex > -1 )
                                 {

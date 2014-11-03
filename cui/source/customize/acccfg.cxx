@@ -78,14 +78,14 @@ using namespace com::sun::star;
 
 
 
-static OUString MODULEPROP_SHORTNAME             ("ooSetupFactoryShortName"                 );
-static OUString MODULEPROP_UINAME                ("ooSetupFactoryUIName"                    );
-static OUString CMDPROP_UINAME                   ("Name"                                    );
+static const char MODULEPROP_SHORTNAME  [] = "ooSetupFactoryShortName";
+static const char MODULEPROP_UINAME     [] = "ooSetupFactoryUIName";
+static const char CMDPROP_UINAME        [] = "Name";
 
-static OUString FOLDERNAME_UICONFIG              ("Configurations2"                         );
+static const char FOLDERNAME_UICONFIG   [] = "Configurations2";
 
-static OUString MEDIATYPE_PROPNAME               ("MediaType"                               );
-static OUString MEDIATYPE_UICONFIG               ("application/vnd.sun.xml.ui.configuration");
+static const char MEDIATYPE_PROPNAME    [] = "MediaType";
+static const char MEDIATYPE_UICONFIG    [] = "application/vnd.sun.xml.ui.configuration";
 
 
 static const sal_uInt16 KEYCODE_ARRAY[] =
@@ -1354,7 +1354,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
             OUString sMediaType;
             xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
             if (sMediaType.isEmpty())
-                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(MEDIATYPE_UICONFIG));
+                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(OUString(MEDIATYPE_UICONFIG)));
 
             css::uno::Reference< css::ui::XUIConfigurationManager2 > xCfgMgr2 = css::ui::UIConfigurationManager::create( m_xContext );
             xCfgMgr2->setStorage(xUIConfig);

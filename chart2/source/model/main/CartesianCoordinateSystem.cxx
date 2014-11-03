@@ -30,11 +30,11 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-static const OUString lcl_aServiceNameCartesian2d( "com.sun.star.chart2.CartesianCoordinateSystem2d" );
-static const OUString lcl_aServiceNameCartesian3d( "com.sun.star.chart2.CartesianCoordinateSystem3d" );
+static const char lcl_aServiceNameCartesian2d[] = "com.sun.star.chart2.CartesianCoordinateSystem2d";
+static const char lcl_aServiceNameCartesian3d[] = "com.sun.star.chart2.CartesianCoordinateSystem3d";
 
-static const OUString lcl_aImplementationNameCartesian2d( "com.sun.star.comp.chart2.CartesianCoordinateSystem2d" );
-static const OUString lcl_aImplementationNameCartesian3d( "com.sun.star.comp.chart2.CartesianCoordinateSystem3d" );
+static const char lcl_aImplementationNameCartesian2d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem2d";
+static const char lcl_aImplementationNameCartesian3d[] = "com.sun.star.comp.chart2.CartesianCoordinateSystem3d";
 }
 
 namespace chart
@@ -108,7 +108,7 @@ Sequence< OUString > CartesianCoordinateSystem2d::getSupportedServiceNames_Stati
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem2d, lcl_aImplementationNameCartesian2d )
+APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem2d, OUString(lcl_aImplementationNameCartesian2d) )
 
 // ==== CartesianCoordinateSystem3d ====
 
@@ -130,7 +130,7 @@ Sequence< OUString > CartesianCoordinateSystem3d::getSupportedServiceNames_Stati
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem3d, lcl_aImplementationNameCartesian3d )
+APPHELPER_XSERVICEINFO_IMPL( CartesianCoordinateSystem3d, OUString(lcl_aImplementationNameCartesian3d) )
 
 }  // namespace chart
 

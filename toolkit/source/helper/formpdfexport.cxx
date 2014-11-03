@@ -63,7 +63,7 @@ namespace toolkitform
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel )
         {
-            static const OUString FM_PROP_CLASSID("ClassId");
+            static const char FM_PROP_CLASSID[] = "ClassId";
             sal_Int16 nControlType = FormComponentType::CONTROL;
 
             Reference< XPropertySetInfo > xPSI;
@@ -243,7 +243,7 @@ namespace toolkitform
         */
         void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
         {
-            static const OUString FM_PROP_STRINGITEMLIST("StringItemList");
+            static const char FM_PROP_STRINGITEMLIST[] = "StringItemList";
             Sequence< OUString > aListEntries;
             OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) >>= aListEntries );
             ::std::copy( aListEntries.getConstArray(), aListEntries.getConstArray() + aListEntries.getLength(),
@@ -282,12 +282,12 @@ namespace toolkitform
 
 
             // Name, Description, Text
-            OSL_VERIFY( xModelProps->getPropertyValue( OUString(FM_PROP_NAME) ) >>= Descriptor->Name );
-            static const OUString FM_PROP_HELPTEXT("HelpText");
+            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_NAME ) >>= Descriptor->Name );
+            static const char FM_PROP_HELPTEXT[] = "HelpText";
             OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= Descriptor->Description );
             Any aText;
-            static const OUString FM_PROP_TEXT("Text");
-            static const OUString FM_PROP_LABEL("Label");
+            static const char FM_PROP_TEXT[] = "Text";
+            static const char FM_PROP_LABEL[] = "Label";
             if ( xPSI->hasPropertyByName( FM_PROP_TEXT ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_TEXT );
             else if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
@@ -297,14 +297,14 @@ namespace toolkitform
 
 
             // readonly
-            static const OUString FM_PROP_READONLY("ReadOnly");
+            static const char FM_PROP_READONLY[] = "ReadOnly";
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= Descriptor->ReadOnly );
 
 
             // border
             {
-                static const OUString FM_PROP_BORDER("Border");
+                static const char FM_PROP_BORDER[] = "Border";
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )
                 {
                     sal_Int16 nBorderType = 0;
@@ -325,7 +325,7 @@ namespace toolkitform
 
 
             // background color
-            static const OUString FM_PROP_BACKGROUNDCOLOR("BackgroundColor");
+            static const char FM_PROP_BACKGROUNDCOLOR[] = "BackgroundColor";
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
             {
                 sal_Int32 nBackColor = COL_TRANSPARENT;
@@ -336,7 +336,7 @@ namespace toolkitform
 
 
             // text color
-            static const OUString FM_PROP_TEXTCOLOR("TextColor");
+            static const char FM_PROP_TEXTCOLOR[] = "TextColor";
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
             {
                 sal_Int32 nTextColor = COL_TRANSPARENT;
@@ -351,7 +351,7 @@ namespace toolkitform
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
             // "WORDBREAK" style flags
-            static const OUString FM_PROP_MULTILINE("MultiLine");
+            static const char FM_PROP_MULTILINE[] = "MultiLine";
             if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
             {
                 bool bMultiLine = false;
@@ -361,7 +361,7 @@ namespace toolkitform
             }
 
             // horizontal alignment
-            static const OUString FM_PROP_ALIGN("Align");
+            static const char FM_PROP_ALIGN[] = "Align";
             if ( xPSI->hasPropertyByName( FM_PROP_ALIGN ) )
             {
                 sal_Int16 nAlign = awt::TextAlign::LEFT;
@@ -397,7 +397,7 @@ namespace toolkitform
             }
 
             // font
-            static const OUString FM_PROP_FONT("FontDescriptor");
+            static const char FM_PROP_FONT[] = "FontDescriptor";
             if ( xPSI->hasPropertyByName( FM_PROP_FONT ) )
             {
                 FontDescriptor aUNOFont;
@@ -435,12 +435,12 @@ namespace toolkitform
                 }
 
                 // file select
-                static const OUString FM_SUN_COMPONENT_FILECONTROL("com.sun.star.form.component.FileControl");
+                static const char FM_SUN_COMPONENT_FILECONTROL[] = "com.sun.star.form.component.FileControl";
                 if ( xSI->supportsService( FM_SUN_COMPONENT_FILECONTROL ) )
                     pEditWidget->FileSelect = true;
 
                 // maximum text length
-                static const OUString FM_PROP_MAXTEXTLEN("MaxTextLen");
+                static const char FM_PROP_MAXTEXTLEN[] = "MaxTextLen";
                 if ( xPSI->hasPropertyByName( FM_PROP_MAXTEXTLEN ) )
                 {
                     sal_Int16 nMaxTextLength = 0;
@@ -459,7 +459,7 @@ namespace toolkitform
                 ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( Descriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
                 OSL_VERIFY( xModelProps->getPropertyValue("ButtonType") >>= eButtonType );
-                static const OUString FM_PROP_TARGET_URL("TargetURL");
+                static const char FM_PROP_TARGET_URL[] = "TargetURL";
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
                     // if a button is a submit button, then it uses the URL at its parent form
@@ -518,7 +518,7 @@ namespace toolkitform
 
 
             // check boxes
-            static const OUString FM_PROP_STATE("State");
+            static const char FM_PROP_STATE[] = "State";
             if ( Descriptor->getType() == ::vcl::PDFWriter::CheckBox )
             {
                 ::vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< ::vcl::PDFWriter::CheckBoxWidget* >( Descriptor.get() );
@@ -538,7 +538,7 @@ namespace toolkitform
                 pRadioWidget->RadioGroup = determineRadioGroupId( xModelProps );
                 try
                 {
-                    static const OUString FM_PROP_REFVALUE("RefValue");
+                    static const char FM_PROP_REFVALUE[] = "RefValue";
                     xModelProps->getPropertyValue( FM_PROP_REFVALUE ) >>= pRadioWidget->OnValue;
                 }
                 catch(...)
@@ -554,7 +554,7 @@ namespace toolkitform
                 ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( Descriptor.get() );
 
                 // drop down
-                static const OUString FM_PROP_DROPDOWN("Dropdown");
+                static const char FM_PROP_DROPDOWN[] = "Dropdown";
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
 
                 // multi selection

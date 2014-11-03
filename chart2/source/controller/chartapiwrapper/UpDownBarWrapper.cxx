@@ -41,7 +41,7 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-static const OUString lcl_aServiceName("com.sun.star.comp.chart.ChartArea");
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.ChartArea";
 
 struct StaticUpDownBarWrapperPropertyArray_Initializer
 {
@@ -382,7 +382,7 @@ Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( UpDownBarWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( UpDownBarWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

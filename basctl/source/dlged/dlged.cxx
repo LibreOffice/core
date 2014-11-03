@@ -57,9 +57,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
-static OUString aResourceResolverPropName( "ResourceResolver" );
-static OUString aDecorationPropName( "Decoration" );
-static OUString aTitlePropName( "Title" );
+static const char aResourceResolverPropName[] = "ResourceResolver";
+static const char aDecorationPropName[] = "Decoration";
+static const char aTitlePropName[] = "Title";
 
 
 

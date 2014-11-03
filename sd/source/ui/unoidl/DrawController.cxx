@@ -211,7 +211,7 @@ OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeExcepti
     return OUString("DrawController") ;
 }
 
-static OUString ssServiceName( "com.sun.star.drawing.DrawingDocumentDrawView");
+static const char ssServiceName[] = "com.sun.star.drawing.DrawingDocumentDrawView";
 
 sal_Bool SAL_CALL DrawController::supportsService (const OUString& rsServiceName)
     throw(RuntimeException, std::exception)

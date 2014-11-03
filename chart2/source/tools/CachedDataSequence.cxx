@@ -46,7 +46,7 @@ using ::chart::impl::CachedDataSequence_Base;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.CachedDataSequence" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.CachedDataSequence";
 
 enum
 {
@@ -260,7 +260,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL CachedDataSequence::getPropertySet
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( CachedDataSequence, lcl_aServiceName )
+APPHELPER_XSERVICEINFO_IMPL( CachedDataSequence, OUString(lcl_aServiceName) )
 
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()

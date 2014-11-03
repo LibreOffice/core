@@ -847,13 +847,13 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
         ESCHER_LineEnd& reLineEnd, sal_Int32& rnArrowLength, sal_Int32& rnArrowWidth )
 {
-    static OUString sLineStart    ( "LineStart" );
-    static OUString sLineStartName( "LineStartName" );
-    static OUString sLineEnd      ( "LineEnd" );
-    static OUString sLineEndName  ( "LineEndName" );
+    static const char sLineStart    [] = "LineStart";
+    static const char sLineStartName[] = "LineStartName";
+    static const char sLineEnd      [] = "LineEnd";
+    static const char sLineEndName  [] = "LineEndName";
 
-    const OUString sLine      ( bLineStart ? sLineStart : sLineEnd );
-    const OUString sLineName  ( bLineStart ? sLineStartName : sLineEndName );
+    const OUString sLine      ( bLineStart ? OUString(sLineStart) : OUString(sLineEnd) );
+    const OUString sLineName  ( bLineStart ? OUString(sLineStartName) : OUString(sLineEndName) );
 
     bool bIsArrow = false;
 
@@ -2015,8 +2015,8 @@ bool EscherPropertyContainer::CreatePolygonProperties(
           ::com::sun::star::awt::Rectangle& rGeoRect,
           Polygon* pPolygon )
 {
-    static OUString sPolyPolygonBezier  ( "PolyPolygonBezier" );
-    static OUString sPolyPolygon        ( "PolyPolygon" );
+    static const char sPolyPolygonBezier [] = "PolyPolygonBezier";
+    static const char sPolyPolygon       [] = "PolyPolygon";
 
     bool    bRetValue = true;
     bool    bLine = ( nFlags & ESCHER_CREATEPOLYGON_LINE ) != 0;
@@ -2029,7 +2029,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
     {
         ::com::sun::star::uno::Any aAny;
         bRetValue = EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                        ( bBezier ) ? sPolyPolygonBezier : sPolyPolygon, true );
+                        ( bBezier ) ? OUString(sPolyPolygonBezier) : OUString(sPolyPolygon), true );
         if ( bRetValue )
         {
             aPolyPolygon = GetPolyPolygon( aAny );
@@ -2311,12 +2311,12 @@ bool EscherPropertyContainer::CreateConnectorProperties(
     EscherSolverContainer& rSolverContainer, ::com::sun::star::awt::Rectangle& rGeoRect,
             sal_uInt16& rShapeType, sal_uInt16& rShapeFlags )
 {
-    static OUString sEdgeKind             ( "EdgeKind" );
-    static OUString sEdgeStartPoint       ( "EdgeStartPoint" );
-    static OUString sEdgeEndPoint         ( "EdgeEndPoint" );
-    static OUString sEdgeStartConnection  ( "EdgeStartConnection" );
-    static OUString sEdgeEndConnection    ( "EdgeEndConnection" );
-    static OUString sEdgePath             ( "PolyPolygonBezier" );
+    static const char sEdgeKind            [] = "EdgeKind";
+    static const char sEdgeStartPoint      [] = "EdgeStartPoint";
+    static const char sEdgeEndPoint        [] = "EdgeEndPoint";
+    static const char sEdgeStartConnection [] = "EdgeStartConnection";
+    static const char sEdgeEndConnection   [] = "EdgeEndConnection";
+    static const char sEdgePath            [] = "PolyPolygonBezier";
 
     bool bRetValue = false;
     rShapeType = rShapeFlags = 0;

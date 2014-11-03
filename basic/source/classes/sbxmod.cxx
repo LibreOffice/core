@@ -732,9 +732,7 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
 
 const OUString& SbModule::GetSource() const
 {
-    static OUString aRetStr;
-    aRetStr = aOUSource;
-    return aRetStr;
+    return aOUSource;
 }
 
 // Parent and BASIC are one!
@@ -1000,29 +998,25 @@ static void SendHint( SbxObject* pObj, sal_uIntPtr nId, SbMethod* p )
 void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
     // delete the return value of CreateUnoService
-    static OUString aName("CreateUnoService");
-    SbxVariable* pVar = pBasic->GetRtl()->Find( aName, SbxCLASS_METHOD );
+    SbxVariable* pVar = pBasic->GetRtl()->Find( OUString("CreateUnoService"), SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CreateUnoDialog
-    static OUString aName2("CreateUnoDialog");
-    pVar = pBasic->GetRtl()->Find( aName2, SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( OUString("CreateUnoDialog"), SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CDec
-    static OUString aName3("CDec");
-    pVar = pBasic->GetRtl()->Find( aName3, SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( OUString("CDec"), SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete return value of CreateObject
-    static OUString aName4("CreateObject");
-    pVar = pBasic->GetRtl()->Find( aName4, SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( OUString("CreateObject"), SbxCLASS_METHOD );
     if( pVar )
     {
         pVar->SbxValue::Clear();
@@ -2548,29 +2542,25 @@ void SbUserFormModule::triggerInitializeEvent( void )
     if ( mbInit )
         return;
     SAL_INFO("basic", "**** SbUserFormModule::triggerInitializeEvent");
-    static OUString aInitMethodName( "Userform_Initialize");
-    triggerMethod( aInitMethodName );
+    triggerMethod(OUString("Userform_Initialize"));
     mbInit = true;
 }
 
 void SbUserFormModule::triggerTerminateEvent( void )
 {
     SAL_INFO("basic", "**** SbUserFormModule::triggerTerminateEvent");
-    static OUString aTermMethodName( "Userform_Terminate" );
-    triggerMethod( aTermMethodName );
+    triggerMethod(OUString( "Userform_Terminate" ));
     mbInit=false;
 }
 
 void SbUserFormModule::triggerLayoutEvent( void )
 {
-    static OUString aMethodName( "Userform_Layout" );
-    triggerMethod( aMethodName );
+    triggerMethod(OUString( "Userform_Layout" ));
 }
 
 void SbUserFormModule::triggerResizeEvent( void )
 {
-    static OUString aMethodName("Userform_Resize");
-    triggerMethod( aMethodName );
+    triggerMethod(OUString("Userform_Resize"));
 }
 
 SbUserFormModuleInstance* SbUserFormModule::CreateInstance()

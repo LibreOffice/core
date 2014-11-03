@@ -689,19 +689,19 @@ public:
     }
 };
 
-const static OUString ISVISIBLE(   "IsVisible");
-const static OUString POSITION(   "Position");
-const static OUString EQUALS( "=" );
-const static OUString NOTEQUALS( "<>" );
-const static OUString GREATERTHAN( ">" );
-const static OUString GREATERTHANEQUALS( ">=" );
-const static OUString LESSTHAN( "<" );
-const static OUString LESSTHANEQUALS( "<=" );
-const static OUString CONTS_HEADER( "ContainsHeader" );
-const static OUString INSERTPAGEBREAKS( "InsertPageBreaks" );
-const static OUString STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY( "The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again" );
-const static OUString STR_ERRORMESSAGE_NOCELLSWEREFOUND( "No cells were found" );
-const static OUString CELLSTYLE( "CellStyle" );
+static const char ISVISIBLE[] = "IsVisible";
+static const char POSITION[] = "Position";
+static const char EQUALS[] = "=";
+static const char NOTEQUALS[] = "<>";
+static const char GREATERTHAN[] = ">";
+static const char GREATERTHANEQUALS[] = ">=";
+static const char LESSTHAN[] = "<";
+static const char LESSTHANEQUALS[] = "<=";
+static const char CONTS_HEADER[] = "ContainsHeader";
+static const char INSERTPAGEBREAKS[] = "InsertPageBreaks";
+static const char STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY[] = "The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again";
+static const char STR_ERRORMESSAGE_NOCELLSWEREFOUND[] = "No cells were found";
+static const char CELLSTYLE[] = "CellStyle";
 
 class CellValueSetter : public ValueSetter
 {
@@ -980,7 +980,7 @@ public:
 
 };
 
-const static OUString sNA("#N/A");
+static const char sNA[] = "#N/A";
 
 class Dim1ArrayValueSetter : public ArrayVisitor
 {
@@ -998,7 +998,7 @@ public:
         if ( y < nColCount )
             mCellValueSetter.processValue( aMatrix[ y ], xCell );
         else
-            mCellValueSetter.processValue( uno::makeAny( sNA ), xCell );
+            mCellValueSetter.processValue( uno::makeAny( OUString(sNA) ), xCell );
     }
 };
 
@@ -1021,7 +1021,7 @@ public:
         if ( x < nRowCount && y < nColCount )
             mCellValueSetter.processValue( aMatrix[ x ][ y ], xCell );
         else
-            mCellValueSetter.processValue( uno::makeAny( sNA ), xCell );
+            mCellValueSetter.processValue( uno::makeAny( OUString(sNA) ), xCell );
 
     }
 };
@@ -3725,8 +3725,7 @@ ScVbaRange::createEnumeration() throw (uno::RuntimeException, std::exception)
 OUString SAL_CALL
 ScVbaRange::getDefaultMethodName(  ) throw (uno::RuntimeException, std::exception)
 {
-    const static OUString sName( "Item" );
-    return sName;
+    return OUString( "Item" );
 }
 
 // returns calc internal col. width ( in points )
@@ -4210,7 +4209,7 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
     Cell1 >>= sRangeName;
     if ( Cell1.hasValue() && !Cell2.hasValue() && !sRangeName.isEmpty() )
     {
-        const static OUString sNamedRanges( "NamedRanges");
+        static const char sNamedRanges[] = "NamedRanges";
         uno::Reference< beans::XPropertySet > xPropSet( getCurrentExcelDoc(xContext), uno::UNO_QUERY_THROW );
 
         uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( sNamedRanges ), uno::UNO_QUERY_THROW );
@@ -4302,12 +4301,12 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
     bool bIsNumeric = false;
     if ( sCriteria1.startsWith( EQUALS ) )
     {
-        if ( sCriteria1.getLength() == EQUALS.getLength() )
+        if ( sCriteria1.getLength() == (sal_Int32)strlen(EQUALS) )
             rFilterField.Operator = sheet::FilterOperator2::EMPTY;
         else
         {
             rFilterField.Operator = sheet::FilterOperator2::EQUAL;
-            sCriteria1 = sCriteria1.copy( EQUALS.getLength() );
+            sCriteria1 = sCriteria1.copy( strlen(EQUALS) );
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
@@ -4317,12 +4316,12 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
     }
     else if ( sCriteria1.startsWith( NOTEQUALS ) )
     {
-        if ( sCriteria1.getLength() == NOTEQUALS.getLength() )
+        if ( sCriteria1.getLength() == (sal_Int32)strlen(NOTEQUALS) )
             rFilterField.Operator = sheet::FilterOperator2::NOT_EMPTY;
         else
         {
             rFilterField.Operator = sheet::FilterOperator2::NOT_EQUAL;
-            sCriteria1 = sCriteria1.copy( NOTEQUALS.getLength() );
+            sCriteria1 = sCriteria1.copy( strlen(NOTEQUALS) );
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
             if ( xDescProps.is() )
@@ -4334,12 +4333,12 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
         bIsNumeric = true;
         if ( sCriteria1.startsWith( GREATERTHANEQUALS ) )
         {
-            sCriteria1 = sCriteria1.copy( GREATERTHANEQUALS.getLength() );
+            sCriteria1 = sCriteria1.copy( strlen(GREATERTHANEQUALS) );
             rFilterField.Operator = sheet::FilterOperator2::GREATER_EQUAL;
         }
         else
         {
-            sCriteria1 = sCriteria1.copy( GREATERTHAN.getLength() );
+            sCriteria1 = sCriteria1.copy( strlen(GREATERTHAN) );
             rFilterField.Operator = sheet::FilterOperator2::GREATER;
         }
 
@@ -4349,12 +4348,12 @@ static void lcl_setTableFieldsFromCriteria( OUString& sCriteria1, uno::Reference
         bIsNumeric = true;
         if ( sCriteria1.startsWith( LESSTHANEQUALS ) )
         {
-            sCriteria1 = sCriteria1.copy( LESSTHANEQUALS.getLength() );
+            sCriteria1 = sCriteria1.copy( strlen(LESSTHANEQUALS) );
             rFilterField.Operator = sheet::FilterOperator2::LESS_EQUAL;
         }
         else
         {
-            sCriteria1 = sCriteria1.copy( LESSTHAN.getLength() );
+            sCriteria1 = sCriteria1.copy( strlen(LESSTHAN) );
             rFilterField.Operator = sheet::FilterOperator2::LESS;
         }
 
@@ -5605,7 +5604,7 @@ ScVbaRange::hasError() throw (uno::RuntimeException, std::exception)
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     uno::Reference< script::XInvocation > xInvoc( xApplication->WorksheetFunction(), uno::UNO_QUERY_THROW );
 
-    static OUString FunctionName( "IsError" );
+    static const char FunctionName[] = "IsError";
     uno::Sequence< uno::Any > Params(1);
     uno::Reference< excel::XRange > aRange( this );
     Params[0] = uno::makeAny( aRange );

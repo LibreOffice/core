@@ -105,7 +105,7 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetCellElemTokenMap();
     Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
-    static const OUString s_sStringConcat(" & ");
+    static const char s_sStringConcat[] = " & ";
 
     const sal_uInt16 nToken = rTokenMap.Get( _nPrefix, _rLocalName );
     switch( nToken )
@@ -117,10 +117,10 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             }
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sText += s_sStringConcat + " PageNumber()";
+            m_sText += OUString(s_sStringConcat) + " PageNumber()";
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sText += s_sStringConcat + " PageCount()";
+            m_sText += OUString(s_sStringConcat) + " PageCount()";
             break;
         case XML_TOK_FORMATTED_TEXT:
             {
@@ -257,11 +257,10 @@ void OXMLCell::Characters( const OUString& rChars )
 {
     if ( !rChars.isEmpty() )
     {
-        static const OUString s_Quote("\"");
+        static const char s_Quote[] = "\"";
         if ( !m_sText.isEmpty() )
         {
-            static const OUString s_sStringConcat(" & ");
-            m_sText += s_sStringConcat;
+            m_sText += " & ";
         }
 
         m_sText += s_Quote + rChars + s_Quote;

@@ -129,14 +129,14 @@ namespace comphelper
 
     namespace
     {
-        void    lcl_replaceParameter( OUString& _inout_Message, const OUString& _rPlaceHolder, const OUString& _rReplacement )
+        void lcl_replaceParameter( OUString& _inout_Message, const char* _rPlaceHolder, const OUString& _rReplacement )
         {
-            sal_Int32 nPlaceholderPosition = _inout_Message.indexOf( _rPlaceHolder );
+            sal_Int32 nPlaceholderPosition = _inout_Message.indexOfAsciiL( _rPlaceHolder, strlen(_rPlaceHolder) );
             OSL_ENSURE( nPlaceholderPosition >= 0, "lcl_replaceParameter: placeholder not found!" );
             if ( nPlaceholderPosition < 0 )
                 return;
 
-            _inout_Message = _inout_Message.replaceAt( nPlaceholderPosition, _rPlaceHolder.getLength(), _rReplacement );
+            _inout_Message = _inout_Message.replaceAt( nPlaceholderPosition, strlen(_rPlaceHolder), _rReplacement );
         }
     }
 
@@ -147,32 +147,24 @@ namespace comphelper
         const OptionalString& _rArgument3, const OptionalString& _rArgument4,
         const OptionalString& _rArgument5, const OptionalString& _rArgument6 ) const
     {
-        // (if OUString had an indexOfAscii, we could save those ugly statics ...)
-        static OUString sPH1( "$1$" );
-        static OUString sPH2( "$2$" );
-        static OUString sPH3( "$3$" );
-        static OUString sPH4( "$4$" );
-        static OUString sPH5( "$5$" );
-        static OUString sPH6( "$6$" );
-
         OUString sMessage( _rMessage );
         if ( !!_rArgument1 )
-            lcl_replaceParameter( sMessage, sPH1, *_rArgument1 );
+            lcl_replaceParameter( sMessage, "$1$", *_rArgument1 );
 
         if ( !!_rArgument2 )
-            lcl_replaceParameter( sMessage, sPH2, *_rArgument2 );
+            lcl_replaceParameter( sMessage, "$2$", *_rArgument2 );
 
         if ( !!_rArgument3 )
-            lcl_replaceParameter( sMessage, sPH3, *_rArgument3 );
+            lcl_replaceParameter( sMessage, "$3$", *_rArgument3 );
 
         if ( !!_rArgument4 )
-            lcl_replaceParameter( sMessage, sPH4, *_rArgument4 );
+            lcl_replaceParameter( sMessage, "$4$", *_rArgument4 );
 
         if ( !!_rArgument5 )
-            lcl_replaceParameter( sMessage, sPH5, *_rArgument5 );
+            lcl_replaceParameter( sMessage, "$5$", *_rArgument5 );
 
         if ( !!_rArgument6 )
-            lcl_replaceParameter( sMessage, sPH6, *_rArgument6 );
+            lcl_replaceParameter( sMessage, "$6$", *_rArgument6 );
 
         try
         {

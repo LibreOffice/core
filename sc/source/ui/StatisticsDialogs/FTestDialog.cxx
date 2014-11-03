@@ -28,13 +28,8 @@
 
 #include "FTestDialog.hxx"
 
-namespace
-{
-
-static const OUString strWildcardVariable1Range("%VAR1_RANGE%");
-static const OUString strWildcardVariable2Range("%VAR2_RANGE%");
-
-}
+static const char strWildcardVariable1Range[] = "%VAR1_RANGE%";
+static const char strWildcardVariable2Range[] = "%VAR2_RANGE%";
 
 ScFTestDialog::ScFTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,

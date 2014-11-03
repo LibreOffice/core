@@ -210,7 +210,7 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
 
 namespace
 {
-static const OUString lcl_aServiceName("com.sun.star.comp.chart.Legend");
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.Legend";
 
 enum
 {
@@ -432,7 +432,7 @@ Sequence< OUString > LegendWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( LegendWrapper, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( LegendWrapper, OUString(lcl_aServiceName) );
 
 } //  namespace wrapper
 } //  namespace chart

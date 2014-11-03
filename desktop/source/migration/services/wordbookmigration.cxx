@@ -33,8 +33,8 @@ namespace migration
 
 
 
-    static OUString sSourceSubDir( "/user/wordbook" );
-    static OUString sTargetSubDir( "/user/wordbook" );
+    static const char sSourceSubDir[] = "/user/wordbook";
+    static const char sTargetSubDir[] = "/user/wordbook";
 
 
 

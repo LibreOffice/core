@@ -52,22 +52,19 @@ namespace dbaccess
     using ::com::sun::star::sdb::DatabaseRegistrationEvent;
     using ::com::sun::star::uno::XAggregation;
 
-    static const OUString& getConfigurationRootPath()
+    static OUString getConfigurationRootPath()
     {
-        static OUString s_sNodeName("org.openoffice.Office.DataAccess/RegisteredNames");
-        return s_sNodeName;
+        return OUString("org.openoffice.Office.DataAccess/RegisteredNames");
     }
 
-    const OUString& getLocationNodeName()
+    static OUString getLocationNodeName()
     {
-        static OUString s_sNodeName("Location");
-        return s_sNodeName;
+        return OUString("Location");
     }
 
-    const OUString& getNameNodeName()
+    static OUString getNameNodeName()
     {
-        static OUString s_sNodeName("Name");
-        return s_sNodeName;
+        return OUString("Name");
     }
 
     // DatabaseRegistrations - declaration

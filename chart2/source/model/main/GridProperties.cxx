@@ -38,7 +38,7 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.GridProperties" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.GridProperties";
 
 enum
 {
@@ -243,7 +243,7 @@ Sequence< OUString > GridProperties::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( GridProperties, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( GridProperties, OUString(lcl_aServiceName) );
 
 // needed by MSC compiler
 using impl::GridProperties_Base;

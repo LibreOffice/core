@@ -481,7 +481,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
 
         Reference< XDispatch > xMenuItemDispatch;
 
-        static const OUString s_sDefault("_default");
+        static const char s_sDefault[] = "_default";
         // query for dispatcher
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); ++p )

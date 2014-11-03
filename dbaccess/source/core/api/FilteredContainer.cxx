@@ -344,7 +344,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                 }
             }
 
-            static const OUString sAll("%");
+            static const char sAll[] = "%";
             Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
             Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
 

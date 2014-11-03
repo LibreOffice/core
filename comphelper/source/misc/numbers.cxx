@@ -67,8 +67,7 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
             css::uno::Reference<css::beans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
-                static OUString PROPERTY_DECIMALS( "Decimals" );
-                return xFormat->getPropertyValue(PROPERTY_DECIMALS);
+                return xFormat->getPropertyValue( "Decimals" );
             }
         }
         catch(...)

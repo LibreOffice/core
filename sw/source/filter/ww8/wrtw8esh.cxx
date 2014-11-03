@@ -527,20 +527,20 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     aFFData.setResult(nTemp);
 
     OUString aStr;
-    static OUString sName("Name");
+    static const char sName[] = "Name";
     if (xPropSetInfo->hasPropertyByName(sName))
     {
         xPropSet->getPropertyValue(sName) >>= aStr;
         aFFData.setName(aStr);
     }
 
-    static OUString sHelpText("HelpText");
+    static const char sHelpText[] = "HelpText";
     if (xPropSetInfo->hasPropertyByName(sHelpText))
     {
         xPropSet->getPropertyValue(sHelpText) >>= aStr;
         aFFData.setHelp(aStr);
     }
-    static OUString sHelpF1Text("HelpF1Text");
+    static const char sHelpF1Text[] = "HelpF1Text";
     if (xPropSetInfo->hasPropertyByName(sHelpF1Text))
     {
         xPropSet->getPropertyValue(sHelpF1Text) >>= aStr;

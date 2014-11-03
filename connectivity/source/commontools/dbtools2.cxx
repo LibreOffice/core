@@ -694,15 +694,15 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         Reference< XRow > xCurrentRow(xPrivileges, UNO_QUERY);
 
         const OUString sUserWorkingFor = _xMetaData->getUserName();
-        static const OUString sSELECT( "SELECT" );
-        static const OUString sINSERT( "INSERT" );
-        static const OUString sUPDATE( "UPDATE" );
-        static const OUString sDELETE( "DELETE" );
-        static const OUString sREAD( "READ" );
-        static const OUString sCREATE( "CREATE" );
-        static const OUString sALTER( "ALTER" );
-        static const OUString sREFERENCE( "REFERENCE" );
-        static const OUString sDROP( "DROP" );
+        static const char sSELECT[] = "SELECT";
+        static const char sINSERT[] = "INSERT";
+        static const char sUPDATE[] = "UPDATE";
+        static const char sDELETE[] = "DELETE";
+        static const char sREAD[] = "READ";
+        static const char sCREATE[] = "CREATE";
+        static const char sALTER[] = "ALTER";
+        static const char sREFERENCE[] = "REFERENCE";
+        static const char sDROP[] = "DROP";
 
         if ( xCurrentRow.is() )
         {
@@ -800,9 +800,8 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     }
     catch(const SQLException& e)
     {
-        static OUString sNotSupportedState( "IM001" );
         // some drivers don't support any privileges so we assume that we are allowed to do all we want :-)
-        if(e.SQLState == sNotSupportedState)
+        if(e.SQLState == "IM001")
             nPrivileges |=  Privilege::DROP         |
                             Privilege::REFERENCE    |
                             Privilege::ALTER        |
@@ -965,20 +964,17 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
 }
 OUString lcl_getReportEngines()
 {
-    static OUString s_sNodeName("org.openoffice.Office.DataAccess/ReportEngines");
-    return s_sNodeName;
+    return OUString("org.openoffice.Office.DataAccess/ReportEngines");
 }
 
 OUString lcl_getDefaultReportEngine()
 {
-    static OUString s_sNodeName("DefaultReportEngine");
-    return s_sNodeName;
+    return OUString("DefaultReportEngine");
 }
 
 OUString lcl_getReportEngineNames()
 {
-    static OUString s_sNodeName("ReportEngineNames");
-    return s_sNodeName;
+    return OUString("ReportEngineNames");
 }
 
 OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >& _rxORB)

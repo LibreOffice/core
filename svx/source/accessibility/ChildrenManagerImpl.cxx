@@ -691,8 +691,8 @@ void SAL_CALL
         const document::EventObject& rEventObject)
     throw (uno::RuntimeException, std::exception)
 {
-    static const OUString sShapeInserted ("ShapeInserted");
-    static const OUString sShapeRemoved ("ShapeRemoved");
+    static const char sShapeInserted[] = "ShapeInserted";
+    static const char sShapeRemoved[] = "ShapeRemoved";
 
 
     if (rEventObject.EventName == sShapeInserted)

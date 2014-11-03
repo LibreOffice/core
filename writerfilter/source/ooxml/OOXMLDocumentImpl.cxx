@@ -527,8 +527,8 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
     mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
-        static const OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
-        static const OUString sCustomTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/customXml");
+        static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
+        static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
@@ -579,14 +579,14 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
 
 void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 {
-    static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
-    static OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
-    static OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
-    static OUString sWebSettings("http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
-    static OUString sSettingsTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/settings");
-    static OUString sStylesTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/styles");
-    static OUString sFonttableTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable");
-    static OUString sWebSettingsStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings");
+    static const char sSettingsType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
+    static const char sStylesType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles";
+    static const char sFonttableType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable";
+    static const char sWebSettings[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
+    static const char sSettingsTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/settings";
+    static const char sStylesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
+    static const char sFonttableTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
+    static const char sWebSettingsStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
 
     OOXMLStream::Pointer_t pStream;
     try
@@ -782,8 +782,8 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
     mxRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
-        static const OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
-        static const OUString sCustomTypeStrict("http://purl.oclc.org/ooxml/officeDocument/relationships/control");
+        static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control";
+        static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/control";
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;

@@ -142,11 +142,10 @@ static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell
     CellContentType eCellType = xCell->getType();
     if ( eCellType == CellContentType_FORMULA )
     {
-        static const OUString s_sFormulaResultType("FormulaResultType");
         Reference<XPropertySet> xProp( xCell, UNO_QUERY );
         try
         {
-            xProp->getPropertyValue( s_sFormulaResultType ) >>= eCellType;      // type of formula result
+            xProp->getPropertyValue( "FormulaResultType" ) >>= eCellType;      // type of formula result
         }
         catch (UnknownPropertyException&)
         {
@@ -258,10 +257,9 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
             sal_Int16 nNumType = NumberFormat::NUMBER;
             try
             {
-                static OUString s_NumberFormat("NumberFormat");
                 sal_Int32 nKey = 0;
 
-                if ( xProp->getPropertyValue( s_NumberFormat ) >>= nKey )
+                if ( xProp->getPropertyValue( "NumberFormat" ) >>= nKey )
                 {
                     const Reference<XPropertySet> xFormat = xFormats->getByKey( nKey );
                     if ( xFormat.is() )

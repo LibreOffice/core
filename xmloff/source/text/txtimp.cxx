@@ -895,7 +895,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                     bProgress, bBlockMode, bOrganizerMode) )
     , m_pBackpatcherImpl( MakeBackpatcherImpl() )
 {
-    static OUString s_PropNameDefaultListId( "DefaultListId");
+    static const char s_PropNameDefaultListId[] = "DefaultListId";
 
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -1410,19 +1410,19 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         // Numberings/Bullets in table not visible after save/reload (#i80724#)
         bool bSetListAttrs )
 {
-    static OUString s_ParaStyleName( "ParaStyleName");
-    static OUString s_CharStyleName( "CharStyleName");
-    static OUString s_NumberingRules( "NumberingRules");
-    static OUString s_NumberingIsNumber( "NumberingIsNumber");
-    static OUString s_NumberingLevel( "NumberingLevel");
-    static OUString s_ParaIsNumberingRestart( "ParaIsNumberingRestart");
-    static OUString s_NumberingStartValue( "NumberingStartValue");
-    static OUString s_PropNameListId( "ListId");
-    static OUString s_PageDescName( "PageDescName");
-    static OUString s_ServiceCombinedCharacters( "com.sun.star.text.TextField.CombinedCharacters");
-    static OUString s_Content("Content");
-    static OUString s_OutlineLevel( "OutlineLevel");
-    static OUString s_NumberingStyleName( "NumberingStyleName");
+    static const char s_ParaStyleName[] = "ParaStyleName";
+    static const char s_CharStyleName[] = "CharStyleName";
+    static const char s_NumberingRules[] = "NumberingRules";
+    static const char s_NumberingIsNumber[] = "NumberingIsNumber";
+    static const char s_NumberingLevel[] = "NumberingLevel";
+    static const char s_ParaIsNumberingRestart[] = "ParaIsNumberingRestart";
+    static const char s_NumberingStartValue[] = "NumberingStartValue";
+    static const char s_PropNameListId[] = "ListId";
+    static const char s_PageDescName[] = "PageDescName";
+    static const char s_ServiceCombinedCharacters[] = "com.sun.star.text.TextField.CombinedCharacters";
+    static const char s_Content[] = "Content";
+    static const char s_OutlineLevel[] = "OutlineLevel";
+    static const char s_NumberingStyleName[] = "NumberingStyleName";
 
     const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                      : XML_STYLE_FAMILY_TEXT_TEXT;
@@ -1446,7 +1446,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     if( !sStyleName.isEmpty() )
     {
         sStyleName = rImport.GetStyleDisplayName( nFamily, sStyleName );
-        const OUString& rPropName = (bPara) ? s_ParaStyleName : s_CharStyleName;
+        const OUString rPropName = bPara ? s_ParaStyleName : s_CharStyleName;
         const Reference < XNameContainer > & rStyles = (bPara)
             ? m_pImpl->m_xParaStyles
             : m_pImpl->m_xTextStyles;
@@ -1851,7 +1851,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 void XMLTextImportHelper::FindOutlineStyleName( OUString& rStyleName,
                                                 sal_Int8 nOutlineLevel )
 {
-    static OUString s_HeadingStyleName( "HeadingStyleName");
+    static const char s_HeadingStyleName[] = "HeadingStyleName";
 
     // style name empty?
     if( rStyleName.isEmpty() )
@@ -1915,8 +1915,8 @@ void XMLTextImportHelper::AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel
 
 void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
 {
-    static OUString s_NumberingStyleName( "NumberingStyleName");
-    static OUString s_HeadingStyleName( "HeadingStyleName");
+    static const char s_NumberingStyleName[] = "NumberingStyleName";
+    static const char s_HeadingStyleName  [] = "HeadingStyleName";
 
     if ((m_pImpl->m_pOutlineStylesCandidates != 0 || bSetEmptyLevels) &&
          m_pImpl->m_xChapterNumbering.is() &&
@@ -2022,12 +2022,12 @@ void XMLTextImportHelper::SetHyperlink(
     const OUString& rVisitedStyleName,
     XMLEventsImportContext* pEvents)
 {
-    static OUString s_HyperLinkURL( "HyperLinkURL");
-    static OUString s_HyperLinkName( "HyperLinkName");
-    static OUString s_HyperLinkTarget( "HyperLinkTarget");
-    static OUString s_UnvisitedCharStyleName( "UnvisitedCharStyleName");
-    static OUString s_VisitedCharStyleName( "VisitedCharStyleName");
-    static OUString s_HyperLinkEvents( "HyperLinkEvents");
+    static const char s_HyperLinkURL[] = "HyperLinkURL";
+    static const char s_HyperLinkName[] = "HyperLinkName";
+    static const char s_HyperLinkTarget[] = "HyperLinkTarget";
+    static const char s_UnvisitedCharStyleName[] = "UnvisitedCharStyleName";
+    static const char s_VisitedCharStyleName[] = "VisitedCharStyleName";
+    static const char s_HyperLinkEvents[] = "HyperLinkEvents";
 
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
     Reference < XPropertySetInfo > xPropSetInfo(
@@ -2608,8 +2608,8 @@ void XMLTextImportHelper::ConnectFrameChains(
         const OUString& rNextFrmName,
         const Reference < XPropertySet >& rFrmPropSet )
 {
-    static OUString s_ChainNextName( "ChainNextName");
-    static OUString s_ChainPrevName( "ChainPrevName");
+    static const char s_ChainNextName[] = "ChainNextName";
+    static const char s_ChainPrevName[] = "ChainPrevName";
 
     if( rFrmName.isEmpty() )
         return;
@@ -2657,7 +2657,7 @@ void XMLTextImportHelper::ConnectFrameChains(
 
 bool XMLTextImportHelper::IsInFrame() const
 {
-    static OUString s_TextFrame( "TextFrame");
+    static const char s_TextFrame[] = "TextFrame";
 
     bool bIsInFrame = false;
 

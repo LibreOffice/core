@@ -40,7 +40,7 @@ using ::chart::impl::UncachedDataSequence_Base;
 
 namespace
 {
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart.UncachedDataSequence" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart.UncachedDataSequence";
 
 enum
 {
@@ -156,7 +156,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertyS
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( UncachedDataSequence, lcl_aServiceName )
+APPHELPER_XSERVICEINFO_IMPL( UncachedDataSequence, OUString(lcl_aServiceName) )
 
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()

@@ -81,11 +81,11 @@ namespace sd { namespace slidesorter { namespace cache {
     BitmapCache& rCache,
     sal_Int32 nMaximalCacheSize)
 {
-    static const OUString sNone ("None");
-    static const OUString sCompress ("Compress");
-    static const OUString sErase ("Erase");
-    static const OUString sResolution ("ResolutionReduction");
-    static const OUString sPNGCompression ("PNGCompression");
+    static const char sNone[] = "None";
+    static const char sCompress[] = "Compress";
+    static const char sErase[] = "Erase";
+    static const char sResolution[] = "ResolutionReduction";
+    static const char sPNGCompression[] = "PNGCompression";
 
     ::boost::shared_ptr<BitmapCompressor> pCompressor;
     OUString sCompressionPolicy(sPNGCompression);

@@ -46,7 +46,7 @@ using ::osl::MutexGuard;
 namespace
 {
 
-static const OUString lcl_aServiceName( "com.sun.star.comp.chart2.Title" );
+static const char lcl_aServiceName[] = "com.sun.star.comp.chart2.Title";
 
 enum
 {
@@ -374,7 +374,7 @@ uno::Sequence< OUString > Title::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( Title, lcl_aServiceName );
+APPHELPER_XSERVICEINFO_IMPL( Title, OUString(lcl_aServiceName) );
 
 // needed by MSC compiler
 using impl::Title_Base;

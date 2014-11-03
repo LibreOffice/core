@@ -259,8 +259,8 @@ namespace
         if ( xLayoutManager.is() )
         {
             xLayoutManager->lock();
-            static OUString s_sDesignToolbar("private:resource/toolbar/designobjectbar");
-            static OUString s_sSqlToolbar("private:resource/toolbar/sqlobjectbar");
+            static const char s_sDesignToolbar[] = "private:resource/toolbar/designobjectbar";
+            static const char s_sSqlToolbar[] = "private:resource/toolbar/sqlobjectbar";
             if ( _bDesign )
             {
                 xLayoutManager->destroyElement( s_sSqlToolbar );
@@ -283,7 +283,7 @@ namespace
      */
     void grabFocusFromLimitBox( OQueryController& _rController )
     {
-        static const OUString sResourceURL( "private:resource/toolbar/designobjectbar" );
+        static const char sResourceURL[] = "private:resource/toolbar/designobjectbar";
         Reference< XLayoutManager > xLayoutManager = _rController.getLayoutManager( _rController.getFrame() );
         Reference< XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
         if (xUIElement.is())

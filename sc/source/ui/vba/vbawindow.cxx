@@ -301,11 +301,11 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 uno::Any SAL_CALL
 ScVbaWindow::getCaption() throw (uno::RuntimeException, std::exception)
 {
-    static OUString sCrud(" - OpenOffice.org Calc" );
-    static sal_Int32 nCrudLen = sCrud.getLength();
+    static const char sCrud[] = " - OpenOffice.org Calc";
+    static const sal_Int32 nCrudLen = strlen(sCrud);
 
     OUString sTitle;
-    getFrameProps()->getPropertyValue( OUString( SC_UNONAME_TITLE ) ) >>= sTitle;
+    getFrameProps()->getPropertyValue( SC_UNONAME_TITLE ) >>= sTitle;
     sal_Int32 nCrudIndex = sTitle.indexOf( sCrud );
     // adjust title ( by removing crud )
     // sCrud string present
@@ -326,7 +326,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException, std::exception)
 
             if ( !sTitle.equals( sName ) )
             {
-                static OUString sDot(".");
+                static const char sDot[] = ".";
                 // starts with title
                 if ( sName.startsWith( sTitle ) )
                     // extention starts immediately after

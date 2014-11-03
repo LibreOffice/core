@@ -318,10 +318,10 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
                     }
                 }
                 xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
-                static OUString sAgg("AggregateFunction");
+                static const char sAgg[] = "AggregateFunction";
                 if ( xInfo->hasPropertyByName(sAgg) )
                     xColumn->getPropertyValue(sAgg) >>= bHaving;
-                static OUString sFunction("Function");
+                static const char sFunction[] = "Function";
                 if ( xInfo->hasPropertyByName(sFunction) )
                     xColumn->getPropertyValue(sFunction) >>= bFunction;
             }
@@ -331,7 +331,7 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
                 _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
                 if ( !sTableName.isEmpty() )
                 {
-                    static OUString sSep(".");
+                    static const char sSep[] = ".";
                     sTableName += sSep;
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;
