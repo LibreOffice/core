@@ -551,7 +551,7 @@ void OFieldExpressionControl::PaintCell( OutputDevice& rDev, const Rectangle& rR
     OUString aText  =const_cast< OFieldExpressionControl*>(this)->GetCellText( m_nCurrentPos, nColumnId );
 
     Point aPos( rRect.TopLeft() );
-    Size aTextSize( GetDataWindow().GetTextHeight(),GetDataWindow().GetTextWidth( aText ));
+    Size aTextSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight() );
 
     if( aPos.X() < rRect.Right() || aPos.X() + aTextSize.Width() > rRect.Right() ||
         aPos.Y() < rRect.Top() || aPos.Y() + aTextSize.Height() > rRect.Bottom() )
