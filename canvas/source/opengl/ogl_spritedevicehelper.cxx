@@ -543,7 +543,7 @@ namespace oglcanvas
 
         class BufferContextImpl : public IBufferContext
         {
-            ::basegfx::B2IVector       maSize;
+            glm::vec2       maSize;
             GLuint mnFrambufferId;
             GLuint mnDepthId;
             GLuint mnTextureId;
@@ -566,13 +566,13 @@ namespace oglcanvas
             }
 
         public:
-            BufferContextImpl(const ::basegfx::B2IVector& rSize) :
+            BufferContextImpl(const glm::vec2& rSize) :
                 maSize(rSize),
                 mnFrambufferId(0),
                 mnDepthId(0),
                 mnTextureId(0)
             {
-                OpenGLHelper::createFramebuffer(maSize.getX(), maSize.getY(), mnFrambufferId,
+                OpenGLHelper::createFramebuffer(maSize.x, maSize.y, mnFrambufferId,
                         mnDepthId, mnTextureId, false);
             }
 
@@ -585,7 +585,7 @@ namespace oglcanvas
         };
     }
 
-    IBufferContextSharedPtr SpriteDeviceHelper::createBufferContext(const ::basegfx::B2IVector& rSize) const
+    IBufferContextSharedPtr SpriteDeviceHelper::createBufferContext(const glm::vec2& rSize) const
     {
         return IBufferContextSharedPtr(new BufferContextImpl(rSize));
     }

@@ -20,6 +20,7 @@
 
 #include "ogl_buffercontext.hxx"
 
+#include <glm/glm.hpp>
 #include <set>
 
 namespace vcl { class Window; }
@@ -110,7 +111,7 @@ namespace oglcanvas
                                            const ::basegfx::B2DHomMatrix&                   rTexTransform );
 
         /// create a pbuffer context (for rendering into background surface)
-        IBufferContextSharedPtr createBufferContext(const ::basegfx::B2IVector& rSize) const;
+        IBufferContextSharedPtr createBufferContext(const glm::vec2& rSize) const;
 
         /// Get instance of internal texture cache
         TextureCache& getTextureCache() const;
