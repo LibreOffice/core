@@ -133,6 +133,7 @@ cmd/lc_pagesetup.png cmd/lc_setdocumentproperties.png
 cmd/sc_pagesetup.png cmd/sc_setdocumentproperties.png
 cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
+cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 
 # Duplicates
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png

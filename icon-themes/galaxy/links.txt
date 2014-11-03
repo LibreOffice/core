@@ -9,3 +9,4 @@ cmd/sc_nexttrackedchange.png cmd/sc_arrowshapes.right-arrow.png
 cmd/sc_previoustrackedchange.png cmd/sc_arrowshapes.left-arrow.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
+cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
