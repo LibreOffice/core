@@ -257,33 +257,32 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 
 void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    GLushort pPoints[4];
+    GLfloat pPoints[4];
 
-    pPoints[0] = nX1;
-    pPoints[1] = nY1;
-    pPoints[2] = nX2;
-    pPoints[3] = nY2;
+    pPoints[0] = (2 * nX1) / GetWidth() - 1.0;
+    pPoints[1] = (2 * nY1) / GetHeight() - 1.0;
+    pPoints[2] = (2 * nX2) / GetWidth() - 1.0;;
+    pPoints[3] = (2 * nY2) / GetHeight() - 1.0;
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, 4, GL_UNSIGNED_SHORT, GL_FALSE, 0, pPoints );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pPoints );
     glDrawArrays( GL_LINES, 0, 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
 
 void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
 {
-    GLushort *pPoints;
+    GLfloat pPoints[nPoints * 2];
     sal_uInt32 i, j;
 
-    pPoints = new GLushort[nPoints * 2];
-    for( i = 0, j = 0; i < nPoints; i++, j += 2 )
+    for( i = 0, j = 0; i < nPoints; i++ )
     {
-        pPoints[j] = pPtAry[i].mnX;
-        pPoints[j+1] = pPtAry[i].mnY;
+        pPoints[j++] = (2 * pPtAry[i].mnX) / GetWidth()  - 1.0;
+        pPoints[j++] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, nPoints * 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pPoints );
+    glVertexAttribPointer( GL_ATTRIB_POS, nPoints * 2, GL_FLOAT, GL_FALSE, 0, pPoints );
     if( bClose )
         glDrawArrays( GL_LINE_LOOP, 0, nPoints );
     else
@@ -293,7 +292,7 @@ void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAr
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    GLushort pVertices[nPoints * 2];
+    GLfloat pVertices[nPoints * 2];
     sal_uInt32 i, j;
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
@@ -303,7 +302,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, nPoints * 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pVertices );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
@@ -312,8 +311,8 @@ void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeigh
 {
     long nX1( nX );
     long nY1( nY );
-    long nX2( nX + nWidth - 1 );
-    long nY2( nY + nHeight - 1 );
+    long nX2( nX + nWidth );
+    long nY2( nY + nHeight );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
@@ -350,7 +349,7 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
         }
 
         glEnableVertexAttribArray( GL_ATTRIB_POS );
-        glVertexAttribPointer( GL_ATTRIB_POS, aResult.count() * 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices );
+        glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices );
         glDrawArrays( GL_TRIANGLES, 0, aResult.count() );
         glDisableVertexAttribArray( GL_ATTRIB_POS );
     }
@@ -367,16 +366,16 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& pPol
         const ::basegfx::B2DPolygon& aResult(
             ::basegfx::triangulator::triangulate( pPolygon ) );
 
-        for( j = 0; i < aResult.count(); j++ )
+        for( j = 0; j < aResult.count(); j++ )
         {
-            const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint(i) );
+            const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint( j ) );
             pVertices.push_back( rPt.getX() );
             pVertices.push_back( rPt.getY() );
         }
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, pVertices.size(), GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices.data() );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices.data() );
     glDrawArrays( GL_TRIANGLES, 0, pVertices.size() / 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
@@ -386,7 +385,7 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( const SalTwoRect& pPosAry )
     GLushort aTexCoord[8];
 
     glEnableVertexAttribArray( GL_ATTRIB_TEX );
-    glVertexAttribPointer( GL_ATTRIB_TEX, 8, GL_UNSIGNED_SHORT, GL_FALSE, 0, aTexCoord );
+    glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, aTexCoord );
 
     DrawRect( pPosAry.mnDestX, pPosAry.mnDestY, pPosAry.mnDestWidth, pPosAry.mnDestHeight );
 
