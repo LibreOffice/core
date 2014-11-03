@@ -398,7 +398,7 @@
       </node>
       <node oor:name=".uno:InsertIndexesEntry" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Entry...</value>
+          <value xml:lang="en-US">~Index Entry...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
