@@ -1309,8 +1309,12 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
     if( src[0] == 'C' && src[1] == ':' && src[2] == '\\' ) // Home Dir
     {
         ret.append("file://");
-        ret.append(getenv("HOME"));
-        ret.push_back('/');
+        const char *pHome = getenv("HOME");
+        if (pHome)
+        {
+            ret.append(pHome);
+            ret.push_back('/');
+        }
         i = 3; // skip first 3
     }
     else if( src[0] == 'D' && src[1] == ':' && src[2] == '\\' ) // Root Dir
