@@ -1,23 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires LibreOffice 1.0 -->
-  <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkAdjustment" id="adjustmentPercent">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentDegrees">
     <property name="upper">359</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustmentPercent">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkListStore" id="liststoreTYPE">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Linear</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Axial</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Radial</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Ellipsoid</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Quadratic</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Square</col>
+        <col id="1">0</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkFrame" id="TransparencyTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_left">6</property>
-    <property name="margin_top">6</property>
     <property name="hexpand">True</property>
+    <property name="border_width">6</property>
     <property name="label_xalign">0</property>
     <property name="shadow_type">none</property>
     <child>
@@ -25,14 +59,14 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
-        <property name="border_width">6</property>
+        <property name="top_padding">6</property>
+        <property name="left_padding">12</property>
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="spacing">12</property>
-            <property name="homogeneous">True</property>
+            <property name="spacing">18</property>
             <child>
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
@@ -62,13 +96,11 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="RBT_TRANS_LINEAR">
-                        <property name="label" translatable="yes">_Transparency</property>
+                        <property name="label" translatable="yes">_Transparency:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -85,8 +117,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -104,8 +134,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -121,8 +149,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -149,14 +175,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">6</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -164,14 +187,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">5</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -179,14 +199,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">4</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -194,14 +211,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentDegrees</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -209,14 +223,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -224,14 +235,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="adjustment">adjustmentPercent</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -243,8 +251,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -256,8 +262,8 @@
                           <object class="GtkLabel" id="FT_TRGR_TYPE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Ty_pe</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Ty_pe:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">LB_TRGR_GRADIENT_TYPES</property>
                           </object>
@@ -266,8 +272,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -279,8 +283,8 @@
                           <object class="GtkLabel" id="FT_TRGR_CENTER_X">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Center _X</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Center _X:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_CENTER_X:0%</property>
                           </object>
@@ -289,8 +293,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -302,8 +304,8 @@
                           <object class="GtkLabel" id="FT_TRGR_CENTER_Y">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Center _Y</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">Center _Y:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_CENTER_Y:0%</property>
                           </object>
@@ -312,8 +314,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -325,8 +325,8 @@
                           <object class="GtkLabel" id="FT_TRGR_ANGLE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Angle</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">_Angle:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_ANGLE:0degree</property>
                           </object>
@@ -335,8 +335,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -348,8 +346,8 @@
                           <object class="GtkLabel" id="FT_TRGR_BORDER">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Border</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">_Border:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_BORDER:0%</property>
                           </object>
@@ -358,8 +356,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">4</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -371,8 +367,8 @@
                           <object class="GtkLabel" id="FT_TRGR_START_VALUE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_Start value</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">_Start value:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_START_VALUE:0%</property>
                           </object>
@@ -381,8 +377,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">5</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -394,8 +388,8 @@
                           <object class="GtkLabel" id="FT_TRGR_END_VALUE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">_End value</property>
+                            <property name="xalign">1</property>
+                            <property name="label" translatable="yes">_End value:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">MTR_TRGR_END_VALUE:0%</property>
                           </object>
@@ -404,8 +398,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">6</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -505,40 +497,6 @@
         </attributes>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="liststoreTYPE">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name guint1 -->
-      <column type="guint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Linear</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Axial</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Radial</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Ellipsoid</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Quadratic</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Square</col>
-        <col id="1">0</col>
-      </row>
-    </data>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <property name="mode">both</property>

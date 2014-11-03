@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-100</property>
     <property name="upper">100</property>
@@ -32,7 +33,6 @@
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
-                <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="TSB_AUTOGROW_WIDTH">
                     <property name="label" translatable="yes">Fit wi_dth to text</property>
@@ -47,8 +47,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -65,8 +63,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -83,8 +79,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -101,8 +95,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -119,8 +111,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -137,8 +127,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -173,8 +161,7 @@
       <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">12</property>
-        <property name="homogeneous">True</property>
+        <property name="spacing">18</property>
         <child>
           <object class="GtkFrame" id="FL_DISTANCE">
             <property name="visible">True</property>
@@ -193,21 +180,18 @@
                     <property name="can_focus">False</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">12</property>
-                    <property name="column_homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Left</property>
+                        <property name="label" translatable="yes">_Left:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_LEFT:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -215,15 +199,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Right</property>
+                        <property name="label" translatable="yes">_Right:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_RIGHT:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -231,15 +213,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Top</property>
+                        <property name="label" translatable="yes">_Top:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_TOP:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -247,15 +227,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">_Bottom</property>
+                        <property name="label" translatable="yes">_Bottom:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">MTR_FLD_BOTTOM:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -269,8 +247,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -284,8 +260,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -299,8 +273,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -314,8 +286,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>

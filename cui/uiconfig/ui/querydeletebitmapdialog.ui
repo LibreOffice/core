@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="AskDelBitmapDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Delete bitmap?</property>
+    <property name="title" translatable="yes">Delete Bitmap?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -15,11 +16,11 @@
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">24</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
-            <property name="layout_style">center</property>
+            <property name="layout_style">end</property>
           </object>
           <packing>
             <property name="expand">False</property>
