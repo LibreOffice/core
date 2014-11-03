@@ -831,8 +831,17 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                     sal_uLong nColMax = pColumn->GetMax();
 
                     nMin -= nColMin;
-                    sal_uLong nAdd = ic<nEndCol-1 ? (nColMin * nMinD) / nColsMin
-                                             : nDiff;
+                    sal_uLong nAdd;
+                    if (ic < nEndCol-1)
+                    {
+                        if (nColsMin == 0)
+                            throw o3tl::divide_by_zero();
+                        nAdd = (nColMin * nMinD) / nColsMin;
+                    }
+                    else
+                    {
+                        nAdd = nDiff;
+                    }
                     nColMin += nAdd;
                     nMin += nColMin;
                     OSL_ENSURE( nDiff >= nAdd, "Ooops: nDiff is not correct anymore" );
