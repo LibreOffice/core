@@ -350,7 +350,7 @@ namespace dbaui
         Point aPos( rRect.TopLeft() );
         Size aTextSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight() );
 
-        if( aPos.X() < rRect.Right() || aPos.X() + aTextSize.Width() > rRect.Right() ||
+        if( aPos.X() < rRect.Left() || aPos.X() + aTextSize.Width() > rRect.Right() ||
             aPos.Y() < rRect.Top() || aPos.Y() + aTextSize.Height() > rRect.Bottom() )
         {
             rDev.SetClipRegion(vcl::Region(rRect));
