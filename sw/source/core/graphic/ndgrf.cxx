@@ -341,7 +341,6 @@ void SwGrfNode::onGraphicChanged()
 
     if(pFlyFmt)
     {
-        const bool bWasSwappedOut = GetGrfObj().IsSwappedOut();
         OUString aName;
         OUString aTitle;
         OUString aDesc;
@@ -381,11 +380,6 @@ void SwGrfNode::onGraphicChanged()
         if(!aDesc.isEmpty())
         {
             SetDescription(aDesc);
-        }
-
-        if (bWasSwappedOut)
-        {
-            SwapOut();
         }
     }
 }
@@ -659,10 +653,6 @@ bool SwGrfNode::SavePersistentData()
         GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
         return true;
     }
-
-    // swap in first if already in storage
-    if( HasEmbeddedStreamName() && !SwapIn() )
-        return false;
 
     // #i44367#
     // Do not delete graphic file in storage, because the graphic file could
