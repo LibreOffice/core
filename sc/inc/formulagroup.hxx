@@ -15,6 +15,7 @@
 #include "platforminfo.hxx"
 #include "stlalgorithm.hxx"
 
+#include <formula/opcode.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <vector>
@@ -122,7 +123,7 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
     static FormulaGroupInterpreter *getStatic();
     static void fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms);
     static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation = false);
-    static void enableOpenCL(bool bEnable);
+    static void enableOpenCL(bool bEnable, bool bEnableCompletely = false, const std::set<OpCodeEnum>& rSubsetToEnable = std::set<OpCodeEnum>());
     static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
 
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;

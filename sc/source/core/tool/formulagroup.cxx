@@ -606,10 +606,12 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
 #endif
 }
 
-void FormulaGroupInterpreter::enableOpenCL(bool bEnable)
+void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely, const std::set<OpCodeEnum>& rSubsetToEnable)
 {
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
     aConfig.mbOpenCLEnabled = bEnable;
+    aConfig.mbOpenCLSubsetOnly = !bEnableCompletely;
+    aConfig.maOpenCLSubsetFunctions = rSubsetToEnable;
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 

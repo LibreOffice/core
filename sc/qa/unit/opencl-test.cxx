@@ -553,7 +553,7 @@ bool ScOpenCLTest::detectOpenCLDevice()
 
 void ScOpenCLTest::enableOpenCL()
 {
-    sc::FormulaGroupInterpreter::enableOpenCL(true);
+    sc::FormulaGroupInterpreter::enableOpenCL(true, true);
 }
 
 void ScOpenCLTest::testCompilerHorizontal()
