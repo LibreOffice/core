@@ -200,8 +200,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/line/LineWidthPopup \
     svx/source/sidebar/possize/PosSizePropertyPanel \
     svx/source/sidebar/possize/SidebarDialControl \
-    svx/source/sidebar/tools/ColorControl \
-    svx/source/sidebar/tools/ColorPopup \
     svx/source/sidebar/tools/PopupControl \
     svx/source/sidebar/tools/PopupContainer \
     svx/source/sidebar/tools/Popup \
