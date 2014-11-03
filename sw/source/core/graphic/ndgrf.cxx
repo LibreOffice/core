@@ -620,17 +620,16 @@ bool SwGrfNode::SwapOut()
         maGrfObj.GetType() != GRAPHIC_NONE &&
         !maGrfObj.IsSwappedOut() && !bInSwapIn )
     {
-        if( !refLink.Is() )
+        if( refLink.Is() || HasEmbeddedStreamName() )
         {
-            // Swapping is only needed for embedded pictures.
-            // The graphic will be written into a temp file if it is new, i.e.
-            // if there is no stream name in the storage yet
-            if( !HasEmbeddedStreamName() )
-                if( !maGrfObj.SwapOut() )
-                    return false;
+            // written graphics and links are removed here
+            return maGrfObj.SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
         }
-        // written graphics and links are removed here
-        return maGrfObj.SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
+        else
+        {
+            return maGrfObj.SwapOut();
+        }
+
     }
     return true;
 }
