@@ -1454,6 +1454,16 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             default:
                 ;
         }
+        return;
+    }
+
+    if (eOp >= SC_OPCODE_START_BIN_OP &&
+        eOp <= SC_OPCODE_STOP_UN_OP &&
+        ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly &&
+        ScInterpreter::GetGlobalConfig().maOpenCLSubsetFunctions.find(eOp) == ScInterpreter::GetGlobalConfig().maOpenCLSubsetFunctions.end())
+    {
+        meVectorState = FormulaVectorDisabled;
+        return;
     }
 }
 
