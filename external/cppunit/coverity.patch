@@ -1,6 +1,14 @@
 --- misc/cppunit-1.13.1/src/cppunit/Asserter.cpp
 +++ misc/build/cppunit-1.13.1/src/cppunit/Asserter.cpp
-@@ -13,7 +13,7 @@ Asserter::fail( std::string message,
+@@ -6,6 +6,7 @@
+ CPPUNIT_NS_BEGIN
+ 
+ 
++// coverity[+kill]
+ void 
+ Asserter::fail( std::string message, 
+                 const SourceLine &sourceLine )
+@@ -13,7 +14,7 @@
    fail( Message( "assertion failed", message ), sourceLine );
  }
  
