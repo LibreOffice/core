@@ -37,14 +37,16 @@ namespace sw { namespace mark
         const OUString& rName,
         const OUString& rShortName,
         const OUString& rPrefix)
-        : Bookmark(rPaM, rCode, rName, rShortName)
+        : Bookmark(
+                // ensure that m_pPos2 is null by only passing start to super
+                SwPaM(*rPaM.Start()), rCode, rName, rShortName)
     {
         OSL_ENSURE( IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark( rPaM ),
                     "<CrossRefBookmark::CrossRefBookmark(..)>"
                     "- creation of cross-reference bookmark with an illegal PaM that does not expand over exactly one whole paragraph.");
-        SetMarkPos(*rPaM.Start());
         if(rName.isEmpty())
             m_aName = MarkBase::GenerateNewName(rPrefix);
+        assert(!m_pPos2);
     }
 
     void CrossRefBookmark::SetMarkPos(const SwPosition& rNewPos)
