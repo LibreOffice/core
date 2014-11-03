@@ -580,7 +580,7 @@ namespace
 namespace sw
 {
 
-DocumentRedlineManager::DocumentRedlineManager( SwDoc& i_rSwdoc ) : m_rSwdoc( i_rSwdoc ),
+DocumentRedlineManager::DocumentRedlineManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                     meRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
                                                                     mpRedlineTbl( new SwRedlineTbl ),
                                                                     mpExtraRedlineTbl ( new SwExtraRedlineTbl ),
@@ -603,8 +603,8 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
         if( (nsRedlineMode_t::REDLINE_SHOW_MASK & meRedlineMode) != (nsRedlineMode_t::REDLINE_SHOW_MASK & eMode)
             || 0 == (nsRedlineMode_t::REDLINE_SHOW_MASK & eMode) )
         {
-            bool bSaveInXMLImportFlag = m_rSwdoc.IsInXMLImport();
-            m_rSwdoc.SetInXMLImport( false );
+            bool bSaveInXMLImportFlag = m_rDoc.IsInXMLImport();
+            m_rDoc.SetInXMLImport( false );
             // and then hide/display everything
             void (SwRangeRedline::*pFnc)( sal_uInt16 ) = 0;
 
@@ -633,10 +633,10 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
                     for( sal_uInt16 i = 0; i < mpRedlineTbl->size(); ++i )
                         ((*mpRedlineTbl)[ i ]->*pFnc)( nLoop );
             _CHECK_REDLINE( *this )
-            m_rSwdoc.SetInXMLImport( bSaveInXMLImportFlag );
+            m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
         }
         meRedlineMode = eMode;
-        m_rSwdoc.getIDocumentState().SetModified();
+        m_rDoc.getIDocumentState().SetModified();
     }
 
     // #TODO - add 'SwExtraRedlineTbl' also ?
@@ -685,7 +685,7 @@ bool DocumentRedlineManager::HasExtraRedlineTbl() const
 bool DocumentRedlineManager::IsInRedlines(const SwNode & rNode) const
 {
     SwPosition aPos(rNode);
-    SwNode & rEndOfRedlines = m_rSwdoc.GetNodes().GetEndOfRedlines();
+    SwNode & rEndOfRedlines = m_rDoc.GetNodes().GetEndOfRedlines();
     SwPaM aPam(SwPosition(*rEndOfRedlines.StartOfSectionNode()),
                SwPosition(rEndOfRedlines));
 
@@ -735,7 +735,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
     {
         pNewRedl->InvalidateRange();
 
-        if( m_rSwdoc.IsAutoFmtRedline() )
+        if( m_rDoc.IsAutoFmtRedline() )
         {
             pNewRedl->SetAutoFmtFlag();
             if( mpAutoFmtRedlnComment && !mpAutoFmtRedlnComment->isEmpty() )
@@ -1200,10 +1200,10 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     pEnd->nNode--;
                                     pEnd->nContent.Assign(
                                         pEnd->nNode.GetNode().GetTxtNode(), 0);
-                                    m_rSwdoc.getIDocumentContentOperations().DelFullPara( *pNewRedl );
+                                    m_rDoc.getIDocumentContentOperations().DelFullPara( *pNewRedl );
                                 }
                                 else
-                                    m_rSwdoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
+                                    m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
 
                                 bCompress = true;
                             }
@@ -1219,7 +1219,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 if( bCallDelete )
                                 {
                                     mpRedlineTbl->Insert( pNewRedl );
-                                    m_rSwdoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
+                                    m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
                                     if( !mpRedlineTbl->Remove( pNewRedl ) )
                                         pNewRedl = 0;
                                 }
@@ -1246,7 +1246,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     mpRedlineTbl->Insert( pNewRedl );
-                                    m_rSwdoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
+                                    m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
                                     if( !mpRedlineTbl->Remove( pNewRedl ) )
                                         pNewRedl = 0;
                                     n = 0;      // re-initialize
@@ -1272,7 +1272,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     mpRedlineTbl->Insert( pNewRedl );
-                                    m_rSwdoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
+                                    m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
                                     if( !mpRedlineTbl->Remove( pNewRedl ) )
                                         pNewRedl = 0;
                                     n = 0;      // re-initialize
@@ -1660,7 +1660,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
             // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
             // The ShowMode needs to be retained!
             meRedlineMode = (RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE));
-            m_rSwdoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
+            m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pNewRedl );
             meRedlineMode = eOld;
         }
         delete pNewRedl, pNewRedl = 0;
@@ -1880,12 +1880,12 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
 
     bool bChg = false;
 
-    if (bSaveInUndo && m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+    if (bSaveInUndo && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndoRedline* pUndo = new SwUndoRedline( UNDO_REDLINE, rRange );
         if( pUndo->GetRedlSaveCount() )
         {
-            m_rSwdoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
         else
             delete pUndo;
@@ -1981,7 +1981,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
     }
 
     if( bChg )
-        m_rSwdoc.getIDocumentState().SetModified();
+        m_rDoc.getIDocumentState().SetModified();
 
     return bChg;
 
@@ -2099,12 +2099,12 @@ bool DocumentRedlineManager::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
     SwRangeRedline* pTmp = (*mpRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
-        if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UndoArg1, pTmp->GetDescr());
-            m_rSwdoc.GetIDocumentUndoRedo().StartUndo(UNDO_ACCEPT_REDLINE, &aRewriter);
+            m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_ACCEPT_REDLINE, &aRewriter);
         }
 
         int nLoopCnt = 2;
@@ -2112,10 +2112,10 @@ bool DocumentRedlineManager::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
 
         do {
 
-            if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 SwUndo *const pUndo( new SwUndoAcceptRedline(*pTmp) );
-                m_rSwdoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
             bRet |= lcl_AcceptRedline( *mpRedlineTbl, nPos, bCallDelete );
@@ -2142,12 +2142,12 @@ bool DocumentRedlineManager::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
         if( bRet )
         {
             CompressRedlines();
-            m_rSwdoc.getIDocumentState().SetModified();
+            m_rDoc.getIDocumentState().SetModified();
         }
 
-        if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rSwdoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
+            m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
         }
     }
     return bRet;
@@ -2168,10 +2168,10 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     lcl_AdjustRedlineRange( aPam );
 
-    if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rSwdoc.GetIDocumentUndoRedo().StartUndo( UNDO_ACCEPT_REDLINE, NULL );
-        m_rSwdoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoAcceptRedline( aPam ));
+        m_rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_ACCEPT_REDLINE, NULL );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoAcceptRedline( aPam ));
     }
 
     int nRet = lcl_AcceptRejectRedl( lcl_AcceptRedline, *mpRedlineTbl,
@@ -2179,9 +2179,9 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     if( nRet > 0 )
     {
         CompressRedlines();
-        m_rSwdoc.getIDocumentState().SetModified();
+        m_rDoc.getIDocumentState().SetModified();
     }
-    if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         OUString aTmpStr;
 
@@ -2194,7 +2194,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, aTmpStr);
 
-        m_rSwdoc.GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
+        m_rDoc.GetIDocumentUndoRedo().EndUndo( UNDO_ACCEPT_REDLINE, &aRewriter );
     }
     return nRet != 0;
 
@@ -2213,12 +2213,12 @@ bool DocumentRedlineManager::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
     SwRangeRedline* pTmp = (*mpRedlineTbl)[ nPos ];
     if( pTmp->HasMark() && pTmp->IsVisible() )
     {
-        if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UndoArg1, pTmp->GetDescr());
-            m_rSwdoc.GetIDocumentUndoRedo().StartUndo(UNDO_REJECT_REDLINE, &aRewriter);
+            m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_REJECT_REDLINE, &aRewriter);
         }
 
         int nLoopCnt = 2;
@@ -2226,10 +2226,10 @@ bool DocumentRedlineManager::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
 
         do {
 
-            if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 SwUndo *const pUndo( new SwUndoRejectRedline( *pTmp ) );
-                m_rSwdoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
             bRet |= lcl_RejectRedline( *mpRedlineTbl, nPos, bCallDelete );
@@ -2256,12 +2256,12 @@ bool DocumentRedlineManager::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
         if( bRet )
         {
             CompressRedlines();
-            m_rSwdoc.getIDocumentState().SetModified();
+            m_rDoc.getIDocumentState().SetModified();
         }
 
-        if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rSwdoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
+            m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
         }
     }
     return bRet;
@@ -2282,10 +2282,10 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
     lcl_AdjustRedlineRange( aPam );
 
-    if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rSwdoc.GetIDocumentUndoRedo().StartUndo( UNDO_REJECT_REDLINE, NULL );
-        m_rSwdoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoRejectRedline(aPam) );
+        m_rDoc.GetIDocumentUndoRedo().StartUndo( UNDO_REJECT_REDLINE, NULL );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoRejectRedline(aPam) );
     }
 
     int nRet = lcl_AcceptRejectRedl( lcl_RejectRedline, *mpRedlineTbl,
@@ -2293,9 +2293,9 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
     if( nRet > 0 )
     {
         CompressRedlines();
-        m_rSwdoc.getIDocumentState().SetModified();
+        m_rDoc.getIDocumentState().SetModified();
     }
-    if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         OUString aTmpStr;
 
@@ -2308,7 +2308,7 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, aTmpStr);
 
-        m_rSwdoc.GetIDocumentUndoRedo().EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
+        m_rDoc.GetIDocumentUndoRedo().EndUndo( UNDO_REJECT_REDLINE, &aRewriter );
     }
 
     return nRet != 0;
@@ -2335,7 +2335,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
         if( !pEnd->nNode.GetNode().IsCntntNode() )
         {
             SwNodeIndex aTmp( pEnd->nNode );
-            SwCntntNode* pCNd = m_rSwdoc.GetNodes().GoPrevSection( &aTmp );
+            SwCntntNode* pCNd = m_rDoc.GetNodes().GoPrevSection( &aTmp );
             if( !pCNd || ( aTmp == rSttPos.nNode &&
                 pCNd->Len() == rSttPos.nContent.GetIndex() ))
                 pFnd = 0;
@@ -2392,7 +2392,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
             SwCntntNode* pCNd;
             SwNodeIndex* pIdx = &rPam.GetMark()->nNode;
             if( !pIdx->GetNode().IsCntntNode() &&
-                0 != ( pCNd = m_rSwdoc.GetNodes().GoNextSection( pIdx )) )
+                0 != ( pCNd = m_rDoc.GetNodes().GoNextSection( pIdx )) )
             {
                 if( *pIdx <= rPam.GetPoint()->nNode )
                     rPam.GetMark()->nContent.Assign( pCNd, 0 );
@@ -2404,7 +2404,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
             {
                 pIdx = &rPam.GetPoint()->nNode;
                 if( !pIdx->GetNode().IsCntntNode() &&
-                    0 != ( pCNd = m_rSwdoc.GetNodes().GoPrevSection( pIdx )) )
+                    0 != ( pCNd = m_rDoc.GetNodes().GoPrevSection( pIdx )) )
                 {
                     if( *pIdx >= rPam.GetMark()->nNode )
                         rPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
@@ -2454,7 +2454,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
         if( !pStt->nNode.GetNode().IsCntntNode() )
         {
             SwNodeIndex aTmp( pStt->nNode );
-            SwCntntNode* pCNd = m_rSwdoc.GetNodes().GoNextSection( &aTmp );
+            SwCntntNode* pCNd = m_rDoc.GetNodes().GoNextSection( &aTmp );
             if( !pCNd || ( aTmp == rSttPos.nNode &&
                 !rSttPos.nContent.GetIndex() ))
                 pFnd = 0;
@@ -2513,7 +2513,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
             SwCntntNode* pCNd;
             SwNodeIndex* pIdx = &rPam.GetMark()->nNode;
             if( !pIdx->GetNode().IsCntntNode() &&
-                0 != ( pCNd = m_rSwdoc.GetNodes().GoPrevSection( pIdx )) )
+                0 != ( pCNd = m_rDoc.GetNodes().GoPrevSection( pIdx )) )
             {
                 if( *pIdx >= rPam.GetPoint()->nNode )
                     rPam.GetMark()->nContent.Assign( pCNd, pCNd->Len() );
@@ -2525,7 +2525,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
             {
                 pIdx = &rPam.GetPoint()->nNode;
                 if( !pIdx->GetNode().IsCntntNode() &&
-                    0 != ( pCNd = m_rSwdoc.GetNodes().GoNextSection( pIdx )) )
+                    0 != ( pCNd = m_rDoc.GetNodes().GoNextSection( pIdx )) )
                 {
                     if( *pIdx <= rPam.GetMark()->nNode )
                         rPam.GetPoint()->nContent.Assign( pCNd, 0 );
@@ -2579,7 +2579,7 @@ bool DocumentRedlineManager::SetRedlineComment( const SwPaM& rPaM, const OUStrin
         }
     }
     if( bRet )
-        m_rSwdoc.getIDocumentState().SetModified();
+        m_rDoc.getIDocumentState().SetModified();
 
     return bRet;
 
@@ -2620,7 +2620,7 @@ void DocumentRedlineManager::SetRedlinePassword(
             /*[in]*/const uno::Sequence <sal_Int8>& rNewPassword)
 {
     maRedlinePasswd = rNewPassword;
-    m_rSwdoc.getIDocumentState().SetModified();
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 /// Set comment text for the Redline, which is inserted later on via
@@ -2629,7 +2629,7 @@ void DocumentRedlineManager::SetRedlinePassword(
 /// needs to stay valid!
 void DocumentRedlineManager::SetAutoFmtRedlineComment( const OUString* pTxt, sal_uInt16 nSeqNo )
 {
-    m_rSwdoc.SetAutoFmtRedline( 0 != pTxt );
+    m_rDoc.SetAutoFmtRedline( 0 != pTxt );
     if( pTxt )
     {
         if( !mpAutoFmtRedlnComment )
@@ -2648,7 +2648,7 @@ void DocumentRedlineManager::SetAutoFmtRedlineComment( const OUString* pTxt, sal
 void DocumentRedlineManager::checkRedlining(RedlineMode_t& _rReadlineMode)
 {
     const SwRedlineTbl& rRedlineTbl = GetRedlineTbl();
-    SwEditShell* pEditShell = m_rSwdoc.GetEditShell();
+    SwEditShell* pEditShell = m_rDoc.GetEditShell();
     vcl::Window* pParent = pEditShell ? pEditShell->GetWin() : NULL;
     if ( pParent && !mbReadlineChecked && rRedlineTbl.size() > MAX_REDLINE_COUNT
         && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )

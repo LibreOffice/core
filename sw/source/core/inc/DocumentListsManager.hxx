@@ -54,7 +54,7 @@ class DocumentListsManager : public IDocumentListsAccess,
 
     private:
 
-        SwDoc& m_rSwdoc;
+        SwDoc& m_rDoc;
 
         typedef boost::unordered_map<OUString, SwList*, OUStringHash> tHashMapForLists;
         // container to hold the lists of the text document

@@ -28,7 +28,7 @@ namespace sw
 {
 
 DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
-    m_rSwdoc( i_rSwdoc ),
+    m_rDoc( i_rSwdoc ),
     mbModified(false),
     mbLoaded(false),
     mbUpdateExpFld(false),
@@ -40,22 +40,22 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
 
 void DocumentStateManager::SetModified()
 {
-    m_rSwdoc.GetDocumentLayoutManager().ClearSwLayouterEntries();
+    m_rDoc.GetDocumentLayoutManager().ClearSwLayouterEntries();
     // give the old and new modified state to the link
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
     sal_IntPtr nCall = mbModified ? 3 : 2;
     mbModified = true;
-    m_rSwdoc.GetDocumentStatisticsManager().GetDocStat().bModified = true;
-    if( m_rSwdoc.GetOle2Link().IsSet() )
+    m_rDoc.GetDocumentStatisticsManager().GetDocStat().bModified = true;
+    if( m_rDoc.GetOle2Link().IsSet() )
     {
         mbInCallModified = true;
-        m_rSwdoc.GetOle2Link().Call( (void*)nCall );
+        m_rDoc.GetOle2Link().Call( (void*)nCall );
         mbInCallModified = false;
     }
 
-    if( m_rSwdoc.GetAutoCorrExceptWord() && !m_rSwdoc.GetAutoCorrExceptWord()->IsDeleted() )
-        m_rSwdoc.DeleteAutoCorrExceptWord();
+    if( m_rDoc.GetAutoCorrExceptWord() && !m_rDoc.GetAutoCorrExceptWord()->IsDeleted() )
+        m_rDoc.DeleteAutoCorrExceptWord();
 }
 
 void DocumentStateManager::ResetModified()
@@ -65,11 +65,11 @@ void DocumentStateManager::ResetModified()
     //  Bit 1:  -> new state
     sal_IntPtr nCall = mbModified ? 1 : 0;
     mbModified = false;
-    m_rSwdoc.GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
-    if( nCall && m_rSwdoc.GetOle2Link().IsSet() )
+    m_rDoc.GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
+    if( nCall && m_rDoc.GetOle2Link().IsSet() )
     {
         mbInCallModified = true;
-        m_rSwdoc.GetOle2Link().Call( (void*)nCall );
+        m_rDoc.GetOle2Link().Call( (void*)nCall );
         mbInCallModified = false;
     }
 }

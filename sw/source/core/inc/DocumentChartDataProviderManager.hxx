@@ -55,7 +55,7 @@ public:
 
 private:
 
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
     mutable rtl::Reference<SwChartDataProvider> maChartDataProviderImplRef;
     SwChartLockController_Helper  *mpChartControllerHelper;

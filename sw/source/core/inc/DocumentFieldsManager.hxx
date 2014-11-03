@@ -92,7 +92,7 @@ public:
 
 private:
 
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
     bool mbNewFldLst; //< TRUE: Rebuild field-list.
     SwDocUpdtFld    *mpUpdtFlds; //< Struct for updating fields

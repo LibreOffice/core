@@ -149,7 +149,7 @@ public:
     virtual ~DocumentContentOperationsManager();
 
 private:
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
     bool DeleteAndJoinImpl(SwPaM&, const bool);
     bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);

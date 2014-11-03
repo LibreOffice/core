@@ -56,7 +56,7 @@ public:
 
 private:
 
-     SwDoc& m_rSwdoc;
+     SwDoc& m_rDoc;
 
      bool mbStartIdleTimer; //< idle timer mode start/stop
      sal_Int32 mIdleBlockCount;

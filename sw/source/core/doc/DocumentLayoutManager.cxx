@@ -46,7 +46,7 @@ namespace sw
 {
 
 DocumentLayoutManager::DocumentLayoutManager( SwDoc& i_rSwdoc ) :
-    m_rSwdoc( i_rSwdoc ),
+    m_rDoc( i_rSwdoc ),
     mpCurrentView( 0 ),
     mpLayouter( 0 )
 {
@@ -110,7 +110,7 @@ void DocumentLayoutManager::SetLayouter( SwLayouter* pNew )
 SwFrmFmt *DocumentLayoutManager::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
-    const bool bMod = m_rSwdoc.getIDocumentState().IsModified();
+    const bool bMod = m_rDoc.getIDocumentState().IsModified();
     bool bHeader = false;
 
     switch ( eRequest )
@@ -126,16 +126,16 @@ SwFrmFmt *DocumentLayoutManager::MakeLayoutFmt( RndStdIds eRequest, const SfxIte
     case RND_STD_FOOTERL:
     case RND_STD_FOOTERR:
         {
-            pFmt = new SwFrmFmt( m_rSwdoc.GetAttrPool(),
+            pFmt = new SwFrmFmt( m_rDoc.GetAttrPool(),
                                  (bHeader ? "Right header" : "Right footer"),
-                                 m_rSwdoc.GetDfltFrmFmt() );
+                                 m_rDoc.GetDfltFrmFmt() );
 
-            SwNodeIndex aTmpIdx( m_rSwdoc.GetNodes().GetEndOfAutotext() );
+            SwNodeIndex aTmpIdx( m_rDoc.GetNodes().GetEndOfAutotext() );
             SwStartNode* pSttNd =
-                m_rSwdoc.GetNodes().MakeTextSection
+                m_rDoc.GetNodes().MakeTextSection
                 ( aTmpIdx,
                   bHeader ? SwHeaderStartNode : SwFooterStartNode,
-                  m_rSwdoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(static_cast<sal_uInt16>( bHeader
+                  m_rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(static_cast<sal_uInt16>( bHeader
                                      ? ( eRequest == RND_STD_HEADERL
                                          ? RES_POOLCOLL_HEADERL
                                          : eRequest == RND_STD_HEADERR
@@ -155,19 +155,19 @@ SwFrmFmt *DocumentLayoutManager::MakeLayoutFmt( RndStdIds eRequest, const SfxIte
             // Why set it back?  Doc has changed, or not?
             // In any case, wrong for the FlyFrames!
             if ( !bMod )
-                m_rSwdoc.getIDocumentState().ResetModified();
+                m_rDoc.getIDocumentState().ResetModified();
         }
         break;
 
     case RND_DRAW_OBJECT:
         {
-            pFmt = m_rSwdoc.MakeDrawFrmFmt( OUString(), m_rSwdoc.GetDfltFrmFmt() );
+            pFmt = m_rDoc.MakeDrawFrmFmt( OUString(), m_rDoc.GetDfltFrmFmt() );
             if( pSet )      // Set a few more attributes
                 pFmt->SetFmtAttr( *pSet );
 
-            if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+            if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                m_rSwdoc.GetIDocumentUndoRedo().AppendUndo(
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     new SwUndoInsLayFmt(pFmt, 0, 0));
             }
         }
@@ -201,23 +201,23 @@ void DocumentLayoutManager::DelLayoutFmt( SwFrmFmt *pFmt )
     {
         SwFmtChain aChain( rChain.GetPrev()->GetChain() );
         aChain.SetNext( rChain.GetNext() );
-        m_rSwdoc.SetAttr( aChain, *rChain.GetPrev() );
+        m_rDoc.SetAttr( aChain, *rChain.GetPrev() );
     }
     if ( rChain.GetNext() )
     {
         SwFmtChain aChain( rChain.GetNext()->GetChain() );
         aChain.SetPrev( rChain.GetPrev() );
-        m_rSwdoc.SetAttr( aChain, *rChain.GetNext() );
+        m_rDoc.SetAttr( aChain, *rChain.GetNext() );
     }
 
     const SwNodeIndex* pCntIdx = 0;
     // The draw format doesn't own its content, it just has a pointer to it.
     if (pFmt->Which() != RES_DRAWFRMFMT)
         pCntIdx = pFmt->GetCntnt().GetCntntIdx();
-    if (pCntIdx && !m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+    if (pCntIdx && !m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         // Disconnect if it's an OLE object
-        SwOLENode* pOLENd = m_rSwdoc.GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
+        SwOLENode* pOLENd = m_rDoc.GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
         {
 
@@ -243,10 +243,10 @@ void DocumentLayoutManager::DelLayoutFmt( SwFrmFmt *pFmt )
 
     // Only FlyFrames are undoable at first
     const sal_uInt16 nWh = pFmt->Which();
-    if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo() &&
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo() &&
         (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh))
     {
-        m_rSwdoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoDelLayFmt( pFmt ));
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoDelLayFmt( pFmt ));
     }
     else
     {
@@ -293,7 +293,7 @@ void DocumentLayoutManager::DelLayoutFmt( SwFrmFmt *pFmt )
         {
             SwNode *pNode = &pCntIdx->GetNode();
             ((SwFmtCntnt&)pFmt->GetFmtAttr( RES_CNTNT )).SetNewCntntIdx( 0 );
-            m_rSwdoc.getIDocumentContentOperations().DeleteSection( pNode );
+            m_rDoc.getIDocumentContentOperations().DeleteSection( pNode );
         }
 
         // Delete the character for FlyFrames anchored as char (if necessary)
@@ -319,9 +319,9 @@ void DocumentLayoutManager::DelLayoutFmt( SwFrmFmt *pFmt )
             }
         }
 
-        m_rSwdoc.DelFrmFmt( pFmt );
+        m_rDoc.DelFrmFmt( pFmt );
     }
-    m_rSwdoc.getIDocumentState().SetModified();
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 /** Copies the stated format (pSrc) to pDest and returns pDest.
@@ -357,7 +357,7 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
              (FLY_AT_FLY  == rNewAnchor.GetAnchorId()) ||
              (FLY_AT_CHAR == rNewAnchor.GetAnchorId())) &&
             rNewAnchor.GetCntntAnchor() &&
-            m_rSwdoc.IsInHeaderFooter( rNewAnchor.GetCntntAnchor()->nNode ) &&
+            m_rDoc.IsInHeaderFooter( rNewAnchor.GetCntntAnchor()->nNode ) &&
             pDrawContact != NULL  &&
             pDrawContact->GetMaster() != NULL  &&
             CheckControlLayer( pDrawContact->GetMaster() );
@@ -367,9 +367,9 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
     if( bMayNotCopy )
         return NULL;
 
-    SwFrmFmt* pDest = m_rSwdoc.GetDfltFrmFmt();
+    SwFrmFmt* pDest = m_rDoc.GetDfltFrmFmt();
     if( rSource.GetRegisteredIn() != pSrcDoc->GetDfltFrmFmt() )
-        pDest = m_rSwdoc.CopyFrmFmt( *(SwFrmFmt*)rSource.GetRegisteredIn() );
+        pDest = m_rDoc.CopyFrmFmt( *(SwFrmFmt*)rSource.GetRegisteredIn() );
     if( bFly )
     {
         // #i11176#
@@ -378,13 +378,13 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
         // These are then added to the DrawingLayer (which needs to exist).
         // Together with correct sorting of all drawinglayer based objects
         // before cloning ZOrder transfer works correctly then.
-        SwFlyFrmFmt *pFormat = m_rSwdoc.MakeFlyFrmFmt( rSource.GetName(), pDest );
+        SwFlyFrmFmt *pFormat = m_rDoc.MakeFlyFrmFmt( rSource.GetName(), pDest );
         pDest = pFormat;
 
         SwXFrame::GetOrCreateSdrObject(*pFormat);
     }
     else
-        pDest = m_rSwdoc.MakeDrawFrmFmt( OUString(), pDest );
+        pDest = m_rDoc.MakeDrawFrmFmt( OUString(), pDest );
 
     // Copy all other or new attributes
     pDest->CopyAttrs( rSource );
@@ -398,8 +398,8 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
         const SwNode& rCSttNd = rSource.GetCntnt().GetCntntIdx()->GetNode();
         SwNodeRange aRg( rCSttNd, 1, *rCSttNd.EndOfSectionNode() );
 
-        SwNodeIndex aIdx( m_rSwdoc.GetNodes().GetEndOfAutotext() );
-        SwStartNode* pSttNd = m_rSwdoc.GetNodes().MakeEmptySection( aIdx, SwFlyStartNode );
+        SwNodeIndex aIdx( m_rDoc.GetNodes().GetEndOfAutotext() );
+        SwStartNode* pSttNd = m_rDoc.GetNodes().MakeEmptySection( aIdx, SwFlyStartNode );
 
         // Set the Anchor/CntntIndex first.
         // Within the copying part, we can access the values (DrawFmt in Headers and Footers)
@@ -409,9 +409,9 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
         pDest->SetFmtAttr( aAttr );
         pDest->SetFmtAttr( rNewAnchor );
 
-        if( !m_rSwdoc.IsCopyIsMove() || &m_rSwdoc != pSrcDoc )
+        if( !m_rDoc.IsCopyIsMove() || &m_rDoc != pSrcDoc )
         {
-            if( m_rSwdoc.IsInReading() || m_rSwdoc.IsInMailMerge() )
+            if( m_rDoc.IsInReading() || m_rDoc.IsInMailMerge() )
                 pDest->SetName( OUString() );
             else
             {
@@ -420,21 +420,21 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
 
                 OUString sOld( pDest->GetName() );
                 pDest->SetName( OUString() );
-                if( m_rSwdoc.FindFlyByName( sOld, nNdTyp ) )     // found one
+                if( m_rDoc.FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
-                    case ND_GRFNODE:    sOld = m_rSwdoc.GetUniqueGrfName();      break;
-                    case ND_OLENODE:    sOld = m_rSwdoc.GetUniqueOLEName();      break;
-                    default:            sOld = m_rSwdoc.GetUniqueFrameName();    break;
+                    case ND_GRFNODE:    sOld = m_rDoc.GetUniqueGrfName();      break;
+                    case ND_OLENODE:    sOld = m_rDoc.GetUniqueOLEName();      break;
+                    default:            sOld = m_rDoc.GetUniqueFrameName();    break;
                     }
 
                 pDest->SetName( sOld );
             }
         }
 
-        if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rSwdoc.GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
         }
 
         // Make sure that FlyFrames in FlyFrames are copied
@@ -442,7 +442,7 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
 
         //fdo#36631 disable (scoped) any undo operations associated with the
         //contact object itself. They should be managed by SwUndoInsLayFmt.
-        const ::sw::DrawUndoGuard drawUndoGuard(m_rSwdoc.GetIDocumentUndoRedo());
+        const ::sw::DrawUndoGuard drawUndoGuard(m_rDoc.GetIDocumentUndoRedo());
 
         pSrcDoc->GetDocumentContentOperationsManager().CopyWithFlyInFly( aRg, 0, aIdx, NULL, false, true, true );
     }
@@ -453,8 +453,8 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
         SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
 
         SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
-                                m_rSwdoc.CloneSdrObj( *pSourceContact->GetMaster(),
-                                        m_rSwdoc.IsCopyIsMove() && &m_rSwdoc == pSrcDoc ) );
+                                m_rDoc.CloneSdrObj( *pSourceContact->GetMaster(),
+                                        m_rDoc.IsCopyIsMove() && &m_rDoc == pSrcDoc ) );
         // #i49730# - notify draw frame format that position attributes are
         // already set, if the position attributes are already set at the
         // source draw frame format.
@@ -476,9 +476,9 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
         else
             pDest->SetFmtAttr( rNewAnchor );
 
-        if (m_rSwdoc.GetIDocumentUndoRedo().DoesUndo())
+        if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rSwdoc.GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFmt(pDest,0,0));
         }
     }
 
@@ -512,10 +512,10 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
 //by the SwLayouter
 void DocumentLayoutManager::ClearSwLayouterEntries()
 {
-    SwLayouter::ClearMovedFwdFrms( m_rSwdoc );
-    SwLayouter::ClearObjsTmpConsiderWrapInfluence( m_rSwdoc );
+    SwLayouter::ClearMovedFwdFrms( m_rDoc );
+    SwLayouter::ClearObjsTmpConsiderWrapInfluence( m_rDoc );
     // #i65250#
-    SwLayouter::ClearMoveBwdLayoutInfo( m_rSwdoc );
+    SwLayouter::ClearMoveBwdLayoutInfo( m_rDoc );
 }
 
 DocumentLayoutManager::~DocumentLayoutManager()

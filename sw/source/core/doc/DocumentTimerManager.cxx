@@ -38,7 +38,7 @@
 namespace sw
 {
 
-DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rSwdoc( i_rSwdoc ),
+DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                 mbStartIdleTimer( false ),
                                                                 mIdleBlockCount( 0 )
 {
@@ -85,12 +85,12 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
         pModLogFile = new ::rtl::Logfile( "First DoIdleJobs" );
 #endif
 
-    SwRootFrm* pTmpRoot = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout();
+    SwRootFrm* pTmpRoot = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout();
     if( pTmpRoot &&
-        !SfxProgress::GetActiveProgress( m_rSwdoc.GetDocShell() ) )
+        !SfxProgress::GetActiveProgress( m_rDoc.GetDocShell() ) )
     {
         SwViewShell *pSh, *pStartSh;
-        pSh = pStartSh = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+        pSh = pStartSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         do {
             if( pSh->ActionPend() )
             {
@@ -108,9 +108,9 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
                         UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
 
             if (bIsOnlineSpell && bIsAutoGrammar)
-                StartGrammarChecking( m_rSwdoc );
+                StartGrammarChecking( m_rDoc );
         }
-        std::set<SwRootFrm*> aAllLayouts = m_rSwdoc.GetAllLayouts();
+        std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
         std::set<SwRootFrm*>::iterator pLayIter = aAllLayouts.begin();
         for ( ;pLayIter != aAllLayouts.end();++pLayIter )
         {
@@ -124,23 +124,23 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
             }
         }
 
-        SwFldUpdateFlags nFldUpdFlag = m_rSwdoc.GetDocumentSettingManager().getFieldUpdateFlags(true);
+        SwFldUpdateFlags nFldUpdFlag = m_rDoc.GetDocumentSettingManager().getFieldUpdateFlags(true);
         if( ( AUTOUPD_FIELD_ONLY == nFldUpdFlag
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
-                m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().IsFieldsDirty()
+                m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().IsFieldsDirty()
                 // If we switch the field name the Fields are not updated.
                 // So the "backgorund update" should always be carried out
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
-            if ( m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().IsInUpdateFlds() ||
-                 m_rSwdoc.getIDocumentFieldsAccess().IsExpFldsLocked() )
+            if ( m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().IsInUpdateFlds() ||
+                 m_rDoc.getIDocumentFieldsAccess().IsExpFldsLocked() )
             {
                 pTimer->Start();
                 return 0;
             }
 
             //  Action brackets!
-            m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( true );
+            m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( true );
 
             pTmpRoot->StartAllAction();
 
@@ -148,17 +148,17 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
             const bool bOldLockView = pStartSh->IsViewLocked();
             pStartSh->LockView( true );
 
-            m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
-            m_rSwdoc.getIDocumentFieldsAccess().UpdateExpFlds( 0, false );      // Updates ExpressionFields
-            m_rSwdoc.getIDocumentFieldsAccess().UpdateTblFlds(NULL);                // Tables
-            m_rSwdoc.getIDocumentFieldsAccess().UpdateRefFlds(NULL);                // References
+            m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
+            m_rDoc.getIDocumentFieldsAccess().UpdateExpFlds( 0, false );      // Updates ExpressionFields
+            m_rDoc.getIDocumentFieldsAccess().UpdateTblFlds(NULL);                // Tables
+            m_rDoc.getIDocumentFieldsAccess().UpdateRefFlds(NULL);                // References
 
             pTmpRoot->EndAllAction();
 
             pStartSh->LockView( bOldLockView );
 
-            m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( false );
-            m_rSwdoc.getIDocumentFieldsAccess().GetUpdtFlds().SetFieldsDirty( false );
+            m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( false );
+            m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetFieldsDirty( false );
         }
     }
 #ifdef TIMELOG

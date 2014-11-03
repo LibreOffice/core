@@ -60,7 +60,7 @@ public:
 
 private:
 
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
     SwViewShell *mpCurrentView; //< SwDoc should get a new member mpCurrentView
     SwLayouter *mpLayouter; /**< ::com::sun::star::frame::Controller for complex layout formatting

@@ -23,18 +23,18 @@
 namespace sw
 {
 
-DocumentOutlineNodesManager::DocumentOutlineNodesManager( SwDoc& i_rSwdoc ) : m_rSwdoc( i_rSwdoc )
+DocumentOutlineNodesManager::DocumentOutlineNodesManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc )
 {
 }
 
 sal_Int32 DocumentOutlineNodesManager::getOutlineNodesCount() const
 {
-    return m_rSwdoc.GetNodes().GetOutLineNds().size();
+    return m_rDoc.GetNodes().GetOutLineNds().size();
 }
 
 int DocumentOutlineNodesManager::getOutlineLevel( const sal_Int32 nIdx ) const
 {
-    return m_rSwdoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
+    return m_rDoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
                                 GetTxtNode()->GetAttrOutlineLevel()-1;
 }
 
@@ -43,14 +43,14 @@ OUString DocumentOutlineNodesManager::getOutlineText( const sal_Int32 nIdx,
                               const bool bWithSpacesForLevel,
                               const bool bWithFtn ) const
 {
-    return m_rSwdoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
+    return m_rDoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->
                 GetTxtNode()->GetExpandTxt( 0, -1, bWithNumber,
                                             bWithNumber, bWithSpacesForLevel, bWithFtn );
 }
 
 SwTxtNode* DocumentOutlineNodesManager::getOutlineNode( const sal_Int32 nIdx ) const
 {
-    return m_rSwdoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->GetTxtNode();
+    return m_rDoc.GetNodes().GetOutLineNds()[ static_cast<sal_uInt16>(nIdx) ]->GetTxtNode();
 }
 
 void DocumentOutlineNodesManager::getOutlineNodes( IDocumentOutlineNodes::tSortedOutlineNodeList& orOutlineNodeList ) const
@@ -62,7 +62,7 @@ void DocumentOutlineNodesManager::getOutlineNodes( IDocumentOutlineNodes::tSorte
     for ( sal_uInt16 i = 0; i < nOutlCount; ++i )
     {
         orOutlineNodeList.push_back(
-            m_rSwdoc.GetNodes().GetOutLineNds()[i]->GetTxtNode() );
+            m_rDoc.GetNodes().GetOutLineNds()[i]->GetTxtNode() );
     }
 }
 

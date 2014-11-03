@@ -72,7 +72,7 @@ private:
     bool mbLinksUpdated; //< #i38810# flag indicating, that the links have been updated.
     sfx2::LinkManager *mpLinkMgr; //< List of linked stuff (graphics/DDE/OLE).
 
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 };
 
 }

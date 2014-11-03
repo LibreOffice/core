@@ -27,7 +27,7 @@
 namespace sw
 {
 
-DocumentListsManager::DocumentListsManager( SwDoc& i_rSwdoc ) : m_rSwdoc( i_rSwdoc ), maLists(), maListStyleLists()
+DocumentListsManager::DocumentListsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ), maLists(), maListStyleLists()
 {
 }
 
@@ -46,14 +46,14 @@ SwList* DocumentListsManager::createList( const OUString& rListId,
         return 0;
     }
 
-    SwNumRule* pDefaultNumRuleForNewList = m_rSwdoc.FindNumRulePtr( sDefaultListStyleName );
+    SwNumRule* pDefaultNumRuleForNewList = m_rDoc.FindNumRulePtr( sDefaultListStyleName );
     if ( !pDefaultNumRuleForNewList )
     {
         OSL_FAIL( "<DocumentListsManager::createList(..)> - for provided default list style name no list style is found. Serious defect -> please inform OD." );
         return 0;
     }
 
-    SwList* pNewList = new SwList( sListId, *pDefaultNumRuleForNewList, m_rSwdoc.GetNodes() );
+    SwList* pNewList = new SwList( sListId, *pDefaultNumRuleForNewList, m_rDoc.GetNodes() );
     maLists[sListId] = pNewList;
 
     return pNewList;
@@ -97,7 +97,7 @@ SwList* DocumentListsManager::createListForListStyle( const OUString& sListStyle
         return 0;
     }
 
-    SwNumRule* pNumRule = m_rSwdoc.FindNumRulePtr( sListStyleName );
+    SwNumRule* pNumRule = m_rDoc.FindNumRulePtr( sListStyleName );
     if ( !pNumRule )
     {
         OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect -> please inform OD." );

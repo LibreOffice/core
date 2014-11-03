@@ -48,7 +48,7 @@ public:
 
 private:
 
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
 
     /** continue computing a chunk of document statistics

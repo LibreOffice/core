@@ -71,7 +71,7 @@ private:
                                 Care has to be taken of the necessary
                                 invalidations and notifications. */
 
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
     SfxPrinter* mpPrt;
     VirtualDevice* mpVirDev;
     SwPrintData* mpPrtData;

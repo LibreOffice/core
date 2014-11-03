@@ -67,7 +67,7 @@ public:
 
 private:
 
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
 
     SwDrawModel* mpDrawModel;

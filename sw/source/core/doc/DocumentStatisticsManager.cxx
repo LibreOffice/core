@@ -73,7 +73,7 @@ namespace
 namespace sw
 {
 
-DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rSwdoc( i_rSwdoc ),
+DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                           mpDocStat( new SwDocStat )
 {
     maStatsUpdateTimer.SetTimeout( 100 );
@@ -82,9 +82,9 @@ DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rSwd
 
 void DocumentStatisticsManager::DocInfoChgd( )
 {
-    m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
-    m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
-    m_rSwdoc.getIDocumentState().SetModified();
+    m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
+    m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
+    m_rDoc.getIDocumentState().SetModified();
 }
 
 const SwDocStat& DocumentStatisticsManager::GetDocStat() const
@@ -134,9 +134,9 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     SwNode* pNd;
 
     // This is the inner loop - at least while the paras are dirty.
-    for( sal_uLong i = m_rSwdoc.GetNodes().Count(); i > 0 && nChars > 0; )
+    for( sal_uLong i = m_rDoc.GetNodes().Count(); i > 0 && nChars > 0; )
     {
-        switch( ( pNd = m_rSwdoc.GetNodes()[ --i ])->GetNodeType() )
+        switch( ( pNd = m_rDoc.GetNodes()[ --i ])->GetNodeType() )
         {
         case ND_TEXTNODE:
         {
@@ -157,7 +157,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
 
     // #i93174#: notes contain paragraphs that are not nodes
     {
-        SwFieldType * const pPostits( m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD) );
+        SwFieldType * const pPostits( m_rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD) );
         SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
         for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
         {
@@ -170,7 +170,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         }
     }
 
-    mpDocStat->nPage     = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout() ? m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum() : 0;
+    mpDocStat->nPage     = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ? m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum() : 0;
     mpDocStat->bModified = false;
 
     com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
@@ -196,7 +196,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     aStat[n++].Value <<= (sal_Int32)mpDocStat->nCharExcludingSpaces;
 
     // For e.g. autotext documents there is no pSwgInfo (#i79945)
-    SwDocShell* pObjShell(m_rSwdoc.GetDocShell());
+    SwDocShell* pObjShell(m_rDoc.GetDocShell());
     if (pObjShell)
     {
         const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -204,7 +204,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         const uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
         // #i96786#: do not set modified flag when updating statistics
-        const bool bDocWasModified( m_rSwdoc.getIDocumentState().IsModified() );
+        const bool bDocWasModified( m_rDoc.getIDocumentState().IsModified() );
         const ModifyBlocker_Impl b(pObjShell);
         // rhbz#1081176: don't jump to cursor pos because of (temporary)
         // activation of modified flag triggering move to input position
@@ -212,14 +212,14 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         xDocProps->setDocumentStatistics(aStat);
         if (!bDocWasModified)
         {
-            m_rSwdoc.getIDocumentState().ResetModified();
+            m_rDoc.getIDocumentState().ResetModified();
         }
     }
 
     // optionally update stat. fields
     if (bFields)
     {
-        SwFieldType *pType = m_rSwdoc.getIDocumentFieldsAccess().GetSysFldType(RES_DOCSTATFLD);
+        SwFieldType *pType = m_rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DOCSTATFLD);
         pType->UpdateFlds();
     }
 
@@ -232,7 +232,7 @@ IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer )
     if (IncrementalDocStatCalculate(32000))
         maStatsUpdateTimer.Start();
 
-    SwView* pView = m_rSwdoc.GetDocShell() ? m_rSwdoc.GetDocShell()->GetView() : NULL;
+    SwView* pView = m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetView() : NULL;
     if( pView )
         pView->UpdateDocStats();
     return 0;

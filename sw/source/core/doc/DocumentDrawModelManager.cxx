@@ -48,7 +48,7 @@ namespace sw
 {
 
 DocumentDrawModelManager::DocumentDrawModelManager(SwDoc& i_rSwdoc)
-    : m_rSwdoc(i_rSwdoc)
+    : m_rDoc(i_rSwdoc)
     , mpDrawModel(0)
     , mnHeaven(0)
     , mnHell(0)
@@ -97,13 +97,13 @@ void DocumentDrawModelManager::InitDrawModel()
 //      pSdrPool->FreezeIdRanges();
 
     // set FontHeight pool defaults without changing static SdrEngineDefaults
-    m_rSwdoc.GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
+    m_rDoc.GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     SAL_INFO( "sw.doc", "before create DrawDocument" );
     // The document owns the SwDrawModel. We always have two layers and one page.
-    mpDrawModel = new SwDrawModel( &m_rSwdoc );
+    mpDrawModel = new SwDrawModel( &m_rDoc );
 
-    mpDrawModel->EnableUndo( m_rSwdoc.GetIDocumentUndoRedo().DoesUndo() );
+    mpDrawModel->EnableUndo( m_rDoc.GetIDocumentUndoRedo().DoesUndo() );
 
     OUString sLayerNm;
     sLayerNm = "Hell";
@@ -137,22 +137,22 @@ void DocumentDrawModelManager::InitDrawModel()
     ::com::sun::star::uno::Reference< com::sun::star::linguistic2::XHyphenator > xHyphenator( ::GetHyphenator() );
     rOutliner.SetHyphenator( xHyphenator );
     SAL_INFO( "sw.doc", "after create Spellchecker/Hyphenator" );
-    m_rSwdoc.SetCalcFieldValueHdl(&rOutliner);
-    m_rSwdoc.SetCalcFieldValueHdl(&mpDrawModel->GetHitTestOutliner());
+    m_rDoc.SetCalcFieldValueHdl(&rOutliner);
+    m_rDoc.SetCalcFieldValueHdl(&mpDrawModel->GetHitTestOutliner());
 
     // Set the LinkManager in the model so that linked graphics can be inserted.
     // The WinWord import needs it too.
-    mpDrawModel->SetLinkManager( & m_rSwdoc.getIDocumentLinksAdministration().GetLinkManager() );
-    mpDrawModel->SetAddExtLeading( m_rSwdoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::ADD_EXT_LEADING) );
+    mpDrawModel->SetLinkManager( & m_rDoc.getIDocumentLinksAdministration().GetLinkManager() );
+    mpDrawModel->SetAddExtLeading( m_rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::ADD_EXT_LEADING) );
 
-    OutputDevice* pRefDev = m_rSwdoc.getIDocumentDeviceAccess().getReferenceDevice( false );
+    OutputDevice* pRefDev = m_rDoc.getIDocumentDeviceAccess().getReferenceDevice( false );
     if ( pRefDev )
         mpDrawModel->SetRefDevice( pRefDev );
 
-    mpDrawModel->SetNotifyUndoActionHdl( LINK( &m_rSwdoc, SwDoc, AddDrawUndo ));
-    if ( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
+    mpDrawModel->SetNotifyUndoActionHdl( LINK( &m_rDoc, SwDoc, AddDrawUndo ));
+    if ( m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwViewShell* pViewSh = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwViewShell* pViewSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         do
         {
             SwRootFrm* pRoot =  pViewSh->GetLayout();
@@ -167,7 +167,7 @@ void DocumentDrawModelManager::InitDrawModel()
                 pDrawPage->SetSize( pRoot->Frm().SSize() );
             }
             pViewSh = (SwViewShell*)pViewSh->GetNext();
-        }while( pViewSh != m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
+        }while( pViewSh != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
     }
 }
 
@@ -212,20 +212,20 @@ SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
 {
     OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
-    if ( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if ( m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
-        SwViewShell* pTmp = m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwViewShell* pTmp = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
         do
         {
             pTmp->MakeDrawView();
             pTmp = (SwViewShell*) pTmp->GetNext();
-        } while ( pTmp != m_rSwdoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
+        } while ( pTmp != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
 
         // Broadcast, so that the FormShell can be connected to the DrawView
-        if( m_rSwdoc.GetDocShell() )
+        if( m_rDoc.GetDocShell() )
         {
             SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
-            m_rSwdoc.GetDocShell()->Broadcast( aHnt );
+            m_rDoc.GetDocShell()->Broadcast( aHnt );
         }
     }
     return mpDrawModel;

@@ -34,7 +34,7 @@ using namespace com::sun::star::uno;
 
 namespace sw {
 
-DocumentChartDataProviderManager::DocumentChartDataProviderManager( SwDoc& i_rSwdoc ) : m_rSwdoc( i_rSwdoc ),
+DocumentChartDataProviderManager::DocumentChartDataProviderManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                                         maChartDataProviderImplRef(),
                                                                                         mpChartControllerHelper( 0 )
 {
@@ -49,7 +49,7 @@ SwChartDataProvider * DocumentChartDataProviderManager::GetChartDataProvider( bo
 
     if (bCreate && !maChartDataProviderImplRef.is())
     {
-        maChartDataProviderImplRef = new SwChartDataProvider( & m_rSwdoc );
+        maChartDataProviderImplRef = new SwChartDataProvider( & m_rDoc );
     }
     return maChartDataProviderImplRef.get();
 }
@@ -61,13 +61,13 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
         OUString aName( pTable->GetFrmFmt()->GetName() );
         SwOLENode *pONd;
         SwStartNode *pStNd;
-        SwNodeIndex aIdx( *m_rSwdoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
+        SwNodeIndex aIdx( *m_rDoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
         while (0 != (pStNd = aIdx.GetNode().GetStartNode()))
         {
             ++aIdx;
             if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                 aName == pONd->GetChartTblName() /* OLE node is chart? */ &&
-                0 != (pONd->getLayoutFrm( m_rSwdoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
+                0 != (pONd->getLayoutFrm( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() )) /* chart frame is not hidden */ )
             {
                 uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
                 if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
@@ -88,7 +88,7 @@ SwChartLockController_Helper & DocumentChartDataProviderManager::GetChartControl
 {
     if (!mpChartControllerHelper)
     {
-        mpChartControllerHelper = new SwChartLockController_Helper( & m_rSwdoc );
+        mpChartControllerHelper = new SwChartLockController_Helper( & m_rDoc );
     }
     return *mpChartControllerHelper;
 }

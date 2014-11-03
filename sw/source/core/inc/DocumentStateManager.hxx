@@ -49,7 +49,7 @@ public:
     void SetLoaded(bool b) SAL_OVERRIDE;
 
 private:
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
     bool mbModified      ;    //< TRUE: document has changed.
     bool mbLoaded        ;    //< TRUE: Doc loaded.

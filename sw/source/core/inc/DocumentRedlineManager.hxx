@@ -124,7 +124,7 @@ public:
     virtual ~DocumentRedlineManager();
 
 private:
-    SwDoc& m_rSwdoc;
+    SwDoc& m_rDoc;
 
     RedlineMode_t meRedlineMode;     //< Current Redline Mode.
     SwRedlineTbl        *mpRedlineTbl;           //< List of all Ranged Redlines.
