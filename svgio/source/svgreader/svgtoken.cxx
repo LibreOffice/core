@@ -189,6 +189,8 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDx, SVGTokenDx));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDy, SVGTokenDy));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrRotate, SVGTokenRotate));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTextLength, SVGTokenTextLength));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrLengthAdjust, SVGTokenLengthAdjust));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFont, SVGTokenFont));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontFamily, SVGTokenFontFamily));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrFontSize, SVGTokenFontSize));
