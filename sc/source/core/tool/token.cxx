@@ -30,6 +30,7 @@
 #include "reftokenhelper.hxx"
 #include "clipparam.hxx"
 #include "compiler.hxx"
+#include "interpre.hxx"
 #include <formula/compiler.hrc>
 #include "rechead.hxx"
 #include "parclass.hxx"
@@ -1218,6 +1219,12 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
 
     if (SC_OPCODE_START_FUNCTION <= eOp && eOp < SC_OPCODE_STOP_FUNCTION)
     {
+        if (ScInterpreter::GetGlobalConfig().mbOpenCLSubsetOnly && ScInterpreter::GetGlobalConfig().maOpenCLSubsetFunctions.find(eOp) == ScInterpreter::GetGlobalConfig().maOpenCLSubsetFunctions.end())
+        {
+            meVectorState = FormulaVectorDisabled;
+            return;
+        }
+
         // We support vectorization for the following opcodes.
         switch (eOp)
         {
