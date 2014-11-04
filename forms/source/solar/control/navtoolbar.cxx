@@ -357,7 +357,7 @@ namespace frm
         for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             sal_uInt16 nId = m_pToolbar->GetItemId( i );
-            if ( ( TOOLBOXITEM_BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( nId ) )
+            if ( ( ToolBoxItemType::BUTTON == m_pToolbar->GetItemType( i ) ) && !isArtificialItem( nId ) )
                 aFormFeatures.push_back( nId );
         }
 

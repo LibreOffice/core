@@ -242,7 +242,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
             if ( aURL == TOOLBOXITEM_SEPARATOR_STR )
             {
                 sal_uInt16 nCount = m_pToolBar->GetItemCount();
-                if ( nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ) && nElements > 0 )
+                if ( nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != ToolBoxItemType::SEPARATOR ) && nElements > 0 )
                 {
                     nElements = 0;
                     m_pToolBar->InsertSeparator();
@@ -251,7 +251,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
             else
             {
                 sal_uInt16 nCount = m_pToolBar->GetItemCount();
-                if ( bAppendSeparator && nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ))
+                if ( bAppendSeparator && nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != ToolBoxItemType::SEPARATOR ))
                 {
                     // We have to append a separator first if the last item is not a separator
                     m_pToolBar->InsertSeparator();

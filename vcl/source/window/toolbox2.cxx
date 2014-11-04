@@ -91,7 +91,7 @@ void ImplToolItem::init(sal_uInt16 nItemId, ToolBoxItemBits nItemBits,
     mnId            = nItemId;
     mpWindow        = NULL;
     mpUserData      = NULL;
-    meType          = TOOLBOXITEM_BUTTON;
+    meType          = ToolBoxItemType::BUTTON;
     mnBits          = nItemBits;
     meState         = TRISTATE_FALSE;
     mbEnabled       = true;
@@ -210,7 +210,7 @@ Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, cons
     Size aSize( rDefaultSize ); // the size of 'standard' toolbox items
                                 // non-standard items are eg windows or buttons with text
 
-    if ( (meType == TOOLBOXITEM_BUTTON) || (meType == TOOLBOXITEM_SPACE) )
+    if ( (meType == ToolBoxItemType::BUTTON) || (meType == ToolBoxItemType::SPACE) )
     {
         aSize = maItemSize;
 
@@ -235,7 +235,7 @@ Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, cons
             }
         }
     }
-    else if ( meType == TOOLBOXITEM_SEPARATOR )
+    else if ( meType == ToolBoxItemType::SEPARATOR )
     {
         if ( bHorz )
         {
@@ -248,7 +248,7 @@ Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, cons
             aSize.Height()  = mnSepSize;
         }
     }
-    else if ( meType == TOOLBOXITEM_BREAK )
+    else if ( meType == ToolBoxItemType::BREAK )
     {
         aSize.Width()   = 0;
         aSize.Height()  = 0;
@@ -259,7 +259,7 @@ Size ImplToolItem::GetSize( bool bHorz, bool bCheckMaxWidth, long maxWidth, cons
 
 void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbImage, bool& rbText ) const
 {
-    if ( meType != TOOLBOXITEM_BUTTON )
+    if ( meType != ToolBoxItemType::BUTTON )
     {
         // no button -> draw nothing
         rbImage = rbText = false;
@@ -333,12 +333,12 @@ Rectangle ImplToolItem::GetDropDownRect( bool bHorz ) const
 
 bool ImplToolItem::IsClipped() const
 {
-    return ( meType == TOOLBOXITEM_BUTTON && mbVisible && maRect.IsEmpty() );
+    return ( meType == ToolBoxItemType::BUTTON && mbVisible && maRect.IsEmpty() );
 }
 
 bool ImplToolItem::IsItemHidden() const
 {
-    return ( meType == TOOLBOXITEM_BUTTON && !mbVisible );
+    return ( meType == ToolBoxItemType::BUTTON && !mbVisible );
 }
 
 const OUString ToolBox::ImplConvertMenuString( const OUString& rStr )
@@ -531,7 +531,7 @@ void ToolBox::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 
     // if this is a ButtonItem, check ID
     bool bNewCalc;
-    if ( aItem.meType != TOOLBOXITEM_BUTTON )
+    if ( aItem.meType != ToolBoxItemType::BUTTON )
     {
         bNewCalc = false;
         aItem.mnId = 0;
@@ -646,7 +646,7 @@ void ToolBox::InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
     // create item and add to list
     ImplToolItem aItem;
     aItem.mnId       = nItemId;
-    aItem.meType     = TOOLBOXITEM_BUTTON;
+    aItem.meType     = ToolBoxItemType::BUTTON;
     aItem.mnBits     = nBits;
     aItem.mpWindow   = pWindow;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
@@ -666,7 +666,7 @@ void ToolBox::InsertSpace( sal_uInt16 nPos )
 {
     // create item and add to list
     ImplToolItem aItem;
-    aItem.meType     = TOOLBOXITEM_SPACE;
+    aItem.meType     = ToolBoxItemType::SPACE;
     aItem.mbEnabled  = false;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
@@ -682,7 +682,7 @@ void ToolBox::InsertSeparator( sal_uInt16 nPos, sal_uInt16 nPixSize )
 {
     // create item and add to list
     ImplToolItem aItem;
-    aItem.meType     = TOOLBOXITEM_SEPARATOR;
+    aItem.meType     = ToolBoxItemType::SEPARATOR;
     aItem.mbEnabled  = false;
     if ( nPixSize )
         aItem.mnSepSize = nPixSize;
@@ -700,7 +700,7 @@ void ToolBox::InsertBreak( sal_uInt16 nPos )
 {
     // create item and add to list
     ImplToolItem aItem;
-    aItem.meType     = TOOLBOXITEM_BREAK;
+    aItem.meType     = ToolBoxItemType::BREAK;
     aItem.mbEnabled  = false;
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(), aItem );
     mpData->ImplClearLayoutData();
@@ -717,7 +717,7 @@ void ToolBox::RemoveItem( sal_uInt16 nPos )
     if( nPos < mpData->m_aItems.size() )
     {
         bool bMustCalc;
-        if ( mpData->m_aItems[nPos].meType == TOOLBOXITEM_BUTTON )
+        if ( mpData->m_aItems[nPos].meType == ToolBoxItemType::BUTTON )
             bMustCalc = true;
         else
             bMustCalc = false;
@@ -884,7 +884,7 @@ sal_uInt16 ToolBox::GetItemCount() const
 
 ToolBoxItemType ToolBox::GetItemType( sal_uInt16 nPos ) const
 {
-    return (nPos < mpData->m_aItems.size()) ? mpData->m_aItems[nPos].meType : TOOLBOXITEM_DONTKNOW;
+    return (nPos < mpData->m_aItems.size()) ? mpData->m_aItems[nPos].meType : ToolBoxItemType::DONTKNOW;
 }
 
 sal_uInt16 ToolBox::GetItemPos( sal_uInt16 nItemId ) const
@@ -933,7 +933,7 @@ sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
         // is it this item?
         if ( it->maRect.IsInside( rPos ) )
         {
-            if ( it->meType == TOOLBOXITEM_BUTTON )
+            if ( it->meType == ToolBoxItemType::BUTTON )
                 return it->mnId;
             else
                 return 0;

@@ -1719,7 +1719,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
         for ( nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
         {
-            if ( m_pToolBar->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
+            if ( m_pToolBar->GetItemType(nPos) == ToolBoxItemType::BUTTON )
             {
                 sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
                 OUString aCommandURL = m_pToolBar->GetItemCommand( nId );

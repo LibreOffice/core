@@ -72,9 +72,7 @@ namespace o3tl
     template<> struct typed_flags<ToolBoxItemBits> : is_typed_flags<ToolBoxItemBits, 0x3ff> {};
 }
 
-enum ToolBoxItemType { TOOLBOXITEM_DONTKNOW, TOOLBOXITEM_BUTTON,
-                       TOOLBOXITEM_SPACE, TOOLBOXITEM_SEPARATOR,
-                       TOOLBOXITEM_BREAK };
+enum class ToolBoxItemType { DONTKNOW, BUTTON, SPACE, SEPARATOR, BREAK };
 
 enum ButtonType { BUTTON_SYMBOL, BUTTON_TEXT, BUTTON_SYMBOLTEXT };
 
