@@ -181,6 +181,7 @@ DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutto
     assertXPath(pDoc, "/html/body/form/p[4]/input", "type", "radio");
     // FIXME not in 4.3 assertXPathNoAttribute(pDoc, "/html/body/form/p[4]/input", "checked");
 }
+#endif
 
 #endif
 
