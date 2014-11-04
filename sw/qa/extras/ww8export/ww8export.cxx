@@ -16,6 +16,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -376,6 +377,15 @@ DECLARE_WW8EXPORT_TEST(testCellBgColor, "cell-bg-color.odt")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xCC0000), getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor"));
+}
+
+DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
+{
+    // Import / export of FFData.cch was missing.
+    uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(1), 2), "Bookmark");
+    uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
+    // This resulted in a container.NoSuchElementException.
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), xParameters->getByName("MaxLength").get<OUString>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
