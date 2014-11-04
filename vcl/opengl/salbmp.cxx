@@ -190,7 +190,7 @@ bool OpenGLSalBitmap::AllocateUserData()
 #ifdef DBG_UTIL
     else
     {
-        for (size_t i = 0; i < mnBytesPerRow * mnHeight; i++)
+        for (size_t i = 0; i < size_t(mnBytesPerRow * mnHeight); i++)
             maUserBuffer.get()[i] = (i & 0xFF);
     }
 #endif
