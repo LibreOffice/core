@@ -968,7 +968,7 @@ storeError OStorePageManager::rebuild (
                     {
                         // Ordinary attributes.
                         sal_uInt32 nAttrib = 0;
-                        eErrCode = attrib (e.m_aKey, 0, e.m_nAttrib, nAttrib);
+                        attrib (e.m_aKey, 0, e.m_nAttrib, nAttrib);
                     }
                 }
             }
