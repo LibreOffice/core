@@ -617,7 +617,7 @@ public:
     WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rR)
         : rRdr(rR), fUnknown(0), fDropdownIndex(0),
         fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
-        fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), sName( rN )
+        fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), mnMaxLen(0), sName( rN )
     {
     }
     sal_uInt8 fUnknown:2;
@@ -633,6 +633,8 @@ public:
     sal_uInt16 hpsCheckBox;
     sal_uInt16 nChecked;
 
+    /// FFData.cch in the spec: maximum length, in characters, of the value of the textbox.
+    sal_uInt16 mnMaxLen;
     OUString sTitle;
     OUString sDefault;
     OUString sFormatting;
