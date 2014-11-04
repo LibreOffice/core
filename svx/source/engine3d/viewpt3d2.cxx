@@ -19,6 +19,7 @@
 
 #include <svx/viewpt3d.hxx>
 #include <basegfx/range/b3drange.hxx>
+#include <o3tl/numeric.hxx>
 
 Viewport3D::Viewport3D() :
     aVRP(0, 0, 5),
@@ -162,6 +163,8 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
             break;
 
         case AS_HOLD_Y:
+            if (nNewH == 0)
+                throw o3tl::divide_by_zero();
             // Adapt view width to view height
             fRatio = (double) nNewW / nNewH;
             fTmp = aViewWin.W;
