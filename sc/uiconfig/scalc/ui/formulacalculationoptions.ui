@@ -155,6 +155,35 @@
                         <property name="height">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spinbutton">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="halign">start</property>
+                        <property name="invisible_char">●</property>
+                        <property name="adjustment">adjustment1</property>
+                        <property name="climb_rate">1</property>
+                        <property name="update_policy">if-valid</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="valign">center</property>
+                        <property name="invisible_char">●</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">4</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -364,6 +393,94 @@
                 <property name="height">1</property>
               </packing>
             </child>
+
+            <child>
+              <object class="GtkLabel" id="opencl_subset_enabled">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Use OpenCL only for a subset of operations</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">17</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="opencl_subset_enabled_desc">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Use OpenCL only for some of the operations that spreadsheet formulas are translated to.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">56</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">18</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <child>
+              <object class="GtkLabel" id="opencl_minimum_size">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Minimum data size for OpenCL use</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">19</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="opencl_minimum_size_desc">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">56</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">20</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <child>
+              <object class="GtkLabel" id="opencl_subset_opcodes">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">Subset of opcodes for which OpenCL is used</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">21</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="opencl_subset_opcodes_desc">
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label" translatable="yes">The list of operator and function opcodes for which to use OpenCL. If a formula contains only these operators and functions, it might be calculated using OpenCL.</property>
+                <property name="wrap">True</property>
+                <property name="max_width_chars">56</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">22</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+
             <child>
               <object class="GtkGrid" id="grid6">
                 <property name="can_focus">False</property>

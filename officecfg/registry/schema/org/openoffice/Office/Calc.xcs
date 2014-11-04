@@ -1340,12 +1340,40 @@
         <info>
           <desc>Contains settings for how to calculate formulae.</desc>
         </info>
+	<!-- Note: The default values below probably must correspond
+	to those assigned in setOpenCLConfigToDefault() in
+	sc/source/core/tool/calcconfig.cxx
+	-->
         <prop oor:name="OpenCL" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>
             <desc>Whether to use OpenCL for formula computation, if available.</desc>
           </info>
-          <value>false</value>
+          <value>true</value>
+        </prop>
+        <prop oor:name="OpenCLSubsetOnly" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Whether to use only a subset of OpenCL.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+        <prop oor:name="OpenCLMinimumDataSize" oor:type="xs:int">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>An approximate lower limit on the number of data cells a spreadsheet formula should use for OpenCL to be considered.</desc>
+          </info>
+          <value>20</value>
+        </prop>
+        <prop oor:name="OpenCLSubsetOpCodes" oor:type="xs:string" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>The list of operator and function opcodes for which to use OpenCL. If a
+	    formula contains only these operators and functions, it
+	    might be calculated using OpenCL.</desc>
+          </info>
+	  <!-- numeric values correspond to MIN;MAX;SUM;AVERAGE;SUMIFS -->
+          <value>222;223;224;226;403</value>
         </prop>
         <prop oor:name="OpenCLAutoSelect" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->

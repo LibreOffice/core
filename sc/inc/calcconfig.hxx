@@ -12,11 +12,11 @@
 
 #include "scdllapi.h"
 
+#include <ostream>
 #include <set>
 
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
-
 #include <rtl/ustring.hxx>
 
 // have to match the registry values
@@ -49,10 +49,12 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;
     OUString maOpenCLDevice;
-    int mnOpenCLMinimumFormulaGroupSize;
-    std::set<OpCodeEnum> maOpenCLSubsetFunctions;
+    sal_Int32 mnOpenCLMinimumFormulaGroupSize;
+    std::set<OpCodeEnum> maOpenCLSubsetOpCodes;
 
     ScCalcConfig();
+
+    void setOpenCLConfigToDefault();
 
     void reset();
     void MergeDocumentSpecific( const ScCalcConfig& r );
@@ -60,6 +62,12 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool operator== (const ScCalcConfig& r) const;
     bool operator!= (const ScCalcConfig& r) const;
 };
+
+std::ostream& SC_DLLPUBLIC operator<<(std::ostream& rStream, const ScCalcConfig& rConfig);
+
+OUString SC_DLLPUBLIC ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes);
+OUString SC_DLLPUBLIC ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes);
+std::set<OpCodeEnum> SC_DLLPUBLIC ScStringToOpCodeSet(const OUString& rOpCodes);
 
 #endif
 

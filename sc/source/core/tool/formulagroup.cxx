@@ -611,7 +611,7 @@ void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely,
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
     aConfig.mbOpenCLEnabled = bEnable;
     aConfig.mbOpenCLSubsetOnly = !bEnableCompletely;
-    aConfig.maOpenCLSubsetFunctions = rSubsetToEnable;
+    aConfig.maOpenCLSubsetOpCodes = rSubsetToEnable;
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 

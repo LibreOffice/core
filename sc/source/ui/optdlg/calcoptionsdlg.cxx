@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "calcconfig.hxx"
 #include "calcoptionsdlg.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
@@ -22,10 +23,13 @@
 namespace {
 
 typedef enum {
-    CALC_OPTION_STRING_CONVERSION = 0,
-    CALC_OPTION_EMPTY_AS_ZERO     = 1,
-    CALC_OPTION_REF_SYNTAX        = 2,
-    CALC_OPTION_ENABLE_OPENCL     = 3
+    CALC_OPTION_STRING_CONVERSION,
+    CALC_OPTION_EMPTY_AS_ZERO,
+    CALC_OPTION_REF_SYNTAX,
+    CALC_OPTION_ENABLE_OPENCL,
+    CALC_OPTION_ENABLE_OPENCL_SUBSET,
+    CALC_OPTION_OPENCL_MIN_SIZE,
+    CALC_OPTION_OPENCL_SUBSET_OPS
 } CalcOptionOrder;
 
 class OptionString : public SvLBoxString
@@ -135,12 +139,17 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpFtAnnotation, "annotation");
     get(mpBtnTrue, "true");
     get(mpBtnFalse, "false");
+    get(mpSpinButton, "spinbutton");
+    get(mpEditField, "entry");
     get(mpOpenclInfoList, "opencl_list");
     get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
     get(mpBtnAutomaticSelectionFalse, "automatic_select_false");
     get(mpFtFrequency, "frequency");
     get(mpFtComputeUnits, "compute_units");
     get(mpFtMemory, "memory");
+
+    mpSpinButton->SetModifyHdl(LINK(this, ScCalcOptionsDialog, NumModifiedHdl));
+    mpEditField->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
 
     mpOpenclInfoList->set_height_request(4* mpOpenclInfoList->GetTextHeight());
     mpOpenclInfoList->SetStyle(mpOpenclInfoList->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -166,6 +175,16 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
     maCaptionOpenCLEnabled = get<vcl::Window>("opencl_enabled")->GetText();
     maDescOpenCLEnabled = get<vcl::Window>("opencl_enabled_desc")->GetText();
+
+    maCaptionOpenCLSubsetEnabled = get<vcl::Window>("opencl_subset_enabled")->GetText();
+    maDescOpenCLSubsetEnabled = get<vcl::Window>("opencl_subset_enabled_desc")->GetText();
+
+    maCaptionOpenCLMinimumFormulaSize = get<vcl::Window>("opencl_minimum_size")->GetText();
+    maDescOpenCLMinimumFormulaSize = get<vcl::Window>("opencl_minimum_size_desc")->GetText();
+
+    maCaptionOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes")->GetText();
+    maDescOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes_desc")->GetText();
+
     maSoftware = get<vcl::Window>("software")->GetText();
 
     mpLbSettings->set_height_request(8 * mpLbSettings->GetTextHeight());
@@ -194,6 +213,26 @@ SvTreeListEntry *ScCalcOptionsDialog::createBoolItem(const OUString &rCaption, b
     pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
     pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
     OptionString* pItem = new OptionString(rCaption, toString(bValue));
+    pEntry->AddItem(pItem);
+    return pEntry;
+}
+
+SvTreeListEntry *ScCalcOptionsDialog::createIntegerItem(const OUString &rCaption, sal_Int32 nValue) const
+{
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
+    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
+    OptionString* pItem = new OptionString(rCaption, toString(nValue));
+    pEntry->AddItem(pItem);
+    return pEntry;
+}
+
+SvTreeListEntry *ScCalcOptionsDialog::createStringItem(const OUString &rCaption, const OUString& sValue) const
+{
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
+    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
+    OptionString* pItem = new OptionString(rCaption, sValue);
     pEntry->AddItem(pItem);
     return pEntry;
 }
@@ -296,6 +335,10 @@ void ScCalcOptionsDialog::FillOptionsList()
 
 #if HAVE_FEATURE_OPENCL
     pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
+    pModel->Insert(createBoolItem(maCaptionOpenCLSubsetEnabled,maConfig.mbOpenCLSubsetOnly));
+    pModel->Insert(createIntegerItem(maCaptionOpenCLMinimumFormulaSize,maConfig.mnOpenCLMinimumFormulaGroupSize));
+    pModel->Insert(createStringItem(maCaptionOpenCLSubsetOpCodes,ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes)));
+
     fillOpenCLList();
 
     mpBtnAutomaticSelectionFalse->Check(!maConfig.mbOpenCLAutoSelect);
@@ -315,6 +358,8 @@ void ScCalcOptionsDialog::SelectionChanged()
             // Formula syntax for INDIRECT function.
             mpBtnTrue->Hide();
             mpBtnFalse->Hide();
+            mpSpinButton->Hide();
+            mpEditField->Hide();
             mpLbOptionEdit->Show();
             mpOpenclInfoList->GetParent()->Hide();
 
@@ -347,6 +392,8 @@ void ScCalcOptionsDialog::SelectionChanged()
             // String conversion for arithmetic operations.
             mpBtnTrue->Hide();
             mpBtnFalse->Hide();
+            mpSpinButton->Hide();
+            mpEditField->Hide();
             mpLbOptionEdit->Show();
             mpOpenclInfoList->GetParent()->Hide();
 
@@ -377,11 +424,14 @@ void ScCalcOptionsDialog::SelectionChanged()
         // booleans
         case CALC_OPTION_EMPTY_AS_ZERO:
         case CALC_OPTION_ENABLE_OPENCL:
+        case CALC_OPTION_ENABLE_OPENCL_SUBSET:
         {
             // Treat empty string as zero.
             mpLbOptionEdit->Hide();
             mpBtnTrue->Show();
             mpBtnFalse->Show();
+            mpSpinButton->Hide();
+            mpEditField->Hide();
 
             bool bValue = false;
             bool bEnable = true;
@@ -401,7 +451,7 @@ void ScCalcOptionsDialog::SelectionChanged()
                         break;  // nothing
                 }
             }
-            else
+            else if ( nSelectedPos == CALC_OPTION_ENABLE_OPENCL )
             {
                 bValue = maConfig.mbOpenCLEnabled;
                 mpFtAnnotation->SetText(maDescOpenCLEnabled);
@@ -413,6 +463,16 @@ void ScCalcOptionsDialog::SelectionChanged()
                     mpOpenclInfoList->GetParent()->Disable();
 
                 OpenCLAutomaticSelectionChanged();
+            }
+            else if ( nSelectedPos == CALC_OPTION_ENABLE_OPENCL_SUBSET )
+            {
+                bValue = maConfig.mbOpenCLSubsetOnly;
+                mpFtAnnotation->SetText(maDescOpenCLSubsetEnabled);
+                mpOpenclInfoList->GetParent()->Hide();
+            }
+            else
+            {
+                assert(false);
             }
 
             if ( bValue )
@@ -437,8 +497,38 @@ void ScCalcOptionsDialog::SelectionChanged()
             }
         }
         break;
-        default:
-            ;
+
+        // numeric fields
+        case CALC_OPTION_OPENCL_MIN_SIZE:
+        {
+            // just one numeric field so far
+            sal_Int32 nValue = maConfig.mnOpenCLMinimumFormulaGroupSize;
+            mpLbOptionEdit->Hide();
+            mpBtnTrue->Hide();
+            mpBtnFalse->Hide();
+            mpSpinButton->Show();
+            mpEditField->Hide();
+            mpOpenclInfoList->GetParent()->Hide();
+            mpFtAnnotation->SetText(maDescOpenCLMinimumFormulaSize);
+            mpSpinButton->SetValue(nValue);
+        }
+        break;
+
+        // strings
+        case CALC_OPTION_OPENCL_SUBSET_OPS:
+        {
+            // just one string field so far
+            OUString sValue = ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes);
+            mpLbOptionEdit->Hide();
+            mpBtnTrue->Hide();
+            mpBtnFalse->Hide();
+            mpSpinButton->Hide();
+            mpEditField->Show();
+            mpOpenclInfoList->GetParent()->Hide();
+            mpFtAnnotation->SetText(maDescOpenCLSubsetOpCodes);
+            mpEditField->SetText(sValue);
+        }
+        break;
     }
 }
 
@@ -489,6 +579,9 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
 
         case CALC_OPTION_EMPTY_AS_ZERO:
         case CALC_OPTION_ENABLE_OPENCL:
+        case CALC_OPTION_ENABLE_OPENCL_SUBSET:
+        case CALC_OPTION_OPENCL_MIN_SIZE:
+        case CALC_OPTION_OPENCL_SUBSET_OPS:
             break;
     }
 }
@@ -558,9 +651,28 @@ void ScCalcOptionsDialog::RadioValueChanged()
                 mpOpenclInfoList->GetParent()->Disable();
             OpenCLAutomaticSelectionChanged();
             break;
+        case CALC_OPTION_ENABLE_OPENCL_SUBSET:
+            maConfig.mbOpenCLSubsetOnly = bValue;
+            break;
     }
 
     setValueAt(nSelected, toString(bValue));
+}
+
+void ScCalcOptionsDialog::SpinButtonValueChanged()
+{
+    // We know that the mpSpinButton is used for only one thing at the moment,
+    // the OpenCL minimum formula size
+    sal_Int64 nVal = mpSpinButton->GetValue();
+    maConfig.mnOpenCLMinimumFormulaGroupSize = nVal;
+}
+
+void ScCalcOptionsDialog::EditFieldValueChanged()
+{
+    // We know that the mpEditField is used for only one thing at the moment,
+    // the OpenCL subset list of opcodes
+    OUString sVal = mpEditField->GetText();
+    maConfig.maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
 }
 
 OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConvention eConv) const
@@ -601,6 +713,11 @@ OUString ScCalcOptionsDialog::toString(bool bVal) const
     return bVal ? maTrue : maFalse;
 }
 
+OUString ScCalcOptionsDialog::toString(sal_Int32 nVal) const
+{
+    return OUString::number(nVal);
+}
+
 IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)
 {
     if (pCtrl == mpLbSettings)
@@ -626,6 +743,18 @@ IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnAutomaticSelectHdl)
 IMPL_LINK_NOARG(ScCalcOptionsDialog, DeviceSelHdl)
 {
     SelectedDeviceChanged();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCalcOptionsDialog, NumModifiedHdl)
+{
+    SpinButtonValueChanged();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScCalcOptionsDialog, EditModifiedHdl)
+{
+    EditFieldValueChanged();
     return 0;
 }
 

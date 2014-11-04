@@ -14,6 +14,8 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <svx/checklbx.hxx>
@@ -35,6 +37,8 @@ public:
     DECL_LINK( BtnToggleHdl, void* );
     DECL_LINK( BtnAutomaticSelectHdl, void* );
     DECL_LINK( DeviceSelHdl, void* );
+    DECL_LINK( NumModifiedHdl, void * );
+    DECL_LINK( EditModifiedHdl, void * );
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 
@@ -45,6 +49,8 @@ private:
     void RadioValueChanged();
     void OpenCLAutomaticSelectionChanged();
     void SelectedDeviceChanged();
+    void SpinButtonValueChanged();
+    void EditFieldValueChanged();
 #if HAVE_FEATURE_OPENCL
     void fillOpenCLList();
 #endif
@@ -52,7 +58,10 @@ private:
     OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
     OUString toString(ScCalcConfig::StringConversion eConv) const;
     OUString toString(bool bVal) const;
+    OUString toString(sal_Int32 nVal) const;
     SvTreeListEntry *createBoolItem(const OUString &rCaption, bool bValue) const;
+    SvTreeListEntry *createIntegerItem(const OUString &rCaption, sal_Int32 nValue) const;
+    SvTreeListEntry *createStringItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
 
 private:
@@ -61,6 +70,8 @@ private:
     ListBox* mpLbOptionEdit;
     RadioButton* mpBtnTrue;
     RadioButton* mpBtnFalse;
+    NumericField* mpSpinButton;
+    Edit* mpEditField;
 
     FixedText* mpFtAnnotation;
     FixedText* mpFtFrequency;
@@ -95,6 +106,15 @@ private:
 
     OUString maCaptionOpenCLEnabled;
     OUString maDescOpenCLEnabled;
+
+    OUString maCaptionOpenCLSubsetEnabled;
+    OUString maDescOpenCLSubsetEnabled;
+
+    OUString maCaptionOpenCLMinimumFormulaSize;
+    OUString maDescOpenCLMinimumFormulaSize;
+
+    OUString maCaptionOpenCLSubsetOpCodes;
+    OUString maDescOpenCLSubsetOpCodes;
 
     OUString maSoftware;
 

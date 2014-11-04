@@ -200,7 +200,10 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_OPENCL_ENABLED      10
 #define SCFORMULAOPT_OPENCL_AUTOSELECT   11
 #define SCFORMULAOPT_OPENCL_DEVICE       12
-#define SCFORMULAOPT_COUNT               13
+#define SCFORMULAOPT_OPENCL_SUBSET_ONLY  13
+#define SCFORMULAOPT_OPENCL_MIN_SIZE     14
+#define SCFORMULAOPT_OPENCL_SUBSET_OPS   15
+#define SCFORMULAOPT_COUNT               16
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -218,7 +221,10 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
         "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
         "Calculation/OpenCLAutoSelect",  // SCFORMULAOPT_OPENCL_AUTOSELECT
-        "Calculation/OpenCLDevice"   // SCFORMULAOPT_OPENCL_DEVICE
+        "Calculation/OpenCLDevice",      // SCFORMULAOPT_OPENCL_DEVICE
+        "Calculation/OpenCLSubsetOnly",  // SCFORMULAOPT_OPENCL_SUBSET_ONLY
+        "Calculation/OpenCLMinimumDataSize",  // SCFORMULAOPT_OPENCL_MIN_SIZE
+        "Calculation/OpenCLSubsetOpCodes",    // SCFORMULAOPT_OPENCL_SUBSET_OPS
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -231,7 +237,24 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 {
     Sequence<OUString> aPropNames = GetPropertyNames();
-    static sal_uInt16 aVals[] = { SCFORMULAOPT_GRAMMAR, SCFORMULAOPT_ENGLISH_FUNCNAME, SCFORMULAOPT_SEP_ARG, SCFORMULAOPT_SEP_ARRAY_ROW, SCFORMULAOPT_SEP_ARRAY_COL, SCFORMULAOPT_STRING_REF_SYNTAX, SCFORMULAOPT_STRING_CONVERSION, SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO, SCFORMULAOPT_OOXML_RECALC, SCFORMULAOPT_ODF_RECALC, SCFORMULAOPT_OPENCL_ENABLED, SCFORMULAOPT_OPENCL_AUTOSELECT, SCFORMULAOPT_OPENCL_DEVICE };
+    static sal_uInt16 aVals[] = {
+        SCFORMULAOPT_GRAMMAR,
+        SCFORMULAOPT_ENGLISH_FUNCNAME,
+        SCFORMULAOPT_SEP_ARG,
+        SCFORMULAOPT_SEP_ARRAY_ROW,
+        SCFORMULAOPT_SEP_ARRAY_COL,
+        SCFORMULAOPT_STRING_REF_SYNTAX,
+        SCFORMULAOPT_STRING_CONVERSION,
+        SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO,
+        SCFORMULAOPT_OOXML_RECALC,
+        SCFORMULAOPT_ODF_RECALC,
+        SCFORMULAOPT_OPENCL_ENABLED,
+        SCFORMULAOPT_OPENCL_AUTOSELECT,
+        SCFORMULAOPT_OPENCL_DEVICE,
+        SCFORMULAOPT_OPENCL_SUBSET_ONLY,
+        SCFORMULAOPT_OPENCL_MIN_SIZE,
+        SCFORMULAOPT_OPENCL_SUBSET_OPS,
+    };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
     for ( sal_uInt16 i=0; i<aPropNames.getLength(); ++i )
@@ -468,6 +491,27 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     GetCalcConfig().maOpenCLDevice = aOpenCLDevice;
                 }
                 break;
+                case SCFORMULAOPT_OPENCL_SUBSET_ONLY:
+                {
+                    bool bVal = GetCalcConfig().mbOpenCLSubsetOnly;
+                    pValues[nProp] >>= bVal;
+                    GetCalcConfig().mbOpenCLSubsetOnly = bVal;
+                }
+                break;
+                case SCFORMULAOPT_OPENCL_MIN_SIZE:
+                {
+                    sal_Int32 nVal = GetCalcConfig().mnOpenCLMinimumFormulaGroupSize;
+                    pValues[nProp] >>= nVal;
+                    GetCalcConfig().mnOpenCLMinimumFormulaGroupSize = nVal;
+                }
+                break;
+                case SCFORMULAOPT_OPENCL_SUBSET_OPS:
+                {
+                    OUString sVal = ScOpCodeSetToNumberString(GetCalcConfig().maOpenCLSubsetOpCodes);
+                    pValues[nProp] >>= sVal;
+                    GetCalcConfig().maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
+                }
+                break;
                 default:
                     ;
                 }
@@ -603,6 +647,24 @@ void ScFormulaCfg::Commit()
                 OUString aOpenCLDevice = GetCalcConfig().maOpenCLDevice;
                 pValues[nProp] <<= aOpenCLDevice;
                 bSetOpenCL = true;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_SUBSET_ONLY:
+            {
+                bool bVal = GetCalcConfig().mbOpenCLSubsetOnly;
+                pValues[nProp] <<= bVal;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_MIN_SIZE:
+            {
+                sal_Int32 nVal = GetCalcConfig().mnOpenCLMinimumFormulaGroupSize;
+                pValues[nProp] <<= nVal;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_SUBSET_OPS:
+            {
+                OUString sVal = ScOpCodeSetToNumberString(GetCalcConfig().maOpenCLSubsetOpCodes);
+                pValues[nProp] <<= sVal;
             }
             break;
             default:

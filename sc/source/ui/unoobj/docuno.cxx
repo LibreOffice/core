@@ -2331,7 +2331,10 @@ void ScModelObj::enableOpenCL(sal_Bool bEnable)
     throw (uno::RuntimeException, std::exception)
 {
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
-    aConfig.mbOpenCLEnabled = bEnable;
+    if (bEnable)
+        aConfig.setOpenCLConfigToDefault();
+    else
+        aConfig.mbOpenCLEnabled = false;
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 
