@@ -54,7 +54,7 @@ void XclImpFmlaCompImpl::CreateRangeList(
 {
     rScRanges.RemoveAll();
 
-    //! evil hack, using old formula import :-)
+    //FIXME: evil hack, using old formula import :-)
     if( !rXclTokArr.Empty() )
     {
         SvMemoryStream aMemStrm;

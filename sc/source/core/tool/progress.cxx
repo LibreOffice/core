@@ -91,7 +91,7 @@ ScProgress::ScProgress( SfxObjectShell* pObjSh, const OUString& rText,
     {
         //  This happens. E.g. when saving the clipboard-content as OLE when closing the app.
         //  In this case a SfxProgress would produce dirt in memory.
-        //! Should that be this way ???
+        //TODO: Should that be this way ???
 
         pProgress = NULL;
     }
