@@ -363,4 +363,29 @@ bool OpenGLHelper::supportsVCLOpenGL()
     return true;
 }
 
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+
+bool OpenGLHelper::GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI)
+{
+    XVisualInfo* pVI;
+    int aAttrib[] = { GLX_RGBA,
+                      GLX_RED_SIZE, 8,
+                      GLX_GREEN_SIZE, 8,
+                      GLX_BLUE_SIZE, 8,
+                      GLX_DEPTH_SIZE, 24,
+                      GLX_DOUBLEBUFFER,
+                      None };
+
+    pVI = glXChooseVisual( pDisplay, nScreen, aAttrib );
+    if( !pVI )
+        return false;
+
+    rVI = *pVI;
+    XFree( pVI );
+
+    return true;
+}
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

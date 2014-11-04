@@ -16,6 +16,12 @@
 
 #include <rtl/ustring.hxx>
 
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#  include <prex.h>
+#  include "GL/glxew.h"
+#  include <postx.h>
+#endif
+
 class VCLOPENGL_DLLPUBLIC OpenGLHelper
 {
 public:
@@ -51,6 +57,10 @@ public:
      * checks if the system supports all features that are necessary for the OpenGL VCL support
      */
     static bool supportsVCLOpenGL();
+
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+    static bool GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI);
+#endif
 };
 
 #define CHECK_GL_ERROR() OpenGLHelper::checkGLError(__FILE__, __LINE__)

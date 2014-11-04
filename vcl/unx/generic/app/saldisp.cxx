@@ -67,9 +67,13 @@
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 #include <osl/socket.h>
 #include <poll.h>
 #include <boost/scoped_array.hpp>
+
+#include <officecfg/Office/Common.hxx>
 
 using namespace vcl_sal;
 
@@ -185,6 +189,10 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
         sscanf( pVID, "%li", &nVID );
 
     if( nVID && sal_GetVisualInfo( pDisplay, nVID, rVI ) )
+        return rVI.visualid == nDefVID;
+
+    bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
+    if( bUseOpenGL && OpenGLHelper::GetVisualInfo( pDisplay, nScreen, rVI ) )
         return rVI.visualid == nDefVID;
 
     XVisualInfo aVI;
