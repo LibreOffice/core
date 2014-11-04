@@ -33,7 +33,6 @@ public:
     InternalData();
 
     void createDefaultData();
-    bool isDefaultData();
 
     void setData( const ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Sequence< double > > & rDataInRows );

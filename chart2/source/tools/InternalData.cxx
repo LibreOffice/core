@@ -118,20 +118,6 @@ void InternalData::createDefaultData()
         lcl_NumberedStringGenerator( aColName, "%COLUMNNUMBER" ));
 }
 
-bool InternalData::isDefaultData()
-{
-
-    if( m_nRowCount == 4 && m_nColumnCount == 3 )
-    {
-        for( sal_Int32 i=0; i<(4*3); ++i )
-            if( m_aData[i] != fDefaultData[i] )
-                return false;
-
-        return true;
-    }
-    return false;
-}
-
 void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
 {
     m_nRowCount = rDataInRows.getLength();

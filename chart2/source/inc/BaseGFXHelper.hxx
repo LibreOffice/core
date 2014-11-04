@@ -55,10 +55,6 @@ OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::awt::Point B2IRectangleToAWTPoint(
 OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::awt::Size B2IRectangleToAWTSize(
             const ::basegfx::B2IRectangle& rB2IRectangle );
 
-OOO_DLLPUBLIC_CHARTTOOLS
-com::sun::star::awt::Rectangle B2IRectangleToAWTRectangle(
-    const ::basegfx::B2IRectangle& rB2IRectangle );
-
 ::basegfx::B3DVector Direction3DToB3DVector(
     const com::sun::star::drawing::Direction3D& rDirection );
 

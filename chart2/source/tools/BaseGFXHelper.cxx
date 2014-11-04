@@ -82,14 +82,6 @@ awt::Size B2IRectangleToAWTSize( const ::basegfx::B2IRectangle& rB2IRectangle )
                       static_cast< sal_Int32 >( rB2IRectangle.getHeight()));
 }
 
-awt::Rectangle B2IRectangleToAWTRectangle(
-    const ::basegfx::B2IRectangle& rB2IRectangle )
-{
-    return awt::Rectangle( rB2IRectangle.getMinX(), rB2IRectangle.getMinY(),
-                           static_cast< sal_Int32 >( rB2IRectangle.getWidth()),
-                           static_cast< sal_Int32 >( rB2IRectangle.getHeight()));
-}
-
 B3DVector Direction3DToB3DVector( const Direction3D& rDirection )
 {
     return B3DVector(
