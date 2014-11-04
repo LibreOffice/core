@@ -456,7 +456,7 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
 #define SuperSubFact 60     /* superscript/subscript: 60% of text angle */
 #define DefaultSpace 40     /* Default: space is 40% of text angle      */
 
-sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_uInt16 Dreh,
+sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_uInt16 nRotation,
                       sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
 {
     SgfFontOne* pSgfFont; // Font from the IniFile
@@ -538,8 +538,8 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
     aFont.SetTransparent(true);
     aFont.SetAlign(ALIGN_BASELINE);
 
-    Dreh/=10; Dreh=3600-Dreh; if (Dreh==3600) Dreh=0;
-    aFont.SetOrientation(Dreh);
+    nRotation/=10; nRotation=3600-nRotation; if (nRotation==3600) nRotation=0;
+    aFont.SetOrientation(nRotation);
 
     if ((Atr.Schnitt & TextBoldBit) !=0) aFont.SetWeight(WEIGHT_BOLD);
     if ((Atr.Schnitt & TextRSlnBit) !=0) aFont.SetItalic(ITALIC_NORMAL);
