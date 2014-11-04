@@ -686,7 +686,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::cancel(  ) throw(RuntimeException, std
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
-    OTools::ThrowException(m_pConnection,N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    N3SQLCancel(m_aStatementHandle);
 }
 
 void SAL_CALL ODatabaseMetaDataResultSet::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
