@@ -474,6 +474,16 @@ DECLARE_RTFIMPORT_TEST(testFdo48037, "fdo48037.rtf")
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo85812, "fdo85812.rtf")
+{
+    lang::Locale locale(getProperty<lang::Locale>(
+                getRun(getParagraph(1), 1, "This "), "CharLocale"));
+    // the \lang inside the group was applied to CJK not Western
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo47764, "fdo47764.rtf")
 {
     // \cbpat with zero argument should mean the auto (-1) color, not a default color (black)

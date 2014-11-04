@@ -4828,6 +4828,8 @@ int RTFDocumentImpl::pushState()
         m_aStates.push(m_aStates.top());
     }
     m_aStates.top().aDestinationText.setLength(0); // was copied: always reset!
+    m_aStates.top().isRightToLeft = false; // fdo#85812 group resets run type
+    m_aStates.top().eRunType = RTFParserState::LOCH;
 
     m_pTokenizer->pushGroup();
 
