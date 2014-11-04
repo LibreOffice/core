@@ -739,11 +739,62 @@ String RID_COLORX_MAGENTA_HELP
 {
     Text [ en-US ] = "Color Magenta" ;
 };
+String RID_COLORX_AQUA        { Text = "color aqua {<?>} " ; };
+String RID_COLORX_AQUA_HELP
+{
+    Text [ en-US ] = "Color Aqua" ;
+};
+String RID_COLORX_FUCHSIA     { Text = "color fuchsia {<?>} " ; };
+String RID_COLORX_FUCHSIA_HELP
+{
+    Text [ en-US ] = "Color Fuchsia" ;
+};
+String RID_COLORX_GRAY        { Text = "color gray {<?>} " ; };
+String RID_COLORX_GRAY_HELP
+{
+    Text [ en-US ] = "Color Gray" ;
+};
+String RID_COLORX_LIME        { Text = "color lime {<?>} " ; };
+String RID_COLORX_LIME_HELP
+{
+    Text [ en-US ] = "Color Lime" ;
+};
+String RID_COLORX_MAROON      { Text = "color maroon {<?>} " ; };
+String RID_COLORX_MAROON_HELP
+{
+    Text [ en-US ] = "Color Maroon" ;
+};
+String RID_COLORX_NAVY        { Text = "color navy {<?>} " ; };
+String RID_COLORX_NAVY_HELP
+{
+    Text [ en-US ] = "Color Navy" ;
+};
+String RID_COLORX_OLIVE       { Text = "color olive {<?>} " ; };
+String RID_COLORX_OLIVE_HELP
+{
+    Text [ en-US ] = "Color Olive" ;
+};
+String RID_COLORX_PURPLE      { Text = "color purple {<?>} " ; };
+String RID_COLORX_PURPLE_HELP
+{
+    Text [ en-US ] = "Color Purple" ;
+};
+String RID_COLORX_SILVER      { Text = "color silver {<?>} " ; };
+String RID_COLORX_SILVER_HELP
+{
+    Text [ en-US ] = "Color Silver" ;
+};
+String RID_COLORX_TEAL        { Text = "color teal {<?>} " ; };
+String RID_COLORX_TEAL_HELP
+{
+    Text [ en-US ] = "Color Teal" ;
+};
 String RID_COLORX_YELLOW       { Text = "color yellow {<?>} " ; };
 String RID_COLORX_YELLOW_HELP
 {
     Text [ en-US ] = "Color Yellow" ;
 };
+
 String RID_LRGROUPX         { Text = "{<?>} " ; };
 String RID_LRGROUPX_HELP
 {
