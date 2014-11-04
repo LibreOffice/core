@@ -334,7 +334,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
             // for a textbox is displayed at correct position
             pH = new ImpTextframeHdl(aRect + GetGridOffset() );
             pH->SetObj((SdrObject*)this);
-            pH->SetDrehWink(aGeo.nRotationAngle);
+            pH->SetRotationAngle(aGeo.nRotationAngle);
             break;
         }
         case 1:
@@ -372,7 +372,7 @@ SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
 
         pH = new SdrHdl(aPnt,eKind);
         pH->SetObj((SdrObject*)this);
-        pH->SetDrehWink(aGeo.nRotationAngle);
+        pH->SetRotationAngle(aGeo.nRotationAngle);
     }
 
     return pH;

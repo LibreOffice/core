@@ -207,7 +207,7 @@ public:
     void SetSelected(bool bJa=true);
 
     void Set1PixMore(bool bJa=true);
-    void SetDrehWink(long n);
+    void SetRotationAngle(long n);
 
     bool IsCornerHdl() const { return eKind==HDL_UPLFT || eKind==HDL_UPRGT || eKind==HDL_LWLFT || eKind==HDL_LWRGT; }
     bool IsVertexHdl() const { return eKind==HDL_UPPER || eKind==HDL_LOWER || eKind==HDL_LEFT  || eKind==HDL_RIGHT; }

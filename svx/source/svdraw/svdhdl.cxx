@@ -333,7 +333,7 @@ void SdrHdl::SetMoveOutside( bool bMoveOutside )
     }
 }
 
-void SdrHdl::SetDrehWink(long n)
+void SdrHdl::SetRotationAngle(long n)
 {
     if(nRotationAngle != n)
     {
