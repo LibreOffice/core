@@ -84,7 +84,15 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     aLink = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
     mpLineDistAtPercentBox->SetModifyHdl( aLink );
     mpLineDistAtMetricBox->SetModifyHdl( aLink );
-    SetFieldUnit(*mpLineDistAtMetricBox, SfxModule::GetCurrentFieldUnit());
+
+    FieldUnit eUnit = FUNIT_INCH;
+    const SfxPoolItem* pItem = NULL;
+    if (SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_METRIC, pItem) >= SfxItemState::DEFAULT)
+        eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+    else
+        eUnit = SfxModule::GetCurrentFieldUnit();
+
+    SetFieldUnit(*mpLineDistAtMetricBox, eUnit);
 
     initialize();
 }
@@ -104,7 +112,6 @@ void ParaLineSpacingControl::initialize()
 
     if( eState >= SfxItemState::DEFAULT )
     {
-    //  SfxMapUnit eUnit = maLNSpaceControl.GetCoreMetric();
         SfxMapUnit eUnit = SFX_MAPUNIT_100TH_MM;
         meLNSpaceUnit = eUnit;
 
