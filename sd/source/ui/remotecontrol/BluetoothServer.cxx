@@ -41,7 +41,7 @@
 #ifdef MACOSX
   #include <osl/conditn.hxx>
   #include <premac.h>
-  #if MACOSX_SDK_VERSION == 1080
+  #if MACOSX_SDK_VERSION >= 1070
     #import <IOBluetooth/IOBluetooth.h>
   #else
     #import <CoreFoundation/CoreFoundation.h>
