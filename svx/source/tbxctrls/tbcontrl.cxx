@@ -2535,7 +2535,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     }
 
     pColorWin->StartPopupMode( &GetToolBox(),
-        FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
+        /*FLOATWIN_POPUPMODE_GRABFOCUS|*/ FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE );
     pColorWin->StartSelection();
     SetPopupWindow( pColorWin );
     if ( !bSidebarType )
