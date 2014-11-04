@@ -1279,11 +1279,15 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  ) throw(S
     return nValueTranslated;
 }
 
-sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeException, std::exception) try
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
     return aValue.copy(0,aValue.lastIndexOf('.')).toInt32();
+}
+catch (const SQLException &)
+{
+    return 0;
 }
 
 OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException, std::exception)
