@@ -205,6 +205,7 @@ private:
     friend class ServerFontLayout;
     friend class ImplServerFontEntry;
     friend class X11SalGraphics;
+    friend class CairoTextRender;
 
     void                        AddRef() const      { ++mnRefCount; }
     long                        GetRefCount() const { return mnRefCount; }
