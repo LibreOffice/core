@@ -219,42 +219,42 @@ namespace canvas
         }
 
         // Sprite
-        virtual bool isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const
+        virtual bool isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.isAreaUpdateOpaque( rUpdateArea );
         }
 
-        virtual bool isContentChanged() const
+        virtual bool isContentChanged() const SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::mbSurfaceDirty;
         }
 
-        virtual ::basegfx::B2DPoint getPosPixel() const
+        virtual ::basegfx::B2DPoint getPosPixel() const SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.getPosPixel();
         }
 
-        virtual ::basegfx::B2DVector getSizePixel() const
+        virtual ::basegfx::B2DVector getSizePixel() const SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.getSizePixel();
         }
 
-        virtual ::basegfx::B2DRange getUpdateArea() const
+        virtual ::basegfx::B2DRange getUpdateArea() const SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.getUpdateArea();
         }
 
-        virtual double getPriority() const
+        virtual double getPriority() const SAL_OVERRIDE
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

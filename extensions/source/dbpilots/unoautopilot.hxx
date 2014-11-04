@@ -81,7 +81,7 @@ namespace dbp
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
     protected:
     // OGenericUnoDialog overridables

@@ -142,7 +142,7 @@ namespace canvas
         }
 
         // SpriteSurface
-        virtual void showSprite( const Sprite::Reference& rSprite )
+        virtual void showSprite( const Sprite::Reference& rSprite ) SAL_OVERRIDE
         {
             OSL_ASSERT( rSprite.is() );
 
@@ -151,7 +151,7 @@ namespace canvas
             maRedrawManager.showSprite( rSprite );
         }
 
-        virtual void hideSprite( const Sprite::Reference& rSprite )
+        virtual void hideSprite( const Sprite::Reference& rSprite ) SAL_OVERRIDE
         {
             OSL_ASSERT( rSprite.is() );
 
@@ -163,7 +163,7 @@ namespace canvas
         virtual void moveSprite( const Sprite::Reference&       rSprite,
                                  const ::basegfx::B2DPoint&     rOldPos,
                                  const ::basegfx::B2DPoint&     rNewPos,
-                                 const ::basegfx::B2DVector&    rSpriteSize )
+                                 const ::basegfx::B2DVector&    rSpriteSize ) SAL_OVERRIDE
         {
             OSL_ASSERT( rSprite.is() );
 
@@ -174,7 +174,7 @@ namespace canvas
 
         virtual void updateSprite( const Sprite::Reference&     rSprite,
                                    const ::basegfx::B2DPoint&   rPos,
-                                   const ::basegfx::B2DRange&   rUpdateArea )
+                                   const ::basegfx::B2DRange&   rUpdateArea ) SAL_OVERRIDE
         {
             OSL_ASSERT( rSprite.is() );
 

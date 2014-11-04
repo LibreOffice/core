@@ -72,7 +72,7 @@ namespace toolkit
         DECL_LINK( ScrollBarHdl, ScrollBar* );
         virtual void ResetScrollBars();
         // Window
-        virtual void Resize();
+        virtual void Resize() SAL_OVERRIDE;
     };
 
 } // namespacetoolkit
