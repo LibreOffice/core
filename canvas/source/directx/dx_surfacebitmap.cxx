@@ -72,37 +72,21 @@ namespace dxcanvas
         private:
 
             ::basegfx::B2IVector maSize;
-#if DIRECTX_VERSION < 0x0900
-            mutable DDSURFACEDESC aSurfaceDesc;
-#else
             mutable D3DLOCKED_RECT maLockedRect;
-#endif
             mutable COMReference<surface_type> mpSurface;
             bool mbAlpha;
         };
 
         sal_uInt8* DXColorBuffer::lock() const
         {
-#if DIRECTX_VERSION < 0x0900
-            memset((void *)&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
-            aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-            const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
-            if(SUCCEEDED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
-                return static_cast<sal_uInt8 *>(aSurfaceDesc.lpSurface);
-#else
             if(SUCCEEDED(mpSurface->LockRect(&maLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 return static_cast<sal_uInt8 *>(maLockedRect.pBits);
-#endif
             return NULL;
         }
 
         void DXColorBuffer::unlock() const
         {
-#if DIRECTX_VERSION < 0x0900
-            mpSurface->Unlock(NULL);
-#else
             mpSurface->UnlockRect();
-#endif
         }
 
         sal_uInt32 DXColorBuffer::getWidth() const
@@ -117,11 +101,7 @@ namespace dxcanvas
 
         sal_uInt32 DXColorBuffer::getStride() const
         {
-#if DIRECTX_VERSION < 0x0900
-            return aSurfaceDesc.lPitch;
-#else
             return maLockedRect.Pitch;
-#endif
         }
 
         canvas::IColorBuffer::Format DXColorBuffer::getFormat() const
@@ -343,29 +323,6 @@ namespace dxcanvas
 
         BitmapSharedPtr pResult;
 
-#if DIRECTX_VERSION < 0x0900
-        DDSURFACEDESC aSurfaceDesc;
-        memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
-        aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-        const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
-
-        // lock the directx surface to receive the pointer to the surface memory.
-        if(SUCCEEDED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
-        {
-            // decide about the format we pass the gdi+, the directx surface is always
-            // 32bit, either with or without alpha component.
-            Gdiplus::PixelFormat nFormat = hasAlpha() ? PixelFormat32bppARGB : PixelFormat32bppRGB;
-
-            // construct a gdi+ bitmap from the raw pixel data.
-            pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
-                                               aSurfaceDesc.lPitch,
-                                               nFormat,
-                                               (BYTE *)aSurfaceDesc.lpSurface ));
-
-            // unlock the directx surface
-            mpSurface->Unlock(NULL);
-        }
-#else
         D3DLOCKED_RECT aLockedRect;
         if(SUCCEEDED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
         {
@@ -381,7 +338,6 @@ namespace dxcanvas
 
             mpSurface->UnlockRect();
         }
-#endif
 
         return pResult;
     }
@@ -467,21 +423,6 @@ namespace dxcanvas
 # if OSL_DEBUG_LEVEL > 0
     void DXSurfaceBitmap::imageDebugger()
     {
-#if DIRECTX_VERSION < 0x0900
-        DDSURFACEDESC aSurfaceDesc;
-        memset( &aSurfaceDesc, 0, sizeof(DDSURFACEDESC) );
-        aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-
-        if( FAILED(mpSurface->Lock( NULL,
-                                    &aSurfaceDesc,
-                                    DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY,
-                                    NULL)) )
-            return;
-
-        imdebug("bgra w=%d h=%d %p", aSurfaceDesc.dwWidth, aSurfaceDesc.dwHeight, aSurfaceDesc.lpSurface);
-
-        mpSurface->Unlock(NULL);
-#else
         D3DLOCKED_RECT aLockedRect;
         if( FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)) )
             return;
@@ -489,7 +430,6 @@ namespace dxcanvas
         imdebug("bgra w=%d h=%d %p", maSize.getX(),
                 maSize.getY(), aLockedRect.pBits);
         mpSurface->UnlockRect();
-#endif
     }
 # endif
 #endif
@@ -540,28 +480,6 @@ namespace dxcanvas
 
             uno::Sequence< sal_Int8 > aRes(nWidth*nHeight*4);
 
-#if DIRECTX_VERSION < 0x0900
-            DDSURFACEDESC aSurfaceDesc;
-            memset(&aSurfaceDesc,0, sizeof(DDSURFACEDESC));
-            aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-            const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
-
-            // lock the directx surface to receive the pointer to the surface memory.
-            if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
-                return uno::Sequence< sal_Int8 >();
-
-            sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
-            sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
-            sal_uInt32 nSegmentSizeInBytes = nWidth*4;
-            for(sal_uInt32 y=0; y<nHeight; ++y)
-            {
-                memcpy(pDst,pSrc,nSegmentSizeInBytes);
-                pDst += nSegmentSizeInBytes;
-                pSrc += aSurfaceDesc.lPitch;
-            }
-
-            mpSurface->Unlock(NULL);
-#else
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 return uno::Sequence< sal_Int8 >();
@@ -577,7 +495,6 @@ namespace dxcanvas
             }
 
             mpSurface->UnlockRect();
-#endif
             return aRes;
         }
     }
@@ -622,28 +539,6 @@ namespace dxcanvas
             sal_uInt32 nWidth = rect.X2-rect.X1;
             sal_uInt32 nHeight = rect.Y2-rect.Y1;
 
-#if DIRECTX_VERSION < 0x0900
-            DDSURFACEDESC aSurfaceDesc;
-            memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
-            aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-            const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY;
-
-            // lock the directx surface to receive the pointer to the surface memory.
-            if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
-                throw uno::RuntimeException();
-
-            sal_uInt8 *pSrc = (sal_uInt8 *)data.getConstArray();
-            sal_uInt8 *pDst = (sal_uInt8 *)((((BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
-            sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
-            for(sal_uInt32 y=0; y<nHeight; ++y)
-            {
-                memcpy(pDst,pSrc,nSegmentSizeInBytes);
-                pSrc += nSegmentSizeInBytes;
-                pDst += aSurfaceDesc.lPitch;
-            }
-
-            mpSurface->Unlock(NULL);
-#else
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
@@ -660,7 +555,6 @@ namespace dxcanvas
             }
 
             mpSurface->UnlockRect();
-#endif
         }
 
         mbIsSurfaceDirty = true;
@@ -702,20 +596,6 @@ namespace dxcanvas
 
             Gdiplus::Color aColor(tools::sequenceToArgb(color));
 
-#if DIRECTX_VERSION < 0x0900
-            DDSURFACEDESC aSurfaceDesc;
-            memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
-            aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-            const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY;
-
-            // lock the directx surface to receive the pointer to the surface memory.
-            if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
-                throw uno::RuntimeException();
-
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aSurfaceDesc.lpSurface)+(pos.Y*aSurfaceDesc.lPitch))+pos.X);
-            *pDst = aColor.GetValue();
-            mpSurface->Unlock(NULL);
-#else
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
@@ -724,7 +604,6 @@ namespace dxcanvas
             sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             *pDst = aColor.GetValue();
             mpSurface->UnlockRect();
-#endif
         }
 
         mbIsSurfaceDirty = true;
@@ -760,20 +639,6 @@ namespace dxcanvas
             ENSURE_ARG_OR_THROW( pos.Y >= 0 && pos.Y < maSize.getY(),
                             "CanvasHelper::getPixel: Y coordinate out of bounds" );
 
-#if DIRECTX_VERSION < 0x0900
-            DDSURFACEDESC aSurfaceDesc;
-            memset(&aSurfaceDesc, 0, sizeof(DDSURFACEDESC));
-            aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
-            const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
-
-            // lock the directx surface to receive the pointer to the surface memory.
-            if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
-                throw uno::RuntimeException();
-
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aSurfaceDesc.lpSurface)+(pos.Y*aSurfaceDesc.lPitch))+pos.X);
-            Gdiplus::Color aColor(*pDst);
-            mpSurface->Unlock(NULL);
-#else
             // lock the directx surface to receive the pointer to the surface memory.
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
@@ -782,7 +647,6 @@ namespace dxcanvas
             sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             Gdiplus::Color aColor(*pDst);
             mpSurface->UnlockRect();
-#endif
 
             return tools::argbToIntSequence(aColor.GetValue());
         }
