@@ -29,8 +29,6 @@ public:
     }
 };
 
-#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-
 DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 {
     /*
