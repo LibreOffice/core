@@ -122,9 +122,9 @@ namespace sdr
 
                 mpItemSet->Put(SdrCircKindItem(eKindA));
 
-                if(rObj.GetStartWink())
+                if(rObj.GetStartAngle())
                 {
-                    mpItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartWink()));
+                    mpItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartAngle()));
                 }
 
                 if(rObj.GetEndWink() != 36000)

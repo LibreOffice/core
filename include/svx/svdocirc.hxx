@@ -122,7 +122,7 @@ protected:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 public:
-    long GetStartWink() const { return nStartAngle; }
+    long GetStartAngle() const { return nStartAngle; }
     long GetEndWink() const { return nEndAngle; }
 
 };
