@@ -178,6 +178,47 @@ String STR_MAGENTA
 {
     Text [ en-US ] = "magenta" ;
 };
+String STR_AQUA
+{
+    Text [ en-US ] = "aqua" ;
+};
+String STR_FUCHSIA
+{
+    Text [ en-US ] = "funchsia" ;
+};
+String STR_GRAY
+{
+    Text [ en-US ] = "gray" ;
+};
+String STR_LIME
+{
+    Text [ en-US ] = "lime" ;
+};
+String STR_MAROON
+{
+    Text [ en-US ] = "maroon" ;
+};
+String STR_NAVY
+{
+    Text [ en-US ] = "navy" ;
+};
+String STR_OLIVE
+{
+    Text [ en-US ] = "olive" ;
+};
+String STR_PURPLE
+{
+    Text [ en-US ] = "purple" ;
+};
+String STR_SILVER
+{
+    Text [ en-US ] = "silver" ;
+};
+String STR_TEAL
+{
+    Text [ en-US ] = "teal" ;
+};
+
 String STR_YELLOW
 {
     Text [ en-US ] = "yellow" ;
