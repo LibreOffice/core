@@ -818,7 +818,7 @@ void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException, std::exception)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    OTools::ThrowException(m_pStatement->getOwnConnection(),N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    N3SQLCancel(m_aStatementHandle);
 }
 
 void SAL_CALL OResultSet::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
