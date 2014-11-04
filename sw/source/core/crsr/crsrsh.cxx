@@ -2478,6 +2478,10 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
     // search over the whole ring
     bool bGoNext;
     do {
+
+        if (!pTmp)
+            break;
+
         const SwPosition *pTmpStt = pTmp->Start(),
                         *pTmpEnd = pTmp->GetPoint() == pTmpStt ?
                                         pTmp->GetMark() : pTmp->GetPoint();
