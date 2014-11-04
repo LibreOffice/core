@@ -659,13 +659,13 @@ DECLARE_RTFEXPORT_TEST(testFdo79599, "fdo79599.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x800080), getProperty<sal_uInt32>(xRun, "CharBackColor"));
 }
 
-#endif
-
 DECLARE_RTFEXPORT_TEST(testFdo82858, "fdo82858.docx")
 {
     // This was table::BorderLineStyle::SOLID, exporter failed to write explicit no line when line color was written.
     CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineStyle);
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
