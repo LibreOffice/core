@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7bd147fb",
+        "filename": "writerfilter/source/dmapper/ConversionHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-11-04T14:13:28Z",
+      "side": 1,
+      "message": "How these numeric tokens are generated? Ideally the only numeric values where are from the NS_ooxml::LN_something enumeration. If they do appear here, then it\u0027s not ConversionHelper should be fixed, but the caller that emits these tokens with integer values which are not from the enumeration.",
+      "revId": "e67b2cf92d39161c745ba0251166979473f3a834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
