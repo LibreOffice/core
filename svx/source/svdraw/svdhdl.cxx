@@ -812,24 +812,24 @@ Pointer SdrHdl::GetPointer() const
     } else {
         // When resizing rotated rectangles, rotate the mouse cursor slightly, too
         if (bSize && nRotationAngle!=0) {
-            long nHdlWink=0;
+            long nHdlAngle=0;
             switch (eKind) {
-                case HDL_LWRGT: nHdlWink=31500; break;
-                case HDL_LOWER: nHdlWink=27000; break;
-                case HDL_LWLFT: nHdlWink=22500; break;
-                case HDL_LEFT : nHdlWink=18000; break;
-                case HDL_UPLFT: nHdlWink=13500; break;
-                case HDL_UPPER: nHdlWink=9000;  break;
-                case HDL_UPRGT: nHdlWink=4500;  break;
-                case HDL_RIGHT: nHdlWink=0;     break;
+                case HDL_LWRGT: nHdlAngle=31500; break;
+                case HDL_LOWER: nHdlAngle=27000; break;
+                case HDL_LWLFT: nHdlAngle=22500; break;
+                case HDL_LEFT : nHdlAngle=18000; break;
+                case HDL_UPLFT: nHdlAngle=13500; break;
+                case HDL_UPPER: nHdlAngle=9000;  break;
+                case HDL_UPRGT: nHdlAngle=4500;  break;
+                case HDL_RIGHT: nHdlAngle=0;     break;
                 default:
                     break;
             }
-            nHdlWink+=nRotationAngle+2249; // a little bit more (for rounding)
-            while (nHdlWink<0) nHdlWink+=36000;
-            while (nHdlWink>=36000) nHdlWink-=36000;
-            nHdlWink/=4500;
-            switch ((sal_uInt8)nHdlWink) {
+            nHdlAngle+=nRotationAngle+2249; // a little bit more (for rounding)
+            while (nHdlAngle<0) nHdlAngle+=36000;
+            while (nHdlAngle>=36000) nHdlAngle-=36000;
+            nHdlAngle/=4500;
+            switch ((sal_uInt8)nHdlAngle) {
                 case 0: ePtr=POINTER_ESIZE;  break;
                 case 1: ePtr=POINTER_NESIZE; break;
                 case 2: ePtr=POINTER_NSIZE;  break;
