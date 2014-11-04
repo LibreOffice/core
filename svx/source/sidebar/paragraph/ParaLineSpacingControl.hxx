@@ -47,15 +47,11 @@ public:
                         int eSpace, long lValue = 0 );
 
     void ExecuteLineSpacing(sal_uInt16 aEntry);
-    void PopupModeEndCallback();
 
 private:
-    bool                    mbUseLineSPCustom;
-    bool                    mbLineSPDisable;
-    SfxMapUnit              m_eLNSpaceUnit;
+    SfxMapUnit              meLNSpaceUnit;
 
-    long                    nMinFixDist;
-    Edit*                   pActLineDistFld;
+    Edit*                   mpActLineDistFld;
 
     PushButton*             mpSpacing1Button;
     PushButton*             mpSpacing115Button;
@@ -67,8 +63,6 @@ private:
     MetricField*            mpLineDistAtPercentBox;
     MetricField*            mpLineDistAtMetricBox;
 
-    sal_Int64               maValue;
-    sal_uInt16              maPos;
 private:
     void initial();
     DECL_LINK(LineSPDistHdl_Impl, ListBox*);
