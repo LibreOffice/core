@@ -11739,7 +11739,7 @@ if test "$test_cairo" = "yes"; then
         SYSTEM_CAIRO=TRUE
         AC_MSG_RESULT([yes])
 
-        PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+        PKG_CHECK_MODULES( CAIRO, cairo >= 1.2.0 )
         CAIRO_CFLAGS=$(printf '%s' "$CAIRO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
         if test "$test_xrender" = "yes"; then
