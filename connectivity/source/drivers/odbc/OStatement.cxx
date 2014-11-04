@@ -176,7 +176,7 @@ void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException, std::exception
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    OTools::ThrowException(m_pConnection,N3SQLCancel(m_aStatementHandle),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    N3SQLCancel(m_aStatementHandle);
 }
 
 
