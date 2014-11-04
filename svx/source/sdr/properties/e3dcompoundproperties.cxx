@@ -56,7 +56,7 @@ namespace sdr
         const SfxItemSet& E3dCompoundProperties::GetMergedItemSet() const
         {
             // include Items of scene this object belongs to
-            E3dCompoundObject& rObj = static_cast<E3dCompoundObject&>(GetSdrObject());
+            const E3dCompoundObject& rObj = static_cast<const E3dCompoundObject&>(GetSdrObject());
             E3dScene* pScene = rObj.GetScene();
 
             if(pScene)
