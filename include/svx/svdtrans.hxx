@@ -104,10 +104,16 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
 
 inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact)
 {
-    if (xFact.GetDenominator()==0) xFact=Fraction(xFact.GetNumerator(),1); // DivZero abfangen
-    if (yFact.GetDenominator()==0) yFact=Fraction(yFact.GetNumerator(),1); // DivZero abfangen
-    rPnt.X()=rRef.X()+ Round(((double)(rPnt.X()-rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-    rPnt.Y()=rRef.Y()+ Round(((double)(rPnt.Y()-rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
+    if (!xFact.IsValid()) {
+        SAL_WARN( "svx.svdraw", "invalid fraction xFact, using Fraction(1,1)" );
+        xFact = Fraction(1,1);
+    }
+    if (!yFact.IsValid()) {
+        SAL_WARN( "svx.svdraw", "invalid fraction yFact, using Fraction(1,1)" );
+        yFact = Fraction(1,1);
+    }
+    rPnt.X() = rRef.X() + Round( (rPnt.X() - rRef.X()) * double(xFact) );
+    rPnt.Y() = rRef.Y() + Round( (rPnt.Y() - rRef.Y()) * double(yFact) );
 }
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
