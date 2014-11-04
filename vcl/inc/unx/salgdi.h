@@ -295,6 +295,8 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
+    virtual bool               SwapBuffers() SAL_OVERRIDE;
+
     /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
      *  if pFrame is not NULL, corresponding Paint events are generated
      *  and dispatched to pFrame

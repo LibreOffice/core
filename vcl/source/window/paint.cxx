@@ -278,6 +278,8 @@ void Window::ImplCallOverlapPaint()
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
         ImplCallPaint( NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
+        OutputDevice *pOutDev = GetOutDev();
+        pOutDev->SwapBuffers();
     }
 }
 

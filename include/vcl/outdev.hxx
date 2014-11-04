@@ -514,6 +514,8 @@ public:
                                     const Point& rSrcPt,  const Size& rSrcSize,
                                     sal_uInt16 nFlags = 0 );
 
+    virtual bool                SwapBuffers();
+
 protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags);

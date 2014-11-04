@@ -397,6 +397,8 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 
+    virtual bool               SwapBuffers() SAL_OVERRIDE { return false; };
+
     /// Update settings based on the platform values
     static void updateSettingsNative( AllSettings& rSettings );
 };

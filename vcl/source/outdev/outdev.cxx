@@ -839,4 +839,11 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
+bool OutputDevice::SwapBuffers()
+{
+    if( !mpGraphics && !AcquireGraphics() )
+        return false;
+    return mpGraphics->SwapBuffers();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

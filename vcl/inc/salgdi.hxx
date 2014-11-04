@@ -412,6 +412,8 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
+    virtual bool                SwapBuffers() = 0;
+
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 
     virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;

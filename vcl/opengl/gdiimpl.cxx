@@ -854,4 +854,10 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
     return false;
 }
 
+bool OpenGLSalGraphicsImpl::swapBuffers()
+{
+    maContext.swapBuffers();
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

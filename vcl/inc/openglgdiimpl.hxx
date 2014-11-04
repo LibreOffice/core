@@ -244,6 +244,8 @@ public:
                     sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) SAL_OVERRIDE;
+
+    virtual bool swapBuffers() SAL_OVERRIDE;
 private:
 };
 

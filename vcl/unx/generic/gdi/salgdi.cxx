@@ -482,4 +482,9 @@ bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradien
     return mpImpl->drawGradient(rPoly, rGradient);
 }
 
+bool X11SalGraphics::SwapBuffers()
+{
+    return mpImpl->swapBuffers();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
