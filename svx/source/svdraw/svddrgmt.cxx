@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <tools/bigint.hxx>
+#include <o3tl/numeric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "svx/xattr.hxx"
@@ -3851,6 +3852,9 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         basegfx::fround(aRangeNewNoShearNoRotate.getMaxY()));
 
     // continue with the old original stuff
+    if (!aOldRect.GetWidth() || !aOldRect.GetHeight())
+        throw o3tl::divide_by_zero();
+
     double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
     double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
 
