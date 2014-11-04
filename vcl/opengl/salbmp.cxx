@@ -529,7 +529,7 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 #endif
 }
 
-bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 /*nScaleFlag*/ )
 {
     SAL_INFO( "vcl.opengl", "::Scale" );
     mnWidth *= rScaleX;

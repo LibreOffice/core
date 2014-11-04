@@ -416,7 +416,7 @@ void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, con
     glUseProgram( 0 );
 }
 
-void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& pPosAry )
+void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& /*pPosAry*/ )
 {
     if( mnMaskedTextureProgram == 0 )
     {
@@ -441,7 +441,7 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, 
     glUseProgram( 0 );
 }
 
-void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& pPosAry )
+void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& /*pPosAry*/ )
 {
     if( mnMaskProgram == 0 )
     {
