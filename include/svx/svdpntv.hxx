@@ -152,7 +152,7 @@ protected:
     SdrDragStat                 aDragStat;
     Rectangle                   aMaxWorkArea;
     SfxItemSet                  aDefaultAttr;
-    Timer                       aComeBackTimer;
+    Idle                        aComeBackIdle;
 
     SdrAnimationMode            eAnimationMode;
 

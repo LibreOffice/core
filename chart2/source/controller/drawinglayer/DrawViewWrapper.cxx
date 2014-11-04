@@ -154,8 +154,8 @@ void DrawViewWrapper::ReInit()
 
 DrawViewWrapper::~DrawViewWrapper()
 {
-    aComeBackTimer.Stop();//@todo this should be done in destructor of base class
-    UnmarkAllObj();//necessary to aavoid a paint call during the destructor hierarchy
+    aComeBackIdle.Stop();//@todo this should be done in destructor of base class
+    UnmarkAllObj();//necessary to avoid a paint call during the destructor hierarchy
 }
 
 SdrPageView* DrawViewWrapper::GetPageView() const

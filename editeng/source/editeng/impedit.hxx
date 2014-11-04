@@ -182,7 +182,7 @@ struct FormatterFontMetric
     sal_uInt16  GetHeight() const       { return nMaxAscent+nMaxDescent; }
 };
 
-class IdleFormattter : public Timer
+class IdleFormattter : public Idle
 {
 private:
     EditView*   pView;

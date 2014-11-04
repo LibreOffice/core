@@ -114,7 +114,7 @@ public:
 class SdrView;
 
 class SdrItemBrowser: public _SdrItemBrowserWindow {
-    Timer aIdleTimer;
+    Idle aIdleTimer;
     SdrView* pView;
     bool bDirty;
 private:

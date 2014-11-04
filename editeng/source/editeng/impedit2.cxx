@@ -145,7 +145,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aStatusTimer.SetTimeout( 200 );
     aStatusTimer.SetTimeoutHdl( LINK( this, ImpEditEngine, StatusTimerHdl ) );
 
-    aIdleFormatter.SetTimeout( 5 );
+    aIdleFormatter.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
     aIdleFormatter.SetTimeoutHdl( LINK( this, ImpEditEngine, IdleFormatHdl ) );
 
     aOnlineSpellTimer.SetTimeout( 100 );

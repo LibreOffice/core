@@ -423,29 +423,24 @@ IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
 
     switch ( m_aDropActionType )
     {
-    case DA_EXPANDNODE:
-    {
-        SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
-        if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
-            // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
-            // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
-            // aber ich denke, die BK sollte es auch so vertragen
-            Expand(pToExpand);
-
-        // nach dem Expand habe ich im Gegensatz zum Scrollen natuerlich nix mehr zu tun
-        m_aDropActionTimer.Stop();
-    }
-    break;
-
-    case DA_SCROLLUP :
-        ScrollOutputArea( 1 );
-        m_nTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+        case DA_EXPANDNODE:
+        {
+            SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
+            if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
+                Expand(pToExpand);
+            m_aDropActionTimer.Stop();
+        }
         break;
 
-    case DA_SCROLLDOWN :
-        ScrollOutputArea( -1 );
-        m_nTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
-        break;
+        case DA_SCROLLUP :
+            ScrollOutputArea( 1 );
+            m_nTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+            break;
+
+        case DA_SCROLLDOWN :
+            ScrollOutputArea( -1 );
+            m_nTimerCounter = DROP_ACTION_TIMER_SCROLL_TICKS;
+            break;
 
     }
 

@@ -190,8 +190,8 @@ void SdrPaintView::ImpClearVars()
     pDefaultStyleSheet=NULL;
     bSomeObjChgdFlag=false;
     nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
-    aComeBackTimer.SetTimeout(1);
-    aComeBackTimer.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
+    aComeBackIdle.SetPriority(VCL_IDLE_PRIORITY_HIGH);
+    aComeBackIdle.SetTimeoutHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
 
     if (pMod)
         SetDefaultStyleSheet(pMod->GetDefaultStyleSheet(), true);
@@ -269,7 +269,7 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) {
                 if (bObjChg) {
                     bSomeObjChgdFlag=true;
-                    aComeBackTimer.Start();
+                    aComeBackIdle.Start();
                 }
             }
             if (eKind==HINT_PAGEORDERCHG) {
@@ -309,8 +309,8 @@ void SdrPaintView::FlushComeBackTimer() const
 {
     if (bSomeObjChgdFlag) {
         // casting to nonconst
-        ((SdrPaintView*)this)->ImpComeBackHdl(&((SdrPaintView*)this)->aComeBackTimer);
-        ((SdrPaintView*)this)->aComeBackTimer.Stop();
+        ((SdrPaintView*)this)->ImpComeBackHdl(&((SdrPaintView*)this)->aComeBackIdle);
+        ((SdrPaintView*)this)->aComeBackIdle.Stop();
     }
 }
 

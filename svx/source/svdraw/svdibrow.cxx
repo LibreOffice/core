@@ -1107,7 +1107,7 @@ void SdrItemBrowser::SetDirty()
 {
     if (!bDirty) {
         bDirty = true;
-        aIdleTimer.SetTimeout(1);
+        aIdleTimer.SetPriority(VCL_IDLE_PRIORITY_HIGH);
         aIdleTimer.Start();
     }
 }
