@@ -56,6 +56,9 @@
 /AUTHORS
 /MAINTAINERS
 
+#lhm stuff
+build-lhm.sh
+
 # make tags
 
 /tags
@@ -109,3 +112,9 @@ xcuserdata
 # gdb config
 /.gdbinit
 /.gdb_history
+
+#ctags
+/canvas/.tags
+/canvas/.tags_sorted_by_file
+/extras/source/gallery/gallery_system/sg1.sdv
+

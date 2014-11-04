@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_externals,oglcanvas,\
 	boost_headers \
 	glew \
 	mesa_headers \
+	glm_headers \
 ))
 
 ifeq ($(strip $(OS)),MACOSX)
