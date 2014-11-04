@@ -24,60 +24,53 @@
 #include <svx/svdoole2.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-
-// predeclarations
-
 class Graphic;
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+class ViewContactOfSdrOle2Obj : public ViewContactOfSdrRectObj
 {
-    namespace contact
+private:
+    // #i123539# allow local buffering of chart data (if chart)
+    drawinglayer::primitive2d::Primitive2DReference mxChartContent;
+
+protected:
+    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something.
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+
+public:
+    // access to SdrOle2Obj
+    const SdrOle2Obj& GetOle2Obj() const
     {
-        class ViewContactOfSdrOle2Obj : public ViewContactOfSdrRectObj
-        {
-        private:
-            // #i123539# allow local buffering of chart data (if chart)
-            drawinglayer::primitive2d::Primitive2DReference mxChartContent;
+        return static_cast<const SdrOle2Obj&>(GetSdrObject());
+    }
 
-        protected:
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+    /// helper to create transformation from SdrObject
+    basegfx::B2DHomMatrix createObjectTransform() const;
 
-        public:
-            // access to SdrOle2Obj
-            const SdrOle2Obj& GetOle2Obj() const
-            {
-                return static_cast<const SdrOle2Obj&>(GetSdrObject());
-            }
+    // basic constructor, used from SdrObject.
+    explicit ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj);
+    virtual ~ViewContactOfSdrOle2Obj();
 
-            /// helper to create transformation from SdrObject
-            basegfx::B2DHomMatrix createObjectTransform() const;
+    // helper for creating a OLE sequence for this object. It takes care od attributes, needed
+    // scaling (e.g. for EmptyPresObj's), the correct graphic and other stuff. It is used from
+    // createViewIndependentPrimitive2DSequence with false, and with evtl. HighContrast true
+    // from the VOC which knows that
+    drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceWithParameters() const;
 
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfSdrOle2Obj(SdrOle2Obj& rOle2Obj);
-            virtual ~ViewContactOfSdrOle2Obj();
+    // #i123539# get rid of buffered chart content (if there) on change
+    virtual void ActionChanged() SAL_OVERRIDE;
 
-            // helper for creating a OLE sequence for this object. It takes care od attributes, needed
-            // scaling (e.g. for EmptyPresObj's), the correct graphic and other stuff. It is used from
-            // createViewIndependentPrimitive2DSequence with false, and with evtl. HighContrast true
-            // from the VOC which knows that
-            drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequenceWithParameters() const;
+    virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const SAL_OVERRIDE;
 
-            // #i123539# get rid of buffered chart content (if there) on change
-            virtual void ActionChanged() SAL_OVERRIDE;
+protected:
+    // This method is responsible for creating the graphical visualisation data
+    // ONLY based on model data, just wraps to call createPrimitive2DSequenceWithParameters(false)
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+};
 
-            virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const SAL_OVERRIDE;
-
-        protected:
-            // This method is responsible for creating the graphical visualisation data
-            // ONLY based on model data, just wraps to call createPrimitive2DSequenceWithParameters(false)
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+}}
 
 
 

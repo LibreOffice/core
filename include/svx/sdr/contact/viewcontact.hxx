@@ -24,144 +24,131 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-
-// predeclarations
-
 class SetOfByte;
 class SdrPage;
 class SdrObject;
 
-namespace sdr
+namespace sdr { namespace contact {
+
+class ObjectContact;
+class ViewObjectContact;
+
+class SVX_DLLPUBLIC ViewContact
 {
-    namespace contact
-    {
-        class ObjectContact;
-        class ViewObjectContact;
-    } // end of namespace contact
-} // end of namespace sdr
+private:
+    // make ViewObjectContact a friend to exclusively allow it to use
+    // AddViewObjectContact/RemoveViewObjectContact
+    friend class ViewObjectContact;
 
+    // List of ViewObjectContacts. This contains all VOCs which were constructed
+    // with this VC. Since the VOCs remember a reference to this VC, this list needs
+    // to be kept and is used e.g. at destructor to destroy all VOCs.
+    // Registering and de-registering is done in the VOC constructors/destructors.
+    std::vector< ViewObjectContact* >               maViewObjectContactVector;
 
+    // Primitive2DSequence of the ViewContact. This contains all necessary information
+    // for the graphical visualisation and needs to be supported by all VCs which
+    // can be visualized.
+    drawinglayer::primitive2d::Primitive2DSequence  mxViewIndependentPrimitive2DSequence;
 
-namespace sdr
-{
-    namespace contact
-    {
-        class SVX_DLLPUBLIC ViewContact
-        {
-        private:
-            // make ViewObjectContact a friend to exclusively allow it to use
-            // AddViewObjectContact/RemoveViewObjectContact
-            friend class ViewObjectContact;
+    // A new ViewObjectContact was created and shall be remembered.
+    void AddViewObjectContact(ViewObjectContact& rVOContact);
 
-            // List of ViewObjectContacts. This contains all VOCs which were constructed
-            // with this VC. Since the VOCs remember a reference to this VC, this list needs
-            // to be kept and is used e.g. at destructor to destroy all VOCs.
-            // Registering and de-registering is done in the VOC constructors/destructors.
-            std::vector< ViewObjectContact* >               maViewObjectContactVector;
+    // A ViewObjectContact was deleted and shall be forgotten.
+    void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
-            // Primitive2DSequence of the ViewContact. This contains all necessary information
-            // for the graphical visualisation and needs to be supported by all VCs which
-            // can be visualized.
-            drawinglayer::primitive2d::Primitive2DSequence  mxViewIndependentPrimitive2DSequence;
+    // internal tooling to delete VOCs
+    void deleteAllVOCs();
 
-            // A new ViewObjectContact was created and shall be remembered.
-            void AddViewObjectContact(ViewObjectContact& rVOContact);
+protected:
+    // Interface to allow derivates to travel over the registered VOC's
+    sal_uInt32 getViewObjectContactCount() const { return maViewObjectContactVector.size(); }
+    ViewObjectContact* getViewObjectContact(sal_uInt32 a) const { return maViewObjectContactVector[a]; }
 
-            // A ViewObjectContact was deleted and shall be forgotten.
-            void RemoveViewObjectContact(ViewObjectContact& rVOContact);
+    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something. Default is to create
+    // a standard ViewObjectContact containing the given ObjectContact and *this
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
 
-            // internal tooling to delete VOCs
-            void deleteAllVOCs();
+    // This method is responsible for creating the graphical visualisation data derived ONLY from
+    // the model data. It will be stored/buffered in mxViewIndependentPrimitive2DSequence. The default implementation
+    // creates a yellow replacement rectangle (1000, 1000, 5000, 3000) to visualize missing
+    // implementations. All implementations have to provide basic geometry here, this is the central
+    // visualisation method and will also be used for BoundRect computations in the long run.
+    // This means it's always an error when the default implementation is called and thus gets
+    // asserted there
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
 
-        protected:
-            // Interface to allow derivates to travel over the registered VOC's
-            sal_uInt32 getViewObjectContactCount() const { return maViewObjectContactVector.size(); }
-            ViewObjectContact* getViewObjectContact(sal_uInt32 a) const { return maViewObjectContactVector[a]; }
+    // method for flushing View Independent Primitive2DSequence for VOC implementations
+    void flushViewIndependentPrimitive2DSequence() { mxViewIndependentPrimitive2DSequence.realloc(0); }
 
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something. Default is to create
-            // a standard ViewObjectContact containing the given ObjectContact and *this
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact);
+    // basic constructor. Since this is a base class only, it shall
+    // never be called directly
+    ViewContact();
 
-            // This method is responsible for creating the graphical visualisation data derived ONLY from
-            // the model data. It will be stored/buffered in mxViewIndependentPrimitive2DSequence. The default implementation
-            // creates a yellow replacement rectangle (1000, 1000, 5000, 3000) to visualize missing
-            // implementations. All implementations have to provide basic geometry here, this is the central
-            // visualisation method and will also be used for BoundRect computations in the long run.
-            // This means it's always an error when the default implementation is called and thus gets
-            // asserted there
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const;
+    // Methods to react on start getting viewed or stop getting
+    // viewed. This info is derived from the count of members of
+    // registered ViewObjectContacts. Default does nothing.
+    virtual void StartGettingViewed();
+    virtual void StopGettingViewed();
 
-            // method for flushing View Independent Primitive2DSequence for VOC implementations
-            void flushViewIndependentPrimitive2DSequence() { mxViewIndependentPrimitive2DSequence.realloc(0); }
+public:
+    // basic destructor with needed cleanups
+    virtual ~ViewContact();
 
-            // basic constructor. Since this is a base class only, it shall
-            // never be called directly
-            ViewContact();
+    // get a Object-specific ViewObjectContact for a specific
+    // ObjectContact (->View). Always needs to return something.
+    ViewObjectContact& GetViewObjectContact(ObjectContact& rObjectContact);
 
-            // Methods to react on start getting viewed or stop getting
-            // viewed. This info is derived from the count of members of
-            // registered ViewObjectContacts. Default does nothing.
-            virtual void StartGettingViewed();
-            virtual void StopGettingViewed();
+    // Test if this ViewContact has ViewObjectContacts at all. This can
+    // be used to test if this ViewContact is visualized ATM or not
+    bool HasViewObjectContacts(bool bExcludePreviews = false) const;
 
-        public:
-            // basic destructor with needed cleanups
-            virtual ~ViewContact();
+    // Check if this primitive is animated in any OC (View) which means it has
+    // generated a PrimitiveAnimation in it's VOC
+    bool isAnimatedInAnyViewObjectContact() const;
 
-            // get a Object-specific ViewObjectContact for a specific
-            // ObjectContact (->View). Always needs to return something.
-            ViewObjectContact& GetViewObjectContact(ObjectContact& rObjectContact);
+    // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
+    // and GetViewContact default pops up an assert since it's an error if
+    // GetObjectCount has a result != 0 and it's not overloaded.
+    virtual sal_uInt32 GetObjectCount() const;
+    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
+    virtual ViewContact* GetParentContact() const;
 
-            // Test if this ViewContact has ViewObjectContacts at all. This can
-            // be used to test if this ViewContact is visualized ATM or not
-            bool HasViewObjectContacts(bool bExcludePreviews = false) const;
+    // React on insertion of a child into DRawHierarchy starting
+    // from this object
+    void ActionChildInserted(ViewContact& rChild);
 
-            // Check if this primitive is animated in any OC (View) which means it has
-            // generated a PrimitiveAnimation in it's VOC
-            bool isAnimatedInAnyViewObjectContact() const;
+    // React on changes of the object of this ViewContact
+    virtual void ActionChanged();
 
-            // Access to possible sub-hierarchy and parent. GetObjectCount() default is 0L
-            // and GetViewContact default pops up an assert since it's an error if
-            // GetObjectCount has a result != 0 and it's not overloaded.
-            virtual sal_uInt32 GetObjectCount() const;
-            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const;
-            virtual ViewContact* GetParentContact() const;
+    // access to SdrObject and/or SdrPage. May return 0L like the default
+    // implementations do. Needs to be overloaded as needed.
+    virtual SdrObject* TryToGetSdrObject() const;
+    virtual SdrPage* TryToGetSdrPage() const;
 
-            // React on insertion of a child into DRawHierarchy starting
-            // from this object
-            void ActionChildInserted(ViewContact& rChild);
+    // access to the local primitive. This will ensure that the primitive is
+    // current in comparing the local one with a fresh created incarnation
+    drawinglayer::primitive2d::Primitive2DSequence getViewIndependentPrimitive2DSequence() const;
 
-            // React on changes of the object of this ViewContact
-            virtual void ActionChanged();
+    // add Gluepoints (if available)
+    virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const;
 
-            // access to SdrObject and/or SdrPage. May return 0L like the default
-            // implementations do. Needs to be overloaded as needed.
-            virtual SdrObject* TryToGetSdrObject() const;
-            virtual SdrPage* TryToGetSdrPage() const;
+    // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
+    // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
+    // for 3D scenes
+    virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
 
-            // access to the local primitive. This will ensure that the primitive is
-            // current in comparing the local one with a fresh created incarnation
-            drawinglayer::primitive2d::Primitive2DSequence getViewIndependentPrimitive2DSequence() const;
+    virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const;
 
-            // add Gluepoints (if available)
-            virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const;
+    // delete all existing VOCs including DrawHierarchy which will invalidate all
+    // visualisations, too. Used mostly at object removal from DrawHierarchy to
+    // delete all existing VOCs by purpose, but can also be used for other purposes.
+    // It is always possible to delete the VOCs, these are re-created on demand
+    void flushViewObjectContacts(bool bWithHierarchy = true);
+};
 
-            // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
-            // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
-            // for 3D scenes
-            virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const;
-
-            virtual basegfx::B2DRange getRange( const drawinglayer::geometry::ViewInformation2D& rViewInfo2D ) const;
-
-            // delete all existing VOCs including DrawHierarchy which will invalidate all
-            // visualisations, too. Used mostly at object removal from DrawHierarchy to
-            // delete all existing VOCs by purpose, but can also be used for other purposes.
-            // It is always possible to delete the VOCs, these are re-created on demand
-            void flushViewObjectContacts(bool bWithHierarchy = true);
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+}}
 
 
 
