@@ -16,6 +16,8 @@
 
 #include <iostream>
 
+#include <test/callgrind.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -50,7 +52,9 @@ void XReplaceable::testReplaceAll()
     xReplaceDescr->setSearchString(maSearchString);
     xReplaceDescr->setReplaceString(maReplaceString);
 
+    callgrindStart();
     xReplaceable->replaceAll(uno::Reference< util::XSearchDescriptor >(xReplaceDescr, UNO_QUERY_THROW));
+    callgrindDump("replaceAll");
 
     //check that now at least one element is found
     xElement = xReplaceable->findFirst(xSearchDescr);
