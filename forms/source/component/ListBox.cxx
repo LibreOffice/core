@@ -412,7 +412,7 @@ namespace frm
 
         case PROPERTY_ID_VALUE_SEQ :
             SAL_WARN( "forms.component", "ValueItemList is read-only!" );
-            throw PropertyVetoException();
+            throw IllegalArgumentException();
 
         case PROPERTY_ID_SELECT_VALUE_SEQ :
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, getCurrentMultiValue());
