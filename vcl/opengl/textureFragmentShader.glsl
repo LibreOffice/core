@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-precision mediump float;
+/* precision mediump float; */
 varying vec2 tex_coord;
 uniform sampler2D sampler;
 
 void main() {
    gl_FragColor = texture2D(sampler, tex_coord);
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
