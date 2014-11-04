@@ -37,6 +37,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/numeric.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/crc.h>
@@ -8970,6 +8971,9 @@ static double calcAngle( const Rectangle& rRect, const Point& rPoint )
 
     double fX = (double)aPoint.X();
     double fY = (double)-aPoint.Y();
+
+    if ((rRect.GetHeight() == 0) || (rRect.GetWidth() == 0))
+        throw o3tl::divide_by_zero();
 
     if( rRect.GetWidth() > rRect.GetHeight() )
         fY = fY*((double)rRect.GetWidth()/(double)rRect.GetHeight());
