@@ -97,9 +97,6 @@ extern "C"
         if ( !g_thread_supported() )
             g_thread_init( NULL );
 
-#if !GTK_CHECK_VERSION(2,4,0)
-#error "Requires gtk 2.4.0+ for lock hooking"
-#endif
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
         SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
 
