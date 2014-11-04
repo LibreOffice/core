@@ -3942,7 +3942,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 const Point aOld = m_pAnchorMarker->GetPosForHitTest( *(rSh.GetOut()) );
                 Point aNew = rSh.FindAnchorPos( aDocPt );
                 SdrHdl* pHdl;
-                if( (0!=( pHdl = pSdrView->PickHandle( aOld ) )||
+                if( pSdrView && (0!=( pHdl = pSdrView->PickHandle( aOld ) )||
                     0 !=(pHdl = pSdrView->PickHandle( m_pAnchorMarker->GetHdlPos()) ) ) &&
                         ( pHdl->GetKind() == HDL_ANCHOR ||
                           pHdl->GetKind() == HDL_ANCHOR_TR ) )
