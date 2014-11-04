@@ -53,7 +53,7 @@ class SdrDragRotate : public SdrDragMethod
 private:
     double                      nSin;
     double                      nCos;
-    long                        nWink0;
+    long                        nAngle0;
     long                        nWink;
     bool                        bRight;
 
@@ -75,7 +75,7 @@ class SdrDragShear : public SdrDragMethod
 {
 private:
     Fraction                    aFact;
-    long                        nWink0;
+    long                        nAngle0;
     long                        nWink;
     double                      nTan;
     bool                        bVertical;   // contort vertically

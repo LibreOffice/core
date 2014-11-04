@@ -2115,7 +2115,7 @@ SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
     nSin(0.0),
     nCos(1.0),
-    nWink0(0),
+    nAngle0(0),
     nWink(0),
     bRight(false)
 {
@@ -2148,7 +2148,7 @@ bool SdrDragRotate::BeginSdrDrag()
     {
         Show();
         DragStat().Ref1()=pH->GetPos();
-        nWink0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
+        nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
         return true;
     }
     else
@@ -2170,7 +2170,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
     Point aPnt(rPnt_);
     if (DragStat().CheckMinMoved(aPnt))
     {
-        long nNewAngle=NormAngle360(GetAngle(aPnt-DragStat().GetRef1())-nWink0);
+        long nNewAngle=NormAngle360(GetAngle(aPnt-DragStat().GetRef1())-nAngle0);
         long nSA=0;
 
         if (getSdrDragView().IsAngleSnapEnabled())
@@ -2246,7 +2246,7 @@ TYPEINIT1(SdrDragShear,SdrDragMethod);
 SdrDragShear::SdrDragShear(SdrDragView& rNewView, bool bSlant1)
 :   SdrDragMethod(rNewView),
     aFact(1,1),
-    nWink0(0),
+    nAngle0(0),
     nWink(0),
     nTan(0.0),
     bVertical(false),
@@ -2296,7 +2296,7 @@ bool SdrDragShear::BeginSdrDrag()
     if (pRefHdl!=NULL)
     {
         DragStat().Ref1()=pRefHdl->GetPos();
-        nWink0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
+        nAngle0=GetAngle(DragStat().GetStart()-DragStat().GetRef1());
     }
     else
     {
@@ -2365,7 +2365,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
 
         if (bSlant)
         {
-            nNewAngle=NormAngle180(-(GetAngle(aDif)-nWink0));
+            nNewAngle=NormAngle180(-(GetAngle(aDif)-nAngle0));
 
             if (bVertical)
                 nNewAngle=NormAngle180(-nNewAngle);

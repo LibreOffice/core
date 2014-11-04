@@ -813,7 +813,7 @@ void SdrCircObj::NbcMove(const Size& aSiz)
 
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    long nWink0=aGeo.nRotationAngle;
+    long nAngle0=aGeo.nRotationAngle;
     bool bNoShearRota=(aGeo.nRotationAngle==0 && aGeo.nShearAngle==0);
     SdrTextObj::NbcResize(rRef,xFact,yFact);
     bNoShearRota|=(aGeo.nRotationAngle==0 && aGeo.nShearAngle==0);
@@ -836,8 +836,8 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
                 }
             } else { // mirror contorted ellipses
                 if (bXMirr!=bYMirr) {
-                    nS0+=nWink0;
-                    nE0+=nWink0;
+                    nS0+=nAngle0;
+                    nE0+=nAngle0;
                     if (bXMirr) {
                         long nTmp=nS0;
                         nS0=18000-nE0;
