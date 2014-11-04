@@ -99,7 +99,7 @@ ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
     for( sal_Int32 i = 0; i < nWorkers; i++ )
         maWorkers.push_back( new ThreadWorker( this ) );
 
-    maTasksComplete.reset();
+    maTasksComplete.set();
 
     osl::MutexGuard aGuard( maGuard );
     for( size_t i = 0; i < maWorkers.size(); i++ )
