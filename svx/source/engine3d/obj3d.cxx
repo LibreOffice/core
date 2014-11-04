@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/numeric.hxx>
 
 #include "svx/svdstr.hrc"
 #include "svdglob.hxx"
@@ -396,6 +397,9 @@ void E3dObject::NbcMove(const Size& rSize)
         const drawinglayer::geometry::ViewInformation3D aViewInfo3D(rVCScene.getViewInformation3D());
         basegfx::B3DRange aEyeVol(pScene->GetBoundVolume());
         aEyeVol.transform(aViewInfo3D.getOrientation());
+
+        if ((aRect.GetWidth() == 0) || (aRect.GetHeight() == 0))
+            throw o3tl::divide_by_zero();
 
         // build relative movement vector in eye coordinates
         basegfx::B3DPoint aMove(
