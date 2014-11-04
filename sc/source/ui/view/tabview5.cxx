@@ -447,39 +447,6 @@ void ScTabView::UpdateIMap( SdrObject* pObj )
         pDrawView->UpdateIMap( pObj );
 }
 
-void ScTabView::DrawMarkRect( const Rectangle& rRect )
-{
-    //! store rectangle for repaint during drag
-
-    for (sal_uInt16 i=0; i<4; i++)
-    {
-        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-        {
-            RasterOp aROp = pGridWin[i]->GetRasterOp();
-            bool bHasLine = pGridWin[i]->IsLineColor();
-            Color aLine   = pGridWin[i]->GetLineColor();
-            bool bHasFill = pGridWin[i]->IsFillColor();
-            Color aFill   = pGridWin[i]->GetFillColor();
-
-            pGridWin[i]->SetRasterOp( ROP_INVERT );
-            pGridWin[i]->SetLineColor( COL_BLACK );
-            pGridWin[i]->SetFillColor();
-
-            pGridWin[i]->DrawRect(rRect);
-
-            pGridWin[i]->SetRasterOp(aROp);
-            if (bHasLine)
-                pGridWin[i]->SetLineColor(aLine);
-            else
-                pGridWin[i]->SetLineColor();
-            if (bHasFill)
-                pGridWin[i]->SetFillColor(aFill);
-            else
-                pGridWin[i]->SetFillColor();
-        }
-    }
-}
-
 void ScTabView::DrawEnableAnim(bool bSet)
 {
     sal_uInt16 i;

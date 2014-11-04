@@ -246,8 +246,6 @@ public:
     void        RemoveSubTotals( ScSubTotalParam& rParam );
     bool        DoSubTotals( ScSubTotalParam& rParam );
 
-    void MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal ) const;
-
     const ScSheetEvents* GetSheetEvents() const              { return pSheetEvents; }
     void        SetSheetEvents( const ScSheetEvents* pNew );
 

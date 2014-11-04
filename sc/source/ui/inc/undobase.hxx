@@ -134,8 +134,6 @@ public:
                     ScDBFuncUndo( ScDocShell* pDocSh, const ScRange& rOriginal, SdrUndoAction* pDrawUndo = 0 );
     virtual         ~ScDBFuncUndo();
 
-    void            SetDrawUndoAction( SdrUndoAction* pDrawUndo );
-
     void            BeginUndo();
     void            EndUndo();
     void            BeginRedo();

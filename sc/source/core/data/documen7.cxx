@@ -233,54 +233,6 @@ void ScDocument::AreaBroadcast( const ScHint& rHint )
     }
 }
 
-void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint )
-{
-    if ( !pBASM )
-        return ;    // Clipboard or Undo
-    if ( !bHardRecalcState )
-    {
-        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
-        if ( pBASM->AreaBroadcastInRange( rRange, rHint ) )
-            TrackFormulas( rHint.GetId() );
-    }
-
-    // Repaint for conditional formats containing relative references.
-    //! This is _THE_ bottle neck!
-    TableContainer::iterator itr = maTabs.begin();
-    for(; itr != maTabs.end(); ++itr)
-    {
-        if(!*itr)
-            continue;
-
-        ScConditionalFormatList* pCondFormList = (*itr)->GetCondFormList();
-        if ( pCondFormList )
-        {
-            SCCOL nCol1;
-            SCROW nRow1;
-            SCTAB nTab1;
-            SCCOL nCol2;
-            SCROW nRow2;
-            SCTAB nTab2;
-            rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-            ScAddress aAddress( rRange.aStart );
-            for ( SCTAB nTab = nTab1; nTab <= nTab2; ++nTab )
-            {
-                aAddress.SetTab( nTab );
-                for ( SCCOL nCol = nCol1; nCol <= nCol2; ++nCol )
-                {
-                    aAddress.SetCol( nCol );
-                    for ( SCROW nRow = nRow1; nRow <= nRow2; ++nRow )
-                    {
-                        aAddress.SetRow( nRow );
-                        pCondFormList->SourceChanged( aAddress );
-                    }
-                }
-            }
-        }
-
-    }
-}
-
 void ScDocument::DelBroadcastAreasInRange( const ScRange& rRange )
 {
     if ( pBASM )

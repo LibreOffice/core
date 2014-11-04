@@ -487,12 +487,6 @@ ScDBFuncUndo::~ScDBFuncUndo()
     delete pAutoDBRange;
 }
 
-void ScDBFuncUndo::SetDrawUndoAction( SdrUndoAction* pDrawUndo )
-{
-    DeleteSdrUndoAction( mpDrawUndo );
-    mpDrawUndo = pDrawUndo;
-}
-
 void ScDBFuncUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();

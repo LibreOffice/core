@@ -276,8 +276,6 @@ public:
 
     void            UpdatePageBreakData( bool bForcePaint = false );
 
-    void            DrawMarkRect( const Rectangle& rRect );
-
     ScViewData&         GetViewData()       { return aViewData; }
     const ScViewData&   GetViewData() const { return aViewData; }
 

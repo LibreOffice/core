@@ -1864,9 +1864,6 @@ public:
 
                         /// only area, no cell broadcast
     void                AreaBroadcast( const ScHint& rHint );
-                        /// only areas in range, no cell broadcasts
-    void                AreaBroadcastInRange( const ScRange& rRange,
-                                              const ScHint& rHint );
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,

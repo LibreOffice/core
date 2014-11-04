@@ -18,14 +18,10 @@ OutputDevice::PixelToLogic(vcl::Region const&, MapMode const&) const
 Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
-ScDBFuncUndo::SetDrawUndoAction(SdrUndoAction*)
-ScDocument::AreaBroadcastInRange(ScRange const&, ScHint const&)
 ScDocument::CreateFormatTable() const
 ScFormulaCellGroup::scheduleCompilation()
 ScRawToken::Clone() const
 ScRawToken::Delete()
-ScTabView::DrawMarkRect(Rectangle const&)
-ScTable::MarkSubTotalCells(sc::ColumnSpanSet&, short, int, short, int, bool) const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
