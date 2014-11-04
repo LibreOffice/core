@@ -34,7 +34,8 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 }
 
 OpenGLSalBitmap::OpenGLSalBitmap()
-: mnTexture(0)
+: mpContext(NULL)
+, mnTexture(0)
 , mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
@@ -368,7 +369,12 @@ GLuint OpenGLSalBitmap::CreateTexture()
     if( !mnTexture )
         glGenTextures( 1, &mnTexture );
     glBindTexture( GL_TEXTURE_2D, mnTexture );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnWidth, mnHeight, 0, nFormat, nType, pData );
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnTexWidth, mnTexHeight, 0, nFormat, nType, pData );
     glBindTexture( GL_TEXTURE_2D, 0 );
 
     if( bAllocated )
@@ -473,12 +479,11 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     case 16:    pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
                 pBuffer->maColorMask  = ColorMask( 0xf800, 0x07e0, 0x001f );
                 break;
-    case 24:    pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR; break;
-    case 32:    pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_ARGB;
-                pBuffer->maColorMask  = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+    case 24:    pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_RGB; break;
+    case 32:    pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_RGBA;
+                pBuffer->maColorMask  = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00 );
                 break;
     }
-    // FIXME pBuffer->mnFormat |= BMP_FORMAT_BOTTOM_UP;
 
     return pBuffer;
 }
