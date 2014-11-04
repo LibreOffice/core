@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <glm/glm.hpp>
 
 
 namespace com { namespace sun { namespace star { namespace geometry
@@ -128,12 +129,21 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ::basegfx::B2DHomMatrix&
             homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                             transform,
                                        const ::com::sun::star::geometry::AffineMatrix2D&    matrix );
+       BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix
+            homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& matrix );
 
-        BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& matrix );
+
+
+        BASEGFX_DLLPUBLIC glm::mat4 glmMatrixFromAffineMatrix( const ::com::sun::star::geometry::AffineMatrix2D&   matrix );
+
+        BASEGFX_DLLPUBLIC glm::mat4 glmMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& matrix );
 
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::Matrix2D&
             matrixFromHomMatrix( ::com::sun::star::geometry::Matrix2D& matrix,
                                  const ::basegfx::B2DHomMatrix&        transform);
+        BASEGFX_DLLPUBLIC glm::mat4 glmMatFromHomMatrix( const ::basegfx::B2DHomMatrix& input);
+
+        BASEGFX_DLLPUBLIC glm::mat4 glmMatFromHomMatrix3d( const ::basegfx::B3DHomMatrix& input);
 
         // Geometry conversions
 

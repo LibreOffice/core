@@ -334,6 +334,41 @@ namespace basegfx
             return output;
         }
 
+        glm::mat4 glmMatrixFromAffineMatrix( const ::com::sun::star::geometry::AffineMatrix2D& input )
+        {
+            // ensure last row is [0,0,1] (and optimized away)
+            glm::mat4 output;
+            output[0][0] = input.m00;
+            output[1][0] = input.m01;
+            output[2][0] = input.m02;
+            output[0][1] = input.m10;
+            output[1][1] = input.m11;
+            output[2][1] = input.m12;
+
+            return output;
+        }
+
+        glm::mat4 glmMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& input )
+        {
+            glm::mat4 output;
+            output[0][0] = input.m00;
+            output[1][0] = input.m01;
+            output[2][0] = input.m02;
+            output[3][0] = input.m03;
+
+            output[0][1] = input.m10;
+            output[1][1] = input.m11;
+            output[2][1] = input.m12;
+            output[3][1] = input.m13;
+
+            output[0][2] = input.m20;
+            output[1][2] = input.m21;
+            output[2][2] = input.m22;
+            output[3][2] = input.m23;
+
+            return output;
+        }
+
         ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& input )
         {
             ::basegfx::B3DHomMatrix output;
@@ -365,6 +400,40 @@ namespace basegfx
             output.m10 = input.get(1,0);
             output.m11 = input.get(1,1);
             output.m12 = input.get(1,2);
+
+            return output;
+        }
+
+        glm::mat4 glmMatFromHomMatrix( const ::basegfx::B2DHomMatrix& input)
+        {
+            glm::mat4 output;
+            output[0][0] = input.get(0,0);
+            output[1][0] = input.get(0,1);
+            output[2][0] = input.get(0,2);
+            output[0][1] = input.get(1,0);
+            output[1][1] = input.get(1,1);
+            output[2][1] = input.get(1,2);
+
+            return output;
+        }
+
+        glm::mat4 glmMatFromHomMatrix3d( const ::basegfx::B3DHomMatrix& input)
+        {
+            glm::mat4 output;
+            output[0][0] = input.get(0,0);
+            output[1][0] = input.get(0,1);
+            output[2][0] = input.get(0,2);
+            output[3][0] = input.get(0,3);
+
+            output[0][1] = input.get(1,0);
+            output[1][1] = input.get(1,1);
+            output[2][1] = input.get(1,2);
+            output[3][1] = input.get(1,3);
+
+            output[0][2] = input.get(2,0);
+            output[1][2] = input.get(2,1);
+            output[2][2] = input.get(2,2);
+            output[3][2] = input.get(2,3);
 
             return output;
         }
