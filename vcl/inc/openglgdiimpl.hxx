@@ -73,11 +73,11 @@ private:
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
-    void DrawPolyPolygon( const basegfx::B2DPolyPolygon& pPolyPolygon );
-    void DrawTextureRect( const SalTwoRect& pPosAry );
-    void DrawTexture( GLuint nTexture, const SalTwoRect& pPosAry );
-    void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& pPosAry );
-    void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& pPosAry );
+    void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
+    void DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry );
+    void DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& rPosAry );
+    void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& rPosAry );
+    void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& rPosAry );
 
 
 public:

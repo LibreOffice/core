@@ -44,6 +44,8 @@ private:
     sal_uInt16                      mnBytesPerRow;
     int                             mnWidth;
     int                             mnHeight;
+    int                             mnTexWidth;
+    int                             mnTexHeight;
 
 public:
     OpenGLSalBitmap();
@@ -69,6 +71,8 @@ public:
     void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) SAL_OVERRIDE;
 
     bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
+
+    bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) SAL_OVERRIDE;
 
 public:
 

@@ -27,6 +27,7 @@
 
 #include <boost/scoped_array.hpp>
 
+#include <impbmp.hxx>
 #include <impoct.hxx>
 #include <impvect.hxx>
 
@@ -871,6 +872,12 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     {
         // no scale
         bRetval = true;
+    }
+
+    if( mpImpBmp && mpImpBmp->ImplScale( rScaleX, rScaleY, nScaleFlag ) )
+    {
+        // implementation specific scaling
+        return true;
     }
 
     //fdo#33455

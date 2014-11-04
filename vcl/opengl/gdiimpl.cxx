@@ -380,19 +380,24 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& pPol
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
 
-void OpenGLSalGraphicsImpl::DrawTextureRect( const SalTwoRect& pPosAry )
+void OpenGLSalGraphicsImpl::DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry )
 {
-    GLushort aTexCoord[8];
+    GLfloat aTexCoord[8];
+
+    aTexCoord[0] = aTexCoord[2] = rPosAry.mnSrcX / (double) rSize.Width();
+    aTexCoord[4] = aTexCoord[6] = (rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) rSize.Width();
+    aTexCoord[3] = aTexCoord[5] = rPosAry.mnSrcY / (double) rSize.Height();
+    aTexCoord[1] = aTexCoord[7] = (rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) rSize.Height();
 
     glEnableVertexAttribArray( GL_ATTRIB_TEX );
-    glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, aTexCoord );
+    glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
 
-    DrawRect( pPosAry.mnDestX, pPosAry.mnDestY, pPosAry.mnDestWidth, pPosAry.mnDestHeight );
+    DrawRect( rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight );
 
     glDisableVertexAttribArray( GL_ATTRIB_TEX );
 }
 
-void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const SalTwoRect& pPosAry )
+void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& pPosAry )
 {
     if( mnTextureProgram == 0 )
     {
@@ -405,7 +410,7 @@ void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const SalTwoRect& pPos
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, nTexture );
 
-    DrawTextureRect( pPosAry );
+    DrawTextureRect( rSize, pPosAry );
 
     glBindTexture( GL_TEXTURE_2D, 0 );
     glUseProgram( 0 );
@@ -427,7 +432,7 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_2D, nMask );
 
-    DrawTextureRect( pPosAry );
+    //DrawTextureRect( pPosAry );
 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_2D, 0 );
@@ -450,7 +455,7 @@ void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const S
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, nMask );
 
-    DrawTextureRect( pPosAry );
+    //DrawTextureRect( pPosAry );
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, 0 );
@@ -665,10 +670,11 @@ void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitm
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     GLuint nTexture = rBitmap.GetTexture( maContext );
+    const Size aSize = rSalBitmap.GetSize();
 
     SAL_INFO( "vcl.opengl", "::drawBitmap" );
     maContext.makeCurrent();
-    DrawTexture( nTexture, rPosAry );
+    DrawTexture( nTexture, aSize, rPosAry );
 }
 
 void OpenGLSalGraphicsImpl::drawBitmap(

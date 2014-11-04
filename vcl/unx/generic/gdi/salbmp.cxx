@@ -860,6 +860,11 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
     return false;
 }
 
+bool X11SalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
+{
+    return false;
+}
+
 // - ImplSalDDB -
 
 ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,

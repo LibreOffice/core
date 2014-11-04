@@ -60,6 +60,9 @@ public:
 
     inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
     inline sal_uLong    ImplGetChecksum() const { return mnChecksum; }
+
+
+    bool                ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
 };
 
 #endif // INCLUDED_VCL_INC_IMPBMP_HXX

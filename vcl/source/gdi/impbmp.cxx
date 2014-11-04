@@ -86,4 +86,9 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
         mnChecksum = 0;
 }
 
+bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+{
+    return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

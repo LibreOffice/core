@@ -96,6 +96,8 @@ public:
     virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool                GetSystemData( BitmapSystemData& rData );
+
+    virtual bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
 };
 
 #endif // INCLUDED_VCL_INC_WIN_SALBMP_H

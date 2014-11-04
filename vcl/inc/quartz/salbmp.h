@@ -79,6 +79,8 @@ public:
 
     bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
+    bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) SAL_OVERRIDE;
+
 private:
     // quartz helper
     bool            CreateContext();

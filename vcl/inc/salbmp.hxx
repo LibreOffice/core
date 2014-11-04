@@ -54,6 +54,8 @@ public:
     virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly ) = 0;
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
+
+    virtual bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) = 0;
 };
 
 #endif

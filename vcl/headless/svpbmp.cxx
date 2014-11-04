@@ -339,6 +339,11 @@ bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
     return false;
 }
 
+bool SvpSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
+{
+    return false;
+}
+
 sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( basebmp::Format nFormat )
 {
     sal_uInt32 nBitCount = 1;
