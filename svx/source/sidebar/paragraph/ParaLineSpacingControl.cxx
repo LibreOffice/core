@@ -82,6 +82,7 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     aLink = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
     mpLineDistAtPercentBox->SetModifyHdl( aLink );
     mpLineDistAtMetricBox->SetModifyHdl( aLink );
+    SetFieldUnit(*mpLineDistAtMetricBox, SfxModule::GetCurrentFieldUnit());
 
     initialize();
 }
@@ -96,11 +97,6 @@ void ParaLineSpacingControl::initialize()
     SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PARA_LINESPACE, pItem);
 
     const SvxLineSpacingItem* currSPItem = static_cast<const SvxLineSpacingItem*>(pItem);
-
-    /* TODO - according to the current units setting
-    FieldUnit currMetricUnit = FUNIT_CM;
-    SetFieldUnit(*mpLineDistAtMetricBox, currMetricUnit);
-    */
 
     mpLineDist->Enable();
 
@@ -300,7 +296,7 @@ void ParaLineSpacingControl::SelectEntryPos(sal_Int32 nPos)
     UpdateMetricFields();
 }
 
-IMPL_LINK( ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, pBox )
+IMPL_LINK(ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, /*pBox*/)
 {
     UpdateMetricFields();
     ExecuteLineSpace();
@@ -417,7 +413,7 @@ void ParaLineSpacingControl::ExecuteLineSpacing(sal_uInt16 nEntry)
 
     // special-case the 1.15 line spacing
     if (nEntry == LLINESPACE_115)
-        SetLineSpace(aSpacing, LLINESPACE_PROP, mpLineDistAtPercentBox->Denormalize(115L));
+        SetLineSpace(aSpacing, LLINESPACE_PROP, mpLineDistAtPercentBox->Denormalize(LINESPACE_115));
     else
         SetLineSpace(aSpacing, nEntry);
 
