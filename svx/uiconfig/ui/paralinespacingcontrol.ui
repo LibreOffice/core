@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
+  <object class="GtkImage" id="image_spacing_2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">6</property>
+    <property name="xalign">0</property>
+    <property name="pixbuf">svx/res/symphony/lpspacing-2.png</property>
+    <property name="icon-size">1</property>
+  </object>
   <object class="GtkWindow" id="ParaLineSpacingControl">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -154,7 +162,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Of:</property>
+                        <property name="label" translatable="yes">Value:</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -265,14 +273,6 @@
     <property name="margin_right">6</property>
     <property name="xalign">0</property>
     <property name="pixbuf">svx/res/symphony/lpspacing-1_5.png</property>
-    <property name="icon-size">1</property>
-  </object>
-  <object class="GtkImage" id="image_spacing_2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">6</property>
-    <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/lpspacing-2.png</property>
     <property name="icon-size">1</property>
   </object>
 </interface>
