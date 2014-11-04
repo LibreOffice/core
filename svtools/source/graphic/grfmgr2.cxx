@@ -34,7 +34,6 @@
 #include "grfcache.hxx"
 #include <svtools/grfmgr.hxx>
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_map.hpp>
 
 // - defines -
 
@@ -48,7 +47,8 @@
 
 
 GraphicManager::GraphicManager( sal_uLong nCacheSize, sal_uLong nMaxObjCacheSize ) :
-        mpCache( new GraphicCache( nCacheSize, nMaxObjCacheSize ) )
+    mnUsedSize(0),
+    mpCache( new GraphicCache( nCacheSize, nMaxObjCacheSize ) )
 {
 }
 
@@ -156,6 +156,8 @@ void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubst
 
     maObjList.push_back( (GraphicObject*)&rObj );
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
+    if( !rObj.IsSwappedOut() )
+        mnUsedSize += rObj.GetSizeBytes();
 }
 
 void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
@@ -169,11 +171,14 @@ void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
         }
     }
     assert(false); // surely it should have been registered?
+    if( !rObj.IsSwappedOut() )
+        mnUsedSize -= rObj.GetSizeBytes();
 }
 
 void GraphicManager::ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj )
 {
     mpCache->GraphicObjectWasSwappedOut( rObj );
+    mnUsedSize -= rObj.GetSizeBytes();
 }
 
 OString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
@@ -194,29 +199,6 @@ namespace
 
 void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore)
 {
-    // get the currently used memory footprint of all swapped in bitmap graphics
-    // of this graphic manager. Remember candidates in a vector. The size in bytes is
-    // already available, thus this loop is not expensive to execute
-    sal_uLong nUsedSize(0);
-    GraphicObject* pObj = 0;
-    std::vector< GraphicObject* > aCandidates;
-    boost::unordered_map<GraphicObject *, size_t> sizes;
-
-    for (size_t i = 0, n = maObjList.size(); i < n; ++i)
-    {
-        pObj = maObjList[i];
-        if (pObj->meType == GRAPHIC_BITMAP && !pObj->IsSwappedOut() && pObj->GetSizeBytes())
-        {
-            size_t const nSize = pObj->GetSizeBytes();
-            nUsedSize += nSize;
-            if( pObj != pGraphicToIgnore )
-            {
-                aCandidates.push_back(pObj);
-                sizes.insert(std::make_pair(pObj, nSize));
-            }
-        }
-    }
-
     // detect maximum allowed memory footprint. Use the user-settings of MaxCacheSize (defaulted
     // to 20MB) and add a decent multiplicator (experimented to find one). Limit to
     // a useful maximum for 32Bit address space
@@ -232,30 +214,33 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
     // calc max allowed cache size
     const sal_uLong nMaxCacheSize(::std::min(GetMaxCacheSize() * aMultiplicator, aMaxSize32Bit));
 
-    if(nUsedSize >= nMaxCacheSize && !aCandidates.empty())
+    if(mnUsedSize >= nMaxCacheSize)
     {
+        // Copy the object list for now, because maObjList can change in the meantime unexpectedly.
+        std::vector< GraphicObject* > aCandidates(maObjList.begin(), maObjList.end());
         // if we use more currently, sort by last DataChangeTimeStamp
         // sort by DataChangeTimeStamp so that the oldest get removed first
         ::std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
 
-        for(sal_uInt32 a(0); nUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
+        for(sal_uInt32 a(0); mnUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
         {
             // swap out until we have no more or the goal to use less than nMaxCacheSize
             // is reached
-            pObj = aCandidates[a];
+            GraphicObject* pObj = aCandidates[a];
+            if( pObj == pGraphicToIgnore )
+            {
+                continue;
+            }
             if (std::find(maObjList.begin(), maObjList.end(), pObj) == maObjList.end())
             {
                 // object has been deleted when swapping out another one
-                nUsedSize = (sizes[pObj] < nUsedSize) ? nUsedSize - sizes[pObj] : 0;
                 continue;
             }
-            const sal_uLong nSizeBytes(pObj->GetSizeBytes());
 
             // do not swap out when we have less than 16KB data objects
-            if(nSizeBytes >= (16 * 1024))
+            if(pObj->GetSizeBytes() >= (16 * 1024))
             {
                 pObj->FireSwapOutRequest();
-                nUsedSize = (nSizeBytes < nUsedSize) ? nUsedSize - nSizeBytes : 0;
             }
         }
     }
@@ -269,6 +254,7 @@ bool GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Gr
 void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
     mpCache->GraphicObjectWasSwappedIn( rObj );
+    mnUsedSize += rObj.GetSizeBytes();
 }
 
 bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
