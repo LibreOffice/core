@@ -23,7 +23,7 @@
 class SVT_DLLPUBLIC FileChangedChecker
 {
 private :
-    Timer                    mTimer;
+    Idle                    mIdle;
     OUString            mFileName;
     TimeValue                mLastModTime;
     ::boost::function0<void> mpCallback;

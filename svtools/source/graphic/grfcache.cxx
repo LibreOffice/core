@@ -32,7 +32,6 @@
 #include <rtl/crc.h>
 #include <boost/scoped_ptr.hpp>
 
-#define RELEASE_TIMEOUT 10000
 #define MAX_BMP_EXTENT  4096
 
 static const char aHexData[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -825,9 +824,9 @@ GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDispla
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
     mnUsedDisplaySize       ( 0UL )
 {
-    maReleaseTimer.SetTimeoutHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
-    maReleaseTimer.SetTimeout( RELEASE_TIMEOUT );
-    maReleaseTimer.Start();
+    maReleaseIdle.SetIdleHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
+    maReleaseIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maReleaseIdle.Start();
 }
 
 GraphicCache::~GraphicCache()

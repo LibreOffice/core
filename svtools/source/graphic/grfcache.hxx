@@ -39,7 +39,7 @@ private:
     typedef std::list< GraphicCacheEntry* > GraphicCacheEntryList;
     typedef std::list< GraphicDisplayCacheEntry* > GraphicDisplayCacheEntryList;
 
-    Timer                   maReleaseTimer;
+    Idle                    maReleaseIdle;
     GraphicCacheEntryList   maGraphicCache;
     GraphicDisplayCacheEntryList maDisplayCache;
     sal_uLong               mnReleaseTimeoutSeconds;
