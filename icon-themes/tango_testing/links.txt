@@ -30,3 +30,7 @@ cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
 cmd/lc_spellingandgrammardialog.png cmd/lc_spelldialog.png
+
+# paragraph line spacing
+cmd/lc_linespacing.png cmd/lc_spacepara15.png
+cmd/sc_linespacing.png cmd/sc_spacepara15.png

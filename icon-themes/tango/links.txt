@@ -628,3 +628,7 @@ cmd/zh-TW/sc_bold.png cmd/sc_bold.png
 cmd/zh-TW/sc_italic.png cmd/sc_italic.png
 cmd/zh-TW/sc_underline.png cmd/sc_underline.png
 cmd/zh-TW/sc_underlinedouble.png cmd/sc_underlinedouble.png
+
+# paragraph line spacing
+cmd/lc_linespacing.png cmd/lc_spacepara15.png
+cmd/sc_linespacing.png cmd/sc_spacepara15.png
