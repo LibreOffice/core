@@ -19,10 +19,10 @@
 
 #include "navicfg.hxx"
 
-//! #define CFGPATH_NAVIPI          "Office.Calc/Navigator"
+//TODO: #define CFGPATH_NAVIPI          "Office.Calc/Navigator"
 
 ScNavipiCfg::ScNavipiCfg() :
-//! ConfigItem( OUString( CFGPATH_NAVIPI ) ),
+//TODO: ConfigItem( OUString( CFGPATH_NAVIPI ) ),
     nListMode(0),
     nDragMode(0),
     nRootType(0)
@@ -34,7 +34,7 @@ void ScNavipiCfg::SetListMode(sal_uInt16 nNew)
     if ( nListMode != nNew )
     {
         nListMode = nNew;
-//!     SetModified();
+//TODO:     SetModified();
     }
 }
 
@@ -43,7 +43,7 @@ void ScNavipiCfg::SetDragMode(sal_uInt16 nNew)
     if ( nDragMode != nNew )
     {
         nDragMode = nNew;
-//!     SetModified();
+//TODO:     SetModified();
     }
 }
 
@@ -52,7 +52,7 @@ void ScNavipiCfg::SetRootType(sal_uInt16 nNew)
     if ( nRootType != nNew )
     {
         nRootType = nNew;
-//!     SetModified();
+//TODO:     SetModified();
     }
 }
 

@@ -92,8 +92,8 @@ private:
     SfxItemSet  aArrowSet;
     SfxItemSet  aToTabSet;
     SfxItemSet  aFromTabSet;
-    SfxItemSet  aCircleSet;         //! einzeln ?
-    sal_uInt16      nMaxLevel;
+    SfxItemSet  aCircleSet;         //TODO: individually ?
+    sal_uInt16  nMaxLevel;
 
 public:
                 ScDetectiveData( SdrModel* pModel );
@@ -500,9 +500,9 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     SfxItemSet& rAttrSet = bFromOtherTab ? rData.GetFromTabSet() : rData.GetArrowSet();
 
     if (bArea && !bFromOtherTab)
-        rAttrSet.Put( XLineWidthItem( 50 ) );               // Bereich
+        rAttrSet.Put( XLineWidthItem( 50 ) );               // range
     else
-        rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
+        rAttrSet.Put( XLineWidthItem( 0 ) );                // single reference
 
     ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
     rAttrSet.Put( XLineColorItem( OUString(), Color( nColorData ) ) );
@@ -511,7 +511,7 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
     SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
+    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //TODO: needed ???
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 
     pArrow->SetLayer( SC_LAYER_INTERN );
@@ -565,9 +565,9 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
 
     SfxItemSet& rAttrSet = rData.GetToTabSet();
     if (bArea)
-        rAttrSet.Put( XLineWidthItem( 50 ) );               // Bereich
+        rAttrSet.Put( XLineWidthItem( 50 ) );               // range
     else
-        rAttrSet.Put( XLineWidthItem( 0 ) );                // einzelne Referenz
+        rAttrSet.Put( XLineWidthItem( 0 ) );                // single reference
 
     ColorData nColorData = ( bRed ? GetErrorColor() : GetArrowColor() );
     rAttrSet.Put( XLineColorItem( OUString(), Color( nColorData ) ) );
@@ -576,7 +576,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     aTempPoly.append(basegfx::B2DPoint(aStartPos.X(), aStartPos.Y()));
     aTempPoly.append(basegfx::B2DPoint(aEndPos.X(), aEndPos.Y()));
     SdrPathObj* pArrow = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aTempPoly));
-    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //! noetig ???
+    pArrow->NbcSetLogicRect(Rectangle(aStartPos,aEndPos));  //TODO: needed ???
 
     pArrow->SetMergedItemSetAndBroadcast(rAttrSet);
 

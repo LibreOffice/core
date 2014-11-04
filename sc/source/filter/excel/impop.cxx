@@ -591,7 +591,7 @@ void ImportExcel::Colwidth( void )
 
     aIn >> nColFirst >> nColLast >> nColWidth;
 
-//! TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
+//TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
 //   if( nColLast > MAXCOL )
 //       nColLast = static_cast<sal_uInt16>(MAXCOL);
 
