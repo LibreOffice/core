@@ -34,7 +34,7 @@ class SdrCircObjGeoData : public SdrTextObjGeoData
 {
 public:
     long                        nStartAngle;
-    long                        nEndWink;
+    long                        nEndAngle;
 };
 
 // class SdrCircObj
@@ -54,7 +54,7 @@ protected:
 
     SdrObjKind                  meCircleKind;
     long                        nStartAngle;
-    long                        nEndWink;
+    long                        nEndAngle;
 private:
      SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
     SVX_DLLPRIVATE void ImpSetCreateParams(SdrDragStat& rStat) const;
@@ -123,7 +123,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 public:
     long GetStartWink() const { return nStartAngle; }
-    long GetEndWink() const { return nEndWink; }
+    long GetEndWink() const { return nEndAngle; }
 
 };
 
