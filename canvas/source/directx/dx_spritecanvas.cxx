@@ -45,11 +45,7 @@
 #include "dx_winstuff.hxx"
 #include "dx_spritecanvas.hxx"
 
-#if DIRECTX_VERSION < 0x0900
-# define CANVAS_TECH "DX5"
-#else
-# define CANVAS_TECH "DX9"
-#endif
+#define CANVAS_TECH "DX9"
 
 #define SPRITECANVAS_SERVICE_NAME        "com.sun.star.rendering.SpriteCanvas."      CANVAS_TECH
 #define SPRITECANVAS_IMPLEMENTATION_NAME "com.sun.star.comp.rendering.SpriteCanvas." CANVAS_TECH
