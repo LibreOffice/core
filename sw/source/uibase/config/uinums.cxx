@@ -398,7 +398,8 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         {
             sal_uInt16 nWhich, nVers;
             rStream.ReadUInt16( nWhich ).ReadUInt16( nVers );
-            aItems.push_back( GetDfltAttr( nWhich )->Create( rStream, nVers ) );
+            if ( ( nWhich >= POOLATTR_BEGIN ) && ( nWhich < POOLATTR_END ) )
+                aItems.push_back( GetDfltAttr( nWhich )->Create( rStream, nVers ) );
         }
     }
 
