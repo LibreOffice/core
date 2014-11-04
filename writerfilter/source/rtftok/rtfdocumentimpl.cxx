@@ -2394,6 +2394,72 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     return 0;
 }
 
+
+static  int lcl_getNumberFormat(int nParam)
+{
+    static const int nMap[] =
+    {
+        NS_ooxml::LN_Value_ST_NumberFormat_decimal,
+        NS_ooxml::LN_Value_ST_NumberFormat_upperRoman,
+        NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman,
+        NS_ooxml::LN_Value_ST_NumberFormat_upperLetter,
+        NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter,
+        NS_ooxml::LN_Value_ST_NumberFormat_ordinal,
+        NS_ooxml::LN_Value_ST_NumberFormat_cardinalText,
+        NS_ooxml::LN_Value_ST_NumberFormat_ordinalText,
+        NS_ooxml::LN_Value_ST_NumberFormat_none,     // Undefined in RTF 1.8 spec.
+        NS_ooxml::LN_Value_ST_NumberFormat_none,     // Undefined in RTF 1.8 spec.
+        NS_ooxml::LN_Value_ST_NumberFormat_ideographDigital,
+        NS_ooxml::LN_Value_ST_NumberFormat_japaneseCounting,
+        NS_ooxml::LN_Value_ST_NumberFormat_aiueo,
+        NS_ooxml::LN_Value_ST_NumberFormat_iroha,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalHalfWidth,
+        NS_ooxml::LN_Value_ST_NumberFormat_japaneseLegal,
+        NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand ,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth2,
+        NS_ooxml::LN_Value_ST_NumberFormat_aiueoFullWidth,
+        NS_ooxml::LN_Value_ST_NumberFormat_irohaFullWidth,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalZero,
+        NS_ooxml::LN_Value_ST_NumberFormat_bullet,
+        NS_ooxml::LN_Value_ST_NumberFormat_ganada,
+        NS_ooxml::LN_Value_ST_NumberFormat_chosung,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedFullstop,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedParen,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese,
+        NS_ooxml::LN_Value_ST_NumberFormat_ideographEnclosedCircle,
+        NS_ooxml::LN_Value_ST_NumberFormat_ideographTraditional,
+        NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiac,
+        NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiacTraditional,
+        NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCounting,
+        NS_ooxml::LN_Value_ST_NumberFormat_ideographLegalTraditional,
+        NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCountingThousand,
+        NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseDigital,
+        NS_ooxml::LN_Value_ST_NumberFormat_chineseCounting,
+        NS_ooxml::LN_Value_ST_NumberFormat_chineseLegalSimplified,
+        NS_ooxml::LN_Value_ST_NumberFormat_chineseCountingThousand,
+        NS_ooxml::LN_Value_ST_NumberFormat_decimal,
+        NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital,
+        NS_ooxml::LN_Value_ST_NumberFormat_koreanCounting,
+        NS_ooxml::LN_Value_ST_NumberFormat_koreanLegal,
+        NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2,
+        NS_ooxml::LN_Value_ST_NumberFormat_hebrew1,
+        NS_ooxml::LN_Value_ST_NumberFormat_arabicAlpha,
+        NS_ooxml::LN_Value_ST_NumberFormat_hebrew2,
+        NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad
+    };
+    const int nLen = sizeof(nMap)/sizeof(nMap[0]);
+    int nValue = 0;
+    if ( nParam >=0 && nParam < nLen ) {
+        nValue = nMap[nParam];
+    } else {    // 255 and the other cases.
+        nValue = NS_ooxml::LN_Value_ST_NumberFormat_none;
+    }
+    return nValue;
+}
+
+
 // Checks if rName is contained at least once in rProperties as a key.
 bool lcl_findPropertyName(const std::vector<beans::PropertyValue>& rProperties, const OUString& rName)
 {
@@ -3453,6 +3519,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     case RTF_LEVELNFC:
         nSprm = NS_ooxml::LN_CT_Lvl_numFmt;
+        pIntValue.reset(new RTFValue(lcl_getNumberFormat(nParam)));
         break;
     case RTF_LEVELSTARTAT:
         nSprm = NS_ooxml::LN_CT_Lvl_start;

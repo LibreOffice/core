@@ -110,6 +110,29 @@ protected:
     }
 #endif
 
+    sal_Bool CjkNumberedListTestHelper(sal_Int16 &nValue)
+    {
+        sal_Bool isNumber;
+        uno::Reference<text::XTextRange> xPara(getParagraph(1));
+        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+        if (!isNumber) {
+            return sal_False;
+        }
+        uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Sequence< beans::PropertyValue > aPropertyValue;
+        xLevels->getByIndex(0) >>= aPropertyValue;
+        int j;
+        for( j = 0 ; j< aPropertyValue.getLength() ; j++) {
+            beans::PropertyValue aProp= aPropertyValue[j];
+            if (aProp.Name == "NumberingType") {
+                nValue = aProp.Value.get<sal_Int16>();
+                return sal_True;
+            }
+        }
+        return sal_False;
+
+    }
     AllSettings m_aSavedSettings;
 };
 
@@ -2012,6 +2035,84 @@ DECLARE_RTFIMPORT_TEST(testFdo82512, "fdo82512.rtf")
     // This was style::BreakType_NONE, column break was before the 3rd paragraph, not before the 2nd one.
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
+
+DECLARE_RTFIMPORT_TEST(testCjklist12, "cjklist12.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::AIU_HALFWIDTH_JA, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist13, "cjklist13.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::IROHA_HALFWIDTH_JA, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist16, "cjklist16.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_TRADITIONAL_JA, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist20, "cjklist20.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::AIU_FULLWIDTH_JA, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist21, "cjklist21.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::IROHA_FULLWIDTH_JA, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist24, "cjklist24.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::HANGUL_SYLLABLE_KO, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist25, "cjklist25.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::HANGUL_JAMO_KO, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist30, "cjklist30.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist31, "cjklist31.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist34, "cjklist34.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
+}
+
+DECLARE_RTFIMPORT_TEST(testCjklist38, "cjklist38.rtf")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH, numFormat);
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
