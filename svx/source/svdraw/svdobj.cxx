@@ -1149,7 +1149,7 @@ void SdrObject::ImpForcePlusData()
         pPlusData = NewPlusData();
 }
 
-OUString SdrObject::GetWinkStr(long nWink, bool bNoDegChar) const
+OUString SdrObject::GetAngleStr(long nWink, bool bNoDegChar) const
 {
     OUString aStr;
     if (pModel!=NULL) {

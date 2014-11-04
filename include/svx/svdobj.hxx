@@ -422,7 +422,7 @@ protected:
 
     void ImpForcePlusData();
 
-    OUString GetWinkStr(long nWink, bool bNoDegChar = false) const;
+    OUString GetAngleStr(long nWink, bool bNoDegChar = false) const;
     OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
 
     // bNotMyself=true means: set only ObjList to dirty, don't mark this object as dirty.

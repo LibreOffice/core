@@ -585,7 +585,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
                 nWink = pU->nEnd;
             }
 
-            aBuf.append(GetWinkStr(nWink,false));
+            aBuf.append(GetAngleStr(nWink,false));
             aBuf.append(')');
         }
 
@@ -603,7 +603,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             OUStringBuffer aBuf(aStr);
             aBuf.appendAscii(" (");
-            aBuf.append(GetWinkStr(nWink,false));
+            aBuf.append(GetAngleStr(nWink,false));
             aBuf.append(')');
 
             return aBuf.makeStringAndClear();
