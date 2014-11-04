@@ -187,6 +187,10 @@ void ThreadPool::waitUntilEmpty()
 {
     osl::ResettableMutexGuard aGuard( maGuard );
 
+    // Avoid deadlock when there are no working threads
+    if( maTasks.empty() )
+        return;
+
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
         ThreadTask *pTask;
