@@ -608,7 +608,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
         if (maTabs[*itr])
             maTabs[*itr]->UpdateSelectionFunction(aData, aMark);
 
-            //! rMark an UpdateSelectionFunction uebergeben !!!!!
+            //TODO: pass rMark to UpdateSelection Function !!!!!
 
     if (!aData.bError)
         switch (eFunc)
@@ -943,7 +943,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCCOL nOtherCol, SCTAB nOtherTab,
                                     SCROW nMaxRow, SCCOLROW* pOtherRows )
 {
-    //! optimieren mit Iterator oder so
+    //TODO: optimize e.g. with iterator?
 
     sal_uLong nDif = 0;
     sal_uLong nUsed = 0;
@@ -992,7 +992,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
     {
         nMaxCont = SC_DOCCOMP_COLUMNS;      // 10 Spalten
         nMinGood = SC_DOCCOMP_MINGOOD;
-        //! Extra Durchgang mit nMinGood = 0 ????
+        //TODO: another pass with nMinGood = 0 ????
     }
     else
     {
@@ -1154,7 +1154,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             SCROW nThisRow;
             sal_uLong n1,n2;    // fuer AppendDeleteRange
 
-            //! ein Progress ueber alle Tabellen ???
+            //TODO: one Progress through all tables ???
             OUString aTabName;
             GetName( nThisTab, aTabName );
             OUString aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
@@ -1177,7 +1177,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             //  2) Original Spalten vergleichen                         (pOtherCols)
             //     mit dieser Spaltenreihenfolge Zeilen vergleichen     (pOtherRows)
 
-            //! Spalten vergleichen zweimal mit unterschiedlichem nMinGood ???
+            //TODO: compare columns twice with differing nMinGood ???
 
             // 1
             FindOrder( pTempRows.get(), nThisEndRow, nOtherEndRow, false,

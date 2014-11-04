@@ -99,7 +99,7 @@ bool ScImportParam::operator==( const ScImportParam& rOther ) const
             bSql        == rOther.bSql &&
             nType       == rOther.nType );
 
-    //! nQuerySh und pConnection sind gleich ?
+    //TODO: are nQuerySh and pConnection equal ?
 }
 
 // struct ScConsolidateParam:

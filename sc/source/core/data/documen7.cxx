@@ -245,7 +245,7 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
     }
 
     // Repaint for conditional formats containing relative references.
-    //! This is _THE_ bottle neck!
+    //TODO: This is _THE_ bottle neck!
     TableContainer::iterator itr = maTabs.begin();
     for(; itr != maTabs.end(); ++itr)
     {
@@ -406,8 +406,8 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
     bool bOldIdleEnabled = IsIdleEnabled();
     EnableIdle(false);
     bool bOldAutoCalc = GetAutoCalc();
-    //! _nicht_ SetAutoCalc( true ) weil das evtl. CalcFormulaTree( true )
-    //! aufruft, wenn vorher disabled war und bHasForcedFormulas gesetzt ist
+    //ATTENTION: _not_ SetAutoCalc( true ) because this might call CalcFormulaTree( true )
+    //ATTENTION: if it was disabled before and bHasForcedFormulas is set
     bAutoCalc = true;
     if ( bHardRecalcState )
         CalcAll();

@@ -472,7 +472,7 @@ ScViewCfg::ScViewCfg() :
     }
     aDisplayItem.SetCommitLink( LINK( this, ScViewCfg, DisplayCommitHdl ) );
 
-    ScGridOptions aGrid = GetGridOptions();     //! initialization necessary?
+    ScGridOptions aGrid = GetGridOptions();     //TODO: initialization necessary?
     aNames = GetGridPropertyNames();
     aValues = aGridItem.GetProperties(aNames);
     aGridItem.EnableNotification(aNames);

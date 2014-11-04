@@ -671,7 +671,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             bNeg = !bNeg;
                             break;
                         case '.':
-                        case ',':                   //!
+                        case ',':
                             eS = S_POST;
                             fFracPos = 0.1;
                             break;
@@ -691,7 +691,7 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     switch( cAkt )
                     {
                         case '.':
-                        case ',':                   //!
+                        case ',':
                             eS = S_POST;
                             fFracPos = 0.1;
                             break;

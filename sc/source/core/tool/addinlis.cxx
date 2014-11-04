@@ -74,7 +74,7 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
     return pLst;
 }
 
-//! move to some container object?
+//TODO: move to some container object?
 void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 {
     ::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin();
@@ -108,7 +108,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
                                 throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard; //! or generate a UserEvent
+    SolarMutexGuard aGuard; //TODO: or generate a UserEvent
 
     aResult = aEvent.Value; // store result
 
