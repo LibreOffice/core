@@ -456,7 +456,7 @@ static void deflateZipEntry(ZipOutputEntry *pZipEntry,
     pZipEntry->closeEntry();
 }
 
-class DeflateThread: public osl::Thread
+class DeflateThread: public comphelper::ThreadTask
 {
     ZipOutputEntry *mpEntry;
     uno::Reference< io::XInputStream > mxInStream;
@@ -469,7 +469,7 @@ public:
     {}
 
 private:
-    virtual void SAL_CALL run() SAL_OVERRIDE
+    virtual void doWork() SAL_OVERRIDE
     {
         deflateZipEntry(mpEntry, mxInStream);
         mxInStream.clear();

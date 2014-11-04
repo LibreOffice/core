@@ -41,6 +41,7 @@ ZipOutputStream::ZipOutputStream( const uno::Reference < io::XOutputStream > &xO
 : m_xStream(xOStream)
 , m_aChucker(xOStream)
 , m_pCurrentEntry(NULL)
+, m_rSharedThreadPool(comphelper::ThreadPool::getSharedOptimalPool())
 {
 }
 
@@ -64,11 +65,10 @@ void ZipOutputStream::setEntry( ZipEntry *pEntry )
     }
 }
 
-void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, osl::Thread *pThread )
+void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThread )
 {
-    m_aWorkers.push_back(pThread);
+    m_rSharedThreadPool.pushTask(pThread);
     m_aEntries.push_back(pEntry);
-    pThread->create();
 }
 
 void ZipOutputStream::rawWrite( const Sequence< sal_Int8 >& rBuffer )
@@ -96,12 +96,7 @@ void ZipOutputStream::finish()
     assert(!m_aZipList.empty() && "Zip file must have at least one entry!");
 
     // Wait for all threads to finish & write
-    for (size_t i = 0; i < m_aWorkers.size(); i++)
-    {
-        m_aWorkers[i]->join();
-        delete m_aWorkers[i];
-    }
-
+    m_rSharedThreadPool.waitUntilEmpty();
     for (size_t i = 0; i < m_aEntries.size(); i++)
     {
         writeLOC(m_aEntries[i]->getZipEntry(), m_aEntries[i]->isEncrypt());

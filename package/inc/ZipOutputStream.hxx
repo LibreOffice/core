@@ -23,7 +23,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <ByteChucker.hxx>
-#include <osl/thread.hxx>
+#include <comphelper/threadpool.hxx>
 
 #include <vector>
 
@@ -38,7 +38,7 @@ class ZipOutputStream
 
     ByteChucker         m_aChucker;
     ZipEntry            *m_pCurrentEntry;
-    std::vector< osl::Thread* > m_aWorkers;
+    comphelper::ThreadPool &m_rSharedThreadPool;
     std::vector< ZipOutputEntry* > m_aEntries;
 
 public:
@@ -46,7 +46,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
-    void addDeflatingThread( ZipOutputEntry *pEntry, osl::Thread *pThread );
+    void addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThreadTask );
 
     void writeLOC( ZipEntry *pEntry, bool bEncrypt = false )
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
