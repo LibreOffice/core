@@ -99,7 +99,7 @@ ThreadPool::ThreadPool( sal_Int32 nWorkers ) :
     for( sal_Int32 i = 0; i < nWorkers; i++ )
         maWorkers.push_back( new ThreadWorker( this ) );
 
-    maTasksComplete.reset();
+    maTasksComplete.set();
 
     osl::MutexGuard aGuard( maGuard );
     for( size_t i = 0; i < maWorkers.size(); i++ )
@@ -186,10 +186,6 @@ void ThreadPool::stopWork()
 void ThreadPool::waitUntilEmpty()
 {
     osl::ResettableMutexGuard aGuard( maGuard );
-
-    // Avoid deadlock when there are no working threads
-    if( maTasks.empty() )
-        return;
 
     if( maWorkers.empty() )
     { // no threads at all -> execute the work in-line
