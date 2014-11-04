@@ -58,6 +58,7 @@ private:
 
     ListBox*                mpLineDist;
 
+    FixedText*              mpLineDistLabel;
     MetricField*            mpLineDistAtPercentBox;
     MetricField*            mpLineDistAtMetricBox;
 

@@ -62,6 +62,8 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     mpSpacing2Button = get<PushButton>("spacing_2");
 
     mpLineDist = get<ListBox>("line_dist");
+
+    mpLineDistLabel = get<FixedText>("value_label");
     mpLineDistAtPercentBox = get<MetricField>("percent_box");
     mpLineDistAtMetricBox = get<MetricField>("metric_box");
 
@@ -171,12 +173,14 @@ void ParaLineSpacingControl::initialize()
     else if( eState == SfxItemState::DISABLED )
     {
         mpLineDist->Disable();
+        mpLineDistLabel->Disable();
         mpActLineDistFld->Disable();
         mpActLineDistFld->SetText("");
 
     }
     else
     {
+        mpLineDistLabel->Disable();
         mpActLineDistFld->Disable();
         mpActLineDistFld->SetText("");
         mpLineDist->SetNoSelection();
@@ -230,6 +234,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             else
                 mpLineDistAtPercentBox->Hide();
 
+            mpLineDistLabel->Disable();
             mpActLineDistFld->Show();
             mpActLineDistFld->Disable();
             mpActLineDistFld->SetText("");
@@ -244,6 +249,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             if (mpLineDistAtMetricBox->GetText().isEmpty())
                 mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0));
 
+            mpLineDistLabel->Enable();
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
             break;
@@ -257,6 +263,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             if (mpLineDistAtMetricBox->GetText().isEmpty())
                 mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0), FUNIT_TWIP);
 
+            mpLineDistLabel->Enable();
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
             break;
@@ -269,6 +276,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             if (mpLineDistAtPercentBox->GetText().isEmpty())
                 mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(100), FUNIT_TWIP);
 
+            mpLineDistLabel->Enable();
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
             break;
@@ -283,6 +291,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             if (mpLineDistAtMetricBox->GetValue() != nTemp)
                 SetMetricValue(*mpLineDistAtMetricBox, FIX_DIST_DEF, SFX_MAPUNIT_TWIP);
 
+            mpLineDistLabel->Enable();
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
         }
