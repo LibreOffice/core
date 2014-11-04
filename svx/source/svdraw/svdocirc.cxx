@@ -110,7 +110,7 @@ TYPEINIT1(SdrCircObj,SdrRectObj);
 
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
 {
-    nStartWink=0;
+    nStartAngle=0;
     nEndWink=36000;
     meCircleKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
@@ -119,7 +119,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind)
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
     SdrRectObj(rRect)
 {
-    nStartWink=0;
+    nStartAngle=0;
     nEndWink=36000;
     meCircleKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
@@ -129,7 +129,7 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewSta
     SdrRectObj(rRect)
 {
     long nWinkDif=nNewEndWink-nNewStartWink;
-    nStartWink=NormAngle360(nNewStartWink);
+    nStartAngle=NormAngle360(nNewStartWink);
     nEndWink=NormAngle360(nNewEndWink);
     if (nWinkDif==36000) nEndWink+=nWinkDif; // full circle
     meCircleKind=eNewKind;
@@ -198,7 +198,7 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
         bNeed = eFill != drawing::FillStyle_NONE && eFill != drawing::FillStyle_SOLID;
     }
 
-    if(!bNeed && meCircleKind != OBJ_CIRC && nStartWink == nEndWink)
+    if(!bNeed && meCircleKind != OBJ_CIRC && nStartAngle == nEndWink)
         bNeed = true; // otherwise we're drawing a full circle
 
     return bNeed;
@@ -279,7 +279,7 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
 
 void SdrCircObj::RecalcXPoly()
 {
-    const basegfx::B2DPolygon aPolyCirc(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));
+    const basegfx::B2DPolygon aPolyCirc(ImpCalcXPolyCirc(meCircleKind, aRect, nStartAngle, nEndWink));
     mpXPoly = new XPolygon(aPolyCirc);
 }
 
@@ -346,7 +346,7 @@ SdrCircObj* SdrCircObj::Clone() const
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
 {
-    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));
+    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartAngle, nEndWink));
     return basegfx::B2DPolyPolygon(aCircPolygon);
 }
 
@@ -405,7 +405,7 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
     switch (nHdlNum)
     {
         case 0:
-            aPnt = GetWinkPnt(aRect,nStartWink);
+            aPnt = GetWinkPnt(aRect,nStartAngle);
             eLocalKind = HDL_CIRC;
             nPNum = 1;
             break;
@@ -538,7 +538,7 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 
         if(1 == rDrag.GetHdl()->GetPointNum())
         {
-            nStartWink = nWink;
+            nStartAngle = nWink;
         }
         else if(2 == rDrag.GetHdl()->GetPointNum())
         {
@@ -597,7 +597,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
         if(bWink)
         {
-            const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartWink : nEndWink);
+            const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartAngle : nEndWink);
 
             OUString aStr;
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
@@ -699,7 +699,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(pU->aR);
     aRect=pU->aR; // for ObjName
     ImpJustifyRect(aRect);
-    nStartWink=pU->nStart;
+    nStartAngle=pU->nStart;
     nEndWink=pU->nEnd;
     SetBoundRectDirty();
     bSnapRectDirty=true;
@@ -734,7 +734,7 @@ bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
         if (bRet) {
             aRect=pU->aR;
             ImpJustifyRect(aRect);
-            nStartWink=pU->nStart;
+            nStartAngle=pU->nStart;
             nEndWink=pU->nEnd;
         }
     }
@@ -825,7 +825,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
             // That, however, is pretty bad (because of forced "hard" formatting).
             // Alternatively, we could implement a bMirrored flag (maybe even
             // a more general one, e. g. for mirrored text, ...).
-            long nS0=nStartWink;
+            long nS0=nStartAngle;
             long nE0=nEndWink;
             if (bNoShearRota) {
                 // the RectObj already mirrors at VMirror because of a 180deg rotation
@@ -853,7 +853,7 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
                 }
             }
             long nWinkDif=nE0-nS0;
-            nStartWink=NormAngle360(nS0);
+            nStartAngle=NormAngle360(nS0);
             nEndWink  =NormAngle360(nE0);
             if (nWinkDif==36000) nEndWink+=nWinkDif; // full circle
         }
@@ -881,7 +881,7 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
         double a;
         // starting point
-        a=nStartWink*nPi180;
+        a=nStartAngle*nPi180;
         aTmpPt1=Point(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
         if (nWdt==0) aTmpPt1.X()=0;
         if (nHgt==0) aTmpPt1.Y()=0;
@@ -919,10 +919,10 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         aTmpPt1-=aCenter;
         aTmpPt2-=aCenter;
         // because it's mirrored, the angles are swapped, too
-        nStartWink=GetAngle(aTmpPt2);
+        nStartAngle=GetAngle(aTmpPt2);
         nEndWink  =GetAngle(aTmpPt1);
-        long nWinkDif=nEndWink-nStartWink;
-        nStartWink=NormAngle360(nStartWink);
+        long nWinkDif=nEndWink-nStartAngle;
+        nStartAngle=NormAngle360(nStartAngle);
         nEndWink  =NormAngle360(nEndWink);
         if (nWinkDif==36000) nEndWink+=nWinkDif; // full circle
     }
@@ -939,7 +939,7 @@ void SdrCircObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrRectObj::SaveGeoData(rGeo);
     SdrCircObjGeoData& rCGeo=static_cast<SdrCircObjGeoData&>(rGeo);
-    rCGeo.nStartWink=nStartWink;
+    rCGeo.nStartAngle=nStartAngle;
     rCGeo.nEndWink  =nEndWink;
 }
 
@@ -947,7 +947,7 @@ void SdrCircObj::RestGeoData(const SdrObjGeoData& rGeo)
 {
     SdrRectObj::RestGeoData(rGeo);
     const SdrCircObjGeoData& rCGeo=static_cast<const SdrCircObjGeoData&>(rGeo);
-    nStartWink=rCGeo.nStartWink;
+    nStartAngle=rCGeo.nStartAngle;
     nEndWink  =rCGeo.nEndWink;
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
@@ -965,9 +965,9 @@ void SdrCircObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
     rRect=aRect;
     if (meCircleKind!=OBJ_CIRC) {
-        const Point aPntStart(GetWinkPnt(aRect,nStartWink));
+        const Point aPntStart(GetWinkPnt(aRect,nStartAngle));
         const Point aPntEnd(GetWinkPnt(aRect,nEndWink));
-        long a=nStartWink;
+        long a=nStartAngle;
         long e=nEndWink;
         rRect.Left  ()=aRect.Right();
         rRect.Right ()=aRect.Left();
@@ -1054,7 +1054,7 @@ sal_uInt32 SdrCircObj::GetSnapPointCount() const
 Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
 {
     switch (i) {
-        case 1 : return GetWinkPnt(aRect,nStartWink);
+        case 1 : return GetWinkPnt(aRect,nStartAngle);
         case 2 : return GetWinkPnt(aRect,nEndWink);
         default: return aRect.Center();
     }
@@ -1088,12 +1088,12 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     sal_Int32 nNewEnd = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
     bool bKindChg = meCircleKind != eNewKind;
-    bool bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
+    bool bWinkChg = nNewStart != nStartAngle || nNewEnd != nEndWink;
 
     if(bKindChg || bWinkChg)
     {
         meCircleKind = eNewKind;
-        nStartWink = nNewStart;
+        nStartAngle = nNewStart;
         nEndWink = nNewEnd;
 
         if(bKindChg || (meCircleKind != OBJ_CIRC && bWinkChg))
@@ -1120,7 +1120,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     sal_Int32 nOldStartWink = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
     sal_Int32 nOldEndWink = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
-    if(eNewKindA != eOldKindA || nStartWink != nOldStartWink || nEndWink != nOldEndWink)
+    if(eNewKindA != eOldKindA || nStartAngle != nOldStartWink || nEndWink != nOldEndWink)
     {
         // since SetItem() implicitly calls ImpSetAttrToCircInfo()
         // setting the item directly is necessary here.
@@ -1129,9 +1129,9 @@ void SdrCircObj::ImpSetCircInfoToAttr()
             GetProperties().SetObjectItemDirect(SdrCircKindItem(eNewKindA));
         }
 
-        if(nStartWink != nOldStartWink)
+        if(nStartAngle != nOldStartWink)
         {
-            GetProperties().SetObjectItemDirect(makeSdrCircStartAngleItem(nStartWink));
+            GetProperties().SetObjectItemDirect(makeSdrCircStartAngleItem(nStartAngle));
         }
 
         if(nEndWink != nOldEndWink)
@@ -1147,7 +1147,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
 SdrObject* SdrCircObj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     const bool bFill(OBJ_CARC == meCircleKind ? sal_False : sal_True);
-    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));
+    const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartAngle, nEndWink));
     SdrObject* pRet = ImpConvertMakeObj(basegfx::B2DPolyPolygon(aCircPolygon), bFill, bBezier);
 
     if(bAddText)

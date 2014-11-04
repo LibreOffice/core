@@ -33,7 +33,7 @@ namespace sdr { namespace properties {
 class SdrCircObjGeoData : public SdrTextObjGeoData
 {
 public:
-    long                        nStartWink;
+    long                        nStartAngle;
     long                        nEndWink;
 };
 
@@ -53,7 +53,7 @@ protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() SAL_OVERRIDE;
 
     SdrObjKind                  meCircleKind;
-    long                        nStartWink;
+    long                        nStartAngle;
     long                        nEndWink;
 private:
      SVX_DLLPRIVATE basegfx::B2DPolygon ImpCalcXPolyCirc(const SdrObjKind eKind, const Rectangle& rRect1, long nStart, long nEnd) const;
@@ -122,7 +122,7 @@ protected:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const SAL_OVERRIDE;
     virtual void RestGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
 public:
-    long GetStartWink() const { return nStartWink; }
+    long GetStartWink() const { return nStartAngle; }
     long GetEndWink() const { return nEndWink; }
 
 };
