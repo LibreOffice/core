@@ -46,7 +46,7 @@ public:
     void SetLineSpace( SvxLineSpacingItem& rLineSpace,
                         int eSpace, long lValue = 0 );
 
-    void ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEntry );
+    void ExecuteLineSpacing(sal_uInt16 aEntry);
     void PopupModeEndCallback();
 
 private:
@@ -61,7 +61,6 @@ private:
     PushButton*             mpSpacing115Button;
     PushButton*             mpSpacing15Button;
     PushButton*             mpSpacing2Button;
-    PushButton*             mpSpacingLastButton;
 
     ListBox*                mpLineDist;
 

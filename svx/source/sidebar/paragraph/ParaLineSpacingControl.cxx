@@ -36,6 +36,7 @@
 #define LINESPACE_2            200
 #define LINESPACE_115          115
 
+// values of the mpLineDist listbox
 #define LLINESPACE_1          0
 #define LLINESPACE_15         1
 #define LLINESPACE_2          2
@@ -43,6 +44,9 @@
 #define LLINESPACE_MIN        4
 #define LLINESPACE_DURCH      5
 #define LLINESPACE_FIX        6
+
+// special case; should not conflict with the mpLinDist values
+#define LLINESPACE_115        7
 
 #define DO_NOT_CUSTOM          false
 #define USE_CUSTOM             true
@@ -67,7 +71,6 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     mpSpacing115Button = get<PushButton>("spacing_115");
     mpSpacing15Button = get<PushButton>("spacing_15");
     mpSpacing2Button = get<PushButton>("spacing_2");
-    mpSpacingLastButton = get<PushButton>("spacing_last");
 
     mpLineDist = get<ListBox>("line_dist");
     mpLineDistAtPercentBox = get<MetricField>("percent_box");
@@ -90,7 +93,6 @@ void ParaLineSpacingControl::initial()
     mpSpacing115Button->SetClickHdl(aLink);
     mpSpacing15Button->SetClickHdl(aLink);
     mpSpacing2Button->SetClickHdl(aLink);
-    mpSpacingLastButton->SetClickHdl(aLink);
 
     aLink = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
     mpLineDist->SetSelectHdl(aLink);
@@ -622,79 +624,43 @@ IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, void *, pControl)
 {
     if (pControl == mpSpacing1Button)
     {
-        ExecuteLineSpacing(false, LLINESPACE_1);
+        ExecuteLineSpacing(LLINESPACE_1);
     }
     else if (pControl == mpSpacing115Button)
     {
-        ExecuteLineSpacing(false, LLINESPACE_PROP);
+        ExecuteLineSpacing(LLINESPACE_115);
     }
     else if (pControl == mpSpacing15Button)
     {
-        ExecuteLineSpacing(false, LLINESPACE_15);
+        ExecuteLineSpacing(LLINESPACE_15);
     }
     else if (pControl == mpSpacing2Button)
     {
-        ExecuteLineSpacing( false, 2 );
-    }
-    else
-    {
-        if(!(mbLineSPDisable))
-        {
-            mpLineDist->SelectEntryPos( maPos ) ;
-            mpLineDist->SaveValue();
-
-            SvxLineSpacingItem aSpacing(_DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
-            switch(maPos)
-            {
-                case LLINESPACE_1:
-                case LLINESPACE_15:
-                case LLINESPACE_2:
-                    SetLineSpace(aSpacing, maPos);
-                    break;
-
-                case LLINESPACE_PROP:
-                    SetLineSpace(aSpacing, maPos, mpLineDistAtPercentBox->Denormalize((long)maValue));
-                    break;
-
-                case LLINESPACE_MIN:
-                case LLINESPACE_DURCH:
-                case LLINESPACE_FIX:
-                    SetLineSpace(aSpacing, maPos, (long)maValue);
-                    break;
-            }
-
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
-                    SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
-
-            ExecuteLineSpacing(USE_CUSTOM, 0);
-        }
+        ExecuteLineSpacing(LLINESPACE_2);
     }
 
     return 0;
 }
 
-void ParaLineSpacingControl::ExecuteLineSpacing( bool aIsCustom, sal_uInt16 aEntry )
+void ParaLineSpacingControl::ExecuteLineSpacing(sal_uInt16 nEntry)
 {
-    if( !aIsCustom )
-    {
-        mpLineDist->SelectEntryPos( aEntry ) ;
-        mpLineDist->SaveValue();
-        SvxLineSpacingItem aSpacing(_DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
-        sal_uInt16 nPos = aEntry;
-        if( aEntry == LLINESPACE_PROP )
-            SetLineSpace( aSpacing, nPos, mpLineDistAtPercentBox->Denormalize( (long)115 ) );
-        else
-            SetLineSpace( aSpacing, nPos );
+    mpLineDist->SelectEntryPos(nEntry) ;
+    mpLineDist->SaveValue();
+    SvxLineSpacingItem aSpacing(_DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
 
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+    // special-case the 1.15 line spacing
+    if (nEntry == LLINESPACE_115)
+        SetLineSpace(aSpacing, LLINESPACE_PROP, mpLineDistAtPercentBox->Denormalize(115L));
+    else
+        SetLineSpace(aSpacing, nEntry);
+
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
-    }
 
-    if( !aIsCustom )
-    {
-        mbUseLineSPCustom = DO_NOT_CUSTOM;
-    }
-//    maLineSpacing.SetNoSelection();
+    mbUseLineSPCustom = DO_NOT_CUSTOM;
+
+    // close when the user used the buttons
+    EndPopupMode();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
