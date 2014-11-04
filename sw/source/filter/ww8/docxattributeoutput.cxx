@@ -5538,6 +5538,56 @@ static OString impl_NumberingType( sal_uInt16 nNumberingType )
     return aType;
 }
 
+// Convertig Level Numbering Format Code to string
+static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOutSet)
+{
+    OString aType;
+
+    switch ( nNumberingType )
+    {
+        case style::NumberingType::CHARS_UPPER_LETTER:
+        case style::NumberingType::CHARS_UPPER_LETTER_N:
+        case style::NumberingType::CHARS_LOWER_LETTER:
+        case style::NumberingType::CHARS_LOWER_LETTER_N:
+        case style::NumberingType::ROMAN_UPPER:
+        case style::NumberingType::ROMAN_LOWER:
+        case style::NumberingType::ARABIC:
+        case style::NumberingType::BITMAP:
+        case style::NumberingType::CHAR_SPECIAL:
+        case style::NumberingType::CHARS_HEBREW:
+            return impl_NumberingType( nNumberingType );
+        case style::NumberingType::FULLWIDTH_ARABIC: aType="decimalFullWidth"; break;
+        case style::NumberingType::TIAN_GAN_ZH: aType="ideographTraditional"; break;
+        case style::NumberingType::DI_ZI_ZH: aType="ideographZodiac"; break;
+        case style::NumberingType::NUMBER_LOWER_ZH:
+            aType="taiwaneseCountingThousand";
+            if (pOutSet) {
+                const SvxLanguageItem rLang = (const SvxLanguageItem&) pOutSet->Get( RES_CHRATR_CJK_LANGUAGE,true);
+                const LanguageType eLang = rLang.GetLanguage();
+
+                if (LANGUAGE_CHINESE_SIMPLIFIED == eLang) {
+                    aType="taiwaneseCountingThousand";
+                }
+            }
+        break;
+        case style::NumberingType::NUMBER_UPPER_ZH_TW: aType="ideographLegalTraditional";break;
+        case style::NumberingType::NUMBER_UPPER_ZH: aType="chineseLegalSimplified"; break;
+        case style::NumberingType::NUMBER_TRADITIONAL_JA: aType="japaneseLegal";break;
+        case style::NumberingType::AIU_FULLWIDTH_JA: aType="aiueoFullWidth";break;
+        case style::NumberingType::AIU_HALFWIDTH_JA: aType="aiueo";break;
+        case style::NumberingType::IROHA_FULLWIDTH_JA: aType="iroha";break;
+        case style::NumberingType::IROHA_HALFWIDTH_JA: aType="irohaFullWidth";break;
+        case style::NumberingType::HANGUL_SYLLABLE_KO: aType="ganada";break;
+        case style::NumberingType::HANGUL_JAMO_KO: aType="chosung";break;
+        case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanDigital";break;
+        case style::NumberingType::NUMBER_UPPER_KO: aType="koreanLegal"; break;
+        default:
+            aType = "decimal";        break;
+    }
+    return aType;
+}
+
+
 void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber )
 {
     // FIXME Not called properly with page styles like "First Page"
@@ -5839,7 +5889,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     }
 
     // format
-    OString aFmt( impl_NumberingType( nNumberingType ) );
+    OString aFmt( impl_LevelNFC( nNumberingType ,pOutSet) );
 
     if ( !aFmt.isEmpty() )
         m_pSerializer->singleElementNS( XML_w, XML_numFmt,

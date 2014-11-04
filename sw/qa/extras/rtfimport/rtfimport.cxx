@@ -109,7 +109,6 @@ protected:
         xFilter->filter(aDescriptor);
     }
 #endif
-
     AllSettings m_aSavedSettings;
 };
 
