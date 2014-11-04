@@ -306,9 +306,9 @@ struct ImpMeasurePoly
     Rectangle                   aTextRect;
     Size                        aTextSize;
     long                        nLineLen;
-    long                        nLineWink;
-    long                        nTextWink;
-    long                        nHlpWink;
+    long                        nLineAngle;
+    long                        nTextAngle;
+    long                        nHlpAngle;
     double                      nLineSin;
     double                      nLineCos;
     double                      nHlpSin;
@@ -452,30 +452,30 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     rPol.nArrow2Len=nArrow2Len;
     rPol.bArrow2Center=bArrow2Center;
 
-    rPol.nLineWink=GetAngle(aDelt);
-    double a=rPol.nLineWink*nPi180;
+    rPol.nLineAngle=GetAngle(aDelt);
+    double a=rPol.nLineAngle*nPi180;
     double nLineSin=sin(a);
     double nLineCos=cos(a);
     rPol.nLineSin=nLineSin;
     rPol.nLineCos=nLineCos;
 
-    rPol.nTextWink=rPol.nLineWink;
-    if (rRec.bTextRota90) rPol.nTextWink+=9000;
+    rPol.nTextAngle=rPol.nLineAngle;
+    if (rRec.bTextRota90) rPol.nTextAngle+=9000;
 
     rPol.bAutoUpsideDown=false;
     if (rRec.bTextAutoAngle) {
-        long nTmpAngle=NormAngle360(rPol.nTextWink-rRec.nTextAutoAngleView);
+        long nTmpAngle=NormAngle360(rPol.nTextAngle-rRec.nTextAutoAngleView);
         if (nTmpAngle>=18000) {
-            rPol.nTextWink+=18000;
+            rPol.nTextAngle+=18000;
             rPol.bAutoUpsideDown=true;
         }
     }
 
-    if (rRec.bTextUpsideDown) rPol.nTextWink+=18000;
-    rPol.nTextWink=NormAngle360(rPol.nTextWink);
-    rPol.nHlpWink=rPol.nLineWink+9000;
-    if (rRec.bBelowRefEdge) rPol.nHlpWink+=18000;
-    rPol.nHlpWink=NormAngle360(rPol.nHlpWink);
+    if (rRec.bTextUpsideDown) rPol.nTextAngle+=18000;
+    rPol.nTextAngle=NormAngle360(rPol.nTextAngle);
+    rPol.nHlpAngle=rPol.nLineAngle+9000;
+    if (rRec.bBelowRefEdge) rPol.nHlpAngle+=18000;
+    rPol.nHlpAngle=NormAngle360(rPol.nHlpAngle);
     double nHlpSin=nLineCos;
     double nHlpCos=-nLineSin;
     if (rRec.bBelowRefEdge) {
@@ -720,8 +720,8 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             aTextPos.Y()-=aTextSize2.Width();
         }
     }
-    if (aMPol.nTextWink!=aGeo.nRotationAngle) {
-        ((SdrMeasureObj*)this)->aGeo.nRotationAngle=aMPol.nTextWink;
+    if (aMPol.nTextAngle!=aGeo.nRotationAngle) {
+        ((SdrMeasureObj*)this)->aGeo.nRotationAngle=aMPol.nTextAngle;
         ((SdrMeasureObj*)this)->aGeo.RecalcSinCos();
     }
     RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
@@ -730,8 +730,8 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     rRect.Justify();
     ((SdrMeasureObj*)this)->aRect=rRect;
 
-    if (aMPol.nTextWink!=aGeo.nRotationAngle) {
-        ((SdrMeasureObj*)this)->aGeo.nRotationAngle=aMPol.nTextWink;
+    if (aMPol.nTextAngle!=aGeo.nRotationAngle) {
+        ((SdrMeasureObj*)this)->aGeo.nRotationAngle=aMPol.nTextAngle;
         ((SdrMeasureObj*)this)->aGeo.RecalcSinCos();
     }
 }
@@ -795,7 +795,7 @@ SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
     } // switch
     SdrHdl* pHdl=new ImpMeasureHdl(aPt,HDL_USER);
     pHdl->SetObjHdlNum(nHdlNum);
-    pHdl->SetRotationAngle(aMPol.nLineWink);
+    pHdl->SetRotationAngle(aMPol.nLineAngle);
     return pHdl;
 }
 
@@ -904,8 +904,8 @@ OUString SdrMeasureObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) cons
 
 void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const
 {
-    long nLineWink=GetAngle(rRec.aPt2-rRec.aPt1);
-    double a=nLineWink*nPi180;
+    long nLineAngle=GetAngle(rRec.aPt2-rRec.aPt1);
+    double a=nLineAngle*nPi180;
     double nSin=sin(a);
     double nCos=cos(a);
 

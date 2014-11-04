@@ -128,10 +128,10 @@ SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect):
 SdrCircObj::SdrCircObj(SdrObjKind eNewKind, const Rectangle& rRect, long nNewStartWink, long nNewEndWink):
     SdrRectObj(rRect)
 {
-    long nWinkDif=nNewEndWink-nNewStartWink;
+    long nAngleDif=nNewEndWink-nNewStartWink;
     nStartAngle=NormAngle360(nNewStartWink);
     nEndAngle=NormAngle360(nNewEndWink);
-    if (nWinkDif==36000) nEndAngle+=nWinkDif; // full circle
+    if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
     meCircleKind=eNewKind;
     bClosedObj=eNewKind!=OBJ_CARC;
 }
@@ -478,9 +478,9 @@ bool SdrCircObj::hasSpecialDrag() const
 
 bool SdrCircObj::beginSpecialDrag(SdrDragStat& rDrag) const
 {
-    const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bAngle(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
-    if(bWink)
+    if(bAngle)
     {
         if(1 == rDrag.GetHdl()->GetPointNum() || 2 == rDrag.GetHdl()->GetPointNum())
         {
@@ -495,9 +495,9 @@ bool SdrCircObj::beginSpecialDrag(SdrDragStat& rDrag) const
 
 bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 {
-    const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+    const bool bAngle(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
-    if(bWink)
+    if(bAngle)
     {
         Point aPt(rDrag.GetNow());
 
@@ -593,9 +593,9 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
     else
     {
-        const bool bWink(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
+        const bool bAngle(rDrag.GetHdl() && HDL_CIRC == rDrag.GetHdl()->GetKind());
 
-        if(bWink)
+        if(bAngle)
         {
             const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartAngle : nEndAngle);
 
@@ -852,10 +852,10 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
                     nE0-=aGeo.nRotationAngle;
                 }
             }
-            long nWinkDif=nE0-nS0;
+            long nAngleDif=nE0-nS0;
             nStartAngle=NormAngle360(nS0);
             nEndAngle  =NormAngle360(nE0);
-            if (nWinkDif==36000) nEndAngle+=nWinkDif; // full circle
+            if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
         }
     }
     SetXPolyDirty();
@@ -921,10 +921,10 @@ void SdrCircObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         // because it's mirrored, the angles are swapped, too
         nStartAngle=GetAngle(aTmpPt2);
         nEndAngle  =GetAngle(aTmpPt1);
-        long nWinkDif=nEndAngle-nStartAngle;
+        long nAngleDif=nEndAngle-nStartAngle;
         nStartAngle=NormAngle360(nStartAngle);
         nEndAngle  =NormAngle360(nEndAngle);
-        if (nWinkDif==36000) nEndAngle+=nWinkDif; // full circle
+        if (nAngleDif==36000) nEndAngle+=nAngleDif; // full circle
     }
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
@@ -1088,15 +1088,15 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     sal_Int32 nNewEnd = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
     bool bKindChg = meCircleKind != eNewKind;
-    bool bWinkChg = nNewStart != nStartAngle || nNewEnd != nEndAngle;
+    bool bAngleChg = nNewStart != nStartAngle || nNewEnd != nEndAngle;
 
-    if(bKindChg || bWinkChg)
+    if(bKindChg || bAngleChg)
     {
         meCircleKind = eNewKind;
         nStartAngle = nNewStart;
         nEndAngle = nNewEnd;
 
-        if(bKindChg || (meCircleKind != OBJ_CIRC && bWinkChg))
+        if(bKindChg || (meCircleKind != OBJ_CIRC && bAngleChg))
         {
             SetXPolyDirty();
             SetRectsDirty();
@@ -1117,10 +1117,10 @@ void SdrCircObj::ImpSetCircInfoToAttr()
         eNewKindA = SDRCIRC_CUT;
 
     SdrCircKind eOldKindA = static_cast<const SdrCircKindItem&>(rSet.Get(SDRATTR_CIRCKIND)).GetValue();
-    sal_Int32 nOldStartWink = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
-    sal_Int32 nOldEndWink = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
+    sal_Int32 nOldStartAngle = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
+    sal_Int32 nOldEndAngle = static_cast<const SdrAngleItem&>(rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
-    if(eNewKindA != eOldKindA || nStartAngle != nOldStartWink || nEndAngle != nOldEndWink)
+    if(eNewKindA != eOldKindA || nStartAngle != nOldStartAngle || nEndAngle != nOldEndAngle)
     {
         // since SetItem() implicitly calls ImpSetAttrToCircInfo()
         // setting the item directly is necessary here.
@@ -1129,12 +1129,12 @@ void SdrCircObj::ImpSetCircInfoToAttr()
             GetProperties().SetObjectItemDirect(SdrCircKindItem(eNewKindA));
         }
 
-        if(nStartAngle != nOldStartWink)
+        if(nStartAngle != nOldStartAngle)
         {
             GetProperties().SetObjectItemDirect(makeSdrCircStartAngleItem(nStartAngle));
         }
 
-        if(nEndAngle != nOldEndWink)
+        if(nEndAngle != nOldEndAngle)
         {
             GetProperties().SetObjectItemDirect(makeSdrCircEndAngleItem(nEndAngle));
         }

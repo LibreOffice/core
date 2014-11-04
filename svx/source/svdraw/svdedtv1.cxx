@@ -308,9 +308,9 @@ long SdrEditView::GetMarkedObjRotate() const
     //for (sal_uIntPtr nm=0; nm<nMarkAnz && bOk; nm++) {
     //  SdrMark* pM=GetSdrMarkByIndex(nm);
     //  SdrObject* pO=pM->GetMarkedSdrObj();
-    //  long nWink2=pO->GetRotateAngle();
-    //  if (b1st) nWink=nWink2;
-    //  else if (nWink2!=nWink) bOk=false;
+    //  long nAngle2=pO->GetRotateAngle();
+    //  if (b1st) nWink=nAngle2;
+    //  else if (nAngle2!=nWink) bOk=false;
     //  b1st=false;
     //}
     //if (!bOk) nWink=0;
@@ -459,9 +459,9 @@ long SdrEditView::GetMarkedObjShear() const
     for (size_t nm=0; nm<nMarkAnz && bOk; ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
-        long nWink2=pO->GetShearAngle();
-        if (b1st) nWink=nWink2;
-        else if (nWink2!=nWink) bOk=false;
+        long nAngle2=pO->GetShearAngle();
+        if (b1st) nWink=nAngle2;
+        else if (nAngle2!=nWink) bOk=false;
         b1st=false;
     }
     if (nWink>SDRMAXSHEAR) nWink=SDRMAXSHEAR;

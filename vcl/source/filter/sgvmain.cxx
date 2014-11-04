@@ -235,8 +235,8 @@ SvStream& ReadCircType(SvStream& rInp, CircType& rCirc)
     SWAPPOINT(rCirc.Radius);
     SWAPPOINT(rCirc.Center);
     rCirc.RotationAngle = OSL_SWAPWORD(rCirc.RotationAngle );
-    rCirc.StartWink     = OSL_SWAPWORD(rCirc.StartWink);
-    rCirc.RelWink       = OSL_SWAPWORD(rCirc.RelWink  );
+    rCirc.StartAngle     = OSL_SWAPWORD(rCirc.StartAngle);
+    rCirc.RelAngle       = OSL_SWAPWORD(rCirc.RelAngle  );
 #endif
     return rInp;
 }
@@ -615,11 +615,11 @@ void CircType::Draw(OutputDevice& rOut)
         double sn,cs;
 
         a.x=Center.x+Radius.x; a.y=Center.y; b=a;
-        sn=sin(double(StartWink)*3.14159265359/18000);
-        cs=cos(double(StartWink)*3.14159265359/18000);
+        sn=sin(double(StartAngle)*3.14159265359/18000);
+        cs=cos(double(StartAngle)*3.14159265359/18000);
         RotatePoint(a,Center.x,Center.y,sn,cs);
-        sn=sin(double(StartWink+RelWink)*3.14159265359/18000);
-        cs=cos(double(StartWink+RelWink)*3.14159265359/18000);
+        sn=sin(double(StartAngle+RelAngle)*3.14159265359/18000);
+        cs=cos(double(StartAngle+RelAngle)*3.14159265359/18000);
         RotatePoint(b,Center.x,Center.y,sn,cs);
         if (Radius.x!=Radius.y) {
           if (Radius.x<1) Radius.x=1;

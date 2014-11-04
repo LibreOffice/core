@@ -62,7 +62,7 @@ protected:
     // helper functions for GET, SET, INS etc. PNT
     void ImpSetClosed(bool bClose);
     void ImpForceKind();
-    void ImpForceLineWink();
+    void ImpForceLineAngle();
     ImpPathForDragAndCreate& impGetDAC() const;
     void impDeleteDAC() const;
 

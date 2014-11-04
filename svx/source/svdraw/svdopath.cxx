@@ -244,8 +244,8 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
     Point                   aRectP2;
     Point                   aRectP3;
     long                    nCircRadius;
-    long                    nCircStWink;
-    long                    nCircRelWink;
+    long                    nCircStAngle;
+    long                    nCircRelAngle;
     bool                    bBezier;
     bool                    bBezHasCtrl0;
     bool                    bCurve;
@@ -260,7 +260,7 @@ struct ImpPathCreateUser  : public SdrDragStatUserData
     SdrObjKind              eAktKind;
 
 public:
-    ImpPathCreateUser(): nCircRadius(0),nCircStWink(0),nCircRelWink(0),
+    ImpPathCreateUser(): nCircRadius(0),nCircStAngle(0),nCircRelAngle(0),
         bBezier(false),bBezHasCtrl0(false),bCurve(false),bCircle(false),bAngleSnap(false),bLine(false),bLine90(false),bRect(false),
         bMixedCreate(false),nBezierStartPoint(0),eStartKind(OBJ_NONE),eAktKind(OBJ_NONE) { }
 
@@ -333,13 +333,13 @@ bool ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
         nRad=std::abs(Round(nR));
     }
     if (dAngle<18000) {
-        nCircStWink=NormAngle360(nTangAngle-9000);
-        nCircRelWink=NormAngle360(2*dAngle);
+        nCircStAngle=NormAngle360(nTangAngle-9000);
+        nCircRelAngle=NormAngle360(2*dAngle);
         aCircCenter.X()+=Round(nRad*cos((nTangAngle+9000)*nPi180));
         aCircCenter.Y()-=Round(nRad*sin((nTangAngle+9000)*nPi180));
     } else {
-        nCircStWink=NormAngle360(nTangAngle+9000);
-        nCircRelWink=-NormAngle360(36000-2*dAngle);
+        nCircStAngle=NormAngle360(nTangAngle+9000);
+        nCircRelAngle=-NormAngle360(36000-2*dAngle);
         aCircCenter.X()+=Round(nRad*cos((nTangAngle-9000)*nPi180));
         aCircCenter.Y()-=Round(nRad*sin((nTangAngle-9000)*nPi180));
     }
@@ -347,32 +347,32 @@ bool ImpPathCreateUser::CalcCircle(const Point& rP1, const Point& rP2, const Poi
     if (bAngleSnap) {
         long nSA=pView->GetSnapAngle();
         if (nSA!=0) { // angle snapping
-            bool bNeg=nCircRelWink<0;
-            if (bNeg) nCircRelWink=-nCircRelWink;
-            nCircRelWink+=nSA/2;
-            nCircRelWink/=nSA;
-            nCircRelWink*=nSA;
-            nCircRelWink=NormAngle360(nCircRelWink);
-            if (bNeg) nCircRelWink=-nCircRelWink;
+            bool bNeg=nCircRelAngle<0;
+            if (bNeg) nCircRelAngle=-nCircRelAngle;
+            nCircRelAngle+=nSA/2;
+            nCircRelAngle/=nSA;
+            nCircRelAngle*=nSA;
+            nCircRelAngle=NormAngle360(nCircRelAngle);
+            if (bNeg) nCircRelAngle=-nCircRelAngle;
         }
     }
     nCircRadius=nRad;
-    if (nRad==0 || std::abs(nCircRelWink)<5) bRet=false;
+    if (nRad==0 || std::abs(nCircRelAngle)<5) bRet=false;
     bCircle=bRet;
     return bRet;
 }
 
 XPolygon ImpPathCreateUser::GetCirclePoly() const
 {
-    if (nCircRelWink>=0) {
+    if (nCircRelAngle>=0) {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
-                     sal_uInt16((nCircStWink+5)/10),sal_uInt16((nCircStWink+nCircRelWink+5)/10),false);
+                     sal_uInt16((nCircStAngle+5)/10),sal_uInt16((nCircStAngle+nCircRelAngle+5)/10),false);
         aXP[0]=aCircStart; aXP.SetFlags(0,XPOLY_SMOOTH);
         if (!bAngleSnap) aXP[aXP.GetPointCount()-1]=aCircEnd;
         return aXP;
     } else {
         XPolygon aXP(aCircCenter,nCircRadius,nCircRadius,
-                     sal_uInt16(NormAngle360(nCircStWink+nCircRelWink+5)/10),sal_uInt16((nCircStWink+5)/10),false);
+                     sal_uInt16(NormAngle360(nCircStAngle+nCircRelAngle+5)/10),sal_uInt16((nCircStAngle+5)/10),false);
         sal_uInt16 nAnz=aXP.GetPointCount();
         for (sal_uInt16 nNum=nAnz/2; nNum>0;) {
             nNum--; // reverse XPoly's order of points
@@ -759,8 +759,8 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
             long nAngle1=GetAngle(aPt);
             aPt=rDrag.GetNow();
             aPt-=mpSdrPathDragData->aXP[nPrevPnt];
-            long nWink2=GetAngle(aPt);
-            long nDiff=nAngle1-nWink2;
+            long nAngle2=GetAngle(aPt);
+            long nDiff=nAngle1-nAngle2;
             nDiff=std::abs(nDiff);
             mpSdrPathDragData->bEliminate=nDiff<=rDrag.GetView()->GetEliminatePolyPointLimitAngle();
             if (mpSdrPathDragData->bEliminate) { // adapt position, Smooth is true for the ends
@@ -957,7 +957,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
         if(pU->bCircle)
         {
-            mrSdrPathObject.GetModel()->TakeAngleStr(std::abs(pU->nCircRelWink), aMetr);
+            mrSdrPathObject.GetModel()->TakeAngleStr(std::abs(pU->nCircRelAngle), aMetr);
             aStr += aMetr;
             aStr += " r=";
             mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, true);
@@ -1701,7 +1701,7 @@ static Rectangle lcl_ImpGetBoundRect(const basegfx::B2DPolyPolygon& rPolyPolygon
         FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
 }
 
-void SdrPathObj::ImpForceLineWink()
+void SdrPathObj::ImpForceLineAngle()
 {
     if(OBJ_LINE == meKind && lcl_ImpIsLine(GetPathPoly()))
     {
@@ -1757,7 +1757,7 @@ void SdrPathObj::ImpForceKind()
 
     if (meKind==OBJ_LINE)
     {
-        ImpForceLineWink();
+        ImpForceLineAngle();
     }
     else
     {
@@ -1778,7 +1778,7 @@ void SdrPathObj::ImpForceKind()
         // which is basically wrong. To make the SdrText methods which deal with aRect directly
         // work it is necessary to always keep aRect updated. This e.g. not done after a Clone()
         // command for SdrPathObj. Since adding this update mechanism with #101412# to
-        // ImpForceLineWink() for lines was very successful, i add it to where ImpForceLineWink()
+        // ImpForceLineAngle() for lines was very successful, i add it to where ImpForceLineAngle()
         // was called, once here below and once on a 2nd place below.
 
         // #i10659# for SdrTextObj, keep aRect up to date
@@ -2522,7 +2522,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
 
         if(meKind==OBJ_LINE)
         {
-            ImpForceLineWink();
+            ImpForceLineAngle();
         }
         else
         {

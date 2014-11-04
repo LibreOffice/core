@@ -236,8 +236,8 @@ public:
     PointType       Center;    // center
     PointType       Radius;    // radius
     sal_uInt16      RotationAngle;  // only ellipses
-    sal_uInt16      StartWink; // and not for full circles
-    sal_uInt16      RelWink;   // and full ellipses
+    sal_uInt16      StartAngle; // and not for full circles
+    sal_uInt16      RelAngle;   // and full ellipses
     friend SvStream& ReadCircType(SvStream& rIStream, CircType& rCirc);
     virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
 };

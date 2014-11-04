@@ -1651,9 +1651,9 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, dou
     if ( bMirroredY )
         nSwap ^= 1;
 
-    double fWink = nWink;                                                   // updating to our new object rotation
-    fWink /= 100.0;
-    fObjectRotation = fmod( nSwap ? fObjectRotation - fWink : fObjectRotation + fWink, 360.0 );
+    double fAngle = nWink;                                                   // updating to our new object rotation
+    fAngle /= 100.0;
+    fObjectRotation = fmod( nSwap ? fObjectRotation - fAngle : fObjectRotation + fAngle, 360.0 );
     if ( fObjectRotation < 0 )
         fObjectRotation = 360 + fObjectRotation;
 
@@ -1690,13 +1690,13 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
 
             // update fObjectRotation
             long nTextObjRotation = aGeo.nRotationAngle;
-            double fWink = nTextObjRotation;
+            double fAngle = nTextObjRotation;
 
-            fWink /= 100.0;
+            fAngle /= 100.0;
 
             bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
 
-            fObjectRotation = fmod( bSingleFlip ? -fWink : fWink, 360.0 );
+            fObjectRotation = fmod( bSingleFlip ? -fAngle : fAngle, 360.0 );
 
             if ( fObjectRotation < 0 )
             {
@@ -1720,13 +1720,13 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, bool
 
     // updating fObjectRotation
     long nTextObjRotation = aGeo.nRotationAngle;
-    double fWink = nTextObjRotation;
+    double fAngle = nTextObjRotation;
 
-    fWink /= 100.0;
+    fAngle /= 100.0;
 
     bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
 
-    fObjectRotation = fmod( bSingleFlip ? -fWink : fWink, 360.0 );
+    fObjectRotation = fmod( bSingleFlip ? -fAngle : fAngle, 360.0 );
 
     if ( fObjectRotation < 0 )
     {
