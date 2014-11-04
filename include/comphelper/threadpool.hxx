@@ -15,6 +15,7 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
+#include <boost/noncopyable.hpp>
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 
@@ -29,7 +30,7 @@ public:
 };
 
 /// A very basic thread pool implementation
-class COMPHELPER_DLLPUBLIC ThreadPool
+class COMPHELPER_DLLPUBLIC ThreadPool: private boost::noncopyable
 {
 public:
     /// returns a pointer to a shared pool with optimal thread
