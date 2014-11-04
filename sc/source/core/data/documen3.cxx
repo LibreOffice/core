@@ -1091,9 +1091,9 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 
 void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    //! pDBCollection
-    //! pPivotCollection
-    //! UpdateChartRef
+    //TODO: pDBCollection
+    //TODO: pPivotCollection
+    //TODO: UpdateChartRef
 
     if (pRangeName)
         pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );

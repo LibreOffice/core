@@ -526,7 +526,7 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
 
     SetModified(bDoUpdate);
 
-    //!     Testen, ob mitten aus dem Bereich geloescht/eingefuegt wurde !!!
+    //TODO: check if something was deleted/inserted with-in the range !!!
 }
 
 void ScDBData::ExtendDataArea(ScDocument* pDoc)

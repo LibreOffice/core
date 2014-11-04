@@ -725,7 +725,7 @@ void ScDocument::UpdateChartListenerCollection()
 
                 //  put into list of other ole objects, so the object doesn't have to
                 //  be swapped in the next time UpdateChartListenerCollection is called
-                //! remove names when objects are no longer there?
+                //TODO: remove names when objects are no longer there?
                 //  (object names aren't used again before reloading the document)
 
                 rNonOleObjects.insert(aObjName);

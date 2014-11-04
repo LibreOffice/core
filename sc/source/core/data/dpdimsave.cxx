@@ -57,7 +57,7 @@ void ScDPSaveGroupItem::AddElementsFromGroup( const ScDPSaveGroupItem& rGroup )
 bool ScDPSaveGroupItem::RemoveElement( const OUString& rName )
 {
     for (std::vector<OUString>::iterator aIter = aElements.begin(); aIter != aElements.end(); ++aIter)
-        if (*aIter == rName)          //! ignore case
+        if (*aIter == rName)          //TODO: ignore case
         {
             aElements.erase(aIter);   // found -> remove
             return true;                // don't have to look further
@@ -162,8 +162,8 @@ OUString ScDPSaveGroupDimension::CreateGroupName(const OUString& rPrefix)
 {
     // create a name for a new group, using "Group1", "Group2" etc. (translated prefix in rPrefix)
 
-    //! look in all dimensions, to avoid clashes with automatic groups (=name of base element)?
-    //! (only dimensions for the same base)
+    //TODO: look in all dimensions, to avoid clashes with automatic groups (=name of base element)?
+    //TODO: (only dimensions for the same base)
 
     sal_Int32 nAdd = 1;                                 // first try is "Group1"
     const sal_Int32 nMaxAdd = nAdd + aGroups.size();    // limit the loop
@@ -175,7 +175,7 @@ OUString ScDPSaveGroupDimension::CreateGroupName(const OUString& rPrefix)
         // look for existing groups
         for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin());
                                     aIter != aGroups.end() && !bExists; ++aIter )
-            if (aIter->GetGroupName().equals(aGroupName))         //! ignore case
+            if (aIter->GetGroupName().equals(aGroupName))         //TODO: ignore case
                 bExists = true;
 
         if ( !bExists )
@@ -196,7 +196,7 @@ const ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroup( const OUString& 
 ScDPSaveGroupItem* ScDPSaveGroupDimension::GetNamedGroupAcc( const OUString& rGroupName )
 {
     for (ScDPSaveGroupItemVec::iterator aIter = aGroups.begin(); aIter != aGroups.end(); ++aIter)
-        if (aIter->GetGroupName().equals(rGroupName))         //! ignore case
+        if (aIter->GetGroupName().equals(rGroupName))         //TODO: ignore case
             return &*aIter;
 
     return NULL;        // none found
@@ -235,7 +235,7 @@ void ScDPSaveGroupDimension::RemoveFromGroups( const OUString& rItemName )
 void ScDPSaveGroupDimension::RemoveGroup(const OUString& rGroupName)
 {
     for (ScDPSaveGroupItemVec::iterator aIter = aGroups.begin(); aIter != aGroups.end(); ++aIter)
-        if (aIter->GetGroupName().equals(rGroupName))          //! ignore case
+        if (aIter->GetGroupName().equals(rGroupName))          //TODO: ignore case
         {
             aGroups.erase( aIter );
             return;                     // don't have to look further
@@ -324,7 +324,7 @@ void fillDateGroupDimension(
     if (rDateInfo.mbAutoEnd)
         rDateInfo.mfEnd = rtl::math::approxFloor(fSourceMax) + 1;
 
-    //! if not automatic, limit fSourceMin/fSourceMax for list of year values?
+    //TODO: if not automatic, limit fSourceMin/fSourceMax for list of year values?
 
     long nStart = 0, nEnd = 0; // end is inclusive
 
@@ -523,7 +523,7 @@ void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
         if (aGroupInfo.mbAutoEnd)
             aGroupInfo.mfEnd = fSourceMax;
 
-        //! limit number of entries?
+        //TODO: limit number of entries?
 
         long nLoopCount = 0;
         double fLoop = aGroupInfo.mfStart;
@@ -783,7 +783,7 @@ OUString ScDPDimensionSaveData::CreateGroupDimName(
 
         // look for existing group dimensions
         for( ScDPSaveGroupDimVec::const_iterator aIt = maGroupDims.begin(), aEnd = maGroupDims.end(); (aIt != aEnd) && !bExists; ++aIt )
-            if( aIt->GetGroupDimName() == aDimName )         //! ignore case
+            if( aIt->GetGroupDimName() == aDimName )         //TODO: ignore case
                 bExists = true;
 
         // look for base dimensions that happen to have that name

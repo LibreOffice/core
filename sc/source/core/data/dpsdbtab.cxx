@@ -75,7 +75,7 @@ ScDatabaseDPData::~ScDatabaseDPData()
 
 void ScDatabaseDPData::DisposeData()
 {
-    //! use OpenDatabase here?
+    //TODO: use OpenDatabase here?
     aCacheTable.clear();
 }
 
@@ -89,7 +89,7 @@ OUString ScDatabaseDPData::getDimensionName(long nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))
     {
-        //! different internal and display names?
+        //TODO: different internal and display names?
         //return "Data";
         return ScGlobal::GetRscString(STR_PIVOT_DATA);
     }
@@ -105,14 +105,14 @@ bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
 
 bool ScDatabaseDPData::IsDateDimension(long /* nDim */)
 {
-    //! later...
+    //TODO: later...
     return false;
 }
 
 void ScDatabaseDPData::SetEmptyFlags( bool /* bIgnoreEmptyRows */, bool /* bRepeatIfEmpty */ )
 {
     //  not used for database data
-    //! disable flags
+    //TODO: disable flags
 }
 
 void ScDatabaseDPData::CreateCacheTable()

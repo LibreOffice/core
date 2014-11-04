@@ -73,7 +73,7 @@
 
 inline bool IsAmbiguousScript( sal_uInt8 nScript )
 {
-    //! move to a header file
+    //TODO: move to a header file
     return ( nScript != SCRIPTTYPE_LATIN &&
              nScript != SCRIPTTYPE_ASIAN &&
              nScript != SCRIPTTYPE_COMPLEX );
@@ -275,7 +275,7 @@ long ScColumn::GetNeededSize(
             }
             else if ( nRotate )
             {
-                //! take different X/Y scaling into consideration
+                //TODO: take different X/Y scaling into consideration
 
                 double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
                 double nCosAbs = fabs( cos( nRealOrient ) );
@@ -289,13 +289,13 @@ long ScColumn::GetNeededSize(
                     nWidth = (long) ( pDocument->GetColWidth( nCol,nTab ) * nPPT );
                     bAddMargin = false;
                     //  only to the right:
-                    //! differ on direction up/down (only Text/whole height)
+                    //TODO: differ on direction up/down (only Text/whole height)
                     if ( pPattern->GetRotateDir( pCondSet ) == SC_ROTDIR_RIGHT )
                         nWidth += (long)( pDocument->GetRowHeight( nRow,nTab ) *
                                             nPPT * nCosAbs / nSinAbs );
                 }
                 else
-                    nWidth  = (long)( aSize.Height() / nSinAbs );   //! limit?
+                    nWidth  = (long)( aSize.Height() / nSinAbs );   //TODO: limit?
 
                 if ( bBreak && !rOptions.bTotalSize )
                 {
@@ -449,7 +449,7 @@ long ScColumn::GetNeededSize(
             bEdWidth = !bEdWidth;
         if ( nRotate )
         {
-            //! take different X/Y scaling into consideration
+            //TODO: take different X/Y scaling into consideration
 
             Size aSize( pEngine->CalcTextWidth(), pEngine->GetTextHeight() );
             double nRealOrient = nRotate * F_PI18000;   // nRotate is in 1/100 Grad
@@ -468,7 +468,7 @@ long ScColumn::GetNeededSize(
                                         nPPT * nCosAbs / nSinAbs );
             }
             else
-                nWidth  = (long)( aSize.Height() / nSinAbs );   //! limit?
+                nWidth  = (long)( aSize.Height() / nSinAbs );   //TODO: limit?
             aSize = Size( nWidth, nHeight );
 
             Size aPixSize = pDev->LogicToPixel( aSize, aHMMMode );
@@ -749,7 +749,7 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
             GetItem(ATTR_FONT_EMPHASISMARK)).GetEmphasisMark() != EMPHASISMARK_NONE )
     {
         //  add height for emphasis marks
-        //! font metrics should be used instead
+        //TODO: font metrics should be used instead
         nHeight += nHeight / 4;
     }
 

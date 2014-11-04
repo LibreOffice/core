@@ -1080,7 +1080,7 @@ bool ScTokenArray::AddFormulaToken(
     if ( bError )
     {
         bError = false;
-        const OpCode eOpCode = static_cast<OpCode>(rToken.OpCode);      //! assuming equal values for the moment
+        const OpCode eOpCode = static_cast<OpCode>(rToken.OpCode);      //TODO: assuming equal values for the moment
 
         const uno::TypeClass eClass = rToken.Data.getValueTypeClass();
         switch ( eClass )
@@ -2143,7 +2143,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                     rRef2.SetAddress(aAbs, rNewPos);
                 }
             }
-            //! fallthru
+            // fallthru
             case svSingleRef :
             {
                 ScSingleRefData& rRef1 = *pCode[j]->GetSingleRef();
@@ -2160,7 +2160,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                 ScAddress aAbs = rRef2.toAbs(rOldPos);
                 rRef2.SetAddress(aAbs, rNewPos);
             }
-            //! fallthru
+            // fallthru
             case svExternalSingleRef :
             {
                 ScSingleRefData& rRef1 = *pCode[j]->GetSingleRef();

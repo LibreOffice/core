@@ -30,7 +30,7 @@ static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
-        rRef = nStart + nDelta;             //! begrenzen ???
+        rRef = nStart + nDelta;             //TODO: limit ???
     if ( rRef < 0 )
     {
         rRef = 0;
@@ -51,7 +51,7 @@ static bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
-        rRef = nStart + nDelta - 1;         //! begrenzen ???
+        rRef = nStart + nDelta - 1;         //TODO: limit ???
     if ( rRef < 0 )
     {
         rRef = 0;
@@ -130,7 +130,7 @@ static void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
 
 template< typename R, typename S, typename U >
 bool IsExpand( R n1, R n2, U nStart, S nD )
-{   //! vor normalem Move...
+{   //TODO: before normal Move...
     return
         nD > 0          // Insert
      && n1 < n2         // mindestens zwei Cols/Rows/Tabs in Ref
@@ -142,10 +142,10 @@ bool IsExpand( R n1, R n2, U nStart, S nD )
 
 template< typename R, typename S, typename U >
 void Expand( R& n1, R& n2, U nStart, S nD )
-{   //! nach normalem Move..., nur wenn IsExpand vorher true war!
-    //! erst das Ende
+{   //TODO: after normal Move..., only if IsExpand was true before!
+    //TODO: first the End
     if ( n2 + 1 == nStart )
-    {   // am Ende
+    {   // at End
         n2 = sal::static_int_cast<R>( n2 + nD );
         return;
     }

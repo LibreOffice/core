@@ -58,8 +58,8 @@ OUString ScUnitConverterData::BuildIndexString(
 
 ScUnitConverter::ScUnitConverter()
 {
-    //  read from configuration - "convert.ini" is no longer used
-    //! config item as member to allow change of values
+    // read from configuration - "convert.ini" is no longer used
+    //TODO: config item as member to allow change of values
 
     ScLinkConfigItem aConfigItem( OUString( CFGPATH_UNIT ) );
 

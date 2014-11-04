@@ -401,7 +401,7 @@ void ScUnoAddInCollection::ReadConfiguration()
         else
             ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
 
-        //! TODO: adjust bucket count?
+        //TODO: adjust bucket count?
         if ( !pExactHashMap )
             pExactHashMap = new ScAddInHashMap;
         if ( !pNameHashMap )
@@ -409,7 +409,7 @@ void ScUnoAddInCollection::ReadConfiguration()
         if ( !pLocalHashMap )
             pLocalHashMap = new ScAddInHashMap;
 
-        //! get the function information in a single call for all functions?
+        //TODO: get the function information in a single call for all functions?
 
         const OUString* pFuncNameArray = aFunctionNames.getConstArray();
         for ( sal_Int32 nFuncPos = 0; nFuncPos < nNewCount; nFuncPos++ )
@@ -637,7 +637,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
                 {
                     if ( ScGlobal::pCharClass->uppercase( (*it).maName ) == aUpperCmp )
                     {
-                        //! store upper case for comparing?
+                        //TODO: store upper case for comparing?
 
                         //  use the first function that has this name for any language
                         rRetCalcName = pFuncData->GetOriginalName();
@@ -664,7 +664,7 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
     switch (xClass->getTypeClass())
     {
         case uno::TypeClass_ANY:                // variable type
-        case uno::TypeClass_ENUM:               //! ???
+        case uno::TypeClass_ENUM:               //TODO: ???
         case uno::TypeClass_BOOLEAN:
         case uno::TypeClass_CHAR:
         case uno::TypeClass_BYTE:
@@ -680,7 +680,7 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
         case uno::TypeClass_INTERFACE:
             {
                 //  return type XInterface may contain a XVolatileResult
-                //! XIdlClass needs getType() method!
+                //TODO: XIdlClass needs getType() method!
 
                 OUString sName = xClass->getName();
                 return (
@@ -691,7 +691,7 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
         default:
             {
                 //  nested sequences for arrays
-                //! XIdlClass needs getType() method!
+                //TODO: XIdlClass needs getType() method!
 
                 OUString sName = xClass->getName();
                 return (
@@ -710,7 +710,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
 
     uno::TypeClass eType = xClass->getTypeClass();
 
-    if ( eType == uno::TypeClass_LONG )             //! other integer types?
+    if ( eType == uno::TypeClass_LONG )             //TODO: other integer types?
         return SC_ADDINARG_INTEGER;
 
     if ( eType == uno::TypeClass_DOUBLE )
@@ -719,7 +719,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     if ( eType == uno::TypeClass_STRING )
         return SC_ADDINARG_STRING;
 
-    //! XIdlClass needs getType() method!
+    //TODO: XIdlClass needs getType() method!
     OUString sName = xClass->getName();
 
     if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<sal_Int32> >*)0) ))
@@ -765,7 +765,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         OUString aServiceName( xName->getServiceName() );
         ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName );
 
-        //! pass XIntrospection to ReadFromAddIn
+        //TODO: pass XIntrospection to ReadFromAddIn
 
         uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
@@ -793,7 +793,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                 else
                     ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
 
-                //! TODO: adjust bucket count?
+                //TODO: adjust bucket count?
                 if ( !pExactHashMap )
                     pExactHashMap = new ScAddInHashMap;
                 if ( !pNameHashMap )
@@ -815,7 +815,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                         bool bSkip = true;
                         if ( xClass.is() )
                         {
-                            //! XIdlClass needs getType() method!
+                            //TODO: XIdlClass needs getType() method!
                             OUString sName = xClass->getName();
                             bSkip = (
                                 IsTypeName( sName,
@@ -939,7 +939,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                             aDesc.aName = aArgName;
                                             aDesc.aDescription = aArgDesc;
                                             aDesc.bOptional = bOptional;
-                                            //! initialize aInternalName only from config?
+                                            //TODO: initialize aInternalName only from config?
                                             aDesc.aInternalName = pParArr[nParamPos].aName;
 
                                             pVisibleArgs[nDestPos++] = aDesc;
@@ -1116,7 +1116,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
 
                                     aDesc.eType = eArgType;
                                     aDesc.bOptional = bOptional;
-                                    //! initialize aInternalName only from config?
+                                    //TODO: initialize aInternalName only from config?
                                     aDesc.aInternalName = pParArr[nParamPos].aName;
 
                                     pVisibleArgs[nDestPos++] = aDesc;
@@ -1157,7 +1157,7 @@ OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bL
     else
     {
         //  first scan international names (used when calling a function)
-        //! before that, check for exact match???
+        //TODO: before that, check for exact match???
 
         ScAddInHashMap::const_iterator iLook( pNameHashMap->find( rUpperName ) );
         if ( iLook != pNameHashMap->end() )
@@ -1185,7 +1185,7 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const OUString& rNa
     {
         const ScUnoAddInFuncData* pFuncData = iLook->second;
 
-        if ( bComplete && !pFuncData->GetFunction().is() )           //! extra flag?
+        if ( bComplete && !pFuncData->GetFunction().is() )           //TODO: extra flag?
             LoadComponent( *pFuncData );
 
         return pFuncData;
@@ -1213,7 +1213,7 @@ void ScUnoAddInCollection::LocalizeString( OUString& rName )
 
     ScAddInHashMap::const_iterator iLook( pExactHashMap->find( rName ) );
     if ( iLook != pExactHashMap->end() )
-        rName = iLook->second->GetUpperLocal();         //! upper?
+        rName = iLook->second->GetUpperLocal();         //TODO: upper?
 }
 
 long ScUnoAddInCollection::GetFuncCount()
@@ -1241,7 +1241,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 {
     rDesc.Clear();
 
-    bool bIncomplete = !rFuncData.GetFunction().is();       //! extra flag?
+    bool bIncomplete = !rFuncData.GetFunction().is();       //TODO: extra flag?
 
     long nArgCount = rFuncData.GetArgumentCount();
     if ( nArgCount > USHRT_MAX )
@@ -1252,7 +1252,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
     // nFIndex is set from outside
 
-    rDesc.pFuncName = new OUString( rFuncData.GetUpperLocal() );     //! upper?
+    rDesc.pFuncName = new OUString( rFuncData.GetUpperLocal() );     //TODO: upper?
     rDesc.nCategory = rFuncData.GetCategory();
     rDesc.sHelpId = rFuncData.GetHelpId();
 
@@ -1360,7 +1360,7 @@ ScAddInArgumentType ScUnoAddInCall::GetArgType( long nPos )
         if ( nPos < nCount )
             return pArgs[nPos].eType;
     }
-    return SC_ADDINARG_VALUE_OR_ARRAY;      //! error code !!!!
+    return SC_ADDINARG_VALUE_OR_ARRAY;      //TODO: error code !!!!
 }
 
 bool ScUnoAddInCall::NeedsCaller() const
@@ -1417,7 +1417,7 @@ void ScUnoAddInCall::ExecuteCall()
     if ( nCount > 0 && pArgs[nCount-1].eType == SC_ADDINARG_VARARGS )
     {
         //  insert aVarArg as last argument
-        //! after inserting caller (to prevent copying twice)?
+        //TODO: after inserting caller (to prevent copying twice)?
 
         OSL_ENSURE( aArgs.getLength() == nCount, "wrong argument count" );
         aArgs.getArray()[nCount-1] <<= aVarArg;
@@ -1546,7 +1546,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
         case uno::TypeClass_INTERFACE:
             {
-                //! directly extract XVolatileResult from any?
+                //TODO: directly extract XVolatileResult from any?
                 uno::Reference<uno::XInterface> xInterface;
                 rNewRes >>= xInterface;
                 if ( xInterface.is() )
@@ -1562,7 +1562,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             {
                 const uno::Sequence< uno::Sequence<sal_Int32> >* pRowSeq = NULL;
 
-                //! use pointer from any!
+                //TODO: use pointer from any!
                 uno::Sequence< uno::Sequence<sal_Int32> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
@@ -1604,7 +1604,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             {
                 const uno::Sequence< uno::Sequence<double> >* pRowSeq = NULL;
 
-                //! use pointer from any!
+                //TODO: use pointer from any!
                 uno::Sequence< uno::Sequence<double> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
@@ -1646,7 +1646,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             {
                 const uno::Sequence< uno::Sequence<OUString> >* pRowSeq = NULL;
 
-                //! use pointer from any!
+                //TODO: use pointer from any!
                 uno::Sequence< uno::Sequence<OUString> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
@@ -1694,7 +1694,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             }
 
             if (!xMatrix)                       // no array found
-                nErrCode = errNoValue;          //! code for error in return type???
+                nErrCode = errNoValue;          //TODO: code for error in return type???
     }
 }
 
