@@ -9,7 +9,11 @@
 
 $(eval $(call gb_Library_Library,basegfx))
 
-$(eval $(call gb_Library_use_external,basegfx,boost_headers))
+$(eval $(call gb_Library_use_externals,basegfx, \
+    boost_headers \
+    glm_headers \
+))
+
 
 $(eval $(call gb_Library_set_precompiled_header,basegfx,$(SRCDIR)/basegfx/inc/pch/precompiled_basegfx))
 
@@ -69,6 +73,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/raster/rasterconvert3d \
     basegfx/source/tools/b2dclipstate \
     basegfx/source/tools/canvastools \
+    basegfx/source/tools/glm_canvastools \
     basegfx/source/tools/gradienttools \
     basegfx/source/tools/keystoplerp \
     basegfx/source/tools/numbertools \

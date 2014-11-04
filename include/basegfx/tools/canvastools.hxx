@@ -128,12 +128,13 @@ namespace basegfx
         BASEGFX_DLLPUBLIC ::basegfx::B2DHomMatrix&
             homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                             transform,
                                        const ::com::sun::star::geometry::AffineMatrix2D&    matrix );
-
-        BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& matrix );
+       BASEGFX_DLLPUBLIC ::basegfx::B3DHomMatrix
+            homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& matrix );
 
         BASEGFX_DLLPUBLIC ::com::sun::star::geometry::Matrix2D&
             matrixFromHomMatrix( ::com::sun::star::geometry::Matrix2D& matrix,
                                  const ::basegfx::B2DHomMatrix&        transform);
+
 
         // Geometry conversions
 
