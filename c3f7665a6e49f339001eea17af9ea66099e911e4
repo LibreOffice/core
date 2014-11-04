@@ -1,0 +1,1075 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bb7b3f7b",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1774,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a remark, like in \"rats, yet another spool\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9b807b48",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a remark, like in \"rats, yet another spool\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7b96e795",
+        "filename": "sc/source/core/data/dbdocutl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement but the author wasn\u0027t that sure..",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bbf21f05",
+        "filename": "sc/source/core/data/documen9.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement about the value of nExtendCol",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7bddc76f",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5bda037a",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3be74f42",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 980,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1be48b39",
+        "filename": "sc/source/core/data/dptabsrc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_fbcf77b1",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "Wrong translation\n\n\"nicht mehrere Undos fuer ein Objekt erzeugen\" \u003d\u003e \"do not create multiple Undos for one object\"\n\n\"hinteres kann dann weggelassen werden\" \u003d\u003e \"last one can be omitted then\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_dbd4b348",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "rather \"omit\" or \"drop\" instead of \"skip\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bbc9ffae",
+        "filename": "sc/source/core/data/fillinfo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "typo, \"cache\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9bce3bb3",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement about importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7bc4a791",
+        "filename": "sc/source/core/data/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement about importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5bc1e37f",
+        "filename": "sc/source/core/data/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement about importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1bbb6b10",
+        "filename": "sc/source/core/data/markdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "\"columns\" (plural)",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_fb3657b3",
+        "filename": "sc/source/core/data/patattr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1149,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7b4b872c",
+        "filename": "sc/source/core/data/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "rather \"The whole check has to be removed if for a new file version the name transformation is dropped.\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5b48c32d",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "rather \"remember\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3b550fc6",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "I guess the original was intended to read \"uebergeben\" rather than \"uebergehen\", so this should be \"pass as parameter\" instead",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_db6273ad",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1803,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "well, then make that \"new end\" ;-)",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bb57bfc9",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9b5cfbee",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7b72677e",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5b6fa392",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3b6cef9b",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1b692b8c",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_fb0417c7",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 334,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_db0953df",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1281,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bb0e9fe3",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2524,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9b13db0d",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2777,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7bf947c8",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2914,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5bf683d8",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3133,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3b03cfba",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3192,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1b000baa",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3274,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_fb2bf731",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3294,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_db3033a1",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3304,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bb257f5d",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3310,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9b2abb2b",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3328,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5b1d630e",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3402,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3b1aaf18",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3900,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1b17ebee",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_fbd2d733",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4250,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_dbd71322",
+        "filename": "sc/source/core/tool/chgtrack.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4363,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bbdc5f47",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9be19b01",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4371,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7be70713",
+        "filename": "sc/source/core/tool/consoli.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 622,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "rather \"optimize on columns\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5be4430c",
+        "filename": "sc/source/core/tool/editutil.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "rather \"configurable\" than \"adjustable\"",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3bf18fce",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4165,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1beecbec",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4626,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bbb33f0a",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2391,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9bb87be7",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7bcee784",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5bcb2373",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_3bc86f74",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1bc5ab5a",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 951,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_fba097a7",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3605,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_dba5d3b5",
+        "filename": "sc/source/core/tool/queryentry.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bbaa1f84",
+        "filename": "sc/source/core/tool/rangenam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_9baf5b94",
+        "filename": "sc/source/core/tool/refupdat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_7b95c73e",
+        "filename": "sc/source/core/tool/refupdat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_5b920359",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_1b9c8b68",
+        "filename": "sc/source/filter/excel/excdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo, it\u0027s a statement of importance",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_db8cb337",
+        "filename": "sc/source/filter/excel/xlroot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-04T12:56:23Z",
+      "side": 1,
+      "message": "not a todo",
+      "revId": "c3f7665a6e49f339001eea17af9ea66099e911e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
