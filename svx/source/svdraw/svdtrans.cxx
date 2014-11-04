@@ -37,36 +37,24 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
     Fraction xFact(rxFact);
     Fraction yFact(ryFact);
 
-    {
-        if (xFact.GetDenominator()==0) {
-            long nWdt=rRect.Right()-rRect.Left();
-            if (xFact.GetNumerator()>=0) { // catch divisions by zero
-                xFact=Fraction(xFact.GetNumerator(),1);
-                if (nWdt==0) rRect.Right()++;
-            } else {
-                xFact=Fraction(xFact.GetNumerator(),-1);
-                if (nWdt==0) rRect.Left()--;
-            }
-        }
-        rRect.Left()  =rRef.X()+Round(((double)(rRect.Left()  -rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-        rRect.Right() =rRef.X()+Round(((double)(rRect.Right() -rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
+    if (!xFact.IsValid()) {
+        SAL_WARN( "svx.svdraw", "invalid fraction xFract, using Fraction(1,1)" );
+        xFact = Fraction(1,1);
+        long nWdt = rRect.Right() - rRect.Left();
+        if (nWdt == 0) rRect.Right()++;
     }
-    {
-        if (yFact.GetDenominator()==0) {
-            long nHgt=rRect.Bottom()-rRect.Top();
-            if (yFact.GetNumerator()>=0) { // catch divisions by zero
-                yFact=Fraction(yFact.GetNumerator(),1);
-                if (nHgt==0) rRect.Bottom()++;
-            } else {
-                yFact=Fraction(yFact.GetNumerator(),-1);
-                if (nHgt==0) rRect.Top()--;
-            }
+    rRect.Left()  = rRef.X() + Round( (rRect.Left()  - rRef.X()) * double(xFact) );
+    rRect.Right() = rRef.X() + Round( (rRect.Right() - rRef.X()) * double(xFact) );
 
-            yFact=Fraction(yFact.GetNumerator(),1); // catch divisions by zero
-        }
-        rRect.Top()   =rRef.Y()+Round(((double)(rRect.Top()   -rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
-        rRect.Bottom()=rRef.Y()+Round(((double)(rRect.Bottom()-rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
+    if (!yFact.IsValid()) {
+        SAL_WARN( "svx.svdraw", "invalid fraction yFract, using Fraction(1,1)" );
+        yFact = Fraction(1,1);
+        long nHgt = rRect.Bottom() - rRect.Top();
+        if (nHgt == 0) rRect.Bottom()++;
     }
+    rRect.Top()    = rRef.Y() + Round( (rRect.Top()    - rRef.Y()) * double(yFact) );
+    rRect.Bottom() = rRef.Y() + Round( (rRect.Bottom() - rRef.Y()) * double(yFact) );
+
     if (!bNoJustify) rRect.Justify();
 }
 
