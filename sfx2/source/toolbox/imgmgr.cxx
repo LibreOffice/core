@@ -211,7 +211,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
                 for ( sal_uInt16 nPos=0; nPos<nCount; nPos++ )
                 {
                     sal_uInt16 nId = pBox->GetItemId( nPos );
-                    if ( pBox->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
+                    if ( pBox->GetItemType(nPos) == ToolBoxItemType::BUTTON )
                     {
                         pBox->SetItemImage( nId, GetImage( nId, bLarge ) );
                         SfxStateCache *pCache = SfxViewFrame::Current()->GetBindings().GetStateCache( nId );

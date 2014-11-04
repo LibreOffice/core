@@ -1738,7 +1738,7 @@ bool ToolBox::ImplCalcItem()
 
             it->mbVisibleText = false;  // indicates if text will definitely be drawn, influences dropdown pos
 
-            if ( it->meType == TOOLBOXITEM_BUTTON )
+            if ( it->meType == ToolBoxItemType::BUTTON )
             {
                 // check if image and/or text exists
                 if ( !(it->maImage) )
@@ -1838,18 +1838,18 @@ bool ToolBox::ImplCalcItem()
                     it->maContentSize.Height() = tmp;
                 }
             }
-            else if ( it->meType == TOOLBOXITEM_SPACE )
+            else if ( it->meType == ToolBoxItemType::SPACE )
             {
                 it->maItemSize = Size( nDefWidth, nDefHeight );
                 it->maContentSize = it->maItemSize;
             }
 
-            if ( it->meType == TOOLBOXITEM_BUTTON || it->meType == TOOLBOXITEM_SPACE )
+            if ( it->meType == ToolBoxItemType::BUTTON || it->meType == ToolBoxItemType::SPACE )
             {
                 // add borders
                 ImplAddButtonBorder( it->maItemSize.Width(), it->maItemSize.Height(), mpData->mbNativeButtons );
 
-                if( it->meType == TOOLBOXITEM_BUTTON )
+                if( it->meType == ToolBoxItemType::BUTTON )
                 {
                     long nMinW = std::max(nMinWidth, it->maMinimalItemSize.Width());
                     long nMinH = std::max(nMinHeight, it->maMinimalItemSize.Height());
@@ -1962,7 +1962,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalc
             bBreak      = false;
             nCurWidth   = 0;
 
-            if ( it->meType == TOOLBOXITEM_BUTTON || it->meType == TOOLBOXITEM_SPACE )
+            if ( it->meType == ToolBoxItemType::BUTTON || it->meType == ToolBoxItemType::SPACE )
             {
                 if ( bCalcHorz )
                     nCurWidth = it->maItemSize.Width();
@@ -1992,14 +1992,14 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalc
                      ( ( it != lastVisible ) && (nLineWidth+nCurWidth+nMenuWidth > nWidthTotal) && mbScroll ) )
                     bBreak = true;
             }
-            else if ( it->meType == TOOLBOXITEM_SEPARATOR )
+            else if ( it->meType == ToolBoxItemType::SEPARATOR )
             {
                 nCurWidth = it->mnSepSize;
                 if ( !ImplIsFloatingMode() && ( it != lastVisible ) && (nLineWidth+nCurWidth+nMenuWidth > nWidthTotal) )
                     bBreak = true;
             }
             // treat breaks as separators, except when using old style toolbars (ie. no menu button)
-            else if ( (it->meType == TOOLBOXITEM_BREAK) && !IsMenuEnabled() )
+            else if ( (it->meType == ToolBoxItemType::BREAK) && !IsMenuEnabled() )
                 bBreak = true;
 
             if ( bBreak )
@@ -2007,7 +2007,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalc
                 nLines++;
 
                 // Add break before the entire group or take group apart?
-                if ( (it->meType == TOOLBOXITEM_BREAK) ||
+                if ( (it->meType == ToolBoxItemType::BREAK) ||
                      (nLineStart == nGroupStart) )
                 {
                     if ( nLineWidth > nMaxLineWidth )
@@ -2036,7 +2036,7 @@ sal_uInt16 ToolBox::ImplCalcBreaks( long nWidth, long* pMaxLineWidth, bool bCalc
             {
                 if( ImplIsFloatingMode() || !IsMenuEnabled() ) // no group breaking when being docked single-line
                 {
-                    if ( (it->meType != TOOLBOXITEM_BUTTON) || bWindow )
+                    if ( (it->meType != ToolBoxItemType::BUTTON) || bWindow )
                     {
                         // found separator or break
                         nLastGroupLineWidth = nLineWidth;
@@ -2141,7 +2141,7 @@ static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
     std::vector< ImplToolItem >::iterator it;
     for ( it = rItems.begin(); it != rItems.end(); ++it )
     {
-        if ( it->meType == TOOLBOXITEM_SEPARATOR )
+        if ( it->meType == ToolBoxItemType::SEPARATOR )
         {
             it->mbVisible = false;
             if ( !bLastSep )
@@ -2150,7 +2150,7 @@ static void lcl_hideDoubleSeparators( std::vector< ImplToolItem >& rItems )
                 std::vector< ImplToolItem >::iterator temp_it;
                 for ( temp_it = it+1; temp_it != rItems.end(); ++temp_it )
                 {
-                    if ( ((temp_it->meType == TOOLBOXITEM_BUTTON) &&
+                    if ( ((temp_it->meType == ToolBoxItemType::BUTTON) &&
                           temp_it->mbVisible) )
                     {
                         it->mbVisible = true;
@@ -2985,7 +2985,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     // draw separators in flat style only
     if ( !bLayout &&
          (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
-         (pItem->meType == TOOLBOXITEM_SEPARATOR) &&
+         (pItem->meType == ToolBoxItemType::SEPARATOR) &&
          nPos > 0
          )
     {
@@ -2993,7 +2993,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     }
 
     // do nothing if item is no button or will be displayed as window
-    if ( (pItem->meType != TOOLBOXITEM_BUTTON) ||
+    if ( (pItem->meType != ToolBoxItemType::BUTTON) ||
          (pItem->mbShowWindow && !mbCustomizeMode) )
         return;
 
@@ -3567,7 +3567,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( it->maRect.IsInside( aMousePos ) )
             {
                 // select it if it is a button
-                if ( it->meType == TOOLBOXITEM_BUTTON )
+                if ( it->meType == ToolBoxItemType::BUTTON )
                 {
                     // if button is disabled, do not
                     // change it
@@ -3676,7 +3676,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             {
                 if ( it->maRect.IsInside( aMousePos ) )
                 {
-                    if ( (it->meType == TOOLBOXITEM_BUTTON) && it->mbEnabled )
+                    if ( (it->meType == ToolBoxItemType::BUTTON) && it->mbEnabled )
                     {
                         if ( !mnOutStyle || (mnOutStyle & TOOLBOX_STYLE_FLAT) )
                         {
@@ -3780,7 +3780,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 // do nothing if it is a separator or
                 // if the item has been disabled
-                if ( (it->meType == TOOLBOXITEM_BUTTON) &&
+                if ( (it->meType == ToolBoxItemType::BUTTON) &&
                      (!it->mbShowWindow || mbCustomizeMode) )
                     nNewPos = i;
 
@@ -4373,7 +4373,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
                 {
                     // do nothing if it is a separator or
                     // the item has been disabled
-                    if ( (it->meType == TOOLBOXITEM_BUTTON) &&
+                    if ( (it->meType == ToolBoxItemType::BUTTON) &&
                          !it->mbShowWindow )
                         mbCommandDrag = true;
                     break;
@@ -4762,7 +4762,7 @@ sal_uInt16 ToolBox::ImplCountLineBreaks( const ToolBox *pThis )
     std::vector< ImplToolItem >::const_iterator it = ((ToolBox*)pThis)->mpData->m_aItems.begin();
     while ( it != ((ToolBox*)pThis)->mpData->m_aItems.end() )
     {
-        if( it->meType == TOOLBOXITEM_BREAK )
+        if( it->meType == ToolBoxItemType::BREAK )
             ++nLines;
         ++it;
     }
@@ -4832,7 +4832,7 @@ Size ToolBox::CalcMinimumWindowSizePixel() const
         while( it != mpData->m_aItems.end() )
         {
             pToolBox->CopyItem( *this, it->mnId );
-            if( (it->meType != TOOLBOXITEM_BUTTON) ||
+            if( (it->meType != ToolBoxItemType::BUTTON) ||
                 !it->mbVisible || ImplIsFixedControl( &(*it) ) )
                 ++it;
             else
@@ -5246,7 +5246,7 @@ ImplToolItem* ToolBox::ImplGetFirstValidItem( sal_uInt16 nLine )
         if( !nLine )
         {
             // find first useful item
-            while( it != mpData->m_aItems.end() && ((it->meType != TOOLBOXITEM_BUTTON) ||
+            while( it != mpData->m_aItems.end() && ((it->meType != ToolBoxItemType::BUTTON) ||
                 /*!it->mbEnabled ||*/ !it->mbVisible || ImplIsFixedControl( &(*it) )) )
             {
                 ++it;
@@ -5360,7 +5360,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus )
 // check for keyboard accessible items
 static bool ImplIsValidItem( const ImplToolItem* pItem, bool bNotClipped )
 {
-    bool bValid = (pItem && pItem->meType == TOOLBOXITEM_BUTTON && pItem->mbVisible && !ImplIsFixedControl( pItem ));
+    bool bValid = (pItem && pItem->meType == ToolBoxItemType::BUTTON && pItem->mbVisible && !ImplIsFixedControl( pItem ));
     if( bValid && bNotClipped && pItem->IsClipped() )
         bValid = false;
     return bValid;

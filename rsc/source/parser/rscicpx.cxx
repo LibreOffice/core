@@ -1290,10 +1290,10 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
         RscEnum   * pEnum;
 
         aBaseLst.push_back( pEnum = new RscEnum( pHS->getID( "EnumToolBoxItemType" ), RSC_NOTYPE ) );
-        SETCONST( pEnum, "TOOLBOXITEM_BUTTON", TOOLBOXITEM_BUTTON );
-        SETCONST( pEnum, "TOOLBOXITEM_SPACE", TOOLBOXITEM_SPACE );
-        SETCONST( pEnum, "TOOLBOXITEM_SEPARATOR", TOOLBOXITEM_SEPARATOR );
-        SETCONST( pEnum, "TOOLBOXITEM_BREAK", TOOLBOXITEM_BREAK );
+        SETCONST( pEnum, "TOOLBOXITEM_BUTTON", ToolBoxItemType::BUTTON );
+        SETCONST( pEnum, "TOOLBOXITEM_SPACE", ToolBoxItemType::SPACE );
+        SETCONST( pEnum, "TOOLBOXITEM_SEPARATOR", ToolBoxItemType::SEPARATOR );
+        SETCONST( pEnum, "TOOLBOXITEM_BREAK", ToolBoxItemType::BREAK );
 
         // Variable einfuegen
         nId = aNmTb.Put( "Type", VARNAME );

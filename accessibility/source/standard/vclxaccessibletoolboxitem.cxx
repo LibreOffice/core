@@ -80,7 +80,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     ToolBoxItemType eType = m_pToolBox->GetItemType( (sal_uInt16)m_nIndexInParent );
     switch ( eType )
     {
-        case TOOLBOXITEM_BUTTON :
+        case ToolBoxItemType::BUTTON :
         {
             ToolBoxItemBits nBits = m_pToolBox->GetItemBits( m_nItemId );
             if (
@@ -99,12 +99,12 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
             break;
         }
 
-        case TOOLBOXITEM_SPACE :
+        case ToolBoxItemType::SPACE :
             m_nRole = AccessibleRole::FILLER;
             break;
 
-        case TOOLBOXITEM_SEPARATOR :
-        case TOOLBOXITEM_BREAK :
+        case ToolBoxItemType::SEPARATOR :
+        case ToolBoxItemType::BREAK :
             m_nRole = AccessibleRole::SEPARATOR;
             break;
 
