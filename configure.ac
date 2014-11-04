@@ -2093,6 +2093,12 @@ AC_ARG_WITH(gssapi,
          where a good system GSSAPI is available.]),
 ,)
 
+AC_ARG_WITH(iwyu,
+    AS_HELP_STRING([--with-iwyu],
+        [Provide IWYU binary path to check unneeded includes instead of building.
+         Use only if you are hacking on it.]),
+,)
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -12503,6 +12509,8 @@ else
 fi
 AC_SUBST(PARALLELISM)
 
+IWYU_PATH="$with_iwyu"
+AC_SUBST(IWYU_PATH)
 #
 # Set up ILIB for MSVC build
 #
