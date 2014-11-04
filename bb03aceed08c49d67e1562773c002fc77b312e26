@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_107eaaae",
+        "filename": "include/svx/svdtrans.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000748
+      },
+      "writtenOn": "2014-11-04T01:23:08Z",
+      "side": 1,
+      "message": "As discussed on irc with dtardon, we use Fraction(1,1) as default value",
+      "revId": "bb03aceed08c49d67e1562773c002fc77b312e26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_f049d68f",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000748
+      },
+      "writtenOn": "2014-11-04T01:23:08Z",
+      "side": 1,
+      "message": "Here, use Fraction(1,1) has no sense for me. In case of that the code was:\n    long nWdt\u003drRect.Right()-rRect.Left();\n    if (nWdt\u003d\u003d0) rRect.Right()++;\ndue that GetNumerator()\u003e\u003d0.\nWhy check for do rRect.Right()++ instead of rRect.Left()--?\nFor me has more sense use Fraction(0,1) here and avoid checks.",
+      "revId": "bb03aceed08c49d67e1562773c002fc77b312e26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
