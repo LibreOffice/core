@@ -25,6 +25,8 @@
 
 using namespace com::sun::star;
 
+static std::vector< GLXContext > vShareList;
+
 GLWindow::~GLWindow()
 {
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
@@ -58,6 +60,8 @@ OpenGLContext::~OpenGLContext()
 #elif defined( UNX )
     if(m_aGLWin.ctx)
     {
+        std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx );
+
         glXMakeCurrent(m_aGLWin.dpy, None, NULL);
         if( glGetError() != GL_NO_ERROR )
         {
@@ -582,13 +586,21 @@ bool OpenGLContext::ImplInit()
 #endif
     if (!m_aGLWin.ctx)
     {
+        GLXContext pSharedCtx( NULL );
+
         if (!m_aGLWin.dpy || !m_aGLWin.vi)
            return false;
 
+        if( !vShareList.empty() )
+            pSharedCtx = vShareList.front();
+
         m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
                 m_aGLWin.vi,
-                0,
+                pSharedCtx,
                 GL_TRUE);
+
+        if( m_aGLWin.ctx )
+            vShareList.push_back( m_aGLWin.ctx );
     }
     if( m_aGLWin.ctx == NULL )
     {
