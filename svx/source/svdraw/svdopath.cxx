@@ -756,11 +756,11 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
         {
             Point aPt(mpSdrPathDragData->aXP[nNextPnt]);
             aPt-=rDrag.GetNow();
-            long nWink1=GetAngle(aPt);
+            long nAngle1=GetAngle(aPt);
             aPt=rDrag.GetNow();
             aPt-=mpSdrPathDragData->aXP[nPrevPnt];
             long nWink2=GetAngle(aPt);
-            long nDiff=nWink1-nWink2;
+            long nDiff=nAngle1-nWink2;
             nDiff=std::abs(nDiff);
             mpSdrPathDragData->bEliminate=nDiff<=rDrag.GetView()->GetEliminatePolyPointLimitAngle();
             if (mpSdrPathDragData->bEliminate) { // adapt position, Smooth is true for the ends

@@ -2543,11 +2543,11 @@ SdrDragMirror::SdrDragMirror(SdrDragView& rNewView)
 
 bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
 {
-    long nWink1=GetAngle(rPnt-DragStat().GetRef1());
-    nWink1-=nWink;
-    nWink1=NormAngle360(nWink1);
+    long nAngle1=GetAngle(rPnt-DragStat().GetRef1());
+    nAngle1-=nWink;
+    nAngle1=NormAngle360(nAngle1);
 
-    return nWink1<18000;
+    return nAngle1<18000;
 }
 
 void SdrDragMirror::TakeSdrDragComment(OUString& rStr) const
