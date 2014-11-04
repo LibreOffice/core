@@ -197,8 +197,6 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
             {
                 if( !mbOutputClipped )
                 {
-                    tools::PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
-
                     // calculate step count if necessary
                     if ( !aGradient.GetSteps() )
                         aGradient.SetSteps( GRADIENT_DEFAULT_STEPCOUNT );
