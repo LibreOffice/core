@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_b03a3ee6",
+        "filename": "starmath/source/smres.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-11-04T05:13:14Z",
+      "side": 1,
+      "message": "There is a typo here, it should be \"fuchsia\".",
+      "revId": "38e21f422cd5ee9ce97aae9f0be32f46f6d22904",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
