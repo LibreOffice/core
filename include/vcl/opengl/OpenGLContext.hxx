@@ -156,6 +156,7 @@ public:
 
     void requestLegacyContext();
     void requestSingleBufferedRendering();
+    void requestVirtualDevice();
 
     bool init(vcl::Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
@@ -211,6 +212,7 @@ private:
     bool mbInitialized;
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
+    bool mbRequestVirtualDevice;
 };
 
 #endif

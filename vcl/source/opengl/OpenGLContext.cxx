@@ -37,7 +37,8 @@ OpenGLContext::OpenGLContext():
     m_pChildWindow(NULL),
     mbInitialized(false),
     mbRequestLegacyContext(false),
-    mbUseDoubleBufferedRendering(true)
+    mbUseDoubleBufferedRendering(true),
+    mbRequestVirtualDevice(false)
 {
 }
 
@@ -75,6 +76,11 @@ void OpenGLContext::requestLegacyContext()
 void OpenGLContext::requestSingleBufferedRendering()
 {
     mbUseDoubleBufferedRendering = false;
+}
+
+void OpenGLContext::requestVirtualDevice()
+{
+    mbRequestVirtualDevice = true;
 }
 
 #if defined( _WIN32 )
@@ -182,7 +188,8 @@ bool WGLisExtensionSupported(const char *extension)
     }
 }
 
-bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat, bool bUseDoubleBufferedRendering)
+bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat,
+        bool bUseDoubleBufferedRendering, bool bRequestVirtualDevice)
 {
     HWND hWnd = NULL;
     GLWindow glWin;
@@ -234,6 +241,11 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat, bool bUseDoub
 
     if (!bUseDoubleBufferedRendering)
         iAttributes[1] = GL_FALSE;
+
+    if (bRequestVirtualDevice)
+    {
+        iAttributes[2] = WGL_DRAW_TO_BITMAP_ARB;
+    }
 
     bool bArbMultisampleSupported = true;
 
@@ -589,9 +601,7 @@ bool OpenGLContext::ImplInit()
     {
         sizeof(PIXELFORMATDESCRIPTOR),
         1,                              // Version Number
-        PFD_DRAW_TO_WINDOW |
-        PFD_SUPPORT_OPENGL |
-        PFD_DOUBLEBUFFER,
+        PFD_SUPPORT_OPENGL,
         PFD_TYPE_RGBA,                  // Request An RGBA Format
         (BYTE)32,                       // Select Our Color Depth
         0, 0, 0, 0, 0, 0,               // Color Bits Ignored
@@ -607,9 +617,18 @@ bool OpenGLContext::ImplInit()
         0, 0, 0                         // Layer Masks Ignored
     };
 
+    if (mbUseDoubleBufferedRendering)
+        PixelFormatFront.dwFlags |= PFD_DOUBLEBUFFER;
+
+    if (mbRequestVirtualDevice)
+        PixelFormatFront.dwFlags |= PFD_DRAW_TO_BITMAP;
+    else
+        PixelFormatFront.dwFlags |= PFD_DRAW_TO_WINDOW;
+
     //  we must check whether can set the MSAA
     int WindowPix = 0;
-    bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix, mbUseDoubleBufferedRendering);
+    bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix,
+            mbUseDoubleBufferedRendering, mbRequestVirtualDevice);
     if (bMultiSampleSupport && WindowPix != 0)
     {
         m_aGLWin.bMultiSampleSupported = true;
