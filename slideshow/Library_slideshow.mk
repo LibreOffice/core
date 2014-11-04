@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_externals,slideshow,\
 	boost_headers \
 	glew \
 	mesa_headers \
+        glm_headers \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,slideshow))

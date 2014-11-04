@@ -16,6 +16,7 @@ $(eval $(call gb_StaticLibrary_use_api,pdfimport_s,\
 
 $(eval $(call gb_StaticLibrary_use_externals,pdfimport_s,\
     boost_headers \
+    glm_headers \
     zlib \
 ))
 

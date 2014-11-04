@@ -9,7 +9,10 @@
 
 $(eval $(call gb_Library_Library,basegfx))
 
-$(eval $(call gb_Library_use_external,basegfx,boost_headers))
+$(eval $(call gb_Library_use_externals,basegfx, \
+         boost_headers \
+         glm_headers \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,basegfx,$(SRCDIR)/basegfx/inc/pch/precompiled_basegfx))
 

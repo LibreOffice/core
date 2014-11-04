@@ -110,6 +110,7 @@ $(eval $(call gb_Library_add_libs,cairocanvas,\
 ))
 $(eval $(call gb_Library_use_externals,cairocanvas,\
 	Xrender \
+        glm_headers \
 ))
 endif
 

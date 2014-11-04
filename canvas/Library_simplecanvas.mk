@@ -21,7 +21,7 @@ $(eval $(call gb_Library_Library,simplecanvas))
 
 $(eval $(call gb_Library_set_componentfile,simplecanvas,canvas/source/simplecanvas/simplecanvas))
 
-$(eval $(call gb_Library_use_external,simplecanvas,boost_headers))
+$(eval $(call gb_Library_use_external,simplecanvas,boost_headers,glm_headers))
 
 $(eval $(call gb_Library_use_sdk_api,simplecanvas))
 

@@ -31,7 +31,11 @@ $(eval $(call gb_Library_add_defs,cppcanvas,\
 
 $(eval $(call gb_Library_set_precompiled_header,cppcanvas,$(SRCDIR)/cppcanvas/inc/pch/precompiled_cppcanvas))
 
-$(eval $(call gb_Library_use_external,cppcanvas,boost_headers))
+$(eval $(call gb_Library_use_externals,cppcanvas, \
+	boost_headers \
+	glm_headers \
+))
+
 
 $(eval $(call gb_Library_use_libraries,cppcanvas,\
 	basegfx \
