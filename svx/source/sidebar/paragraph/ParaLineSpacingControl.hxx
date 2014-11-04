@@ -19,15 +19,10 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARALINESPACINGCONTROL_HXX
 
-#include "svx/sidebar/ValueSetWithTextControl.hxx"
-#include <sfx2/bindings.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <svtools/ctrltool.hxx>
-#include <vcl/fixed.hxx>
-#include <svl/poolitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/tbxctrl.hxx>
+
+class SvxLineSpacingItem;
 
 namespace svx {
 
@@ -36,15 +31,6 @@ class ParaLineSpacingControl : public SfxPopupWindow
 public:
     ParaLineSpacingControl(sal_uInt16 nId);
     virtual ~ParaLineSpacingControl();
-
-    short GetLastCustomState();
-    long  GetLastCustomValue();
-
-    void ExecuteLineSpace();
-    void SetLineSpace( SvxLineSpacingItem& rLineSpace,
-                        int eSpace, long lValue = 0 );
-
-    void ExecuteLineSpacing(sal_uInt16 aEntry);
 
 private:
     SfxMapUnit              meLNSpaceUnit;
@@ -63,7 +49,17 @@ private:
     MetricField*            mpLineDistAtMetricBox;
 
 private:
-    void initialize();
+    /// Setup the widgets with values from the document.
+    void Initialize();
+
+    /// Take the values from the widgets, and update the paragraph accordingly.
+    void ExecuteLineSpace();
+
+    /// Set one particular value.
+    void SetLineSpace(SvxLineSpacingItem& rLineSpace, int eSpace, long lValue = 0);
+
+    /// For the buttons - set the values, and close the popup.
+    void ExecuteLineSpacing(sal_uInt16 aEntry);
 
     /// Set mpActlineDistFld and visibility of mpLineDist* fields according to what is just selected.
     void UpdateMetricFields();

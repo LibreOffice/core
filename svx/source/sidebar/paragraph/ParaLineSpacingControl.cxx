@@ -16,18 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "ParaLineSpacingControl.hxx"
-#include "ParaPropertyPanel.hrc"
-#include <sfx2/sidebar/ResourceDefinitions.hrc>
-#include <svx/dialogs.hrc>
-#include <svx/dialmgr.hxx>
-#include <unotools/viewoptions.hxx>
+
+#include <editeng/editids.hrc>
 #include <editeng/kernitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svtools/unitconv.hxx>
-#include <vcl/settings.hxx>
 
 #define DEFAULT_LINE_SPACING  200
 #define FIX_DIST_DEF          283
@@ -51,7 +47,6 @@
 #define MIN_FIXED_DISTANCE    28
 
 using namespace svx;
-using namespace svx::sidebar;
 
 ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     : SfxPopupWindow(nId, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui")
@@ -94,14 +89,14 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
 
     SetFieldUnit(*mpLineDistAtMetricBox, eUnit);
 
-    initialize();
+    Initialize();
 }
 
 ParaLineSpacingControl::~ParaLineSpacingControl()
 {
 }
 
-void ParaLineSpacingControl::initialize()
+void ParaLineSpacingControl::Initialize()
 {
     const SfxPoolItem* pItem;
     SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PARA_LINESPACE, pItem);
@@ -287,8 +282,8 @@ void ParaLineSpacingControl::UpdateMetricFields()
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
             break;
+
         case LLINESPACE_FIX:
-        {
             mpLineDistAtPercentBox->Hide();
 
             mpActLineDistFld = mpLineDistAtMetricBox;
@@ -301,8 +296,7 @@ void ParaLineSpacingControl::UpdateMetricFields()
             mpLineDistLabel->Enable();
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
-        }
-        break;
+            break;
     }
 }
 
@@ -348,10 +342,9 @@ void ParaLineSpacingControl::ExecuteLineSpace()
         case LLINESPACE_DURCH:
         case LLINESPACE_FIX:
             SetLineSpace(aSpacing, nPos, GetCoreValue(*mpLineDistAtMetricBox, meLNSpaceUnit));
-        break;
+            break;
 
         default:
-            OSL_ENSURE(false, "error!!");
             break;
     }
 
