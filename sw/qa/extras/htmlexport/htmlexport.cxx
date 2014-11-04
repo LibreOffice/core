@@ -162,8 +162,6 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbeddedDocument, "skipimage-embedded-docum
     assertXPathContent(pDoc, "/html/body/p/span/p/span", "Inner.");
 }
 
-#endif
-
 DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutton.doc")
 {
     htmlDocPtr pDoc = parseHtml(maTempFile);
@@ -183,6 +181,7 @@ DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutto
     assertXPath(pDoc, "/html/body/form/p[4]/input", "type", "radio");
     // FIXME not in 4.3 assertXPathNoAttribute(pDoc, "/html/body/form/p[4]/input", "checked");
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
