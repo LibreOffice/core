@@ -487,6 +487,8 @@ void WinSalGraphics::InitGraphics()
     OpenGLSalGraphicsImpl* pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
     if (pImpl)
     {
+        if (mbVirDev)
+            pImpl->GetOpenGLContext().requestVirtualDevice();
         pImpl->GetOpenGLContext().init(mhLocalDC, mhWnd);
     }
 }
