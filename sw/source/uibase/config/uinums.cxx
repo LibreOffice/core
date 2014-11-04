@@ -67,13 +67,23 @@ SwBaseNumRules::~SwBaseNumRules()
 {
     if( bModified )
     {
+        INetURLObject aURL;
         SvtPathOptions aPathOpt;
-        OUString sNm( aPathOpt.GetUserConfigPath() + "/" + sFileName );
-        INetURLObject aTempObj(sNm);
-        sNm = aTempObj.GetFull();
-        SfxMedium aStrm( sNm, STREAM_WRITE | STREAM_TRUNC |
-                                        STREAM_SHARE_DENYALL );
-        Store( *aStrm.GetOutStream() );
+        aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
+        aURL.setFinalSlash();
+        aURL.Append(sFileName);
+
+        SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
+        SvStream* pStream = aMedium.GetOutStream();
+        bool bRet = (pStream && pStream->GetError() == 0);
+        if (bRet)
+        {
+            Store( *pStream );
+
+            pStream->Flush();
+
+            aMedium.Commit();
+        }
     }
 
     for( sal_uInt16 i = 0; i < nMaxRules; ++i )
