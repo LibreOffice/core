@@ -344,7 +344,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     }
 }
 
-void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachoperation
+void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeated?) operation
                                SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                const ScMarkData& rMark)
 {
@@ -608,7 +608,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
         if (maTabs[*itr])
             maTabs[*itr]->UpdateSelectionFunction(aData, aMark);
 
-            //! rMark an UpdateSelectionFunction uebergeben !!!!!
+            //TODO: pass rMark to UpdateSelectionFunction !!!!!
 
     if (!aData.bError)
         switch (eFunc)
@@ -660,10 +660,10 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
             nPrecision = (short)GetFormatTable()->GetFormatPrecision( nFormat );
             switch ( nType )
             {
-                case NUMBERFORMAT_PERCENT:      // 0,41% == 0,0041
+                case NUMBERFORMAT_PERCENT:      // 0.41% == 0.0041
                     nPrecision += 2;
                     break;
-                case NUMBERFORMAT_SCIENTIFIC:   // 1,23e-3 == 0,00123
+                case NUMBERFORMAT_SCIENTIFIC:   // 1.23e-3 == 0.00123
                 {
                     if ( fVal > 0.0 )
                         nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( fVal ) ) );
@@ -682,7 +682,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         }
         double fRound = ::rtl::math::round( fVal, nPrecision );
         if ( ::rtl::math::approxEqual( fVal, fRound ) )
-            return fVal;        // durch Rundung hoechstens Fehler
+            return fVal;        // rounding might introduce some error
         else
             return fRound;
     }
@@ -690,7 +690,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         return fVal;
 }
 
-//          bedingte Formate und Gueltigkeitsbereiche
+// conditional formats and validation ranges
 
 sal_uLong ScDocument::AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab )
 {
@@ -706,7 +706,7 @@ sal_uLong ScDocument::AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab )
 sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
 {
     if (rNew.IsEmpty())
-        return 0;                   // leer ist immer 0
+        return 0;                   // empty is always 0
 
     if (!pValidationList)
         pValidationList = new ScValidationDataList;
@@ -722,7 +722,7 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
             nMax = nKey;
     }
 
-    // Der Aufruf kann aus ScPatternAttr::PutInPool kommen, darum Clone (echte Kopie)
+    // might be called from ScPatternAttr::PutInPool; thus clone (real copy)
 
     sal_uLong nNewKey = nMax + 1;
     ScValidationData* pInsert = rNew.Clone(this);
@@ -882,19 +882,19 @@ void ScDocument::AddDetectiveOperation( const ScDetOpData& rData )
 
 void ScDocument::ClearDetectiveOperations()
 {
-    delete pDetOpList;      // loescht auch die Eintraege
+    delete pDetOpList;      // deletes also the entries
     pDetOpList = NULL;
 }
 
 void ScDocument::SetDetOpList(ScDetOpList* pNew)
 {
-    delete pDetOpList;      // loescht auch die Eintraege
+    delete pDetOpList;      // deletes also the entries
     pDetOpList = pNew;
 }
 
-//      Vergleich von Dokumenten
+// Comparison of Documents
 
-//  Pfriemel-Faktoren
+//  Pfriemel-Factors
 #define SC_DOCCOMP_MAXDIFF  256
 #define SC_DOCCOMP_MINGOOD  128
 #define SC_DOCCOMP_COLUMNS  10
@@ -914,7 +914,7 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
         else
             nOtherCol = nThisCol;
 
-        if (ValidCol(nOtherCol))    // nur Spalten vergleichen, die in beiden Dateien sind
+        if (ValidCol(nOtherCol))    // only compare columns that are common to both docs
         {
             ScRefCellValue aThisCell, aOtherCell;
             aThisCell.assign(*this, ScAddress(nThisCol, nThisRow, nThisTab));
@@ -924,7 +924,7 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
                 if (!aThisCell.isEmpty() && !aOtherCell.isEmpty())
                     nDif += 3;
                 else
-                    nDif += 4;      // Inhalt <-> leer zaehlt mehr
+                    nDif += 4;      // content <-> empty counts more
             }
 
             if (!aThisCell.isEmpty() || !aOtherCell.isEmpty())
@@ -943,7 +943,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCCOL nOtherCol, SCTAB nOtherTab,
                                     SCROW nMaxRow, SCCOLROW* pOtherRows )
 {
-    //! optimieren mit Iterator oder so
+    //TODO: Optimize e.g. with Iterator
 
     sal_uLong nDif = 0;
     sal_uLong nUsed = 0;
@@ -955,7 +955,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
         else
             nOtherRow = nThisRow;
 
-        if (ValidRow(nOtherRow))    // nur Zeilen vergleichen, die in beiden Dateien sind
+        if (ValidRow(nOtherRow))    // only compare rows that are common to both docs
         {
             ScRefCellValue aThisCell, aOtherCell;
             aThisCell.assign(*this, ScAddress(nThisCol, nThisRow, nThisTab));
@@ -965,7 +965,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                 if (!aThisCell.isEmpty() && !aOtherCell.isEmpty())
                     nDif += 3;
                 else
-                    nDif += 4;      // Inhalt <-> leer zaehlt mehr
+                    nDif += 4;      // content <-> empty counts more
             }
 
             if (!aThisCell.isEmpty() || !aOtherCell.isEmpty())
@@ -984,27 +984,27 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
                             bool bColumns, ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
                             SCCOLROW nEndCol, SCCOLROW* pTranslate, ScProgress* pProgress, sal_uLong nProAdd )
 {
-    //  bColumns=true: Zeilen sind Spalten und umgekehrt
+    //  bColumns=true: rows are columns and vice versa
 
-    SCCOLROW nMaxCont;                      // wieviel weiter
-    SCCOLROW nMinGood;                      // was ist ein Treffer (incl.)
+    SCCOLROW nMaxCont;                      // continue by how much
+    SCCOLROW nMinGood;                      // what is a hit (incl.)
     if ( bColumns )
     {
-        nMaxCont = SC_DOCCOMP_COLUMNS;      // 10 Spalten
+        nMaxCont = SC_DOCCOMP_COLUMNS;      // 10 columns
         nMinGood = SC_DOCCOMP_MINGOOD;
-        //! Extra Durchgang mit nMinGood = 0 ????
+        //TODO: additional pass with nMinGood = 0 ????
     }
     else
     {
-        nMaxCont = SC_DOCCOMP_ROWS;         // 100 Zeilen
+        nMaxCont = SC_DOCCOMP_ROWS;         // 100 rows
         nMinGood = SC_DOCCOMP_MINGOOD;
     }
-    bool bUseTotal = bColumns && !pTranslate;       // nur beim ersten Durchgang
+    bool bUseTotal = bColumns && !pTranslate;       // only for the 1st pass
 
     SCCOLROW nOtherRow = 0;
     sal_uInt16 nComp;
     SCCOLROW nThisRow;
-    bool bTotal = false;        // ueber verschiedene nThisRow beibehalten
+    bool bTotal = false;        // hold for several nThisRow
     SCCOLROW nUnknown = 0;
     for (nThisRow = 0; nThisRow <= nThisEndRow; nThisRow++)
     {
@@ -1012,7 +1012,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
         bool bFound = false;
         sal_uInt16 nBest = SC_DOCCOMP_MAXDIFF;
         SCCOLROW nMax = std::min( nOtherEndRow, static_cast<SCCOLROW>(( nTempOther + nMaxCont + nUnknown )) );
-        for (SCCOLROW i=nTempOther; i<=nMax && nBest>0; i++)    // bei 0 abbrechen
+        for (SCCOLROW i=nTempOther; i<=nMax && nBest>0; i++)    // stop at 0
         {
             if (bColumns)
                 nComp = ColDifferences( static_cast<SCCOL>(nThisRow), nThisTab, rOtherDoc, static_cast<SCCOL>(i), nOtherTab, nEndCol, pTranslate );
@@ -1027,7 +1027,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
             if ( nComp < SC_DOCCOMP_MAXDIFF || bFound )
                 bTotal = false;
             else if ( i == nTempOther && bUseTotal )
-                bTotal = true;                          // nur ganz oben
+                bTotal = true;                          // only at the very top
         }
         if ( bFound )
         {
@@ -1045,7 +1045,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
             pProgress->SetStateOnPercent(nProAdd+static_cast<sal_uLong>(nThisRow));
     }
 
-    //  Bloecke ohne Uebereinstimmung ausfuellen
+    // fill in blocks that don't match
 
     SCROW nFillStart = 0;
     SCROW nFillPos = 0;
@@ -1057,7 +1057,7 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
         {
             if ( bInFill )
             {
-                if ( nThisOther > nFillStart )      // ist was zu verteilen da?
+                if ( nThisOther > nFillStart )      // is there something to distribute?
                 {
                     SCROW nDiff1 = nThisOther - nFillStart;
                     SCROW nDiff2 = nThisRow   - nFillPos;
@@ -1086,13 +1086,13 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
     boost::scoped_array<SCTAB> pOtherTabs(new SCTAB[nThisCount]);
     SCTAB nThisTab;
 
-    //  Tabellen mit gleichen Namen vergleichen
+    //  compare tables with identical names
     OUString aThisName;
     OUString aOtherName;
     for (nThisTab=0; nThisTab<nThisCount; nThisTab++)
     {
         SCTAB nOtherTab = SCTAB_MAX;
-        if (!IsScenario(nThisTab))  // Szenarien weglassen
+        if (!IsScenario(nThisTab))  // skip scenarios
         {
             GetName( nThisTab, aThisName );
             for (SCTAB nTemp=0; nTemp<nOtherCount && nOtherTab>MAXTAB; nTemp++)
@@ -1105,7 +1105,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
         }
         pOtherTabs[nThisTab] = nOtherTab;
     }
-    //  auffuellen, damit einzeln umbenannte Tabellen nicht wegfallen
+    //  fill in, so that un-named tables don't get lost
     SCTAB nFillStart = 0;
     SCTAB nFillPos = 0;
     bool bInFill = false;
@@ -1116,7 +1116,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
         {
             if ( bInFill )
             {
-                if ( nThisOther > nFillStart )      // ist was zu verteilen da?
+                if ( nThisOther > nFillStart )      // is there something to distribute?
                 {
                     SCTAB nDiff1 = nThisOther - nFillStart;
                     SCTAB nDiff2 = nThisTab   - nFillPos;
@@ -1135,7 +1135,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             bInFill = true;
     }
 
-    //  Tabellen in der gefundenen Reihenfolge vergleichen
+    //  compare tables in the original order
 
     for (nThisTab=0; nThisTab<nThisCount; nThisTab++)
     {
@@ -1152,9 +1152,9 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             SCROW nEndRow = std::max(nThisEndRow, nOtherEndRow);
             SCCOL nThisCol;
             SCROW nThisRow;
-            sal_uLong n1,n2;    // fuer AppendDeleteRange
+            sal_uLong n1,n2;    // for AppendDeleteRange
 
-            //! ein Progress ueber alle Tabellen ???
+            //TODO: one Progress over all tables ???
             OUString aTabName;
             GetName( nThisTab, aTabName );
             OUString aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
@@ -1164,20 +1164,20 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             nIndex = 0;
             aProText.append(aTemplate.getToken( 1, '#', nIndex ));
             ScProgress aProgress( GetDocumentShell(),
-                                        aProText.makeStringAndClear(), 3*nThisEndRow );  // 2x FindOrder, 1x hier
-            long nProgressStart = 2*nThisEndRow;                    // start fuer hier
+                                        aProText.makeStringAndClear(), 3*nThisEndRow );  // 2x FindOrder, 1x here
+            long nProgressStart = 2*nThisEndRow;                    // start for here
 
             boost::scoped_array<SCCOLROW> pTempRows(new SCCOLROW[nThisEndRow+1]);
             boost::scoped_array<SCCOLROW> pOtherRows(new SCCOLROW[nThisEndRow+1]);
             boost::scoped_array<SCCOLROW> pOtherCols(new SCCOLROW[nThisEndCol+1]);
 
-            //  eingefuegte/geloeschte Spalten/Zeilen finden:
-            //  Zwei Versuche:
-            //  1) Original Zeilen vergleichen                          (pTempRows)
-            //  2) Original Spalten vergleichen                         (pOtherCols)
-            //     mit dieser Spaltenreihenfolge Zeilen vergleichen     (pOtherRows)
+            //  find inserted/deleted columns/rows:
+            //  Two attempts:
+            //  1) compare original rows                    (pTempRows)
+            //  2) compare original columns                 (pOtherCols)
+            //     with this column order compare rows      (pOtherRows)
 
-            //! Spalten vergleichen zweimal mit unterschiedlichem nMinGood ???
+            //TODO: compare columns twice with different nMinGood ???
 
             // 1
             FindOrder( pTempRows.get(), nThisEndRow, nOtherEndRow, false,
@@ -1189,7 +1189,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                         rOtherDoc, nThisTab, nOtherTab, nThisEndCol,
                        pOtherCols.get(), &aProgress, nThisEndRow );
 
-            sal_uLong nMatch1 = 0;  // pTempRows, keine Spalten
+            sal_uLong nMatch1 = 0;  // pTempRows, no columns
             for (nThisRow = 0; nThisRow<=nThisEndRow; nThisRow++)
                 if (ValidRow(pTempRows[nThisRow]))
                     nMatch1 += SC_DOCCOMP_MAXDIFF -
@@ -1203,26 +1203,26 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                                RowDifferences( nThisRow, nThisTab, rOtherDoc, pOtherRows[nThisRow],
                                                nOtherTab, nThisEndCol, pOtherCols.get() );
 
-            if ( nMatch1 >= nMatch2 )           // ohne Spalten ?
+            if ( nMatch1 >= nMatch2 )           // without columns ?
             {
-                //  Spalten zuruecksetzen
+                //  reset columns
                 for (nThisCol = 0; nThisCol<=nThisEndCol; nThisCol++)
                     pOtherCols[nThisCol] = nThisCol;
 
-                //  Zeilenarrays vertauschen (geloescht werden sowieso beide)
+                //  swap row-arrays (they get both deleted anyway)
                 pTempRows.swap(pOtherRows);
             }
             else
             {
-                //  bleibt bei pOtherCols, pOtherRows
+                //  remains for pOtherCols, pOtherRows
             }
 
-            //  Change-Actions erzeugen
-            //  1) Spalten von rechts
-            //  2) Zeilen von unten
-            //  3) einzelne Zellen in normaler Reihenfolge
+            //  Generate Change-Actions
+            //  1) columns from the right
+            //  2) rows from below
+            //  3) single cells in normal order
 
-            //  Actions fuer eingefuegte/geloeschte Spalten
+            //  Actions for inserted/deleted columns
 
             SCCOL nLastOtherCol = static_cast<SCCOL>(nOtherEndCol + 1);
             //  nThisEndCol ... 0
@@ -1232,14 +1232,14 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 SCCOL nOtherCol = static_cast<SCCOL>(pOtherCols[nThisCol]);
                 if ( ValidCol(nOtherCol) && nOtherCol+1 < nLastOtherCol )
                 {
-                    // Luecke -> geloescht
+                    // gap -> deleted
                     ScRange aDelRange( nOtherCol+1, 0, nOtherTab,
                                         nLastOtherCol-1, MAXROW, nOtherTab );
                     pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
                 }
-                if ( nOtherCol > MAXCOL )                       // eingefuegt
+                if ( nOtherCol > MAXCOL )                       // inserted
                 {
-                    //  zusammenfassen
+                    //  combine
                     if ( nThisCol == nThisEndCol || ValidCol(static_cast<SCCOL>(pOtherCols[nThisCol+1])) )
                     {
                         SCCOL nFirstNew = static_cast<SCCOL>(nThisCol);
@@ -1254,14 +1254,14 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 else
                     nLastOtherCol = nOtherCol;
             }
-            if ( nLastOtherCol > 0 )                            // ganz oben geloescht
+            if ( nLastOtherCol > 0 )                            // deleted at the very top
             {
                 ScRange aDelRange( 0, 0, nOtherTab,
                                     nLastOtherCol-1, MAXROW, nOtherTab );
                 pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
             }
 
-            //  Actions fuer eingefuegte/geloeschte Zeilen
+            //  Actions for inserted/deleted rows
 
             SCROW nLastOtherRow = nOtherEndRow + 1;
             //  nThisEndRow ... 0
@@ -1271,14 +1271,14 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 SCROW nOtherRow = pOtherRows[nThisRow];
                 if ( ValidRow(nOtherRow) && nOtherRow+1 < nLastOtherRow )
                 {
-                    // Luecke -> geloescht
+                    // gap -> deleted
                     ScRange aDelRange( 0, nOtherRow+1, nOtherTab,
                                         MAXCOL, nLastOtherRow-1, nOtherTab );
                     pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
                 }
-                if ( nOtherRow > MAXROW )                       // eingefuegt
+                if ( nOtherRow > MAXROW )                       // inserted
                 {
-                    //  zusammenfassen
+                    //  combine
                     if ( nThisRow == nThisEndRow || ValidRow(pOtherRows[nThisRow+1]) )
                     {
                         SCROW nFirstNew = nThisRow;
@@ -1293,14 +1293,14 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
                 else
                     nLastOtherRow = nOtherRow;
             }
-            if ( nLastOtherRow > 0 )                            // ganz oben geloescht
+            if ( nLastOtherRow > 0 )                            // deleted at the very top
             {
                 ScRange aDelRange( 0, 0, nOtherTab,
                                     MAXCOL, nLastOtherRow-1, nOtherTab );
                 pChangeTrack->AppendDeleteRange( aDelRange, &rOtherDoc, n1, n2 );
             }
 
-            //  Zeilen durchgehen um einzelne Zellen zu finden
+             //  walk rows to find single cells
 
             for (nThisRow = 0; nThisRow <= nThisEndRow; nThisRow++)
             {

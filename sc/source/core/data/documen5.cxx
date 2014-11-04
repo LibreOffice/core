@@ -199,7 +199,7 @@ bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                  pObject->GetCurrentBoundRect().IsInside(rPos) )
             {
-                        // auch Chart-Objekte die nicht in der Collection sind
+                // also Chart-Objects that are not in the Collection
 
                 if (IsChart(pObject))
                 {
@@ -631,9 +631,8 @@ uno::Reference< embed::XEmbeddedObject >
     if (!pDrawLayer)
         return uno::Reference< embed::XEmbeddedObject >();
 
-    //  die Seiten hier vom Draw-Layer nehmen,
-    //  weil sie evtl. nicht mit den Tabellen uebereinstimmen
-    //  (z.B. Redo von Tabelle loeschen, Draw-Redo passiert vor DeleteTab).
+    //  take the pages here from Draw-Layer, as they might not match with the tables
+    //  (e.g. delete Redo of table; Draw-Redo happens before DeleteTab)
 
     sal_uInt16 nCount = pDrawLayer->GetPageCount();
     for (sal_uInt16 nTab=0; nTab<nCount; nTab++)
@@ -733,7 +732,7 @@ void ScDocument::UpdateChartListenerCollection()
             }
         }
     }
-    // alle nicht auf SetUsed gesetzten loeschen
+    // delete all that are not set SetUsed
     pChartListenerCollection->FreeUnused();
 }
 
