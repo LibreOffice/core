@@ -959,7 +959,7 @@ storeError OStorePageManager::rebuild (
                         if (eErrCode == store_E_None)
                         {
                             OStorePageKey aDstKey (aSrcPage.key());
-                            eErrCode = link (e.m_aKey, aDstKey);
+                            link (e.m_aKey, aDstKey);
                         }
                         e.m_nAttrib &= ~STORE_ATTRIB_ISLINK;
                     }
