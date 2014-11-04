@@ -4770,6 +4770,9 @@ int RTFDocumentImpl::pushState()
         m_aStates.push(m_aDefaultState);
     else
     {
+        // fdo#85812 group resets run type of _current_ and new state (but not RTL)
+        m_aStates.top().eRunType = RTFParserState::LOCH;
+
         if (m_aStates.top().nDestinationState == DESTINATION_MR)
             lcl_DestinationToMath(*m_aStates.top().pDestinationText, m_aMathBuffer, m_bMathNor);
         m_aStates.push(m_aStates.top());
