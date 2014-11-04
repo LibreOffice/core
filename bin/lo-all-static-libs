@@ -64,6 +64,7 @@ esac
 echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
+     $WORKDIR/LinkTarget/Library/lib*.a \
      $oslibs \
      $nsslibs \
      $WORKDIR/UnpackedTarball/coinmp/Cbc/src/.libs/*.a \
