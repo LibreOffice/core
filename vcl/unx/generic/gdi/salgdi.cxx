@@ -52,6 +52,7 @@
 
 #include "salgdiimpl.hxx"
 #include "unx/x11windowprovider.hxx"
+#include "textrender.hxx"
 #include "gdiimpl.hxx"
 #include "openglgdiimpl.hxx"
 
@@ -74,7 +75,6 @@ X11SalGraphics::X11SalGraphics():
     pPaintRegion_(NULL),
     mpClipRegion(NULL),
     pFontGC_(NULL),
-    nTextColor_(MAKE_SALCOLOR(0x00, 0x00, 0x00)), //black
     nTextPixel_(0),
     hBrush_(None),
     bWindow_(false),
@@ -87,15 +87,6 @@ X11SalGraphics::X11SalGraphics():
         mpImpl.reset(new OpenGLSalGraphicsImpl());
     else
         mpImpl.reset(new X11SalGraphicsImpl(*this));
-
-    for( int i = 0; i < MAX_FALLBACK; ++i )
-        mpServerFont[i] = NULL;
-
-#if ENABLE_GRAPHITE
-    // check if graphite fonts have been disabled
-    static const char* pDisableGraphiteStr = getenv( "SAL_DISABLE_GRAPHITE" );
-    bDisableGraphite_   = pDisableGraphiteStr && (pDisableGraphiteStr[0]!='0');
-#endif
 }
 
 X11SalGraphics::~X11SalGraphics()
@@ -157,7 +148,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
         }
 
         mpImpl->Init( m_pFrame );
-        nTextPixel_     = GetPixel( nTextColor_ );
+        // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
     }
 }
 

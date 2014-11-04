@@ -52,48 +52,21 @@ class ServerFontLayout;
 class PhysicalFontCollection;
 class PhysicalFontFace;
 class SalGraphicsImpl;
+class TextRenderImpl;
 
 namespace basegfx {
     class B2DTrapezoid;
 }
 
-typedef struct FT_FaceRec_* FT_Face;
-
-class CairoFontsCache
-{
-public:
-    struct CacheId
-    {
-        FT_Face maFace;
-        const void *mpOptions;
-        bool mbEmbolden;
-        bool mbVerticalMetrics;
-        bool operator ==(const CacheId& rOther) const
-        {
-            return maFace == rOther.maFace &&
-                mpOptions == rOther.mpOptions &&
-                mbEmbolden == rOther.mbEmbolden &&
-                mbVerticalMetrics == rOther.mbVerticalMetrics;
-        }
-    };
-private:
-    static int mnRefCount;
-    typedef std::deque< std::pair<void *, CacheId> > LRUFonts;
-    static LRUFonts maLRUFonts;
-public:
-    CairoFontsCache();
-    static void  CacheFont(void *pFont, const CacheId &rId);
-    static void* FindCachedFont(const CacheId &rId);
-    ~CairoFontsCache();
-};
-
 class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 {
     friend class ServerFontLayout;
     friend class X11SalGraphicsImpl;
+    friend class X11CairoTextRender;
 
 private:
     boost::scoped_ptr<SalGraphicsImpl> mpImpl;
+    boost::scoped_ptr<TextRenderImpl> mpTextRenderImpl;
 
 protected:
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
@@ -105,18 +78,12 @@ protected:
     SalX11Screen    m_nXScreen;
     mutable XRenderPictFormat* m_pXRenderFormat;
     XID             m_aXRenderPicture;
-    CairoFontsCache m_aCairoFontsCache;
 
     Region          pPaintRegion_;
     Region          mpClipRegion;
 
     GC              pFontGC_;       // Font attributes
-    ServerFont*             mpServerFont[ MAX_FALLBACK ];
-
-    SalColor        nTextColor_;
-    Pixel           nTextPixel_;
-
-    bool            bDisableGraphite_;
+    Pixel nTextPixel_;
 
     Pixmap          hBrush_;        // Dither
 
@@ -140,7 +107,6 @@ protected:
                                 SalColor          nTransparentColor );
 
     GC                      GetFontGC();
-    bool                    setFont( const FontSelectPattern* pEntry, int nFallbackLevel );
 
 protected:
     void                    DrawPrinterString( const SalLayout& );
@@ -293,7 +259,7 @@ public:
                                            long nHeight, sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
-    virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
+    virtual SystemFontData     GetSysFontData( int nFallbackLevel ) const SAL_OVERRIDE;
 
     virtual bool               SwapBuffers() SAL_OVERRIDE;
 
