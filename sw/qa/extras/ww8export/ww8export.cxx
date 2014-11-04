@@ -17,6 +17,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 
 class Test : public SwModelTestBase
 {
@@ -214,6 +215,15 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 }
 
 #endif
+
+DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
+{
+    // Import / export of FFData.cch was missing.
+    uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(1), 2), "Bookmark");
+    uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
+    // This resulted in a container.NoSuchElementException.
+    CPPUNIT_ASSERT_EQUAL(OUString("5"), xParameters->getByName("MaxLength").get<OUString>());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
