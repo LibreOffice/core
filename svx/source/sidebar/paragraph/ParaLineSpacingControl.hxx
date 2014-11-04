@@ -37,8 +37,6 @@ public:
     ParaLineSpacingControl(sal_uInt16 nId);
     virtual ~ParaLineSpacingControl();
 
-    void Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext);
-
     short GetLastCustomState();
     long  GetLastCustomValue();
 
@@ -64,7 +62,14 @@ private:
     MetricField*            mpLineDistAtMetricBox;
 
 private:
-    void initial();
+    void initialize();
+
+    /// Set mpActlineDistFld and visibility of mpLineDist* fields according to what is just selected.
+    void UpdateMetricFields();
+
+    /// Set the entry and update the metric fields.
+    void SelectEntryPos(sal_Int32 nPos);
+
     DECL_LINK(LineSPDistHdl_Impl, ListBox*);
     DECL_LINK(LineSPDistAtHdl_Impl, void*);
     DECL_LINK(PredefinedValuesHandler, void*);

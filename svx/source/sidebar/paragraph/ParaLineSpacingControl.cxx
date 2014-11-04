@@ -55,7 +55,6 @@ using namespace svx::sidebar;
 
 ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
     : SfxPopupWindow(nId, "ParaLineSpacingControl", "svx/ui/paralinespacingcontrol.ui")
-//    , maLineSpacing(ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES( LINE_SPACING ) )
 {
     mpSpacing1Button = get<PushButton>("spacing_1");
     mpSpacing115Button = get<PushButton>("spacing_115");
@@ -68,16 +67,8 @@ ParaLineSpacingControl::ParaLineSpacingControl(sal_uInt16 nId)
 
     mpActLineDistFld = mpLineDistAtPercentBox;
 
-    initial();
     meLNSpaceUnit = SFX_MAPUNIT_100TH_MM;
-}
 
-ParaLineSpacingControl::~ParaLineSpacingControl()
-{
-}
-
-void ParaLineSpacingControl::initial()
-{
     Link aLink = LINK(this, ParaLineSpacingControl, PredefinedValuesHandler);
     mpSpacing1Button->SetClickHdl(aLink);
     mpSpacing115Button->SetClickHdl(aLink);
@@ -86,23 +77,32 @@ void ParaLineSpacingControl::initial()
 
     aLink = LINK( this, ParaLineSpacingControl, LineSPDistHdl_Impl );
     mpLineDist->SetSelectHdl(aLink);
-    mpLineDist->SelectEntryPos( LLINESPACE_1 ) ;
+    SelectEntryPos(LLINESPACE_1);
 
     aLink = LINK( this, ParaLineSpacingControl, LineSPDistAtHdl_Impl );
     mpLineDistAtPercentBox->SetModifyHdl( aLink );
     mpLineDistAtMetricBox->SetModifyHdl( aLink );
+
+    initialize();
 }
 
-void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMetricUnit,SvxLineSpacingItem* currSPItem,const ::sfx2::sidebar::EnumContext currentContext)
+ParaLineSpacingControl::~ParaLineSpacingControl()
 {
-    SfxItemState eState = currSPState;
+}
 
+void ParaLineSpacingControl::initialize()
+{
+    const SfxPoolItem* pItem;
+    SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PARA_LINESPACE, pItem);
+
+    const SvxLineSpacingItem* currSPItem = static_cast<const SvxLineSpacingItem*>(pItem);
+
+    /* TODO - according to the current units setting
+    FieldUnit currMetricUnit = FUNIT_CM;
     SetFieldUnit(*mpLineDistAtMetricBox, currMetricUnit);
+    */
 
     mpLineDist->Enable();
-    mpActLineDistFld->Enable();
-    mpActLineDistFld->SetText( "" );
-    //bool bValueSetFocus = sal_False;        //wj
 
     if( eState >= SfxItemState::DEFAULT )
     {
@@ -119,106 +119,35 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
                 switch( eInter )
                 {
                 case SVX_INTER_LINE_SPACE_OFF:
-                    {
-                        mpLineDist->SelectEntryPos( LLINESPACE_1 );
-                        mpActLineDistFld->Disable();
-                        mpActLineDistFld->SetText( "" );
-                        if ( LINESPACE_1 == currSPItem->GetPropLineSpace() )
-                        {
-//                            maLineSpacing.SelectItem(1);
-                            //bValueSetFocus = sal_True;  //wj
-                        }
-                    }
+                    SelectEntryPos(LLINESPACE_1);
                     break;
 
                 case SVX_INTER_LINE_SPACE_PROP:
                     {
                         if ( LINESPACE_1 == currSPItem->GetPropLineSpace() )
                         {
-                            mpLineDist->SelectEntryPos( LLINESPACE_1 );
-                            mpActLineDistFld->Disable();
-                            mpActLineDistFld->SetText( "" );
-//                            maLineSpacing.SelectItem(1);
-                            //bValueSetFocus = sal_True;  //wj
-                            break;
+                            SelectEntryPos(LLINESPACE_1);
                         }
-                        if ( LINESPACE_15 == currSPItem->GetPropLineSpace() )
+                        else if ( LINESPACE_15 == currSPItem->GetPropLineSpace() )
                         {
-                            mpLineDist->SelectEntryPos( LLINESPACE_15 );
-                            mpActLineDistFld->Disable();
-                            mpActLineDistFld->SetText( "" );
-
-//                            maLineSpacing.SelectItem(3);
-                            //bValueSetFocus = sal_True;  //wj
-                            break;
+                            SelectEntryPos(LLINESPACE_15);
                         }
-                        if ( LINESPACE_2 == currSPItem->GetPropLineSpace() )
+                        else if ( LINESPACE_2 == currSPItem->GetPropLineSpace() )
                         {
-                            mpLineDist->SelectEntryPos( LLINESPACE_2 );
-                            mpActLineDistFld->Disable();
-                            mpActLineDistFld->SetText( "" );
-
-//                            maLineSpacing.SelectItem(4);
-                            //bValueSetFocus = sal_True;  //wj
-                            break;
-                        }
-
-                        mpLineDist->SelectEntryPos( LLINESPACE_PROP );
-                        if(mpActLineDistFld != mpLineDistAtPercentBox)
-                        {
-                            mpActLineDistFld->Disable();
-                            mpActLineDistFld->Hide();
-                            mpActLineDistFld = mpLineDistAtPercentBox;
+                            SelectEntryPos(LLINESPACE_2);
                         }
                         else
                         {
-                            mpActLineDistFld = mpLineDistAtMetricBox;
-                            mpActLineDistFld->Disable();
-                            mpActLineDistFld->Hide();
-                            mpActLineDistFld = mpLineDistAtPercentBox;
-                        }
-                        mpActLineDistFld->Enable();
-                        mpActLineDistFld->Show();
-                        mpLineDistAtPercentBox->
-                            SetValue( mpLineDistAtPercentBox->Normalize(
-                            currSPItem->GetPropLineSpace() ) );
-
-                        if( currSPItem->GetPropLineSpace() == LINESPACE_115 )
-                        {
-//                            maLineSpacing.SelectItem(2);
-                            //bValueSetFocus = sal_True;  //wj
-                        }
-                        else
-                        {
-//                            maLineSpacing.SetNoSelection();
-//                                                 maLineSpacing.SelectItem(0);
+                            SelectEntryPos(LLINESPACE_PROP);
+                            mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(currSPItem->GetPropLineSpace()));
                         }
                     }
                     break;
 
                 case SVX_INTER_LINE_SPACE_FIX:
                     {
-                        if(mpActLineDistFld != mpLineDistAtMetricBox)
-                        {
-                            mpActLineDistFld->Disable();
-                            mpActLineDistFld->Hide();
-                            mpActLineDistFld = mpLineDistAtMetricBox;
-                        }
-                        else
-                        {
-                            mpActLineDistFld = mpLineDistAtPercentBox;
-                            mpActLineDistFld->Disable();
-                            mpActLineDistFld->Hide();
-                            mpActLineDistFld = mpLineDistAtMetricBox;
-                        }
-                        mpActLineDistFld->Enable();
-                        mpActLineDistFld->Show();
-//                        maLineSpacing.SetNoSelection();
-//                                          maLineSpacing.SelectItem(0);
-
+                        SelectEntryPos(LLINESPACE_DURCH);
                         SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetInterLineSpace(), eUnit);
-                        mpLineDist->SelectEntryPos( LLINESPACE_DURCH );
-
                     }
                     break;
                 default:
@@ -228,51 +157,15 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
             break;
         case SVX_LINE_SPACE_FIX:
             {
-                if(mpActLineDistFld != mpLineDistAtMetricBox)
-                {
-                    mpActLineDistFld->Disable();
-                    mpActLineDistFld->Hide();
-                    mpActLineDistFld = mpLineDistAtMetricBox;
-                }
-                else
-                {
-                    mpActLineDistFld = mpLineDistAtPercentBox;
-                    mpActLineDistFld->Disable();
-                    mpActLineDistFld->Hide();
-                    mpActLineDistFld = mpLineDistAtMetricBox;
-                }
-                mpActLineDistFld->Enable();
-                mpActLineDistFld->Show();
-//                maLineSpacing.SetNoSelection();
-//                            maLineSpacing.SelectItem(0);
-
+                SelectEntryPos(LLINESPACE_FIX);
                 SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
-                mpLineDist->SelectEntryPos( LLINESPACE_FIX );
             }
             break;
 
         case SVX_LINE_SPACE_MIN:
             {
-                if(mpActLineDistFld != mpLineDistAtMetricBox)
-                {
-                    mpActLineDistFld->Disable();
-                    mpActLineDistFld->Hide();
-                    mpActLineDistFld = mpLineDistAtMetricBox;
-                }
-                else
-                {
-                    mpActLineDistFld = mpLineDistAtPercentBox;
-                    mpActLineDistFld->Disable();
-                    mpActLineDistFld->Hide();
-                    mpActLineDistFld = mpLineDistAtMetricBox;
-                }
-                mpActLineDistFld->Enable();
-                mpActLineDistFld->Show();
-//                maLineSpacing.SetNoSelection();
-//                            maLineSpacing.SelectItem(0);
-
+                SelectEntryPos(LLINESPACE_MIN);
                 SetMetricValue(*mpLineDistAtMetricBox, currSPItem->GetLineHeight(), eUnit);
-                mpLineDist->SelectEntryPos( LLINESPACE_MIN );
             }
             break;
         default:
@@ -282,23 +175,20 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
     else if( eState == SfxItemState::DISABLED )
     {
         mpLineDist->Disable();
-        mpActLineDistFld->Enable(false);
-        mpActLineDistFld->SetText( "" );
-//        maLineSpacing.SetNoSelection();
-//              maLineSpacing.SelectItem(0);
+        mpActLineDistFld->Disable();
+        mpActLineDistFld->SetText("");
 
     }
     else
     {
-        mpActLineDistFld->Enable(false);
-        mpActLineDistFld->SetText( "" );
+        mpActLineDistFld->Disable();
+        mpActLineDistFld->SetText("");
         mpLineDist->SetNoSelection();
-//        maLineSpacing.SetNoSelection();
-//              maLineSpacing.SelectItem(0);
     }
 
     mpLineDist->SaveValue();
 
+    /* TODO
     const sal_uInt16 uCount = mpLineDist->GetEntryCount();
     if( uCount == LLINESPACE_FIX + 1 )
     {
@@ -329,80 +219,90 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
             }
         }
     }
-//    maLineSpacing.Format();
-//    maLineSpacing.StartSelection();
+    */
 }
 
-IMPL_LINK( ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, pBox )
+void ParaLineSpacingControl::UpdateMetricFields()
 {
-//    maLineSpacing.SetNoSelection();
-//       maLineSpacing.SelectItem(0);
-//    maLineSpacing.Format();
-//    maLineSpacing.StartSelection();
-
-    switch( pBox->GetSelectEntryPos() )
+    switch (mpLineDist->GetSelectEntryPos())
     {
         case LLINESPACE_1:
         case LLINESPACE_15:
         case LLINESPACE_2:
-            mpActLineDistFld->Enable(false);
-            mpActLineDistFld->SetText( "" );
+            if (mpActLineDistFld == mpLineDistAtPercentBox)
+                mpLineDistAtMetricBox->Hide();
+            else
+                mpLineDistAtPercentBox->Hide();
+
+            mpActLineDistFld->Show();
+            mpActLineDistFld->Disable();
+            mpActLineDistFld->SetText("");
             break;
 
         case LLINESPACE_DURCH:
             mpLineDistAtPercentBox->Hide();
+
             mpActLineDistFld = mpLineDistAtMetricBox;
             mpLineDistAtMetricBox->SetMin(0);
 
+            if (mpLineDistAtMetricBox->GetText().isEmpty())
+                mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0));
 
-            if ( mpLineDistAtMetricBox->GetText().isEmpty() )
-                mpLineDistAtMetricBox->SetValue(
-                    mpLineDistAtMetricBox->Normalize( 0 ) );
-            mpLineDistAtPercentBox->Hide();
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
             break;
 
         case LLINESPACE_MIN:
             mpLineDistAtPercentBox->Hide();
+
             mpActLineDistFld = mpLineDistAtMetricBox;
             mpLineDistAtMetricBox->SetMin(0);
 
-            if ( mpLineDistAtMetricBox->GetText().isEmpty() )
-                mpLineDistAtMetricBox->SetValue(
-                    mpLineDistAtMetricBox->Normalize( 0 ), FUNIT_TWIP );
-            mpLineDistAtPercentBox->Hide();
+            if (mpLineDistAtMetricBox->GetText().isEmpty())
+                mpLineDistAtMetricBox->SetValue(mpLineDistAtMetricBox->Normalize(0), FUNIT_TWIP);
+
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
             break;
 
         case LLINESPACE_PROP:
             mpLineDistAtMetricBox->Hide();
+
             mpActLineDistFld = mpLineDistAtPercentBox;
 
-            if ( mpLineDistAtPercentBox->GetText().isEmpty() )
-                mpLineDistAtPercentBox->SetValue(
-                    mpLineDistAtPercentBox->Normalize( 100 ), FUNIT_TWIP );
-            mpLineDistAtMetricBox->Hide();
+            if (mpLineDistAtPercentBox->GetText().isEmpty())
+                mpLineDistAtPercentBox->SetValue(mpLineDistAtPercentBox->Normalize(100), FUNIT_TWIP);
+
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
             break;
         case LLINESPACE_FIX:
         {
             mpLineDistAtPercentBox->Hide();
+
             mpActLineDistFld = mpLineDistAtMetricBox;
             sal_Int64 nTemp = mpLineDistAtMetricBox->GetValue();
             mpLineDistAtMetricBox->SetMin(mpLineDistAtMetricBox->Normalize(MIN_FIXED_DISTANCE), FUNIT_TWIP);
 
-            if ( mpLineDistAtMetricBox->GetValue() != nTemp )
+            if (mpLineDistAtMetricBox->GetValue() != nTemp)
                 SetMetricValue(*mpLineDistAtMetricBox, FIX_DIST_DEF, SFX_MAPUNIT_TWIP);
 
-            mpLineDistAtPercentBox->Hide();
             mpActLineDistFld->Show();
             mpActLineDistFld->Enable();
         }
         break;
     }
+}
+
+void ParaLineSpacingControl::SelectEntryPos(sal_Int32 nPos)
+{
+    mpLineDist->SelectEntryPos(nPos);
+    UpdateMetricFields();
+}
+
+IMPL_LINK( ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, pBox )
+{
+    UpdateMetricFields();
     ExecuteLineSpace();
     return 0;
 }
@@ -416,7 +316,6 @@ IMPL_LINK_NOARG( ParaLineSpacingControl, LineSPDistAtHdl_Impl )
 void ParaLineSpacingControl::ExecuteLineSpace()
 {
     mpLineDist->SaveValue();
-//    maLineSpacing.SetNoSelection();
 
     SvxLineSpacingItem aSpacing(DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
     sal_uInt16 nPos = mpLineDist->GetSelectEntryPos();
@@ -426,7 +325,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
         case LLINESPACE_1:
         case LLINESPACE_15:
         case LLINESPACE_2:
-            SetLineSpace( aSpacing, nPos );
+            SetLineSpace(aSpacing, nPos);
             break;
 
         case LLINESPACE_PROP:
@@ -448,8 +347,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
 }
 
-void ParaLineSpacingControl::SetLineSpace( SvxLineSpacingItem& rLineSpace,
-                        int eSpace, long lValue )
+void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, int eSpace, long lValue)
 {
     switch ( eSpace )
     {
@@ -515,8 +413,6 @@ IMPL_LINK(ParaLineSpacingControl, PredefinedValuesHandler, void *, pControl)
 
 void ParaLineSpacingControl::ExecuteLineSpacing(sal_uInt16 nEntry)
 {
-    mpLineDist->SelectEntryPos(nEntry) ;
-    mpLineDist->SaveValue();
     SvxLineSpacingItem aSpacing(DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
 
     // special-case the 1.15 line spacing
