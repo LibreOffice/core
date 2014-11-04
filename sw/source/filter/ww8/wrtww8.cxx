@@ -3782,6 +3782,16 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
             ffres = 0;
     }
     aFldHeader.bits |= ( (ffres<<2) & 0x7C );
+    if (type == 0) // iTypeText
+    {
+        sw::mark::IFieldmark::parameter_map_t::const_iterator pParameter = rFieldmark.GetParameters()->find("MaxLength");
+        if (pParameter != rFieldmark.GetParameters()->end())
+        {
+            OUString aLength;
+            pParameter->second >>= aLength;
+            aFldHeader.cch = aLength.toUInt32();
+        }
+    }
 
     std::vector< OUString > aListItems;
     if (type==2)

@@ -164,6 +164,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
             maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.sToolTip));
             maFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.sTitle));
+            if (aFormula.mnMaxLen)
+                maFieldStack.back().getParameters()["MaxLength"] = uno::makeAny(OUString::number(aFormula.mnMaxLen));
         }
         return FLD_TEXT;
     }
@@ -2173,8 +2175,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 
     sal_uInt8 iRes = (bits1 & 0x7C) >> 2;
 
-    sal_uInt16 cch = 0;
-    pDataStream->ReadUInt16( cch );
+    pDataStream->ReadUInt16( mnMaxLen );
 
     sal_uInt16 hps = 0;
     pDataStream->ReadUInt16( hps );
