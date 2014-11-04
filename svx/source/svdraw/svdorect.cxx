@@ -500,15 +500,15 @@ void SdrRectObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrRectObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    SdrTextObj::NbcRotate(rRef,nWink,sn,cs);
+    SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
     SetXPolyDirty();
 }
 
-void SdrRectObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrRectObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
+    SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     SetXPolyDirty();
 }
 

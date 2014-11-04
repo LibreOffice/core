@@ -361,9 +361,9 @@ void SdrVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrVirtObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    rRefObj.NbcRotate(rRef-aAnchor,nWink,sn,cs);
+    rRefObj.NbcRotate(rRef-aAnchor,nAngle,sn,cs);
     SetRectsDirty();
 }
 
@@ -373,9 +373,9 @@ void SdrVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrVirtObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    rRefObj.NbcShear(rRef-aAnchor,nWink,tn,bVShear);
+    rRefObj.NbcShear(rRef-aAnchor,nAngle,tn,bVShear);
     SetRectsDirty();
 }
 
@@ -402,11 +402,11 @@ void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction
     }
 }
 
-void SdrVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrVirtObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    if (nWink!=0) {
+    if (nAngle!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        rRefObj.Rotate(rRef-aAnchor,nWink,sn,cs);
+        rRefObj.Rotate(rRef-aAnchor,nAngle,sn,cs);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }
@@ -420,11 +420,11 @@ void SdrVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrVirtObj::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrVirtObj::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    if (nWink!=0) {
+    if (nAngle!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        rRefObj.Shear(rRef-aAnchor,nWink,tn,bVShear);
+        rRefObj.Shear(rRef-aAnchor,nAngle,tn,bVShear);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
     }

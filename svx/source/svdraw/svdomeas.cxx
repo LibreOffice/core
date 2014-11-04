@@ -1043,9 +1043,9 @@ void SdrMeasureObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
     SetTextDirty();
 }
 
-void SdrMeasureObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrMeasureObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    SdrTextObj::NbcRotate(rRef,nWink,sn,cs);
+    SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
     long nLen0=GetLen(aPt2-aPt1);
     RotatePoint(aPt1,rRef,sn,cs);
     RotatePoint(aPt2,rRef,sn,cs);
@@ -1074,9 +1074,9 @@ void SdrMeasureObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SdrMeasureObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrMeasureObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
+    SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     ShearPoint(aPt1,rRef,tn,bVShear);
     ShearPoint(aPt2,rRef,tn,bVShear);
     SetRectsDirty();

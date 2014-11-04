@@ -102,15 +102,15 @@ public:
 
     virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
+    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
+    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
 
     virtual void Move(const Size& rSiz) SAL_OVERRIDE;
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true) SAL_OVERRIDE;
-    virtual void Rotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
+    virtual void Rotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
     virtual void Mirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void Shear(const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
+    virtual void Shear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
 
     virtual void RecalcSnapRect() SAL_OVERRIDE;
     virtual const Rectangle& GetSnapRect() const SAL_OVERRIDE;

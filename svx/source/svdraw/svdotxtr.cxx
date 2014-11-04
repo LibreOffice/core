@@ -200,7 +200,7 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SetRectsDirty();
 }
 
-void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrTextObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     long dx=aRect.Right()-aRect.Left();
@@ -212,19 +212,19 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     aRect.Right()=aRect.Left()+dx;
     aRect.Bottom()=aRect.Top()+dy;
     if (aGeo.nRotationAngle==0) {
-        aGeo.nRotationAngle=NormAngle360(nWink);
+        aGeo.nRotationAngle=NormAngle360(nAngle);
         aGeo.nSin=sn;
         aGeo.nCos=cs;
     } else {
-        aGeo.nRotationAngle=NormAngle360(aGeo.nRotationAngle+nWink);
+        aGeo.nRotationAngle=NormAngle360(aGeo.nRotationAngle+nAngle);
         aGeo.RecalcSinCos();
     }
     SetRectsDirty();
-    NbcRotateGluePoints(rRef,nWink,sn,cs);
+    NbcRotateGluePoints(rRef,nAngle,sn,cs);
     SetGlueReallyAbsolute(false);
 }
 
-void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrTextObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
 
@@ -242,7 +242,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear
     }
     ImpCheckShear();
     SetRectsDirty();
-    NbcShearGluePoints(rRef,nWink,tn,bVShear);
+    NbcShearGluePoints(rRef,nAngle,tn,bVShear);
     SetGlueReallyAbsolute(false);
 }
 

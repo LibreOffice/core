@@ -1149,11 +1149,11 @@ void SdrObject::ImpForcePlusData()
         pPlusData = NewPlusData();
 }
 
-OUString SdrObject::GetAngleStr(long nWink, bool bNoDegChar) const
+OUString SdrObject::GetAngleStr(long nAngle, bool bNoDegChar) const
 {
     OUString aStr;
     if (pModel!=NULL) {
-        pModel->TakeAngleStr(nWink,aStr,bNoDegChar);
+        pModel->TakeAngleStr(nAngle,aStr,bNoDegChar);
     }
     return aStr;
 }
@@ -1516,7 +1516,7 @@ void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     SetRectsDirty();
 }
 
-void SdrObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrObject::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     aOutRect.Move(-rRef.X(),-rRef.Y());
@@ -1540,7 +1540,7 @@ void SdrObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     aOutRect.Move(rRef.X(),rRef.Y());
     aOutRect.Justify(); // just in case
     SetRectsDirty();
-    NbcRotateGluePoints(rRef,nWink,sn,cs);
+    NbcRotateGluePoints(rRef,nAngle,sn,cs);
     SetGlueReallyAbsolute(false);
 }
 
@@ -1575,10 +1575,10 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(false);
 }
 
-void SdrObject::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrObject::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
-    NbcShearGluePoints(rRef,nWink,tn,bVShear);
+    NbcShearGluePoints(rRef,nAngle,tn,bVShear);
     SetGlueReallyAbsolute(false);
 }
 
@@ -1611,11 +1611,11 @@ void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction&
     }
 }
 
-void SdrObject::Rotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrObject::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    if (nWink!=0) {
+    if (nAngle!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        NbcRotate(rRef,nWink,sn,cs);
+        NbcRotate(rRef,nAngle,sn,cs);
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -1631,11 +1631,11 @@ void SdrObject::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 
-void SdrObject::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrObject::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    if (nWink!=0) {
+    if (nAngle!=0) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-        NbcShear(rRef,nWink,tn,bVShear);
+        NbcShear(rRef,nAngle,tn,bVShear);
         SetChanged();
         BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
@@ -2422,13 +2422,13 @@ void SdrObject::SetGlueReallyAbsolute(bool bOn)
     }
 }
 
-void SdrObject::NbcRotateGluePoints(const Point& rRef, long nWink, double sn, double cs)
+void SdrObject::NbcRotateGluePoints(const Point& rRef, long nAngle, double sn, double cs)
 {
     // First a const call to see whether there are any glue points.
     // Force const call!
     if (GetGluePointList()!=NULL) {
         SdrGluePointList* pGPL=ForceGluePointList();
-        pGPL->Rotate(rRef,nWink,sn,cs,this);
+        pGPL->Rotate(rRef,nAngle,sn,cs,this);
     }
 }
 
@@ -2442,13 +2442,13 @@ void SdrObject::NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2)
     }
 }
 
-void SdrObject::NbcShearGluePoints(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrObject::NbcShearGluePoints(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     // First a const call to see whether there are any glue points.
     // Force const call!
     if (GetGluePointList()!=NULL) {
         SdrGluePointList* pGPL=ForceGluePointList();
-        pGPL->Shear(rRef,nWink,tn,bVShear,this);
+        pGPL->Shear(rRef,nAngle,tn,bVShear,this);
     }
 }
 

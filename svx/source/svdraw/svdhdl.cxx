@@ -1540,8 +1540,8 @@ bool ImpEdgeHdl::IsHorzDrag() const
     }
     else if (eEdgeKind==SDREDGE_THREELINES)
     {
-        long nWink=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
-        if (nWink==0 || nWink==18000)
+        long nAngle=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
+        if (nAngle==0 || nAngle==18000)
             return true;
         else
             return false;

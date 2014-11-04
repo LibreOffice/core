@@ -908,9 +908,9 @@ void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         bMirrored = !bMirrored;
 }
 
-void SdrGrafObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrGrafObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    SdrRectObj::NbcRotate(rRef,nWink,sn,cs);
+    SdrRectObj::NbcRotate(rRef,nAngle,sn,cs);
 }
 
 void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
@@ -919,10 +919,10 @@ void SdrGrafObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     bMirrored = !bMirrored;
 }
 
-void SdrGrafObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrGrafObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     // #i118485# Call Shear now, old version redirected to rotate
-    SdrRectObj::NbcShear(rRef, nWink, tn, bVShear);
+    SdrRectObj::NbcShear(rRef, nAngle, tn, bVShear);
 }
 
 void SdrGrafObj::NbcSetSnapRect(const Rectangle& rRect)

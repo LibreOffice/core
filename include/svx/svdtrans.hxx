@@ -31,12 +31,12 @@
 
 
 // Winkelangaben der DrawingEngine sind 1/100 Degree
-// #i19054# nowhere used, removed // const int nWinkDiv=100;
+// #i19054# nowhere used, removed // const int nAngleDiv=100;
 // Um Winkel der DrawingEngine mit den Trigonometrischen Funktionen
 // verarbeiten zu koennen, muessen sie zunaest ins Bogenmass umgerechnet
 // werden. Dies gestaltet sich recht einfach mit der folgenden Konstanten
-// nPi180. Sei nWink ein Winkel in 1/100 Deg so schreibt man z.B.:
-//   double nSin=sin(nWink*nPi180);
+// nPi180. Sei nAngle ein Winkel in 1/100 Deg so schreibt man z.B.:
+//   double nSin=sin(nAngle*nPi180);
 // Rueckwandlung entsprechend durch Teilen.
 const double nPi=3.14159265358979323846;
 const double nPi180=0.000174532925199432957692222; // Bei zuweing Stellen ist tan(4500*nPi180)!=1.0
@@ -79,7 +79,7 @@ void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear = fa
 inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, bool bVertical);
 // Die folgenden Methoden behandeln einen Punkt eines XPolygons, wobei die
 // benachbarten Kontrollpunkte des eigentlichen Punktes ggf. in pC1/pC2
-// uebergeben werden. Ueber rSin/rCos wird gleichzeitig sin(nWink) und cos(nWink)
+// uebergeben werden. Ueber rSin/rCos wird gleichzeitig sin(nAngle) und cos(nAngle)
 // zurueckgegeben.
 // Der Rueckgabewinkel ist hier ebenfalls in Rad.
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
@@ -133,17 +133,17 @@ inline void ShearPoint(Point& rPnt, const Point& rRef, double tn, bool bVShear)
 
 inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad, bool bVertical)
 {
-    double nWink;
+    double nAngle;
     if (bVertical) {
         long dy=rPnt.Y()-rCenter.Y();
-        nWink=(double)dy/(double)rRad.Y();
+        nAngle=(double)dy/(double)rRad.Y();
         rPnt.Y()=rCenter.Y();
     } else {
         long dx=rCenter.X()-rPnt.X();
-        nWink=(double)dx/(double)rRad.X();
+        nAngle=(double)dx/(double)rRad.X();
         rPnt.X()=rCenter.X();
     }
-    return nWink;
+    return nAngle;
 }
 
 /**************************************************************************************************/
@@ -157,7 +157,7 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
 SVX_DLLPUBLIC long GetAngle(const Point& rPnt);
 long NormAngle180(long a); // Winkel normalisieren auf -180.00..179.99
 SVX_DLLPUBLIC long NormAngle360(long a); // Winkel normalisieren auf    0.00..359.99
-sal_uInt16 GetAngleSector(long nWink); // Sektor im kartesischen Koordinatensystem bestimmen
+sal_uInt16 GetAngleSector(long nAngle); // Sektor im kartesischen Koordinatensystem bestimmen
 // Berechnet die Laenge von (0,0) via a^2 + b^2 = c^2
 // Zur Vermeidung von Ueberlaeufen werden ggf. einige Stellen ignoriert.
 long GetLen(const Point& rPnt);

@@ -106,9 +106,9 @@ public:
 
     virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
+    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
+    virtual void NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
 
     virtual bool DoMacro(const SdrObjMacroHitRec& rRec) SAL_OVERRIDE;
     virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const SAL_OVERRIDE;

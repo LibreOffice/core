@@ -96,12 +96,12 @@ public:
     Point        GetAbsolutePos(const SdrObject& rObj) const;
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
     long         GetAlignAngle() const;
-    void         SetAlignAngle(long nWink);
+    void         SetAlignAngle(long nAngle);
     long         EscDirToAngle(sal_uInt16 nEsc) const;
-    sal_uInt16       EscAngleToDir(long nWink) const;
-    void         Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj);
-    void         Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj);
-    void         Shear (const Point& rRef, long nWink, double tn, bool bVShear, const SdrObject* pObj);
+    sal_uInt16       EscAngleToDir(long nAngle) const;
+    void         Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj);
+    void         Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj);
+    void         Shear (const Point& rRef, long nAngle, double tn, bool bVShear, const SdrObject* pObj);
 };
 
 #define SDRGLUEPOINT_NOTFOUND 0xFFFF
@@ -133,10 +133,10 @@ public:
     void                Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
     void                SetReallyAbsolute(bool bOn, const SdrObject& rObj);
-    void                Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj);
+    void                Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj);
     void                Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
-    void                Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj);
-    void                Shear (const Point& rRef, long nWink, double tn, bool bVShear, const SdrObject* pObj);
+    void                Mirror(const Point& rRef1, const Point& rRef2, long nAngle, const SdrObject* pObj);
+    void                Shear (const Point& rRef, long nAngle, double tn, bool bVShear, const SdrObject* pObj);
 };
 
 

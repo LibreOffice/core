@@ -2377,9 +2377,9 @@ void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fr
     SetRectsDirty();
 }
 
-void SwDrawVirtObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SwDrawVirtObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    rRefObj.NbcRotate(rRef - GetOffset(), nWink, sn, cs);
+    rRefObj.NbcRotate(rRef - GetOffset(), nAngle, sn, cs);
     SetRectsDirty();
 }
 
@@ -2389,9 +2389,9 @@ void SwDrawVirtObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetRectsDirty();
 }
 
-void SwDrawVirtObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SwDrawVirtObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    rRefObj.NbcShear(rRef - GetOffset(), nWink, tn, bVShear);
+    rRefObj.NbcShear(rRef - GetOffset(), nAngle, tn, bVShear);
     SetRectsDirty();
 }
 
@@ -2411,12 +2411,12 @@ void SwDrawVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fract
     }
 }
 
-void SwDrawVirtObj::Rotate(const Point& rRef, long nWink, double sn, double cs)
+void SwDrawVirtObj::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    if(nWink)
+    if(nAngle)
     {
         Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Rotate(rRef - GetOffset(), nWink, sn, cs);
+        rRefObj.Rotate(rRef - GetOffset(), nAngle, sn, cs);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
     }
@@ -2430,12 +2430,12 @@ void SwDrawVirtObj::Mirror(const Point& rRef1, const Point& rRef2)
     SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
 }
 
-void SwDrawVirtObj::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SwDrawVirtObj::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    if(nWink)
+    if(nAngle)
     {
         Rectangle aBoundRect0; if(pUserCall) aBoundRect0 = GetLastBoundRect();
-        rRefObj.Shear(rRef - GetOffset(), nWink, tn, bVShear);
+        rRefObj.Shear(rRef - GetOffset(), nAngle, tn, bVShear);
         SetRectsDirty();
         SendUserCall(SDRUSERCALL_RESIZE, aBoundRect0);
     }

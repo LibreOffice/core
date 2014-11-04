@@ -2275,13 +2275,13 @@ void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const F
 }
 
 // #i54102# added rotation support
-void SdrEdgeObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrEdgeObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     if(bEdgeTrackUserDefined)
     {
         // #i120437# special handling when track is imported, apply
         // transformation directly to imported track.
-        SdrTextObj::NbcRotate(rRef, nWink, sn, cs);
+        SdrTextObj::NbcRotate(rRef, nAngle, sn, cs);
         RotateXPoly(*pEdgeTrack, rRef, sn, cs);
     }
     else
@@ -2337,13 +2337,13 @@ void SdrEdgeObj::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 // #i54102# added shear support
-void SdrEdgeObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrEdgeObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     if(bEdgeTrackUserDefined)
     {
         // #i120437# special handling when track is imported, apply
         // transformation directly to imported track.
-        SdrTextObj::NbcShear(rRef, nWink, tn, bVShear);
+        SdrTextObj::NbcShear(rRef, nAngle, tn, bVShear);
         ShearXPoly(*pEdgeTrack, rRef, tn, bVShear);
     }
     else

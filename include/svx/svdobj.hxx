@@ -422,7 +422,7 @@ protected:
 
     void ImpForcePlusData();
 
-    OUString GetAngleStr(long nWink, bool bNoDegChar = false) const;
+    OUString GetAngleStr(long nAngle, bool bNoDegChar = false) const;
     OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
 
     // bNotMyself=true means: set only ObjList to dirty, don't mark this object as dirty.
@@ -673,15 +673,15 @@ public:
     // Nbc bedeutet: 'NoBroadcast'.
     virtual void NbcMove  (const Size& rSiz);
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
+    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
-    virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear);
+    virtual void NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear);
 
     virtual void Move  (const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative = true);
-    virtual void Rotate(const Point& rRef, long nWink, double sn, double cs);
+    virtual void Rotate(const Point& rRef, long nAngle, double sn, double cs);
     virtual void Mirror(const Point& rRef1, const Point& rRef2);
-    virtual void Shear (const Point& rRef, long nWink, double tn, bool bVShear);
+    virtual void Shear (const Point& rRef, long nAngle, double tn, bool bVShear);
 
     // Die relative Position eines Zeichenobjektes ist die Entfernung der
     // linken oberen Eche des logisch umschliessenden Rechtecks (SnapRect)
@@ -831,9 +831,9 @@ public:
 
     // to be set temporarily when transforming related object(?)
     void SetGlueReallyAbsolute(bool bOn);
-    void NbcRotateGluePoints(const Point& rRef, long nWink, double sn, double cs);
+    void NbcRotateGluePoints(const Point& rRef, long nAngle, double sn, double cs);
     void NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2);
-    void NbcShearGluePoints (const Point& rRef, long nWink, double tn, bool bVShear);
+    void NbcShearGluePoints (const Point& rRef, long nAngle, double tn, bool bVShear);
 
     // is object an edge?
     virtual bool IsEdge() const;

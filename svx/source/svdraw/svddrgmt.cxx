@@ -1086,13 +1086,13 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 if (pH!=NULL)
                 {
                     Point aRef(pH->GetPos());
-                    long nWink=NormAngle360(GetAngle(aPnt-aRef));
-                    long nNewAngle=nWink;
+                    long nAngle=NormAngle360(GetAngle(aPnt-aRef));
+                    long nNewAngle=nAngle;
                     nNewAngle+=nSA/2;
                     nNewAngle/=nSA;
                     nNewAngle*=nSA;
                     nNewAngle=NormAngle360(nNewAngle);
-                    double a=(nNewAngle-nWink)*nPi180;
+                    double a=(nNewAngle-nAngle)*nPi180;
                     double nSin=sin(a);
                     double nCos=cos(a);
                     RotatePoint(aPnt,aRef,nSin,nCos);
@@ -2108,7 +2108,7 @@ TYPEINIT1(SdrDragRotate,SdrDragMethod);
 
 void SdrDragRotate::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Rotate(DragStat().GetRef1(), nWink, sin(nWink*nPi180), cos(nWink*nPi180));
+    rTarget.Rotate(DragStat().GetRef1(), nAngle, sin(nAngle*nPi180), cos(nAngle*nPi180));
 }
 
 SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
@@ -2116,7 +2116,7 @@ SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
     nSin(0.0),
     nCos(1.0),
     nAngle0(0),
-    nWink(0),
+    nAngle(0),
     bRight(false)
 {
 }
@@ -2125,9 +2125,9 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethRotate, rStr);
     rStr += " (";
-    sal_Int32 nTmpAngle(NormAngle360(nWink));
+    sal_Int32 nTmpAngle(NormAngle360(nAngle));
 
-    if(bRight && nWink)
+    if(bRight && nAngle)
     {
         nTmpAngle -= 36000;
     }
@@ -2188,9 +2188,9 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
 
         nNewAngle=NormAngle180(nNewAngle);
 
-        if (nWink!=nNewAngle)
+        if (nAngle!=nNewAngle)
         {
-            sal_uInt16 nSekt0=GetAngleSector(nWink);
+            sal_uInt16 nSekt0=GetAngleSector(nAngle);
             sal_uInt16 nSekt1=GetAngleSector(nNewAngle);
 
             if (nSekt0==0 && nSekt1==3)
@@ -2199,8 +2199,8 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
             if (nSekt0==3 && nSekt1==0)
                 bRight=false;
 
-            nWink=nNewAngle;
-            double a=nWink*nPi180;
+            nAngle=nNewAngle;
+            double a=nAngle*nPi180;
             double nSin1=sin(a); // calculate now, so as little time as possible
             double nCos1=cos(a); // passes between Hide() and Show()
             Hide();
@@ -2216,19 +2216,19 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
 {
     Hide();
 
-    if (nWink!=0)
+    if (nAngle!=0)
     {
         if (IsDraggingPoints())
         {
-            getSdrDragView().RotateMarkedPoints(DragStat().GetRef1(),nWink);
+            getSdrDragView().RotateMarkedPoints(DragStat().GetRef1(),nAngle);
         }
         else if (IsDraggingGluePoints())
         {
-            getSdrDragView().RotateMarkedGluePoints(DragStat().GetRef1(),nWink,bCopy);
+            getSdrDragView().RotateMarkedGluePoints(DragStat().GetRef1(),nAngle,bCopy);
         }
         else
         {
-            getSdrDragView().RotateMarkedObj(DragStat().GetRef1(),nWink,bCopy);
+            getSdrDragView().RotateMarkedObj(DragStat().GetRef1(),nAngle,bCopy);
         }
     }
     return true;
@@ -2247,7 +2247,7 @@ SdrDragShear::SdrDragShear(SdrDragView& rNewView, bool bSlant1)
 :   SdrDragMethod(rNewView),
     aFact(1,1),
     nAngle0(0),
-    nWink(0),
+    nAngle(0),
     nTan(0.0),
     bVertical(false),
     bResize(false),
@@ -2261,7 +2261,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
     ImpTakeDescriptionStr(STR_DragMethShear, rStr);
     rStr += " (";
 
-    sal_Int32 nTmpAngle(nWink);
+    sal_Int32 nTmpAngle(nAngle);
 
     if(bUpSideDown)
         nTmpAngle += 18000;
@@ -2431,11 +2431,11 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         if (bNeg)
             nNewAngle=-nNewAngle;
 
-        if (nWink!=nNewAngle || aFact!=aNeuFact)
+        if (nAngle!=nNewAngle || aFact!=aNeuFact)
         {
-            nWink=nNewAngle;
+            nAngle=nNewAngle;
             aFact=aNeuFact;
-            double a=nWink*nPi180;
+            double a=nAngle*nPi180;
             double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
             Hide();
             nTan=nTan1;
@@ -2459,9 +2459,9 @@ void SdrDragShear::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
         }
     }
 
-    if (nWink!=0)
+    if (nAngle!=0)
     {
-        rTarget.Shear(DragStat().GetRef1(),nWink,tan(nWink*nPi180),bVertical);
+        rTarget.Shear(DragStat().GetRef1(),nAngle,tan(nAngle*nPi180),bVertical);
     }
 }
 
@@ -2472,9 +2472,9 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
     if (bResize && aFact==Fraction(1,1))
         bResize=false;
 
-    if (nWink!=0 || bResize)
+    if (nAngle!=0 || bResize)
     {
-        if (nWink!=0 && bResize)
+        if (nAngle!=0 && bResize)
         {
             OUString aStr;
             ImpTakeDescriptionStr(STR_EditShear,aStr);
@@ -2499,12 +2499,12 @@ bool SdrDragShear::EndSdrDrag(bool bCopy)
             bCopy=false;
         }
 
-        if (nWink!=0)
+        if (nAngle!=0)
         {
-            getSdrDragView().ShearMarkedObj(DragStat().GetRef1(),nWink,bVertical,bCopy);
+            getSdrDragView().ShearMarkedObj(DragStat().GetRef1(),nAngle,bVertical,bCopy);
         }
 
-        if (nWink!=0 && bResize)
+        if (nAngle!=0 && bResize)
             getSdrDragView().EndUndo();
 
         return true;
@@ -2535,7 +2535,7 @@ void SdrDragMirror::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
 SdrDragMirror::SdrDragMirror(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
-    nWink(0),
+    nAngle(0),
     bMirrored(false),
     bSide0(false)
 {
@@ -2544,7 +2544,7 @@ SdrDragMirror::SdrDragMirror(SdrDragView& rNewView)
 bool SdrDragMirror::ImpCheckSide(const Point& rPnt) const
 {
     long nAngle1=GetAngle(rPnt-DragStat().GetRef1());
-    nAngle1-=nWink;
+    nAngle1-=nAngle;
     nAngle1=NormAngle360(nAngle1);
 
     return nAngle1<18000;
@@ -2579,7 +2579,7 @@ bool SdrDragMirror::BeginSdrDrag()
         aDif=pH2->GetPos()-pH1->GetPos();
         bool b90=(aDif.X()==0) || aDif.Y()==0;
         bool b45=b90 || (std::abs(aDif.X()) == std::abs(aDif.Y()));
-        nWink=NormAngle360(GetAngle(aDif));
+        nAngle=NormAngle360(GetAngle(aDif));
 
         if (!getSdrDragView().IsMirrorAllowed(false,false) && !b45)
             return false; // free choice of axis angle not allowed
@@ -2834,7 +2834,7 @@ SdrDragCrook::SdrDragCrook(SdrDragView& rNewView)
     bUpr(false),
     bLwr(false),
     bAtCenter(false),
-    nWink(0),
+    nAngle(0),
     nMarkSize(0),
     eMode(SDRCROOK_ROTATE)
 {
@@ -2848,7 +2848,7 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
     {
         rStr += " (";
 
-        sal_Int32 nVal(nWink);
+        sal_Int32 nVal(nAngle);
 
         if(bAtCenter)
             nVal *= 2;
@@ -3198,7 +3198,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
         }
 
         long nNeuRad=0;
-        nWink=0;
+        nAngle=0;
 
         if (bValid)
         {
@@ -3255,18 +3255,18 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
                     nMul*=2;
 
                 aNeuFact=Fraction(nMul,nMarkSize);
-                nWink=nPntWink;
+                nAngle=nPntWink;
             }
             else
             {
-                nWink=(long)((nMarkSize*360/nUmfang)*100)/2;
+                nAngle=(long)((nMarkSize*360/nUmfang)*100)/2;
 
-                if (nWink==0)
+                if (nAngle==0)
                     bValid=false;
             }
         }
 
-        if (nWink==0 || nNeuRad==0)
+        if (nAngle==0 || nNeuRad==0)
             bValid=false;
 
         if (!bValid)

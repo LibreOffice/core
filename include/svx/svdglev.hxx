@@ -79,11 +79,11 @@ public:
 
     void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy=false);
     void ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
-    void RotateMarkedGluePoints(const Point& rRef, long nWink, bool bCopy=false);
+    void RotateMarkedGluePoints(const Point& rRef, long nAngle, bool bCopy=false);
     void MirrorMarkedGluePoints(const Point& rRef1, const Point& rRef2, bool bCopy=false);
     void MirrorMarkedGluePointsHorizontal(bool bCopy=false);
     void MirrorMarkedGluePointsVertical(bool bCopy=false);
-    void ShearMarkedGluePoints(const Point& rRef, long nWink, bool bVShear=false, bool bCopy=false);
+    void ShearMarkedGluePoints(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false);
     void CrookMarkedGluePoints(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false);
     void DistortMarkedGluePoints(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion=false, bool bCopy=false);
 

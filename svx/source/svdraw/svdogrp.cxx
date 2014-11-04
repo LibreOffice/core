@@ -468,7 +468,7 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
 }
 
 
-void SdrObjGroup::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrObjGroup::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     SetGlueReallyAbsolute(true);
     RotatePoint(aRefPoint,rRef,sn,cs);
@@ -476,9 +476,9 @@ void SdrObjGroup::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     const size_t nObjAnz = pOL->GetObjCount();
     for (size_t i=0; i<nObjAnz; ++i) {
         SdrObject* pObj=pOL->GetObj(i);
-        pObj->NbcRotate(rRef,nWink,sn,cs);
+        pObj->NbcRotate(rRef,nAngle,sn,cs);
     }
-    NbcRotateGluePoints(rRef,nWink,sn,cs);
+    NbcRotateGluePoints(rRef,nAngle,sn,cs);
     SetGlueReallyAbsolute(false);
 }
 
@@ -498,7 +498,7 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrObjGroup::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
     ShearPoint(aRefPoint,rRef,tn);
@@ -506,9 +506,9 @@ void SdrObjGroup::NbcShear(const Point& rRef, long nWink, double tn, bool bVShea
     const size_t nObjAnz = pOL->GetObjCount();
     for (size_t i=0; i<nObjAnz; ++i) {
         SdrObject* pObj=pOL->GetObj(i);
-        pObj->NbcShear(rRef,nWink,tn,bVShear);
+        pObj->NbcShear(rRef,nAngle,tn,bVShear);
     }
-    NbcShearGluePoints(rRef,nWink,tn,bVShear);
+    NbcShearGluePoints(rRef,nAngle,tn,bVShear);
     SetGlueReallyAbsolute(false);
 }
 
@@ -631,9 +631,9 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
 }
 
 
-void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrObjGroup::Rotate(const Point& rRef, long nAngle, double sn, double cs)
 {
-    if (nWink!=0) {
+    if (nAngle!=0) {
         SetGlueReallyAbsolute(true);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         RotatePoint(aRefPoint,rRef,sn,cs);
@@ -642,13 +642,13 @@ void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
         const size_t nObjAnz = pOL->GetObjCount();
         for (size_t i=0; i<nObjAnz; ++i) {
             SdrObject* pObj=pOL->GetObj(i);
-            if (pObj->IsEdgeObj()) pObj->Rotate(rRef,nWink,sn,cs);
+            if (pObj->IsEdgeObj()) pObj->Rotate(rRef,nAngle,sn,cs);
         }
         for (size_t i=0; i<nObjAnz; ++i) {
             SdrObject* pObj=pOL->GetObj(i);
-            if (!pObj->IsEdgeObj()) pObj->Rotate(rRef,nWink,sn,cs);
+            if (!pObj->IsEdgeObj()) pObj->Rotate(rRef,nAngle,sn,cs);
         }
-        NbcRotateGluePoints(rRef,nWink,sn,cs);
+        NbcRotateGluePoints(rRef,nAngle,sn,cs);
         SetGlueReallyAbsolute(false);
         SetChanged();
         BroadcastObjectChange();
@@ -681,9 +681,9 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 }
 
 
-void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrObjGroup::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    if (nWink!=0) {
+    if (nAngle!=0) {
         SetGlueReallyAbsolute(true);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         ShearPoint(aRefPoint,rRef,tn);
@@ -692,13 +692,13 @@ void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
         const size_t nObjAnz = pOL->GetObjCount();
         for (size_t i=0; i<nObjAnz; ++i) {
             SdrObject* pObj=pOL->GetObj(i);
-            if (pObj->IsEdgeObj()) pObj->Shear(rRef,nWink,tn,bVShear);
+            if (pObj->IsEdgeObj()) pObj->Shear(rRef,nAngle,tn,bVShear);
         }
         for (size_t i=0; i<nObjAnz; ++i) {
             SdrObject* pObj=pOL->GetObj(i);
-            if (!pObj->IsEdgeObj()) pObj->Shear(rRef,nWink,tn,bVShear);
+            if (!pObj->IsEdgeObj()) pObj->Shear(rRef,nAngle,tn,bVShear);
         }
-        NbcShearGluePoints(rRef,nWink,tn,bVShear);
+        NbcShearGluePoints(rRef,nAngle,tn,bVShear);
         SetGlueReallyAbsolute(false);
         SetChanged();
         BroadcastObjectChange();

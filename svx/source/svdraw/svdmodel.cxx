@@ -1302,15 +1302,15 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakeAngleStr(long nWink, OUString& rStr, bool bNoDegChar) const
+void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar) const
 {
-    bool bNeg = nWink < 0;
+    bool bNeg = nAngle < 0;
 
     if(bNeg)
-        nWink = -nWink;
+        nAngle = -nAngle;
 
     OUStringBuffer aBuf;
-    aBuf.append(static_cast<sal_Int32>(nWink));
+    aBuf.append(static_cast<sal_Int32>(nAngle));
 
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();

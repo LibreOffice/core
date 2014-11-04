@@ -401,7 +401,7 @@ public:
 
     static void      TakeUnitStr(FieldUnit eUnit, OUString& rStr);
     void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    void             TakeAngleStr(long nWink, OUString& rStr, bool bNoDegChar = false) const;
+    void             TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar = false) const;
     void             TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar = false) const;
 
     // RecalcPageNums is ordinarily only called by the Page.

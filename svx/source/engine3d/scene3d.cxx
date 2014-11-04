@@ -534,7 +534,7 @@ void E3dScene::Notify(SfxBroadcaster &rBC, const SfxHint  &rHint)
     E3dObject::Notify(rBC, rHint);
 }
 
-void E3dScene::RotateScene (const Point& rRef, long /*nWink*/, double sn, double cs)
+void E3dScene::RotateScene (const Point& rRef, long /*nAngle*/, double sn, double cs)
 {
     Point UpperLeft, LowerRight, Center, NewCenter;
 
@@ -623,7 +623,7 @@ void E3dScene::SetTransform(const basegfx::B3DHomMatrix& rMatrix)
     }
 }
 
-void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void E3dScene::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     // So currently the glue points are defined relative to the scene aOutRect.
     // Before turning the glue points are defined relative to the page. They
@@ -636,15 +636,15 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     // objects. So going through the entire list and rotate around the Z axis
     // through the enter of aOutRect's (Steiner's theorem), so RotateZ
 
-    RotateScene (rRef, nWink, sn, cs);  // Rotates the scene
-    double fWinkelInRad = nWink/100.0 * F_PI180;
+    RotateScene (rRef, nAngle, sn, cs);  // Rotates the scene
+    double fWinkelInRad = nAngle/100.0 * F_PI180;
 
     basegfx::B3DHomMatrix aRotation;
     aRotation.rotate(0.0, 0.0, fWinkelInRad);
     NbcSetTransform(aRotation * GetTransform());
 
     SetRectsDirty();    // This forces a recalculation of all BoundRects
-    NbcRotateGluePoints(rRef,nWink,sn,cs);  // Rotate the glue points (who still
+    NbcRotateGluePoints(rRef,nAngle,sn,cs);  // Rotate the glue points (who still
                                             // have coordinates relative to the
                                             // original page)
     SetGlueReallyAbsolute(false);  // from now they are again relative to BoundRect (that is defined as aOutRect)

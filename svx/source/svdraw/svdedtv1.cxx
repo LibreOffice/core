@@ -303,21 +303,21 @@ long SdrEditView::GetMarkedObjRotate() const
     return nRetval;
     //sal_Bool b1st=true;
     //sal_Bool bOk=true;
-    //long nWink=0;
+    //long nAngle=0;
     //sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
     //for (sal_uIntPtr nm=0; nm<nMarkAnz && bOk; nm++) {
     //  SdrMark* pM=GetSdrMarkByIndex(nm);
     //  SdrObject* pO=pM->GetMarkedSdrObj();
     //  long nAngle2=pO->GetRotateAngle();
-    //  if (b1st) nWink=nAngle2;
-    //  else if (nAngle2!=nWink) bOk=false;
+    //  if (b1st) nAngle=nAngle2;
+    //  else if (nAngle2!=nAngle) bOk=false;
     //  b1st=false;
     //}
-    //if (!bOk) nWink=0;
-    //return nWink;
+    //if (!bOk) nAngle=0;
+    //return nAngle;
 }
 
-void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
+void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
 {
     const bool bUndo = IsUndoEnabled();
     if( bUndo )
@@ -331,8 +331,8 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
     if (bCopy)
         CopyMarkedObj();
 
-    double nSin=sin(nWink*nPi180);
-    double nCos=cos(nWink*nPi180);
+    double nSin=sin(nAngle*nPi180);
+    double nCos=cos(nAngle*nPi180);
     const size_t nMarkAnz(GetMarkedObjectCount());
 
     if(nMarkAnz)
@@ -359,7 +359,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
                 aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pO));
             }
 
-            pO->Rotate(rRef,nWink,nSin,nCos);
+            pO->Rotate(rRef,nAngle,nSin,nCos);
         }
 
         // fire scene updaters
@@ -454,23 +454,23 @@ long SdrEditView::GetMarkedObjShear() const
 {
     bool b1st=true;
     bool bOk=true;
-    long nWink=0;
+    long nAngle=0;
     const size_t nMarkAnz=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkAnz && bOk; ++nm) {
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         long nAngle2=pO->GetShearAngle();
-        if (b1st) nWink=nAngle2;
-        else if (nAngle2!=nWink) bOk=false;
+        if (b1st) nAngle=nAngle2;
+        else if (nAngle2!=nAngle) bOk=false;
         b1st=false;
     }
-    if (nWink>SDRMAXSHEAR) nWink=SDRMAXSHEAR;
-    if (nWink<-SDRMAXSHEAR) nWink=-SDRMAXSHEAR;
-    if (!bOk) nWink=0;
-    return nWink;
+    if (nAngle>SDRMAXSHEAR) nAngle=SDRMAXSHEAR;
+    if (nAngle<-SDRMAXSHEAR) nAngle=-SDRMAXSHEAR;
+    if (!bOk) nAngle=0;
+    return nAngle;
 }
 
-void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, bool bVShear, bool bCopy)
+void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, bool bCopy)
 {
     const bool bUndo = IsUndoEnabled();
 
@@ -486,7 +486,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, bool bVShear, bo
     if (bCopy)
         CopyMarkedObj();
 
-    double nTan=tan(nWink*nPi180);
+    double nTan=tan(nAngle*nPi180);
     const size_t nMarkAnz=GetMarkedObjectCount();
     for (size_t nm=0; nm<nMarkAnz; ++nm)
     {
@@ -498,7 +498,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nWink, bool bVShear, bo
             AddUndoActions( vConnectorUndoActions );
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
-        pO->Shear(rRef,nWink,nTan,bVShear);
+        pO->Shear(rRef,nAngle,nTan,bVShear);
     }
 
     if( bUndo )
@@ -560,7 +560,7 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
         Point aCtr1(aCtr0);
         bool bRotOk(false);
         double nSin(0.0), nCos(1.0);
-        double nWink(0.0);
+        double nAngle(0.0);
 
         if(0 != rRad.X() && 0 != rRad.Y())
         {
@@ -568,16 +568,16 @@ void SdrEditView::ImpCrookObj(SdrObject* pO, const Point& rRef, const Point& rRa
 
             switch (eMode)
             {
-                case SDRCROOK_ROTATE : nWink=CrookRotateXPoint (aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical); bRotOk=bRotate; break;
-                case SDRCROOK_SLANT  : nWink=CrookSlantXPoint  (aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical);           break;
-                case SDRCROOK_STRETCH: nWink=CrookStretchXPoint(aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical,rMarkRect); break;
+                case SDRCROOK_ROTATE : nAngle=CrookRotateXPoint (aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical); bRotOk=bRotate; break;
+                case SDRCROOK_SLANT  : nAngle=CrookSlantXPoint  (aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical);           break;
+                case SDRCROOK_STRETCH: nAngle=CrookStretchXPoint(aCtr1,NULL,NULL,rRef,rRad,nSin,nCos,bVertical,rMarkRect); break;
             }
         }
 
         aCtr1 -= aCtr0;
 
         if(bRotOk)
-            pO->Rotate(aCtr0, Round(nWink/nPi180), nSin, nCos);
+            pO->Rotate(aCtr0, Round(nAngle/nPi180), nSin, nCos);
 
         pO->Move(Size(aCtr1.X(),aCtr1.Y()));
     }

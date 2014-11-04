@@ -178,7 +178,7 @@ public:
     // which is vertical to the screen, plus a shift of the scene.
     // This means that also the scene (E3dScene) must define this
     // routine as virtual in its class.
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
+    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
 
     // get wireframe polygon for local object. No transform is applied.
     basegfx::B3DPolyPolygon CreateWireframe() const;

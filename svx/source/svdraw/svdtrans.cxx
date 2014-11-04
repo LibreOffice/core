@@ -136,8 +136,8 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
         long nRefWink=GetAngle(rRef2-rRef1);
         rPnt-=rRef1;
         long nPntWink=GetAngle(rPnt);
-        long nWink=2*(nRefWink-nPntWink);
-        double a=nWink*nPi180;
+        long nAngle=2*(nRefWink-nPntWink);
+        double a=nAngle*nPi180;
         double nSin=sin(a);
         double nCos=cos(a);
         RotatePoint(rPnt,Point(),nSin,nCos);
@@ -186,9 +186,9 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
     long y0=rPnt.Y();
     long cx=rCenter.X();
     long cy=rCenter.Y();
-    double nWink=GetCrookAngle(rPnt,rCenter,rRad,bVert);
-    double sn=sin(nWink);
-    double cs=cos(nWink);
+    double nAngle=GetCrookAngle(rPnt,rCenter,rRad,bVert);
+    double sn=sin(nAngle);
+    double cs=cos(nAngle);
     RotatePoint(rPnt,rCenter,sn,cs);
     if (bC1) {
         if (bVert) {
@@ -228,7 +228,7 @@ double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCent
     }
     rSin=sn;
     rCos=cs;
-    return nWink;
+    return nAngle;
 }
 
 double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
@@ -266,9 +266,9 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
             pC2->Y()=nStart;
         }
     }
-    double nWink=GetCrookAngle(rPnt,rCenter,rRad,bVert);
-    double sn=sin(nWink);
-    double cs=cos(nWink);
+    double nAngle=GetCrookAngle(rPnt,rCenter,rRad,bVert);
+    double sn=sin(nAngle);
+    double cs=cos(nAngle);
     RotatePoint(rPnt,rCenter,sn,cs);
     if (bC1) { if (bVert) pC1->Y()-=y0-rCenter.Y(); else pC1->X()-=x0-rCenter.X(); RotatePoint(*pC1,rCenter,sn,cs); }
     if (bC2) { if (bVert) pC2->Y()-=y0-rCenter.Y(); else pC2->X()-=x0-rCenter.X(); RotatePoint(*pC2,rCenter,sn,cs); }
@@ -283,7 +283,7 @@ double CrookSlantXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCente
     }
     rSin=sn;
     rCos=cs;
-    return nWink;
+    return nAngle;
 }
 
 double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
@@ -431,13 +431,13 @@ long NormAngle360(long a)
     return a;
 }
 
-sal_uInt16 GetAngleSector(long nWink)
+sal_uInt16 GetAngleSector(long nAngle)
 {
-    while (nWink<0) nWink+=36000;
-    while (nWink>=36000) nWink-=36000;
-    if (nWink< 9000) return 0;
-    if (nWink<18000) return 1;
-    if (nWink<27000) return 2;
+    while (nAngle<0) nAngle+=36000;
+    while (nAngle>=36000) nAngle-=36000;
+    if (nAngle< 9000) return 0;
+    if (nAngle<18000) return 1;
+    if (nAngle<27000) return 2;
     return 3;
 }
 

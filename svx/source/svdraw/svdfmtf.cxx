@@ -1040,14 +1040,14 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
         aAttr.Put(XFillColorItem(OUString(), aFnt.GetFillColor()));
         pText->SetMergedItemSet(aAttr);
     }
-    sal_uInt32 nWink = aFnt.GetOrientation();
-    if ( nWink )
+    sal_uInt32 nAngle = aFnt.GetOrientation();
+    if ( nAngle )
     {
-        nWink*=10;
-        double a=nWink*nPi180;
+        nAngle*=10;
+        double a=nAngle*nPi180;
         double nSin=sin(a);
         double nCos=cos(a);
-        pText->NbcRotate(aPos,nWink,nSin,nCos);
+        pText->NbcRotate(aPos,nAngle,nSin,nCos);
     }
     InsertObj( pText, false );
 }

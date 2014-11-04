@@ -215,12 +215,12 @@ public:
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bCopy, const bool bWdh, const bool bHgt);
     long GetMarkedObjRotate() const;
-    void RotateMarkedObj(const Point& rRef, long nWink, bool bCopy=false);
+    void RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy=false);
     void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
     void MirrorMarkedObjHorizontal(bool bCopy=false);
     void MirrorMarkedObjVertical(bool bCopy=false);
     long GetMarkedObjShear() const;
-    void ShearMarkedObj(const Point& rRef, long nWink, bool bVShear=false, bool bCopy=false);
+    void ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false);
     void CrookMarkedObj(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false);
     void DistortMarkedObj(const Rectangle& rRef, const XPolygon& rDistortedRect, bool bNoContortion=false, bool bCopy=false);
 
@@ -230,12 +230,12 @@ public:
     void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj   (rSiz,bCopy); }
     void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false) { ResizeMarkedObj (rRef,xFact,yFact,bCopy); }
     long GetAllMarkedRotate() const { return GetMarkedObjRotate(); }
-    void RotateAllMarked(const Point& rRef, long nWink, bool bCopy=false) { RotateMarkedObj(rRef,nWink,bCopy); }
+    void RotateAllMarked(const Point& rRef, long nAngle, bool bCopy=false) { RotateMarkedObj(rRef,nAngle,bCopy); }
     void MirrorAllMarked(const Point& rRef1, const Point& rRef2, bool bCopy=false) { MirrorMarkedObj(rRef1,rRef2,bCopy); }
     void MirrorAllMarkedHorizontal(bool bCopy=false) { MirrorMarkedObjHorizontal(bCopy); }
     void MirrorAllMarkedVertical(bool bCopy=false) { MirrorMarkedObjVertical(bCopy); }
     long GetAllMarkedShear() const { return GetMarkedObjShear(); }
-    void ShearAllMarked(const Point& rRef, long nWink, bool bVShear=false, bool bCopy=false) { ShearMarkedObj(rRef,nWink,bVShear,bCopy); }
+    void ShearAllMarked(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false) { ShearMarkedObj(rRef,nAngle,bVShear,bCopy); }
     void CrookAllMarked(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false) { CrookMarkedObj(rRef,rRad,eMode,bVertical,bNoContortion,bCopy); }
     void CopyMarked() { CopyMarkedObj(); }
     bool IsMoveAllowed() const { ForcePossibilities(); return bMoveAllowed && !bMoveProtect; }

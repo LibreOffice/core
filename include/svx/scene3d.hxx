@@ -210,8 +210,8 @@ public:
     virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix) SAL_OVERRIDE;
     virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix) SAL_OVERRIDE;
 
-    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs) SAL_OVERRIDE;
-    void RotateScene(const Point& rRef, long nWink, double sn, double cs);
+    virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;
+    void RotateScene(const Point& rRef, long nAngle, double sn, double cs);
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;

@@ -52,14 +52,14 @@
 
 using namespace com::sun::star;
 
-Point GetAnglePnt(const Rectangle& rR, long nWink)
+Point GetAnglePnt(const Rectangle& rR, long nAngle)
 {
     Point aCenter(rR.Center());
     long nWdt=rR.Right()-rR.Left();
     long nHgt=rR.Bottom()-rR.Top();
     long nMaxRad=((nWdt>nHgt ? nWdt : nHgt)+1) /2;
     double a;
-    a=nWink*nPi180;
+    a=nAngle*nPi180;
     Point aRetval(Round(cos(a)*nMaxRad),-Round(sin(a)*nMaxRad));
     if (nWdt==0) aRetval.X()=0;
     if (nHgt==0) aRetval.Y()=0;
@@ -362,7 +362,7 @@ struct ImpCircUser : public SdrDragStatUserData
     long                        nWdt;
     long                        nStart;
     long                        nEnd;
-    long                        nWink;
+    long                        nAngle;
     bool                        bRight; // not yet implemented
 
 public:
@@ -372,7 +372,7 @@ public:
         nWdt(0),
         nStart(0),
         nEnd(0),
-        nWink(0),
+        nAngle(0),
         bRight(false)
     {}
     void SetCreateParams(SdrDragStat& rStat);
@@ -521,7 +521,7 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
             aPt.X()=BigMulDiv(aPt.X(),nHgt,nWdt);
         }
 
-        long nWink=NormAngle360(GetAngle(aPt));
+        long nAngle=NormAngle360(GetAngle(aPt));
 
         if (rDrag.GetView() && rDrag.GetView()->IsAngleSnapEnabled())
         {
@@ -529,20 +529,20 @@ bool SdrCircObj::applySpecialDrag(SdrDragStat& rDrag)
 
             if (nSA!=0)
             {
-                nWink+=nSA/2;
-                nWink/=nSA;
-                nWink*=nSA;
-                nWink=NormAngle360(nWink);
+                nAngle+=nSA/2;
+                nAngle/=nSA;
+                nAngle*=nSA;
+                nAngle=NormAngle360(nAngle);
             }
         }
 
         if(1 == rDrag.GetHdl()->GetPointNum())
         {
-            nStartAngle = nWink;
+            nStartAngle = nAngle;
         }
         else if(2 == rDrag.GetHdl()->GetPointNum())
         {
-            nEndAngle = nWink;
+            nEndAngle = nAngle;
         }
 
         SetRectsDirty();
@@ -572,20 +572,20 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         if(OBJ_CIRC != meCircleKind && nPntAnz > 2)
         {
             const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
-            sal_Int32 nWink;
+            sal_Int32 nAngle;
 
             aBuf.appendAscii(" (");
 
             if(3 == nPntAnz)
             {
-                nWink = pU->nStart;
+                nAngle = pU->nStart;
             }
             else
             {
-                nWink = pU->nEnd;
+                nAngle = pU->nEnd;
             }
 
-            aBuf.append(GetAngleStr(nWink,false));
+            aBuf.append(GetAngleStr(nAngle,false));
             aBuf.append(')');
         }
 
@@ -597,13 +597,13 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
         if(bAngle)
         {
-            const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartAngle : nEndAngle);
+            const sal_Int32 nAngle(1 == rDrag.GetHdl()->GetPointNum() ? nStartAngle : nEndAngle);
 
             OUString aStr;
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             OUStringBuffer aBuf(aStr);
             aBuf.appendAscii(" (");
-            aBuf.append(GetAngleStr(nWink,false));
+            aBuf.append(GetAngleStr(nAngle,false));
             aBuf.append(')');
 
             return aBuf.makeStringAndClear();
@@ -862,9 +862,9 @@ void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     ImpSetCircInfoToAttr();
 }
 
-void SdrCircObj::NbcShear(const Point& rRef, long nWink, double tn, bool bVShear)
+void SdrCircObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
 {
-    SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
+    SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
     SetXPolyDirty();
     ImpSetCircInfoToAttr();
 }

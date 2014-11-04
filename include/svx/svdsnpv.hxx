@@ -187,7 +187,7 @@ public:
     // Der Winkelfang ist unabhaengig vom Koordinatenfang
     // und somit von der Einstellung IsSnapEnabled()
     // Es sollten nur Werte angegeben werden fuer die gilt:
-    //     36000 modulu nWink = 0
+    //     36000 modulu nAngle = 0
     // Implementiert fuer:
     // - Rotate (Dragging)
     // - Shear (Dragging)
@@ -195,7 +195,7 @@ public:
     // Persistent.
     void SetAngleSnapEnabled(bool bOn) { bAngleSnapEnab=bOn; }
     bool IsAngleSnapEnabled() const { return bAngleSnapEnab; }
-    void SetSnapAngle(long nWink) { nSnapAngle=nWink; }
+    void SetSnapAngle(long nAngle) { nSnapAngle=nAngle; }
     long GetSnapAngle() const { return nSnapAngle; }
 
     // Ortho hat je nach Kontext verschiedene Effekte:

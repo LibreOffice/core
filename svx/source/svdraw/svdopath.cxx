@@ -979,9 +979,9 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
             mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
             aStr += aMetr;
 
-            sal_Int32 nWink(GetAngle(aNow));
+            sal_Int32 nAngle(GetAngle(aNow));
             aStr += " ";
-            mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
+            mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
             aStr += aMetr;
         }
 
@@ -1072,9 +1072,9 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                 mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
                 aStr += aMetr;
 
-                sal_Int32 nWink(GetAngle(aNow));
+                sal_Int32 nAngle(GetAngle(aNow));
                 aStr += " ";
-                mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
+                mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
                 aStr += aMetr;
             }
             else if(nPntAnz > 1)
@@ -1118,9 +1118,9 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
                     aStr += aMetr;
 
-                    sal_Int32 nWink(GetAngle(aPt));
+                    sal_Int32 nAngle(GetAngle(aPt));
                     aStr += " ";
-                    mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
+                    mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
                     aStr += aMetr;
                 }
 
@@ -1139,9 +1139,9 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
                     mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, true);
                     aStr += aMetr;
 
-                    sal_Int32 nWink(GetAngle(aPt));
+                    sal_Int32 nAngle(GetAngle(aPt));
                     aStr += " ";
-                    mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
+                    mrSdrPathObject.GetModel()->TakeAngleStr(nAngle, aMetr);
                     aStr += aMetr;
                 }
             }
@@ -2363,14 +2363,14 @@ void SdrPathObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     SdrTextObj::NbcResize(rRef,xFact,yFact);
 }
 
-void SdrPathObj::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
+void SdrPathObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 {
     // Thank JOE, the angles are defined mirrored to the mathematical meanings
-    const basegfx::B2DHomMatrix aTrans(basegfx::tools::createRotateAroundPoint(rRef.X(), rRef.Y(), -nWink * nPi180));
+    const basegfx::B2DHomMatrix aTrans(basegfx::tools::createRotateAroundPoint(rRef.X(), rRef.Y(), -nAngle * nPi180));
     maPathPolygon.transform(aTrans);
 
     // #i19871# first modify locally, then call parent (to get correct SnapRect with GluePoints)
-    SdrTextObj::NbcRotate(rRef,nWink,sn,cs);
+    SdrTextObj::NbcRotate(rRef,nAngle,sn,cs);
 }
 
 void SdrPathObj::NbcShear(const Point& rRefPnt, long nAngle, double fTan, bool bVShear)

@@ -400,16 +400,16 @@ static void ImpRotate(Point& rPt, const void* p1, const void* /*p2*/, const void
     RotatePoint(rPt,*(const Point*)p1,*(const double*)p3,*(const double*)p4);
 }
 
-void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, long nWink, bool bCopy)
+void SdrGlueEditView::RotateMarkedGluePoints(const Point& rRef, long nAngle, bool bCopy)
 {
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditRotate));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
     BegUndo(aStr,GetDescriptionOfMarkedGluePoints(),SDRREPFUNC_OBJ_ROTATE);
     if (bCopy) ImpCopyMarkedGluePoints();
-    double nSin=sin(nWink*nPi180);
-    double nCos=cos(nWink*nPi180);
-    ImpTransformMarkedGluePoints(ImpRotate,&rRef,&nWink,&nSin,&nCos);
+    double nSin=sin(nAngle*nPi180);
+    double nCos=cos(nAngle*nPi180);
+    ImpTransformMarkedGluePoints(ImpRotate,&rRef,&nAngle,&nSin,&nCos);
     EndUndo();
     AdjustMarkHdl();
 }

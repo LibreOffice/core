@@ -1616,7 +1616,7 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     }
     InvalidateRenderGeometry();
 }
-void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, double cs )
+void SdrObjCustomShape::NbcRotate( const Point& rRef, long nAngle, double sn, double cs )
 {
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
@@ -1626,7 +1626,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, dou
         fObjectRotation = 360 + fObjectRotation;
 
     // the rotation angle for ashapes is stored in fObjectRotation, this rotation
-    // has to be applied to the text object (which is internally using aGeo.nWink).
+    // has to be applied to the text object (which is internally using aGeo.nAngle).
     SdrTextObj::NbcRotate( aRect.TopLeft(), -aGeo.nRotationAngle,        // retrieving the unrotated text object
                             sin( (-aGeo.nRotationAngle) * F_PI18000 ),
                             cos( (-aGeo.nRotationAngle) * F_PI18000 ) );
@@ -1651,13 +1651,13 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, dou
     if ( bMirroredY )
         nSwap ^= 1;
 
-    double fAngle = nWink;                                                   // updating to our new object rotation
+    double fAngle = nAngle;                                                   // updating to our new object rotation
     fAngle /= 100.0;
     fObjectRotation = fmod( nSwap ? fObjectRotation - fAngle : fObjectRotation + fAngle, 360.0 );
     if ( fObjectRotation < 0 )
         fObjectRotation = 360 + fObjectRotation;
 
-    SdrTextObj::NbcRotate( rRef, nWink, sn, cs );                           // applying text rotation
+    SdrTextObj::NbcRotate( rRef, nAngle, sn, cs );                           // applying text rotation
     InvalidateRenderGeometry();
 }
 
@@ -1708,15 +1708,15 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
     InvalidateRenderGeometry();
 }
 
-void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, bool bVShear )
+void SdrObjCustomShape::Shear( const Point& rRef, long nAngle, double tn, bool bVShear )
 {
-    SdrTextObj::Shear( rRef, nWink, tn, bVShear );
+    SdrTextObj::Shear( rRef, nAngle, tn, bVShear );
     InvalidateRenderGeometry();
 }
-void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, bool bVShear )
+void SdrObjCustomShape::NbcShear( const Point& rRef, long nAngle, double tn, bool bVShear )
 {
     // TTTT: Fix for old mirroring, can be removed again in aw080
-    SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
+    SdrTextObj::NbcShear(rRef,nAngle,tn,bVShear);
 
     // updating fObjectRotation
     long nTextObjRotation = aGeo.nRotationAngle;
@@ -3078,7 +3078,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     }
 }
 
-// taking fObjectRotation instead of aGeo.nWink
+// taking fObjectRotation instead of aGeo.nAngle
 bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear

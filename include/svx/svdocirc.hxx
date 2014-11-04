@@ -114,7 +114,7 @@ public:
     virtual void NbcMove(const Size& aSiz) SAL_OVERRIDE;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2) SAL_OVERRIDE;
-    virtual void NbcShear (const Point& rRef, long nWink, double tn, bool bVShear) SAL_OVERRIDE;
+    virtual void NbcShear (const Point& rRef, long nAngle, double tn, bool bVShear) SAL_OVERRIDE;
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const SAL_OVERRIDE;
 
 protected:
