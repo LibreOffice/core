@@ -46,19 +46,11 @@ SfxPopupWindow* ParaLineSpacingPopup::CreatePopupWindow()
 {
     ParaLineSpacingControl* pControl = new ParaLineSpacingControl(GetSlotId());
 
-    //pControl->StartPopupMode(&GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_ALLOWTEAROFF|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
     pControl->StartPopupMode(&GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS|FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
-    //pControl->StartSelection();
 
     SetPopupWindow(pControl);
-    //pControl->SetSelectedHdl(LINK(this, ParaLineSpacingPopup, SelectedHdl));
 
     return pControl;
-}
-
-void ParaLineSpacingPopup::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
-{
-    // FIXME - do we need to do anything here?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
