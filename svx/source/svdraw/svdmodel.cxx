@@ -1302,7 +1302,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar) const
+void SdrModel::TakeAngleStr(long nWink, OUString& rStr, bool bNoDegChar) const
 {
     bool bNeg = nWink < 0;
 

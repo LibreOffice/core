@@ -1153,7 +1153,7 @@ OUString SdrObject::GetAngleStr(long nWink, bool bNoDegChar) const
 {
     OUString aStr;
     if (pModel!=NULL) {
-        pModel->TakeWinkStr(nWink,aStr,bNoDegChar);
+        pModel->TakeAngleStr(nWink,aStr,bNoDegChar);
     }
     return aStr;
 }

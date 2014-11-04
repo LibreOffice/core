@@ -2133,7 +2133,7 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
     }
 
     OUString aStr;
-    getSdrDragView().GetModel()->TakeWinkStr(nTmpAngle, aStr);
+    getSdrDragView().GetModel()->TakeAngleStr(nTmpAngle, aStr);
     rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2269,7 +2269,7 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
     nTmpAngle = NormAngle180(nTmpAngle);
 
     OUString aStr;
-    getSdrDragView().GetModel()->TakeWinkStr(nTmpAngle, aStr);
+    getSdrDragView().GetModel()->TakeAngleStr(nTmpAngle, aStr);
     rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2855,7 +2855,7 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
 
         nVal = std::abs(nVal);
         OUString aStr;
-        getSdrDragView().GetModel()->TakeWinkStr(nVal, aStr);
+        getSdrDragView().GetModel()->TakeAngleStr(nVal, aStr);
         rStr += aStr + ")";
     }
 

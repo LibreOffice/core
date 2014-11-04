@@ -957,7 +957,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
         if(pU->bCircle)
         {
-            mrSdrPathObject.GetModel()->TakeWinkStr(std::abs(pU->nCircRelWink), aMetr);
+            mrSdrPathObject.GetModel()->TakeAngleStr(std::abs(pU->nCircRelWink), aMetr);
             aStr += aMetr;
             aStr += " r=";
             mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, true);
@@ -981,7 +981,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
             sal_Int32 nWink(GetAngle(aNow));
             aStr += " ";
-            mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
+            mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
             aStr += aMetr;
         }
 
@@ -1074,7 +1074,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                 sal_Int32 nWink(GetAngle(aNow));
                 aStr += " ";
-                mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
+                mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
                 aStr += aMetr;
             }
             else if(nPntAnz > 1)
@@ -1120,7 +1120,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                     sal_Int32 nWink(GetAngle(aPt));
                     aStr += " ";
-                    mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
+                    mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
                     aStr += aMetr;
                 }
 
@@ -1141,7 +1141,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
 
                     sal_Int32 nWink(GetAngle(aPt));
                     aStr += " ";
-                    mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
+                    mrSdrPathObject.GetModel()->TakeAngleStr(nWink, aMetr);
                     aStr += aMetr;
                 }
             }
