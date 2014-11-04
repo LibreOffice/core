@@ -127,9 +127,9 @@ namespace sdr
                     mpItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartAngle()));
                 }
 
-                if(rObj.GetEndWink() != 36000)
+                if(rObj.GetEndAngle() != 36000)
                 {
-                    mpItemSet->Put(makeSdrCircEndAngleItem(rObj.GetEndWink()));
+                    mpItemSet->Put(makeSdrCircEndAngleItem(rObj.GetEndAngle()));
                 }
             }
 
