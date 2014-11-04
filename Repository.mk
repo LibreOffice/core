@@ -804,11 +804,11 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	) \
 ))
 
-ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	xmlsec \
 ))
 
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Helper_register_packages_for_install,base_brand,\
 	desktop_sbase_sh \
 ))
