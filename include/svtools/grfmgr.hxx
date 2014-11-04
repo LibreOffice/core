@@ -520,6 +520,7 @@ class SVT_DLLPUBLIC GraphicManager
 private:
 
     GraphicObjectList_impl  maObjList;
+    sal_uLong               mnUsedSize; // currently used memory footprint of all swapped in graphics
     GraphicCache*           mpCache;
 
                         GraphicManager( const GraphicManager& ) {}
