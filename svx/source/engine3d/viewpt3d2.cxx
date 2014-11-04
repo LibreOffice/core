@@ -155,6 +155,8 @@ void Viewport3D::SetDeviceWindow(const Rectangle& rRect)
                 break;
             }
         case AS_HOLD_X:
+            if (nNewW == 0)
+                throw o3tl::divide_by_zero();
             // Adapt view height to view width
             fRatio = (double) nNewH / nNewW;
             fTmp = aViewWin.H;
