@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_dbcb931d",
+        "filename": "sw/source/core/sw3io/swacorr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-04T16:40:46Z",
+      "side": 1,
+      "message": "what happens if m_pTextBlocks is 0, could we return \"true\" then which sounds wrong?\n\nit looks like m_pTextBlocks cannot legitimately be 0 here so best to replace the if with  assert(m_pTextBlocks);",
+      "revId": "567f435af20bd0735fbe16b783c92978e4087b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a0c5dc1_bbd0dfca",
+        "filename": "sw/source/core/sw3io/swacorr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-04T16:40:46Z",
+      "side": 1,
+      "message": "it\u0027s unnecessary to add this, only primitive members need explicit initialization",
+      "revId": "567f435af20bd0735fbe16b783c92978e4087b20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
