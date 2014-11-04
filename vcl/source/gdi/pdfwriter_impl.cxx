@@ -10449,6 +10449,8 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                 m_aTilings.back().m_pTilingStream   = new SvMemoryStream();
                 m_aTilings.back().m_pTilingStream->Write( aTilingStream.getStr(), aTilingStream.getLength() );
                 // phase the tiling so wallpaper begins on upper left
+                if ((aConvertRect.GetWidth() == 0) || (aConvertRect.GetHeight() == 0))
+                    throw o3tl::divide_by_zero();
                 m_aTilings.back().m_aTransform.matrix[2] = double(aConvertRect.Left() % aConvertRect.GetWidth()) / fDivisor;
                 m_aTilings.back().m_aTransform.matrix[5] = double(aConvertRect.Top() % aConvertRect.GetHeight()) / fDivisor;
                 m_aTilings.back().m_aResources.m_aXObjects[aImageName] = rEmit.m_nObject;
