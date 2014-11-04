@@ -45,6 +45,12 @@ ctor fraction once); we could also do this with BigInts
 
 static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 {
+    if( nD1 == 0 || nD2 == 0 ) //under these bad circumstances the following while loop will be endless
+    {
+        DBG_ASSERT(false,"Invalid parameter for ImplMakeFraction");
+        return Fraction( 1, 1 );
+    }
+
     long i = 1;
 
     if ( nN1 < 0 ) { i = -i; nN1 = -nN1; }
@@ -53,17 +59,9 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
     if ( nD2 < 0 ) { i = -i; nD2 = -nD2; }
     // all positive; i sign
 
-    Fraction aF( i*nN1, nD1 );
-    aF *= Fraction( nN2, nD2 );
+    Fraction aF = Fraction( i*nN1, nD1 ) * Fraction( nN2, nD2 );
 
-    if( nD1 == 0 || nD2 == 0 ) //under these bad circumstances the following while loop will be endless
-    {
-        DBG_ASSERT(false,"Invalid parameter for ImplMakeFraction");
-        return Fraction( 1, 1 );
-    }
-
-    while ( aF.GetDenominator() == -1 )
-    {
+    while ( !aF.IsValid() ) {
         if ( nN1 > nN2 )
             nN1 = (nN1 + 1) / 2;
         else
@@ -73,8 +71,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
         else
             nD2 = (nD2 + 1) / 2;
 
-        aF = Fraction( i*nN1, nD1 );
-        aF *= Fraction( nN2, nD2 );
+        aF = Fraction( i*nN1, nD1 ) * Fraction( nN2, nD2 );
     }
 
     return aF;
