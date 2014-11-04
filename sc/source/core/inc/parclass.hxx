@@ -101,10 +101,6 @@ private:
         sal_uInt8   nRepeatLast;
     };
 
-    // SUNWS7 needs a forward declared friend, otherwise members of the outer
-    // class are not accessible (in this case CommonData).
-    struct RawData;
-    friend struct ScParameterClassification::RawData;
     struct RawData
     {
         OpCode      eOp;

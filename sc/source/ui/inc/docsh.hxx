@@ -121,10 +121,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SAL_DLLPRIVATE void          InitOptions(bool bForLoading);
     SAL_DLLPRIVATE void          ResetDrawObjectShell();
 
-    // SUNWS needs a forward declared friend, otherwise types and members
-    // of the outer class are not accessible.
-    class PrepareSaveGuard;
-    friend class ScDocShell::PrepareSaveGuard;
     /** Do things that need to be done before saving to our own format and
         necessary clean ups in dtor. */
     class PrepareSaveGuard

@@ -123,11 +123,6 @@ private:
     typedef ::boost::unordered_map<SCROW, RowDataType>     RowsDataType;
 
 public:
-    // SUNWS needs a forward declared friend, otherwise types and members
-    // of the outer class are not accessible.
-    class Table;
-    friend class ScExternalRefCache::Table;
-
     /**
      * Represents a single cached table in an external document.  It only
      * stores non-empty cells; empty cells should never be stored in the data
@@ -335,11 +330,6 @@ private:
     typedef ::boost::unordered_map<OUString, TokenArrayRef, OUStringHash> RangeNameMap;
     typedef ::boost::unordered_map<ScRange, TokenArrayRef, RangeHash> RangeArrayMap;
     typedef ::boost::unordered_map<OUString, OUString, OUStringHash> NamePairMap;
-
-    // SUNWS needs a forward declared friend, otherwise types and members
-    // of the outer class are not accessible.
-    struct DocItem;
-    friend struct ScExternalRefCache::DocItem;
 
     /** Represents data cached for a single external document. */
     struct DocItem
