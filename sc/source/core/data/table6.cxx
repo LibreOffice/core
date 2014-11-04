@@ -496,10 +496,14 @@ bool ScTable::ReplaceAll(
     SCCOL nCol = 0;
     SCROW nRow = -1;
 
+    SCCOL nLastCol;
+    SCROW nLastRow;
+    GetLastDataPos(nLastCol, nLastRow);
+
     bool bEverFound = false;
     while (true)
     {
-        bool bFound = Search(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
+        bool bFound = Search(rSearchItem, nCol, nRow, nLastCol, nLastRow, rMark, rUndoStr, pUndoDoc);
 
         if (bFound)
         {
