@@ -34,170 +34,165 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdhdl.hxx>
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+// Create a Object-Specific ViewObjectContact, set ViewContact and
+// ObjectContact. Always needs to return something.
+ViewObjectContact& ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
-    namespace contact
+    ViewObjectContact* pRetval = new ViewObjectContactOfSdrObj(rObjectContact, *this);
+    DBG_ASSERT(pRetval, "ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact() failed (!)");
+
+    return *pRetval;
+}
+
+ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
+:   ViewContact(),
+    mrObject(rObj),
+    meRememberedAnimationKind(SDRTEXTANI_NONE)
+{
+    // init AnimationKind
+    if(GetSdrObject().ISA(SdrTextObj))
     {
-        // Create a Object-Specific ViewObjectContact, set ViewContact and
-        // ObjectContact. Always needs to return something.
-        ViewObjectContact& ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
-        {
-            ViewObjectContact* pRetval = new ViewObjectContactOfSdrObj(rObjectContact, *this);
-            DBG_ASSERT(pRetval, "ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact() failed (!)");
+        SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
+        meRememberedAnimationKind = rTextObj.GetTextAniKind();
+    }
+}
 
-            return *pRetval;
+ViewContactOfSdrObj::~ViewContactOfSdrObj()
+{
+}
+
+// Access to possible sub-hierarchy
+sal_uInt32 ViewContactOfSdrObj::GetObjectCount() const
+{
+    if(GetSdrObject().GetSubList())
+    {
+        return GetSdrObject().GetSubList()->GetObjCount();
+    }
+
+    return 0L;
+}
+
+ViewContact& ViewContactOfSdrObj::GetViewContact(sal_uInt32 nIndex) const
+{
+    assert(GetSdrObject().GetSubList() &&
+        "ViewContactOfSdrObj::GetViewContact: Access to non-existent Sub-List (!)");
+    SdrObject* pObj = GetSdrObject().GetSubList()->GetObj(nIndex);
+    assert(pObj && "ViewContactOfSdrObj::GetViewContact: Corrupt SdrObjList (!)");
+    return pObj->GetViewContact();
+}
+
+ViewContact* ViewContactOfSdrObj::GetParentContact() const
+{
+    ViewContact* pRetval = 0L;
+    SdrObjList* pObjList = GetSdrObject().GetObjList();
+
+    if(pObjList)
+    {
+        if(pObjList->ISA(SdrPage))
+        {
+            // Is a page
+            pRetval = &(static_cast<SdrPage*>(pObjList)->GetViewContact());
         }
-
-        ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
-        :   ViewContact(),
-            mrObject(rObj),
-            meRememberedAnimationKind(SDRTEXTANI_NONE)
+        else
         {
-            // init AnimationKind
-            if(GetSdrObject().ISA(SdrTextObj))
+            // Is a group?
+            if(pObjList->GetOwnerObj())
             {
-                SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
-                meRememberedAnimationKind = rTextObj.GetTextAniKind();
+                pRetval = &(pObjList->GetOwnerObj()->GetViewContact());
             }
         }
+    }
 
-        ViewContactOfSdrObj::~ViewContactOfSdrObj()
+    return pRetval;
+}
+
+// React on changes of the object of this ViewContact
+void ViewContactOfSdrObj::ActionChanged()
+{
+    // look for own changes
+    if(GetSdrObject().ISA(SdrTextObj))
+    {
+        SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
+
+        if(rTextObj.GetTextAniKind() != meRememberedAnimationKind)
         {
+            // #i38135# now remember new type
+            meRememberedAnimationKind = rTextObj.GetTextAniKind();
         }
+    }
 
-        // Access to possible sub-hierarchy
-        sal_uInt32 ViewContactOfSdrObj::GetObjectCount() const
+    // call parent
+    ViewContact::ActionChanged();
+}
+
+// overload for acessing the SdrObject
+SdrObject* ViewContactOfSdrObj::TryToGetSdrObject() const
+{
+    return &GetSdrObject();
+}
+
+
+// primitive stuff
+
+// add Gluepoints (if available)
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::createGluePointPrimitive2DSequence() const
+{
+    drawinglayer::primitive2d::Primitive2DSequence xRetval;
+    const SdrGluePointList* pGluePointList = GetSdrObject().GetGluePointList();
+
+    if(pGluePointList)
+    {
+        const sal_uInt32 nCount(pGluePointList->GetCount());
+
+        if(nCount)
         {
-            if(GetSdrObject().GetSubList())
+            // prepare point vector
+            std::vector< basegfx::B2DPoint > aGluepointVector;
+
+            // create GluePoint primitives. ATM these are relative to the SnapRect
+            for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                return GetSdrObject().GetSubList()->GetObjCount();
+                const SdrGluePoint& rCandidate = (*pGluePointList)[(sal_uInt16)a];
+                const Point aPosition(rCandidate.GetAbsolutePos(GetSdrObject()));
+
+                aGluepointVector.push_back(basegfx::B2DPoint(aPosition.X(), aPosition.Y()));
             }
 
-            return 0L;
-        }
-
-        ViewContact& ViewContactOfSdrObj::GetViewContact(sal_uInt32 nIndex) const
-        {
-            assert(GetSdrObject().GetSubList() &&
-                "ViewContactOfSdrObj::GetViewContact: Access to non-existent Sub-List (!)");
-            SdrObject* pObj = GetSdrObject().GetSubList()->GetObj(nIndex);
-            assert(pObj && "ViewContactOfSdrObj::GetViewContact: Corrupt SdrObjList (!)");
-            return pObj->GetViewContact();
-        }
-
-        ViewContact* ViewContactOfSdrObj::GetParentContact() const
-        {
-            ViewContact* pRetval = 0L;
-            SdrObjList* pObjList = GetSdrObject().GetObjList();
-
-            if(pObjList)
+            if(!aGluepointVector.empty())
             {
-                if(pObjList->ISA(SdrPage))
-                {
-                    // Is a page
-                    pRetval = &(static_cast<SdrPage*>(pObjList)->GetViewContact());
-                }
-                else
-                {
-                    // Is a group?
-                    if(pObjList->GetOwnerObj())
-                    {
-                        pRetval = &(pObjList->GetOwnerObj()->GetViewContact());
-                    }
-                }
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::MarkerArrayPrimitive2D(
+                                aGluepointVector, SdrHdl::createGluePointBitmap()));
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
-
-            return pRetval;
         }
+    }
 
-        // React on changes of the object of this ViewContact
-        void ViewContactOfSdrObj::ActionChanged()
-        {
-            // look for own changes
-            if(GetSdrObject().ISA(SdrTextObj))
-            {
-                SdrTextObj& rTextObj = static_cast<SdrTextObj&>(GetSdrObject());
+    return xRetval;
+}
 
-                if(rTextObj.GetTextAniKind() != meRememberedAnimationKind)
-                {
-                    // #i38135# now remember new type
-                    meRememberedAnimationKind = rTextObj.GetTextAniKind();
-                }
-            }
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const
+{
+    if(rSource.hasElements() &&
+        (!GetSdrObject().GetName().isEmpty() ||
+         !GetSdrObject().GetTitle().isEmpty() ||
+         !GetSdrObject().GetDescription().isEmpty()))
+    {
+        const drawinglayer::primitive2d::Primitive2DReference xRef(
+            new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
+                rSource,
+                GetSdrObject().GetName(),
+                GetSdrObject().GetTitle(),
+                GetSdrObject().GetDescription()));
 
-            // call parent
-            ViewContact::ActionChanged();
-        }
+        return drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
+    }
 
-        // overload for acessing the SdrObject
-        SdrObject* ViewContactOfSdrObj::TryToGetSdrObject() const
-        {
-            return &GetSdrObject();
-        }
+    return rSource;
+}
 
-
-        // primitive stuff
-
-        // add Gluepoints (if available)
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::createGluePointPrimitive2DSequence() const
-        {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
-            const SdrGluePointList* pGluePointList = GetSdrObject().GetGluePointList();
-
-            if(pGluePointList)
-            {
-                const sal_uInt32 nCount(pGluePointList->GetCount());
-
-                if(nCount)
-                {
-                    // prepare point vector
-                    std::vector< basegfx::B2DPoint > aGluepointVector;
-
-                    // create GluePoint primitives. ATM these are relative to the SnapRect
-                    for(sal_uInt32 a(0L); a < nCount; a++)
-                    {
-                        const SdrGluePoint& rCandidate = (*pGluePointList)[(sal_uInt16)a];
-                        const Point aPosition(rCandidate.GetAbsolutePos(GetSdrObject()));
-
-                        aGluepointVector.push_back(basegfx::B2DPoint(aPosition.X(), aPosition.Y()));
-                    }
-
-                    if(!aGluepointVector.empty())
-                    {
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(
-                                new drawinglayer::primitive2d::MarkerArrayPrimitive2D(
-                                        aGluepointVector, SdrHdl::createGluePointBitmap()));
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                    }
-                }
-            }
-
-            return xRetval;
-        }
-
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const
-        {
-            if(rSource.hasElements() &&
-                (!GetSdrObject().GetName().isEmpty() ||
-                 !GetSdrObject().GetTitle().isEmpty() ||
-                 !GetSdrObject().GetDescription().isEmpty()))
-            {
-                const drawinglayer::primitive2d::Primitive2DReference xRef(
-                    new drawinglayer::primitive2d::ObjectInfoPrimitive2D(
-                        rSource,
-                        GetSdrObject().GetName(),
-                        GetSdrObject().GetTitle(),
-                        GetSdrObject().GetDescription()));
-
-                return drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
-            }
-
-            return rSource;
-        }
-
-    } // end of namespace contact
-} // end of namespace sdr
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,71 +25,62 @@
 #include <svx/sdtakitm.hxx>
 #include <svx/svxdllapi.h>
 
-
-// predeclarations
-
 class SdrObject;
 class GeoStat;
 class Bitmap;
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+class SVX_DLLPUBLIC ViewContactOfSdrObj : public ViewContact
 {
-    namespace contact
+protected:
+    // the owner of this ViewContact. Set from constructor and not
+    // to be changed in any way.
+    SdrObject&                                      mrObject;
+
+    // Remember AnimationKind of object. Used to find out if that kind
+    // has changed in ActionChanged()
+    SdrTextAniKind                                  meRememberedAnimationKind;
+
+    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something.
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+
+public:
+    // access to SdrObject
+    SdrObject& GetSdrObject() const
     {
-        class SVX_DLLPUBLIC ViewContactOfSdrObj : public ViewContact
-        {
-        protected:
-            // the owner of this ViewContact. Set from constructor and not
-            // to be changed in any way.
-            SdrObject&                                      mrObject;
+        return mrObject;
+    }
 
-            // Remember AnimationKind of object. Used to find out if that kind
-            // has changed in ActionChanged()
-            SdrTextAniKind                                  meRememberedAnimationKind;
+    // basic constructor, used from SdrObject.
+    explicit ViewContactOfSdrObj(SdrObject& rObj);
+    virtual ~ViewContactOfSdrObj();
 
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+    // Access to possible sub-hierarchy
+    virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
+    virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    virtual ViewContact* GetParentContact() const SAL_OVERRIDE;
 
-        public:
-            // access to SdrObject
-            SdrObject& GetSdrObject() const
-            {
-                return mrObject;
-            }
+    // React on changes of the object of this ViewContact
+    virtual void ActionChanged() SAL_OVERRIDE;
 
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfSdrObj(SdrObject& rObj);
-            virtual ~ViewContactOfSdrObj();
-
-            // Access to possible sub-hierarchy
-            virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
-            virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
-            virtual ViewContact* GetParentContact() const SAL_OVERRIDE;
-
-            // React on changes of the object of this ViewContact
-            virtual void ActionChanged() SAL_OVERRIDE;
-
-            // overload for acessing the SdrObject
-            virtual SdrObject* TryToGetSdrObject() const SAL_OVERRIDE;
+    // overload for acessing the SdrObject
+    virtual SdrObject* TryToGetSdrObject() const SAL_OVERRIDE;
 
 
-            // primitive stuff
+    // primitive stuff
 
-            // add Gluepoints (if available)
-            virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const SAL_OVERRIDE;
+    // add Gluepoints (if available)
+    virtual drawinglayer::primitive2d::Primitive2DSequence createGluePointPrimitive2DSequence() const SAL_OVERRIDE;
 
-            // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
-            // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
-            // for 3D scenes
-            virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const SAL_OVERRIDE;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+    // allow embedding if needed (e.g. for SdrObjects, evtl. Name, Title and description get added). This
+    // is a helper normally used from getViewIndependentPrimitive2DSequence(), but there is one exception
+    // for 3D scenes
+    virtual drawinglayer::primitive2d::Primitive2DSequence embedToObjectSpecificInformation(const drawinglayer::primitive2d::Primitive2DSequence& rSource) const SAL_OVERRIDE;
+};
 
-
+}}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDROBJ_HXX
 
