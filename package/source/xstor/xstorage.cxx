@@ -5986,15 +5986,22 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
     uno::Reference< embed::XExtendedStorageStream > xResult;
     if ( aListPath.size() == 1 )
     {
-        // that must be a direct request for a stream
-        // the transacted version of the stream should be opened
+        try
+        {
+            // that must be a direct request for a stream
+            // the transacted version of the stream should be opened
 
-        SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, false );
-        assert(pElement && pElement->m_pStream && "In case element can not be created an exception must be thrown!");
+            SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, false );
+            assert(pElement && pElement->m_pStream && "In case element can not be created an exception must be thrown!");
 
-        xResult = uno::Reference< embed::XExtendedStorageStream >(
-                        pElement->m_pStream->GetStream( nOpenMode, true ),
-                        uno::UNO_QUERY_THROW );
+            xResult = uno::Reference< embed::XExtendedStorageStream >(
+                            pElement->m_pStream->GetStream( nOpenMode, true ),
+                            uno::UNO_QUERY_THROW );
+        }
+        catch ( const container::NoSuchElementException & )
+        {
+            throw io::IOException( THROW_WHERE ); // file not found
+        }
     }
     else
     {
