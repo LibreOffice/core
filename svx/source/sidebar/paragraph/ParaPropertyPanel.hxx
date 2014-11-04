@@ -92,7 +92,6 @@ private:
     ToolBox*            mpTbxUL_IncDec;
     SvxRelativeField*   mpTopDist;
     SvxRelativeField*   mpBottomDist;
-    ToolBox*            mpLineSPTbx;
     ToolBox*            mpTbxIndent_IncDec;
     ToolBox*            mpTbxProDemote;
     SvxRelativeField*   mpLeftIndent;
@@ -172,8 +171,6 @@ private:
     void initial();
     void ReSize(bool bSize);
 
-
-    //PopupControl* CreateLineSpacingControl (PopupContainer* pParent);
     PopupControl* CreateBulletsPopupControl (PopupContainer* pParent);
     PopupControl* CreateNumberingPopupControl (PopupContainer* pParent);
     DECL_LINK(ClickLineSPDropDownHdl_Impl, ToolBox*);
@@ -182,7 +179,6 @@ private:
     void InitToolBoxIndent();
     void InitToolBoxBulletsNumbering();
     void InitToolBoxSpacing();
-    void InitToolBoxLineSpacing();
 };
 
 } } // end of namespace ::svx::sidebar

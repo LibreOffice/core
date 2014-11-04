@@ -19,7 +19,6 @@
 #include "ParaPropertyPanel.hxx"
 #include "ParaPropertyPanel.hrc"
 
-#include "ParaLineSpacingControl.hxx"
 #include "ParaBulletsPopup.hxx"
 #include "ParaBulletsControl.hxx"
 #include "ParaNumberingPopup.hxx"
@@ -313,24 +312,12 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
 }
 
-void ParaPropertyPanel::InitToolBoxLineSpacing()
-{
-    Link aLink = LINK( this, ParaPropertyPanel, ClickLineSPDropDownHdl_Impl );
-    mpLineSPTbx->SetDropdownClickHdl( aLink );
-    mpLineSPTbx->SetSelectHdl( aLink );     //support keyinput "ENTER"
-
-    const sal_uInt16 nIdSpacing = mpLineSPTbx->GetItemId(UNO_LINESPACING);
-    mpLineSPTbx->SetItemBits( nIdSpacing, mpLineSPTbx->GetItemBits( nIdSpacing ) | ToolBoxItemBits::DROPDOWNONLY );
-    mpLineSPTbx->SetItemImage(nIdSpacing, maSpace3);
-}
-
 void ParaPropertyPanel::initial()
 {
     //toolbox
     InitToolBoxIndent();
     InitToolBoxBulletsNumbering();
     InitToolBoxSpacing();
-    InitToolBoxLineSpacing();
 }
 
 // for Numbering & Bullet
@@ -493,20 +480,6 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
         }
 
     return( 0L );
-}
-// for Paragraph Line Spacing
-IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
-{
-    const sal_uInt16 nId = pBox->GetCurItemId();
-    const OUString aCommand(pBox->GetItemCommand(nId));
-
-    if (aCommand == UNO_LINESPACING)
-    {
-        pBox->SetItemDown( nId, true );
-        //maLineSpacePopup.Rearrange(meLnSpState,m_eMetricUnit,mpLnSPItem,maContext);
-        //maLineSpacePopup.Show(*pBox);
-    }
-    return (0L);
 }
 
 // for Paragraph Spacing
@@ -968,12 +941,6 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     return eUnit;
 }
 
-/*
-PopupControl* ParaPropertyPanel::CreateLineSpacingControl (PopupContainer* pParent)
-{
-    return new ParaLineSpacingControl(pParent, *this);
-}*/
-
 PopupControl* ParaPropertyPanel::CreateBulletsPopupControl (PopupContainer* pParent)
 {
     return new ParaBulletsControl(pParent, *this);
@@ -1022,7 +989,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       mxFrame(rxFrame),
       maContext(),
       mpBindings(pBindings),
-      //maLineSpacePopup(this, ::boost::bind(&ParaPropertyPanel::CreateLineSpacingControl, this, _1)),
       maBulletsPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBulletsPopupControl, this, _1)),
       maNumberingPopup(this, ::boost::bind(&ParaPropertyPanel::CreateNumberingPopupControl, this, _1)),
       mxSidebar(rxSidebar)
@@ -1046,7 +1012,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
 
     get(mpTbxIndent_IncDec, "indent");
     get(mpTbxProDemote, "promotedemote");
-    get(mpLineSPTbx,    "linespacing");
     get(mpTbxUL_IncDec, "paraspacing");
 
     initial();
