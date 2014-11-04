@@ -302,7 +302,7 @@ public:
     SfxItemSet GetAttrFromMarked(bool bOnlyHardAttr) const;
     void SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll);
 
-    // Geometrische Attribute (Position, Groesse, Drehwinkel)
+    // Geometrische Attribute (Position, Groesse, RotationAngle)
     // Bei der Position wird ein evtl. gesetzter PageOrigin beruecksichtigt.
     SfxItemSet GetGeoAttrFromMarked() const;
     void SetGeoAttrToMarked(const SfxItemSet& rAttr);

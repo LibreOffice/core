@@ -188,8 +188,8 @@ public:
     PointType       Pos1;      // lower left corner = reference point
     PointType       Pos2;      // right corner
     sal_Int16       Radius;    // radius of corner
-    sal_uInt16      DrehWink;  //  315...<45
-    sal_uInt16      Slant;     // >270...<90
+    sal_uInt16      RotationAngle;  //  315...<45
+    sal_uInt16      Slant;          // >270...<90
     friend SvStream& ReadRectType(SvStream& rIStream, RectType& rRect);
     virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
 };
@@ -235,7 +235,7 @@ public:
     ObjAreaType     F;         // not for arcs (circly & ellips)
     PointType       Center;    // center
     PointType       Radius;    // radius
-    sal_uInt16      DrehWink;  // only ellipses
+    sal_uInt16      RotationAngle;  // only ellipses
     sal_uInt16      StartWink; // and not for full circles
     sal_uInt16      RelWink;   // and full ellipses
     friend SvStream& ReadCircType(SvStream& rIStream, CircType& rCirc);
@@ -255,7 +255,7 @@ public:
     PointType   Pos1;        // reference point (upper left)
     PointType   Pos2;        //                 (lower right)
     sal_Int16   TopOfs;      // from upper side to start of text (future for vJustify)
-    sal_uInt16  DrehWink;    //    0...<360
+    sal_uInt16  RotationAngle;    //    0...<360
     sal_uInt16  BoxSlant;    // >270...<90 (only Box)
     sal_uInt16  BufSize;     // size of buffer for Load, Save, Copy etc.
     sal_uInt16  BufLo,BufHi; // (UCHAR*) pointer to Textbuffer << ShortArr, otherwise DWord-Allign needed
@@ -282,7 +282,7 @@ public:
     ObjAreaType F;            // colour and pattern of first plane bitmap
     PointType   Pos1;
     PointType   Pos2;
-    sal_uInt16  DrehWink;     //  315...<45   (future)
+    sal_uInt16  RotationAngle;//  315...<45   (future)
     sal_uInt16  Slant;        // >270...<90   (future)
     UCHAR       Filename[80]; // path
     PointType   PixSize;      // size in Pixel (0 for vector)
@@ -297,7 +297,7 @@ public:
     BmapType()
         : Flags(0)
         , Reserve(0)
-        , DrehWink(0)
+        , RotationAngle(0)
         , Slant(0)
         , Format(NoGraf)
         , nPlanes(0)

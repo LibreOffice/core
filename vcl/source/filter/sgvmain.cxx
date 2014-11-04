@@ -199,9 +199,9 @@ SvStream& ReadRectType(SvStream& rInp, RectType& rRect)
     SWAPAREA (rRect.F);
     SWAPPOINT(rRect.Pos1);
     SWAPPOINT(rRect.Pos2);
-    rRect.Radius  =OSL_SWAPWORD(rRect.Radius  );
-    rRect.DrehWink=OSL_SWAPWORD(rRect.DrehWink);
-    rRect.Slant   =OSL_SWAPWORD(rRect.Slant   );
+    rRect.Radius        = OSL_SWAPWORD(rRect.Radius  );
+    rRect.RotationAngle = OSL_SWAPWORD(rRect.RotationAngle);
+    rRect.Slant         = OSL_SWAPWORD(rRect.Slant   );
 #endif
     return rInp;
 }
@@ -234,9 +234,9 @@ SvStream& ReadCircType(SvStream& rInp, CircType& rCirc)
     SWAPAREA (rCirc.F);
     SWAPPOINT(rCirc.Radius);
     SWAPPOINT(rCirc.Center);
-    rCirc.DrehWink =OSL_SWAPWORD(rCirc.DrehWink );
-    rCirc.StartWink=OSL_SWAPWORD(rCirc.StartWink);
-    rCirc.RelWink  =OSL_SWAPWORD(rCirc.RelWink  );
+    rCirc.RotationAngle = OSL_SWAPWORD(rCirc.RotationAngle );
+    rCirc.StartWink     = OSL_SWAPWORD(rCirc.StartWink);
+    rCirc.RelWink       = OSL_SWAPWORD(rCirc.RelWink  );
 #endif
     return rInp;
 }
@@ -248,12 +248,12 @@ SvStream& ReadTextType(SvStream& rInp, TextType& rText)
     SWAPTEXT (rText.T);
     SWAPPOINT(rText.Pos1);
     SWAPPOINT(rText.Pos2);
-    rText.TopOfs  =OSL_SWAPWORD(rText.TopOfs  );
-    rText.DrehWink=OSL_SWAPWORD(rText.DrehWink);
-    rText.BoxSlant=OSL_SWAPWORD(rText.BoxSlant);
-    rText.BufSize =OSL_SWAPWORD(rText.BufSize );
+    rText.TopOfs        = OSL_SWAPWORD(rText.TopOfs  );
+    rText.RotationAngle = OSL_SWAPWORD(rText.RotationAngle);
+    rText.BoxSlant      = OSL_SWAPWORD(rText.BoxSlant);
+    rText.BufSize       = OSL_SWAPWORD(rText.BufSize );
     SWAPPOINT(rText.FitSize);
-    rText.FitBreit=OSL_SWAPWORD(rText.FitBreit);
+    rText.FitBreit      = OSL_SWAPWORD(rText.FitBreit);
 #endif
     rText.Buffer=NULL;
     return rInp;
@@ -266,8 +266,8 @@ SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)
     SWAPAREA (rBmap.F);
     SWAPPOINT(rBmap.Pos1);
     SWAPPOINT(rBmap.Pos2);
-    rBmap.DrehWink=OSL_SWAPWORD(rBmap.DrehWink);
-    rBmap.Slant   =OSL_SWAPWORD(rBmap.Slant   );
+    rBmap.RotationAngle = OSL_SWAPWORD(rBmap.RotationAngle);
+    rBmap.Slant         = OSL_SWAPWORD(rBmap.Slant   );
     SWAPPOINT(rBmap.PixSize);
 #endif
     return rInp;
@@ -443,7 +443,7 @@ void RectType::Draw(OutputDevice& rOut)
 {
     if (L.LMuster!=0) L.LMuster=1; // no line separator here, only on or off
     SetArea(F,rOut);
-    if (DrehWink==0) {
+    if (RotationAngle==0) {
     if ((F.FBFarbe & 0x38)==0 || Radius!=0) {
             SetLine(L,rOut);
             rOut.DrawRect(Rectangle(Pos1.x,Pos1.y,Pos2.x,Pos2.y),Radius,Radius);
@@ -459,8 +459,8 @@ void RectType::Draw(OutputDevice& rOut)
         Point  aPts[4];
         sal_uInt16 i;
         double sn,cs;
-        sn=sin(double(DrehWink)*3.14159265359/18000);
-        cs=cos(double(DrehWink)*3.14159265359/18000);
+        sn=sin(double(RotationAngle)*3.14159265359/18000);
+        cs=cos(double(RotationAngle)*3.14159265359/18000);
         aPts[0]=Point(Pos1.x,Pos1.y);
         aPts[1]=Point(Pos2.x,Pos1.y);
         aPts[2]=Point(Pos2.x,Pos2.y);

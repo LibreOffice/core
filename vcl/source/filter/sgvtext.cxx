@@ -867,10 +867,10 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
 
 // Start of DrawText.Pas
 
-void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uInt16 DrehWink,
+void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uInt16 RotationAngle,
               sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
 {
-    SetTextContext(rOut,T,UpcasePossible(c),DrehWink,FitXMul,FitXDiv,FitYMul,FitYDiv);
+    SetTextContext(rOut,T,UpcasePossible(c),RotationAngle,FitXMul,FitXDiv,FitYMul,FitYDiv);
     if ((T.Schnitt & TextKaptBit)!=0 && UpcasePossible(c)) c=Upcase(c);
     OUString s(reinterpret_cast<const sal_Char*>(&c), 1,
         RTL_TEXTENCODING_IBM_437);
@@ -917,12 +917,12 @@ void TextType::Draw(OutputDevice& rOut)
     bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? or flags -> strech each line
     if (TextFit && FitSize.x==0) LineFit=true;
 
-    if (DrehWink==0) {
+    if (RotationAngle==0) {
         sn=0.0;
         cs=1.0;
     } else {
-        sn=sin(double(DrehWink)*3.14159265359/18000);
-        cs=cos(double(DrehWink)*3.14159265359/18000);
+        sn=sin(double(RotationAngle)*3.14159265359/18000);
+        cs=cos(double(RotationAngle)*3.14159265359/18000);
     }
 
     T1=T; Index1=0; yPos=0; xPos=0;
@@ -981,8 +981,8 @@ void TextType::Draw(OutputDevice& rOut)
                     Pos.x=short(xp1);
                     Pos.y=short(yp1);
 
-                    if (DrehWink!=0) RotatePoint(Pos,Pos1.x,Pos1.y,sn,cs);
-                    DrawChar(rOut,c,T2,Pos,DrehWink,FitXMul,FitXDiv,FitYMul,FitYDiv);
+                    if (RotationAngle!=0) RotatePoint(Pos,Pos1.x,Pos1.y,sn,cs);
+                    DrawChar(rOut,c,T2,Pos,RotationAngle,FitXMul,FitXDiv,FitYMul,FitYDiv);
                     i++;
                 } // while i<=l
                 yPos=yPos0+LF;
