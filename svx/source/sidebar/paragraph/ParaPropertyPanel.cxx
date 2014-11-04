@@ -53,8 +53,6 @@ const char UNO_PROMOTE[]          = ".uno:Promote";
 const char UNO_DEMOTE[]           = ".uno:Demote";
 const char UNO_HANGINGINDENT2[]   = ".uno:HangingIndent2";
 
-const char UNO_LINESPACING[]      = ".uno:LineSpacing";
-
 const char UNO_PARASPACEINC[]     = ".uno:ParaspaceIncrease";
 const char UNO_PARASPACEDEC[]     = ".uno:ParaspaceDecrease";
 
