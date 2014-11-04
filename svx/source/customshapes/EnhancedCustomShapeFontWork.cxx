@@ -552,12 +552,20 @@ void CalcDistances( const Polygon& rPoly, std::vector< double >& rDistances )
 
 void InsertMissingOutlinePoints( const Polygon& /*rOutlinePoly*/, const std::vector< double >& rDistances, const Rectangle& rTextAreaBoundRect, Polygon& rPoly )
 {
-    sal_uInt16 i = 0;
+    sal_uInt16 nSize = rPoly.GetSize();
+    if (nSize == 0)
+        return;
+
+    long nTextWidth = rTextAreaBoundRect.GetWidth();
+
+    if (nTextWidth == 0)
+        throw o3tl::divide_by_zero();
+
     double fLastDistance = 0.0;
-    for ( i = 0; i < rPoly.GetSize(); i++ )
+    for (sal_uInt16 i = 0; i < nSize; ++i)
     {
         Point& rPoint = rPoly[ i ];
-        double fDistance = (double)( rPoint.X() - rTextAreaBoundRect.Left() ) / (double)rTextAreaBoundRect.GetWidth();
+        double fDistance = (double)( rPoint.X() - rTextAreaBoundRect.Left() ) / (double)nTextWidth;
         if ( i )
         {
             if ( fDistance > fLastDistance )
