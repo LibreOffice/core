@@ -744,6 +744,7 @@ inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_u
         nLen++;
     }
 
+    assert( nLen <= 8 ); // mask length must be 8 bits or less
     rOrShift = 8L - nLen;
     rOr = (sal_uInt8) ( ( 0xffUL >> nLen ) << rOrShift );
 
