@@ -52,7 +52,7 @@
 
 using namespace com::sun::star;
 
-Point GetWinkPnt(const Rectangle& rR, long nWink)
+Point GetAnglePnt(const Rectangle& rR, long nWink)
 {
     Point aCenter(rR.Center());
     long nWdt=rR.Right()-rR.Left();
@@ -405,12 +405,12 @@ SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
     switch (nHdlNum)
     {
         case 0:
-            aPnt = GetWinkPnt(aRect,nStartAngle);
+            aPnt = GetAnglePnt(aRect,nStartAngle);
             eLocalKind = HDL_CIRC;
             nPNum = 1;
             break;
         case 1:
-            aPnt = GetWinkPnt(aRect,nEndAngle);
+            aPnt = GetAnglePnt(aRect,nEndAngle);
             eLocalKind = HDL_CIRC;
             nPNum = 2L;
             break;
@@ -646,7 +646,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
                 nStart=NormAngle360(nStart);
             }
         }
-        aP1 = GetWinkPnt(aR,nStart);
+        aP1 = GetAnglePnt(aR,nStart);
         nEnd=nStart;
         aP2=aP1;
     } else aP1=aCenter;
@@ -667,7 +667,7 @@ void ImpCircUser::SetCreateParams(SdrDragStat& rStat)
                 nEnd=NormAngle360(nEnd);
             }
         }
-        aP2 = GetWinkPnt(aR,nEnd);
+        aP2 = GetAnglePnt(aR,nEnd);
     } else aP2=aCenter;
 }
 
@@ -965,8 +965,8 @@ void SdrCircObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
     rRect=aRect;
     if (meCircleKind!=OBJ_CIRC) {
-        const Point aPntStart(GetWinkPnt(aRect,nStartAngle));
-        const Point aPntEnd(GetWinkPnt(aRect,nEndAngle));
+        const Point aPntStart(GetAnglePnt(aRect,nStartAngle));
+        const Point aPntEnd(GetAnglePnt(aRect,nEndAngle));
         long a=nStartAngle;
         long e=nEndAngle;
         rRect.Left  ()=aRect.Right();
@@ -1054,8 +1054,8 @@ sal_uInt32 SdrCircObj::GetSnapPointCount() const
 Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
 {
     switch (i) {
-        case 1 : return GetWinkPnt(aRect,nStartAngle);
-        case 2 : return GetWinkPnt(aRect,nEndAngle);
+        case 1 : return GetAnglePnt(aRect,nStartAngle);
+        case 2 : return GetAnglePnt(aRect,nEndAngle);
         default: return aRect.Center();
     }
 }
