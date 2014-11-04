@@ -19,6 +19,7 @@
 
 
 #include <dragmt3d.hxx>
+#include <o3tl/numeric.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svddrgmt.hxx>
@@ -345,6 +346,8 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             }
             else
             {
+                if ((maFullBound.GetWidth() == 0) || (maFullBound.GetHeight() == 0))
+                    throw o3tl::divide_by_zero();
                 fWAngle = 90.0 * (double)(rPnt.X() - maLastPos.X())
                     / (double)maFullBound.GetWidth();
                 fHAngle = 90.0 * (double)(rPnt.Y() - maLastPos.Y())
