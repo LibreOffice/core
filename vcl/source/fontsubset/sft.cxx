@@ -1082,7 +1082,7 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     theLowByte = (sal_uInt8)(c & 0x00ff);
     subHeader2Keys = CMAP2 + 3;
     subHeader2s = (subHeader2 *)(subHeader2Keys + 256);
-    if(reinterpret_cast<sal_uInt8*>(&subHeader2Keys[theHighByte]) - cmap < nMaxCmapSize - 2)
+    if(reinterpret_cast<sal_uInt8*>(&subHeader2Keys[theHighByte]) - cmap < int(nMaxCmapSize - 2))
     {
         k = Int16FromMOTA(subHeader2Keys[theHighByte]) / 8;
         // check if the subheader record fits into available space
@@ -1178,16 +1178,16 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     }
     startCode = endCode + segCount + 1;
 
-    if((reinterpret_cast<sal_uInt8*>(&startCode[i]) - cmap >= nMaxCmapSize - 2) || Int16FromMOTA(startCode[i]) > c) {
+    if((reinterpret_cast<sal_uInt8*>(&startCode[i]) - cmap >= int(nMaxCmapSize - 2)) || Int16FromMOTA(startCode[i]) > c) {
         return MISSING_GLYPH_INDEX;
     }
     idDelta = startCode + segCount;
     idRangeOffset = idDelta + segCount;
     /*glyphIndexArray = idRangeOffset + segCount;*/
 
-    if((reinterpret_cast<sal_uInt8*>(&idRangeOffset[i]) - cmap < nMaxCmapSize - 2) && Int16FromMOTA(idRangeOffset[i]) != 0) {
+    if((reinterpret_cast<sal_uInt8*>(&idRangeOffset[i]) - cmap < int(nMaxCmapSize - 2)) && Int16FromMOTA(idRangeOffset[i]) != 0) {
         sal_uInt16 * pGlyphOffset = &(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])));
-        if(reinterpret_cast<sal_uInt8*>(pGlyphOffset) - cmap >= nMaxCmapSize - 2)
+        if(reinterpret_cast<sal_uInt8*>(pGlyphOffset) - cmap >= int(nMaxCmapSize - 2))
             return MISSING_GLYPH_INDEX;
         c = Int16FromMOTA(*pGlyphOffset);
     }
