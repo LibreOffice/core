@@ -2125,15 +2125,15 @@ void SdrDragRotate::TakeSdrDragComment(OUString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethRotate, rStr);
     rStr += " (";
-    sal_Int32 nTmpWink(NormAngle360(nWink));
+    sal_Int32 nTmpAngle(NormAngle360(nWink));
 
     if(bRight && nWink)
     {
-        nTmpWink -= 36000;
+        nTmpAngle -= 36000;
     }
 
     OUString aStr;
-    getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
+    getSdrDragView().GetModel()->TakeWinkStr(nTmpAngle, aStr);
     rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2261,15 +2261,15 @@ void SdrDragShear::TakeSdrDragComment(OUString& rStr) const
     ImpTakeDescriptionStr(STR_DragMethShear, rStr);
     rStr += " (";
 
-    sal_Int32 nTmpWink(nWink);
+    sal_Int32 nTmpAngle(nWink);
 
     if(bUpSideDown)
-        nTmpWink += 18000;
+        nTmpAngle += 18000;
 
-    nTmpWink = NormAngle180(nTmpWink);
+    nTmpAngle = NormAngle180(nTmpAngle);
 
     OUString aStr;
-    getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
+    getSdrDragView().GetModel()->TakeWinkStr(nTmpAngle, aStr);
     rStr += aStr + ")";
 
     if(getSdrDragView().IsDragWithCopy())
@@ -2416,11 +2416,11 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         if (bSlant)
         { // calculate resize for slant
             // when angle snapping is activated, disable 89 degree limit
-            long nTmpWink=nNewAngle;
+            long nTmpAngle=nNewAngle;
             if (bUpSideDown) nNewAngle-=18000;
-            if (bNeg) nTmpWink=-nTmpWink;
+            if (bNeg) nTmpAngle=-nTmpAngle;
             bResize=true;
-            double nCos=cos(nTmpWink*nPi180);
+            double nCos=cos(nTmpAngle*nPi180);
             aNeuFact=nCos;
             Kuerzen(aFact,10); // three decimals should be enough
         }

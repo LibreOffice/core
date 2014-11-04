@@ -464,8 +464,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
 
     rPol.bAutoUpsideDown=false;
     if (rRec.bTextAutoAngle) {
-        long nTmpWink=NormAngle360(rPol.nTextWink-rRec.nTextAutoAngleView);
-        if (nTmpWink>=18000) {
+        long nTmpAngle=NormAngle360(rPol.nTextWink-rRec.nTextAutoAngleView);
+        if (nTmpAngle>=18000) {
             rPol.nTextWink+=18000;
             rPol.bAutoUpsideDown=true;
         }
