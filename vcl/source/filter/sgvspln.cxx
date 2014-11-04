@@ -693,7 +693,7 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
     double      Step;          // stepsize for t
     double      dt1,dt2,dt3;   // delta t, y, ^3
     double      t;
-    bool        bEnde;         // partial polynom ended?
+    bool        bEnd;         // partial polynom ended?
     sal_uInt16  n;             // number of partial polynoms to draw
     sal_uInt16  i;             // actual partial polynom
     bool        bOk;           // all still ok?
@@ -709,10 +709,10 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
         i=0;
         while (i<n) {       // draw n partial polynoms
             t=tv[i]+Step;
-            bEnde=false;
-            while (!bEnde) {  // extrapolate one partial polynom
-                bEnde=t>=tv[i+1];
-                if (bEnde) t=tv[i+1];
+            bEnd=false;
+            while (!bEnd) {  // extrapolate one partial polynom
+                bEnd=t>=tv[i+1];
+                if (bEnd) t=tv[i+1];
                 dt1=t-tv[i]; dt2=dt1*dt1; dt3=dt2*dt1;
                 x=long(ax[i]+bx[i]*dt1+cx[i]*dt2+dx[i]*dt3);
                 y=long(ay[i]+by[i]*dt1+cy[i]*dt2+dy[i]*dt3);
