@@ -243,6 +243,17 @@ vcl::Window* ExtrusionDirectionControl::createPopupWindow( vcl::Window* pParent 
     return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
 }
 
+// XInitialization
+void SAL_CALL ExtrusionDirectionControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    svt::PopupWindowController::initialize( aArguments );
+
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+}
 
 // XServiceInfo
 
@@ -493,7 +504,17 @@ vcl::Window* ExtrusionDepthController::createPopupWindow( vcl::Window* pParent )
     return new ExtrusionDepthWindow( *this, m_xFrame, pParent );
 }
 
+// XInitialization
+void SAL_CALL ExtrusionDepthController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    svt::PopupWindowController::initialize( aArguments );
 
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+}
 
 // XServiceInfo
 
@@ -750,6 +771,17 @@ vcl::Window* ExtrusionLightingControl::createPopupWindow( vcl::Window* pParent )
     return new ExtrusionLightingWindow( *this, m_xFrame, pParent );
 }
 
+// XInitialization
+void SAL_CALL ExtrusionLightingControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    svt::PopupWindowController::initialize( aArguments );
+
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+}
 
 // XServiceInfo
 
@@ -893,6 +925,17 @@ vcl::Window* ExtrusionSurfaceControl::createPopupWindow( vcl::Window* pParent )
     return new ExtrusionSurfaceWindow( *this, m_xFrame, pParent );
 }
 
+// XInitialization
+void SAL_CALL ExtrusionSurfaceControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    svt::PopupWindowController::initialize( aArguments );
+
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+}
 
 // XServiceInfo
 

@@ -419,6 +419,10 @@ public:
 
     virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -441,6 +445,17 @@ vcl::Window* FontworkAlignmentControl::createPopupWindow( vcl::Window* pParent )
     return new FontworkAlignmentWindow( *this, m_xFrame, pParent );
 }
 
+// XInitialization
+void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    svt::PopupWindowController::initialize( aArguments );
+
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+}
 
 // XServiceInfo
 
@@ -650,6 +665,10 @@ public:
 
     virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -670,6 +689,17 @@ vcl::Window* FontworkCharacterSpacingControl::createPopupWindow( vcl::Window* pP
     return new FontworkCharacterSpacingWindow( *this, m_xFrame, pParent );
 }
 
+// XInitialization
+void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    svt::PopupWindowController::initialize( aArguments );
+
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+        pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+}
 
 // XServiceInfo
 
