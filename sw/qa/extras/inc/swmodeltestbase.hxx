@@ -149,23 +149,6 @@ using namespace css;
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, BaseClass) \
-    class TestName : public BaseClass { \
-    protected: \
-        virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
-    public: \
-        CPPUNIT_TEST_SUITE(TestName); \
-        CPPUNIT_TEST(MailMerge); \
-        CPPUNIT_TEST_SUITE_END(); \
-    \
-        void MailMerge() { \
-            executeMailMergeTest(filename, datasource, tablename); \
-        } \
-        void verify() SAL_OVERRIDE; \
-    }; \
-    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
-    void TestName::verify()
-
 /**
  * Maps database URIs to the registered database names for quick lookups
  */

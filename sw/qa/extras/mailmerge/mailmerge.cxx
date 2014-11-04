@@ -37,6 +37,23 @@ class MMTest : public SwModelTestBase
         MMTest() : SwModelTestBase("/sw/qa/extras/mailmerge/data/", "writer8") {}
 };
 
+#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, BaseClass) \
+    class TestName : public BaseClass { \
+    protected: \
+        virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
+    public: \
+        CPPUNIT_TEST_SUITE(TestName); \
+        CPPUNIT_TEST(MailMerge); \
+        CPPUNIT_TEST_SUITE_END(); \
+    \
+        void MailMerge() { \
+            executeMailMergeTest(filename, datasource, tablename); \
+        } \
+        void verify() SAL_OVERRIDE; \
+    }; \
+    CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
+    void TestName::verify()
+
 #define DECLARE_DFLT_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
     DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, MMTest)
 
