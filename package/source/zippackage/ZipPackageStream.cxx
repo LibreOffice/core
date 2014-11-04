@@ -798,6 +798,11 @@ bool ZipPackageStream::saveChild(
             else
             {
                 bParallelDeflate = true;
+                // Do not deflate small streams in a thread
+                uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY );
+                if (xSeek.is() && xSeek->getLength() < 100000)
+                    bParallelDeflate = false;
+
                 if (bParallelDeflate)
                 {
                     // Start a new thread deflating this zip entry
