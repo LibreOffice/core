@@ -110,19 +110,21 @@ namespace svt
 
 
     //= NormalizedArea
-
-
     NormalizedArea::NormalizedArea()
         :m_aReference()
     {
     }
 
-
     NormalizedArea::NormalizedArea( const Rectangle& i_rReference, const bool i_bIsVertical )
-        :m_aReference( i_bIsVertical ? Rectangle( i_rReference.TopLeft(), Size( i_rReference.GetHeight(), i_rReference.GetWidth() ) ) : i_rReference )
+        : m_aReference(i_rReference)
     {
+        if (i_bIsVertical)
+        {
+            const long nRotatedWidth = i_rReference.GetHeight();
+            const long nRotatedHeight = i_rReference.GetWidth();
+            m_aReference = Rectangle(i_rReference.TopLeft(), Size(nRotatedWidth, nRotatedHeight));
+        }
     }
-
 
     Rectangle NormalizedArea::getTransformed( const Rectangle& i_rArea, const TabAlignment i_eTargetAlignment ) const
     {
