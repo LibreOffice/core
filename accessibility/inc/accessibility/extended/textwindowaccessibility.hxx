@@ -38,7 +38,6 @@
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 
-#include <svtools/svtools.hrc>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <queue>
