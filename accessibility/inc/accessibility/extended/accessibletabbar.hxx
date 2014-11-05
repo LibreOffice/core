@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "accessibility/extended/accessibletabbarbase.hxx"
 
-#include <vector>
 
 namespace utl {
 class AccessibleStateSetHelper;
