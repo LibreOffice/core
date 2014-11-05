@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
