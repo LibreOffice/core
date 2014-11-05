@@ -20,7 +20,6 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEICONCHOICECTRLENTRY_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEICONCHOICECTRLENTRY_HXX
 
-#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
