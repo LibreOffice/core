@@ -244,7 +244,7 @@ void OutputDevice::drawPolyLine(const Polygon& rPoly, const LineInfo& rLineInfo)
 
     if(bDashUsed || bLineWidthUsed)
     {
-        PaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()));
+        drawLine ( basegfx::B2DPolyPolygon(aPoly.getB2DPolygon()), aInfo );
     }
     else
     {
