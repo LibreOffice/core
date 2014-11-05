@@ -42,7 +42,7 @@ namespace sdr
             VirtualDevice                           maOutputBufferDevice;
 
             // Timer for buffering
-            Timer                                   maBufferTimer;
+            Idle                                    maBufferIdle;
 
             // Range for buffering (in pixel to be independent from mapMode)
             basegfx::B2IRange                       maBufferRememberedRangePixel;

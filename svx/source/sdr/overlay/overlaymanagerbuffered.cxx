@@ -257,7 +257,7 @@ namespace sdr
             rtl::Reference<OverlayManager> xRef(this);
 
             // stop timer
-            maBufferTimer.Stop();
+            maBufferIdle.Stop();
 
             if(!maBufferRememberedRangePixel.isEmpty())
             {
@@ -428,8 +428,8 @@ namespace sdr
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
-            maBufferTimer.SetTimeout(1);
-            maBufferTimer.SetTimeoutHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
+            maBufferIdle.SetPriority( VCL_IDLE_PRIORITY_HIGH );
+            maBufferIdle.SetTimeoutHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
         }
 
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(
@@ -443,7 +443,7 @@ namespace sdr
         OverlayManagerBuffered::~OverlayManagerBuffered()
         {
             // Clear timer
-            maBufferTimer.Stop();
+            maBufferIdle.Stop();
 
             if(!maBufferRememberedRangePixel.isEmpty())
             {
@@ -493,7 +493,7 @@ namespace sdr
             {
                 // buffered output, do not invalidate but use the timer
                 // to trigger a timer event for refresh
-                maBufferTimer.Start();
+                maBufferIdle.Start();
 
                 // add the discrete range to the remembered region
                 // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
