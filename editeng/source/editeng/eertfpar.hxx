@@ -79,7 +79,7 @@ private:
 protected:
     virtual void        InsertPara() SAL_OVERRIDE;
     virtual void        InsertText() SAL_OVERRIDE;
-    virtual void        MovePos( int bForward = sal_True ) SAL_OVERRIDE;
+    virtual void        MovePos( bool bForward = true ) SAL_OVERRIDE;
     virtual void        SetEndPrevPara( SvxNodeIdx*& rpNodePos,
                                             sal_Int32& rCntPos ) SAL_OVERRIDE;
 

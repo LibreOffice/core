@@ -204,7 +204,8 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
 void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 {
     DBG_ASSERT( pSet, "A SfxItemSet has to be provided as argument!" );
-    int bFirstToken = sal_True, bContinue = sal_True;
+    bool bFirstToken = true;
+    bool bContinue = true;
     sal_uInt16 nStyleNo = 0;        // default
     FontUnderline eUnderline;
     FontUnderline eOverline;
@@ -220,14 +221,14 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
         switch( nToken )
         {
         case RTF_PARD:
-            RTFPardPlain( sal_True, &pSet );
+            RTFPardPlain( true, &pSet );
             ResetPard();
             nStyleNo = 0;
             bPardTokenRead = true;
             break;
 
         case RTF_PLAIN:
-            RTFPardPlain( sal_False, &pSet );
+            RTFPardPlain( false, &pSet );
             break;
 
         default:
@@ -249,7 +250,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     // Open a new Group
                     SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                                *pAkt, *pInsPos, sal_True );
+                                                *pAkt, *pInsPos, true );
                     pNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // "Set" all valid attributes up until this point
@@ -283,7 +284,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     if( !bFirstToken )
                         SkipToken( -1 );
-                    bContinue = sal_False;
+                    bContinue = false;
                 }
                 else
                 {
@@ -691,7 +692,7 @@ SET_FONTALIGNMENT:
                 if( aPlainMap.nContour &&
                     IsAttrSttPos() )        // not in the text flow?
                 {
-                    pSet->Put( SvxContourItem( nTokenValue ? sal_True : sal_False,
+                    pSet->Put( SvxContourItem(nTokenValue != 0,
                                 aPlainMap.nContour ));
                 }
                 break;
@@ -700,7 +701,7 @@ SET_FONTALIGNMENT:
                 if( aPlainMap.nShadowed &&
                     IsAttrSttPos() )        // not in the text flow?
                 {
-                    pSet->Put( SvxShadowedItem( nTokenValue ? sal_True : sal_False,
+                    pSet->Put( SvxShadowedItem(nTokenValue != 0,
                                 aPlainMap.nShadowed ));
                 }
                 break;
@@ -1139,10 +1140,9 @@ ATTR_SETEMPHASIS:
                         case RTF_HYPHEN:
                             {
                                 SvxHyphenZoneItem aHypenZone(
-                                            (nTokenValue & 1) ? sal_True : sal_False,
+                                            (nTokenValue & 1) != 0,
                                                 aPardMap.nHyphenzone );
-                                aHypenZone.SetPageEnd(
-                                            (nTokenValue & 2) ? sal_True : sal_False );
+                                aHypenZone.SetPageEnd((nTokenValue & 2) != 0);
 
                                 if( aPardMap.nHyphenzone &&
                                     RTF_HYPHLEAD == GetNextToken() &&
@@ -1165,7 +1165,7 @@ ATTR_SETEMPHASIS:
 
                         case RTF_SHADOW:
                             {
-                                int bSkip = sal_True;
+                                bool bSkip = true;
                                 do {    // middle check loop
                                     SvxShadowLocation eSL = SvxShadowLocation( nTokenValue );
                                     if( RTF_SHDW_DIST != GetNextToken() )
@@ -1188,7 +1188,7 @@ ATTR_SETEMPHASIS:
                                         pSet->Put( SvxShadowItem( aPardMap.nShadow,
                                                                   &aColor, nDist, eSL ) );
 
-                                    bSkip = sal_False;
+                                    bSkip = false;
                                 } while( false );
 
                                 if( bSkip )
@@ -1253,7 +1253,7 @@ ATTR_SETEMPHASIS:
                         if (!bFirstToken)
                             --nSkip;    // BRACELEFT: is the next token
                         SkipToken( nSkip );
-                        bContinue = sal_False;
+                        bContinue = false;
                     }
                 }
                 break;
@@ -1269,7 +1269,7 @@ ATTR_SETEMPHASIS:
                     // unknown token, so token "returned in Parser"
                     if( !bFirstToken )
                         SkipToken( -1 );
-                    bContinue = sal_False;
+                    bContinue = false;
                 }
             }
         }
@@ -1277,7 +1277,7 @@ ATTR_SETEMPHASIS:
         {
             nToken = GetNextToken();
         }
-        bFirstToken = sal_False;
+        bFirstToken = false;
     }
 }
 
@@ -1287,7 +1287,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
 // then read all the TabStops
     SvxTabStop aTabStop;
     SvxTabStopItem aAttr( 0, 0, SVX_TAB_ADJUST_DEFAULT, aPardMap.nTabStop );
-    int bContinue = sal_True;
+    bool bContinue = true;
     do {
         switch( nToken )
         {
@@ -1340,13 +1340,13 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
                 if( nSkip )
                 {
                     SkipToken( nSkip );     // Ignore back again
-                    bContinue = sal_False;
+                    bContinue = false;
                 }
             }
             break;
 
         default:
-            bContinue = sal_False;
+            bContinue = false;
         }
         if( bContinue )
         {
@@ -1703,15 +1703,15 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
 }
 
 
-// pard / plain abarbeiten
-void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
+// pard / plain handling
+void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
 {
     if( !bNewGroup && !aAttrStack.empty() ) // not at the beginning of a new group
     {
         SvxRTFItemStackType* pAkt = aAttrStack.back();
 
         int nLastToken = GetStackPtr(-1)->nTokenId;
-        int bNewStkEntry = sal_True;
+        bool bNewStkEntry = true;
         if( RTF_PARD != nLastToken &&
             RTF_PLAIN != nLastToken &&
             BRACELEFT != nLastToken )
@@ -1719,7 +1719,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             if( pAkt->aAttrSet.Count() || pAkt->pChildList || pAkt->nStyleNo )
             {
                 // open a new group
-                SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, sal_True );
+                SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, true );
                 pNew->SetRTFDefaults( GetRTFDefaults() );
 
                 // Set all until here valid attributes
@@ -1733,7 +1733,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             {
                 // continue to use this entry as new
                 pAkt->SetStartPos( *pInsPos );
-                bNewStkEntry = sal_False;
+                bNewStkEntry = false;
             }
         }
 

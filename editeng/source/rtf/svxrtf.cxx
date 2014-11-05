@@ -60,7 +60,7 @@ static rtl_TextEncoding lcl_GetDefaultTextEncodingForRTF()
 
 SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
             uno::Reference<document::XDocumentProperties> i_xDocProps,
-            int bReadNewDoc )
+            bool const bReadNewDoc )
     : SvRTFParser( rIn, 5 )
     , rStrm(rIn)
     , aPlainMap(rPool)
@@ -822,7 +822,7 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
     return *pFont;
 }
 
-SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
+SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( bool const bCopyAttr )
 {
     SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
     SvxRTFItemStackType* pNew;
@@ -927,7 +927,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
             {
                 // at the beginning of a paragraph? Move back one position
                 sal_Int32 nNd = pInsPos->GetNodeIdx();
-                MovePos( sal_False );
+                MovePos(false);
                 // if can not move backward then later dont move forward !
                 bCrsrBack = nNd != pInsPos->GetNodeIdx();
             }
@@ -951,7 +951,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         // - all paragraph attributes to get the area
                         //   up to the previous paragraph
                         SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                    *pOld, *pInsPos, sal_True );
+                                    *pOld, *pInsPos, true );
                         pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 
                         // Delete all paragraph attributes from pNew
@@ -1021,12 +1021,12 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                     if( bCrsrBack && 50 < pAkt->pChildList->size() )
                     {
                         // at the beginning of a paragraph? Move back one position
-                        MovePos( sal_True );
+                        MovePos(true);
                         bCrsrBack = false;
 
                         // Open a new Group.
                         SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                                *pAkt, *pInsPos, sal_True );
+                                                *pAkt, *pInsPos, true );
                         pNew->SetRTFDefaults( GetRTFDefaults() );
 
                         // Set all until here valid Attributes
@@ -1047,7 +1047,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
             if( bCrsrBack )
                 // at the beginning of a paragraph? Move back one position
-                MovePos( sal_True );
+                MovePos(true);
 
         } while( false );
 
@@ -1161,7 +1161,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
 SvxRTFItemStackType::SvxRTFItemStackType(
         const SvxRTFItemStackType& rCpy,
         const SvxPosition& rPos,
-        int bCopyAttr )
+        bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() ),
     pChildList( 0 ),
     nStyleNo( rCpy.nStyleNo )

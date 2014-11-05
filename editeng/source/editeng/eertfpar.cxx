@@ -257,7 +257,7 @@ void EditRTFParser::InsertPara()
     nLastAction = ACTION_INSERTPARABRK;
 }
 
-void EditRTFParser::MovePos( int bForward )
+void EditRTFParser::MovePos( bool const bForward )
 {
     if( bForward )
         aCurSel = mpEditEngine->CursorRight(

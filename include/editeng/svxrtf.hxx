@@ -214,7 +214,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void ClearStyleTbl();
     void ClearAttrStack();
 
-    SvxRTFItemStackType* _GetAttrSet( int bCopyAttr=sal_False );  // Create new ItemStackType:s
+    SvxRTFItemStackType* _GetAttrSet(bool bCopyAttr = false);  // Create new ItemStackType:s
     void _ClearStyleAttr( SvxRTFItemStackType& rStkType );
 
     // Sets all the attributes that are different from the current
@@ -223,7 +223,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void SetDefault( int nToken, int nValue );
 
     // Execute pard / plain
-    void RTFPardPlain( int bPard, SfxItemSet** ppSet );
+    void RTFPardPlain( bool bPard, SfxItemSet** ppSet );
 
     void BuildWhichTbl();
 
@@ -273,7 +273,7 @@ protected:
 
 
     virtual void InsertText() = 0;
-    virtual void MovePos( int bForward = sal_True ) = 0;
+    virtual void MovePos( bool bForward = true ) = 0;
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos,
                                  sal_Int32& rCntPos )=0;
     virtual void SetAttrInDoc( SvxRTFItemStackType &rSet );
@@ -287,7 +287,7 @@ protected:
                     SvStream& rIn,
                     ::com::sun::star::uno::Reference<
                         ::com::sun::star::document::XDocumentProperties> i_xDocProps,
-                    int bReadNewDoc = sal_True );
+                    bool bReadNewDoc = true );
     virtual ~SvxRTFParser();
 
     bool IsNewDoc() const               { return bNewDoc; }
@@ -364,7 +364,7 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
 
 public:
     SvxRTFItemStackType( const SvxRTFItemStackType&, const SvxPosition&,
-                        int bCopyAttr = sal_False );
+                        bool bCopyAttr = false );
     ~SvxRTFItemStackType();
     //cmc, I'm very suspicios about SetStartPos, it doesn't change
     //its children's starting position, and the implementation looks
