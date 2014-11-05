@@ -22,7 +22,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <tools/link.hxx>
 
 #include <vector>
