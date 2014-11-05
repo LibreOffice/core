@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
 #include <sot/exchange.hxx>
