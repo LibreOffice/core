@@ -19,7 +19,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/treelistbox.hxx>
-#include <vcl/controllayout.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
