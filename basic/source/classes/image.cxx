@@ -156,7 +156,16 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             }
             case B_EXTSOURCE:
             {
-                for( sal_uInt16 j = 0 ; j < nCount ; j++ )
+                //assuming an empty string with just the lead 32bit/16bit len indicator
+                const size_t nMinStringSize = (eCharSet == RTL_TEXTENCODING_UNICODE) ? 4 : 2;
+                const size_t nMaxStrings = r.remainingSize() / nMinStringSize;
+                if (nCount > nMaxStrings)
+                {
+                    SAL_WARN("basic", "Parsing error: " << nMaxStrings <<
+                             " max possible entries, but " << nCount << " claimed, truncating");
+                    nCount = nMaxStrings;
+                }
+                for( sal_uInt16 j = 0; j < nCount; ++j)
                 {
                     aOUSource += r.ReadUniOrByteString(eCharSet);
                 }
