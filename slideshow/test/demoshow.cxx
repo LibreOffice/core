@@ -469,10 +469,7 @@ IMPL_LINK_NOARG(DemoWindow, updateHdl)
     init();
 
     if( mxShow.is() )
-    {
-        double nTimeout;
-        mxShow->update(nTimeout);
-    }
+        mxShow->update(0);
     return 0;
 }
 
