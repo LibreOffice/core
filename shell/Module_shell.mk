@@ -112,6 +112,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 endif
 
 ifneq ($(filter-out MACOSX WNT,$(OS)),)
+ifneq ($(ENABLE_HEADLESS),TRUE)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Executable_gnome_open_url \
@@ -121,6 +122,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Package_scripts_kde \
 ))
 
+endif
 endif
 
 ifneq ($(OS),WNT)
