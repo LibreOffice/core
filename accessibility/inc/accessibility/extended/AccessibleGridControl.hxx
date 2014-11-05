@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROL_HXX
 
 #include <accessibility/extended/AccessibleGridControlTable.hxx>
-#include <svtools/accessibletable.hxx>
 
 
 
