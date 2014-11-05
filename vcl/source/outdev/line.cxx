@@ -74,7 +74,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
         aLinePolygon.append(basegfx::B2DPoint(aStartPt.X(), aStartPt.Y()));
         aLinePolygon.append(basegfx::B2DPoint(aEndPt.X(), aEndPt.Y()));
 
-        PaintLineGeometryWithEvtlExpand(aInfo, basegfx::B2DPolyPolygon(aLinePolygon));
+        drawLine( basegfx::B2DPolyPolygon(aLinePolygon), aInfo );
     }
     else
     {
@@ -145,9 +145,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         mpAlphaVDev->DrawLine( rStartPt, rEndPt );
 }
 
-void OutputDevice::PaintLineGeometryWithEvtlExpand(
-            const LineInfo& rInfo,
-            basegfx::B2DPolyPolygon aLinePolyPolygon)
+void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
     const bool bTryAA((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
