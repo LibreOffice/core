@@ -225,29 +225,25 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             sal_uInt16 nScriptTypes = rWrtSh.GetScriptType();
             const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                         aSetItem.GetItemOfScript( nScriptTypes ) ) );
-            std::vector<SwPaM*> vPaM;
-            std::vector<const SfxPoolItem*> vItem;
+            std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItems;
             if ( pSize ) // selected text has one size
             {
-                vItem.push_back( pSize );
                 // must create new one, otherwise document is without pam
                 SwPaM* pPaM = rWrtSh.GetCrsr();
-                vPaM.push_back( new SwPaM( *(pPaM->GetMark()), *(pPaM->GetPoint()) ) );
+                vItems.push_back( std::make_pair( pSize, std::unique_ptr<SwPaM>(new SwPaM( *(pPaM->GetMark()), *(pPaM->GetPoint()))) ) );
             }
             else
-            {
-                vPaM = rWrtSh.GetSplitPaM( RES_CHRATR_FONTSIZE );
-                vItem = rWrtSh.GetCurItem ( RES_CHRATR_FONTSIZE );
-            }
-            std::vector<SwPaM*>::iterator iPaM = vPaM.begin();
-            std::vector<const SfxPoolItem*>::const_iterator iItem = vItem.begin();
+                vItems = rWrtSh.GetItemWithPaM( RES_CHRATR_FONTSIZE );
+
             rWrtSh.StartUndo( UNDO_INSATTR, NULL);
-            for ( ; iPaM != vPaM.end() && iItem != vItem.end(); ++iPaM, ++iItem )
+            for( std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >& iPair : vItems )
             {
-                rWrtSh.GetPaMAttr( *iPaM, aSetItem.GetItemSet() );
+                std::unique_ptr<SwPaM> pPaM = std::move(iPair.second);
+                const SfxPoolItem* pItem = iPair.first;
+                rWrtSh.GetPaMAttr( pPaM.get(), aSetItem.GetItemSet() );
                 aAttrSet.SetRanges( aSetItem.GetItemSet().GetRanges() );
 
-                pSize = static_cast<const SvxFontHeightItem*>( *iItem );
+                pSize = static_cast<const SvxFontHeightItem*>( pItem );
                 if (pSize)
                 {
                     SvxFontHeightItem aSize(*pSize);
@@ -265,9 +261,8 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
                     if( pColl )
                         pColl->SetFmtAttr( aAttrSet );
                     else
-                        rWrtSh.SetAttrSet( aAttrSet, 0, *iPaM );
+                        rWrtSh.SetAttrSet( aAttrSet, 0, pPaM.get() );
                 }
-                delete *iPaM;
             }
             rWrtSh.EndUndo( UNDO_INSATTR, NULL);
             rReq.Done();
@@ -627,20 +622,27 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                             aSetItem.GetItemOfScript( rSh.GetScriptType() ) ) );
 
-                std::vector<const SfxPoolItem*> vFontHeight;
                 if( pSize ) // selection is of one size
-                    vFontHeight.push_back( pSize );
-                else
-                    vFontHeight = rSh.GetCurItem( RES_CHRATR_FONTSIZE );
-
-                for ( const SfxPoolItem* pIt : vFontHeight )
                 {
-                    pSize = static_cast<const SvxFontHeightItem*>(pIt);
                     sal_uInt32 nSize = pSize->GetHeight();
                     if( nSize == nFontMaxSz )
                         rSet.DisableItem( FN_GROW_FONT_SIZE );
                     else if( nSize == nFontInc )
                         rSet.DisableItem( FN_SHRINK_FONT_SIZE );
+                }
+                else
+                {
+                    std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >>
+                        vFontHeight = rSh.GetItemWithPaM( RES_CHRATR_FONTSIZE );
+                    for ( std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM>>& pIt : vFontHeight )
+                    {
+                        pSize = static_cast<const SvxFontHeightItem*>( pIt.first );
+                        sal_uInt32 nSize = pSize->GetHeight();
+                        if( nSize == nFontMaxSz )
+                            rSet.DisableItem( FN_GROW_FONT_SIZE );
+                        else if( nSize == nFontInc )
+                            rSet.DisableItem( FN_SHRINK_FONT_SIZE );
+                    }
                 }
                 nSlot = 0;
             }
