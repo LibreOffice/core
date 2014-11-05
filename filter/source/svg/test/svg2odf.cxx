@@ -90,36 +90,40 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // bootstrap UNO
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     uno::Reference< uno::XComponentContext > xCtx;
+    int nRet = 1;
     try
     {
         xCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);
         xFactory = uno::Reference< lang::XMultiServiceFactory >(xCtx->getServiceManager(),
                                                                 uno::UNO_QUERY);
-        if( xFactory.is() )
-            ::comphelper::setProcessServiceFactory( xFactory );
-    }
-    catch( const uno::Exception& )
-    {
-    }
+        if (!xFactory.is())
+        {
+            OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
+            return 1;
+        }
 
-    if( !xFactory.is() )
+        ::comphelper::setProcessServiceFactory( xFactory );
+
+        osl::File aInputFile(aSrcURL);
+        if( osl::FileBase::E_None!=aInputFile.open(osl_File_OpenFlag_Read) )
+        {
+            OSL_TRACE( "Cannot open input file" );
+            return 1;
+        }
+
+        svgi::SVGReader aReader(xCtx,
+                                uno::Reference<io::XInputStream>(
+                                    new comphelper::OSLInputStreamWrapper(aInputFile)),
+                                svgi::createSerializer(new OutputWrap(aDstURL)));
+        nRet = aReader.parseAndConvert() ? 0 : 1;
+
+    }
+    catch (const uno::Exception& e)
     {
-        OSL_TRACE( "Could not bootstrap UNO, installation must be in disorder. Exiting." );
+        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
         return 1;
     }
-
-    osl::File aInputFile(aSrcURL);
-    if( osl::FileBase::E_None!=aInputFile.open(osl_File_OpenFlag_Read) )
-    {
-        OSL_TRACE( "Cannot open input file" );
-        return 1;
-    }
-
-    svgi::SVGReader aReader(xCtx,
-                            uno::Reference<io::XInputStream>(
-                                new comphelper::OSLInputStreamWrapper(aInputFile)),
-                            svgi::createSerializer(new OutputWrap(aDstURL)));
-    return aReader.parseAndConvert() ? 0 : 1;
+    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
