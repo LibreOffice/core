@@ -324,26 +324,6 @@ public:
 
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 
-::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (
-    const Reference<frame::XController>& rxController)
-{
-    // Tunnel through the controller to obtain a ViewShellBase.
-    Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
-    if (xTunnel.is())
-    {
-        ::sd::DrawController* pController = reinterpret_cast<sd::DrawController*>(
-            xTunnel->getSomething(sd::DrawController::getUnoTunnelId()));
-        if (pController != NULL)
-        {
-            ViewShellBase* pBase = pController->GetViewShellBase();
-            if (pBase != NULL)
-                return Instance(*pBase);
-        }
-    }
-
-    return ::boost::shared_ptr<FrameworkHelper>();
-}
-
 ::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
 

@@ -77,7 +77,6 @@ public:
     sal_uInt16 GetNumTypeIndex(){ return mnNumTypeIndex; }
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
 
-    void EndSpacingPopupMode (void);
     void EndBulletsPopupMode (void);
     void EndNumberingPopupMode (void);
 

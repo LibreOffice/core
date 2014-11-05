@@ -109,9 +109,6 @@ public:
     */
     static ::boost::shared_ptr<FrameworkHelper> Instance (ViewShellBase& rBase);
 
-    static ::boost::shared_ptr<FrameworkHelper> Instance (
-        const css::uno::Reference<css::frame::XController>& rxController);
-
     /** Mark the FrameworkHelper object for the given ViewShellBase as
         disposed.  A following ReleaseInstance() call will destroy the
         FrameworkHelper object.

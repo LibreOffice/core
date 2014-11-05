@@ -1,5 +1,6 @@
 BigInt::BigInt(unsigned int)
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
+Chart2ImportTest::testTextCanOverlapXLSX()
 FontCharMap::GetDefaultMap(bool)
 GDriveDocument::GDriveDocument(GDriveSession*)
 GDriveFolder::GDriveFolder(GDriveSession*)
@@ -18,6 +19,8 @@ OutputDevice::PixelToLogic(vcl::Region const&, MapMode const&) const
 Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
+ScBroadcastAreaSlotMachine::AreaBroadcastInRange(ScRange const&, ScHint const&) const
+ScColumn::MarkSubTotalCells(sc::ColumnSpanSet&, int, int, bool) const
 ScDocument::CreateFormatTable() const
 ScFormulaCellGroup::scheduleCompilation()
 ScRawToken::Clone() const
@@ -177,7 +180,6 @@ connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiType
 connectivity::odbc::appendSQLWCHARs(rtl::OUStringBuffer&, wchar_t const*, int)
 connectivity::sdbcx::OGroup::OGroup(bool)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, bool)
-dbaccess::ORowSetCacheIterator::getMutex() const
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::drawingml::TextListStyle::dump() const
@@ -189,7 +191,6 @@ sc::CLBuildKernelThread::produce()
 sc::CellValues::transferTo(ScColumn&, int)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
-sd::framework::FrameworkHelper::Instance(com::sun::star::uno::Reference<com::sun::star::frame::XController> const&)
 sfx2::SvBaseLink::SvBaseLink(rtl::OUString const&, unsigned short, sfx2::SvLinkSource*)
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::__cxx1998::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)

@@ -219,11 +219,6 @@ void ParaPropertyPanel::ReSize(bool /* bSize */)
         mxSidebar->requestLayout();
 }
 
-void ParaPropertyPanel::EndSpacingPopupMode (void)
-{
-    //maLineSpacePopup.Hide();
-}
-
 void ParaPropertyPanel::EndBulletsPopupMode (void)
 {
     //i122054, Missed following line, for collapse the bullets popup
