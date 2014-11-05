@@ -860,7 +860,15 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
         DBG_ASSERT( false, "BasicManager-Stream defect!" );
         return;
     }
-    for ( sal_uInt16 nL = 0; nL < nLibs; nL++ )
+    const size_t nMinBasicLibSize(8);
+    const size_t nMaxPossibleLibs = xManagerStream->remainingSize() / nMinBasicLibSize;
+    if (nLibs > nMaxPossibleLibs)
+    {
+        SAL_WARN("basic", "Parsing error: " << nMaxPossibleLibs <<
+                 " max possible entries, but " << nLibs << " claimed, truncating");
+        nLibs = nMaxPossibleLibs;
+    }
+    for (sal_uInt16 nL = 0; nL < nLibs; ++nL)
     {
         BasicLibInfo* pInfo = BasicLibInfo::Create( *xManagerStream );
 
