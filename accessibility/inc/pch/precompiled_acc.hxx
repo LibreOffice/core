@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <svtools/accessibletable.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svtools/svtabbx.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/toolpanel/paneltabbar.hxx>
 #include <svtools/toolpanel/toolpaneldeck.hxx>
