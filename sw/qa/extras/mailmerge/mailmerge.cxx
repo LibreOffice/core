@@ -50,12 +50,11 @@ class MMTest : public SwModelTestBase
         preTest(filename);
         load(mpTestDocumentPath, filename);
 
-        const OUString aPrefix( "LOMM_" );
         utl::TempFile aTempDir(nullptr, true);
         const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
-        OUString aDBName = registerDBsource( aURI, aPrefix, aWorkDir );
-        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, file );
+        OUString aDBName = registerDBsource( aURI, aWorkDir );
+        initMailMergeJobAndArgs( filename, tablename, aDBName, "LOMM_", aWorkDir, file );
 
         postTest(filename);
         verify();

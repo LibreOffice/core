@@ -801,13 +801,13 @@ protected:
         xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("css3t"), BAD_CAST("http://www.w3.org/TR/css3-text/"));
     }
 
-    virtual OUString registerDBsource( const OUString &aURI, const OUString &aPrefix, const OUString &aWorkDir )
+    virtual OUString registerDBsource( const OUString &aURI, const OUString &aWorkDir )
     {
         OUString aDBName;
         DBuriMap::const_iterator pos = aDBuriMap.find( aURI );
         if (pos == aDBuriMap.end())
         {
-            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, &aPrefix, &aWorkDir );
+            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, NULL, &aWorkDir );
             aDBuriMap.insert( std::pair< OUString, OUString >( aURI, aDBName ) );
             std::cout << "New datasource name: '" << aDBName << "'" << std::endl;
         }
