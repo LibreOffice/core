@@ -20,7 +20,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLTABLECELL_HXX
 
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
 #include <svtools/accessibletable.hxx>
 
