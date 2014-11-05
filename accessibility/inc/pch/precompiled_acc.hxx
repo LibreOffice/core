@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
