@@ -71,6 +71,7 @@ public:
     void testBnc862510_5();
     void testBnc822347_EmptyBullet();
     void testFdo83751();
+    void testFdo79731();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testN821567);
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testBnc862510_5);
     CPPUNIT_TEST(testBnc822347_EmptyBullet);
     CPPUNIT_TEST(testFdo83751);
+    CPPUNIT_TEST(testFdo79731);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -474,6 +476,15 @@ void SdExportTest::testFdo83751()
     OUString propValue;
     xUDProps->getPropertyValue(OUString("Testing")) >>= propValue;
     CPPUNIT_ASSERT_EQUAL(OUString("Document"), propValue);
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testFdo79731()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo79731.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
     xDocShRef->DoClose();
 }
 
