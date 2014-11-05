@@ -88,6 +88,65 @@ FuDraw::~FuDraw()
     mpView->BrkAction();
 }
 
+
+/**
+ * Code shared by MouseButtonDown and MouseMove
+ */
+void FuDraw::DoModifiers(const MouseEvent& rMEvt, bool bSnapModPressed)
+{
+    FrameView* pFrameView = mpViewShell->GetFrameView();
+    bool bGridSnap = pFrameView->IsGridSnap();
+    bGridSnap = (bSnapModPressed != bGridSnap);
+
+    if (mpView->IsGridSnap() != bGridSnap)
+        mpView->SetGridSnap(bGridSnap);
+
+    bool bBordSnap = pFrameView->IsBordSnap();
+    bBordSnap = (bSnapModPressed != bBordSnap);
+
+    if (mpView->IsBordSnap() != bBordSnap)
+        mpView->SetBordSnap(bBordSnap);
+
+    bool bHlplSnap = pFrameView->IsHlplSnap();
+    bHlplSnap = (bSnapModPressed != bHlplSnap);
+
+    if (mpView->IsHlplSnap() != bHlplSnap)
+        mpView->SetHlplSnap(bHlplSnap);
+
+    bool bOFrmSnap = pFrameView->IsOFrmSnap();
+    bOFrmSnap = (bSnapModPressed != bOFrmSnap);
+
+    if (mpView->IsOFrmSnap() != bOFrmSnap)
+        mpView->SetOFrmSnap(bOFrmSnap);
+
+    bool bOPntSnap = pFrameView->IsOPntSnap();
+    bOPntSnap = (bSnapModPressed != bOPntSnap);
+
+    if (mpView->IsOPntSnap() != bOPntSnap)
+        mpView->SetOPntSnap(bOPntSnap);
+
+    bool bOConSnap = pFrameView->IsOConSnap();
+    bOConSnap = (bSnapModPressed != bOConSnap);
+
+    if (mpView->IsOConSnap() != bOConSnap)
+        mpView->SetOConSnap(bOConSnap);
+
+    bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
+
+    if (mpView->IsAngleSnapEnabled() != bAngleSnap)
+        mpView->SetAngleSnapEnabled(bAngleSnap);
+
+    bool bCenter = rMEvt.IsMod2();
+
+    if ( mpView->IsCreate1stPointAsCenter() != bCenter ||
+         mpView->IsResizeAtCenter() != bCenter )
+    {
+        mpView->SetCreate1stPointAsCenter(bCenter);
+        mpView->SetResizeAtCenter(bCenter);
+    }
+}
+
+
 bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -140,63 +199,14 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         {
             bOrtho = rMEvt.IsShift() != pFrameView->IsOrtho();
         }
-
         if (!mpView->IsSnapEnabled())
             mpView->SetSnapEnabled(true);
+
         bool bSnapModPressed = rMEvt.IsMod1();
-
-        bool bGridSnap = pFrameView->IsGridSnap();
-        bGridSnap = (bSnapModPressed != bGridSnap);
-
-        if (mpView->IsGridSnap() != bGridSnap)
-            mpView->SetGridSnap(bGridSnap);
-
-        bool bBordSnap = pFrameView->IsBordSnap();
-        bBordSnap = (bSnapModPressed != bBordSnap);
-
-        if (mpView->IsBordSnap() != bBordSnap)
-            mpView->SetBordSnap(bBordSnap);
-
-        bool bHlplSnap = pFrameView->IsHlplSnap();
-        bHlplSnap = (bSnapModPressed != bHlplSnap);
-
-        if (mpView->IsHlplSnap() != bHlplSnap)
-            mpView->SetHlplSnap(bHlplSnap);
-
-        bool bOFrmSnap = pFrameView->IsOFrmSnap();
-        bOFrmSnap = (bSnapModPressed != bOFrmSnap);
-
-        if (mpView->IsOFrmSnap() != bOFrmSnap)
-            mpView->SetOFrmSnap(bOFrmSnap);
-
-        bool bOPntSnap = pFrameView->IsOPntSnap();
-        bOPntSnap = (bSnapModPressed != bOPntSnap);
-
-        if (mpView->IsOPntSnap() != bOPntSnap)
-            mpView->SetOPntSnap(bOPntSnap);
-
-        bool bOConSnap = pFrameView->IsOConSnap();
-        bOConSnap = (bSnapModPressed != bOConSnap);
-
-        if (mpView->IsOConSnap() != bOConSnap)
-            mpView->SetOConSnap(bOConSnap);
-
-        bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
-
-        if (mpView->IsAngleSnapEnabled() != bAngleSnap)
-            mpView->SetAngleSnapEnabled(bAngleSnap);
-
         if (mpView->IsOrtho() != bOrtho)
             mpView->SetOrtho(bOrtho);
 
-        bool bCenter = rMEvt.IsMod2();
-
-        if ( mpView->IsCreate1stPointAsCenter() != bCenter ||
-             mpView->IsResizeAtCenter() != bCenter )
-        {
-            mpView->SetCreate1stPointAsCenter(bCenter);
-            mpView->SetResizeAtCenter(bCenter);
-        }
+        DoModifiers(rMEvt, bSnapModPressed);
 
         SdrPageView* pPV = 0;
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
@@ -259,58 +269,10 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
         bool bSnapModPressed = rMEvt.IsMod2();
         mpView->SetDragWithCopy(rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
-        bool bGridSnap = pFrameView->IsGridSnap();
-        bGridSnap = (bSnapModPressed != bGridSnap);
-
-        if (mpView->IsGridSnap() != bGridSnap)
-            mpView->SetGridSnap(bGridSnap);
-
-        bool bBordSnap = pFrameView->IsBordSnap();
-        bBordSnap = (bSnapModPressed != bBordSnap);
-
-        if (mpView->IsBordSnap() != bBordSnap)
-            mpView->SetBordSnap(bBordSnap);
-
-        bool bHlplSnap = pFrameView->IsHlplSnap();
-        bHlplSnap = (bSnapModPressed != bHlplSnap);
-
-        if (mpView->IsHlplSnap() != bHlplSnap)
-            mpView->SetHlplSnap(bHlplSnap);
-
-        bool bOFrmSnap = pFrameView->IsOFrmSnap();
-        bOFrmSnap = (bSnapModPressed != bOFrmSnap);
-
-        if (mpView->IsOFrmSnap() != bOFrmSnap)
-            mpView->SetOFrmSnap(bOFrmSnap);
-
-        bool bOPntSnap = pFrameView->IsOPntSnap();
-        bOPntSnap = (bSnapModPressed != bOPntSnap);
-
-        if (mpView->IsOPntSnap() != bOPntSnap)
-            mpView->SetOPntSnap(bOPntSnap);
-
-        bool bOConSnap = pFrameView->IsOConSnap();
-        bOConSnap = (bSnapModPressed != bOConSnap);
-
-        if (mpView->IsOConSnap() != bOConSnap)
-            mpView->SetOConSnap(bOConSnap);
-
-        bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
-
-        if (mpView->IsAngleSnapEnabled() != bAngleSnap)
-            mpView->SetAngleSnapEnabled(bAngleSnap);
-
         if (mpView->IsOrtho() != bOrtho)
             mpView->SetOrtho(bOrtho);
+        DoModifiers(rMEvt, bSnapModPressed);
 
-        bool bCenter = rMEvt.IsMod2();
-
-        if ( mpView->IsCreate1stPointAsCenter() != bCenter ||
-             mpView->IsResizeAtCenter() != bCenter )
-        {
-            mpView->SetCreate1stPointAsCenter(bCenter);
-            mpView->SetResizeAtCenter(bCenter);
-        }
 
         if ( mpView->IsDragHelpLine() )
             mpView->MovDragHelpLine(aPos);
