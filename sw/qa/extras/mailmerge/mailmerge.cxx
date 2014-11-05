@@ -44,7 +44,7 @@ class MMTest : public SwModelTestBase
      * The 'verify' method actually has to execute the mail merge by
      * calling executeMailMerge() after modifying the job arguments.
      */
-    void executeMailMergeTest(const char* filename, const char* datasource, const char* tablename = 0)
+    void executeMailMergeTest(const char* filename, const char* datasource, const char* tablename, bool file)
     {
         header();
         preTest(filename);
@@ -55,18 +55,19 @@ class MMTest : public SwModelTestBase
         const OUString aWorkDir = aTempDir.GetURL();
         const OUString aURI( getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
         OUString aDBName = registerDBsource( aURI, aPrefix, aWorkDir );
-        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir );
+        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir, file );
 
         postTest(filename);
         verify();
         finish();
 
         ::utl::removeTree(aWorkDir);
+        nCurOutputType = 0;
     }
 
 };
 
-#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, BaseClass) \
+#define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass) \
     class TestName : public BaseClass { \
     protected: \
         virtual OUString getTestName() SAL_OVERRIDE { return OUString::createFromAscii(#TestName); } \
@@ -76,17 +77,22 @@ class MMTest : public SwModelTestBase
         CPPUNIT_TEST_SUITE_END(); \
     \
         void MailMerge() { \
-            executeMailMergeTest(filename, datasource, tablename); \
+            executeMailMergeTest(filename, datasource, tablename, file); \
         } \
         void verify() SAL_OVERRIDE; \
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_DFLT_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
-    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, MMTest)
+// Will generate the resulting document in mxMMDocument.
+#define DECLARE_SHELL_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, false, MMTest)
 
-DECLARE_DFLT_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-draws.odt", "4_v01.ods", "Tabelle1")
+// Will generate documents as files, use loadMailMergeDocument().
+#define DECLARE_FILE_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
+    DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest)
+
+DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-draws.odt", "4_v01.ods", "Tabelle1")
 {
     executeMailMerge();
 
@@ -117,19 +123,19 @@ DECLARE_DFLT_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-
     }
 }
 
-DECLARE_DFLT_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-color.ott", "one-empty-address.ods", "one-empty-address")
+DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-color.ott", "one-empty-address.ods", "one-empty-address")
 {
     executeMailMerge();
     // The document was created by LO version which didn't write out the default value for line color
     // (see XMLGraphicsDefaultStyle::SetDefaults()).
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     // Lines do not have a line color.
     CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( "LineColor" ));
-    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
-    uno::Reference< lang::XMultiServiceFactory > xFact( mxMMComponent, uno::UNO_QUERY );
+    uno::Reference< lang::XMultiServiceFactory > xFact( mxComponent, uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( "com.sun.star.drawing.Defaults" ), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xDefaults.is());
     uno::Reference< beans::XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo());
@@ -138,6 +144,10 @@ DECLARE_DFLT_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     xDefaults->getPropertyValue( "LineColor" ) >>= lineColor;
     // And the default value is black (wasn't copied properly by mailmerge).
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, lineColor );
+    // And check that the resulting file has the proper default.
+    xmlDocPtr pXmlDoc = parseMailMergeExport( 0, "styles.xml" );
+    CPPUNIT_ASSERT_EQUAL( OUString( "graphic" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]", "family"));
+    CPPUNIT_ASSERT_EQUAL( OUString( "#000000" ), getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties", "stroke-color"));
 }
 
 #endif

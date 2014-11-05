@@ -182,6 +182,8 @@ protected:
     utl::TempFile maTempFile;
     bool mbExported; ///< Does maTempFile already contain something useful?
     sal_Int16 nCurOutputType;
+    OUString mailMergeOutputURL;
+    OUString mailMergeOutputPrefix;
 
 protected:
     virtual OUString getTestName() { return OUString(); }
@@ -612,6 +614,25 @@ protected:
             calcLayout();
     }
 
+    /**
+     Loads number-th document from mail merge. Requires file output from mail merge.
+    */
+    void loadMailMergeDocument( int number )
+    {
+        assert( nCurOutputType == text::MailMergeType::FILE );
+        if (mxComponent.is())
+            mxComponent->dispose();
+        OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
+        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
+        std::cout << name << ",";
+        mnStartTime = osl_getGlobalTimer();
+        mxComponent = loadFromDesktop(mailMergeOutputURL + "/" + name, "com.sun.star.text.TextDocument");
+        CPPUNIT_ASSERT( mxComponent.is());
+        OString name2 = OUStringToOString( name, RTL_TEXTENCODING_UTF8 );
+        if (mustCalcLayoutOf(name2.getStr()))
+            calcLayout();
+    }
+
     void reload(const char* pFilter, const char* filename)
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -692,8 +713,25 @@ protected:
         if (!mbExported)
             return 0;
 
+        return parseExportInternal( maTempFile.GetURL(), rStreamName );
+    }
+
+    /**
+     * Like parseExport(), but for given mail merge document.
+     */
+    xmlDocPtr parseMailMergeExport(int number, const OUString& rStreamName = OUString("word/document.xml"))
+    {
+        if (nCurOutputType != text::MailMergeType::FILE)
+            return 0;
+
+        OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
+        return parseExportInternal( mailMergeOutputURL + "/" + name, rStreamName );
+    }
+
+    xmlDocPtr parseExportInternal( const OUString& url, const OUString& rStreamName )
+    {
         // Read the XML stream we're interested in.
-        uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+        uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), url);
         uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rStreamName), uno::UNO_QUERY);
         boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
@@ -783,7 +821,7 @@ protected:
     }
 
     virtual void initMailMergeJobAndArgs( const char* filename, const char* tablename, const OUString &aDBName,
-                                          const OUString &aPrefix, const OUString &aWorkDir )
+                                          const OUString &aPrefix, const OUString &aWorkDir, bool file )
     {
         uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
         mxJob.set( xJob );
@@ -793,7 +831,7 @@ protected:
         mSeqMailMergeArgs.realloc( seq_id );
 
         seq_id = 0;
-        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_TYPE ), uno::Any( text::MailMergeType::SHELL ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_TYPE ), uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) );
         mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DOCUMENT_URL ), uno::Any(
                                         ( OUString(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
         mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) );
@@ -810,8 +848,6 @@ protected:
     {
         uno::Any res = mxJob->execute( mSeqMailMergeArgs );
 
-        OUString aCurOutputURL;
-        OUString aCurFileNamePrefix;
         const beans::NamedValue *pArguments = mSeqMailMergeArgs.getConstArray();
         bool bOk = true;
         sal_Int32 nArgs = mSeqMailMergeArgs.getLength();
@@ -822,9 +858,9 @@ protected:
 
             // all error checking was already done by the MM job execution
             if (rName == UNO_NAME_OUTPUT_URL)
-                bOk &= rValue >>= aCurOutputURL;
+                bOk &= rValue >>= mailMergeOutputURL;
             else if (rName == UNO_NAME_FILE_NAME_PREFIX)
-                bOk &= rValue >>= aCurFileNamePrefix;
+                bOk &= rValue >>= mailMergeOutputPrefix;
             else if (rName == UNO_NAME_OUTPUT_TYPE)
                 bOk &= rValue >>= nCurOutputType;
         }
@@ -839,10 +875,7 @@ protected:
         else
         {
             CPPUNIT_ASSERT(res == true);
-            mxMMComponent = loadFromDesktop( aCurOutputURL + "/" + aCurFileNamePrefix + "0.odt",
-                                             "com.sun.star.text.TextDocument");
-            CPPUNIT_ASSERT(mxMMComponent.is());
-            calcLayout();
+            loadMailMergeDocument( 0 );
         }
     }
 };
