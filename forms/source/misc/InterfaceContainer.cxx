@@ -680,9 +680,8 @@ throw (::com::sun::star::uno::RuntimeException, std::exception) {
     if (evt.PropertyName == PROPERTY_NAME)
     {
         ::osl::MutexGuard aGuard( m_rMutex );
-        OInterfaceMap::iterator i = ::std::find(m_aMap.begin(), m_aMap.end(),
-            ::std::pair<const OUString, InterfaceRef >(::comphelper::getString(evt.OldValue),evt.Source));
-        if (i != m_aMap.end())
+        OInterfaceMap::iterator i = m_aMap.find(::comphelper::getString(evt.OldValue));
+        if (i != m_aMap.end() && (*i).second != evt.Source)
         {
             InterfaceRef  xCorrectType((*i).second);
             m_aMap.erase(i);

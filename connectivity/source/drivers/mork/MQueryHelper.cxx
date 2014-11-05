@@ -228,7 +228,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 {
                     int rowId = rowIter->first;
                     // belongs this row id to the list table?
-                    if (listRecords.end() == std::find(listRecords.begin(), listRecords.end(), rowId))
+                    if (listRecords.end() == listRecords.find(rowId))
                     {
                         // no, skip it
                         continue;
