@@ -638,7 +638,7 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         // update fallback_runs if needed
         psp::CharacterMetric aMetric;
-        // coverity[array_vs_singleton]
+        // coverity[callee_ptr_arith]
         mrPrinterGfx.GetFontMgr().getMetrics( mnFontID, cChar, cChar, &aMetric, mbVertical );
         if( aMetric.width == -1 && aMetric.height == -1 )
             rArgs.NeedFallback( nCharPos, bRightToLeft );

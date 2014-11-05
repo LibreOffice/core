@@ -905,7 +905,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                     sal_Int32 nIdx = nLower;
                     for( sal_Int32 i = 0 ; i < nSize ; i++,nIdx++ )
                     {
-                        // coverity[array_vs_singleton]
+                        // coverity[callee_ptr_arith]
                         SbxVariableRef xVar = pArray->Get32( &nIdx );
                         Type aType = getUnoTypeForSbxValue( (SbxVariable*)xVar );
                         if( bNeedsInit )
@@ -1351,7 +1351,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                     sal_Int32 nIdx = nLower;
                     for( sal_Int32 i = 0 ; i < nSeqSize ; i++,nIdx++ )
                     {
-                        // coverity[array_vs_singleton]
+                        // coverity[callee_ptr_arith]
                         SbxVariableRef xVar = pArray->Get32( &nIdx );
 
                         // Convert the value of Sbx to Uno

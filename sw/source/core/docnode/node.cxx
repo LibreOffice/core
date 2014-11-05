@@ -1614,7 +1614,9 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
     {
         if( !GetpSwAttrSet() || ( SfxItemState::SET != GetpSwAttrSet()->GetItemState(
                     nWhich, false, &pFnd ) && bInParents ))
-            ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
+        {
+            (void)((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
+        }
     }
     // undo change of issue #i51029#
     // Note: <GetSwAttrSet()> returns <mpAttrSet>, if set, otherwise it returns

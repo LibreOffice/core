@@ -104,6 +104,7 @@ JNI_interface_type_info::JNI_interface_type_info(
             typelib_InterfaceTypeDescription * td =
                 reinterpret_cast< typelib_InterfaceTypeDescription * >(
                     m_td.get() );
+            // coverity [ctor_dtor_leak]
             m_methods = new jmethodID[ td->nMapFunctionIndexToMemberIndex ];
             sal_Int32 nMethodIndex = 0;
             typelib_TypeDescriptionReference ** ppMembers = td->ppMembers;
@@ -289,6 +290,7 @@ JNI_compound_type_info::JNI_compound_type_info(
                 ((typelib_TypeDescription *)td)->pWeakRef,
                 jni_info->m_RuntimeException_type.getTypeLibType() ))
         {
+            // coverity [ctor_dtor_leak]
             m_fields = new jfieldID[ 2 ];
             m_fields[ 0 ] = 0; // special Throwable.getMessage()
             // field Context
@@ -848,7 +850,7 @@ JNI_info::JNI_info(
         css::uno::TypeDescription XInterface_td(
             ::getCppuType(
                 (css::uno::Reference< css::uno::XInterface > const *)0 ) );
-        //coverity [ctor_dtor_leak]
+        // coverity [ctor_dtor_leak]
         m_XInterface_type_info =
             new JNI_interface_type_info( jni, XInterface_td.get() );
     }

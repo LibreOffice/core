@@ -378,9 +378,10 @@ namespace drawinglayer
                     aRetval = Primitive2DSequence(&aPrimitiveBlackAndWhite, 1);
                     break;
                 }
+                // coverity[dead_error_begin] - intentional dead case
                 case GRAPHICDRAWMODE_WATERMARK:
                 {
-                    OSL_ENSURE(false, "OOps, GRAPHICDRAWMODE_WATERMARK should already be handled (see above)");
+                    assert(false && "OOps, GRAPHICDRAWMODE_WATERMARK should already be handled (see above)");
                     // fallthrough intended
                 }
                 default: // case GRAPHICDRAWMODE_STANDARD:

@@ -945,6 +945,7 @@ bool SvDataPipe_Impl::removeMark(sal_uInt32 nPosition)
     if (t == m_aMarks.end())
         return false;
     m_aMarks.erase(t);
+    // coverity[pass_freed_arg] - remove frees m_pFirstPage but then sets m_pFirstPage to something else
     while (remove(m_pFirstPage)) ;
     return true;
 }

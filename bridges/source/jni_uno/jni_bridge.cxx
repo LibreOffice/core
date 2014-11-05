@@ -490,7 +490,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             uno_registerMapping(
                 &mapping, Bridge_free,
                 pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
-            //coverity[leaked_storage]
+            // coverity[leaked_storage]
         }
         else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_JAVA )
         {
@@ -500,7 +500,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
             uno_registerMapping(
                 &mapping, Bridge_free,
                 (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
-            //coverity[leaked_storage]
+            // coverity[leaked_storage]
         }
     }
     catch (const BridgeRuntimeError & err)

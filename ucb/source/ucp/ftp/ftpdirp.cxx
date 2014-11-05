@@ -934,6 +934,7 @@ bool FTPDirectoryParser::parseUNIX (
                 else
                     eMode = FOUND_NONE;
                 break;
+            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
             case FOUND_YEAR_TIME:
                 break;
         }

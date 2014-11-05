@@ -683,7 +683,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
             //check if version of current is recognized, by comparing it with itself
             try
             {
-                cur->compareVersions(cur->getVersion());
+                (void)cur->compareVersions(cur->getVersion());
             }
             catch (MalformedVersionException &)
             {

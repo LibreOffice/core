@@ -182,7 +182,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
                         {
                             sal_uInt16 nRet = static_cast<sal_uInt16>(sdb::CommandType::COMMAND);
                             const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetCommandTypeOptions();
-                            SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
+                            (void)SvXMLUnitConverter::convertEnum( nRet, sValue, aXML_EnumMap );
                             m_xDatabaseDataProvider->setCommandType(nRet);
                         }
                         break;

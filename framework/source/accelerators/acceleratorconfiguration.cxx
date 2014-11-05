@@ -1208,7 +1208,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred, const css::
 
         // take over all changes into the original container
         SolarMutexGuard g;
-        // coverity[reverse_inull]
+        // coverity[check_after_deref]
         if (m_pPrimaryWriteCache)
         {
             m_aPrimaryReadCache.takeOver(*m_pPrimaryWriteCache);
@@ -1247,7 +1247,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred, const css::
 
         // take over all changes into the original container
         SolarMutexGuard g;
-        // coverity[reverse_inull]
+        // coverity[check_after_deref]
         if (m_pSecondaryWriteCache)
         {
             m_aSecondaryReadCache.takeOver(*m_pSecondaryWriteCache);

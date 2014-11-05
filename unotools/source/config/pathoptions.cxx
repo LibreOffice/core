@@ -776,8 +776,10 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
                 case PATH_WORK:         aPath = GetWorkPath();          break;
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
                 case PATH_FINGERPRINT:  aPath = GetFingerprintPath();   break;
-                case PATH_USERCONFIG:/*-Wall???*/           break;
-                case PATH_COUNT: /*-Wall???*/ break;
+                // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
+                case PATH_USERCONFIG:
+                case PATH_COUNT:
+                    break;
             }
 
             sal_Int32 nPathIndex = 0;

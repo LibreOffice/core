@@ -965,7 +965,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                     else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
                     {
                         Point aPt;
-                        lcl_SetAnchor( *PCURCRSR->GetPoint(), PCURCRSR->GetNode(),
+                        (void)lcl_SetAnchor( *PCURCRSR->GetPoint(), PCURCRSR->GetNode(),
                                         0, aPt, *this, aAnchor, aPt, false );
                     }
 

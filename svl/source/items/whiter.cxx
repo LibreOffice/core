@@ -26,17 +26,13 @@ SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt
     pStart(rSet.GetRanges()),
     nOfst(0), nFrom(nFromWh), nTo(nToWh)
 {
-    if ( nFrom > 0 )
-        FirstWhich();
+    if (nFrom > 0)
+        (void)FirstWhich();
 }
-
-
 
 SfxWhichIter::~SfxWhichIter()
 {
 }
-
-
 
 sal_uInt16 SfxWhichIter::NextWhich()
 {
@@ -55,8 +51,6 @@ sal_uInt16 SfxWhichIter::NextWhich()
     }
     return 0;
 }
-
-
 
 sal_uInt16 SfxWhichIter::FirstWhich()
 {

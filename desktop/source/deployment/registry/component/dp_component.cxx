@@ -458,7 +458,7 @@ void BackendImpl::initServiceRdbFiles()
     // switch native rdb:
     if (!m_nativeRDB_orig.isEmpty())
     {
-        create_ucb_content(
+        (void)create_ucb_content(
             &oldRDB, makeURL(getCachePath(), m_nativeRDB_orig),
             xCmdEnv, false /* no throw */ );
     }

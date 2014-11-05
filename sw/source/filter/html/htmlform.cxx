@@ -1126,9 +1126,6 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             sal_Int16 nVertOri = text::VertOrientation::NONE;
             switch( eVertOri )
             {
-            case text::VertOrientation::NONE:
-                nVertOri = text::VertOrientation::NONE;
-                break;
             case text::VertOrientation::TOP:
                 nVertOri = text::VertOrientation::TOP;
                 break;
@@ -1155,6 +1152,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 break;
             case text::VertOrientation::LINE_BOTTOM:
                 nVertOri = text::VertOrientation::LINE_BOTTOM;
+                break;
+            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
+            case text::VertOrientation::NONE:
+                nVertOri = text::VertOrientation::NONE;
                 break;
             }
             aTmp <<= (sal_Int16)nVertOri ;

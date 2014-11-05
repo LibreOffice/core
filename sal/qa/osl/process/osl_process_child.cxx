@@ -94,7 +94,10 @@ int main(int argc, char* argv[])
     if (argc > 2)
     {
         if (0 == strcmp("-join", argv[1]))
+        {
+            // coverity[tainted_data] - this is a build-time only test tool
             wait_for_seconds(argv[2]);
+        }
         else if (0 == strcmp("-env", argv[1]))
             dump_env(argv[2]);
     }

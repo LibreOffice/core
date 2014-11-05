@@ -981,7 +981,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                         aDrawMirrorAttrValue);
     }
 
-    if( bMoveProtect || bSizeProtect || !aProtectAttrValue.isEmpty() )
+    if (bMoveProtect || bSizeProtect || !aProtectAttrValue.isEmpty())
     {
         if( (bMoveProtect ||bSizeProtect) && IsXMLToken( aProtectAttrValue, XML_NONE ) )
             aProtectAttrValue = OUString();
@@ -1002,6 +1002,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             aProtectAttrValue += rSize;
         }
 
+        // coverity[var_deref_model] - pProtectContext is assigned in a superset of the enclosing if condition entry logic
         pProtectContext->AddAttribute( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_STYLE, GetXMLToken( XML_PROTECT ) ), aProtectAttrValue );
     }
 

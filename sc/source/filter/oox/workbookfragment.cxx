@@ -328,7 +328,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
             nSheetsLeft++;
         }
 
-        // coverity[infinite_loop]
+        // coverity[loop_top] - this isn't an infinite loop where nSheetsLeft gets decremented by the above threads
         while( nSheetsLeft > 0)
         {
             // This is a much more controlled re-enterancy hazard than
@@ -438,6 +438,7 @@ void WorkbookFragment::finalizeImport()
                             case SHEETTYPE_CHARTSHEET:
                                 xFragment.set( new ChartsheetFragment( *xSheetGlob, aFragmentPath ) );
                             break;
+                            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
                             case SHEETTYPE_EMPTYSHEET:
                             case SHEETTYPE_MODULESHEET:
                                 break;

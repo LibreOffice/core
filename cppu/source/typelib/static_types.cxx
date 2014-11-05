@@ -445,7 +445,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference * pBaseType )
     SAL_THROW_EXTERN_C()
 {
-    // coverity[array_vs_singleton]
+    // coverity[callee_ptr_arith]
     typelib_static_mi_interface_type_init(
         ppRef, pTypeName, pBaseType == 0 ? 0 : 1, &pBaseType);
 }

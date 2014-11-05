@@ -465,6 +465,7 @@ namespace basegfx
 
         if(!fTools::equalZero(fShearY))
         {
+            // coverity[copy_paste_error] - this is correct getZ, not getY
             rShear.setY(rShear.getY() / rScale.getZ());
         }
 
@@ -472,6 +473,7 @@ namespace basegfx
 
         if(!fTools::equalZero(fShearZ))
         {
+            // coverity[original] - this is not an original copy-and-paste source for ^^^
             rShear.setZ(rShear.getZ() / rScale.getZ());
         }
 

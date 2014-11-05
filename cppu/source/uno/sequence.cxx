@@ -268,7 +268,10 @@ static inline bool idefaultConstructElements(
     case typelib_TypeClass_SEQUENCE:
     {
         if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(uno_Sequence *), nAlloc );
+        {
+            // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
+            pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
+        }
         if (pSeq != 0)
         {
             uno_Sequence ** pElements =
@@ -431,8 +434,8 @@ static inline bool icopyConstructFromElements(
             rtl_uString ** pDestElements = (rtl_uString **) pSeq->elements;
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
-                // https://communities.coverity.com/thread/2993
-                /* coverity[overrun-buffer-arg] */
+                // This code tends to trigger coverity's overrun-buffer-arg warning
+                // coverity[index_parm_via_loop_bound] - https://communities.coverity.com/thread/2993
                 ::rtl_uString_acquire(
                     ((rtl_uString **)pSourceElements)[nPos] );
                 pDestElements[nPos] = ((rtl_uString **)pSourceElements)[nPos];
@@ -534,7 +537,10 @@ static inline bool icopyConstructFromElements(
     case typelib_TypeClass_SEQUENCE: // sequence of sequence
     {
         if (nAlloc >= 0)
-            pSeq = reallocSeq( pSeq, sizeof(uno_Sequence *), nAlloc );
+        {
+            // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
+            pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
+        }
         if (pSeq != 0)
         {
             typelib_TypeDescription * pElementTypeDescr = 0;

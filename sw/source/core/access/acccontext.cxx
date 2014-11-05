@@ -243,6 +243,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                                     GetMap() );
                             }
                             break;
+                        // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
                         case Action::NONE:
                             break;
                         }

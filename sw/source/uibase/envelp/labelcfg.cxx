@@ -99,7 +99,7 @@ SwLabelConfig::SwLabelConfig() :
             res == xmlreader::XmlReader::RESULT_BEGIN
             && name.equals("manufacturer"));
         // Get the name
-        reader.nextAttribute(&nsId, &name);
+        (void)reader.nextAttribute(&nsId, &name);
         assert(
             nsId == xmlreader::XmlReader::NAMESPACE_NONE
             && name.equals("name"));

@@ -493,7 +493,7 @@ SAL_IMPLEMENT_MAIN()
 
             nIndex = 0;
             OUString aUnoUrlToken( aUnoUrl.getToken( 1, ';', nIndex ) );
-            // coverity[infinite_loop]
+            // coverity[loop_top] - not really an infinite loop, we can be instructed to exit via the connection
             for (;;)
             {
                 // accepting

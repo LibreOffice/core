@@ -4372,7 +4372,7 @@ RTLFUNC(StrConv)
             {
                 ++index;
             }
-            // coverity[array_vs_singleton]
+            // coverity[callee_ptr_arith]
             pArray->Put( pNew, &index );
         }
 

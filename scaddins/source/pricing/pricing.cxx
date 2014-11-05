@@ -438,7 +438,8 @@ OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
             case ScaCat_Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
             case ScaCat_Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
             case ScaCat_Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
-            default:    // to prevent compiler warnings
+            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
+            default:
                 break;
         }
     }

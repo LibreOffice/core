@@ -50,7 +50,7 @@ namespace rptxml
     {
         sal_uInt16 nRet = report::ForceNewPage::NONE;
         const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
-        SvXMLUnitConverter::convertEnum( nRet,_sValue,aXML_EnumMap );
+        (void)SvXMLUnitConverter::convertEnum( nRet,_sValue,aXML_EnumMap );
         return nRet;
     }
 

@@ -421,8 +421,6 @@ namespace drawinglayer
 
                     switch(eStyle)
                     {
-                        case drawing::FillStyle_NONE : // for warnings
-                        case drawing::FillStyle_SOLID :
                         default:
                         {
                             // nothing to do, color is defined

@@ -104,7 +104,7 @@ void TimerTest::testDurations()
     {
         bool bDone = false;
         TimerBool aTimer( aDurations[i], bDone );
-        // coverity[infinite_loop]
+        // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bDone
         while( !bDone )
         {
             Application::Yield();
@@ -135,7 +135,6 @@ void TimerTest::testAutoTimer()
 {
     sal_Int32 nCount = 0;
     AutoTimerCount aCount(1, nCount);
-    // coverity[infinite_loop]
     while (nCount < 100) {
         Application::Yield();
     }
@@ -163,7 +162,7 @@ void TimerTest::testRecursiveTimer()
     sal_Int32 nCount = 0;
     YieldTimer aCount(5);
     AutoTimerCount aCountUp( 3, nCount );
-    // coverity[infinite_loop]
+    // coverity[loop_top] - Application::Yield allows the timer to fire and increment nCount
     while (nCount < 20)
         Application::Yield();
 }
@@ -197,10 +196,10 @@ void TimerTest::testSlowTimerCallback()
     sal_Int32 nCount = 0;
     AutoTimerCount aHighFreq(1, nCount);
     SlowCallbackTimer aSlow(250, bBeenSlow);
-    // coverity[infinite_loop]
+    // coverity[loop_top] - Application::Yield allows the timer to fire and toggle bBeenSlow
     while (!bBeenSlow)
         Application::Yield();
-    // coverity[infinite_loop]
+    // coverity[loop_top] - Application::Yield allows the timer to fire and increment nCount
     while (nCount < 200)
         Application::Yield();
 }

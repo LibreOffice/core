@@ -1520,7 +1520,7 @@ namespace frm
             if ( m_xCursor->isLast() )
                 m_xUpdateCursor->moveToInsertRow();
             else
-                m_xCursor->next();
+                (void)m_xCursor->next();
         }
 
         return true;

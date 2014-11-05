@@ -81,7 +81,7 @@ void OfficeConnection::setUp() {
         {
             envs = &argEnv.pData;
         }
-        // coverity[array_vs_singleton]
+        // coverity[callee_ptr_arith]
         CPPUNIT_ASSERT_EQUAL(
             osl_Process_E_None,
             osl_executeProcess(

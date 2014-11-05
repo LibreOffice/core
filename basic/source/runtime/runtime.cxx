@@ -669,7 +669,7 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 {
                     SbxVariable* v = pParams->Get( j );
                     short nDimIndex = j - i;
-                    // coverity[array_vs_singleton]
+                    // coverity[callee_ptr_arith]
                     pArray->Put( v, &nDimIndex );
                 }
                 SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );

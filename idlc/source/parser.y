@@ -2154,7 +2154,7 @@ at_least_one_scoped_name :
         } else
         {
             StringList* pScopedNames = new StringList();
-            //coverity [copy_paste_error]
+            // coverity [copy_paste_error]
             pScopedNames->push_back(*$1);
             $$ = pScopedNames;
         }

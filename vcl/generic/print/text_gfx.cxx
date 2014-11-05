@@ -329,9 +329,9 @@ PrinterGfx::DrawText (
     for( int n = 0; n < nLen; n++ )
     {
         CharacterMetric aBBox;
-        // coverity[array_vs_singleton]
-        pFontMap[n]   = getCharMetric (aFont, pEffectiveStr[n], &aBBox);
-        pCharWidth[n] = getCharWidth  (mbTextVertical, pEffectiveStr[n], &aBBox);
+        // coverity[callee_ptr_arith]
+        pFontMap[n] = getCharMetric(aFont, pEffectiveStr[n], &aBBox);
+        pCharWidth[n] = getCharWidth(mbTextVertical, pEffectiveStr[n], &aBBox);
     }
 
     // setup a new delta array, use virtual resolution of 1000
@@ -644,8 +644,8 @@ PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
     for( int n = 0; n < (nTo - nFrom + 1); n++ )
     {
         CharacterMetric aBBox;
-        // coverity[array_vs_singleton]
-        getCharMetric (aFont, n + nFrom, &aBBox);
+        // coverity[callee_ptr_arith]
+        getCharMetric(aFont, n + nFrom, &aBBox);
         pWidthArray[n] = getCharWidth (mbTextVertical, n + nFrom, &aBBox);
     }
 

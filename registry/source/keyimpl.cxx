@@ -634,6 +634,7 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
         case RG_VALUETYPE_BINARY:
             memcpy(value, pBuffer, valueSize);
             break;
+        // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
         case RG_VALUETYPE_LONGLIST:
         case RG_VALUETYPE_STRINGLIST:
         case RG_VALUETYPE_UNICODELIST:

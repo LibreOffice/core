@@ -309,6 +309,7 @@ rtl_arena_hash_rescale (
                 rtl_arena_segment_type  * next = curr->m_fnext;
                 rtl_arena_segment_type ** head;
 
+                // coverity[negative_shift]
                 head = &(arena->m_hash_table[RTL_ARENA_HASH_INDEX(arena, curr->m_addr)]);
                 curr->m_fnext = (*head);
                 (*head) = curr;

@@ -598,7 +598,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
         case 3:         // 3=exact/365
             nDaysInYear = 365;
             break;
-        //coverity[dead_error_begin] - condition exists to avoid compiler warning
+        // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
         default:
             throw lang::IllegalArgumentException();
     }
@@ -928,7 +928,7 @@ bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 else
                     eS = S_End;
                 break;
-            //coverity[dead_error_begin] - condition exists to avoid compiler warning
+            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
             case S_End:
                 break;
         }

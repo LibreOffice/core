@@ -43,7 +43,7 @@ namespace rptxml
     {
         sal_uInt16 nRet = report::KeepTogether::NO;
         const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetKeepTogetherOptions();
-        SvXMLUnitConverter::convertEnum( nRet, _sValue, aXML_EnumMap );
+        (void)SvXMLUnitConverter::convertEnum( nRet, _sValue, aXML_EnumMap );
         return nRet;
     }
 
