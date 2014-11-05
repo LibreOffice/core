@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <comphelper/types.hxx>
 #include <config_features.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/supportsservice.hxx>
