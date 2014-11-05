@@ -22,7 +22,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOX_HXX
 
 #include <accessibility/extended/AccessibleBrowseBoxBase.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletableprovider.hxx>
 
