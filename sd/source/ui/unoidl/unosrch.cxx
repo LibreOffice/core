@@ -303,7 +303,8 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
     if( nFound != nSequence )
         aSeq.realloc( nFound );
 
-    return (container::XIndexAccess*)new SdUnoFindAllAccess( aSeq );
+    uno::Reference<css::container::XIndexAccess> xRet(new SdUnoFindAllAccess(aSeq));
+    return xRet;
 }
 
 uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XSearchDescriptor >& xDesc )
