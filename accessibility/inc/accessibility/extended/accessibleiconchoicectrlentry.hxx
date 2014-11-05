@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase8.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <tools/gen.hxx>
 
