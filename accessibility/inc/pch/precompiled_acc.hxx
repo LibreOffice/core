@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
