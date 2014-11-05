@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETABLISTBOXTABLE_HXX
 
 #include "AccessibleBrowseBoxTable.hxx"
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 class SvHeaderTabListBox;
