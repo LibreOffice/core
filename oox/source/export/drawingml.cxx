@@ -1088,10 +1088,12 @@ void DrawingML::WriteShapeTransformation( Reference< XShape > rXShape, sal_Int32
             aPos.X-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Width/2-facsin*sin(nRotation*F_PI18000)*aSize.Height/2;
             aPos.Y-=(1-faccos*cos(nRotation*F_PI18000))*aSize.Height/2+facsin*sin(nRotation*F_PI18000)*aSize.Width/2;
         }
-    }
-    if (!bSuppressRotation)
-    {
-        if (bFlipV) {nRotation=(nRotation+18000)%36000;}
+
+        // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
+        uno::Reference<beans::XPropertySet> xPropertySet(rXShape, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+        if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
+            xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
     }
     WriteTransformation( Rectangle( Point( aPos.X, aPos.Y ), Size( aSize.Width, aSize.Height ) ), nXmlNamespace, bFlipH, bFlipV, PPTX_EXPORT_ROTATE_CLOCKWISIFY(nRotation) );
 }
@@ -1791,7 +1793,8 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
     if( !enumeration.is() )
         return;
 
-    SdrObject* pSdrObject = GetSdrObjectFromXShape(uno::Reference<drawing::XShape>(rXIface, uno::UNO_QUERY_THROW));
+    uno::Reference<drawing::XShape> xShape(rXIface, uno::UNO_QUERY);
+    SdrObject* pSdrObject = xShape.is() ? GetSdrObjectFromXShape(xShape) : 0;
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, pSdrObject);
     if (pTxtObj && mpTextExport)
     {
