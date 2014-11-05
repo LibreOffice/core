@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <boost/unordered_map.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
