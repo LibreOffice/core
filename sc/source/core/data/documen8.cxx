@@ -757,9 +757,21 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
 
     ScMultipleReadHeader aHdr( rStream );
 
-    sal_uInt16 nCount;
+    sal_uInt16 nCount(0);
     rStream.ReadUInt16( nCount );
-    for (sal_uInt16 i=0; i<nCount; i++)
+
+    const rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
+    const size_t nMinStringSize = eCharSet == RTL_TEXTENCODING_UNICODE ? sizeof(sal_uInt32) : sizeof(sal_uInt16);
+    const size_t nMinRecordSize = 1 + nMinStringSize*3;
+    const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
+    if (nCount > nMaxRecords)
+    {
+        SAL_WARN("sc", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nCount << " claimed, truncating");
+        nCount = nMaxRecords;
+    }
+
+    for (sal_uInt16 i=0; i<nCount; ++i)
     {
         ScDdeLink* pLink = new ScDdeLink( this, rStream, aHdr );
         pMgr->InsertDDELink(pLink, pLink->GetAppl(), pLink->GetTopic(), pLink->GetItem());
