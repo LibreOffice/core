@@ -71,6 +71,7 @@
 #include <svx/fontwork.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
+#include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
@@ -259,6 +260,7 @@ void SdDLL::RegisterControllers()
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
+    svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
 
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );

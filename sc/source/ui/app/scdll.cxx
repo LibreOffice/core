@@ -35,6 +35,7 @@
 #include <comphelper/types.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/tbxcustomshapes.hxx>
+#include <svx/ParaLineSpacingPopup.hxx>
 
 #include <svtools/parhtml.hxx>
 #include <sot/formats.hxx>
@@ -184,6 +185,7 @@ void ScDLL::Init()
     SvxClipBoardControl             ::RegisterControl(SID_PASTE,                pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_UNDO,                 pMod );
     SvxUndoRedoControl              ::RegisterControl(SID_REDO,                 pMod );
+    svx::ParaLineSpacingPopup       ::RegisterControl(SID_ATTR_PARA_LINESPACE,  pMod );
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
