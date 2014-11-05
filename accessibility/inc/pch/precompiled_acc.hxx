@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <osl/mutex.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <string.h>
