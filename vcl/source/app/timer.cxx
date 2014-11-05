@@ -36,6 +36,50 @@ struct ImplTimerData
     sal_uLong       mnTimerUpdate;  // TimerCallbackProcs on stack
     bool            mbDelete;       // Was timer deleted during Update()?
     bool            mbInTimeout;    // Are we in a timeout handler?
+
+    void Invoke()
+    {
+        if (mbDelete || mbInTimeout )
+            return;
+
+        // if no AutoTimer than stop
+        if ( !mpTimer->mbAuto )
+        {
+            mbDelete = true;
+            mpTimer->mbActive = false;
+        }
+
+        // invoke it
+        mbInTimeout = true;
+        mpTimer->Timeout();
+        mbInTimeout = false;
+    }
+
+    sal_uLong GetDeadline()
+    {
+        return mnUpdateTime + mpTimer->mnTimeout;
+    }
+    static ImplTimerData *GetFirstIdle()
+    {
+        ImplSVData*     pSVData = ImplGetSVData();
+        ImplTimerData *pMostUrgent = NULL;
+
+        for ( ImplTimerData *p = pSVData->mpFirstTimerData; p; p = p->mpNext )
+        {
+            if ( !p->mpTimer || p->mbDelete || !p->mpTimer->mbIdle )
+                continue;
+            if (!pMostUrgent)
+                pMostUrgent = p;
+            else
+            {
+                // Find the highest priority one somehow.
+                if ( p->GetDeadline() < pMostUrgent->GetDeadline() )
+                    pMostUrgent = p;
+            }
+        }
+
+        return pMostUrgent;
+    }
 };
 
 void Timer::ImplDeInitTimer()
@@ -110,22 +154,12 @@ void Timer::ImplTimerCallbackProc()
              !pTimerData->mbDelete && !pTimerData->mbInTimeout )
         {
             // time has expired
-            if ( (pTimerData->mnUpdateTime+pTimerData->mpTimer->mnTimeout) <= nTime )
+            if ( pTimerData->GetDeadline() <= nTime )
             {
                 // set new update time
                 pTimerData->mnUpdateTime = nTime;
 
-                // if no AutoTimer than stop
-                if ( !pTimerData->mpTimer->mbAuto )
-                {
-                    pTimerData->mpTimer->mbActive = false;
-                    pTimerData->mbDelete = true;
-                }
-
-                // call Timeout
-                pTimerData->mbInTimeout = true;
-                pTimerData->mpTimer->Timeout();
-                pTimerData->mbInTimeout = false;
+                pTimerData->Invoke();
             }
         }
 
@@ -197,11 +231,22 @@ void Timer::ImplTimerCallbackProc()
     pSVData->mbNotAllTimerCalled = false;
 }
 
+void Timer::ProcessAllIdleHandlers()
+{
+    // process all pending Idle timers
+    while (ImplTimerData* pTimerData =
+                ImplTimerData::GetFirstIdle())
+    {
+        pTimerData->Invoke();
+    }
+}
+
 Timer::Timer():
     mpTimerData(NULL),
     mnTimeout(1),
     mbActive(false),
-    mbAuto(false)
+    mbAuto(false),
+    mbIdle(false)
 {
 }
 
@@ -210,6 +255,7 @@ Timer::Timer( const Timer& rTimer ):
     mnTimeout(rTimer.mnTimeout),
     mbActive(false),
     mbAuto(false),
+    mbIdle(false),
     maTimeoutHdl(rTimer.maTimeoutHdl)
 {
     if ( rTimer.IsActive() )
@@ -339,12 +385,14 @@ AutoTimer& AutoTimer::operator=( const AutoTimer& rTimer )
 Idle::Idle()
     : Timer()
 {
+    mbIdle = true;
     SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 }
 
 Idle::Idle( IdlePriority ePriority )
     : Timer()
 {
+    mbIdle = true;
     SetPriority( ePriority );
 }
 

@@ -35,7 +35,10 @@ protected:
     sal_uLong       mnTimeout;
     bool            mbActive;
     bool            mbAuto;
+    bool            mbIdle;
     Link            maTimeoutHdl;
+
+    friend struct ImplTimerData;
 
 public:
                     Timer();
@@ -60,6 +63,9 @@ public:
 
     static void ImplDeInitTimer();
     static void ImplTimerCallbackProc();
+
+    /// Process all pending idle tasks ahead of time in priority order.
+    static void ProcessAllIdleHandlers();
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at

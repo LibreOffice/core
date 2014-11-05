@@ -46,6 +46,7 @@ class TimerTest : public test::BootstrapFixture
 public:
     TimerTest() : BootstrapFixture(true, false) {}
 
+    void testIdle();
 #ifdef TEST_WATCHDOG
     void testWatchdog();
 #endif
@@ -55,6 +56,7 @@ public:
     void testSlowTimerCallback();
 
     CPPUNIT_TEST_SUITE(TimerTest);
+    CPPUNIT_TEST(testIdle);
 #ifdef TEST_WATCHDOG
     CPPUNIT_TEST(testWatchdog);
 #endif
@@ -76,6 +78,15 @@ void TimerTest::testWatchdog()
     osl::Thread::wait( aWait );
 }
 #endif
+
+
+void TimerTest::testIdle()
+{
+//    Add an idle handler
+//        forcible execute that lot first ... and ...
+
+// Error ...
+}
 
 // --------------------------------------------------------------------
 
