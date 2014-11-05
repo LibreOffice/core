@@ -43,19 +43,27 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
-    tools::extendApplicationEnvironment();
+    try
+    {
+        tools::extendApplicationEnvironment();
 
-    Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
-    Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
+        Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
+        Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
 
-    if( !xServiceManager.is() )
-        Application::Abort( "Failed to bootstrap" );
+        if( !xServiceManager.is() )
+            Application::Abort( "Failed to bootstrap" );
 
-    comphelper::setProcessServiceFactory( xServiceManager );
+        comphelper::setProcessServiceFactory( xServiceManager );
 
-    InitVCL();
-    ::Main();
-    DeInitVCL();
+        InitVCL();
+        ::Main();
+        DeInitVCL();
+    }
+    catch (const Exception& e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        return 1;
+    }
 
     return 0;
 }
