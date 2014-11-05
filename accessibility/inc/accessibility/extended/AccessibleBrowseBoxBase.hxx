@@ -21,7 +21,6 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXBASE_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXBASE_HXX
 
-#include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
