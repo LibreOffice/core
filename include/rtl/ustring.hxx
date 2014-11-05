@@ -2075,6 +2075,26 @@ public:
     }
 
     /**
+     * Convert an OString to an OUString, assuming that the OString is
+     * UTF-8-encoded.
+     *
+     * @param rStr
+     * an OString to convert
+     *
+     * @param convertFlags
+     * flags which control the conversion.
+     *
+     * @see rtl::OStringToOUString for more info on convertFlags.
+     *
+     * @since LibreOffice 4.4
+     */
+    static inline OUString fromUtf8(const OString& rStr,
+                                    sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS)
+    {
+        return OUString(rStr.getStr(), rStr.getLength(), RTL_TEXTENCODING_UTF8, convertFlags);
+    }
+
+    /**
       Returns the string representation of the integer argument.
 
       This function can't be used for language specific conversion.

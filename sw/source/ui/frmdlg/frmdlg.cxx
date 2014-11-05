@@ -55,7 +55,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
 
     : SfxTabDialog(pViewFrame, pParent, sResType,
         OUString("modules/swriter/ui/") +
-        OStringToOUString(sResType.toAsciiLowerCase(), RTL_TEXTENCODING_UTF8) +
+        OUString::fromUtf8(sResType.toAsciiLowerCase()) +
         (".ui"), &rCoreSet, pStr != 0)
     , m_bFormat(bFormat)
     , m_bNew(bNewFrm)
