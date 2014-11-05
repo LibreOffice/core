@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include "accessibility/extended/accessibletabbarbase.hxx"
 
-#include <vector>
 
 namespace utl {
 class AccessibleStateSetHelper;
