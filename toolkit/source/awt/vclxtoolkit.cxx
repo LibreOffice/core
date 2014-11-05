@@ -196,6 +196,8 @@ public:
     // css::awt::XToolkitExperimental
     css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDeviceUsingBuffer( sal_Int32 Width, sal_Int32 Height, sal_Int32 ScaleNumerator, sal_Int32 ScaleDenominator, sal_Int32 XOffset, sal_Int32 YOffset, sal_Int64 AddressOfMemoryBufferForSharedArrayWrapper ) throw
 (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL processEventsToIdle()
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css::awt::XToolkit
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -1882,6 +1884,13 @@ void SAL_CALL VCLXToolkit::reschedule()
 {
     SolarMutexGuard aSolarGuard;
     Application::Reschedule(true);
+}
+
+void SAL_CALL VCLXToolkit::processEventsToIdle()
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aSolarGuard;
+    Timer::ProcessAllIdleHandlers();
 }
 
 }

@@ -41,6 +41,11 @@ interface XToolkitExperimental : XToolkit2
                                                                         [in] long XOffset,
                                                                         [in] long YOffset,
                                                                         [in] hyper AddressOfMemoryBufferForSharedArrayWrapper );
+
+  /** Process all pending idle events
+   */
+  void processEventsToIdle();
+
 };
 
 }; }; }; };
