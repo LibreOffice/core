@@ -362,6 +362,15 @@ private:
         xmlFreeTextWriter(pXmlWriter);
     }
 
+    void discardDumpedLayout()
+    {
+        if (mpXmlBuffer)
+        {
+            xmlBufferFree(mpXmlBuffer);
+            mpXmlBuffer = 0;
+        }
+    }
+
     void calcLayout()
     {
         SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -610,6 +619,7 @@ protected:
         std::cout << pName << ",";
         mnStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
+        discardDumpedLayout();
         if (mustCalcLayoutOf(pName))
             calcLayout();
     }
@@ -629,6 +639,7 @@ protected:
         mxComponent = loadFromDesktop(mailMergeOutputURL + "/" + name, "com.sun.star.text.TextDocument");
         CPPUNIT_ASSERT( mxComponent.is());
         OString name2 = OUStringToOString( name, RTL_TEXTENCODING_UTF8 );
+        discardDumpedLayout();
         if (mustCalcLayoutOf(name2.getStr()))
             calcLayout();
     }
@@ -659,12 +670,7 @@ protected:
                 validate(maTempFile.GetFileName(), test::ODF);
             }
         }
-
-        if (mpXmlBuffer)
-        {
-            xmlBufferFree(mpXmlBuffer);
-            mpXmlBuffer = 0;
-        }
+        discardDumpedLayout();
         if (mustCalcLayoutOf(filename))
             calcLayout();
     }
@@ -685,11 +691,7 @@ protected:
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         std::cout << (nEndTime - mnStartTime) << std::endl;
-        if (mpXmlBuffer)
-        {
-            xmlBufferFree(mpXmlBuffer);
-            mpXmlBuffer = 0;
-        }
+        discardDumpedLayout();
     }
 
     /// Get page count.
