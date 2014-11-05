@@ -45,6 +45,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
@@ -755,7 +756,21 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException, std::exception)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
-    return impl_attachResource( _rURL, _rArguments, aGuard );
+    sal_Bool bRet(sal_False);
+    try
+    {
+        bRet = impl_attachResource( _rURL, _rArguments, aGuard );
+    }
+    catch( const RuntimeException& )
+    {
+        throw;
+    }
+    catch( const Exception& )
+    {
+        Any aError = ::cppu::getCaughtException();
+        throw WrappedTargetRuntimeException( OUString(), *this, aError );
+    }
+    return bRet;
 }
 
 bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocumentURL,
