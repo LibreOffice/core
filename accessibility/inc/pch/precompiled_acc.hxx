@@ -16,7 +16,6 @@
 
 #include <algorithm>
 #include <svtools/accessibletable.hxx>
-#include <svtools/ivctrl.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtabbx.hxx>
