@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <string.h>
 #include <svtools/accessiblefactory.hxx>
