@@ -22,45 +22,53 @@ using namespace com::sun::star;
 
 SAL_IMPLEMENT_MAIN()
 {
-    tools::extendApplicationEnvironment();
-
-    uno::Reference<uno::XComponentContext> xContext =
-        cppu::defaultBootstrap_InitialComponentContext();
-
-    uno::Reference<lang::XMultiComponentFactory> xFactory =
-        xContext->getServiceManager();
-
-    uno::Reference<lang::XMultiServiceFactory> xSFactory(xFactory,
-        uno::UNO_QUERY_THROW);
-
-    comphelper::setProcessServiceFactory(xSFactory);
-
-    InitVCL();
-
+    try
     {
-        sal_uInt32 nCount = SvtLanguageTable::GetLanguageEntryCount();
-        for (sal_uInt32 i = 0; i < nCount; ++i)
+        tools::extendApplicationEnvironment();
+
+        uno::Reference<uno::XComponentContext> xContext =
+            cppu::defaultBootstrap_InitialComponentContext();
+
+        uno::Reference<lang::XMultiComponentFactory> xFactory =
+            xContext->getServiceManager();
+
+        uno::Reference<lang::XMultiServiceFactory> xSFactory(xFactory,
+            uno::UNO_QUERY_THROW);
+
+        comphelper::setProcessServiceFactory(xSFactory);
+
+        InitVCL();
+
         {
-            LanguageType eLang = SvtLanguageTable::GetLanguageTypeAtIndex(i);
-
-            if (eLang == LANGUAGE_DONTKNOW ||
-                eLang == LANGUAGE_NONE ||
-                eLang == LANGUAGE_HID_HUMAN_INTERFACE_DEVICE ||
-                eLang == LANGUAGE_SYSTEM)
+            sal_uInt32 nCount = SvtLanguageTable::GetLanguageEntryCount();
+            for (sal_uInt32 i = 0; i < nCount; ++i)
             {
-                continue;
+                LanguageType eLang = SvtLanguageTable::GetLanguageTypeAtIndex(i);
+
+                if (eLang == LANGUAGE_DONTKNOW ||
+                    eLang == LANGUAGE_NONE ||
+                    eLang == LANGUAGE_HID_HUMAN_INTERFACE_DEVICE ||
+                    eLang == LANGUAGE_SYSTEM)
+                {
+                    continue;
+                }
+
+                OUString sTag( LanguageTag::convertToBcp47( eLang));
+
+                std::cout << OUStringToOString(sTag, osl_getThreadTextEncoding()).getStr()
+                    << std::endl;
             }
-
-            OUString sTag( LanguageTag::convertToBcp47( eLang));
-
-            std::cout << OUStringToOString(sTag, osl_getThreadTextEncoding()).getStr()
-                << std::endl;
         }
+
+        DeInitVCL();
+
+        uno::Reference< lang::XComponent >(xContext, uno::UNO_QUERY_THROW)->dispose();
     }
-
-    DeInitVCL();
-
-    uno::Reference< lang::XComponent >(xContext, uno::UNO_QUERY_THROW)->dispose();
+    catch (const uno::Exception& e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        return 1;
+    }
 
     return 0;
 }
