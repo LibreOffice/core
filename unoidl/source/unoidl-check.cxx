@@ -203,8 +203,8 @@ void checkMap( rtl::Reference<unoidl::Provider> const & providerB, OUString cons
                     << std::endl;
                 std::exit(EXIT_FAILURE);
             }
-            if ((dynamic_cast<unoidl::PublishableEntity *>(entA.get())->isPublished()) &&
-                (!dynamic_cast<unoidl::PublishableEntity *>(entB.get())->isPublished()))
+            if ((dynamic_cast<unoidl::PublishableEntity&>(*entA.get()).isPublished()) &&
+                (!dynamic_cast<unoidl::PublishableEntity&>(*entB.get()).isPublished()))
             {
                 std::cerr
                     << "A published entity " << name << " is not published in B"
