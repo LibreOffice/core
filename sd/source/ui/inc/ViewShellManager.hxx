@@ -164,6 +164,10 @@ public:
     */
     SfxShell* GetTopShell (void) const;
 
+    /** Return the top-most active view shell on the internal shell stack.
+    */
+    SfxShell* GetTopViewShell (void) const;
+
     /** Use this class to safely lock updates of the view shell stack.
     */
     class UpdateLock
