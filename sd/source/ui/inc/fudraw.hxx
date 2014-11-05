@@ -80,6 +80,9 @@ protected:
     bool    bPermanent;
     bool bIsImageSelected;
 
+private:
+    void DoModifiers(const MouseEvent& rMEvt, bool bSnapModPressed);
+
 };
 
 } // end of namespace sd
