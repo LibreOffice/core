@@ -23,7 +23,6 @@
 
 
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
-#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/compbase5.hxx>
