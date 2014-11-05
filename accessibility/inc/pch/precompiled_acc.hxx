@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <string.h>
 #include <svtools/accessiblefactory.hxx>
 #include <svtools/accessibletable.hxx>
 #include <svtools/accessibletableprovider.hxx>
