@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETABLISTBOX_HXX
 
 #include "AccessibleBrowseBox.hxx"
-#include <svtools/accessibletableprovider.hxx>
 
 class SvHeaderTabListBox;
 
