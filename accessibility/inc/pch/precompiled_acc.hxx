@@ -19,7 +19,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/treelistbox.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
