@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
