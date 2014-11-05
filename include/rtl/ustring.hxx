@@ -2078,20 +2078,21 @@ public:
      * Convert an OString to an OUString, assuming that the OString is
      * UTF-8-encoded.
      *
-     * @param rStr
+     * @param rSource
      * an OString to convert
-     *
-     * @param convertFlags
-     * flags which control the conversion.
-     *
-     * @see rtl::OStringToOUString for more info on convertFlags.
      *
      * @since LibreOffice 4.4
      */
-    static inline OUString fromUtf8(const OString& rStr,
-                                    sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS)
+    static inline OUString fromUtf8(const OString& rSource)
     {
-        return OUString(rStr.getStr(), rStr.getLength(), RTL_TEXTENCODING_UTF8, convertFlags);
+        OUString aTarget;
+        bool bSuccess = rtl_convertStringToUString(&aTarget.pData,
+                                                   rSource.getStr(),
+                                                   rSource.getLength(),
+                                                   RTL_TEXTENCODING_UTF8,
+                                                   RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+        assert(bSuccess);
+        return aTarget;
     }
 
     /**
