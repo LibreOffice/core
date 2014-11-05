@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <comphelper/accessiblekeybindinghelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <comphelper/processfactory.hxx>
