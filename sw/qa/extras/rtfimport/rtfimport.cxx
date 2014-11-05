@@ -481,7 +481,69 @@ DECLARE_RTFIMPORT_TEST(testFdo85812, "fdo85812.rtf")
     // the \lang inside the group was applied to CJK not Western
     CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
-
+    // further testing indicates that Word is doing really weird stuff
+    // \loch \hich \dbch is reset by opening a group
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(2), 1, "CharGroup"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("ru"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("RU"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(2), 2, "AfterChar"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(3), 2, "AfterBookmark"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(4), 1, "CharGroup"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("ru"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("RU"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(4), 1, "CharGroup"), "CharLocaleComplex");
+    CPPUNIT_ASSERT_EQUAL(OUString("ar"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("DZ"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(4), 2, "AfterChar"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(4), 2, "AfterChar"), "CharLocaleComplex");
+    CPPUNIT_ASSERT_EQUAL(OUString("ar"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("DZ"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(5), 2, "AfterBookmark"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(5), 2, "AfterBookmark"), "CharLocaleComplex");
+    CPPUNIT_ASSERT_EQUAL(OUString("ar"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("DZ"), locale.Country);
+    // \ltrch \rtlch works differently - it is sticky across groups
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(6), 1, "CharGroup"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(6), 1, "CharGroup"), "CharLocaleComplex");
+    CPPUNIT_ASSERT_EQUAL(OUString("ar"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("DZ"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(6), 2, "AfterChar"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(6), 2, "AfterChar"), "CharLocaleComplex");
+    CPPUNIT_ASSERT_EQUAL(OUString("ar"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("EG"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(7), 2, "AfterBookmark"), "CharLocale");
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), locale.Country);
+    locale = getProperty<lang::Locale>(
+                getRun(getParagraph(7), 2, "AfterBookmark"), "CharLocaleComplex");
+    CPPUNIT_ASSERT_EQUAL(OUString("ar"), locale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("EG"), locale.Country);
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo47764, "fdo47764.rtf")
