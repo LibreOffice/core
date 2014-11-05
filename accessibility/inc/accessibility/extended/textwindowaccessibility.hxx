@@ -37,7 +37,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <rtl/ref.hxx>
 
 #include <svtools/svtools.hrc>
 #include <vcl/svapp.hxx>
