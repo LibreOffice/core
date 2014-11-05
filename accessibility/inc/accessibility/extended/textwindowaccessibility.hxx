@@ -22,7 +22,6 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <svl/lstner.hxx>
-#include <vcl/textdata.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/txtattr.hxx>
