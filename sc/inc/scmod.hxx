@@ -81,8 +81,8 @@ class ScAnyRefModalDlg;
 
 class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
 {
-    Timer               aIdleTimer;
-    Timer               aSpellTimer;
+    Idle                aIdle;
+    Idle                aSpellIdle;
     ScDragData*         mpDragData;
     ScClipData*         mpClipData;
     ScSelectionTransferObj* pSelTransfer;

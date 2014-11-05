@@ -414,7 +414,7 @@ ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
     pDoc( pDocP )
 {
-    aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
+    aIdle.SetIdleHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
 }
 
 ScChartListenerCollection::ScChartListenerCollection(
@@ -422,12 +422,12 @@ ScChartListenerCollection::ScChartListenerCollection(
     meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
     pDoc( rColl.pDoc )
 {
-    aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
+    aIdle.SetIdleHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
 }
 
 ScChartListenerCollection::~ScChartListenerCollection()
 {
-    //  remove ChartListener objects before aTimer dtor is called, because
+    //  remove ChartListener objects before aIdle dtor is called, because
     //  ScChartListener::EndListeningTo may cause ScChartListenerCollection::StartTimer
     //  to be called if an empty ScNoteCell is deleted
 
@@ -589,15 +589,15 @@ void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartData
 
 void ScChartListenerCollection::StartTimer()
 {
-    aTimer.SetTimeout( SC_CHARTTIMEOUT );
-    aTimer.Start();
+    aIdle.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
+    aIdle.Start();
 }
 
 IMPL_LINK_NOARG(ScChartListenerCollection, TimerHdl)
 {
     if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
     {
-        aTimer.Start();
+        aIdle.Start();
         return 0;
     }
     UpdateDirtyCharts();
@@ -618,10 +618,7 @@ void ScChartListenerCollection::UpdateDirtyCharts()
         if (p->IsDirty())
             p->Update();
 
-        if (meModifiedDuringUpdate == SC_CLCUPDATE_MODIFIED)
-            break;      // iterator is invalid
-
-        if (aTimer.IsActive() && !pDoc->IsImportingXML())
+        if (aIdle.IsActive() && !pDoc->IsImportingXML())
             break;                      // one interfered
     }
     meModifiedDuringUpdate = SC_CLCUPDATE_NONE;

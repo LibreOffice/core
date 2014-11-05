@@ -112,14 +112,7 @@
 #include "formulagroup.hxx"
 #include <documentlinkmgr.hxx>
 
-#define SC_IDLE_MIN     150
-#define SC_IDLE_MAX     3000
-#define SC_IDLE_STEP    75
-#define SC_IDLE_COUNT   50
-
-static sal_uInt16 nIdleCount = 0;
-
-SFX_IMPL_INTERFACE(ScModule, SfxShell)
+SFX_IMPL_INTERFACE(ScModule, SfxShell, ScResId(RID_APPTITLE))
 
 void ScModule::InitInterface_Impl()
 {
@@ -174,11 +167,11 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
                                         ERRCODE_AREA_APP2-1,
                                         GetResMgr() );
 
-    aSpellTimer.SetTimeout(10);
-    aSpellTimer.SetTimeoutHdl( LINK( this, ScModule, SpellTimerHdl ) );
-    aIdleTimer.SetTimeout(SC_IDLE_MIN);
-    aIdleTimer.SetTimeoutHdl( LINK( this, ScModule, IdleHandler ) );
-    aIdleTimer.Start();
+    aSpellIdle.SetPriority(VCL_IDLE_PRIORITY_REPAINT);
+    aSpellIdle.SetIdleHdl( LINK( this, ScModule, SpellTimerHdl ) );
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
+    aIdle.SetIdleHdl( LINK( this, ScModule, IdleHandler ) );
+    aIdle.Start();
 
     pMessagePool = new ScMessagePool;
     pMessagePool->FreezeIdRanges();
@@ -1851,11 +1844,7 @@ void ScModule::EndReference()
  */
 void ScModule::AnythingChanged()
 {
-    sal_uLong nOldTime = aIdleTimer.GetTimeout();
-    if ( nOldTime != SC_IDLE_MIN )
-        aIdleTimer.SetTimeout( SC_IDLE_MIN );
-
-    nIdleCount = 0;
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
 }
 
 static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
@@ -1875,7 +1864,7 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
 {
     if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
     {
-        aIdleTimer.Start(); // Timeout unchanged
+        aIdle.Start(); // Timeout unchanged
         return 0;
     }
 
@@ -1910,35 +1899,15 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
             bool bSpell = pViewSh->ContinueOnlineSpelling();
             if (bSpell)
             {
-                aSpellTimer.Start();
+                aSpellIdle.Start();
                 bMore = true;
             }
         }
     }
 
-    sal_uLong nOldTime = aIdleTimer.GetTimeout();
-    sal_uLong nNewTime = nOldTime;
-    if ( bMore )
-    {
-        nNewTime = SC_IDLE_MIN;
-        nIdleCount = 0;
-    }
-    else
-    {
-        // Set SC_IDLE_COUNT to initial Timeout - increase afterwards
-        if ( nIdleCount < SC_IDLE_COUNT )
-            ++nIdleCount;
-        else
-        {
-            nNewTime += SC_IDLE_STEP;
-            if ( nNewTime > SC_IDLE_MAX )
-                nNewTime = SC_IDLE_MAX;
-        }
-    }
-    if ( nNewTime != nOldTime )
-        aIdleTimer.SetTimeout( nNewTime );
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 
-    aIdleTimer.Start();
+    aIdle.Start();
     return 0;
 }
 
@@ -1946,7 +1915,7 @@ IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
 {
     if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
     {
-        aSpellTimer.Start();
+        aSpellIdle.Start();
         return 0; // Later again ...
     }
 
@@ -1954,7 +1923,7 @@ IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
     if (pViewSh)
     {
         if (pViewSh->ContinueOnlineSpelling())
-            aSpellTimer.Start();
+            aSpellIdle.Start();
     }
     return 0;
 }

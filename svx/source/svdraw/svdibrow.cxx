@@ -1074,7 +1074,7 @@ SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     pView(&rView),
     bDirty(false)
 {
-    aIdleTimer.SetTimeoutHdl(LINK(this,SdrItemBrowser,IdleHdl));
+    aIdle.SetIdleHdl(LINK(this,SdrItemBrowser,IdleHdl));
     GetBrowserControl().SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
     GetBrowserControl().SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
     SetDirty();
@@ -1107,14 +1107,14 @@ void SdrItemBrowser::SetDirty()
 {
     if (!bDirty) {
         bDirty = true;
-        aIdleTimer.SetPriority(VCL_IDLE_PRIORITY_HIGH);
-        aIdleTimer.Start();
+        aIdle.SetPriority(VCL_IDLE_PRIORITY_HIGH);
+        aIdle.Start();
     }
 }
 
 void SdrItemBrowser::Undirty()
 {
-    aIdleTimer.Stop();
+    aIdle.Stop();
     bDirty = false;
 
     SfxItemSet aSet(pView->GetModel()->GetItemPool());

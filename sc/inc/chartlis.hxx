@@ -150,7 +150,7 @@ private:
     ::std::list<RangeListenerItem> maHiddenListeners;
     StringSetType maNonOleObjectNames;
 
-    Timer           aTimer;
+    Idle            aIdle;
     ScDocument*     pDoc;
 
                     DECL_LINK(TimerHdl, void *);
