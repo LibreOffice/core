@@ -784,7 +784,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  ) throw(
     {
         ODatabaseMetaDataResultSet::ORow aRow(2);
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[1] = new ORowSetValueDecorator(aTable);
+        aRow[1] = new ORowSetValueDecorator(OUString(aTable));
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
@@ -999,7 +999,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
         aRow[1] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[2] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[3] = new ORowSetValueDecorator(xRecords->getName());
-        aRow[4] = new ORowSetValueDecorator(aTable);
+        aRow[4] = new ORowSetValueDecorator(OUString(aTable));
         aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRows.push_back(aRow);
 
