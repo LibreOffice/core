@@ -24,7 +24,6 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <tools/link.hxx>
 
-#include <vector>
 
 class Menu;
 class VclSimpleEvent;
