@@ -2091,6 +2091,7 @@ public:
                                                    rSource.getLength(),
                                                    RTL_TEXTENCODING_UTF8,
                                                    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR|RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+        (void) bSuccess;
         assert(bSuccess);
         return aTarget;
     }
