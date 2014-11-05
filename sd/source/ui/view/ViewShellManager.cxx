@@ -877,7 +877,8 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
     CreateShells();
 
     // Update the pointer to the top-most active view shell.
-    mpTopViewShell = maActiveViewShells.begin()->mpShell;
+    mpTopViewShell = (maActiveViewShells.empty())
+        ? 0 : maActiveViewShells.begin()->mpShell;
 
 
     // 2. Create the internal target stack.
