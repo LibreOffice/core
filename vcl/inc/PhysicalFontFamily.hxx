@@ -25,7 +25,6 @@
 #include <unotools/fontcfg.hxx>
 
 #include "PhysicalFontFace.hxx"
-#include "PhysicalFontFamily.hxx"
 
 class PhysicalFontFace;
 class PhysicalFontCollection;
