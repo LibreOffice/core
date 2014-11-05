@@ -36,7 +36,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase7.hxx>
-#include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <rtl/ref.hxx>
 
