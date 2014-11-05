@@ -22,7 +22,6 @@
 
 #include <accessibility/helper/IComboListBoxHelper.hxx>
 #include <vcl/combobox.hxx>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 
 // globals
