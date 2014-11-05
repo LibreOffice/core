@@ -22,7 +22,6 @@
 
 #include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <cppuhelper/implbase3.hxx>
 
 
 typedef ::cppu::ImplHelper3<
