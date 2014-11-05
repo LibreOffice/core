@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/Point.hpp>
