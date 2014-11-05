@@ -1895,10 +1895,18 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     }
     ppDeleteTab.reset();
 
-    sal_uInt16 nMod;
+    sal_uInt16 nMod(0);
     pModules->Clear();
     r.ReadUInt16( nMod );
-    for( sal_uInt16 i = 0; i < nMod; i++ )
+    const size_t nMinSbxSize(14);
+    const size_t nMaxPossibleEntries = r.remainingSize() / nMinSbxSize;
+    if (nMod > nMaxPossibleEntries)
+    {
+        nMod = nMaxPossibleEntries;
+        SAL_WARN("basic", "Parsing error: " << nMaxPossibleEntries <<
+                 " max possible entries, but " << nMod << " claimed, truncating");
+    }
+    for (sal_uInt16 i = 0; i < nMod; ++i)
     {
         SbxBase* pBase = SbxBase::Load( r );
         SbModule* pMod = dynamic_cast<SbModule*>(pBase);
