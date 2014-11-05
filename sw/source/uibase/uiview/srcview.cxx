@@ -721,9 +721,9 @@ sal_Int32 SwSrcView::PrintSource(
     aPaperSz.Height() -= (TMARGPRN + BMARGPRN);
 
     // nLinepPage is not true, if lines have to be wrapped...
-    const long nLinespPage = aPaperSz.Height() / nLineHeight;
-    const sal_Int32 nCharspLine =
-        static_cast<sal_Int32>(aPaperSz.Width() / pOutDev->GetTextWidth("X"));
+    const long nLinespPage = nLineHeight ? aPaperSz.Height() / nLineHeight : 1;
+    const long nCharWidth = pOutDev->GetTextWidth("X");
+    const sal_Int32 nCharspLine = nCharWidth ? static_cast<sal_Int32>(aPaperSz.Width() / nCharWidth) : 1;
     const sal_uLong nParas = pTextEngine->GetParagraphCount();
 
     const sal_Int32 nPages = static_cast<sal_Int32>(nParas / nLinespPage + 1 );
