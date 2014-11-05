@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLELISTBOX_HXX
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <vcl/vclevent.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 #include <map>
