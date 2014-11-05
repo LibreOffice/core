@@ -1152,7 +1152,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequen
     bool bImplicitInitialization = !impl_isInitialized();
     // implicit initialization while another initialization is just running is not possible
     if ( bImplicitInitialization && impl_isInitializing() )
-        throw DoubleInitializationException();
+        throw RuntimeException();
 
     if ( bImplicitInitialization )
         impl_setInitializing();
