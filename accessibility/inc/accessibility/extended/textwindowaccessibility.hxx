@@ -39,7 +39,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 
 #include <queue>
-#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
 class TextEngine;
