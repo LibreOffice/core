@@ -296,35 +296,6 @@ protected:
     }
 
     /**
-     * Helper func used by each unit test to test the 'mail merge' code.
-     *
-     * Registers the data source, loads the original file as reference,
-     * initializes the mail merge job and its default argument sequence.
-     *
-     * The 'verify' method actually has to execute the mail merge by
-     * calling executeMailMerge() after modifying the job arguments.
-     */
-    void executeMailMergeTest(const char* filename, const char* datasource, const char* tablename = 0)
-    {
-        header();
-        preTest(filename);
-        load(mpTestDocumentPath, filename);
-
-        const OUString aPrefix( "LOMM_" );
-        utl::TempFile aTempDir(nullptr, true);
-        const OUString aWorkDir = aTempDir.GetURL();
-        const OUString aURI( getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(datasource) );
-        OUString aDBName = registerDBsource( aURI, aPrefix, aWorkDir );
-        initMailMergeJobAndArgs( filename, tablename, aDBName, aPrefix, aWorkDir );
-
-        postTest(filename);
-        verify();
-        finish();
-
-        ::utl::removeTree(aWorkDir);
-    }
-
-    /**
      * Function overloaded by unit test. See DECLARE_SW_*_TEST macros
      */
     virtual void verify()
