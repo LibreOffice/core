@@ -275,45 +275,53 @@ ReadResponseFile(std::vector<INetURLObject> & rFiles, OUString const& rInput)
 
 int GalApp::Main()
 {
-    OUString aPath, aDestDir;
-    OUString aName( "Default name" );
-    std::vector<INetURLObject> aFiles;
-
-    for( sal_uInt32 i = 0; i < GetCommandLineParamCount(); i++ )
+    try
     {
-        OUString aParam = GetCommandLineParam( i );
+        OUString aPath, aDestDir;
+        OUString aName( "Default name" );
+        std::vector<INetURLObject> aFiles;
 
-        if ( aParam.startsWith( "-env:" ) )
-            continue;
-        else if ( aParam == "--help" || aParam == "-h"  )
-            return PrintHelp();
-        else if ( aParam == "--build-tree" )
+        for( sal_uInt32 i = 0; i < GetCommandLineParamCount(); i++ )
         {
-            mbRelativeURLs = true;
-            mbInBuildTree = true;
+            OUString aParam = GetCommandLineParam( i );
+
+            if ( aParam.startsWith( "-env:" ) )
+                continue;
+            else if ( aParam == "--help" || aParam == "-h"  )
+                return PrintHelp();
+            else if ( aParam == "--build-tree" )
+            {
+                mbRelativeURLs = true;
+                mbInBuildTree = true;
+            }
+            else if ( aParam == "--name" )
+                aName = GetCommandLineParam( ++i );
+            else if ( aParam == "--path" )
+                aPath = Smartify( GetCommandLineParam( ++i ) ).
+                    GetMainURL(INetURLObject::NO_DECODE);
+            else if ( aParam == "--destdir" )
+                aDestDir = GetCommandLineParam( ++i );
+            else if ( aParam == "--relative-urls" )
+                mbRelativeURLs = true;
+            else if ( aParam == "--number-from" )
+                fprintf ( stderr, "--number-from is deprecated, themes now "
+                          "have filenames based on their names\n" );
+            else if ( aParam == "--filenames" )
+                ReadResponseFile(aFiles, GetCommandLineParam(++i));
+            else
+                aFiles.push_back( Smartify( aParam ) );
         }
-        else if ( aParam == "--name" )
-            aName = GetCommandLineParam( ++i );
-        else if ( aParam == "--path" )
-            aPath = Smartify( GetCommandLineParam( ++i ) ).
-                GetMainURL(INetURLObject::NO_DECODE);
-        else if ( aParam == "--destdir" )
-            aDestDir = GetCommandLineParam( ++i );
-        else if ( aParam == "--relative-urls" )
-            mbRelativeURLs = true;
-        else if ( aParam == "--number-from" )
-            fprintf ( stderr, "--number-from is deprecated, themes now "
-                      "have filenames based on their names\n" );
-        else if ( aParam == "--filenames" )
-            ReadResponseFile(aFiles, GetCommandLineParam(++i));
-        else
-            aFiles.push_back( Smartify( aParam ) );
+
+        if( aFiles.empty() )
+            return PrintHelp();
+
+        createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );
     }
-
-    if( aFiles.empty() )
-        return PrintHelp();
-
-    createTheme( aName, aPath, aDestDir, aFiles, mbRelativeURLs );
+    catch (const uno::Exception& e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
