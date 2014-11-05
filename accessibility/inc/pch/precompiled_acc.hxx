@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
