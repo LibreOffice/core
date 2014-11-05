@@ -22,7 +22,6 @@
 
 #include <accessibility/standard/vclxaccessiblebox.hxx>
 
-#include <cppuhelper/weakref.hxx>
 
 
 /** The accessible drop down combobox has two children.  The first is the
