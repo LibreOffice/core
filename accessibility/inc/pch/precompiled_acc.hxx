@@ -19,7 +19,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/treelistbox.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
