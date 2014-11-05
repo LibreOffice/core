@@ -36,7 +36,6 @@ Related modules
 
 - writerfilter
   - import of .docx, uses also oox for the graphics etc.
-  - can also parse .doc; but used for ooxml only for now
 
 - filter
   - the configuration stuff (so that the filters appear in the filepicker)
@@ -176,6 +175,10 @@ Old binary filters (export)
        from /local/ooxml/inst/openoffice.org3.0/program/../basis-link/program/libsdlx.so
     #4  0x00002aec23119b58 in SfxObjectShell::DoLoad ()
        from /local/ooxml/inst/openoffice.org3.0/program/../basis-link/program//libsfxlx.so
+
+- pptx export
+  - sd/source/filter/eppt/pptx-epptooxml.cxx,
+    oox::core::PowerPointExport::exportDocument()
 
 - odp export
     #0  ZipPackage (this=0x1805e80, xNewFactory=@0x7fffe284e990) at /home/rodo/git/ooxml/package/source/zippackage/ZipPackage.cxx:279
