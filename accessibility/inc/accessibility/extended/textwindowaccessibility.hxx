@@ -30,7 +30,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
