@@ -19,7 +19,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/treelistbox.hxx>
-#include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/multisel.hxx>
 #include <tools/simplerm.hxx>
