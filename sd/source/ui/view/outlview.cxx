@@ -64,6 +64,7 @@
 #include "strings.hrc"
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
+#include "ViewShellManager.hxx"
 #include "undo/undoobjects.hxx"
 #include "undo/undomanager.hxx"
 #include "stlsheet.hxx"
@@ -205,7 +206,15 @@ OutlineView::~OutlineView()
 
 void OutlineView::ConnectToApplication (void)
 {
-    mrOutlineViewShell.GetActiveWindow()->GrabFocus();
+    // When the mode is switched to outline the main view shell grabs focus.
+    // This is done for getting cut/copy/paste commands on slides in the left
+    // pane (slide sorter view shell) to work properly.
+    SfxShell* pTopViewShell = mrOutlineViewShell.GetViewShellBase().GetViewShellManager()->GetTopViewShell();
+    if (pTopViewShell && pTopViewShell == &mrOutlineViewShell)
+    {
+        mrOutlineViewShell.GetActiveWindow()->GrabFocus();
+    }
+
     Application::AddEventListener(LINK(this, OutlineView, AppEventListenerHdl));
 }
 

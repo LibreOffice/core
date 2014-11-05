@@ -126,6 +126,7 @@ public:
     void MoveToTop (const SfxShell& rParentShell);
     SfxShell* GetShell (ShellId nId) const;
     SfxShell* GetTopShell (void) const;
+    SfxShell* GetTopViewShell (void) const;
     void Shutdown (void);
     void InvalidateAllSubShells (const SfxShell* pParentShell);
 
@@ -203,6 +204,8 @@ private:
     bool mbFormShellAboveParent;
 
     SfxShell* mpTopShell;
+    SfxShell* mpTopViewShell;
+
 
     void UpdateShellStack (void);
 
@@ -384,8 +387,13 @@ SfxShell* ViewShellManager::GetTopShell (void) const
         return NULL;
 }
 
-
-
+SfxShell* ViewShellManager::GetTopViewShell (void) const
+{
+    if (mbValid)
+        return mpImpl->GetTopViewShell();
+    else
+        return NULL;
+}
 
 void ViewShellManager::Shutdown (void)
 {
@@ -429,7 +437,8 @@ ViewShellManager::Implementation::Implementation (
       mpFormShell(NULL),
       mpFormShellParent(NULL),
       mbFormShellAboveParent(true),
-      mpTopShell(NULL)
+      mpTopShell(NULL),
+      mpTopViewShell(NULL)
 {
     (void)rManager;
 }
@@ -813,8 +822,10 @@ SfxShell* ViewShellManager::Implementation::GetTopShell (void) const
     return mpTopShell;
 }
 
-
-
+SfxShell* ViewShellManager::Implementation::GetTopViewShell (void) const
+{
+    return mpTopViewShell;
+}
 
 void ViewShellManager::Implementation::LockUpdate (void)
 {
@@ -864,6 +875,9 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
     // 1. Create the missing shells.
     CreateShells();
+
+    // Update the pointer to the top-most active view shell.
+    mpTopViewShell = maActiveViewShells.begin()->mpShell;
 
 
     // 2. Create the internal target stack.
