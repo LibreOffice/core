@@ -324,7 +324,7 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
     ResetPostEvent();
     maLoseFocusTimer.Stop();
 
-    // We need this query, because the edit get a losefous event,
+    // We need this query, because the edit gets a losefocus event,
     // when it shows the context menu or the insert symbol dialog
     if ( !HasFocus() && HasChildPathFocus( true ) )
     {
@@ -345,7 +345,7 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
     if ( HasFocus() )
         return 0;
 
-    // We need this query, because the edit get a losefous event,
+    // We need this query, because the edit gets a losefocus event,
     // when it shows the context menu or the insert symbol dialog
     if ( HasChildPathFocus( true ) )
         maLoseFocusTimer.Start();
