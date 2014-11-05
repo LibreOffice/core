@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLEDROPDOWNLISTBOX_HXX
 
 #include <accessibility/standard/vclxaccessiblebox.hxx>
-#include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
