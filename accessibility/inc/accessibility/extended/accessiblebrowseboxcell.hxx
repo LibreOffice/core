@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXCELL_HXX
 
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
-#include <svtools/AccessibleBrowseBoxObjType.hxx>
 
 
 namespace accessibility
