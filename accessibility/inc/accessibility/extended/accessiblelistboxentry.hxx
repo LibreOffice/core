@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <cppuhelper/compbase9.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <svtools/treelistentry.hxx>
 #include <tools/gen.hxx>
