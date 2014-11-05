@@ -1288,17 +1288,25 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         pC->GetParaAttribs().Load( rIStream );
 
         // The number of attributes ...
-        sal_uInt16 nTmp16;
+        sal_uInt16 nTmp16(0);
         rIStream.ReadUInt16( nTmp16 );
         size_t nAttribs = nTmp16;
+
+        const size_t nMinRecordSize(10);
+        const size_t nMaxRecords = rIStream.remainingSize() / nMinRecordSize;
+        if (nAttribs > nMaxRecords)
+        {
+            SAL_WARN("editeng", "Parsing error: " << nMaxRecords <<
+                     " max possible entries, but " << nAttribs << " claimed, truncating");
+            nAttribs = nMaxRecords;
+        }
 
         // And the individual attributes
         // Items as Surregate => always 8 bytes per Attributes
         // Which = 2; Surregat = 2; Start = 2; End = 2;
-        size_t nAttr;
-        for (nAttr = 0; nAttr < nAttribs; ++nAttr)
+        for (size_t nAttr = 0; nAttr < nAttribs; ++nAttr)
         {
-            sal_uInt16 _nWhich, nStart, nEnd;
+            sal_uInt16 _nWhich(0), nStart(0), nEnd(0);
             const SfxPoolItem* pItem;
 
             rIStream.ReadUInt16( _nWhich );
@@ -1345,7 +1353,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             }
         }
 
-        for (nAttr = pC->aAttribs.size(); nAttr; )
+        for (size_t nAttr = pC->aAttribs.size(); nAttr; )
         {
             const XEditAttribute& rAttr = pC->aAttribs[--nAttr];
             if ( rAttr.GetItem()->Which() == EE_CHAR_FONTINFO )
