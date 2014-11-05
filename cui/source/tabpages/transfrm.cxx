@@ -1194,10 +1194,10 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
     }
 
     const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit ) - 1L));
-    fLeft = (fLeft > fMaxLong) ? fMaxLong : (fLeft < -fMaxLong) ? -fMaxLong : fLeft;
-    fRight = (fRight > fMaxLong) ? fMaxLong : (fRight < -fMaxLong) ? -fMaxLong : fRight;
-    fTop = (fTop > fMaxLong) ? fMaxLong : (fTop < -fMaxLong) ? -fMaxLong : fTop;
-    fBottom = (fBottom > fMaxLong) ? fMaxLong : (fBottom < -fMaxLong) ? -fMaxLong : fBottom;
+    fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
+    fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
+    fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);
+    fBottom = basegfx::clamp(fBottom, -fMaxLong, fMaxLong);
 
     // #i75273# normalizing when setting the min/max values was wrong, removed
     m_pMtrPosX->SetMin(basegfx::fround64(fLeft));
