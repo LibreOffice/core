@@ -38,6 +38,7 @@ public:
     AsynchronousCall (const Action& rAction);
     ~AsynchronousCall (void);
 
+    void RequestCall (const Action& rAction);
     void RequestCall (void);
     void CancelRequest (void);
 

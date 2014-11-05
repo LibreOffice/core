@@ -122,6 +122,9 @@ public:
     const static sal_Int32 SwitchFlag_ForceNewDeck = 0x02;
     const static sal_Int32 SwitchFlag_ForceNewPanels = 0x02;
 
+
+    void RequestSwitchToDeck (
+        const ::rtl::OUString& rsDeckId);
     void OpenThenSwitchToDeck (
         const ::rtl::OUString& rsDeckId);
 
@@ -132,6 +135,10 @@ public:
     /** Open the deck area and restore the parent window to its old width.
     */
     void RequestOpenDeck (void);
+
+    /** Returns true when the given deck is the currently visible deck
+     */
+    bool IsDeckVisible (const ::rtl::OUString& rsDeckId);
 
     FocusManager& GetFocusManager (void) { return maFocusManager;}
 

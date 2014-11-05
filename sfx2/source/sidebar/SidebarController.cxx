@@ -504,14 +504,27 @@ void SidebarController::UpdateConfigurations (void)
 }
 
 
-
+void SidebarController::RequestSwitchToDeck (
+    const ::rtl::OUString& rsDeckId)
+{
+    maContextChangeUpdate.CancelRequest();
+    maAsynchronousDeckSwitch.RequestCall(
+        ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, rsDeckId));
+}
 
 void SidebarController::OpenThenSwitchToDeck (
     const ::rtl::OUString& rsDeckId)
 {
+    // fdo#67627 Clicking a second time on a Deck icon will close the Deck
+    if (IsDeckVisible(rsDeckId))
+    {
+        RequestCloseDeck();
+        return;
+    }
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
     mpTabBar->Invalidate();
+    mpTabBar->HighlightDeck(rsDeckId);
 }
 
 void SidebarController::SwitchToDeck (
@@ -996,7 +1009,10 @@ void SidebarController::RequestOpenDeck (void)
     UpdateDeckOpenState();
 }
 
-
+bool SidebarController::IsDeckVisible(const OUString& rsDeckId)
+{
+    return mbIsDeckOpen && mbIsDeckOpen.get() && msCurrentDeckId == rsDeckId;
+}
 
 
 void SidebarController::UpdateDeckOpenState (void)

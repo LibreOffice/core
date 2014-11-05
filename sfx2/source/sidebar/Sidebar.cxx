@@ -40,9 +40,10 @@ void Sidebar::ShowPanel (
 
         // All that is not necessary for the current use cases so lets
         // keep it simple for the time being.
-        pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
+        pController->RequestSwitchToDeck(pPanelDescriptor->msDeckId);
     }
 }
+
 
 } } // end of namespace sfx2::sidebar
 

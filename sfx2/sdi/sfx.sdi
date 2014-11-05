@@ -1343,7 +1343,7 @@ SfxUInt16Item DeleteStyle SID_STYLE_DELETE
 ]
 
 
-SfxBoolItem DesignerDialog SID_STYLE_DESIGNER
+SfxVoidItem DesignerDialog SID_STYLE_DESIGNER
 
 [
     /* flags: */
