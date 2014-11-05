@@ -22,7 +22,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase6.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 
 // forward ---------------------------------------------------------------
