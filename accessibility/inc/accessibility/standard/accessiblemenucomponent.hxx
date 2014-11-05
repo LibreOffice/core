@@ -22,7 +22,6 @@
 
 #include <accessibility/standard/accessiblemenubasecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <cppuhelper/implbase1.hxx>
 
 
 
