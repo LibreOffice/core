@@ -573,14 +573,19 @@ bool OpenGLContext::ImplInit()
         if (!pFBC)
             return false;
 
-        int nContextAttribs[] =
+        if (best_fbc != -1)
         {
-            GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-            GLX_CONTEXT_MINOR_VERSION_ARB, 2,
-            None
-        };
-        m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], 0, GL_TRUE, nContextAttribs);
-        SAL_INFO_IF(m_aGLWin.ctx, "vcl.opengl", "created a 3.2 core context");
+            int nContextAttribs[] =
+            {
+                GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+                GLX_CONTEXT_MINOR_VERSION_ARB, 2,
+                None
+            };
+            m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], 0, GL_TRUE, nContextAttribs);
+            SAL_INFO_IF(m_aGLWin.ctx, "vcl.opengl", "created a 3.2 core context");
+        }
+        else
+            SAL_WARN("vcl.opengl", "unable to find correct FBC");
 
     }
 #endif
