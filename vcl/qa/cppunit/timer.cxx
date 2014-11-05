@@ -79,13 +79,31 @@ void TimerTest::testWatchdog()
 }
 #endif
 
+// --------------------------------------------------------------------
+
+class IdleBool : public Idle
+{
+    bool &mrBool;
+public:
+    IdleBool( bool &rBool ) :
+        Idle( VCL_IDLE_PRIORITY_LOWEST ), mrBool( rBool )
+    {
+        Start();
+        mrBool = false;
+    }
+    virtual void Timeout() SAL_OVERRIDE
+    {
+        mrBool = true;
+        Application::EndYield();
+    }
+};
 
 void TimerTest::testIdle()
 {
-//    Add an idle handler
-//        forcible execute that lot first ... and ...
-
-// Error ...
+    bool bTriggered = false;
+    IdleBool aTest( bTriggered );
+    Timer::ProcessAllIdleHandlers();
+    CPPUNIT_ASSERT_MESSAGE("watchdog triggered", bTriggered);
 }
 
 // --------------------------------------------------------------------
