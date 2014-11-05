@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX
 
 #include <accessibility/standard/vclxaccessiblebox.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 
 /** The accessible combobox has two children.  The first is the text field
