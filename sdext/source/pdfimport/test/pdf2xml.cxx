@@ -39,40 +39,48 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if( argc < 4 )
         return 1;
 
-    OUString aBaseURL, aTmpURL, aSrcURL, aDstURL;
+    try
+    {
+        OUString aBaseURL, aTmpURL, aSrcURL, aDstURL;
 
-    TreeVisitorFactorySharedPtr pTreeFactory;
-    if( rtl_str_compare(argv[1], "-writer") == 0 )
-        pTreeFactory = createWriterTreeVisitorFactory();
-    else if( rtl_str_compare(argv[1], "-draw") == 0 )
-        pTreeFactory = createDrawTreeVisitorFactory();
-    else if( rtl_str_compare(argv[1], "-impress") == 0 )
-        pTreeFactory = createImpressTreeVisitorFactory();
-    else
+        TreeVisitorFactorySharedPtr pTreeFactory;
+        if( rtl_str_compare(argv[1], "-writer") == 0 )
+            pTreeFactory = createWriterTreeVisitorFactory();
+        else if( rtl_str_compare(argv[1], "-draw") == 0 )
+            pTreeFactory = createDrawTreeVisitorFactory();
+        else if( rtl_str_compare(argv[1], "-impress") == 0 )
+            pTreeFactory = createImpressTreeVisitorFactory();
+        else
+            return 1;
+
+        osl_getProcessWorkingDir(&aBaseURL.pData);
+        osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[2]).pData,
+                                      &aTmpURL.pData );
+        osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aSrcURL.pData);
+
+        osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[3]).pData,
+                                      &aTmpURL.pData );
+        osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
+
+        // bootstrap UNO
+        uno::Reference< uno::XComponentContext > xContext(
+            cppu::defaultBootstrap_InitialComponentContext() );
+        uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager());
+        uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
+        comphelper::setProcessServiceFactory(xSM);
+
+        test::BootstrapFixtureBase aEnv;
+        aEnv.setUp();
+
+        pdfi::PDFIRawAdaptor aAdaptor( aEnv.getComponentContext() );
+        aAdaptor.setTreeVisitorFactory(pTreeFactory);
+        aAdaptor.odfConvert( aSrcURL, new OutputWrap(aDstURL), NULL );
+    }
+    catch (const uno::Exception& e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
         return 1;
-
-    osl_getProcessWorkingDir(&aBaseURL.pData);
-    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[2]).pData,
-                                  &aTmpURL.pData );
-    osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aSrcURL.pData);
-
-    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[3]).pData,
-                                  &aTmpURL.pData );
-    osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
-
-    // bootstrap UNO
-    uno::Reference< uno::XComponentContext > xContext(
-        cppu::defaultBootstrap_InitialComponentContext() );
-    uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager());
-    uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
-    comphelper::setProcessServiceFactory(xSM);
-
-    test::BootstrapFixtureBase aEnv;
-    aEnv.setUp();
-
-    pdfi::PDFIRawAdaptor aAdaptor( aEnv.getComponentContext() );
-    aAdaptor.setTreeVisitorFactory(pTreeFactory);
-    aAdaptor.odfConvert( aSrcURL, new OutputWrap(aDstURL), NULL );
+    }
 
     return 0;
 }
