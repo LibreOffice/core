@@ -22,7 +22,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROLBASE_HXX
 
 #include <svtools/accessibletable.hxx>
-#include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/compbase4.hxx>
