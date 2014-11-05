@@ -80,7 +80,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_uiwriter,\
     unoxml/source/service/unoxml \
     uui/util/uui \
     $(if $(filter-out MACOSX WNT,$(OS)), \
-        vcl/vcl.unx \
+        $(if $(ENABLE_HEADLESS),, \
+            vcl/vcl.unx \
+        ) \
     ) \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 	writerfilter/util/writerfilter \
