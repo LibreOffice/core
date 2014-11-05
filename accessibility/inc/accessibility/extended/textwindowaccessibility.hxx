@@ -26,7 +26,6 @@
 #include <vcl/textview.hxx>
 #include <vcl/txtattr.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
