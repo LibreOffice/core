@@ -38,7 +38,6 @@
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 
-#include <unotools/accessiblerelationsethelper.hxx>
 #include <queue>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
