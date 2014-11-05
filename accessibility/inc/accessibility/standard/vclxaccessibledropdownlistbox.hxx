@@ -22,7 +22,6 @@
 
 #include <accessibility/standard/vclxaccessiblebox.hxx>
 
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
 
