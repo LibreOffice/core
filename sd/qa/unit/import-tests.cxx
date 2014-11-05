@@ -91,6 +91,7 @@ public:
     void testBnc480256();
     void testCreationDate();
     void testBnc584721_4();
+    void testFdo79731();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -123,6 +124,7 @@ public:
     CPPUNIT_TEST(testBnc480256);
     CPPUNIT_TEST(testCreationDate);
     CPPUNIT_TEST(testBnc584721_4);
+    CPPUNIT_TEST(testFdo79731);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1104,6 +1106,16 @@ void SdFiltersTest::testBnc584721_4()
 
     xDocShRef->DoClose();
 }
+
+void SdFiltersTest::testFdo79731()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo79731.odp"));
+    xDocShRef = saveAndReload(xDocShRef, PPTX);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    xDocShRef->DoClose();
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
 
