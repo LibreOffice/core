@@ -21,7 +21,6 @@
 
 #include <comphelper/accessibletexthelper.hxx>
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
-#include <svtools/accessibletable.hxx>
 
 namespace accessibility
 {
