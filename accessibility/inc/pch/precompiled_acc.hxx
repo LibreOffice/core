@@ -18,7 +18,6 @@
 #include <svtools/accessibletable.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
-#include <svtools/toolpanel/paneltabbar.hxx>
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
