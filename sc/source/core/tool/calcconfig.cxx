@@ -38,6 +38,10 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 20;
     maOpenCLSubsetOpCodes = {ocMin, ocMax, ocSum, ocAverage, ocSumIfs};
+    maOpenCLBlackList = {
+        "Windows/*/Intel(R) Corporation/9.17.10.2884",
+        "SuperOS/1.0/Big Corp, Inc./2.3\\/beta"
+    };
 }
 
 void ScCalcConfig::reset()
@@ -64,13 +68,29 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
            maOpenCLDevice == r.maOpenCLDevice &&
            mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
-           maOpenCLSubsetOpCodes == r.maOpenCLSubsetOpCodes;
+           maOpenCLSubsetOpCodes == r.maOpenCLSubsetOpCodes &&
+           maOpenCLWhiteList == r.maOpenCLWhiteList &&
+           maOpenCLBlackList == r.maOpenCLBlackList;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 {
     return !operator==(r);
 }
+
+namespace {
+
+void writeStringSet(std::ostream& rStream, const std::set<OUString>& rSet)
+{
+    for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
+    {
+        if (i != rSet.cbegin())
+            rStream << ",";
+        rStream << (*i).replaceAll(",", "\\,");
+    }
+}
+
+} // anonymous namespace
 
 std::ostream& SC_DLLPUBLIC operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
 {
@@ -83,7 +103,13 @@ std::ostream& SC_DLLPUBLIC operator<<(std::ostream& rStream, const ScCalcConfig&
         "OpenCLAutoSelect=" << (rConfig.mbOpenCLAutoSelect?"Y":"N") << ","
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"
         "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
-        "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "}"
+        "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "},"
+        "OpenCLWhiteList={";
+    writeStringSet(rStream, rConfig.maOpenCLWhiteList);
+    rStream << "},"
+        "OpenCLBlackList={";
+    writeStringSet(rStream, rConfig.maOpenCLBlackList);
+    rStream << "}"
         "}";
     return rStream;
 }

@@ -52,6 +52,9 @@ struct SC_DLLPUBLIC ScCalcConfig
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
     std::set<OpCodeEnum> maOpenCLSubsetOpCodes;
 
+    std::set<OUString> maOpenCLWhiteList;
+    std::set<OUString> maOpenCLBlackList;
+
     ScCalcConfig();
 
     void setOpenCLConfigToDefault();

@@ -203,7 +203,9 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_OPENCL_SUBSET_ONLY  13
 #define SCFORMULAOPT_OPENCL_MIN_SIZE     14
 #define SCFORMULAOPT_OPENCL_SUBSET_OPS   15
-#define SCFORMULAOPT_COUNT               16
+#define SCFORMULAOPT_OPENCL_WHITELIST    16
+#define SCFORMULAOPT_OPENCL_BLACKLIST    17
+#define SCFORMULAOPT_COUNT               18
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -225,6 +227,8 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Calculation/OpenCLSubsetOnly",  // SCFORMULAOPT_OPENCL_SUBSET_ONLY
         "Calculation/OpenCLMinimumDataSize",  // SCFORMULAOPT_OPENCL_MIN_SIZE
         "Calculation/OpenCLSubsetOpCodes",    // SCFORMULAOPT_OPENCL_SUBSET_OPS
+        "Calculation/OpenCLWhiteList",    // SCFORMULAOPT_OPENCL_WHITELIST
+        "Calculation/OpenCLBlackList",    // SCFORMULAOPT_OPENCL_BLACKLIST
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -254,6 +258,8 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
         SCFORMULAOPT_OPENCL_SUBSET_ONLY,
         SCFORMULAOPT_OPENCL_MIN_SIZE,
         SCFORMULAOPT_OPENCL_SUBSET_OPS,
+        SCFORMULAOPT_OPENCL_WHITELIST,
+        SCFORMULAOPT_OPENCL_BLACKLIST,
     };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
@@ -269,6 +275,35 @@ ScFormulaCfg::ScFormulaCfg() :
     UpdateFromProperties( aNames );
     EnableNotification( aNames );
 }
+
+namespace {
+
+css::uno::Sequence<OUString> StringSetToStringSequence(std::set<OUString>& rSet)
+{
+    css::uno::Sequence<OUString> result(rSet.size());
+
+    size_t n(0);
+    for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
+    {
+        result[n++] = *i;
+    }
+
+    return result;
+}
+
+std::set<OUString> StringSequenceToStringSet(css::uno::Sequence<OUString>& rSequence)
+{
+    std::set<OUString> result;
+
+    for (auto i = rSequence.begin(); i != rSequence.end(); ++i)
+    {
+        result.insert(*i);
+    }
+
+    return result;
+}
+
+} // anonymous namespace
 
 void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
 {
@@ -512,8 +547,20 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     GetCalcConfig().maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
                 }
                 break;
-                default:
-                    ;
+                case SCFORMULAOPT_OPENCL_WHITELIST:
+                {
+                    css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLWhiteList);
+                    pValues[nProp] >>= sVal;
+                    GetCalcConfig().maOpenCLWhiteList = StringSequenceToStringSet(sVal);
+                }
+                break;
+                case SCFORMULAOPT_OPENCL_BLACKLIST:
+                {
+                    css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLBlackList);
+                    pValues[nProp] >>= sVal;
+                    GetCalcConfig().maOpenCLBlackList = StringSequenceToStringSet(sVal);
+                }
+                break;
                 }
             }
         }
@@ -667,8 +714,18 @@ void ScFormulaCfg::Commit()
                 pValues[nProp] <<= sVal;
             }
             break;
-            default:
-                ;
+            case SCFORMULAOPT_OPENCL_WHITELIST:
+            {
+                css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLWhiteList);
+                pValues[nProp] <<= sVal;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_BLACKLIST:
+            {
+                css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLBlackList);
+                pValues[nProp] <<= sVal;
+            }
+            break;
         }
     }
     if(bSetOpenCL)

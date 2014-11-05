@@ -17,6 +17,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <svx/checklbx.hxx>
 #include <svtools/treelistbox.hxx>
@@ -62,6 +63,7 @@ private:
     SvTreeListEntry *createBoolItem(const OUString &rCaption, bool bValue) const;
     SvTreeListEntry *createIntegerItem(const OUString &rCaption, sal_Int32 nValue) const;
     SvTreeListEntry *createStringItem(const OUString &rCaption, const OUString& sValue) const;
+    SvTreeListEntry *createStringListItem(const OUString &rCaption) const;
     void     setValueAt(size_t nPos, const OUString &rString);
 
 private:
@@ -72,6 +74,11 @@ private:
     RadioButton* mpBtnFalse;
     NumericField* mpSpinButton;
     Edit* mpEditField;
+    VclGrid* mpListGrid;
+    ListBox* mpListBox;
+    PushButton* mpListEditButton;
+    PushButton* mpListNewButton;
+    PushButton* mpListDeleteButton;
 
     FixedText* mpFtAnnotation;
     FixedText* mpFtFrequency;
@@ -115,6 +122,27 @@ private:
 
     OUString maCaptionOpenCLSubsetOpCodes;
     OUString maDescOpenCLSubsetOpCodes;
+
+    OUString maCaptionOpenCLWhiteList;
+    OUString maDescOpenCLWhiteList;
+
+    OUString maCaptionOpenCLBlackList;
+    OUString maDescOpenCLBlackList;
+
+    OUString maCaptionOS;
+    OUString maDescOS;
+
+    OUString maCaptionOSVersion;
+    OUString maDescOSVersion;
+
+    OUString maCaptionOpenCLVendor;
+    OUString maDescOpenCLVendor;
+
+    OUString maCaptionOpenCLDevice;
+    OUString maDescOpenCLDevice;
+
+    OUString maCaptionOpenCLDriverVersion;
+    OUString maDescOpenCLDriverVersion;
 
     OUString maSoftware;
 
