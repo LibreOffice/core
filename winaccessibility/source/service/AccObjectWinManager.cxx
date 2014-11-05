@@ -548,7 +548,10 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
     size_t i = XResIdAccList.erase(accObj.GetResID());
     assert(i != 0);
     DeleteFromHwndXAcc(pXAcc);
-    if (DOCUMENT == accObj.GetRole())
+    if( accObj.GetRole() == DOCUMENT ||
+        accObj.GetRole() == DOCUMENT_PRESENTATION ||
+        accObj.GetRole() == DOCUMENT_SPREADSHEET ||
+        accObj.GetRole() == DOCUMENT_TEXT )
     {
         XHWNDDocList.erase(accObj.GetParentHWND());
     }
@@ -710,7 +713,10 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
     pObj.SetParentHWND( pWnd );
 
     //for file name support
-    if ( pObj.GetRole() == DOCUMENT )
+    if( pObj.GetRole() == DOCUMENT ||
+        pObj.GetRole() == DOCUMENT_PRESENTATION ||
+        pObj.GetRole() == DOCUMENT_SPREADSHEET ||
+        pObj.GetRole() == DOCUMENT_TEXT )
     {
         XHWNDToDocumentHash::iterator aIter = XHWNDDocList.find(pWnd);
         if ( aIter != XHWNDDocList.end() )
@@ -793,6 +799,9 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case /*AccessibleRole::*/CANVAS:
         case /*AccessibleRole::*/COMBO_BOX:
         case /*AccessibleRole::*/DOCUMENT:
+        case /*AccessibleRole::*/DOCUMENT_PRESENTATION:
+        case /*AccessibleRole::*/DOCUMENT_SPREADSHEET:
+        case /*AccessibleRole::*/DOCUMENT_TEXT:
         case /*AccessibleRole::*/END_NOTE:
         case /*AccessibleRole::*/FILLER:
         case /*AccessibleRole::*/FOOTNOTE:
@@ -1037,6 +1046,9 @@ sal_Bool AccObjectWinManager::IsContainer(XAccessible* pAccessible)
                 case /*AccessibleRole::*/CANVAS:
                 case /*AccessibleRole::*/COMBO_BOX:
                 case /*AccessibleRole::*/DOCUMENT:
+                case /*AccessibleRole::*/DOCUMENT_PRESENTATION:
+                case /*AccessibleRole::*/DOCUMENT_SPREADSHEET:
+                case /*AccessibleRole::*/DOCUMENT_TEXT:
                 case /*AccessibleRole::*/EMBEDDED_OBJECT:
                 case /*AccessibleRole::*/END_NOTE:
                 case /*AccessibleRole::*/FILLER:
