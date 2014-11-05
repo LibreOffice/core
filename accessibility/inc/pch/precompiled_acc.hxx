@@ -19,7 +19,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/treelistbox.hxx>
-#include <vcl/popupmenuwindow.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/status.hxx>
