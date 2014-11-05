@@ -235,16 +235,11 @@ public:
     void SetAttrItem( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
     void SetAttrSet( const SfxItemSet&, sal_uInt16 nFlags = 0, SwPaM* pCrsr = NULL );
 
-    /** Get all items of one type in the current selection.
+    /** Get RES_CHRATR_* items of one type in the current selection.
      * @param nWhich WhichId of the collected items.
-     * @return Vector with the items.*/
-    std::vector<const SfxPoolItem*> GetCurItem( sal_uInt16 nWhich );
-
-    /** Splits the current SwPaM in smaller ones.
-     * The borders of an itemtype are used as separator. The SwPaMs must be deleted after use.
-     * @param nWhich WhichId of the item to separate at.
-     * @return Vector with the smaller SwPaMs*/
-    std::vector<SwPaM*> GetSplitPaM( sal_uInt16 nWhich );
+     * If parts of the selection have different scripttypes, the items with corresponding WhichIds are also collected.
+     * @return a vector of pairs. The pair contains a SfxPoolItem and a SwPaM, in which the item is valid and can be changed. */
+    std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM>>> GetItemWithPaM( sal_uInt16 nWhich );
 
     /**
      * Get the paragraph format attribute(s) of the current selection.
