@@ -430,7 +430,7 @@ protected:
         if (aAttribute.getLength())
             aRet = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
         else
-            aRet = OUString::createFromAscii((const char*)XML_GET_CONTENT(pXmlNode));
+            aRet = OUString::createFromAscii((const char*)xmlNodeGetContent(pXmlNode));
 
         xmlFreeDoc(pXmlDoc);
 
