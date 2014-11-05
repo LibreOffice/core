@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/Size.hpp>
