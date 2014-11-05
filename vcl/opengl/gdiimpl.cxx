@@ -310,9 +310,9 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
 {
     long nX1( nX );
-    long nY1( nY );
+    long nY1( GetHeight() - nY );
     long nX2( nX + nWidth );
-    long nY2( nY + nHeight );
+    long nY2( GetHeight() - nY - nHeight );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
@@ -386,8 +386,8 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( const Size& rSize, const SalTwoRect
 
     aTexCoord[0] = aTexCoord[2] = rPosAry.mnSrcX / (double) rSize.Width();
     aTexCoord[4] = aTexCoord[6] = (rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) rSize.Width();
-    aTexCoord[3] = aTexCoord[5] = rPosAry.mnSrcY / (double) rSize.Height();
-    aTexCoord[1] = aTexCoord[7] = (rPosAry.mnSrcY + rPosAry.mnSrcHeight) / (double) rSize.Height();
+    aTexCoord[3] = aTexCoord[5] = (rSize.Height() - rPosAry.mnSrcY) / (double) rSize.Height();
+    aTexCoord[1] = aTexCoord[7] = (rSize.Height() - rPosAry.mnSrcY - rPosAry.mnSrcHeight) / (double) rSize.Height();
 
     glEnableVertexAttribArray( GL_ATTRIB_TEX );
     glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
