@@ -25,7 +25,6 @@
 #ifndef INCLUDED_XMLOFF_INC_TXTVFLDI_HXX
 #define INCLUDED_XMLOFF_INC_TXTVFLDI_HXX
 
-#include "txtvfldi.hxx"
 #include "txtfldi.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>

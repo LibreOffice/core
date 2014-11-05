@@ -32,7 +32,6 @@
 #include <oox/ppt/slidetransition.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/ppt/animationspersist.hxx>
-#include <oox/ppt/timenode.hxx>
 
 namespace oox { namespace ppt {
 

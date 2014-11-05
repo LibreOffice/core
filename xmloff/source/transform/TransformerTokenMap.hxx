@@ -23,9 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "TransformerTokenMap.hxx"
-
-
 
 class XMLTransformerTokenMap :
     public ::boost::unordered_map< OUString, ::xmloff::token::XMLTokenEnum,
