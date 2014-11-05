@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX
 
 #include <accessibility/standard/vclxaccessiblebox.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 
