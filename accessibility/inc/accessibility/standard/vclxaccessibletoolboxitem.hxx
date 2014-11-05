@@ -20,7 +20,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLETOOLBOXITEM_HXX
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase4.hxx>
