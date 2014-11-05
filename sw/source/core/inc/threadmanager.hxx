@@ -123,7 +123,7 @@ class ThreadManager : public IThreadListenerOwner
         std::deque< tThreadData > maWaitingForStartThreads;
         std::deque< tThreadData > maStartedThreads;
 
-        Timer maStartNewThreadTimer;
+        Idle maStartNewThreadIdle;
 
         bool mbStartingOfThreadsSuspended;
 

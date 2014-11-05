@@ -37,7 +37,7 @@ ThreadManager::ThreadManager( uno::Reference< util::XJobManager >& rThreadJoiner
       mnThreadIDCounter( 0 ),
       maWaitingForStartThreads(),
       maStartedThreads(),
-      maStartNewThreadTimer(),
+      maStartNewThreadIdle(),
       mbStartingOfThreadsSuspended( false )
 {
 }
@@ -46,8 +46,8 @@ void ThreadManager::Init()
 {
     mpThreadListener.reset( new ThreadListener( *this ) );
 
-    maStartNewThreadTimer.SetTimeout( 2000 );
-    maStartNewThreadTimer.SetTimeoutHdl( LINK( this, ThreadManager, TryToStartNewThread ) );
+    maStartNewThreadIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maStartNewThreadIdle.SetIdleHdl( LINK( this, ThreadManager, TryToStartNewThread ) );
 }
 
 ThreadManager::~ThreadManager()
@@ -98,7 +98,7 @@ oslInterlockedCount ThreadManager::AddThread(
             // setup Timer to start thread from waiting ones
             if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
             {
-                maStartNewThreadTimer.Start();
+                maStartNewThreadIdle.Start();
             }
         }
     }
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG(ThreadManager, TryToStartNewThread)
             // setup Timer to start thread from waiting ones
             if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
             {
-                maStartNewThreadTimer.Start();
+                maStartNewThreadIdle.Start();
             }
         }
     }
@@ -240,7 +240,7 @@ void ThreadManager::ResumeStartingOfThreads()
             // setup Timer to start thread from waiting ones
             if ( maStartedThreads.empty() && !maWaitingForStartThreads.empty() )
             {
-                maStartNewThreadTimer.Start();
+                maStartNewThreadIdle.Start();
                 break;
             }
         }
