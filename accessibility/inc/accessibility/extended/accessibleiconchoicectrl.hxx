@@ -22,7 +22,6 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <vcl/vclevent.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 // class AccessibleListBox -----------------------------------------------
