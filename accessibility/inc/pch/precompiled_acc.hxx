@@ -19,7 +19,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
