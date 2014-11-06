@@ -36,7 +36,7 @@
 
 #include <math.h>
 #include <float.h>
-
+#include <boost/scoped_array.hpp>
 
 
 SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
@@ -2558,7 +2558,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     // initialize array that is to hold the maximum widths of all
     // elements (subnodes) in that column.
-    long *pColWidth = new long[nNumCols];
+    boost::scoped_array<long> pColWidth(new long[nNumCols]);
     for (j = 0;  j  < nNumCols;  j++)
         pColWidth[j] = 0;
 
@@ -2584,7 +2584,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
           nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100L;
 
     // build array that holds the leftmost position for each column
-    long *pColLeft = new long[nNumCols];
+    boost::scoped_array<long> pColLeft(new long[nNumCols]);
     long  nX = 0;
     for (j = 0;  j < nNumCols;  j++)
     {   pColLeft[j] = nX;
@@ -2644,9 +2644,6 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
         ExtendBy(aLineRect, RCP_NONE);
     }
-
-    delete [] pColLeft;
-    delete [] pColWidth;
 }
 
 
