@@ -46,6 +46,9 @@ public:
 
         nHint &= ConfigurationChangedHint::ONE;
         CPPUNIT_ASSERT( bool(nHint &= ConfigurationChangedHint::ONE) );
+
+        ConfigurationChangedHint nHint2  = nHint & ~(ConfigurationChangedHint::ONE | ConfigurationChangedHint::TWO);
+
     }
 
     // Change the following lines only, if you add, remove or rename
