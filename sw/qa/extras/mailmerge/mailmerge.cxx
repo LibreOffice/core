@@ -33,7 +33,7 @@
 
 class MMTest : public SwModelTestBase
 {
-    public:
+public:
         MMTest() : SwModelTestBase("/sw/qa/extras/mailmerge/data/", "writer8") {}
     /**
      * Helper func used by each unit test to test the 'mail merge' code.
@@ -64,6 +64,9 @@ class MMTest : public SwModelTestBase
         nCurOutputType = 0;
     }
 
+protected:
+    // Returns page number of the first page of a MM document inside the large MM document (used in the SHELL case).
+    int documentStartPageNumber( int document ) const;
 };
 
 #define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass) \
@@ -90,6 +93,30 @@ class MMTest : public SwModelTestBase
 // Will generate documents as files, use loadMailMergeDocument().
 #define DECLARE_FILE_MAILMERGE_TEST(TestName, filename, datasource, tablename) \
     DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, true, MMTest)
+
+int MMTest::documentStartPageNumber( int document ) const
+{   // See SwMailMergeOutputPage::documentStartPageNumber() .
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    SwWrtShell* shell = pTxtDoc->GetDocShell()->GetWrtShell();
+    IDocumentMarkAccess* marks = shell->GetDoc()->getIDocumentMarkAccess();
+    // Unfortunately, the pages are marked using UNO bookmarks, which have internals names, so they cannot be referred to by their names.
+    // Assume that there are no other UNO bookmarks than the ones used by mail merge, and that they are in the sorted order.
+    IDocumentMarkAccess::const_iterator_t mark;
+    int pos = 0;
+    for( mark = marks->getAllMarksBegin(); mark != marks->getAllMarksEnd() && pos < document; ++mark )
+    {
+        if( IDocumentMarkAccess::GetType( **mark ) == IDocumentMarkAccess::UNO_BOOKMARK )
+            ++pos;
+    }
+    CPPUNIT_ASSERT( pos == document );
+    sal_uInt16 page, dummy;
+    shell->Push();
+    shell->GotoMark( mark->get());
+    shell->GetPageNum( page, dummy );
+    shell->Pop(false);
+    return page;
+}
 
 DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-draws.odt", "4_v01.ods", "Tabelle1")
 {
@@ -187,6 +214,39 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         CPPUNIT_ASSERT_EQUAL( OUString( "" ), parseDump("/root/page[1]/body/txt[4]", ""));
         CPPUNIT_ASSERT_EQUAL( OUString( "Second page." ), parseDump("/root/page[2]/body/txt[1]", ""));
         CPPUNIT_ASSERT_EQUAL( firstname, parseDump("/root/page[2]/body/txt[2]/Special", "rText"));
+    }
+}
+
+DECLARE_SHELL_MAILMERGE_TEST(testPageBoundariesSimpleMailMerge, "simple-mail-merge.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    // This is like the test above, but this one uses the create-single-document-containing-everything-generated approach,
+    // and verifies that boundaries of the generated sub-documents are correct inside that document.
+    // These boundaries are done using "SwMailMergeOutputPage::documentStartPageNumber<number>" UNO bookmarks (see also
+    // SwMailMergeOutputPage::documentStartPageNumber() ).
+    executeMailMerge();
+    // Here getPages() works on the source document, so get pages of the resulting one.
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), pTxtDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
+    for( int doc = 0;
+         doc < 10;
+         ++doc )
+    {
+        CPPUNIT_ASSERT_EQUAL( doc * 2 + 1, documentStartPageNumber( doc ));
+    }
+}
+
+DECLARE_SHELL_MAILMERGE_TEST(testPageBoundaries2Pages, "simple-mail-merge-2pages.odt", "10-testing-addresses.ods", "testing-addresses")
+{
+    executeMailMerge();
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 20 ), pTxtDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 20 pages, each sub-document starts on odd page number
+    for( int doc = 0;
+         doc < 10;
+         ++doc )
+    {
+        CPPUNIT_ASSERT_EQUAL( doc * 2 + 1, documentStartPageNumber( doc ));
     }
 }
 
