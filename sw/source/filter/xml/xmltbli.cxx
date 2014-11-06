@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <o3tl/numeric.hxx>
 #include <svl/itemset.hxx>
 #include <svl/zformat.hxx>
 #include <sax/tools/converter.hxx>
@@ -2446,6 +2447,8 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             {
                 if( !colIter->isRelative )
                 {
+                    if (nMinAbsColWidth == 0)
+                        throw o3tl::divide_by_zero();
                     sal_Int32 nRelCol = ( colIter->width * nMinRelColWidth) / nMinAbsColWidth;
                     colIter->width = nRelCol;
                     colIter->isRelative = true;
