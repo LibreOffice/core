@@ -1891,7 +1891,7 @@ void NumberFormat::setFormatCode( const OUString& rFmtCode )
 void NumberFormat::setFormatCode( const Locale& rLocale, const sal_Char* pcFmtCode )
 {
     maModel.maLocale = rLocale;
-    maModel.maFmtCode = OStringToOUString( OString( pcFmtCode ), RTL_TEXTENCODING_UTF8 );
+    maModel.maFmtCode = OUString::fromUtf8( OString( pcFmtCode ) );
     maModel.mnPredefId = -1;
 }
 

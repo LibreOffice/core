@@ -2119,7 +2119,7 @@ bool TransferableDataHelper::GetFileList(
 
                     while( xStm->ReadLine( aDiskString ) )
                         if( !aDiskString.isEmpty() && aDiskString[0] != '#' )
-                            rFileList.AppendFile( OStringToOUString(aDiskString, RTL_TEXTENCODING_UTF8) );
+                            rFileList.AppendFile( OUString::fromUtf8(aDiskString) );
 
                     bRet = true;
                  }

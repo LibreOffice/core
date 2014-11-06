@@ -755,7 +755,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 //we just add all other xcu/xcs files to the configmgr.ini instead of
                 //rebuilding the directory structure.
                 OUString url2(
-                    OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
+                    OUString::fromUtf8(i->first));
                 if (url2 != url) {
                    bool schema = i->second.equalsIgnoreAsciiCase(
                        "vnd.sun.star.configuration-schema");

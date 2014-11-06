@@ -52,7 +52,7 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
     static const char* pDir = getenv( "DBG_PDFIMPORT_DIR" );
     if( pDir )
     {
-        OUString aStr( OStringToOUString( pDir, RTL_TEXTENCODING_UTF8 ) );
+        OUString aStr( OUString::fromUtf8( pDir ) );
         OUString aFileURL;
         osl_getFileURLFromSystemPath( aStr.pData, &aFileURL.pData );
         OUStringBuffer aBuf( 256 );

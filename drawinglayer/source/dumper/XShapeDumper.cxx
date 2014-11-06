@@ -1957,7 +1957,7 @@ OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes, bool b
     xmlTextWriterEndDocument( xmlWriter );
     xmlFreeTextWriter( xmlWriter );
 
-    return OStringToOUString(aString.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+    return OUString::fromUtf8(aString.makeStringAndClear());
 }
 
 OUString XShapeDumper::dump(uno::Reference<drawing::XShape> xPageShapes, bool bDumpInteropProperties)
@@ -1981,7 +1981,7 @@ OUString XShapeDumper::dump(uno::Reference<drawing::XShape> xPageShapes, bool bD
     xmlTextWriterEndDocument( xmlWriter );
     xmlFreeTextWriter( xmlWriter );
 
-    return OStringToOUString(aString.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+    return OUString::fromUtf8(aString.makeStringAndClear());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

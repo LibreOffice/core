@@ -60,7 +60,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
             else if (sTmp == "EndFragment")
                 nFragEnd = sLine.copy(nIndex).toInt32();
             else if (sTmp == "SourceURL")
-                sBaseURL = OStringToOUString( sLine.copy(nIndex), RTL_TEXTENCODING_UTF8 );
+                sBaseURL = OUString::fromUtf8( sLine.copy(nIndex) );
 
             if (nEnd >= 0 && nStt >= 0 &&
                 (!sBaseURL.isEmpty() || rStream.Tell() >= static_cast<sal_Size>(nStt)))

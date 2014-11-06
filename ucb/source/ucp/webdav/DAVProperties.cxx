@@ -113,10 +113,8 @@ void DAVProperties::createUCBPropName( const char * nspace,
                                        const char * name,
                                        OUString & rFullName )
 {
-    OUString aNameSpace
-        = OStringToOUString( nspace, RTL_TEXTENCODING_UTF8 );
-    OUString aName
-        = OStringToOUString( name,   RTL_TEXTENCODING_UTF8 );
+    OUString aNameSpace = OUString::fromUtf8( nspace );
+    OUString aName = OUString::fromUtf8( name );
 
     if ( !aNameSpace.getLength() )
     {

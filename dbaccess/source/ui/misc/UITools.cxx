@@ -1142,7 +1142,7 @@ namespace
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = "vnd.sun.star.help://" +
-        _sModuleName + "/" + OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
+        _sModuleName + "/" + OUString::fromUtf8(sHelpId);
 
     OUString sAnchor;
     OUString sTempURL = aURL.Complete;

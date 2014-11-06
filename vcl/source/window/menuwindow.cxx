@@ -151,7 +151,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
             if ( !aCommand.isEmpty() )
                 pHelp->Start( aCommand, NULL );
             else
-                pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
+                pHelp->Start( OUString::fromUtf8( aHelpId ), NULL );
         }
         bDone = true;
     }

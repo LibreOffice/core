@@ -377,8 +377,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                 struct rtl_bootstrap_NameValue nameValue;
                 nameValue.sName = OStringToOUString(
                     line.copy(0,nIndex).trim(), RTL_TEXTENCODING_ASCII_US );
-                nameValue.sValue = OStringToOUString(
-                    line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
+                nameValue.sValue = OUString::fromUtf8(line.copy(nIndex+1).trim());
 
 #if OSL_DEBUG_LEVEL > 1
                 OString name_tmp = OUStringToOString(nameValue.sName, RTL_TEXTENCODING_ASCII_US);
@@ -987,14 +986,13 @@ rtl::OUString expandMacros(
                         // replacement text (and if it did, it would fail to
                         // detect cycles that pass through here):
                         buf.append(
-                            rtl::OStringToOUString(
+                            rtl::OUString::fromUtf8(
                                 osl::Profile(seg[0]).readString(
                                     rtl::OUStringToOString(
                                         seg[1], RTL_TEXTENCODING_UTF8),
                                     rtl::OUStringToOString(
                                         seg[2], RTL_TEXTENCODING_UTF8),
-                                    rtl::OString()),
-                                RTL_TEXTENCODING_UTF8));
+                                    rtl::OString())));
                     }
                 }
             } else {

@@ -119,7 +119,7 @@ static bool cleanPath()
 
 void removeIfExists(const OString& pathname)
 {
-    osl::File::remove(OStringToOUString(pathname, RTL_TEXTENCODING_UTF8));
+    osl::File::remove(OUString::fromUtf8(pathname));
 }
 
 sal_Int32 SAL_CALL
@@ -154,7 +154,7 @@ produceFile(const OString& regFileName, sPair_t const*const pDepFile)
     OString urlRegTmpName = convertToFileUrl(regTmpName);
 
     Registry regFile;
-    if ( regFile.create(OStringToOUString(urlRegTmpName, RTL_TEXTENCODING_UTF8)) != REG_NO_ERROR )
+    if ( regFile.create(OUString::fromUtf8(urlRegTmpName)) != REG_NO_ERROR )
     {
         fprintf(stderr, "%s: could not create registry file '%s'\n",
                 pOptions->getProgramName().getStr(), regTmpName.getStr());
@@ -184,7 +184,7 @@ produceFile(const OString& regFileName, sPair_t const*const pDepFile)
             fprintf(stderr, "%s: could not close registry file '%s'\n",
                     pOptions->getProgramName().getStr(), regFileName.getStr());
         }
-        regFile.destroy(OStringToOUString(regFileName, RTL_TEXTENCODING_UTF8));
+        regFile.destroy(OUString::fromUtf8(regFileName));
         removeIfExists(regFileName);
         cleanPath();
         return 1;

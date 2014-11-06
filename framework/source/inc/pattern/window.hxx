@@ -62,7 +62,7 @@ static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& x
     }
     // <- SOLAR SAFE ----------------------------
 
-    return OStringToOUString(sWindowState,RTL_TEXTENCODING_UTF8);
+    return OUString::fromUtf8(sWindowState);
 }
 
 static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     ,

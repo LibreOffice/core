@@ -542,7 +542,7 @@ SetString( uno::Any& rAny, const gchar * value )
 
     if( !aFontName.isEmpty() )
     {
-        rAny = uno::makeAny( OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ) );
+        rAny = uno::makeAny( OUString::fromUtf8( aFontName ) );
         return true;
     }
 

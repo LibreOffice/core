@@ -126,8 +126,7 @@ void InitPoFile(
     //Create directory for po file
     {
         OUString outDir =
-            OStringToOUString(
-                rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+            OUString::fromUtf8(rPotDir.copy(0,rPotDir.lastIndexOf('/')));
         OUString outDirUrl;
         if (osl::FileBase::getFileURLFromSystemPath(outDir, outDirUrl)
             != osl::FileBase::E_None)
@@ -407,8 +406,7 @@ void handleDirectory(
 
     //Remove empty pot directory
     OUString sPoPath =
-        OStringToOUString(
-            rPotDir.copy(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+        OUString::fromUtf8(rPotDir.copy(0,rPotDir.lastIndexOf('/')));
     OUString sPoUrl;
     if (osl::FileBase::getFileURLFromSystemPath(sPoPath, sPoUrl)
         != osl::FileBase::E_None)

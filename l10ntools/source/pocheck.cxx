@@ -121,7 +121,7 @@ static void checkStyleNames(const OString& aLanguage)
     aPoInput.close();
     aPoOutput.close();
     OUString aPoPathURL;
-    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPath, RTL_TEXTENCODING_UTF8), aPoPathURL);
+    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(aPoPath), aPoPathURL);
     if( bAnyError )
         osl::File::move(aPoPathURL + ".new", aPoPathURL);
     else
@@ -343,7 +343,7 @@ static void checkFunctionNames(const OString& aLanguage)
         }
         aPoInput.close();
         aPoOutput.close();
-        osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPaths[i], RTL_TEXTENCODING_UTF8), aPoPathURL);
+        osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(aPoPaths[i]), aPoPathURL);
         if( bAnyError )
             osl::File::move(aPoPathURL + ".new", aPoPathURL);
         else
@@ -395,7 +395,7 @@ static void checkVerticalBar(const OString& aLanguage)
     aPoInput.close();
     aPoOutput.close();
     OUString aPoPathURL;
-    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPath, RTL_TEXTENCODING_UTF8), aPoPathURL);
+    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(aPoPath), aPoPathURL);
     if( bError )
         osl::File::move(aPoPathURL + ".new", aPoPathURL);
     else
@@ -444,7 +444,7 @@ static void checkMathSymbolNames(const OString& aLanguage)
     aPoInput.close();
     aPoOutput.close();
     OUString aPoPathURL;
-    osl::FileBase::getFileURLFromSystemPath(OStringToOUString(aPoPath, RTL_TEXTENCODING_UTF8), aPoPathURL);
+    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(aPoPath), aPoPathURL);
     if( bError )
         osl::File::move(aPoPathURL + ".new", aPoPathURL);
     else

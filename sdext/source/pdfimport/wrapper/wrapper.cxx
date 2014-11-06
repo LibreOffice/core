@@ -382,7 +382,7 @@ void Parser::readChar()
     // chars gobble up rest of line
     m_nCharIndex = -1;
 
-    m_pSink->drawGlyphs(OStringToOUString(aChars, RTL_TEXTENCODING_UTF8),
+    m_pSink->drawGlyphs(OUString::fromUtf8(aChars),
         aRect, aUnoMatrix, fontSize);
 }
 
@@ -600,8 +600,7 @@ void Parser::readFont()
     }
 
     // yet unknown font - get info and add to map
-    FontAttributes aResult( OStringToOUString( aFontName,
-                                                    RTL_TEXTENCODING_UTF8 ),
+    FontAttributes aResult( OUString::fromUtf8( aFontName ),
                             nIsBold != 0,
                             nIsItalic != 0,
                             nIsUnderline != 0,
@@ -783,9 +782,8 @@ void Parser::readLink()
     readDouble(aBounds.Y2);
 
     m_pSink->hyperLink( aBounds,
-                        OStringToOUString( lcl_unescapeLineFeeds(
-                                m_aLine.copy(m_nCharIndex) ),
-                                RTL_TEXTENCODING_UTF8 ) );
+                        OUString::fromUtf8( lcl_unescapeLineFeeds(
+                                m_aLine.copy(m_nCharIndex) ) ) );
     // name gobbles up rest of line
     m_nCharIndex = -1;
 }

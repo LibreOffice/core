@@ -101,7 +101,7 @@ void SfxModalDialog::SetDialogData_Impl()
     // save settings (position and user data)
     OUString sConfigId;
     if (isLayoutEnabled())
-        sConfigId = OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8);
+        sConfigId = OUString::fromUtf8(GetHelpId());
     else
     {
         SAL_WARN("sfx.config", "Dialog needs to be converted to .ui format");
@@ -128,7 +128,7 @@ void SfxModalDialog::GetDialogData_Impl()
 {
     OUString sConfigId;
     if (isLayoutEnabled())
-        sConfigId = OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8);
+        sConfigId = OUString::fromUtf8(GetHelpId());
     else
     {
         SAL_WARN("sfx.config", "Dialog needs to be converted to .ui format");
@@ -654,8 +654,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
         pImpl->m_pSfxPage->FillUserData();
         OUString sData( pImpl->m_pSfxPage->GetUserData() );
 
-        OUString sConfigId = OStringToOUString(pImpl->m_pSfxPage->GetConfigId(),
-            RTL_TEXTENCODING_UTF8);
+        OUString sConfigId = OUString::fromUtf8(pImpl->m_pSfxPage->GetConfigId());
         if (sConfigId.isEmpty())
         {
             SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");
@@ -724,8 +723,7 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
     if ( pImpl->m_pSfxPage )
     {
         // First obtain the user data, only then Reset()
-        OUString sConfigId = OStringToOUString(pImpl->m_pSfxPage->GetConfigId(),
-            RTL_TEXTENCODING_UTF8);
+        OUString sConfigId = OUString::fromUtf8(pImpl->m_pSfxPage->GetConfigId());
         if (sConfigId.isEmpty())
         {
             SAL_WARN("sfx.config", "Tabpage needs to be converted to .ui format");

@@ -60,7 +60,7 @@ public:
         char* pEnv = getenv("CPPCANVAS_DEBUG_EMFPLUS_DUMP_TO");
         if (pEnv)
         {
-            SvFileStream aStream(OStringToOUString(pEnv, RTL_TEXTENCODING_UTF8), STREAM_WRITE);
+            SvFileStream aStream(OUString::fromUtf8(pEnv), STREAM_WRITE);
             vcl::PNGWriter aWriter(aResultBitmap);
             CPPUNIT_ASSERT(aWriter.Write(aStream));
         }

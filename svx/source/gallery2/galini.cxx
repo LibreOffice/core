@@ -57,8 +57,7 @@ OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
             {
                 aKey = OStringToOUString(
                     aLine.copy( 0, n ).trim(), RTL_TEXTENCODING_ASCII_US );
-                aValue = OStringToOUString(
-                    aLine.copy( n + 1 ).trim(), RTL_TEXTENCODING_UTF8 );
+                aValue = OUString::fromUtf8( aLine.copy( n + 1 ).trim() );
 
                 if( ( n = aKey.indexOf( '[' ) ) >= 1 )
                 {

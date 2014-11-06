@@ -59,7 +59,7 @@ OString SfxSlot::GetCommand() const
 
 OUString SfxSlot::GetCommandString() const
 {
-    return OStringToOUString(GetCommand(), RTL_TEXTENCODING_UTF8);
+    return OUString::fromUtf8(GetCommand());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

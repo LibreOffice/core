@@ -109,13 +109,13 @@ bool AstConstant::dumpBlob(
     OUString type;
     if ( getNodeType() != NT_enum_val )
     {
-        type = OStringToOUString(exprTypeToString(getConstValueType()), RTL_TEXTENCODING_UTF8);
+        type = OUString::fromUtf8(exprTypeToString(getConstValueType()));
     }
 
     rBlob.setFieldData(
         index, getDocumentation(), OUString(),
         RT_ACCESS_CONST | (published ? RT_ACCESS_PUBLISHED : 0),
-        OStringToOUString(name, RTL_TEXTENCODING_UTF8), type, aConst);
+        OUString::fromUtf8(name), type, aConst);
 
     return true;
 }

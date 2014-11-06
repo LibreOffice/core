@@ -46,9 +46,7 @@ template< typename T > void checkEqual(T const & value, T const & argument) {
     if (argument != value) {
         std::ostringstream s;
         s << value << " != " << argument;
-        throw CheckFailed(
-            OStringToOUString(
-                OString(s.str().c_str()), RTL_TEXTENCODING_UTF8));
+        throw CheckFailed( OUString::fromUtf8(OString(s.str().c_str())) );
     }
 }
 

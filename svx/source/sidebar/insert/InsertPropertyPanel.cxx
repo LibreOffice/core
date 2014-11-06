@@ -106,7 +106,7 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
         return 1;
 
     // Extract name of (sub)toolbar from help id.
-    OUString sToolbarName (rtl::OStringToOUString(pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8));
+    OUString sToolbarName (rtl::OUString::fromUtf8(pToolBox->GetHelpId()));
     if (sToolbarName.getLength() == 0)
         return 1;
     const util::URL aURL (sfx2::sidebar::Tools::GetURL(sToolbarName));

@@ -48,12 +48,11 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
     if (m_pReturnType == 0) {
         returnTypeName = "void";
     } else {
-        returnTypeName = OStringToOUString(
-            m_pReturnType->getRelativName(), RTL_TEXTENCODING_UTF8);
+        returnTypeName = OUString::fromUtf8(m_pReturnType->getRelativName());
     }
     rBlob.setMethodData(
         index, getDocumentation(), methodMode,
-        OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
+        OUString::fromUtf8(getLocalName()),
         returnTypeName, nParam, nExcep);
 
     if ( nParam )
@@ -91,11 +90,8 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 
                 rBlob.setMethodParameterData(
                     index, paramIndex++, paramMode,
-                    OStringToOUString(
-                        pDecl->getLocalName(), RTL_TEXTENCODING_UTF8),
-                    OStringToOUString(
-                        pParam->getType()->getRelativName(),
-                        RTL_TEXTENCODING_UTF8));
+                    OUString::fromUtf8(pDecl->getLocalName()),
+                    OUString::fromUtf8(pParam->getType()->getRelativName()));
             }
             ++iter;
         }
@@ -110,8 +106,7 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
         {
             rBlob.setMethodExceptionTypeName(
                 index, exceptIndex++,
-                OStringToOUString(
-                    (*iter)->getRelativName(), RTL_TEXTENCODING_UTF8));
+                OUString::fromUtf8((*iter)->getRelativName()));
             ++iter;
         }
     }

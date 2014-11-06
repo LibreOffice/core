@@ -128,8 +128,7 @@ public:
 
     static OUString fromUTF8( const char *pStr )
     {
-        return OStringToOUString( OString( pStr, strlen( pStr ) ),
-                                       RTL_TEXTENCODING_UTF8 );
+        return OUString::fromUtf8( OString( pStr, strlen( pStr ) ) );
     }
 
     void Populate()

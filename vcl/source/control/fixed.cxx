@@ -1049,7 +1049,7 @@ Image FixedImage::loadThemeImage(const OString &rFileName)
     static ImplImageTreeSingletonRef aImageTree;
     OUString sIconTheme =
         Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-    const OUString sFileName(OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
+    const OUString sFileName(OUString::fromUtf8(rFileName));
     BitmapEx aBitmap;
     bool bSuccess = aImageTree->loadImage(sFileName, sIconTheme, aBitmap, true);
     SAL_WARN_IF(!bSuccess, "vcl.layout", "Unable to load " << sFileName

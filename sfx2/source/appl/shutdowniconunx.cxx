@@ -164,8 +164,7 @@ static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
                       OUString *pOverrideLabel,
                       sal_uInt16 nResId, GCallback pFnCallback )
 {
-    OUString *pURL = new OUString (OStringToOUString( pAsciiURL,
-                                                      RTL_TEXTENCODING_UTF8 ));
+    OUString *pURL = new OUString (OUString::fromUtf8( pAsciiURL ));
     OString aLabel;
     if (pOverrideLabel)
         aLabel = OUStringToOString (*pOverrideLabel, RTL_TEXTENCODING_UTF8);

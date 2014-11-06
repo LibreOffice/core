@@ -43,7 +43,6 @@ using namespace osl;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
-using ::rtl::OStringToOUString;
 
 // helper functions
 
@@ -474,7 +473,7 @@ namespace osl_FileBase
 
     void getAbsoluteFileURL::check_getAbsoluteFileURL( rtl::OUString const& _suBaseURL,  rtl::OString const& _sRelativeURL, ::osl::FileBase::RC _nAssumeError, rtl::OUString const& _suAssumeResultStr )
     {
-        rtl::OUString suRelativeURL = rtl::OStringToOUString(_sRelativeURL, RTL_TEXTENCODING_UTF8);
+        rtl::OUString suRelativeURL = rtl::OUString::fromUtf8(_sRelativeURL);
         rtl::OString sBaseURL = rtl::OUStringToOString(_suBaseURL, RTL_TEXTENCODING_UTF8);
         rtl::OUString suResultURL;
         osl::FileBase::RC nError = FileBase::getAbsoluteFileURL( _suBaseURL,  suRelativeURL, suResultURL );
@@ -674,25 +673,21 @@ namespace osl_FileBase
         // PRE: URL as String
         rtl::OUString suSource;
         rtl::OUString suStr;
-        suSource = rtl::OStringToOUString(_sSource, RTL_TEXTENCODING_UTF8);
-    ::osl::FileBase::RC nError;
-    if ( bDirection )
-      nError = osl::FileBase::getSystemPathFromFileURL( suSource, suStr );
-    else
-      nError = osl::FileBase::getFileURLFromSystemPath( suSource, suStr );
+        suSource = rtl::OUString::fromUtf8(_sSource);
+        ::osl::FileBase::RC nError;
+        if ( bDirection )
+          nError = osl::FileBase::getSystemPathFromFileURL( suSource, suStr );
+        else
+          nError = osl::FileBase::getFileURLFromSystemPath( suSource, suStr );
 
         // if the given string is gt length 0,
         // we check also this string
         rtl::OString sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
         rtl::OString sError = errorToString(nError);
-    if ( bDirection )
-      printf("getSystemPathFromFileURL('%s') deliver system path: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr() );
-    else
-      printf("getFileURLFromSystemPath('%s') deliver File URL: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr() );
-
-        // rtl::OUString suStrEncode = rtl::Uri::encode(suStr, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
-        // sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
-        // printf("UTF8: %s\n", sStr.getStr() );
+        if ( bDirection )
+          printf("getSystemPathFromFileURL('%s') deliver system path: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr() );
+        else
+          printf("getFileURLFromSystemPath('%s') deliver File URL: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr() );
 
         if (!_sAssumeResultStr.isEmpty())
         {
@@ -4857,7 +4852,7 @@ namespace osl_Directory
 #endif
             tmp_x += rtl::OString(TEST_PATH_POSTFIX);
 
-            rc = FileBase::getFileURLFromSystemPath(rtl::OStringToOUString(tmp_x, RTL_TEXTENCODING_UTF8), test_path);
+            rc = FileBase::getFileURLFromSystemPath(rtl::OUString::fromUtf8(tmp_x), test_path);
 
             CPPUNIT_ASSERT_MESSAGE
             (
