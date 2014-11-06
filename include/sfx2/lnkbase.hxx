@@ -112,10 +112,8 @@ public:
                     TYPEINFO();
 
     virtual void    Closed();
-                    SvBaseLink( const OUString& rNm, sal_uInt16 nObjectType,
-                                 SvLinkSource* );
 
-    sal_uInt16          GetObjType() const { return nObjType; }
+    sal_uInt16      GetObjType() const { return nObjType; }
 
     void            SetObj( SvLinkSource * pObj );
     SvLinkSource*   GetObj() const  { return xObj; }

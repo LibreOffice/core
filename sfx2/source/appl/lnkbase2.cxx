@@ -40,15 +40,11 @@ namespace sfx2
 
 TYPEINIT0( SvBaseLink )
 
-static DdeTopic* FindTopic( const OUString &, sal_uInt16* = 0 );
-
-class  ImplDdeItem;
-
 struct BaseLink_Impl
 {
     Link                m_aEndEditLink;
-    LinkManager*      m_pLinkMgr;
-    vcl::Window*             m_pParentWin;
+    LinkManager*        m_pLinkMgr;
+    vcl::Window*        m_pParentWin;
     FileDialogHelper*   m_pFileDlg;
     bool                m_bIsConnect;
 
@@ -66,61 +62,19 @@ struct BaseLink_Impl
 // only for internal management
 struct ImplBaseLinkData
 {
-    struct tClientType
-    {
-        // applies for all links
-        sal_uIntPtr nCntntType; // Update Format
-        // Not Ole-Links
-        bool    bIntrnlLnk;  // It is an internal link
-        sal_uInt16  nUpdateMode; // UpdateMode
-    };
+     // applies for all links
+     sal_uIntPtr nCntntType; // Update Format
+     // Not Ole-Links
+     bool        bIntrnlLnk;  // It is an internal link
+     sal_uInt16  nUpdateMode; // UpdateMode
 
-    struct tDDEType
-    {
-        ImplDdeItem* pItem;
-    };
-
-    union {
-        tClientType ClientType;
-        tDDEType DDEType;
-    };
     ImplBaseLinkData()
     {
-        ClientType.nCntntType = 0;
-        ClientType.bIntrnlLnk = false;
-        ClientType.nUpdateMode = 0;
-        DDEType.pItem = NULL;
+        nCntntType = 0;
+        bIntrnlLnk = false;
+        nUpdateMode = 0;
     }
 };
-
-
-class ImplDdeItem : public DdeGetPutItem
-{
-    SvBaseLink* pLink;
-    DdeData aData;
-    Sequence< sal_Int8 > aSeq;  // Datacontainer for DdeData !!!
-    bool bIsValidData : 1;
-    bool bIsInDTOR : 1;
-public:
-    ImplDdeItem( SvBaseLink& rLink, const OUString& rStr )
-        : DdeGetPutItem( rStr ), pLink( &rLink ), bIsValidData( false ),
-        bIsInDTOR( false )
-    {}
-    virtual ~ImplDdeItem();
-
-    virtual DdeData* Get( sal_uIntPtr ) SAL_OVERRIDE;
-    virtual bool     Put( const DdeData* ) SAL_OVERRIDE;
-    virtual void     AdviseLoop( bool ) SAL_OVERRIDE;
-
-    void Notify()
-    {
-        bIsValidData = false;
-        DdeGetPutItem::NotifyClient();
-    }
-
-    bool IsInDTOR() const { return bIsInDTOR; }
-};
-
 
 
 SvBaseLink::SvBaseLink()
@@ -145,48 +99,9 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     bWasLastEditOK = false;
 
     // It it going to be a Ole-Link,
-    pImplData->ClientType.nUpdateMode = nUpdateMode;
-    pImplData->ClientType.nCntntType = nContentType;
-    pImplData->ClientType.bIntrnlLnk = false;
-}
-
-
-
-SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
-    : pImpl(0)
-    , m_bIsReadOnly(false)
-{
-    bVisible = bSynchron = bUseCache = true;
-    bWasLastEditOK = false;
-    aLinkName = rLinkName;
-    pImplData = new ImplBaseLinkData;
-    nObjType = nObjectType;
-
-    if( !pObj )
-    {
-        DBG_ASSERT( pObj, "Where is my left-most object" );
-        return;
-    }
-
-    if( OBJECT_DDE_EXTERN == nObjType )
-    {
-        sal_uInt16 nItemStt = 0;
-        DdeTopic* pTopic = FindTopic( aLinkName, &nItemStt );
-        if( pTopic )
-        {
-            // then we have it all together
-            // MM_TODO how do I get the name
-            OUString aStr = aLinkName; // xLinkName->GetDisplayName();
-            aStr = aStr.copy( nItemStt );
-            pImplData->DDEType.pItem = new ImplDdeItem( *this, aStr );
-            pTopic->InsertItem( pImplData->DDEType.pItem );
-
-            // store the Advice
-            xObj = pObj;
-        }
-    }
-    else if( pObj->Connect( this ) )
-        xObj = pObj;
+    pImplData->nUpdateMode = nUpdateMode;
+    pImplData->nCntntType = nContentType;
+    pImplData->bIntrnlLnk = false;
 }
 
 
@@ -194,14 +109,6 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
 SvBaseLink::~SvBaseLink()
 {
     Disconnect();
-
-    switch( nObjType )
-    {
-    case OBJECT_DDE_EXTERN:
-        if( !pImplData->DDEType.pItem->IsInDTOR() )
-            delete pImplData->DDEType.pItem;
-        break;
-    }
 
     delete pImplData;
     delete pImpl;
@@ -242,7 +149,7 @@ void SvBaseLink::SetName( const OUString & rNm )
 void SvBaseLink::SetObj( SvLinkSource * pObj )
 {
     DBG_ASSERT( (nObjType & OBJECT_CLIENT_SO &&
-                pImplData->ClientType.bIntrnlLnk) ||
+                pImplData->bIntrnlLnk) ||
                 nObjType == OBJECT_CLIENT_GRF,
                 "no intern link" );
     xObj = pObj;
@@ -274,12 +181,12 @@ void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
 void SvBaseLink::SetUpdateMode( sal_uInt16 nMode )
 {
     if( ( OBJECT_CLIENT_SO & nObjType ) &&
-        pImplData->ClientType.nUpdateMode != nMode )
+        pImplData->nUpdateMode != nMode )
     {
         AddNextRef();
         Disconnect();
 
-        pImplData->ClientType.nUpdateMode = nMode;
+        pImplData->nUpdateMode = nMode;
         _GetRealObject();
         ReleaseRef();
     }
@@ -308,7 +215,7 @@ bool SvBaseLink::Update()
         {
             xObj->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
             OUString sMimeType( SotExchange::GetFormatMimeType(
-                            pImplData->ClientType.nCntntType ));
+                            pImplData->nCntntType ));
             Any aData;
 
             if( xObj->GetData( aData, sMimeType ) )
@@ -341,7 +248,7 @@ bool SvBaseLink::Update()
 sal_uInt16 SvBaseLink::GetUpdateMode() const
 {
     return ( OBJECT_CLIENT_SO & nObjType )
-            ? pImplData->ClientType.nUpdateMode
+            ? pImplData->nUpdateMode
             : sal::static_int_cast< sal_uInt16 >( LINKUPDATE_ONCALL );
 }
 
@@ -363,12 +270,12 @@ void SvBaseLink::_GetRealObject( bool bConnect)
             nObjType = OBJECT_INTERN;
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
-            pImplData->ClientType.bIntrnlLnk = true;
+            pImplData->bIntrnlLnk = true;
             nObjType = OBJECT_CLIENT_DDE;  // so we know what it once was!
         }
         else
         {
-            pImplData->ClientType.bIntrnlLnk = false;
+            pImplData->bIntrnlLnk = false;
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
         }
     }
@@ -382,7 +289,7 @@ void SvBaseLink::_GetRealObject( bool bConnect)
 sal_uIntPtr SvBaseLink::GetContentType() const
 {
     if( OBJECT_CLIENT_SO & nObjType )
-        return pImplData->ClientType.nCntntType;
+        return pImplData->nCntntType;
 
     return 0;  // all Formats ?
 }
@@ -392,7 +299,7 @@ bool SvBaseLink::SetContentType( sal_uIntPtr nType )
 {
     if( OBJECT_CLIENT_SO & nObjType )
     {
-        pImplData->ClientType.nCntntType = nType;
+        pImplData->nCntntType = nType;
         return true;
     }
     return false;
@@ -425,13 +332,6 @@ void SvBaseLink::Disconnect()
 
 SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const ::com::sun::star::uno::Any & )
 {
-    switch( nObjType )
-    {
-    case OBJECT_DDE_EXTERN:
-        if( pImplData->DDEType.pItem )
-            pImplData->DDEType.pItem->Notify();
-        break;
-    }
     return SUCCESS;
 }
 
@@ -446,7 +346,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link& rEndEditHdl )
     bool bAsync = false;
     Link aLink = LINK( this, SvBaseLink, EndEditHdl );
 
-    if( OBJECT_CLIENT_SO & nObjType && pImplData->ClientType.bIntrnlLnk )
+    if( OBJECT_CLIENT_SO & nObjType && pImplData->bIntrnlLnk )
     {
         if( pImpl->m_pLinkMgr )
         {
@@ -528,113 +428,6 @@ FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) con
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             SFXWB_INSERT, rFactory);
     return *pImpl->m_pFileDlg;
-}
-
-ImplDdeItem::~ImplDdeItem()
-{
-    bIsInDTOR = true;
-    // So that no-one gets the idea to delete the pointer when Disconnecting!
-    SvBaseLinkRef aRef( pLink );
-    aRef->Disconnect();
-}
-
-DdeData* ImplDdeItem::Get( sal_uIntPtr nFormat )
-{
-    if( pLink->GetObj() )
-    {
-        // is it still valid?
-        if( bIsValidData && nFormat == aData.GetFormat() )
-            return &aData;
-
-        Any aValue;
-        OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
-        if( pLink->GetObj()->GetData( aValue, sMimeType ) )
-        {
-            if( aValue >>= aSeq )
-            {
-                aData = DdeData( (const char *)aSeq.getConstArray(), aSeq.getLength(), nFormat );
-
-                bIsValidData = true;
-                return &aData;
-            }
-        }
-    }
-    aSeq.realloc( 0 );
-    bIsValidData = false;
-    return 0;
-}
-
-
-bool ImplDdeItem::Put( const DdeData*  )
-{
-    OSL_FAIL( "ImplDdeItem::Put not implemented" );
-    return false;
-}
-
-
-void ImplDdeItem::AdviseLoop( bool bOpen )
-{
-    // Connection is closed, so also unsubscribe link
-    if( pLink->GetObj() )
-    {
-        if( bOpen )
-        {
-            // A connection is re-established
-            if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
-            {
-                pLink->GetObj()->AddDataAdvise( pLink, OUString("text/plain;charset=utf-16"),  ADVISEMODE_NODATA );
-                pLink->GetObj()->AddConnectAdvise( pLink );
-            }
-        }
-        else
-        {
-            // So that no-one gets the idea to delete the pointer
-            // when Disconnecting!
-            SvBaseLinkRef aRef( pLink );
-            aRef->Disconnect();
-        }
-    }
-}
-
-
-static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
-{
-    if( rLinkName.isEmpty() )
-        return 0;
-
-    OUString sNm( rLinkName );
-    sal_Int32 nTokenPos = 0;
-    OUString sService( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
-
-    DdeServices& rSvc = DdeService::GetServices();
-    for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
-    {
-        DdeService* pService = *aI;
-        if( pService->GetName() == sService )
-        {
-            // then we search for the Topic
-            OUString sTopic( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
-            if( pItemStt )
-                *pItemStt = nTokenPos;
-
-            std::vector<DdeTopic*>& rTopics = pService->GetTopics();
-
-            for( int i = 0; i < 2; ++i )
-            {
-                for( std::vector<DdeTopic*>::iterator iterTopic = rTopics.begin();
-                     iterTopic != rTopics.end(); ++iterTopic )
-                    if( (*iterTopic)->GetName() == sTopic )
-                        return *iterTopic;
-
-                // Topic not found?
-                // then we try once to create it
-                if( i || !pService->MakeTopic( sTopic ) )
-                    break;  // did not work, exiting
-            }
-            break;
-        }
-    }
-    return 0;
 }
 
 }
