@@ -47,7 +47,6 @@ public:
 
     sal_Int64 GetValue() const { return mnValue;}
 
-    void SetValue( sal_Int64 nVal );
 };
 
 
