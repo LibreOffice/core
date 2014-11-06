@@ -146,6 +146,10 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	ui-previewer \
+	$(if $(filter LINUX MACOSX WNT,$(OS)), \
+		icontest \
+	    outdevgrind) \
+	vcldemo \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
 	) \

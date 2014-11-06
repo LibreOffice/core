@@ -27,7 +27,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
         StaticLibrary_vclmain \
         Executable_ui-previewer \
 		$(if $(filter LINUX MACOSX WNT,$(OS)), \
-	        Executable_icontest)) \
+	        Executable_icontest \
+	        Executable_outdevgrind)) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
