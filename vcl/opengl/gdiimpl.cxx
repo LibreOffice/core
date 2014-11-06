@@ -27,6 +27,8 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include "opengl/salbmp.hxx"
 
+#include <vector>
+
 #define GL_ATTRIB_POS 0
 #define GL_ATTRIB_TEX 1
 
@@ -272,17 +274,17 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
 {
-    GLfloat pPoints[nPoints * 2];
+    std::vector<GLfloat> aPoints(nPoints * 2);
     sal_uInt32 i, j;
 
     for( i = 0, j = 0; i < nPoints; i++ )
     {
-        pPoints[j++] = (2 * pPtAry[i].mnX) / GetWidth()  - 1.0;
-        pPoints[j++] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
+        aPoints[j++] = (2 * pPtAry[i].mnX) / GetWidth()  - 1.0;
+        aPoints[j++] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, nPoints * 2, GL_FLOAT, GL_FALSE, 0, pPoints );
+    glVertexAttribPointer( GL_ATTRIB_POS, nPoints * 2, GL_FLOAT, GL_FALSE, 0, &aPoints[0] );
     if( bClose )
         glDrawArrays( GL_LINE_LOOP, 0, nPoints );
     else
@@ -292,17 +294,17 @@ void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAr
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    GLfloat pVertices[nPoints * 2];
+    std::vector<GLfloat> aVertices(nPoints * 2);
     sal_uInt32 i, j;
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
-        pVertices[j] = (2 * pPtAry[i].mnX) / GetWidth() - 1.0;
-        pVertices[j+1] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
+        aVertices[j] = (2 * pPtAry[i].mnX) / GetWidth() - 1.0;
+        aVertices[j+1] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pVertices );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
@@ -338,18 +340,18 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     {
         const ::basegfx::B2DPolygon& aResult(
             ::basegfx::triangulator::triangulate( aPolygon ) );
-        GLushort pVertices[aResult.count() * 2];
+        std::vector<GLushort> aVertices(aResult.count() * 2);
         sal_uInt32 j( 0 );
 
         for( sal_uInt32 i = 0; i < aResult.count(); i++ )
         {
             const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint(i) );
-            pVertices[j++] = rPt.getX();
-            pVertices[j++] = rPt.getY();
+            aVertices[j++] = rPt.getX();
+            aVertices[j++] = rPt.getY();
         }
 
         glEnableVertexAttribArray( GL_ATTRIB_POS );
-        glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices );
+        glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, &aVertices[0] );
         glDrawArrays( GL_TRIANGLES, 0, aResult.count() );
         glDisableVertexAttribArray( GL_ATTRIB_POS );
     }
