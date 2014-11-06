@@ -20,7 +20,6 @@
 #include "accessibility/extended/accessiblelistboxentry.hxx"
 #include <svtools/stringtransfer.hxx>
 #include <svtools/svlbitm.hxx>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
