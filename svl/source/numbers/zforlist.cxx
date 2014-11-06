@@ -2145,7 +2145,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + SetIndexTable( NF_NUMBER_1000DEC2, ZF_STANDARD+4 ));
 
-    // #.##0,00 System country/language dependent   since number formatter version 6
+    // #.##0,00 System country/language dependent
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_SYSTEM );
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ));
@@ -2208,7 +2208,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
                      CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_RED, ZF_STANDARD_CURRENCY+3 ));
     aFormatSeq[nIdx].Default = bDefault;
 
-    // #,##0.00 USD   since number formatter version 3
+    // #,##0.00 USD
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = false;
@@ -2218,7 +2218,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
         pNewFormat->SetUsed(true);      // must be saved for older versions
     aFormatSeq[nIdx].Default = bDefault;
 
-    // #.##0,--   since number formatter version 6
+    // #.##0,--
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = false;
@@ -2262,7 +2262,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + SetIndexTable( NF_DATE_QQJJ, ZF_STANDARD_DATE+5 ));
 
-    // DD.MM.YYYY   since number formatter version 2, was DD.MM.[YY]YY
+    // DD.MM.YYYY   was DD.MM.[YY]YY
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYYYY );
     pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
                                   CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYYYY, ZF_STANDARD_DATE+6 ));
@@ -2270,7 +2270,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     {
         pNewFormat->SetUsed(true);      // must be saved for older versions
     }
-    // DD.MM.YY   def/System, since number formatter version 6
+    // DD.MM.YY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYY, ZF_STANDARD_DATE+7 ));
@@ -2282,7 +2282,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
                      CLOffset + SetIndexTable( NF_DATE_SYSTEM_LONG, ZF_STANDARD_DATE+8 ));
 
     // Hard coded but system (regional settings) delimiters dependent long date formats
-    // since numberformatter version 6
 
     // D. MMM YY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYY );
