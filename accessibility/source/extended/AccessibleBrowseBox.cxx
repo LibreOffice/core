@@ -20,7 +20,6 @@
 #include "accessibility/extended/AccessibleBrowseBox.hxx"
 #include "accessibility/extended/AccessibleBrowseBoxTable.hxx"
 #include "accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx"
-#include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 
