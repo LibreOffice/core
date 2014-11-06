@@ -1182,7 +1182,8 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 if (bMergeShell)
                                 {
                                     SwDocMergeInfo aMergeInfo;
-                                    aMergeInfo.startPageInTarget = pTargetDoc->getIDocumentMarkAccess()->makeMark( appendedDocStart, "MailMergeInternalStart" + OUString::number( nStartRow ),
+                                    // Name of the mark is actually irrelevant, UNO bookmarks have internals names.
+                                    aMergeInfo.startPageInTarget = pTargetDoc->getIDocumentMarkAccess()->makeMark( appendedDocStart, "",
                                         IDocumentMarkAccess::UNO_BOOKMARK );
                                     aMergeInfo.nDBRow = nStartRow;
                                     rMergeDescriptor.pMailMergeConfigItem->AddMergedDocument( aMergeInfo );
