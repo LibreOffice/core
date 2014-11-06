@@ -18,7 +18,6 @@
  */
 
 #include "accessibility/extended/AccessibleGridControlTableBase.hxx"
-#include <svtools/accessibletable.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
