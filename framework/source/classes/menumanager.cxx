@@ -732,7 +732,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         OUString aCommand( m_aMenuItemCommand );
         if (m_aMenuItemCommand.matchIgnoreAsciiCase(UNO_COMMAND))
         {
-            // Remove protocol part from command so we can use an easier comparision method
+            // Remove protocol part from command so we can use an easier comparison method
             aCommand = aCommand.copy(RTL_CONSTASCII_LENGTH(UNO_COMMAND));
         }
 

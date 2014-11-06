@@ -38,7 +38,7 @@ public interface DocumentSerializerFactory {
      *
      * <p>The {@code ConvertData} object is passed along to the created
      * {@code DocumentSerializer} via its constructor.  The {@code ConvertData}
-     * is read and converted when the the {@code DocumentSerializer} object's
+     * is read and converted when the {@code DocumentSerializer} object's
      * {@code serialize} method is called.</p>
      *
      * @param   doc  {@code Document} object that the created

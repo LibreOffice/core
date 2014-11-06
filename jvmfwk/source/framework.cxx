@@ -266,7 +266,7 @@ javaFrameworkError SAL_CALL jfw_startVM(
                 //check if JAVA is disabled
                 //If Java is enabled, but it was disabled when this process was started
                 // then no preparational work, such as setting the LD_LIBRARY_PATH, was
-                //done. Therefore if a JRE needs it it must not be started.
+                //done. Therefore if a JRE needs it, it must not be started.
                 if (g_bEnabledSwitchedOn &&
                     (aInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     return JFW_E_NEED_RESTART;

@@ -1393,7 +1393,7 @@ bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, bool Expand) throw()
         else
         {
             if ( !pForwarder )
-                pForwarder = mpEditSource->GetTextForwarder();  // first here, it it is necessary...
+                pForwarder = mpEditSource->GetTextForwarder();  // first here, it is necessary...
 
             --nNewPar;
             nCount -= nNewPos + 1;

@@ -482,7 +482,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
                 m_pView2Close = pTargetView;
                 pTargetView->GetViewFrame()->GetTopViewFrame()->GetWindow().Hide();
                 pSourceView->GetViewFrame()->GetFrame().AppearWithUpdate();
-                // the current view has be be set when the target is destroyed
+                // the current view has be set when the target is destroyed
                 m_pView = pSourceView;
                 m_pMMConfig->SetTargetView(0);
 

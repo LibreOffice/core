@@ -262,7 +262,7 @@ public class DocumentProperties
             xDP.setModificationDate(dt);
             assertEquals(
                 "setModificationDate", dt.Year, xDP.getModificationDate().Year);
-            str = "i didnt do it";
+            str = "i did not do it";
             xDP.setPrintedBy(str);
             assertEquals("setPrintedBy", str, xDP.getPrintedBy());
             dt.Year = 2024;

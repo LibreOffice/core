@@ -35,7 +35,7 @@ namespace framework{
                     It's possible too, to enable automatically throwing of some exceptions for illegal
                     transaction requests ... e.g. interface call for already disposed objects.
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are marked private!
     @devstatus      draft
 *//*-*************************************************************************************************************/
 class TransactionGuard : private boost::noncopyable

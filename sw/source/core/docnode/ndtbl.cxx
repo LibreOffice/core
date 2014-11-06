@@ -1808,7 +1808,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
     // Remove the Crsr from the to-be-deleted Section.
     // The Cursor is placed after the table, except for
     //  - when there's another Line, we place it in that one
-    //  - when a Line preceeds it, we place it in that one
+    //  - when a Line precedes it, we place it in that one
     {
         SwTableNode* pTblNd = rCursor.GetNode().FindTableNode();
 
@@ -1856,7 +1856,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
                 pNextBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
             pNextBox = pNextBox->FindNextBox( pTblNd->GetTable(), pNextBox );
 
-        if( !pNextBox ) // No succeeding Boxes? Then take the preceeding one
+        if( !pNextBox ) // No succeeding Boxes? Then take the preceding one
         {
             pDelLine = pFndBox->GetLines().front().GetLine();
             pDelBox = pDelLine->GetTabBoxes()[ 0 ];
@@ -2329,7 +2329,7 @@ SwTabFrm *SwTableNode::MakeFrm( SwFrm* pSib )
 }
 
 /**
- * Creates all Views from the Document for the preceeding Node. The resulting ContentFrames
+ * Creates all Views from the Document for the preceding Node. The resulting ContentFrames
  * are added to the corresponding Layout.
  */
 void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
@@ -2351,7 +2351,7 @@ void SwTableNode::MakeFrms(const SwNodeIndex & rIdx )
         pNew = pNode->MakeFrm( pFrm );
         // Will the Node receive Frames before or after?
         if ( bBefore )
-            // The new one preceeds me
+            // The new one preceds me
             pNew->Paste( pFrm->GetUpper(), pFrm );
         else
             // The new one succeeds me
@@ -3162,7 +3162,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
 
         switch( eHdlnMode )
         {
-        // Set the lower Border of the preceeding Line to
+        // Set the lower Border of the preceding Line to
         // the upper Border of the current one
         case HEADLINE_BORDERCOPY:
             {
@@ -3450,7 +3450,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
 /**
  * rPos needs to be in the Table that remains
  *
- * @param bWithPrev  merge the current Table with the preceeding
+ * @param bWithPrev  merge the current Table with the
  *                   or succeeding one
  */
 bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode )
@@ -3552,7 +3552,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
 
     if( !bWithPrev )
     {
-        // Transfer all Attributes of the succeeding Table to the preceeding one
+        // Transfer all Attributes of the succeeding Table to the preceding one
         // We do this, because the succeeding one is deleted when deleting the Node
         rTbl.SetRowsToRepeat( rDelTbl.GetRowsToRepeat() );
         rTbl.SetTblChgMode( rDelTbl.GetTblChgMode() );
@@ -3573,7 +3573,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
     rTbl.GetTabSortBoxes().insert( rDelTbl.GetTabSortBoxes() );
     rDelTbl.GetTabSortBoxes().clear();
 
-    // The preceeding Table always remains, while the succeeding one is deleted
+    // The preceding Table always remains, while the succeeding one is deleted
     SwEndNode* pTblEndNd = pDelTblNd->EndOfSectionNode();
     pTblNd->pEndOfSection = pTblEndNd;
 

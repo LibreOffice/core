@@ -1319,7 +1319,7 @@ AC_ARG_ENABLE(extra-font,
 AC_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
-         LibreOffice. By default, it is on on Windows and Mac, and off on Linux.]),
+         LibreOffice. By default, it is on Windows and Mac, and off on Linux.]),
 ,)
 
 AC_ARG_ENABLE(release-build,
@@ -1436,10 +1436,10 @@ AC_ARG_ENABLE(library-bin-tar,
         the content of the config_host.mk file and the content
         of the top-level directory in core for that library
         If this option is enabled, then if such a tarfile exist, it will be untarred
-        isntead of the source tarfile, and the build step will be skipped for that
+        instead of the source tarfile, and the build step will be skipped for that
         library.
         If a proper tarfile does not exist, then the normal source-based
-        build is done for taht library and a proper binary tarfile is created
+        build is done for that library and a proper binary tarfile is created
         for the next time.]),
 )
 
@@ -2320,7 +2320,7 @@ AC_ARG_WITH(macosx-sdk,
 
 
                           see: http://developer.apple.com/library/mac/#technotes/tn2064/_index.html
-                          for a detailled technical explanation of these variables
+                          for a detailed technical explanation of these variables
 
                           Note: MACOSX_DEPLOYMENT_TARGET will be set to the value of 'min'.
     ],
@@ -2566,7 +2566,7 @@ dnl  Checks if ccache is available
 dnl ===================================================================
 if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
     case "%$CC%$CXX%" in
-    # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some verison number etc),
+    # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some version number etc),
     # assume that's good then
     *%ccache[[-_' ']]*|*/ccache[[-_' ']]*)
         AC_MSG_NOTICE([ccache seems to be included in a pre-defined CC and/or CXX])
@@ -2848,7 +2848,7 @@ if test $_os = Darwin; then
         # http://stackoverflow.com/questions/13196291/difference-between-mac-developer-and-3rd-party-mac-developer-application
         # says that the "Mac Developer" certificate is useful just for self-testing. For distribution
         # outside the Mac App Store, use the "Developer ID Application" one, and for distribution in
-        # the App Store, the "3rd Party Mac Developer" one. I think it works best to the the
+        # the App Store, the "3rd Party Mac Developer" one. I think it works best to the
         # "Developer ID Application" one.
 
         identity=`security find-identity -p codesigning -v 2>/dev/null | grep 'Developer ID Application:' | $AWK '{print $2}' |head -1`
@@ -3570,7 +3570,7 @@ if test "$_os" = "WINNT"; then
                     WINDOWS_SDK_ACCEPTABLE_VERSIONS=$with_windows_sdk
                     ;;
                 *)
-                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work witn VS $MSVSVER])
+                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work with VS $MSVSVER])
                     ;;
                 esac
             fi
@@ -8383,7 +8383,7 @@ if test "$with_system_curl" = "yes"; then
     if test -n "$CURL_PKG_ERRORS"; then
         AC_PATH_PROG(CURLCONFIG, curl-config)
         if test -z "$CURLCONFIG"; then
-            AC_MSG_ERROR([curl developement files not found])
+            AC_MSG_ERROR([curl development files not found])
         fi
         CURL_LIBS=`$CURLCONFIG --libs`
         CURL_CFLAGS=$("$CURLCONFIG" --cflags | sed -e "s/-I/${ISYSTEM?}/g")

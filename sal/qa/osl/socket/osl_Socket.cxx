@@ -832,11 +832,11 @@ namespace osl_SocketAddr
 
         void ctors_hostname_port_001()
         {
-            /// tcpip-specif constructor.
+            /// tcpip-specific constructor.
             ::osl::SocketAddr saSocketAddr( aHostIp1, IP_PORT_FTP );
             printUString(saSocketAddr.getHostname( ), "ctors_hostname_port_001:getHostname");
 
-            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specific constructor function: do a constructor using tcpip spec, check the result.",
+            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specificy constructor function: do a constructor using tcpip spec, check the result.",
                                     saSocketAddr.is( ) == sal_True &&
                                     ( saSocketAddr.getPort( ) == IP_PORT_FTP )/*&&
                                     ( sal_True == compareUString( saSocketAddr.getHostname( ), aHostName1 ) ) */);
@@ -845,10 +845,10 @@ namespace osl_SocketAddr
         //same as is_002
         void ctors_hostname_port_002()
         {
-            /// tcpip-specif constructor.
+            /// tcpip-specific constructor.
             ::osl::SocketAddr saSocketAddr( aHostIpInval1, IP_PORT_MYPORT2 );
 
-            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specific constructor function: using an invalid IP address, the socketaddr ctors should fail", sal_False == saSocketAddr.is( ));
+            CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specificy constructor function: using an invalid IP address, the socketaddr ctors should fail", sal_False == saSocketAddr.is( ));
         }
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_none );

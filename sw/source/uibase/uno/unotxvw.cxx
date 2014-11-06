@@ -1146,7 +1146,7 @@ void SwXTextViewCursor::gotoRange(
         if(bExpand)
         {
             // The cursor should include everything that has been included
-            // by him and the transfered Range.
+            // by him and the transferred Range.
             SwPosition aOwnLeft(*aOwnPaM.Start());
             SwPosition aOwnRight(*aOwnPaM.End());
             SwPosition* pParamLeft = rDestPam.Start();

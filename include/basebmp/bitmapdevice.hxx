@@ -125,7 +125,7 @@ public:
 
         @param rDamage
         Object implementing the IBitmapDeviceDamageTracker interface -
-        everytime some area of the surface gets clobbered, that object
+        every time some area of the surface gets clobbered, that object
         gets notified.
      */
     void  setDamageTracker( const IBitmapDeviceDamageTrackerSharedPtr& rDamage );

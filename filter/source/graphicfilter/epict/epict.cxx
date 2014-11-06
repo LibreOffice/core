@@ -240,7 +240,7 @@ Polygon PictWriter::PolyPolygonToPolygon(const tools::PolyPolygon & rPolyPoly)
         // At first we look for a point in aPoly1 (referenced by nBestIdx1) and a
         // point in aPoly2 (referenced by nBestid2), which are as close together as
         // possible. Because this is following square complexity and therefore some
-        // pictures would need infinite time to export, we limit the the number of test
+        // pictures would need infinite time to export, we limit the number of test
         // by the number of 1000 and cancel the search if necessary preliminarily.
         // The result of this will not be wrong but rather not so beautiful.
         nCountdownTests=1000;

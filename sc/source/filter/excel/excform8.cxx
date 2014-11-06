@@ -519,7 +519,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x25: // Area Reference                        [320 270]
             case 0x4B:
             case 0x6B:
-            case 0x2B: // Deleted Area Refernce                 [323 273]
+            case 0x2B: // Deleted Area Reference                [323 273]
             {
                 sal_uInt16          nRowFirst, nRowLast;
                 sal_uInt16          nColFirst, nColLast;
@@ -545,7 +545,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 {
                     case 0x4B:
                     case 0x6B:
-                    case 0x2B: // Deleted Area Refernce         [323 273]
+                    case 0x2B: // Deleted Area Reference        [323 273]
                         // no information which part is deleted, set all
                         rSRef1.SetColDeleted( true );
                         rSRef1.SetRowDeleted( true );
@@ -785,7 +785,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 if (aExtInfo.mbExternal)
                 {
-                    // nTabFirst and nTabLast are the indices of the refernced
+                    // nTabFirst and nTabLast are the indices of the referenced
                     // sheets in the SUPBOOK record, hence do not represent
                     // the actual indices of the original sheets since the
                     // SUPBOOK record only stores referenced sheets and skips
@@ -1100,7 +1100,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 break;
             case 0x4B:
             case 0x6B:
-            case 0x2B: // Deleted Area Refernce                 [323 273]
+            case 0x2B: // Deleted Area Reference                [323 273]
                 aIn.Ignore( 6 );
                 break;
             case 0x4C:
@@ -1569,7 +1569,7 @@ bool ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
             case 0x1F: // Number                                [315 266]
             case 0x4B:
             case 0x6B:
-            case 0x2B: // Deleted Area Refernce                 [323 273]
+            case 0x2B: // Deleted Area Reference                [323 273]
                 nSeek = 8;
                 break;
             case 0x5D:

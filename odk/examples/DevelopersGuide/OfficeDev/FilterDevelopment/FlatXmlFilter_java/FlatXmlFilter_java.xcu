@@ -28,7 +28,7 @@
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
-                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. It it is not necessary. -->
+                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
                     <value xml:lang="x-no-translate"></value>
                     <value xml:lang="de">DevGuide FlatXML Calc</value>
                     <value xml:lang="en-US">DevGuide FlatXML Calc</value>
@@ -44,7 +44,7 @@
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
-                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. It it is not necessary. -->
+                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
                     <value xml:lang="x-no-translate"></value>
                     <value xml:lang="de">DevGuide FlatXML Draw</value>
                     <value xml:lang="en-US">DevGuide FlatXML Draw</value>
@@ -60,7 +60,7 @@
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
-                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. It it is not necessary. -->
+                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
                     <value xml:lang="x-no-translate"></value>
                     <value xml:lang="de">DevGuide FlatXML Impress</value>
                     <value xml:lang="en-US">DevGuide FlatXML Impress</value>
@@ -76,7 +76,7 @@
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
-                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. It it is not necessary. -->
+                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
                     <value xml:lang="x-no-translate"></value>
                     <value xml:lang="de">DevGuide FlatXML Writer</value>
                     <value xml:lang="en-US">DevGuide FlatXML Writer</value>
@@ -92,7 +92,7 @@
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
-                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. It it is not necessary. -->
+                    <!-- The x-no-translate entry is a marker to prevent l10n tooling from translation. If it is not necessary. -->
                     <value xml:lang="x-no-translate"></value>
                     <value xml:lang="de">DevGuide FlatXML Master</value>
                     <value xml:lang="en-US">DevGuide FlatXML Master</value>

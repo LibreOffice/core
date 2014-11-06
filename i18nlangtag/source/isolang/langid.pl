@@ -238,7 +238,7 @@ sub main()
         }
     }
     # If the string given is of the form xx-yy lookup a language,country pair
-    # to obtain the define identifier. xx and yy themselfs may be regexps.
+    # to obtain the define identifier. xx and yy themselves may be regexps.
     # xx- is a short form for 'xx-.*' and -yy a short form for '.*-yy'
     # Note that -Latn for '.*-Latn' also works, accidentally.
     if ($grepdef =~ /^(.*)-$/) {

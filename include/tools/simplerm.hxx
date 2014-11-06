@@ -65,7 +65,7 @@ public:
     */
     OUString           ReadString( sal_uInt32 nId );
 
-    /** checks whether a certain resource is availble
+    /** checks whether a certain resource is available
         @param  _resourceType
             the type of the resource to check. Currently, only RSC_STRING (strings) and RSC_RESOURCE (blobs)
             are supported, for every other type, <FALSE/> will be returned.

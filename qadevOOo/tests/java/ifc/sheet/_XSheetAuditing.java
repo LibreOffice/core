@@ -70,7 +70,7 @@ public class _XSheetAuditing extends MultiMethodTest {
 
         // get a sheet for changing the cells
         XSpreadsheet xSheet = (XSpreadsheet)tEnv.getObjRelation("XSheetAuditing.Spreadsheet");
-        if (xSheet == null) // query on ther object
+        if (xSheet == null) // query on their object
             xSheet = UnoRuntime.queryInterface(XSpreadsheet.class, oObj);
         if (xSheet == null)
             throw new StatusException(Status.failed("'XSheetAuditing.Spreadsheet' object relation not found."));

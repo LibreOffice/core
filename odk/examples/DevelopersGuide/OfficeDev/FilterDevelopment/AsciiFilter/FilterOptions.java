@@ -180,7 +180,7 @@ public class FilterOptions
     /**
      * with this method it's possible for the outside filter to decide
      * if he can use this FilterOptions really or not.
-     * That means especialy if necessary streams are available or not.
+     * That means especially if necessary streams are available or not.
      */
     public boolean isValid()
     {

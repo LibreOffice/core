@@ -182,7 +182,7 @@ enum IA2ScrollType {
   /** Scroll the object or substring such that as much as possible of the
    object or substring is within the top level window.  The placement of
    the object is dependent on the application.  For example, the object or
-   substring may be scrolled to to closest edge, the furthest edge, or midway
+   substring may be scrolled to closest edge, the furthest edge, or midway
    between those two edges.
   */
   IA2_SCROLL_TYPE_ANYWHERE

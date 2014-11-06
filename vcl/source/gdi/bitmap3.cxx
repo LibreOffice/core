@@ -876,7 +876,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     //fdo#33455
     //
     //If we start with a 1 bit image, then after scaling it in any mode except
-    //BMP_SCALE_FAST we have a a 24bit image which is perfectly correct, but we
+    //BMP_SCALE_FAST we have a 24bit image which is perfectly correct, but we
     //are going to down-shift it to mono again and Bitmap::ImplMakeMono just
     //has "Bitmap aNewBmp( GetSizePixel(), 1 );" to create a 1 bit bitmap which
     //will default to black/white and the colors mapped to which ever is closer

@@ -20,7 +20,7 @@ package com.sun.star.uno;
 
 /**
  * The <code>IMemberDescription</code> is the base interface
- * for for the special subset of typedescriptions, which describe
+ * for the special subset of typedescriptions, which describe
  * members of IDL structs or interfeces.
  *
  * @deprecated This interface does not cover all the features supported by the

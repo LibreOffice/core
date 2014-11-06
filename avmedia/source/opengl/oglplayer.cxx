@@ -286,7 +286,7 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     releaseInputFiles();
     if( nRet != 0 )
     {
-        SAL_WARN("avmedia.opengl", "Error occured while setting up the scene! Error code: " << nRet);
+        SAL_WARN("avmedia.opengl", "Error occurred while setting up the scene! Error code: " << nRet);
         return uno::Reference< media::XPlayerWindow >();
     }
     // The background color is white by default, but we need to separate the
@@ -329,7 +329,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
     releaseInputFiles();
     if( nRet != 0 )
     {
-        SAL_WARN("avmedia.opengl", "Error occured while setting up the scene! Error code: " << nRet);
+        SAL_WARN("avmedia.opengl", "Error occurred while setting up the scene! Error code: " << nRet);
         return uno::Reference< media::XFrameGrabber >();
     }
     glClearColor(0.5f, 0.5f, 0.5f, 0.5f);

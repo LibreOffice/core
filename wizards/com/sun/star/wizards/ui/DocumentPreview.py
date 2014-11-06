@@ -69,7 +69,7 @@ class DocumentPreview(object):
 
     '''
     create a new frame with a new container window inside,
-    which isnt part of the global frame tree.
+    which is not part of the global frame tree.
 
     Attention:
     a) This frame wont be destroyed by the office. It must be closed by you!

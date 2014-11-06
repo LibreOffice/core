@@ -5480,7 +5480,7 @@
       </node>
       <node oor:name=".uno:FieldMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fiel~ds</value>
+          <value xml:lang="en-US">Fields</value>
         </prop>
       </node>
       <node oor:name=".uno:FormattingMarkMenu" oor:op="replace">

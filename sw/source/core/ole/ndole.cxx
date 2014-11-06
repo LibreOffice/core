@@ -350,7 +350,7 @@ bool SwOLENode::SavePersistentData()
             pCnt->RemoveEmbeddedObject( aOLEObj.aName, false, bKeepObjectToTempStorage );
 
             // TODO/LATER: aOLEObj.aName has no meaning here, since the undo container contains the object
-            // by different name, in future it might makes sence that the name is transported here.
+            // by different name, in future it might makes sense that the name is transported here.
             aOLEObj.xOLERef.AssignToContainer( 0, aOLEObj.aName );
             try
             {
@@ -487,7 +487,7 @@ bool SwOLENode::IsInGlobalDocSection() const
     }
 
     // pAnchorNd contains the most recently found Section Node, which
-    // now must fullfill the prerequesites for the GlobalDoc
+    // now must fulfill the prerequesites for the GlobalDoc
     pSectNd = (SwSectionNode*)pAnchorNd;
     return FILE_LINK_SECTION == pSectNd->GetSection().GetType() &&
             pSectNd->GetIndex() > nEndExtraIdx;

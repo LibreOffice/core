@@ -648,7 +648,7 @@ public class GeckoLayerClient implements LayerView.Listener, PanZoomTarget
       * on every frame, it needs to be ultra-fast.
       * It avoids taking any locks or allocating any objects. We keep around a
       * mCurrentViewTransform so we don't need to allocate a new ViewTransform
-      * everytime we're called. NOTE: we might be able to return a ImmutableViewportMetrics
+      * every time we're called. NOTE: we might be able to return a ImmutableViewportMetrics
       * which would avoid the copy into mCurrentViewTransform.
       */
     //@WrapElementForJNI(allowMultithread = true)

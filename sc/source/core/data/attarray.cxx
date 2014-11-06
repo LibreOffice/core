@@ -2372,7 +2372,7 @@ SCsROW ScAttrArray::SearchStyle(
         }
     }
 
-    OSL_ENSURE( bFound || !ValidRow(nRow), "Internal failure in in ScAttrArray::SearchStyle" );
+    OSL_ENSURE( bFound || !ValidRow(nRow), "Internal failure in ScAttrArray::SearchStyle" );
 
     return nRow;
 }

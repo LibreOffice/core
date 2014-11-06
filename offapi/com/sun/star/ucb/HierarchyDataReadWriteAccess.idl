@@ -41,7 +41,7 @@ published service HierarchyDataReadWriteAccess
 
         <p>Adding and removing must only be supported if the access object
         points to the "Children" data member of a node or to the root node.
-        It will insert a new node or or remove an existing one. If supported
+        It will insert a new node or remove an existing one. If supported
         on data nodes, adding must add new data members to the node, removing
         must remove data members. However, the mandatory data members (Title,
         TargetURL, Children) must never be removable.

@@ -528,7 +528,7 @@ done, regression tests added:
 #i107843# em-dash/en-dash breakiterator fix for spell checking
 #i103552# Japanese word for 'shutdown' added to ja.dic
 #i113785# ligatures for spell checking will no longer break words
-An opening quote should not be counted as a word by word count tool (regression test in in writer)
+An opening quote should not be counted as a word by word count tool (regression test in writer)
 fdo#31271 wrong line break with (
 #i89042# word count fix (regression test is in writer)
 #i58513# add break iterator rules for Finish

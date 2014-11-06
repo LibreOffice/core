@@ -158,7 +158,7 @@ public:
     SbiInstance* pNext;             // instances chain
 
     // #31460 new concept for StepInto/Over/Out,
-    // Explaination see runtime.cxx at SbiInstance::CalcBreakCallLevel()
+    // explanation see runtime.cxx at SbiInstance::CalcBreakCallLevel()
     sal_uInt16  nCallLvl;
     sal_uInt16  nBreakCallLvl;
     void    CalcBreakCallLevel( sal_uInt16 nFlags );

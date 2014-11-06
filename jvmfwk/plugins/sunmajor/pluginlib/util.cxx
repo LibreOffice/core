@@ -698,7 +698,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
                 }
                 catch (MalformedVersionException & )
                 {
-                    //The second version is invalid, therefore it is regardes less.
+                    //The second version is invalid, therefore it regards less.
                     nCmp = 1;
                 }
             }

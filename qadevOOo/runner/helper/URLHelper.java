@@ -80,7 +80,7 @@ public class URLHelper
 
     /**
      * The same as getFileURLFromSystemPath() before but uses string parameter instead
-     * of a File type. It exist to supress converting of necessary parameters in the
+     * of a File type. It exist to suppress converting of necessary parameters in the
      * outside code. But of course getFileURLFromSystemPath(File) will be a little bit faster
      * then this method ...
      *

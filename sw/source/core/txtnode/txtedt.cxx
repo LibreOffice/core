@@ -839,9 +839,9 @@ bool SwScanner::NextWord()
                 g_pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
         OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
-        // we don't want to include preceeding text
+        // we don't want to include preceding text
         // to count words in text with mixed script punctuation correctly,
-        // but we want to include preceeding symbols (eg. percent sign, section sign,
+        // but we want to include preceding symbols (eg. percent sign, section sign,
         // degree sign defined by dict_word_hu to spell check their affixed forms).
         if (nWordType == i18n::WordType::WORD_COUNT && aBound.startPos < nBegin)
             aBound.startPos = nBegin;
@@ -1385,7 +1385,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         {
             aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
 
-            // fdo#71558 notify mispelled word to accessibility
+            // fdo#71558 notify misspelled word to accessibility
             SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if( pViewSh )
                 pViewSh->InvalidateAccessibleParaAttrs( *this );

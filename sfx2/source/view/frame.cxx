@@ -812,7 +812,7 @@ void SfxFrame::CreateWorkWindow_Impl()
 
     if ( IsInPlace() )
     {
-        // this makes sence only for inplace activated objects
+        // this makes sense only for inplace activated objects
         try
         {
             Reference < XChild > xChild( GetCurrentDocument()->GetModel(), UNO_QUERY );

@@ -259,7 +259,7 @@ public:
                 This value is set to a default value "UNKNWON_CONTENT", which force
                 an internal check, if this content is loadable or not.
                 But may this check was already made by the caller of this method and
-                passing this information to this LoadEnv instance can supress this
+                passing this information to this LoadEnv instance can suppress this
                 might expensive check.
                 That can be useful in case this information is needed outside too,
                 to decide if its necessary to create some resources for this load
@@ -433,7 +433,7 @@ private:
                 for the detected content type (must be done before by calling
                 impl_detectTypeAndFilter()). Because such handler does not depend
                 from a real target frame, location of such frame will be
-                supressed here.
+                suppressed here.
                 In case handle failed all new created resources will be
                 removed before a suitable exception is thrown.
                 (Excepting a RuntimeException occurrence!)
@@ -524,29 +524,29 @@ private:
     css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget()
         throw(LoadEnvException, css::uno::RuntimeException, std::exception);
 
-    /** @short  because showing of a frame is needed more than once ...
+    /** @short  because showing of a frame is needed more than once...
                 it's implemented as an separate method .-)
 
-        @descr  Note: Showing of a frame is bound to a special feature ...
+        @descr  Note: Showing of a frame is bound to a special feature...
                 a) If we recycle any existing frame, we must bring it to front.
-                   Showing of such frame isnt needed really .. because we recycle
+                   Showing of such frame is not needed really.. because we recycle
                    visible frames only!
                 b) If the document was already shown (e.g. by our progress implementation)
-                   we do nothing here. The reason  behind: The document was already shown ..
-                   and it was already make a top window ...
+                   we do nothing here. The reason  behind: The document was already shown...
+                   and it was already make a top window...
                    If the user activated another frame inbetween (because loading needed some time)
                    it's not allowed to disturb the user again. Then the frame must resists in the background.
-                c) If the frame was not shown before ... but loading of a visible document into this frame
-                   was finished ... we need both actions: setVisible() and toFront().
+                c) If the frame was not shown before... but loading of a visible document into this frame
+                   was finished... we need both actions: setVisible() and toFront().
 
         @param  xWindow
                 points to the container window of a frame.
 
         @param  bForceToFront
-                if it's set to sal_False ... showing of the window is done more intelligent.
+                if it's set to sal_False... showing of the window is done more intelligent.
                 setVisible() is called only if the window was not shown before.
                 This mode is needed by b) and c)
-                If it's set to sal_True ... both actions has to be done: setVisible(), toFront()!
+                If it's set to sal_True... both actions has to be done: setVisible(), toFront()!
                 This mode is needed by a)
      */
     void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,

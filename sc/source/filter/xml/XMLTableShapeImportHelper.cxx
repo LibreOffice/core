@@ -192,7 +192,7 @@ void XMLTableShapeImportHelper::finishShape(
     else //this are grouped shapes which should also get the layerid
     {
         uno::Reference< drawing::XShapes > xGroup( rShape, uno::UNO_QUERY );
-        // ignore the group ( within group ) object it it exists
+        // ignore the group ( within group ) object if it exists
         if ( !bOnTable && !xGroup.is() )
         {
             // For cell anchored grouped shape we need to set the start

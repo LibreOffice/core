@@ -246,7 +246,7 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
     enumXFWrap eWrap = enumXFWrapNone;
     switch(m_pLayout->GetWrapType())
     {
-        case LwpPlacableLayout::LAY_WRAP_AROUND:    //fall throught
+        case LwpPlacableLayout::LAY_WRAP_AROUND:    //fall through
         case LwpPlacableLayout::LAY_WRAP_IRREG_BIGGEST:
         {
             //In SODC, if Optimal wrap type is used and the distance between the frame object
@@ -282,19 +282,19 @@ void LwpFrame::ApplyWrapType(XFFrameStyle *pFrameStyle)
             }
             break;
         }
-        case LwpPlacableLayout::LAY_WRAP_LEFT:      //fall throught
+        case LwpPlacableLayout::LAY_WRAP_LEFT:      //fall through
         case LwpPlacableLayout::LAY_WRAP_IRREG_LEFT:
         {
             eWrap = enumXFWrapLeft;
             break;
         }
-        case LwpPlacableLayout::LAY_WRAP_RIGHT: //fall throught
+        case LwpPlacableLayout::LAY_WRAP_RIGHT: //fall through
         case LwpPlacableLayout::LAY_WRAP_IRREG_RIGHT:
         {
             eWrap = enumXFWrapRight;
             break;
         }
-        case LwpPlacableLayout::LAY_WRAP_BOTH:  //fall throught
+        case LwpPlacableLayout::LAY_WRAP_BOTH:  //fall through
         case LwpPlacableLayout::LAY_WRAP_IRREG_BOTH:
         {
             eWrap = enumXFWrapParallel;
@@ -426,7 +426,7 @@ void LwpFrame::ApplyPosType(XFFrameStyle* pFrameStyle)
     sal_uInt8 nType = m_pLayout->GetRelativeType();
     switch(nType)
     {
-        case LwpLayoutRelativityGuts::LAY_PARENT_RELATIVE://fall throught
+        case LwpLayoutRelativityGuts::LAY_PARENT_RELATIVE://fall through
         case LwpLayoutRelativityGuts::LAY_CONTENT_RELATIVE:
         {
             //anchor to page, frame and cell
@@ -609,7 +609,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
     sal_uInt8 nType = m_pLayout->GetRelativeType();
     switch(nType)
     {
-        case LwpLayoutRelativityGuts::LAY_PARENT_RELATIVE://fall throught
+        case LwpLayoutRelativityGuts::LAY_PARENT_RELATIVE://fall through
         case LwpLayoutRelativityGuts::LAY_CONTENT_RELATIVE:
         {
             //anchor to page, frame and cell
@@ -689,7 +689,7 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             double offset = 0;
 
             //because of the different feature between Word Pro and SODC, I simulate the vertical base offset
-            //between anchor and frame orgin using the font height.
+            //between anchor and frame origin using the font height.
             //LwpPara* pPara = static_cast<LwpPara*>(m_pLayout->GetPosition()->obj());
             rtl::Reference<XFFont> pFont = m_pLayout->GetFont();
             if(pFont.is())

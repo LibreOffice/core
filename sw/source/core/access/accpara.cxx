@@ -2998,7 +2998,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
         pIndices[i] = i;
     sort( &pIndices[0], &pIndices[nLength], IndexCompare(pPairs) );
 
-    // create sorted sequences accoring to index array
+    // create sorted sequences according to index array
     uno::Sequence< OUString > aNames( nLength );
     OUString* pNames = aNames.getArray();
     uno::Sequence< uno::Any > aValues( nLength );

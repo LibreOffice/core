@@ -50,7 +50,7 @@ import com.sun.star.registry.XSimpleRegistry;
 *    The full system path to the registry file which is opened and modified.
 *  </li>
 *  <li> <code>'XSimpleRegistry.destroy'</code> (of type <code>String</code>):
-*    The full system path to the registry fiel which is destroyed.
+*    The full system path to the registry file which is destroyed.
 *  </li>
 *  <li> <code>'XSimpleRegistry.merge'</code> (of type <code>String</code>):
 *    The full system path to the registry file which is merged with the

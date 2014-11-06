@@ -1550,7 +1550,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             // The reference to sCountName in the formula of sFunctionName refers to the *old* value
-                            // so we need to expand the the formula of sCountName
+                            // so we need to expand the formula of sCountName
                             sPrefix = " + 1) / " + OUString::number(xGroup->getGroupInterval());
                             sFunctionName = sFunction + "_" + sExpression;
                             sFunction = sFunction + "(";

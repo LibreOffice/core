@@ -493,7 +493,7 @@ class Process(ProcessErrors):
 
         try:
              # here I calculate the destination filename.
-             # I take the original filename (docFilename), substract the extension, (docExt) -> (fn)
+             # I take the original filename (docFilename), subtract the extension, (docExt) -> (fn)
              # and find an available filename which starts with
              # this filename, but with the new extension. (destExt)
             docFilename = FileAccess.getFilename(doc.cp_URL)

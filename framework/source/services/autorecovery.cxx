@@ -200,9 +200,9 @@ public:
 
         /* FINAL STATES */
 
-        /// the Auto/Emergency saved document isnt useable any longer
+        /// the Auto/Emergency saved document is not useable any longer
         E_DAMAGED = 64,
-        /// the Auto/Emergency saved document isnt really up-to-date (some changes can be missing)
+        /// the Auto/Emergency saved document is not really up-to-date (some changes can be missing)
         E_INCOMPLETE = 128,
         /// the Auto/Emergency saved document was processed successfully
         E_SUCCEDED = 512
@@ -286,7 +286,7 @@ public:
             sal_Int32 DocumentState;
 
             /** Because our applications not ready for concurrent save requests at the same time,
-                we have supress our own AutoSave for the moment, a document will be already saved
+                we have suppress our own AutoSave for the moment, a document will be already saved
                 by others.
              */
             bool UsedForSaving;
@@ -317,7 +317,7 @@ public:
             OUString AppModule;      // e.g. com.sun.star.text.TextDocument - used to identify app module
             OUString FactoryService; // the service to create a document of the module
             OUString RealFilter;     // real filter, which was used at loading time
-            OUString DefaultFilter;  // supports saving of the default format without loosing data
+            OUString DefaultFilter;  // supports saving of the default format without losing data
             OUString Extension;      // file extension of the default filter
             OUString Title;          // can be used as "DisplayName" on every recovery UI!
             css::uno::Sequence< OUString >
@@ -585,7 +585,7 @@ private:
 
         @descr  ... but only keys related to the AutoSave mechanism.
                 Means: State and Timer intervall.
-                E.g. the recovery list isnt adressed here.
+                E.g. the recovery list is not addressed here.
 
         @throw  [com.sun.star.uno.RuntimeException]
                 if config could not be opened or readed successfully!
@@ -964,14 +964,14 @@ private:
                 a) An external progress is provided by our CrashSave or Recovery dialog.
                 b) We must create our own progress e.g. for an AutoSave
                 c) Sometimes our application filters dont use the progress
-                   provided by the MediaDescriptor. They uses the Frame everytime to create
+                   provided by the MediaDescriptor. They uses the Frame every time to create
                    it's own progress. So we implemented a HACK for these and now we set
                    an InterceptedProgress there for the time WE use this frame for loading/storing documents .-)
 
         @param  xNewFrame
                 must be set only in case WE create a new frame (e.g. for loading documents
                 on session restore or recovery). Then search for a frame using rInfo.Document must
-                be supressed and xFrame must be preferred instead .-)
+                be suppressed and xFrame must be preferred instead .-)
 
         @param  rInfo
                 used e.g. to find the frame corresponding to a document.
@@ -1006,10 +1006,10 @@ private:
     void st_impl_removeFile(const OUString& sURL);
 
     /** try to remove ".lock" file from disc if office will be terminated
-        not using the offical way .-)
+        not using the official way .-)
 
         This method has to be handled "optional". So every error inside
-        has to be ignored ! This method CANT FAIL ... it can forget something only .-)
+        has to be ignored ! This method CAN NOT FAIL ... it can forget something only .-)
      */
     void st_impl_removeLockFile();
 };
@@ -1109,7 +1109,7 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
 
 // enable the following defines in case you wish to simulate a full disc for debug purposes .-)
 
-// this define throws everytime a document is stored or a configuration change
+// this define throws every time a document is stored or a configuration change
 // should be flushed an exception ... so the special error handler for this scenario is triggered
 // #define TRIGGER_FULL_DISC_CHECK
 
@@ -1121,7 +1121,7 @@ class CacheLockGuard
     private:
 
         // holds the outside calli alive, so it's shared resources
-        // are valid everytimes
+        // are valid every time
         css::uno::Reference< css::uno::XInterface > m_xOwner;
 
         // mutex shared with outside calli !
@@ -1346,7 +1346,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     // This can be done immediately ... must not been done asynchronous.
     if ((eNewJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
     {
-        // it's important to set a flag internally, so AutoRecovery will be supressed - even if it's requested.
+        // it's important to set a flag internally, so AutoRecovery will be suppressed - even if it's requested.
         m_eJob |= eNewJob;
         implts_stopTimer();
         implts_stopListening();
@@ -1608,7 +1608,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
         implts_updateModifiedState(xDocument);
     }
     /* at least one document starts saving process =>
-       Our application code isn't ready for multiple save requests
+       Our application code is not ready for multiple save requests
        at the same time. So we have to suppress our AutoSave feature
        for the moment, till this other save requests will be finished.
      */
@@ -1706,7 +1706,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
 
     // Note: This call stops the timer and starts it again.
     // But it checks the different timer states internally and
-    // may be supress the restart!
+    // may be suppress the restart!
     implts_updateTimer();
 }
 
@@ -1939,7 +1939,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     if (rInfo.AppModule.isEmpty())
     {
         throw css::uno::RuntimeException(
-                "Cant find out the default filter and its extension, if no application module is known!",
+                "Can not find out the default filter and its extension, if no application module is known!",
                 static_cast< css::frame::XDispatch* >(this));
     }
 
@@ -2000,7 +2000,7 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
 {
     ENSURE_OR_THROW2(
         !rInfo.AppModule.isEmpty() || rInfo.Document.is(),
-        "Cant find out the application module nor its factory URL, if no application module (or a suitable) document is known!",
+        "Can not find out the application module nor its factory URL, if no application module (or a suitable) document is known!",
         *this );
 
     css::uno::Reference< css::frame::XModuleManager2 > xManager = ModuleManager::create(m_xContext);
@@ -2390,7 +2390,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
         bool bAllowUserIdleLoop = true;
         AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop, false);
 
-        // If timer isn't used for "short callbacks" (means polling
+        // If timer is not used for "short callbacks" (means polling
         // for special states) ... reset the handle state of all
         // cache items. Such handle state indicates, that a document
         // was already saved during the THIS(!) AutoSave session.
@@ -2547,7 +2547,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
-    // create a new cache entry ... this document isn't known.
+    // create a new cache entry ... this document is not known.
     ++m_nIdPool;
     aNew.ID = m_nIdPool;
     SAL_WARN_IF(m_nIdPool<0, "fwk", "AutoRecovery::implts_registerDocument(): Overflow of ID pool detected.");
@@ -2877,8 +2877,8 @@ void AutoRecovery::implts_prepareSessionShutdown()
         if implts_registerDocument() was called.
         So we have to check a second time, if this property is set ....
         Best place doing so is to check it immeditaly before saving
-        and supressingd saving the document then.
-        Of course removing the corresponding cache entry isn't an option.
+        and suppressingd saving the document then.
+        Of course removing the corresponding cache entry is not an option.
         Because it would disturb iteration over the cache !
         So we ignore such documents only ...
         Hopefully next time they are not inserted in our cache.
@@ -3104,7 +3104,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // for make hyperlinks working
     lNewArgs[utl::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= OUString();
 
-    // try to save this document as a new temp file everytimes.
+    // try to save this document as a new temp file every time.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is to old and does not include all changes.
     Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
@@ -3190,7 +3190,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
     }
 
-    // make sure the progress isn't referred any longer
+    // make sure the progress is not referred any longer
     impl_forgetProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
 
     // try to remove the old temp file.
@@ -4259,7 +4259,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     // So we use a two step mechanism:
     // 1) we set the progress inside the MediaDescriptor, which will be provided to the filter
     // 2) and we set a special Frame property, which overwrites the normal behaviour of Frame::createStatusIndicator .-)
-    // But we supress 2) in case we uses an internal progress. Because then it doesn't matter
+    // But we suppress 2) in case we uses an internal progress. Because then it doesn't matter
     // if our applications make it wrong. In such case the internal progress resists at the same frame
     // and there is no need to forward progress activities to e.g. an outside dialog .-)
     if (

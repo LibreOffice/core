@@ -1602,7 +1602,7 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
             //try to move to nCurRow, nColId
             CursorMoveAttempt aAttempt(nCurRow, nColId, bScrolled);
             //Detect if we are already in a call to BrowseBox::GoToColumnId
-            //but the the attempt is impossible and we are simply recursing
+            //but the attempt is impossible and we are simply recursing
             //into BrowseBox::GoToColumnId with the same impossible to
             //fulfill conditions
             if (m_aGotoStack.empty() || aAttempt != m_aGotoStack.top())

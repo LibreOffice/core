@@ -105,7 +105,7 @@ public class _XNameReplace extends MultiMethodTest {
             log.println("ObjRelation(\"INSTANCE" + Index +"\") Object n.a.");
         }
 
-        log.println("getting the existant object's name");
+        log.println("getting the existent object's name");
         XNameAccess oNameAccess = UnoRuntime.queryInterface(
                                                        XNameAccess.class, oObj);
         oNames = oNameAccess.getElementNames();

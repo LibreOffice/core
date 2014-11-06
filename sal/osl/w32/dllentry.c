@@ -291,7 +291,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
             // This code will attach the process to its parent process
             // if the parent process had set the environment variable.
             // The corresponding code (setting the environment variable)
-            // is is desktop/win32/source/officeloader.cxx
+            // is desktop/win32/source/officeloader.cxx
 
             DWORD   dwResult = GetEnvironmentVariable( "ATTACHED_PARENT_PROCESSID", szBuffer, sizeof(szBuffer) );
 

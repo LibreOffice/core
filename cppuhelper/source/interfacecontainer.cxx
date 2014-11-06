@@ -250,7 +250,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
         sal_Int32 i;
         for( i = 0; i < nLen; i++ )
         {
-            // It is not valid to compare the Pointer direkt, but is is is much
+            // It is not valid to compare the Pointer direkt, but is much
             // more faster.
             if( pL[i].get() == rListener.get() )
             {

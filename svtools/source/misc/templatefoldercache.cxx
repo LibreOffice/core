@@ -266,7 +266,7 @@ namespace svt
     };
 
 
-    /// base class for functors which act an an SvStream
+    /// base class for functors which act an SvStream
     struct StorageHelper
     {
     protected:

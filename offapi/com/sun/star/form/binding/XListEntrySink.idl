@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module form { module binding {
 interface XListEntrySource;
 
 
-/** specifies support for indirect manipulation of of a string list
+/** specifies support for indirect manipulation of a string list
 */
 interface XListEntrySink : com::sun::star::uno::XInterface
 {

@@ -739,7 +739,7 @@ bool SwEditWin::IsInputSequenceCheckingRequired( const OUString &rText, const Sw
     return (0 <= nCTLScriptPos && nCTLScriptPos <= rText.getLength());
 }
 
-//return INVALID_HINT if language should not be explictly overridden, the correct
+//return INVALID_HINT if language should not be explicitly overridden, the correct
 //HintId to use for the eBufferLanguage otherwise
 static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView& rView,
     const OUString &rInBuffer)
@@ -4187,7 +4187,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             m_aSaveCallEvent.Set( EVENT_OBJECT_URLITEM, pFmt );
                     }
 
-                    // should be be over a InternetField with an
+                    // should be over a InternetField with an
                     // embedded macro?
                     if( m_aSaveCallEvent != aLastCallEvent )
                     {

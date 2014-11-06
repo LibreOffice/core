@@ -1037,7 +1037,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
                 xUpperLeft = new FormulaDoubleToken( f);
                 break;
             }
-            // fall thru
+            // fall through
         default:
             {
                 OSL_FAIL("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
@@ -2143,7 +2143,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                     rRef2.SetAddress(aAbs, rNewPos);
                 }
             }
-            //! fallthru
+            //! fall through
             case svSingleRef :
             {
                 ScSingleRefData& rRef1 = *pCode[j]->GetSingleRef();
@@ -2160,7 +2160,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                 ScAddress aAbs = rRef2.toAbs(rOldPos);
                 rRef2.SetAddress(aAbs, rNewPos);
             }
-            //! fallthru
+            //! fall through
             case svExternalSingleRef :
             {
                 ScSingleRefData& rRef1 = *pCode[j]->GetSingleRef();

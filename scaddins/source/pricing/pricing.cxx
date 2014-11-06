@@ -476,7 +476,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibility
 }
 
 // actual function implementation starts here
-// auxillary input handling functions
+// auxiliary input handling functions
 namespace {
 
 bool getinput_putcall(bs::types::PutCall& pc, const OUString& str) {
@@ -581,7 +581,7 @@ bool getinput_greek(bs::types::Greeks& greek, const uno::Any& anyval) {
     return true;
 }
 
-} // namespace for auxillary functions
+} // namespace for auxiliary functions
 
 // OPT_BARRIER(...)
 double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,

@@ -335,7 +335,7 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         // The given XPane reference is either empty or the pane was not
         // created by any of the factories managed by the called
         // BasicPaneFactory object.
-        throw lang::IllegalArgumentException("BasicPaneFactory::releasePane() called for pane that that was not created by same factory.",
+        throw lang::IllegalArgumentException("BasicPaneFactory::releasePane() called for pane that was not created by same factory.",
             NULL,
             0);
     }

@@ -698,7 +698,7 @@ private:
 
 public:
                     EditSelection();    // No constructor and destructor
-                                        // are automtically excecuted correctly!
+                                        // are automatically executed correctly!
                     EditSelection( const EditPaM& rStartAndAnd );
                     EditSelection( const EditPaM& rStart, const EditPaM& rEnd );
 

@@ -162,8 +162,8 @@ sal_Int32 ResultSet::findColumn( const OUString& columnName )
     checkClosed();
     sal_Int32 res = PQfnumber( m_result,
                                OUStringToOString( columnName, (*m_ppSettings)->encoding ).getStr());
-    /* PQfnumber reurn -1 for not found, which is waht we want
-     * otehr than that we use col number as 1-based not 0-based */
+    /* PQfnumber reurn -1 for not found, which is what we want
+     * other than that we use col number as 1-based not 0-based */
     if(res >= 0)
     {
         res += 1;

@@ -629,7 +629,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     }
     else if( pCol )
     {
-        // minumum gutter width
+        // minimum gutter width
         sal_uInt16 nGutter = pCol->GetGutterWidth( true );
         if( nGutter!=USHRT_MAX )
         {

@@ -1059,7 +1059,7 @@ SwView::~SwView()
     EndListening(*GetDocShell());
     delete m_pScrollFill;
     delete m_pWrtShell;
-    m_pWrtShell = 0;      // Set to 0, so that it is not accessable by the following dtors cannot.
+    m_pWrtShell = 0;      // Set to 0, so that it is not accessible by the following dtors cannot.
     m_pShell = 0;
     delete m_pHScrollbar;
     delete m_pVScrollbar;

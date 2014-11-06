@@ -471,11 +471,11 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // ensure the imported legacy rotated shape is in the expected position
         // when a shape is fully hidden reloading seems to result is in some errors, usually
         // ( same but different error happens pre-patch ) - we should do better here, I regard it
-        // as a pre-existing bug though ( #FIXME )
+        // as a pre-existing bug though (#FIXME)
         //Rectangle aRect( 6000, -2000, 8000, 4000 ); // proper dimensions
         Rectangle aRect( 6000, -2000, 7430, 4000 );
-        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
-        // terms of the rotated shape ) is more or less contains the correct info
+        // ensure the imported (and converted) anchor (note we internally now store the anchor in
+        // terms of the rotated shape) is more or less contains the correct info
         ScDrawObjData aAnchor;
         aAnchor.maStart.SetRow( 0 );
         aAnchor.maStart.SetCol( 5 );
@@ -484,7 +484,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         rDoc.ShowRows(0, 9, 0, true); // show relavent rows
         rDoc.SetDrawPageSize(0); // trigger recalcpos
 
-        // apply hefty ( 1 mm ) tolerence here, as some opensuse tinderbox
+        // apply hefty (1 mm) tolerance here, as some opensuse tinderbox
         // failing
         impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor, 100 );
 
@@ -498,8 +498,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         CPPUNIT_ASSERT(&rDoc);
         // ensure the imported legacy rotated shape is in the expected position
         Rectangle aRect( 6000, 3000, 8000, 9000 );
-        // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
-        // terms of the rotated shape ) is more or less contains the correct info
+        // ensure the imported (and converted) anchor (note we internally now store the anchor in
+        // terms of the rotated shape) is more or less contains the correct info
 
         ScDrawObjData aAnchor;
         aAnchor.maStart.SetRow( 3 );

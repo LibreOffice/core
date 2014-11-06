@@ -145,7 +145,7 @@ published interface XDynamicResultSet: com::sun::star::lang::XComponent
         the interface XSourceInitialization.
 
         @throws ListenerAlreadySetException
-        if if someone already has fetched the ContentResultSet via
+        if someone already has fetched the ContentResultSet via
         XDynamicResultSet::getStaticResultSet().
 
         @throws AlreadyInitializedException
