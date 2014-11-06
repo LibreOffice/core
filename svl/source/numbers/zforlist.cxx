@@ -2459,6 +2459,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     }
     SAL_WARN_IF( nNewExtended > ZF_STANDARD_NEWEXTENDEDMAX, "svl.numbers",
         "ImpGenerateFormats: overflow of nNewExtended standard formats" );
+    assert( nNewExtended <= ZF_STANDARD_NEWEXTENDEDMAX );
 
     // Now all additional format codes provided by I18N, but only if not
     // changing SystemCL, then they are appended last after user defined.
