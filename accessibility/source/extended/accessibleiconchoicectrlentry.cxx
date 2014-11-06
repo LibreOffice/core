@@ -19,7 +19,6 @@
 
 #include <accessibility/extended/accessibleiconchoicectrlentry.hxx>
 #include <svtools/ivctrl.hxx>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
