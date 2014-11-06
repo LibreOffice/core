@@ -435,7 +435,7 @@ public:
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) SAL_OVERRIDE;
 
     virtual VclAbstractDialog*          CreateTblMergeDialog(vcl::Window* pParent, bool& rWithPrev) SAL_OVERRIDE;
-    virtual SfxAbstractTabDialog*       CreateFrmTabDialog( const OString &rDialogType,
+    virtual SfxAbstractTabDialog*       CreateFrmTabDialog( const OUString &rDialogType,
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrm  = true,

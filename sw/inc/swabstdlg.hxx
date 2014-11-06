@@ -389,7 +389,7 @@ public:
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg(vcl::Window *pParent) = 0;
 
     virtual VclAbstractDialog*          CreateTblMergeDialog( vcl::Window* pParent, bool& rWithPrev ) = 0;
-    virtual SfxAbstractTabDialog*       CreateFrmTabDialog(const OString &rDialogType,
+    virtual SfxAbstractTabDialog*       CreateFrmTabDialog(const OUString &rDialogType,
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool bNewFrm = true,

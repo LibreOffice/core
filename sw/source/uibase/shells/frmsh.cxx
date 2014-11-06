@@ -501,9 +501,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
                 boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog(
-                                                        nSel & nsSelectionType::SEL_GRF ? "PictureDialog" :
-                                                        nSel & nsSelectionType::SEL_OLE ? "ObjectDialog":
-                                                                                        "FrameDialog",
+                                                        nSel & nsSelectionType::SEL_GRF ? OUString("PictureDialog") :
+                                                        nSel & nsSelectionType::SEL_OLE ? OUString("ObjectDialog"):
+                                                                                        OUString("FrameDialog"),
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
                                                         aSet, false,

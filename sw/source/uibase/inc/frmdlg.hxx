@@ -31,7 +31,7 @@ class SwFrmDlg : public SfxTabDialog
     bool m_bNew;
     bool m_bHTMLMode;
     const SfxItemSet&   m_rSet;
-    OString m_sDlgType;
+    OUString m_sDlgType;
     SwWrtShell* m_pWrtShell;
 
     sal_uInt16 m_nStdId;
@@ -53,7 +53,7 @@ public:
     SwFrmDlg(   SfxViewFrame *pFrame, vcl::Window *pParent,
                 const SfxItemSet& rCoreSet,
                 bool bNewFrm  = false,
-                const OString& sResType = OString("FrameDialog"),
+                const OUString& sResType = OUString("FrameDialog"),
                 bool bFmt     = false,
                 const OString& sDefPage = OString(),
                 const OUString* pFmtStr  = 0);

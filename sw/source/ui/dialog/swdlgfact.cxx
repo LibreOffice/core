@@ -938,7 +938,7 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateTblMergeDialog(vcl::Wind
     return new VclAbstractDialog_Impl( pDlg );
 }
 
-SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog(const OString &rDialogType,
+SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog(const OUString &rDialogType,
                                                 SfxViewFrame *pFrame, vcl::Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 bool        bNewFrm,

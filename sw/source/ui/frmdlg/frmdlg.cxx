@@ -48,14 +48,14 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     vcl::Window*             pParent,
                     const SfxItemSet&   rCoreSet,
                     bool                bNewFrm,
-                    const OString&      sResType,
+                    const OUString&      sResType,
                     bool                bFormat,
                     const OString&      sDefPage,
                     const OUString*     pStr)
 
-    : SfxTabDialog(pViewFrame, pParent, sResType,
+    : SfxTabDialog(pViewFrame, pParent, OUStringToOString(sResType, RTL_TEXTENCODING_UTF8),
         OUString("modules/swriter/ui/") +
-        OUString::fromUtf8(sResType.toAsciiLowerCase()) +
+        sResType.toAsciiLowerCase() +
         (".ui"), &rCoreSet, pStr != 0)
     , m_bFormat(bFormat)
     , m_bNew(bNewFrm)
@@ -148,12 +148,12 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         ((SwFrmPage&)rPage).SetNewFrame(m_bNew);
         ((SwFrmPage&)rPage).SetFormatUsed(m_bFormat);
-        ((SwFrmPage&)rPage).SetFrmType(m_sDlgType);
+        ((SwFrmPage&)rPage).SetFrmType(OUStringToOString(m_sDlgType, RTL_TEXTENCODING_UTF8));
     }
     else if (nId == m_nAddId)
     {
         ((SwFrmAddPage&)rPage).SetFormatUsed(m_bFormat);
-        ((SwFrmAddPage&)rPage).SetFrmType(m_sDlgType);
+        ((SwFrmAddPage&)rPage).SetFrmType(OUStringToOString(m_sDlgType, RTL_TEXTENCODING_UTF8));
         ((SwFrmAddPage&)rPage).SetNewFrame(m_bNew);
         ((SwFrmAddPage&)rPage).SetShell(m_pWrtShell);
     }
