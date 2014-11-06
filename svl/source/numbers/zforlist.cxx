@@ -2479,9 +2479,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     // Week of year   must be appended here because of nNewExtended
     const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
     aSingleFormatCode.Code = rKeyword[NF_KEY_WW];
-    ImpInsertNewStandardFormat( aSingleFormatCode,
-                                CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NF_DATE_WW );
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + SetIndexTable( NF_DATE_WW, nNewExtended++ ));
 
     {
         osl::MutexGuard aGuard(&theIndexTable.maMtx);
