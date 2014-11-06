@@ -2212,10 +2212,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_CCC );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = false;
-    pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
-                                  CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_CCC, ZF_STANDARD_CURRENCY+4 ));
-    if ( pNewFormat )
-        pNewFormat->SetUsed(true);      // must be saved for older versions
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_CCC, ZF_STANDARD_CURRENCY+4 ));
     aFormatSeq[nIdx].Default = bDefault;
 
     // #.##0,--
@@ -2264,12 +2262,9 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // DD.MM.YYYY   was DD.MM.[YY]YY
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYYYY );
-    pNewFormat = ImpInsertFormat( aFormatSeq[nIdx],
-                                  CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYYYY, ZF_STANDARD_DATE+6 ));
-    if ( pNewFormat )
-    {
-        pNewFormat->SetUsed(true);      // must be saved for older versions
-    }
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYYYY, ZF_STANDARD_DATE+6 ));
+
     // DD.MM.YY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
     ImpInsertFormat( aFormatSeq[nIdx],
