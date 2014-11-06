@@ -125,7 +125,7 @@ private:
     Size                aOutputSize;
     SelectionEngine     aSelEng;
     ImpLBSelEng         aFctSet;
-    Timer               aAsyncBeginDragTimer;
+    Idle                aAsyncBeginDragIdle;
     Point               aAsyncBeginDragPos;
 
     long                nYoffsNodeBmp;

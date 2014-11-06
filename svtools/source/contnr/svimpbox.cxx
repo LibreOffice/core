@@ -89,8 +89,8 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     nNodeBmpWidth       = 0;
 
     bAsyncBeginDrag     = false;
-    aAsyncBeginDragTimer.SetTimeout(0);
-    aAsyncBeginDragTimer.SetTimeoutHdl( LINK(this,SvImpLBox,BeginDragHdl));
+    aAsyncBeginDragIdle.SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+    aAsyncBeginDragIdle.SetIdleHdl( LINK(this,SvImpLBox,BeginDragHdl));
     // button animation in listbox
     pActiveButton = 0;
     pActiveEntry = 0;
@@ -2933,7 +2933,7 @@ void SvImpLBox::BeginDrag()
     else
     {
         aAsyncBeginDragPos = aSelEng.GetMousePosPixel();
-        aAsyncBeginDragTimer.Start();
+        aAsyncBeginDragIdle.Start();
     }
 }
 
