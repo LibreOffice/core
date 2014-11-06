@@ -18,7 +18,6 @@
  */
 
 #include "accessibility/extended/AccessibleGridControl.hxx"
-#include "accessibility/extended/AccessibleGridControlTable.hxx"
 #include "accessibility/extended/AccessibleGridControlHeader.hxx"
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
