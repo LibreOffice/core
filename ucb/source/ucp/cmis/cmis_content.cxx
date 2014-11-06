@@ -1854,40 +1854,51 @@ namespace cmis
 
     uno::Sequence< uno::Type > SAL_CALL Content::getTypes() throw( uno::RuntimeException, std::exception )
     {
-        if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
+        try
         {
-            static cppu::OTypeCollection aFolderCollection
-                (CPPU_TYPE_REF( lang::XTypeProvider ),
-                 CPPU_TYPE_REF( lang::XServiceInfo ),
-                 CPPU_TYPE_REF( lang::XComponent ),
-                 CPPU_TYPE_REF( ucb::XContent ),
-                 CPPU_TYPE_REF( ucb::XCommandProcessor ),
-                 CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                 CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
-                 CPPU_TYPE_REF( beans::XPropertyContainer ),
-                 CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
-                 CPPU_TYPE_REF( container::XChild ),
-                 CPPU_TYPE_REF( ucb::XContentCreator ) );
-            return aFolderCollection.getTypes();
+            if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
+            {
+                static cppu::OTypeCollection aFolderCollection
+                    (CPPU_TYPE_REF( lang::XTypeProvider ),
+                     CPPU_TYPE_REF( lang::XServiceInfo ),
+                     CPPU_TYPE_REF( lang::XComponent ),
+                     CPPU_TYPE_REF( ucb::XContent ),
+                     CPPU_TYPE_REF( ucb::XCommandProcessor ),
+                     CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
+                     CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
+                     CPPU_TYPE_REF( beans::XPropertyContainer ),
+                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
+                     CPPU_TYPE_REF( container::XChild ),
+                     CPPU_TYPE_REF( ucb::XContentCreator ) );
+                return aFolderCollection.getTypes();
+            }
         }
-        else
+        catch (const uno::RuntimeException&)
         {
-            static cppu::OTypeCollection aFileCollection
-                (CPPU_TYPE_REF( lang::XTypeProvider ),
-                 CPPU_TYPE_REF( lang::XServiceInfo ),
-                 CPPU_TYPE_REF( lang::XComponent ),
-                 CPPU_TYPE_REF( ucb::XContent ),
-                 CPPU_TYPE_REF( ucb::XCommandProcessor ),
-                 CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                 CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
-                 CPPU_TYPE_REF( beans::XPropertyContainer ),
-                 CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
-                 CPPU_TYPE_REF( container::XChild ) );
+            throw;
+        }
+        catch (const uno::Exception& e)
+        {
+            uno::Any a(cppu::getCaughtException());
+            throw lang::WrappedTargetRuntimeException(
+                "wrapped Exception " + e.Message,
+                uno::Reference<uno::XInterface>(), a);
+        }
 
-            return aFileCollection.getTypes();
-        }
+        static cppu::OTypeCollection aFileCollection
+            (CPPU_TYPE_REF( lang::XTypeProvider ),
+             CPPU_TYPE_REF( lang::XServiceInfo ),
+             CPPU_TYPE_REF( lang::XComponent ),
+             CPPU_TYPE_REF( ucb::XContent ),
+             CPPU_TYPE_REF( ucb::XCommandProcessor ),
+             CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
+             CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
+             CPPU_TYPE_REF( beans::XPropertyContainer ),
+             CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
+             CPPU_TYPE_REF( container::XChild ) );
+
+        return aFileCollection.getTypes();
     }
-
 
     uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         const uno::Reference< ucb::XCommandEnvironment >& xEnv)
