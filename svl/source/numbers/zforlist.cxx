@@ -2160,9 +2160,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // #.##0,00 System country/language dependent   since number formatter version 6
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_NUMBER_SYSTEM );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_NUMBER_SYSTEM, ZF_STANDARD+5 ));
 
 
     // Percent number
@@ -2236,9 +2235,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000DEC2_DASHED );
     bDefault = aFormatSeq[nIdx].Default;
     aFormatSeq[nIdx].Default = false;
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_DASHED, ZF_STANDARD_CURRENCY+5 ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_CURRENCY_1000DEC2_DASHED, ZF_STANDARD_CURRENCY+5 ));
     aFormatSeq[nIdx].Default = bDefault;
 
 
@@ -2287,25 +2285,22 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     }
     // DD.MM.YY   def/System, since number formatter version 6
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DDMMYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYY, ZF_STANDARD_DATE+7 ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_DDMMYY, ZF_STANDARD_DATE+7 ));
 
     // NNN, D. MMMM YYYY   System
     // Long day of week: "NNNN" instead of "NNN," because of compatibility
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_LONG );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYSTEM_LONG, ZF_STANDARD_DATE+8 ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYSTEM_LONG, ZF_STANDARD_DATE+8 ));
 
     // Hard coded but system (regional settings) delimiters dependent long date formats
     // since numberformatter version 6
 
     // D. MMM YY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYY, ZF_STANDARD_DATE+9 ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYY, ZF_STANDARD_DATE+9 ));
 
     //! Unfortunately TLOT intended only 10 builtin formats per category, more
     //! would overwrite the next category (ZF_STANDARD_TIME) :-((
@@ -2313,65 +2308,55 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // D. MMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMYYYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYYYY, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_DMMMYYYY, nNewExtended++ ));
 
     // D. MMMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_DMMMMYYYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYS_DMMMMYYYY, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_DMMMMYYYY, nNewExtended++ ));
 
     // NN, D. MMM YY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMYY, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMYY, nNewExtended++ ));
 
     // NN, D. MMMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNDMMMMYYYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMMYYYY, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_NNDMMMMYYYY, nNewExtended++ ));
 
     // NNN, D. MMMM YYYY   def/System
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_NNNNDMMMMYYYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_SYS_NNNNDMMMMYYYY, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_SYS_NNNNDMMMMYYYY, nNewExtended++ ));
 
     // Hard coded DIN (Deutsche Industrie Norm) and EN (European Norm) date formats
 
     // D. MMM. YYYY   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMYYYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_DIN_DMMMYYYY, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_DIN_DMMMYYYY, nNewExtended++ ));
 
     // D. MMMM YYYY   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_DMMMMYYYY );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_DIN_DMMMMYYYY, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_DIN_DMMMMYYYY, nNewExtended++ ));
 
     // MM-DD   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_MMDD );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_DIN_MMDD, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_DIN_MMDD, nNewExtended++ ));
 
     // YY-MM-DD   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYMMDD );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_DIN_YYMMDD, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_DIN_YYMMDD, nNewExtended++ ));
 
     // YYYY-MM-DD   DIN/EN
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_DATE_DIN_YYYYMMDD, nNewExtended++ ),
-                                SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_DATE_DIN_YYYYMMDD, nNewExtended++ ));
 
 
 
