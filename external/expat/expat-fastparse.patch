@@ -1,0 +1,52 @@
+--- misc/expat/lib/xmlparse.c
++++ misc/build/expat/lib/xmlparse.c
+@@ -2713,6 +2713,8 @@
+   const XML_Char *localPart;
+ 
+   /* lookup the element type name */
++if (dtd->elementTypes.used > 0)
++{
+   elementType = (ELEMENT_TYPE *)lookup(parser, &dtd->elementTypes, tagNamePtr->str,0);
+   if (!elementType) {
+     const XML_Char *name = poolCopyString(&dtd->pool, tagNamePtr->str);
+@@ -2726,6 +2728,12 @@
+       return XML_ERROR_NO_MEMORY;
+   }
+   nDefaultAtts = elementType->nDefaultAtts;
++}
++else
++{
++  elementType = NULL;
++  nDefaultAtts = 0;
++}
+ 
+   /* get the attributes from the tokenizer */
+   n = XmlGetAttributes(enc, attStr, attsSize, atts);
+@@ -2786,7 +2794,7 @@
+       XML_Bool isCdata = XML_TRUE;
+ 
+       /* figure out whether declared as other than CDATA */
+-      if (attId->maybeTokenized) {
++      if (elementType && attId->maybeTokenized) {
+         int j;
+         for (j = 0; j < nDefaultAtts; j++) {
+           if (attId == elementType->defaultAtts[j].id) {
+@@ -2836,7 +2844,7 @@
+ 
+   /* set-up for XML_GetSpecifiedAttributeCount and XML_GetIdAttributeIndex */
+   nSpecifiedAtts = attIndex;
+-  if (elementType->idAtt && (elementType->idAtt->name)[-1]) {
++  if (elementType && elementType->idAtt && (elementType->idAtt->name)[-1]) {
+     for (i = 0; i < attIndex; i += 2)
+       if (appAtts[i] == elementType->idAtt->name) {
+         idAttIndex = i;
+@@ -2991,7 +2999,7 @@
+     return XML_ERROR_NONE;
+ 
+   /* expand the element type name */
+-  if (elementType->prefix) {
++  if (elementType && elementType->prefix) {
+     binding = elementType->prefix->binding;
+     if (!binding)
+       return XML_ERROR_UNBOUND_PREFIX;
+Only in expat/lib: xmlparse.c~
