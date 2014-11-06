@@ -58,6 +58,7 @@ int main( int argc, char* argv[] )
     }
 
     aTimes.push_back(TimeRecord("initialization"));
+    // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init(argv[1]);
     aTimes.push_back(TimeRecord());
 

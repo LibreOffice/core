@@ -48,6 +48,7 @@ int main (int argc, char **argv)
         return 1;
     }
 
+    // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init( argv[1] );
     if( !pOffice )
     {

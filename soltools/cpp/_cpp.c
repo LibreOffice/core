@@ -52,6 +52,7 @@ __cdecl
     curtime = ctime(&t);
     maketokenrow(3, &tr);
     expandlex();
+    // coverity[tainted_string] - build time test tool
     setup(argc, argv);
     fixlex();
     if (!Pflag)
