@@ -124,14 +124,14 @@
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
       <FormatCode>YYYY/M/D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey22" default="false" type="short" usage="DATE" formatindex="22">
+    <FormatElement msgid="DateFormatskey5" default="false" type="short" usage="DATE" formatindex="22">
       <FormatCode>YYYY"年"M"月"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
-      <FormatCode>YYYY"年"MMMD"日"</FormatCode>
+      <FormatCode>YYYY.MM.DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
-      <FormatCode>YYYY "年" MMM D "日"</FormatCode>
+      <FormatCode>YY.MM.DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
@@ -299,62 +299,62 @@
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>一月</DefaultAbbrvName>
+          <DefaultAbbrvName>1月</DefaultAbbrvName>
           <DefaultFullName>一月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>二月</DefaultAbbrvName>
+          <DefaultAbbrvName>2月</DefaultAbbrvName>
           <DefaultFullName>二月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>三月</DefaultAbbrvName>
+          <DefaultAbbrvName>3月</DefaultAbbrvName>
           <DefaultFullName>三月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>四月</DefaultAbbrvName>
+          <DefaultAbbrvName>4月</DefaultAbbrvName>
           <DefaultFullName>四月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>五月</DefaultAbbrvName>
+          <DefaultAbbrvName>5月</DefaultAbbrvName>
           <DefaultFullName>五月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>六月</DefaultAbbrvName>
+          <DefaultAbbrvName>6月</DefaultAbbrvName>
           <DefaultFullName>六月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>七月</DefaultAbbrvName>
+          <DefaultAbbrvName>7月</DefaultAbbrvName>
           <DefaultFullName>七月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>八月</DefaultAbbrvName>
+          <DefaultAbbrvName>8月</DefaultAbbrvName>
           <DefaultFullName>八月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>九月</DefaultAbbrvName>
+          <DefaultAbbrvName>9月</DefaultAbbrvName>
           <DefaultFullName>九月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>十月</DefaultAbbrvName>
+          <DefaultAbbrvName>10月</DefaultAbbrvName>
           <DefaultFullName>十月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>十一月</DefaultAbbrvName>
+          <DefaultAbbrvName>11月</DefaultAbbrvName>
           <DefaultFullName>十一月</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>十二月</DefaultAbbrvName>
+          <DefaultAbbrvName>12月</DefaultAbbrvName>
           <DefaultFullName>十二月</DefaultFullName>
         </Month>
       </MonthsOfYear>
@@ -406,18 +406,18 @@
       <LineBreakHangingCharacters>!,.:;?、。！，．：；？</LineBreakHangingCharacters>
     </ForbiddenCharacters>
     <ReservedWords>
-      <trueWord>真</trueWord>
-      <falseWord>假</falseWord>
+      <trueWord>TRUE</trueWord>
+      <falseWord>FALSE</falseWord>
       <quarter1Word>第1季度</quarter1Word>
       <quarter2Word>第2季度</quarter2Word>
       <quarter3Word>第3季度</quarter3Word>
       <quarter4Word>第4季度</quarter4Word>
       <aboveWord>上面</aboveWord>
       <belowWord>下面</belowWord>
-      <quarter1Abbreviation>1季</quarter1Abbreviation>
-      <quarter2Abbreviation>2季</quarter2Abbreviation>
-      <quarter3Abbreviation>3季</quarter3Abbreviation>
-      <quarter4Abbreviation>4季</quarter4Abbreviation>
+      <quarter1Abbreviation>Q1</quarter1Abbreviation>
+      <quarter2Abbreviation>Q2</quarter2Abbreviation>
+      <quarter3Abbreviation>Q3</quarter3Abbreviation>
+      <quarter4Abbreviation>Q4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
