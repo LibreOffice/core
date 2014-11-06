@@ -14,6 +14,6 @@ varying vec2 tex_coord;
 void main() {
    gl_Position = position;
    tex_coord = tex_coord_in;
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

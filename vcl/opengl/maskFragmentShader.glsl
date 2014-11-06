@@ -16,6 +16,6 @@ void main() {
    vec4 texel0;
    texel0 = texture2D(sampler, tex_coord);
    gl_FragColor = color * texel0.a;
-};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
