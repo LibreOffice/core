@@ -21,7 +21,6 @@
 #define INCLUDED_SVL_NFVERSI_HXX
 
 //      file IDs
-#define SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS  0x000e
 
 #define SV_NUMBERFORMATTER_VERSION                          0x000f
 

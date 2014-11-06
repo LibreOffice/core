@@ -184,23 +184,16 @@ public:
     ~SvNumberformat();
 
     /// Get type of format, may include NUMBERFORMAT_DEFINED bit
-    short GetType() const
-        { return (nNewStandardDefined &&
-            (nNewStandardDefined <= SV_NUMBERFORMATTER_VERSION)) ?
-            (eType & ~NUMBERFORMAT_DEFINED) : eType; }
+    short GetType() const                       { return eType; }
 
     void SetType(const short eSetType)          { eType = eSetType; }
     // Standard means the I18N defined standard format of this type
     void SetStandard()                          { bStandard = true; }
     bool IsStandard() const                     { return bStandard; }
 
-    // For versions before version nVer it is UserDefined, for newer versions
-    // it is builtin. nVer of SV_NUMBERFORMATTER_VERSION_...
-    void SetNewStandardDefined( sal_uInt16 nVer )
-        { nNewStandardDefined = nVer; eType |= NUMBERFORMAT_DEFINED; }
-
-    bool IsAdditionalStandardDefined() const
-        { return nNewStandardDefined == SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS; }
+    // If this format is an additional built-in format defined by i18n.
+    void SetAdditionalBuiltin()                 { bAdditionalBuiltin = true; }
+    bool IsAdditionalBuiltin() const            { return bAdditionalBuiltin; }
 
     LanguageType GetLanguage() const            { return maLocale.meLanguage;}
 
@@ -467,8 +460,8 @@ private:
     LocaleType maLocale;            // Language/country of the format, numeral shape and calendar type from Excel.
     SvNumberformatLimitOps eOp1;    // Operator for first condition
     SvNumberformatLimitOps eOp2;    // Operator for second condition
-    sal_uInt16 nNewStandardDefined; // new builtin formats as of version 6
     short eType;                    // Type of format
+    bool bAdditionalBuiltin;        // If this is an additional built-in format defined by i18n
     bool bStarFlag;                 // Take *n format as ESC n
     bool bStandard;                 // If this is a default standard format
     bool bIsUsed;                   // Flag as used for storing

@@ -473,8 +473,8 @@ SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
     , rScan(rSc)
     , eOp1(NUMBERFORMAT_OP_NO)
     , eOp2(NUMBERFORMAT_OP_NO)
-    , nNewStandardDefined(0)
     , eType(0)
+    , bAdditionalBuiltin( false )
     , bStarFlag( false )
     , bStandard( false )
     , bIsUsed( false )
@@ -494,7 +494,7 @@ void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
     bStandard     = rFormat.bStandard;
     bIsUsed       = rFormat.bIsUsed;
     sComment      = rFormat.sComment;
-    nNewStandardDefined = rFormat.nNewStandardDefined;
+    bAdditionalBuiltin = rFormat.bAdditionalBuiltin;
 
     // #121103# when copying between documents, get color pointers from own scanner
     ImpSvNumberformatScan* pColorSc = ( &rScan != &rFormat.rScan ) ? &rScan : NULL;
@@ -610,7 +610,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                                LanguageType& eLan,
                                bool bStan)
         : rScan(*pSc)
-        , nNewStandardDefined(0)
+        , bAdditionalBuiltin( false )
         , bStarFlag( false )
 {
     OUStringBuffer sBuff(rString);

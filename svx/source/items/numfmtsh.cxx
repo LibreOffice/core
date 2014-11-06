@@ -920,7 +920,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
         if ( !IsRemoved_Impl( nKey ) )
         {
             if( pNumEntry->GetType() & NUMBERFORMAT_DEFINED ||
-                pNumEntry->IsAdditionalStandardDefined() )
+                pNumEntry->IsAdditionalBuiltin() )
             {
                 nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
                 aStrComment = pNumEntry->GetComment();
@@ -1073,7 +1073,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
         if ( !IsRemoved_Impl( nKey ) )
         {
             if( (pNumEntry->GetType() & NUMBERFORMAT_DEFINED) ||
-                    (bAdditional && pNumEntry->IsAdditionalStandardDefined()) )
+                    (bAdditional && pNumEntry->IsAdditionalBuiltin()) )
             {
                 nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
                 aStrComment=pNumEntry->GetComment();

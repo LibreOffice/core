@@ -2515,7 +2515,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
             if ( SvNumberformat* pNewFormat = ImpInsertFormat( pFormatArr[j], nPos+1,
                         bAfterChangingSystemCL, nOrgIndex ) )
             {
-                pNewFormat->SetNewStandardDefined( SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
+                pNewFormat->SetAdditionalBuiltin();
                 nPos++;
             }
             pFormatArr[j].Index = nOrgIndex;
@@ -2546,7 +2546,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
                 if ( SvNumberformat* pNewFormat = ImpInsertFormat( pFormatArr[j], nPos+1,
                             bAfterChangingSystemCL ) )
                 {
-                    pNewFormat->SetNewStandardDefined( SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
+                    pNewFormat->SetAdditionalBuiltin();
                     nPos++;
                 }
             }
