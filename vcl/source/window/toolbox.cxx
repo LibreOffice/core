@@ -4182,7 +4182,7 @@ const OUString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
             if ( pItem->maCommandStr.getLength() )
                 pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
             if ( pItem->maHelpText.isEmpty() && !pItem->maHelpId.isEmpty() )
-                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                pItem->maHelpText = pHelp->GetHelpText( OUString::fromUtf8( pItem->maHelpId ), this );
         }
     }
 
@@ -4254,7 +4254,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                     if ( !aCommand.isEmpty() )
                         pHelp->Start( aCommand, this );
                     else if ( !aHelpId.isEmpty() )
-                        pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                        pHelp->Start( OUString::fromUtf8( aHelpId ), this );
                 }
                 return;
             }

@@ -158,8 +158,7 @@ static OUString getUString(const char* pString)
     if (pString == NULL)
         return OUString();
 
-    OString sString(pString, strlen(pString));
-    return OStringToOUString(sString, RTL_TEXTENCODING_UTF8);
+    return OUString::fromUtf8(OString(pString, strlen(pString)));
 }
 
 // Try to convert a relative URL to an absolute one

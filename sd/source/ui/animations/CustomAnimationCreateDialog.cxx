@@ -627,7 +627,7 @@ vcl::Window * lcl_GetTopmostParent( vcl::Window * pWindow )
 
 void CustomAnimationCreateDialog::setPosition()
 {
-    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(E_TABDIALOG, OUString::fromUtf8(GetHelpId()));
     if ( aDlgOpt.Exists() )
     {
         SetWindowState( OUStringToOString(aDlgOpt.GetWindowState(),
@@ -654,7 +654,7 @@ void CustomAnimationCreateDialog::setPosition()
 void CustomAnimationCreateDialog::storePosition()
 {
     // save settings (screen position and current page)
-    SvtViewOptions aDlgOpt(E_TABDIALOG, OStringToOUString(GetHelpId(), RTL_TEXTENCODING_UTF8));
+    SvtViewOptions aDlgOpt(E_TABDIALOG, OUString::fromUtf8(GetHelpId()));
     aDlgOpt.SetWindowState(OStringToOUString(
         GetWindowState(WINDOWSTATE_MASK_POS), RTL_TEXTENCODING_ASCII_US));
 }

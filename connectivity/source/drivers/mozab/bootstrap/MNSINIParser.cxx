@@ -67,8 +67,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
                 struct ini_NameValue nameValue;
                 nameValue.sName = OStringToOUString(
                     line.copy(0,nIndex).trim(), RTL_TEXTENCODING_ASCII_US );
-                nameValue.sValue = OStringToOUString(
-                    line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
+                nameValue.sValue = OUString::fromUtf8( line.copy(nIndex+1).trim() );
 
                 aSection->lList.push_back(nameValue);
 

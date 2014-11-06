@@ -730,8 +730,7 @@ static OUString getAutostartDir( bool bCreate = false )
     OUString aShortcut;
     const char *pConfigHome;
     if( (pConfigHome = getenv("XDG_CONFIG_HOME") ) )
-        aShortcut = OStringToOUString( OString( pConfigHome ),
-                                       RTL_TEXTENCODING_UTF8 );
+        aShortcut = OUString::fromUtf8( OString( pConfigHome ) );
     else
     {
         OUString aHomeURL;

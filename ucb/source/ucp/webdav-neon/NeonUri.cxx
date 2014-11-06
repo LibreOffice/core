@@ -124,28 +124,24 @@ void NeonUri::init( const OString & rUri, const ne_uri * pUri )
               &g_sUriDefaultsHTTPS :
               &g_sUriDefaultsHTTP;
 
-    mScheme   = OStringToOUString(
-                    pUri->scheme ? pUri->scheme : pUriDefs->scheme,
-                    RTL_TEXTENCODING_UTF8 );
-    mUserInfo = OStringToOUString(
-                    pUri->userinfo ? pUri->userinfo : pUriDefs->userinfo,
-                    RTL_TEXTENCODING_UTF8 );
-    mHostName = OStringToOUString(
-                    pUri->host ? pUri->host : pUriDefs->host,
-                    RTL_TEXTENCODING_UTF8 );
+    mScheme   = OUString::fromUtf8(
+                    pUri->scheme ? pUri->scheme : pUriDefs->scheme);
+    mUserInfo = OUString::fromUtf8(
+                    pUri->userinfo ? pUri->userinfo : pUriDefs->userinfo);
+    mHostName = OUString::fromUtf8(
+                    pUri->host ? pUri->host : pUriDefs->host);
     mPort     = pUri->port > 0 ? pUri->port : pUriDefs->port;
-    mPath     = OStringToOUString(
-                    pUri->path ? pUri->path : pUriDefs->path,
-                    RTL_TEXTENCODING_UTF8 );
+    mPath     = OUString::fromUtf8(
+                    pUri->path ? pUri->path : pUriDefs->path);
 
     if ( pUri->query )
     {
-        mPath += "?" + OStringToOUString( pUri->query,  RTL_TEXTENCODING_UTF8 );
+        mPath += "?" + OUString::fromUtf8( pUri->query );
     }
 
     if ( pUri->fragment )
     {
-        mPath += "#" + OStringToOUString( pUri->fragment,  RTL_TEXTENCODING_UTF8 );
+        mPath += "#" + OUString::fromUtf8( pUri->fragment );
     }
 }
 

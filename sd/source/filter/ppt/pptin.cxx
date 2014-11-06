@@ -443,7 +443,7 @@ bool ImplSdPPTImport::Import()
                                             {   // second pass, searching for a SlideName
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
-                                                    OUString aToken(OStringToOUString(aStringAry[nToken], RTL_TEXTENCODING_UTF8));
+                                                    OUString aToken(OUString::fromUtf8(aStringAry[nToken]));
                                                     std::vector<OUString>::const_iterator pIter =
                                                             std::find(maSlideNameList.begin(),maSlideNameList.end(),aToken);
 

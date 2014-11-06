@@ -163,7 +163,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     #ifdef SYSTEM_PPD_DIR
     if( pSubDir && rtl_str_compare( pSubDir, PRINTER_PPDDIR ) == 0 )
     {
-        rPathList.push_back( OStringToOUString( OString( SYSTEM_PPD_DIR ), RTL_TEXTENCODING_UTF8 ) );
+        rPathList.push_back( OUString::fromUtf8( OString( SYSTEM_PPD_DIR ) ) );
     }
     #endif
 

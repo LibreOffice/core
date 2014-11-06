@@ -938,7 +938,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
                         gchar *gFileName = g_filename_from_uri ( sFileName.getStr(), NULL, NULL );
                         if( g_file_test( gFileName, G_FILE_TEST_IS_REGULAR ) )
                         {
-                            INetURLObject aFileObj( OStringToOUString(sFileName, RTL_TEXTENCODING_UTF8) );
+                            INetURLObject aFileObj( OUString::fromUtf8(sFileName) );
 
                             OString baseName(
                               OUStringToOString(
@@ -1382,7 +1382,7 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
     else
         OSL_TRACE("Can't get label on list");
 
-    return OStringToOUString( aTxt, RTL_TEXTENCODING_UTF8 );
+    return OUString::fromUtf8( aTxt );
 }
 
 // XFilePreview functions

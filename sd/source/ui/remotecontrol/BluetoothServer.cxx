@@ -492,7 +492,7 @@ sal_Int32 OSXBluetoothWrapper::readLine( OString& aLine )
                 mBuffer.erase( mBuffer.begin(), aIt + 1 ); // Also delete the empty line
 
                 // yeps
-                SAL_INFO( "sdremote.bluetooth", "  returning, got \"" << OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 ) << "\"" );
+                SAL_INFO( "sdremote.bluetooth", "  returning, got \"" << OUString::fromUtf8( aLine ) << "\"" );
                 return aLine.getLength() + 1;
             }
 

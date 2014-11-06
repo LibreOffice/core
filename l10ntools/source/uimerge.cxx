@@ -135,7 +135,7 @@ bool Merge(
     {
         bool bDestinationIsDir(false);
 
-        const OUString aDestDir(OStringToOUString(rDestinationDir, RTL_TEXTENCODING_UTF8));
+        const OUString aDestDir(OUString::fromUtf8(rDestinationDir));
         OUString aDestDirUrl;
         if (osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(aDestDir, aDestDirUrl))
         {

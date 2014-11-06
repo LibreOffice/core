@@ -165,7 +165,7 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
         }
     }
 
-    return OStringToOUString( aResult.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+    return OUString::fromUtf8( aResult.makeStringAndClear() );
 }
 
 

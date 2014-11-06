@@ -3370,7 +3370,7 @@ static OUString failsToSupply(const OUString& name_, const OString& baseName)
     return OUString(
             "\n"
             "#if OSL_DEBUG_LEVEL > 0\n"
-            "                ::rtl::OUString(\"component context fails to supply service '" + name_ + "' of type '" + OStringToOUString(baseName, RTL_TEXTENCODING_UTF8) + "'\")\n"
+            "                ::rtl::OUString(\"component context fails to supply service '" + name_ + "' of type '" + OUString::fromUtf8(baseName) + "'\")\n"
             "#else\n"
             "                ::rtl::OUString(\"service not supplied\")\n"
             "#endif\n");

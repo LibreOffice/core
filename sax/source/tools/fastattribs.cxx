@@ -46,9 +46,9 @@ void UnknownAttribute::FillAttribute( Attribute* pAttrib ) const
 {
     if( pAttrib )
     {
-        pAttrib->Name = OStringToOUString( maName, RTL_TEXTENCODING_UTF8 );
+        pAttrib->Name = OUString::fromUtf8( maName );
         pAttrib->NamespaceURL = maNamespaceURL;
-        pAttrib->Value = OStringToOUString( maValue, RTL_TEXTENCODING_UTF8 );
+        pAttrib->Value = OUString::fromUtf8( maValue );
     }
 }
 

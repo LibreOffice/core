@@ -214,8 +214,7 @@ namespace connectivity
 
         if( pSpec )
         {
-            aName = OStringToOUString( g_param_spec_get_name( ( GParamSpec * )pSpec ),
-                                            RTL_TEXTENCODING_UTF8 );
+            aName = OUString::fromUtf8( g_param_spec_get_name( ( GParamSpec * )pSpec ) );
             aName = aName.replace( '-', '_' );
         }
         return aName;
@@ -1155,12 +1154,10 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
             ODatabaseMetaDataResultSet::ORow aRow(3);
             aRow.reserve(6);
-            OUString aHumanName = OStringToOUString( e_source_get_display_name( pSource ),
-                                                          RTL_TEXTENCODING_UTF8 );
+            OUString aHumanName = OUString::fromUtf8( e_source_get_display_name( pSource ) );
             aRow.push_back(new ORowSetValueDecorator(aHumanName)); //tablename
             aRow.push_back(new ORowSetValueDecorator(aTable));
-            OUString aUID = OStringToOUString( e_source_get_uid( pSource ),
-                                                          RTL_TEXTENCODING_UTF8 );
+            OUString aUID = OUString::fromUtf8( e_source_get_uid( pSource ) );
             aRow.push_back(new ORowSetValueDecorator(aUID)); //comment
             //I'd prefer to swap the comment and the human name and
             //just use e_source_registry_ref_source(get_e_source_registry(), aUID);
@@ -1207,8 +1204,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             {
                 ESource *pSource = E_SOURCE (s->data);
 
-                OUString aName = OStringToOUString( e_source_peek_name( pSource ),
-                                                              RTL_TEXTENCODING_UTF8 );
+                OUString aName = OUString::fromUtf8( e_source_peek_name( pSource ) );
 
                 ODatabaseMetaDataResultSet::ORow aRow(3);
                 aRow.reserve(6);

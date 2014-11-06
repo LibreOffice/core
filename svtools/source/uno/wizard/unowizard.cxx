@@ -258,8 +258,7 @@ namespace {
     static OUString lcl_getHelpURL( const OString& sHelpId )
     {
         OUStringBuffer aBuffer;
-        OUString aTmp(
-            OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) );
+        OUString aTmp( OUString::fromUtf8( sHelpId ) );
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
             aBuffer.appendAscii( INET_HID_SCHEME );

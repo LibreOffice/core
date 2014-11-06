@@ -68,7 +68,7 @@ inline OString u2b(OUString const & s) {
 }
 
 inline OUString b2u(OString const & s) {
-    return OStringToOUString(s, RTL_TEXTENCODING_UTF8);
+    return OUString::fromUtf8(s);
 }
 
 #endif

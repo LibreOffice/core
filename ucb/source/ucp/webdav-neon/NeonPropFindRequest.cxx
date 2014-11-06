@@ -175,7 +175,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
         else
         {
             thePropertyValue.Value
-                <<= OStringToOUString( value, RTL_TEXTENCODING_UTF8 );
+                <<= OUString::fromUtf8( value );
         }
     }
 
@@ -192,8 +192,7 @@ extern "C" void NPFR_propfind_results( void* userdata,
 {
     // @@@ href is not the uri! DAVResource ctor wants uri!
 
-    DAVResource theResource(
-        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
+    DAVResource theResource( OUString::fromUtf8( uri->path ) );
 
     ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
 
@@ -224,8 +223,7 @@ extern "C" void NPFR_propnames_results( void* userdata,
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
     // Create entry for the resource.
-    DAVResourceInfo theResource(
-        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
+    DAVResourceInfo theResource( OUString::fromUtf8( uri->path ) );
 
     // Fill entry.
     ne_propset_iterate( results, NPFR_propnames_iter, &theResource );

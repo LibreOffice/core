@@ -1539,7 +1539,7 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
 {
     if ((rKey == "label") || (rKey == "title") || (rKey == "text") )
     {
-        SetText(OStringToOUString(VclBuilder::convertMnemonicMarkup(rValue), RTL_TEXTENCODING_UTF8));
+        SetText(OUString::fromUtf8(VclBuilder::convertMnemonicMarkup(rValue)));
     }
     else if (rKey == "visible")
         Show(toBool(rValue));
@@ -1618,9 +1618,9 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
     else if (rKey == "valign")
         set_valign(toAlign(rValue));
     else if (rKey == "tooltip-markup")
-        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(OUString::fromUtf8(rValue));
     else if (rKey == "tooltip-text")
-        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(OUString::fromUtf8(rValue));
     else if (rKey == "border-width")
         set_border_width(rValue.toInt32());
     else if (rKey == "margin-left")
@@ -1653,11 +1653,11 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
     }
     else if (rKey == "accessible-name")
     {
-        SetAccessibleName(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetAccessibleName(OUString::fromUtf8(rValue));
     }
     else if (rKey == "accessible-description")
     {
-        SetAccessibleDescription(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetAccessibleDescription(OUString::fromUtf8(rValue));
     }
     else if (rKey == "use-markup")
     {

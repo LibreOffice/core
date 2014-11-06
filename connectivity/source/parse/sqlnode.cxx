@@ -1603,7 +1603,7 @@ OSQLParseNode::OSQLParseNode(const OString &_rNewValue,
                              SQLNodeType eNewNodeType,
                              sal_uInt32 nNewNodeID)
         :m_pParent(NULL)
-        ,m_aNodeValue(OStringToOUString(_rNewValue,RTL_TEXTENCODING_UTF8))
+        ,m_aNodeValue(OUString::fromUtf8(_rNewValue))
         ,m_eNodeType(eNewNodeType)
         ,m_nNodeID(nNewNodeID)
 {
@@ -2301,7 +2301,7 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
 
         case SQL_NODE_KEYWORD:
             _inout_rBuffer.appendAscii( "SQL_KEYWORD: " );
-            _inout_rBuffer.append( OStringToOUString( OSQLParser::TokenIDToStr( getTokenID() ), RTL_TEXTENCODING_UTF8 ) );
+            _inout_rBuffer.append( OUString::fromUtf8( OSQLParser::TokenIDToStr( getTokenID() ) ) );
             _inout_rBuffer.append( '\n' );
             break;
 
@@ -2442,7 +2442,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
                 rString.appendAscii(" ");
 
             const OString sT = OSQLParser::TokenIDToStr(m_nNodeID, rParam.bInternational ? &rParam.m_rContext :  NULL);
-            rString.append(OStringToOUString(sT,RTL_TEXTENCODING_UTF8));
+            rString.append(OUString::fromUtf8(sT));
         }   break;
         case SQL_NODE_STRING:
             if (!rString.isEmpty())

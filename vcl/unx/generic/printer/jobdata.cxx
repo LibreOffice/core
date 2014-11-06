@@ -219,7 +219,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         else if (aLine.startsWith(printerEquals))
         {
             bPrinter = true;
-            rJobData.m_aPrinterName = OStringToOUString(aLine.copy(RTL_CONSTASCII_LENGTH(printerEquals)), RTL_TEXTENCODING_UTF8);
+            rJobData.m_aPrinterName = OUString::fromUtf8(aLine.copy(RTL_CONSTASCII_LENGTH(printerEquals)));
         }
         else if (aLine.startsWith(orientatationEquals))
         {

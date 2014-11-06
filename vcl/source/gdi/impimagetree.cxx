@@ -326,8 +326,8 @@ void ImplImageTree::parseLinkFile(boost::shared_ptr< SvStream > pStream)
             continue;
 
         sal_Int32 nIndex = 0;
-        aLink = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
-        aOriginal = OStringToOUString( aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8 );
+        aLink = OUString::fromUtf8( aLine.getToken(0, ' ', nIndex) );
+        aOriginal = OUString::fromUtf8( aLine.getToken(0, ' ', nIndex) );
 
         // skip comments, or incomplete entries
         if (aLink.isEmpty() || aLink[0] == '#' || aOriginal.isEmpty())

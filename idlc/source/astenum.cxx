@@ -60,7 +60,7 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
 bool AstEnum::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
-    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
+    if (rKey.createKey( OUString::fromUtf8(getFullName()), localKey))
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -75,7 +75,7 @@ bool AstEnum::dump(RegistryKey& rKey)
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
             getDocumentation(), emptyStr, RT_TYPE_ENUM, m_bPublished,
-            OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
+            OUString::fromUtf8(getRelativName()), 0,
             nConst, 0, 0);
 
         DeclList::const_iterator iter = getIteratorBegin();

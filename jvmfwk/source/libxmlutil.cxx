@@ -130,7 +130,7 @@ CXmlCharPtr::operator OUString()
     if (_object != NULL)
     {
         OString aOStr((sal_Char*)_object);
-        ret = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
+        ret = OUString::fromUtf8(aOStr);
     }
     return ret;
 }

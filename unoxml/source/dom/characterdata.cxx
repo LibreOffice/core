@@ -88,7 +88,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
+            OUString tmp(OUString::fromUtf8(aData));
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -159,7 +159,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
+            OUString tmp(OUString::fromUtf8(aData));
             if (offset > tmp.getLength() || offset < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -194,7 +194,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
+            OUString tmp(OUString::fromUtf8(aData));
             if (offset > tmp.getLength() || offset < 0 || count < 0){
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
@@ -249,7 +249,7 @@ namespace DOM
             ::boost::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
-            OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
+            OUString tmp(OUString::fromUtf8(aData));
             if (offset > tmp.getLength() || offset < 0 || count < 0) {
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;

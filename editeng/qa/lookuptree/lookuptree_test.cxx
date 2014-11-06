@@ -98,12 +98,12 @@ void LookupTreeTest::testTrie()
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     suggestions.clear();
 
-    trie.insert( OStringToOUString( "H\xC3\xA4llo", RTL_TEXTENCODING_UTF8 ) );
+    trie.insert( OUString::fromUtf8( "H\xC3\xA4llo" ) );
     trie.findSuggestions( OUString("H"), suggestions );
     CPPUNIT_ASSERT_EQUAL( (size_t) 3, suggestions.size() );
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     CPPUNIT_ASSERT_EQUAL( OUString("H1"), suggestions[1] );
-    CPPUNIT_ASSERT_EQUAL( OStringToOUString( "H\xC3\xA4llo", RTL_TEXTENCODING_UTF8 ), suggestions[2] );
+    CPPUNIT_ASSERT_EQUAL( OUString::fromUtf8( "H\xC3\xA4llo" ), suggestions[2] );
     suggestions.clear();
 
     trie.findSuggestions( OUString("H3"), suggestions );
@@ -111,9 +111,9 @@ void LookupTreeTest::testTrie()
     CPPUNIT_ASSERT_EQUAL( OUString("H31l0"), suggestions[0] );
     suggestions.clear();
 
-    trie.findSuggestions( OStringToOUString("H\xC3\xA4", RTL_TEXTENCODING_UTF8), suggestions );
+    trie.findSuggestions( OUString::fromUtf8("H\xC3\xA4"), suggestions );
     CPPUNIT_ASSERT_EQUAL( (size_t) 1, suggestions.size() );
-    CPPUNIT_ASSERT_EQUAL( OStringToOUString("H\xC3\xA4llo", RTL_TEXTENCODING_UTF8), suggestions[0] );
+    CPPUNIT_ASSERT_EQUAL( OUString::fromUtf8("H\xC3\xA4llo"), suggestions[0] );
     suggestions.clear();
 
     trie.findSuggestions( OUString(""), suggestions);

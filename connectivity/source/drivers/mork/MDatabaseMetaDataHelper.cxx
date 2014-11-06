@@ -60,7 +60,7 @@ bool MDatabaseMetaDataHelper::getTableStrings( OConnection* _pCon,
     std::set<std::string> lists;
     _pCon->getMorkParser("AddressBook")->retrieveLists(lists);
     for (::std::set<std::string>::iterator iter = lists.begin(); iter != lists.end(); ++iter) {
-        OUString groupTableName = OStringToOUString((*iter).c_str(), RTL_TEXTENCODING_UTF8);
+        OUString groupTableName = OUString::fromUtf8((*iter).c_str());
         SAL_INFO("connectivity.mork", "add Table " << groupTableName);
 
         _rStrings.push_back(groupTableName);

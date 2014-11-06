@@ -166,7 +166,7 @@ class DemoRenderer
         void drawStringAt( OString aString, double x, double y )
         {
             rendering::StringContext aText;
-            aText.Text = OStringToOUString( aString, RTL_TEXTENCODING_UTF8 );
+            aText.Text = OUString::fromUtf8( aString );
             aText.StartPosition = 0;
             aText.Length = aString.getLength();
             rendering::RenderState aRenderState( maRenderState );

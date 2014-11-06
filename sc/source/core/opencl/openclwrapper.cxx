@@ -154,7 +154,7 @@ std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const 
         if ( mpArryDevsID[i] != 0 )
         {
             OString fileName = createFileName(gpuEnv.mpArryDevsID[i], clFileName);
-            osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
+            osl::File* pNewFile = new osl::File(rtl::OUString::fromUtf8(fileName));
             if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
             {
                 aGeneratedFiles.push_back(boost::shared_ptr<osl::File>(pNewFile));
@@ -174,7 +174,7 @@ std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const 
 
 bool OpenCLDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
-    osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
+    osl::File file(rtl::OUString::fromUtf8(rFileName));
     osl::FileBase::RC status = file.open(
             osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
@@ -345,7 +345,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
         }
 
         OString aBuildLogFileURL = OpenCLDevice::maCacheFolder + "kernel-build.log";
-        osl::File aBuildLogFile(rtl::OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
+        osl::File aBuildLogFile(rtl::OUString::fromUtf8(aBuildLogFileURL));
         osl::FileBase::RC status = aBuildLogFile.open(
                 osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 

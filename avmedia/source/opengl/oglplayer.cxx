@@ -87,7 +87,7 @@ bool OGLPlayer::create( const OUString& rURL )
         if( !rFile.filename.empty() )
         {
             const OUString sFilesURL =
-                INetURLObject::GetAbsURL(m_sURL,OStringToOUString(OString(rFile.filename.c_str()),RTL_TEXTENCODING_UTF8));
+                INetURLObject::GetAbsURL(m_sURL, OUString::fromUtf8(OString(rFile.filename.c_str())));
             if( rFile.type == GLTF_IMAGE )
             {
                 // Load images as bitmaps

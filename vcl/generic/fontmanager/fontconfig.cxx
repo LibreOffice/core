@@ -577,7 +577,7 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
                 continue;
             }
 
-            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), true );
+            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OUString::fromUtf8( OString( (sal_Char*)family ) ), true );
             PrintFont* pUpdate = aFonts.front();
             std::list<PrintFont*>::const_iterator second_font = aFonts.begin();
             ++second_font;
@@ -630,7 +630,7 @@ void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, 
                     pUpdate->m_eItalic = convertSlant(slant);
                 if( eStyleRes == FcResultMatch )
                 {
-                    pUpdate->m_aStyleName = OStringToOUString( OString( (sal_Char*)style ), RTL_TEXTENCODING_UTF8 );
+                    pUpdate->m_aStyleName = OUString::fromUtf8( OString( (sal_Char*)style ) );
                 }
 
                 // update font cache
@@ -877,7 +877,7 @@ namespace
         const char* pScriptCode = uscript_getShortName(eScript);
         if (pScriptCode)
             aBuf.append('-').append(pScriptCode);
-        return LanguageTag(OStringToOUString(aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+        return LanguageTag(OUString::fromUtf8(aBuf.makeStringAndClear()));
     }
 
 #if defined(ENABLE_DBUS) && defined(ENABLE_PACKAGEKIT)
@@ -1056,7 +1056,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                         rWrapper.m_aFontNameToLocalized.find(sFamily);
                     if (aI != rWrapper.m_aFontNameToLocalized.end())
                         sFamily = aI->second;
-                    rPattern.maSearchName = OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
+                    rPattern.maSearchName = OUString::fromUtf8( sFamily );
                     bRet = true;
                 }
             }

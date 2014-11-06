@@ -832,7 +832,7 @@ namespace
         if (!rFrame.is())
             return;
 
-        OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
+        OUString aCommand(OUString::fromUtf8(extractActionName(rMap)));
         if (aCommand.isEmpty())
             return;
 
@@ -1392,7 +1392,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
                 MetricField *pField = new MetricField(pParent, nBits);
                 pField->SetUnit(eUnit);
                 if (eUnit == FUNIT_CUSTOM)
-                    pField->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+                    pField->SetCustomUnitText(OUString::fromUtf8(sUnit));
                 pWindow = pField;
             }
         }
@@ -1426,7 +1426,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             pBox->SetUnit(eUnit);
             pBox->SetDecimalDigits(extractDecimalDigits(sPattern));
             if (eUnit == FUNIT_CUSTOM)
-                pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+                pBox->SetCustomUnitText(OUString::fromUtf8(sUnit));
             pWindow = pBox;
         }
         else if (extractEntry(rMap))
@@ -1437,7 +1437,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             {
                 sal_uInt16 nActiveId = extractActive(rMap);
                 for (std::vector<OString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
-                    pComboBox->InsertEntry(OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
+                    pComboBox->InsertEntry(OUString::fromUtf8(*aI));
                 if (nActiveId < rItems.size())
                     pComboBox->SelectEntryPos(nActiveId);
             }
@@ -1451,7 +1451,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             {
                 sal_uInt16 nActiveId = extractActive(rMap);
                 for (std::vector<OString>::const_iterator aI = rItems.begin(), aEnd = rItems.end(); aI != aEnd; ++aI)
-                    pListBox->InsertEntry(OStringToOUString(*aI, RTL_TEXTENCODING_UTF8));
+                    pListBox->InsertEntry(OUString::fromUtf8(*aI));
                 if (nActiveId < rItems.size())
                     pListBox->SelectEntryPos(nActiveId);
             }
@@ -1482,7 +1482,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             pBox->SetUnit(eUnit);
             pBox->SetDecimalDigits(extractDecimalDigits(sPattern));
             if (eUnit == FUNIT_CUSTOM)
-                pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+                pBox->SetCustomUnitText(OUString::fromUtf8(sUnit));
             pWindow = pBox;
         }
         else
@@ -1616,7 +1616,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
         ToolBox *pToolBox = dynamic_cast<ToolBox*>(pParent);
         if (pToolBox)
         {
-            OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
+            OUString aCommand(OUString::fromUtf8(extractActionName(rMap)));
 
             sal_uInt16 nItemId = 0;
             ToolBoxItemBits nBits = ToolBoxItemBits::NONE;
@@ -1633,14 +1633,14 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
                 const sal_uInt16 COMMAND_ITEMID_START = 30000;
                 nItemId = COMMAND_ITEMID_START + pToolBox->GetItemCount();
                 pToolBox->InsertItem(nItemId,
-                    OStringToOUString(extractLabel(rMap), RTL_TEXTENCODING_UTF8), nBits);
+                    OUString::fromUtf8(extractLabel(rMap)), nBits);
                 pToolBox->SetItemCommand(nItemId, aCommand);
                 pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);
             }
 
             OString sTooltip(extractTooltipText(rMap));
             if (!sTooltip.isEmpty())
-                pToolBox->SetQuickHelpText(nItemId, OStringToOUString(sTooltip, RTL_TEXTENCODING_UTF8));
+                pToolBox->SetQuickHelpText(nItemId, OUString::fromUtf8(sTooltip));
 
             OString sIconName(extractIconName(rMap));
             if (!sIconName.isEmpty())
@@ -1678,10 +1678,10 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
 #ifdef SAL_DLLPREFIX
             sModuleBuf.append(SAL_DLLPREFIX);
 #endif
-            sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
+            sModuleBuf.append(OUString::fromUtf8(name.copy(0, nDelim)));
             sModuleBuf.append(SAL_DLLEXTENSION);
 #endif
-            OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
+            OUString sFunction(OUString::fromUtf8(OString("make") + name.copy(nDelim+1)));
 #ifndef DISABLE_DYNLOADING
             OUString sModule = sModuleBuf.makeStringAndClear();
             ModuleMap::iterator aI = m_aModuleMap.find(sModule);
@@ -1885,8 +1885,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
     if (aFind != aProperties.end())
     {
         sal_uInt16 nPageId = pTabControl->GetCurPageId();
-        pTabControl->SetPageText(nPageId,
-            OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
+        pTabControl->SetPageText(nPageId, OUString::fromUtf8(aFind->second));
         pTabControl->SetPageName(nPageId, sID);
     }
     else
@@ -2446,7 +2445,7 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
 
                 if (m_pStringReplace)
                 {
-                    OUString sTmp = (*m_pStringReplace)(OStringToOUString(sValue, RTL_TEXTENCODING_UTF8));
+                    OUString sTmp = (*m_pStringReplace)(OUString::fromUtf8(sValue));
                     sValue = OUStringToOString(sTmp, RTL_TEXTENCODING_UTF8);
                 }
 
@@ -2710,7 +2709,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
 
     if (rClass == "GtkMenuItem")
     {
-        OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        OUString sLabel(OUString::fromUtf8(convertMnemonicMarkup(extractLabel(rProps))));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
     }
     else if (rClass == "GtkSeparatorMenuItem")
@@ -2730,9 +2729,9 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
             const OString &rValue = aI->second;
 
             if (rKey == "tooltip-markup")
-                pParent->SetTipHelpText(nNewId, OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+                pParent->SetTipHelpText(nNewId, OUString::fromUtf8(rValue));
             else if (rKey == "tooltip-text")
-                pParent->SetTipHelpText(nNewId, OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+                pParent->SetTipHelpText(nNewId, OUString::fromUtf8(rValue));
             else if (rKey == "visible")
                 pParent->ShowItem(nNewId, toBool(rValue));
             else if (rKey == "has-default" && toBool(rValue))
@@ -3062,7 +3061,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
         sProperty = sProperty.replace('_', '-');
         if (m_pStringReplace)
         {
-            OUString sTmp = (*m_pStringReplace)(OStringToOUString(sValue, RTL_TEXTENCODING_UTF8));
+            OUString sTmp = (*m_pStringReplace)(OUString::fromUtf8(sValue));
             rMap[sProperty] = OUStringToOString(sTmp, RTL_TEXTENCODING_UTF8);
         }
         else
@@ -3290,7 +3289,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         aI != aEnd; ++aI)
     {
         const ListStore::row &rRow = *aI;
-        sal_uInt16 nEntry = rTarget.InsertEntry(OStringToOUString(rRow[0], RTL_TEXTENCODING_UTF8));
+        sal_uInt16 nEntry = rTarget.InsertEntry(OUString::fromUtf8(rRow[0]));
         if (rRow.size() > 1)
         {
             sal_IntPtr nValue = rRow[1].toInt32();
@@ -3433,7 +3432,7 @@ void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rT
         const OString &rValue = aI->second;
 
         if (rKey == "text")
-            rTarget.SetText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+            rTarget.SetText(OUString::fromUtf8(rValue));
         else
         {
             SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
