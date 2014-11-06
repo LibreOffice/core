@@ -31,7 +31,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/noncopyable.hpp>
 
 
 namespace accessibility
