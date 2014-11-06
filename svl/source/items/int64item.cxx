@@ -96,10 +96,4 @@ SfxPoolItem* SfxInt64Item::Clone( SfxItemPool* /*pOther*/ ) const
 }
 
 
-void SfxInt64Item::SetValue( sal_Int64 nVal )
-{
-    mnValue = nVal;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
