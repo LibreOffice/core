@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a0c5dc1_f6c66e15",
+        "filename": "svx/uiconfig/ui/paralinespacingcontrol.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-11-06T11:03:40Z",
+      "side": 0,
+      "message": "Are these icons being used somewhere else?\nIf not, you could delete them.",
+      "revId": "fc4d04d51b34cf81e0f69f7210071f795c81fee1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
