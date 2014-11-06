@@ -18,7 +18,6 @@
  */
 
 #include "accessibility/extended/AccessibleGridControlTable.hxx"
-#include <svtools/accessibletable.hxx>
 
 
 
