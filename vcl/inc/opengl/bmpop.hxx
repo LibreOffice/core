@@ -17,32 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_OPENGL_TEXTURE_H
-#define INCLUDED_VCL_OPENGL_TEXTURE_H
+#ifndef INCLUDED_VCL_INC_OPENGL_BMPOP_H
+#define INCLUDED_VCL_INC_OPENGL_BMPOP_H
 
-#include <boost/shared_ptr.hpp>
-#include <GL/glew.h>
-
-class OpenGLTexture
+class OpenGLSalBitmapOp
 {
-private:
-    GLuint mnTexture;
-    int    mnWidth;
-    int    mnHeight;
-
 public:
-    OpenGLTexture();
-    OpenGLTexture( int nWidth, int nHeight );
-    virtual ~OpenGLTexture();
+    OpenGLSalBitmapOp() {};
+    virtual ~OpenGLSalBitmapOp() {};
 
-    GLuint Id() const;
-    void Bind();
-    void Unbind();
-    bool Draw();
+    virtual bool Execute() = 0;
+    virtual void GetSize( Size& rSize ) const = 0;
 };
 
-typedef boost::shared_ptr< OpenGLTexture > OpenGLTextureSharedPtr;
-
-#endif // INCLUDED_VCL_OPENGL_TEXTURE_H
+#endif // INCLUDED_VCL_INC_OPENGL_BMPOP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,8 +24,12 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 
 #include "vcl/salbtype.hxx"
+#include "opengl/bmpop.hxx"
+#include "opengl/texture.hxx"
 
 #include <salbmp.hxx>
+
+#include <deque>
 
 // - SalBitmap  -
 
@@ -35,17 +39,18 @@ class   BitmapPalette;
 class VCL_PLUGIN_PUBLIC OpenGLSalBitmap : public SalBitmap
 {
 private:
-    OpenGLContext*                  mpContext;
-    GLuint                          mnTexture;
-    bool                            mbDirtyTexture;
-    BitmapPalette                   maPalette;
-    basebmp::RawMemorySharedArray   maUserBuffer;
-    sal_uInt16                      mnBits;
-    sal_uInt16                      mnBytesPerRow;
-    int                             mnWidth;
-    int                             mnHeight;
-    int                             mnTexWidth;
-    int                             mnTexHeight;
+    OpenGLContext*                      mpContext;
+    OpenGLTextureSharedPtr              mpTexture;
+    bool                                mbDirtyTexture;
+    BitmapPalette                       maPalette;
+    basebmp::RawMemorySharedArray       maUserBuffer;
+    sal_uInt16                          mnBits;
+    sal_uInt16                          mnBytesPerRow;
+    int                                 mnWidth;
+    int                                 mnHeight;
+    int                                 mnBufWidth;
+    int                                 mnBufHeight;
+    std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
 public:
     OpenGLSalBitmap();
@@ -87,6 +92,27 @@ private:
     void            DrawTexture( GLuint nTexture, const SalTwoRect& rPosAry );
     bool            AllocateUserData();
     bool            ReadTexture();
+
+private:
+
+    GLuint          ImplGetTextureProgram();
+    GLuint          mnTexProgram;
+    GLuint          mnTexSamplerUniform;
+
+    GLuint          ImplGetConvolutionProgram();
+    GLuint          mnConvProgram;
+    GLuint          mnConvSamplerUniform;
+    GLuint          mnConvKernelUniform;
+    GLuint          mnConvKernelSizeUniform;
+    GLuint          mnConvOffsetsUniform;
+
+    bool ImplScaleFilter( GLenum nFilter );
+    void ImplCreateKernel( const double& fScale, const Kernel& rKernel, GLfloat*& pWeights, sal_uInt32& aKernelSize );
+    bool ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel );
+
+public:
+
+    bool ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_SALBMP_H

@@ -874,10 +874,23 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
         bRetval = true;
     }
 
-    if( mpImpBmp && mpImpBmp->ImplScale( rScaleX, rScaleY, nScaleFlag ) )
+    if( mpImpBmp )
     {
         // implementation specific scaling
-        return true;
+        ImpBitmap* pImpBmp = new ImpBitmap;
+
+        if( pImpBmp->ImplCreate( *mpImpBmp ) && pImpBmp->ImplScale( rScaleX, rScaleY, nScaleFlag ) )
+        {
+            ImplSetImpBitmap( pImpBmp );
+            SAL_INFO( "vcl.opengl", "Ref count: " << mpImpBmp->ImplGetRefCount() );
+            maPrefMapMode = MapMode( MAP_PIXEL );
+            maPrefSize = pImpBmp->ImplGetSize();
+            return true;
+        }
+        else
+        {
+            delete pImpBmp;
+        }
     }
 
     //fdo#33455

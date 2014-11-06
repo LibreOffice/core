@@ -34,20 +34,22 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 
 OpenGLSalBitmap::OpenGLSalBitmap()
 : mpContext(NULL)
-, mnTexture(0)
 , mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
 , mnWidth(0)
 , mnHeight(0)
-, mnTexWidth(0)
-, mnTexHeight(0)
+, mnBufWidth(0)
+, mnBufHeight(0)
+, mnTexProgram(0)
+, mnConvProgram(0)
 {
 }
 
 OpenGLSalBitmap::~OpenGLSalBitmap()
 {
     Destroy();
+    SAL_INFO( "vcl.opengl", "~OpenGLSalBitmap" );
 }
 
 bool OpenGLSalBitmap::Create( OpenGLContext& rContext, long nX, long nY, long nWidth, long nHeight )
@@ -55,20 +57,20 @@ bool OpenGLSalBitmap::Create( OpenGLContext& rContext, long nX, long nY, long nW
     static const BitmapPalette aEmptyPalette;
 
     Destroy();
+    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO" );
 
     mpContext = &rContext;
     mpContext->makeCurrent();
-    mnWidth = mnTexWidth = nWidth;
-    mnHeight = mnTexHeight = nHeight;
+    mnWidth = nWidth;
+    mnHeight = nHeight;
+    mnBufWidth = 0;
+    mnBufHeight = 0;
 
     // TODO Check the framebuffer configuration
     mnBits = 32;
     maPalette = aEmptyPalette;
 
-    glGenTextures( 1, &mnTexture );
-    glBindTexture( GL_TEXTURE_2D, mnTexture );
-    glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nX, nY, nWidth, nHeight, 0 );
-    glBindTexture( GL_TEXTURE_2D, 0 );
+    mpTexture.reset( new OpenGLTexture( nX, nY, nWidth, nHeight ) );
 
     return true;
 }
@@ -76,13 +78,14 @@ bool OpenGLSalBitmap::Create( OpenGLContext& rContext, long nX, long nY, long nW
 bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
     Destroy();
+    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create with size" );
 
     if( !isValidBitCount( nBits ) )
         return false;
     maPalette = rBitmapPalette;
     mnBits = nBits;
-    mnWidth = mnTexWidth = rSize.Width();
-    mnHeight = mnTexHeight = rSize.Height();
+    mnWidth = mnBufWidth = rSize.Width();
+    mnHeight = mnBufHeight = rSize.Height();
     return false;
 }
 
@@ -100,15 +103,20 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
 {
     const OpenGLSalBitmap& rSourceBitmap = static_cast<const OpenGLSalBitmap&>(rSalBmp);
 
+    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from BMP " << rSourceBitmap.mnHeight );
+
     if( isValidBitCount( nNewBitCount ) )
     {
         mnBits = nNewBitCount;
-        mnTexWidth = rSourceBitmap.mnTexWidth;
-        mnTexHeight = rSourceBitmap.mnTexHeight;
+        mnBytesPerRow = rSourceBitmap.mnBytesPerRow;
         mnWidth = rSourceBitmap.mnWidth;
         mnHeight = rSourceBitmap.mnHeight;
+        mnBufWidth = rSourceBitmap.mnBufWidth;
+        mnBufHeight = rSourceBitmap.mnBufHeight;
         maPalette = rSourceBitmap.maPalette;
-        mnTexture = rSourceBitmap.mnTexture;
+        mpContext = rSourceBitmap.mpContext;
+        mpTexture = rSourceBitmap.mpTexture;
+        maUserBuffer = rSourceBitmap.maUserBuffer;
 
         // TODO Copy buffer data if the bitcount and palette are the same
         return true;
@@ -127,13 +135,13 @@ bool OpenGLSalBitmap::Draw( OpenGLContext& rContext, const SalTwoRect& rPosAry )
     if( !mpContext )
         mpContext = &rContext;
 
-    if( !mnTexture || mbDirtyTexture )
+    if( !mpTexture || mbDirtyTexture )
     {
         if( !CreateTexture() )
             return false;
     }
 
-    DrawTexture( mnTexture, rPosAry );
+    //DrawTexture( mnTexture, rPosAry );
     return true;
 }
 
@@ -141,20 +149,23 @@ GLuint OpenGLSalBitmap::GetTexture( OpenGLContext& rContext ) const
 {
     if( !mpContext )
         const_cast<OpenGLSalBitmap*>(this)->mpContext = &rContext;
-    if( !mnTexture || mbDirtyTexture )
+    if( !mpTexture || mbDirtyTexture )
         const_cast<OpenGLSalBitmap*>(this)->CreateTexture();
-    return mnTexture;
+    return mpTexture->Id();
 }
 
 void OpenGLSalBitmap::Destroy()
 {
-    DeleteTexture();
+    SAL_INFO( "vcl.opengl", "Destroy OpenGLSalBitmap" );
+    maPendingOps.clear();
+    mpTexture.reset();
     maUserBuffer.reset();
 }
 
 bool OpenGLSalBitmap::AllocateUserData()
 {
     Destroy();
+    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::AllocateUserData" );
 
     if( mnWidth && mnHeight )
     {
@@ -295,7 +306,13 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
 
 Size OpenGLSalBitmap::GetSize() const
 {
-    return Size( mnWidth, mnHeight );
+    std::deque< OpenGLSalBitmapOp* >::const_iterator it = maPendingOps.begin();
+    Size aSize( mnWidth, mnHeight );
+
+    while( it != maPendingOps.end() )
+        (*it++)->GetSize( aSize );
+
+    return aSize;
 }
 
 GLuint OpenGLSalBitmap::CreateTexture()
@@ -334,7 +351,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
         else
         {
             // convert to 32 bits RGBA using palette
-            pData = new sal_uInt8[ mnTexHeight * (mnTexWidth << 2) ];
+            pData = new sal_uInt8[ mnBufHeight * (mnBufWidth << 2) ];
             bAllocated = true;
             nFormat = GL_RGBA;
             nType = GL_UNSIGNED_BYTE;
@@ -343,12 +360,12 @@ GLuint OpenGLSalBitmap::CreateTexture()
             sal_uInt8* pSrcData = maUserBuffer.get();
             sal_uInt8* pDstData = pData;
 
-            sal_uInt32 nY = mnTexHeight;
+            sal_uInt32 nY = mnBufHeight;
             while( nY-- )
             {
                 pSrcFormat->StartLine( pSrcData );
 
-                sal_uInt32 nX = mnTexWidth;
+                sal_uInt32 nX = mnBufWidth;
                 while( nX-- )
                 {
                     const BitmapColor& c = pSrcFormat->ReadPixel();
@@ -364,59 +381,22 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
     }
 
+    SAL_INFO( "vcl.opengl", "::CreateTexture" );
     mpContext->makeCurrent();
-    if( !mnTexture )
-        glGenTextures( 1, &mnTexture );
-    glBindTexture( GL_TEXTURE_2D, mnTexture );
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnTexWidth, mnTexHeight, 0, nFormat, nType, pData );
-    glBindTexture( GL_TEXTURE_2D, 0 );
+    mpTexture.reset( new OpenGLTexture (mnBufWidth, mnBufHeight, nFormat, nType, pData ) );
 
     if( bAllocated )
         delete pData;
 
-    mbDirtyTexture = false;
-    return mnTexture;
-}
-
-void OpenGLSalBitmap::DeleteTexture()
-{
-    if( mnTexture )
+    while( !maPendingOps.empty() )
     {
-        mpContext->makeCurrent();
-        glDeleteTextures( 1, &mnTexture );
-        mnTexture = 0;
+        OpenGLSalBitmapOp* pOp = maPendingOps.front();
+        pOp->Execute();
+        maPendingOps.pop_front();
     }
-}
 
-void OpenGLSalBitmap::DrawTexture( GLuint nTexture, const SalTwoRect& /*rPosAry*/ )
-{
-    GLushort aTexCoord[8];
-    GLushort aVertices[8];
-
-    /*if( mnTextureProgram == 0 )
-    {
-        if( !CreateTextureProgram() )
-            return;
-    }*/
-
-    //glUseProgram( mnTextureProgram );
-    //glUniform1i( mnSamplerUniform, 0 );
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, nTexture );
-    glEnableVertexAttribArray( 0 );
-    glVertexAttribPointer( 0, 8, GL_UNSIGNED_SHORT, GL_FALSE, 0, aTexCoord );
-    glEnableVertexAttribArray( 1 );
-    glVertexAttribPointer( 1, 8, GL_UNSIGNED_SHORT, GL_FALSE, 0, aVertices );
-    glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
-    glDisableVertexAttribArray( 0 );
-    glDisableVertexAttribArray( 1 );
-    glBindTexture( GL_TEXTURE_2D, 0 );
-    glUseProgram( 0 );
+    mbDirtyTexture = false;
+    return mpTexture->Id();
 }
 
 bool OpenGLSalBitmap::ReadTexture()
@@ -428,17 +408,17 @@ bool OpenGLSalBitmap::ReadTexture()
     // TODO Check mnTexWidth and mnTexHeight
 
     mpContext->makeCurrent();
-    OpenGLHelper::createFramebuffer( mnTexWidth, mnTexHeight, nFramebufferId,
+    OpenGLHelper::createFramebuffer( mnWidth, mnHeight, nFramebufferId,
         nRenderbufferDepthId, nRenderbufferColorId, true );
     glBindFramebuffer( GL_FRAMEBUFFER, nFramebufferId );
 
     aPosAry.mnSrcX = aPosAry.mnDestX = 0;
     aPosAry.mnSrcY = aPosAry.mnDestY = 0;
-    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = mnTexWidth;
-    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = mnTexHeight;
+    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = mnWidth;
+    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = mnHeight;
 
-    DrawTexture( mnTexture, aPosAry );
-    glReadPixels( 0, 0, mnTexWidth, mnTexHeight, GL_RGBA, GL_UNSIGNED_BYTE, pData );
+    //DrawTexture( mnTexture, aPosAry );
+    glReadPixels( 0, 0, mnWidth, mnHeight, GL_RGBA, GL_UNSIGNED_BYTE, pData );
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     glDeleteFramebuffers( 1, &nFramebufferId );
@@ -459,7 +439,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     {
         if( !AllocateUserData() )
             return NULL;
-        if( mnTexture && !ReadTexture() )
+        if( mpTexture && !ReadTexture() )
             return NULL;
     }
 
@@ -526,14 +506,6 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 #else
     return false;
 #endif
-}
-
-bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 /*nScaleFlag*/ )
-{
-    SAL_INFO( "vcl.opengl", "::Scale" );
-    mnWidth *= rScaleX;
-    mnHeight *= rScaleY;
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

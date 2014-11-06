@@ -17,12 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "texture.hxx"
+#include <sal/config.h>
+#include "vcl/salbtype.hxx"
+
+#include "opengl/texture.hxx"
 
 OpenGLTexture::OpenGLTexture()
 : mnTexture( 0 )
 , mnWidth( -1 )
 , mnHeight( -1 )
+, mnFilter( GL_NEAREST )
 {
 }
 
@@ -30,6 +34,7 @@ OpenGLTexture::OpenGLTexture( int nWidth, int nHeight )
 : mnTexture( 0 )
 , mnWidth( nWidth )
 , mnHeight( nHeight )
+, mnFilter( GL_NEAREST )
 {
     glGenTextures( 1, &mnTexture );
     glBindTexture( GL_TEXTURE_2D, mnTexture );
@@ -38,6 +43,40 @@ OpenGLTexture::OpenGLTexture( int nWidth, int nHeight )
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
+    glBindTexture( GL_TEXTURE_2D, 0 );
+}
+
+OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight )
+: mnTexture( 0 )
+, mnWidth( nWidth )
+, mnHeight( nHeight )
+, mnFilter( GL_NEAREST )
+{
+    glGenTextures( 1, &mnTexture );
+    glBindTexture( GL_TEXTURE_2D, mnTexture );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nX, nY, nWidth, nHeight, 0 );
+    glBindTexture( GL_TEXTURE_2D, 0 );
+}
+
+OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData )
+: mnTexture( 0 )
+, mnWidth( nWidth )
+, mnHeight( nHeight )
+, mnFilter( GL_NEAREST )
+{
+    if( !mnTexture )
+        glGenTextures( 1, &mnTexture );
+    glBindTexture( GL_TEXTURE_2D, mnTexture );
+    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnWidth, mnHeight, 0, nFormat, nType, pData );
     glBindTexture( GL_TEXTURE_2D, 0 );
 }
 
@@ -50,6 +89,21 @@ OpenGLTexture::~OpenGLTexture()
 GLuint OpenGLTexture::Id() const
 {
     return mnTexture;
+}
+
+GLenum OpenGLTexture::GetFilter() const
+{
+    return mnFilter;
+}
+
+void OpenGLTexture::SetFilter( GLenum nFilter )
+{
+    mnFilter = nFilter;
+    if( mnTexture )
+    {
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, nFilter );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, nFilter );
+    }
 }
 
 void OpenGLTexture::Bind()

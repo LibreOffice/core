@@ -502,6 +502,7 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
 
     if( mnFillColor != SALCOLOR_NONE )
     {
@@ -676,6 +677,7 @@ void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitm
 
     SAL_INFO( "vcl.opengl", "::drawBitmap" );
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
     DrawTexture( nTexture, aSize, rPosAry );
 }
 
