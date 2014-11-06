@@ -17,6 +17,10 @@ $(eval $(call gb_Package_add_files,canvas_opengl_shader,$(LIBO_ETC_FOLDER)/openg
 	radialTwoColorGradientFragmentShader.glsl \
 	rectangularMultiColorGradientFragmentShader.glsl \
 	rectangularTwoColorGradientFragmentShader.glsl \
+        constantFragmentShader.glsl \
+        simpleVertexShader.glsl \
+        textFragmentShader.glsl \
+        textManipulatingVertexShader.glsl \
 ))
 
 # vim: set noet sw=4 ts=4:
