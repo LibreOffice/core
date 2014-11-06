@@ -20,7 +20,6 @@ Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScBroadcastAreaSlotMachine::AreaBroadcastInRange(ScRange const&, ScHint const&) const
-ScColumn::MarkSubTotalCells(sc::ColumnSpanSet&, int, int, bool) const
 ScDocument::CreateFormatTable() const
 ScFormulaCellGroup::scheduleCompilation()
 ScRawToken::Clone() const

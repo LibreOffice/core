@@ -1920,33 +1920,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
 namespace {
 
-class SubTotalCellPicker
-{
-    sc::ColumnSpanSet& mrSet;
-    SCTAB mnTab;
-    SCCOL mnCol;
-    bool mbVal;
-public:
-    SubTotalCellPicker(sc::ColumnSpanSet& rSet, SCTAB nTab, SCCOL nCol, bool bVal) :
-        mrSet(rSet), mnTab(nTab), mnCol(nCol), mbVal(bVal) {}
-
-    void operator() (size_t nRow, const ScFormulaCell* pCell)
-    {
-        if (pCell->IsSubTotal())
-            mrSet.set(mnTab, mnCol, nRow, mbVal);
-    }
-};
-
-}
-
-void ScColumn::MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCROW nRow1, SCROW nRow2, bool bVal ) const
-{
-    SubTotalCellPicker aFunc(rSet, nTab, nCol, bVal);
-    sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
-}
-
-namespace {
-
 class SharedTopFormulaCellPicker : std::unary_function<sc::CellStoreType::value_type, void>
 {
 public:

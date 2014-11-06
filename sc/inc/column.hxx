@@ -285,8 +285,6 @@ public:
     void        SwapCol(ScColumn& rCol);
     void        MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol);
 
-    void MarkSubTotalCells( sc::ColumnSpanSet& rSet, SCROW nRow1, SCROW nRow2, bool bVal ) const;
-
     bool HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst);
 
     bool SetString(
