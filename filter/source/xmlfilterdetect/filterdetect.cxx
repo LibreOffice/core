@@ -115,7 +115,12 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
         }
 
         if ( nUniPos == 3 || ( nUniPos == 0 && !bTryUtf16 ) ) // UTF-8 or non-Unicode
-            resultString = OStringToOUString( read_uInt8s_ToOString( *pInStream, nSize ), RTL_TEXTENCODING_UTF8 );
+        {
+            OString const str(read_uInt8s_ToOString(*pInStream, nSize));
+            resultString = OUString(str.getStr(), str.getLength(),
+                RTL_TEXTENCODING_ASCII_US,
+                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT|RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT|RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT);
+        }
         else if ( nUniPos == 2 || bTryUtf16 ) // UTF-16
             resultString = read_uInt16s_ToOUString( *pInStream, nSize );
 
