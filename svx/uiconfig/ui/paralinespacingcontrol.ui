@@ -18,14 +18,14 @@
   <object class="GtkImage" id="image_spacing_1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/symphony/lpspacing-1.png</property>
+    <property name="pixbuf">cmd/lc_spacepara1.png</property>
   </object>
   <object class="GtkImage" id="image_spacing_115">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="margin_right">6</property>
     <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/lpspacing-1_15.png</property>
+    <property name="pixbuf">cmd/lc_spacepara1.png</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkImage" id="image_spacing_15">
@@ -33,7 +33,7 @@
     <property name="can_focus">False</property>
     <property name="margin_right">6</property>
     <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/lpspacing-1_5.png</property>
+    <property name="pixbuf">cmd/lc_spacepara15.png</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkImage" id="image_spacing_2">
@@ -41,7 +41,7 @@
     <property name="can_focus">False</property>
     <property name="margin_right">6</property>
     <property name="xalign">0</property>
-    <property name="pixbuf">svx/res/symphony/lpspacing-2.png</property>
+    <property name="pixbuf">cmd/lc_spacepara2.png</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkWindow" id="ParaLineSpacingControl">
