@@ -1393,6 +1393,15 @@ DECLARE_OOXMLIMPORT_TEST(testTableAutoColumnFixedSize, "table-auto-column-fixed-
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTableAutoColumnFixedSize2, "table-auto-column-fixed-size2.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // This was 17907, i.e. the sum of the width of the 3 cells (10152 twips each), which is too wide.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16891), getProperty<sal_Int32>(xTextTable, "Width"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo46361, "fdo46361.docx")
 {
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);

@@ -202,16 +202,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             }
 
                             // Check whether the total width of given row is compared with the maximum value of rows (m_nMaxFixedWidth).
-                            if (bFixed )
-                            {
-                                // Check if total width
-                                if (m_nMaxFixedWidth < nRowFixedWidth)
-                                    m_nMaxFixedWidth = nRowFixedWidth;
-
-                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX );
-                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nMaxFixedWidth );
-                            }
-                            else
+                            if (!bFixed)
                             {
                                 // Set the width type of table with 'Auto' and set the width value to 100(%)
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
