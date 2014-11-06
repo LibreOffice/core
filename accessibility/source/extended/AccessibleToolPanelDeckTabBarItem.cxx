@@ -30,7 +30,6 @@
 #include <toolkit/helper/externallock.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 namespace accessibility
 {
