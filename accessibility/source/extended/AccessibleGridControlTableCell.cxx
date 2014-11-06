@@ -19,7 +19,6 @@
 
 
 #include "accessibility/extended/AccessibleGridControl.hxx"
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility
 {
