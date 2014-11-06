@@ -19,7 +19,6 @@
 
 
 #include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
-#include "accessibility/extended/AccessibleGridControl.hxx"
 
 namespace accessibility
 {
