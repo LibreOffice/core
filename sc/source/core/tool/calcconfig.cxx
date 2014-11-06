@@ -141,7 +141,7 @@ OUString SC_DLLPUBLIC ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpC
     {
         if (i != rOpCodes.cbegin())
             result.append(';');
-        result.append(static_cast<int>(*i));
+        result.append(static_cast<sal_Int32>(*i));
     }
 
     return result.toString();
