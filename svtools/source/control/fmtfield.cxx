@@ -128,14 +128,14 @@ namespace validation
     {
         // build up our transition table
 
-        // how to procede from START
+        // how to proceed from START
         {
             StateTransitions& rRow = m_aTransitions[ START ];
             rRow.insert( Transition( '_', NUM_START ) );
-                // if we encounter the normalizing character, we want to procede with the number
+                // if we encounter the normalizing character, we want to proceed with the number
         }
 
-        // how to procede from NUM_START
+        // how to proceed from NUM_START
         {
             StateTransitions& rRow = m_aTransitions[ NUM_START ];
 
@@ -150,7 +150,7 @@ namespace validation
             lcl_insertStartExponentTransition( rRow );
         }
 
-        // how to procede from DIGIT_PRE_COMMA
+        // how to proceed from DIGIT_PRE_COMMA
         {
             StateTransitions& rRow = m_aTransitions[ DIGIT_PRE_COMMA ];
 
@@ -165,7 +165,7 @@ namespace validation
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from DIGIT_POST_COMMA
+        // how to proceed from DIGIT_POST_COMMA
         {
             StateTransitions& rRow = m_aTransitions[ DIGIT_POST_COMMA ];
 
@@ -179,7 +179,7 @@ namespace validation
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from EXPONENT_START
+        // how to proceed from EXPONENT_START
         {
             StateTransitions& rRow = m_aTransitions[ EXPONENT_START ];
 
@@ -193,7 +193,7 @@ namespace validation
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from EXPONENT_DIGIT
+        // how to proceed from EXPONENT_DIGIT
         {
             StateTransitions& rRow = m_aTransitions[ EXPONENT_DIGIT ];
 
@@ -204,7 +204,7 @@ namespace validation
             lcl_insertStopTransition( rRow );
         }
 
-        // how to procede from END
+        // how to proceed from END
         {
             /*StateTransitions& rRow =*/ m_aTransitions[ EXPONENT_DIGIT ];
             // no valid transition to leave this state

@@ -1533,7 +1533,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         if ( FAILED( hr ) || !pDataObject )
             throw io::IOException(); // TODO: transport error code
 
-        // The following optimization does not make much sence currently just because
+        // The following optimization does not make much sense currently just because
         // only one aspect is supported, and only three formats for the aspect are supported
         // and moreover it is not guarantied that the once returned format will be supported further
         // example - i52106

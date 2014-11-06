@@ -154,7 +154,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     bool      mbShowFooterSeparator:1; ///< Flag to say that we are showing the footer control
     bool      mbHeaderFooterEdit:1;  ///< Flag to say that we are editing header or footer (according to the bShow(Header|Footer)Separator above)
 
-    // boolean, indicating that class in in constructor.
+    // boolean, indicating that class in constructor.
     bool mbInConstructor:1;
     bool mbTiledRendering:1; ///< Set if we are doing the tiled rendering (using PaintTile()).
 

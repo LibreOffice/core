@@ -48,7 +48,7 @@ class VCLStatusIndicator : public  ::cppu::WeakImplHelper1< css::task::XStatusIn
 
         /** shows the progress.
 
-            @attention  This member isnt synchronized using our own mutex!
+            @attention  This member is not synchronized using our own mutex!
                         Its guarded by the solarmutex only. Otherwise
                         we have to lock two of them, which can force a deadlock ...
             */

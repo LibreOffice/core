@@ -1176,7 +1176,7 @@ private:
     wwExtraneousParas m_aExtraneousParas;
 
     /*
-    A map of of tables to their follow nodes for use in inserting tables into
+    A map of tables to their follow nodes for use in inserting tables into
     already existing document, i.e. insert file
     */
     sw::util::InsertedTablesManager maInsertedTables;
@@ -1219,7 +1219,7 @@ private:
     std::deque<bool> maApos;
     typedef std::deque<bool>::const_iterator mycApoIter;
     /*
-    Keep track of generated Ruby character formats we we can minimize the
+    Keep track of generated Ruby character formats we can minimize the
     number of character formats created
     */
     std::vector<const SwCharFmt*> aRubyCharFmts;

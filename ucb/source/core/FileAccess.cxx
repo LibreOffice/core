@@ -225,7 +225,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
     }
     else
     {
-        // non-hierachical URL
+        // non-hierarchical URL
 
         // #i29648#
 

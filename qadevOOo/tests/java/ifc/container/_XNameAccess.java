@@ -74,7 +74,7 @@ public class _XNameAccess extends MultiMethodTest {
             result &= loc_result;
     }
 
-    name = "non_existant_name__1234";
+    name = "non_existent_name__1234";
     log.println("testing hasByName() with invalid name");
         try {
             loc_result = !oObj.hasByName(name);
@@ -126,8 +126,8 @@ public class _XNameAccess extends MultiMethodTest {
             result &= loc_result;
         }
 
-        log.println("testing with non-existant name");
-        name = "non_existant_name__1234";
+        log.println("testing with non-existent name");
+        name = "non_existent_name__1234";
         try {
             loc_result = (null != oObj.getByName(name));
             loc_result = false;

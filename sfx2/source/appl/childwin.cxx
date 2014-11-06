@@ -726,7 +726,7 @@ void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::su
         if( pImp->xFrame.is() )
             pImp->xFrame->removeEventListener( pImp->xListener );
 
-        // If new frame isnt NULL -> we must guarantee valid listener for disposing events.
+        // If new frame is not NULL -> we must guarantee valid listener for disposing events.
         // Use already existing or create new one.
         if( rFrame.is() )
             if( !pImp->xListener.is() )

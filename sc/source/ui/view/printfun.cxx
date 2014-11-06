@@ -1670,7 +1670,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), true );
 
         pEditEngine->EnableUndo(false);
-        //fdo#45869 we want text to be positioned as it would be for the the
+        //fdo#45869 we want text to be positioned as it would be for the
         //high dpi printed output, not as would be ideal for the 96dpi preview
         //window itself
         pEditEngine->SetRefDevice(pPrinter ? pPrinter : pDoc->GetRefDevice());

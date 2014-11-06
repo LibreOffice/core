@@ -1313,7 +1313,7 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
         }
         else
         {
-            // If ther are script dependencies and we are derived from a tag,
+            // If there are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
             OUString aNewSelector( aSelector );
@@ -1417,7 +1417,7 @@ static void OutCSS1DropCapRule(
         }
         else
         {
-            // If ther are script dependencies and we are derived from a tag,
+            // If there are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
             OUString aNewSelector( aSelector );

@@ -2219,7 +2219,7 @@ void DrawGraphic(
                 {
                     if ( !bGrfIsTransparent )
                     {
-                        // substract area of background graphic from draw area
+                        // subtract area of background graphic from draw area
                         // OD 08.10.2002 #103898# - consider only that part of the
                         // graphic area that is overlapping with draw area.
                         SwRect aTmpGrf = aGrf;
@@ -3301,7 +3301,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 // moved paint pre-process for DrawingLayer overlay here since the above
                 // code dependent from bExtraData may expand the PaintRect
                 {
-                    // #i75172# if called from SwViewShell::ImplEndAction it sould no longer
+                    // #i75172# if called from SwViewShell::ImplEndAction it should no longer
                     // really be used but handled by SwViewShell::ImplEndAction already
                     const vcl::Region aDLRegion(aPaintRect.SVRect());
                     pSh->DLPrePaint2(aDLRegion);
@@ -3432,7 +3432,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
             if ( aRect.IsOver( aEmptyPageRect ) )
             {
-                // #i75172# if called from SwViewShell::ImplEndAction it sould no longer
+                // #i75172# if called from SwViewShell::ImplEndAction it should no longer
                 // really be used but handled by SwViewShell::ImplEndAction already
                 {
                     const vcl::Region aDLRegion(aPaintRect.SVRect());

@@ -2161,7 +2161,7 @@ SvTreeListEntry* SbaTableQueryBrowser::implAppendEntry( SvTreeListEntry* _pParen
 IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
 {
     if (_pParent->HasChildren())
-        // nothing to to ...
+        // nothing to do...
         return 1L;
 
     SvTreeListEntry* pFirstParent = m_pTreeView->getListBox().GetRootLevelParent(_pParent);

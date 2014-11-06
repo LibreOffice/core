@@ -669,7 +669,7 @@
 		<xsl:element name="{$elementName}">
 			<xsl:choose>
 				<!-- in ODF borders of paragraphs will be merged by default. Merging means the adjactend paragraphs are building a unit,
-					where only the first and the last will have have a border to the surrounding (top / bottom border)
+					where only the first and the last will have a border to the surrounding (top / bottom border)
 												<xsl:variable name="precedingParagraphStyle" select="preceding-sibling::*[1][name() = 'text:p']/@text:style-name"/>
 					<xsl:variable name="followingParagraphStyle" select="following-sibling::*[1][name() = 'text:p']/@text:style-name"/>
 					-->

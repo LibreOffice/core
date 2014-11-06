@@ -2696,7 +2696,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         {
         case '-' :
             nExpSign = -1;
-            // fallthru
+            // fall through
         case '+' :
             ++nExpStart;
             break;
@@ -4478,7 +4478,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
         {
         case NF_SYMBOLTYPE_DECSEP:
             aGrouping.reset();
-            // fall thru
+            // fall through
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
         case NF_SYMBOLTYPE_PERCENT:

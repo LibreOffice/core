@@ -1130,7 +1130,7 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     return true;
 }
 
-// Separable Unsharepn Mask filter is actually a substracted blured
+// Separable Unsharepn Mask filter is actually a subtracted blured
 // image from the original image.
 bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     const long  nWidth = GetSizePixel().Width();
@@ -1150,7 +1150,7 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
 
     BitmapColor aColor, aColorBlur;
 
-    // For all pixels in original image substract pixels values from blured image.
+    // For all pixels in original image subtract pixels values from blured image.
     for( int x = 0; x < nWidth; x++ )
     {
         for( int y = 0; y < nHeight; y++ )

@@ -1352,7 +1352,7 @@ SfxLibrary* SfxLibraryContainer::getImplLib( const OUString& rLibraryName )
 
 // Storing with password encryption
 
-// Empty implementation, avoids unneccesary implementation in dlgcont.cxx
+// Empty implementation, avoids unnecessary implementation in dlgcont.cxx
 bool SfxLibraryContainer::implStorePasswordLibrary( SfxLibrary*,
                                                     const OUString&,
                                                     const uno::Reference< embed::XStorage >&,

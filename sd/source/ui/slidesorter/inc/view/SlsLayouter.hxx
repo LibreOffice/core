@@ -164,7 +164,7 @@ public:
         const bool bClampToValidRange = true) const;
 
     /** Return an object that describes the logical and visual properties of
-        where to do an insert operation when the user would release the the
+        where to do an insert operation when the user would release the
         mouse button at the given position after a drag operation and of
         where and how to display an insertion indicator.
         @param rModelPosition

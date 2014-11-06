@@ -24,7 +24,7 @@
   <templates>
     <group oor:name="MenuItem">
       <info>
-        <desc>Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+        <desc>Describes a menu item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
       </info>
       <prop oor:name="URL" oor:type="xs:string">
         <info>
@@ -154,7 +154,7 @@
     </group>
     <group oor:name="ToolBarItem">
       <info>
-        <desc>Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+        <desc>Describes a toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
       </info>
       <prop oor:name="URL" oor:type="xs:string">
         <info>

@@ -343,7 +343,7 @@
       <menu:menu menu:id=".uno:PolyFormen">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:Merge"/>
-          <menu:menuitem menu:id=".uno:Substract"/>
+          <menu:menuitem menu:id=".uno:Subtract"/>
           <menu:menuitem menu:id=".uno:Intersect"/>
         </menu:menupopup>
       </menu:menu>

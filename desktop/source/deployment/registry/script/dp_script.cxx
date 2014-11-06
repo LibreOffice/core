@@ -411,7 +411,7 @@ void BackendImpl::PackageImpl::processPackage_(
         //We cannot just call removeLibrary(name) because this could remove a
         //script which was added by an extension in a different repository. For
         //example, extension foo is contained in the bundled repository and then
-        //the user adds it it to the user repository. The extension manager will
+        //the user adds it to the user repository. The extension manager will
         //then register the new script and revoke the script from the bundled
         //extension. removeLibrary(name) would now remove the script from the
         //user repository. That is, the script of the newly added user extension does

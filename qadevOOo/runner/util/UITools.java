@@ -113,7 +113,7 @@ public class UITools {
 
     /**
      * returns the button by the given name
-     * @param buttonName is name name of the button to get
+     * @param buttonName is the name of the button to get
      * @return a XAccessibleContext of the button
      * @throws java.lang.Exception if something fail
      */
@@ -125,7 +125,7 @@ public class UITools {
 
     /**
      * Helper method: gets button via accessibility and 'click' it</code>
-     * @param buttonName is name name of the button to click
+     * @param buttonName is the name of the button to click
      * @throws java.lang.Exception if something fail
      */
      public void clickButton(String buttonName) throws java.lang.Exception

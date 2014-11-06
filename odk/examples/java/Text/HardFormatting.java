@@ -65,7 +65,7 @@ public class HardFormatting {
 
             String sMyText = "A very short paragraph for illustration only";
 
-            // you can travel with the cursor throught the text document.
+            // you can travel with the cursor through the text document.
             // you travel only at the model, not at the view. The cursor that you can
             // see on the document doesn't change the position
             com.sun.star.text.XTextCursor xTextCursor = null;
@@ -86,7 +86,7 @@ public class HardFormatting {
             xPropertySet = UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xTextRange);
 
-            // create a paragraph cursor to travel throught the paragraphs
+            // create a paragraph cursor to travel through the paragraphs
             com.sun.star.text.XParagraphCursor xParagraphCursor = null;
             xParagraphCursor = UnoRuntime.queryInterface(
                 com.sun.star.text.XParagraphCursor.class, xTextRange);

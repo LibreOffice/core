@@ -57,7 +57,7 @@ namespace x11 {
         virtual void fireContentsChanged() = 0;
         virtual css::uno::Reference< css::uno::XInterface > getReference() = 0;
         // returns a reference that will keep the SelectionAdaptor alive until the
-        // refernce is released
+        // reference is released
 
     protected:
         ~SelectionAdaptor() {}

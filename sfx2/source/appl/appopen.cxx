@@ -1009,7 +1009,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     Reference < XController > xController;
-        // if a frame is given, it must be used for the starting point of the targetting mechanism
+        // if a frame is given, it must be used for the starting point of the targeting mechanism
         // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
         if ( !xTargetFrame.is() )
         {
@@ -1057,7 +1057,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if( bHidden || pLinkItem || rReq.IsSynchronCall() )
         {
             // if loading must be done synchron, we must wait for completion to get a return value
-            // find frame by myself; I must konw the exact frame to get the controller for the return value from it
+            // find frame by myself; I must know the exact frame to get the controller for the return value from it
             Reference < XComponent > xComp;
 
             try

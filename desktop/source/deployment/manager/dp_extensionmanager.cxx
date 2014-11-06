@@ -1342,7 +1342,7 @@ sal_Bool ExtensionManager::synchronize(
         catch (...)
         {
             //We catch the exception, so we can write the lastmodified file
-            //so we will no repeat this everytime OOo starts.
+            //so we will no repeat this every time OOo starts.
             OSL_FAIL("Extensions Manager: synchronize");
         }
         OUString lastSyncBundled("$BUNDLED_EXTENSIONS_USER/lastsynchronized");

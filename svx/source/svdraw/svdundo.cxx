@@ -372,7 +372,7 @@ void SdrUndoAttrObj::Undo()
         // Since ClearItem sets back everything to normal
         // it also sets fit-to-size text to non-fit-to-size text and
         // switches on autogrowheight (the default). That may lead to
-        // loosing the geometry size info for the object when it is
+        // losing the geometry size info for the object when it is
         // laid out again from AdjustTextFrameWidthAndHeight(). This makes
         // rescuing the size of the object necessary.
         const Rectangle aSnapRect = pObj->GetSnapRect();

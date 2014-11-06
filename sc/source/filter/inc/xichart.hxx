@@ -1058,7 +1058,7 @@ private:
                             XDataSeriesRef xSeries, sal_Int32 nApiAxesSetIdx ) const;
     /** Creates all data series of any chart type except stock charts. */
     void                CreateDataSeries( XChartTypeRef xChartType, sal_Int32 nApiAxesSetIdx ) const;
-    /** Creates all data series of of a stock chart. */
+    /** Creates all data series of a stock chart. */
     void                CreateStockSeries( XChartTypeRef xChartType, sal_Int32 nApiAxesSetIdx ) const;
 
 private:

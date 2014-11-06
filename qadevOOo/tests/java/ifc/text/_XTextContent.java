@@ -64,7 +64,7 @@ public class _XTextContent extends MultiMethodTest {
     /**
      * Tries to attach the text content to the test range
      * gotten with getAnchor(). If relations are found
-     * then they are are used for testing. <p>
+     * then they are used for testing. <p>
      *
      * The test is OK if the method works without error.
      * @see #_getAnchor()

@@ -333,7 +333,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     JobData::EMode eMode = m_aJobCfg.getMode();
 
     // Create list of environment variables. This list must be part of the
-    // returned structure everytimes ... but some of its members are opetional!
+    // returned structure every time... but some of its members are opetional!
     css::uno::Sequence< css::beans::NamedValue > lEnvArgs(1);
     lEnvArgs[0].Name = "EnvType";
     lEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
@@ -411,7 +411,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     @short  analyze the given job result and change the job configuration
     @descr  Note: Some results can be handled only, if this job has a valid configuration!
             For "not configured jobs" (means pure services) they can be ignored.
-            But these cases are handled by our JobData member. We can call it everytime.
+            But these cases are handled by our JobData member. We can call it every time.
             It does the right things automatically. E.g. if the job has no configuration ...
             it does nothing during setJobConfig()!
 
@@ -475,7 +475,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
             at the global desktop instance. That will hold us
             alive and additional we get the information, if the
             office wish to shutdown. If then an internal job
-            is running we will have the chance to supress that
+            is running we will have the chance to suppress that
             by throwing a veto exception. If our internal wrapped
             job finished his work, we can release this listener
             connection.

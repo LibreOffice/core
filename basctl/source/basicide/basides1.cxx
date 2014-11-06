@@ -84,7 +84,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
             SfxItemSet const& rArgs = *rReq.GetArgs();
             // unfortunately I don't know the ID:
             sal_uInt16 nWhich = rArgs.GetWhichByPos( 0 );
-            DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
+            DBG_ASSERT( nWhich, "Which for SearchItem?" );
             SfxPoolItem const& rItem = rArgs.Get(nWhich);
             DBG_ASSERT(dynamic_cast<SvxSearchItem const*>(&rItem), "no searchitem!");
             SvxSearchItem const& rSearchItem = static_cast<SvxSearchItem const&>(rItem);

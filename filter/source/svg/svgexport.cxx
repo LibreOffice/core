@@ -1620,7 +1620,7 @@ bool SVGFilter::implExportPage( const OUString & sPageId,
             }   // insert the </g> closing tag related to the Background
         }
 
-        // In case we are dealing with a master page we need to to group all its shapes
+        // In case we are dealing with a master page we need to group all its shapes
         // into a group element, this group will make up the so named "background objects"
         if( bMaster )
         {
@@ -1887,7 +1887,7 @@ bool SVGFilter::implCreateObjects()
 #ifdef ENABLE_EXPORT_CUSTOM_SLIDE_BACKGROUND
             // TODO complete the implementation for exporting custom background for each slide
             // implementation status:
-            // - hatch stroke color is set to 'none' so the hatch is not visible, why ?
+            // - hatch stroke color is set to 'none' so the hatch is not visible, why?
             // - gradient look is not really awesome, too few colors are used;
             // - stretched bitmap, gradient and hatch are not exported only once
             //   and then referenced in case more than one slide uses them.

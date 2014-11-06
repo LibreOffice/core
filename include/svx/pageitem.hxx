@@ -55,7 +55,7 @@ enum SvxPageUsage
 
 /*
 This item describes a page attribute (name of the template, enumeration,
-portait or landscape, layout)
+portrait or landscape, layout)
 */
 
 class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem

@@ -46,7 +46,7 @@ struct MutexOwner {mutable ::osl::Mutex maMutex;};
 
 /** @descr
         This base class provides an implementation of the
-        AccessibleContext service.  Appart from the
+        AccessibleContext service. Apart from the
         <type>XXAccessible<type> and XAccessibleContextContext
         interfaces it supports the XServiceInfo interface.
 */
@@ -350,7 +350,7 @@ private:
          ::com::sun::star::accessibility::XAccessible> mxParent;
 
     /** Description of this object.  This is not a constant because it can
-        be set from the outside.  Furthermore, it changes according the the
+        be set from the outside.  Furthermore, it changes according to the
         draw page's display mode.
     */
     OUString msDescription;

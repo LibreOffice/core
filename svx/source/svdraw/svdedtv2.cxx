@@ -1111,7 +1111,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
             }
             case SDR_MERGE_SUBSTRACT:
             {
-                // Substract B from A
+                // Subtract B from A
                 aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
                 break;
             }

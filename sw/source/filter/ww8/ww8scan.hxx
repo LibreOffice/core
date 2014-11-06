@@ -1551,12 +1551,12 @@ public:
     //    compatibility options
     bool       copts_fNoTabForInd : 1;          //    when 1, don't add automatic tab stops for hanging indent
     bool       copts_fNoSpaceRaiseLower : 1;        //    when 1, don't add extra space for raised or lowered characters
-    bool       copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
+    bool       copts_fSupressSpbfAfterPgBrk : 1;    // when 1, suppress the paragraph Space Before and Space After options after a page break
     bool       copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
     bool       copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
     bool       copts_fNoColumnBalance : 1;      //    when 1, don't balance columns for Continuous Section starts
     bool       copts_fConvMailMergeEsc : 1;
-    bool       copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
+    bool       copts_fSupressTopSpacing : 1;        //    when 1, suppress extra line spacing at top of page
     bool       copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
     bool       copts_fTransparentMetafiles : 1; //    when 1, don't blank area between metafile pictures
     bool       copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames

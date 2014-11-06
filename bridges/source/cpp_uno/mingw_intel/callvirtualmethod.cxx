@@ -39,7 +39,7 @@
 // never happens at runtime), which in turn can throw exceptions, and (b)
 // callVirtualMethod is not inlined at its call site (so that any exceptions are
 // caught which are thrown from the instruction calling callVirtualMethod).  [It
-// is unclear how much of this comment is still relevent -- see the above
+// is unclear how much of this comment is still relevant -- see the above
 // comment.]
 void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     void * pAdjustedThisPtr, sal_Int32 nVtableIndex, void * pRegisterReturn,

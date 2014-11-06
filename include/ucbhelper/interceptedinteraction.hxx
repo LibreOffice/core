@@ -276,7 +276,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
     public:
 
 
-        /** @short  implements the default handling of this class ....
+        /** @short  implements the default handling of this class...
                     or can be overwritten by any derived class.
 
             @descr  If no further class is derived from this one
@@ -288,7 +288,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                     If this method was overwritten by a derived implementation
                     -> the new implementation has to do everything by itself.
                     Of course it can access all members/helpers and work with it.
-                    But the default implementation isnt used automatically then.
+                    But the default implementation is not used automatically then.
 
             @param  xRequest
                     the interaction request, which should be intercepted.

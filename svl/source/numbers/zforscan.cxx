@@ -865,7 +865,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
         case SsGetStar:
             eState = SsStop;
             sSymbol += OUString(cToken);
-            nRepPos = (nPos - nStart) - 1; // everytime > 0!!
+            nRepPos = (nPos - nStart) - 1; // every time > 0!!
             break;
         case SsGetBlank:
             eState = SsStop;
@@ -2270,7 +2270,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                // fall thru
+                // fall through
             case NF_KEY_M:                          // M
             case NF_KEY_MM:                         // MM
             case NF_KEY_MMM:                        // MMM
@@ -2426,7 +2426,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                // fall thru
+                // fall through
             case NF_KEY_MI:                         // M
             case NF_KEY_MMI:                        // MM
             case NF_KEY_H:                          // H

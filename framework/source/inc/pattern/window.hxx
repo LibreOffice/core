@@ -103,7 +103,7 @@ static bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
     {
         // Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
         // Be sure that these window is really a "top system window".
-        // Attention ! Checking Window->GetParent() isnt the right approach here.
+        // Attention ! Checking Window->GetParent() is not the right approach here.
         // Because sometimes VCL create "implicit border windows" as parents even we created
         // a simple XWindow using the toolkit only .-(
         SolarMutexGuard aSolarGuard;

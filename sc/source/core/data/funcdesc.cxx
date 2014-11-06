@@ -398,8 +398,8 @@ ScFunctionList::ScFunctionList() :
         boost::scoped_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but
         // otherwise the sub resources within the resource blocks and the
-        // resource blocks themselfs would had to be ordered according to
-        // OpCodes, which is utopian..
+        // resource blocks themselves would had to be ordered according to
+        // OpCodes, which is utopian...
         for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
         {
             ScResId aRes(i);

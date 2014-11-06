@@ -313,7 +313,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
     }
     else
     {
-        // get the appropiate node
+        // get the appropriate node
         OUString sManufacturer( wrapConfigurationElementName( rManufacturer ) );
         const Sequence<OUString> aLabels = GetNodeNames( sManufacturer );
         const OUString* pLabels = aLabels.getConstArray();

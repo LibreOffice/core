@@ -131,7 +131,7 @@
       </info>
       <set oor:name="ServiceNameEntries" oor:node-type="ServiceNameEntry">
         <info>
-          <desc>The node name is the service implementation name and and the
+          <desc>The node name is the service implementation name and the
           property states the node name to use in the VendorImages set.</desc>
           <label>Component entries</label>
         </info>

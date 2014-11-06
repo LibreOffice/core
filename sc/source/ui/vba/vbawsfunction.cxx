@@ -186,7 +186,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
         aRet = xFunctionAccess->callFunction( FunctionName, aParamTemp );
     }
 
-    /*  Convert return value from double to to Boolean for some functions that
+    /*  Convert return value from double to Boolean for some functions that
         return Booleans. */
     typedef uno::Sequence< uno::Sequence< uno::Any > > AnySeqSeq;
     if( (eOpCode == ocIsEmpty) || (eOpCode == ocIsString) || (eOpCode == ocIsNonString) || (eOpCode == ocIsLogical) ||

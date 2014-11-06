@@ -237,7 +237,7 @@ final class DisplayPortCalculator {
     }
 
     /**
-     * This class implements the variation where we basically don't bother with a a display port.
+     * This class implements the variation where we basically don't bother with a display port.
      */
     private static class NoMarginStrategy extends DisplayPortStrategy {
         NoMarginStrategy(Map<String, Integer> prefs) {
@@ -478,7 +478,7 @@ final class DisplayPortCalculator {
         private static final float VELOCITY_EXPANSION_THRESHOLD = /*GeckoAppShell.getDpi()*/ LOKitShell.getDpi() / 16f;
 
         // How much we increase the display port based on velocity. Assuming no friction and
-        // splitting (see below), this should be be the number of frames (@60fps) between us
+        // splitting (see below), this should be the number of frames (@60fps) between us
         // calculating the display port and the draw of the *next* display port getting composited
         // and displayed on the screen. This is because the timeline looks like this:
         //      Java: pan pan pan pan pan pan ! pan pan pan pan pan pan !

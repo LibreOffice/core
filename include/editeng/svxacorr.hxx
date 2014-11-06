@@ -299,7 +299,7 @@ public:
     bool GetPrevAutoCorrWord( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                                 sal_Int32 nPos, OUString& rWord ) const;
 
-    // Search for or or the words in the replacement table.
+    // Search for the words in the replacement table.
     // rText - check in this text the words of the list
     // rStt - the detected starting position
     // nEnd - to check position - as of this item forward

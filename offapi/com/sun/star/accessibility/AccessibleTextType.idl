@@ -42,7 +42,7 @@ constants AccessibleTextType
     /** Single word.
 
         <p>Indicates that single words are used.  The definition of what a
-        word is is implementation and language/locale dependent.  While in
+        word is, it is implementation and language/locale dependent.  While in
         English a word is ended by a space or a special character like a
         comma or a period, this is not necessarily true in other
         languages.</p>
@@ -52,7 +52,7 @@ constants AccessibleTextType
     /** Single sentence.
 
         <p>Indicates that single sentences are used.  The definition of what
-        a sentence is is implementation and language/locale dependent.
+        a sentence is implementation and language/locale dependent.
         While in English a sentence is ended by a period, this is not
         necessarily true in other languages.</p>
     */
@@ -61,7 +61,7 @@ constants AccessibleTextType
     /** Single paragraph.
 
         <p>Indicates that single paragraphs are used.  The definition of
-        what a paragraph is is implementation and language/locale
+        what a paragraph is implementation and language/locale
         dependent.</p>
     */
     const short PARAGRAPH = 4;

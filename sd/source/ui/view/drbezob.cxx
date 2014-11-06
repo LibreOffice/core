@@ -91,7 +91,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
 {
     SfxItemSet aAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aAttrSet );
-    rSet.Put(aAttrSet, false); // <- sal_False, so DontCare-Status gets aquired
+    rSet.Put(aAttrSet, false); // <- sal_False, so DontCare-Status gets acquired
 
     rtl::Reference<FuPoor> xFunc( mpViewSh->GetCurrentFunction() );
 

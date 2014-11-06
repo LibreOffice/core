@@ -169,7 +169,7 @@ public:
     ::com::sun::star::lang::XTypeProvider and
     ::com::sun::star::uno::XInterface
     which supports weak mechanism to be held weakly
-    (supporting ::com::sun::star::uno::XWeak thru ::cppu::OWeakObject).
+    (supporting ::com::sun::star::uno::XWeak through ::cppu::OWeakObject).
 
     @derive
     Inherit from this class giving your interface(s) to be implemented as

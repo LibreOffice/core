@@ -1086,7 +1086,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
     // Capture the vertical position of this window in the toolbar, when we increase
-    // the size of the toolbar to accomadate expanded line input we need to take this
+    // the size of the toolbar to accommodate expanded line input we need to take this
     // into account
     if ( !nVertOffset )
         nVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
@@ -2420,7 +2420,7 @@ void ScPosWnd::DoEnter()
                 }
                 else
                 {
-                    // for all selection types, excecute the SID_CURRENTCELL slot.
+                    // for all selection types, execute the SID_CURRENTCELL slot.
                     if (eType == SC_NAME_INPUT_CELL || eType == SC_NAME_INPUT_RANGE)
                     {
                         // Note that SID_CURRENTCELL always expects address to

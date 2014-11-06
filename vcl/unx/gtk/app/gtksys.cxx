@@ -73,7 +73,7 @@ struct GdkRectangleCoincident
  * GtkSalSystem::countScreenMonitors()
  *
  * This method builds the vector which allows us to map from VCL's
- * idea of linear integer ScreenNumber to to gtk+'s rather more
+ * idea of linear integer ScreenNumber to gtk+'s rather more
  * complicated screen + monitor concept.
  */
 void

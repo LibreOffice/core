@@ -61,7 +61,7 @@ protected:
 
     T getItem( const OUString& rName )
     {
-        OSL_ENSURE( hasItem( rName ), "can't get non-existant item" );
+        OSL_ENSURE( hasItem( rName ), "can't get non-existent item" );
         return maItems[ rName ];
     }
 

@@ -1078,7 +1078,7 @@ void OS2METReader::ReadArc(bool bGivenPos)
     // now we still need the radius in x and y direction:
     r=sqrt(q*q*(x1-cx)*(x1-cx)+p*p*(y1-cy)*(y1-cy));
     rx=r/q; ry=r/p;
-    // We now have to find out how the the starting and the end point
+    // We now have to find out how the starting and the end point
     // have to be chosen so that point no. 2 lies inside the drawn arc:
     w1=fmod((atan2(x1-cx,y1-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w1<0) w1+=6.28318530718;
     w3=fmod((atan2(x3-cx,y3-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w3<0) w3+=6.28318530718;
@@ -2201,7 +2201,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             break;
 
         case 0xfe92: { // Image Data
-            // At the latest we now need the temprary BMP file and
+            // At the latest we now need the temporary BMP file and
             // inside this file we need the header and the palette.
             if (p->pBMP==NULL) {
                 p->pBMP=new SvMemoryStream();

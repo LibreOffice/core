@@ -801,7 +801,7 @@ int mscx_filterCppException(
         }
     }
     // though this unknown exception leaks now, no user-defined exception
-    // is ever thrown thru the binary C-UNO dispatcher call stack.
+    // is ever thrown through the binary C-UNO dispatcher call stack.
     RuntimeException exc( "[mscx_uno bridge error] unexpected "
                   "C++ exception occurred!" );
     uno_type_any_constructAndConvert(

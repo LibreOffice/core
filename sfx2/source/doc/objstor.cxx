@@ -1798,7 +1798,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 // contents, the storag will be broken
                 xOptStorage->attachToURL( aBackupURL, sal_True );
 
-                // the storage is successfully attached to backup, thus it it owned by the document not by the medium
+                // the storage is successfully attached to backup, thus it is owned by the document not by the medium
                 rSrcMedium.CanDisposeStorage_Impl( false );
                 bResult = true;
             }
@@ -1927,7 +1927,7 @@ bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, bool bCommit )
         }
         catch( uno::Exception& )
         {
-            SAL_WARN( "sfx.doc", "The strotage was not commited on DoSaveAs!" );
+            SAL_WARN( "sfx.doc", "The strotage was not committed on DoSaveAs!" );
         }
     }
 
@@ -2520,7 +2520,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     // copy version list from "old" medium to target medium, so it can be used on saving
     pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
 
-    // an interaction handler here can aquire only in case of GUI Saving
+    // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
     com::sun::star::uno::Reference< XInteractionHandler > xInteract;
     SFX_ITEMSET_ARG( pArgs, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, false );
@@ -3366,7 +3366,7 @@ bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XSto
     }
     catch( uno::Exception& )
     {
-        SAL_WARN( "sfx.doc", "Cant check storage consistency!" );
+        SAL_WARN( "sfx.doc", "Can not check storage consistency!" );
     }
 
     return true;

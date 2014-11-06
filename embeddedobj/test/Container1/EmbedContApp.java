@@ -450,7 +450,7 @@ public class EmbedContApp extends Applet
         {
             try {
                 int nState = m_xEmbedObj.getCurrentState();
-                // such a position change make sence only when object is
+                // such a position change make sense only when object is
                 // either inplace or ui active
                 if ( nState == EmbedStates.EMBED_INPLACE_ACTIVE
                   || nState == EmbedStates.EMBED_UI_ACTIVE )

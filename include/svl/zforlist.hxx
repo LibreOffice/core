@@ -913,7 +913,7 @@ public:
     void ResetDefaultSystemCurrency();
 
     // Called by SvNumberFormatterRegistry_Impl::Notify if the system locale's
-    // date acceptence patterns change.
+    // date acceptance patterns change.
     void InvalidateDateAcceptancePatterns();
 
     // Replace the SYSTEM language/country format codes. Called upon change of

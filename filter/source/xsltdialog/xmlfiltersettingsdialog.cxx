@@ -1000,7 +1000,7 @@ void XMLFilterSettingsDialog::onClose()
 
 bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
 {
-    // Because of of tab control first call the base class.
+    // Because of tab control first call the base class.
     bool nRet = ModelessDialog::Notify( rNEvt );
     if ( !nRet )
     {

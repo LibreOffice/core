@@ -465,7 +465,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
     sal_uLong  Grad;
     sal_uLong  Brei;
     OUString FNam;
-    sal_uInt16 StdBrei=50;    // average line width in in % of text angle
+    sal_uInt16 StdBrei=50;    // average line width in % of text angle
     bool   bFit=(FitXMul!=1 || FitXDiv!=1 || FitYMul!=1 || FitYDiv!=1);
 
     pSgfFont = pSgfFonts->GetFontDesc(Atr.GetFont());

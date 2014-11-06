@@ -371,7 +371,7 @@ public:
         Index of paragraph to query line length in
 
         @param nIndex[0 .. m-1]
-        Index of of the chara in the paragraph text
+        Index of the chara in the paragraph text
 
         @returns [0 .. k-1]
         The line number of the chara in the paragraph

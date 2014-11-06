@@ -334,7 +334,7 @@ const char* getTypeString(GLenum type)
             ;
     }
 
-    return "unkown";
+    return "unknown";
 }
 
 extern "C" void

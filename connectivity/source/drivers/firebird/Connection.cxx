@@ -563,7 +563,7 @@ sal_Bool SAL_CALL Connection::isClosed(  ) throw(SQLException, RuntimeException,
 {
     MutexGuard aGuard( m_aMutex );
 
-    // just simple -> we are close when we are disposed taht means someone called dispose(); (XComponent)
+    // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
     return Connection_BASE::rBHelper.bDisposed;
 }
 

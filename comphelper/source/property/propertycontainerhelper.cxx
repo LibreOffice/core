@@ -278,7 +278,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
             }
 
             Any* pPropContainer = NULL;
-                // the pointer to the any which holds the property value, no matter if located in the derived clas
+                // the pointer to the any which holds the property value, no matter if located in the derived class
                 // or in out vector
 
             if (PropertyDescription::ltHoldMyself == aPos->eLocated)

@@ -490,7 +490,7 @@ void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
 }
 
 /**
-   * Delete Delete all children with the tree root of XAccessible pointer
+   * Delete all children with the tree root of XAccessible pointer
    * @param pXAcc Tree root XAccessible interface.
    * @return
    */
@@ -517,7 +517,7 @@ void AccObjectWinManager::DeleteChildrenAccObj(XAccessible* pXAcc)
 }
 
 /**
-   * Delete Delete Acc object self.
+   * Delete Acc object self.
    * @param pXAcc The XAccessible interface.
    * @return
    */

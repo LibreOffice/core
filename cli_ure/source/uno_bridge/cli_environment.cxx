@@ -119,7 +119,7 @@ System::Object^ Cli_environment::getRegisteredInterface(System::String^ oid,
     ret = m_objects[oid];
     if (! ret)
     {
-        //try if if it is a proxy for a cli object
+        //try if it is a proxy for a cli object
         oid = createKey(oid, type);
         ret = m_objects[ oid ];
     }

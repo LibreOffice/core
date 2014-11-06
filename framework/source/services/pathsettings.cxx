@@ -649,9 +649,9 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const OUString& sPath)
         css::beans::Property aInfo = xInfo->getAsProperty();
         bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
 
-        // Note: Till we support finalized / mandatory on our API more in detail we handle
-        // all states simple as READONLY ! But because all really needed paths are "mandatory" by default
-        // we have to handle "finalized" as the real "readonly" indicator .
+        // Note: 'till we support finalized/mandatory on our API more in detail we handle
+        // all states simple as READONLY! But because all really needed paths are "mandatory" by default
+        // we have to handle "finalized" as the real "readonly" indicator.
         aPathVal.bIsReadonly = bFinalized;
     }
 
@@ -665,8 +665,8 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
     css::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew();
     css::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld();
 
-    // try to replace path-parts with well known and uspported variables.
-    // So an office can be moved easialy to another location without loosing
+    // try to replace path-parts with well known and usopported variables.
+    // So an office can be moved easialy to another location without losing
     // it's related paths.
     PathInfo aResubstPath(aPath);
     impl_subst(aResubstPath, true);
@@ -687,9 +687,9 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 
     ::comphelper::ConfigurationHelper::flush(xCfgNew);
 
-    // remove the whole path from the old configuration !
+    // remove the whole path from the old configuration!
     // Otherwise we can't make sure that the diff between new and old configuration
-    // on loading time really represent an user setting !!!
+    // on loading time really represent an user setting!!!
 
     // Check if the given path exists inside the old configuration.
     // Because our new configuration knows more than the list of old paths ... !
@@ -846,11 +846,11 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(const OUSt
 
     // Attention: The default set of IDs is fix and must follow these schema.
     // Otherwhise the outside code ant work for new added properties.
-    // Why ?
+    // Why?
     // The outside code must fire N events for every changed property.
     // And the knowing about packaging of variables of the structure PathInfo
-    // follow these group IDs ! But if such ID isnt in the range of [0..IDGROUP_COUNT]
-    // the outside can't determine the right group ... and cant fire the right events .-)
+    // follow these group IDs! But if such ID is not in the range of [0..IDGROUP_COUNT]
+    // the outside can't determine the right group ... and can not fire the right events .-)
 
     css::uno::Sequence< sal_Int32 > lIDs(IDGROUP_COUNT);
     lIDs[0] = IDGROUP_OLDSTYLE;

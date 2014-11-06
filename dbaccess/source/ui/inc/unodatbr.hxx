@@ -431,7 +431,7 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connectWithStatus(
             const OUString& _rDataSourceName,
-            void* _pTreeListUserData    // in rela a DBTreeListUserData*, but we do not know this class here ....
+            void* _pTreeListUserData    // in real a DBTreeListUserData*, but we do not know this class here ....
         );
 
 #if OSL_DEBUG_LEVEL > 0

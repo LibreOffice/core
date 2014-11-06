@@ -1709,7 +1709,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     }
     //In a property put operation a property value is a named argument (DISPID_PROPERTYPUT).
     //Therefore the number of named arguments is increased by one.
-    //Although named, the argument is not named in a actual language, such as  Basic,
+    //Although named, the argument is not named in an actual language, such as Basic,
     //therefore it is never a com.sun.star.bridge.oleautomation.NamedArgument
     if (aFuncDesc->invkind == DISPATCH_PROPERTYPUT
         || aFuncDesc->invkind == DISPATCH_PROPERTYPUTREF)
@@ -2451,7 +2451,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                                      "ITypeInfo::GetFuncDesc failed.";
                     }
 
-                    //If we create an Object in JScript and a a property then it
+                    //If we create an Object in JScript and a property then it
                     //has VARDESC instead of FUNCDESC
                     for (long i = 0; i < typeAttr->cVars; i++)
                     {

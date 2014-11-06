@@ -139,7 +139,7 @@ inline const T1* rttiCast(const T2* pObj, const TypeId& rTypeId) {
 #define HAS_BASE( T, pObj ) \
         ( pObj && (pObj)->IsA( TYPE(T) ) )
 
-/** Check whether a pointer is targetting and object of type T. */
+/** Check whether a pointer is targeting and object of type T. */
 #define IS_TYPE(T,pObj) \
         ( pObj && (pObj)->Type() == TYPE(T) )
 

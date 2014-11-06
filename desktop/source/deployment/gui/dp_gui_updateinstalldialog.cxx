@@ -490,7 +490,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             {
                 OSL_ASSERT(curData.aUpdateSource.is());
                 //I am not sure if we should obtain the install properties and pass them into
-                //add extension. Currently it contains only "SUPPRESS_LICENSE". So it it could happen
+                //add extension. Currently it contains only "SUPPRESS_LICENSE". So it could happen
                 //that a license is displayed when updating from the shared repository, although the
                 //shared extension was installed using "SUPPRESS_LICENSE".
                 css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));

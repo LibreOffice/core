@@ -885,7 +885,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             break;
             case ssGetWordFirstChar :
                 eState = ssGetWord;
-                // fall thru
+                // fall through
             case ssGetWord :
             {
                 if ( nMask & TOKEN_WORD )

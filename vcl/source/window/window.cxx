@@ -1345,7 +1345,7 @@ void Window::ImplSetReallyVisible()
     }
 }
 
-void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatiblity ok
+void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
     DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
     if( !pDel->mpWindow )
@@ -1356,7 +1356,7 @@ void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompat
     }
 }
 
-void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatiblity ok
+void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
     pDel->mpWindow = NULL;      // #112873# pDel is not associated with a Window anymore
     if ( mpWindowImpl->mpFirstDel == pDel )
