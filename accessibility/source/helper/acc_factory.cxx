@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
