@@ -147,7 +147,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 const SvxSearchItem* pSearchItem =
                 (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
 
-                // would be nice to have an an assign operation at SearchItem
+                // would be nice to have an assign operation at SearchItem
                 SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                 delete pAppSearchItem;
                 pAppSearchItem = (SvxSearchItem*) pSearchItem->Clone();
@@ -215,7 +215,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     const SvxSearchItem* pSearchItem =
                     (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
 
-                    // would be nice to have an an assign operation at SearchItem
+                    // would be nice to have an assign operation at SearchItem
                     SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                     delete pAppSearchItem;
                     pAppSearchItem = (SvxSearchItem*)pSearchItem->Clone();

@@ -3680,7 +3680,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
      *  don't rely on the new parent from the event.
      *  the event may be "out of date", that is the window manager
      *  window may not exist anymore. This can happen if someone
-     *  shows a frame and hides it again quickly (not that that would
+     *  shows a frame and hides it again quickly (not that would
      *  be very sensible)
      */
     hWM_Parent = GetShellWindow();

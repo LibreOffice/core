@@ -137,7 +137,7 @@ public:
     ~TextSearch();
 
     /* search in the (selected) text the search string:
-        rScrTxt - the text, in in which we search
+        rScrTxt - the text, in which we search
         pStart  - start position for the search
         pEnde   - end position for the search
 

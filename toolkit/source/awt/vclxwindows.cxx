@@ -4187,7 +4187,7 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
-    // no, don't call VCLXEdit here - it has properties which we do *not* want to have at at combo box
+    // no, don't call VCLXEdit here - it has properties which we do *not* want to have at combo box
     // #i92690# / 2008-08-12 / frank.schoenheit@sun.com
     // VCLXEdit::ImplGetPropertyIds( rIds );
     VCLXWindow::ImplGetPropertyIds( rIds );

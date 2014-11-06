@@ -299,7 +299,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                 return;
         }
 
-        // deregistration will be done everytime ...
+        // deregistration will be done every time...
         // But may it's not necessary to establish a new registration!
         // Don't look for ignoring actions - it was done already inside original frameAction() call!
         boolean bRegister = false;

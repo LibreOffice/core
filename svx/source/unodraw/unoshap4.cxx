@@ -92,7 +92,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPro
     {
     case OWN_ATTR_OLE_VISAREA:
     {
-        // TODO/LATER: seems to make no sence for iconified object
+        // TODO/LATER: seems to make no sense for iconified object
 
         awt::Rectangle aVisArea;
         if( (rValue >>= aVisArea) && mpObj->ISA(SdrOle2Obj))

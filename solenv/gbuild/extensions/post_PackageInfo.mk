@@ -48,7 +48,7 @@ $(foreach suf,html css,$(foreach file,$(wildcard $(INSTDIR)/help/$(1)/*.$(suf)),
 
 endef
 
-#getting the package files post-hoc with wildcard isnt good and should be done better
+#getting the package files post-hoc with wildcard is not good and should be done better
 define gb_PackageInfo_emit_l10n_for_one_alllangpackage
 @$(foreach file,$(shell ls $(INSTDIR)/$(1)/$(2)),echo "$(1)/$(2)/$(file)" >> $(gb_PackageInfo_get_target)/l10n-$(2).files &&) true
 

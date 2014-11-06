@@ -165,7 +165,7 @@ public:
 
     /** Create a limit on an SmOperNode
      *
-     * This this method only work if the caret is inside an SmOperNode, or to the right of one.
+     * This method only work if the caret is inside an SmOperNode, or to the right of one.
      * Notice also that this method ignores any selection made.
      *
      * @param bMoveCaret If true that caret will be moved into the limit.

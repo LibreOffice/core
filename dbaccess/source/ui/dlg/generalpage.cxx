@@ -393,7 +393,7 @@ namespace dbaui
     {
         // reset all locale data
         implSetCurrentType(  OUString() );
-            // this ensures that our type selection link will be called, even if the new is is the same as the
+            // this ensures that our type selection link will be called, even if the new is the same as the
             // current one
         OGenericAdministrationPage::Reset(_rCoreAttrs);
     }

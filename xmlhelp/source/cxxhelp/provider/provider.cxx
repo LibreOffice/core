@@ -365,7 +365,7 @@ ContentProvider::getConfiguration() const
         }
         catch( const uno::Exception& )
         {
-            OSL_ENSURE( xProvider.is(), "cant instantiate configuration" );
+            OSL_ENSURE( xProvider.is(), "can not instantiate configuration" );
         }
     }
 

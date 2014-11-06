@@ -2478,7 +2478,7 @@ Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(cons
     {
         m_bInterceptingDispatch = true;
         // safety against recursion : as we are master of the first chain element and slave of the last one we would
-        // have an infinite loop without this if no dispatcher can fullfill the request
+        // have an infinite loop without this if no dispatcher can fulfill the request
         xResult = m_xFirstDispatchInterceptor->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
         m_bInterceptingDispatch = false;
     }

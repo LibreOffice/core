@@ -688,7 +688,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     //TODO Draw the other background styles: gradient, hatching and bitmap
                }
 
-                // when the font- and background-color are too similiar, adjust the Font-Color
+                // when the font and background color are too similar, adjust the Font-Color
                 if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
                     aFontCol = TestColorsVisible(aFontCol, (aBackCol != COL_AUTO) ? aBackCol : pDevice->GetBackground().GetColor());
 

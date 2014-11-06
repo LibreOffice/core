@@ -17,13 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
 #include <utility>
 #include <vector>
 #include <list>
@@ -200,7 +193,7 @@ bool WildCard::Matches( const OUString& rString ) const
                 else
                     break;
 
-                // Note: fall-thru's are intended!
+                // Note: fall-through are intended!
 
             case '*':
                 while ( *pWild == '*' )

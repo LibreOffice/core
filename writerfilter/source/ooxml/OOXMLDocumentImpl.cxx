@@ -512,7 +512,7 @@ void OOXMLDocumentImpl::incrementProgress()
     mnProgressCurrentPos++;
     // 1) If we know the end
     // 2) We progressed enough that updating makes sense
-    // 3) We did not reach the end yet (possible in case the doc stat is is misleading)
+    // 3) We did not reach the end yet (possible in case the doc stat is misleading)
     if (mnProgressEndPos && mnProgressCurrentPos > (mnProgressLastPos + mnPercentSize) && mnProgressLastPos < mnProgressEndPos)
     {
         mnProgressLastPos = mnProgressCurrentPos;

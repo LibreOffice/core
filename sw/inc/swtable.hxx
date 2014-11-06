@@ -445,7 +445,7 @@ public:
     bool IsNumberChanged() const;
 
     // Is that a formula box or a box with numeric contents (AutoSum)?
-    // What it is is indicated by the return value - the WhichId of the attribute.
+    // What it is indicated by the return value - the WhichId of the attribute.
     // Empty boxes have the return value USHRT_MAX !!
     sal_uInt16 IsFormulaOrValueBox() const;
 

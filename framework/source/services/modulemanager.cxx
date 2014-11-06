@@ -222,7 +222,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
 
     if (sModule.isEmpty())
         throw css::frame::UnknownModuleException(
-                OUString("Cant find suitable module for the given component."),
+                OUString("Can not find suitable module for the given component."),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     return sModule;

@@ -805,7 +805,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
             if ( bReopenNavigator )
                 // we closed the navigator only to implicitly commit it (as we do not have another
-                // direct wire to it), but to the user, it should look it it was always open
+                // direct wire to it), but to the user, it should look as it was always open
                 GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_FILTER_NAVIGATOR );
         }
         break;

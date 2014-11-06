@@ -3307,7 +3307,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat, OUString
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( pFormat )
     {
-        OUStringBuffer sBuff(128); // guess-estimate of a value that will pretty much garantee no re-alloc
+        OUStringBuffer sBuff(128); // guess-estimate of a value that will pretty much guarantee no re-alloc
         OUString aSymbol, aExtension;
         if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {

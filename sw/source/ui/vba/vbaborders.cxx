@@ -38,7 +38,7 @@ typedef InheritedHelperInterfaceImpl1<word::XBorder > SwVbaBorder_Base;
 // borders, the enumeration will match the order in this list
 static const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBottom, word::WdBorderType::wdBorderDiagonalDown, word::WdBorderType::wdBorderDiagonalUp, word::WdBorderType::wdBorderHorizontal, word::WdBorderType::wdBorderLeft, word::WdBorderType::wdBorderRight, word::WdBorderType::wdBorderTop, word::WdBorderType::wdBorderVertical };
 
-//  Equiv widths in in 1/100 mm
+//  Equiv widths in 1/100 mm
 const static sal_Int32 OOLineHairline = 2;
 
 class SwVbaBorder : public SwVbaBorder_Base

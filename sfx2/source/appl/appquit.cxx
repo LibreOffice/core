@@ -91,7 +91,7 @@ void SfxApplication::Deinitialize()
     Exit();
 
     // Release Controller and others
-    // then the remaining components should alse disapear ( Beamer! )
+    // then the remaining components should also disapear ( Beamer! )
 
 #if HAVE_FEATURE_SCRIPTING
     BasicManagerRepository::resetApplicationBasicManager();

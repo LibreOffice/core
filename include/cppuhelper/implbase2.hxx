@@ -84,7 +84,7 @@ namespace cppu
     };
     /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
         com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
-        (supporting com::sun::star::uno::XWeak thru ::cppu::OWeakObject).
+        (supporting com::sun::star::uno::XWeak through ::cppu::OWeakObject).
 
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
@@ -111,9 +111,9 @@ namespace cppu
     };
     /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
         com::sun::star::uno::XInterface which supports weak mechanism to be held weakly
-        (supporting com::sun::star::uno::XWeak thru ::cppu::OWeakAggObject).
+        (supporting com::sun::star::uno::XWeak through ::cppu::OWeakAggObject).
         In addition, it supports also aggregation meaning object of this class can be aggregated
-        (com::sun::star::uno::XAggregation thru ::cppu::OWeakAggObject).
+        (com::sun::star::uno::XAggregation through ::cppu::OWeakAggObject).
         If a delegator is set (this object is aggregated), then incoming queryInterface()
         calls are delegated to the delegator object. If the delegator does not support the
         demanded interface, it calls queryAggregation() on its aggregated objects.

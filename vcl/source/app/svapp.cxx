@@ -366,7 +366,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
 
-    // the system timer events will not necessarily come in in non waiting mode
+    // the system timer events will not necessarily come in non waiting mode
     // e.g. on OS X; need to trigger timer checks manually
     if( pSVData->maAppData.mbNoYield && !pSVData->mbNoCallTimer )
     {

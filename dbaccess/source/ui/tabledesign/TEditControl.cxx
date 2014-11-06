@@ -879,7 +879,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     if( !nInsertRows )
         nInsertRows = 1;
     GetUndoManager().AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
-    // Insert the number of of selected rows
+    // Insert the number of selected rows
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
         m_pRowList->insert( m_pRowList->begin()+i ,::boost::shared_ptr<OTableRow>(new OTableRow()));
     RowInserted( nRow, nInsertRows, true );

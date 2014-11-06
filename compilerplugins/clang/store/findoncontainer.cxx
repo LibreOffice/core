@@ -15,7 +15,7 @@
 // Look for places calling std::find on a standard container where it should be using the container find method, which
 // is more efficient.
 //
-// This lives in /store because the implementation is a hack and is highly dependant on the inwards
+// This lives in /store because the implementation is a hack and is highly dependent on the inwards
 // of the libc++ library on the machine it runs on.
 //
 

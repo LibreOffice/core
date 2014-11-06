@@ -37,7 +37,7 @@
 #define SDRSEARCH_WITHTEXT     0x0040 /* Just objects with text */
 #define SDRSEARCH_TESTTEXTAREA 0x0080 /* The textarea of objects with text  (TextEditHit) */
 #define SDRSEARCH_BACKWARD     0x0100 /* Backwards search */
-#define SDRSEARCH_NEXT         0x0200 /* Search starts behind the transfered object/point/... */
+#define SDRSEARCH_NEXT         0x0200 /* Search starts behind the transferred object/point/... */
 #define SDRSEARCH_MARKED       0x0400 /* Just marked objects/points/... */
 #define SDRSEARCH_PASS2BOUND   0x0800 /* In case of empty search results, then 2nd. try with BoundRectHit */
 #define SDRSEARCH_PASS3NEAREST 0x1000 /* In case of empty search results, then new 3rd. Try with NearestBoundRectHit */
@@ -440,7 +440,7 @@ public:
 
     // Entering (Editing) of a maybe marked object group. If there are several
     // object groups marked, the most upper group is selected. After that
-    // all member objects of the group are directly accessable. All other
+    // all member objects of the group are directly accessible. All other
     // objects may not be processed in the meantime (until the next
     // LeaveGroup()). With markings which overlaps pages, every page is processed
     // separately. The method returns sal_True, if at least one group was entered.

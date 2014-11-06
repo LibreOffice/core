@@ -190,7 +190,7 @@ public class LayerView extends FrameLayout /*implements Tabs.OnTabsChangedListen
 
                     if (PointUtils.subtract(point, mInitialTouchPoint).length() <
                         Math.max(PanZoomController.CLICK_THRESHOLD, Math.min(Math.min(p.x, p.y), PanZoomController.PAN_THRESHOLD))) {
-                        // Don't send the touchmove event if if the users finger hasn't moved far.
+                        // Don't send the touchmove event if the users finger hasn't moved far.
                         // Necessary for Google Maps to work correctly. See bug 771099.
                         return true;
                     } else {

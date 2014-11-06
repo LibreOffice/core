@@ -521,7 +521,7 @@ public class RecoveryTest extends ComplexTestCase {
         Rectangle posSize = new Rectangle();
         Random rand = new Random();
 
-        // Random integers that range from from 0 to n
+        // Random integers that range from 0 to n
         posSize.X = rand.nextInt(windowMaxPosition.x + 1);
         posSize.Y = rand.nextInt(windowMaxPosition.y + 1);
 

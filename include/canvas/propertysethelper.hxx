@@ -44,7 +44,7 @@ namespace canvas
         XPropertySet methods, and take care of UNO XInterface and lock
         handling by yourself.
 
-        The core responsibility of this this class is the name/value
+        The core responsibility of this class is the name/value
         mapping for property sets.
      */
     class CANVASTOOLS_DLLPUBLIC PropertySetHelper

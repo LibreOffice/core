@@ -27,7 +27,7 @@ module com { module sun { module star { module java {
 
 /** indicates that there is no Java available <p>
     It is presumed that Java is a vital part of an office installation.
-    That is, if Java does work for some reason, it it not guaranteed that
+    That is, if Java does work for some reason, it is not guaranteed that
     the office is functional. A JavaInitializationException is therefore
     caused by some misconfiguration of Java which is closer described by
     other exceptions in this namespace which inherit JavaInitializationException.

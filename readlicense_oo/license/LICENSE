@@ -173,7 +173,7 @@ Cairo
    source code in these directories contributes to a build of the cairo
    library itself, (libcairo.so or cairo.dll or similar).
 
-   These auxilary components are also free software, but may be under
+   These auxiliary components are also free software, but may be under
    different license terms than cairo itself. For example, most of the
    test cases in the perf and test directories are made available under a
    MIT license to simplify any use of this code for reference purposes in
@@ -535,7 +535,7 @@ Graphite2
 
    Alternatively, you may use this library under the terms of the Mozilla
    Public License (http://mozilla.org/MPL) or under the GNU General
-   Public License, as published by the Free Sofware Foundation; either
+   Public License, as published by the Free Software Foundation; either
    version 2 of the license or (at your option) any later version.
 
    See LGPL Version 2.1 below

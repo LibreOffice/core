@@ -1615,7 +1615,7 @@ void SwCntntFrm::MakeAll()
         SWREFRESHFN( this )
 
         // If MoveFwd moves the paragraph to the next page, a following
-        // paragraph, which contains footnotes can can cause the old upper
+        // paragraph, which contains footnotes can cause the old upper
         // frame to grow. In this case we explicitly allow a new check
         // for MoveBwd. Robust: We also check the bMovedBwd flag again.
         // If pOldUp was a footnote frame, it has been deleted inside MoveFwd.

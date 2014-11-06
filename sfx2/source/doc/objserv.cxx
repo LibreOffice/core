@@ -760,7 +760,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SfxViewFrame *pFrame = GetFrame();
             if ( pFrame && pFrame->GetFrame().GetParentFrame() )
             {
-                // If SID_CLOSEDOC is excecuted through menu and so on, but
+                // If SID_CLOSEDOC is executed through menu and so on, but
                 // the current document is in a frame, then the
                 // FrameSetDocument should actually be closed.
                 pFrame->GetTopViewFrame()->GetObjectShell()->ExecuteSlot( rReq );
@@ -1029,7 +1029,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 if ( pFrame && pFrame->GetFrame().GetParentFrame() )
                 {
 
-                    // If SID_CLOSEDOC is excecuted through menu and so on, but
+                    // If SID_CLOSEDOC is executed through menu and so on, but
                     // the current document is in a frame, then the
                     // FrameSetDocument should actually be closed.
                     pDoc = pFrame->GetTopViewFrame()->GetObjectShell();

@@ -432,7 +432,7 @@ namespace XSLT
         OUString udStyleSheet = rel2abs(msUserData[5]);
 
         // read source data
-        // we are especialy interested in the output stream
+        // we are especially interested in the output stream
         // since that is where our xml-writer will push the data
         // from it's data-source interface
         OUString aName, sURL;
@@ -519,7 +519,7 @@ namespace XSLT
             }
     }
 
-    // for the DocumentHandler implementation, we just proxy the the
+    // for the DocumentHandler implementation, we just proxy the
     // events to the XML writer that we created upon the output stream
     // that was provided by the XMLFilterAdapter
     void

@@ -241,7 +241,7 @@ SfxUShortRanges& SfxUShortRanges::operator +=
     if ( IsEmpty() )
         return *this = rRanges;
 
-    // First, run thru _pRanges and rRanges._pRanges and determine the size of
+    // First, run through _pRanges and rRanges._pRanges and determine the size of
     // the new, merged ranges:
     sal_uInt16 nCount = 0;
     const sal_uInt16 * pRA = _pRanges;
@@ -301,7 +301,7 @@ count_rest:
     for (; pRB[0]; pRB += 2)
         nCount += 2;
 
-    // Now, create new ranges of the correct size and, on a second run thru
+    // Now, create new ranges of the correct size and, on a second run through
     // _pRanges and rRanges._pRanges, copy the merged pairs into the new
     // ranges:
     sal_uInt16 * pNew = new sal_uInt16[nCount + 1];

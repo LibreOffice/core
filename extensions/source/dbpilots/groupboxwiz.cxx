@@ -228,7 +228,7 @@ namespace dbp
 
         // no need to initialize the list of radios here
         // (we're the only one affecting this special setting, so it will be in the same state as last time this
-        // page was commited)
+        // page was committed)
 
         implCheckMoveButtons();
     }

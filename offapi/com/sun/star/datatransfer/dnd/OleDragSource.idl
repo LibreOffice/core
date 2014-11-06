@@ -49,7 +49,7 @@ published service OleDragSource
         <p>TODO: specify how such a machine id should look like.</p>
 
         The second parameter is a window handle of the native windows window.
-        Is is passed as an unsigned long.
+        It is passed as an unsigned long.
     */
     interface com::sun::star::lang::XInitialization;
 

@@ -227,7 +227,7 @@ public class JavaLoader implements XImplementationLoader,
      *
      * <p>The <code>JavaLoader</code> tries to load the class first. If a
      * loacation URL is given the RegistrationClassFinder is used to load the
-     * class. Otherwise the class is loaded thru the Class.forName method.</p>
+     * class. Otherwise the class is loaded through the Class.forName method.</p>
      *
      * <p>To get the factory the inspects the class for the optional static member
      * functions __getServiceFactory resp. getServiceFactory (DEPRECATED).</p>

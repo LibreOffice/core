@@ -114,7 +114,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
 
 SwTxtFormatter::~SwTxtFormatter()
 {
-    // Extremly unlikely, but still possible
+    // Extremely unlikely, but still possible
     // e.g.: field splits up, widows start to matter
     if( GetInfo().GetRest() )
     {
@@ -199,7 +199,7 @@ SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
                     pTmpPrev->Move( rInf );
                     rInf.SetLast( pTmpPrev );
                     pTmpPrev = pTmpPrev->GetPortion();
-                    OSL_ENSURE( pTmpPrev, "Underflow: Loosing control!" );
+                    OSL_ENSURE( pTmpPrev, "Underflow: losing control!" );
                 };
             }
             pPor = pPor->GetPortion();
@@ -868,7 +868,7 @@ SwTxtPortion *SwTxtFormatter::WhichTxtPor( SwTxtFormatInfo &rInf ) const
         else
         {
             // Only at the End!
-            // If pCurr does not have a width, it can however aready have content.
+            // If pCurr does not have a width, it can however already have content.
             // E.g. for non-displayable characters
             if (rInf.GetTxt()[rInf.GetIdx()]==CH_TXT_ATR_FIELDSTART)
                 pPor = new SwFieldMarkPortion();
@@ -2483,7 +2483,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     else
         pFly = NULL;
     // aBase is the document-global position, from which the new extra portion is placed
-    // aBase.X() = Offset in in the line after the current position
+    // aBase.X() = Offset in the line after the current position
     // aBase.Y() = LineIter.Y() + Ascent of the current position
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;

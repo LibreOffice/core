@@ -2053,7 +2053,7 @@ void XMLTextImportHelper::SetHyperlink(
     {
         // The API treats events at hyperlinks differently from most
         // other properties: You have to set a name replace with the
-        // events in it. The easiest way to to this is to 1) get
+        // events in it. The easiest way to do this is to 1) get
         // events, 2) set new ones, and 3) then put events back.
         uno::Reference<XNameReplace> const xReplace(
             xPropSet->getPropertyValue(s_HyperLinkEvents), UNO_QUERY);

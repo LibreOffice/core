@@ -122,7 +122,7 @@ void SfxModalDialog::GetDialogData_Impl()
 /*  [Description]
 
     Helper function, reads the dialogue position from the ini file and
-    puts them on the transfered window.
+    puts them on the transferred window.
 */
 
 {

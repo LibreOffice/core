@@ -570,7 +570,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 /*-************************************************************************************************************
     @interface  XTasksSupplier
     @short      get access to create enumerations of our taskchildren
-    @descr      Direct children of desktop are tasks everytime.
+    @descr      Direct children of desktop are tasks every time.
                 Call these method to could create enumerations of it.
 
 But; Don't forget - you will be the owner of returned object and must release it!
@@ -948,7 +948,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         //  But we ust break further searches if target was already found.
         //  Order of using flags is fix: SELF - CHILDREN - SIBLINGS - PARENT
         //  TASK and CREATE are handled special.
-        //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
+        //  But note: Such flags are not valid for the desktop - especially SIBLINGS or PARENT.
 
         // II.I) SELF
         //  Check for right name. If it's the searched one return ourself - otherwise
@@ -965,7 +965,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         // II.II) TASKS
         //  This is a special flag. Normally it regulate search inside tasks and forbid access to parent trees.
         //  But the desktop exists outside such task trees. They are our sub trees. So the desktop implement
-        //  a special feature: We use it to start search on our direct children only. That means we supress
+        //  a special feature: We use it to start search on our direct children only. That means we suppress
         //  search on ALL child frames. May that can be useful to get access on opened document tasks
         //  only without filter out all non really required sub frames ...
         //  Used helper method on our container doesn't create any frame - it's a search only.
@@ -1083,7 +1083,7 @@ void SAL_CALL Desktop::disposing()
     @interface  XComponent
     @short      add/remove listener for dispose events
     @descr      Add an event listener to this object, if you wish to get information
-                about our dieing!
+                about our dying!
                 You must releas ethis listener reference during your own disposing() method.
 
     @attention  Our container is threadsafe himeslf. So we don't need any lock here.
@@ -1187,7 +1187,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // Don't check incoming request!
-    // If somewhere starts interaction without right parameter - he maked something wrong.
+    // If somewhere starts interaction without right parameter - he made something wrong.
     // loadComponentFromURL() waits for thjese event - otherwise it yield for ever!
 
     // get packed request and work on it first

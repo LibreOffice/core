@@ -425,7 +425,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets aquired
+    rSet.Put( aAttrSet, false ); // <- sal_False, so DontCare-Status gets acquired
 
     // these are disabled in outline-mode
     if (!mpViewShell || !mpViewShell->ISA(DrawViewShell))

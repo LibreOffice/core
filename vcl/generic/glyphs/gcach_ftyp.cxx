@@ -485,7 +485,7 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mpLayoutEngine( NULL )
 {
     // TODO: move update of mpFontEntry into FontEntry class when
-    // it becomes reponsible for the ServerFont instantiation
+    // it becomes responsible for the ServerFont instantiation
     static_cast<ImplServerFontEntry*>(rFSD.mpFontEntry)->SetServerFont( this );
 
     maFaceFT = pFI->GetFaceFT();

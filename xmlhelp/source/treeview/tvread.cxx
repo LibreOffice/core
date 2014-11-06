@@ -783,7 +783,7 @@ TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext)
         }
         catch( const com::sun::star::uno::Exception& )
         {
-            OSL_ENSURE( xProvider.is(),"cant instantiate configuration" );
+            OSL_ENSURE( xProvider.is(),"can not instantiate configuration" );
         }
     }
 

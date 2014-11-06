@@ -661,7 +661,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => set must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception("Cant add item. Set is finalized or mandatory!",
+                    throw css::uno::Exception("Can not add item. Set is finalized or mandatory!",
                                               css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
@@ -678,7 +678,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                 // special case. no exception - but not a valid item => it must be finalized or mandatory!
                 // Reject flush operation by throwing an exception. At least one item couldnt be flushed.
                 if (!xItem.is())
-                    throw css::uno::Exception("Cant change item. Its finalized or mandatory!",
+                    throw css::uno::Exception("Can not change item. Its finalized or mandatory!",
                                               css::uno::Reference< css::uno::XInterface >());
 
                 CacheItemList::const_iterator pItem = rCache.find(sItem);
@@ -847,7 +847,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         }
         break;
 
-        default : throw css::uno::Exception("These configuration node isnt supported here for open!", 0);
+        default : throw css::uno::Exception("These configuration node is not supported here for open!", 0);
     }
 
     {
@@ -1138,7 +1138,7 @@ void FilterCache::impl_validateAndOptimize()
                 (!bReferencedByHandler)
                )
             {
-                sLog.append("Warning\t:\t" "The type \"" + sType + "\" isnt used by any filter, loader or content handler.\n");
+                sLog.append("Warning\t:\t" "The type \"" + sType + "\" is not used by any filter, loader or content handler.\n");
                 ++nWarnings;
             }
         }
@@ -2124,7 +2124,7 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
                         sal_Int32 nOrder = sValue.toInt32();
                         if (nOrder > 0)
                         {
-                            SAL_WARN( "filter.config", "FilterCache::impl_interpretDataVal4Filter()\nCant move Order value from filter to type on demand!");
+                            SAL_WARN( "filter.config", "FilterCache::impl_interpretDataVal4Filter()\nCan not move Order value from filter to type on demand!");
                             _FILTER_CONFIG_LOG_2_("impl_interpretDataVal4Filter(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(rItem).getStr())
                         }
                     }
@@ -2216,7 +2216,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     css::uno::Reference< css::container::XNameAccess > xItem;
     xSet->getByName(sItem) >>= xItem;
     if (!xItem.is())
-        throw css::uno::Exception("Cant read old item.", css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::Exception("Can not read old item.", css::uno::Reference< css::uno::XInterface >());
 
     CacheItem aItem;
     aItem[PROPNAME_NAME] <<= sItem;
@@ -2237,7 +2237,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
         (lData.size()<1    )
        )
     {
-        throw css::uno::Exception( "Cant read old item property DATA.", css::uno::Reference< css::uno::XInterface >());
+        throw css::uno::Exception( "Can not read old item property DATA.", css::uno::Reference< css::uno::XInterface >());
     }
 
     sal_Int32 nProp = 0;

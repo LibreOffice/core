@@ -1918,7 +1918,7 @@ bool UnoConversionUtilities<T>::convertValueObject( const VARIANTARG *var, Any& 
                 if(SUCCEEDED( spDisp->QueryInterface( __uuidof( IJScriptValueObject),
                                                        reinterpret_cast<void**> (&spValue))))
                 {
-                    ret = true; // is is a ValueObject
+                    ret = true; // is a ValueObject
                     //If it is an out - param then it does not need to be converted. In/out and
                     // in params does so.
                     if (SUCCEEDED(hr= spValue->IsOutParam( &varBool)))

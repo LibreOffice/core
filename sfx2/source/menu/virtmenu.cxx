@@ -892,7 +892,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
         pBindings->Update( SID_IMAGE_ORIENTATION );
 
-        // Supress the Status updates until Deactivate
+        // Suppress the Status updates until Deactivate
         pBindings->ENTERREGISTRATIONS(); ++nLocks; bIsActive = true;
 
         return sal_True;

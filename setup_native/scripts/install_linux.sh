@@ -225,7 +225,7 @@ else
   rmdir ${INSTALLDIR} 2>/dev/null
 
   mkdir -p $RPM_DB_PATH || exit 2
-  # XXX why ? XXX
+  # XXX why? XXX
   chmod 700 $RPM_DB_PATH
 
   # the RPM_DB_PATH must be absolute

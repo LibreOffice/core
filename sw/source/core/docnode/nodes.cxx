@@ -1659,7 +1659,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         }
     }
 
-    // if the StartNode was moved to whom the the cursor pointed, so
+    // if the StartNode was moved to whom the cursor pointed, so
     // the content must be registered in the current content!
     if ( &pStt->nNode.GetNode() == &GetEndOfContent() )
     {

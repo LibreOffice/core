@@ -670,7 +670,7 @@ void SfxWorkWindow::Lock_Impl( bool bLock )
 void SfxWorkWindow::DeleteControllers_Impl()
 {
 
-    // Lock SplitWindows (which means supressing the Resize-Reaction of the
+    // Lock SplitWindows (which means suppressing the Resize-Reaction of the
     // DockingWindows)
     sal_uInt16 n;
     for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
@@ -1313,7 +1313,7 @@ bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
 
 void SfxWorkWindow::UpdateObjectBars_Impl()
 {
-    // Lock SplitWindows (which means supressing the Resize-Reaction of the
+    // Lock SplitWindows (which means suppressing the Resize-Reaction of the
     // DockingWindows)
     sal_uInt16 n;
     for ( n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
@@ -2604,7 +2604,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
                 if ( !bDummyWindow )
                     aSize.Width() = pSplitWin->GetSizePixel().Width();
 
-                // If a Window is visable to the left, then the free region
+                // If a Window is visible to the left, then the free region
                 // starts to the right from it, for example at the Client area
                 long nLeft = aPos.X() + aSize.Width();
                 if ( nLeft > aArea.Left() )
@@ -2631,7 +2631,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
                     aSize.Width() = aArea.GetWidth();
                 }
 
-                // If a Window is visable to the right, then the free region
+                // If a Window is visible to the right, then the free region
                 // starts to the left from it, for example at the Client area
                 long nRight = aPos.X();
                 if ( nRight < aArea.Right() )
@@ -2651,7 +2651,7 @@ void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
                 aPos.X() = aArea.Left();
                 aSize.Width() = aArea.GetWidth();
 
-                // If a Window is visable at the top, then the free region
+                // If a Window is visible at the top, then the free region
                 // starts beneath it, for example at the Client area
                 long nTop = aPos.Y() + aSize.Height();
                 if ( nTop > aArea.Top() )

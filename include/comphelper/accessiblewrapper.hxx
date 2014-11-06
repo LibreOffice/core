@@ -217,7 +217,7 @@ namespace comphelper
         // own overridables
         /** notify an accessible event which has been translated (if necessary)
 
-            <p>Usually, you derive your clas from both OAccessibleContextWrapperHelper and XAccessibleEventBroadcaster,
+            <p>Usually, you derive your class from both OAccessibleContextWrapperHelper and XAccessibleEventBroadcaster,
             and simply call all your XAccessibleEventListener with the given event.</p>
 
             <p>The mutex of the BroadcastHelper passed to the instance's ctor is <em>not</em> locked when calling

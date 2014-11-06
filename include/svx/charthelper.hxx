@@ -37,7 +37,7 @@ public:
     /// Use chart's XUpdatable::update() to update values.
     static void updateChart( const css::uno::Reference< css::frame::XModel >& rXModel, bool bHardUpdate );
 
-    // try to access rXModel in case of a chart to to get the chart content
+    // try to access rXModel in case of a chart to get the chart content
     // as sequence of primitives. Return range of primitives (chart size) in rRange;
     // it will be used to embed the chart to the SdrObject transformation. This
     // allows to define possible distances between chart and SDrObject bounds here
