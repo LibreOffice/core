@@ -303,6 +303,7 @@
                     <menu:menuitem menu:id=".uno:EditPrintArea"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:ChooseDesign"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FontDialog"/>
             <menu:menuitem menu:id=".uno:ParagraphDialog"/>
