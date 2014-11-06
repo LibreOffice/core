@@ -19,7 +19,6 @@
 
 #include "accessibility/extended/AccessibleGridControlTableBase.hxx"
 #include <comphelper/sequence.hxx>
-#include <comphelper/servicehelper.hxx>
 
 
 
