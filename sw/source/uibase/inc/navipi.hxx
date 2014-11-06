@@ -60,7 +60,7 @@ class SwNavigationPI : public vcl::Window,
     SwContentTree       aContentTree;
     SwGlobalTree        aGlobalTree;
     ListBox             aDocListBox;
-    Timer               aPageChgTimer;
+    Idle                aPageChgIdle;
     OUString            sContentFileName;
     OUString            aContextArr[3];
     OUString            aStatusArr[4];

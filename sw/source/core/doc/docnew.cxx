@@ -340,8 +340,8 @@ SwDoc::SwDoc()
     new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
-    maOLEModifiedTimer.SetTimeout( 1000 );
-    maOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
+    maOLEModifiedIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maOLEModifiedIdle.SetIdleHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DBManager
@@ -785,7 +785,7 @@ void SwDoc::SetPreviewPrtData( const SwPagePreviewPrtData* pNew )
 
 void SwDoc::SetOLEObjModified()
 {
-    if( getIDocumentLayoutAccess().GetCurrentViewShell() ) maOLEModifiedTimer.Start();
+    if( getIDocumentLayoutAccess().GetCurrentViewShell() ) maOLEModifiedIdle.Start();
 }
 
 /** SwDoc: Reading and writing of the layout cache. */

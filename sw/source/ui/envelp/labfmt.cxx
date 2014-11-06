@@ -347,8 +347,8 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     m_pSavePB->SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
     // Set timer
-    aPreviewTimer.SetTimeout(1000);
-    aPreviewTimer.SetTimeoutHdl(LINK(this, SwLabFmtPage, PreviewHdl));
+    aPreviewIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aPreviewIdle.SetIdleHdl(LINK(this, SwLabFmtPage, PreviewHdl));
 }
 
 SwLabFmtPage::~SwLabFmtPage()
@@ -359,7 +359,7 @@ SwLabFmtPage::~SwLabFmtPage()
 IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
 {
     bModified = true;
-    aPreviewTimer.Start();
+    aPreviewIdle.Start();
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, ModifyHdl)
@@ -367,7 +367,7 @@ IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, ModifyHdl)
 // Invalidate preview
 IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
 {
-    aPreviewTimer.Stop();
+    aPreviewIdle.Stop();
     ChangeMinMax();
     FillItem( aItem );
     m_pPreview->UpdateItem( aItem );

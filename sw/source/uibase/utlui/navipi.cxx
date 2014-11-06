@@ -466,8 +466,8 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
     SwView *pView = GetCreateView();
     if (pView)
     {
-        if(aPageChgTimer.IsActive())
-            aPageChgTimer.Stop();
+        if(aPageChgIdle.IsActive())
+            aPageChgIdle.Stop();
         pCreateView->GetWrtShell().GotoPage((sal_uInt16)pEdit->GetValue(), true);
         pCreateView->GetEditWin().GrabFocus();
         pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
@@ -833,8 +833,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     else
         aContentTree.GrabFocus();
     UsePage(0);
-    aPageChgTimer.SetTimeoutHdl(LINK(this, SwNavigationPI, ChangePageHdl));
-    aPageChgTimer.SetTimeout(PAGE_CHANGE_TIMEOUT);
+    aPageChgIdle.SetIdleHdl(LINK(this, SwNavigationPI, ChangePageHdl));
+    aPageChgIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 
     aContentTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
     aGlobalTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
@@ -1295,9 +1295,9 @@ IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl)
 
 IMPL_LINK_NOARG(SwNavigationPI, PageEditModifyHdl)
 {
-    if(aPageChgTimer.IsActive())
-        aPageChgTimer.Stop();
-    aPageChgTimer.Start();
+    if(aPageChgIdle.IsActive())
+        aPageChgIdle.Stop();
+    aPageChgIdle.Start();
     return 0;
 }
 

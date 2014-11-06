@@ -83,7 +83,7 @@ class SwLabFmtPage : public SfxTabPage
     MetricField*  m_pPHeightField;
     PushButton*   m_pSavePB;
 
-    Timer aPreviewTimer;
+    Idle aPreviewIdle;
     bool  bModified;
 
     SwLabItem    aItem;

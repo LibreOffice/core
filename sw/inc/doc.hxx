@@ -268,7 +268,7 @@ class SW_DLLPUBLIC SwDoc :
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
-    Timer       maOLEModifiedTimer;      //< Timer for update modified OLE-Objecs
+    Idle       maOLEModifiedIdle;      //< Timer for update modified OLE-Objecs
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     boost::ptr_vector< boost::nullable<OUString> > maPatternNms;          // Array for names of document-templates
