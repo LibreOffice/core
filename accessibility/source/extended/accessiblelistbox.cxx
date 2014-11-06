@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 
 
