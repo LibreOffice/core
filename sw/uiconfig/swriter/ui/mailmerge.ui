@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="step_increment">1</property>
@@ -9,6 +10,7 @@
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Mail Merge</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -26,7 +28,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -42,7 +43,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -58,13 +58,13 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -103,7 +103,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
@@ -132,7 +132,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
@@ -151,7 +150,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -167,7 +165,7 @@
                               <object class="GtkBox" id="box4">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
+                                <property name="spacing">12</property>
                                 <child>
                                   <object class="GtkRadioButton" id="rbfrom">
                                     <property name="label" translatable="yes">_From:</property>
@@ -175,7 +173,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -192,8 +189,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">•</property>
-                                    <property name="numeric">True</property>
                                     <property name="adjustment">adjustment1</property>
+                                    <property name="numeric">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -220,8 +217,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="invisible_char">•</property>
-                                    <property name="numeric">True</property>
                                     <property name="adjustment">adjustment1</property>
+                                    <property name="numeric">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -289,7 +286,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="active">True</property>
@@ -308,7 +304,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
@@ -327,7 +322,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">printer</property>
@@ -352,7 +346,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
                                 <property name="draw_indicator">True</property>
@@ -397,12 +390,11 @@
                                                 <property name="column_spacing">6</property>
                                                 <child>
                                                   <object class="GtkCheckButton" id="generate">
-                                                    <property name="label" translatable="yes">Generate file name from _Database</property>
+                                                    <property name="label" translatable="yes">Generate file name from _database</property>
                                                     <property name="use_action_appearance">False</property>
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">False</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="xalign">0</property>
                                                     <property name="draw_indicator">True</property>
@@ -411,7 +403,6 @@
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">0</property>
                                                     <property name="width">3</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -420,14 +411,11 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Field</property>
+                                                    <property name="label" translatable="yes">Field:</property>
                                                   </object>
-                                                  <property name="mnemonic_widget">field</property>
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">1</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -436,15 +424,13 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">_Path</property>
+                                                    <property name="label" translatable="yes">_Path:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">path</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -453,15 +439,13 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">F_ile format</property>
+                                                    <property name="label" translatable="yes">F_ile format:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">fileformat</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">3</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -473,7 +457,6 @@
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">1</property>
                                                     <property name="width">2</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -485,7 +468,6 @@
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">3</property>
                                                     <property name="width">2</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -495,14 +477,11 @@
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="use_underline">True</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -514,8 +493,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">2</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -525,15 +502,13 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">_Subject</property>
+                                                    <property name="label" translatable="yes">_Subject:</property>
                                                     <property name="use_underline">True</property>
                                                     <property name="mnemonic_widget">subject</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">5</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -546,8 +521,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">5</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -557,14 +530,12 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Attachments</property>
+                                                    <property name="label" translatable="yes">Attachments:</property>
                                                     <property name="mnemonic_widget">attachments</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">6</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -577,8 +548,6 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">6</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -589,14 +558,11 @@
                                                     <property name="sensitive">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="receives_default">True</property>
-                                                    <property name="use_action_appearance">False</property>
                                                     <property name="use_underline">True</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
                                                     <property name="top_attach">6</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
                                                 </child>
                                                 <child>
@@ -606,106 +572,12 @@
                                                     <property name="can_focus">False</property>
                                                     <property name="halign">start</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Mail Format</property>
+                                                    <property name="label" translatable="yes">Mail format:</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">0</property>
                                                     <property name="top_attach">7</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="html">
-                                                    <property name="label" translatable="yes">HTM_L</property>
-                                                    <property name="use_action_appearance">False</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="sensitive">False</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="use_action_appearance">False</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="draw_indicator">True</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">8</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="rtf">
-                                                    <property name="label" translatable="yes">RT_F</property>
-                                                    <property name="use_action_appearance">False</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="sensitive">False</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="use_action_appearance">False</property>
-                                                    <property name="use_underline">True</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="draw_indicator">True</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">9</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <object class="GtkCheckButton" id="swriter">
-                                                    <property name="label" translatable="yes">%PRODUCTNAME Writer</property>
-                                                    <property name="use_action_appearance">False</property>
-                                                    <property name="visible">True</property>
-                                                    <property name="sensitive">False</property>
-                                                    <property name="can_focus">True</property>
-                                                    <property name="receives_default">False</property>
-                                                    <property name="use_action_appearance">False</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="draw_indicator">True</property>
-                                                  </object>
-                                                  <packing>
-                                                    <property name="left_attach">1</property>
-                                                    <property name="top_attach">10</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
                                                 </child>
                                                 <child>
                                                   <object class="GtkComboBox" id="address">
@@ -716,9 +588,81 @@
                                                   <packing>
                                                     <property name="left_attach">1</property>
                                                     <property name="top_attach">4</property>
-                                                    <property name="width">1</property>
-                                                    <property name="height">1</property>
                                                   </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCheckButton" id="html">
+                                                    <property name="label" translatable="yes">HTM_L</property>
+                                                    <property name="use_action_appearance">False</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="sensitive">False</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">False</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="draw_indicator">True</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="top_attach">7</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCheckButton" id="rtf">
+                                                    <property name="label" translatable="yes">RT_F</property>
+                                                    <property name="use_action_appearance">False</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="sensitive">False</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">False</property>
+                                                    <property name="use_underline">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="draw_indicator">True</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="top_attach">8</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkCheckButton" id="swriter">
+                                                    <property name="label" translatable="yes">%PRODUCTNAME Writer</property>
+                                                    <property name="use_action_appearance">False</property>
+                                                    <property name="visible">True</property>
+                                                    <property name="sensitive">False</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="receives_default">False</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="draw_indicator">True</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="left_attach">1</property>
+                                                    <property name="top_attach">9</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
+                                                </child>
+                                                <child>
+                                                  <placeholder/>
                                                 </child>
                                               </object>
                                             </child>
@@ -737,7 +681,6 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
-                                                <property name="use_action_appearance">False</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="xalign">0</property>
                                                 <property name="active">True</property>
@@ -756,7 +699,6 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
-                                                <property name="use_action_appearance">False</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="xalign">0</property>
                                                 <property name="draw_indicator">True</property>
@@ -778,7 +720,7 @@
                                   <object class="GtkLabel" id="savemergeddoclabel">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Save merged document</property>
+                                    <property name="label" translatable="yes">Save Merged Document</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"/>
                                     </attributes>
