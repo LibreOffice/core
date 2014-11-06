@@ -19,7 +19,6 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/tabbar.hxx>
 #include <svtools/treelistbox.hxx>
-#include <vcl/window.hxx>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
