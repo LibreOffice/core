@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unx/cairotextrender.hxx"
+#include "cairotextrender.hxx"
 
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
