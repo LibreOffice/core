@@ -122,10 +122,6 @@ static long GetPrecExp( double fAbsVal )
     }
 }
 
-const sal_uInt16 nNewCurrencyVersionId = 0x434E; // "NC"
-const sal_Unicode cNewCurrencyMagic = 0x01; // Magic for format code in comment
-const sal_uInt16 nNewStandardFlagVersionId = 0x4653; // "SF"
-
 /**
  * SvNumberformatInfo
  * */
