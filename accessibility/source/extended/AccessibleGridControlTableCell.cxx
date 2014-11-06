@@ -19,7 +19,6 @@
 
 
 #include "accessibility/extended/AccessibleGridControl.hxx"
-#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility
