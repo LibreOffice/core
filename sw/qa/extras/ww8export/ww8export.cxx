@@ -346,7 +346,6 @@ DECLARE_WW8EXPORT_TEST(testBorderColoursExport, "bordercolours.odt")
     CPPUNIT_ASSERT_BORDER_EQUAL(expectedBottom, border);
 #endif
 }
-#endif
 
 DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
 {
@@ -356,6 +355,7 @@ DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
     // This resulted in a container.NoSuchElementException.
     CPPUNIT_ASSERT_EQUAL(OUString("5"), xParameters->getByName("MaxLength").get<OUString>());
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
