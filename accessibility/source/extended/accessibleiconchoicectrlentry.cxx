@@ -19,7 +19,6 @@
 
 #include <accessibility/extended/accessibleiconchoicectrlentry.hxx>
 #include <svtools/ivctrl.hxx>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
