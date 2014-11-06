@@ -34,7 +34,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <accessibility/helper/accresmgr.hxx>
 #include <accessibility/helper/accessiblestrings.hrc>
-#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #define ACCESSIBLE_ACTION_COUNT 1
 
 namespace
