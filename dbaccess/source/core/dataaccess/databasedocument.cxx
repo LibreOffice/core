@@ -756,7 +756,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException, std::exception)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         bRet = impl_attachResource( _rURL, _rArguments, aGuard );
