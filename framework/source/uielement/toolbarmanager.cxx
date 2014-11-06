@@ -235,8 +235,8 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     aHelpIdAsString += OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
     m_pToolBar->SetHelpId( aHelpIdAsString );
 
-    m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
-    m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
+    m_aAsyncUpdateControllersIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    m_aAsyncUpdateControllersIdle.SetIdleHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
 
     SvtMiscOptions().AddListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }
@@ -476,9 +476,7 @@ throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
-    {
-        m_aAsyncUpdateControllersTimer.Start();
-    }
+        m_aAsyncUpdateControllersIdle.Start();
 }
 
 void SAL_CALL ToolBarManager::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
@@ -1416,9 +1414,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     if( m_pToolBar->WillUsePopupMode() )
         UpdateControllers();
     else if ( m_pToolBar->IsReallyVisible() )
-    {
-        m_aAsyncUpdateControllersTimer.Start();
-    }
+        m_aAsyncUpdateControllersIdle.Start();
 
     // Try to retrieve UIName from the container property set and set it as the title
     // if it is not empty.
@@ -2052,13 +2048,11 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
     else if ( *pStateChangedType == StateChangedType::VISIBLE )
     {
         if ( m_pToolBar->IsReallyVisible() )
-        {
-            m_aAsyncUpdateControllersTimer.Start();
-        }
+            m_aAsyncUpdateControllersIdle.Start();
     }
     else if ( *pStateChangedType == StateChangedType::INITSHOW )
     {
-        m_aAsyncUpdateControllersTimer.Start();
+        m_aAsyncUpdateControllersIdle.Start();
     }
     return 1;
 }
@@ -2113,7 +2107,7 @@ IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl)
         return 1;
 
     // Request to update our controllers
-    m_aAsyncUpdateControllersTimer.Stop();
+    m_aAsyncUpdateControllersIdle.Stop();
     UpdateControllers();
 
     return 0;

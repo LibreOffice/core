@@ -709,14 +709,14 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager)
 
     m_pUpdateBtn->Enable(false);
 
-    m_aTimeoutTimer.SetTimeout( 500 ); // mSec
-    m_aTimeoutTimer.SetTimeoutHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
+    m_aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    m_aIdle.SetIdleHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
 
 ExtMgrDialog::~ExtMgrDialog()
 {
-    m_aTimeoutTimer.Stop();
+    m_aIdle.Stop();
 }
 
 
@@ -951,7 +951,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
     bool bLockInterface = (bool) _bLockInterface;
 
     if ( m_bStartProgress && !m_bHasProgress )
-        m_aTimeoutTimer.Start();
+        m_aIdle.Start();
 
     if ( m_bStopProgress )
     {
@@ -1096,7 +1096,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl)
         if ( m_pProgressBar->IsVisible() )
             m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
 
-        m_aTimeoutTimer.Start();
+        m_aIdle.Start();
     }
 
     return 1;
@@ -1191,13 +1191,13 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     m_pUpdateBtn->Enable( false );
     m_pCloseBtn->GrabFocus();
 
-    m_aTimeoutTimer.SetTimeout( 50 ); // mSec
-    m_aTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
+    m_aIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    m_aIdle.SetIdleHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 
 UpdateRequiredDialog::~UpdateRequiredDialog()
 {
-    m_aTimeoutTimer.Stop();
+    m_aIdle.Stop();
 }
 
 long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
@@ -1266,7 +1266,7 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
     bool bLockInterface = (bool) _bLockInterface;
 
     if ( m_bStartProgress && !m_bHasProgress )
-        m_aTimeoutTimer.Start();
+        m_aIdle.Start();
 
     if ( m_bStopProgress )
     {
@@ -1427,7 +1427,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl)
         if ( m_pProgressBar->IsVisible() )
             m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
 
-        m_aTimeoutTimer.Start();
+        m_aIdle.Start();
     }
 
     return 1;

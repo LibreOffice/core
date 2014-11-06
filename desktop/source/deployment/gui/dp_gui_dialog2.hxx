@@ -121,7 +121,7 @@ class ExtMgrDialog : public ModelessDialog,
     bool                 m_bDisableWarning;
     bool                 m_bDeleteWarning;
     long                 m_nProgress;
-    Timer                m_aTimeoutTimer;
+    Idle                 m_aIdle;
     TheExtensionManager *m_pManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;
@@ -191,7 +191,7 @@ class UpdateRequiredDialog : public ModalDialog,
     bool                 m_bDisableWarning;
     bool                 m_bHasLockedEntries;
     long                 m_nProgress;
-    Timer                m_aTimeoutTimer;
+    Idle                 m_aIdle;
     TheExtensionManager *m_pManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;

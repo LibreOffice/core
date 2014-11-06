@@ -309,8 +309,8 @@ namespace framework
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                             m_pGlobalSettings;
-            OUString                                                               m_aModuleIdentifier;
-        Timer                                                                       m_aAsyncLayoutTimer;
+            OUString                                                                    m_aModuleIdentifier;
+            Idle                                                                        m_aAsyncLayoutIdle;
             ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aListenerContainer; // container for ALL Listener
             ToolbarLayoutManager*                                                       m_pToolbarManager;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >       m_xToolbarManager;
