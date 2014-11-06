@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <ctype.h>
+
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
@@ -278,26 +280,64 @@ ScFormulaCfg::ScFormulaCfg() :
 
 namespace {
 
-css::uno::Sequence<OUString> StringSetToStringSequence(std::set<OUString>& rSet)
+css::uno::Sequence<OUString> SetOfOpenCLImplementationMatcherToStringSequence(std::set<ScCalcConfig::OpenCLImplementationMatcher>& rSet)
 {
     css::uno::Sequence<OUString> result(rSet.size());
 
     size_t n(0);
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {
-        result[n++] = *i;
+        result[n++] =
+            (*i).maOS.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
+            (*i).maOSVersion.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
+            (*i).maPlatformVendor.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
+            (*i).maDevice.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
+            (*i).maDriverVersion.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B");
     }
 
     return result;
 }
 
-std::set<OUString> StringSequenceToStringSet(css::uno::Sequence<OUString>& rSequence)
+OUString getToken(const OUString& string, sal_Int32& index)
 {
-    std::set<OUString> result;
+    OUString token(string.getToken(0, '/', index));
+    OUString result;
+    sal_Int32 i(0);
+    sal_Int32 p;
+    while ((p = token.indexOf('%', i)) >= 0)
+    {
+        if (p > i)
+            result += token.copy(i, p - i);
+        if (p < token.getLength() - 2)
+        {
+            result += OUString(static_cast<sal_Unicode>(token.copy(p+1, 2).toInt32(16)));
+            i = p + 3;
+        }
+        else
+        {
+            i = token.getLength();
+        }
+    }
+    result += token.copy(i);
+
+    return result;
+}
+
+std::set<ScCalcConfig::OpenCLImplementationMatcher> StringSequenceToSetOfOpenCLImplementationMatcher(css::uno::Sequence<OUString>& rSequence)
+{
+    std::set<ScCalcConfig::OpenCLImplementationMatcher> result;
 
     for (auto i = rSequence.begin(); i != rSequence.end(); ++i)
     {
-        result.insert(*i);
+        ScCalcConfig::OpenCLImplementationMatcher m;
+        sal_Int32 index(0);
+        m.maOS = getToken(*i, index);
+        m.maOSVersion = getToken(*i, index);
+        m.maPlatformVendor = getToken(*i, index);
+        m.maDevice = getToken(*i, index);
+        m.maDriverVersion = getToken(*i, index);
+
+        result.insert(m);
     }
 
     return result;
@@ -549,16 +589,16 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_OPENCL_WHITELIST:
                 {
-                    css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLWhiteList);
+                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
                     pValues[nProp] >>= sVal;
-                    GetCalcConfig().maOpenCLWhiteList = StringSequenceToStringSet(sVal);
+                    GetCalcConfig().maOpenCLWhiteList = StringSequenceToSetOfOpenCLImplementationMatcher(sVal);
                 }
                 break;
                 case SCFORMULAOPT_OPENCL_BLACKLIST:
                 {
-                    css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLBlackList);
+                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLBlackList);
                     pValues[nProp] >>= sVal;
-                    GetCalcConfig().maOpenCLBlackList = StringSequenceToStringSet(sVal);
+                    GetCalcConfig().maOpenCLBlackList = StringSequenceToSetOfOpenCLImplementationMatcher(sVal);
                 }
                 break;
                 }
@@ -716,13 +756,13 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_OPENCL_WHITELIST:
             {
-                css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLWhiteList);
+                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
                 pValues[nProp] <<= sVal;
             }
             break;
             case SCFORMULAOPT_OPENCL_BLACKLIST:
             {
-                css::uno::Sequence<OUString> sVal = StringSetToStringSequence(GetCalcConfig().maOpenCLBlackList);
+                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLBlackList);
                 pValues[nProp] <<= sVal;
             }
             break;

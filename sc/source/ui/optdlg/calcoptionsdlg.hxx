@@ -40,6 +40,7 @@ public:
     DECL_LINK( DeviceSelHdl, void* );
     DECL_LINK( NumModifiedHdl, void * );
     DECL_LINK( EditModifiedHdl, void * );
+    DECL_LINK( OpenCLWhiteAndBlackListSelHdl, Control* );
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 
@@ -52,6 +53,7 @@ private:
     void SelectedDeviceChanged();
     void SpinButtonValueChanged();
     void EditFieldValueChanged();
+    void WhiteAndBlackListSelectionChanged();
 #if HAVE_FEATURE_OPENCL
     void fillOpenCLList();
 #endif
@@ -74,8 +76,13 @@ private:
     RadioButton* mpBtnFalse;
     NumericField* mpSpinButton;
     Edit* mpEditField;
-    VclGrid* mpListGrid;
-    ListBox* mpListBox;
+    VclGrid* mpOpenCLWhiteAndBlackListGrid;
+    ListBox* mpOpenCLWhiteAndBlackListBox;
+    Edit* mpOS;
+    Edit* mpOSVersion;
+    Edit* mpPlatformVendor;
+    Edit* mpDevice;
+    Edit* mpDriverVersion;
     PushButton* mpListEditButton;
     PushButton* mpListNewButton;
     PushButton* mpListDeleteButton;

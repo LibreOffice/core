@@ -41,6 +41,57 @@ struct SC_DLLPUBLIC ScCalcConfig
         STRING_CONVERSION_LOCALE_DEPENDENT  ///<  =1+"1.000" may be 2 or 1001 ... =1+"x" gives #VALUE!
     };
 
+    struct OpenCLImplementationMatcher
+    {
+        OUString maOS;
+        OUString maOSVersion;
+        OUString maPlatformVendor;
+        OUString maDevice;
+        OUString maDriverVersion;
+
+        OpenCLImplementationMatcher()
+        {
+        }
+
+        OpenCLImplementationMatcher(const OUString& rOS,
+                                    const OUString& rOSVersion,
+                                    const OUString& rPlatformVendor,
+                                    const OUString& rDevice,
+                                    const OUString& rDriverVersion)
+            : maOS(rOS),
+              maOSVersion(rOSVersion),
+              maPlatformVendor(rPlatformVendor),
+              maDevice(rDevice),
+              maDriverVersion(rDriverVersion)
+        {
+        }
+
+        bool operator==(const OpenCLImplementationMatcher& r) const
+        {
+            return maOS == r.maOS &&
+                   maOSVersion == r.maOSVersion &&
+                   maPlatformVendor == r.maPlatformVendor &&
+                   maDevice == r.maDevice &&
+                   maDriverVersion == r.maDriverVersion;
+        }
+        bool operator!=(const OpenCLImplementationMatcher& r) const
+        {
+            return !operator==(r);
+        }
+        bool operator<(const OpenCLImplementationMatcher& r) const
+        {
+            return (maOS < r.maOS ||
+                    (maOS == r.maOS &&
+                     (maOSVersion < r.maOSVersion ||
+                      (maOSVersion == r.maOSVersion &&
+                       (maPlatformVendor < r.maPlatformVendor ||
+                        (maPlatformVendor == r.maPlatformVendor &&
+                         (maDevice < r.maDevice ||
+                          (maDevice == r.maDevice &&
+                           (maDriverVersion < r.maDriverVersion)))))))));
+        }
+    };
+
     formula::FormulaGrammar::AddressConvention meStringRefAddressSyntax;
     StringConversion meStringConversion;
     bool mbEmptyStringAsZero:1;
@@ -52,8 +103,8 @@ struct SC_DLLPUBLIC ScCalcConfig
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
     std::set<OpCodeEnum> maOpenCLSubsetOpCodes;
 
-    std::set<OUString> maOpenCLWhiteList;
-    std::set<OUString> maOpenCLBlackList;
+    std::set<OpenCLImplementationMatcher> maOpenCLWhiteList;
+    std::set<OpenCLImplementationMatcher> maOpenCLBlackList;
 
     ScCalcConfig();
 

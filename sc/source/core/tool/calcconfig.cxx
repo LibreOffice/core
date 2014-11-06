@@ -26,6 +26,8 @@ ScCalcConfig::ScCalcConfig() :
     mbEmptyStringAsZero(false)
 {
     setOpenCLConfigToDefault();
+
+    // SAL _DEBUG(__FILE__ ":" << __LINE__ << ": ScCalcConfig::ScCalcConfig(): " << *this);
 }
 
 void ScCalcConfig::setOpenCLConfigToDefault()
@@ -42,8 +44,8 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSum);
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
-    maOpenCLBlackList.insert("Windows/*/Intel(R) Corporation/9.17.10.2884");
-    maOpenCLBlackList.insert("SuperOS/1.0/Big Corp, Inc./2.3\\/beta");
+    maOpenCLBlackList.insert(OpenCLImplementationMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884"));
+    maOpenCLBlackList.insert(OpenCLImplementationMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3"));
 }
 
 void ScCalcConfig::reset()
@@ -82,13 +84,19 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 
 namespace {
 
-void writeStringSet(std::ostream& rStream, const std::set<OUString>& rSet)
+void writeOpenCLImplementationMatcher(std::ostream& rStream, const std::set<ScCalcConfig::OpenCLImplementationMatcher>& rSet)
 {
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {
         if (i != rSet.cbegin())
             rStream << ",";
-        rStream << (*i).replaceAll(",", "\\,");
+        rStream << "{"
+            "OS=" << (*i).maOS << ","
+            "OSVersion=" << (*i).maOSVersion << ","
+            "PlatformVendor=" << (*i).maPlatformVendor << ","
+            "Device=" << (*i).maDevice << ","
+            "DriverVersion=" << (*i).maDriverVersion <<
+            "}";
     }
 }
 
@@ -107,10 +115,10 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
         "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "},"
         "OpenCLWhiteList={";
-    writeStringSet(rStream, rConfig.maOpenCLWhiteList);
+    writeOpenCLImplementationMatcher(rStream, rConfig.maOpenCLWhiteList);
     rStream << "},"
         "OpenCLBlackList={";
-    writeStringSet(rStream, rConfig.maOpenCLBlackList);
+    writeOpenCLImplementationMatcher(rStream, rConfig.maOpenCLBlackList);
     rStream << "}"
         "}";
     return rStream;

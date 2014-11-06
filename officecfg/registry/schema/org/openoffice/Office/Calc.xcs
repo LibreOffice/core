@@ -1401,7 +1401,7 @@
           <info>
             <desc>Like OpenCLWhiteList, but for combinations known to be bad.</desc>
           </info>
-          <value oor:separator=";">Windows/*/Intel(R) Corporation/9.17.10.2884;SuperOS/1.0/Big Corp, Inc./2.3\/beta</value>
+          <value oor:separator=";">Windows/*/Intel(R) Corporation/*/9.17.10.2884;SuperOS/*/Big Corp, Inc./Whizz\Grafix/4.2%2Fbeta%3B3</value>
         </prop>
       </group>
       <group oor:name="Syntax">

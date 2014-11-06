@@ -224,11 +224,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTextView" id="os:border">
+                              <object class="GtkEntry" id="os:border">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -250,11 +248,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTextView" id="osversion:border">
+                              <object class="GtkEntry" id="osversion:border">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -262,7 +258,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="openclvendorlabel">
+                              <object class="GtkLabel" id="platformvendorlabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
@@ -276,11 +272,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTextView" id="openclvendor:border">
+                              <object class="GtkEntry" id="platformvendor:border">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -302,11 +296,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTextView" id="opencldevice:border">
+                              <object class="GtkEntry" id="opencldevice:border">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -328,11 +320,9 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTextView" id="opencldriverversion:border">
+                              <object class="GtkEntry" id="opencldriverversion:border">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
