@@ -19,7 +19,6 @@
 
 #include <accessibility/extended/accessiblelistbox.hxx>
 #include <accessibility/extended/accessiblelistboxentry.hxx>
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
