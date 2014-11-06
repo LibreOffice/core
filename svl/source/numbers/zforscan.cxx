@@ -1241,14 +1241,14 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 if ( i < nAnzStrings-1 &&
                      nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                      sStrArray[i+1][0] == '$' )
-                {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                {
                     eNewType = NUMBERFORMAT_CURRENCY;
                     bMatchBracket = true;
                 }
                 else if ( i < nAnzStrings-1 &&
                           nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                           sStrArray[i+1][0] == '~' )
-                {   // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
+                {
                     eNewType = NUMBERFORMAT_DATE;
                     bMatchBracket = true;
                 }
@@ -1482,7 +1482,6 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
          sStrArray[i+1][0] == '~' )
     {
         // [~calendarID]
-        // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
         nPos = nPos + sStrArray[i].getLength();           // [
         nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
         nPos = nPos + sStrArray[++i].getLength();         // ~
@@ -2042,7 +2041,6 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                          sStrArray[i+1][0] == '$' )
                     {
                         // [$DM-xxx]
-                        // As of SV_NUMBERFORMATTER_VERSION_NEW_CURR
                         nPos = nPos + sStrArray[i].getLength();     // [
                         nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
                         nPos = nPos + sStrArray[++i].getLength();   // $

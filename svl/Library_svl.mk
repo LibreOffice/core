@@ -128,7 +128,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/notify/listener \
     svl/source/notify/lstner \
     svl/source/numbers/numfmuno \
-    svl/source/numbers/numhead \
     svl/source/numbers/numuno \
     svl/source/numbers/supservs \
     svl/source/numbers/zforfind \

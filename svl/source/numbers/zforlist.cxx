@@ -36,7 +36,6 @@
 #include "zforscan.hxx"
 #include "zforfind.hxx"
 #include <svl/zformat.hxx>
-#include "numhead.hxx"
 
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/digitgroupingiterator.hxx>
@@ -197,7 +196,6 @@ SvNumberFormatter::SvNumberFormatter( const Reference< XComponentContext >& rxCo
 {
     ImpConstruct( eLang );
 }
-
 
 SvNumberFormatter::~SvNumberFormatter()
 {
@@ -673,148 +671,10 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( OUString & rString, 
     return nKey;
 }
 
-
 void SvNumberFormatter::DeleteEntry(sal_uInt32 nKey)
 {
     delete aFTable[nKey];
     aFTable.erase(nKey);
-}
-
-bool SvNumberFormatter::Load( SvStream& rStream )
-{
-    LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
-    boost::scoped_ptr<SvNumberFormatter> pConverter;
-
-    ImpSvNumMultipleReadHeader aHdr( rStream );
-    sal_uInt16 nVersion;
-    rStream.ReadUInt16( nVersion );
-    SvNumberformat* pEntry;
-    sal_uInt32 nPos;
-    sal_uInt16 nSysOnStore, eLge, eDummy;       // Dummy for compatible format
-    rStream.ReadUInt16( nSysOnStore ).ReadUInt16( eLge );             // system language from document
-
-    SAL_WARN_IF( nVersion < SV_NUMBERFORMATTER_VERSION_CALENDAR, "svl.numbers", "SvNumberFormatter::Load: where does this unsupported old data come from?!?");
-
-    LanguageType eSaveSysLang = (LanguageType) nSysOnStore;
-    LanguageType eLnge = (LanguageType) eLge;
-    ImpChangeSysCL( eLnge, true );
-
-    rStream.ReadUInt32( nPos );
-    while (nPos != NUMBERFORMAT_ENTRY_NOT_FOUND)
-    {
-        rStream.ReadUInt16( eDummy ).ReadUInt16( eLge );
-        eLnge = (LanguageType) eLge;
-        ImpGenerateCL( eLnge, true );           // create new standard formats if necessary
-
-        sal_uInt32 nOffset = nPos % SV_COUNTRY_LANGUAGE_OFFSET;     // relativIndex
-        bool bUserDefined = (nOffset > SV_MAX_ANZ_STANDARD_FORMATE);
-
-        pEntry = new SvNumberformat(*pFormatScanner, eLnge);
-        pEntry->Load( rStream, aHdr, NULL, *pStringScanner );
-        if ( !bUserDefined )
-        {
-            bUserDefined = (pEntry->GetNewStandardDefined() > SV_NUMBERFORMATTER_VERSION);
-        }
-        if ( bUserDefined )
-        {
-            LanguageType eLoadSysLang = (eLnge == LANGUAGE_SYSTEM ? eSysLang : eSaveSysLang);
-            if ( eSaveSysLang != eLoadSysLang )
-            {
-                // different SYSTEM locale
-                if ( !pConverter )
-                {
-                    pConverter.reset(new SvNumberFormatter( m_xContext, eSysLang ));
-                }
-                pEntry->ConvertLanguage( *pConverter, eSaveSysLang, eLoadSysLang, true );
-            }
-        }
-        if ( nOffset == 0 )     // Standard/General format
-        {
-            SvNumberformat* pEnt = GetFormatEntry(nPos);
-            if (pEnt)
-            {
-                pEnt->SetLastInsertKey(pEntry->GetLastInsertKey());
-            }
-        }
-        if (!aFTable.insert(make_pair( nPos, pEntry)).second)
-        {
-            SAL_WARN( "svl.numbers", "SvNumberFormatter::Load: dup position");
-            delete pEntry;
-        }
-        rStream.ReadUInt32( nPos );
-    }
-
-    // as of SV_NUMBERFORMATTER_VERSION_YEAR2000
-    if ( nVersion >= SV_NUMBERFORMATTER_VERSION_YEAR2000 )
-    {
-        aHdr.StartEntry();
-        if ( aHdr.BytesLeft() >= sizeof(sal_uInt16) )
-        {
-            sal_uInt16 nY2k;
-            rStream.ReadUInt16( nY2k );
-            if ( nVersion < SV_NUMBERFORMATTER_VERSION_TWODIGITYEAR && nY2k < 100 )
-            {
-                nY2k += 1901;       // was before src513e: 29, now: 1930
-            }
-            SetYear2000( nY2k );
-        }
-        aHdr.EndEntry();
-    }
-
-    pConverter.reset();
-
-    // generate additional i18n standard formats for all used locales
-    LanguageType eOldLanguage = ActLnge;
-    NumberFormatCodeWrapper aNumberFormatCode( m_xContext,
-                                               GetLanguageTag().getLocale() );
-    std::vector<sal_uInt16> aList;
-    GetUsedLanguages( aList );
-    for ( std::vector<sal_uInt16>::const_iterator it(aList.begin()); it != aList.end(); ++it )
-    {
-        LanguageType eLang = *it;
-        ChangeIntl( eLang );
-        sal_uInt32 CLOffset = ImpGetCLOffset( eLang );
-        ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, true );
-    }
-    ChangeIntl( eOldLanguage );
-
-    return rStream.GetError() ? false : true;
-}
-
-bool SvNumberFormatter::Save( SvStream& rStream ) const
-{
-    ImpSvNumMultipleWriteHeader aHdr( rStream );
-    // As of 364i we store what SYSTEM locale really was, before it was hard
-    // coded LANGUAGE_SYSTEM.
-    rStream.WriteUInt16( SV_NUMBERFORMATTER_VERSION );
-    rStream.WriteUInt16( SvtSysLocale().GetLanguageTag().getLanguageType() ).WriteUInt16( IniLnge );
-
-    const SvNumberFormatTable* pTable = &aFTable;
-    SvNumberFormatTable::const_iterator it = pTable->begin();
-    while (it != pTable->end())
-    {
-        SvNumberformat* pEntry = it->second;
-        // Stored are all marked user defined formats and for each active
-        // (selected) locale the Standard/General format and
-        // NewStandardDefined.
-        if ( pEntry->GetUsed() || (pEntry->GetType() & NUMBERFORMAT_DEFINED) ||
-             pEntry->GetNewStandardDefined() || (it->first % SV_COUNTRY_LANGUAGE_OFFSET == 0) )
-        {
-            rStream.WriteUInt32( it->first )
-                   .WriteUInt16( LANGUAGE_SYSTEM )
-                   .WriteUInt16( pEntry->GetLanguage() );
-            pEntry->Save(rStream, aHdr);
-        }
-        ++it;
-    }
-    rStream.WriteUInt32( NUMBERFORMAT_ENTRY_NOT_FOUND );                // end marker
-
-    // as of SV_NUMBERFORMATTER_VERSION_YEAR2000
-    aHdr.StartEntry();
-    rStream.WriteUInt16( GetYear2000() );
-    aHdr.EndEntry();
-
-    return rStream.GetError() ? false : true;
 }
 
 void SvNumberFormatter::GetUsedLanguages( std::vector<sal_uInt16>& rList )

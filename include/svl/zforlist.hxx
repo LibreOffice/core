@@ -37,7 +37,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class Date;
-class SvStream;
 class Color;
 class CharClass;
 class CalendarWrapper;
@@ -517,11 +516,6 @@ public:
 
     /// Whether format index nFIndex is of type text or not
     bool IsTextFormat(sal_uInt32 nFIndex) const;
-
-    /// Load all formats from a stream
-    bool Load( SvStream& rStream );
-    /// Save all formats to a stream
-    bool Save( SvStream& rStream ) const;
 
     /// Get additional info of a format index, e.g. for dialog box
     void GetFormatSpecialInfo(sal_uInt32 nFormat, bool& bThousand, bool& IsRed,
