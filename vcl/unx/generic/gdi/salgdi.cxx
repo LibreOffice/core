@@ -55,6 +55,7 @@
 #include "textrender.hxx"
 #include "gdiimpl.hxx"
 #include "openglgdiimpl.hxx"
+#include "x11cairotextrender.hxx"
 
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
@@ -64,6 +65,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 X11SalGraphics::X11SalGraphics():
+    mpTextRenderImpl(new X11CairoTextRender(false, *this)),
     m_pFrame(NULL),
     m_pVDev(NULL),
     m_pColormap(NULL),
@@ -87,6 +89,7 @@ X11SalGraphics::X11SalGraphics():
         mpImpl.reset(new OpenGLSalGraphicsImpl());
     else
         mpImpl.reset(new X11SalGraphicsImpl(*this));
+
 }
 
 X11SalGraphics::~X11SalGraphics()
