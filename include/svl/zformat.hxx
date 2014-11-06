@@ -199,7 +199,6 @@ public:
     void SetNewStandardDefined( sal_uInt16 nVer )
         { nNewStandardDefined = nVer; eType |= NUMBERFORMAT_DEFINED; }
 
-    sal_uInt16 GetNewStandardDefined() const        { return nNewStandardDefined; }
     bool IsAdditionalStandardDefined() const
         { return nNewStandardDefined == SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS; }
 
