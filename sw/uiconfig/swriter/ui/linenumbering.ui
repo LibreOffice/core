@@ -98,6 +98,7 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">2</property>
+                <property name="secondary">True</property>
               </packing>
             </child>
           </object>
@@ -337,7 +338,7 @@
                   <object class="GtkBox" id="box3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
+                    <property name="spacing">18</property>
                     <child>
                       <object class="GtkFrame" id="frame2">
                         <property name="visible">True</property>
