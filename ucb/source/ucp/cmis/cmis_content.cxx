@@ -1893,35 +1893,46 @@ namespace cmis
         const uno::Reference< ucb::XCommandEnvironment >& xEnv)
             throw( uno::RuntimeException )
     {
-        if ( isFolder( xEnv ) )
+        try
         {
-            uno::Sequence< ucb::ContentInfo > seq(2);
+            if ( isFolder( xEnv ) )
+            {
+                uno::Sequence< ucb::ContentInfo > seq(2);
 
-            // Minimum set of props we really need
-            uno::Sequence< beans::Property > props( 1 );
-            props[0] = beans::Property(
-                OUString("Title"),
-                -1,
-                cppu::UnoType<OUString>::get(),
-                beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
+                // Minimum set of props we really need
+                uno::Sequence< beans::Property > props( 1 );
+                props[0] = beans::Property(
+                    OUString("Title"),
+                    -1,
+                    cppu::UnoType<OUString>::get(),
+                    beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
-            // file
-            seq[0].Type       =  CMIS_FILE_TYPE;
-            seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
-                                  ucb::ContentInfoAttribute::KIND_DOCUMENT );
-            seq[0].Properties = props;
+                // file
+                seq[0].Type       =  CMIS_FILE_TYPE;
+                seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
+                                      ucb::ContentInfoAttribute::KIND_DOCUMENT );
+                seq[0].Properties = props;
 
-            // folder
-            seq[1].Type       = CMIS_FOLDER_TYPE;
-            seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
-            seq[1].Properties = props;
+                // folder
+                seq[1].Type       = CMIS_FOLDER_TYPE;
+                seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
+                seq[1].Properties = props;
 
-            return seq;
+                return seq;
+            }
         }
-        else
+        catch (const uno::RuntimeException&)
         {
-            return uno::Sequence< ucb::ContentInfo >();
+            throw;
         }
+        catch (const uno::Exception& e)
+        {
+            uno::Any a(cppu::getCaughtException());
+            throw lang::WrappedTargetRuntimeException(
+                "wrapped Exception " + e.Message,
+                uno::Reference<uno::XInterface>(), a);
+        }
+        return uno::Sequence< ucb::ContentInfo >();
     }
 
     list< uno::Reference< ucb::XContent > > Content::getChildren( )
