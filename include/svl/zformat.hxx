@@ -22,7 +22,6 @@
 #include <svl/svldllapi.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/nfversi.hxx>
 #include <svl/nfkeytab.hxx>
 
 namespace utl {
