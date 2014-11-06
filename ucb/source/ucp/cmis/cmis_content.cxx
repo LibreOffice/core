@@ -17,6 +17,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
@@ -40,6 +41,7 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <config_oauth2.h>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <ucbhelper/content.hxx>
@@ -1657,9 +1659,25 @@ namespace cmis
 
     OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException, std::exception )
     {
-        return isFolder( uno::Reference< ucb::XCommandEnvironment >() )
-            ? OUString(CMIS_FOLDER_TYPE)
-            : OUString(CMIS_FILE_TYPE);
+        OUString sRet;
+        try
+        {
+            sRet = isFolder( uno::Reference< ucb::XCommandEnvironment >() )
+                ? OUString(CMIS_FOLDER_TYPE)
+                : OUString(CMIS_FILE_TYPE);
+        }
+        catch (const uno::RuntimeException&)
+        {
+            throw;
+        }
+        catch (const uno::Exception& e)
+        {
+            uno::Any a(cppu::getCaughtException());
+            throw lang::WrappedTargetRuntimeException(
+                "wrapped Exception " + e.Message,
+                uno::Reference<uno::XInterface>(), a);
+        }
+        return sRet;
     }
 
     uno::Any SAL_CALL Content::execute(
