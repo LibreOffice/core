@@ -190,7 +190,7 @@ std::set<OpCodeEnum> SC_DLLPUBLIC ScStringToOpCodeSet(const OUString& rOpCodes)
             {
                 auto opcode(pHashMap->find(element));
                 if (opcode != pHashMap->end())
-                    result.insert(opcode->second);
+                    result.insert(static_cast<OpCodeEnum>(opcode->second));
                 else
                     SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");
             }
