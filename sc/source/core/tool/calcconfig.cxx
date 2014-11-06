@@ -37,7 +37,11 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 20;
-    maOpenCLSubsetOpCodes = {ocMin, ocMax, ocSum, ocAverage, ocSumIfs};
+    maOpenCLSubsetOpCodes.insert(ocMin);
+    maOpenCLSubsetOpCodes.insert(ocMax);
+    maOpenCLSubsetOpCodes.insert(ocSum);
+    maOpenCLSubsetOpCodes.insert(ocAverage);
+    maOpenCLSubsetOpCodes.insert(ocSumIfs);
     maOpenCLBlackList = {
         "Windows/*/Intel(R) Corporation/9.17.10.2884",
         "SuperOS/1.0/Big Corp, Inc./2.3\\/beta"
