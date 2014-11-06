@@ -52,6 +52,8 @@ public:
 
     virtual ~WinSalGraphicsImpl();
 
+    virtual void Init(SalFrame* pFrame) SAL_OVERRIDE;
+
     virtual void freeResources() SAL_OVERRIDE;
 
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
@@ -211,6 +213,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) SAL_OVERRIDE;
+
+    virtual bool swapBuffers() SAL_OVERRIDE { return false; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

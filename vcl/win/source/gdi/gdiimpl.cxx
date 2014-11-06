@@ -294,6 +294,10 @@ WinSalGraphicsImpl::~WinSalGraphicsImpl()
 
 }
 
+void WinSalGraphicsImpl::Init(SalFrame* /*pFrame*/)
+{
+}
+
 void WinSalGraphicsImpl::freeResources()
 {
 }
