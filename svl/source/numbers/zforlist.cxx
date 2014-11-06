@@ -2467,15 +2467,13 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // # ?/4
     aSingleFormatCode.Code = "# ?/4";
-    ImpInsertNewStandardFormat( aSingleFormatCode,
-                                CLOffset + SetIndexTable( NF_FRACTION_3, ZF_STANDARD_FRACTION+2 ),
-                                SV_NUMBERFORMATTER_VERSION_FIXED_FRACTION );
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + SetIndexTable( NF_FRACTION_3, ZF_STANDARD_FRACTION+2 ));
 
     // # ??/100
     aSingleFormatCode.Code = "# ?\?/100";
-    ImpInsertNewStandardFormat( aSingleFormatCode,
-                                CLOffset + SetIndexTable( NF_FRACTION_4, ZF_STANDARD_FRACTION+3 ),
-                                SV_NUMBERFORMATTER_VERSION_FIXED_FRACTION );
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + SetIndexTable( NF_FRACTION_4, ZF_STANDARD_FRACTION+3 ));
 
 
 
