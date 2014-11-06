@@ -826,12 +826,6 @@ private:
                                                     sal_uInt32 nPos,
                                                     bool bAfterChangingSystemCL = false,
                                                     sal_Int16 nOrgIndex = 0 );
-    // ImpInsertNewStandardFormat for new (since version ...) builtin formats
-    SVL_DLLPRIVATE SvNumberformat* ImpInsertNewStandardFormat( const ::com::sun::star::i18n::NumberFormatCode& rCode,
-                                                               sal_uInt32 nPos,
-                                                               sal_uInt16 nVersion,
-                                                               bool bAfterChangingSystemCL = false,
-                                                               sal_Int16 nOrgIndex = 0 );
 
     // Return CLOffset or (MaxCLOffset + SV_COUNTRY_LANGUAGE_OFFSET) if new language/country
     SVL_DLLPRIVATE sal_uInt32 ImpGetCLOffset(LanguageType eLnge) const;

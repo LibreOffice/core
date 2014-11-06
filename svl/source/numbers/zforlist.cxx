@@ -1751,19 +1751,6 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
     return pFormat;
 }
 
-SvNumberformat* SvNumberFormatter::ImpInsertNewStandardFormat(
-            const ::com::sun::star::i18n::NumberFormatCode& rCode,
-            sal_uInt32 nPos, sal_uInt16 nVersion, bool bAfterChangingSystemCL,
-            sal_Int16 nOrgIndex )
-{
-    SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos,
-        bAfterChangingSystemCL, nOrgIndex );
-    if (pNewFormat)
-        pNewFormat->SetNewStandardDefined( nVersion );
-        // so that it gets saved, displayed properly, and converted by old versions
-    return pNewFormat;
-}
-
 void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
                                              bool& bThousand,
                                              bool& IsRed,
@@ -2525,10 +2512,12 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
             //! no default on currency
             bool bDefault = aFormatSeq[j].Default;
             aFormatSeq[j].Default = false;
-            if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
-                    SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
-                    bAfterChangingSystemCL, nOrgIndex ) )
+            if ( SvNumberformat* pNewFormat = ImpInsertFormat( pFormatArr[j], nPos+1,
+                        bAfterChangingSystemCL, nOrgIndex ) )
+            {
+                pNewFormat->SetNewStandardDefined( SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
                 nPos++;
+            }
             pFormatArr[j].Index = nOrgIndex;
             aFormatSeq[j].Default = bDefault;
         }
@@ -2554,10 +2543,12 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
             }
             if ( pFormatArr[j].Index >= NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
             {
-                if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
-                        SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
-                        bAfterChangingSystemCL ) )
+                if ( SvNumberformat* pNewFormat = ImpInsertFormat( pFormatArr[j], nPos+1,
+                            bAfterChangingSystemCL ) )
+                {
+                    pNewFormat->SetNewStandardDefined( SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS );
                     nPos++;
+                }
             }
         }
     }
