@@ -1019,6 +1019,25 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
     }
 }
 
+void SdPage::DestroyDefaultPresObj(PresObjKind eObjKind)
+{
+    SdrObject* pObject = GetPresObj( eObjKind );
+
+    if( pObject )
+    {
+        SdDrawDocument *pDoc = static_cast<SdDrawDocument*>(pModel);
+
+        const bool bUndo = pDoc->IsUndoEnabled();
+        if( bUndo )
+            pDoc->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
+        SdrObjList* pOL = pObject->GetObjList();
+        pOL->RemoveObject(pObject->GetOrdNumDirect());
+
+        if( !bUndo )
+            SdrObject::Free(pObject);
+    }
+}
+
 /*************************************************************************
 |*
 |* return title area

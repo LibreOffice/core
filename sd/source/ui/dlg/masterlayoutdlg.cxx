@@ -121,26 +121,14 @@ void MasterLayoutDialog::applyChanges()
     mpDoc->EndUndo();
 }
 
-void MasterLayoutDialog::create( PresObjKind eKind )
+void MasterLayoutDialog::create(PresObjKind eKind)
 {
-    mpCurrentPage->CreateDefaultPresObj( eKind, true );
+    mpCurrentPage->CreateDefaultPresObj(eKind, true);
 }
 
 void MasterLayoutDialog::remove( PresObjKind eKind )
 {
-    SdrObject* pObject = mpCurrentPage->GetPresObj( eKind );
-
-    if( pObject )
-    {
-        const bool bUndo = mpDoc->IsUndoEnabled();
-        if( bUndo )
-            mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
-        SdrObjList* pOL =pObject->GetObjList();
-        pOL->RemoveObject(pObject->GetOrdNumDirect());
-
-        if( !bUndo )
-            SdrObject::Free(pObject);
-    }
+    mpCurrentPage->DestroyDefaultPresObj(eKind);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

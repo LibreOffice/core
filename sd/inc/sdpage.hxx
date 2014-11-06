@@ -176,6 +176,7 @@ public:
     void EnsureMasterPageDefaultBackground();
     SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rectangle& rRect, bool bInsert=false);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
+    void            DestroyDefaultPresObj(PresObjKind eObjKind);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
     OUString        GetPresObjText(PresObjKind eObjKind) const;
