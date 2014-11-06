@@ -527,6 +527,13 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
             _pStream->SeekRel( + _nContentSize );
         else
             _pStream->Seek( _nContentSize );
+        const size_t nMaxRecords = _pStream->remainingSize() / sizeof(sal_uInt32);
+        if (_nContentCount > nMaxRecords)
+        {
+            SAL_WARN("svl", "Parsing error: " << nMaxRecords << " max possible entries, but " <<
+                     _nContentCount << " claimed, truncating");
+            _nContentCount = nMaxRecords;
+        }
         _pContentOfs = new sal_uInt32[_nContentCount];
         memset(_pContentOfs, 0, _nContentCount*sizeof(sal_uInt32));
         #if defined(OSL_LITENDIAN)
