@@ -17,42 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
 #include <svl/aeitem.hxx>
-#include <svl/itempool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdpage.hxx>
-#include <editeng/editview.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/fmview.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <doc.hxx>
-#include <IDocumentDeviceAccess.hxx>
 #include <textboxhelper.hxx>
-#include <editeng/langitem.hxx>
-#include <linguistic/lngprops.hxx>
-#include <editeng/unolingu.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/svdetc.hxx>
 #include <editeng/editstat.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/printer.hxx>
-#include <svx/fmglob.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svx/svdoutl.hxx>
 
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "viewopt.hxx"
 #include "cmdid.h"
-#include "drawsh.hxx"
 #include "drwbassh.hxx"
 #include "beziersh.hxx"
 #include "conrect.hxx"
@@ -61,11 +44,9 @@
 #include "conform.hxx"
 #include "concustomshape.hxx"
 #include "dselect.hxx"
-#include "edtwin.hxx"
 
 #include <dcontact.hxx>
 
-#include <svx/svdpagv.hxx>
 #include <svx/extrusionbar.hxx>
 #include <vcl/svapp.hxx>
 

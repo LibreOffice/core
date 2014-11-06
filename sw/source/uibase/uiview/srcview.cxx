@@ -17,51 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <comphelper/string.hxx>
-#include <unotools/tempfile.hxx>
-#include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/print.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/metric.hxx>
-#include <svtools/ctrltool.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svl/undo.hxx>
-#include <unotools/textsearch.hxx>
-#include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
-#include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/htmlcfg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/prnmon.hxx>
 #include <sfx2/docfile.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/srchdlg.hxx>
 #include <svl/srchitem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/flstitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
-#include <swmodule.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 #include <srcview.hxx>
@@ -69,26 +42,16 @@
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentState.hxx>
-#include <sfx2/msg.hxx>
-#include <shellio.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
 #include <globals.hrc>
-#include <shells.hrc>
 #include <popup.hrc>
 #include <web.hrc>
 #include <view.hrc>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
 #define SwSrcView
-#include "swslots.hxx"
 
-#include <unomid.h>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;

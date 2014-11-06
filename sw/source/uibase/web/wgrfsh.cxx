@@ -17,26 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/msg.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/app.hxx>
 
 #include <sfx2/objface.hxx>
 
-#include "cmdid.h"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "swmodule.hxx"
-#include "uitool.hxx"
-#include "docsh.hxx"
 #include "shells.hrc"
 #include "popup.hrc"
-#include "globals.hrc"
 #include "web.hrc"
 #include "wgrfsh.hxx"
 
 #define SwWebGrfShell
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebGrfShell, SwGrfShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 

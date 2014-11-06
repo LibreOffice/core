@@ -18,22 +18,14 @@
  */
 
 #include <svx/svxids.hrc>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdview.hxx>
-#include <svx/drawitem.hxx>
 
-#include <svx/xtable.hxx>
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "docsh.hxx"
 #include "cmdid.h"
 
 #include "drawsh.hxx"
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <boost/scoped_ptr.hpp>
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {

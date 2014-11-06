@@ -21,123 +21,59 @@
 
 #include <swtypes.hxx>
 #include <hintids.hxx>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
-#include <com/sun/star/i18n/UnicodeScript.hpp>
 
 #include <vcl/help.hxx>
-#include <vcl/graph.hxx>
-#include <vcl/msgbox.hxx>
-#include <sot/storage.hxx>
-#include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
 #include <basic/sbxvar.hxx>
 #include <svl/ctloptions.hxx>
 #include <basic/sbx.hxx>
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svl/ptitem.hxx>
-#include <editeng/sizeitem.hxx>
 #include <editeng/langitem.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdhdl.hxx>
-#include <svx/svdoutl.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <editeng/flditem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/brushitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/protitem.hxx>
 #include <unotools/charclass.hxx>
-#include <basegfx/color/bcolortools.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <touch/touch-impl.h>
 
 #include <editeng/acorrcfg.hxx>
-#include <SwSmartTagMgr.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <IDocumentSettingAccess.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <textboxhelper.hxx>
-#include <dcontact.hxx>
-#include <fldbas.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
-#include <viewopt.hxx>
 #include <drawbase.hxx>
 #include <dselect.hxx>
-#include <textsh.hxx>
 #include <shdwcrsr.hxx>
 #include <txatbase.hxx>
-#include <fmtanchr.hxx>
-#include <fmtornt.hxx>
-#include <fmtfsize.hxx>
-#include <fmtclds.hxx>
-#include <fmthdft.hxx>
 #include <frmfmt.hxx>
-#include <modcfg.hxx>
-#include <fmtcol.hxx>
 #include <wview.hxx>
-#include <listsh.hxx>
 #include <gloslst.hxx>
 #include <inputwin.hxx>
 #include <gloshdl.hxx>
-#include <swundo.hxx>
 #include <drwtxtsh.hxx>
-#include <fchrfmt.hxx>
-#include <fmturl.hxx>
-#include <romenu.hxx>
 #include <initui.hxx>
-#include <frmatr.hxx>
-#include <extinput.hxx>
 #include <acmplwrd.hxx>
 #include <swcalwrp.hxx>
-#include <swdtflvr.hxx>
-#include <wdocsh.hxx>
 #include <crsskip.hxx>
 #include <breakit.hxx>
 #include <checkit.hxx>
 #include <pagefrm.hxx>
-#include <HeaderFooterWin.hxx>
 
 #include <helpid.h>
 #include <cmdid.h>
-#include <docvw.hrc>
-#include <uitool.hxx>
-#include <fmtfollowtextflow.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <charfmt.hxx>
-#include <numrule.hxx>
 #include <pagedesc.hxx>
 #include <svtools/ruler.hxx>
 #include "formatclipboard.hxx"
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <docstat.hxx>
 #include <wordcountdialog.hxx>
-#include <swwait.hxx>
-#include <txtfld.hxx>
 #include <fmtfld.hxx>
 
-#include <IMark.hxx>
 #include <doc.hxx>
 #include <xmloff/odffields.hxx>
 
@@ -146,11 +82,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "../../core/inc/rootfrm.hxx"
 
 #include <unotools/syslocaleoptions.hxx>
-#include <boost/scoped_array.hpp>
-#include <boost/scoped_ptr.hpp>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;

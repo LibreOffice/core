@@ -17,18 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <svx/svxids.hrc>
-#include <svl/stritem.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/xtable.hxx>
 
-#include <docsh.hxx>
-#include <doc.hxx>
-#include <drawdoc.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 
 using namespace ::com::sun::star;
 

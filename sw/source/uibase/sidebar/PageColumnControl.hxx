@@ -21,10 +21,8 @@
 
 #include <svx/sidebar/PopupControl.hxx>
 
-#include <vcl/image.hxx>
 #include <vcl/button.hxx>
 
-#include <vector>
 
 namespace svx { namespace sidebar {
     class ValueSetWithTextControl;

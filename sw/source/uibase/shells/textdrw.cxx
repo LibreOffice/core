@@ -19,27 +19,11 @@
 
 #include <config_features.h>
 
-#include <svx/svdview.hxx>
-#include <tools/urlobj.hxx>
-#include <svx/fmglob.hxx>
-#include <svx/svdouno.hxx>
-#include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <view.hxx>
-#include <wrtsh.hxx>
-#include <edtwin.hxx>
-#include <swundo.hxx>
 #include <basesh.hxx>
 
-#include <poolfmt.hrc>
 
-#include <docsh.hxx>
-#include <sfx2/docfile.hxx>
-#include <svl/urihelper.hxx>
-#include <avmedia/mediawindow.hxx>
 
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

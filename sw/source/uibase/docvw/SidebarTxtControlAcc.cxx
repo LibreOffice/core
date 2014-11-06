@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
 #include <memory>
-#include <utility>
 
 #include <SidebarTxtControlAcc.hxx>
 

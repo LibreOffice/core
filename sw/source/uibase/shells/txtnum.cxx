@@ -17,30 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <numrule.hxx>
 
 #include "cmdid.h"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "viewopt.hxx"
 #include "wdocsh.hxx"
 #include "textsh.hxx"
-#include "uiitems.hxx"
 #include "swabstdlg.hxx"
 #include <globals.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <boost/scoped_ptr.hpp>
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {

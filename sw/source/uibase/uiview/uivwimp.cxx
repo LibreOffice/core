@@ -19,32 +19,17 @@
 
 #include <config_features.h>
 
-#include <cmdid.h>
-#include "globals.hrc"
 
-#include <com/sun/star/scanner/XScannerManager2.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 
 #include <sfx2/docinsert.hxx>
 #include <sfx2/request.hxx>
 #include <uivwimp.hxx>
-#include <wview.hxx>
 #include <unotxvw.hxx>
-#include <unodispatch.hxx>
 #include <swmodule.hxx>
 #include <swdtflvr.hxx>
-#include <edtwin.hxx>
-#include <mmconfigitem.hxx>
 
 #include <view.hrc>
 

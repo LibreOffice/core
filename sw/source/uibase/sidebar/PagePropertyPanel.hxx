@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEPROPERTYPANEL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_PAGEPROPERTYPANEL_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/document/XUndoManager.hpp>
 
 #include <svx/sidebar/Popup.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
@@ -33,19 +31,8 @@ namespace svx { namespace sidebar {
 
 #include <i18nutil/paper.hxx>
 
-#include <svx/pageitem.hxx>
-#include <svx/rulritem.hxx>
-#include <editeng/sizeitem.hxx>
 
-#include <vcl/ctrl.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <svl/intitem.hxx>
 
-#include <boost/scoped_ptr.hpp>
 
 
 namespace sw { namespace sidebar {

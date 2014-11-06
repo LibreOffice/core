@@ -17,29 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
 #include <hintids.hxx>
-#include <sfx2/bindings.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
-#include <editeng/scripttypeitem.hxx>
 #include <cmdid.h>
-#include <view.hxx>
 #include <basesh.hxx>
 #include <wrtsh.hxx>
-#include <frmatr.hxx>
-#include <initui.hxx>
 #include <mdiexp.hxx>
-#include <fmtcol.hxx>
-#include <frmfmt.hxx>
-#include <swundo.hxx>
 #include <swevent.hxx>
 #include <swdtflvr.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
 #include <wordcountdialog.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;

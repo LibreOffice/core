@@ -19,43 +19,26 @@
 
 #include <config_features.h>
 
-#include <string>
 
-#include <boost/scoped_ptr.hpp>
 
 #include <hintids.hxx>
 
-#include <com/sun/star/util/SearchOptions.hpp>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svx/pageitem.hxx>
 #include <svl/whiter.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
-#include <unotools/textsearch.hxx>
-#include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sal/macros.h>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
-#include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/wrkwin.hxx>
-#include <editeng/unolingu.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
-#include <docsh.hxx>
-#include <doc.hxx>
-#include <unocrsr.hxx>
 
 #include <view.hrc>
 #include <SwRewriter.hxx>

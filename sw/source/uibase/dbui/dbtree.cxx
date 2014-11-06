@@ -17,38 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/formats.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdb/XDatabaseAccess.hpp>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
-#include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <svx/dbaexchange.hxx>
 
-#include <dbmgr.hxx>
-#include <swmodule.hxx>
-#include <view.hxx>
-#include <wrtsh.hxx>
 #include <dbtree.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <helpid.h>
 #include <utlui.hrc>
 
-#include <unomid.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 

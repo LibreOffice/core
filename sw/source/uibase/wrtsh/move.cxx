@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/bindings.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <viewopt.hxx>
-#include <crsskip.hxx>
 
 /**
    Always:

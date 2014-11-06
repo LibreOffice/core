@@ -19,7 +19,6 @@
 
 #include <hintids.hxx>
 #include "uitool.hxx"
-#include <sfx2/app.hxx>
 #include <svx/rulritem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/request.hxx>
@@ -32,29 +31,21 @@
 #include <svx/ruler.hxx>
 #include <editeng/protitem.hxx>
 #include <svl/rectitem.hxx>
-#include <sfx2/bindings.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtclds.hxx>
 #include <fmtornt.hxx>
-#include <frmatr.hxx>
-#include <edtwin.hxx>
 #include "view.hxx"
 #include "wrtsh.hxx"
-#include "basesh.hxx"
 #include "cmdid.h"
-#include "viewopt.hxx"
 #include "tabcol.hxx"
-#include "frmfmt.hxx"
 #include "pagedesc.hxx"
 #include "wview.hxx"
-#include "fmtcol.hxx"
 #include "section.hxx"
 
 #include "ndtxt.hxx"
 #include "pam.hxx"
 
-#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 

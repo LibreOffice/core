@@ -17,26 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/srchitem.hxx>
-#include <sfx2/app.hxx>
-#include <svx/svxids.hrc>
 
 #include <comphelper/classids.hxx>
-#include <sfx2/objface.hxx>
 
-#include <sfx2/msg.hxx>
-#include "cfgid.h"
-#include "cmdid.h"
 #include "swtypes.hxx"
 
-#include "shellio.hxx"
 #include "wdocsh.hxx"
 #include "web.hrc"
 
 #define SwWebDocShell
-#include "swslots.hxx"
 
-#include <unomid.h>
 
 SFX_IMPL_INTERFACE(SwWebDocShell, SfxObjectShell, SW_RES(0) )
 

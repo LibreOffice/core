@@ -17,29 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svl/stritem.hxx>
-#include <svl/eitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <fmtfsize.hxx>
-#include <fldbas.hxx>
 #include <uiitems.hxx>
-#include "viewopt.hxx"
 #include "cmdid.h"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "swundo.hxx"
 #include "textsh.hxx"
 #include "idxmrk.hxx"
-#include "cnttab.hxx"
 #include "toxmgr.hxx"
 #include "swabstdlg.hxx"
 #include <index.hrc>
-#include <globals.hrc>
-#include <boost/scoped_ptr.hpp>
 
 void SwTextShell::ExecIdx(SfxRequest &rReq)
 {

@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/urlobj.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <swtypes.hxx>
@@ -32,11 +28,9 @@
 #include <initui.hxx>
 #include <glosdoc.hxx>
 #include <gloslst.hxx>
-#include <swunohelper.hxx>
 
 #include <vector>
 
-#include <utlui.hrc>
 
 #define STRING_DELIM (char)0x0A
 #define GLOS_TIMEOUT 30000   // update every 30 seconds

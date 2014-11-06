@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <mdiexp.hxx>
 #include <sfx2/progress.hxx>
 #include <tools/resid.hxx>
-#include <docsh.hxx>
 #include <swmodule.hxx>
 #include "swtypes.hxx"
 

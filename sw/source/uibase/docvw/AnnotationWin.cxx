@@ -42,16 +42,12 @@
 #include <editeng/editobj.hxx>
 
 #include <docufld.hxx>
-#include <txtfld.hxx>
-#include <ndtxt.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <SwUndoField.hxx>
 
-#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace annotation {
 

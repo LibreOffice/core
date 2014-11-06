@@ -17,71 +17,44 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <comphelper/flagguard.hxx>
 
-#include <hintids.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/styledlg.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/newstyle.hxx>
-#include <sfx2/printer.hxx>
-#include <svl/macitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/languageoptions.hxx>
-#include <editeng/eeitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <swmodule.hxx>
-#include <wdocsh.hxx>
-#include <fmtfsize.hxx>
 #include <fchrfmt.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svx/xdef.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <SwRewriter.hxx>
 #include <numrule.hxx>
-#include <swundo.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/drawitem.hxx>
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "docsh.hxx"
 #include "uitool.hxx"
 #include "cmdid.h"
-#include "globals.hrc"
 #include "viewopt.hxx"
 #include <doc.hxx>
-#include <drawdoc.hxx>
 #include "IDocumentDrawModelAccess.hxx"
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <IDocumentDeviceAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
-#include <IDocumentListsAccess.hxx>
 #include <IDocumentState.hxx>
 #include "swstyle.h"
-#include "frmfmt.hxx"
-#include "charfmt.hxx"
-#include "poolfmt.hxx"
 #include "pagedesc.hxx"
 #include "docstyle.hxx"
 #include "uiitems.hxx"
 #include "fmtcol.hxx"
-#include "frmmgr.hxx"
-#include "swevent.hxx"
 #include "edtwin.hxx"
-#include "unochart.hxx"
-#include "app.hrc"
 #include "swabstdlg.hxx"
 
-#include <list.hxx>
 
 #include <paratr.hxx>
 

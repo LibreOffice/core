@@ -19,9 +19,7 @@
 
 #include <svx/svdobj.hxx>
 
-#include "view.hxx"
 #include "edtwin.hxx"
-#include "wrtsh.hxx"
 #include "drawbase.hxx"
 #include "conarc.hxx"
 

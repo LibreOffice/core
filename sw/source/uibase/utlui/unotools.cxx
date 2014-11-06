@@ -18,42 +18,18 @@
  */
 
 #include <swtypes.hxx>
-#include <globals.hrc>
-#include <misc.hrc>
 
 #include <utlui.hrc>
 #include <unotools.hrc>
 #include <unotools.hxx>
 #include <unoprnms.hxx>
 #include <i18nutil/unicode.hxx>
-#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/view/XScreenCursor.hpp>
-#include <com/sun/star/view/DocumentZoomType.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svl/stritem.hxx>
-#include <shellio.hxx>
-#include <docsh.hxx>
-#include <view.hxx>
-#include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <TextCursorHelper.hxx>
-#include <unocrsr.hxx>
-#include <doc.hxx>
 
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

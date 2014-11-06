@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "wrtsh.hxx"
 
-#include "dbui.hrc"
 #include "dbui.hxx"
 
 PrintMonitor::PrintMonitor(vcl::Window *pParent, PrintMonitorType eType )

@@ -21,7 +21,6 @@
 
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
-#include <svl/eitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <utlui.hrc>
 #include <swtypes.hxx>

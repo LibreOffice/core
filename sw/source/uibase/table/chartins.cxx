@@ -17,46 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/viewfrm.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/basedlgs.hxx>
-#include <IDocumentUndoRedo.hxx>
-#include <IDocumentChartDataProviderAccess.hxx>
 
-#include <sfx2/app.hxx>
-#include <swtypes.hxx>
 #include <swmodule.hxx>
-#include <wrtsh.hxx>
-#include <docsh.hxx>
 #include <view.hxx>
-#include <chartins.hxx>
-#include <tablemgr.hxx>
-#include <frmfmt.hxx>
-#include <swtable.hxx>
-#include <tblsel.hxx>
-#include <unochart.hxx>
 #include <autoedit.hxx>
-#include <doc.hxx>
 
-#include <edtwin.hxx>
 
 #include <cmdid.h>
-#include <anchoredobject.hxx>
 
-#include <comphelper/classids.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/component_context.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

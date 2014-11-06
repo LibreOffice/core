@@ -19,24 +19,15 @@
 
 #include <config_features.h>
 
-#include <string>
 #include <stdlib.h>
-#include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
-#include <basic/sbxobj.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/printer.hxx>
-#include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
-#include <editeng/protitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -45,72 +36,32 @@
 #include <swhints.hxx>
 #include <swmodule.hxx>
 #include <inputwin.hxx>
-#include <chartins.hxx>
 #include <uivwimp.hxx>
-#include <uitool.hxx>
 #include <edtwin.hxx>
-#include <textsh.hxx>
-#include <listsh.hxx>
-#include <tabsh.hxx>
-#include <grfsh.hxx>
-#include <mediash.hxx>
 #include <docsh.hxx>
-#include <frmsh.hxx>
-#include <olesh.hxx>
-#include <drawsh.hxx>
 #include <drawbase.hxx>
-#include <drformsh.hxx>
 #include <drwtxtsh.hxx>
-#include <beziersh.hxx>
-#include <navsh.hxx>
 #include <globdoc.hxx>
 #include <scroll.hxx>
-#include <navipi.hxx>
-#include <gloshdl.hxx>
 #include <usrpref.hxx>
 #include <srcview.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <DocumentFieldsManager.hxx>
-#include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <drawdoc.hxx>
 #include <wdocsh.hxx>
-#include <wview.hxx>
-#include <workctrl.hxx>
 #include <wrtsh.hxx>
 #include <barcfg.hxx>
 #include <pview.hxx>
 #include <swdtflvr.hxx>
-#include <view.hrc>
-#include <globdoc.hrc>
-#include <frmui.hrc>
-#include <cfgitems.hxx>
-#include <prtopt.hxx>
-#include <linguistic/lngprops.hxx>
-#include <editeng/unolingu.hxx>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/scanner/ScannerContext.hpp>
-#include <com/sun/star/scanner/XScannerManager2.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 
-#include "formatclipboard.hxx"
 #include <PostItMgr.hxx>
 #include <annotsh.hxx>
-#include <swruler.hxx>
 
-#include <fldbas.hxx>
 
-#include <unomid.h>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <svl/cjkoptions.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

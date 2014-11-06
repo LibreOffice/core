@@ -17,43 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sot/factory.hxx>
 #include <hintids.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svxids.hrc>
-#include <sfx2/linkmgr.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
-#include <svl/visitem.hxx>
-#include <sfx2/objitem.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <svx/gallery.hxx>
 #include <editeng/langitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
 #include <vcl/graph.hxx>
 #include <svl/slstitm.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/ptitem.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
-#include <svl/srchitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/opaqitem.hxx>
-#include <editeng/sizeitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/xflclit.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/objface.hxx>
 #include <fmturl.hxx>
@@ -63,50 +46,27 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <swmodule.hxx>
-#include <swundo.hxx>
 #include <fldbas.hxx>
 #include <uitool.hxx>
 #include <basesh.hxx>
 #include <viewopt.hxx>
 #include <fontcfg.hxx>
-#include <docstat.hxx>
-#include <usrfld.hxx>
-#include <expfld.hxx>
 #include <fldmgr.hxx>
 #include <frmmgr.hxx>
-#include <tablemgr.hxx>
 #include <mdiexp.hxx>
 #include <swdtflvr.hxx>
 #include <pagedesc.hxx>
-#include <convert.hxx>
-#include <fmtcol.hxx>
 #include <edtwin.hxx>
 #include <tblafmt.hxx>
-#include <caption.hxx>
 #include <swwait.hxx>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <shells.hrc>
-#include <statstr.hrc>
-#include <globals.h>
 #include <unotxdoc.hxx>
-#include <crsskip.hxx>
-#include <fmtinfmt.hxx>
-#include <doc.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
-#include "fldui.hrc"
-#include "table.hrc"
-#include <modcfg.hxx>
-#include <instable.hxx>
 #include <svx/fmshell.hxx>
-#include <SwRewriter.hxx>
 #include <comcore.hrc>
-#include <unomid.h>
 #include <svx/galleryitem.hxx>
-#include <com/sun/star/gallery/GalleryItemType.hpp>
-#include <boost/scoped_ptr.hpp>
 
 //UUUU
 #include <svx/unobrushitemhelper.hxx>
@@ -128,8 +88,6 @@ static sal_uInt8 nHeaderPos;
 static sal_uInt8 nFooterPos;
 
 #define SwBaseShell
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 
 #define SWCONTOURDLG(rView) ( (SvxContourDlg*) ( rView.GetViewFrame()->GetChildWindow(  \
                           SvxContourDlgChildWindow::GetChildWindowId() )->  \

@@ -20,58 +20,31 @@
 #include <config_features.h>
 
 #include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <vcl/graphicfilter.hxx>
-#include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <svl/aeitem.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <docary.hxx>
 #include <hintids.hxx>
 #include <SwRewriter.hxx>
-#include <numrule.hxx>
-#include <swundo.hxx>
-#include <caption.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/miscopt.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <editeng/langitem.hxx>
-#include <svx/viewlayoutitem.hxx>
-#include <svx/zoomslideritem.hxx>
 #include <svtools/xwindowitem.hxx>
 #include <svx/linkwarn.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <editeng/lrspitem.hxx>
-#include <unotools/textsearch.hxx>
-#include <editeng/unolingu.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/tstpitem.hxx>
-#include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <editeng/sizeitem.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
-#include <svl/ptitem.hxx>
-#include <sfx2/linkmgr.hxx>
-#include <tools/errinf.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/svdview.hxx>
 #include <swtypes.hxx>
 #include <swwait.hxx>
 #include <redlndlg.hxx>
@@ -79,45 +52,24 @@
 #include <uivwimp.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
-#include <IDocumentSettingAccess.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <IDocumentStatistics.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <basesh.hxx>
 #include <swmodule.hxx>
 #include <uitool.hxx>
-#include <shellio.hxx>
-#include <fmtinfmt.hxx>
-#include <mdiexp.hxx>
-#include <drawbase.hxx>
 #include <frmmgr.hxx>
 #include <pagedesc.hxx>
 #include <section.hxx>
-#include <usrpref.hxx>
-#include <IMark.hxx>
-#include <navipi.hxx>
 #include <tox.hxx>
-#include <workctrl.hxx>
-#include <scroll.hxx>
 #include <edtwin.hxx>
 #include <wview.hxx>
-#include <textsh.hxx>
-#include <tabsh.hxx>
-#include <listsh.hxx>
 #include <cmdid.h>
 #include <comcore.hrc>
 #include <poolfmt.hrc>
-#include <statstr.hrc>
 #include <swerror.h>
 #include <globals.hrc>
 #include <shells.hrc>
-#include <web.hrc>
 #include <view.hrc>
 #include <app.hrc>
-#include <fmtclds.hxx>
-#include <helpid.h>
 #include <sfx2/templatedlg.hxx>
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
@@ -125,28 +77,17 @@
 
 #include <PostItMgr.hxx>
 
-#include <ndtxt.hxx>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
-#include <envelp.hrc>
-#include <fmthdft.hxx>
-#include <svx/ofaitem.hxx>
-#include <unomid.h>
-#include <unotextrange.hxx>
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
-#include <sfx2/sidebar/Sidebar.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
-#include <vcl/settings.hxx>
 
-#include <boost/scoped_ptr.hpp>
 
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";

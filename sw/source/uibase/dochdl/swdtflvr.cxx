@@ -19,77 +19,48 @@
 
 #include <config_features.h>
 
-#include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/embed/XEmbedObjectClipboardCreator.hpp>
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#include <com/sun/star/embed/MSOLEObjectSystemCreator.hpp>
 
-#include <svtools/embedtransfer.hxx>
-#include <svtools/insdlg.hxx>
 #include <unotools/tempfile.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/filelist.hxx>
 #include <svx/svxdlg.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <osl/endian.h>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/xexch.hxx>
 #include <svx/xmlexchg.hxx>
 #include <svx/dbaexchange.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <sfx2/mieclip.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/xoutbmp.hxx>
 #include <svl/urlbmk.hxx>
-#include <svtools/htmlout.hxx>
-#include <svx/hlnkitem.hxx>
 #include <svtools/inetimg.hxx>
-#include <editeng/paperinf.hxx>
 #include <svx/fmview.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <sfx2/docfilt.hxx>
 #include <svtools/imapobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <unotools/streamwrap.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #include <svx/unomodel.hxx>
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
-#include <fmtfsize.hxx>
 #include <swdtflvr.hxx>
 #include <shellio.hxx>
 #include <ddefld.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <IDocumentDeviceAccess.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
-#include <pagedesc.hxx>
 #include <IMark.hxx>
-#include <docary.hxx>
 #include <section.hxx>
-#include <ndtxt.hxx>
 #include <edtwin.hxx>
 #include <navicont.hxx>
 #include <swcont.hxx>
@@ -103,23 +74,16 @@
 #include <pam.hxx>
 #include <ndole.hxx>
 #include <swwait.hxx>
-#include <viewopt.hxx>
 #include <swerror.h>
 #include <SwCapObjType.hxx>
 #include <cmdid.h>
 #include <dochdl.hrc>
-#include <comcore.hrc>
-#include <sot/stg.hxx>
 #include <svx/svditer.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <svx/svdpage.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <swcrsr.hxx>
 #include <SwRewriter.hxx>
 #include <globals.hrc>
-#include <app.hrc>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
 #include <switerator.hxx>
@@ -127,8 +91,6 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 
-#include <boost/scoped_array.hpp>
-#include <boost/scoped_ptr.hpp>
 
 extern bool bFrmDrag;
 extern bool bDDINetAttr;

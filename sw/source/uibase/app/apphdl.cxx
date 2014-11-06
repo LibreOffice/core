@@ -19,18 +19,14 @@
 
 #include <config_features.h>
 
-#include <hintids.hxx>
 
 #include <osl/diagnose.h>
 #include <tools/link.hxx>
-#include <svl/urihelper.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/objitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svl/srchitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
@@ -40,17 +36,8 @@
 #include <svl/stritem.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/wrkwin.hxx>
-#include <svx/insctrl.hxx>
-#include <svx/selctrl.hxx>
-#include <com/sun/star/document/UpdateDocMode.hpp>
-#include <sfx2/docfile.hxx>
-#include <svx/xmlsecctrl.hxx>
-#include <navicfg.hxx>
 
 #include <sfx2/objface.hxx>
-#include <sfx2/app.hxx>
 
 #include <view.hxx>
 #include <pview.hxx>
@@ -61,46 +48,22 @@
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
-#include <wdocsh.hxx>
 #include <wview.hxx>
 #include <usrpref.hxx>
-#include <gloslst.hxx>
 #include <glosdoc.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <IDocumentFieldsAccess.hxx>
-#include <cfgitems.hxx>
-#include <prtopt.hxx>
 #include <modcfg.hxx>
-#include <globals.h>
 #include <app.hrc>
-#include <fontcfg.hxx>
-#include <barcfg.hxx>
-#include <uinums.hxx>
 #include <dbconfig.hxx>
 #include <mmconfigitem.hxx>
 #include <mailmergechildwindow.hxx>
-#include <linguistic/lngprops.hxx>
-#include <editeng/unolingu.hxx>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <swabstdlg.hxx>
 
-#include <vcl/status.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
 
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 
@@ -109,8 +72,6 @@ using namespace ::com::sun::star;
 // here are the SlotID's being included
 // see Idl-file
 #define SwModule
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 #include <cfgid.h>
 
 #include <shells.hrc>

@@ -17,35 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
-#include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/imagemgr.hxx>
-#include <sfx2/mnumgr.hxx>
-#include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <initui.hxx>
-#include <viewopt.hxx>
-#include <docsh.hxx>
 #include <gloshdl.hxx>
-#include <glosdoc.hxx>
-#include <gloslst.hxx>
 #include <workctrl.hxx>
 #include <workctrl.hrc>
 #include <cmdid.h>
 #include <helpid.h>
-#include <wrtsh.hxx>
 #include <svl/imageitm.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx"
-#include <misc.hrc>
 
 #include <vcl/svapp.hxx>
 

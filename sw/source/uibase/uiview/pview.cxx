@@ -18,50 +18,34 @@
  */
 
 #include <sfx2/objface.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/cmdevt.hxx>
-#include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/progress.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/stddlg.hxx>
 #include <editeng/paperinf.hxx>
-#include <svl/srchitem.hxx>
-#include <svx/svdview.hxx>
-#include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxids.hrc>
 
-#include <swwait.hxx>
 #include <globdoc.hxx>
 #include <wdocsh.hxx>
 #include <pvprtdat.hxx>
 #include <swmodule.hxx>
-#include <modcfg.hxx>
-#include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <pview.hxx>
 #include <view.hxx>
-#include <textsh.hxx>
 #include <scroll.hxx>
-#include <prtopt.hxx>
-#include <docstat.hxx>
-#include <usrpref.hxx>
 #include <viewfunc.hxx>
 
 #include <helpid.h>
@@ -71,15 +55,10 @@
 #include <view.hrc>
 
 #define SwPagePreview
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
 #include <pagepreviewlayout.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include <osl/mutex.hxx>
 
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")

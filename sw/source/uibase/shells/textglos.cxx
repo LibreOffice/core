@@ -21,15 +21,12 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 
-#include "view.hxx"
 #include "cmdid.h"
 #include "textsh.hxx"
 #include "initui.hxx"
 #include "gloshdl.hxx"
 #include "glosdoc.hxx"
-#include "gloslst.hxx"
 #include "swabstdlg.hxx"
-#include <misc.hrc>
 
 void SwTextShell::ExecGlossary(SfxRequest &rReq)
 {

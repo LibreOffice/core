@@ -20,9 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_FORMATCLIPBOARD_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_FORMATCLIPBOARD_HXX
 
-#include <wrtsh.hxx>
-#include <svl/itemset.hxx>
-#include <svl/style.hxx>
 
 /** This class acts as data container and execution class for the format paintbrush feature in writer.
 */

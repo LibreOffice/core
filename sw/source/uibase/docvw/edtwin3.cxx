@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <vcl/settings.hxx>
 #include <svx/ruler.hxx>
-#include <viewopt.hxx>
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "basesh.hxx"
@@ -29,11 +27,7 @@
 #include "edtwin.hxx"
 #include "swmodule.hxx"
 #include "modcfg.hxx"
-#include "swtable.hxx"
 #include "docsh.hxx"
-#include "pagedesc.hxx"
-#include <frmatr.hxx>
-#include <editeng/frmdiritem.hxx>
 
 // Core-Notify
 void ScrollMDI( SwViewShell* pVwSh, const SwRect &rRect,

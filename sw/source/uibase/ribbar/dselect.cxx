@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/bindings.hxx>
-#include "view.hxx"
 #include "edtwin.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
 #include "drawbase.hxx"
 #include "dselect.hxx"
 

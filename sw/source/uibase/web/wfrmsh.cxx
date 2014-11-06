@@ -17,23 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/srchitem.hxx>
 #include "swtypes.hxx"
-#include "cmdid.h"
-#include "view.hxx"
 #include "wfrmsh.hxx"
-#include "globals.hrc"
 #include "popup.hrc"
-#include "shells.hrc"
 #include "web.hrc"
 
 // STATIC DATA
 #define SwWebFrameShell
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebFrameShell, SwFrameShell, SW_RES(STR_SHELLNAME_WEBFRAME))
 

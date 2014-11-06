@@ -17,13 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
 #include <swdbtoolsclient.hxx>
 #include <osl/diagnose.h>
-#include <tools/solar.h>
 
 using namespace ::connectivity::simple;
 using namespace ::com::sun::star;

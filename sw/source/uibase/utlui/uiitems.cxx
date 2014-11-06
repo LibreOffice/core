@@ -21,10 +21,8 @@
 #include <unosett.hxx>
 
 #include "swtypes.hxx"
-#include "cmdid.h"
 #include "uiitems.hxx"
 
-#include "utlui.hrc"
 #include "attrdesc.hrc"
 #include <unomid.h>
 #include <numrule.hxx>

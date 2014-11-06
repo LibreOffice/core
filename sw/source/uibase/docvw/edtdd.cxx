@@ -17,27 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 
 #include <svx/svdview.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svdobj.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <sfx2/bindings.hxx>
 
-#include <sfx2/viewfrm.hxx>
-#include <fmturl.hxx>
-#include <frmfmt.hxx>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
-#include <viewopt.hxx>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
-#include <swundo.hxx>
 
 using namespace ::com::sun::star;
 

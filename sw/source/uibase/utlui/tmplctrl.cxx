@@ -17,17 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/style.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <vcl/status.hxx>
 
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "swmodule.hxx"
 #include "cmdid.h"
-#include "docsh.hxx"
 #include "tmplctrl.hxx"
 
 SFX_IMPL_STATUSBAR_CONTROL( SwTemplateControl, SfxStringItem );

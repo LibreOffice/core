@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
-#include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/gen.hxx>
-#include <sfx2/imgmgr.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/settings.hxx>
 
@@ -39,8 +34,6 @@
 #include "inputwin.hxx"
 #include "fldbas.hxx"
 #include "fldmgr.hxx"
-#include "frmfmt.hxx"
-#include "cellatr.hxx"
 #include "edtwin.hxx"
 #include "helpid.h"
 #include "access.hrc"
@@ -48,7 +41,6 @@
 // Only for the UpdateRange: Delete the box in which the stacked cursor is positioned.
 #include "pam.hxx"
 
-#include "swundo.hxx"
 #include "ribbar.hrc"
 #include "inputwin.hrc"
 

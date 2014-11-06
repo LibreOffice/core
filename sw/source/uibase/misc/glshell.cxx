@@ -17,22 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/frame/XTitle.hpp>
 
-#include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svl/srchitem.hxx>
 #include <svl/macitem.hxx>
 #include <gloshdl.hxx>
 
 #include <editeng/acorrcfg.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <uitool.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <glshell.hxx>
@@ -44,15 +38,11 @@
 #include <shellio.hxx>
 #include <initui.hxx>
 #include <cmdid.h>
-#include <swerror.h>
 #include <misc.hrc>
 
 #define SwWebGlosDocShell
 #define SwGlosDocShell
 
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 

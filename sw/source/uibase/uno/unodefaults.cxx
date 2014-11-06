@@ -18,8 +18,6 @@
  */
 
 #include <unodefaults.hxx>
-#include <svx/unoprov.hxx>
-#include <drawdoc.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 

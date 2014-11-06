@@ -17,11 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
 
-#include "hintids.hxx"
-#include <vcl/svapp.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/srchitem.hxx>
@@ -30,27 +26,14 @@
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <docsh.hxx>
 #include <viewopt.hxx>
-#include <frmatr.hxx>
-#include <wdocsh.hxx>
-#include <uitool.hxx>
-#include <edtwin.hxx>
 #include <pagedesc.hxx>
-#include <IMark.hxx>
-#include <fldbas.hxx>
 #include <workctrl.hxx>
-#include <usrpref.hxx>
 #include <scroll.hxx>
 #include <wview.hxx>
 
 #include <cmdid.h>
-#include <view.hrc>
-#include <ribbar.hrc>
-#include <helpid.h>
-#include <globals.hrc>
 
-#include <IDocumentSettingAccess.hxx>
 #include <PostItMgr.hxx>
 
 sal_uInt16  SwView::m_nMoveType = NID_PGE;

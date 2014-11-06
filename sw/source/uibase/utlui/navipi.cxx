@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string>
 #include <comphelper/string.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/imgmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
 #include <vcl/toolbox.hxx>
@@ -36,25 +32,17 @@
 #include <view.hxx>
 #include <navicfg.hxx>
 #include <wrtsh.hxx>
-#include <docsh.hxx>
 #include <actctrl.hxx>
-#include <IMark.hxx>
 #include <navipi.hxx>
-#include <content.hxx>
 #include <workctrl.hxx>
-#include <section.hxx>
-#include <edtwin.hxx>
 #include <sfx2/app.hxx>
 #include <cmdid.h>
 #include <helpid.h>
-#include <ribbar.hrc>
 #include <navipi.hrc>
 #include <utlui.hrc>
 
 #include "access.hrc"
 
-#include <unomid.h>
-#include <boost/scoped_ptr.hpp>
 
 #define PAGE_CHANGE_TIMEOUT 1000
 

@@ -23,85 +23,40 @@
 #include <comphelper/string.hxx>
 #include <svl/globalnameitem.hxx>
 #include <svl/ownlist.hxx>
-#include <sfx2/frmdescr.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/lnkbase.hxx>
 
-#include <tools/errinf.hxx>
-#include <svx/svdview.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svl/srchitem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
-#include <basic/sbxvar.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
-#include <editeng/opaqitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <sfx2/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svtools/htmlcfg.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
 
 #include <comphelper/classids.hxx>
 #include <editeng/acorrcfg.hxx>
-#include <wdocsh.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtclds.hxx>
-#include <fmtsrnd.hxx>
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <view.hxx>
-#include <docsh.hxx>
-#include <doc.hxx>
-#include <IDocumentChartDataProviderAccess.hxx>
-#include <uitool.hxx>
 #include <cmdid.h>
-#include <globals.hrc>
 #include <frmmgr.hxx>
 #include <textsh.hxx>
-#include <frmfmt.hxx>
 #include <tablemgr.hxx>
-#include <swundo.hxx>
-#include <shellio.hxx>
-#include <frmdlg.hxx>
-#include <usrpref.hxx>
-#include <swtable.hxx>
-#include <tblafmt.hxx>
-#include <caption.hxx>
-#include <idxmrk.hxx>
-#include <poolfmt.hxx>
 #include <breakit.hxx>
-#include <crsskip.hxx>
-#include <modcfg.hxx>
-#include <column.hxx>
-#include <edtwin.hxx>
 #include <shells.hrc>
 #include <popup.hrc>
-#include <swerror.h>
-#include <unochart.hxx>
 
-#include <chartins.hxx>
 
 #define SwTextShell
-#include <sfx2/msg.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
-#include <swslots.hxx>
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
 
@@ -110,11 +65,7 @@ using namespace ::com::sun::star;
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
-#include <misc.hrc>
-#include <table.hrc>
 #include <frmui.hrc>
-#include <unomid.h>
-#include <boost/scoped_ptr.hpp>
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
 

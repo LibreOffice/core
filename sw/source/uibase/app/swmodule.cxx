@@ -19,124 +19,30 @@
 
 #include <config_features.h>
 
-#include <hintids.hxx>
-#include <swerror.h>
-#include <vcl/wrkwin.hxx>
-#include <vcl/graph.hxx>
 #include <svtools/ehdl.hxx>
-#include <svx/ParaLineSpacingPopup.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/fntszctl.hxx>
-#include <svx/fntctl.hxx>
-#include <svx/SmartTagCtl.hxx>
-#include <svx/pszctrl.hxx>
-#include <svx/insctrl.hxx>
-#include <svx/selctrl.hxx>
-#include <svx/linectrl.hxx>
-#include <svx/tbxctl.hxx>
-#include <svx/fillctrl.hxx>
-#include <svx/tbcontrl.hxx>
-#include <svx/verttexttbxctrl.hxx>
-#include <svx/formatpaintbrushctrl.hxx>
-#include <svx/contdlg.hxx>
-#include <svx/layctrl.hxx>
-#include <svx/fontwork.hxx>
-#include <SwSpellDialogChildWindow.hxx>
-#include <svx/tbxalign.hxx>
-#include <svx/grafctrl.hxx>
-#include <svx/tbxcolor.hxx>
-#include <svx/clipboardctl.hxx>
-#include <svx/lboxctrl.hxx>
-#include <svx/tbxcustomshapes.hxx>
-#include <svx/imapdlg.hxx>
-#include <svx/srchdlg.hxx>
-#include <svx/hyperdlg.hxx>
-#include <svx/fontworkgallery.hxx>
-#include <svx/modctrl.hxx>
-#include <com/sun/star/scanner/ScannerManager.hpp>
-#include <com/sun/star/container/XSet.hpp>
-#include <com/sun/star/linguistic2/LanguageGuessing.hpp>
-#include <comphelper/processfactory.hxx>
-#include <docsh.hxx>
 #include <swmodule.hxx>
-#include <swevent.hxx>
 #include <swacorr.hxx>
 #include <cmdid.h>
-#include <dobjfac.hxx>
-#include <init.hxx>
 #include <pview.hxx>
 #include <wview.hxx>
-#include <wdocsh.hxx>
-#include <globdoc.hxx>
 #include <srcview.hxx>
-#include <glshell.hxx>
-#include <tabsh.hxx>
-#include <listsh.hxx>
-#include <grfsh.hxx>
-#include <mediash.hxx>
-#include <olesh.hxx>
-#include <drawsh.hxx>
-#include <wformsh.hxx>
-#include <drwtxtsh.hxx>
-#include <beziersh.hxx>
-#include <wtextsh.hxx>
-#include <wfrmsh.hxx>
-#include <drformsh.hxx>
-#include <wgrfsh.hxx>
-#include <wolesh.hxx>
-#include <wlistsh.hxx>
-#include <wtabsh.hxx>
-#include <navipi.hxx>
-#include <chartins.hxx>
-#include <inputwin.hxx>
-#include <usrpref.hxx>
-#include <uinums.hxx>
-#include <prtopt.hxx>
-#include <bookctrl.hxx>
-#include <tmplctrl.hxx>
-#include <viewlayoutctrl.hxx>
-#include <svx/zoomsliderctrl.hxx>
-#include <tblctrl.hxx>
-#include <zoomctrl.hxx>
-#include <wordcountctrl.hxx>
-#include <workctrl.hxx>
-#include <tbxanchr.hxx>
-#include <fldwrap.hxx>
-#include <redlndlg.hxx>
-#include <syncbtn.hxx>
-#include <mailmergechildwindow.hxx>
 #include <modcfg.hxx>
 #include <fontcfg.hxx>
-#include <sfx2/sidebar/SidebarChildWindow.hxx>
-#include <sfx2/taskpane.hxx>
-#include <sfx2/evntconf.hxx>
 #include <swatrset.hxx>
-#include <idxmrk.hxx>
-#include <wordcountdialog.hxx>
-#include <dlelstnr.hxx>
 #include <barcfg.hxx>
-#include <svx/rubydialog.hxx>
-#include <svtools/colorcfg.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <unotools/moduleoptions.hxx>
 
-#include <avmedia/mediaplayer.hxx>
-#include <avmedia/mediatoolbox.hxx>
 
-#include <annotsh.hxx>
-#include <navsh.hxx>
 
 #include <app.hrc>
-#include <svx/xmlsecctrl.hxx>
 ResMgr *pSwResMgr = 0;
 bool     bNoInterrupt     = false;
 
-#include <sfx2/app.hxx>
 
 #include <svx/svxerr.hxx>
 
-#include <unomid.h>
 
 #include "swdllimpl.hxx"
 

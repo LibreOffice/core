@@ -24,7 +24,6 @@
 #include <accmap.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 namespace sw { namespace sidebarwindows {
 

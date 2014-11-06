@@ -20,11 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_OPTCOMP_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 #include <unotools/compatibility.hxx>
-#include <svx/checklbx.hxx>
 #include <rtl/ustring.hxx>
 
 class SwWrtShell;

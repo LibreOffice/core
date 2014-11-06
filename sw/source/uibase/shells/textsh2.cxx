@@ -17,52 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdarg>
 
-#include <svtools/svmedit.hxx>
-#include <svl/eitem.hxx>
-#include <svl/whiter.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
 #include <sfx2/request.hxx>
-#include <com/sun/star/sdb/CommandType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#include <com/sun/star/sdb/XDatabaseAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <sfx2/frame.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 #include "dbmgr.hxx"
-#include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
 #include <vcl/svapp.hxx>
 
-#include "view.hxx"
-#include "wrtsh.hxx"
 #include "swtypes.hxx"
 #include "cmdid.h"
-#include "swevent.hxx"
-#include "shells.hrc"
 #include "textsh.hxx"
-#include "swabstdlg.hxx"
-#include "dbui.hrc"
 
-#include <unomid.h>
 
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::svx;
 using namespace ::com::sun::star;

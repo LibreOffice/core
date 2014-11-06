@@ -21,56 +21,38 @@
 #include <svx/svdotext.hxx>
 #include <svl/whiter.hxx>
 #include <svx/fontwork.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/itemiter.hxx>
-#include <svl/srchitem.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <uitool.hxx>
 #include <dcontact.hxx>
 #include <textboxhelper.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
-#include <swwait.hxx>
-#include <doc.hxx>
-#include <docsh.hxx>
-#include <docstat.hxx>
-#include <IDocumentStatistics.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <svx/svdoashp.hxx>
 #include <svx/xtable.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdundo.hxx>
 #include <svx/xbtmpit.hxx>
 
-#include "swundo.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
-#include "globals.hrc"
-#include "helpid.h"
 #include "popup.hrc"
 #include "shells.hrc"
 #include "drwbassh.hxx"
 #include "drawsh.hxx"
 
 #define SwDrawShell
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 #include "swabstdlg.hxx"
 #include <wordcountdialog.hxx>
 #include "misc.hrc"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

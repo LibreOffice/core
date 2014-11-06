@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cmdid.h>
-#include <swtypes.hxx>
 #include <popbox.hxx>
-#include <navipi.hxx>
 
 SwHelpToolBox::SwHelpToolBox( SwNavigationPI* pParent, const ResId& rResId )
     : ToolBox( pParent, rResId ),

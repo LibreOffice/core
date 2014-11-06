@@ -21,18 +21,12 @@
 
 #include <PagePropertyPanel.hxx>
 #include <WrapPropertyPanel.hxx>
-#include <navipi.hxx>
 
-#include <sfx2/sidebar/SidebarPanelBase.hxx>
-#include <sfx2/sfxbasecontroller.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/window.hxx>
-#include <rtl/ref.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
 using namespace css;

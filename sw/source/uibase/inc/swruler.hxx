@@ -13,7 +13,6 @@
 #include <svx/ruler.hxx>
 
 class SwViewShell;
-class View;
 namespace vcl { class Window; }
 class SwEditWin;
 
@@ -119,4 +118,4 @@ protected:
 
 #endif
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+lass View;$d

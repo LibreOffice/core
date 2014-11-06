@@ -19,38 +19,24 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX
 
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <sfx2/basedlgs.hxx>
 
 #include <svx/stddlg.hxx>
 
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <sfx2/childwin.hxx>
 #include "toxe.hxx"
-#include <svtools/stdctrl.hxx>
-#include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 
 class SwWrtShell;
 class SwTOXMgr;
 class SwTOXMark;
 
 // insert mark for index entry
-class SwIndexMarkFloatDlg;
-class SwIndexMarkModalDlg;
 
 class SwIndexMarkPane
 {
     Dialog& m_rDialog;
 
-    friend class SwIndexMarkFloatDlg;
-    friend class SwIndexMarkModalDlg;
     VclFrame*       m_pFrame;
     FixedText*      m_pTypeFT;
     ListBox*        m_pTypeDCB;
@@ -171,7 +157,6 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-class SwAuthMarkModalDlg;
 
 class SwAuthorMarkPane
 {
@@ -179,7 +164,6 @@ class SwAuthorMarkPane
 
     static bool     bIsFromComponent;
 
-    friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;
 
     RadioButton*    m_pFromComponentRB;

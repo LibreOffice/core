@@ -24,7 +24,6 @@
 #include <swtypes.hxx>
 
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
-#include <vcl/settings.hxx>
 
 namespace sw { namespace sidebar {
 

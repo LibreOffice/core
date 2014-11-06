@@ -23,14 +23,11 @@
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/rulritem.hxx>
-#include <svl/srchitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/spltitem.hxx>
-#include <editeng/langitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
@@ -38,36 +35,26 @@
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 
 #include <fmtornt.hxx>
-#include <fmtclds.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
-#include <frmatr.hxx>
 #include <uitool.hxx>
 #include <inputwin.hxx>
 #include <uiitems.hxx>
-#include <usrpref.hxx>
 #include <tabsh.hxx>
 #include "swtablerep.hxx"
 #include <tablemgr.hxx>
 #include <cellatr.hxx>
-#include <frmfmt.hxx>
 #include <swundo.hxx>
-#include <swtable.hxx>
-#include <docsh.hxx>
 #include <tblsel.hxx>
 
 #include <app.hrc>
@@ -75,18 +62,12 @@
 #include <popup.hrc>
 #include <shells.hrc>
 #include <cmdid.h>
-#include <globals.hrc>
-#include <helpid.h>
-#include <unobaseclass.hxx>
 
 #define SwTableShell
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
 
 #include "swabstdlg.hxx"
 #include <table.hrc>
 
-#include <boost/scoped_ptr.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

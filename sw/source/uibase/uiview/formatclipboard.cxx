@@ -21,21 +21,12 @@
 
 #include <svx/svxids.hrc>
 #include <cmdid.h>
-#include <charfmt.hxx>
-#include <frmfmt.hxx>
 #include <docstyle.hxx>
 #include <fchrfmt.hxx>
-#include <svx/svdview.hxx>
 #include <editeng/brushitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <fmtlsplt.hxx>
-#include <editeng/keepitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace
 {

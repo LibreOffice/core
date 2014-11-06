@@ -18,81 +18,50 @@
  */
 
 #include <osl/mutex.hxx>
-#include <vcl/image.hxx>
-#include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/awt/vclxdevice.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
 #include <wdocsh.hxx>
-#include <wrtsh.hxx>
 #include <pview.hxx>
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
 #include <printdata.hxx>
-#include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
-#include <svl/numuno.hxx>
 #include <fldbas.hxx>
 #include <unotextbodyhf.hxx>
-#include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unosett.hxx>
 #include <unocoll.hxx>
 #include <unoredlines.hxx>
 #include <unosrch.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
 #include <unoprnms.hxx>
 #include <unostyle.hxx>
 #include <unodraw.hxx>
 #include <svl/eitem.hxx>
-#include <pagedesc.hxx>
-#include <unotools/textsearch.hxx>
 #include <unocrsr.hxx>
 #include <unofieldcoll.hxx>
 #include <unoidxcoll.hxx>
 #include <unocrsrhelper.hxx>
-#include <unotxvw.hxx>
-#include <poolfmt.hxx>
 #include <globdoc.hxx>
 #include <viewopt.hxx>
 #include <unochart.hxx>
 #include <charatr.hxx>
-#include <svx/xmleohlp.hxx>
-#include <globals.hrc>
-#include <unomid.h>
 #include <unotools/printwarningoptions.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <com/sun/star/document/RedlineDisplayType.hpp>
-#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
 #include <sfx2/linkmgr.hxx>
-#include <svx/unofill.hxx>
-#include <editeng/unolingu.hxx>
-#include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
 #include <modcfg.hxx>
 #include <ndtxt.hxx>
 #include <utlui.hrc>
 #include <swcont.hxx>
-#include <unodefaults.hxx>
-#include <SwXDocumentSettings.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -102,14 +71,10 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
-#include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentState.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
-#include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <osl/file.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -117,15 +82,10 @@
 #include <numrule.hxx>
 
 #include <editeng/langitem.hxx>
-#include <docary.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-#include <format.hxx>
-#include <charfmt.hxx>
-#include <fmtcol.hxx>
 #include <istyleaccess.hxx>
 
-#include <svl/stylepool.hxx>
 #include <swatrset.hxx>
 #include <view.hxx>
 #include <srcview.hxx>
@@ -137,12 +97,7 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
-#include <svx/svdoutl.hxx>
-#include <svl/languageoptions.hxx>
-#include <svx/svdview.hxx>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

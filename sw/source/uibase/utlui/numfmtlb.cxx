@@ -17,31 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <editeng/unolingu.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zformat.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/numinf.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/flagsdef.hxx>
 #include <svl/itemset.hxx>
-#include <docsh.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
-#include <wrtsh.hxx>
 #include <numfmtlb.hxx>
 #include <utlui.hrc>
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
-#include <unomid.h>
-#include <sfx2/viewfrm.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

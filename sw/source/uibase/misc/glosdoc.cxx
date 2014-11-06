@@ -19,7 +19,6 @@
 
 #include <algorithm>
 
-#include <com/sun/star/container/XNamed.hpp>
 
 #include <unotools/transliterationwrapper.hxx>
 
@@ -33,16 +32,13 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/string.hxx>
 #include <swtypes.hxx>
-#include <uitool.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
 #include <swunohelper.hxx>
 
 #include <unoatxt.hxx>
 #include <swerror.h>
-#include <globals.hrc>
 
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

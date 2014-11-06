@@ -17,43 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <docary.hxx>
-#include <grfsh.hxx>
 #include <wrtsh.hxx>
-#include <view.hxx>
 #include <textsh.hxx>
-#include <viewopt.hxx>
-#include <swundo.hxx>
-#include <shells.hrc>
-#include <caption.hxx>
-#include <vcl/graphicfilter.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <drawdoc.hxx>
-#include <doc.hxx>
-#include <IDocumentDrawModelAccess.hxx>
-#include <docsh.hxx>
-#include <frmfmt.hxx>
-#include <frmmgr.hxx>
-#include <vcl/msgbox.hxx>
 #include <svx/svdomedia.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svdpagv.hxx>
-#include <SwStyleNameMapper.hxx>
-#include <sfx2/filedlghelper.hxx>
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
-#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
-#include <poolfmt.hrc>
 
 #include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 
 // -> #111827#
-#include <SwRewriter.hxx>
-#include <comcore.hrc>
 // <- #111827#
 
 using namespace ::com::sun::star;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
 #include <cstdlib>
 
@@ -28,7 +27,6 @@
 #include <swtypes.hxx>
 
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
-#include <vcl/settings.hxx>
 
 #define SWPAGE_LEFT_GVALUE      "Sw_Page_Left"
 #define SWPAGE_RIGHT_GVALUE     "Sw_Page_Right"

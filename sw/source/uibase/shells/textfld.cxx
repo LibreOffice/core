@@ -17,19 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <chrdlgmodes.hxx>
-#include <crsskip.hxx>
 #include <hintids.hxx>
-#include <SidebarWin.hxx>
-#include <IDocumentFieldsAccess.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/kernitem.hxx>
-#include <editeng/outliner.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <fmtfld.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/itempool.hxx>
-#include <unotools/useroptions.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
@@ -38,39 +28,22 @@
 #include <svx/postattr.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <sfx2/linkmgr.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <sfx2/dispatch.hxx>
 #include <fmtinfmt.hxx>
 #include <fldwrap.hxx>
 #include <redline.hxx>
-#include <view.hxx>
-#include <viewopt.hxx>
 #include <wrtsh.hxx>
-#include <basesh.hxx>
-#include <flddat.hxx>
-#include <numrule.hxx>
 #include <textsh.hxx>
-#include <docsh.hxx>
 #include <docufld.hxx>
-#include <usrfld.hxx>
 #include <ddefld.hxx>
-#include <expfld.hxx>
 #include <fldmgr.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <shells.hrc>
-#include <sfx2/app.hxx>
-#include <svx/dialogs.hrc>
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
-#include <fldui.hrc>
-#include <doc.hxx>
 #include <app.hrc>
-#include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <switerator.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace nsSwDocInfoSubType;
 

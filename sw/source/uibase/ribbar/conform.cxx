@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/fmglob.hxx>
 #include <svx/svdview.hxx>
-#include <svx/fmshell.hxx>
 
-#include "view.hxx"
 #include "edtwin.hxx"
-#include "wrtsh.hxx"
 #include "drawbase.hxx"
 #include "conform.hxx"
 

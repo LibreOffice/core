@@ -22,7 +22,6 @@
 #include <editeng/brushitem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/menu.hxx>
-#include <svl/stritem.hxx>
 
 class SwView;
 class SfxDispatcher;

@@ -19,41 +19,21 @@
 
 #include <hintids.hxx>
 
-#include <svx/dialogs.hrc>
 #include <i18nlangtag/mslangid.hxx>
-#include <sot/storinfo.hxx>
-#include <sot/storage.hxx>
-#include <svl/zforlist.hxx>
 #include <svtools/ctrltool.hxx>
 #include <unotools/lingucfg.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/bindings.hxx>
 #include <svl/asiancfg.hxx>
-#include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
-#include <svl/intitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
-#include <linguistic/lngprops.hxx>
-#include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <sfx2/docfilt.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/flstitem.hxx>
-#include <editeng/tstpitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
-#include <editeng/svxacorr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <view.hxx>
-#include <prtopt.hxx>
 #include <fmtcol.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
@@ -63,32 +43,19 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
-#include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentState.hxx>
 #include <docfac.hxx>
 #include <docstyle.hxx>
 #include <shellio.hxx>
-#include <tox.hxx>
-#include <swdtflvr.hxx>
-#include <dbmgr.hxx>
 #include <usrpref.hxx>
 #include <fontcfg.hxx>
 #include <poolfmt.hxx>
-#include <modcfg.hxx>
 #include <globdoc.hxx>
-#include <ndole.hxx>
-#include <mdiexp.hxx>
 #include <unotxdoc.hxx>
 #include <linkenum.hxx>
-#include <swwait.hxx>
-#include <wrtsh.hxx>
 #include <swerror.h>
-#include <globals.hrc>
-#include <unochart.hxx>
 
 // text grid
-#include <tgrditem.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
