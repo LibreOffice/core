@@ -224,19 +224,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="os_desc">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">Operating System, one of: Windows, Linux, OS X</property>
-                                <property name="wrap">True</property>
-                                <property name="max_width_chars">10</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkTextView" id="os:border">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -245,7 +232,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                             <child>
@@ -259,20 +246,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="osversion_desc">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">Operating System Version, free form</property>
-                                <property name="wrap">True</property>
-                                <property name="max_width_chars">10</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">4</property>
+                                <property name="top_attach">2</property>
                               </packing>
                             </child>
                             <child>
@@ -284,7 +258,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">5</property>
+                                <property name="top_attach">3</property>
                               </packing>
                             </child>
                             <child>
@@ -298,20 +272,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">6</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="openclvendor_desc">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">OpenCL Platform Vendor</property>
-                                <property name="wrap">True</property>
-                                <property name="max_width_chars">56</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">7</property>
+                                <property name="top_attach">4</property>
                               </packing>
                             </child>
                             <child>
@@ -323,7 +284,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">8</property>
+                                <property name="top_attach">5</property>
                               </packing>
                             </child>
                             <child>
@@ -337,20 +298,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">9</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="opencldevice_desc">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">OpenCL Device</property>
-                                <property name="wrap">True</property>
-                                <property name="max_width_chars">56</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">10</property>
+                                <property name="top_attach">6</property>
                               </packing>
                             </child>
                             <child>
@@ -362,7 +310,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">11</property>
+                                <property name="top_attach">7</property>
                               </packing>
                             </child>
                             <child>
@@ -376,20 +324,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">12</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="opencldriverversion_desc">
-                                <property name="can_focus">False</property>
-                                <property name="no_show_all">True</property>
-                                <property name="label" translatable="yes">OpenCL Driver Version</property>
-                                <property name="wrap">True</property>
-                                <property name="max_width_chars">56</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">13</property>
+                                <property name="top_attach">8</property>
                               </packing>
                             </child>
                             <child>
@@ -401,7 +336,7 @@
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
-                                <property name="top_attach">14</property>
+                                <property name="top_attach">9</property>
                               </packing>
                             </child>
                           </object>
