@@ -32,7 +32,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <accessibility/helper/accresmgr.hxx>
 #include <accessibility/helper/accessiblestrings.hrc>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
