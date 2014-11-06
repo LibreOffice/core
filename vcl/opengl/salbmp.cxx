@@ -26,7 +26,6 @@
 #include "salgdi.hxx"
 
 #include "opengl/salbmp.hxx"
-#include "unx/salbmp.h"
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {

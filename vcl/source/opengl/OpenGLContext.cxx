@@ -25,7 +25,9 @@
 
 using namespace com::sun::star;
 
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 static std::vector< GLXContext > vShareList;
+#endif
 
 GLWindow::~GLWindow()
 {
