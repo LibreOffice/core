@@ -24,14 +24,12 @@
 #include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
 
 #include <registerservices.hxx>
 
 /**
  * SvNumberFormatsSupplierServiceObject - a number formats supplier which
  * - can be instantiated as an service
- * - supports the ::com::sun::star::io::XPersistObject interface
  * - works with it's own SvNumberFormatter instance
  * - can be initialized (::com::sun::star::lang::XInitialization)
  * with a specific language (i.e. ::com::sun::star::lang::Locale)
@@ -39,7 +37,6 @@
 class SvNumberFormatsSupplierServiceObject
             :protected SvNumberFormatsSupplierObj
             ,public ::com::sun::star::lang::XInitialization
-            ,public ::com::sun::star::io::XPersistObject
             ,public ::com::sun::star::lang::XServiceInfo
 {   // don't want the Set-/GetNumberFormatter to be accessible from outside
 
@@ -72,11 +69,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XPersistObject
-    virtual OUString SAL_CALL getServiceName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNumberFormatsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL

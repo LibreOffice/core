@@ -63,7 +63,6 @@ Any SAL_CALL SvNumberFormatsSupplierServiceObject::queryAggregation( const Type&
 {
     Any aReturn = ::cppu::queryInterface(_rType,
         static_cast< XInitialization* >(this),
-        static_cast< XPersistObject* >(this),
         static_cast< XServiceInfo* >(this)
     );
 
@@ -129,34 +128,6 @@ Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupported
     Sequence< OUString > aSupported(1);
     aSupported.getArray()[0] = PERSISTENT_SERVICE_NAME;
     return aSupported;
-}
-
-OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getServiceName(  ) throw(RuntimeException, std::exception)
-{
-    return PERSISTENT_SERVICE_NAME;
-}
-
-void SAL_CALL SvNumberFormatsSupplierServiceObject::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw(IOException, RuntimeException, std::exception)
-{
-    ::osl::MutexGuard aGuard( getSharedMutex() );
-    implEnsureFormatter();
-
-    Reference< XOutputStream > xStream(_rxOutStream.get());
-    SvLockBytesRef aLockBytes = new SvOutputStreamOpenLockBytes(xStream);
-    SvStream aSvOutputSteam(aLockBytes);
-
-    m_pOwnFormatter->Save(aSvOutputSteam);
-}
-
-void SAL_CALL SvNumberFormatsSupplierServiceObject::read( const Reference< XObjectInputStream >& _rxInStream ) throw(IOException, RuntimeException, std::exception)
-{
-    ::osl::MutexGuard aGuard( getSharedMutex() );
-    implEnsureFormatter();
-
-    Reference< XInputStream > xStream(_rxInStream.get());
-    SvInputStream aSvInputSteam(xStream);
-
-    m_pOwnFormatter->Load(aSvInputSteam);
 }
 
 Reference< XPropertySet > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormatSettings() throw(RuntimeException, std::exception)
