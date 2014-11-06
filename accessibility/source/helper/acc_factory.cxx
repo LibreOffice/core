@@ -26,7 +26,6 @@
 #include <accessibility/standard/vclxaccessibledropdowncombobox.hxx>
 #include <accessibility/standard/vclxaccessiblecombobox.hxx>
 #include <accessibility/standard/vclxaccessibledropdownlistbox.hxx>
-#include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <accessibility/standard/vclxaccessiblefixedhyperlink.hxx>
 #include <accessibility/standard/vclxaccessiblefixedtext.hxx>
 #include <accessibility/standard/vclxaccessiblelistbox.hxx>
