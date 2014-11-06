@@ -1007,7 +1007,7 @@ OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
     OUStringBuffer aResult( 16 );
 
-    sal_uInt16 nUnmodifiedCode = (nKeyCode & KEY_CODE);
+    sal_uInt16 nUnmodifiedCode = (nKeyCode & KEY_CODE_MASK);
     std::map< sal_uInt16, OUString >::const_iterator it = aKeyMap.find( nUnmodifiedCode );
     if( it != aKeyMap.end() )
     {

@@ -140,7 +140,7 @@ void DebugEventInjector::InjectTextEvent()
 
     if (getRandom() < 0.10) // Occasionally a truly random event
     {
-        aKeyEvent.mnCode = getRandom() * KEY_CODE;
+        aKeyEvent.mnCode = getRandom() * KEY_CODE_MASK;
         aKeyEvent.mnCharCode = getRandom() * 0xffff;
     }
     else
@@ -162,7 +162,7 @@ void DebugEventInjector::InjectTextEvent()
     }
 
     if( getRandom() < 0.05 ) // modifier
-        aKeyEvent.mnCode |= (sal_uInt16)( getRandom() * KEY_MODTYPE ) & KEY_MODTYPE;
+        aKeyEvent.mnCode |= (sal_uInt16)( getRandom() * KEY_MODIFIERS_MASK ) & KEY_MODIFIERS_MASK;
 
     bool bHandled = ImplWindowFrameProc( pWindow, NULL, SALEVENT_KEYINPUT, &aKeyEvent);
 
@@ -244,7 +244,7 @@ void DebugEventInjector::InjectKeyNavEdit()
     aKeyEvent.mnCode = nKey;
 
     if (getRandom() < 0.15) // modifier
-        aKeyEvent.mnCode |= (sal_uInt16)(getRandom() * KEY_MODTYPE) & KEY_MODTYPE;
+        aKeyEvent.mnCode |= (sal_uInt16)(getRandom() * KEY_MODIFIERS_MASK) & KEY_MODIFIERS_MASK;
 
     aKeyEvent.mnCharCode = 0x0; // hopefully unused.
 

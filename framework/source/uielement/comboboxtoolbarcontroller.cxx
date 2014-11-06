@@ -190,7 +190,7 @@ void ComboboxToolbarController::Select()
     {
         vcl::Window::PointerState aState = m_pComboBox->GetPointerState();
 
-        sal_uInt16 nKeyModifier = sal_uInt16( aState.mnState & KEY_MODTYPE );
+        sal_uInt16 nKeyModifier = sal_uInt16( aState.mnState & KEY_MODIFIERS_MASK );
         execute( nKeyModifier );
     }
 }

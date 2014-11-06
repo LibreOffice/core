@@ -134,14 +134,14 @@ namespace o3tl
     template<> struct typed_flags<WindowBorderStyle> : is_typed_flags<WindowBorderStyle, 0x3033> {};
 }
 
-#define KEY_CODE        ((sal_uInt16)0x0FFF)
+#define KEY_CODE_MASK       ((sal_uInt16)0x0FFF)
 
 // Modifier-Tasten
-#define KEY_SHIFT       ((sal_uInt16)0x1000)
-#define KEY_MOD1        ((sal_uInt16)0x2000)
-#define KEY_MOD2        ((sal_uInt16)0x4000)
-#define KEY_MOD3        ((sal_uInt16)0x8000)
-#define KEY_MODTYPE     ((sal_uInt16)0xF000)
+#define KEY_SHIFT           ((sal_uInt16)0x1000)
+#define KEY_MOD1            ((sal_uInt16)0x2000)
+#define KEY_MOD2            ((sal_uInt16)0x4000)
+#define KEY_MOD3            ((sal_uInt16)0x8000)
+#define KEY_MODIFIERS_MASK  ((sal_uInt16)0xF000)
 
 #endif
 

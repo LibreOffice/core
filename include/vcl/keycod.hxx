@@ -48,10 +48,10 @@ public:
     KeyFuncType     GetFullFunction() const { return eFunc; }
 
     sal_uInt16      GetCode() const
-                    { return (nKeyCodeAndModifiers & KEY_CODE); }
+                    { return (nKeyCodeAndModifiers & KEY_CODE_MASK); }
 
     sal_uInt16      GetModifier() const
-                    { return (nKeyCodeAndModifiers & KEY_MODTYPE); }
+                    { return (nKeyCodeAndModifiers & KEY_MODIFIERS_MASK); }
     bool            IsShift() const
                     { return ((nKeyCodeAndModifiers & KEY_SHIFT) != 0); }
     bool            IsMod1() const
