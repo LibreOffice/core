@@ -28,7 +28,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <tools/diagnose_ex.h>
 
