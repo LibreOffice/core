@@ -350,7 +350,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/sw3io/swacorr \
     sw/source/core/swg/SwXMLBlockExport \
     sw/source/core/swg/SwXMLBlockImport \
-    sw/source/core/swg/SwXMLBlockListContext \
     sw/source/core/swg/SwXMLSectionList \
     sw/source/core/swg/SwXMLTextBlocks \
     sw/source/core/swg/SwXMLTextBlocks1 \
