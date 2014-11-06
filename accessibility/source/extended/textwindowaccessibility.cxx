@@ -23,7 +23,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <vector>
 #include <boost/unordered_map.hpp>
 
 namespace accessibility
