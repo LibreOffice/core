@@ -1231,7 +1231,6 @@ static void FindCmap(TrueTypeFont *ttf)
     const sal_uInt8* table = getTable(ttf, O_cmap);
     sal_uInt32 table_size = getTableSize(ttf, O_cmap);
     sal_uInt16 ncmaps = GetUInt16(table, 2, 1);
-    unsigned int i;
     sal_uInt32 AppleUni   = 0;              // Apple Unicode
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
     sal_uInt32 ThreeOne   = 0;              /* MS UCS-2             */
@@ -1241,7 +1240,18 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt32 ThreeFive  = 0;              /* MS Wansung           */
     sal_uInt32 ThreeSix   = 0;              /* MS Johab             */
 
-    for (i = 0; i < ncmaps; i++) {
+    const sal_uInt32 remaining_table_size = table_size-4;
+    const sal_uInt32 nMinRecordSize = 8;
+    const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
+    if (ncmaps > nMaxRecords)
+    {
+        SAL_WARN("vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fname) <<
+                 ": " << nMaxRecords << " max possible entries, but " <<
+                 ncmaps << " claimed, truncating");
+        ncmaps = nMaxRecords;
+    }
+
+    for (unsigned int i = 0; i < ncmaps; i++) {
         /* sanity check, cmap entry must lie within table */
         sal_uInt32 nLargestFixedOffsetPos = 8 + i * 8;
         sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
