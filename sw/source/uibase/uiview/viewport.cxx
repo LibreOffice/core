@@ -19,34 +19,20 @@
 
 #include <config_features.h>
 
-#include "hintids.hxx"
 
-#include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
 #include <svx/ruler.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/lrspitem.hxx>
-#include <sfx2/bindings.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swmodule.hxx>
 #include <viewopt.hxx>
-#include <frmatr.hxx>
-#include <docsh.hxx>
 #include <cmdid.h>
-#include <edtwin.hxx>
 #include <scroll.hxx>
-#include <wview.hxx>
-#include <usrpref.hxx>
-#include <pagedesc.hxx>
-#include <workctrl.hxx>
 #include <crsskip.hxx>
 #include <touch/touch.h>
 
 #include <PostItMgr.hxx>
 
-#include <IDocumentSettingAccess.hxx>
 
 #include <basegfx/tools/zoomtools.hxx>
 

@@ -23,12 +23,8 @@
 
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/rulritem.hxx>
-#include <unotools/viewoptions.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <svtools/unitconv.hxx>
-#include <vector>
 
 #define SWPAGE_NARROW_VALUE    720
 #define SWPAGE_NORMAL_VALUE    1136

@@ -18,43 +18,18 @@
  */
 
 #include <hintids.hxx>
-#include <uitool.hxx>
 #include <comphelper/string.hxx>
-#include <svl/urihelper.hxx>
-#include <svl/PasswordHelper.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
-#include <sot/formats.hxx>
-#include <sfx2/passwd.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/sizeitem.hxx>
-#include <svtools/htmlcfg.hxx>
 #include <section.hxx>
-#include <docary.hxx>
-#include <regionsw.hxx>
 #include <basesh.hxx>
-#include <wdocsh.hxx>
-#include <view.hxx>
-#include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>
-#include <column.hxx>
 #include <fmtfsize.hxx>
-#include <shellio.hxx>
-#include <helpid.h>
 #include <cmdid.h>
-#include <regionsw.hrc>
-#include <comcore.hrc>
-#include <globals.hrc>
-#include <sfx2/bindings.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <svx/dlgutil.hxx>
 #include "swabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {

@@ -20,62 +20,37 @@
 #include <cmdid.h>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
-#include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
-#include <svl/srchitem.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svx/sdgluitm.hxx>
-#include <svx/sdgcoitm.hxx>
-#include <svx/sdggaitm.hxx>
-#include <svx/sdgtritm.hxx>
-#include <svx/sdginitm.hxx>
-#include <svx/sdgmoitm.hxx>
 #include <editeng/brushitem.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/compressgraphicdialog.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
 #include <svx/tbxcolor.hxx>
-#include <drawdoc.hxx>
-#include <fmturl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
-#include <frmatr.hxx>
-#include <swundo.hxx>
 #include <uitool.hxx>
 #include <docsh.hxx>
 #include <grfsh.hxx>
 #include <frmmgr.hxx>
-#include <frmdlg.hxx>
-#include <frmfmt.hxx>
 #include <grfatr.hxx>
-#include <usrpref.hxx>
-#include <edtwin.hxx>
 #include <swwait.hxx>
 #include <shells.hrc>
 #include <popup.hrc>
 #include <svx/extedit.hxx>
-#include <svx/graphichelper.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-#include <svx/drawitem.hxx>
 #define SwGrfShell
 
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 #include "swabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
 
 #define TOOLBOX_NAME "colorbar"
 

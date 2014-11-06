@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MAILDISPATCHER_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MAILDISPATCHER_HXX
 
-#include <com/sun/star/mail/XSmtpService.hpp>
-#include <com/sun/star/mail/XMailMessage.hpp>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <salhelper/refobj.hxx>

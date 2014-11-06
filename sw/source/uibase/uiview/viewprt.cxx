@@ -17,53 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/text/NotePrintMode.hpp>
-#include <cstdarg>
 #include <cmdid.h>
 #include <sfx2/request.hxx>
-#include <sfx2/progress.hxx>
-#include <sfx2/app.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
-#include <sfx2/prnmon.hxx>
 #include <editeng/paperinf.hxx>
-#include <sfx2/dispatch.hxx>
 #include <unotools/misccfg.hxx>
-#include <svx/prtqry.hxx>
-#include <svx/svdview.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/flagitem.hxx>
-#include <sfx2/linkmgr.hxx>
 
 #include <modcfg.hxx>
-#include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <docsh.hxx>
 #include <viewopt.hxx>
-#include <prtopt.hxx>
-#include <fontcfg.hxx>
 #include <cfgitems.hxx>
-#include <dbmgr.hxx>
-#include <docstat.hxx>
-#include <viewfunc.hxx>
 #include <swmodule.hxx>
 #include <wview.hxx>
-#include <doc.hxx>
-#include <fldbas.hxx>
 #include <IDocumentDeviceAccess.hxx>
 
 #include <globals.hrc>
 #include <view.hrc>
-#include <app.hrc>
-#include <swwrtshitem.hxx>
 #include "swabstdlg.hxx"
-#include <svl/slstitm.hxx>
 
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

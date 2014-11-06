@@ -19,12 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SRTDLG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SRTDLG_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
 #include <svx/stddlg.hxx>
-#include <svx/langbox.hxx>
 
 class SwWrtShell;
 class CollatorResource;

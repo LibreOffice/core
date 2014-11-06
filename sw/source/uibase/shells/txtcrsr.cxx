@@ -17,27 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
 #include <memory>
 
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
-#include <basic/sbxvar.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <textsh.hxx>
-#include <num.hxx>
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 
 #include <cmdid.h>
-#include <globals.h>
 #include <globals.hrc>
 
 #include <svx/svdouno.hxx>

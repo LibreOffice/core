@@ -18,10 +18,7 @@
  */
 
 #include "hintids.hxx"
-#include <editeng/lrspitem.hxx>
 
-#include "frmmgr.hxx"
-#include "frmfmt.hxx"
 #include "colmgr.hxx"
 
 // private methods

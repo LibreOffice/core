@@ -11,9 +11,7 @@
 
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
 
-#include "swtypes.hxx"
 
 class   SwWrtShell;
 struct  SwPosition;

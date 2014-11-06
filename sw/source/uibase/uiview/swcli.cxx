@@ -17,16 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#include <wrtsh.hxx>
-#include <doc.hxx>
-#include <IDocumentSettingAccess.hxx>
-#include <swtypes.hxx>
 #include <view.hxx>
-#include <edtwin.hxx>
 #include <swcli.hxx>
-#include <cmdid.h>
-#include <cfgitems.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 

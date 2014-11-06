@@ -23,10 +23,7 @@
 #include <vcl/menu.hxx>
 
 #include <vector>
-#include <com/sun/star/smarttags/XSmartTagAction.hpp>
 
-#include <com/sun/star/container/XStringKeyMap.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 
 class SwView;
 

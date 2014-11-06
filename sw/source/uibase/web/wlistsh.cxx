@@ -17,22 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/msg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/srchitem.hxx>
-#include <svx/imapdlg.hxx>
 
-#include "cmdid.h"
-#include "wrtsh.hxx"
-#include "swmodule.hxx"
-#include "globals.hrc"
 #include "shells.hrc"
-#include "uinums.hxx"
 #include "wlistsh.hxx"
 
 #define SwWebListShell
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebListShell, SwListShell, SW_RES(STR_SHELLNAME_LIST))
 

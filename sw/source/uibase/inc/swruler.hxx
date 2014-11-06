@@ -13,7 +13,6 @@
 #include <svx/ruler.hxx>
 
 class SwViewShell;
-class View;
 namespace vcl { class Window; }
 class SwEditWin;
 

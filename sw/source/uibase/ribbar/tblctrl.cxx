@@ -20,10 +20,7 @@
 #include <svl/intitem.hxx>
 
 #include <vcl/toolbox.hxx>
-#include <sfx2/app.hxx>
 
-#include "cmdid.h"
-#include "swtypes.hxx"
 #include "tblctrl.hxx"
 
 SFX_IMPL_TOOLBOX_CONTROL( SwTableOptimizeCtrl, SfxUInt16Item );

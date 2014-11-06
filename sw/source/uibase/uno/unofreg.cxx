@@ -22,7 +22,6 @@
 #include "SwXFilterOptions.hxx"
 #include "unofreg.hxx"
 #include <sal/types.h>
-#include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 

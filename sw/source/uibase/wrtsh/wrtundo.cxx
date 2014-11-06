@@ -17,17 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resid.hxx>
-#include <sfx2/app.hxx>
 #include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <swdtflvr.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
-#include <wrtsh.hrc>
-#include <sfx2/sfx.hrc>
 
 // Undo ends all modes. If a selection is emerged by the Undo,
 // this must be considered for further action.

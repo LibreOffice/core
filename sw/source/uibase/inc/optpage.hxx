@@ -20,18 +20,10 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_OPTPAGE_HXX
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/group.hxx>
 
-#include <vcl/button.hxx>
 
-#include <vcl/lstbox.hxx>
 
-#include <vcl/field.hxx>
 
-#include <vcl/fixed.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <svx/fntctrl.hxx>
-#include <fontcfg.hxx>
 class SfxPrinter;
 class SwStdFontConfig;
 class SwWrtShell;

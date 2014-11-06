@@ -17,36 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
-#include <svl/urihelper.hxx>
-#include <sfx2/event.hxx>
-#include <swtypes.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
 #include <initui.hxx>
 #include <gloslst.hxx>
 #include <unoatxt.hxx>
 #include <unomap.hxx>
-#include <unomid.h>
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <TextCursorHelper.hxx>
 #include <swevent.hxx>
 #include <doc.hxx>
-#include <unocrsr.hxx>
-#include <IMark.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
-#include <unoprnms.hxx>
 #include <docsh.hxx>
-#include <swmodule.hxx>
 #include <swdll.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/macitem.hxx>
@@ -55,7 +44,6 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 

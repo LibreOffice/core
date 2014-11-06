@@ -7,14 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <edtwin.hxx>
 #include <FrameControlsManager.hxx>
 #include <HeaderFooterWin.hxx>
 #include <PageBreakWin.hxx>
-#include <pagefrm.hxx>
-#include <viewopt.hxx>
-#include <view.hxx>
-#include <wrtsh.hxx>
 
 using namespace std;
 

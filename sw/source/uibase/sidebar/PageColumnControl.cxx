@@ -27,7 +27,6 @@
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <vcl/settings.hxx>
 
 namespace sw { namespace sidebar {
 

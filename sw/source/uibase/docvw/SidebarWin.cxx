@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
 #include <cstdlib>
 
@@ -31,15 +30,11 @@
 #include <OverlayRanges.hxx>
 
 #include <annotation.hrc>
-#include <popup.hrc>
-#include <docvw.hrc>
-#include <app.hrc>
 #include <access.hrc>
 
 #include <viewopt.hxx>
 #include <cmdid.h>
 
-#include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/editview.hxx>
@@ -47,13 +42,9 @@
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 
-#include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
 #include <svl/stritem.hxx>
 
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
@@ -69,17 +60,9 @@
 #include <langhelper.hxx>
 
 #include <txtannotationfld.hxx>
-#include <ndtxt.hxx>
 
-#include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
-#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebarwindows {
 

@@ -20,34 +20,23 @@
 #include <hintids.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>
-#include <globals.hrc>
 #include <splargs.hxx>
 
-#include <vcl/msgbox.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/text/RubyAdjust.hpp>
 #include <hhcwrp.hxx>
-#include <sdrhhcwrap.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <mdiexp.hxx>
-#include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <index.hxx>
 #include <pam.hxx>
-#include <swcrsr.hxx>
-#include <viscrs.hxx>
 #include <ndtxt.hxx>
 #include <fmtruby.hxx>
 #include <breakit.hxx>
 
-#include <olmenu.hrc>
 
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

@@ -21,12 +21,10 @@
 
 #include <view.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <svx/svdview.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
 #include <sw_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/primitivetools2d.hxx>
-#include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 
 namespace sw { namespace sidebarwindows {
 

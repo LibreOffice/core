@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "cmdid.h"
 #include "hintids.hxx"
-#include <algorithm>
 #include <svl/eitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -27,9 +25,7 @@
 #include <svx/pageitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>

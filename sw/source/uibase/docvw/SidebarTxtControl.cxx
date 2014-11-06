@@ -29,17 +29,13 @@
 
 #include <unotools/securityoptions.hxx>
 
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/mnumgr.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/gradient.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 
 #include <editeng/outliner.hxx>
@@ -47,12 +43,9 @@
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
 
-#include <uitool.hxx>
 #include <view.hxx>
-#include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <SwRewriter.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebarwindows {
 

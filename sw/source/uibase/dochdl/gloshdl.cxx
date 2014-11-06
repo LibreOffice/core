@@ -17,48 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/adjustitem.hxx>
 #ifndef __RSC //autogen
-#include <tools/errinf.hxx>
 #endif
-#include <vcl/msgbox.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <svl/urihelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <poolfmt.hxx>
-#include <fmtcol.hxx>
-#include <docary.hxx>
 #include <wrtsh.hxx>
-#include <uitool.hxx>
-#include <view.hxx>
 #include <swevent.hxx>
 #include <gloshdl.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
-#include <swundo.hxx>
 #include <expfld.hxx>
 #include <initui.hxx>
 #include <gloslst.hxx>
 #include <swdtflvr.hxx>
-#include <docsh.hxx>
-#include <crsskip.hxx>
 
 #include <dochdl.hrc>
-#include <swerror.h>
-#include <frmmgr.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
-#include <misc.hrc>
 
-#include <IDocumentFieldsAccess.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 

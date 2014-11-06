@@ -17,22 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/eitem.hxx>
 #include <unotools/syslocale.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <drawdoc.hxx>
 #include <fmtcol.hxx>
 #include <uitool.hxx>
-#include <swmodule.hxx>
-#include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <frmfmt.hxx>
-#include <charfmt.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <docstyle.hxx>
@@ -50,18 +43,13 @@
 #include <paratr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <svl/cjkoptions.hxx>
-#include <comphelper/processfactory.hxx>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <numrule.hxx>
-#include <fmthdft.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <SwRewriter.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/drawitem.hxx>
 
 // The Format names in the list of all names have the
 // following family as their first character:

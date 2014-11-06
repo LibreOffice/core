@@ -19,62 +19,38 @@
 
 #include <config_features.h>
 
-#include <cstdarg>
 
 #include <hintids.hxx>
 
 #include <comphelper/string.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-#include <editeng/boxitem.hxx>
-#include <editeng/paperinf.hxx>
-#include <editeng/protitem.hxx>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <fmthdft.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <swwait.hxx>
 #include <gloshdl.hxx>
-#include <mdiexp.hxx>
-#include <frmatr.hxx>
-#include <paratr.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
 #include <fldbas.hxx>
-#include <swundo.hxx>
 #include <wrtsh.hxx>
 #include <cmdid.h>
 #include <dbmgr.hxx>
-#include <fmtcol.hxx>
-#include <expfld.hxx>
 #include <fldmgr.hxx>
-#include <label.hxx>
 #include <labimg.hxx>
 #include <section.hxx>
 #include <pagedesc.hxx>
-#include <poolfmt.hxx>
 
 #include <app.hrc>
-#include <poolfmt.hrc>
 #include "swabstdlg.hxx"
-#include "envelp.hrc"
-#include <misc.hrc>
 
 #include <IDocumentDeviceAccess.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <appenv.hxx>
 
 using namespace ::com::sun::star;

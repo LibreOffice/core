@@ -17,24 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
 #include <svx/svdview.hxx>
-#include <svx/svdobj.hxx>
-#include <svl/ptitem.hxx>
-#include <editeng/sizeitem.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/bindings.hxx>
-#include <fmtclds.hxx>
-#include <frmfmt.hxx>
 #include "cmdid.h"
-#include "basesh.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "drawbase.hxx"
 #include "edtwin.hxx"
-#include "caption.hxx"
-#include "swundo.hxx"
-#include <SwRewriter.hxx>
 #include "comcore.hrc"
 
 using namespace ::com::sun::star;

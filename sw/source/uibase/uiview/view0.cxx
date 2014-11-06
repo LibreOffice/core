@@ -19,38 +19,25 @@
 
 #include <config_features.h>
 
-#include "hintids.hxx"
-#include <vcl/graph.hxx>
-#include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <viewopt.hxx>
 #include <globals.h>
-#include <sfx2/app.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
-#include <sfx2/templdlg.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <uivwimp.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <swmodule.hxx>
-#include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
 #include <sfx2/objface.hxx>
-#include <navipi.hxx>
-#include <wrtsh.hxx>
-#include <edtwin.hxx>
 #include "view.hxx"
-#include "basesh.hxx"
 #include "docsh.hxx"
 #include "doc.hxx"
-#include "globals.hrc"
 #include "cmdid.h"
 #include "globdoc.hxx"
 #include "wview.hxx"
@@ -66,18 +53,13 @@
 #define WebTextInTable
 #define WebListInText
 #define WebListInTable
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 #include <PostItMgr.hxx>
 
 using namespace ::com::sun::star;
 
 #include <unotools/moduleoptions.hxx>
 
-#include <IDocumentSettingAccess.hxx>
 
-#include <unomid.h>
-#include <boost/scoped_ptr.hpp>
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {

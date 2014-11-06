@@ -8,25 +8,12 @@
  */
 
 #include "cmdid.h"
-#include <svx/svdview.hxx>
-#include <svl/srchitem.hxx>
-#include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
-#include <svx/svdopath.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objface.hxx>
 #include "wrtsh.hxx"
-#include "view.hxx"
-#include "edtwin.hxx"
-#include "helpid.h"
-#include "globals.hrc"
 #include "navsh.hxx"
-#include "popup.hrc"
 #include "shells.hrc"
 #define SwNavigationShell
-#include "swslots.hxx"
-#include <unomid.h>
 #include "navmgr.hxx"
 
 SFX_IMPL_INTERFACE(SwNavigationShell, SwBaseShell, SW_RES(STR_SHELLNAME_NAVIGATION))

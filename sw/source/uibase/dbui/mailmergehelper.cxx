@@ -19,23 +19,14 @@
 
 #include <swtypes.hxx>
 #include <mailmergehelper.hxx>
-#include <svtools/stdctrl.hxx>
 #include <mmconfigitem.hxx>
 #include <docsh.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/fcontnr.hxx>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/mail/MailServiceProvider.hpp>
-#include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
 #include <sfx2/passwd.hxx>

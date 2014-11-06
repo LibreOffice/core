@@ -20,19 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_COLUMN_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/image.hxx>
-#include <vcl/group.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
-#include <vcl/timer.hxx>
-#include <svtools/ctrlbox.hxx>
 #include <svtools/valueset.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <fmtclbl.hxx>
-#include <colex.hxx>
 #include <prcntfld.hxx>
 
 const int nMaxCols = 99;

@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/string.hxx>
-#include <svl/urlbmk.hxx>
 #include <osl/thread.h>
 #include <tools/urlobj.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <sot/formats.hxx>
@@ -34,62 +30,33 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
-#include <drawdoc.hxx>
 #include <content.hxx>
 #include <frmfmt.hxx>
 #include <fldbas.hxx>
-#include <txtatr.hxx>
-#include <IMark.hxx>
 #include <section.hxx>
 #include <tox.hxx>
 #include <navipi.hxx>
 #include <navicont.hxx>
 #include <navicfg.hxx>
-#include <edtwin.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <IDocumentOutlineNodes.hxx>
-#include <unotools.hxx>
 #include <crsskip.hxx>
 #include <cmdid.h>
 #include <helpid.h>
 #include <navipi.hrc>
 #include <utlui.hrc>
-#include <misc.hrc>
 #include <comcore.hrc>
-#include <com/sun/star/text/XTextSectionsSupplier.hpp>
-#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
-#include <com/sun/star/text/XTextTablesSupplier.hpp>
-#include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
-#include <com/sun/star/text/XDocumentIndex.hpp>
-#include <com/sun/star/text/XBookmarksSupplier.hpp>
-#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
-#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <dcontact.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/scrbar.hxx>
 #include <SwRewriter.hxx>
 #include <hints.hxx>
-#include <numrule.hxx>
-#include <swundo.hxx>
-#include <ndtxt.hxx>
-#include <fmtcntnt.hxx>
 #include <PostItMgr.hxx>
 #include <postithelper.hxx>
-#include <redline.hxx>
-#include <docary.hxx>
-#include <o3tl/sorted_vector.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include "swabstdlg.hxx"
-#include "globals.hrc"
-#include <unomid.h>
 
 #include "navmgr.hxx"
-#include <boost/scoped_ptr.hpp>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1

@@ -17,26 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "hintids.hxx"
-#include <sfx2/app.hxx>
-#include <tools/globname.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/srchitem.hxx>
 
-#include "cmdid.h"
-#include "globals.hrc"
-#include "uitool.hxx"
-#include "helpid.h"
 #include "popup.hrc"
 #include "shells.hrc"
-#include "table.hrc"
-#include "wrtsh.hxx"
 #include "wtabsh.hxx"
 
 #define SwWebTableShell
-#include <sfx2/msg.hxx>
-#include "svx/svxids.hrc"
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell, SW_RES(STR_SHELLNAME_TABLE))
 

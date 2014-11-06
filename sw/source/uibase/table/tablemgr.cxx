@@ -17,34 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 
-#include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
-#include <svx/charthelper.hxx>
 
-#include "edtwin.hxx"
-#include "wrtsh.hxx"
-#include "cmdid.h"
-#include "frmatr.hxx"
-#include "view.hxx"
-#include "basesh.hxx"
-#include "swundo.hxx"
 #include "tablemgr.hxx"
 #include "frmfmt.hxx"
-#include "instable.hxx"
-#include "swerror.h"
-#include "table.hrc"
 #include "swabstdlg.hxx"
-#include "swcli.hxx"
-#include "docsh.hxx"
-#include "unotbl.hxx"
-#include "unochart.hxx"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 

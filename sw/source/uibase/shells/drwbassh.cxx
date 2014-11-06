@@ -17,52 +17,19 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <helpid.h>
 #include <swtypes.hxx>
-#include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <svl/aeitem.hxx>
-#include <svx/svdview.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>
-#include <svx/anchorid.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <drawdoc.hxx>
-#include <uitool.hxx>
-#include <fmtornt.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
-#include <wrtsh.hxx>
-#include <wview.hxx>
 #include <edtwin.hxx>
-#include <viewopt.hxx>
-#include <dcontact.hxx>
-#include <frmfmt.hxx>
-#include <wrap.hxx>
-#include <drawbase.hxx>
 #include <drwbassh.hxx>
-#include <swdtflvr.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-#include <shells.hrc>
 #define SwDrawBaseShell
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-#include "swabstdlg.hxx"
 #include "dialog.hrc"
-#include <swundo.hxx>
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
-#include <IDocumentDrawModelAccess.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 

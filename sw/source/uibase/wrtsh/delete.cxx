@@ -18,8 +18,6 @@
  */
 
 #include <wrtsh.hxx>
-#include <crsskip.hxx>
-#include <swcrsr.hxx>
 #include <editeng/lrspitem.hxx>
 // #134369#
 #include <view.hxx>

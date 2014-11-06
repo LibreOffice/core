@@ -21,7 +21,6 @@
 
 #include <unotools/localedatawrapper.hxx>
 #include <viewsh.hxx>
-#include <initui.hxx>
 #include <edtwin.hxx>
 #include <shellres.hxx>
 #include <fldbas.hxx>
@@ -35,7 +34,6 @@
 #include <dbmgr.hxx>
 #include <unotools/syslocale.hxx>
 
-#include <unomid.h>
 
 // Global Pointer
 

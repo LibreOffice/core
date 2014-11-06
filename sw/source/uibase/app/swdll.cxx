@@ -21,28 +21,20 @@
 
 #include <svx/svdobj.hxx>
 
-#include "globdoc.hrc"
 
-#include <swdll.hxx>
 #include <wdocsh.hxx>
 #include <globdoc.hxx>
 #include <initui.hxx>
 #include <swmodule.hxx>
-#include <swtypes.hxx>
 #include <init.hxx>
 #include <dobjfac.hxx>
-#include <cfgid.h>
 
-#include <com/sun/star/frame/Desktop.hpp>
 #include <unotools/moduleoptions.hxx>
-#include <comphelper/scoped_disposing_ptr.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <svx/fmobjfac.hxx>
 #include <svx/svdfield.hxx>
 #include <svx/objfac3d.hxx>
 
-#include <unomid.h>
 
 #include "swdllimpl.hxx"
 

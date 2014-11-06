@@ -19,31 +19,20 @@
 
 #include <hintids.hxx>
 
-#include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/inetimg.hxx>
 #include <svtools/transfer.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/gallery.hxx>
 #include <svx/graphichelper.hxx>
 #include <editeng/brushitem.hxx>
 
-#include <frmatr.hxx>
-#include <fmturl.hxx>
-#include <fmtinfmt.hxx>
-#include <docsh.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
 #include <romenu.hxx>
-#include <pagedesc.hxx>
 #include <modcfg.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
 #include <docvw.hrc>
 
 using namespace ::com::sun::star::lang;

@@ -19,15 +19,12 @@
 
 #include <config_folders.h>
 
-#include <swtypes.hxx>
 #include <labelcfg.hxx>
-#include <labimp.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/configpaths.hxx>
 #include <xmlreader/xmlreader.hxx>
 
-#include <unomid.h>
 
 using namespace utl;
 using namespace ::com::sun::star::uno;

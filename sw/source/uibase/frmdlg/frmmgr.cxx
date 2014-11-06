@@ -20,10 +20,7 @@
 #include "cmdid.h"
 #include "hintids.hxx"
 
-#include <svl/stritem.hxx>
-#include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/opaqitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/shaditem.hxx>
@@ -35,13 +32,7 @@
 #include "viewopt.hxx"
 #include "uitool.hxx"
 #include "frmmgr.hxx"
-#include "format.hxx"
-#include "mdiexp.hxx"
 #include "poolfmt.hxx"
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 
 using namespace ::com::sun::star;
 

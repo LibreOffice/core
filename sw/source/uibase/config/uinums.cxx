@@ -18,24 +18,17 @@
  */
 
 #include <hintids.hxx>
-#include <svl/urihelper.hxx>
 #include <osl/thread.h>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 #include <sfx2/docfile.hxx>
-#include <svl/itemiter.hxx>
 #include <editeng/brushitem.hxx>
 
-#include <tools/resid.hxx>
 #include <fmtornt.hxx>
 #include <swtypes.hxx>
-#include <wrtsh.hxx>
 #include <uinums.hxx>
 #include <poolfmt.hxx>
-#include <charfmt.hxx>
-#include <frmatr.hxx>
 
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

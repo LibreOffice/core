@@ -19,10 +19,8 @@
 
 #include <hintids.hxx>
 
-#include <vcl/msgbox.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <sfx2/bindings.hxx>
@@ -39,23 +37,17 @@
 #include "paratr.hxx"
 
 #include <fmtinfmt.hxx>
-#include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
 #include <textsh.hxx>
-#include <num.hxx>
-#include <swundo.hxx>
 #include <fmtcol.hxx>
 
 #include <cmdid.h>
 #include <globals.h>
-#include <shells.hrc>
-#include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
-#include <boost/scoped_ptr.hpp>
 
 const sal_uInt32 nFontInc = 40;      // 2pt
 const sal_uInt32 nFontMaxSz = 19998; // 999.9pt

@@ -21,18 +21,9 @@
 #include <shellio.hxx>
 #include <swdll.hxx>
 #include <unoprnms.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <cppuhelper/supportsservice.hxx>
-#include <unotools/ucbstreamhelper.hxx>
-#include <unotxdoc.hxx>
 
 #include "swabstdlg.hxx"
-#include "dialog.hrc"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;

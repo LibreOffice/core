@@ -17,18 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
 
 #include <hintids.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/childwin.hxx>
 #include <unotools/useroptions.hxx>
-#include <cppuhelper/weak.hxx>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <svx/dataaccessdescriptor.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -36,7 +27,6 @@
 #include <editeng/cmapitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/cjkoptions.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
@@ -45,19 +35,14 @@
 #include <view.hxx>
 #include <pview.hxx>
 #include <wview.hxx>
-#include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <dbmgr.hxx>
 #include <uinums.hxx>
 #include <prtopt.hxx>
 #include <navicfg.hxx>
 #include <doc.hxx>
-#include <cmdid.h>
 #include <app.hrc>
-#include "helpid.h"
 #include <IDocumentLayoutAccess.hxx>
 
-#include <unomid.h>
 #include <tools/color.hxx>
 #include "PostItMgr.hxx"
 

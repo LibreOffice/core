@@ -17,40 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <helpid.h>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/SearchOptions.hpp>
-#include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
-#include <svl/eitem.hxx>
-#include <unotools/textsearch.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <svl/itemset.hxx>
-#include <editeng/langitem.hxx>
-#include <swtypes.hxx>
 #include <idxmrk.hxx>
-#include <txttxmrk.hxx>
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <multmrk.hxx>
-#include <swundo.hxx>
 #include <cmdid.h>
-#include <index.hrc>
-#include <swmodule.hxx>
-#include <fldmgr.hxx>
-#include <fldbas.hxx>
-#include <utlui.hrc>
-#include <swcont.hxx>
-#include <svl/cjkoptions.hxx>
-#include <ndtxt.hxx>
-#include <breakit.hxx>
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
 

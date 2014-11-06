@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <fldmgr.hxx>
 #include <expfld.hxx>
@@ -30,18 +29,14 @@
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "caption.hxx"
-#include "poolfmt.hxx"
-#include "edtwin.hxx"
 #include <SwStyleNameMapper.hxx>
 
 #include "initui.hxx"
 #include "swabstdlg.hxx"
 #include "frmui.hrc"
-#include "misc.hrc"
 
 #include "view.hrc"
 
-#include <boost/scoped_ptr.hpp>
 
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {

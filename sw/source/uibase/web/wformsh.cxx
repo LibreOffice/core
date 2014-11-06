@@ -17,24 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/msg.hxx>
 
-#include <svx/svxids.hrc>
-#include <svl/srchitem.hxx>
 #include <sfx2/objface.hxx>
-#include <tools/globname.hxx>
-#include <sfx2/app.hxx>
 
 #include "swtypes.hxx"
-#include "cmdid.h"
 #include "wformsh.hxx"
-#include "globals.hrc"
-#include "web.hrc"
 #include "popup.hrc"
 #include "shells.hrc"
 
 #define SwWebDrawFormShell
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebDrawFormShell, SwDrawFormShell, SW_RES(0))
 

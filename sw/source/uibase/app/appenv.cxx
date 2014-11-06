@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstdarg>
 
 #include <hintids.hxx>
 
@@ -25,51 +24,32 @@
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 
-#include <svtools/svmedit.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/printer.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/paperinf.hxx>
-#include <editeng/formatbreakitem.hxx>
-#include <fmthdft.hxx>
 #include <swwait.hxx>
-#include <paratr.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
-#include <frmatr.hxx>
 #include <fldbas.hxx>
-#include <swundo.hxx>
 #include <IDocumentDeviceAccess.hxx>
-#include <dbmgr.hxx>
-#include <fmtcol.hxx>
 #include <frmmgr.hxx>
 #include <fldmgr.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <expfld.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <crsskip.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <app.hrc>
-#include <poolfmt.hrc>
 #include "swabstdlg.hxx"
-#include "envelp.hrc"
 #include "envimg.hxx"
 #include <appenv.hxx>
 
-#include <boost/scoped_ptr.hpp>
 
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER

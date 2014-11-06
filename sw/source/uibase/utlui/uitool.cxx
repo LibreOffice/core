@@ -21,15 +21,9 @@
 
 #include <osl/diagnose.h>
 #include <tools/datetime.hxx>
-#include <vcl/svapp.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/syslocale.hxx>
-#include <sfx2/app.hxx>
-#include <IDocumentStylePoolAccess.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/docfilt.hxx>
 #include <editeng/pmdlitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -41,37 +35,24 @@
 #include <svl/style.hxx>
 #include <vcl/lstbox.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <fmtornt.hxx>
 #include <tabcol.hxx>
-#include <edtwin.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
-#include <wview.hxx>
 #include <uiitems.hxx>
 #include <docsh.hxx>
-#include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <view.hxx>
 #include <uitool.hxx>
-#include <frmatr.hxx>
 #include <paratr.hxx>
 #include <fmtcol.hxx>
 #include <poolfmt.hxx>
 #include "usrpref.hxx"
 
 #include <cmdid.h>
-#include <globals.hrc>
-#include <utlui.hrc>
 #include <doc.hxx>
-#include <docary.hxx>
-#include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 // 50 cm 28350
 

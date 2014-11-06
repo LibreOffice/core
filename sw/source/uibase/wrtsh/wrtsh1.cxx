@@ -17,81 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/embed/EmbedMisc.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 
-#include <svx/dialogs.hrc>
 
-#include <math.h>
 #include <hintids.hxx>
-#include <svx/hdft.hxx>
-#include <svx/svdview.hxx>
-#include <sot/factory.hxx>
 #include <svl/itemiter.hxx>
 #include <tools/bigint.hxx>
-#include <sot/storage.hxx>
 #include <svtools/insdlg.hxx>
-#include <sfx2/frmdescr.hxx>
 #include <sfx2/ipclient.hxx>
-#include <svtools/ehdl.hxx>
-#include <svtools/soerr.hxx>
-#include <unotools/moduleoptions.hxx>
-#include <editeng/sizeitem.hxx>
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/ulspitem.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/msgbox.hxx>
-#include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/extrusionbar.hxx>
-#include <svx/fontworkbar.hxx>
 #include <frmfmt.hxx>
 #include <fmtftn.hxx>
-#include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
 #include <wdocsh.hxx>
-#include <basesh.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <uitool.hxx>
 #include <cmdid.h>
-#include <cfgitems.hxx>
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
-#include <shellio.hxx>
-#include <uinums.hxx>
-#include <swundo.hxx>
 #include <swcli.hxx>
-#include <poolfmt.hxx>
-#include <wview.hxx>
 #include <edtwin.hxx>
-#include <fmtcol.hxx>
-#include <swtable.hxx>
-#include <caption.hxx>
-#include <viscrs.hxx>
-#include <swdtflvr.hxx>
 #include <crsskip.hxx>
-#include <doc.hxx>
-#include <IDocumentSettingAccess.hxx>
-#include <wrtsh.hrc>
 #include <SwStyleNameMapper.hxx>
-#include <sfx2/request.hxx>
-#include <paratr.hxx>
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
-#include <IMark.hxx>
-#include <sfx2/bindings.hxx>
-#include <svx/dialmgr.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -99,11 +53,9 @@
 // <- #111827#
 
 #include <toolkit/helper/vclunohelper.hxx>
-#include <sfx2/viewfrm.hxx>
 
 #include "PostItMgr.hxx"
 #include <sfx2/msgpool.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace sw::mark;
 using namespace com::sun::star;

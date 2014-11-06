@@ -21,13 +21,8 @@
 
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
-#include <svtools/imapobj.hxx>
-#include <svtools/miscopt.hxx>
-#include <svl/srchitem.hxx>
-#include <svtools/imap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
-#include <svl/rectitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -35,57 +30,35 @@
 #include <editeng/colritem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/protitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/svdview.hxx>
-#include <vcl/msgbox.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <doc.hxx>
-#include <drawdoc.hxx>
-#include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <fmturl.hxx>
 #include <fmtclds.hxx>
 #include <fmtcnct.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <wview.hxx>
-#include <frmatr.hxx>
-#include <uitool.hxx>
-#include <frmfmt.hxx>
 #include <frmsh.hxx>
 #include <frmmgr.hxx>
-#include <frmdlg.hxx>
-#include <swevent.hxx>
-#include <usrpref.hxx>
 #include <edtwin.hxx>
 #include <swdtflvr.hxx>
-#include <swwait.hxx>
-#include <docstat.hxx>
-#include <IDocumentStatistics.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
-#include <helpid.h>
 #include <cmdid.h>
-#include <cfgitems.hxx>
 #include <globals.hrc>
 #include <popup.hrc>
 #include <shells.hrc>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 
-#include <svx/dialogs.hrc>
 #include <wordcountdialog.hxx>
 
 #include <docsh.hxx>
-#include <svx/drawitem.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -106,8 +79,6 @@ static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rNam
 }
 
 #define SwFrameShell
-#include <sfx2/msg.hxx>
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
 

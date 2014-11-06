@@ -19,16 +19,11 @@
 
 #include <config_features.h>
 
-#include <vcl/svapp.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <unodispatch.hxx>
-#include <unobaseclass.hxx>
 #include <view.hxx>
 #include <cmdid.h>
-#include "wrtsh.hxx"
 #include "dbmgr.hxx"
 
 using namespace ::com::sun::star;

@@ -19,59 +19,40 @@
 
 #include <config_features.h>
 
-#include <hintids.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wrkwin.hxx>
 #include <vcl/jobset.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/PasswordHelper.hxx>
-#include <editeng/adjustitem.hxx>
-#include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/misccfg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/evntconf.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <svl/srchitem.hxx>
-#include <editeng/flstitem.hxx>
-#include <sfx2/htmlmode.hxx>
-#include <svtools/soerr.hxx>
 #include <comphelper/classids.hxx>
-#include <basic/basmgr.hxx>
-#include <basic/sbmod.hxx>
-#include <swevent.hxx>
-#include <fmtpdsc.hxx>
-#include <fmtfsize.hxx>
 #include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
 #include <printdata.hxx>
-#include <frmatr.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <basesh.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
 #include <swmodule.hxx>
 #include <globdoc.hxx>
-#include <usrpref.hxx>
 #include <shellio.hxx>
-#include <docstyle.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -79,45 +60,28 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
-#include <docstat.hxx>
-#include <pagedesc.hxx>
 #include <pview.hxx>
 #include <mdiexp.hxx>
-#include <swbaslnk.hxx>
 #include <srcview.hxx>
 #include <ndindex.hxx>
 #include <ndole.hxx>
-#include <swcli.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
 #include <fldbas.hxx>
-#include <docary.hxx>
 #include <swerror.h>
-#include <helpid.h>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <app.hrc>
 
-#include <cfgid.h>
 #include <unotools/fltrcfg.hxx>
 #include <svtools/htmlcfg.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/objface.hxx>
-#include <comphelper/storagehelper.hxx>
 
 #define SwDocShell
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
-#include <com/sun/star/document/UpdateDocMode.hpp>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <unomid.h>
 #include <unotextrange.hxx>
 
-#include <sfx2/Metadatable.hxx>
 #include <switerator.hxx>
 
 using namespace ::com::sun::star;

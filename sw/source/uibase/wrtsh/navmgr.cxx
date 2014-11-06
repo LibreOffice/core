@@ -9,14 +9,8 @@
 
 #include "navmgr.hxx"
 #include "wrtsh.hxx"
-#include <sfx2/bindings.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <cmdid.h>
-#include <view.hxx>
-#include <doc.hxx>
-#include <unocrsr.hxx>
 
-#include <com/sun/star/frame/XLayoutManager.hpp>
 
 /**
  *  If SMART is defined, the navigation history has recency with temporal ordering enhancement,

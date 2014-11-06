@@ -18,15 +18,11 @@
  */
 
 #include <comphelper/classids.hxx>
-#include <unotools/moduleoptions.hxx>
 
-#include <unomid.h>
 
 #include "swtypes.hxx"
-#include "shellio.hxx"
 #include "globdoc.hxx"
 #include "globdoc.hrc"
-#include "cfgid.h"
 
 // Description: Register all filters
 

@@ -18,14 +18,11 @@
  */
 
 #include <i18nutil/unicode.hxx>
-#include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <editeng/itemtype.hxx>
 #include <svtools/grfmgr.hxx>
-#include <unotools/intlwrapper.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
@@ -49,9 +46,6 @@
 #include <paratr.hxx>
 #include <grfatr.hxx>
 #include <pagedesc.hxx>
-#include <charfmt.hxx>
-#include <fmtcol.hxx>
-#include <tox.hxx>
 #include <attrdesc.hrc>
 #include <fmtftntx.hxx>
 #include <fmtfollowtextflow.hxx>

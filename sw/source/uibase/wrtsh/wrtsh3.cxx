@@ -18,23 +18,9 @@
  */
 
 #include <svx/svxids.hrc>
-#include <sfx2/app.hxx>
-#include <sfx2/childwin.hxx>
-#include <sfx2/bindings.hxx>
-#include <svx/svdmark.hxx>
-#include <svx/svdview.hxx>
-#include <svx/fmglob.hxx>
-#include <svx/svdouno.hxx>
-#include <com/sun/star/form/FormButtonType.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <sfx2/htmlmode.hxx>
 #include "wrtsh.hxx"
 #include "view.hxx"
-#include "IMark.hxx"
-#include "doc.hxx"
-#include "wrtsh.hrc"
 
-#include <unomid.h>
 
 using namespace ::com::sun::star;
 

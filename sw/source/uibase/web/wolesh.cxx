@@ -17,23 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/msg.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/srchitem.hxx>
 
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "helpid.h"
-#include "globals.hrc"
 #include "web.hrc"
 #include "popup.hrc"
 #include "shells.hrc"
 #include "wolesh.hxx"
-#include "cmdid.h"
 
 #define SwWebOleShell
-#include "swslots.hxx"
 
 SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell, SW_RES(STR_SHELLNAME_OBJECT))
 

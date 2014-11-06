@@ -19,17 +19,10 @@
 
 #include <hintids.hxx>
 
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-#include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 
-#include <i18nlangtag/mslangid.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -41,52 +34,30 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/shdditem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/postitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <svx/svdoutl.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
-#include <editeng/writingmodeitem.hxx>
-#include <swundo.hxx>
-#include <doc.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
-#include <uitool.hxx>
 #include <popup.hrc>
 #include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
-#include <swdtflvr.hxx>
-#include <drwtxtsh.hxx>
 #include <swmodule.hxx>
-#include <initui.hxx>
-#include <edtwin.hxx>
-#include <swwait.hxx>
-#include <docstat.hxx>
 
 #include <cmdid.h>
-#include <globals.hrc>
 #include <shells.hrc>
 #include <breakit.hxx>
 #include "annotsh.hxx"
@@ -100,19 +71,14 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/svxids.hrc>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 
 #include <svl/languageoptions.hxx>
-#include <svtools/langtab.hxx>
 
-#include <docsh.hxx>
 #include <svl/undo.hxx>
 #include "swabstdlg.hxx"
-#include "chrdlg.hrc"
 #include "misc.hrc"
 #include <app.hrc>
 
@@ -123,8 +89,6 @@
 #include <langhelper.hxx>
 
 #include <wordcountdialog.hxx>
-#include <tools/diagnose_ex.h>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -133,8 +97,6 @@ using namespace ::com::sun::star::i18n;
 
 #define SwAnnotationShell
 
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
 
 SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
 

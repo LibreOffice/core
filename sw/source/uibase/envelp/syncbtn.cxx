@@ -23,11 +23,8 @@
 #include "cmdid.h"
 #include "swmodule.hxx"
 #include "view.hxx"
-#include "edtwin.hxx"
-#include "label.hrc"
 
 #include "syncbtn.hxx"
-#include "swtypes.hxx"
 
 SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
 

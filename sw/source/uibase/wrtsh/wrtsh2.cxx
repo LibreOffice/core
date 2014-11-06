@@ -18,53 +18,30 @@
  */
 
 #include <hintids.hxx>
-#include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
-#include <vcl/msgbox.hxx>
-#include <svl/urihelper.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <sfx2/docfile.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <fmtinfmt.hxx>
-#include <frmatr.hxx>
-#include <swtypes.hxx>
 #include <wrtsh.hxx>
-#include <docsh.hxx>
 #include <fldbas.hxx>
 #include <expfld.hxx>
-#include <ddefld.hxx>
 #include <docufld.hxx>
-#include <reffld.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <viewopt.hxx>
-#include <frmfmt.hxx>
-#include <fmtfld.hxx>
-#include <swtable.hxx>
-#include <mdiexp.hxx>
 #include <view.hxx>
 #include <swevent.hxx>
-#include <poolfmt.hxx>
 #include <section.hxx>
 #include <navicont.hxx>
-#include <navipi.hxx>
 #include <crsskip.hxx>
 #include <txtinet.hxx>
 #include <cmdid.h>
-#include <wrtsh.hrc>
 #include "swabstdlg.hxx"
-#include "fldui.hrc"
 #include <SwRewriter.hxx>
 
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-#include <xmloff/odffields.hxx>
-#include <boost/scoped_ptr.hpp>
 
 void SwWrtShell::Insert(SwField &rFld)
 {

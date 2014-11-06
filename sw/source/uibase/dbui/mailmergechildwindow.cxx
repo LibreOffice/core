@@ -17,21 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <view.hxx>
-#include <edtwin.hxx>
-#include <vcl/layout.hxx>
 #include <mailmergechildwindow.hxx>
-#include <mmconfigitem.hxx>
-#include <svtools/svmedit.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/image.hxx>
-#include <dbui.hrc>
-#include <helpid.h>
 
 using namespace ::com::sun::star;
 

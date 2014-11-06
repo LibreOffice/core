@@ -19,10 +19,7 @@
 
 #include <redline.hxx>
 #include <tools/datetime.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svx/ctredlin.hxx>
 #include <svx/postattr.hxx>
 #include <swtypes.hxx>
@@ -41,20 +38,15 @@
 
 // -> #111827#
 #include <comcore.hrc>
-#include <swundo.hxx>
 #include <SwRewriter.hxx>
 // <- #111827#
 
 #include <vector>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 
-#include <unomid.h>
 
-#include <docsh.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
-#include <boost/scoped_ptr.hpp>
 
 SFX_IMPL_MODELESSDIALOG_WITHID( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 

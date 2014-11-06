@@ -20,13 +20,10 @@
 #define INCLUDED_SW_SOURCE_UIBASE_SIDEBAR_WRAPPROPERTYPANEL_HXX
 
 #include <svx/sidebar/PanelLayout.hxx>
-#include <vcl/button.hxx>
 #include <vcl/image.hxx>
 
 #include <sfx2/sidebar/ControllerItem.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 
-#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebar {
 

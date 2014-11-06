@@ -17,18 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include "swmodule.hxx"
 #include "swdll.hxx"
-#include "unofreg.hxx"
 #include "unomodule.hxx"
-#include <cppuhelper/supportsservice.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace css;

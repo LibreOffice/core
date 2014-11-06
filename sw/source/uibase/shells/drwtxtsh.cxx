@@ -20,11 +20,8 @@
 #include <hintids.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/slstitm.hxx>
-#include <svl/cjkoptions.hxx>
 #include <editeng/fontitem.hxx>
-#include <editeng/langitem.hxx>
 #include <svx/svdview.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
@@ -35,33 +32,20 @@
 #include <sfx2/bindings.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <svl/whiter.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/editstat.hxx>
-#include <svx/svdoutl.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-#include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#include <initui.hxx>
 #include <drwtxtsh.hxx>
-#include <swundo.hxx>
 #include <breakit.hxx>
 
 #include <cmdid.h>
-#include <helpid.h>
-#include <globals.hrc>
 #include <shells.hrc>
 
 #define SwDrawTextShell
-#include <sfx2/msg.hxx>
-#include <swslots.hxx>
 #include <popup.hrc>
 #include <uitool.hxx>
 #include <wview.hxx>
@@ -70,10 +54,6 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/xtable.hxx>
-#include <cppuhelper/bootstrap.hxx>
-#include "swabstdlg.hxx"
-#include "misc.hrc"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

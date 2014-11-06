@@ -17,24 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
 #include <svx/ruler.hxx>
-#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 #include <idxmrk.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <viewopt.hxx>
 #include <docsh.hxx>
-#include <globdoc.hxx>
-#include <navipi.hxx>
 #include <fldwrap.hxx>
 #include <redlndlg.hxx>
-#include <dpage.hxx>
 #include <edtwin.hxx>
 #include "formatclipboard.hxx"
-#include <cmdid.h>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 

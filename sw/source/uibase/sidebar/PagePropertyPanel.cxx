@@ -17,19 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
 #include <cstdlib>
 
 #include "PagePropertyPanel.hxx"
 #include "PagePropertyPanel.hrc"
 
-#include "PropertyPanel.hrc"
 
 #include <svx/sidebar/PopupContainer.hxx>
 #include "PageOrientationControl.hxx"
 #include "PageMarginControl.hxx"
-#include "PageSizeControl.hxx"
 #include "PageColumnControl.hxx"
 
 #include <swtypes.hxx>
@@ -42,17 +39,11 @@
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 
-#include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <boost/bind.hpp>
 
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 const char UNO_ORIENTATION[] = ".uno:Orientation";
 const char UNO_MARGIN[]      = ".uno:Margin";

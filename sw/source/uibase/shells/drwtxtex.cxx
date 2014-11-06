@@ -21,9 +21,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <i18nlangtag/mslangid.hxx>
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/spltitem.hxx>
@@ -36,59 +33,35 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <editeng/crossedoutitem.hxx>
-#include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
-#include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/contouritem.hxx>
-#include <editeng/postitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <svx/svdoutl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
-#include <svtools/langtab.hxx>
 #include <svl/languageoptions.hxx>
-#include <vcl/msgbox.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <svl/slstitm.hxx>
 #include <editeng/langitem.hxx>
-#include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/eeitem.hxx>
-#include <editeng/editeng.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
-#include <vcl/window.hxx>
 #include <editeng/editview.hxx>
-#include <vcl/outdev.hxx>
 #include <editeng/hyphenzoneitem.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <cmdid.h>
-#include <doc.hxx>
-#include <docstat.hxx>
 #include <drwtxtsh.hxx>
-#include <edtwin.hxx>
-#include <globals.hrc>
 #include <hintids.hxx>
-#include <initui.hxx>
 #include <langhelper.hxx>
 #include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
-#include <shells.hrc>
 #include <string.h>
-#include <swdtflvr.hxx>
 #include <swmodule.hxx>
-#include <swwait.hxx>
 #include <uitool.hxx>
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
@@ -96,9 +69,7 @@
 #include <wordcountdialog.hxx>
 
 #include "swabstdlg.hxx"
-#include "chrdlg.hrc"
 #include "misc.hrc"
-#include <boost/scoped_ptr.hpp>
 
 const sal_uInt32 nFontInc = 40;      // 2pt
 const sal_uInt32 nFontMaxSz = 19998; // 999.9pt

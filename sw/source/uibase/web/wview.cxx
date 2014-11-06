@@ -19,53 +19,26 @@
 
 #include <config_features.h>
 
-#include <sfx2/msg.hxx>
-#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
-#include <sfx2/templdlg.hxx>
 #include <svx/srchdlg.hxx>
-#include <basic/sbxobj.hxx>
-#include <uivwimp.hxx>
-#include <svx/fmshell.hxx>
-#include <svx/extrusionbar.hxx>
-#include <svx/fontworkbar.hxx>
 
 #include <sfx2/objface.hxx>
 #include <swmodule.hxx>
-#include <unotxvw.hxx>
 #include <swtypes.hxx>
-#include <cmdid.h>
-#include <globals.hrc>
 #include <wrtsh.hxx>
-#include <edtwin.hxx>
-#include <wgrfsh.hxx>
-#include <wfrmsh.hxx>
-#include <wolesh.hxx>
-#include <wtabsh.hxx>
-#include <wlistsh.hxx>
-#include <wformsh.hxx>
-#include <wtextsh.hxx>
-#include <barcfg.hxx>
-#include <doc.hxx>
 
 // TECHNICALLY not possible !!
-#include <beziersh.hxx>
-#include <drawsh.hxx>
-#include <drwtxtsh.hxx>
-#include <annotsh.hxx>
 
 #include <wview.hxx>
 #include <wdocsh.hxx>
 #include <web.hrc>
-#include <shells.hrc>
 
 #define SwWebView
 #define Text
 #define TextInTable
 #define ListInText
 #define ListInTable
-#include <swslots.hxx>
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")
 {
