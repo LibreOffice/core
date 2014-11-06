@@ -25,7 +25,6 @@
 #include <unotools/charclass.hxx>
 #include <swtypes.hxx>
 
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -42,13 +41,11 @@ public:
     SwXMLBlockListContext( SwXMLBlockListImport& rImport,
                            sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                           const uno::Reference<xml::sax::XAttributeList> & xAttrList);
     virtual ~SwXMLBlockListContext ( void );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                           const uno::Reference<xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
 
 };
 
@@ -58,8 +55,7 @@ public:
     SwXMLBlockContext(     SwXMLBlockListImport& rImport,
                            sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                           const uno::Reference<xml::sax::XAttributeList> & xAttrList);
     virtual ~SwXMLBlockContext ( void );
 };
 
@@ -72,12 +68,10 @@ public:
     SwXMLTextBlockDocumentContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                           const uno::Reference<xml::sax::XAttributeList> & xAttrList);
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                           const uno::Reference<xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
     virtual ~SwXMLTextBlockDocumentContext ( void );
 };
 
@@ -90,12 +84,10 @@ public:
     SwXMLTextBlockBodyContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                           const uno::Reference<xml::sax::XAttributeList > & xAttrList);
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                           const uno::Reference<xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
     virtual ~SwXMLTextBlockBodyContext ( void );
 };
 
@@ -108,12 +100,12 @@ public:
     SwXMLTextBlockTextContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                           const uno::Reference<
+                           xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+                           const uno::Reference<
+                           xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
     virtual ~SwXMLTextBlockTextContext ( void );
 };
 
@@ -126,8 +118,8 @@ public:
     SwXMLTextBlockParContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
                            const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                           const uno::Reference<
+                           xml::sax::XAttributeList > & xAttrList );
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
     virtual ~SwXMLTextBlockParContext ( void );
 };
