@@ -626,17 +626,53 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
 void DrawViewShell::FuDeleteSelectedObjects()
 {
-    if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
+    bool bConsumed = false;
+
+    //if any placeholders are selected
+    if (mpDrawView->IsPresObjSelected(false, true, false, false))
+    {
+        //If there are placeholders in the list which can be toggled
+        //off in edit->master->master elements then do that here,
+        std::vector<SdrObject*> aPresMarksToRemove;
+        const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+        for (size_t i=0; i < rMarkList.GetMarkCount(); ++i)
+        {
+            SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+            SdPage* pPage = (SdPage*)pObj->GetPage();
+            PresObjKind eKind = pPage->GetPresObjKind(pObj);
+            if (eKind == PRESOBJ_FOOTER || eKind == PRESOBJ_HEADER ||
+                eKind == PRESOBJ_DATETIME || eKind == PRESOBJ_SLIDENUMBER)
+            {
+                aPresMarksToRemove.push_back(pObj);
+            }
+        }
+
+        for (SdrObject* pObj : aPresMarksToRemove)
+        {
+            //Unmark object
+            mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView(), true);
+            SdPage* pPage = (SdPage*)pObj->GetPage();
+            //remove placeholder from master page
+            pPage->DestroyDefaultPresObj(pPage->GetPresObjKind(pObj));
+        }
+
+        bConsumed = true;
+    }
+
+    // placeholders which cannot be deleted selected
+    if (mpDrawView->IsPresObjSelected(false, true, false, true))
     {
         ::sd::Window* pWindow = GetActiveWindow();
         InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
+        bConsumed = true;
     }
-    else
+
+    if (!bConsumed)
     {
         ::vcl::KeyCode aKCode(KEY_DELETE);
         KeyEvent aKEvt( 0, aKCode);
 
-        bool bConsumed = mpDrawView && mpDrawView->getSmartTags().KeyInput( aKEvt );
+        bConsumed = mpDrawView && mpDrawView->getSmartTags().KeyInput( aKEvt );
 
         if( !bConsumed && HasCurrentFunction() )
             bConsumed = GetCurrentFunction()->KeyInput(aKEvt);
