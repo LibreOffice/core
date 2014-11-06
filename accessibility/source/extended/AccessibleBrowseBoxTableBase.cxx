@@ -19,7 +19,6 @@
 
 #include "accessibility/extended/AccessibleBrowseBoxTableBase.hxx"
 #include <svtools/accessibletableprovider.hxx>
-#include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
