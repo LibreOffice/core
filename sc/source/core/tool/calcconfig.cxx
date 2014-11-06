@@ -92,7 +92,7 @@ void writeStringSet(std::ostream& rStream, const std::set<OUString>& rSet)
 
 } // anonymous namespace
 
-std::ostream& SC_DLLPUBLIC operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
+std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
 {
     rStream << "{"
         "StringRefAddressSyntax=" << rConfig.meStringRefAddressSyntax << ","
@@ -133,7 +133,7 @@ formula::FormulaCompiler::OpCodeMapPtr setup()
 
 } // anonymous namespace
 
-OUString SC_DLLPUBLIC ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes)
+OUString ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes)
 {
     OUStringBuffer result;
 
@@ -147,7 +147,7 @@ OUString SC_DLLPUBLIC ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpC
     return result.toString();
 }
 
-OUString SC_DLLPUBLIC ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes)
+OUString ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes)
 {
     OUStringBuffer result;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(setup());
@@ -165,7 +165,7 @@ OUString SC_DLLPUBLIC ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rO
     return result.toString();
 }
 
-std::set<OpCodeEnum> SC_DLLPUBLIC ScStringToOpCodeSet(const OUString& rOpCodes)
+std::set<OpCodeEnum> ScStringToOpCodeSet(const OUString& rOpCodes)
 {
     std::set<OpCodeEnum> result;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(setup());

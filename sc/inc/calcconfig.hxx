@@ -66,11 +66,11 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool operator!= (const ScCalcConfig& r) const;
 };
 
-std::ostream& SC_DLLPUBLIC operator<<(std::ostream& rStream, const ScCalcConfig& rConfig);
+SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig);
 
-OUString SC_DLLPUBLIC ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes);
-OUString SC_DLLPUBLIC ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes);
-std::set<OpCodeEnum> SC_DLLPUBLIC ScStringToOpCodeSet(const OUString& rOpCodes);
+SC_DLLPUBLIC OUString ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes);
+SC_DLLPUBLIC OUString ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes);
+SC_DLLPUBLIC std::set<OpCodeEnum> ScStringToOpCodeSet(const OUString& rOpCodes);
 
 #endif
 
