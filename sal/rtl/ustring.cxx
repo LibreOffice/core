@@ -661,6 +661,8 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
             if (pInfo != NULL) {
                 *pInfo = 0;
             }
+            RTL_LOG_STRING_NEW( *ppThis );
+            return;
         }
 retry:
         {
