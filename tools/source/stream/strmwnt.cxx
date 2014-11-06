@@ -186,11 +186,13 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
 
 void SvFileStream::FlushData()
 {
+#if 0
     if( IsOpen() )
     {
         if( !FlushFileBuffers(pInstanceData->hFile) )
             SetError(::GetSvError(GetLastError()));
     }
+#endif
 }
 
 bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
