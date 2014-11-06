@@ -546,11 +546,10 @@ bool OpenGLContext::init(HDC hDC, HWND hWnd)
 bool OpenGLContext::ImplInit()
 {
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
-    /* TODO: moggi: FIXME add back
-     * if(m_pWindow)
+    if(m_pWindow)
         m_pWindow->setPosSizePixel(0,0,0,0);
     m_aGLWin.Width = 0;
-    m_aGLWin.Height = 0;*/
+    m_aGLWin.Height = 0;
 
 #if defined( WNT )
 #elif defined( MACOSX )
