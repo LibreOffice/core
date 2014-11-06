@@ -158,7 +158,7 @@ End
 
 #endif
 
-#if defined UNX && ! defined MACOSX
+#if defined UNX
 File gid_File_Bin_Senddoc
     BIN_FILE_BODY;
     Dir = FILELIST_DIR;

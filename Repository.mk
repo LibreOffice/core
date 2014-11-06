@@ -144,7 +144,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
-	$(if $(filter unx,$(GUIBASE)),uri-encode) \
+	$(if $(filter WNT,$(OS)),,uri-encode) \
 	ui-previewer \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
