@@ -696,10 +696,7 @@ retry:
                     pBuffer = (*ppThis)->buffer;
                     do
                     {
-                        /* Check ASCII range */
-                        SAL_WARN_IF( ((unsigned char)*pStr) > 127, "rtl.string",
-                                    "rtl_string2UString_status() - UTF8 test encoding is wrong" );
-
+                        assert(((unsigned char)*pStr) <= 127);
                         *pBuffer = *pStr;
                         pBuffer++;
                         pStr++;
