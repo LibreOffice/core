@@ -358,7 +358,7 @@ void PresenterController::UpdatePaneTitles (void)
                     sCurrentSlideName = sName;
             }
         }
-        catch (beans::UnknownPropertyException&)
+        catch (const beans::UnknownPropertyException&)
         {
         }
     }
@@ -585,10 +585,16 @@ bool PresenterController::HasTransition (Reference<drawing::XDrawPage>& rxPage)
     if( rxPage.is() )
     {
         Reference<beans::XPropertySet> xSlidePropertySet (rxPage, UNO_QUERY);
-        xSlidePropertySet->getPropertyValue("TransitionType") >>= aTransitionType;
-        if( aTransitionType > 0 )
+        try
         {
-            bTransition = true;
+            xSlidePropertySet->getPropertyValue("TransitionType") >>= aTransitionType;
+            if (aTransitionType > 0)
+            {
+                bTransition = true;
+            }
+        }
+        catch (const beans::UnknownPropertyException&)
+        {
         }
     }
     return bTransition;
@@ -597,8 +603,6 @@ bool PresenterController::HasTransition (Reference<drawing::XDrawPage>& rxPage)
 bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage>& rxPage)
 {
     bool bCustomAnimation = false;
-    presentation::AnimationEffect aEffect = presentation::AnimationEffect_NONE;
-    presentation::AnimationEffect aTextEffect = presentation::AnimationEffect_NONE;
     if( rxPage.is() )
     {
         sal_uInt32 i, nCount = rxPage->getCount();
@@ -606,8 +610,16 @@ bool PresenterController::HasCustomAnimation (Reference<drawing::XDrawPage>& rxP
         {
             Reference<drawing::XShape> xShape(rxPage->getByIndex(i), UNO_QUERY);
             Reference<beans::XPropertySet> xShapePropertySet(xShape, UNO_QUERY);
-            xShapePropertySet->getPropertyValue("Effect") >>= aEffect;
-            xShapePropertySet->getPropertyValue("TextEffect") >>= aTextEffect;
+            presentation::AnimationEffect aEffect = presentation::AnimationEffect_NONE;
+            presentation::AnimationEffect aTextEffect = presentation::AnimationEffect_NONE;
+            try
+            {
+                xShapePropertySet->getPropertyValue("Effect") >>= aEffect;
+                xShapePropertySet->getPropertyValue("TextEffect") >>= aTextEffect;
+            }
+            catch (const beans::UnknownPropertyException&)
+            {
+            }
             if( aEffect != presentation::AnimationEffect_NONE ||
                 aTextEffect != presentation::AnimationEffect_NONE )
             {
