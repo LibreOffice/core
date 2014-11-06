@@ -29,7 +29,6 @@
 #include <accessibility/standard/vclxaccessiblefixedhyperlink.hxx>
 #include <accessibility/standard/vclxaccessiblefixedtext.hxx>
 #include <accessibility/standard/vclxaccessiblelistbox.hxx>
-#include <accessibility/standard/vclxaccessiblemenu.hxx>
 #include <accessibility/standard/vclxaccessibleradiobutton.hxx>
 #include <accessibility/standard/vclxaccessiblescrollbar.hxx>
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
