@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <comphelper/types.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 
 
