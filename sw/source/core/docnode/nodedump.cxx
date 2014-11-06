@@ -478,7 +478,8 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             {
                 pWhich = "frame size";
                 const SwFmtFrmSize* pSize = static_cast<const SwFmtFrmSize*>(pItem);
-                oValue = "height size type: " + OString::number(pSize->GetHeightSizeType()) + ", width size type: " + OString::number(pSize->GetWidthSizeType());
+                oValue = "height size type: " + OString::number(pSize->GetHeightSizeType()) + ", height: " + OString::number(pSize->GetHeight())
+                    + ", width size type: " + OString::number(pSize->GetWidthSizeType()) + ", width: " + OString::number(pSize->GetWidth());
                 break;
             }
             case RES_VERT_ORIENT:
