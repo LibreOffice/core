@@ -7472,7 +7472,7 @@ SvxLineSpacingItem LineSpacing SID_ATTR_PARA_LINESPACE
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
