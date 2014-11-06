@@ -641,23 +641,28 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                 return;
             }
             pBuffer = (*ppThis)->buffer;
+            sal_Int32 nLenCopy(nLen);
+            const sal_Char *pStrCopy(pStr);
             do
             {
                 /* Check ASCII range */
-                SAL_WARN_IF( ((unsigned char)*pStr) > 127, "rtl.string",
-                            "rtl_string2UString_status() - Found char > 127 and RTL_TEXTENCODING_ASCII_US is specified" );
+                if (static_cast<unsigned char>(*pStrCopy) > 127)
+                {
+                    rtl_uString_release(*ppThis);
+                    goto retry; // cancel loop - try again with the converter
+                }
 
-                *pBuffer = *pStr;
+                *pBuffer = *pStrCopy;
                 pBuffer++;
-                pStr++;
-                nLen--;
+                pStrCopy++;
+                nLenCopy--;
             }
-            while ( nLen );
+            while (nLenCopy);
             if (pInfo != NULL) {
                 *pInfo = 0;
             }
         }
-        else
+retry:
         {
             rtl_uString*                pTemp;
             rtl_uString*                pTemp2 = NULL;
