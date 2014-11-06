@@ -122,19 +122,18 @@ private:
     // all our images
     Image               m_aNodeAndEntryImages[ IT_IMAGE_COUNT ];
 
-    // wg. kompat. hier
     Size                aOutputSize;
     SelectionEngine     aSelEng;
     ImpLBSelEng         aFctSet;
-    Timer               aAsyncBeginDragTimer;
+    Idle                aAsyncBeginDragIdle;
     Point               aAsyncBeginDragPos;
 
     long                nYoffsNodeBmp;
-    long                nNodeBmpTabDistance; // typisch kleiner 0
+    long                nNodeBmpTabDistance; // typical smaller than 0
     long                nNodeBmpWidth;
     long                nNextVerVisSize;
     long                nMostRight;
-    sal_uLong               nVisibleCount;  // Anzahl Zeilen im Control
+    sal_uLong               nVisibleCount;  // Number of lines in control
     ImplSVEvent *       nCurUserEvent;
     short               nHorSBarHeight, nVerSBarWidth;
     sal_uInt16              nFlags;
@@ -154,7 +153,7 @@ private:
     bool                bAreChildrenTransient;
 
     Point               aEditClickPos;
-    Timer               aEditTimer;
+    Idle                aEditIdle;
 
     // #102891# -------------------
     comphelper::string::NaturalStringSorter *m_pStringSorter;

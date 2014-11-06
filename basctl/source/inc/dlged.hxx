@@ -129,7 +129,7 @@ private:
     bool                bCreateOK;
     Rectangle           aPaintRect;
     bool                bDialogModelChanged;
-    Timer               aMarkTimer;
+    Idle                aMarkIdle;
     long                mnPaintGuard;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
 

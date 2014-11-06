@@ -220,8 +220,8 @@ DlgEditor::DlgEditor (
     m_ClipboardDataFlavorsResource[1].HumanPresentableName = "Dialog 8.0" ;
     m_ClipboardDataFlavorsResource[1].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-    aMarkTimer.SetTimeout( 100 );
-    aMarkTimer.SetTimeoutHdl( LINK( this, DlgEditor, MarkTimeout ) );
+    aMarkIdle.SetPriority(VCL_IDLE_PRIORITY_LOW);
+    aMarkIdle.SetIdleHdl( LINK( this, DlgEditor, MarkTimeout ) );
 
     rWindow.SetMapMode( MapMode( MAP_100TH_MM ) );
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
@@ -247,7 +247,7 @@ DlgEditor::DlgEditor (
 
 DlgEditor::~DlgEditor()
 {
-    aMarkTimer.Stop();
+    aMarkIdle.Stop();
 
     ::comphelper::disposeComponent( m_xControlContainer );
 }
@@ -1079,7 +1079,7 @@ void DlgEditor::ShowProperties()
 
 void DlgEditor::UpdatePropertyBrowserDelayed()
 {
-    aMarkTimer.Start();
+    aMarkIdle.Start();
 }
 
 

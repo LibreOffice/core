@@ -89,8 +89,8 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     nNodeBmpWidth       = 0;
 
     bAsyncBeginDrag     = false;
-    aAsyncBeginDragTimer.SetTimeout( 0 );
-    aAsyncBeginDragTimer.SetTimeoutHdl( LINK(this,SvImpLBox,BeginDragHdl));
+    aAsyncBeginDragIdle.SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+    aAsyncBeginDragIdle.SetIdleHdl( LINK(this,SvImpLBox,BeginDragHdl));
     // button animation in listbox
     pActiveButton = 0;
     pActiveEntry = 0;
@@ -99,8 +99,8 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     nFlags = 0;
     nCurTabPos = FIRST_ENTRY_TAB;
 
-    aEditTimer.SetTimeout( 800 );
-    aEditTimer.SetTimeoutHdl( LINK(this,SvImpLBox,EditTimerCall) );
+    aEditIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    aEditIdle.SetIdleHdl( LINK(this,SvImpLBox,EditTimerCall) );
 
     nMostRight = -1;
     pMostRightEntry = 0;
@@ -115,7 +115,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
 
 SvImpLBox::~SvImpLBox()
 {
-    aEditTimer.Stop();
+    aEditIdle.Stop();
     StopUserEvent();
 
     delete m_pStringSorter;
@@ -2037,7 +2037,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if ( !rMEvt.IsLeft() && !rMEvt.IsRight())
         return;
 
-    aEditTimer.Stop();
+    aEditIdle.Stop();
     Point aPos( rMEvt.GetPosPixel());
 
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
@@ -2128,7 +2128,7 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
     {
         nFlags &= (~F_START_EDITTIMER);
         aEditClickPos = rMEvt.GetPosPixel();
-        aEditTimer.Start();
+        aEditIdle.Start();
     }
 
     return;
@@ -2144,7 +2144,7 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 
 bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 {
-    aEditTimer.Stop();
+    aEditIdle.Stop();
     const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
 
     if( rKeyCode.IsMod2() )
@@ -2622,7 +2622,7 @@ void SvImpLBox::GetFocus()
 
 void SvImpLBox::LoseFocus()
 {
-    aEditTimer.Stop();
+    aEditIdle.Stop();
     if( pCursor )
         pView->SetEntryFocus( pCursor,false );
     ShowCursor( false );
@@ -2933,7 +2933,7 @@ void SvImpLBox::BeginDrag()
     else
     {
         aAsyncBeginDragPos = aSelEng.GetMousePosPixel();
-        aAsyncBeginDragTimer.Start();
+        aAsyncBeginDragIdle.Start();
     }
 }
 
@@ -2981,7 +2981,7 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
     sal_uInt16              nCommand = rCEvt.GetCommand();
 
     if( nCommand == COMMAND_CONTEXTMENU )
-        aEditTimer.Stop();
+        aEditIdle.Stop();
 
     // scroll mouse event?
     if( ( ( nCommand == COMMAND_WHEEL ) || ( nCommand == COMMAND_STARTAUTOSCROLL ) || ( nCommand == COMMAND_AUTOSCROLL ) )

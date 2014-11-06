@@ -35,7 +35,7 @@ private:
 
     ScDocShell*     pDocSh;
     Timer           aTimer;
-    Timer           aInitTimer;
+    Idle            aInitIdle;
     sal_uLong           nTimerStart;
     boost::ptr_vector<ScAutoStyleData> aEntries;
     boost::ptr_vector<ScAutoStyleInitData> aInitials;
