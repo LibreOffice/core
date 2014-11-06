@@ -42,10 +42,8 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSum);
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
-    maOpenCLBlackList = {
-        "Windows/*/Intel(R) Corporation/9.17.10.2884",
-        "SuperOS/1.0/Big Corp, Inc./2.3\\/beta"
-    };
+    maOpenCLBlackList.insert("Windows/*/Intel(R) Corporation/9.17.10.2884");
+    maOpenCLBlackList.insert("SuperOS/1.0/Big Corp, Inc./2.3\\/beta");
 }
 
 void ScCalcConfig::reset()
