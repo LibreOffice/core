@@ -129,21 +129,6 @@ private:
     OUString maCaptionOpenCLBlackList;
     OUString maDescOpenCLBlackList;
 
-    OUString maCaptionOS;
-    OUString maDescOS;
-
-    OUString maCaptionOSVersion;
-    OUString maDescOSVersion;
-
-    OUString maCaptionOpenCLVendor;
-    OUString maDescOpenCLVendor;
-
-    OUString maCaptionOpenCLDevice;
-    OUString maDescOpenCLDevice;
-
-    OUString maCaptionOpenCLDriverVersion;
-    OUString maDescOpenCLDriverVersion;
-
     OUString maSoftware;
 
     ScCalcConfig maConfig;

@@ -201,21 +201,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     maCaptionOpenCLBlackList = get<vcl::Window>("opencl_blacklist")->GetText();
     maDescOpenCLBlackList = get<vcl::Window>("opencl_blacklist_desc")->GetText();
 
-    maCaptionOS = get<vcl::Window>("oslabel")->GetText();
-    maDescOS = get<vcl::Window>("os_desc")->GetText();
-
-    maCaptionOSVersion = get<vcl::Window>("osversionlabel")->GetText();
-    maDescOSVersion = get<vcl::Window>("osversion_desc")->GetText();
-
-    maCaptionOpenCLVendor = get<vcl::Window>("openclvendorlabel")->GetText();
-    maDescOpenCLVendor = get<vcl::Window>("openclvendor_desc")->GetText();
-
-    maCaptionOpenCLDevice = get<vcl::Window>("opencldevicelabel")->GetText();
-    maDescOpenCLDevice = get<vcl::Window>("opencldevice_desc")->GetText();
-
-    maCaptionOpenCLDriverVersion = get<vcl::Window>("opencldriverversionlabel")->GetText();
-    maDescOpenCLDriverVersion = get<vcl::Window>("opencldriverversion_desc")->GetText();
-
     maSoftware = get<vcl::Window>("software")->GetText();
 
     mpLbSettings->set_height_request(8 * mpLbSettings->GetTextHeight());
