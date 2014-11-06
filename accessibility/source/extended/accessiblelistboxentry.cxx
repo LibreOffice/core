@@ -31,7 +31,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <accessibility/helper/accresmgr.hxx>
