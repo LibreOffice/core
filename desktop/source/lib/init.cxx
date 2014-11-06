@@ -137,19 +137,13 @@ static const ExtensionMap aImpressExtensionMap[] =
 
 static const ExtensionMap aDrawExtensionMap[] =
 {
-    { "odg",   "draw8" },
     { "fodg",  "draw_ODG_FlatXML" },
     { "html",  "draw_html_Export" },
+    { "odg",   "draw8" },
+    { "pdf",   "draw_pdf_Export" },
     { "svg",   "draw_svg_Export" },
     { "swf",   "draw_flash_Export" },
     { "xhtml", "XHTML Draw File" },
-    { "vdx",   "draw_Visio_Document" },
-    { "vsd",   "draw_Visio_Document" },
-    { "vsdm",  "draw_Visio_Document" },
-    { "vsdx",  "draw_Visio_Document" },
-    { "pub",   "draw_Publisher_Document" },
-    { "cdr",   "draw_CorelDraw_Document" },
-    { "wpg",   "draw_WordPerfect_Graphics" },
     { NULL, NULL }
 };
 
