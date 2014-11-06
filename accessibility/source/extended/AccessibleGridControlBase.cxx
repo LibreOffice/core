@@ -18,7 +18,6 @@
  */
 
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
