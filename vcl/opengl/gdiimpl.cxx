@@ -57,7 +57,7 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
     const basegfx::B2DPolyPolygon aClip( rClip.GetAsB2DPolyPolygon() );
 
-    glEnable(GL_STENCIL_TEST);
+    /*glEnable(GL_STENCIL_TEST);
 
     glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
     glDepthMask( GL_FALSE );
@@ -71,7 +71,7 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glDepthMask( GL_TRUE );
     glStencilMask( 0x00 );
-    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glStencilFunc(GL_EQUAL, 1, 0xFF);*/
 
     return true;
 }
@@ -166,6 +166,7 @@ bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
     if( mnSolidProgram == 0 )
         return false;
 
+    SAL_INFO( "vcl.opengl", "Solid Program Created" );
     glBindAttribLocation( mnSolidProgram, GL_ATTRIB_POS, "position" );
     mnColorUniform = glGetUniformLocation( mnSolidProgram, "color" );
     return true;
@@ -213,6 +214,8 @@ void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor, sal_uInt8 nTransparency
 {
     if( mnSolidProgram == 0 )
     {
+        glClearColor( 1, 1, 1, 1 );
+        glClear( GL_COLOR_BUFFER_BIT );
         if( !CreateSolidProgram() )
             return;
     }
@@ -410,9 +413,11 @@ void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, con
     glUseProgram( mnTextureProgram );
     glUniform1i( mnSamplerUniform, 0 );
     glActiveTexture( GL_TEXTURE0 );
+    CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, nTexture );
 
     DrawTextureRect( rSize, pPosAry );
+    CHECK_GL_ERROR();
 
     glBindTexture( GL_TEXTURE_2D, 0 );
     glUseProgram( 0 );
@@ -468,6 +473,7 @@ void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const S
 // draw --> LineColor and FillColor and RasterOp and ClipRegion
 void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY )
 {
+    SAL_INFO( "vcl.opengl", "::drawPixel" );
     if( mnLineColor != SALCOLOR_NONE )
     {
         maContext.makeCurrent();
@@ -479,6 +485,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY )
 
 void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
 {
+    SAL_INFO( "vcl.opengl", "::drawPixel" );
     if( nSalColor != SALCOLOR_NONE )
     {
         maContext.makeCurrent();
@@ -490,6 +497,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
 
 void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
+    SAL_INFO( "vcl.opengl", "::drawLine" );
     if( mnLineColor != SALCOLOR_NONE )
     {
         maContext.makeCurrent();
@@ -501,6 +509,7 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
+    SAL_INFO( "vcl.opengl", "::drawRect" );
     maContext.makeCurrent();
     glViewport( 0, 0, GetWidth(), GetHeight() );
 
@@ -528,6 +537,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
 
 void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
+    SAL_INFO( "vcl.opengl", "::drawPolyLine" );
     maContext.makeCurrent();
 
     if( mnLineColor != SALCOLOR_NONE && nPoints > 1 )
@@ -540,6 +550,7 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
 
 void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
+    SAL_INFO( "vcl.opengl", "::drawPolygon" );
     if( nPoints == 0 )
         return;
     if( nPoints == 1 )
@@ -573,6 +584,7 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
 void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
 {
+    SAL_INFO( "vcl.opengl", "::drawPolyPolygon" );
     if( nPoly <= 0 )
         return;
 
@@ -643,6 +655,7 @@ void OpenGLSalGraphicsImpl::copyArea(
             long /*nSrcWidth*/, long /*nSrcHeight*/,
             sal_uInt16 /*nFlags*/ )
 {
+    SAL_INFO( "vcl.opengl", "::copyArea" );
 }
 
 // CopyBits and DrawBitmap --> RasterOp and ClipRegion
@@ -652,6 +665,7 @@ void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* /*
     // TODO Check if SalGraphicsImpl is the same
     const bool bSameGraphics( false );
 
+    SAL_INFO( "vcl.opengl", "::copyBits" );
     if( bSameGraphics &&
         (rPosAry.mnSrcWidth == rPosAry.mnDestWidth) &&
         (rPosAry.mnSrcHeight == rPosAry.mnDestHeight))
@@ -712,6 +726,7 @@ void OpenGLSalGraphicsImpl::drawMask(
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const GLuint nTexture( rBitmap.GetTexture( maContext ) );
 
+    SAL_INFO( "vcl.opengl", "::drawMask" );
     maContext.makeCurrent();
     DrawMask( nTexture, nMaskColor, rPosAry );
 }
@@ -719,6 +734,7 @@ void OpenGLSalGraphicsImpl::drawMask(
 SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     OpenGLSalBitmap* pBitmap = new OpenGLSalBitmap;
+    SAL_INFO( "vcl.opengl", "::getBitmap" );
     if( !pBitmap->Create( maContext, nX, nY, nWidth, nHeight ) )
     {
         delete pBitmap;
