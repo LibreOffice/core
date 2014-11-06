@@ -19,7 +19,6 @@
 
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 namespace accessibility
