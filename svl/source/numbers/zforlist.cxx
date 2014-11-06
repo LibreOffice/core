@@ -2411,9 +2411,8 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     // [HH]:MM:SS,00
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_TIME_HH_MMSS00 );
-    ImpInsertNewStandardFormat( aFormatSeq[nIdx],
-                                CLOffset + SetIndexTable( NF_TIME_HH_MMSS00, ZF_STANDARD_TIME+6 ),
-                                SV_NUMBERFORMATTER_VERSION_NF_TIME_HH_MMSS00 );
+    ImpInsertFormat( aFormatSeq[nIdx],
+                     CLOffset + SetIndexTable( NF_TIME_HH_MMSS00, ZF_STANDARD_TIME+6 ));
 
 
 
