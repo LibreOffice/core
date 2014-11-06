@@ -131,8 +131,9 @@ void RemoteServer::execute()
             MutexGuard aGuard( sDataMutex );
             ::boost::shared_ptr< ClientInfoInternal > pClient(
                 new ClientInfoInternal(
-                    OUString::fromUtf8( aName ),
-                    aAddress, false, pSocket, OUString::fromUtf8( aPin ) ) );
+                    OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
+                    aAddress, false, pSocket, OStringToOUString( aPin,
+                                                                 RTL_TEXTENCODING_UTF8 ) ) );
             mAvailableClients.push_back( pClient );
 
             // Read off any additional non-empty lines

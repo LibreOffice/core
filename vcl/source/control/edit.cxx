@@ -231,7 +231,7 @@ bool Edit::set_property(const OString &rKey, const OString &rValue)
         SetStyle(nBits);
     }
     else if (rKey == "placeholder-text")
-        SetPlaceholderText(OUString::fromUtf8(rValue));
+        SetPlaceholderText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else
         return Control::set_property(rKey, rValue);
     return true;

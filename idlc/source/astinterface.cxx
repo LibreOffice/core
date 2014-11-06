@@ -103,7 +103,7 @@ bool AstInterface::dump(RegistryKey& rKey)
         return true;
 
     RegistryKey localKey;
-    if (rKey.createKey( OUString::fromUtf8(getFullName()), localKey))
+    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -194,7 +194,7 @@ bool AstInterface::dump(RegistryKey& rKey)
     OUString emptyStr;
     typereg::Writer aBlob(
         version, getDocumentation(), emptyStr, RT_TYPE_INTERFACE, m_bPublished,
-        OUString::fromUtf8(getRelativName()), nBaseTypes,
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), nBaseTypes,
         nAttributes, nMethods, nReferences);
 
     sal_uInt16 superTypeIndex = 0;
@@ -206,11 +206,15 @@ bool AstInterface::dump(RegistryKey& rKey)
             aBlob.setReferenceData(
                 referenceIndex++, i->getDocumentation(), RT_REF_SUPPORTS,
                 RT_ACCESS_OPTIONAL,
-                OUString::fromUtf8(i->getInterface()->getRelativName()));
+                OStringToOUString(
+                    i->getInterface()->getRelativName(),
+                    RTL_TEXTENCODING_UTF8));
         } else {
             aBlob.setSuperTypeName(
                 superTypeIndex++,
-                OUString::fromUtf8(i->getInterface()->getRelativName()));
+                OStringToOUString(
+                    i->getInterface()->getRelativName(),
+                    RTL_TEXTENCODING_UTF8));
         }
     }
 

@@ -2252,7 +2252,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                         std::vector<OString>& rNames = it->second;
                         if (rNames.size() > nIndex)
                             // We know the bookmark name for this sequence and this index, do the replacement.
-                            sMark = OUString::fromUtf8(rNames[nIndex]);
+                            sMark = OStringToOUString(rNames[nIndex], RTL_TEXTENCODING_UTF8);
                     }
                 }
             }

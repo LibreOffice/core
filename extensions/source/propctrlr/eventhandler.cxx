@@ -809,7 +809,7 @@ namespace pcr
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         aDescriptor.DisplayName = rEvent.sDisplayName;
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
-        aDescriptor.PrimaryButtonId = OUString::fromUtf8(rEvent.sUniqueBrowseId);
+        aDescriptor.PrimaryButtonId = OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
         aDescriptor.HasPrimaryButton = sal_True;
         aDescriptor.Category = "Events";
         return aDescriptor;

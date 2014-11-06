@@ -228,7 +228,7 @@ void LdapConnection::initConnection()
             data->insert(
                 LdapData::value_type(
                     OStringToOUString(attr, RTL_TEXTENCODING_ASCII_US),
-                    OUString::fromUtf8(*values)));
+                    OStringToOUString(*values, RTL_TEXTENCODING_UTF8)));
             ldap_value_free(values);
         }
         attr = ldap_next_attribute(mConnection, result.msg, ptr);
@@ -284,7 +284,7 @@ void LdapConnection::initConnection()
 #else
         sal_Char *charsDn = ldap_get_dn(mConnection, entry) ;
 
-        userDn = OUString::fromUtf8( charsDn );
+        userDn = OStringToOUString( charsDn, RTL_TEXTENCODING_UTF8 );
         ldap_memfree(charsDn) ;
 #endif
     }

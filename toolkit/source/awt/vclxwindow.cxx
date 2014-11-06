@@ -1993,7 +1993,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             break;
             case BASEPROPERTY_HELPURL:
             {
-                OUString aHelpId( OUString::fromUtf8( GetWindow()->GetHelpId() ) );
+                OUString aHelpId( OStringToOUString( GetWindow()->GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
                 aProp <<= OUString( aHelpId );
             }
             break;

@@ -523,13 +523,13 @@ sal_Int32 gatherString(int delim, sal_Int32 nTyp)
                 switch(nTyp)
                 {
                 case 0:
-                    SQL_NEW_NODE(::rtl::OUString::fromUtf8(sBuffer.makeStringAndClear()), SQL_NODE_NAME);
+                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
                     return SQL_TOKEN_NAME;
                 case 1:
-                    SQL_NEW_NODE(::rtl::OUString::fromUtf8(sBuffer.makeStringAndClear()), SQL_NODE_STRING);
+                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
                     return SQL_TOKEN_STRING;
                 case 2:
-                    SQL_NEW_NODE(::rtl::OUString::fromUtf8(sBuffer.makeStringAndClear()), SQL_NODE_ACCESS_DATE);
+                    SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
                     return SQL_TOKEN_ACCESS_DATE;
                 }
             }

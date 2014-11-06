@@ -339,7 +339,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
         {
             if (aLine[0] == '#') // skip comments
                 continue;
-            OUString aText = OUString::fromUtf8(aLine);
+            OUString aText = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
             uno::Reference< XDictionaryEntry > xEntry =
                     new DicEntry( aText, eDicType == DictionaryType_NEGATIVE );
             addEntry_Impl( xEntry, true ); //! don't launch events here

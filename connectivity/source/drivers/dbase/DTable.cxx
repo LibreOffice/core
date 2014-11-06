@@ -1946,7 +1946,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
                         aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$columnname$", aColName));
                         aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$precision$", OUString::number(nLen)));
                         aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$scale$", OUString::number(nScale)));
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$value$", OUString::fromUtf8(aDefaultValue)));
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$value$", OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
 
                         const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                                 STR_INVALID_COLUMN_DECIMAL_VALUE

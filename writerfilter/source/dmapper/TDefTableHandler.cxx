@@ -292,7 +292,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             appendGrabBag("val", TDefTableHandler::getBorderTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_color:
-            appendGrabBag("color", OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true)));
+            appendGrabBag("color", OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8));
             m_nLineColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_space:

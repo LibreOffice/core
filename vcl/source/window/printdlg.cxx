@@ -775,7 +775,7 @@ void PrintDialog::storeToSettings()
                      mpTabCtrl->GetPageText( mpTabCtrl->GetCurPageId() ) );
     pItem->setValue( OUString( "PrintDialog"  ),
                      OUString( "WindowState"  ),
-                     OUString::fromUtf8( GetWindowState() )
+                     OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
                      );
     pItem->Commit();
 }

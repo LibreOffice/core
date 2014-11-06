@@ -134,7 +134,7 @@ void FixedHyperlink::SetText(const OUString& rNewDescription)
 bool FixedHyperlink::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "uri")
-        SetURL(OUString::fromUtf8(rValue));
+        SetURL(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else
         return FixedText::set_property(rKey, rValue);
     return true;

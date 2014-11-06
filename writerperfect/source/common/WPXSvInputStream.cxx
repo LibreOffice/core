@@ -206,7 +206,7 @@ SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
 SotStorageStreamRef OLEStorageImpl::getStream(const std::size_t nId)
 {
     if (!maStreams[nId].stream.ref.Is())
-        maStreams[nId].stream.ref = createStream(rtl::OUString::fromUtf8(maStreams[nId].name));
+        maStreams[nId].stream.ref = createStream(rtl::OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
 
     return maStreams[nId].stream.ref;
 }
@@ -352,7 +352,7 @@ Reference<XInputStream> ZipStorageImpl::getStream(const rtl::OUString &rPath)
 Reference<XInputStream> ZipStorageImpl::getStream(const std::size_t nId)
 {
     if (!maStreams[nId].xStream.is())
-        maStreams[nId].xStream = createStream(rtl::OUString::fromUtf8(maStreams[nId].aName));
+        maStreams[nId].xStream = createStream(rtl::OStringToOUString(maStreams[nId].aName, RTL_TEXTENCODING_UTF8));
 
     return maStreams[nId].xStream;
 }
@@ -625,7 +625,7 @@ bool WPXSvInputStreamImpl::existsSubStream(const char *const name)
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    const rtl::OUString aName(rtl::OUString::fromUtf8(rtl::OString(name)));
+    const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
 
     if (isOLE())
     {
@@ -655,7 +655,7 @@ librevenge::RVNGInputStream *WPXSvInputStreamImpl::getSubStreamByName(const char
     PositionHolder pos(mxSeekable);
     mxSeekable->seek(0);
 
-    const rtl::OUString aName(rtl::OUString::fromUtf8(rtl::OString(name)));
+    const rtl::OUString aName(rtl::OStringToOUString(rtl::OString(name), RTL_TEXTENCODING_UTF8));
 
     if (isOLE())
     {

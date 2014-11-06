@@ -36,7 +36,7 @@ namespace rptui
     OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
     {
         OUStringBuffer aBuffer;
-        OUString aTmp( OUString::fromUtf8(sHelpId) );
+        OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
         DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
         aBuffer.appendAscii( INET_HID_SCHEME );
         aBuffer.append( aTmp.getStr() );

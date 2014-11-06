@@ -61,7 +61,8 @@ namespace
     //Escape unicode characters
     static void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
     {
-        const OUString sTemp = OUString::fromUtf8( rText );
+        const OUString sTemp =
+            OStringToOUString( rText, RTL_TEXTENCODING_UTF8 );
         for ( sal_Int32 nIndex = 0; nIndex < sTemp.getLength(); ++nIndex )
         {
             sal_Unicode cUniCode = sTemp[nIndex];

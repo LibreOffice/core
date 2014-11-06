@@ -182,8 +182,8 @@ void call(
         } catch (std::exception & e) {
             throw css::uno::RuntimeException(
                 "C++ code threw "
-                + OUString::fromUtf8(typeid(e).name())
-                + ": " + OUString::fromUtf8(e.what()));
+                + OStringToOUString(typeid(e).name(), RTL_TEXTENCODING_UTF8)
+                + ": " + OStringToOUString(e.what(), RTL_TEXTENCODING_UTF8));
         } catch (...) {
             throw css::uno::RuntimeException(
                 "C++ code threw unknown exception");

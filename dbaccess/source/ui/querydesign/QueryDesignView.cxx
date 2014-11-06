@@ -3421,7 +3421,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
 
                 OUString sFunctionName = pFunctionName->getTokenValue();
                 if ( sFunctionName.isEmpty() )
-                    sFunctionName = OUString::fromUtf8(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()));
+                    sFunctionName = OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
 
                 nDataType = OSQLParser::getFunctionReturnType(
                     sFunctionName

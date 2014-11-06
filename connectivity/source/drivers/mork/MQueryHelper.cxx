@@ -243,7 +243,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                     std::string value = xMork->getValue(CellsIter->second);
                     OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
                     OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
-                    OUString valueOUString = OUString::fromUtf8( valueOString );
+                    OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                     entry->setValue(key, valueOUString);
                 }
                 ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &expr, entry);

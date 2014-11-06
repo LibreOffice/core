@@ -76,7 +76,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
 sal_Int32 StyleContainer::getStandardStyleId( const OString& rName )
 {
     PropertyMap aProps;
-    aProps[ "style:family" ] = OUString::fromUtf8( rName );
+    aProps[ "style:family" ] = OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
     aProps[ "style:name" ] = "standard";
 
     Style aStyle( "style:style", aProps );

@@ -253,7 +253,8 @@ void PackageManagerImpl::initActivationLayer(
                             ::rtl::ByteSequence data = dp_misc::readFile(remFileContent);
                             OString osData(reinterpret_cast<const sal_Char*>(data.getConstArray()),
                                                   data.getLength());
-                            OUString sData = OUString::fromUtf8(osData);
+                            OUString sData = OStringToOUString(
+                                osData, RTL_TEXTENCODING_UTF8);
                             if (!sData.equals(aUserName))
                                 continue;
                         }

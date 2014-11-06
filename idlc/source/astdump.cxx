@@ -41,7 +41,7 @@ bool AstModule::dump(RegistryKey& rKey)
         localKey = rKey;
     }else
     {
-        if (rKey.createKey( OUString::fromUtf8(getFullName()), localKey))
+        if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
         {
             fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                     idlc()->getOptions()->getProgramName().getStr(),
@@ -62,7 +62,7 @@ bool AstModule::dump(RegistryKey& rKey)
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
             getDocumentation(), emptyStr, typeClass,
             m_bPublished,
-            OUString::fromUtf8(getRelativName()), 0,
+            OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
             nConst, 0, 0);
 
         DeclList::const_iterator iter = getIteratorBegin();
@@ -102,7 +102,7 @@ bool AstModule::dump(RegistryKey& rKey)
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
             getDocumentation(), emptyStr, typeClass, m_bPublished,
-            OUString::fromUtf8(getRelativName()), 0, 0, 0,
+            OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0, 0, 0,
             0);
 
         sal_uInt32 aBlobSize;
@@ -131,7 +131,7 @@ bool AstTypeDef::dump(RegistryKey& rKey)
 {
     OUString emptyStr;
     RegistryKey localKey;
-    if (rKey.createKey( OUString::fromUtf8(getFullName()), localKey))
+    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -142,10 +142,11 @@ bool AstTypeDef::dump(RegistryKey& rKey)
     typereg::Writer aBlob(
         m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
         getDocumentation(), emptyStr, RT_TYPE_TYPEDEF, m_bPublished,
-        OUString::fromUtf8(getRelativName()), 1, 0, 0, 0);
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1, 0, 0, 0);
     aBlob.setSuperTypeName(
         0,
-        OUString::fromUtf8(getBaseType()->getRelativName()));
+        OStringToOUString(
+            getBaseType()->getRelativName(), RTL_TEXTENCODING_UTF8));
 
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
@@ -216,7 +217,7 @@ bool AstService::dump(RegistryKey& rKey)
     }
     RegistryKey localKey;
     if (rKey.createKey(
-            OUString::fromUtf8(getFullName()),
+            OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8),
             localKey)) {
         fprintf(
             stderr, "%s: warning, could not create key '%s' in '%s'\n",
@@ -230,12 +231,12 @@ bool AstService::dump(RegistryKey& rKey)
         version, getDocumentation(), emptyStr,
         getNodeType() == NT_singleton ? RT_TYPE_SINGLETON : RT_TYPE_SERVICE,
         m_bPublished,
-        OUString::fromUtf8(getRelativName()),
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
         superName.isEmpty() ? 0 : 1, properties, constructors,
         references);
     if (!superName.isEmpty()) {
         writer.setSuperTypeName(
-            0, OUString::fromUtf8(superName));
+            0, OStringToOUString(superName, RTL_TEXTENCODING_UTF8));
     }
     sal_uInt16 constructorIndex = 0;
     sal_uInt16 propertyIndex = 0;
@@ -257,7 +258,8 @@ bool AstService::dump(RegistryKey& rKey)
             writer.setReferenceData(
                 referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
                 (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
-                OUString::fromUtf8( decl->getRealInterface()->getRelativName() ));
+                OStringToOUString( decl->getRealInterface()->getRelativName(),
+                                        RTL_TEXTENCODING_UTF8));
             break;
         }
 
@@ -267,7 +269,8 @@ bool AstService::dump(RegistryKey& rKey)
                 AstServiceMember * decl = static_cast<AstServiceMember *>(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
                     (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
-                    OUString::fromUtf8(decl->getRealService()->getRelativName()));
+                    OStringToOUString(decl->getRealService()->getRelativName(),
+                                           RTL_TEXTENCODING_UTF8));
             }
             break;
 
@@ -276,7 +279,8 @@ bool AstService::dump(RegistryKey& rKey)
                 AstObserves * decl = static_cast<AstObserves *>(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
                     RT_ACCESS_INVALID,
-                    OUString::fromUtf8( decl->getRealInterface()->getRelativName()));
+                    OStringToOUString( decl->getRealInterface()->getRelativName(),
+                                            RTL_TEXTENCODING_UTF8));
                 break;
             }
 
@@ -285,7 +289,8 @@ bool AstService::dump(RegistryKey& rKey)
                 AstNeeds * decl = static_cast<AstNeeds *>(*i);
                 writer.setReferenceData( referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
                     RT_ACCESS_INVALID,
-                    OUString::fromUtf8( decl->getRealService()->getRelativName()));
+                    OStringToOUString( decl->getRealService()->getRelativName(),
+                                            RTL_TEXTENCODING_UTF8));
                 break;
             }
 
@@ -362,10 +367,10 @@ bool AstAttribute::dumpBlob(
         accessMode |= RT_ACCESS_REMOVABLE;
     }
 
-    OUString name(OUString::fromUtf8(getLocalName()));
+    OUString name(OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8));
     rBlob.setFieldData(
         index, getDocumentation(), OUString(), accessMode, name,
-        OUString::fromUtf8(getType()->getRelativName()),
+        OStringToOUString(getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
         RTConstValue());
     dumpExceptions(
         rBlob, m_getDocumentation, m_getExceptions, RT_MODE_ATTRIBUTE_GET,
@@ -388,7 +393,7 @@ void AstAttribute::dumpExceptions(
         // AstInterface::dump:
         writer.setMethodData(
             idx, documentation, flags,
-            OUString::fromUtf8(getLocalName()),
+            OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
             OUString("void"), 0,
             static_cast< sal_uInt16 >(exceptions.size()));
         sal_uInt16 exceptionIndex = 0;
@@ -397,7 +402,8 @@ void AstAttribute::dumpExceptions(
         {
             writer.setMethodExceptionTypeName(
                 idx, exceptionIndex++,
-                OUString::fromUtf8((*i)->getRelativName()));
+                OStringToOUString(
+                    (*i)->getRelativName(), RTL_TEXTENCODING_UTF8));
         }
     }
 }

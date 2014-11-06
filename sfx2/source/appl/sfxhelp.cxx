@@ -455,7 +455,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
         while ( pParent )
         {
             aNewHelpId = pParent->GetHelpId();
-            sHelpText = SfxHelp_Impl::GetHelpText( OUString::fromUtf8(aNewHelpId), sModuleName );
+            sHelpText = SfxHelp_Impl::GetHelpText( OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
             if (!sHelpText.isEmpty())
                 pParent = NULL;
             else
@@ -476,7 +476,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
         if ( !aNewHelpId.isEmpty() )
         {
             sHelpText += " - ";
-            sHelpText += OUString::fromUtf8(aNewHelpId);
+            sHelpText += OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8);
         }
     }
 
@@ -568,7 +568,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
                 while ( pParent )
                 {
                     OString aHelpId = pParent->GetHelpId();
-                    aHelpURL = CreateHelpURL( OUString::fromUtf8(aHelpId), aHelpModuleName );
+                    aHelpURL = CreateHelpURL( OStringToOUString(aHelpId, RTL_TEXTENCODING_UTF8), aHelpModuleName );
                     if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
                     {
                         break;

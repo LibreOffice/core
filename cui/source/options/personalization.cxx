@@ -381,7 +381,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     {
         OString aLine;
         aStream.ReadLine( aLine );
-        OUString aPersonaSetting( OUString::fromUtf8( aLine ) );
+        OUString aPersonaSetting( OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 ) );
         OUString aPreviewFile;
         sal_Int32 nNewIndex = aPersonaSetting.indexOf( ';', 0 );
         if( nNewIndex < 0 )

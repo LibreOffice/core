@@ -711,7 +711,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                 sal_uInt32      nThemeId = 0;
 
                 OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
-                aThemeName = OUString::fromUtf8(aTmpStr);
+                aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
                 // execute a charakter conversion
                 if( nVersion >= 0x0004 )

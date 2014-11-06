@@ -170,7 +170,7 @@ namespace dbaui
                     {
                         rString += "SQL_KEYWORD:";
                         OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
-                        rString += OUString::fromUtf8(sT);
+                        rString += OStringToOUString(sT, RTL_TEXTENCODING_UTF8);
                      break;}
 
                 case SQL_NODE_COMPARISON:

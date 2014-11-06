@@ -2220,9 +2220,9 @@ OUString MessageDialog::get_secondary_text() const
 bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "text")
-        set_primary_text(OUString::fromUtf8(rValue));
+        set_primary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey == "secondary-text")
-        set_secondary_text(OUString::fromUtf8(rValue));
+        set_secondary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey == "message-type")
     {
         VclMessageType eMode = VCL_MESSAGE_INFO;

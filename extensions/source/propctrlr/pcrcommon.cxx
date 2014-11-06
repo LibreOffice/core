@@ -49,7 +49,7 @@ namespace pcr
     OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
     {
         OUStringBuffer aBuffer;
-        OUString aTmp( OUString::fromUtf8(sHelpId) );
+        OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
             aBuffer.appendAscii( INET_HID_SCHEME );

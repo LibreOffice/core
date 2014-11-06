@@ -61,6 +61,7 @@
 
 using ::rtl::OUString;
 using ::rtl::OString;
+using ::rtl::OStringToOUString;
 using ::rtl::OStringBuffer;
 
 extern int yylex(void);
@@ -896,7 +897,8 @@ attribute_get_raises:
     IDL_GET raises ';'
     {
         $$.documentation = new rtl::OUString(
-            rtl::OUString::fromUtf8(idlc()->getDocumentation()));
+            rtl::OStringToOUString(
+                idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8));
         $$.exceptions = $2;
     }
     ;
@@ -918,7 +920,8 @@ attribute_set_raises:
     raises ';'
     {
         $$.documentation = new rtl::OUString(
-            rtl::OUString::fromUtf8(idlc()->getDocumentation()));
+            rtl::OStringToOUString(
+                idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8));
         $$.exceptions = $3;
     }
     ;
@@ -1200,7 +1203,8 @@ interface_inheritance_decl:
         } else {
             addInheritedInterface(
                 ifc, *$4, $1,
-                rtl::OUString::fromUtf8(idlc()->getDocumentation()));
+                rtl::OStringToOUString(
+                    idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8));
         }
         delete $4;
     }

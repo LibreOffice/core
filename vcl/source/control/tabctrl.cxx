@@ -1366,7 +1366,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            OUString aHelpId( OUString::fromUtf8( GetHelpId( nItemId ) ) );
+            OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
             {
                 // call Help if existing
@@ -1962,7 +1962,7 @@ const OUString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
     {
         Help* pHelp = Application::GetHelp();
         if ( pHelp )
-            pItem->maHelpText = pHelp->GetHelpText( OUString::fromUtf8( pItem->maHelpId ), this );
+            pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
     }
     return pItem->maHelpText;
 }

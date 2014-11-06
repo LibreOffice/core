@@ -191,7 +191,8 @@ void OSelectionBrowseBox::initialize()
         for (size_t i = 0; i < sizeof (eFunctions) / sizeof (eFunctions[0]); ++i)
         {
             m_aFunctionStrings += ";";
-            m_aFunctionStrings += OUString::fromUtf8(rContext.getIntlKeywordAscii(eFunctions[i]));
+            m_aFunctionStrings += OStringToOUString(rContext.getIntlKeywordAscii(eFunctions[i]),
+                RTL_TEXTENCODING_UTF8);
         }
         m_aFunctionStrings += ";";
         m_aFunctionStrings += sGroup;

@@ -142,7 +142,9 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
         sVersion = xmlNodeListGetString(
             m_xmlDocVendorSettings,
             xPathObjectMin->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
-        aVersionInfo.sMinVersion = OUString::fromUtf8(OString((sal_Char*)(xmlChar*) sVersion));
+        OString osVersion((sal_Char*)(xmlChar*) sVersion);
+        aVersionInfo.sMinVersion = OStringToOUString(
+            osVersion, RTL_TEXTENCODING_UTF8);
     }
 
     //Get maxVersion
@@ -162,7 +164,9 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
         sVersion = xmlNodeListGetString(
             m_xmlDocVendorSettings,
             xPathObjectMax->nodesetval->nodeTab[0]->xmlChildrenNode, 1);
-        aVersionInfo.sMaxVersion = OUString::fromUtf8(OString((sal_Char*) (xmlChar*) sVersion));
+        OString osVersion((sal_Char*) (xmlChar*) sVersion);
+        aVersionInfo.sMaxVersion = OStringToOUString(
+            osVersion, RTL_TEXTENCODING_UTF8);
     }
 
     //Get excludeVersions
@@ -184,7 +188,9 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
                     CXmlCharPtr sVersion;
                     sVersion = xmlNodeListGetString(
                         m_xmlDocVendorSettings, cur->xmlChildrenNode, 1);
-                    OUString usVersion = OUString::fromUtf8(OString((sal_Char*)(xmlChar*) sVersion));
+                    OString osVersion((sal_Char*)(xmlChar*) sVersion);
+                    OUString usVersion = OStringToOUString(
+                        osVersion, RTL_TEXTENCODING_UTF8);
                     aVersionInfo.addExcludeVersion(usVersion);
                 }
             }

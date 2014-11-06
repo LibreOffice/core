@@ -271,7 +271,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        aHelpText = pHelp->GetHelpText( OUString::fromUtf8(sHelpId), NULL );
+        aHelpText = pHelp->GetHelpText( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), NULL );
     return aHelpText;
 }
 
@@ -1143,7 +1143,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
         {
             while ( *_pControlId )
             {
-                DBG_ASSERT( INetURLObject( OUString::fromUtf8( *_pHelpId ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
+                DBG_ASSERT( INetURLObject( OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
                 OUString sId( sHelpIdPrefix );
                 sId += OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
                 xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );

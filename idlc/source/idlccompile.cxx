@@ -258,8 +258,9 @@ sal_Int32 compileFile(const OString * pathname)
         {
             cppArgs.append("-I");
             cppArgs.append(filePath);
-            lCppArgs.push_back(OUString::fromUtf8(
-                cppArgs.makeStringAndClear().replace('\\', '/')));
+            lCppArgs.push_back(OStringToOUString(
+                cppArgs.makeStringAndClear().replace('\\', '/'),
+                RTL_TEXTENCODING_UTF8));
         }
     }
 
@@ -271,7 +272,7 @@ sal_Int32 compileFile(const OString * pathname)
         {
             token = dOpt.getToken( 0, ' ', nIndex );
             if (token.getLength())
-                lCppArgs.push_back(OUString::fromUtf8("-D" + token));
+                lCppArgs.push_back(OStringToOUString("-D" + token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }
 
@@ -283,17 +284,17 @@ sal_Int32 compileFile(const OString * pathname)
         {
             token = incOpt.getToken( 0, ' ', nIndex );
             if (token.getLength())
-                lCppArgs.push_back(OUString::fromUtf8("-I" + token));
+                lCppArgs.push_back(OStringToOUString("-I" + token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }
 
     lCppArgs.push_back(OUString("-o"));
 
 	cppArgs.append(preprocFile);
-    lCppArgs.push_back(OUString::fromUtf8(cppArgs.makeStringAndClear()));
+    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
 
     cppArgs.append(tmpFile);
-    lCppArgs.push_back(OUString::fromUtf8(cppArgs.makeStringAndClear()));
+    lCppArgs.push_back(OStringToOUString(cppArgs.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
 
     OUString cpp;
     OUString startDir;

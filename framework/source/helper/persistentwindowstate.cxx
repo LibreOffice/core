@@ -239,8 +239,9 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
         {
             sal_uLong nMask  =   WINDOWSTATE_MASK_ALL;
                   nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
-            sWindowState = OUString::fromUtf8(
-                            static_cast<SystemWindow*>(pWindow)->GetWindowState(nMask));
+            sWindowState = OStringToOUString(
+                            static_cast<SystemWindow*>(pWindow)->GetWindowState(nMask),
+                            RTL_TEXTENCODING_UTF8);
         }
         // <- SOLAR SAFE ------------------------
     }

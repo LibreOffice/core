@@ -448,8 +448,8 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 if(xPropInfo->hasPropertyByName(uProp))
                 {
                     OUString sId = OUString::createFromAscii( INET_HID_SCHEME );
-                    DBG_ASSERT( INetURLObject( OUString::fromUtf8( sHelpId ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
-                    sId += OUString::fromUtf8( sHelpId );
+                    DBG_ASSERT( INetURLObject( OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
+                    sId += OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 );
                     xPropSet->setPropertyValue( uProp, makeAny( sId ) );
                 }
 

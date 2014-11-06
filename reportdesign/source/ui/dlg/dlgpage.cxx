@@ -38,9 +38,9 @@ namespace rptui
 \************************************************************************/
 
 ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, const OString &rDialog)
-    : SfxTabDialog (pParent, rDialog,
-        "modules/dbreport/ui/" + OUString::fromUtf8(rDialog).toAsciiLowerCase() + ".ui",
-        pAttr)
+    : SfxTabDialog (pParent, rDialog, OUString("modules/dbreport/ui/") +
+        OStringToOUString(rDialog, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() +
+        OUString(".ui"), pAttr)
     , rOutAttrs(*pAttr)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

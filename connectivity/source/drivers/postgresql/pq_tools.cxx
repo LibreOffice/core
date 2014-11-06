@@ -125,7 +125,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
     strbuf.setLength( len );
     // Previously here RTL_TEXTENCODING_ASCII_US; as we set the PostgreSQL client_encoding to UTF8,
     // we get UTF8 here, too. I'm not sure why it worked well before...
-    buf.append( OUString::fromUtf8( strbuf.makeStringAndClear() ) );
+    buf.append( OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
 }
 
 static inline void ibufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
@@ -168,7 +168,7 @@ static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString 
                            -1,
                            Any());
     }
-    buf.append( OUString::fromUtf8( cstr ) );
+    buf.append( OStringToOUString( cstr, RTL_TEXTENCODING_UTF8 ) );
     PQfreemem( cstr );
 }
 
@@ -553,11 +553,11 @@ void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUSt
     {
     case 1:
         *first  = OUString();
-        *second = OUString::fromUtf8( vec[0] );
+        *second = OStringToOUString( vec[0], RTL_TEXTENCODING_UTF8 );
         break;
     case 3:
-        *first  = OUString::fromUtf8( vec[0] );
-        *second = OUString::fromUtf8( vec[2] );
+        *first  = OStringToOUString( vec[0], RTL_TEXTENCODING_UTF8 );
+        *second = OStringToOUString( vec[2], RTL_TEXTENCODING_UTF8 );
         break;
     default:
          SAL_WARN("connectivity.postgresql",
@@ -706,12 +706,15 @@ com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const OUString & str )
 {
     sal_Int32 start = 0;
     IntVector vec;
+//     printf( ">%s<\n" , OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
     for( sal_Int32 i = str.indexOf( ' ' ) ; i != -1 ; i = str.indexOf( ' ', start) )
     {
         vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
+//         printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
         start = i + 1;
     }
     vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
+//     printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
     return sequence_of_vector(vec);
 }
 

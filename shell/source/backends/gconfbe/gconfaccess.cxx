@@ -204,8 +204,8 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
             return uno::makeAny( (sal_Int32) gconf_value_get_int( pGconfValue ) );
 
         case GCONF_VALUE_STRING:
-            return uno::makeAny( OUString::fromUtf8( OString(
-                gconf_value_get_string(pGconfValue) ) ) );
+            return uno::makeAny( OStringToOUString( OString(
+                gconf_value_get_string(pGconfValue) ), RTL_TEXTENCODING_UTF8 ) );
 
         default:
             fprintf( stderr, "makeAnyOfGconfValue: Type not handled.\n" );
@@ -230,7 +230,7 @@ static void splitFontName( GConfValue *pGconfValue, OUString &rName, sal_Int16 &
        rHeight = static_cast<sal_Int16>( aSize.toInt32() );
    }
 
-   rName = OUString::fromUtf8( aFont.copy( 0, nIdx ) );
+   rName = OStringToOUString( aFont.copy( 0, nIdx ), RTL_TEXTENCODING_UTF8 );
 }
 
 
@@ -265,7 +265,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
                 }
                 // Remove trailing ";"
                 aBuffer.setLength(aBuffer.getLength()-1);
-                return uno::makeAny(OUString::fromUtf8(aBuffer.makeStringAndClear()));
+                return uno::makeAny(OStringToOUString(aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
             }
             else
                 g_warning( "unexpected type for ignore_hosts" );

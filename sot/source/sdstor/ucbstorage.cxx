@@ -3167,7 +3167,7 @@ OUString UCBStorage::GetLinkedFile( SvStream &rStream )
         OString aTmp = read_uInt16_lenPrefixed_uInt8s_ToOString(rStream);
         if (aTmp.match("ContentURL="))
         {
-            aString = OUString::fromUtf8(aTmp.copy(11));
+            aString = OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);
         }
     }
 

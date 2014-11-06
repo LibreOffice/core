@@ -93,22 +93,22 @@ SerfUri::SerfUri( const OUString & inUri )
 
 void SerfUri::init( const apr_uri_t * pUri )
 {
-    mScheme   = OUString::fromUtf8( pUri->scheme );
-    mUserInfo = OUString::fromUtf8( pUri->user );
-    mHostName = OUString::fromUtf8( pUri->hostname );
+    mScheme   = OStringToOUString( pUri->scheme, RTL_TEXTENCODING_UTF8 );
+    mUserInfo = OStringToOUString( pUri->user, RTL_TEXTENCODING_UTF8 );
+    mHostName = OStringToOUString( pUri->hostname, RTL_TEXTENCODING_UTF8 );
     mPort     = pUri->port;
-    mPath     = OUString::fromUtf8( pUri->path );
+    mPath     = OStringToOUString( pUri->path, RTL_TEXTENCODING_UTF8 );
 
     if ( pUri->query )
     {
         mPath += "?";
-        mPath += OUString::fromUtf8( pUri->query );
+        mPath += OStringToOUString( pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
         mPath += "#";
-        mPath += OUString::fromUtf8( pUri->fragment );
+        mPath += OStringToOUString( pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
 }
 

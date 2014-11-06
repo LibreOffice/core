@@ -432,7 +432,7 @@ void ScOrcusSharedStrings::append_segment(const char* s, size_t n)
 size_t ScOrcusSharedStrings::commit_segments()
 {
     OString aStr = maCurSegment.makeStringAndClear();
-    return mrFactory.addString(OUString::fromUtf8(aStr));
+    return mrFactory.addString(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 }
 
 void ScOrcusStyles::set_font_count(size_t /*n*/)

@@ -523,7 +523,7 @@ void
 SwitchIMCallback (XIC, XPointer, XPointer call_data)
 {
     XIMSwitchIMNotifyCallbackStruct* pCallData = (XIMSwitchIMNotifyCallbackStruct*)call_data;
-    ::vcl::I18NStatus::get().changeIM( OUString::fromUtf8(pCallData->to->name) );
+    ::vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
 }
 
 // vii. destroy callbacks: internally disable all IC/IM calls

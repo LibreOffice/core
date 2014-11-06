@@ -185,7 +185,7 @@ OUString PDFName::getFilteredName() const
         else
             aFilter.append( pStr[i] );
     }
-    return OUString::fromUtf8( aFilter.makeStringAndClear() );
+    return OStringToOUString( aFilter.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
 PDFString::~PDFString()

@@ -2684,7 +2684,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     OString sComment = pA->GetComment();
                     if (!sComment.isEmpty())
                     {
-                        sType.append(OUString::fromUtf8(sComment));
+                        sType.append(OStringToOUString(
+                                        sComment, RTL_TEXTENCODING_UTF8));
                     }
                     if (sComment.equalsIgnoreAsciiCase("FIELD_SEQ_BEGIN"))
                     {

@@ -306,7 +306,8 @@ void add_group_entries(
 
             key_value_utf8 = comphelper::string::strip(key_value_utf8, '\"');
 
-            OUString key_value_utf16 = OUString::fromUtf8(key_value_utf8);
+            OUString key_value_utf16 =
+                OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
 
             Substitutor.add_substitution(
                 GroupName.getStr(), make_winrc_unicode_string(key_value_utf16));

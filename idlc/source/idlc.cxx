@@ -272,7 +272,7 @@ OUString Idlc::processDocumentation()
     if (m_bIsDocValid) {
         OString raw(getDocumentation());
         if (m_bGenerateDoc) {
-            doc = OUString::fromUtf8(raw);
+            doc = OStringToOUString(raw, RTL_TEXTENCODING_UTF8);
         } else if (raw.indexOf("@deprecated") != -1) {
             //TODO: this check is somewhat crude
             doc = "@deprecated";

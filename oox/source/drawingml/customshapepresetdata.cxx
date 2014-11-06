@@ -34,7 +34,7 @@ void lcl_parseAdjustmentValue(comphelper::SequenceAsVector<drawing::EnhancedCust
         if (aToken.startsWith(aNamePrefix))
         {
             OString aName = aToken.copy(aNamePrefix.getLength(), aToken.getLength() - aNamePrefix.getLength() - strlen("\""));
-            aAdjustmentValue.Name = OUString::fromUtf8(aName);
+            aAdjustmentValue.Name = OStringToOUString(aName, RTL_TEXTENCODING_UTF8);
         }
         else if (aToken.startsWith(aValuePrefix))
         {
@@ -414,7 +414,7 @@ void lcl_parseEquations(comphelper::SequenceAsVector<OUString>& rEquations, cons
         else if (rValue[i] == '"' && bInString)
         {
             bInString = false;
-            rEquations.push_back(OUString::fromUtf8(rValue.copy(nStart + strlen("\""), i - nStart - strlen("\""))));
+            rEquations.push_back(OStringToOUString(rValue.copy(nStart + strlen("\""), i - nStart - strlen("\"")), RTL_TEXTENCODING_UTF8));
         }
     }
 }
@@ -734,7 +734,7 @@ void CustomShapeProperties::initializePresetDataMap()
                 bFirst = false;
             else
                 maPresetDataMap[StaticTokenMap::get().getTokenFromUnicode(aName)] = aPropertyMap;
-            aName = OUString::fromUtf8(aLine.copy(aCommentPrefix.getLength(), aLine.getLength() - aCommentPrefix.getLength() - strlen(" */")));
+            aName = OStringToOUString(aLine.copy(aCommentPrefix.getLength(), aLine.getLength() - aCommentPrefix.getLength() - strlen(" */")), RTL_TEXTENCODING_UTF8);
         }
         else
         {

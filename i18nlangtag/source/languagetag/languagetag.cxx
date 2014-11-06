@@ -1493,7 +1493,7 @@ void LanguageTag::convertFromRtlLocale()
         myLtError aError;
         theDataRef::get().incRef();
         mpImplLangtag = lt_tag_convert_from_locale( aStr.getStr(), &aError.p);
-        maBcp47 = OUString::fromUtf8( lt_tag_get_string( mpImplLangtag));
+        maBcp47 = OStringToOUString( lt_tag_get_string( mpImplLangtag), RTL_TEXTENCODING_UTF8);
         mbInitializedBcp47 = true;
 #else
         mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);

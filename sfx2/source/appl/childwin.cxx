@@ -292,7 +292,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     if (!rInfo.aModule.isEmpty())
         sName = rInfo.aModule + "/" + sName;
     SvtViewOptions aWinOpt(E_WINDOW, sName);
-    aWinOpt.SetWindowState(OUString::fromUtf8(rInfo.aWinState));
+    aWinOpt.SetWindowState(OStringToOUString(rInfo.aWinState, RTL_TEXTENCODING_UTF8));
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
     aSeq[0].Name = "Data";

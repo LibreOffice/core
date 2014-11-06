@@ -1018,7 +1018,8 @@ void FontNameBox::LoadMRUEntries( const OUString& aFontMRUEntriesFile, sal_Unico
 
     OString aLine;
     aStream.ReadLine( aLine );
-    OUString aEntries = OUString::fromUtf8(aLine);
+    OUString aEntries = OStringToOUString(aLine,
+        RTL_TEXTENCODING_UTF8);
     SetMRUEntries( aEntries, cSep );
 }
 

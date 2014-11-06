@@ -283,7 +283,7 @@ static rtl::OUString GetNextPluginStringFromHandle(Handle h, short *index)
     rtl::OStringBuffer aBuf( nLen );
     aBuf.append( pPascalBytes+1, nLen );
     *index += nLen + 1;
-    return rtl::OUString::fromUtf8( aBuf.makeStringAndClear() );
+    return rtl::OStringToOUString( aBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
 static int parseMimeResource( CFBundleRef i_xBundle,

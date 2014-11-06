@@ -176,7 +176,8 @@ ActivePackages::Entries ActivePackages::getEntries() const {
                         RTL_TEXTENCODING_UTF8),
                     decodeNewData(i->second)));
         } else {
-            OUString fn(OUString::fromUtf8(i->first));
+            OUString fn(
+                OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
             es.push_back(
                 ::std::make_pair(
                     ::dp_misc::generateLegacyIdentifier(fn),

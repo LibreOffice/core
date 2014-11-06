@@ -279,7 +279,7 @@ public:
 
 inline NameTranslationEntry::NameTranslationEntry( const OString& rOrg, const OString& rTrans )
     : HashedEntry(OStringToOUString(rOrg, RTL_TEXTENCODING_ASCII_US))
-    , maTranslatedName(OUString::fromUtf8(rTrans))
+    , maTranslatedName(OStringToOUString(rTrans, RTL_TEXTENCODING_UTF8))
 {
 }
 

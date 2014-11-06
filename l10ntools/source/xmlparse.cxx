@@ -799,7 +799,7 @@ namespace
 
 static OUString lcl_pathnameToAbsoluteUrl(const OString& rPathname)
 {
-    OUString sPath = OUString::fromUtf8(rPathname);
+    OUString sPath = OStringToOUString(rPathname, RTL_TEXTENCODING_UTF8 );
     OUString sUrl;
     if (osl::FileBase::getFileURLFromSystemPath(sPath, sUrl)
         != osl::FileBase::E_None)
@@ -1139,7 +1139,7 @@ OString XMLUtil::QuotHTML( const OString &rString )
         reinterpret_cast<const UChar*>(sPattern.getStr()),
         sPattern.getLength() );
 
-    const OUString sOUSource = OUString::fromUtf8(rString);
+    const OUString sOUSource = OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
     icu::UnicodeString sSource(
         reinterpret_cast<const UChar*>(
             sOUSource.getStr()), sOUSource.getLength() );

@@ -128,8 +128,9 @@ PrinterInfoManager::~PrinterInfoManager()
 
 void PrinterInfoManager::initSystemDefaultPaper()
 {
-    m_aSystemDefaultPaper = OUString::fromUtf8(
-        PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()));
+    m_aSystemDefaultPaper = OStringToOUString(
+        PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
+        RTL_TEXTENCODING_UTF8);
 }
 
 bool PrinterInfoManager::checkPrintersChanged( bool bWait )
@@ -329,9 +330,10 @@ void PrinterInfoManager::initialize()
                 // initialize to global defaults
                 aPrinter.m_aInfo = m_aGlobalDefaults;
 
-                aPrinterName = OUString::fromUtf8(aValue.copy(nNamePos+1));
+                aPrinterName = OStringToOUString(aValue.copy(nNamePos+1),
+                    RTL_TEXTENCODING_UTF8);
                 aPrinter.m_aInfo.m_aPrinterName = aPrinterName;
-                aPrinter.m_aInfo.m_aDriverName = OUString::fromUtf8(aValue.copy(0, nNamePos));
+                aPrinter.m_aInfo.m_aDriverName = OStringToOUString(aValue.copy(0, nNamePos), RTL_TEXTENCODING_UTF8);
 
                 // set parser, merge settings
                 // don't do this for CUPS printers as this is done
@@ -385,14 +387,14 @@ void PrinterInfoManager::initialize()
                         aValue = "lpr";
                         #endif
                     }
-                    aPrinter.m_aInfo.m_aCommand = OUString::fromUtf8(aValue);
+                    aPrinter.m_aInfo.m_aCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
                 }
 
                 aValue = aConfig.ReadKey( "QuickCommand" );
-                aPrinter.m_aInfo.m_aQuickCommand = OUString::fromUtf8(aValue);
+                aPrinter.m_aInfo.m_aQuickCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Features" );
-                aPrinter.m_aInfo.m_aFeatures = OUString::fromUtf8(aValue);
+                aPrinter.m_aInfo.m_aFeatures = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 // override the settings in m_aGlobalDefaults if keys exist
                 aValue = aConfig.ReadKey( "DefaultPrinter" );
@@ -400,10 +402,10 @@ void PrinterInfoManager::initialize()
                     aDefaultPrinter = aPrinterName;
 
                 aValue = aConfig.ReadKey( "Location" );
-                aPrinter.m_aInfo.m_aLocation = OUString::fromUtf8(aValue);
+                aPrinter.m_aInfo.m_aLocation = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Comment" );
-                aPrinter.m_aInfo.m_aComment = OUString::fromUtf8(aValue);
+                aPrinter.m_aInfo.m_aComment = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Copies" );
                 if (!aValue.isEmpty())

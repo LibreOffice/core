@@ -2199,14 +2199,14 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
         {
             // Import
-            nFormat = GetImportFormatNumberForShortName( OUString::fromUtf8( aShortName) );
+            nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
             nRet = ImportGraphic( pData->maGraphic, OUString(), pData->mrStm, nFormat ) == 0;
         }
 #ifndef DISABLE_EXPORT
         else if( !aShortName.isEmpty() )
         {
             // Export
-            nFormat = GetExportFormatNumberForShortName( OUString::fromUtf8(aShortName) );
+            nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
             nRet = ExportGraphic( pData->maGraphic, OUString(), pData->mrStm, nFormat ) == 0;
         }
 #endif

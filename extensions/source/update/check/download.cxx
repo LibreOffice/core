@@ -77,7 +77,7 @@ static void openFile( OutData& out )
     sal_Int32 nIndex = aURL.lastIndexOf('/');
     if( nIndex > 0 )
     {
-        out.File = out.DestinationDir + OUString::fromUtf8(aURL.copy(nIndex));
+        out.File = out.DestinationDir + OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
 
         oslFileError rc;
 
@@ -329,7 +329,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
                 }
             }
             if ( !ret )
-                out.Handler->downloadStalled( OUString::fromUtf8(aMessage) );
+                out.Handler->downloadStalled( OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
         }
 
         curl_easy_cleanup(pCURL);

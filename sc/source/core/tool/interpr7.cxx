@@ -93,13 +93,13 @@ void ScInterpreter::ScFilterXML()
                             xmlNsPtr ns = (xmlNsPtr)pNodeSet->nodeTab[0];
                             xmlNodePtr cur = (xmlNodePtr)ns->next;
                             boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OUString::fromUtf8(OString((char*)pChar2.get()));
+                            aResult = OStringToOUString(OString((char*)pChar2.get()), RTL_TEXTENCODING_UTF8);
                         }
                         else
                         {
                             xmlNodePtr cur = pNodeSet->nodeTab[0];
                             boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
-                            aResult = OUString::fromUtf8(OString((char*)pChar2.get()));
+                            aResult = OStringToOUString(OString((char*)pChar2.get()), RTL_TEXTENCODING_UTF8);
                         }
                     }
                     else
@@ -198,7 +198,7 @@ void ScInterpreter::ScWebservice()
 
         xStream->closeInput();
 
-        OUString aContent = OUString::fromUtf8( aBuffer.makeStringAndClear() );
+        OUString aContent = OStringToOUString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
         PushString( aContent );
     }
 }

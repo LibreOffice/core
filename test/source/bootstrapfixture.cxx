@@ -175,7 +175,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
             RTL_TEXTENCODING_UTF8).getStr(), 0, returnValue);
 
     OString aContentString = loadFile(aOutput.GetURL());
-    OUString aContentOUString = OUString::fromUtf8(aContentString);
+    OUString aContentOUString = OStringToOUString(aContentString, RTL_TEXTENCODING_UTF8);
 
     if( eFormat == test::OOXML && !aContentOUString.isEmpty() )
     {

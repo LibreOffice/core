@@ -238,7 +238,8 @@ namespace DOM
 
         if (m_pNamespace.get()) {
             OSL_ASSERT(!m_aNodePtr->parent);
-            OUString const ret(OUString::fromUtf8(m_pNamespace->second));
+            OUString const ret(OStringToOUString(
+                        m_pNamespace->second, RTL_TEXTENCODING_UTF8));
             return ret;
         } else {
             return CNode::getPrefix();
@@ -254,7 +255,8 @@ namespace DOM
 
         if (m_pNamespace.get()) {
             OSL_ASSERT(!m_aNodePtr->parent);
-            OUString const ret(OUString::fromUtf8(m_pNamespace->first));
+            OUString const ret(OStringToOUString(
+                        m_pNamespace->first, RTL_TEXTENCODING_UTF8));
             return ret;
         } else {
             return CNode::getNamespaceURI();

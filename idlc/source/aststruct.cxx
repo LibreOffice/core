@@ -78,7 +78,7 @@ bool AstStruct::isType() const {
 bool AstStruct::dump(RegistryKey& rKey)
 {
     RegistryKey localKey;
-    if (rKey.createKey( OUString::fromUtf8(getFullName()), localKey))
+    if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey))
     {
         fprintf(stderr, "%s: warning, could not create key '%s' in '%s'\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -107,13 +107,14 @@ bool AstStruct::dump(RegistryKey& rKey)
         (m_typeParameters.empty() && !m_bPublished
          ? TYPEREG_VERSION_0 : TYPEREG_VERSION_1),
         getDocumentation(), emptyStr, typeClass, m_bPublished,
-        OUString::fromUtf8(getRelativName()),
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
         m_pBaseType == 0 ? 0 : 1, nMember, 0,
         static_cast< sal_uInt16 >(m_typeParameters.size()));
     if (m_pBaseType != 0) {
         aBlob.setSuperTypeName(
             0,
-            OUString::fromUtf8(m_pBaseType->getRelativName()));
+            OStringToOUString(
+                m_pBaseType->getRelativName(), RTL_TEXTENCODING_UTF8));
     }
 
     if ( nMember > 0 )
@@ -139,8 +140,9 @@ bool AstStruct::dump(RegistryKey& rKey)
                 }
                 aBlob.setFieldData(
                     index++, pMember->getDocumentation(), emptyStr, flags,
-                    OUString::fromUtf8(pMember->getLocalName()),
-                    OUString::fromUtf8(typeName),
+                    OStringToOUString(
+                        pMember->getLocalName(), RTL_TEXTENCODING_UTF8),
+                    OStringToOUString(typeName, RTL_TEXTENCODING_UTF8),
                     RTConstValue());
             }
             ++iter;
@@ -153,7 +155,8 @@ bool AstStruct::dump(RegistryKey& rKey)
     {
         aBlob.setReferenceData(
             index++, emptyStr, RT_REF_TYPE_PARAMETER, RT_ACCESS_INVALID,
-            OUString::fromUtf8((*i)->getLocalName()));
+            OStringToOUString(
+                (*i)->getLocalName(), RTL_TEXTENCODING_UTF8));
     }
 
     sal_uInt32 aBlobSize;

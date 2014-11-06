@@ -197,7 +197,7 @@ bool Options::setOption(char const * option, std::string const & rArg)
    with error.
 */
 OString convertIncPathtoShortWindowsPath(const OString& incPath) {
-    OUString path = OUString::fromUtf8(incPath);
+    OUString path = OStringToOUString(incPath, RTL_TEXTENCODING_UTF8);
 
     std::vector<sal_Unicode> vec(path.getLength() + 1);
     //GetShortPathNameW only works if the file can be found!

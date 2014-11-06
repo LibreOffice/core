@@ -3898,7 +3898,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     psp::FastPrintFontInfo aInfo;
     // set family name
-    aInfo.m_aFamilyName = OUString::fromUtf8( aFamily );
+    aInfo.m_aFamilyName = OStringToOUString( aFamily, RTL_TEXTENCODING_UTF8 );
     // set italic
     switch( eStyle )
     {

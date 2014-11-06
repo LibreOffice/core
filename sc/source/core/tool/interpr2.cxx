@@ -3043,7 +3043,7 @@ void ScInterpreter::ScBahtText()
         if( bMinus )
             aText.insert( 0, OString( UTF8_TH_MINUS ) );
 
-        PushString( OUString::fromUtf8(aText.makeStringAndClear()) );
+        PushString( OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
     }
 }
 
