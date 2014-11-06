@@ -41,7 +41,6 @@
 
 #include "zforfind.hxx"
 #include <svl/zforlist.hxx>
-#include "numhead.hxx"
 #include <unotools/digitgroupingiterator.hxx>
 #include <svl/nfsymbol.hxx>
 
@@ -145,52 +144,6 @@ void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt
     nCntPost     = rNumFor.nCntPost;
     nCntExp      = rNumFor.nCntExp;
 }
-
-void ImpSvNumberformatInfo::Save(SvStream& rStream, sal_uInt16 nAnz) const
-{
-    for (sal_uInt16 i = 0; i < nAnz; i++)
-    {
-        rStream.WriteUniOrByteString( sStrArray[i], rStream.GetStreamCharSet() );
-        short nType = nTypeArray[i];
-        switch ( nType )
-        {
-            // The fight with versions before SV_NUMBERFORMATTER_VERSION_NEW_CURR
-            case NF_SYMBOLTYPE_CURRENCY :
-                rStream.WriteInt16( short( NF_SYMBOLTYPE_STRING ) );
-            break;
-            case NF_SYMBOLTYPE_CURRDEL :
-            case NF_SYMBOLTYPE_CURREXT :
-                rStream.WriteInt16( short(0) ); // will be ignored (hopefully ...)
-                break;
-            default:
-                if ( nType > NF_KEY_LASTKEYWORD_SO5 )
-                {
-                    rStream.WriteInt16( short( NF_SYMBOLTYPE_STRING ) );  // all new keywords are string
-                }
-                else
-                {
-                    rStream.WriteInt16( nType );
-                }
-        }
-
-    }
-    rStream.WriteInt16( eScannedType ).WriteUChar( bThousand ).WriteUInt16( nThousand )
-           .WriteUInt16( nCntPre ).WriteUInt16( nCntPost ).WriteUInt16( nCntExp );
-}
-
-void ImpSvNumberformatInfo::Load(SvStream& rStream, sal_uInt16 nAnz)
-{
-    for (sal_uInt16 i = 0; i < nAnz; ++i)
-    {
-        sStrArray[i] = SvNumberformat::LoadString( rStream );
-        rStream.ReadInt16( nTypeArray[i] );
-    }
-    bool bStreamThousand;
-    rStream.ReadInt16( eScannedType ).ReadCharAsBool( bStreamThousand ).ReadUInt16( nThousand )
-           .ReadUInt16( nCntPre ).ReadUInt16( nCntPost ).ReadUInt16( nCntExp );
-    bThousand = bStreamThousand;
-}
-
 
 // static
 sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang, bool bDate )
@@ -442,25 +395,6 @@ void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc )
     aNatNum = rNumFor.aNatNum;
 }
 
-void ImpSvNumFor::Save(SvStream& rStream) const
-{
-    rStream.WriteUInt16( nAnzStrings );
-    aI.Save(rStream, nAnzStrings);
-    rStream.WriteUniOrByteString( sColorName, rStream.GetStreamCharSet() );
-}
-
-void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
-                       OUString& rLoadedColorName )
-{
-    sal_uInt16 nAnz;
-    rStream.ReadUInt16( nAnz ); //! Not nAnzStrings right away due to Enlarge
-    Enlarge( nAnz );
-    aI.Load( rStream, nAnz );
-    sColorName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-    rLoadedColorName = sColorName;
-    pColor = rSc.GetColor(sColorName);
-}
-
 bool ImpSvNumFor::HasNewCurrency() const
 {
     for ( sal_uInt16 j=0; j<nAnzStrings; j++ )
@@ -494,53 +428,6 @@ bool ImpSvNumFor::GetNewCurrencySymbol( OUString& rSymbol,
     }
     //! No Erase at rSymbol, rExtension
     return false;
-}
-
-void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
-{
-    sal_uInt16 j;
-    sal_uInt16 nCnt = 0;
-    for ( j=0; j<nAnzStrings; j++ )
-    {
-        switch ( aI.nTypeArray[j] )
-        {
-        case NF_SYMBOLTYPE_CURRENCY :
-        case NF_SYMBOLTYPE_CURRDEL :
-        case NF_SYMBOLTYPE_CURREXT :
-            nCnt++;
-            break;
-        }
-    }
-    rStream.WriteUInt16( nCnt );
-    for ( j=0; j<nAnzStrings; j++ )
-    {
-        switch ( aI.nTypeArray[j] )
-        {
-        case NF_SYMBOLTYPE_CURRENCY :
-        case NF_SYMBOLTYPE_CURRDEL :
-        case NF_SYMBOLTYPE_CURREXT :
-            rStream.WriteUInt16( j ).WriteInt16( aI.nTypeArray[j] );
-            break;
-        }
-    }
-}
-
-void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
-{
-    sal_uInt16 nCnt;
-    rStream.ReadUInt16(nCnt);
-    if (!nCnt)
-        return;
-    for (sal_uInt16 j=0; j < nCnt; ++j)
-    {
-        sal_uInt16 nPos;
-        short nType;
-        rStream.ReadUInt16( nPos ).ReadInt16( nType );
-        if ( nPos < nAnzStrings )
-        {
-            aI.nTypeArray[nPos] = nType;
-        }
-    }
 }
 
 /**
@@ -1533,14 +1420,14 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                     eState = SsGetPrefix;
                 }
                 else
-                {   // currency as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                {   // currency
                     eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                     eState = SsGetString;
                 }
                 sBuffSymbol.append(cToken);
                 break;
             case '~' :
-                // calendarID as of SV_NUMBERFORMATTER_VERSION_CALENDAR
+                // calendarID
                 eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
                 sBuffSymbol.append(cToken);
                 eState = SsGetString;
@@ -1708,189 +1595,6 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
     return eSymbolType;
 }
 
-NfHackConversion SvNumberformat::Load( SvStream& rStream,
-                                       ImpSvNumMultipleReadHeader& rHdr,
-                                       SvNumberFormatter* pHackConverter,
-                                       ImpSvNumberInputScan& rISc )
-{
-    rHdr.StartEntry();
-    sal_uInt16 nOp1, nOp2;
-    sFormatstring = SvNumberformat::LoadString( rStream );
-    bool bStreamStandard, bStreamUsed;
-    rStream.ReadInt16( eType ).ReadDouble( fLimit1 ).ReadDouble( fLimit2 )
-           .ReadUInt16( nOp1 ).ReadUInt16( nOp2 ).ReadCharAsBool( bStreamStandard ).ReadCharAsBool( bStreamUsed );
-    bStandard = bStreamStandard;
-    bIsUsed = bStreamUsed;
-    NfHackConversion eHackConversion = NF_CONVERT_NONE;
-    bool bOldConvert = false;
-    LanguageType eOldTmpLang = 0;
-    LanguageType eOldNewLang = 0;
-    if ( pHackConverter )
-    {
-        // Are only needed here
-        bOldConvert = rScan.GetConvertMode();
-        eOldTmpLang = rScan.GetTmpLnge();
-        eOldNewLang = rScan.GetNewLnge();
-    }
-    OUString aLoadedColorName;
-    for (sal_uInt16 i = 0; i < 4; i++)
-    {
-        NumFor[i].Load( rStream, rScan, aLoadedColorName );
-        if ( pHackConverter && eHackConversion == NF_CONVERT_NONE )
-        {
-            // FIXME: HACK!
-            // Unfortunately we didn't save what SYSTEM on Save really was :-/
-            // After all we save FARBE or COLOR for an Entry ...
-            // When translating from System-German FARBE to System-xxx COLOR and vice versa,
-            // we assume that onSave only has GERMAN and ENGLISH KeyWords in ImpSvNumberformatScan
-            if ( !aLoadedColorName.isEmpty() &&
-                 !NumFor[i].GetColor() &&
-                 aLoadedColorName != rScan.GetColorString() )
-            {
-                if ( rScan.GetColorString() == "FARBE" )
-                {   // English -> German
-                    eHackConversion = NF_CONVERT_ENGLISH_GERMAN;
-                    rScan.GetNumberformatter()->ChangeIntl( LANGUAGE_ENGLISH_US );
-                    rScan.SetConvertMode( LANGUAGE_ENGLISH_US, LANGUAGE_GERMAN );
-                }
-                else
-                {   // German -> English
-                    eHackConversion = NF_CONVERT_GERMAN_ENGLISH;
-                    rScan.GetNumberformatter()->ChangeIntl( LANGUAGE_GERMAN );
-                    rScan.SetConvertMode( LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US );
-                }
-                OUString aColorName = NumFor[i].GetColorName();
-                const Color* pColor = rScan.GetColor( aColorName );
-                if ( !pColor && aLoadedColorName == aColorName )
-                {
-                    eHackConversion = NF_CONVERT_NONE;
-                }
-                rScan.GetNumberformatter()->ChangeIntl( LANGUAGE_SYSTEM );
-                rScan.SetConvertMode( eOldTmpLang, eOldNewLang );
-                rScan.SetConvertMode( bOldConvert );
-            }
-        }
-    }
-    eOp1 = (SvNumberformatLimitOps) nOp1;
-    eOp2 = (SvNumberformatLimitOps) nOp2;
-    OUString aComment; // Will be set to the correct value after the NewCurrency troubles
-    if ( rHdr.BytesLeft() )
-    {
-        // As of SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
-        aComment = SvNumberformat::LoadString( rStream );
-        rStream.ReadUInt16( nNewStandardDefined );
-    }
-
-    sal_Int32 nNewCurrencyEnd = -1;
-    bool bNewCurrencyComment = ( aComment.getLength() > 1 && aComment[0] == cNewCurrencyMagic &&
-                                 (nNewCurrencyEnd = aComment.indexOf( cNewCurrencyMagic, 1 )) >= 0 );
-    bool bNewCurrencyLoaded = false;
-    bool bNewCurrency = false;
-
-    bool bGoOn = true;
-    while ( rHdr.BytesLeft() && bGoOn )
-    {
-        // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-        sal_uInt16 nId;
-        unsigned char bStreamCurr;
-        rStream.ReadUInt16( nId );
-        switch ( nId )
-        {
-        case nNewCurrencyVersionId :
-            bNewCurrencyLoaded = true;
-            rStream.ReadUChar( bStreamCurr );
-            bNewCurrency = bStreamCurr;
-            if ( bNewCurrency )
-            {
-                for ( sal_uInt16 j=0; j<4; j++ )
-                {
-                    NumFor[j].LoadNewCurrencyMap( rStream );
-                }
-            }
-            break;
-        case nNewStandardFlagVersionId :
-            rStream.ReadCharAsBool( bStreamStandard ); // the real standard flag
-            bStandard = bStreamStandard;
-            break;
-        default:
-            SAL_WARN( "svl.numbers", "SvNumberformat::Load: unknown header bytes left nId" );
-            bGoOn = false; // stop reading unknown stream left over of newer versions
-            // Would be nice to have multiple read/write headers instead
-            // but old versions wouldn't know it, TLOT.
-        }
-    }
-    rHdr.EndEntry();
-
-    if ( bNewCurrencyLoaded )
-    {
-        if ( bNewCurrency && bNewCurrencyComment )
-        {   // Recover original format string and comment
-            sFormatstring = aComment.copy( 1, nNewCurrencyEnd-1 );
-            if(nNewCurrencyEnd + 1 < aComment.getLength())
-            {
-                aComment = aComment.copy(nNewCurrencyEnd + 1 );
-            }
-            else
-            {
-                aComment = "";
-            }
-        }
-    }
-    else if ( bNewCurrencyComment )
-    {
-        // New, but saved with version before SV_NUMBERFORMATTER_VERSION_NEW_CURR
-        // Recover original format string and comment
-        sFormatstring = aComment.copy( 1, nNewCurrencyEnd - 1 );
-        if(nNewCurrencyEnd + 1 < aComment.getLength())
-        {
-            aComment = aComment.copy(nNewCurrencyEnd + 1 );
-        }
-        else
-        {
-            aComment = "";
-        }
-        // Remember states
-        short nDefined = ( eType & NUMBERFORMAT_DEFINED );
-        sal_uInt16 nNewStandard = nNewStandardDefined;
-
-        // Parse new ones etc.
-        OUString aStr( sFormatstring );
-        sal_Int32 nCheckPos = 0;
-        boost::scoped_ptr<SvNumberformat> pFormat(new SvNumberformat( aStr, &rScan, &rISc,
-                                                      nCheckPos, maLocale.meLanguage, bStandard ));
-        DBG_ASSERT( !nCheckPos, "SvNumberformat::Load: NewCurrencyRescan nCheckPos" );
-        ImpCopyNumberformat( *pFormat );
-        pFormat.reset();
-
-        // Recover states
-        eType |= nDefined;
-        if ( nNewStandard )
-        {
-            SetNewStandardDefined( nNewStandard );
-        }
-    }
-    SetComment( aComment );
-
-    if ( eHackConversion != NF_CONVERT_NONE )
-    {
-        //! and we continue with the HACK!
-        switch ( eHackConversion )
-        {
-        case NF_CONVERT_ENGLISH_GERMAN :
-            ConvertLanguage( *pHackConverter,
-                             LANGUAGE_ENGLISH_US, LANGUAGE_GERMAN, true );
-            break;
-        case NF_CONVERT_GERMAN_ENGLISH :
-            ConvertLanguage( *pHackConverter,
-                             LANGUAGE_GERMAN, LANGUAGE_ENGLISH_US, true );
-            break;
-        default:
-            SAL_WARN( "svl.numbers", "SvNumberformat::Load: eHackConversion unknown" );
-        }
-    }
-    return eHackConversion;
-}
-
 void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
                                       LanguageType eConvertFrom,
                                       LanguageType eConvertTo, bool bSystem )
@@ -1927,92 +1631,6 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
             NumFor[i].SetColor( pColor, aColorName );
         }
     }
-}
-
-// static
-OUString SvNumberformat::LoadString( SvStream& rStream )
-{
-    rtl_TextEncoding eStream = rStream.GetStreamCharSet();
-    OString aStr = read_uInt16_lenPrefixed_uInt8s_ToOString(rStream);
-    sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
-    if (aStr.indexOf(cStream) < 0)
-    {
-        // simple conversion to unicode
-        return OStringToOUString(aStr, eStream);
-    }
-    sal_Unicode cSource = OUString(&cStream, 1, eStream).toChar();
-    sal_Unicode cTarget = NfCurrencyEntry::GetEuroSymbol();
-    OUStringBuffer aBuf(OStringToOUString(aStr, eStream));
-    aBuf.replace(cSource, cTarget);
-
-    return aBuf.makeStringAndClear();
-}
-
-void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr ) const
-{
-    OUString aFormatstring( sFormatstring );
-    OUStringBuffer aComment( sComment.getLength() + sFormatstring.getLength() + 2 );
-
-    bool bNewCurrency = HasNewCurrency();
-    if ( bNewCurrency )
-    {
-        // Save SV_NUMBERFORMATTER_VERSION_NEW_CURR in comment
-        aComment.insert( 0, cNewCurrencyMagic );
-        aComment.insert( 0, cNewCurrencyMagic );
-        aComment.insert( 1, aFormatstring );
-        Build50Formatstring( aFormatstring ); // Generate old format string
-    }
-
-    // old SO5 versions do behave strange (no output) if standard flag is set
-    // on formats not prepared for it (not having the following exact types)
-    bool bOldStandard = bStandard;
-    if ( bOldStandard )
-    {
-        switch ( eType )
-        {
-        case NUMBERFORMAT_NUMBER :
-        case NUMBERFORMAT_DATE :
-        case NUMBERFORMAT_TIME :
-        case NUMBERFORMAT_DATETIME :
-        case NUMBERFORMAT_PERCENT :
-        case NUMBERFORMAT_SCIENTIFIC :
-            // ok to save
-            break;
-        default:
-            bOldStandard = false;
-        }
-    }
-
-    rHdr.StartEntry();
-    rStream.WriteUniOrByteString( aFormatstring, rStream.GetStreamCharSet() );
-    rStream.WriteInt16( eType ).WriteDouble( fLimit1 ).WriteDouble( fLimit2 ).WriteUInt16( eOp1 ).WriteUInt16( eOp2 )
-           .WriteUChar( bOldStandard ).WriteUChar( bIsUsed );
-    for (sal_uInt16 i = 0; i < 4; i++)
-    {
-        NumFor[i].Save(rStream);
-    }
-    // As of SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
-    rStream.WriteUniOrByteString( aComment.makeStringAndClear(), rStream.GetStreamCharSet() );
-    rStream.WriteUInt16( nNewStandardDefined );
-    // As of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-    rStream.WriteUInt16( nNewCurrencyVersionId );
-    rStream.WriteUChar( bNewCurrency );
-    if ( bNewCurrency )
-    {
-        for ( sal_uInt16 j=0; j<4; j++ )
-        {
-            NumFor[j].SaveNewCurrencyMap( rStream );
-        }
-    }
-
-    // the real standard flag to load with versions >638 if different
-    if ( bStandard != bOldStandard )
-    {
-        rStream.WriteUInt16( nNewStandardFlagVersionId );
-        rStream.WriteUChar( bStandard );
-    }
-
-    rHdr.EndEntry();
 }
 
 bool SvNumberformat::HasNewCurrency() const

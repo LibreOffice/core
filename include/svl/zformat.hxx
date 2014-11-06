@@ -29,13 +29,10 @@ namespace utl {
     class DigitGroupingIterator;
 }
 
-class SvStream;
 class Color;
 
 class ImpSvNumberformatScan;            // format code string scanner
 class ImpSvNumberInputScan;             // input string scanner
-class ImpSvNumMultipleWriteHeader;      // compatible file format
-class ImpSvNumMultipleReadHeader;       // compatible file format
 class SvNumberFormatter;
 
 enum SvNumberformatLimitOps
@@ -69,8 +66,6 @@ struct ImpSvNumberformatInfo            // Struct for FormatInfo
     bool bThousand;                     // Has group (AKA thousand) separator
 
     void Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nAnz );
-    void Load(SvStream& rStream, sal_uInt16 nAnz);
-    void Save(SvStream& rStream, sal_uInt16 nAnz) const;
 };
 
 // NativeNumber, represent numbers using CJK or other digits if nNum>0,
@@ -119,9 +114,6 @@ public:
     ~ImpSvNumFor();
 
     void Enlarge(sal_uInt16 nAnz);      // Init of arrays to the right size
-    void Load( SvStream& rStream, ImpSvNumberformatScan& rSc,
-               OUString& rLoadedColorName);
-    void Save( SvStream& rStream ) const;
 
     // if pSc is set, it is used to get the Color pointer
     void Copy( const ImpSvNumFor& rNumFor, ImpSvNumberformatScan* pSc );
@@ -141,8 +133,6 @@ public:
     // new SYMBOLTYPE_CURRENCY in subformat?
     bool HasNewCurrency() const;
     bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
-    void SaveNewCurrencyMap( SvStream& rStream ) const;
-    void LoadNewCurrencyMap( SvStream& rStream );
 
     // [NatNum1], [NatNum2], ...
     void SetNatNumNum( sal_uInt8 nNum, bool bDBNum ) { aNatNum.SetNum( nNum, bDBNum ); }
@@ -226,14 +216,6 @@ public:
     bool GetUsed() const                        { return bIsUsed; }
     bool IsStarFormatSupported() const          { return bStarFlag; }
     void SetStarFormatSupport( bool b )         { bStarFlag = b; }
-
-    NfHackConversion Load( SvStream& rStream, ImpSvNumMultipleReadHeader& rHdr,
-                           SvNumberFormatter* pConverter, ImpSvNumberInputScan& rISc );
-    void Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr  ) const;
-
-    // Load a string which might contain an Euro symbol,
-    // in fact that could be any string used in number formats.
-    static OUString LoadString( SvStream& rStream );
 
     /**
      * Get output string from a numeric value that fits the number of
