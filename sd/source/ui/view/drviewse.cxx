@@ -624,6 +624,28 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 }
 
+void DrawViewShell::FuDeleteSelectedObjects()
+{
+    if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
+    {
+        ::sd::Window* pWindow = GetActiveWindow();
+        InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
+    }
+    else
+    {
+        ::vcl::KeyCode aKCode(KEY_DELETE);
+        KeyEvent aKEvt( 0, aKCode);
+
+        bool bConsumed = mpDrawView && mpDrawView->getSmartTags().KeyInput( aKEvt );
+
+        if( !bConsumed && HasCurrentFunction() )
+            bConsumed = GetCurrentFunction()->KeyInput(aKEvt);
+
+        if( !bConsumed && mpDrawView )
+            mpDrawView->DeleteMarked();
+    }
+}
+
 void DrawViewShell::FuSupport(SfxRequest& rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
@@ -871,23 +893,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     pOLV->PostKeyEvent(aKEvt);
                 }
             }
-            else if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
-            {
-                ::sd::Window* pWindow = GetActiveWindow();
-                InfoBox(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) ).Execute();
-            }
             else
             {
-                ::vcl::KeyCode aKCode(KEY_DELETE);
-                KeyEvent aKEvt( 0, aKCode);
-
-                bool bConsumed = mpDrawView && mpDrawView->getSmartTags().KeyInput( aKEvt );
-
-                if( !bConsumed && HasCurrentFunction() )
-                    bConsumed = GetCurrentFunction()->KeyInput(aKEvt);
-
-                if( !bConsumed && mpDrawView )
-                    mpDrawView->DeleteMarked();
+                FuDeleteSelectedObjects();
             }
             rReq.Ignore ();
         }

@@ -221,6 +221,7 @@ public:
     void            FuTemporary(SfxRequest& rReq);
     void            FuPermanent(SfxRequest& rReq);
     void            FuSupport(SfxRequest& rReq);
+    void            FuDeleteSelectedObjects();
     void            FuSupportRotate(SfxRequest& rReq);
     void            FuTable(SfxRequest& rReq);
 
