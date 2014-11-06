@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 120 core
+#version 120
 
 uniform sampler2D TextTex;	
 uniform vec4 colorTex;
 //Texture Coordinates
-varying vec2 textC	oords;
+varying vec2 textCoords;
 
 void main()
 {
