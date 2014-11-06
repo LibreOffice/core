@@ -1568,7 +1568,7 @@
       </node>
       <node oor:name=".uno:CenterPara" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Centered</value>
+          <value xml:lang="en-US">Center Vertically</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>11</value>
@@ -5340,7 +5340,7 @@
       </node>
       <node oor:name=".uno:CellVertTop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Top</value>
+          <value xml:lang="en-US">Align Top</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5348,7 +5348,7 @@
       </node>
       <node oor:name=".uno:CellVertCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Center ( vertical )</value>
+          <value xml:lang="en-US">Center Vertically</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5356,7 +5356,7 @@
       </node>
       <node oor:name=".uno:CellVertBottom" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Bottom</value>
+          <value xml:lang="en-US">Align Bottom</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

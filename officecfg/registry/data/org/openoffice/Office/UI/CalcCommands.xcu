@@ -1510,7 +1510,7 @@
       </node>
       <node oor:name=".uno:AlignHorizontalCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Align Center Horizontally</value>
+          <value xml:lang="en-US">Center Horizontally</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1542,7 +1542,7 @@
       </node>
       <node oor:name=".uno:AlignVCenter" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Align Center Vertically</value>
+          <value xml:lang="en-US">Center Vertically</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
