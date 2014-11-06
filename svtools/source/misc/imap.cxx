@@ -883,8 +883,18 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm, const OUString& rBaseURL ) con
 
 void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& rBaseURL )
 {
+    const size_t nMinRecordSize = 12; //circle, three 32bit numbers
+    const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
+
+    if (nCount > nMaxRecords)
+    {
+        SAL_WARN("svtools.misc", "Parsing error: " << nMaxRecords << " max possible entries, but " <<
+                 nCount << " claimed, truncating");
+        nCount = nMaxRecords;
+    }
+
     // neue Objekte einlesen
-    for ( size_t i = 0; i < nCount; i++ )
+    for (size_t i = 0; i < nCount; ++i)
     {
         sal_uInt16 nType;
 
