@@ -31,7 +31,6 @@
 #include <accessibility/standard/vclxaccessiblelistbox.hxx>
 #include <accessibility/standard/vclxaccessibleradiobutton.hxx>
 #include <accessibility/standard/vclxaccessiblescrollbar.hxx>
-#include <accessibility/standard/vclxaccessibletextcomponent.hxx>
 #include <accessibility/standard/vclxaccessibletoolbox.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <accessibility/standard/vclxaccessiblestatusbar.hxx>
