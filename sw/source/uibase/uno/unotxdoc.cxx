@@ -2518,9 +2518,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     sal_Int32 nRet = 0;
     if (bIsSwSrcView)
     {
-        SwSrcView *pSwSrcView = dynamic_cast< SwSrcView * >(pView);
+        SwSrcView& rSwSrcView = dynamic_cast<SwSrcView&>(*pView);
         OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
-        nRet = pSwSrcView->PrintSource( pOutDev, 1 /* dummy */, true /* get page count only */ );
+        nRet = rSwSrcView.PrintSource( pOutDev, 1 /* dummy */, true /* get page count only */ );
     }
     else
     {
@@ -2975,9 +2975,9 @@ void SAL_CALL SwXTextDocument::render(
         {
             if (bIsSwSrcView)
             {
-                SwSrcView *pSwSrcView = dynamic_cast< SwSrcView * >(pView);
+                SwSrcView& rSwSrcView = dynamic_cast<SwSrcView&>(*pView);
                 OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
-                pSwSrcView->PrintSource( pOutDev, nRenderer + 1, false );
+                rSwSrcView.PrintSource(pOutDev, nRenderer + 1, false);
             }
             else
             {
