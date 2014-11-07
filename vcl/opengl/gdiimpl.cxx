@@ -252,7 +252,7 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
     GLushort pPoint[2];
 
     pPoint[0] = nX;
-    pPoint[1] = nY;
+    pPoint[1] = GetHeight() - nY;
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pPoint );
@@ -265,9 +265,9 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
     GLfloat pPoints[4];
 
     pPoints[0] = (2 * nX1) / GetWidth() - 1.0;
-    pPoints[1] = (2 * nY1) / GetHeight() - 1.0;
+    pPoints[1] = (2 * (GetHeight() - nY1)) / GetHeight() - 1.0;
     pPoints[2] = (2 * nX2) / GetWidth() - 1.0;;
-    pPoints[3] = (2 * nY2) / GetHeight() - 1.0;
+    pPoints[3] = (2 * (GetHeight() - nY2)) / GetHeight() - 1.0;
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pPoints );
