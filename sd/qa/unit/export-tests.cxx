@@ -498,7 +498,7 @@ void SdExportTest::testFdo79731()
 void SdExportTest::testSwappedOutImageExport()
 {
     // Problem was with the swapped out images, which were not swapped in during export.
-    static const std::vector<sal_Int32> vFormats = {
+    const sal_Int32 vFormats[] = {
         ODP,
         PPT,
         PPTX,
@@ -509,17 +509,17 @@ void SdExportTest::testSwappedOutImageExport()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
     xBatch->commit();
 
-    for( size_t nExportFormat = 0; nExportFormat < vFormats.size(); ++nExportFormat )
+    for( size_t nExportFormat = 0; nExportFormat < 3; ++nExportFormat )
     {
         // Load the original file with one image
         ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/document_with_two_images.odp"), ODP);
-        const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[nExportFormat].pFilterName);
+        const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[nExportFormat]].pFilterName);
 
         // Export the document and import again for a check
         uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
         uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[nExportFormat].pFilterName), RTL_TEXTENCODING_UTF8);
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
 
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();

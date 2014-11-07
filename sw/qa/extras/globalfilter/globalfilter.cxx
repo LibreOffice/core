@@ -33,14 +33,14 @@ public:
 
 void Test::testSwappedOutImageExport()
 {
-    std::vector<OUString> aFilterNames = {
+    const OUString aFilterNames[] = {
         "writer8",
         "Rich Text Format",
         "MS Word 97",
         "Office Open XML Text",
     };
 
-    for( size_t nFilter = 0; nFilter < aFilterNames.size(); ++nFilter )
+    for( size_t nFilter = 0; nFilter < 4; ++nFilter )
     {
         // Check whether the export code swaps in the image which was swapped out before by auto mechanism
 

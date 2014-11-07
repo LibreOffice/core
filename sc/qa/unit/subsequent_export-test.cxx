@@ -2265,7 +2265,7 @@ void ScExportTest::testFunctionsExcel2010ODS()
 
 void ScExportTest::testSwappedOutImageExport()
 {
-    std::vector<OUString> aFilterNames = {
+    const OUString aFilterNames[] = {
         "calc8",
         "MS Excel 97",
         "Calc Office Open XML",
@@ -2277,7 +2277,7 @@ void ScExportTest::testSwappedOutImageExport()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
     xBatch->commit();
 
-    for( size_t nFilter = 0; nFilter < aFilterNames.size(); ++nFilter )
+    for( size_t nFilter = 0; nFilter < 4; ++nFilter )
     {
         // Check whether the export code swaps in the image which was swapped out before.
         ScDocShellRef xDocSh = loadDoc("document_with_two_images.", ODS);
