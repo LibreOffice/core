@@ -102,14 +102,14 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     if (m_pDeleteColormap != pOrigDeleteColormap)
         delete pOrigDeleteColormap;
 
-    const Drawable aVdevDrawable = pDevice->GetDrawable();
-    SetDrawable( aVdevDrawable, m_nXScreen );
-
     m_pVDev      = pDevice;
     m_pFrame     = NULL;
 
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = true;
+
+    const Drawable aVdevDrawable = pDevice->GetDrawable();
+    SetDrawable( aVdevDrawable, m_nXScreen );
 }
 
 bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
