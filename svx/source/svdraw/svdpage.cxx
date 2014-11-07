@@ -1217,7 +1217,6 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     mbMaster(bMasterPage),
     mbInserted(false),
     mbObjectsNotPersistent(false),
-    mbSwappingLocked(false),
     mbPageBorderOnlyLeftRight(false)
 {
     aPrefVisiLayers.SetAll();
@@ -1243,7 +1242,6 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     mbMaster(rSrcPage.mbMaster),
     mbInserted(false),
     mbObjectsNotPersistent(rSrcPage.mbObjectsNotPersistent),
-    mbSwappingLocked(rSrcPage.mbSwappingLocked),
     mbPageBorderOnlyLeftRight(rSrcPage.mbPageBorderOnlyLeftRight)
 {
     aPrefVisiLayers.SetAll();
@@ -1339,7 +1337,6 @@ SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)
     // a valid copy of source page before copying and inserting
     // the contained objects
     mbMaster = rSrcPage.mbMaster;
-    mbSwappingLocked = rSrcPage.mbSwappingLocked;
     mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
     aPrefVisiLayers = rSrcPage.aPrefVisiLayers;
     nWdt = rSrcPage.nWdt;

@@ -465,7 +465,6 @@ protected:
     bool                mbMaster : 1;               // flag if this is a MasterPage
     bool                mbInserted : 1;
     bool                mbObjectsNotPersistent : 1;
-    bool                mbSwappingLocked : 1;
 
     // #i93597#
     bool                mbPageBorderOnlyLeftRight : 1;
@@ -541,14 +540,6 @@ public:
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const Rectangle* pRect) const;
     bool IsObjectsNotPersistent() const          { return mbObjectsNotPersistent; }
     void SetObjectsNotPersistent(bool b)     { mbObjectsNotPersistent = b; }
-    // Durch Setzen dieses Flags, kann das Auslagern (Swappen) von
-    // Teilen der Page (z.B. Grafiken) unterbunden werden.
-    // Es werden hierdurch jedoch nicht automatisch alle ausgelagerten
-    // Teile nachgeladen, dies geschieht erst bei konkretem Bedarf oder
-    // durch Aufruf von SwapInAll().
-    // Fuer die MasterPage(s) der Page muss dies ggf. separat gemacht werden.
-    bool IsSwappingLocked() const { return mbSwappingLocked; }
-    void SetSwappingLocked(bool bLock) { mbSwappingLocked = bLock; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoPage();
 
