@@ -2391,6 +2391,12 @@ static OString dateTimeToString( const util::DateTime& dt )
     return DateTimeToOString( DateTime( Date( dt.Day, dt.Month, dt.Year ), tools::Time( dt.Hours, dt.Minutes, dt.Seconds )));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTcwRounding, "tcw-rounding.docx")
+{
+    // Width of the A1 cell in twips was 3200, due to a rounding error.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3201),  parseDump("/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testBnc821804, "bnc821804.docx")
 {
     CPPUNIT_ASSERT_EQUAL( OUString( "TITLE" ), getRun( getParagraph( 1 ), 1 )->getString());

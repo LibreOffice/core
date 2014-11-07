@@ -34,6 +34,7 @@
 #include <ooxml/resourceids.hxx>
 #include <dmapperLoggers.hxx>
 #include <dmapper/DomainMapper.hxx>
+#include <rtl/math.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -745,8 +746,7 @@ void DomainMapperTableManager::endOfRowAction()
                 for ( sal_Int32 nGridCount = *aSpansIter; nGridCount > 0; --nGridCount )
                     fGridWidth += (*pTableGrid.get())[nBorderGridIndex++];
 
-                sal_Int16 nRelPos =
-                    sal::static_int_cast< sal_Int16 >((fGridWidth * 10000) / nFullWidthRelative);
+                sal_Int16 nRelPos = rtl::math::round((fGridWidth * 10000) / nFullWidthRelative);
 
                 pSeparators[nBorder].Position =  nRelPos + nLastRelPos;
                 pSeparators[nBorder].IsVisible = sal_True;
