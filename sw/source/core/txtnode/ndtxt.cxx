@@ -1067,12 +1067,19 @@ void SwTxtNode::Update(
         {
             bool bAtLeastOneBookmarkMoved = false;
             bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
-            const IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
-            for ( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
-                ppMark != pMarkAccess->getAllMarksEnd();
-                ++ppMark )
+            // A text node already knows its marks via its SwIndexes.
+            std::set<const sw::mark::IMark*> aSeenMarks;
+            const SwIndex* next;
+            for (const SwIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
             {
-                const ::sw::mark::IMark* const pMark = ppMark->get();
+                next = pIndex->GetNext();
+                const sw::mark::IMark* pMark = pIndex->GetMark();
+                if (!pMark)
+                    continue;
+                // Only handle bookmarks once, if they start and end at this node as well.
+                if (aSeenMarks.find(pMark) != aSeenMarks.end())
+                    continue;
+                aSeenMarks.insert(pMark);
                 const SwPosition* pEnd = &pMark->GetMarkEnd();
                 SwIndex & rEndIdx = const_cast<SwIndex&>(pEnd->nContent);
                 if( this == &pEnd->nNode.GetNode() &&
