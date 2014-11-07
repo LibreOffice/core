@@ -26,6 +26,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include "drawdoc.hxx"
+#include "Outliner.hxx"
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 
@@ -415,6 +416,51 @@ sal_Int32 ReadThroughComponent(
 
 }
 
+//PRESOBJ_OUTLINEs in master pages are the preview of the outline styles
+//numbering format. Since fdo#78151 toggling bullets on and off changes
+//the style they are a preview of, previously toggling bullets on and off
+//would only affect the preview paragraph itself without an effect on the
+//style. i.e.  previews of numbering which don't match the real numbering
+//they are supposed to be a preview of.
+//
+//But there exist documents which were saved previous to that modification
+//so here we detect such cases and fix them up to ensure the previews
+//numbering level matches that of the outline level it previews
+void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
+{
+    for (sal_uInt16 i = 0; i < pDoc->GetMasterSdPageCount(PK_STANDARD); ++i)
+    {
+        SdPage *pMasterPage = pDoc->GetMasterSdPage(i, PK_STANDARD);
+        SdrObject* pMasterOutline = pMasterPage->GetPresObj(PRESOBJ_OUTLINE);
+        if (!pMasterOutline)
+            continue;
+        OutlinerParaObject* pOutlParaObj = pMasterOutline->GetOutlinerParaObject();
+        if (!pOutlParaObj)
+            continue;
+        ::sd::Outliner* pOutliner = pDoc->GetInternalOutliner();
+        pOutliner->Clear();
+        pOutliner->SetText(*pOutlParaObj);
+        bool bInconsistent = false;
+        const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
+        for (sal_Int32 j = 0; j < nParaCount; ++j)
+        {
+            const sal_Int16 nExpectedDepth = j;
+            if (nExpectedDepth != pOutliner->GetDepth(j))
+            {
+                Paragraph* p = pOutliner->GetParagraph(j);
+                pOutliner->SetDepth(p, nExpectedDepth);
+                bInconsistent = true;
+            }
+        }
+        if (bInconsistent)
+        {
+            SAL_WARN("sd.filter", "Fixing inconsistent outline numbering placeholder preview depth");
+            pMasterOutline->SetOutlinerParaObject(pOutliner->CreateParaObject(0, nParaCount));
+        }
+        pOutliner->Clear();
+    }
+}
+
 bool SdXMLFilter::Import( ErrCode& nError )
 {
     sal_uInt32  nRet = 0;
@@ -762,6 +808,8 @@ bool SdXMLFilter::Import( ErrCode& nError )
                 TransformOOo2xDocument( pDoc );
         }
     }
+
+    fixupOutlinePlaceholderNumberingDepths(pDoc);
 
     pDoc->EnableUndo(true);
     mrDocShell.ClearUndoBuffer();
