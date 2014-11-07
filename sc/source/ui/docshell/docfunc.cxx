@@ -5039,8 +5039,15 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi
 
         bDone = ModifyRangeNames( aNewRanges, aTab );
 
-        aModificator.SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+        // avoid duplicating broadcast
+        // ModifyRangeNames may already have broadcasted SC_HINT_AREAS_CHANGED through SetNewRangeNames
+        // then the document is set IsModified
+        bool bIsAlreadySetModified = rDocShell.IsModified();
+        if (!bIsAlreadySetModified)
+        {
+             aModificator.SetDocumentModified();
+             SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+        }
     }
 
     return bDone;
