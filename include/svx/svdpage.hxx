@@ -169,11 +169,6 @@ public:
     // Zaehlt alle Objekte inkl. Objekte in Objektgruppen, ...
     size_t CountAllObjects() const;
 
-    // Alle aufgelagerten Teile (z.B. Grafiken) der Liste in den
-    // Speicher laden.
-    void    ForceSwapInObjects() const;
-    void    ForceSwapOutObjects() const;
-
     /** Makes the object list flat, i.e. the object list content are
         then tree leaves
 

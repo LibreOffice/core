@@ -735,37 +735,6 @@ size_t SdrObjList::CountAllObjects() const
     return nCnt;
 }
 
-void SdrObjList::ForceSwapInObjects() const
-{
-    for (size_t nObjNum=GetObjCount(); nObjNum>0;) {
-        SdrObject* pObj=GetObj(--nObjNum);
-        SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
-        if (pGrafObj!=NULL) {
-            pGrafObj->ForceSwapIn();
-        }
-        SdrObjList* pOL=pObj->GetSubList();
-        if (pOL!=NULL) {
-            pOL->ForceSwapInObjects();
-        }
-    }
-}
-
-void SdrObjList::ForceSwapOutObjects() const
-{
-    const size_t nObjAnz = GetObjCount();
-    for (size_t nObjNum=nObjAnz; nObjNum>0;) {
-        SdrObject* pObj=GetObj(--nObjNum);
-        SdrGrafObj* pGrafObj=PTR_CAST(SdrGrafObj,pObj);
-        if (pGrafObj!=NULL) {
-            pGrafObj->ForceSwapOut();
-        }
-        SdrObjList* pOL=pObj->GetSubList();
-        if (pOL!=NULL) {
-            pOL->ForceSwapOutObjects();
-        }
-    }
-}
-
 void SdrObjList::FlattenGroups()
 {
     const size_t nObj = GetObjCount();
