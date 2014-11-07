@@ -24,6 +24,11 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#if 0
+#  define FIXME_ALPHA_WORKING
+#  define FIXME_ROUNDED_RECT_WORKING
+#endif
+
 using namespace css;
 
 class DemoWin : public WorkWindow
@@ -96,9 +101,9 @@ public:
         SetLineColor(Color(COL_RED));
 //        DrawPolyLine(aPoly);
     }
-    void drawPolyPoly(Rectangle r)
+    void drawEllipse(Rectangle r)
     {
-        (void)r;
+        DrawEllipse(r);
     }
     void drawCheckered(Rectangle r)
     {
@@ -122,12 +127,22 @@ public:
     }
     void drawBitmapEx(Rectangle r)
     {
+        drawCheckered(r);
+
         BitmapEx aBitmap(maIntro);
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+#ifdef FIXME_ALPHA_WORKING
+        AlphaMask aSemiTransp(aBitmap.GetSizePixel());
+        aSemiTransp.Erase(64);
+        DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
+                                           aSemiTransp));
+#else
         DrawBitmapEx(r.TopLeft(), aBitmap);
+#endif
     }
     void fetchDrawBitmap(Rectangle r)
     {
+        // FIXME: should work ...
         Bitmap aBitmap(GetBitmap(Point(0,0),GetSizePixel()));
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
         DrawBitmap(r.TopLeft(), aBitmap);
@@ -158,9 +173,13 @@ std::vector<Rectangle> DemoWin::partitionAndClear(int nX, int nY)
             if ((x + y) % 2)
                 DrawRect(r);
             else
+            {
+#ifdef FIXME_ROUNDED_RECT_WORKING
+                DrawRect(r, nBorderSize, nBorderSize);
+#else
                 DrawRect(r);
-// FIXME: rendering these guys doesn't work at all
-//              DrawRect(r, nBorderSize, nBorderSize);
+#endif
+            }
 
             aRegions.push_back(r);
         }
@@ -181,7 +200,7 @@ void DemoWin::Paint( const Rectangle& rRect )
     drawRadialLines(aRegions[i++]);
     drawText(aRegions[i++]);
     drawPoly(aRegions[i++]);
-    drawPolyPoly(aRegions[i++]);
+    drawEllipse(aRegions[i++]);
     drawCheckered(aRegions[i++]);
     drawBitmapEx(aRegions[i++]);
     drawBitmap(aRegions[i++]);
