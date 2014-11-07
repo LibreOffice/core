@@ -747,8 +747,6 @@ bool OpenGLContext::ImplInit()
 
 #endif
 
-    //rGLRender.InitOpenGL(m_aGLWin);
-
     static bool bGlewInit = false;
     if(!bGlewInit)
     {
