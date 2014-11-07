@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <rtl/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -16,16 +17,41 @@
 
 #include <vcl/vclmain.hxx>
 
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/pngread.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/graphicfilter.hxx>
 
 using namespace css;
 
 class DemoWin : public WorkWindow
 {
+    Bitmap   maIntroBW;
+    BitmapEx maIntro;
+
 public:
     DemoWin() : WorkWindow( NULL, WB_APP | WB_STDWORK)
     {
+        // Needed to find images
+        OUString aPath;
+        rtl::Bootstrap::get("SYSBINDIR", aPath);
+#ifdef FIXME_THIS_FAILS
+        rtl::Bootstrap::set("BRAND_BASE_DIR", aPath + "/..");
+        if (Application::LoadBrandBitmap("intro", maIntro))
+            Application::Abort("Failed to load intro image");
+#else
+        aPath = aPath + "/intro.png";
+        SvFileStream aFileStream( aPath, STREAM_READ );
+        GraphicFilter aGraphicFilter(false);
+        Graphic aGraphic;
+        if (aGraphicFilter.ImportGraphic(aGraphic, aPath, aFileStream) != 0)
+            Application::Abort("Failed to load intro image: " + aPath);
+        maIntro = aGraphic.GetBitmapEx();
+#endif
+        maIntroBW = maIntro.GetBitmap();
+        maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
     }
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -46,9 +72,10 @@ public:
     void drawRadialLines(Rectangle r)
     {
         SetFillColor(Color(COL_LIGHTRED));
-        SetLineColor(Color(COL_LIGHTGREEN));
+        SetLineColor(Color(COL_BLACK));
         DrawRect( r );
 
+        // FIXME: notice these appear reflected at the bottom not the top.
         for(int i=0; i<r.GetHeight(); i+=15)
             DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
         for(int i=0; i<r.GetWidth(); i+=15)
@@ -69,12 +96,10 @@ public:
         SetLineColor(Color(COL_RED));
 //        DrawPolyLine(aPoly);
     }
-
     void drawPolyPoly(Rectangle r)
     {
         (void)r;
     }
-
     void drawCheckered(Rectangle r)
     {
         DrawCheckered(r.TopLeft(), r.GetSize());
@@ -82,12 +107,30 @@ public:
     void drawGradient(Rectangle r)
     {
         Gradient aGradient;
-        aGradient.SetStartColor(COL_BLUE);
-        aGradient.SetEndColor(COL_GREEN);
+        aGradient.SetStartColor(COL_YELLOW);
+        aGradient.SetEndColor(COL_RED);
 //        aGradient.SetAngle(45);
-        aGradient.SetStyle(GradientStyle_LINEAR);
+        aGradient.SetStyle(GradientStyle_RECT);
         aGradient.SetBorder(r.GetSize().Width()/20);
         DrawGradient(r, aGradient);
+    }
+    void drawBitmap(Rectangle r)
+    {
+        Bitmap aBitmap(maIntroBW);
+        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+        DrawBitmap(r.TopLeft(), aBitmap);
+    }
+    void drawBitmapEx(Rectangle r)
+    {
+        BitmapEx aBitmap(maIntro);
+        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+        DrawBitmapEx(r.TopLeft(), aBitmap);
+    }
+    void fetchDrawBitmap(Rectangle r)
+    {
+        Bitmap aBitmap(GetBitmap(Point(0,0),GetSizePixel()));
+        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+        DrawBitmap(r.TopLeft(), aBitmap);
     }
 };
 
@@ -100,8 +143,7 @@ std::vector<Rectangle> DemoWin::partitionAndClear(int nX, int nY)
     Size aSize(GetSizePixel());
     long nBorderSize = aSize.Width() / 32;
     long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
-    long nBoxHeight = (aSize.Height() - nBorderSize*(nX+1)) / nY;
-//    SL_DEBUG("Size " << aSize << " boxes " << nBoxWidth << "x" << nBoxHeight << " border " << nBorderSize);
+    long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
     for (int y = 0; y < nY; y++ )
     {
         for (int x = 0; x < nX; x++ )
@@ -117,7 +159,8 @@ std::vector<Rectangle> DemoWin::partitionAndClear(int nX, int nY)
                 DrawRect(r);
             else
                 DrawRect(r);
-//              DrawRect(r, nBorderSize, nBorderSize); FIXME - lfrb
+// FIXME: rendering these guys doesn't work at all
+//              DrawRect(r, nBorderSize, nBorderSize);
 
             aRegions.push_back(r);
         }
@@ -140,7 +183,12 @@ void DemoWin::Paint( const Rectangle& rRect )
     drawPoly(aRegions[i++]);
     drawPolyPoly(aRegions[i++]);
     drawCheckered(aRegions[i++]);
+    drawBitmapEx(aRegions[i++]);
+    drawBitmap(aRegions[i++]);
     drawGradient(aRegions[i++]);
+    // last - thumbnail all the above
+    fetchDrawBitmap(aRegions[i++]);
+    assert(i<=12);
 }
 
 class DemoApp : public Application
