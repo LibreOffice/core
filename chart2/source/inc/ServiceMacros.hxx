@@ -32,42 +32,36 @@ static com::sun::star::uno::Sequence< OUString >
 namespace apphelper
 {
 
-#define APPHELPER_XSERVICEINFO_DECL()                                                   \
-    virtual OUString SAL_CALL                                        \
-        getImplementationName()                                             \
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
-    virtual sal_Bool SAL_CALL                                               \
-        supportsService( const OUString& ServiceName )               \
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL     \
-        getSupportedServiceNames()                                          \
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
-                                                                            \
-    static OUString getImplementationName_Static();                  \
-    static ::com::sun::star::uno::Sequence< OUString >               \
-        getSupportedServiceNames_Static();
+#define APPHELPER_XSERVICEINFO_DECL()                                         \
+    virtual OUString SAL_CALL getImplementationName()                         \
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )  \
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()\
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE; \
+                                                                              \
+    static OUString getImplementationName_Static();                           \
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
 // XServiceInfo impl
 
-#define APPHELPER_XSERVICEINFO_IMPL( Class, ImplName )                              \
-OUString SAL_CALL Class::getImplementationName()                     \
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )        \
+#define APPHELPER_XSERVICEINFO_IMPL( Class, ImplName )                      \
+OUString SAL_CALL Class::getImplementationName()                            \
+    throw( css::uno::RuntimeException, std::exception )                     \
 {                                                                           \
     return getImplementationName_Static();                                  \
 }                                                                           \
                                                                             \
-OUString Class::getImplementationName_Static()                       \
+OUString Class::getImplementationName_Static()                              \
 {                                                                           \
     return ImplName;                                                        \
 }                                                                           \
                                                                             \
-sal_Bool SAL_CALL                                                           \
-Class::supportsService( const OUString& ServiceName )                \
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )        \
+sal_Bool SAL_CALL Class::supportsService( const OUString& ServiceName )     \
+    throw( css::uno::RuntimeException, std::exception )                     \
 {                                                                           \
-    ::com::sun::star::uno::Sequence< OUString > aSNL =               \
-                                        getSupportedServiceNames();         \
-    const OUString* pArray = aSNL.getArray();                        \
+    css::uno::Sequence< OUString > aSNL = getSupportedServiceNames();       \
+    const OUString* pArray = aSNL.getArray();                               \
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )                       \
     {                                                                       \
         if( pArray[ i ] == ServiceName )                                    \
@@ -77,9 +71,8 @@ Class::supportsService( const OUString& ServiceName )                \
     return sal_False;                                                       \
 }                                                                           \
                                                                             \
-::com::sun::star::uno::Sequence< OUString > SAL_CALL                 \
-Class::getSupportedServiceNames()                                           \
-    throw( ::com::sun::star::uno::RuntimeException, std::exception )        \
+css::uno::Sequence< OUString > SAL_CALL Class::getSupportedServiceNames()   \
+    throw( css::uno::RuntimeException, std::exception )                     \
 {                                                                           \
     return getSupportedServiceNames_Static();                               \
 }
@@ -90,12 +83,9 @@ Class::getSupportedServiceNames()                                           \
 //class( Reference< XComponentContext > const & xContext )
 //and implement OWeakObject
 
-#define APPHELPER_SERVICE_FACTORY_HELPER(Class)                                     \
-static ::com::sun::star::uno::Reference<                                    \
-                            ::com::sun::star::uno::XInterface > SAL_CALL    \
-    create( ::com::sun::star::uno::Reference<                               \
-               ::com::sun::star::uno::XComponentContext > const & xContext) \
-    throw(::com::sun::star::uno::Exception)                                 \
+#define APPHELPER_SERVICE_FACTORY_HELPER(Class)                             \
+static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext) \
+    throw(css::uno::Exception)                                              \
 {                                                                           \
     return (::cppu::OWeakObject *)new Class( xContext );                    \
 }
