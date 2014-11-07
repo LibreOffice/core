@@ -1190,12 +1190,6 @@ AC_ARG_ENABLE(kde4,
          both KDE3 and KDE4.]),
 ,)
 
-AC_ARG_ENABLE(headless,
-    AS_HELP_STRING([--enable-headless],
-        [Disable building of GUIs to reduce dependencies. Useful for
-        server usage. Work in progress, use only if you are hacking on
-        it. Not related to the --headless option.]), ,)
-
 AC_ARG_ENABLE(randr,
     AS_HELP_STRING([--disable-randr],
         [Disable RandR support in the vcl project.]),
@@ -4339,9 +4333,9 @@ solaris*)
     ;;
 esac
 
-if test "$enable_headless" = "yes"; then
+if test "$with_x" = "no"; then
     if test "$GUIBASE" != "unx"; then
-        AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --enable-headless])
+        AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --without-x])
     fi
     GUIBASE=not-used
 fi
@@ -4585,7 +4579,7 @@ if test $_os != "WINNT" -a $_os != "Darwin"; then
 fi
 AC_SUBST(ENABLE_OOENV)
 
-if test "$enable_headless" = "yes"; then
+if test "$with_x" = "no"; then
     # be sure to do not mess with uneeded stuff
     test_randr=no
     test_xrender=no
@@ -8926,7 +8920,7 @@ AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
 # Obviously no such thing on iOS or Android. Also not possible when building
 # 64-bit OS X code as the plugin code uses QuickTime and Carbon.
 if test "$_os" != Android -a "$_os" != iOS -a $_os != Darwin -a \
-        "$enable_headless" != yes -a "$enable_mpl_subset" != yes
+        "$with_x" != "no" -a "$enable_mpl_subset" != yes
 then
     AC_MSG_RESULT([yes])
     ENABLE_NPAPI_FROM_BROWSER=TRUE
@@ -8941,7 +8935,7 @@ dnl ***************************************
 dnl testing for X libraries and includes...
 dnl ***************************************
 WANT_X11="no"
-if test $_os != Darwin -a $_os != WINNT -a $_os != Android -a $_os != iOS -a "$enable_headless" != "yes"; then
+if test $_os != Darwin -a $_os != WINNT -a $_os != Android -a $_os != iOS -a "$with_x" != "no"; then
     WANT_X11="yes"
     AC_DEFINE(HAVE_FEATURE_X11)
 fi
@@ -9809,7 +9803,7 @@ AC_SUBST(GTK3_CFLAGS)
 AC_SUBST(ENABLE_GTK3)
 
 AC_MSG_CHECKING([which VCLplugs shall be built])
-if test "$GUIBASE" != "unx" -o "$enable_headless" = "yes"; then
+if test "$GUIBASE" != "unx" -o "$with_x" = "no"; then
     enable_gtk=no
 fi
 ENABLE_GTK=""
@@ -9854,7 +9848,7 @@ fi
 AC_SUBST(ENABLE_KDE4)
 
 ENABLE_HEADLESS=""
-if test "x$enable_headless" = "xyes"; then
+if test "x$with_x" = "xno"; then
     ENABLE_HEADLESS="TRUE"
     SCPDEFS="$SCPDEFS -DLIBO_HEADLESS"
     R="headless"
@@ -10193,7 +10187,7 @@ if test -z "$enable_opengl"; then
         # As such with some suitable minor tweaks the Mac OpenGL transitions code would presumably
         # build fine for iOS, too, but let's leave that for later
         enable_opengl=no
-    elif test "$enable_headless" = "yes"; then
+    elif test "$with_x" = "no"; then
         enable_opengl=no
     else
         enable_opengl=yes
