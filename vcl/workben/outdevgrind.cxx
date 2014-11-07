@@ -40,6 +40,8 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 
+#include <rtl/bootstrap.hxx>
+
 #include <osl/time.h>
 
 #include <boost/function.hpp>
@@ -109,6 +111,7 @@ void setupMethodStubs( functor_vector_type& res )
     const OUString    aString("This is a test");
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
+#ifdef FIXME_VDEV
     // unfortunately, VDevs have inaccessible copy constructors
     static VirtualDevice aVDev;
     static VirtualDevice aVDevBW(1);
@@ -120,6 +123,18 @@ void setupMethodStubs( functor_vector_type& res )
     const Bitmap      aBitmap( aVDev.GetBitmap(aPt1,aVDevSize) );
     const Bitmap      aBitmapBW( aVDevBW.GetBitmap(aPt1,aVDevSize) );
     const Bitmap      aBitmapAlien( aVDevSize, 8 );
+#else
+    BitmapEx aIntro;
+    rtl::Bootstrap::set("BRAND_BASE_DIR", ".");
+    if (Application::LoadBrandBitmap ("intro", aIntro))
+        Application::Abort( "Failed to load intro image, run inside program/" );
+
+    const Bitmap      aBitmap( aIntro.GetBitmap() );
+    Bitmap            aBitmapBW( aBitmap );
+    aBitmapBW.Filter( BMP_FILTER_EMBOSS_GREY );
+    Bitmap      aBitmapAlien( Size( 100, 100 ), 8 );
+    aBitmapAlien.Erase( COL_RED );
+#endif
 
     const BitmapEx    aBitmapEx( aBitmap, aBitmapBW );
     const BitmapEx    aBitmapExBW( aBitmapBW, aBitmapBW );
@@ -284,6 +299,7 @@ void setupMethodStubs( functor_vector_type& res )
             aRect2.TopLeft(), aRect2.GetSize(),
             aRect.TopLeft(),  aRect.GetSize()));
 
+#ifdef FIXME_VDEV
     /* void DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPt,  const Size& rSrcSize,
                                     const OutputDevice& rOutDev );
@@ -315,6 +331,7 @@ void setupMethodStubs( functor_vector_type& res )
             aRect2.TopLeft(), aRect2.GetSize(),
             aRect.TopLeft(),  aRect.GetSize(),
             boost::cref(aVDev) ));
+#endif
 
     /* void CopyArea( const Point& rDestPt,
                                   const Point& rSrcPt,  const Size& rSrcSize,
