@@ -173,6 +173,11 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/data/html/"),
             OUString(sHTML));
 
+    testDir("T602Document",
+            getURLFromSrc("/sw/qa/core/data/602/"),
+            OUString(),
+            SFX_FILTER_STARONEFILTER);
+
     testDir("Rich Text Format",
             getURLFromSrc("/sw/qa/core/exportdata/rtf/"),
             OUString(),

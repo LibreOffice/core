@@ -60,6 +60,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     dbaccess/util/dba \
     embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
+    filter/source/t602/t602filter \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
