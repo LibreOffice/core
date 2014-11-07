@@ -114,6 +114,7 @@ private:
 
 #else
 
+class GdkX11Pixmap;
 class GtkSalGraphics : public X11SalGraphics
 {
     GtkWidget           *m_pWindow;
@@ -162,8 +163,8 @@ public:
 protected:
     typedef std::list< Rectangle > clipList;
 
-    GdkPixmap* NWGetPixmapFromScreen( Rectangle srcRect );
-    bool NWRenderPixmapToScreen( GdkPixmap* pPixmap, Rectangle dstRect );
+    GdkX11Pixmap* NWGetPixmapFromScreen( Rectangle srcRect );
+    bool NWRenderPixmapToScreen( GdkX11Pixmap* pPixmap, Rectangle dstRect );
 
     bool NWPaintGTKArrow( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                            const Rectangle& rControlRectangle,

@@ -23,6 +23,7 @@
 
 #include "vcl/salbtype.hxx"
 
+#include "unx/pixmap.hxx"
 #include "unx/salunx.h"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
@@ -79,6 +80,63 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
         aTwoRect.mnDestY = dest_y;
         aBM.ImplDraw( aDest, nXScreenDest, nDestDepth, aTwoRect,aDestGC );
     }
+}
+
+X11Pixmap* X11SalGraphics::GetPixmapFromScreen( const Rectangle& rRect )
+{
+    Display* pDpy = GetXDisplay();
+    X11Pixmap* pPixmap = new X11Pixmap( pDpy, GetScreenNumber(), rRect.GetWidth(), rRect.GetHeight(), 24 );
+    GC aTmpGC = XCreateGC( pDpy, pPixmap->GetPixmap(), 0, NULL );
+
+    if( !pPixmap || !aTmpGC )
+    {
+        if ( pPixmap )
+            delete pPixmap;
+        if ( aTmpGC )
+            XFreeGC( pDpy, aTmpGC );
+        SAL_WARN( "vcl", "Could not get valid pixmap from screen" );
+        return NULL;
+    }
+
+    // Copy the background of the screen into a composite pixmap
+    CopyScreenArea( GetXDisplay(),
+                    GetDrawable(), GetScreenNumber(), GetVisual().GetDepth(),
+                    pPixmap->GetDrawable(), pPixmap->GetScreen(), pPixmap->GetDepth(),
+                    aTmpGC,
+                    rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight(), 0, 0 );
+
+    XFreeGC( pDpy, aTmpGC );
+    return pPixmap;
+}
+
+bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
+{
+    SAL_INFO( "vcl", "RenderPixmapToScreen" );
+    /*if( UseOpenGL() )
+    {
+        X11OpenGLTexture pTexture( pPixmap );
+        pTexture.Draw( nX, nY );
+        return true;
+    }*/
+
+    GC aFontGC = GetFontGC();
+
+    // The GC can't be null, otherwise we'd have no clip region
+    if( aFontGC == NULL )
+    {
+        SAL_WARN( "vcl", "no valid GC to render pixmap" );
+        return false;
+    }
+
+    if( !pPixmap )
+        return false;
+
+    CopyScreenArea( GetXDisplay(),
+                    pPixmap->GetDrawable(), pPixmap->GetScreen(), pPixmap->GetDepth(),
+                    GetDrawable(), m_nXScreen, GetVisual().GetDepth(),
+                    aFontGC,
+                    0, 0, pPixmap->GetWidth(), pPixmap->GetHeight(), nX, nY );
+    return true;
 }
 
 extern "C"

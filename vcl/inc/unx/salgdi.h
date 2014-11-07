@@ -42,6 +42,7 @@ class SalBitmap;
 class SalColormap;
 class SalDisplay;
 class SalFrame;
+class X11Pixmap;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class PspSalPrinter;
@@ -262,6 +263,13 @@ public:
     virtual SystemFontData     GetSysFontData( int nFallbackLevel ) const SAL_OVERRIDE;
 
     virtual bool               SwapBuffers() SAL_OVERRIDE;
+
+    // create a pixmap from a screen region
+    X11Pixmap* GetPixmapFromScreen( const Rectangle& rRect );
+
+    // render a pixmap to the screen
+    bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY );
+
 
     /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends
      *  if pFrame is not NULL, corresponding Paint events are generated
