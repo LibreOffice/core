@@ -362,8 +362,9 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
         pOutDev->ReMirror( aMousePos );
     }
     MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
-                           mpWindowImpl->mpFrameData->mnClickCount, 0,
-                           mpWindowImpl->mpFrameData->mnMouseCode, mpWindowImpl->mpFrameData->mnMouseCode );
+                           mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
+                           mpWindowImpl->mpFrameData->mnMouseCode,
+                           mpWindowImpl->mpFrameData->mnMouseCode );
     TrackingEvent   aTEvt( aMEvt, TRACKING_REPEAT );
     Tracking( aTEvt );
 
@@ -430,8 +431,9 @@ void Window::EndTracking( sal_uInt16 nFlags )
             }
 
             MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
-                                   mpWindowImpl->mpFrameData->mnClickCount, 0,
-                                   mpWindowImpl->mpFrameData->mnMouseCode, mpWindowImpl->mpFrameData->mnMouseCode );
+                                   mpWindowImpl->mpFrameData->mnClickCount, MouseEventModifiers::NONE,
+                                   mpWindowImpl->mpFrameData->mnMouseCode,
+                                   mpWindowImpl->mpFrameData->mnMouseCode );
             TrackingEvent   aTEvt( aMEvt, nFlags | ENDTRACK_END );
             Tracking( aTEvt );
         }

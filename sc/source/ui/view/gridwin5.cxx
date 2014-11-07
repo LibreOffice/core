@@ -288,7 +288,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         if ( pDrView )                                      // URL / Image-Map
         {
             SdrViewEvent aVEvt;
-            MouseEvent aMEvt( aPosPixel, 1, 0, MOUSE_LEFT );
+            MouseEvent aMEvt( aPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
             SdrHitKind eHit = pDrView->PickAnything( aMEvt, SDRMOUSEBUTTONDOWN, aVEvt );
 
             if ( eHit != SDRHIT_NONE && aVEvt.pObj != NULL )

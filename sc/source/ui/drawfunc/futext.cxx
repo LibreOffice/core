@@ -750,7 +750,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                         {
                             if ( pMousePixel )
                             {
-                                MouseEvent aEditEvt( *pMousePixel, 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                                MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
                                 pOLV->MouseButtonDown(aEditEvt);
                                 pOLV->MouseButtonUp(aEditEvt);
                             }

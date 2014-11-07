@@ -63,7 +63,7 @@ SdrViewEvent::SdrViewEvent()
       eHdlKind(HDL_MOVE),
       eEndCreateCmd(SDRCREATE_NEXTPOINT),
       nMouseClicks(0),
-      nMouseMode(0),
+      nMouseMode(MouseEventModifiers::NONE),
       nMouseCode(0),
       nHlplIdx(0),
       nGlueId(0),

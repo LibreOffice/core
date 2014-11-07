@@ -82,20 +82,27 @@ inline KeyEvent::KeyEvent( sal_Unicode nChar, const vcl::KeyCode& rKeyCode,
 // - MouseEvent-Types -
 
 
-// Maus-Move-Modi
-#define MOUSE_SIMPLEMOVE        ((sal_uInt16)0x0001)
-#define MOUSE_DRAGMOVE          ((sal_uInt16)0x0002)
-#define MOUSE_DRAGCOPY          ((sal_uInt16)0x0004)
-#define MOUSE_ENTERWINDOW       ((sal_uInt16)0x0010)
-#define MOUSE_LEAVEWINDOW       ((sal_uInt16)0x0020)
-#define MOUSE_SYNTHETIC         ((sal_uInt16)0x0040)
-#define MOUSE_MODIFIERCHANGED   ((sal_uInt16)0x0080)
-
-// Maus-Button-Down/Up-Modi
-#define MOUSE_SIMPLECLICK       ((sal_uInt16)0x0001)
-#define MOUSE_SELECT            ((sal_uInt16)0x0002)
-#define MOUSE_MULTISELECT       ((sal_uInt16)0x0004)
-#define MOUSE_RANGESELECT       ((sal_uInt16)0x0008)
+enum class MouseEventModifiers
+{
+   NONE              = 0,
+   // mouse move modifiers
+   SIMPLEMOVE        = 0x0001,
+   DRAGMOVE          = 0x0002,
+   DRAGCOPY          = 0x0004,
+   ENTERWINDOW       = 0x0010,
+   LEAVEWINDOW       = 0x0020,
+   SYNTHETIC         = 0x0040,
+   MODIFIERCHANGED   = 0x0080,
+   // mouse up/down-button modifiers
+   SIMPLECLICK       = 0x0100,
+   SELECT            = 0x0200,
+   MULTISELECT       = 0x0400,
+   RANGESELECT       = 0x0800
+};
+namespace o3tl
+{
+    template<> struct typed_flags<MouseEventModifiers> : is_typed_flags<MouseEventModifiers, 0xff7> {};
+}
 
 // Maus-Buttons
 #define MOUSE_LEFT              ((sal_uInt16)0x0001)
@@ -109,34 +116,34 @@ inline KeyEvent::KeyEvent( sal_Unicode nChar, const vcl::KeyCode& rKeyCode,
 class VCL_DLLPUBLIC MouseEvent
 {
 private:
-    Point           maPos;
-    sal_uInt16          mnMode;
+    Point               maPos;
+    MouseEventModifiers mnMode;
     sal_uInt16          mnClicks;
     sal_uInt16          mnCode;
 
 public:
     explicit        MouseEvent();
     explicit        MouseEvent( const Point& rPos, sal_uInt16 nClicks = 1,
-                                sal_uInt16 nMode = 0, sal_uInt16 nButtons = 0,
+                                MouseEventModifiers nMode = MouseEventModifiers::NONE, sal_uInt16 nButtons = 0,
                                 sal_uInt16 nModifier = 0 );
 
     const Point&    GetPosPixel() const     { return maPos; }
-    sal_uInt16          GetMode() const         { return mnMode; }
+    MouseEventModifiers GetMode() const         { return mnMode; }
                     /** inits this vcl KeyEvent with all settings from the given awt event **/
                     MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent );
 
-    sal_uInt16          GetClicks() const       { return mnClicks; }
+    sal_uInt16      GetClicks() const       { return mnClicks; }
 
     bool            IsEnterWindow() const
-                        { return ((mnMode & MOUSE_ENTERWINDOW) != 0); }
+                        { return bool(mnMode & MouseEventModifiers::ENTERWINDOW); }
     bool            IsLeaveWindow() const
-                        { return ((mnMode & MOUSE_LEAVEWINDOW) != 0); }
+                        { return bool(mnMode & MouseEventModifiers::LEAVEWINDOW); }
     bool            IsSynthetic() const
-                        { return ((mnMode & MOUSE_SYNTHETIC) != 0); }
+                        { return bool(mnMode & MouseEventModifiers::SYNTHETIC); }
     bool            IsModifierChanged() const
-                        { return ((mnMode & MOUSE_MODIFIERCHANGED) != 0); }
+                        { return bool(mnMode & MouseEventModifiers::MODIFIERCHANGED); }
 
-    sal_uInt16          GetButtons() const
+    sal_uInt16      GetButtons() const
                         { return (mnCode & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)); }
     bool            IsLeft() const
                         { return ((mnCode & MOUSE_LEFT) != 0); }
@@ -145,7 +152,7 @@ public:
     bool            IsRight() const
                         { return ((mnCode & MOUSE_RIGHT) != 0); }
 
-    sal_uInt16          GetModifier() const
+    sal_uInt16      GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
     bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
@@ -159,13 +166,13 @@ public:
 
 inline MouseEvent::MouseEvent()
 {
-    mnMode      = 0;
+    mnMode      = MouseEventModifiers::NONE;
     mnClicks    = 0;
     mnCode      = 0;
 }
 
 inline MouseEvent::MouseEvent( const Point& rPos, sal_uInt16 nClicks,
-                               sal_uInt16 nMode,
+                               MouseEventModifiers nMode,
                                sal_uInt16 nButtons, sal_uInt16 nModifier ) :
             maPos( rPos )
 {

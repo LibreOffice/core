@@ -950,7 +950,7 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
                 Point ePoint = aPoint + Point(nX,nY);
                 mpWindow->SetPointerPosPixel(ePoint);
                 //simulate mouse move action
-                MouseEvent eMevt(ePoint,1,2, MOUSE_LEFT, 0);
+                MouseEvent eMevt(ePoint, 1, MouseEventModifiers::DRAGMOVE, MOUSE_LEFT, 0);
                 MouseMove(eMevt);
                 oldPoint = ePoint;
                 bMovedToCenterPoint = true;
@@ -964,7 +964,9 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
                 if(!bBeginInsertPoint)
                 {
                     //simulate mouse button down action
-                    MouseEvent aMevt(oldPoint,1,3, MOUSE_LEFT, KEY_SHIFT);
+                    MouseEvent aMevt(oldPoint, 1,
+                                     MouseEventModifiers::SIMPLEMOVE | MouseEventModifiers::DRAGMOVE,
+                                     MOUSE_LEFT, KEY_SHIFT);
                     MouseButtonDown(aMevt);
                     mpWindow->CaptureMouse();
                     bBeginInsertPoint = true;
@@ -972,7 +974,9 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
                 else
                 {
                     //simulate mouse button up action
-                    MouseEvent rMEvt(oldPoint,1,17, MOUSE_LEFT, KEY_SHIFT);
+                    MouseEvent rMEvt(oldPoint, 1,
+                                     MouseEventModifiers::SIMPLEMOVE | MouseEventModifiers::ENTERWINDOW,
+                                     MOUSE_LEFT, KEY_SHIFT);
                     MouseButtonUp(rMEvt);
                     bBeginInsertPoint = false;
                 }

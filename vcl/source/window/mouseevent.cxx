@@ -26,7 +26,7 @@
 /** inits this vcl KeyEvent with all settings from the given awt event **/
 MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
 : maPos( rEvent.X, rEvent.Y )
-, mnMode( 0 )
+, mnMode( MouseEventModifiers::NONE )
 , mnClicks( static_cast< sal_uInt16 >( rEvent.ClickCount ) )
 , mnCode( 0 )
 {
@@ -38,8 +38,8 @@ MouseEvent::MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent )
             mnCode |= KEY_MOD1;
         if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD2) != 0 )
             mnCode |= KEY_MOD2;
-                if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD3) != 0 )
-                        mnCode |= KEY_MOD3;
+        if( (rEvent.Modifiers & ::com::sun::star::awt::KeyModifier::MOD3) != 0 )
+            mnCode |= KEY_MOD3;
     }
 
     if( rEvent.Buttons )

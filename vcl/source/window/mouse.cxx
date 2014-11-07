@@ -140,7 +140,7 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
         long    nX      = mpWindowImpl->mpFrameData->mnLastMouseX;
         long    nY      = mpWindowImpl->mpFrameData->mnLastMouseY;
         sal_uInt16  nCode   = nMouseCode;
-        sal_uInt16  nMode   = mpWindowImpl->mpFrameData->mnMouseMode;
+        MouseEventModifiers nMode = mpWindowImpl->mpFrameData->mnMouseMode;
         bool    bLeave;
         // check for MouseLeave
         if ( ((nX < 0) || (nY < 0) ||
@@ -150,9 +150,9 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
             bLeave = true;
         else
             bLeave = false;
-        nMode |= MOUSE_SYNTHETIC;
+        nMode |= MouseEventModifiers::SYNTHETIC;
         if ( bModChanged )
-            nMode |= MOUSE_MODIFIERCHANGED;
+            nMode |= MouseEventModifiers::MODIFIERCHANGED;
         ImplHandleMouseEvent( mpWindowImpl->mpFrameWindow, EVENT_MOUSEMOVE, bLeave, nX, nY, nTime, nCode, nMode );
     }
 }

@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
             MouseEvent aMouseEvent(
                             aPointerState.maPos,
                             1/*nClicks*/,
-                            0/*nMode*/,
+                            MouseEventModifiers::NONE,
                             static_cast< sal_uInt16 >( aPointerState.mnState )/*nButtons*/,
                             0/*nModifier*/ );
             impl_SetMousePointer( aMouseEvent );

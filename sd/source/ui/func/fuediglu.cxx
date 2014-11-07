@@ -309,7 +309,7 @@ bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 Point ePoint = aPoint + Point(nX,nY);
                 mpWindow->SetPointerPosPixel(ePoint);
                 //simulate mouse move action
-                MouseEvent eMevt(ePoint,1,2,MOUSE_LEFT, 0);
+                MouseEvent eMevt(ePoint, 1, MouseEventModifiers::DRAGMOVE, MOUSE_LEFT, 0);
                 MouseMove(eMevt);
                 oldPoint = ePoint;
                 bBeginInsertPoint = true;
@@ -324,14 +324,18 @@ bool FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
                 {
                     mpWindow->SetPointerPosPixel(oldPoint);
                     //simulate mouse button down action
-                    MouseEvent aMevt(oldPoint,1,3,MOUSE_LEFT,KEY_SHIFT);
+                    MouseEvent aMevt(oldPoint, 1,
+                                     MouseEventModifiers::SIMPLEMOVE | MouseEventModifiers::DRAGMOVE,
+                                     MOUSE_LEFT, KEY_SHIFT);
                     // MT IA2: Not used?
                     // sal_uInt16 ubuttons = aMevt.GetButtons();
                     // sal_uInt16 uMod      = aMevt.GetModifier();
                     MouseButtonDown(aMevt);
                     mpWindow->CaptureMouse();
                     //simulate mouse button up action
-                    MouseEvent rMEvt(oldPoint+Point(0,0),1,17, MOUSE_LEFT, KEY_SHIFT);
+                    MouseEvent rMEvt(oldPoint+Point(0,0), 1,
+                                     MouseEventModifiers::SIMPLEMOVE | MouseEventModifiers::ENTERWINDOW,
+                                     MOUSE_LEFT, KEY_SHIFT);
                     MouseButtonUp(rMEvt);
                     bReturn= true;
                 }

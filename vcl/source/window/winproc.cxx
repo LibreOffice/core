@@ -269,7 +269,7 @@ static long ContextMenuEventLink( void* pCEvent, void* )
 
 bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeave,
                            long nX, long nY, sal_uLong nMsgTime,
-                           sal_uInt16 nCode, sal_uInt16 nMode )
+                           sal_uInt16 nCode, MouseEventModifiers nMode )
 {
     ImplSVData* pSVData = ImplGetSVData();
     Point       aMousePos( nX, nY );
@@ -309,7 +309,8 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
     pWinFrameData->mnLastMouseX = nX;
     pWinFrameData->mnLastMouseY = nY;
     pWinFrameData->mnMouseCode  = nCode;
-    pWinFrameData->mnMouseMode  = nMode & ~(MOUSE_SYNTHETIC | MOUSE_MODIFIERCHANGED);
+    MouseEventModifiers nTmpMask = MouseEventModifiers::SYNTHETIC | MouseEventModifiers::MODIFIERCHANGED;
+    pWinFrameData->mnMouseMode  = nMode & ~nTmpMask;
     if ( bMouseLeave )
     {
         pWinFrameData->mbMouseIn = false;
@@ -388,7 +389,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
             {
                 ImplHandleMouseHelpRequest( pChild, aMousePos );
                 if( pWinFrameData->mpMouseMoveWin != pChild )
-                    nMode |= MOUSE_ENTERWINDOW;
+                    nMode |= MouseEventModifiers::ENTERWINDOW;
             }
 
             // Call the hook also, if Window is disabled
@@ -537,7 +538,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
             if ( pMouseMoveWin )
             {
                 Point       aLeaveMousePos = pMouseMoveWin->ImplFrameToOutput( aMousePos );
-                MouseEvent  aMLeaveEvt( aLeaveMousePos, nClicks, nMode | MOUSE_LEAVEWINDOW, nCode, nCode );
+                MouseEvent  aMLeaveEvt( aLeaveMousePos, nClicks, nMode | MouseEventModifiers::LEAVEWINDOW, nCode, nCode );
                 NotifyEvent aNLeaveEvt( EVENT_MOUSEMOVE, pMouseMoveWin, &aMLeaveEvt );
                 ImplDelData aDelData;
                 ImplDelData aDelData2;
@@ -570,7 +571,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
                 pMouseMoveWin->ImplRemoveDel( &aDelData );
             }
 
-            nMode |= MOUSE_ENTERWINDOW;
+            nMode |= MouseEventModifiers::ENTERWINDOW;
         }
         pWinFrameData->mpMouseMoveWin = pChild;
         if( pChild )
@@ -1925,31 +1926,31 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
     }
 }
 
-static sal_uInt16 ImplGetMouseMoveMode( SalMouseEvent* pEvent )
+static MouseEventModifiers ImplGetMouseMoveMode( SalMouseEvent* pEvent )
 {
-    sal_uInt16 nMode = 0;
+    MouseEventModifiers nMode = MouseEventModifiers::NONE;
     if ( !pEvent->mnCode )
-        nMode |= MOUSE_SIMPLEMOVE;
+        nMode |= MouseEventModifiers::SIMPLEMOVE;
     if ( (pEvent->mnCode & MOUSE_LEFT) && !(pEvent->mnCode & KEY_MOD1) )
-        nMode |= MOUSE_DRAGMOVE;
+        nMode |= MouseEventModifiers::DRAGMOVE;
     if ( (pEvent->mnCode & MOUSE_LEFT) && (pEvent->mnCode & KEY_MOD1) )
-        nMode |= MOUSE_DRAGCOPY;
+        nMode |= MouseEventModifiers::DRAGCOPY;
     return nMode;
 }
 
-static sal_uInt16 ImplGetMouseButtonMode( SalMouseEvent* pEvent )
+static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent* pEvent )
 {
-    sal_uInt16 nMode = 0;
+    MouseEventModifiers nMode = MouseEventModifiers::NONE;
     if ( pEvent->mnButton == MOUSE_LEFT )
-        nMode |= MOUSE_SIMPLECLICK;
+        nMode |= MouseEventModifiers::SIMPLECLICK;
     if ( (pEvent->mnButton == MOUSE_LEFT) && !(pEvent->mnCode & (MOUSE_MIDDLE | MOUSE_RIGHT)) )
-        nMode |= MOUSE_SELECT;
+        nMode |= MouseEventModifiers::SELECT;
     if ( (pEvent->mnButton == MOUSE_LEFT) && (pEvent->mnCode & KEY_MOD1) &&
          !(pEvent->mnCode & (MOUSE_MIDDLE | MOUSE_RIGHT | KEY_SHIFT)) )
-        nMode |= MOUSE_MULTISELECT;
+        nMode |= MouseEventModifiers::MULTISELECT;
     if ( (pEvent->mnButton == MOUSE_LEFT) && (pEvent->mnCode & KEY_SHIFT) &&
          !(pEvent->mnCode & (MOUSE_MIDDLE | MOUSE_RIGHT | KEY_MOD1)) )
-        nMode |= MOUSE_RANGESELECT;
+        nMode |= MouseEventModifiers::RANGESELECT;
     return nMode;
 }
 

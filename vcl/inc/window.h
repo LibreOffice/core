@@ -49,6 +49,7 @@ class ImplFontCache;
 class VCLXWindow;
 class SalFrame;
 class SalObject;
+enum class MouseEventModifiers;
 
 namespace com {
 namespace sun {
@@ -158,7 +159,7 @@ struct ImplFrameData
     sal_uInt16          mnClickCount;           //< mouse click count
     sal_uInt16          mnFirstMouseCode;       //< mouse code by mousebuttondown
     sal_uInt16          mnMouseCode;            //< mouse code
-    sal_uInt16          mnMouseMode;            //< mouse mode
+    MouseEventModifiers mnMouseMode;            //< mouse mode
     MapUnit             meMapUnit;              //< last MapUnit for LogicUnitToPixel
     bool                mbHasFocus;             //< focus
     bool                mbInMouseMove;          //< is MouseMove on stack
@@ -377,7 +378,7 @@ public:
 
 bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeave,
                            long nX, long nY, sal_uIntPtr nMsgTime,
-                           sal_uInt16 nCode, sal_uInt16 nMode );
+                           sal_uInt16 nCode, MouseEventModifiers nMode );
 void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
 #endif // INCLUDED_VCL_INC_WINDOW_H
