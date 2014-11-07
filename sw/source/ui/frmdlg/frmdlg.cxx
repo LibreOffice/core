@@ -148,7 +148,7 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         ((SwFrmPage&)rPage).SetNewFrame(m_bNew);
         ((SwFrmPage&)rPage).SetFormatUsed(m_bFormat);
-        ((SwFrmPage&)rPage).SetFrmType(OUStringToOString(m_sDlgType, RTL_TEXTENCODING_UTF8));
+        ((SwFrmPage&)rPage).SetFrmType(m_sDlgType);
     }
     else if (nId == m_nAddId)
     {

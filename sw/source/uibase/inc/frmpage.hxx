@@ -104,7 +104,7 @@ class SwFrmPage: public SfxTabPage
     bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
     bool            bHtmlMode;
     sal_uInt16          nHtmlMode;
-    OString         sDlgType;
+    OUString        sDlgType;
     Size            aGrfSize;
     SwTwips         nUpperBorder;
     SwTwips         nLowerBorder;
@@ -192,7 +192,7 @@ public:
 
     void            SetNewFrame(bool bNewFrame) { bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFmt);
-    void            SetFrmType(const OString &rType) { sDlgType  = rType; }
+    void            SetFrmType(const OUString &rType) { sDlgType  = rType; }
     inline bool     IsInGraficMode( void ) { return sDlgType == "PictureDialog" || sDlgType == "ObjectDialog"; }
     void            EnableVerticalPositioning( bool bEnable );
 };
