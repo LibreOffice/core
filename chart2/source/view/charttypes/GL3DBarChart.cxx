@@ -26,7 +26,6 @@
 
 #define CALC_POS_EVENT_ID 1
 #define SHAPE_START_ID 10
-#define DATA_UPDATE_TIME 15
 #define FPS_TIME 500
 #define DATAUPDATE_FPS_TIME 1000
 #define HISTORY_NUM 51
@@ -561,9 +560,9 @@ GL3DBarChart::GL3DBarChart(
         {
             mbAutoFly = atoi(aAutoFly);
         }
-        maTimer.SetTimeout(DATA_UPDATE_TIME);
-        maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, UpdateTimerHdl));
-        maTimer.Start();
+        maIdle.SetPriority(VCL_IDLE_PRIORITY_REPAINT);
+        maIdle.SetIdleHdl(LINK(this, GL3DBarChart, UpdateTimerHdl));
+        maIdle.Start();
         osl_getSystemTime(&maFPSRenderStartTime);
         osl_getSystemTime(&maFPSRenderEndTime);
         osl_getSystemTime(&maDataUpdateStartTime);
@@ -1475,7 +1474,7 @@ void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
 IMPL_LINK_NOARG(GL3DBarChart, UpdateTimerHdl)
 {
     updateScreenText();
-    maTimer.Start();
+    maIdle.Start();
     return 0;
 }
 

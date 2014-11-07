@@ -174,7 +174,7 @@ private:
     Point maClickPos;
     sal_uInt32 miScrollRate;
     bool mbScrollFlg;
-    Timer maTimer;
+    Idle maIdle;
     bool mbScreenTextNewRender;
     boost::ptr_vector<opengl3D::Renderable3DObject> maScreenTextShapes;
     OUString maFPS;

@@ -1265,12 +1265,7 @@ IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
         {
             SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
             if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
-                // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
-                // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
-                // aber ich denke, die BK sollte es auch so vertragen
                 Expand(pToExpand);
-
-            // nach dem Expand habe ich im Gegensatz zum Scrollen natuerlich nix mehr zu tun
             m_aDropActionTimer.Stop();
         }
         break;
@@ -1284,7 +1279,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     Point aDropPos = rEvt.maPosPixel;
 
-    // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
+    // possible DropActions scroll and expand
     if (rEvt.mbLeaving)
     {
         if (m_aDropActionTimer.IsActive())
@@ -1293,7 +1288,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
     else
     {
         bool bNeedTrigger = false;
-        // auf dem ersten Eintrag ?
+        // first entry ?
         if ((aDropPos.Y() >= 0) && (aDropPos.Y() < GetEntryHeight()))
         {
             m_aDropActionType = DA_SCROLLUP;
@@ -1301,8 +1296,6 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
         }
         else
         {
-            // auf dem letzten (bzw. in dem Bereich, den ein Eintrag einnehmen wuerde, wenn er unten genau buendig
-            // abschliessen wuerde) ?
             if ((aDropPos.Y() < GetSizePixel().Height()) && (aDropPos.Y() >= GetSizePixel().Height() - GetEntryHeight()))
             {
                 m_aDropActionType = DA_SCROLLDOWN;
@@ -1313,7 +1306,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
                 SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
                 if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                 {
-                    // -> aufklappen
+                    // -> expand
                     m_aDropActionType = DA_EXPANDNODE;
                     bNeedTrigger = true;
                 }
@@ -1321,12 +1314,10 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
         }
         if (bNeedTrigger && (m_aTimerTriggered != aDropPos))
         {
-            // neu anfangen zu zaehlen
             m_aTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
-            // die Pos merken, da ich auch QueryDrops bekomme, wenn sich die Maus gar nicht bewegt hat
+            // remember DropPos because there are QueryDrops even though the mouse was not moved
             m_aTimerTriggered = aDropPos;
-            // und den Timer los
-            if (!m_aDropActionTimer.IsActive()) // gibt es den Timer schon ?
+            if (!m_aDropActionTimer.IsActive())
             {
                 m_aDropActionTimer.SetTimeout(DROP_ACTION_TIMER_TICK_BASE);
                 m_aDropActionTimer.Start();
@@ -1336,8 +1327,6 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
             m_aDropActionTimer.Stop();
     }
 
-
-    // Hat das Object das richtige Format?
     if (!m_aControlExchange.isDragSource())
         return DND_ACTION_NONE;
 
@@ -1386,15 +1375,13 @@ namespace
 
 sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    // ware schlecht, wenn nach dem Droppen noch gescrollt wird ...
+    // you can't scroll after dropping...
     if (m_aDropActionTimer.IsActive())
         m_aDropActionTimer.Stop();
 
-    // Format-Ueberpruefung
     if (!m_aControlExchange.isDragSource())
         return DND_ACTION_NONE;
 
-    // das Ziel des Drop sowie einige Daten darueber
     Point aDropPos = rEvt.maPosPixel;
     SvTreeListEntry* pDropTarget = GetEntry( aDropPos );
     if (!pDropTarget)

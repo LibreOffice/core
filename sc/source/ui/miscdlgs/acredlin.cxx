@@ -114,14 +114,14 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
     m_pAcceptChgCtr = new SvxAcceptChgCtr(get_content_area());
     nAcceptCount=0;
     nRejectCount=0;
-    aReOpenTimer.SetTimeout(50);
-    aReOpenTimer.SetTimeoutHdl(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
+    aReOpenIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+    aReOpenIdle.SetIdleHdl(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
 
     pTPFilter=m_pAcceptChgCtr->GetFilterPage();
     pTPView=m_pAcceptChgCtr->GetViewPage();
     pTheView=pTPView->GetTableControl();
-    aSelectionTimer.SetTimeout(100);
-    aSelectionTimer.SetTimeoutHdl(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
+    aSelectionIdle.SetPriority(VCL_IDLE_PRIORITY_LOW);
+    aSelectionIdle.SetIdleHdl(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
 
     pTPFilter->SetReadyHdl(LINK( this, ScAcceptChgDlg, FilterHandle ));
     pTPFilter->SetRefHdl(LINK( this, ScAcceptChgDlg, RefHandle ));
@@ -1104,7 +1104,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
 IMPL_LINK_NOARG(ScAcceptChgDlg, SelectHandle)
 {
     if(!bNoSelection)
-        aSelectionTimer.Start();
+        aSelectionIdle.Start();
 
     bNoSelection=false;
     return 0;

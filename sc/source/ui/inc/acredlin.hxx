@@ -95,8 +95,8 @@ class ScAcceptChgDlg : public SfxModelessDialog
 {
 private:
 
-    Timer                   aSelectionTimer;
-    Timer                   aReOpenTimer;
+    Idle                    aSelectionIdle;
+    Idle                    aReOpenIdle;
     SvxAcceptChgCtr*        m_pAcceptChgCtr;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
