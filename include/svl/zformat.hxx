@@ -163,9 +163,6 @@ class SVL_DLLPUBLIC SvNumberformat
     };
 
 public:
-    // Ctor for Load
-    SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge );
-
     // Normal ctor
     SvNumberformat( OUString& rString,
                    ImpSvNumberformatScan* pSc,
@@ -312,9 +309,6 @@ public:
 
     // Whether a new SYMBOLTYPE_CURRENCY is contained in the format
     bool HasNewCurrency() const;
-
-    // Build string from NewCurrency for saving it SO50 compatible
-    void Build50Formatstring( OUString& rStr ) const;
 
     // strip [$-yyy] from all [$xxx-yyy] leaving only xxx's,
     // if bQuoteSymbol==true the xxx will become "xxx"

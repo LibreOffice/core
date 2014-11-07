@@ -295,12 +295,6 @@ public:
                                                     sal_uInt16 nCurrFormat, bool bBank );
     static  sal_uInt16  GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
                                                     sal_uInt16 nCurrFormat, bool bBank );
-
-                        /// General Unicode Euro symbol
-    static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
-                        /** Platform and CharSet dependent Euro symbol,
-                             needed for import/export */
-    static  sal_Char    GetEuroSymbol( rtl_TextEncoding eTextEncoding );
 };
 
 typedef boost::ptr_vector<NfCurrencyEntry> NfCurrencyTable;
@@ -808,10 +802,6 @@ private:
 
     // called by ctors
     SVL_DLLPRIVATE void ImpConstruct( LanguageType eLang );
-
-    // Changes initialized language/country, clears the entries and generates
-    // new ones, may ONLY be called by the binary file format load
-    SVL_DLLPRIVATE void ImpChangeSysCL( LanguageType eLnge, bool bNoAdditionalFormats );
 
     // Generate builtin formats provided by i18n behind CLOffset,
     // if bNoAdditionalFormats==false also generate additional i18n formats.

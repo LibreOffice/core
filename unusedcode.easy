@@ -1,6 +1,5 @@
 BigInt::BigInt(unsigned int)
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
-Chart2ImportTest::testTextCanOverlapXLSX()
 FontCharMap::GetDefaultMap(bool)
 GDriveDocument::GDriveDocument(GDriveSession*)
 GDriveFolder::GDriveFolder(GDriveSession*)

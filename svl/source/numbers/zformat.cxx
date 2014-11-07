@@ -467,21 +467,6 @@ enum BracketFormatSymbolType
     BRACKET_SYMBOLTYPE_NATNUM19 = -33
 };
 
-SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
-    : fLimit1(0.0)
-    , fLimit2(0.0)
-    , rScan(rSc)
-    , eOp1(NUMBERFORMAT_OP_NO)
-    , eOp2(NUMBERFORMAT_OP_NO)
-    , eType(0)
-    , bAdditionalBuiltin( false )
-    , bStarFlag( false )
-    , bStandard( false )
-    , bIsUsed( false )
-{
-    maLocale.meLanguage = eLge;
-}
-
 void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
 {
     sFormatstring = rFormat.sFormatstring;
@@ -1724,11 +1709,6 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
         aTmp += aSource.copy( nStartPos, nLen - nStartPos );
     }
     return aTmp;
-}
-
-void SvNumberformat::Build50Formatstring( OUString& rStr ) const
-{
-    rStr = StripNewCurrencyDelimiters( sFormatstring, true );
 }
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString)

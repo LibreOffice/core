@@ -348,40 +348,6 @@ sal_uInt16 SvNumberFormatter::GetStandardPrec()
     return pFormatScanner->GetStandardPrec();
 }
 
-void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, bool bNoAdditionalFormats )
-{
-    if (eLnge == LANGUAGE_DONTKNOW)
-    {
-        eLnge = UNKNOWN_SUBSTITUTE;
-    }
-    if (eLnge != IniLnge)
-    {
-        IniLnge = eLnge;
-        ChangeIntl(eLnge);
-        // delete old formats
-        for (SvNumberFormatTable::iterator it = aFTable.begin(); it != aFTable.end(); ++it)
-        {
-            delete it->second;
-        }
-        aFTable.clear();
-        ImpGenerateFormats( 0, bNoAdditionalFormats );   // new standard formats
-    }
-    else if ( bNoAdditionalFormats )
-    {
-        // delete additional standard formats
-        sal_uInt32 nKey;
-        SvNumberFormatTable::iterator it = aFTable.find( SV_MAX_ANZ_STANDARD_FORMATE + 1 );
-        while ( it != aFTable.end() &&
-                (nKey = it->first) > SV_MAX_ANZ_STANDARD_FORMATE &&
-                nKey < SV_COUNTRY_LANGUAGE_OFFSET )
-        {
-            delete it->second;
-            aFTable.erase( it++ );
-        }
-    }
-}
-
-
 void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
 {
     sal_uInt32 nCLOffset = ImpGetCLOffset( LANGUAGE_SYSTEM );
@@ -4257,28 +4223,5 @@ sal_uInt16 NfCurrencyEntry::GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
     }
     return nIntlFormat;
 }
-
-
-// we only support default encodings here
-// static
-sal_Char NfCurrencyEntry::GetEuroSymbol( rtl_TextEncoding eTextEncoding )
-{
-    switch ( eTextEncoding )
-    {
-    case RTL_TEXTENCODING_MS_1252 :
-    case RTL_TEXTENCODING_ISO_8859_1 :
-        return '\x80';
-    case RTL_TEXTENCODING_ISO_8859_15 :
-        return '\xA4';
-    case RTL_TEXTENCODING_IBM_850 :
-        return '\xD5';
-    case RTL_TEXTENCODING_APPLE_ROMAN :
-        return '\xDB';
-    default:
-        return '\x80';      // Windows code for the converted TrueType fonts (whatever that means)
-    }
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
