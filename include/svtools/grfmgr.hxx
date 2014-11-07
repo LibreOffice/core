@@ -412,7 +412,7 @@ public:
     bool                    IsAnimated() const { return mbAnimated; }
     bool                    IsEPS() const { return mbEPS; }
 
-    Link                    GetAnimationNotifyHdl() const { return maGraphic.GetAnimationNotifyHdl(); }
+    Link                    GetAnimationNotifyHdl() const { return GetGraphic().GetAnimationNotifyHdl(); }
 
     bool                    SwapOut();
     bool                    SwapOut( SvStream* pOStm );

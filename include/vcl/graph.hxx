@@ -176,6 +176,8 @@ public:
     const OUString&       GetDocFileName() const;
     sal_uLong               GetDocFilePos() const;
 
+private:
+    friend class GraphicObject;
     bool                SwapOut();
     void                SwapOutAsLink();
     bool                SwapOut( SvStream* pOStm );
@@ -183,6 +185,7 @@ public:
     bool                SwapIn( SvStream* pIStm );
     bool                IsSwapOut() const;
 
+public:
     void                SetLink( const GfxLink& );
     GfxLink             GetLink() const;
     bool                IsLink() const;

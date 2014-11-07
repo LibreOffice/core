@@ -279,7 +279,7 @@ bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
     const Graphic&  rGraphic = rObj.GetGraphic();
     bool            bRet = false;
 
-    if( rGraphic.IsSupportedGraphic() && !rGraphic.IsSwapOut() )
+    if( rGraphic.IsSupportedGraphic() && !rObj.IsSwappedOut() )
     {
         if( GRAPHIC_BITMAP == rGraphic.GetType() )
         {

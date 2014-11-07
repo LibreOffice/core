@@ -4089,11 +4089,6 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             // Not in cache, then need to write it.
             m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
 
-            if (pGraphic->IsSwapOut() && !pGrfNode)
-            {
-                const_cast<Graphic*>(pGraphic)->SwapIn();
-            }
-
             OUString aImageId = m_rDrawingML.WriteImage( *pGraphic );
 
             aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );

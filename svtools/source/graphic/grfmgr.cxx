@@ -694,9 +694,7 @@ void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
 const Graphic& GraphicObject::GetGraphic() const
 {
     GraphicObject *pThis = const_cast<GraphicObject*>(this);
-
-    if (mbAutoSwapped)
-        pThis->ImplAutoSwapIn();
+    pThis->SwapIn();
 
     //fdo#50697 If we've been asked to provide the graphic, then reset
     //the cache timeout to start from now and not remain at the
@@ -736,7 +734,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
 {
     // #104550# Extracted from svx/source/svdraw/svdograf.cxx
-    Graphic             aTransGraphic( maGraphic );
+    Graphic             aTransGraphic( GetGraphic() );
     const GraphicType   eType = GetType();
     const Size          aSrcSize( aTransGraphic.GetPrefSize() );
 
