@@ -311,7 +311,7 @@ const CCIHuffmanTableEntry CCIUncompTable[CCIUncompTableSize]={
 // To make sure that the Huffman tables do not contain errors they were entered
 // from two different sources (Phew) and compared.
 // Since an error could creep in to the source code while maintaining it
-// (e.g. an accidentaly key press in the editor) the tables are listed twice
+// (e.g. an accidental key press in the editor) the tables are listed twice
 // and are compared during runtime. (If the comparison fails CCIDcompressor
 // throws an error) The whole thing may appear insane, but an error within the
 // tables would otherwise be really hard to discover and it's very unlikely that

@@ -2316,7 +2316,7 @@ void XMLTextFieldExport::ExportMetaField(
     bool doExport(!i_bAutoStyles); // do not export element if autostyles
     // check version >= 1.2
     switch (GetExport().getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_011: // fall through
         case SvtSaveOptions::ODFVER_010: doExport = false; break;
         default: break;
     }

@@ -217,7 +217,7 @@ void XSpreadsheets2::testImportNewNamedRange()
 */
     importSheetToCopy();
 
-    //formula with a non-existant named range in dest - new_rangename
+    //formula with a non-existent named range in dest - new_rangename
     OUString aNewNamedRangeString("new_rangename");
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("New NamedRange not created", xDestNamedRangesNameAccess->hasByName(aNewNamedRangeString));

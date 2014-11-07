@@ -51,7 +51,7 @@ sub select_help_items
             # Files with style "HELPPACK" and "FORCEHELPPACK" also have to be included into the help pack.
             # Files with style "HELPPACK" are only included into help packs.
             # Files with style "FORCEHELPPACK" are included into help packs and non help packs. They are
-            # forced, because otherwise they not not be included into helppacks.
+            # forced, because otherwise they may not be included into helppacks.
 
             my $ismultilingual = $oneitem->{'ismultilingual'};
 

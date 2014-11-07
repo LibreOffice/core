@@ -52,7 +52,7 @@ public class _XControlInformation extends MultiMethodTest {
 
     /**
      * For every available control check if it is supported.
-     * Also wrong control name (non-existant and empty) are checked.<p>
+     * Also wrong control name (non-existent and empty) are checked.<p>
      *
      * Has <b>OK</b> status if <code>true</code> returned for valid
      * control names and <code>false</code> for invalid.<p>

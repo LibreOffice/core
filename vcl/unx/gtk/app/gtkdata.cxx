@@ -553,7 +553,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     /* #i33212# only enter g_main_context_iteration in one thread at any one
      * time, else one of them potentially will never end as long as there is
-     * another thread in in there. Having only one yieldin thread actually dispatch
+     * another thread in there. Having only one yieldin thread actually dispatch
      * fits the vcl event model (see e.g. the generic plugin).
      */
     bool bDispatchThread = false;
@@ -646,7 +646,7 @@ void GtkData::Init()
 
     g_set_application_name(SalGenericSystem::getFrameClassName());
 
-    // Set consistant name of the root accessible
+    // Set consistent name of the root accessible
     OUString aAppName = Application::GetAppName();
     if( !aAppName.isEmpty() )
     {

@@ -330,7 +330,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
 }
 
 // Insert an OLE-Objekt into the CORE.
-// if no object is transfered, then one will be created.
+// if no object is transferred, then one will be created.
 
 void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName *pName,
                                bool bActivate, sal_uInt16 nSlotId )

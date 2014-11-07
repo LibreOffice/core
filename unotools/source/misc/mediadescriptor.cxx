@@ -637,7 +637,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
     // try to open the file in read/write mode
     // (if its allowed to do so).
     // But handle errors in a "hidden mode". Because
-    // we try it readonly later - if read/write isnt an option.
+    // we try it readonly later - if read/write is not an option.
     css::uno::Reference< css::io::XStream >      xStream;
     css::uno::Reference< css::io::XInputStream > xInputStream;
 
@@ -654,7 +654,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
     {
         try
         {
-            // TODO: use "special" still interaction to supress error messages
+            // TODO: use "special" still interaction to suppress error messages
             xStream = aContent.openWriteableStream();
             if (xStream.is())
                 xInputStream = xStream->getInputStream();
@@ -681,7 +681,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
             }
     }
 
-    // If opening of the stream in read/write mode wasnt allowed
+    // If opening of the stream in read/write mode was not allowed
     // or failed by an error - we must try it in readonly mode.
     if (!xInputStream.is())
     {

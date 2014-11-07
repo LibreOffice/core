@@ -352,7 +352,7 @@ private:
     SVX_DLLPRIVATE void fillControlTexts(const InterfaceArray& arrFields);
 
     // three methods implementing a complete search loop (null/not null, wildcard, SearchText)
-    // (they all have some code in common, but with this solution we have do do a distinction only once per search (before
+    // (they all have some code in common, but with this solution we have to do a distinction only once per search (before
     // starting the loop), not in every loop step
     SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollection::iterator& iterFieldLoop,
         const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);

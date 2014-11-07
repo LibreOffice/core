@@ -30,7 +30,7 @@ namespace oglcanvas
 
         /** prune old entries from cache
 
-            Everytime this method is called, all cache entries are set
+            Every time this method is called, all cache entries are set
             to "old". If subsequently not used by getTexture(),
             they'll be entitled for expunge on the next prune()
             call. Resets statistic counters.

@@ -420,7 +420,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     // set the text color as fill color (see kCTForegroundColorFromContextAttributeName)
     CGContextSetFillColor( context, rAquaGraphics.maTextColor.AsArray() );
 
-    /* if we have a m_vRunData that indicate that an ApplyDXArray occured
+    /* if we have a m_vRunData that indicate that an ApplyDXArray occurred
      * iow that we want to use DXArray to align glyphs
      * Otherwise we just use CoreText to display the whole line
      */

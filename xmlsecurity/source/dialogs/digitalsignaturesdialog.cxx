@@ -751,7 +751,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 
 //If bTempStream is true, then a temporary stream is return. If it is false then, the actual
 //signature stream is used.
-//Everytime the user presses Add a new temporary stream is created.
+//Every time the user presses Add a new temporary stream is created.
 //We keep the temporary stream as member because ImplGetSignatureInformations
 //will later access the stream to create DocumentSignatureInformation objects
 //which are stored in maCurrentSignatureInformations.

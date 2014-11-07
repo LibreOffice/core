@@ -268,7 +268,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
     SAL_WARN_IF( !xPackage.is(), "package.xstor", "No package component is provided!" );
     SAL_WARN_IF( !m_xContext.is(), "package.xstor", "No package stream is provided!" );
     OSL_ENSURE( pParent, "No parent storage is provided!\n" );
-    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML || !m_xOrigRelInfoStream.is(), "The Relations info makes sence only for OFOPXML format!\n" );
+    OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML || !m_xOrigRelInfoStream.is(), "The Relations info makes sense only for OFOPXML format!\n" );
 }
 
 OWriteStream_Impl::~OWriteStream_Impl()
@@ -393,7 +393,7 @@ bool OWriteStream_Impl::IsEncrypted()
         GetEncryptionKeyProperty_Impl( xPropSet ) >>= aKey;
 
     // If the properties must be investigated the stream is either
-    // was never changed or was changed, the parent was commited
+    // was never changed or was changed, the parent was committed
     // and the stream was closed.
     // That means that if it is intended to use common storage key
     // it is already has no encryption but is marked to be stored
@@ -1514,7 +1514,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
     if ( m_bHasCachedEncryptionData )
     {
-        // TODO: introduce last commited cashed password information and use it here
+        // TODO: introduce last committed cashed password information and use it here
         // that means "use common pass" also should be remembered on flash
         uno::Sequence< beans::NamedValue > aKey = aEncryptionData.getAsConstNamedValueList();
 
@@ -1651,7 +1651,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 }
             }
 
-            // the original stream makes no sence after this step
+            // the original stream makes no sense after this step
             m_xOrigRelInfoStream = m_xNewRelInfoStream;
             m_aOrigRelInfo = m_aNewRelInfo;
             m_bOrigRelInfoBroken = false;
@@ -2301,7 +2301,7 @@ void OWriteStream::CloseOutput_Impl()
 
     if ( !m_bInitOnDemand )
     {
-        // after the stream is disposed it can be commited
+        // after the stream is disposed it can be committed
         // so transport correct size property
         if ( !m_xSeekable.is() )
             throw uno::RuntimeException();
@@ -3264,7 +3264,7 @@ void SAL_CALL OWriteStream::removeVetoableChangeListener(
 void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
 /*
     1 - preCommit
-    2 - commited
+    2 - committed
     3 - preRevert
     4 - reverted
 */
@@ -3335,7 +3335,7 @@ void SAL_CALL OWriteStream::commit()
 
         m_pImpl->Commit();
 
-        // when the storage is commited the parent is modified
+        // when the storage is committed the parent is modified
         ModifyParentUnlockMutex_Impl( aGuard );
     }
     catch( const io::IOException& rIOException )

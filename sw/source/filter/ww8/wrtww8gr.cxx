@@ -159,8 +159,8 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
                             xObj,
                             uno::UNO_QUERY_THROW );
 
-                    // it makes no sence to search the object in the container by reference since the object was created
-                    // outside of the container and was not inserted there, only the name makes sence
+                    // it makes no sense to search the object in the container by reference since the object was created
+                    // outside of the container and was not inserted there, only the name makes sense
                     pGraphicStream =
                             ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( xPersist->getEntryName() ) );
                 }

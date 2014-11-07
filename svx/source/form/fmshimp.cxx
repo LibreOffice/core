@@ -1556,7 +1556,7 @@ void FmXFormShell::ExecuteSearch()
             Reference< XGrid> xGrid(xActiveControl, UNO_QUERY);
             if (xGrid.is())
             {
-                // fuer strActiveField brauche ich die die ControlSource der Column, dafuer den Columns-Container, dafuer die
+                // fuer strActiveField brauche ich die ControlSource der Column, dafuer den Columns-Container, dafuer die
                 // GridPeer
                 Reference< XGridPeer> xGridPeer(xActiveControl->getPeer(), UNO_QUERY);
                 Reference< XIndexAccess> xColumns;
@@ -2850,7 +2850,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
     // 67506 - 15.07.99 - FS
     if (bDesign && m_bHadPropertyBrowserInDesignMode)
     {
-        // The UIFeatureChanged performes an update (a check of the available features) asynchronously.
+        // The UIFeatureChanged performs an update (a check of the available features) asynchronously.
         // So we can't call ShowSelectionProperties directly as the according feature isn't enabled yet.
         // That's why we use an asynchron execution on the dispatcher.
         // (And that's why this has to be done AFTER the UIFeatureChanged.)

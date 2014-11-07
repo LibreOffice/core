@@ -1089,7 +1089,7 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
     // Dont distrub the user for "non existing files - means empty URLs" or
     // if we was forced to detect a stream.
     // Reason behind: We must be sure to ask user for "unknown contents" only ...
-    // and not for "missing files". Especialy if detection is done by a stream only
+    // and not for "missing files". Especially if detection is done by a stream only
     // we can't check if the stream points to an "existing content"!
     if (
         (sURL.isEmpty()                                     ) || // "non existing file" ?

@@ -110,7 +110,7 @@ namespace reportdesign
             l.notify();
         }
 
-        /** checks if this section is eiter the page header or footer and if so it throws an UnknownPropertyException
+        /** checks if this section is either the page header or footer and if so it throws an UnknownPropertyException
         *
         */
         void checkNotPageHeaderFooter();

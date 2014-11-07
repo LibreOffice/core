@@ -64,7 +64,7 @@ static sal_Int64 existMarkOffset = 0;
    /Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale - 27/01/2011)
 */
 
-// C-standard garantees that static variables are automatically initialized to 0
+// C-standard guarantees that static variables are automatically initialized to 0
 static sal_uInt8 exists[0x2000];
 static sal_uInt32 charArray[0x10000];
 

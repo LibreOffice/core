@@ -217,7 +217,7 @@ Text [ en-US ] = "Select target directory";
 
 String MESSAGES + 4
 {
-Text [ en-US ] = "non-existant";
+Text [ en-US ] = "non-existent";
 };
 
 String MESSAGES + 5

@@ -198,8 +198,8 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
                     before (e.g. by calling implts_closeView()!
 
                     Otherwise e.g. the XController->suspend()
-                    call isnt made and no UI warn the user about
-                    loosing document changes. Because the
+                    call is not made and no UI warn the user about
+                    losing document changes. Because the
                     frame is closed ....
 
             @return [bool]
@@ -218,7 +218,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper2<
         /** @short  calls XDesktop->terminate().
 
             @descr  No office code has to be called
-                    afterwards! Because the process is dieing ...
+                    afterwards! Because the process is dying...
                     The only exception is a might be registered
                     listener at this instance here.
                     Because he should know, that such things will happen :-)

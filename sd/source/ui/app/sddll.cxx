@@ -99,7 +99,7 @@
 
 using namespace ::com::sun::star;
 
-// Register all Factorys
+// Register all Factories
 void SdDLL::RegisterFactorys()
 {
     if (SvtModuleOptions().IsImpress())

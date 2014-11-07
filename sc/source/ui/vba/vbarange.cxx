@@ -4190,7 +4190,7 @@ ScVbaRange::getWorksheet() throw (uno::RuntimeException, std::exception)
 uno::Reference< excel::XRange >
 ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xContext, const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException)
 {
-    // Althought the documentation seems clear that Range without a
+    // Although the documentation seems clear that Range without a
     // qualifier then it's a shortcut for ActiveSheet.Range
     // however, similarly Application.Range is apparently also a
     // shortcut for ActiveSheet.Range

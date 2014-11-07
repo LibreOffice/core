@@ -1350,7 +1350,7 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
         xAppend->appendByDescriptor(xView);
 
     xView = NULL;
-    // we need to reget the view because after appending it it is no longer valid
+    // we need to reget the view because after appending it, it is no longer valid
     // but this time it isn't a view object it is a table object with type "VIEW"
     Reference<XTablesSupplier> xTabSup(_rxConnection,UNO_QUERY);
     Reference< XNameAccess > xTables;

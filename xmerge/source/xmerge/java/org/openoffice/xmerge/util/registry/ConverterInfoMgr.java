@@ -77,7 +77,7 @@ public final class ConverterInfoMgr {
             }
         }
 
-        // Since this is a adding to a static Vector, make sure this add method
+        // Since this is adding to a static Vector, make sure this add method
         // call is synchronized.
         synchronized (converterInfoList) {
             converterInfoList.add(ci);
@@ -235,7 +235,7 @@ public final class ConverterInfoMgr {
 
                 if (deviceFromMime.trim().equals(fromDeviceInfo)) {
 
-                    // Found a a match for deviceFrom.  Now loop over the
+                    // Found a match for deviceFrom.  Now loop over the
                     // elements comparing with deviceToMime
                     Iterator<ConverterInfo> citEnum = converterInfoList.iterator();
                     while (citEnum.hasNext()) {

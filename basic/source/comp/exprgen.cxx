@@ -109,7 +109,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
         // special treatment for WITH
         else if( (pWithParent_ = GetWithParent()) != NULL )
         {
-            eOp = _ELEM;            // .-Term in in WITH
+            eOp = _ELEM;            // .-Term in WITH
         }
         else
         {

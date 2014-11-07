@@ -568,7 +568,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x25: // Area Reference                        [320 270]
             case 0x4B:
             case 0x6B:
-            case 0x2B: // Deleted Area Refernce                 [323 273]
+            case 0x2B: // Deleted Area Reference                [323 273]
             {
                 sal_uInt16          nRowFirst, nRowLast;
                 sal_uInt8           nColFirst, nColLast;
@@ -594,7 +594,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 {
                     case 0x4B:
                     case 0x6B:
-                    case 0x2B: // Deleted Area Refernce         [323 273]
+                    case 0x2B: // Deleted Area Reference        [323 273]
                         // no information which part is deleted, set all
                         rSRef1.SetColDeleted( true );
                         rSRef1.SetRowDeleted( true );
@@ -1109,7 +1109,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                 break;
             case 0x4B:
             case 0x6B:
-            case 0x2B: // Deleted Area Refernce                 [323 273]
+            case 0x2B: // Deleted Area Refernece                [323 273]
                 nIgnore = 6;
                 break;
             case 0x4C:
@@ -1467,7 +1467,7 @@ bool ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
             case 0x4B:
             case 0x6B:
-            case 0x2B: // Deleted Area Refernce                 [323 273]
+            case 0x2B: // Deleted Area Reference                [323 273]
                 nSeek = 6;
                 break;
             case 0x40:

@@ -128,7 +128,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& 
     m_bConfigAccessInitialized( false ),
     m_bCacheFilled( false )
 {
-    // Create configuration hierachical access name
+    // Create configuration hierarchical access name
     m_aConfigCategoryAccess += aModuleName;
     m_aConfigCategoryAccess += CONFIGURATION_CATEGORY_ELEMENT_ACCESS;
 

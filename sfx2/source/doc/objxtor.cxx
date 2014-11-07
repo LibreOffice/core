@@ -512,7 +512,7 @@ SfxObjectShell* SfxObjectShell::GetFirst
 {
     SfxObjectShellArr_Impl &rDocs = SfxGetpApp()->GetObjectShells_Impl();
 
-    // seach for a SfxDocument of the specified type
+    // search for a SfxDocument of the specified type
     for ( sal_uInt16 nPos = 0; nPos < rDocs.size(); ++nPos )
     {
         SfxObjectShell* pSh = rDocs[ nPos ];
@@ -626,7 +626,7 @@ bool SfxObjectShell::PrepareClose
     }
 
     // Ask if possible if it should be saved
-    // only ask for the Document in the visable window
+    // only ask for the Document in the visible window
     SfxViewFrame *pFrame = SfxObjectShell::Current() == this
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
 

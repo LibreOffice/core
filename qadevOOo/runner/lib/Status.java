@@ -101,7 +101,7 @@ public class Status extends SimpleStatus {
     /**
      * The method returns a human-readable description of the status.
      * The Status implementation of the method returns the status state
-     * description and appends to it it the reason, for example:
+     * description and appends to it the reason, for example:
      * "FAILED.The getLabel works wrong", "PASSED.OK".
      */
     @Override

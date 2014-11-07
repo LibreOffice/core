@@ -962,7 +962,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     return true;
 }
 
-// FIXME: This is incredibly lame ... but so is cairo's insistance on -exactly-
+// FIXME: This is incredibly lame... but so is cairo's insistence on - exactly -
 // its own stride - neither more nor less - particularly not more aligned
 // we like 8byte aligned, it likes 4 - most odd.
 void GtkSalGraphics::renderAreaToPix( cairo_t *cr,

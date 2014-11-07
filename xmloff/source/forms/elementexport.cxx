@@ -1699,7 +1699,7 @@ namespace xmloff
         // in general, all control types need to export the control id
         m_nIncludeCommon |= CCA_CONTROL_ID;
 
-        // is is a control bound to a calc cell?
+        // is it a control bound to a calc cell?
         if ( FormCellBindingHelper::livesInSpreadsheetDocument( m_xProps ) )
         {
             FormCellBindingHelper aHelper( m_xProps, NULL );

@@ -4644,7 +4644,7 @@ void DomainMapper_Impl::AddNewRedline( sal_uInt32 sprmId )
         // <w:rPrChange> applies to the whole <w:r>, <w:pPrChange> applies to the whole <w:p>,
         // so keep those two in CONTEXT_CHARACTERS and CONTEXT_PARAGRAPH, which will take
         // care of their scope (i.e. when they should be used and discarded).
-        // Let's keep the rest the same way they used to be handled (explictly dropped
+        // Let's keep the rest the same way they used to be handled (explicitly dropped
         // from a global stack by endtrackchange), but quite possibly they should not be handled
         // that way either (I don't know).
         if( sprmId == NS_ooxml::LN_EG_RPrContent_rPrChange )

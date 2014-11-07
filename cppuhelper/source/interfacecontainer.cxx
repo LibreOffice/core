@@ -250,8 +250,7 @@ sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface
         sal_Int32 i;
         for( i = 0; i < nLen; i++ )
         {
-            // It is not valid to compare the Pointer direkt, but is is is much
-            // more faster.
+            // It is not valid to compare the pointer directly, but it's faster.
             if( pL[i].get() == rListener.get() )
             {
                 sequenceRemoveElementAt( *aData.pAsSequence, i );

@@ -258,7 +258,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseQuotedIdentifiers()
 }
 
 // ---- Unquoted Identifiers -------------------------------------------------
-// All unquoted identifers are stored upper case.
+// All unquoted identifiers are stored upper case.
 sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers()
     throw(SQLException, RuntimeException, std::exception)
 {

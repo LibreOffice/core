@@ -217,7 +217,7 @@ protected:
     TextPaM             SplitContent( sal_uLong nNode, sal_uInt16 nSepPos );
     TextPaM             ConnectContents( sal_uLong nLeftNode );
 
-    // adjust PaM's and selections that were transfered to the API to a valid range
+    // adjust PaM's and selections that were transferred to the API to a valid range
     void                ValidateSelection( TextSelection& rSel ) const;
     void                ValidatePaM( TextPaM& rPaM ) const;
 

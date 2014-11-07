@@ -82,7 +82,7 @@ published service Storage
                 In case a storage object is disposed all the elements
                 ( substorages and substreams ) retrieved from the
                 object are disposed. If the storage was opened in
-                read-write mode all non-commited changes will be lost.
+                read-write mode all non-committed changes will be lost.
                 </p>
             </dd>
             <dt>interface XStorage</dt>
@@ -226,11 +226,11 @@ published service Storage
     /** allows to commit or revert changes that were done for the storage.
 
         <p>
-        If a storage is commited all changes made to it will be integrated to
-        its parent storage. This is recursive process, so the last commited
+        If a storage is committed all changes made to it will be integrated to
+        its parent storage. This is recursive process, so the last committed
         storage should be the root one. For the package based storages commit
         of a root storage also means flashing to the related medium. If
-        a storage is not commited, no changes for it or its child elements
+        a storage is not committed, no changes for it or its child elements
         will be stored.
         </p>
      */

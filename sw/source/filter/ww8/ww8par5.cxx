@@ -3423,7 +3423,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
     }
 
     //As an attribute this needs to be closed, and that'll happen from
-    //EndExtSprm in conjunction with the maFieldStack If there are are flyfrms
+    //EndExtSprm in conjunction with the maFieldStack. If there are flyfrms
     //between the start and begin, their hyperlinks will be set at that time
     //as well.
     pCtrlStck->NewAttr( *pPaM->GetPoint(), aURL );

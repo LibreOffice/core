@@ -1099,7 +1099,7 @@ double LwpMiddleLayout::GetWidth()
     return GetGeometryWidth();
 }
 /**
-* @descr:   Get layout orgin point
+* @descr:   Get layout origin point
 *
 */
 LwpPoint LwpMiddleLayout::GetOrigin()

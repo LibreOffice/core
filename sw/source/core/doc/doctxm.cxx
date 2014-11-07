@@ -1882,7 +1882,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
         {
             if(TOX_AUTHORITIES != SwTOXBase::GetType())
             {
-                // Own entry for for double entries or keywords
+                // Own entry for double entries or keywords
                 if( pOld->GetType() == TOX_SORT_CUSTOM &&
                     pNew->GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)
                     continue;

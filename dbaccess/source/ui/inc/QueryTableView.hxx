@@ -111,7 +111,7 @@ namespace dbaui
         // used by AddTabDlg to see if tables can still be added
         //virtual sal_Bool IsAddAllowed();
 
-        /// announce new Connection and insert it, if not existant yet
+        /// announce new Connection and insert it, if not existing yet
         void NotifyTabConnection(const OQueryTableConnection& rNewConn, bool _bCreateUndoAction = true);
 
         /// @note the Handler receives a pointer to a TabWinsChangeNotification struct

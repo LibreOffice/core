@@ -78,7 +78,7 @@ private:
 
     // Instance data
     ContentProvider  *m_pProvider;  // No need for a ref, base class holds object
-    sal_Bool          m_bTransient; // A non-existant (as yet) item
+    sal_Bool          m_bTransient; // A non-existent (as yet) item
     GnomeVFSFileInfo  m_info;       // cached status information
 
     // Internal helpers

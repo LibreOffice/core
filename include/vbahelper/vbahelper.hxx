@@ -236,7 +236,7 @@ public:
     static sal_Int32 FieldInList( const css::uno::Sequence< OUString >& SearchList, const OUString& SearchString );
 };
 
-// really just a a place holder to ease the porting pain
+// really just a place holder to ease the porting pain
 class VBAHELPER_DLLPUBLIC DebugHelper
 {
 public:

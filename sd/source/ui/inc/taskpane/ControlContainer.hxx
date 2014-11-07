@@ -108,7 +108,7 @@ public:
     */
     TreeNode* GetControl (sal_uInt32 nIndex) const;
 
-    /** Return the index of the control previous to that that is specified
+    /** Return the index of the control previous to that is specified
         by the given index.
         @param nIndex
             Index of the control for which to return the index of the
@@ -130,7 +130,7 @@ public:
         bool bIncludeHidden=false,
         bool bCycle=false) const;
 
-    /** Return the index of the control next to that that is specified by
+    /** Return the index of the control next to that is specified by
         the given index.
         @param nIndex
             Index of the control for which to return the index of the next

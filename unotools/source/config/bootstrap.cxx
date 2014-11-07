@@ -669,7 +669,7 @@ bool Bootstrap::Impl::initUserInstallationData(rtl::Bootstrap& _rData)
         // should we do just this
         aUserInstall_.status = DATA_MISSING;
 
-        // .. or this - look for a single-user user directory ?
+        // ... or this - look for a single-user user directory ?
         OUString const csUserDirItem(BOOTSTRAP_ITEM_USERDIR);
         OUString sDummy;
         // look for $BASEINSTALLATION/user only if default UserDir setting is used

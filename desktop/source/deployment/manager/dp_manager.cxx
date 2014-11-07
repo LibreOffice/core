@@ -170,7 +170,7 @@ void PackageManagerImpl::initActivationLayer(
             create_folder( 0, m_registrationData_expanded, xCmdEnv, true);
             dbName = m_registrationData_expanded + "/extensions.pmap";
         }
-        // The data base can always be written because it it always in the user installation
+        // The data base can always be written because it is always in the user installation
         m_activePackagesDB.reset( new ActivePackages( dbName, false ) );
 
         if (! m_readOnly && ! (m_context == "bundled"))
@@ -1337,7 +1337,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 rtl_UriEncodeIgnoreEscapes,
                 RTL_TEXTENCODING_UTF8);
 
-            //It it sufficient to check for the folder name, because when the administor
+            //It is sufficient to check for the folder name, because when the administor
             //installed the extension it was already checked if there is one with the
             //same identifier.
             const MatchTempDir match(titleEncoded);

@@ -143,7 +143,7 @@ public:
         // Transformation of a relative vector (so no translation)
 
     bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
-        // Attemp to transform a circle (in xy plane) so that it results
+        // Attempt to transform a circle (in xy plane) so that it results
         // in an aligned ellipse. If the does not work because a ellipse of
         // arbitrary position would be created, sal_False is returned.
         // (The center point will not be transformed, use Transform(..))

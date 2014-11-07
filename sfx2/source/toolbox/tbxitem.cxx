@@ -1340,7 +1340,7 @@ SfxPopupWindow* SfxPopupWindow::Clone() const
     Presentation-mode. It is called when a Show() would be meaningless
     since the parent is no presentation window.
     When create a new window the bew Top-Window will be used automatically,
-    so that the Parent becomes the presentation window and and that the new
+    so that the Parent becomes the presentation window and that the new
     Popup therefore becomes visible.
 */
 

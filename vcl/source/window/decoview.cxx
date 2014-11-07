@@ -983,7 +983,7 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, sal_uInt16 nStyle 
     mpOutDev->SetLineColor( maOldLineColor );
     mpOutDev->SetFillColor( maOldFillColor );
 
-    // keep border free, altough it is used at default representation
+    // keep border free, although it is used at default representation
     ++aRect.Left();
     ++aRect.Top();
     --aRect.Right();

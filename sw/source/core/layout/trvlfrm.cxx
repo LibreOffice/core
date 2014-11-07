@@ -424,7 +424,7 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         ((SwCrsrMoveState*)pCMS)->bFillRet = false;
     Point aOldPoint = rPoint;
 
-    // search for page containing rPoint. The borders around the pages are considerd
+    // search for page containing rPoint. The borders around the pages are considered
     const SwPageFrm* pPage = GetPageAtPos( rPoint, 0, true );
 
     // #i95626#
@@ -1706,7 +1706,7 @@ sal_uInt16 SwFrm::GetPhyPageNum() const
  *
  * If the first content of the page has a page descriptor, we take the follow
  * of the page descriptor of the last not empty page. If this descriptor allows
- * only right(left) pages and the page isn't an empty page then it wanna be
+ * only right(left) pages and the page isn't an empty page then it want to be
  * such right(left) page. If the descriptor allows right and left pages, we
  * look for a number offset in the first content. If there is one, odd number
  * results right pages, even number results left pages.

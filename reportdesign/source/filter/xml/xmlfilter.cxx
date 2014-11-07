@@ -607,7 +607,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                         // TODO/LATER: no way to transport the error outside from the filter!
                         break;
                     }
-                    // fall through intented
+                    // fall through intended
                 default:
                     {
                         // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!

@@ -260,7 +260,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
         m_bError = false;
         m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER(), OUString()) ), css::uno::UNO_QUERY_THROW );
         // OK- we can start async playing ...
-        // Count this request and initialize self-holder against dieing by uno ref count ...
+        // Count this request and initialize self-holder against dying by uno ref count ...
         m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         m_xPlayer->start();
         m_aUpdateTimer.SetTimeout( 200 );
@@ -337,7 +337,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
                 We use this information to callback our might existing listener.
 
     @seealso    method dispatchWithNotification()
-    @return     0 everytime ... it doesn't matter for us.
+    @return     0 every time... it doesn't matter for us.
     @threadsafe yes
 *//*-*************************************************************************************************************/
 IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)

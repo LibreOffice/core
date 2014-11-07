@@ -355,7 +355,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 
     ensureModelEnv(xSourceContainer, m_xEnvironmentHistory);
     m_aEventsHistory = aEvts;
-        // if we we're clone there was a call to operator=, so aEvts are exactly the events we need here ...
+        // if we were clone there was a call to operator=, so aEvts are exactly the events we need here...
 }
 
 

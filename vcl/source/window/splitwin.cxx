@@ -586,7 +586,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                     j++;
                 }
 
-                // substract size of individual items
+                // subtract size of individual items
                 nErrorSum       = nSizeDelta % nCalcItems;
                 nCurSizeDelta   = nSizeDelta / nCalcItems;
                 nMins           = 0;

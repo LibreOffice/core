@@ -103,7 +103,7 @@ DefaultFontConfiguration::DefaultFontConfiguration()
     {
         // get service provider
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierachical access name
+        // create configuration hierarchical access name
         try
         {
             m_xConfigProvider = theDefaultProvider::get( xContext );
@@ -366,7 +366,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
     {
         // get service provider
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierachical access name
+        // create configuration hierarchical access name
         m_xConfigProvider = theDefaultProvider::get( xContext );
         Sequence< Any > aArgs(1);
         PropertyValue aVal;

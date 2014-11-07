@@ -370,9 +370,9 @@ OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentCo
         PropertySet aPropSet( mxControlModel );
         if ( aPropSet.getProperty( nClassId, PROP_ClassId ) )
         {
-            /* psuedo ripped from legacy msocximex:
+            /* pseudo ripped from legacy msocximex:
               "There is a truly horrible thing with EditControls and FormattedField
-              Controls, they both pretend to have an EDITBOX ClassId for compability
+              Controls, they both pretend to have an EDITBOX ClassId for compatibility
               reasons, at some stage in the future hopefully there will be a proper
               FormulaField ClassId rather than this piggybacking two controls onto the
               same ClassId, cmc." - when fixed the fake FORMULAFIELD id entry

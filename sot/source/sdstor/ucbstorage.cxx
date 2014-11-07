@@ -444,7 +444,7 @@ public:
     void                        Free();
     bool                        Init();
     bool                        Clear();
-    sal_Int16                   Commit();       // if modified and commited: transfer an XInputStream to the content
+    sal_Int16                   Commit();       // if modified and committed: transfer an XInputStream to the content
     bool                        Revert();       // discard all changes
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
     sal_uLong                   GetSize();
@@ -1073,7 +1073,7 @@ sal_uLong UCBStorageStream_Impl::GetSize()
 BaseStorage* UCBStorageStream_Impl::CreateStorage()
 {
     // create an OLEStorage on a SvStream ( = this )
-    // it gets the root attribute because otherwise it would probably not write before my root is commited
+    // it gets the root attribute because otherwise it would probably not write before my root is committed
     UCBStorageStream* pNewStorageStream = new UCBStorageStream( this );
     Storage *pStorage = new Storage( *pNewStorageStream, m_bDirect );
 
@@ -1092,7 +1092,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
     if ( m_bCommited || m_bIsOLEStorage || m_bDirect )
     {
         // modified streams with OLEStorages on it have autocommit; it is assumed that the OLEStorage
-        // was commited as well ( if not opened in direct mode )
+        // was committed as well ( if not opened in direct mode )
 
         if ( m_bModified )
         {
@@ -1882,7 +1882,7 @@ void UCBStorage_Impl::ReadContent()
     {
         // any command wasn't executed successfully - not specified
         if ( !( m_nMode & STREAM_WRITE ) )
-            // if the folder was just inserted and not already commited, this is not an error!
+            // if the folder was just inserted and not already committed, this is not an error!
             SetError( ERRCODE_IO_GENERAL );
     }
     catch (const RuntimeException&)
@@ -2819,7 +2819,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         // create OLE storages on a stream ( see ctor of SotStorage )
         // Such a storage will be created on a UCBStorageStream; it will write into the stream
         // if it is opened in direct mode or when it is committed. In this case the stream will be
-        // modified and then it MUST be treated as commited.
+        // modified and then it MUST be treated as committed.
         if ( !pElement->m_xStream.Is() )
         {
             BaseStorageStream* pStr = OpenStream( rEleName, nMode, bDirect );

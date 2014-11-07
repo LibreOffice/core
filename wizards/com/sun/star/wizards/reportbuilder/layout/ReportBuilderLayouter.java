@@ -1350,7 +1350,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             // 'Page #page# of #count#'
             // to something like
             // '\"Page \" & PageNumber() & \" of \" & PageCount()'
-            // due to the fact that is is not fixed, where #page# or #count# occurs, we make it
+            // due to the fact that it is not fixed, where #page# or #count# occurs, we make it
             // a little bit trickier.
             // we first surround the string with double quotes,
             // second, replace the #...#

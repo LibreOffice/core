@@ -787,7 +787,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
 }
 
-// Save the current values to add them as automatic entries to to AutoCorrect.
+// Save the current values to add them as automatic entries to AutoCorrect.
 void SwDoc::SetAutoCorrExceptWord( SwAutoCorrExceptWord* pNew )
 {
     if( pNew != mpACEWord )

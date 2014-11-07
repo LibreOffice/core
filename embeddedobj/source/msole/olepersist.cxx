@@ -401,7 +401,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     if ( xTempOutStream.is() )
     {
         // the OlePres stream must have additional header
-        // TODO/LATER: might need to be extended in future ( actually makes sence only for SO7 format )
+        // TODO/LATER: might need to be extended in future (actually makes sense only for SO7 format)
         uno::Reference< io::XInputStream > xInCacheStream = xCachedVisualRepresentation->getInputStream();
         if ( !xInCacheStream.is() )
             throw uno::RuntimeException();
