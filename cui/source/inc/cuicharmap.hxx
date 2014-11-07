@@ -70,7 +70,7 @@ private:
 
     SvxShowCharSet* m_pShowSet;
     Edit*           m_pShowText;
-    OKButton*       m_pOKBtn;
+    PushButton*     m_pOKBtn;
     FixedText*      m_pFontText;
     ListBox*        m_pFontLB;
     FixedText*      m_pSubsetText;
