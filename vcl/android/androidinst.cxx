@@ -485,15 +485,15 @@ Java_org_libreoffice_android_AppSupport_touch(JNIEnv * /* env */,
 
         switch (action) {
         case AMOTION_EVENT_ACTION_DOWN:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+            aEvent = MouseEvent(Point(x, y), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
             nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
             break;
         case AMOTION_EVENT_ACTION_UP:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT);
+            aEvent = MouseEvent(Point(x, y), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
             nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
             break;
         case AMOTION_EVENT_ACTION_MOVE:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT);
+            aEvent = MouseEvent(Point(x, y), 1, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT);
             nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
             break;
         default:
