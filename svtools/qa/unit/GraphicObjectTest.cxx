@@ -19,21 +19,42 @@
 
 #include <vcl/image.hxx>
 
+#include <com/sun/star/frame/Desktop.hpp>
+#include <officecfg/Office/Common.hxx>
+#include <unotest/macros_test.hxx>
+#include <comphelper/processfactory.hxx>
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
+#include <doc.hxx>
+#include <ndgrf.hxx>
+#include <boost/shared_ptr.hpp>
+
+using namespace css;
+
 namespace
 {
 
-class GraphicObjectTest: public test::BootstrapFixture
+class GraphicObjectTest: public test::BootstrapFixture, public unotest::MacrosTest
 {
 
 public:
     void testSwap();
+    void testSizeBasedAutoSwap();
+
+
+    virtual void setUp() SAL_OVERRIDE
+    {
+        test::BootstrapFixture::setUp();
+
+        mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
+    }
 
 private:
     DECL_LINK(getLinkStream, GraphicObject*);
 
 private:
     CPPUNIT_TEST_SUITE(GraphicObjectTest);
-    CPPUNIT_TEST(testSwap);
+    CPPUNIT_TEST(testSizeBasedAutoSwap);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -117,6 +138,89 @@ void GraphicObjectTest::testSwap()
         // the data are still there
         CPPUNIT_ASSERT_EQUAL(nGraphicSizeBytes, aGraphObj.GetGraphic().GetSizeBytes());
         CPPUNIT_ASSERT_EQUAL(nGraphicSizeBytes, aGraphObj2.GetGraphic().GetSizeBytes());
+    }
+}
+
+void GraphicObjectTest::testSizeBasedAutoSwap()
+{
+    // Set cache size to a very small value to check what happens
+    {
+        boost::shared_ptr< comphelper::ConfigurationChanges > aBatch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), aBatch);
+        aBatch->commit();
+    }
+
+    uno::Reference< lang::XComponent > xComponent =
+        loadFromDesktop(getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
+
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwNodes& aNodes = pDoc->GetNodes();
+
+    // Find images
+    const GraphicObject* pGrafObj1 = 0;
+    const GraphicObject* pGrafObj2 = 0;
+    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
+    {
+        if( aNodes[nIndex]->IsGrfNode() )
+        {
+            SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
+            if( !pGrafObj1 )
+            {
+                pGrafObj1 = &pGrfNode->GetGrfObj();
+            }
+            else
+            {
+                pGrafObj2 = &pGrfNode->GetGrfObj();
+            }
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Missing image", pGrafObj1 != 0 && pGrafObj2 != 0);
+
+    {
+        // First image should be swapped out
+        CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(697230), pGrafObj1->GetSizeBytes());
+
+        // Still swapped out: size is cached
+        CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
+    }
+
+    {
+        // Second image should be in the memory
+        // Size based swap out is triggered by swap in, so the last swapped in image should be
+        // in the memory despite of size limit is reached.
+        CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
+        CPPUNIT_ASSERT_EQUAL(sal_uLong(1620000), pGrafObj2->GetSizeBytes());
+    }
+
+    // Swap in first image -> second image will be swapped out
+    {
+        pGrafObj1->GetGraphic(); // GetGraphic calls swap in on a const object
+        CPPUNIT_ASSERT(!pGrafObj1->IsSwappedOut());
+        CPPUNIT_ASSERT(pGrafObj2->IsSwappedOut());
+    }
+
+    // Swap in second image -> first image will be swapped out
+    {
+        pGrafObj2->GetGraphic(); // GetGraphic calls swap in on a const object
+        CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
+        CPPUNIT_ASSERT(pGrafObj1->IsSwappedOut());
+    }
+
+    // Use bigger cache
+    {
+        GraphicManager& rGrfMgr = pGrafObj1->GetGraphicManager();
+        rGrfMgr.SetMaxCacheSize(pGrafObj1->GetSizeBytes()+pGrafObj2->GetSizeBytes());
+    }
+    // Swap in both images -> both should be swapped in
+    {
+        pGrafObj1->GetGraphic();
+        pGrafObj2->GetGraphic();
+        CPPUNIT_ASSERT(!pGrafObj1->IsSwappedOut());
+        CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
     }
 }
 
