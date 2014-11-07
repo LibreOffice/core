@@ -295,6 +295,9 @@ public:
                                                     sal_uInt16 nCurrFormat, bool bBank );
     static  sal_uInt16  GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
                                                     sal_uInt16 nCurrFormat, bool bBank );
+
+    /// General Unicode Euro symbol
+    static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
 
 typedef boost::ptr_vector<NfCurrencyEntry> NfCurrencyTable;
@@ -951,9 +954,6 @@ public:
 
     // return the corresponding date separator
     inline const OUString& GetDateSep() const { return aDateSep; }
-
-    /// General Unicode Euro symbol
-    static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
 
 inline sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
