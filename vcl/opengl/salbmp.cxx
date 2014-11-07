@@ -130,7 +130,7 @@ bool OpenGLSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun
     return false;
 }
 
-bool OpenGLSalBitmap::Draw( OpenGLContext& rContext, const SalTwoRect& rPosAry )
+bool OpenGLSalBitmap::Draw( OpenGLContext& rContext, const SalTwoRect& /*rPosAry*/ )
 {
     if( !mpContext )
         mpContext = &rContext;

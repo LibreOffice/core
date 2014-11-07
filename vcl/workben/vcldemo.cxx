@@ -154,6 +154,7 @@ public:
         aMainWin.SetText( "Interactive VCL demo" );
         aMainWin.Show();
         Application::Execute();
+        return 0;
     }
 
 protected:

@@ -27,13 +27,13 @@ $(eval $(call gb_Module_add_targets,vcl,\
         StaticLibrary_vclmain \
         Executable_ui-previewer \
 		$(if $(filter LINUX MACOSX WNT,$(OS)), \
-	        Executable_icontest \
-	        Executable_outdevgrind )) \
+			Executable_icontest \
+			Executable_outdevgrind \
+			Executable_vcldemo )) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
-        Executable_svpclient \
-        Executable_vcldemo) \
+        Executable_svpclient) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\
