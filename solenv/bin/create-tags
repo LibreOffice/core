@@ -7,14 +7,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ctags=ctags
+if test "$1" = "-e"; then
+    ctags=etags
+fi
+
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 
-ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
+$ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
       -R --exclude=instdir --exclude=workdir \
       --exclude=clone --totals=yes ${SRCDIR:-*}
 
-ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
+$ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
       -R --append=yes --totals=yes \
       workdir/UnoApiHeadersTarget/udkapi/normal \
