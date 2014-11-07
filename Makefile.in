@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck
 
-.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
@@ -320,6 +320,9 @@ id:
 
 tags:
 	@create-tags
+
+etags:
+	@create-tags -e
 
 docs:
 	@mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg

@@ -60,6 +60,9 @@
 
 /tags
 
+# make etags
+/TAGS
+
 # backup and temporary editor files: the only convinience rules allowed here.
 *~
 .*sw?
