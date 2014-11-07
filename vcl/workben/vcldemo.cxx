@@ -27,6 +27,7 @@
 #if 0
 #  define FIXME_ALPHA_WORKING
 #  define FIXME_ROUNDED_RECT_WORKING
+#  define FIXME_DRAW_TRANSPARENT_WORKING
 #endif
 
 using namespace css;
@@ -85,6 +86,17 @@ public:
             DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
         for(int i=0; i<r.GetWidth(); i+=15)
             DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
+
+        // Should draw a white-line across the middle
+        Color aLastPixel( COL_WHITE );
+        Point aCenter((r.Left() + r.Right())/2 - 4,
+                      (r.Top() + r.Bottom())/2 - 4);
+        for(int i=0; i<8; i++)
+        {
+            DrawPixel(aCenter, aLastPixel);
+            aLastPixel = GetPixel(aCenter);
+            aCenter.Move(1,1);
+        }
     }
 
     void drawText(Rectangle r)
@@ -152,6 +164,49 @@ public:
         DrawBitmapEx(r.TopLeft(), aBitmap);
 #endif
     }
+    void drawPolyPolgons(Rectangle r)
+    {
+        struct {
+            double nX, nY;
+        } aPoints[] = { { 0.1, 0.1 }, { 0.9, 0.9 },
+                        { 0.9, 0.1 }, { 0.1, 0.9 },
+                        { 0.1, 0.1 } };
+
+        tools::PolyPolygon aPolyPoly;
+        // Render 4x polygons & aggregate into another PolyPolygon
+        for (int x = 0; x < 2; x++)
+        {
+            for (int y = 0; y < 2; y++)
+            {
+                Rectangle aSubRect(r);
+                aSubRect.Move(x * r.GetWidth()/3, y * r.GetHeight()/3);
+                aSubRect.SetSize(Size(r.GetWidth()/2, r.GetHeight()/4));
+                Polygon aPoly(SAL_N_ELEMENTS(aPoints));
+                for (size_t v = 0; v < SAL_N_ELEMENTS(aPoints); v++)
+                {
+                    aPoly.SetPoint(Point(aSubRect.Left() +
+                                         aSubRect.GetWidth() * aPoints[v].nX,
+                                         aSubRect.Top() +
+                                         aSubRect.GetHeight() * aPoints[v].nY),
+                                   v);
+                }
+                SetLineColor(Color(COL_YELLOW));
+                SetFillColor(Color(COL_BLACK));
+                DrawPolygon(aPoly);
+
+                // now move and add to the polypolygon
+                aPoly.Move(0, r.GetHeight()/2);
+                aPolyPoly.Insert(aPoly);
+            }
+        }
+        SetLineColor(Color(COL_LIGHTRED));
+        SetFillColor(Color(COL_GREEN));
+#ifdef FIXME_DRAW_TRANSPARENT_WORKING
+        DrawTransparent(aPolyPoly, 50);
+#else
+        DrawPolyPolygon(aPolyPoly);
+#endif
+    }
     void fetchDrawBitmap(Rectangle r)
     {
         // FIXME: should work ...
@@ -217,6 +272,7 @@ void DemoWin::Paint( const Rectangle& rRect )
     drawBitmapEx(aRegions[i++]);
     drawBitmap(aRegions[i++]);
     drawGradient(aRegions[i++]);
+    drawPolyPolgons(aRegions[i++]);
     // last - thumbnail all the above
     fetchDrawBitmap(aRegions[i++]);
     assert(i<=12);
