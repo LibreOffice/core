@@ -1035,17 +1035,23 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
             }
         }
 
-        const IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
-        for(IDocumentMarkAccess::const_iterator_t ppMark =
-                pMarkAccess->getMarksBegin();
-            ppMark != pMarkAccess->getMarksEnd();
-            ++ppMark)
+        // A text node already knows its marks via its SwIndexes.
+        std::set<const sw::mark::IMark*> aSeenMarks;
+        const SwIndex* next;
+        for (const SwIndex* pIndex = GetFirstIndex(); pIndex; pIndex = next )
         {
+            next = pIndex->GetNext();
+            const sw::mark::IMark* pMark = pIndex->GetMark();
+            if (!pMark)
+                continue;
+            // Only handle bookmarks once, if they start and end at this node as well.
+            if (aSeenMarks.find(pMark) != aSeenMarks.end())
+                continue;
+            aSeenMarks.insert(pMark);
             // Bookmarks must never grow to either side, when
             // editing (directly) to the left or right (#i29942#)!
             // And a bookmark with same start and end must remain
             // to the left of the inserted text (used in XML import).
-            const ::sw::mark::IMark* const pMark = ppMark->get();
             const SwPosition* pEnd = &pMark->GetMarkEnd();
             SwIndex & rIdx = const_cast<SwIndex&>(pEnd->nContent);
             if( this == &pEnd->nNode.GetNode() &&
