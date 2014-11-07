@@ -567,7 +567,6 @@ void ImplClearHDCCache( SalData* pData )
 }
 
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd):
-    mpImpl(new WinSalGraphicsImpl(*this)),
     mhLocalDC(0),
     mbPrinter(eType == WinSalGraphics::PRINTER),
     mbVirDev(eType == WinSalGraphics::VIRTUAL_DEVICE),
