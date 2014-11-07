@@ -37,6 +37,7 @@ class SwDoc;
 class SwFmtCol;
 class SwDocShell;
 class SwNumRule;
+class SwNumFmt;
 
 class SwXFootnoteProperties : public cppu::WeakAggImplHelper2
 <
@@ -204,6 +205,19 @@ public:
     static bool             isInvalidStyle(const OUString &rName);
     void    Invalidate()    {pDocShell = 0;}
     OUString                GetCreatedNumRuleName() const {return m_sCreatedNumRuleName;}
+
+    static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFmt(
+            const SwNumFmt& rFmt, OUString const& rCharFormatName,
+            OUString const* pHeadingStyleName);
+    static void SetPropertiesToNumFmt(
+            SwNumFmt & aFmt,
+            OUString & rCharStyleName,
+            OUString *const pBulletFontName,
+            OUString *const pHeadingStyleName,
+            OUString *const pParagraphStyleName,
+            SwDoc *const pDoc, SwDocShell *const pDocShell,
+            css::uno::Sequence<css::beans::PropertyValue> const& rProperties);
+
 };
 
 class SwXChapterNumbering : public SwXNumberingRules

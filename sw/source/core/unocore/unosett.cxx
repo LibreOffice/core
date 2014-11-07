@@ -1331,7 +1331,58 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
     const SwNumFmt& rFmt = rNumRule.Get( (sal_uInt16)nIndex );
 
-    bool bChapterNum = pDocShell != 0;
+    SwCharFmt* pCharFmt = rFmt.GetCharFmt();
+    OUString CharStyleName;
+    if (pCharFmt)
+        CharStyleName = pCharFmt->GetName();
+
+    // Whether or not a style is present: the array entry overwrites this string
+    if (!m_sNewCharStyleNames[nIndex].isEmpty() &&
+        !SwXNumberingRules::isInvalidStyle(m_sNewCharStyleNames[nIndex]))
+    {
+        CharStyleName = m_sNewCharStyleNames[nIndex];
+    }
+
+    OUString aUString;
+    if (pDocShell) // -> Chapter Numbering
+    {
+        // template name
+        OUString sValue(SW_RES(STR_POOLCOLL_HEADLINE1 + nIndex));
+        const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
+        const size_t nCount = pColls->size();
+        for(size_t i = 0; i < nCount; ++i)
+        {
+            SwTxtFmtColl &rTxtColl = *pColls->operator[](i);
+            if(rTxtColl.IsDefault())
+                continue;
+
+            const sal_Int16 nOutLevel = rTxtColl.IsAssignedToListLevelOfOutlineStyle()
+                                        ? static_cast<sal_Int16>(rTxtColl.GetAssignedOutlineStyleLevel())
+                                        : MAXLEVEL;
+            if ( nOutLevel == nIndex )
+            {
+                sValue = rTxtColl.GetName();
+                break; // the style for the level in question has been found
+            }
+            else if( sValue==rTxtColl.GetName() )
+            {
+                // if the default for the level is existing, but its
+                // level is different, then it cannot be the default.
+                sValue = OUString();
+            }
+        }
+        SwStyleNameMapper::FillProgName(sValue, aUString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
+    }
+
+    return GetPropertiesForNumFmt(rFmt, CharStyleName, (pDocShell) ? & aUString : 0);
+
+}
+
+uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
+        const SwNumFmt& rFmt, OUString const& rCharFormatName,
+        OUString const*const pHeadingStyleName)
+{
+    bool bChapterNum = pHeadingStyleName != 0;
 
     PropValDataArr  aPropertyValues;
     //fill all properties into the array
@@ -1358,17 +1409,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     aPropertyValues.push_back(pData);
 
     //char style name
-    SwCharFmt* pCharFmt = rFmt.GetCharFmt();
-    OUString CharStyleName;
-    if(pCharFmt)
-        CharStyleName = pCharFmt->GetName();
-
-    // Whether or not a style is present: the array entry overwrites this string
-    if (!m_sNewCharStyleNames[nIndex].isEmpty() &&
-        !SwXNumberingRules::isInvalidStyle(m_sNewCharStyleNames[nIndex]))
-    {
-        CharStyleName = m_sNewCharStyleNames[nIndex];
-    }
+    OUString CharStyleName(rCharFormatName);
 
     aUString = OUString();
     SwStyleNameMapper::FillProgName( CharStyleName, aUString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
@@ -1527,34 +1568,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     }
     else
     {
-        // template name
-        OUString sValue(SW_RES(STR_POOLCOLL_HEADLINE1 + nIndex));
-        const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
-        const size_t nCount = pColls->size();
-        for(size_t i = 0; i < nCount; ++i)
-        {
-            SwTxtFmtColl &rTxtColl = *pColls->operator[](i);
-            if(rTxtColl.IsDefault())
-                continue;
-
-            const sal_Int16 nOutLevel = rTxtColl.IsAssignedToListLevelOfOutlineStyle()
-                                        ? static_cast<sal_Int16>(rTxtColl.GetAssignedOutlineStyleLevel())
-                                        : MAXLEVEL;
-            if ( nOutLevel == nIndex )
-            {
-                sValue = rTxtColl.GetName();
-                break; // the style for the level in question has been found
-            }
-            else if( sValue==rTxtColl.GetName() )
-            {
-                // if the default for the level is existing, but its
-                // level is different, then it cannot be the default.
-                sValue = OUString();
-            }
-        }
-        aUString = OUString();
-        SwStyleNameMapper::FillProgName(sValue, aUString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
-
+        aUString = *pHeadingStyleName;
         pData = new PropValData((void*)&aUString, UNO_NAME_HEADING_STYLE_NAME, ::cppu::UnoType<OUString>::get());
         aPropertyValues.push_back(pData);
     }
@@ -1595,6 +1609,63 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
     SolarMutexGuard aGuard;
     OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
 
+    SwNumFmt aFmt(rNumRule.Get( (sal_uInt16)nIndex ));
+
+    OUString sHeadingStyleName;
+    OUString sParagraphStyleName;
+
+    SetPropertiesToNumFmt(aFmt, m_sNewCharStyleNames[nIndex],
+        &m_sNewBulletFontNames[nIndex],
+        &sHeadingStyleName, &sParagraphStyleName,
+        pDoc, pDocShell, rProperties);
+
+
+    if (pDoc && !sParagraphStyleName.isEmpty())
+    {
+        const SwTxtFmtColls* pColls = pDoc->GetTxtFmtColls();
+        const size_t nCount = pColls->size();
+        for (size_t k = 0; k < nCount; ++k)
+        {
+            SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
+            if (rTxtColl.GetName() == sParagraphStyleName)
+                rTxtColl.SetFmtAttr( SwNumRuleItem( rNumRule.GetName()));
+        }
+    }
+
+    if (!sHeadingStyleName.isEmpty())
+    {
+        assert(pDocShell);
+        const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
+        const size_t nCount = pColls->size();
+        for (size_t k = 0; k < nCount; ++k)
+        {
+            SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
+            if (rTxtColl.IsDefault())
+                continue;
+            if (rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&
+                rTxtColl.GetAssignedOutlineStyleLevel() == nIndex &&
+                rTxtColl.GetName() != sHeadingStyleName)
+            {
+                rTxtColl.DeleteAssignmentToListLevelOfOutlineStyle();
+            }
+            else if (rTxtColl.GetName() == sHeadingStyleName)
+            {
+                rTxtColl.AssignToListLevelOfOutlineStyle( nIndex );
+            }
+        }
+    }
+
+    rNumRule.Set(static_cast<sal_uInt16>(nIndex), aFmt);
+}
+
+void SwXNumberingRules::SetPropertiesToNumFmt(
+        SwNumFmt & aFmt,
+        OUString & rCharStyleName, OUString *const pBulletFontName,
+        OUString *const pHeadingStyleName,
+        OUString *const pParagraphStyleName,
+        SwDoc *const pDoc, SwDocShell *const pDocShell,
+        const uno::Sequence<beans::PropertyValue>& rProperties)
+{
     // the order of the names is important!
     static const char* aNumPropertyNames[] =
     {
@@ -1665,7 +1736,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         aPropertyValues.push_back(pData);
     }
 
-    SwNumFmt aFmt(rNumRule.Get( (sal_uInt16)nIndex ));
     bool bWrongArg = false;
     if(!bExcept)
        {
@@ -1726,7 +1796,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     SwStyleNameMapper::FillUIName( uTmp, sCharFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                     if (sCharFmtName == UNO_NAME_CHARACTER_FORMAT_NONE)
                     {
-                        m_sNewCharStyleNames[nIndex] = aInvalidStyle;
+                        rCharStyleName = aInvalidStyle;
                         aFmt.SetCharFmt(0);
                     }
                     else if(pDocShell || pDoc)
@@ -1762,10 +1832,10 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         // #i51842#
                         // If the character format has been found its name should not be in the
                         // char style names array
-                        m_sNewCharStyleNames[nIndex] = OUString();
+                        rCharStyleName = OUString();
                      }
                     else
-                        m_sNewCharStyleNames[nIndex] = sCharFmtName;
+                        rCharStyleName = sCharFmtName;
                 }
                 break;
                 case 5: //"StartWith",
@@ -1885,20 +1955,13 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 15: //"ParagraphStyleName"
                 {
-                    if( pDoc )
+                    if (pParagraphStyleName)
                     {
                         OUString uTmp;
                         pData->aVal >>= uTmp;
                         OUString sStyleName;
                         SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-                        const SwTxtFmtColls* pColls = pDoc->GetTxtFmtColls();
-                        const size_t nCount = pColls->size();
-                        for(size_t k = 0; k < nCount; ++k)
-                        {
-                            SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
-                            if ( rTxtColl.GetName() == sStyleName )
-                                rTxtColl.SetFmtAttr( SwNumRuleItem( rNumRule.GetName()));
-                        }
+                        *pParagraphStyleName = sStyleName;
                     }
                 }
                 break;
@@ -1948,8 +2011,8 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         vcl::Font aFont(aInfo);
                         aFmt.SetBulletFont(&aFont);
                     }
-                    else
-                        m_sNewBulletFontNames[nIndex] = sBulletFontName;
+                    else if (pBulletFontName)
+                        *pBulletFontName = sBulletFontName;
                 }
                 break;
                 case 19: //"BulletChar",
@@ -2047,28 +2110,13 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 24: //"HeadingStyleName"
                 {
-                    assert( pDocShell );
-                    OUString uTmp;
-                    pData->aVal >>= uTmp;
-                    OUString sStyleName;
-                    SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
-                    const SwTxtFmtColls* pColls = pDocShell->GetDoc()->GetTxtFmtColls();
-                    const size_t nCount = pColls->size();
-                    for(size_t k = 0; k < nCount; ++k)
+                    if (pHeadingStyleName)
                     {
-                        SwTxtFmtColl &rTxtColl = *((*pColls)[k]);
-                        if(rTxtColl.IsDefault())
-                            continue;
-                        if ( rTxtColl.IsAssignedToListLevelOfOutlineStyle() &&
-                             rTxtColl.GetAssignedOutlineStyleLevel() == nIndex &&
-                             rTxtColl.GetName() != sStyleName )
-                        {
-                            rTxtColl.DeleteAssignmentToListLevelOfOutlineStyle();
-                        }
-                        else if ( rTxtColl.GetName() == sStyleName )
-                        {
-                            rTxtColl.AssignToListLevelOfOutlineStyle( nIndex );
-                        }
+                        OUString uTmp;
+                        pData->aVal >>= uTmp;
+                        OUString sStyleName;
+                        SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
+                        *pHeadingStyleName = sStyleName;
                     }
                 }
                 break;
@@ -2103,13 +2151,14 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 aFmt.SetGraphicBrush( pSetBrush, pSetSize, text::VertOrientation::NONE == eOrient ? 0 : &eOrient );
             }
         }
-        if((!bCharStyleNameSet || m_sNewCharStyleNames[nIndex].isEmpty()) &&
-                aFmt.GetNumberingType() == NumberingType::BITMAP && !aFmt.GetCharFmt()
-                    && !SwXNumberingRules::isInvalidStyle(m_sNewCharStyleNames[nIndex]))
+        if ((!bCharStyleNameSet || rCharStyleName.isEmpty())
+            && aFmt.GetNumberingType() == NumberingType::BITMAP
+            && !aFmt.GetCharFmt()
+            && !SwXNumberingRules::isInvalidStyle(rCharStyleName))
         {
             OUString tmp;
             SwStyleNameMapper::FillProgName(RES_POOLCHR_BUL_LEVEL, tmp);
-            m_sNewCharStyleNames[nIndex] = tmp;
+            rCharStyleName = tmp;
         }
         delete pSetBrush;
         delete pSetSize;
@@ -2123,7 +2172,6 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         throw lang::IllegalArgumentException();
     else if(bExcept)
         throw uno::RuntimeException();
-    rNumRule.Set( (sal_uInt16)nIndex, aFmt );
 }
 
 uno::Reference< XPropertySetInfo > SwXNumberingRules::getPropertySetInfo()
