@@ -1270,6 +1270,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
     sal_Int32 nPos = mpPaletteListBox->GetSelectEntryPos();
     mrPaletteManager.SetPalette( nPos );
     mrPaletteManager.ReloadColorSet(*mpColorSet);
+    mpColorSet->layoutToGivenHeight(mpColorSet->GetSizePixel().Height(), mrPaletteManager.GetColorCount());
     return 0;
 }
 
