@@ -321,15 +321,15 @@ void touch_lo_mouse(int x, int y, MLOMouseButtonState state, MLOModifierMask mod
 
         switch (state) {
         case DOWN:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, nModifiers);
+            aEvent = MouseEvent(Point(x, y), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT, nModifiers);
             nEvent = VCLEVENT_WINDOW_MOUSEBUTTONDOWN;
             break;
         case MOVE:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLEMOVE, MOUSE_LEFT, nModifiers);
+            aEvent = MouseEvent(Point(x, y), 1, MouseEventModifiers::SIMPLEMOVE, MOUSE_LEFT, nModifiers);
             nEvent = VCLEVENT_WINDOW_MOUSEMOVE;
             break;
         case UP:
-            aEvent = MouseEvent(Point(x, y), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, nModifiers);
+            aEvent = MouseEvent(Point(x, y), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT, nModifiers);
             nEvent = VCLEVENT_WINDOW_MOUSEBUTTONUP;
             break;
         default:
@@ -388,7 +388,7 @@ void touch_lo_keyboard_did_hide()
     if (pFocus) {
         MouseEvent aEvent;
 
-        aEvent = MouseEvent(Point(0, 0), 0, MOUSE_LEAVEWINDOW, MOUSE_LEFT);
+        aEvent = MouseEvent(Point(0, 0), 0, MouseEventModifiers::LEAVEWINDOW, MOUSE_LEFT);
         Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEMOVE, pFocus->GetWindow(), &aEvent);
     }
 }
