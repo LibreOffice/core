@@ -734,7 +734,8 @@ void OpenGLSalGraphicsImpl::drawMask(
 SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     OpenGLSalBitmap* pBitmap = new OpenGLSalBitmap;
-    SAL_INFO( "vcl.opengl", "::getBitmap" );
+    SAL_INFO( "vcl.opengl", "::getBitmap " << nX << "," << nY <<
+              " " << nWidth << "x" << nHeight );
     if( !pBitmap->Create( maContext, nX, nY, nWidth, nHeight ) )
     {
         delete pBitmap;

@@ -18,6 +18,8 @@
  */
 
 #include <sal/config.h>
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 #include "vcl/salbtype.hxx"
 
 #include "opengl/texture.hxx"
@@ -59,7 +61,9 @@ OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight )
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nX, nY, nWidth, nHeight, 0 );
+    CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, 0 );
+    CHECK_GL_ERROR();
 }
 
 OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData )

@@ -97,9 +97,21 @@ public:
 
     void drawPoly(Rectangle r) // pretty
     {
-        Polygon aPoly(r, r.TopLeft(), r.TopRight());
+        drawCheckered(r);
+
+        long nDx = r.GetWidth()/20;
+        long nDy = r.GetHeight()/20;
+        Rectangle aShrunk(r);
+        aShrunk.Move(nDx, nDy);
+        aShrunk.SetSize(Size(r.GetWidth()-nDx*2,
+                             r.GetHeight()-nDy*2));
+        Polygon aPoly(aShrunk);
+        tools::PolyPolygon aPPoly(aPoly);
         SetLineColor(Color(COL_RED));
-//        DrawPolyLine(aPoly);
+        SetFillColor(Color(COL_RED));
+        // This hits the 'drawAlphaRect' code-path
+        // FIXME: not alpha ...
+        DrawTransparent(aPPoly, 64);
     }
     void drawEllipse(Rectangle r)
     {
