@@ -62,10 +62,7 @@ private:
     OUString toString(ScCalcConfig::StringConversion eConv) const;
     OUString toString(bool bVal) const;
     OUString toString(sal_Int32 nVal) const;
-    SvTreeListEntry *createBoolItem(const OUString &rCaption, bool bValue) const;
-    SvTreeListEntry *createIntegerItem(const OUString &rCaption, sal_Int32 nValue) const;
-    SvTreeListEntry *createStringItem(const OUString &rCaption, const OUString& sValue) const;
-    SvTreeListEntry *createStringListItem(const OUString &rCaption) const;
+    SvTreeListEntry *createItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
 
 private:

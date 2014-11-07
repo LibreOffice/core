@@ -231,42 +231,12 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog() {}
 
-SvTreeListEntry *ScCalcOptionsDialog::createBoolItem(const OUString &rCaption, bool bValue) const
-{
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
-    OptionString* pItem = new OptionString(rCaption, toString(bValue));
-    pEntry->AddItem(pItem);
-    return pEntry;
-}
-
-SvTreeListEntry *ScCalcOptionsDialog::createIntegerItem(const OUString &rCaption, sal_Int32 nValue) const
-{
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
-    OptionString* pItem = new OptionString(rCaption, toString(nValue));
-    pEntry->AddItem(pItem);
-    return pEntry;
-}
-
-SvTreeListEntry *ScCalcOptionsDialog::createStringItem(const OUString &rCaption, const OUString& sValue) const
+SvTreeListEntry *ScCalcOptionsDialog::createItem(const OUString &rCaption, const OUString& sValue) const
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
     pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
     OptionString* pItem = new OptionString(rCaption, sValue);
-    pEntry->AddItem(pItem);
-    return pEntry;
-}
-
-SvTreeListEntry *ScCalcOptionsDialog::createStringListItem(const OUString &rCaption) const
-{
-    SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
-    OptionString* pItem = new OptionString(rCaption, "");
     pEntry->AddItem(pItem);
     return pEntry;
 }
@@ -333,7 +303,7 @@ void ScCalcOptionsDialog::fillOpenCLList()
 
 namespace {
 
-void fillListBox(ListBox* pListBox, const std::set<ScCalcConfig::OpenCLImplementationMatcher>& rSet)
+void fillListBox(ListBox* pListBox, const std::set<ScCalcConfig::OpenCLImpl>& rSet)
 {
     pListBox->SetUpdateMode(false);
     pListBox->Clear();
@@ -380,7 +350,7 @@ void ScCalcOptionsDialog::FillOptionsList()
         addOption( pModel, pItem);
     }
 
-    pModel->Insert(createBoolItem(maCaptionEmptyStringAsZero,maConfig.mbEmptyStringAsZero));
+    pModel->Insert(createItem(maCaptionEmptyStringAsZero,toString(maConfig.mbEmptyStringAsZero)));
 
     {
         // Syntax for INDIRECT function.
@@ -390,12 +360,12 @@ void ScCalcOptionsDialog::FillOptionsList()
     }
 
 #if HAVE_FEATURE_OPENCL
-    pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
-    pModel->Insert(createBoolItem(maCaptionOpenCLSubsetEnabled,maConfig.mbOpenCLSubsetOnly));
-    pModel->Insert(createIntegerItem(maCaptionOpenCLMinimumFormulaSize,maConfig.mnOpenCLMinimumFormulaGroupSize));
-    pModel->Insert(createStringItem(maCaptionOpenCLSubsetOpCodes,ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes)));
-    pModel->Insert(createStringListItem(maCaptionOpenCLWhiteList));
-    pModel->Insert(createStringListItem(maCaptionOpenCLBlackList));
+    pModel->Insert(createItem(maCaptionOpenCLEnabled,toString(maConfig.mbOpenCLEnabled)));
+    pModel->Insert(createItem(maCaptionOpenCLSubsetEnabled,toString(maConfig.mbOpenCLSubsetOnly)));
+    pModel->Insert(createItem(maCaptionOpenCLMinimumFormulaSize,toString(maConfig.mnOpenCLMinimumFormulaGroupSize)));
+    pModel->Insert(createItem(maCaptionOpenCLSubsetOpCodes,ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes)));
+    pModel->Insert(createItem(maCaptionOpenCLWhiteList,""));
+    pModel->Insert(createItem(maCaptionOpenCLBlackList,""));
 
     fillOpenCLList();
 
@@ -871,15 +841,16 @@ IMPL_LINK(ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl, Control*, )
 {
     // We know this is called for the mpOpenCLWhiteAndBlackListBox
 
-    std::set<ScCalcConfig::OpenCLImplementationMatcher>
-        &m(mpLbSettings->GetSelectEntryPos() == CALC_OPTION_OPENCL_WHITELIST ? maConfig.maOpenCLWhiteList : maConfig.maOpenCLBlackList);
+    std::set<ScCalcConfig::OpenCLImpl>
+        &implSet(mpLbSettings->GetSelectEntryPos() == CALC_OPTION_OPENCL_WHITELIST ? maConfig.maOpenCLWhiteList : maConfig.maOpenCLBlackList);
     sal_uLong n(mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos());
+    const ScCalcConfig::OpenCLImpl& impl(*nth(implSet, n));
 
-    mpOS->SetText(nth(m, n)->maOS);
-    mpOSVersion->SetText(nth(m, n)->maOSVersion);
-    mpPlatformVendor->SetText(nth(m, n)->maPlatformVendor);
-    mpDevice->SetText(nth(m, n)->maDevice);
-    mpDriverVersion->SetText(nth(m, n)->maDriverVersion);
+    mpOS->SetText(impl.maOS);
+    mpOSVersion->SetText(impl.maOSVersion);
+    mpPlatformVendor->SetText(impl.maPlatformVendor);
+    mpDevice->SetText(impl.maDevice);
+    mpDriverVersion->SetText(impl.maDriverVersion);
 
     return 0;
 }

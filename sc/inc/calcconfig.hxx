@@ -41,7 +41,7 @@ struct SC_DLLPUBLIC ScCalcConfig
         STRING_CONVERSION_LOCALE_DEPENDENT  ///<  =1+"1.000" may be 2 or 1001 ... =1+"x" gives #VALUE!
     };
 
-    struct OpenCLImplementationMatcher
+    struct OpenCLImpl
     {
         OUString maOS;
         OUString maOSVersion;
@@ -49,15 +49,15 @@ struct SC_DLLPUBLIC ScCalcConfig
         OUString maDevice;
         OUString maDriverVersion;
 
-        OpenCLImplementationMatcher()
+        OpenCLImpl()
         {
         }
 
-        OpenCLImplementationMatcher(const OUString& rOS,
-                                    const OUString& rOSVersion,
-                                    const OUString& rPlatformVendor,
-                                    const OUString& rDevice,
-                                    const OUString& rDriverVersion)
+        OpenCLImpl(const OUString& rOS,
+                   const OUString& rOSVersion,
+                   const OUString& rPlatformVendor,
+                   const OUString& rDevice,
+                   const OUString& rDriverVersion)
             : maOS(rOS),
               maOSVersion(rOSVersion),
               maPlatformVendor(rPlatformVendor),
@@ -66,7 +66,7 @@ struct SC_DLLPUBLIC ScCalcConfig
         {
         }
 
-        bool operator==(const OpenCLImplementationMatcher& r) const
+        bool operator==(const OpenCLImpl& r) const
         {
             return maOS == r.maOS &&
                    maOSVersion == r.maOSVersion &&
@@ -74,11 +74,11 @@ struct SC_DLLPUBLIC ScCalcConfig
                    maDevice == r.maDevice &&
                    maDriverVersion == r.maDriverVersion;
         }
-        bool operator!=(const OpenCLImplementationMatcher& r) const
+        bool operator!=(const OpenCLImpl& r) const
         {
             return !operator==(r);
         }
-        bool operator<(const OpenCLImplementationMatcher& r) const
+        bool operator<(const OpenCLImpl& r) const
         {
             return (maOS < r.maOS ||
                     (maOS == r.maOS &&
@@ -103,8 +103,8 @@ struct SC_DLLPUBLIC ScCalcConfig
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
     std::set<OpCodeEnum> maOpenCLSubsetOpCodes;
 
-    std::set<OpenCLImplementationMatcher> maOpenCLWhiteList;
-    std::set<OpenCLImplementationMatcher> maOpenCLBlackList;
+    std::set<OpenCLImpl> maOpenCLWhiteList;
+    std::set<OpenCLImpl> maOpenCLBlackList;
 
     ScCalcConfig();
 

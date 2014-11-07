@@ -44,8 +44,8 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSum);
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
-    maOpenCLBlackList.insert(OpenCLImplementationMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884"));
-    maOpenCLBlackList.insert(OpenCLImplementationMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3"));
+    maOpenCLBlackList.insert(OpenCLImpl("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884"));
+    maOpenCLBlackList.insert(OpenCLImpl("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3"));
 }
 
 void ScCalcConfig::reset()
@@ -84,7 +84,7 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 
 namespace {
 
-void writeOpenCLImplementationMatcher(std::ostream& rStream, const std::set<ScCalcConfig::OpenCLImplementationMatcher>& rSet)
+std::ostream& operator<<(std::ostream& rStream, const std::set<ScCalcConfig::OpenCLImpl>& rSet)
 {
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {
@@ -98,6 +98,7 @@ void writeOpenCLImplementationMatcher(std::ostream& rStream, const std::set<ScCa
             "DriverVersion=" << (*i).maDriverVersion <<
             "}";
     }
+    return rStream;
 }
 
 } // anonymous namespace
@@ -114,12 +115,8 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"
         "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
         "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "},"
-        "OpenCLWhiteList={";
-    writeOpenCLImplementationMatcher(rStream, rConfig.maOpenCLWhiteList);
-    rStream << "},"
-        "OpenCLBlackList={";
-    writeOpenCLImplementationMatcher(rStream, rConfig.maOpenCLBlackList);
-    rStream << "}"
+        "OpenCLWhiteList={" << rConfig.maOpenCLWhiteList << "},"
+        "OpenCLBlackList={" << rConfig.maOpenCLBlackList << "}"
         "}";
     return rStream;
 }

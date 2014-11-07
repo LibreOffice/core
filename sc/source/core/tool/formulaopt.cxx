@@ -280,7 +280,7 @@ ScFormulaCfg::ScFormulaCfg() :
 
 namespace {
 
-css::uno::Sequence<OUString> SetOfOpenCLImplementationMatcherToStringSequence(std::set<ScCalcConfig::OpenCLImplementationMatcher>& rSet)
+css::uno::Sequence<OUString> SetOfOpenCLImplToStringSequence(std::set<ScCalcConfig::OpenCLImpl>& rSet)
 {
     css::uno::Sequence<OUString> result(rSet.size());
 
@@ -323,13 +323,13 @@ OUString getToken(const OUString& string, sal_Int32& index)
     return result;
 }
 
-std::set<ScCalcConfig::OpenCLImplementationMatcher> StringSequenceToSetOfOpenCLImplementationMatcher(css::uno::Sequence<OUString>& rSequence)
+std::set<ScCalcConfig::OpenCLImpl> StringSequenceToSetOfOpenCLImpl(css::uno::Sequence<OUString>& rSequence)
 {
-    std::set<ScCalcConfig::OpenCLImplementationMatcher> result;
+    std::set<ScCalcConfig::OpenCLImpl> result;
 
     for (auto i = rSequence.begin(); i != rSequence.end(); ++i)
     {
-        ScCalcConfig::OpenCLImplementationMatcher m;
+        ScCalcConfig::OpenCLImpl m;
         sal_Int32 index(0);
         m.maOS = getToken(*i, index);
         m.maOSVersion = getToken(*i, index);
@@ -589,16 +589,16 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_OPENCL_WHITELIST:
                 {
-                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
+                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplToStringSequence(GetCalcConfig().maOpenCLWhiteList);
                     pValues[nProp] >>= sVal;
-                    GetCalcConfig().maOpenCLWhiteList = StringSequenceToSetOfOpenCLImplementationMatcher(sVal);
+                    GetCalcConfig().maOpenCLWhiteList = StringSequenceToSetOfOpenCLImpl(sVal);
                 }
                 break;
                 case SCFORMULAOPT_OPENCL_BLACKLIST:
                 {
-                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLBlackList);
+                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplToStringSequence(GetCalcConfig().maOpenCLBlackList);
                     pValues[nProp] >>= sVal;
-                    GetCalcConfig().maOpenCLBlackList = StringSequenceToSetOfOpenCLImplementationMatcher(sVal);
+                    GetCalcConfig().maOpenCLBlackList = StringSequenceToSetOfOpenCLImpl(sVal);
                 }
                 break;
                 }
@@ -756,13 +756,13 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_OPENCL_WHITELIST:
             {
-                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
+                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplToStringSequence(GetCalcConfig().maOpenCLWhiteList);
                 pValues[nProp] <<= sVal;
             }
             break;
             case SCFORMULAOPT_OPENCL_BLACKLIST:
             {
-                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplementationMatcherToStringSequence(GetCalcConfig().maOpenCLBlackList);
+                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplToStringSequence(GetCalcConfig().maOpenCLBlackList);
                 pValues[nProp] <<= sVal;
             }
             break;
