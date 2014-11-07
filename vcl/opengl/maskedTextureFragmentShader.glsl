@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-precision mediump float;
+/*precision mediump float;*/
 varying vec2 tex_coord;
 uniform sampler2D sampler;
 uniform sampler2D mask;
