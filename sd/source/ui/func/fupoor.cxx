@@ -180,7 +180,7 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 
     // use remembered MouseButton state to create correct
     // MouseEvents for this artificial MouseMove.
-    MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
+    MouseMove(MouseEvent(aPnt, 1, MouseEventModifiers::NONE, GetMouseButtonCode()));
 
     return 0;
 }
@@ -989,7 +989,7 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, DelayHdl)
 
     // use remembered MouseButton state to create correct
     // MouseEvents for this artificial MouseMove.
-    MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
+    MouseMove(MouseEvent(aPnt, 1, MouseEventModifiers::NONE, GetMouseButtonCode()));
 
     return 0;
 }

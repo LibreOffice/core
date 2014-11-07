@@ -498,7 +498,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
         }
 
         Point aPoint;
-        MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
+        MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
         MouseMove( aLeave );
         SetItemDown(TBC_BT_AUTOFILTER,false);
 

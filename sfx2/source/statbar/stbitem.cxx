@@ -324,7 +324,7 @@ throw ( uno::RuntimeException, std::exception )
 
     ::MouseEvent aMouseEvent( aPos,
                               (sal_uInt16)rMouseEvent.ClickCount,
-                              0,
+                              MouseEventModifiers::NONE,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
 
@@ -342,7 +342,7 @@ throw (uno::RuntimeException, std::exception)
 
     ::MouseEvent aMouseEvent( aPos,
                               (sal_uInt16)rMouseEvent.ClickCount,
-                              0,
+                              MouseEventModifiers::NONE,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
     return MouseMove( aMouseEvent );
@@ -359,7 +359,7 @@ throw ( uno::RuntimeException, std::exception )
 
     ::MouseEvent aMouseEvent( aPos,
                               (sal_uInt16)rMouseEvent.ClickCount,
-                              0,
+                              MouseEventModifiers::NONE,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
     return MouseButtonUp( aMouseEvent );

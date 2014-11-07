@@ -1307,7 +1307,7 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
 
     Point aEventPos( rPosPixel );
-    MouseEvent aMouseEvt( aEventPos, 1, MOUSE_SELECT, MOUSE_LEFT );
+    MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
     MouseButtonUp( aMouseEvt );
 
     nOldDragMode = GetDragDropMode();

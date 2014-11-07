@@ -2274,7 +2274,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             {
                 //  Text-Cursor gleich an die geklickte Stelle setzen
                 EditView* pEditView = pViewData->GetEditView( eWhich );
-                MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
                 pEditView->MouseButtonDown( aEditEvt );
                 pEditView->MouseButtonUp( aEditEvt );
             }
@@ -2472,7 +2472,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             nButtonDown = 0;
             nMouseStatus = SC_GM_NONE;
             ReleaseMouse();
-            pFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT ) );
+            pFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT ) );
             return;
         }
     }

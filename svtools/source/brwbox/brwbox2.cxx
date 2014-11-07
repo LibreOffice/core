@@ -1582,7 +1582,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
         DoubleClick( rEvt );
     }
     // selections
-    else if ( ( rEvt.GetMode() & ( MOUSE_SELECT | MOUSE_SIMPLECLICK ) ) &&
+    else if ( ( rEvt.GetMode() & ( MouseEventModifiers::SELECT | MouseEventModifiers::SIMPLECLICK ) ) &&
          ( bColumnCursor || rEvt.GetRow() >= 0 ) )
     {
         if ( rEvt.GetClicks() == 1 )
@@ -1626,7 +1626,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                         }
 
                         // expanding mode?
-                        if ( rEvt.GetMode() & MOUSE_RANGESELECT )
+                        if ( rEvt.GetMode() & MouseEventModifiers::RANGESELECT )
                         {
                             // select the further touched rows too
                             bSelect = true;
@@ -1639,13 +1639,12 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
                         {
                             // wait for Drag&Drop
                             bHit = true;
-                            bExtendedMode = MOUSE_MULTISELECT ==
-                                    ( rEvt.GetMode() & MOUSE_MULTISELECT );
+                            bExtendedMode = bool( rEvt.GetMode() & MouseEventModifiers::MULTISELECT );
                             return;
                         }
 
                         // extension mode?
-                        else if ( rEvt.GetMode() & MOUSE_MULTISELECT )
+                        else if ( rEvt.GetMode() & MouseEventModifiers::MULTISELECT )
                         {
                             // determine the new selection range
                             // and selection/deselection

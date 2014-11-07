@@ -234,7 +234,7 @@ namespace dbaui
         sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
         // "cleanup" the toolbox state
         Point aPoint = pToolBox->GetItemRect( m_nToolBoxId ).TopLeft();
-        MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
+        MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
         pToolBox->MouseMove( aLeave );
         pToolBox->SetItemDown( m_nToolBoxId, false);
 

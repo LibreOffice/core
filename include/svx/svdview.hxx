@@ -101,11 +101,11 @@ struct SVX_DLLPUBLIC SdrViewEvent
     SdrHdlKind                  eHdlKind;
     SdrCreateCmd                eEndCreateCmd;   // auch fuer EndInsPoint
 
-    sal_uInt16                      nMouseClicks;
-    sal_uInt16                      nMouseMode;
-    sal_uInt16                      nMouseCode;
-    sal_uInt16                      nHlplIdx;
-    sal_uInt16                      nGlueId;
+    sal_uInt16                  nMouseClicks;
+    MouseEventModifiers         nMouseMode;
+    sal_uInt16                  nMouseCode;
+    sal_uInt16                  nHlplIdx;
+    sal_uInt16                  nGlueId;
 
     bool                        bMouseDown : 1;
     bool                        bMouseUp : 1;

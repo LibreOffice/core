@@ -759,7 +759,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
     {
         SdrViewEvent aVEvt;
 
-        MouseEvent aMEvt(mpWindow->GetPointerPosPixel(), 1, 0, MOUSE_LEFT);
+        MouseEvent aMEvt(mpWindow->GetPointerPosPixel(), 1, MouseEventModifiers::NONE, MOUSE_LEFT);
 
         SdrHitKind eHit = mpView->PickAnything(aMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 

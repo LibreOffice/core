@@ -405,7 +405,7 @@ IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl)
 
         //  den gehighlighteten Button aufheben
         Point aPoint;
-        MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
+        MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
         MouseMove( aLeave );
     }
 

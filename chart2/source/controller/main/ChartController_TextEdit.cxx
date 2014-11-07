@@ -90,7 +90,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
             OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
             if ( pOutlinerView )
             {
-                MouseEvent aEditEvt( *pMousePixel, 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
+                MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
                 pOutlinerView->MouseButtonDown( aEditEvt );
                 pOutlinerView->MouseButtonUp( aEditEvt );
             }

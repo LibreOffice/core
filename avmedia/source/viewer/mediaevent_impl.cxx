@@ -107,7 +107,7 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt
     {
         MouseEvent aVCLMouseEvt( Point( e.X, e.Y ),
                                  sal::static_int_cast< sal_uInt16 >(e.ClickCount),
-                                 0,
+                                 MouseEventModifiers::NONE,
                                 ( ( e.Buttons & 1 ) ? MOUSE_LEFT : 0 ) |
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |
                                 ( ( e.Buttons & 4 ) ? MOUSE_MIDDLE : 0 ),
@@ -128,7 +128,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
     {
         MouseEvent aVCLMouseEvt( Point( e.X, e.Y ),
                                  sal::static_int_cast< sal_uInt16 >(e.ClickCount),
-                                 0,
+                                 MouseEventModifiers::NONE,
                                 ( ( e.Buttons & 1 ) ? MOUSE_LEFT : 0 ) |
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |
                                 ( ( e.Buttons & 4 ) ? MOUSE_MIDDLE : 0 ),
@@ -173,7 +173,7 @@ void SAL_CALL MediaEventListenersImpl::mouseDragged( const ::com::sun::star::awt
 
     if( mpNotifyWindow )
     {
-        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, 0, e.Buttons, e.Modifiers );
+        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
         Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEMOVE, reinterpret_cast< vcl::Window* >( mpNotifyWindow ), &aVCLMouseEvt );
     }
 }
@@ -188,7 +188,7 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::
 
     if( mpNotifyWindow )
     {
-        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, 0, e.Buttons, e.Modifiers );
+        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
         Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEMOVE, reinterpret_cast< vcl::Window* >( mpNotifyWindow ), &aVCLMouseEvt );
     }
 }

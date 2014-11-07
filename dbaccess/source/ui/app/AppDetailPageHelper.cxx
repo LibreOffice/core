@@ -1176,7 +1176,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
 
     // simulate a mouse move (so the "down" state is really painted)
     Point aPoint = m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ).TopLeft();
-    MouseEvent aMove( aPoint, 0, MOUSE_SIMPLEMOVE | MOUSE_SYNTHETIC );
+    MouseEvent aMove( aPoint, 0, MouseEventModifiers::SIMPLEMOVE | MouseEventModifiers::SYNTHETIC );
     m_aTBPreview.MouseMove( aMove );
 
     m_aTBPreview.Update();
@@ -1200,7 +1200,7 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
 
     sal_uInt16 nSelectedAction = aMenu->Execute(&m_aTBPreview, m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ));
     // "cleanup" the toolbox state
-    MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
+    MouseEvent aLeave( aPoint, 0, MouseEventModifiers::LEAVEWINDOW | MouseEventModifiers::SYNTHETIC );
     m_aTBPreview.MouseMove( aLeave );
     m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, false);
     if ( nSelectedAction )

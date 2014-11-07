@@ -135,7 +135,7 @@ void SvxXConnectionPreview::AdaptSize()
         SetMapMode( aDisplayMap );
 
         Point aPos;
-        MouseEvent aMEvt( aPos, 1, 0, MOUSE_RIGHT );
+        MouseEvent aMEvt( aPos, 1, MouseEventModifiers::NONE, MOUSE_RIGHT );
         MouseButtonDown( aMEvt );
     }
 }

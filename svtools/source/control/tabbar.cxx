@@ -897,7 +897,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
             return;
     }
 
-    if ( (rMEvt.GetMode() & (MOUSE_MULTISELECT | MOUSE_RANGESELECT)) && (rMEvt.GetClicks() == 1) )
+    if ( (rMEvt.GetMode() & (MouseEventModifiers::MULTISELECT | MouseEventModifiers::RANGESELECT)) && (rMEvt.GetClicks() == 1) )
     {
         if ( nSelId )
         {
@@ -907,7 +907,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 
             if ( pItem->mbEnable )
             {
-                if ( (rMEvt.GetMode() & MOUSE_MULTISELECT) && (mnWinStyle & WB_MULTISELECT) )
+                if ( (rMEvt.GetMode() & MouseEventModifiers::MULTISELECT) && (mnWinStyle & WB_MULTISELECT) )
                 {
                     if ( nSelId != mnCurPageId )
                     {

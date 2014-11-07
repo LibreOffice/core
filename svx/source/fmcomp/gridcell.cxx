@@ -3494,7 +3494,7 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Window&
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( rMouseEvent, *this ) );
                 aEvent.ClickCount = 0;
-                const bool bSimpleMove = ( ( rMouseEvent.GetMode() & MOUSE_SIMPLEMOVE ) != 0 );
+                const bool bSimpleMove = bool( rMouseEvent.GetMode() & MouseEventModifiers::SIMPLEMOVE );
                 m_aMouseMotionListeners.notifyEach( bSimpleMove ? &awt::XMouseMotionListener::mouseMoved: &awt::XMouseMotionListener::mouseDragged, aEvent );
             }
         }

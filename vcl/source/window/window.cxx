@@ -1015,7 +1015,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->mnClickCount       = 0;
         mpWindowImpl->mpFrameData->mnFirstMouseCode   = 0;
         mpWindowImpl->mpFrameData->mnMouseCode        = 0;
-        mpWindowImpl->mpFrameData->mnMouseMode        = 0;
+        mpWindowImpl->mpFrameData->mnMouseMode        = MouseEventModifiers::NONE;
         mpWindowImpl->mpFrameData->meMapUnit          = MAP_PIXEL;
         mpWindowImpl->mpFrameData->mbHasFocus         = false;
         mpWindowImpl->mpFrameData->mbInMouseMove      = false;

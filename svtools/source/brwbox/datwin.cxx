@@ -403,7 +403,7 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 
     Point aEventPos( rEvt.GetMousePosPixel() );
     long nRow = pBox->GetRowAtYPosPixel( aEventPos.Y(), false);
-    MouseEvent aMouseEvt( aEventPos, 1, MOUSE_SELECT, MOUSE_LEFT );
+    MouseEvent aMouseEvt( aEventPos, 1, MouseEventModifiers::SELECT, MOUSE_LEFT );
     if ( COMMAND_CONTEXTMENU == rEvt.GetCommand() && rEvt.IsMouseEvent() &&
          nRow < pBox->GetRowCount() && !pBox->IsRowSelected(nRow) )
     {

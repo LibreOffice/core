@@ -682,7 +682,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     aWhere = Point( -1, -1 );
                 }
 
-                MouseEvent aMEvt( aWhere, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, 0 );
+                MouseEvent aMEvt( aWhere, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT, 0 );
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( aMEvt, *this ) );
                 aEvent.PopupTrigger = sal_True;
 
@@ -714,7 +714,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
                 aEvent.ClickCount = 0;  // #92138#
-                if ( pMouseEvt->GetMode() & MOUSE_SIMPLEMOVE )
+                if ( pMouseEvt->GetMode() & MouseEventModifiers::SIMPLEMOVE )
                     mpImpl->getMouseMotionListeners().mouseMoved( aEvent );
                 else
                     mpImpl->getMouseMotionListeners().mouseDragged( aEvent );

@@ -3535,7 +3535,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 {
     // pressing a modifier generates synthetic mouse moves
     // ignore it if keyboard selection is acive
-    if( HasFocus() && ( rMEvt.GetMode() & MOUSE_MODIFIERCHANGED ) )
+    if( HasFocus() && ( rMEvt.GetMode() & MouseEventModifiers::MODIFIERCHANGED ) )
         return;
 
     if ( ImplHandleMouseMove( rMEvt ) )
@@ -3625,7 +3625,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
     if ( (mnWinStyle & TB_WBLINESIZING) == TB_WBLINESIZING )
     {
-        if ( rMEvt.GetMode() & MOUSE_SIMPLEMOVE )
+        if ( rMEvt.GetMode() & MouseEventModifiers::SIMPLEMOVE )
         {
             sal_uInt16 nLinePtr = ImplTestLineSize( this, rMEvt.GetPosPixel() );
             if ( nLinePtr & DOCK_LINEHSIZE )
@@ -4384,7 +4384,7 @@ void ToolBox::Command( const CommandEvent& rCEvt )
 
             if ( mbCommandDrag )
             {
-                MouseEvent aMEvt( aMousePos, 1, MOUSE_SIMPLECLICK,
+                MouseEvent aMEvt( aMousePos, 1, MouseEventModifiers::SIMPLEMOVE,
                                   MOUSE_LEFT, KEY_MOD2 );
                 ToolBox::MouseButtonDown( aMEvt );
                 return;
