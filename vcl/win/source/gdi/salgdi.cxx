@@ -1029,4 +1029,9 @@ SystemGraphicsData WinSalGraphics::GetGraphicsData() const
     return aRes;
 }
 
+bool WinSalGraphics::SwapBuffers()
+{
+    return mpImpl->swapBuffers();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
