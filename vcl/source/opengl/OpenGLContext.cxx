@@ -493,6 +493,8 @@ bool OpenGLContext::init( vcl::Window* pParent )
 
     m_pWindow.reset(pParent ? NULL : new vcl::Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
     mpWindow = pParent ? pParent : m_pWindow.get();
+    if(m_pWindow)
+        m_pWindow->setPosSizePixel(0,0,0,0);
     m_pChildWindow = 0;
     initWindow();
     return ImplInit();
@@ -531,42 +533,11 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
 
     return ImplInit();
 }
-#elif defined( _WIN32 )
-bool OpenGLContext::init(HDC hDC, HWND hWnd)
-{
-    if (mbInitialized)
-        return false;
-
-    m_aGLWin.hDC = hDC;
-    m_aGLWin.hWnd = hWnd;
-    return ImplInit();
-}
-#endif
 
 bool OpenGLContext::ImplInit()
 {
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
-    if(m_pWindow)
-        m_pWindow->setPosSizePixel(0,0,0,0);
-    m_aGLWin.Width = 0;
-    m_aGLWin.Height = 0;
-
-#if defined( WNT )
-#elif defined( MACOSX )
-
-#elif defined( IOS )
-
-    SAL_INFO("vcl.opengl", "OpenGLContext not implemented yet for iOS");
-    return false;
-
-#elif defined( ANDROID )
-
-    SAL_INFO("vcl.opengl", "OpenGLContext not implemented yet for Android");
-    return false;
-
-#elif defined( UNX )
 #ifdef DBG_UTIL
-
     if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
@@ -613,10 +584,78 @@ bool OpenGLContext::ImplInit()
         SAL_WARN("vcl.opengl", "unable to create GLX context");
         return false;
     }
-#endif
 
-#if defined( WNT )
-    PIXELFORMATDESCRIPTOR PixelFormatFront =                    // PixelFormat Tells Windows How We Want Things To Be
+    if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
+    {
+        SAL_WARN("vcl.opengl", "unable to select current GLX context");
+        return false;
+    }
+
+    int glxMinor, glxMajor;
+    double nGLXVersion = 0;
+    if( glXQueryVersion( m_aGLWin.dpy, &glxMajor, &glxMinor ) )
+      nGLXVersion = glxMajor + 0.1*glxMinor;
+    SAL_INFO("vcl.opengl", "available GLX version: " << nGLXVersion);
+
+    m_aGLWin.GLExtensions = glGetString( GL_EXTENSIONS );
+    SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
+
+    XWindowAttributes xWinAttr;
+    XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr );
+    m_aGLWin.Width = xWinAttr.width;
+    m_aGLWin.Height = xWinAttr.height;
+
+    if( m_aGLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
+    {
+        // enable vsync
+        typedef GLint (*glXSwapIntervalProc)(GLint);
+        glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
+        if( glXSwapInterval )
+        {
+            int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
+
+            XLockDisplay(m_aGLWin.dpy);
+            XSync(m_aGLWin.dpy, false);
+            // replace error handler temporarily
+            oldHandler = XSetErrorHandler( oglErrorHandler );
+
+            errorTriggered = false;
+
+            glXSwapInterval( 1 );
+
+            // sync so that we possibly get an XError
+            glXWaitGL();
+            XSync(m_aGLWin.dpy, false);
+
+            if( errorTriggered )
+                SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
+            else
+                SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
+
+            // restore the error handler
+            XSetErrorHandler( oldHandler );
+            XUnlockDisplay(m_aGLWin.dpy);
+        }
+    }
+    return InitGLEW();
+}
+
+#elif defined( _WIN32 )
+
+bool OpenGLContext::init(HDC hDC, HWND hWnd)
+{
+    if (mbInitialized)
+        return false;
+
+    m_aGLWin.hDC = hDC;
+    m_aGLWin.hWnd = hWnd;
+    return ImplInit();
+}
+
+bool OpenGLContext::ImplInit()
+{
+    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+    PIXELFORMATDESCRIPTOR PixelFormatFront = // PixelFormat Tells Windows How We Want Things To Be
     {
         sizeof(PIXELFORMATDESCRIPTOR),
         1,                              // Version Number
@@ -677,76 +716,35 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-    RECT clientRect;
-    GetClientRect(WindowFromDC(m_aGLWin.hDC), &clientRect);
     m_aGLWin.Width = clientRect.right - clientRect.left;
     m_aGLWin.Height = clientRect.bottom - clientRect.top;
 
+    return InitGLEW();
+}
+
 #elif defined( MACOSX )
 
+bool OpenGLContext::ImplInit()
+{
+    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
     NSOpenGLView* pView = getOpenGLView();
     OpenGLWrapper::makeCurrent(pView);
 
-#elif defined( IOS )
+    return InitGLEW();
+}
 
-#elif defined( ANDROID )
+#else
 
-#elif defined( UNX )
-    if( !glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ) )
-    {
-        SAL_WARN("vcl.opengl", "unable to select current GLX context");
-        return false;
-    }
-
-    int glxMinor, glxMajor;
-    double nGLXVersion = 0;
-    if( glXQueryVersion( m_aGLWin.dpy, &glxMajor, &glxMinor ) )
-      nGLXVersion = glxMajor + 0.1*glxMinor;
-    SAL_INFO("vcl.opengl", "available GLX version: " << nGLXVersion);
-
-    m_aGLWin.GLExtensions = glGetString( GL_EXTENSIONS );
-    SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
-
-    XWindowAttributes xWinAttr;
-    XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr );
-    m_aGLWin.Width = xWinAttr.width;
-    m_aGLWin.Height = xWinAttr.height;
-
-    if( m_aGLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
-    {
-        // enable vsync
-        typedef GLint (*glXSwapIntervalProc)(GLint);
-        glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
-        if( glXSwapInterval )
-        {
-            int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
-
-            XLockDisplay(m_aGLWin.dpy);
-            XSync(m_aGLWin.dpy, false);
-            // replace error handler temporarily
-            oldHandler = XSetErrorHandler( oglErrorHandler );
-
-            errorTriggered = false;
-
-            glXSwapInterval( 1 );
-
-            // sync so that we possibly get an XError
-            glXWaitGL();
-            XSync(m_aGLWin.dpy, false);
-
-            if( errorTriggered )
-                SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
-            else
-                SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
-
-            // restore the error handler
-            XSetErrorHandler( oldHandler );
-            XUnlockDisplay(m_aGLWin.dpy);
-        }
-    }
+bool OpenGLContext::ImplInit()
+{
+    SAL_INFO("vcl.opengl", "OpenGLContext not implemented for this platform");
+    return false;
+}
 
 #endif
 
+bool OpenGLContext::InitGLEW()
+{
     static bool bGlewInit = false;
     if(!bGlewInit)
     {
