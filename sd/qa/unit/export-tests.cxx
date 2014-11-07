@@ -513,7 +513,7 @@ void SdExportTest::testSwappedOutImageExport()
     {
         // Load the original file with one image
         ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/document_with_two_images.odp"), ODP);
-        const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[nExportFormat]].pFilterName);
+        const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[vFormats[nExportFormat]].pFilterName);
 
         // Export the document and import again for a check
         uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
