@@ -509,7 +509,7 @@ void SdExportTest::testSwappedOutImageExport()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
     xBatch->commit();
 
-    for( size_t nExportFormat = 0; nExportFormat < 3; ++nExportFormat )
+    for( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
     {
         // Load the original file with one image
         ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/document_with_two_images.odp"), ODP);

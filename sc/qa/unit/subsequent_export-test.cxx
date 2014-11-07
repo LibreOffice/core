@@ -2277,7 +2277,7 @@ void ScExportTest::testSwappedOutImageExport()
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
     xBatch->commit();
 
-    for( size_t nFilter = 0; nFilter < 4; ++nFilter )
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
         // Check whether the export code swaps in the image which was swapped out before.
         ScDocShellRef xDocSh = loadDoc("document_with_two_images.", ODS);

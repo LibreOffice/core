@@ -40,7 +40,7 @@ void Test::testSwappedOutImageExport()
         "Office Open XML Text",
     };
 
-    for( size_t nFilter = 0; nFilter < 4; ++nFilter )
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
         // Check whether the export code swaps in the image which was swapped out before by auto mechanism
 
