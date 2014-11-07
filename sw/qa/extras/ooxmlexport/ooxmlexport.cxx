@@ -15,6 +15,7 @@
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 
 #include <string>
 
@@ -501,6 +502,15 @@ DECLARE_OOXMLEXPORT_TEST(testPageBreakBefore, "page-break-before.docx")
 {
     // This was style::BreakType_PAGE_BEFORE, i.e. page break wasn't ignored, as it should have been.
     CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTableRtl, "table-rtl.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // This was text::WritingMode2::LR_TB, i.e. direction of the table was ignored.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

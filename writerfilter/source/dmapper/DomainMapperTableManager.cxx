@@ -463,6 +463,13 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblPrBase_tblCellSpacing:
                 // To-Do: Not yet preserved
                 break;
+            case NS_ooxml::LN_CT_TblPrBase_bidiVisual:
+            {
+                TablePropertyMapPtr pPropMap(new TablePropertyMap());
+                pPropMap->Insert(PROP_WRITING_MODE, uno::makeAny(nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB));
+                insertTableProps(pPropMap);
+                break;
+            }
             default:
                 bRet = false;
 
