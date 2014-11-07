@@ -36,4 +36,8 @@ $(eval $(call gb_Executable_add_exception_objects,vcldemo,\
     vcl/workben/vcldemo \
 ))
 
+$(eval $(call gb_Executable_use_static_libraries,vcldemo,\
+    vclmain \
+))
+
 # vim: set noet sw=4 ts=4:

@@ -5,81 +5,30 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/main.h>
-#include <tools/extendapplicationenvironment.hxx>
-
-#include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
-#include <vcl/event.hxx>
+#include <vcl/vclmain.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 
-#include <unistd.h>
-#include <stdio.h>
+using namespace css;
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace cppu;
-
-// Forward declaration
-void Main();
-
-SAL_IMPLEMENT_MAIN()
-{
-    try
-    {
-        tools::extendApplicationEnvironment();
-
-        Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
-        Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
-
-        if( !xServiceManager.is() )
-            Application::Abort( "Failed to bootstrap" );
-
-        comphelper::setProcessServiceFactory( xServiceManager );
-
-        InitVCL();
-        ::Main();
-        DeInitVCL();
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
-        return 1;
-    }
-
-    return 0;
-}
-
-class MyWin : public WorkWindow
+class DemoWin : public WorkWindow
 {
 public:
-                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
+    DemoWin() : WorkWindow( NULL, WB_APP | WB_STDWORK)
+    {
+    }
 
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
 
     std::vector<Rectangle> partitionAndClear(int nX, int nY);
 
@@ -142,49 +91,7 @@ public:
     }
 };
 
-void Main()
-{
-    MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText( OUString( "VCLDemo - VCL Workbench" ) );
-    aMainWin.Show();
-
-    Application::Execute();
-}
-
-MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
-    WorkWindow( pParent, nWinStyle )
-{
-}
-
-void MyWin::MouseMove( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseMove( rMEvt );
-}
-
-void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    Rectangle aRect(0,0,4,4);
-    aRect.SetPos( rMEvt.GetPosPixel() );
-    SetFillColor(Color(COL_RED));
-    DrawRect( aRect );
-}
-
-void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonUp( rMEvt );
-}
-
-void MyWin::KeyInput( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyInput( rKEvt );
-}
-
-void MyWin::KeyUp( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyUp( rKEvt );
-}
-
-std::vector<Rectangle> MyWin::partitionAndClear(int nX, int nY)
+std::vector<Rectangle> DemoWin::partitionAndClear(int nX, int nY)
 {
     Rectangle r;
     std::vector<Rectangle> aRegions;
@@ -219,9 +126,9 @@ std::vector<Rectangle> MyWin::partitionAndClear(int nX, int nY)
     return aRegions;
 }
 
-void MyWin::Paint( const Rectangle& rRect )
+void DemoWin::Paint( const Rectangle& rRect )
 {
-    fprintf(stderr, "MyWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
+    fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
 
     drawBackground();
 
@@ -236,9 +143,51 @@ void MyWin::Paint( const Rectangle& rRect )
     drawGradient(aRegions[i++]);
 }
 
-void MyWin::Resize()
+class DemoApp : public Application
 {
-    WorkWindow::Resize();
+public:
+    DemoApp() {}
+
+    virtual int Main() SAL_OVERRIDE
+    {
+        DemoWin aMainWin;
+        aMainWin.SetText( "Interactive VCL demo" );
+        aMainWin.Show();
+        Application::Execute();
+    }
+
+protected:
+    uno::Reference<lang::XMultiServiceFactory> xMSF;
+    void Init() SAL_OVERRIDE
+    {
+        try
+        {
+            uno::Reference<uno::XComponentContext> xComponentContext
+                = ::cppu::defaultBootstrap_InitialComponentContext();
+            xMSF = uno::Reference<lang::XMultiServiceFactory>
+                ( xComponentContext->getServiceManager(), uno::UNO_QUERY );
+            if( !xMSF.is() )
+                Application::Abort("Bootstrap failure - no service manager");
+
+            ::comphelper::setProcessServiceFactory( xMSF );
+        }
+        catch (const uno::Exception &e)
+        {
+            Application::Abort("Bootstrap exception " + e.Message);
+        }
+    }
+    void DeInit() SAL_OVERRIDE
+    {
+        uno::Reference< lang::XComponent >(
+            comphelper::getProcessComponentContext(),
+        uno::UNO_QUERY_THROW )-> dispose();
+        ::comphelper::setProcessServiceFactory( NULL );
+    }
+};
+
+void vclmain::createApplication()
+{
+    static DemoApp aApp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
