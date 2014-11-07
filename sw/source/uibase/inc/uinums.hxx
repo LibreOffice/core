@@ -27,6 +27,8 @@ class SfxPoolItem;
 class SwWrtShell;
 class SvStream;
 
+namespace sw { class StoredChapterNumberingRules; }
+
 #define MAX_NUM_RULES 9
 
 typedef boost::ptr_vector<SfxPoolItem> _SwNumFmtsAttrs;
@@ -38,6 +40,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
     // (They should always be there!)
     class SAL_DLLPRIVATE _SwNumFmtGlobal
     {
+        friend class SwNumRulesWithName;
         SwNumFmt aFmt;
         OUString sCharFmtName;
         sal_uInt16 nCharPoolId;
@@ -58,7 +61,11 @@ class SW_DLLPUBLIC SwNumRulesWithName
     _SwNumFmtGlobal* aFmts[ MAXLEVEL ];
 
 protected:
+    friend class sw::StoredChapterNumberingRules;
+    friend class SwBaseNumRules;
     void SetName(const OUString& rSet) {maName = rSet;}
+    void SetNumFmt(size_t, SwNumFmt const&, OUString const&);
+    SwNumRulesWithName();
 
 public:
     SwNumRulesWithName(const SwNumRule &, const OUString &);
@@ -72,6 +79,8 @@ public:
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
 
     void Store( SvStream& );
+
+    void GetNumFmt(size_t, SwNumFmt const*&, OUString const*&) const;
 };
 
 class SwBaseNumRules
@@ -88,12 +97,14 @@ protected:
     virtual bool        Store(SvStream&);
 
     void                Init();
+    void Save();
 
 public:
     SwBaseNumRules(const OUString& rFileName);
     virtual ~SwBaseNumRules();
 
     inline const SwNumRulesWithName*    GetRules(sal_uInt16 nIdx) const;
+    void CreateEmptyNumRule(sal_uInt16 nIdx); // for import
     virtual void                        ApplyNumRules(
                                                 const SwNumRulesWithName &rCopy,
                                                 sal_uInt16 nIdx);
@@ -116,6 +127,17 @@ inline const SwNumRulesWithName *SwBaseNumRules::GetRules(sal_uInt16 nIdx) const
     OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     return pNumRules[nIdx];
 }
+
+
+namespace sw
+{
+
+void ExportStoredChapterNumberingRules(
+        SwBaseNumRules & rRules, SvStream & rStream, OUString const&);
+void ImportStoredChapterNumberingRules(
+        SwBaseNumRules & rRules, SvStream & rStream, OUString const&);
+
+} // namespace sw
 
 #endif
 

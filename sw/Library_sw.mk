@@ -574,6 +574,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/cctrl/popbox \
     sw/source/uibase/cctrl/swlbox \
     sw/source/uibase/chrdlg/ccoll \
+    sw/source/uibase/config/StoredChapterNumbering \
     sw/source/uibase/config/barcfg \
     sw/source/uibase/config/caption \
     sw/source/uibase/config/cfgitems \

@@ -30,7 +30,8 @@ class SvI18NMap;
 class SvxXMLListLevelStyleContext_Impl;
 typedef std::vector<SvxXMLListLevelStyleContext_Impl *> SvxXMLListStyle_Impl;
 
-class SvxXMLListStyleContext : public SvXMLStyleContext
+class XMLOFF_DLLPUBLIC SvxXMLListStyleContext
+    : public SvXMLStyleContext
 {
     const OUString       sIsPhysical;
     const OUString       sNumberingRules;
@@ -47,7 +48,7 @@ class SvxXMLListStyleContext : public SvXMLStyleContext
 
 protected:
 
-    virtual void SetAttribute( sal_uInt16 nPrefixKey,
+    SAL_DLLPRIVATE virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
                                const OUString& rValue ) SAL_OVERRIDE;
 

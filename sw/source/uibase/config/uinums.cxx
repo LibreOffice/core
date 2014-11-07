@@ -63,7 +63,7 @@ SwBaseNumRules::SwBaseNumRules( const OUString& rFileName )
     Init();
 }
 
-SwBaseNumRules::~SwBaseNumRules()
+void SwBaseNumRules::Save()
 {
     if( bModified )
     {
@@ -78,14 +78,17 @@ SwBaseNumRules::~SwBaseNumRules()
         bool bRet = (pStream && pStream->GetError() == 0);
         if (bRet)
         {
-            Store( *pStream );
+            sw::ExportStoredChapterNumberingRules(*this, *pStream, sFileName);
 
             pStream->Flush();
 
             aMedium.Commit();
         }
     }
+}
 
+SwBaseNumRules::~SwBaseNumRules()
+{
     for( sal_uInt16 i = 0; i < nMaxRules; ++i )
         delete pNumRules[i];
 }
@@ -100,8 +103,15 @@ void  SwBaseNumRules::Init()
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
         SfxMedium aStrm( sNm, STREAM_STD_READ );
-        Load( *aStrm.GetInStream() );
+        sw::ImportStoredChapterNumberingRules(*this, *aStrm.GetInStream(), sFileName);
     }
+}
+
+void SwBaseNumRules::CreateEmptyNumRule(sal_uInt16 const nIndex)
+{
+    assert(nIndex < nMaxRules);
+    assert(!pNumRules[nIndex]);
+    pNumRules[nIndex] = new SwNumRulesWithName;
 }
 
 void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
@@ -111,6 +121,7 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
         pNumRules[nIdx] = new SwNumRulesWithName( rCopy );
     else
         *pNumRules[nIdx] = rCopy;
+    Save(); // store it immediately
 }
 
 bool SwBaseNumRules::Store(SvStream &rStream)
@@ -189,6 +200,11 @@ SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,
         else
             aFmts[ n ] = 0;
     }
+}
+
+SwNumRulesWithName::SwNumRulesWithName()
+{
+    memset(aFmts, 0, sizeof(aFmts));
 }
 
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRulesWithName& rCopy )
@@ -277,6 +293,23 @@ void SwNumRulesWithName::Store( SvStream &rStream )
         else
             rStream.WriteChar( (char)0 );
     }
+}
+
+void SwNumRulesWithName::GetNumFmt(
+    size_t const nIndex, SwNumFmt const*& rpNumFmt, OUString const*& rpName) const
+{
+    rpNumFmt = (aFmts[nIndex]) ? &aFmts[nIndex]->aFmt : 0;
+    rpName = (aFmts[nIndex]) ? &aFmts[nIndex]->sCharFmtName : 0;
+}
+
+void SwNumRulesWithName::SetNumFmt(
+        size_t const nIndex, SwNumFmt const& rNumFmt, OUString const& rName)
+{
+    delete aFmts[nIndex];
+    aFmts[nIndex] = new _SwNumFmtGlobal(rNumFmt);
+    aFmts[nIndex]->sCharFmtName = rName;
+    aFmts[nIndex]->nCharPoolId = USHRT_MAX;
+    aFmts[nIndex]->aItems.clear();
 }
 
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
