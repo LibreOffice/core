@@ -15,7 +15,7 @@ uniform sampler1D t_stopArray1d;
 uniform mat3x2    m_transform;
 varying vec2      v_textureCoords2d;
 
-int max(int x, int y)
+int maxInt(int x, int y)
 {
     if(x > y)
         return x;
@@ -28,13 +28,13 @@ int findBucket(float t)
     while( nMinBucket < i_nColors &&
             texture1D(t_stopArray1d, nMinBucket).s < t )
         ++nMinBucket;
-    return max(nMinBucket-1,0);
+    return maxInt(nMinBucket-1,0);
 }
 
 void main(void)
 {
     vec2  v = abs( vec2(m_transform * vec3(v_textureCoords2d,1)) );
-    float fAlpha = 1 - max(v.x, v.y);
+    float fAlpha = 1.0 - max(v.x, v.y);
 
     int nMinBucket=findBucket( fAlpha );
 
