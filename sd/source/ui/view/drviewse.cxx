@@ -672,7 +672,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
         ::vcl::KeyCode aKCode(KEY_DELETE);
         KeyEvent aKEvt( 0, aKCode);
 
-        bConsumed = mpDrawView && mpDrawView->getSmartTags().KeyInput( aKEvt );
+        bConsumed = mpDrawView->getSmartTags().KeyInput( aKEvt );
 
         if( !bConsumed && HasCurrentFunction() )
             bConsumed = GetCurrentFunction()->KeyInput(aKEvt);
