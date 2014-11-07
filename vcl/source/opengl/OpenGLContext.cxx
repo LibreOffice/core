@@ -677,6 +677,11 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
+    RECT clientRect;
+    GetClientRect(WindowFromDC(m_aGLWin.hDC), &clientRect);
+    m_aGLWin.Width = clientRect.right - clientRect.left;
+    m_aGLWin.Height = clientRect.bottom - clientRect.top;
+
 #elif defined( MACOSX )
 
     NSOpenGLView* pView = getOpenGLView();
