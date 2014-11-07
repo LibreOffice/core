@@ -101,10 +101,15 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool mbOpenCLAutoSelect:1;
     OUString maOpenCLDevice;
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
-    std::set<OpCodeEnum> maOpenCLSubsetOpCodes;
 
-    std::set<OpenCLImpl> maOpenCLWhiteList;
-    std::set<OpenCLImpl> maOpenCLBlackList;
+    typedef std::set<OpCodeEnum> OpCodeSet;
+
+    OpCodeSet maOpenCLSubsetOpCodes;
+
+    typedef std::set<OpenCLImpl> OpenCLImplSet;
+
+    OpenCLImplSet maOpenCLWhiteList;
+    OpenCLImplSet maOpenCLBlackList;
 
     ScCalcConfig();
 
@@ -117,11 +122,13 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool operator!= (const ScCalcConfig& r) const;
 };
 
+SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImpl& rImpl);
+SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplSet& rSet);
 SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig);
 
-SC_DLLPUBLIC OUString ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes);
-SC_DLLPUBLIC OUString ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes);
-SC_DLLPUBLIC std::set<OpCodeEnum> ScStringToOpCodeSet(const OUString& rOpCodes);
+SC_DLLPUBLIC OUString ScOpCodeSetToNumberString(const ScCalcConfig::OpCodeSet& rOpCodes);
+SC_DLLPUBLIC OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes);
+SC_DLLPUBLIC ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes);
 
 #endif
 

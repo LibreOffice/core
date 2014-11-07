@@ -39,7 +39,7 @@ public:
     DECL_LINK( BtnAutomaticSelectHdl, void* );
     DECL_LINK( DeviceSelHdl, void* );
     DECL_LINK( NumModifiedHdl, void * );
-    DECL_LINK( EditModifiedHdl, void * );
+    DECL_LINK( EditModifiedHdl, Control * );
     DECL_LINK( OpenCLWhiteAndBlackListSelHdl, Control* );
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
@@ -52,7 +52,7 @@ private:
     void OpenCLAutomaticSelectionChanged();
     void SelectedDeviceChanged();
     void SpinButtonValueChanged();
-    void EditFieldValueChanged();
+    void EditFieldValueChanged(Control *pCtrl);
     void WhiteAndBlackListSelectionChanged();
 #if HAVE_FEATURE_OPENCL
     void fillOpenCLList();
@@ -64,6 +64,8 @@ private:
     OUString toString(sal_Int32 nVal) const;
     SvTreeListEntry *createItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
+    std::set<ScCalcConfig::OpenCLImpl>& CurrentWhiteOrBlackList();
+    const ScCalcConfig::OpenCLImpl& CurrentWhiteOrBlackListEntry();
 
 private:
     SvxCheckListBox* mpLbSettings;

@@ -82,26 +82,31 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
     return !operator==(r);
 }
 
-namespace {
-
-std::ostream& operator<<(std::ostream& rStream, const std::set<ScCalcConfig::OpenCLImpl>& rSet)
+std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImpl& rImpl)
 {
+    rStream << "{"
+        "OS=" << rImpl.maOS << ","
+        "OSVersion=" << rImpl.maOSVersion << ","
+        "PlatformVendor=" << rImpl.maPlatformVendor << ","
+        "Device=" << rImpl.maDevice << ","
+        "DriverVersion=" << rImpl.maDriverVersion <<
+        "}";
+
+    return rStream;
+}
+
+std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplSet& rSet)
+{
+    rStream << "{";
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {
         if (i != rSet.cbegin())
             rStream << ",";
-        rStream << "{"
-            "OS=" << (*i).maOS << ","
-            "OSVersion=" << (*i).maOSVersion << ","
-            "PlatformVendor=" << (*i).maPlatformVendor << ","
-            "Device=" << (*i).maDevice << ","
-            "DriverVersion=" << (*i).maDriverVersion <<
-            "}";
+        rStream << *i;
     }
+    rStream << "}";
     return rStream;
 }
-
-} // anonymous namespace
 
 std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
 {
@@ -115,8 +120,8 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"
         "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
         "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "},"
-        "OpenCLWhiteList={" << rConfig.maOpenCLWhiteList << "},"
-        "OpenCLBlackList={" << rConfig.maOpenCLBlackList << "}"
+        "OpenCLWhiteList=" << rConfig.maOpenCLWhiteList << ","
+        "OpenCLBlackList=" << rConfig.maOpenCLBlackList <<
         "}";
     return rStream;
 }
@@ -140,7 +145,7 @@ formula::FormulaCompiler::OpCodeMapPtr setup()
 
 } // anonymous namespace
 
-OUString ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes)
+OUString ScOpCodeSetToNumberString(const ScCalcConfig::OpCodeSet& rOpCodes)
 {
     OUStringBuffer result;
 
@@ -154,7 +159,7 @@ OUString ScOpCodeSetToNumberString(const std::set<OpCodeEnum>& rOpCodes)
     return result.toString();
 }
 
-OUString ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes)
+OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 {
     OUStringBuffer result;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(setup());
@@ -172,9 +177,9 @@ OUString ScOpCodeSetToSymbolicString(const std::set<OpCodeEnum>& rOpCodes)
     return result.toString();
 }
 
-std::set<OpCodeEnum> ScStringToOpCodeSet(const OUString& rOpCodes)
+ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
 {
-    std::set<OpCodeEnum> result;
+    ScCalcConfig::OpCodeSet result;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(setup());
 
     OUString s(rOpCodes + ";");

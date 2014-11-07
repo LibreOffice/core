@@ -162,6 +162,11 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
     mpSpinButton->SetModifyHdl(LINK(this, ScCalcOptionsDialog, NumModifiedHdl));
     mpEditField->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
+    mpOS->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
+    mpOSVersion->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
+    mpPlatformVendor->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
+    mpDevice->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
+    mpDriverVersion->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
 
     mpOpenCLWhiteAndBlackListBox->set_height_request(4* mpOpenCLWhiteAndBlackListBox->GetTextHeight());
     mpOpenCLWhiteAndBlackListBox->SetStyle(mpOpenCLWhiteAndBlackListBox->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -303,7 +308,7 @@ void ScCalcOptionsDialog::fillOpenCLList()
 
 namespace {
 
-void fillListBox(ListBox* pListBox, const std::set<ScCalcConfig::OpenCLImpl>& rSet)
+    void fillListBox(ListBox* pListBox, const ScCalcConfig::OpenCLImplSet& rSet)
 {
     pListBox->SetUpdateMode(false);
     pListBox->Clear();
@@ -725,12 +730,76 @@ void ScCalcOptionsDialog::SpinButtonValueChanged()
     maConfig.mnOpenCLMinimumFormulaGroupSize = nVal;
 }
 
-void ScCalcOptionsDialog::EditFieldValueChanged()
+ScCalcConfig::OpenCLImplSet& ScCalcOptionsDialog::CurrentWhiteOrBlackList()
 {
-    // We know that the mpEditField is used for only one thing at the moment,
-    // the OpenCL subset list of opcodes
-    OUString sVal = mpEditField->GetText();
-    maConfig.maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
+    return (mpLbSettings->GetSelectEntryPos() == CALC_OPTION_OPENCL_WHITELIST ? maConfig.maOpenCLWhiteList : maConfig.maOpenCLBlackList);
+}
+
+const ScCalcConfig::OpenCLImpl& ScCalcOptionsDialog::CurrentWhiteOrBlackListEntry()
+{
+    ScCalcConfig::OpenCLImplSet& rSet(CurrentWhiteOrBlackList());
+
+    auto i = rSet.begin();
+    int n(mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos());
+    while (n && i != rSet.end())
+    {
+        ++i;
+        --n;
+    }
+
+    return *i;
+}
+
+void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
+{
+    Edit* pEdit(dynamic_cast<Edit*>(pCtrl));
+
+    assert(pEdit);
+
+    OUString sVal = pEdit->GetText();
+
+    if (pEdit == mpEditField)
+    {
+        // We know that the mpEditField is used for only one thing at the moment,
+        // the OpenCL subset list of opcodes
+        maConfig.maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
+    }
+    else
+    {
+        // We know that this handler is otherwise currently used only
+        // for the OpenCL white/blacklists
+
+        const ScCalcConfig::OpenCLImpl& impl(CurrentWhiteOrBlackListEntry());
+        ScCalcConfig::OpenCLImpl newImpl(impl);
+
+        if (pEdit == mpOS)
+        {
+            newImpl.maOS = sVal;
+        }
+        else if (pEdit == mpOSVersion)
+        {
+            newImpl.maOSVersion = sVal;
+        }
+        else if (pEdit == mpPlatformVendor)
+        {
+            newImpl.maPlatformVendor = sVal;
+        }
+        else if (pEdit == mpDevice)
+        {
+            newImpl.maDevice = sVal;
+        }
+        else if (pEdit == mpDriverVersion)
+        {
+            newImpl.maDriverVersion = sVal;
+        }
+        else
+            assert(false && "pEdit does not match any of the Edit fields");
+
+        ScCalcConfig::OpenCLImplSet& rSet(CurrentWhiteOrBlackList());
+
+        rSet.erase(impl);
+        rSet.insert(newImpl);
+    }
 }
 
 void ScCalcOptionsDialog::WhiteAndBlackListSelectionChanged()
@@ -814,37 +883,17 @@ IMPL_LINK_NOARG(ScCalcOptionsDialog, NumModifiedHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScCalcOptionsDialog, EditModifiedHdl)
+IMPL_LINK(ScCalcOptionsDialog, EditModifiedHdl, Control*, pCtrl)
 {
-    EditFieldValueChanged();
+    EditFieldValueChanged(pCtrl);
     return 0;
 }
 
-namespace {
-
-template <class T>
-typename T::iterator nth(T container, int n)
-{
-    auto i = container.begin();
-    while (n && i != container.end())
-    {
-        ++i;
-        --n;
-    }
-
-    return i;
-}
-
-} // anonymous namespace
-
 IMPL_LINK(ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl, Control*, )
 {
-    // We know this is called for the mpOpenCLWhiteAndBlackListBox
+    // We know this handler is used for the mpOpenCLWhiteAndBlackListBox
 
-    std::set<ScCalcConfig::OpenCLImpl>
-        &implSet(mpLbSettings->GetSelectEntryPos() == CALC_OPTION_OPENCL_WHITELIST ? maConfig.maOpenCLWhiteList : maConfig.maOpenCLBlackList);
-    sal_uLong n(mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos());
-    const ScCalcConfig::OpenCLImpl& impl(*nth(implSet, n));
+    const ScCalcConfig::OpenCLImpl& impl(CurrentWhiteOrBlackListEntry());
 
     mpOS->SetText(impl.maOS);
     mpOSVersion->SetText(impl.maOSVersion);
