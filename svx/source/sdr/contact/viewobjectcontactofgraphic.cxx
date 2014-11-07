@@ -245,8 +245,6 @@ namespace sdr
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
             bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
-            bool bSwapInDone(false);
-            bool bSwapInExclusive(false);
 
             if( bDoAsynchronGraphicLoading && rGrafObj.IsSwappedOut() )
             {
@@ -262,16 +260,15 @@ namespace sdr
                     || GetObjectContact().isOutputToPDFFile() )
                 {
                     bDoAsynchronGraphicLoading = false;
-                    bSwapInExclusive = true;
                 }
             }
             if( bDoAsynchronGraphicLoading )
             {
-                bSwapInDone = const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithAsynchroniousLoading();
+                const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithAsynchroniousLoading();
             }
             else
             {
-                bSwapInDone = const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithSynchroniousLoading();
+                const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithSynchroniousLoading();
             }
 
             // get return value by calling parent
@@ -292,12 +289,6 @@ namespace sdr
                         xRetval = drawinglayer::primitive2d::Primitive2DSequence();
                     }
                 }
-            }
-
-            // if swap in was forced only for printing metafile and pdf, swap out again
-            if( bSwapInDone && bSwapInExclusive )
-            {
-                rGrafObj.ForceSwapOut();
             }
 
             return xRetval;

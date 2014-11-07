@@ -106,6 +106,10 @@ $(eval $(call gb_CppunitTest_use_components,sd_export_tests,\
     xmlsecurity/util/xmlsecurity \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sd_export_tests,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sd_export_tests))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sd_export_tests))

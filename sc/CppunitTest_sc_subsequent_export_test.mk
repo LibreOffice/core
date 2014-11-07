@@ -117,6 +117,10 @@ $(eval $(call gb_CppunitTest_use_components,sc_subsequent_export_test,\
 ))
 endif
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sc_subsequent_export_test,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sc_subsequent_export_test))
 
 # vim: set noet sw=4 ts=4:

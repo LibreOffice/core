@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <officecfg/Office/Common.hxx>
 #include <sal/config.h>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
@@ -59,7 +60,7 @@
 #include <tools/datetime.hxx>
 
 #include <test/xmltesttools.hxx>
-
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
@@ -2271,26 +2272,19 @@ void ScExportTest::testSwappedOutImageExport()
         "generic_HTML",
     };
 
+    // Set cache size to a very small value to make sure one of the images is swapped out
+    boost::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
+    xBatch->commit();
+
     for( size_t nFilter = 0; nFilter < aFilterNames.size(); ++nFilter )
     {
         // Check whether the export code swaps in the image which was swapped out before.
-        ScDocShellRef xDocSh = loadDoc("document_with_an_image.", ODS);
+        ScDocShellRef xDocSh = loadDoc("document_with_two_images.", ODS);
 
         const OString sFailedMessage = OString("Failed on filter: ")
                                        + OUStringToOString(aFilterNames[nFilter], RTL_TEXTENCODING_ASCII_US);
-
-        // Find and swap out the image
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.Is());
-        ScDocument* pDoc = &xDocSh->GetDocument();
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc);
-        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDrawLayer);
-        const SdrPage* pPage = pDrawLayer->GetPage(0);
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pPage);
-        const SdrObject* pObj = pPage->GetObj(0);
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pObj->GetObjIdentifier() == OBJ_GRAF);
-        const SdrGrafObj& rGrafObj = static_cast<const SdrGrafObj&>(*pObj);
-        rGrafObj.ForceSwapOut();
 
         // Export the document and import again for a check
         ScDocShellRef xDocSh2 = saveAndReload(xDocSh, nFilter);
@@ -2302,7 +2296,7 @@ void ScExportTest::testSwappedOutImageExport()
         uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
         uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
         uno::Reference< container::XIndexAccess > xDraws(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(1), xDraws->getCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
 
         uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
@@ -2321,6 +2315,24 @@ void ScExportTest::testSwappedOutImageExport()
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+        }
+        // Second Image
+        xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+        XPropSet.set( xImage, uno::UNO_QUERY_THROW );
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("vnd.sun.star.GraphicObject:1000000000000384000002580A24B597"), sURL);
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height );
         }
         xDocSh2->DoClose();
     }

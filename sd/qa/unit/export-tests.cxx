@@ -6,10 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
+#include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include "Outliner.hxx"
-
+#include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
@@ -504,20 +504,16 @@ void SdExportTest::testSwappedOutImageExport()
         PPTX,
     };
 
+    // Set cache size to a very small value to make sure one of the images is swapped out
+    boost::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
+    xBatch->commit();
+
     for( size_t nExportFormat = 0; nExportFormat < vFormats.size(); ++nExportFormat )
     {
         // Load the original file with one image
-        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/document_with_an_image.odp"), ODP);
+        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/document_with_two_images.odp"), ODP);
         const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[nExportFormat].pFilterName);
-
-        // Swap out the image
-        SdDrawDocument *pDoc = xDocShRef->GetDoc();
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != NULL );
-        const SdrPage* pPage = pDoc->GetPage(1);
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
-        SdrGrafObj* pGrafObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pGrafObject != NULL);
-        pGrafObject->ForceSwapOut();
 
         // Export the document and import again for a check
         uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
@@ -534,7 +530,7 @@ void SdExportTest::testSwappedOutImageExport()
 
         // Check whether graphic exported well after it was swapped out
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xDrawPagesSupplier->getDrawPages()->getCount() == 1 );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), xDrawPagesSupplier->getDrawPages()->getCount() == 2 );
         uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
 
         uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(2), uno::UNO_QUERY);
@@ -553,6 +549,26 @@ void SdExportTest::testSwappedOutImageExport()
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+        }
+
+        // Second Image
+        xDrawPage.set(xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW );
+        xImage.set(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+        XPropSet.set( xImage, uno::UNO_QUERY_THROW );
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString("vnd.sun.star.GraphicObject:1000000000000384000002580A24B597"), sURL);
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height );
         }
         xDocShRef->DoClose();
     }
