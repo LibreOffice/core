@@ -396,15 +396,15 @@ void SwGrfNode::SetGraphic(const Graphic& rGraphic, const OUString& rLink)
     onGraphicChanged();
 }
 
-const Graphic& SwGrfNode::GetGrf() const
+const Graphic& SwGrfNode::GetGrf(bool bWait) const
 {
-    const_cast<SwGrfNode*>(this)->SwapIn();
+    const_cast<SwGrfNode*>(this)->SwapIn(bWait);
     return maGrfObj.GetGraphic();
 }
 
-const GraphicObject& SwGrfNode::GetGrfObj() const
+const GraphicObject& SwGrfNode::GetGrfObj(bool bWait) const
 {
-    const_cast<SwGrfNode*>(this)->SwapIn();
+    const_cast<SwGrfNode*>(this)->SwapIn(bWait);
     return maGrfObj;
 }
 
@@ -461,7 +461,7 @@ Size SwGrfNode::GetTwipSize() const
 {
     if( !nGrfSize.Width() && !nGrfSize.Height() )
     {
-        const_cast<SwGrfNode*>(this)->SwapIn(true);
+        const_cast<SwGrfNode*>(this)->SwapIn();
     }
     return nGrfSize;
 }

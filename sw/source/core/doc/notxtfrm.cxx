@@ -879,7 +879,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         }
 
         bool bContinue = true;
-        const GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
+        const GraphicObject& rGrfObj = pGrfNd->GetGrfObj(bPrn);
 
         GraphicAttr aGrfAttr;
         pGrfNd->GetGraphicAttr( aGrfAttr, this );
@@ -917,8 +917,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( bContinue )
         {
-            const bool bSwappedIn = pGrfNd->SwapIn( bPrn );
-            if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
+            if( rGrfObj.GetGraphic().IsSupportedGraphic())
             {
                 const bool bAnimate = rGrfObj.IsAnimated() &&
                                          !pShell->IsPreview() &&
@@ -955,13 +954,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             else
             {
                 sal_uInt16 nResId = 0;
-                if( bSwappedIn )
-                {
-                    if( GRAPHIC_NONE == rGrfObj.GetType() )
-                        nResId = STR_COMCORE_READERROR;
-                    else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
-                        nResId = STR_COMCORE_CANT_SHOW;
-                }
+
+                if( GRAPHIC_NONE == rGrfObj.GetType() )
+                    nResId = STR_COMCORE_READERROR;
+                else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
+                    nResId = STR_COMCORE_CANT_SHOW;
+
                 ((SwNoTxtFrm*)this)->nWeight = -1;
                 OUString aText;
                 if ( !nResId &&

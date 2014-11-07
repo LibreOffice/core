@@ -851,8 +851,7 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
     }
     else
     {
-        ((SwGrfNode&)rGrfNd).SwapIn( true );
-        pGrf = new Graphic( rGrfNd.GetGrf() );
+        pGrf = new Graphic( rGrfNd.GetGrf(true) );
         pNm = pFltr = 0;
     }
     nMirr = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
