@@ -252,7 +252,7 @@ public:
     virtual void    DestroyAnchor() SAL_OVERRIDE;
 };
 
-class IdleFormatter : public Timer
+class IdleFormatter : public Idle
 {
 private:
     TextView*   mpView;

@@ -405,7 +405,7 @@ class SfxHelpTextWindow_Impl : public vcl::Window
 private:
     ToolBox                 aToolBox;
     CheckBox                aOnStartupCB;
-    Timer                   aSelectTimer;
+    Idle                    aSelectIdle;
     Image                   aIndexOnImage;
     Image                   aIndexOffImage;
     OUString                aIndexOnText;

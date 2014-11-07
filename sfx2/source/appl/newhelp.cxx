@@ -1875,8 +1875,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     InitOnStartupBox( false );
     aOnStartupCB.SetClickHdl( LINK( this, SfxHelpTextWindow_Impl, CheckHdl ) );
 
-    aSelectTimer.SetTimeoutHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
-    aSelectTimer.SetTimeout( 1000 );
+    aSelectIdle.SetIdleHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
+    aSelectIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
 
     char* pEnv = getenv( "help_debug" );
     if ( pEnv )
@@ -2497,7 +2497,7 @@ void SfxHelpTextWindow_Impl::SelectSearchText( const OUString& rSearchText, bool
 {
     aSearchText = rSearchText;
     bIsFullWordSearch = _bIsFullWordSearch;
-    aSelectTimer.Start();
+    aSelectIdle.Start();
 }
 
 

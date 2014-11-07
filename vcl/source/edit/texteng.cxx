@@ -92,7 +92,7 @@ TextEngine::TextEngine()
     mpLocaleDataWrapper = NULL;
 
     mpIdleFormatter = new IdleFormatter;
-    mpIdleFormatter->SetTimeoutHdl( LINK( this, TextEngine, IdleFormatHdl ) );
+    mpIdleFormatter->SetIdleHdl( LINK( this, TextEngine, IdleFormatHdl ) );
 
     mpRefDev = new VirtualDevice;
 

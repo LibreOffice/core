@@ -223,6 +223,7 @@ IdleFormatter::IdleFormatter()
 {
     mpView = 0;
     mnRestarts = 0;
+    SetPriority(VCL_IDLE_PRIORITY_HIGH);
 }
 
 IdleFormatter::~IdleFormatter()
@@ -240,7 +241,7 @@ void IdleFormatter::DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts )
     if ( mnRestarts > nMaxRestarts )
     {
         mnRestarts = 0;
-        ((Link&)GetTimeoutHdl()).Call( this );
+        ((Link&)GetIdleHdl()).Call( this );
     }
     else
     {
@@ -254,7 +255,7 @@ void IdleFormatter::ForceTimeout()
     {
         Stop();
         mnRestarts = 0;
-        ((Link&)GetTimeoutHdl()).Call( this );
+        ((Link&)GetIdleHdl()).Call( this );
     }
 }
 
