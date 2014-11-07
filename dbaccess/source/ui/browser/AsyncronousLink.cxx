@@ -72,7 +72,7 @@ IMPL_LINK(OAsyncronousLink, OnAsyncCall, void*, _pArg)
         {
             ::osl::MutexGuard aEventGuard( m_aEventSafety );
             if (!m_nEventId)
-                // our destructor deleted the event just while we we're waiting for m_aEventSafety
+                // our destructor deleted the event just while we are waiting for m_aEventSafety
                 // -> get outta here
                 return 0;
             m_nEventId = 0;

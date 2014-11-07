@@ -661,7 +661,7 @@ sal_Int32 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     // fill Format-Listbox
     m_pFormatLB->Clear();
 
-    // refernce has less that the annotation
+    // reference has less that the annotation
     sal_uInt16 nSize( 0 );
     bool bAddCrossRefFormats( false );
     switch (nTypeId)

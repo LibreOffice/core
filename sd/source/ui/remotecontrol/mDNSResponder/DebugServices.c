@@ -1026,7 +1026,7 @@ static void DebugWindowsEventLogPrint( DebugLevel inLevel, char *inData, size_t 
     }
     *dst = 0;
 
-    // Add the the string to the event log.
+    // Add the string to the event log.
     array[ 0 ] = buffer;
     if( gDebugWindowsEventLogEventSource )
     {

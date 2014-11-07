@@ -1965,7 +1965,7 @@ void ScInterpreter::ScIsLogical()
         case svMatrix:
             // TODO: we don't have type information for arrays except
             // numerical/string.
-        // Fall thru
+        // Fall through
         default:
             PopError();
             if ( !nGlobalError )

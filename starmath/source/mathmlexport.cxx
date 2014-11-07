@@ -409,7 +409,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // EXPORT_OASIS is required here allthough there is no differrence between
+    // EXPORT_OASIS is required here although there is no difference between
     // OOo and OASIS, because without the flag, a transformation to OOo would
     // be chained in.
     return (cppu::OWeakObject*)new SmXMLExport( comphelper::getComponentContext(rSMgr), SmXMLExport_getImplementationName(), EXPORT_OASIS|EXPORT_ALL );

@@ -343,12 +343,12 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
     sal_Int32 nCount = rNames.getLength();
     Sequence< sal_Bool > lStates(nCount);
 
-    // We must be sure to return a valid information everytime!
-    // Set default to non readonly ... similar to the configuration handling of this property.
+    // We must be sure to return a valid information every time!
+    // Set default to non readonly... similar to the configuration handling of this property.
     for ( i=0; i<nCount; ++i)
         lStates[i] = sal_False;
 
-    // no access - no information ...
+    // no access - no information...
     Reference< XHierarchicalNameAccess > xHierarchyAccess = GetTree();
     if (!xHierarchyAccess.is())
         return lStates;

@@ -1235,7 +1235,7 @@ WW8_WrPct::~WW8_WrPct()
 // Fill the piece and create a new one
 void WW8_WrPct::AppendPc(WW8_FC nStartFc, bool bIsUnicode)
 {
-    WW8_CP nStartCp = nStartFc - nOldFc;    // substract the beginning of the text
+    WW8_CP nStartCp = nStartFc - nOldFc;    // subtract the beginning of the text
     if ( !nStartCp )
     {
         if ( !aPcts.empty() )
@@ -2684,7 +2684,7 @@ void WW8Export::WriteMainText()
                     // ccpText includes Footnote and KF-text
                     // therefore pFib->ccpText may get updated as well
     // save the StyleId of the last paragraph. Because WW97 take the style
-    // from the last CR, that will be writen after footer/Header/footnotes/
+    // from the last CR, that will be written after footer/Header/footnotes/
     // annotation usw.
     const SwTxtNode* pLastNd = pCurPam->GetMark()->nNode.GetNode().GetTxtNode();
     if( pLastNd )
@@ -2791,7 +2791,7 @@ void WW8Export::WriteFkpPlcUsw()
         if (pEscher || pDoc->ContainsMSVBasic())
         {
             /*
-             Everytime MS 2000 creates an escher stream there is always
+             Every time MS 2000 creates an escher stream there is always
              an ObjectPool dir (even if empty). It turns out that if a copy of
              MS 2000 is used to open a document that contains escher graphics
              exported from StarOffice without this empty dir then *if* that

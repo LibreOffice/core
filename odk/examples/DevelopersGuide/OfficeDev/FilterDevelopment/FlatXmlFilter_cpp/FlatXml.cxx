@@ -228,7 +228,7 @@ sal_Bool XFlatXml::exporter(
     return sal_True;
 }
 
-// for the DocumentHandler implementation, we just proxy the the
+// for the DocumentHandler implementation, we just proxy the
 // events to the XML writer that we created upon the output stream
 // that was provided by the XMLFilterAdapter
 void XFlatXml::startDocument() throw (SAXException,RuntimeException){

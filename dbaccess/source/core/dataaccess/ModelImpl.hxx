@@ -256,7 +256,7 @@ public:
             - this is an automatism for data safety reasons.
             If you pass <TRUE/> here, committing the root storage is prevented for this particular
             call.
-        @return <TRUE/> if the storage could be commited, otherwise <FALSE/>
+        @return <TRUE/> if the storage could be committed, otherwise <FALSE/>
     */
     bool        commitEmbeddedStorage( bool _bPreventRootCommits = false );
 

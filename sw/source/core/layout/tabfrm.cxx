@@ -2281,7 +2281,7 @@ void SwTabFrm::MakeAll()
 
                 // Some more checks if we want to call the split algorithm or not:
                 // The repeating lines / keeping lines still fit into the upper or
-                // if we do not have an (in)direkt Prev, we split anyway.
+                // if we do not have an (in)direct Prev, we split anyway.
                 if( (*fnRect->fnYDiff)(nDeadLine, nBreakLine) >=0 || !pIndPrev )
                 {
                     aNotify.SetLowersComplete( false );

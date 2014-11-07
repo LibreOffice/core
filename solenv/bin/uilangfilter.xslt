@@ -20,7 +20,7 @@
   <xsl:apply-templates select="//*[not(self::col)][@translatable='yes']" />
   <!--
       What I want to do here is to extract just the list and tree store
-      columns that that are translatable (the first one only)
+      columns that are translatable (the first one only)
   -->
   <xsl:apply-templates select="interface/object[data/row/col[@id='0'][@translatable='yes']]" />
   </l>

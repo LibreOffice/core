@@ -68,7 +68,7 @@ const OUString HASLEGEND("HasLegend");
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, const css::uno::Reference< css::table::XTableChart >& _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart( _xTableChart )
 {
     mxChartDocument.set( _xChartComponent, uno::UNO_QUERY_THROW ) ;
-    // #TODO is is possible that the XPropertySet interface is not set
+    // #TODO is it possible that the XPropertySet interface is not set
     // code in setPlotBy seems to indicate that this is possible? but
     // additionally there is no check in most of the places where it is used
     // ( and therefore could possibly be NULL )

@@ -636,7 +636,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
             // #i86581#
             // FIXME: sometimes the NSTimer will never fire. Firing it by hand then
             // fixes the problem even seems to set the correct next firing date
-            // Why oh why ?
+            // Why oh why?
             if( ! pEvent && AquaSalTimer::pRunningTimer )
             {
                 // this cause crashes on MacOSX 10.4

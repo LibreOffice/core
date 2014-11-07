@@ -2665,7 +2665,7 @@ void SfxHelpWindow_Impl::MakeLayout()
         /* #i55528#
             Hide() / Show() will produce strange effects.
             The returned size (used later to be written back into the configuration)
-            isnt the right after a resize during the window is hidden.
+            is not the right after a resize during the window is hidden.
             If this resize is done if the window is visible evyrthing works as aspected.
             Some VCL-patches could not solve this problem so I've established the
             workaround: resize the help window if it's visible .-)

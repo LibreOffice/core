@@ -1585,7 +1585,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
 void ScInputHandler::UpdateParenthesis()
 {
     // Find parentheses
-    //TODO: Can we disable parentheses highlighting per paranthesis?
+    //TODO: Can we disable parentheses highlighting per parentheses?
     bool bFound = false;
     if ( bFormulaMode && eMode != SC_INPUT_TOP )
     {

@@ -136,7 +136,7 @@ DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
     uno::Reference< beans::XPropertySet > properties( paragraphStyles->getByName( "Standard" ), uno::UNO_QUERY );
     uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence< style::TabStop > >(
         paragraphStyles->getByName( "Standard" ), "ParaTabStops" );
-// There actually be be one tab stop, but it will be the default.
+// There actually be one tab stop, but it will be the default.
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(1), stops.getLength());
     CPPUNIT_ASSERT_EQUAL( style::TabAlign_DEFAULT, stops[ 0 ].Alignment );
 }
@@ -750,7 +750,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo64238_a, "fdo64238_a.docx")
 {
     // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
-    // then LO would still import the Even footer and concatenate it to to the odd footer.
+    // then LO would still import the Even footer and concatenate it to the odd footer.
     // This case specifically is for :
     // 'Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be blank, but instead was the 'even' footer
@@ -770,7 +770,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo64238_a, "fdo64238_a.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo64238_b, "fdo64238_b.docx")
 {
     // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
-    // then LO would still import the Even footer and concatenate it to to the odd footer.
+    // then LO would still import the Even footer and concatenate it to the odd footer.
     // This case specifically is for :
     // 'Non-Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
     // In this case the imported footer in LO was supposed to be just the odd footer, but instead was the 'odd' and 'even' footers concatenated
@@ -1055,7 +1055,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
     {
         // After import, table is inside a TextFrame.
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-        // This was 0, should be the the opposite of (left margin + half of the border width).
+        // This was 0, should be the opposite of (left margin + half of the border width).
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
         // Was 0 as well, should be the right margin.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xFrame, "RightMargin"));
@@ -1064,7 +1064,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
     {
         // After import, table is inside a TextFrame.
         uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
-        // This was 0, should be the the opposite of (left margin + half of the border width).
+        // This was 0, should be the opposite of (left margin + half of the border width).
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
         // Was 0 as well, should be the right margin.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xShape, "RightMargin"));

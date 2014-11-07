@@ -253,7 +253,7 @@ namespace sdr
             // more than just the shapes, and then it fails.
             //
             // This is good enough for the tiled rendering for the moment, but
-            // we need to come up with with the real solution shortly.
+            // we need to come up with the real solution shortly.
 
             // Only get the expensive hierarchy if we can be sure that the
             // returned sequence won't be empty anyway.

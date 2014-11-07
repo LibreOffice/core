@@ -925,7 +925,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                     {
                         // Deselect all tabs till the clicked tab
                         // and select all tabs from the clicked tab
-                        // till the the actual position
+                        // 'till the actual position
                         n = 0;
                         while ( n < nCurPos )
                         {

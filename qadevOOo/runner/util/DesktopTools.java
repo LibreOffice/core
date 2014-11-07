@@ -326,8 +326,8 @@ public class DesktopTools
     /**
      * Creates a floating XWindow on the given position and size.
      * @return a floating XWindow
-     * @param X the X-Postion of the floating XWindow
-     * @param Y the Y-Postion of the floating XWindow
+     * @param X the X-Position of the floating XWindow
+     * @param Y the Y-Position of the floating XWindow
      * @param width the width of the floating XWindow
      * @param height the height of the floating XWindow
      * @param xMSF the MultiServiceFactory

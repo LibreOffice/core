@@ -65,7 +65,7 @@
 /**
  * @brief
  * Base64 algorithm implementation.
- * I only implements encode funtion now,i'll add decode if needed later.
+ * I only implements encode function now, i'll add decode if needed later.
  * http://www.faqs.org/rfcs/rfc3548.html.
  */
 

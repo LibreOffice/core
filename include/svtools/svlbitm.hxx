@@ -83,7 +83,7 @@ public:
     Image&                  GetImage(SvBmp nIndex) { return aBmps[(int)nIndex]; }
 
     void                    SetDefaultImages( const Control* pControlForSettings = NULL );
-                                // set images acording to the color scheeme of the Control
+                                // set images according to the color scheeme of the Control
                                 // pControlForSettings == NULL: settings are taken from Application
     bool                    HasDefaultImages( void ) const;
 };

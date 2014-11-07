@@ -164,7 +164,7 @@ namespace svx
 
     //= ODataAccessObjectTransferable
 
-    /** class for transfering data access objects (tables, queries, statements ...)
+    /** class for transferring data access objects (tables, queries, statements ...)
     */
     class SVX_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
     {
@@ -252,7 +252,7 @@ namespace svx
 
     //= OMultiColumnTransferable
 
-    /** class for transfering multiple columns
+    /** class for transferring multiple columns
     */
     class SVX_DLLPUBLIC OMultiColumnTransferable : public TransferableHelper
     {

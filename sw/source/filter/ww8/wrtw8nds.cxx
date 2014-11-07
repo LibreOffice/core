@@ -2344,7 +2344,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if (bIncludeEndOfParaCRInRedlineProperties)
                 {
                     AttrOutput().Redline( aAttrIter.GetRunLevelRedline( nEnd ) );
-                    //If if there was no redline property emitted, force adding
+                    //If there was no redline property emitted, force adding
                     //another entry for the CR so that in the case that this
                     //has no redline, but the next para does, then this one is
                     //not merged with the next

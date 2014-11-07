@@ -1892,7 +1892,7 @@ int NeonSession::POST( ne_session * sess,
     if ( !rContentType.isEmpty() || !rReferer.isEmpty() )
     {
         // Remember contenttype and referer. Data will be added to HTTP request
-        // header in in 'PreSendRequest' callback.
+        // header in 'PreSendRequest' callback.
         pData = static_cast< RequestDataMap* >( m_pRequestData );
         (*pData)[ req ] = RequestData( rContentType, rReferer );
     }

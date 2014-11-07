@@ -234,7 +234,7 @@ public:
     sal_uInt16    nMasterSlotId;  // Enum-Slot for example Which-Id
     sal_uInt16    nValue;         // Value, in case of Enum-Slot
 
-    SfxExecFunc   fnExec;   // Function to be excecuted
+    SfxExecFunc   fnExec;   // Function to be executed
     SfxStateFunc  fnState;  // Function for Status
 
     const SfxType*  pType;       // SfxPoolItem-Type (Status)

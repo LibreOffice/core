@@ -121,12 +121,12 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     //extension button is considered as a candidate
 
     //But the containers are not invisible to the PushButton ctor which checks
-    //if the preceeding window of its parent is a button and if it then
+    //if the preceding window of its parent is a button and if it then
     //defaults to grouping with it and if it is not a button defaults to
     //setting itself as the start of a new group.
 
     //So here take the second button and set it as explicitly not the start
-    //of a group, i.e. allow it to be grouped with the preceeding
+    //of a group, i.e. allow it to be grouped with the preceding
     //PushButton so when seen as a candidate by cursor travelling
     //it will be accepted as a continuation of the group.
     WinBits nBits = mpExtensionsButton->GetStyle();

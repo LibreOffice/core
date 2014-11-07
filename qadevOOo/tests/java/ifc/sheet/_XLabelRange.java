@@ -82,7 +82,7 @@ public class _XLabelRange extends MultiMethodTest {
 
     /**
     * Test calls the method and compares returned value with value set before.
-    * <p>Has <b> OK </b> status if if values are equal. <p>
+    * <p>Has <b> OK </b> status if values are equal. <p>
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setLabelArea() </code>: to have the cell range that contains

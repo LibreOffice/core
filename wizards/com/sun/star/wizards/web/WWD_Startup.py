@@ -37,7 +37,7 @@ from ..ui.event.DataAware import DataAware
 from ..ui.event.Task import Task
 
 '''
-Web Wizard Dialog implementation : Startup.
+Web Wizard Dialog implementation: Startup.
 This class contains the startup implementation and session mounting methods.
 <h2> Data Aware Concept </h2>
 <p> I use DataAware objects, which synchronize
@@ -46,7 +46,7 @@ between a Value and a UI element.
 </P>
 <p>
 A Value is either a JavaBean property with
-a Getter and a Setter or a public class Memeber.
+a Getter and a Setter or a public class Member.
 </P>
 When the UI Control changes, the Value changes correspondingly.
 This depends on WWD_General.settings a Listener which calls the updateData()
@@ -60,7 +60,7 @@ here I use only UI Listeners, and keep calling
 the updateUI() method whenever I change the Value.
 </P>
 To contain the Data, I use the Configuration Data Objects
-which read themselfs out of the Configuration. they are all located under
+which read themselves out of the Configuration. they are all located under
 the data package.
 <p/>
 Different groups of DataAware objects are grouped into vectors.

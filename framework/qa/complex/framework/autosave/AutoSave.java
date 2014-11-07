@@ -324,7 +324,7 @@ public class AutoSave
                 {
                     m_aLog.log(Protocol.TYPE_WARNING     , "got CloseVetoException on calling doc.close()."                                    );
                     m_aLog.log(Protocol.TYPE_WARNING_INFO, "Please check the reason for that more in detail."                                  );
-                    m_aLog.log(Protocol.TYPE_WARNING_INFO, "A message like \"Cant close while saving.\" was intended and doesn't show an error!");
+                    m_aLog.log(Protocol.TYPE_WARNING_INFO, "A message like \"Can not close while saving.\" was intended and doesn't show an error!");
                     m_aLog.log(Protocol.TYPE_WARNING_INFO, exVeto.getMessage());
                 }
 

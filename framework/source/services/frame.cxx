@@ -547,10 +547,10 @@ void Frame::initListeners()
 
     // Safe impossible cases
     // We can't work without these helpers!
-    SAL_WARN_IF( !xDispatchProvider.is(), "fwk", "Frame::Frame(): Slowest slave for dispatch- and interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" );
-    SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Frame::Frame(): Interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" );
-    SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Frame::Frame(): Frames helper isn't valid. XFrames, XIndexAccess and XElementAcces are not supported!" );
-    SAL_WARN_IF( !m_xDropTargetListener.is(), "fwk", "Frame::Frame(): DropTarget helper isn't valid. Drag and drop without functionality!" );
+    SAL_WARN_IF( !xDispatchProvider.is(), "fwk", "Frame::Frame(): Slowest slave for dispatch- and interception helper is not valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" );
+    SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Frame::Frame(): Interception helper is not valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" );
+    SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Frame::Frame(): Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!" );
+    SAL_WARN_IF( !m_xDropTargetListener.is(), "fwk", "Frame::Frame(): DropTarget helper is not valid. Drag and drop without functionality!" );
 
     // establish notifies for changing of "disabled commands" configuration during runtime
     m_aCommandOptions.EstablisFrameCallback(this);
@@ -582,7 +582,7 @@ Frame::~Frame()
                 As result of this operation we return the new created component or nothing, if loading failed.
     @param      "sURL"              , URL, which represant the content
     @param      "sTargetFrameName"  , name of target frame or special value like "_self", "_blank" ...
-    @param      "nSearchFlags"      , optional arguments for frame search, if target isn't a special one
+    @param      "nSearchFlags"      , optional arguments for frame search, if target is not a special one
     @param      "lArguments"        , optional arguments for loading
     @return     A valid component reference, if loading was successfully.
                 A null reference otherwise.
@@ -731,7 +731,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
         }
 
         // If last active frame was active ...
-        // but new one isn't it ...
+        // but new one is not it ...
         // ... set it as active one.
         if  (
                 ( eActiveState          ==  E_ACTIVE    )   &&
@@ -806,7 +806,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                "Frame::initialized() is called more than once, which isnt useful nor allowed.",
+                "Frame::initialized() is called more than once, which is not useful nor allowed.",
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!
@@ -1139,7 +1139,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
         // II.III) TASKS
         //  This is a special flag. It regulate search on this task tree only or allow search on
         //  all other ones (which are sibling trees of us) too.
-        //  Upper search must stop at this frame if we are the topest one and the TASK flag isn't set
+        //  Upper search must stop at this frame if we are the topest one and the TASK flag is not set
         //  or we can ignore it if we have no valid parent.
 
         if (
@@ -1150,7 +1150,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
             // II.III.I) SIBLINGS
             //  Search on all our direct siblings - means all children of our parent.
-            //  Use this flag in combination with TASK. We must supress such upper search if
+            //  Use this flag in combination with TASK. We must suppress such upper search if
             //  user has not set it and if we are a top frame.
             //  Attention: Don't forward this request to our parent as a findFrame() call.
             //  In such case we must protect us against recursive calls.
@@ -2196,7 +2196,7 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
 
     @param      "aURL"              , URL for loading
     @param      "sTargetFrameName"  , name of target frame
-    @param      "nSearchFlags"      , additional flags to regulate search if sTargetFrameName isn't clear
+    @param      "nSearchFlags"      , additional flags to regulate search if sTargetFrameName is not clear
     @return     css::uno::Reference to dispatch handler.
 
     @onerror    A null reference is returned.
@@ -2207,7 +2207,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
 {
     const char UNO_PROTOCOL[] = ".uno:";
 
-    // Don't check incoming parameter here! Our helper do it for us and it isn't a good idea to do it more than ones!
+    // Don't check incoming parameter here! Our helper do it for us and it is not a good idea to do it more than ones!
     // But look for rejected calls!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -2242,7 +2242,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
 *//*-*****************************************************************************************************/
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Frame::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception )
 {
-    // Don't check incoming parameter here! Our helper do it for us and it isn't a good idea to do it more than ones!
+    // Don't check incoming parameter here! Our helper do it for us and it is not a good idea to do it more than ones!
     // But look for rejected calls!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -2610,7 +2610,7 @@ void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException, std::
 
     {
         SolarMutexGuard g;
-        SAL_WARN_IF( m_nExternalLockCount<=0, "fwk", "Frame::removeActionLock(): Frame isn't locked! Possible multithreading problem detected." );
+        SAL_WARN_IF( m_nExternalLockCount<=0, "fwk", "Frame::removeActionLock(): Frame is not locked! Possible multithreading problem detected." );
         --m_nExternalLockCount;
     }
 
@@ -3097,7 +3097,7 @@ void Frame::implts_checkSuicide()
     aReadLock.clear();
     /* } SAFE */
     // force close and deliver owner ship to source of possible throwed veto exception
-    // Attention: Because this method isn't designed to throw such exception we must suppress
+    // Attention: Because this method is not designed to throw such exception we must suppress
     // it for outside code!
     try
     {
@@ -3123,7 +3123,7 @@ void Frame::implts_checkSuicide()
 void Frame::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::XFrame2 >& xFrame ,
                             /*IN*/       bool                                   bState  )
 {
-    // Note: If start module isn't installed - no closer has to be shown!
+    // Note: If start module is not installed - no closer has to be shown!
     if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return;
 

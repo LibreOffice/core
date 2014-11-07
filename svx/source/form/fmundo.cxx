@@ -566,7 +566,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
         }
 
         // no Undo for transient and readonly props. But unfortunately "transient" is not only that the
-        // "transient" flag is set for the property in question, instead is is somewhat more complex
+        // "transient" flag is set for the property in question, instead it is somewhat more complex
         // Transience criterions are:
         // - the "transient" flag is set for the property
         // - OR the control has a non-empty COntrolSource property, i.e. is intended to be bound

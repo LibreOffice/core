@@ -859,7 +859,7 @@ public:
     inline const sfx2::LinkManager& GetLinkManager() const;
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
-     One can either change the margin "by" adding or substracting a given
+     One can either change the margin "by" adding or subtracting a given
      offset or set it "to" this position @param (bModulus = true). */
     bool IsMoveLeftMargin( bool bRight = true, bool bModulus = true ) const;
     void MoveLeftMargin( bool bRight = true, bool bModulus = true );

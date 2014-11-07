@@ -51,7 +51,7 @@ public:
         bar.
         Note that this value is not persistent.
         The flag can not be set directly at a DeckDescriptor object
-        because the ResourceManager gives access to to them only
+        because the ResourceManager gives access to them only
         read-only.
     */
     void SetIsDeckEnabled (

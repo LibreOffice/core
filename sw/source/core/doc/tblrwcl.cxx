@@ -4063,7 +4063,7 @@ static bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam
     else
     {
         // Set line height
-        // pLine is the following/preceeding, thus adjust it
+        // pLine is the following/preceding, thus adjust it
         if( TBLFIX_CHGPROP == rParam.nMode )
         {
             SwLayoutFrm* pLineFrm = GetRowFrm( *pLine );

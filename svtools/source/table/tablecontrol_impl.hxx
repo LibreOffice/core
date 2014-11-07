@@ -323,7 +323,7 @@ namespace svt { namespace table
         /** toggles the cursor visibility
 
             The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            situations where the they must not necessarily be fulfilled.
         */
         void        impl_ni_doSwitchCursor( bool _bOn );
 
@@ -356,7 +356,7 @@ namespace svt { namespace table
         /** updates all cached model values
 
             The method is not bound to the classes public invariants, as it's used in
-            situations where the they must not necessarily be fullfilled.
+            situations where the they must not necessarily be fulfilled.
         */
         void        impl_ni_updateCachedModelValues();
 

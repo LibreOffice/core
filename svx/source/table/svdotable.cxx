@@ -511,7 +511,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
             fixes fdo#59889 and resizing of table in edge dragging
             Total vertical edges in a NxN table is N+1, indexed from 0 to N and total Columns is N, indexed from 0 to N-1
             In LTR table vertical edge responsible for dragging of column x(x=0 to N-1) is, Edge x+1
-            But in RTL table vertical edge responisble for dragging of column x(x=0 to N-1, but from right to left)is, Edge x
+            But in RTL table vertical edge responsible for dragging of column x(x=0 to N-1, but from right to left)is, Edge x
             In LTR table dragging of edge 0(for RTL table edge N) does nothing.
             */
             //Todo: Implement Dragging functionality for leftmost edge of table.

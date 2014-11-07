@@ -286,8 +286,8 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
             //bSectionColumns = sal_True;
             break;
         }
-        case LwpLayout::StartOnNextPage:    //fall throught
-        case LwpLayout::StartOnOddPage: //fall throught
+        case LwpLayout::StartOnNextPage://fall through
+        case LwpLayout::StartOnOddPage: //fall through
         case LwpLayout::StartOnEvenPage:
         {
             LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());

@@ -167,7 +167,7 @@ public:
 //     |                       | 8mm
 //     |                       |
 //    Pt1============#        Pt2-- <----reference edge (from Pt1 to Pt2)
-//     #             #         |___ <-excess length of the auxiliary dimention line(s)
+//     #             #         |___ <-excess length of the auxiliary dimension line(s)
 //     #             #=========#
 //     # objected to be dimensioned #
 //     #=======================#

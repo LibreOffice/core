@@ -2474,7 +2474,7 @@ DNSServiceErrorType DNSSD_API DNSServiceSleepKeepalive
  * and report errors at compile-time if anything is wrong. The usual way to do this would
  * be to use a run-time "if" statement or the conventional run-time "assert" mechanism, but
  * then you don't find out what's wrong until you run the software. This way, if the assertion
- * condition is false, the array size is negative, and the complier complains immediately.
+ * condition is false, the array size is negative, and the compiler complains immediately.
  */
 
 struct CompileTimeAssertionChecks_DNS_SD

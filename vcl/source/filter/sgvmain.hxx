@@ -143,7 +143,7 @@ public:
     virtual ~Obj0Type() {}
 };
 
-#define ObjkSize 20                /* should be 21. due to allignment we shifted the flag */
+#define ObjkSize 20                /* should be 21. due to alignment we shifted the flag */
 class ObjkType: public Obj0Type {  // basic componenents of all Stardraw objects
 public:
     sal_uInt32     Last;

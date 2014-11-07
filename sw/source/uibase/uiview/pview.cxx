@@ -1323,7 +1323,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
     SetVisArea( Rectangle( Point(), aBottomRight ) );
 
     // Call of the DocSzChgd-Methode of the scrollbars is necessary,
-    // because from the maximum scoll range half the height of the
+    // because from the maximum scroll range half the height of the
     // VisArea is always deducted.
     if ( pVScrollbar && aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
     {

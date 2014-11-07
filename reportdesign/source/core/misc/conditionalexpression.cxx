@@ -93,7 +93,7 @@ namespace rptui
             "ConditionalExpression::matchExpression: unsupported pattern (more than one RHS occurrence)!" );
         // Also, an LHS must be present, and precede the RHS (if present)
         OSL_ENSURE( ( nLHSIndex != -1 ) && ( ( nLHSIndex < nRHSIndex ) || ( nRHSIndex == -1 ) ),
-            "ConditionalExpression::matchExpression: no LHS, or an RHS preceeding the LHS - this is not supported!" );
+            "ConditionalExpression::matchExpression: no LHS, or an RHS preceding the LHS - this is not supported!" );
 
         // up to the occurrence of the LHS (which must exist, see above), the two expressions
         // must be identical

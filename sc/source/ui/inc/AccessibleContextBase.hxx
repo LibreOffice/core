@@ -306,7 +306,7 @@ protected:
 
 private:
     /** Description of this object.  This is not a constant because it can
-        be set from the outside.  Furthermore, it changes according the the
+        be set from the outside.  Furthermore, it changes according to the
         draw page's display mode.
     */
     OUString msDescription;

@@ -424,7 +424,7 @@ void appendPath(
             // input begins with "../" -> remove from input
             //  i.e., !precedingSlash -> !precedingSlash
             // input begins with "/.." -> replace with "/" in input, and shrink
-            // output (not not yet done):
+            // output (not yet done):
             //  i.e., precedingSlash -> precedingSlash
             // input begins with "/../" -> replace with "/" in input, and shrink
             // output:

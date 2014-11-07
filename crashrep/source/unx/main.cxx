@@ -449,8 +449,8 @@ static void WriteSOAPRequest( FILE *fp, char* report_filename, char* description
         fclose( fpin );
     }
 
-// nowhere g_szStackfile actualy populated with something
-// so this endup trying to open "" which is ging to fail
+// nowhere g_szStackfile is actually populated with something
+// so this ends up trying to open "" which is going to fail
 // so what's the point ?
 #if 0
     fpin = fopen( g_szStackFile, "r" );

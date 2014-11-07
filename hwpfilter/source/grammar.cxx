@@ -545,7 +545,7 @@ yyparse(YYPARSE_PARAM_ARG)
   short yyssa[YYINITDEPTH]; /*  the state stack         */
   YYSTYPE yyvsa[YYINITDEPTH];   /*  the semantic value stack        */
 
-  short *yyss = yyssa;      /*  refer to the stacks thru separate pointers */
+  short *yyss = yyssa;      /*  refer to the stacks through separate pointers */
   YYSTYPE *yyvs = yyvsa;    /*  to allow yyoverflow to reallocate them elsewhere */
 
 #ifdef YYLSP_NEEDED
@@ -1045,7 +1045,7 @@ case 72:
 { yyval.ptr = new Node(ID_EXPR); yyval.ptr->child = yyvsp[0].ptr; debug("Expr : EndExpr\n");  nodelist.push_back(yyval.ptr);;
     break;}
 }
-   /* the action file gets copied in in place of this dollarsign */
+   /* the action file gets copied in place of this dollarsign */
 
   yyvsp -= yylen;
   yyssp -= yylen;

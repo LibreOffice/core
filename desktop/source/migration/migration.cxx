@@ -428,7 +428,7 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
     uno::Reference< XNameAccess > aMigrationAccess(getConfigAccess("org.openoffice.Setup/Migration/SupportedVersions"), uno::UNO_QUERY_THROW);
     uno::Reference< XNameAccess > xMigrationData( aMigrationAccess->getByName(rMigrationName), uno::UNO_QUERY_THROW );
 
-    // get migration description from from org.openoffice.Setup/Migration
+    // get migration description from org.openoffice.Setup/Migration
     // and build vector of migration steps
     OUString aMigrationSteps( "MigrationSteps" );
     uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName(aMigrationSteps), uno::UNO_QUERY_THROW);

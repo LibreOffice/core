@@ -204,7 +204,7 @@ void SvtMatchContext_Impl::execute( )
 // This method is called via AsynchronLink, so it has the SolarMutex and
 // calling solar code ( VCL ... ) is safe. It is called when the thread is
 // terminated ( finished work or stopped ). Cancelling the thread via
-// Cancellable does not not discard the information gained so far, it
+// Cancellable does not discard the information gained so far, it
 // inserts all collected completions into the listbox.
 
 IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )

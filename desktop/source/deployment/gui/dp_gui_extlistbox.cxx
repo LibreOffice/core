@@ -1102,8 +1102,8 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
             {
                 long nPos = iIndex - m_vEntries.begin();
 
-                // Entries mustn't removed here, because they contain a hyperlink control
-                // which can only be deleted when the thread has the solar mutex. Therefor
+                // Entries mustn't be removed here, because they contain a hyperlink control
+                // which can only be deleted when the thread has the solar mutex. Therefore
                 // the entry will be moved into the m_vRemovedEntries list which will be
                 // cleared on the next paint event
                 m_vRemovedEntries.push_back( *iIndex );

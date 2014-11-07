@@ -1489,7 +1489,7 @@ throw (uno::RuntimeException, std::exception)
 
     std::sort( vXShapes.begin(), vXShapes.end(), XShapePosCompareHelper() );
 
-    //get the the index of the selected object in the group
+    //get the index of the selected object in the group
     std::vector< uno::Reference<drawing::XShape> >::iterator aIter;
     //we start counting position from 1
     sal_Int32 nPos = 1;

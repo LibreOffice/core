@@ -138,7 +138,7 @@ Dim ogGroup As Object, vGroup() As Variant, vIndex() As Variant
 					If oRadios(i).TabIndex &gt; oRadios(i - 1).TabIndex + 1 Then
 						bFound = True
 					Else
-						Goto Error_Arg		&apos;	same group as preceeding item although name correct
+						Goto Error_Arg		&apos;	same group as preceding item although name correct
 					End If
 			End Select
 			If bFound Then

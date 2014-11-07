@@ -360,7 +360,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw lang::IllegalArgumentException(
-                OUString("Cant locate at least the model parameter."),
+                OUString("Can not locate at least the model parameter."),
                 static_cast< container::XSet* >(this),
                 0);
 
@@ -397,7 +397,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw lang::IllegalArgumentException(
-                OUString("Cant locate at least the model parameter."),
+                OUString("Can not locate at least the model parameter."),
                 static_cast< container::XSet* >(this),
                 0);
 

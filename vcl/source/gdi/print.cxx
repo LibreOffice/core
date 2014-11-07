@@ -144,7 +144,7 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
     {
         // get service provider
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierachical access name
+        // create configuration hierarchical access name
         try
         {
             xConfigProvider = theDefaultProvider::get( xContext );

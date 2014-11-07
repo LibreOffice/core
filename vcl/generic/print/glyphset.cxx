@@ -95,7 +95,7 @@ GlyphSet::LookupCharID (
     char_list_t::iterator aGlyphSet;
     sal_Int32             nGlyphSetID;
 
-    // loop thru all the font subsets
+    // loop through all the font subsets
     for (aGlyphSet  = maCharList.begin(), nGlyphSetID = 1;
          aGlyphSet != maCharList.end();
          ++aGlyphSet, nGlyphSetID++)
@@ -126,7 +126,7 @@ GlyphSet::LookupGlyphID (
     glyph_list_t::iterator aGlyphSet;
     sal_Int32             nGlyphSetID;
 
-    // loop thru all the font subsets
+    // loop through all the font subsets
     for (aGlyphSet  = maGlyphList.begin(), nGlyphSetID = 1;
          aGlyphSet != maGlyphList.end();
          ++aGlyphSet, nGlyphSetID++)
@@ -604,7 +604,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
 
     PrintFontManager &rMgr = rGfx.GetFontMgr();
 
-    // loop thru all the font subsets
+    // loop through all the font subsets
     sal_Int32               nGlyphSetID = 0;
     char_list_t::iterator   aGlyphSet;
     for (aGlyphSet = maCharList.begin(); aGlyphSet != maCharList.end(); ++aGlyphSet)
@@ -648,7 +648,7 @@ GlyphSet::PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx)
         }
 
         ps_mapping_t::const_iterator aSortedGlyph;
-        // loop thru all the glyphs in the subset
+        // loop through all the glyphs in the subset
         for (aSortedGlyph  = (aSortedGlyphSet).begin();
              aSortedGlyph != (aSortedGlyphSet).end();
              ++aSortedGlyph)
@@ -755,7 +755,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     sal_uInt16 pTTGlyphMapping[256];
     const bool bAllowCID = false; // TODO: nPSLanguageLevel>=3
 
-    // loop thru all the font subsets
+    // loop through all the font subsets
     sal_Int32 nCharSetID;
     char_list_t::iterator aCharSet;
     for (aCharSet = maCharList.begin(), nCharSetID = 1;
@@ -765,7 +765,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         if ((*aCharSet).empty())
             continue;
 
-        // loop thru all the chars in the subset
+        // loop through all the chars in the subset
         char_map_t::const_iterator aChar;
         sal_Int32 n = 0;
         for (aChar = (*aCharSet).begin(); aChar != (*aCharSet).end(); ++aChar)
@@ -787,7 +787,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         rSuppliedFonts.push_back( aCharSetName );
     }
 
-    // loop thru all the font glyph subsets
+    // loop through all the font glyph subsets
     sal_Int32 nGlyphSetID;
     glyph_list_t::iterator aGlyphSet;
     for (aGlyphSet = maGlyphList.begin(), nGlyphSetID = 1;
@@ -797,7 +797,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
         if ((*aGlyphSet).empty())
             continue;
 
-        // loop thru all the glyphs in the subset
+        // loop through all the glyphs in the subset
         glyph_map_t::const_iterator aGlyph;
         sal_Int32 n = 0;
         for (aGlyph = (*aGlyphSet).begin(); aGlyph != (*aGlyphSet).end(); ++aGlyph)

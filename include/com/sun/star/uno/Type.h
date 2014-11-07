@@ -45,7 +45,7 @@ enum UnoType_NoAcquire
     UNO_TYPE_NO_ACQUIRE
 };
 
-/** C++ class representing an IDL meta type. This class is used to represent a a type,
+/** C++ class representing an IDL meta type. This class is used to represent a type,
     i.e. a type name and its type class.
     Internally the type holds a C type description reference of the runtime.
     You can obtain a full type description of a type by calling member function getDescription().

@@ -52,7 +52,7 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
     get(m_pBtnOk, "ok");
     get(m_pBtnCancel, "cancel");
 
-    //  in order to keep the the Strings with the FixedTexts in the resource:
+    // in order to keep the Strings with the FixedTexts in the resource:
     Init();
     SetDispatcherLock( true ); // activate modal mode
 }

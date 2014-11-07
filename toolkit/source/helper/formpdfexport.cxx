@@ -487,7 +487,7 @@ namespace toolkitform
                     const bool bDocumentLocalTarget = sURL.startsWith("#");
                     if ( bDocumentLocalTarget )
                     {
-                        // Register the destination for for future handling ...
+                        // Register the destination for future handling ...
                         pButtonWidget->Dest = i_pdfExportData.RegisterDest();
 
                         // and put it into the bookmarks, to ensure the future handling really happens

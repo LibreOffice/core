@@ -805,7 +805,7 @@ public:
     // - without any connection to any node,
     // - or connected on one end to a node, while the other end is not connected,
     // - or connected on both ends with exactly one node each.
-    // The edge is listener for its upto two nodes.
+    // The edge is listener for its up to two nodes.
     // Whenever a node is moved or resized, all its connected edges follow.
     // This is also true for SetGluePoint()... on the node.
     // On the other hand, moving/resizing an edge breaks the connection.

@@ -575,7 +575,7 @@ System::String^ mapPolymorphicName(System::String^ unoName, bool bCliToUno)
             System::String ^ sParam = unoName->Substring(index, cur - index);
             //skip the comma
             cur++;
-            //the the index to the beginning of the next param
+            //the index to the beginning of the next param
             index = cur;
             if (bCliToUno)
             {

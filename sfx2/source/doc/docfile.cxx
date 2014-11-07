@@ -1737,7 +1737,7 @@ void SfxMedium::Transfer_Impl()
         aNameURL = pImp->pTempFile->GetURL();
     else if ( !pImp->m_aLogicName.isEmpty() && pImp->m_bSalvageMode )
     {
-        // makes sence only in case logic name is set
+        // makes sense only in case logic name is set
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aNameURL ) )
             SAL_WARN( "sfx.doc", "The medium name is not convertible!" );
     }
@@ -2209,7 +2209,7 @@ void SfxMedium::GetLockingStream_Impl()
 
             if ( !pImp->pTempFile && pImp->m_aName.isEmpty() )
             {
-                // the medium is still based on the original file, it makes sence to initialize the streams
+                // the medium is still based on the original file, it makes sense to initialize the streams
                 if ( pImp->m_xLockingStream.is() )
                     pImp->xStream = pImp->m_xLockingStream;
 

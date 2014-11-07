@@ -280,7 +280,7 @@ typedef struct
 /*  FontInfo
  *  Record type containing pointers to all of the other data
  *  structures containing information about a font.
- *  A a record of this type is filled with data by the
+ *  A record of this type is filled with data by the
  *  parseFile function.
  */
 typedef struct

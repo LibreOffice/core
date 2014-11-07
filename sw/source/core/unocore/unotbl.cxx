@@ -4247,7 +4247,7 @@ void SwXCellRange::GetDataSequence(
                                 // system language is probably not the best possible choice
                                 // but since we have to guess anyway (because the language of at
                                 // the text is NOT the one used for the number format!)
-                                // it is at least conform to to what is used in
+                                // it is at least conform to what is used in
                                 // SwTableShell::Execute when
                                 // SID_ATTR_NUMBERFORMAT_VALUE is set...
                                 LanguageType eLang = LANGUAGE_SYSTEM;
