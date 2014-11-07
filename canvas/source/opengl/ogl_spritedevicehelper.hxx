@@ -19,6 +19,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "ogl_buffercontext.hxx"
+#include "ogl_renderHelper.hxx"
 
 #include <glm/glm.hpp>
 #include <set>
@@ -116,7 +117,12 @@ namespace oglcanvas
         /// Get instance of internal texture cache
         TextureCache& getTextureCache() const;
 
+        ///Get instance of internal RenderHelper;
+        RenderHelper* getRenderHelper();
+
         bool activateWindowContext();
+
+
 
     private:
         void resize( const ::basegfx::B2IVector& rNewSize );
@@ -147,6 +153,7 @@ namespace oglcanvas
         unsigned int                                       mnRectangularMultiColorGradientProgram;
 
         OpenGLContext maContext;
+        RenderHelper                                      mRenderHelper;
     };
 }
 

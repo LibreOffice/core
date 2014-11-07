@@ -47,7 +47,6 @@ namespace oglcanvas
         ::canvas::tools::setIdentityAffineMatrix2D(maTransformation);
         maCanvasHelper.init( *rRefDevice.get(),
                              rDeviceHelper );
-        mRenderHelper.SetVP(1600, 900);//is this right?
     }
 
     void CanvasCustomSprite::disposeThis()
@@ -55,7 +54,6 @@ namespace oglcanvas
         ::osl::MutexGuard aGuard( m_aMutex );
 
         mpSpriteCanvas.clear();
-        mRenderHelper.dispose();
         // forward to parent
         CanvasCustomSpriteBaseT::disposeThis();
     }
@@ -132,10 +130,10 @@ namespace oglcanvas
         if( ::basegfx::fTools::equalZero( mfAlpha ) )
             return true;
 
-        const ::basegfx::B2IVector aSpriteSizePixel(
+        const glm::vec2 aSpriteSizePixel(
             ::canvas::tools::roundUp( maSize.Width ),
             ::canvas::tools::roundUp( maSize.Height ));
-
+        RenderHelper* pRenderHelper = maCanvasHelper.getDeviceHelper()->getRenderHelper();
             IBufferContextSharedPtr pBufferContext;
             if( mfAlpha != 1.0 || mxClip.is() )
             {
@@ -161,7 +159,7 @@ namespace oglcanvas
                         maTransformation.m02, maTransformation.m12, 0, 1
                     );
 
-                mRenderHelper.SetModelAndMVP(translate * aGLTransform);
+                pRenderHelper->SetModelAndMVP(translate * aGLTransform);
                 // content ended up in background buffer - compose to
                 // screen now. Calls below switches us back to window
                 // context, and binds to generated, dynamic texture
@@ -197,8 +195,8 @@ namespace oglcanvas
                             rTriangulatedPolygon,
                             basegfx::B2DRange(
                                 0,0,
-                                aSpriteSizePixel.getX(),
-                                aSpriteSizePixel.getY())));
+                                aSpriteSizePixel.x,
+                                aSpriteSizePixel.y)));
 
                     GLfloat vertices[rTriangulatedPolygon.count()*2];
                     for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
@@ -207,29 +205,29 @@ namespace oglcanvas
                         vertices[i*2]= rPt.getX();
                         vertices[i*2+1]= rPt.getY();
                     }
-                    mRenderHelper.renderVertexTex( vertices, fWidth, fHeight,  color, GL_TRIANGLES);
+                    pRenderHelper->renderVertexTex( vertices, fWidth, fHeight,  color, GL_TRIANGLES);
                 }
                 else
                 {
-                    const double fWidth=maSize.Width/aSpriteSizePixel.getX();
-                    const double fHeight=maSize.Height/aSpriteSizePixel.getY();
+                    const double fWidth=maSize.Width/aSpriteSizePixel.x;
+                    const double fHeight=maSize.Height/aSpriteSizePixel.y;
 
                     GLfloat vertices[] = {0, 0,
-                                          0, (float) aSpriteSizePixel.getY(),
-                                          (float) aSpriteSizePixel.getX(), 0,
-                                          (float) aSpriteSizePixel.getX(), (float) aSpriteSizePixel.getY() };
+                                          0, (float) aSpriteSizePixel.y,
+                                          (float) aSpriteSizePixel.x, 0,
+                                          (float) aSpriteSizePixel.x, (float) aSpriteSizePixel.y };
                     GLfloat uvCoordinates[] = {0, 0,
                                                0, (float) fHeight,
                                                (float) fWidth, 0,
                                                (float) fWidth, (float) fHeight };
 
-                    mRenderHelper.renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
+                    pRenderHelper->renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
                 }
 
                 glBindTexture(GL_TEXTURE_2D, 0);
             }
         // translate sprite to output position
-        mRenderHelper.SetModelAndMVP(translate);
+        pRenderHelper->SetModelAndMVP(translate);
         GLfloat vertices[] = {-2, -2,
                               -2, (float) maSize.Height+4,
                               (float) maSize.Width+4, (float) maSize.Height+4,
@@ -237,7 +235,7 @@ namespace oglcanvas
                               -2, -2,
                               (float) maSize.Width+4, (float) maSize.Height+4 };
 
-        mRenderHelper.renderVertexConstColor(vertices, glm::vec4(1, 0, 0, 1), GL_LINE_STRIP);
+        pRenderHelper->renderVertexConstColor(vertices, glm::vec4(1, 0, 0, 1), GL_LINE_STRIP);
 
         std::vector<double> aVec;
         aVec.push_back(mfAlpha);

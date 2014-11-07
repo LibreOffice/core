@@ -19,12 +19,11 @@ namespace oglcanvas
         void SetVP(int width, int height);
         void SetModelAndMVP(glm::mat4 mat);
         void dispose();
+        void  InitOpenGL();
 
     private:
         RenderHelper&  operator = (const RenderHelper& other);
         RenderHelper(const RenderHelper& other);
-
-        void  InitOpenGL();
 
         GLuint                                            m_vertexBuffer;
         GLuint                                            m_uvBuffer;

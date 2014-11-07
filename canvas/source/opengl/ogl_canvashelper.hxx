@@ -230,8 +230,6 @@ namespace oglcanvas
             copied (used e.g. for CanvasBitmap)
          */
         RecordVectorT                                mpRecordedActions;
-
-        RenderHelper                                 mRenderHelper;
     };
 }
 

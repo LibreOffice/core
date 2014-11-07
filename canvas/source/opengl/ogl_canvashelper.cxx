@@ -93,61 +93,86 @@ namespace oglcanvas
 
     namespace
     {
-        bool lcl_drawPoint( const CanvasHelper&              /*rHelper*/,
+        bool lcl_drawPoint( const CanvasHelper&              rHelper,
                             const ::basegfx::B2DHomMatrix&   rTransform,
                             GLenum                           eSrcBlend,
                             GLenum                           eDstBlend,
                             const rendering::ARGBColor&      rColor,
-                            const geometry::RealPoint2D&     rPoint,
-                            RenderHelper& mRenderHelper)
+                            const geometry::RealPoint2D&     rPoint)
         {
-            mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
                                 (float) rColor.Alpha);
             GLfloat vertices[] = {(float) rPoint.X, (float) rPoint.Y};
-            mRenderHelper.renderVertexConstColor(vertices, color, GL_POINTS);
+            pRenderHelper->renderVertexConstColor(vertices, color, GL_POINTS);
             return true;
         }
 
-        bool lcl_drawLine( const CanvasHelper&              /*rHelper*/,
+        bool lcl_drawLine( const CanvasHelper&              rHelper,
                            const ::basegfx::B2DHomMatrix&   rTransform,
                            GLenum                           eSrcBlend,
                            GLenum                           eDstBlend,
                            const rendering::ARGBColor&      rColor,
                            const geometry::RealPoint2D&     rStartPoint,
-                           const geometry::RealPoint2D&     rEndPoint,
-                           RenderHelper& mRenderHelper)
+                           const geometry::RealPoint2D&     rEndPoint)
         {
-            mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
                                 (float) rColor.Alpha);
             GLfloat vertices[] = {(float) rStartPoint.X, (float) rStartPoint.Y,
                                   (float) rEndPoint.X, (float) rEndPoint.Y };
-            mRenderHelper.renderVertexConstColor(vertices, color, GL_LINES);
+            pRenderHelper->renderVertexConstColor(vertices, color, GL_LINES);
             return true;
         }
 
-        bool lcl_drawPolyPolygon( const CanvasHelper&                    /*rHelper*/,
+        bool lcl_drawPolyPolygon( const CanvasHelper&                    rHelper,
                                   const ::basegfx::B2DHomMatrix&         rTransform,
                                   GLenum                                 eSrcBlend,
                                   GLenum                                 eDstBlend,
                                   const rendering::ARGBColor&            rColor,
-                                  const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
+                                  const ::basegfx::B2DPolyPolygonVector& rPolyPolygons)
         {
-            //move renderPolyPolygon here?
-         //   mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
                                 (float) rColor.Alpha);
+
             ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
             while( aCurr != aEnd )
-                renderPolyPolygon(*aCurr++);
+            {
+               // renderPolyPolygon(*aCurr++);
+               const ::basegfx::B2DPolyPolygon& rPolyPoly= *aCurr++;
+                ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
+                if( aPolyPoly.areControlPointsUsed() )
+                    aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
+
+                for( sal_uInt32 i=0; i<aPolyPoly.count(); i++ )
+                {
+
+
+                    const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
+
+                    const sal_uInt32 nPts=rPolygon.count();
+                    const sal_uInt32 nExtPts=nPts + int(rPolygon.isClosed());
+                    GLfloat vertices[nExtPts*2];
+                    for( sal_uInt32 j=0; j<nExtPts; j++ )
+                    {
+                        const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
+                        vertices[j*2] = rPt.getX();
+                        vertices[j*2+1] = rPt.getY();
+                    }
+                    pRenderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
+                }
+            }
 
             return true;
         }
@@ -271,11 +296,11 @@ namespace oglcanvas
                                     const rendering::ARGBColor&      rColor,
                                     const geometry::IntegerSize2D&   rPixelSize,
                                     const uno::Sequence<sal_Int8>&   rPixelData,
-                                    sal_uInt32                       nPixelCrc32,
-                                    RenderHelper&                    mRenderHelper)
+                                    sal_uInt32                       nPixelCrc32)
 
         {
-            mRenderHelper.SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
 
             const unsigned int nTexId=rHelper.getDeviceHelper()->getTextureCache().getTexture(
                 rPixelSize, rPixelData.getConstArray(), nPixelCrc32);
@@ -303,7 +328,7 @@ namespace oglcanvas
                                        0, 1,
                                        1, 0,
                                        1, 1 };
-            mRenderHelper.renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
+            pRenderHelper->renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
 
             glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -389,7 +414,6 @@ namespace oglcanvas
         mpDeviceHelper( NULL ),
         mpRecordedActions()
     {
-       mRenderHelper.SetVP(1600, 900);//is this right?
     }
 
     CanvasHelper::~CanvasHelper()
@@ -436,7 +460,7 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maFunction = ::boost::bind(&lcl_drawPoint,
                                             _1,_2,_3,_4,_5,
-                                            aPoint, boost::ref(mRenderHelper));
+                                            aPoint);
         }
     }
 
@@ -453,8 +477,7 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
             rAct.maFunction = ::boost::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
-                                            aStartPoint,aEndPoint,
-                                            boost::ref(mRenderHelper));
+                                            aStartPoint,aEndPoint);
         }
     }
 
@@ -477,7 +500,7 @@ namespace oglcanvas
                                             geometry::RealPoint2D(
                                                 aBezierSegment.Px,
                                                 aBezierSegment.Py),
-                                            aEndPoint, boost::ref(mRenderHelper));
+                                            aEndPoint);
         }
     }
 
@@ -499,7 +522,7 @@ namespace oglcanvas
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
 
-            rAct.maFunction = &lcl_drawPolyPolygon;
+          //  rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
         // TODO(P1): Provide caching here.
@@ -526,7 +549,7 @@ namespace oglcanvas
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
 
             // TODO(F3): fallback to drawPolyPolygon currently
-            rAct.maFunction = &lcl_drawPolyPolygon;
+          //  rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
         // TODO(P1): Provide caching here.
@@ -881,8 +904,7 @@ namespace oglcanvas
                                                     aSize, aARGBBytes,
                                                     rtl_crc32(0,
                                                               aARGBBytes.getConstArray(),
-                                                              aARGBBytes.getLength()),
-                                                    boost::ref(mRenderHelper));
+                                                              aARGBBytes.getLength()));
                 }
                 // TODO(F1): handle non-integer case
             }

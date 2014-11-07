@@ -5,17 +5,17 @@ namespace oglcanvas
 {
     RenderHelper::RenderHelper()
     : m_iWidth(1600) //Why this dimensions?
-    , m_iHeight(900)
+    , m_iHeight(900) //Whole window, see spritedevicehelper
     , m_Model(glm::mat4(1.0f))
     {
-        InitOpenGL();
     }
     void RenderHelper::InitOpenGL()
     {
+        GLenum err = glewInit();
         //Load Shaders //
         m_texManProgID = OpenGLHelper::LoadShaders("textManipulatingVertexShader", "textFragmentShader");
         m_simpleProgID = OpenGLHelper::LoadShaders("simpleVertexShader", "textFragmentShader");
-        m_texProgID = OpenGLHelper::LoadShaders("texVertrexShader", "constantFragmentShader");
+        m_texProgID = OpenGLHelper::LoadShaders("texVertexShader", "constantFragmentShader");
         // Get a handle for uniforms
         m_manTexUnf = glGetUniformLocation(m_texManProgID, "TextTex");
         m_simpleTexUnf = glGetUniformLocation(m_simpleProgID, "TextTex");

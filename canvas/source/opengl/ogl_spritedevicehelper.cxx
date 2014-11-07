@@ -108,6 +108,8 @@ namespace oglcanvas
         maContext.init(&rWindow);
         // init window context
         initContext();
+        mRenderHelper.InitOpenGL();
+        mRenderHelper.SetVP(1600, 900);//is this right?
 
         mnLinearMultiColorGradientProgram =
             OpenGLHelper::LoadShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader");
@@ -149,6 +151,7 @@ namespace oglcanvas
             glDeleteProgram( mnLinearTwoColorGradientProgram );
             glDeleteProgram( mnLinearMultiColorGradientProgram );
         }
+        mRenderHelper.dispose();
     }
 
     geometry::RealSize2D SpriteDeviceHelper::getPhysicalResolution()
@@ -593,6 +596,11 @@ namespace oglcanvas
     TextureCache& SpriteDeviceHelper::getTextureCache() const
     {
         return *mpTextureCache;
+    }
+
+    RenderHelper* SpriteDeviceHelper::getRenderHelper()
+    {
+        return &    mRenderHelper;
     }
 }
 

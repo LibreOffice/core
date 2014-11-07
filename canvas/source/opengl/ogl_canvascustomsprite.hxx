@@ -92,7 +92,6 @@ namespace oglcanvas
         ::basegfx::B2DPoint                               maPosition;
         double                                            mfAlpha;
         double                                            mfPriority;
-        RenderHelper                                      mRenderHelper;
     };
 }
 
