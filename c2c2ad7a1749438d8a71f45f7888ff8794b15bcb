@@ -1,0 +1,718 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a016987_26be1600",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "this should read \u0027By default, it is enabled on Windows and Mac and disabled on Linux\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_c63bc29b",
+        "filename": "connectivity/source/drivers/postgresql/pq_databasemetadata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 2403,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "the original wording was better \u0027a table\u0027s index descriptions\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_a640c608",
+        "filename": "cppuhelper/source/interfacecontainer.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027compare the pointer directly\u0027\n\u0027it is much\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_8645ca18",
+        "filename": "cppuhelper/source/interfacecontainer.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "more faster -\u003e faster",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_664bee2c",
+        "filename": "crashrep/source/unx/main.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "endup -\u003e ends up\nging -\u003e going",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_4648f22d",
+        "filename": "dbaccess/source/ui/dlg/generalpage.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027if the new one is the\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_2655f6c5",
+        "filename": "dbaccess/source/ui/inc/QueryTableView.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027not existing yet\u0027\nor\n\u0027if it does not yet exist\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_0652fadd",
+        "filename": "dbaccess/source/ui/inc/unodatbr.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027in reality\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_e65d9eed",
+        "filename": "dbaccess/source/ui/querydesign/QueryMoveTabWinUndoAct.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "substract -\u003e substract",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_c662a2ad",
+        "filename": "desktop/source/deployment/gui/dp_gui_extlistbox.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1105,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "musn\u0027t be removed",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_a657a6c9",
+        "filename": "filter/source/graphicfilter/itiff/ccidecom.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027an accidental key press\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_865caaee",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5956,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "steamm -\u003e stream",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_6672ce7e",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027They use the\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_466fd292",
+        "filename": "framework/source/services/pathsettings.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "uspported -\u003e supported",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_266cd69b",
+        "filename": "framework/source/services/pathsettings.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 692,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "represents a",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_0669da8b",
+        "filename": "i18nlangtag/source/isolang/langid.pl",
+        "patchSetId": 6
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "xx and yy may themselves be",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_e6047ec7",
+        "filename": "include/editeng/unoedsrc.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "chara -\u003e char",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_c60982df",
+        "filename": "include/editeng/unoedsrc.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "chara -\u003e char",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_a60e86e3",
+        "filename": "include/osl/process.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "remove the \u0027therefore\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_86138a0d",
+        "filename": "include/tools/rtti.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027an object\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_66f9aec8",
+        "filename": "javaunohelper/com/sun/star/lib/uno/adapter/OutputStreamToXOutputStreamAdapter.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027an UNO\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_46f6b2d8",
+        "filename": "jurt/com/sun/star/comp/servicemanager/ServiceManager.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "factorys -\u003e factories",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_0600baa9",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleTextType.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "it is -\u003e is",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_2603b6ba",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleTextType.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027a sentence is, is implementation\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_e62b5e32",
+        "filename": "offapi/com/sun/star/accessibility/AccessibleTextType.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027a paragraph is, is implementation\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_c63062a1",
+        "filename": "offapi/com/sun/star/accessibility/XAccessible.idl",
+        "patchSetId": 6
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "the original was correct",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_a625665d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 5483,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "the original was correct",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_862a6a2b",
+        "filename": "qadevOOo/runner/helper/URLHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027It exists to\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_66208e4a",
+        "filename": "qadevOOo/tests/java/ifc/container/_XNameReplace.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "existing",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_461d920e",
+        "filename": "sc/qa/unit/filters-test.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "remove the \u0027is\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_261a9618",
+        "filename": "sc/source/filter/xml/XMLTableShapeResizer.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027is therefore incorrect\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_06179aee",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027Can we disable parentheses\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_e6d23e34",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "you can\u0027t change this, it references stuff in code and in other XML files",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_26f176ce",
+        "filename": "starmath/source/mathmlexport.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "differrence-\u003e difference",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_e6b91eee",
+        "filename": "svtools/source/misc/templatefoldercache.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "\u0027which act on an\u0027",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_86b82ae7",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3453,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "dropped a word?",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_66ce4e85",
+        "filename": "sw/source/core/layout/frmtool.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "extreme",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_46cb5273",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3426,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "I think in this case we should just add a period (.) since it looks like the start of a new sentence",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_26c85674",
+        "filename": "unotools/source/config/dynamicmenuoptions.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "supeflous -\u003e superflous",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_06c55a5a",
+        "filename": "vcl/source/gdi/bitmap4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1133,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "Unsharepn -\u003e Unsharpen\nblured -\u003e blurred",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_e6a0fea7",
+        "filename": "vcl/source/gdi/bitmap4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "blured -\u003e blurred",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a016987_c6a502b6",
+        "filename": "vcl/unx/generic/window/salframe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3683,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-11-07T10:28:10Z",
+      "side": 1,
+      "message": "the original was correct in this case",
+      "revId": "c2c2ad7a1749438d8a71f45f7888ff8794b15bcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
