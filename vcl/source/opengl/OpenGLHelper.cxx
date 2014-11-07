@@ -86,7 +86,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
             SAL_WARN("vcl.opengl", "vertex shader compile for " << rVertexShaderName << " failed : " << &VertexShaderErrorMessage[0]);
         }
         else
-            SAL_WARN("vcl.opengl", "vertex shader compile failed without error log");
+            SAL_WARN("vcl.opengl", "vertex shader: " << rVertexShaderName << " compile failed without error log");
 
         return 0;
     }
