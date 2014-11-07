@@ -279,7 +279,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
                 m_xGraphicObject.clear();
             else
             {
-                m_xGraphicObject = GraphicObject::create( m_xContext );
+                m_xGraphicObject = graphic::GraphicObject::create( m_xContext );
                 m_xGraphicObject->setGraphic( xGraphic );
             }
 
