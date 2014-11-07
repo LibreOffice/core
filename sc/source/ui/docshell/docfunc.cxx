@@ -5039,8 +5039,6 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi
 
         bDone = ModifyRangeNames( aNewRanges, aTab );
 
-        aModificator.SetDocumentModified();
-        SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
     }
 
     return bDone;
