@@ -360,7 +360,8 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
 
 bool OpenGLHelper::supportsVCLOpenGL()
 {
-    return true;
+    static bool bDisableGL = !getenv("SAL_DISABLEGL");
+    return bDisableGL;
 }
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
