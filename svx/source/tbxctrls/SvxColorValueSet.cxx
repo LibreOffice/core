@@ -162,22 +162,19 @@ Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntry
     SetStyle(aWinBits);
     Size aNewSize(CalcWindowSizePixel(aItemSize, getColumnCount()));
 
-    // evtl. activate vertical scroll
-    const bool bAdaptHeight(static_cast< sal_uInt32 >(aNewSize.Height()) > nHeight);
-
-    if(bAdaptHeight)
-    {
-        SetStyle(aWinBits|WB_VSCROLL);
-        aNewSize = CalcWindowSizePixel(aItemSize, getColumnCount());
-    }
-
+    const Size aItemSizePixel(CalcItemSizePixel(aItemSize));
     // calculate field height and available height for requested height
     const sal_uInt32 nFieldHeight(aNewSize.Height() - aSizeNoScrollNoFields.Height());
-    const sal_uInt32 nAvailableHeight(nHeight >= nFieldHeight ? nHeight - nFieldHeight : 0);
+    const sal_uInt32 nAvailableHeight(nHeight >= nFieldHeight ? nHeight - nFieldHeight + aItemSizePixel.Height() - 1 : 0);
 
     // calculate how many lines can be shown there
-    const Size aItemSizePixel(CalcItemSizePixel(aItemSize));
-    const sal_uInt32 nLineCount((nAvailableHeight + aItemSizePixel.Height() - 1) / aItemSizePixel.Height());
+    const sal_uInt32 nLineCount(nAvailableHeight / aItemSizePixel.Height());
+    const sal_uInt32 nLineMax(ceil(double(nEntryCount)/getColumnCount()));
+
+    if(nLineMax > nLineCount)
+    {
+        SetStyle(aWinBits|WB_VSCROLL);
+    }
 
     // set height to wanted height
     aNewSize.Height() = nHeight;
