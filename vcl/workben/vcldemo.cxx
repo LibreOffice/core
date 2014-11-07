@@ -80,6 +80,66 @@ public:
     virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
+
+    std::vector<Rectangle> partitionAndClear(int nX, int nY);
+
+    void drawBackground()
+    {
+        Rectangle r(Point(0,0), GetSizePixel());
+        Gradient aGradient;
+        aGradient.SetStartColor(COL_BLUE);
+        aGradient.SetEndColor(COL_GREEN);
+        aGradient.SetStyle(GradientStyle_LINEAR);
+//        aGradient.SetBorder(r.GetSize().Width()/20);
+        DrawGradient(r, aGradient);
+    }
+
+    void drawRadialLines(Rectangle r)
+    {
+        SetFillColor(Color(COL_LIGHTRED));
+        SetLineColor(Color(COL_LIGHTGREEN));
+        DrawRect( r );
+
+        for(int i=0; i<r.GetHeight(); i+=15)
+            DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
+        for(int i=0; i<r.GetWidth(); i+=15)
+            DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
+    }
+
+    void drawText(Rectangle r)
+    {
+        SetTextColor( Color( COL_BLACK ) );
+        vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
+        SetFont( aFont );
+        DrawText( r, OUString( "Just a simple text" ) );
+    }
+
+    void drawPoly(Rectangle r) // pretty
+    {
+        Polygon aPoly(r, r.TopLeft(), r.TopRight());
+        SetLineColor(Color(COL_RED));
+//        DrawPolyLine(aPoly);
+    }
+
+    void drawPolyPoly(Rectangle r)
+    {
+        (void)r;
+    }
+
+    void drawCheckered(Rectangle r)
+    {
+        DrawCheckered(r.TopLeft(), r.GetSize());
+    }
+    void drawGradient(Rectangle r)
+    {
+        Gradient aGradient;
+        aGradient.SetStartColor(COL_BLUE);
+        aGradient.SetEndColor(COL_GREEN);
+//        aGradient.SetAngle(45);
+        aGradient.SetStyle(GradientStyle_LINEAR);
+        aGradient.SetBorder(r.GetSize().Width()/20);
+        DrawGradient(r, aGradient);
+    }
 };
 
 void Main()
@@ -124,28 +184,56 @@ void MyWin::KeyUp( const KeyEvent& rKEvt )
     WorkWindow::KeyUp( rKEvt );
 }
 
+std::vector<Rectangle> MyWin::partitionAndClear(int nX, int nY)
+{
+    Rectangle r;
+    std::vector<Rectangle> aRegions;
+
+    // Make small cleared area for these guys
+    Size aSize(GetSizePixel());
+    long nBorderSize = aSize.Width() / 32;
+    long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
+    long nBoxHeight = (aSize.Height() - nBorderSize*(nX+1)) / nY;
+//    SL_DEBUG("Size " << aSize << " boxes " << nBoxWidth << "x" << nBoxHeight << " border " << nBorderSize);
+    for (int y = 0; y < nY; y++ )
+    {
+        for (int x = 0; x < nX; x++ )
+        {
+            r.SetPos(Point(nBorderSize + (nBorderSize + nBoxWidth) * x,
+                           nBorderSize + (nBorderSize + nBoxHeight) * y));
+            r.SetSize(Size(nBoxWidth, nBoxHeight));
+
+            // knock up a nice little border
+            SetLineColor(COL_GRAY);
+            SetFillColor(COL_LIGHTGRAY);
+            if ((x + y) % 2)
+                DrawRect(r);
+            else
+                DrawRect(r);
+//              DrawRect(r, nBorderSize, nBorderSize); FIXME - lfrb
+
+            aRegions.push_back(r);
+        }
+    }
+
+    return aRegions;
+}
+
 void MyWin::Paint( const Rectangle& rRect )
 {
     fprintf(stderr, "MyWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
 
-    Size aSz(GetSizePixel());
-    Point aPt;
-    Rectangle r(aPt, aSz);
+    drawBackground();
 
-    SetFillColor(Color(COL_BLUE));
-    SetLineColor(Color(COL_YELLOW));
+    std::vector<Rectangle> aRegions(partitionAndClear(4,3));
 
-    DrawRect( r );
-
-    for(int i=0; i<aSz.Height(); i+=15)
-        DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
-    for(int i=0; i<aSz.Width(); i+=15)
-        DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
-
-    SetTextColor( Color( COL_WHITE ) );
-    vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
-    SetFont( aFont );
-    DrawText( Point( 20, 30 ), OUString( "Just a simple test text" ) );
+    int i = 0;
+    drawRadialLines(aRegions[i++]);
+    drawText(aRegions[i++]);
+    drawPoly(aRegions[i++]);
+    drawPolyPoly(aRegions[i++]);
+    drawCheckered(aRegions[i++]);
+    drawGradient(aRegions[i++]);
 }
 
 void MyWin::Resize()
