@@ -308,19 +308,23 @@ void ScCalcOptionsDialog::fillOpenCLList()
 
 namespace {
 
-    void fillListBox(ListBox* pListBox, const ScCalcConfig::OpenCLImplSet& rSet)
+OUString format(const ScCalcConfig::OpenCLImpl& rImpl)
+{
+    return (rImpl.maOS + " " +
+            rImpl.maOSVersion + " " +
+            rImpl.maPlatformVendor + " " +
+            rImpl.maDevice + " " +
+            rImpl.maDriverVersion);
+}
+
+void fillListBox(ListBox* pListBox, const ScCalcConfig::OpenCLImplSet& rSet)
 {
     pListBox->SetUpdateMode(false);
     pListBox->Clear();
 
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
     {
-        pListBox->InsertEntry((*i).maOS + " " +
-                              (*i).maOSVersion + " " +
-                              (*i).maPlatformVendor + " " +
-                              (*i).maDevice + " " +
-                              (*i).maDriverVersion,
-                              LISTBOX_APPEND);
+        pListBox->InsertEntry(format(*i), LISTBOX_APPEND);
     }
 
     pListBox->SetUpdateMode(true);
@@ -799,6 +803,9 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
 
         rSet.erase(impl);
         rSet.insert(newImpl);
+
+        fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
+        mpOpenCLWhiteAndBlackListBox->SelectEntry(format(newImpl));
     }
 }
 
