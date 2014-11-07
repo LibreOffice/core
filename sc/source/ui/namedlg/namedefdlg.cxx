@@ -237,8 +237,10 @@ void ScNameDefDlg::AddPushed()
                     if (!mpDoc->GetTable(aScope, nTab))
                         nTab = -1;
 
-                    mpDocShell->GetUndoManager()->AddUndoAction(
-                            new ScUndoAddRangeData( mpDocShell, pNewEntry, nTab) );
+                    assert( pNewEntry);     // undo of no insertion smells fishy
+                    if (pNewEntry)
+                        mpDocShell->GetUndoManager()->AddUndoAction(
+                                new ScUndoAddRangeData( mpDocShell, pNewEntry, nTab) );
 
                     // set table stream invalid, otherwise RangeName won't be saved if no other
                     // call invalidates the stream
