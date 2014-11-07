@@ -48,7 +48,6 @@
 #include <boost/bind.hpp>
 
 #include <stdio.h>
-#include <unistd.h>
 
 using namespace ::com::sun::star;
 
