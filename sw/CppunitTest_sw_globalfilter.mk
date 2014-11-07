@@ -83,6 +83,10 @@ $(eval $(call gb_CppunitTest_use_components,sw_globalfilter,\
 	xmloff/util/xo \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_globalfilter,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sw_globalfilter))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sw_globalfilter))

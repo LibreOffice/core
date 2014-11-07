@@ -563,7 +563,6 @@ IMAGE_SETEVENT:
     Size aGrfSz( 0, 0 );
     bool bSetTwipSize = true;       // Twip-Size am Node setzen?
     bool bChangeFrmSize = false;    // Frame-Format nachtraeglich anpassen?
-    bool bRequestGrfNow = false;
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
@@ -575,7 +574,6 @@ IMAGE_SETEVENT:
         // Tabelle layoutet wird.
         if( pTable!=0 && !nWidth )
         {
-            bRequestGrfNow = true;
             IncGrfsThatResizeTable();
         }
 
@@ -798,14 +796,6 @@ IMAGE_SETEVENT:
 
     if( !aMacroItem.GetMacroTable().empty() )
         pFlyFmt->SetFmtAttr( aMacroItem );
-
-    // Wenn die Grafik gleich angeforder wird, muss dies geschehen,
-    // nachdem das Format vollstaendig aufgebaut ist, weil es evtl.
-    // gleich (synchron) angepasst wird (war bug #40983#)
-    if (bRequestGrfNow && pGrfNd)
-    {
-        pGrfNd->SwapIn();
-    }
 
     // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );

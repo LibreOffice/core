@@ -11,11 +11,13 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-
+#include <officecfg/Office/Common.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <ndgrf.hxx>
+#include <drawdoc.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -40,31 +42,19 @@ void Test::testSwappedOutImageExport()
 
     for( size_t nFilter = 0; nFilter < aFilterNames.size(); ++nFilter )
     {
-        // Check whether the export code swaps in the image which was swapped out before.
+        // Check whether the export code swaps in the image which was swapped out before by auto mechanism
+
+        // Set cache size to a very small value to make sure one of the images is swapped out
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
+        batch->commit();
+
         if (mxComponent.is())
             mxComponent->dispose();
-        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_an_image.odt"), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
 
         const OString sFailedMessage = OString("Failed on filter: ")
                                        + OUStringToOString(aFilterNames[nFilter], RTL_TEXTENCODING_ASCII_US);
-        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTxtDoc);
-        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc);
-        SwNodes& aNodes = pDoc->GetNodes();
-
-        // Find and swap out the image
-        bool bImageFound = false;
-        for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
-        {
-            if( aNodes[nIndex]->IsGrfNode() )
-            {
-                SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
-                pGrfNode->SwapOut();
-                bImageFound = true;
-            }
-        }
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), bImageFound);
 
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -82,8 +72,9 @@ void Test::testSwappedOutImageExport()
         // Check whether graphic exported well after it was swapped out
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(1), xDraws->getCount());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
 
+        // First image
         uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
         // Check URL
@@ -101,6 +92,35 @@ void Test::testSwappedOutImageExport()
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+        }
+
+        // Second Image
+        xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+        XPropSet.set( xImage, uno::UNO_QUERY_THROW );
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            // HTML filter changes the name, but the real indicater here is the "null" URL.
+            if( aFilterNames[nFilter] == "HTML (StarWriter)" )
+            {
+                CPPUNIT_ASSERT_MESSAGE(
+                    sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+            }
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    sFailedMessage.getStr(), OUString("vnd.sun.star.GraphicObject:1000000000000384000002580A24B597"), sURL);
+            }
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height );
         }
     }
 }

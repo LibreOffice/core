@@ -169,10 +169,13 @@ public:
                  const Graphic* pGraphic = 0,
                  const GraphicObject* pGrfObj = 0,
                  bool bModify = true );
+private:
     /// Loading of graphic immediately before displaying.
     bool SwapIn( bool bWaitForData = false );
     /// Remove graphic in order to free memory.
     bool SwapOut();
+
+public:
     bool HasEmbeddedStreamName() const { return maGrfObj.HasUserData(); }
     /// applying new stream name for embedded graphic - needed as saving the document might change this stream name
     void ApplyNewEmbeddedStreamName(const OUString& r)

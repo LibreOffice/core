@@ -599,8 +599,6 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         }
                     } while( pVSh != (pSh = (SwViewShell*)pSh->GetNext() ));
                 }
-                else
-                    pNd->SwapIn();
             }
         }
         break;
