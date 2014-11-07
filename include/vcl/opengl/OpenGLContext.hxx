@@ -102,14 +102,16 @@ struct GLWindow
 #elif defined( IOS )
 #elif defined( ANDROID )
 #elif defined( UNX )
-    Display*           dpy;
-    int                screen;
-    Window             win;
+    Display*            dpy;
+    int                 screen;
+    Window              win;
+    Pixmap              pix;
 #if defined( GLX_EXT_texture_from_pixmap )
     GLXFBConfig        fbc;
 #endif
     XVisualInfo*       vi;
     GLXContext         ctx;
+    GLXPixmap           glPix;
 
     bool HasGLXExtension( const char* name ) { return checkExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
     const char*             GLXExtensions;
@@ -135,6 +137,7 @@ struct GLWindow
 #endif
         vi(NULL),
         ctx(0),
+        glPix(0),
         GLXExtensions(NULL),
 #endif
         bpp(0),
@@ -165,6 +168,7 @@ public:
 // only in vcl's platform code
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     bool init(Display* dpy, Window win, int screen);
+    bool init(Display* dpy, Pixmap pix, unsigned int width, unsigned int height, int nScreen);
 #elif defined( _WIN32 )
     bool init( HDC hDC, HWND hWnd );
 #endif
@@ -214,6 +218,9 @@ private:
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
     bool mbRequestVirtualDevice;
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    bool mbPixmap; // is a pixmap instead of a window
+#endif
 };
 
 #endif

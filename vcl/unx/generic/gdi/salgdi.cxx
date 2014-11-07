@@ -143,11 +143,21 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
     if( hDrawable_ )
     {
         OpenGLSalGraphicsImpl* pOpenGLImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
-        if (pOpenGLImpl && m_pFrame && dynamic_cast<X11WindowProvider*>(m_pFrame))
+        if (pOpenGLImpl)
         {
-            Window aWin = dynamic_cast<X11WindowProvider*>(m_pFrame)->GetX11Window();
-            pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
-                    aWin, m_nXScreen.getXScreen());
+            if (m_pFrame && dynamic_cast<X11WindowProvider*>(m_pFrame))
+            {
+                Window aWin = dynamic_cast<X11WindowProvider*>(m_pFrame)->GetX11Window();
+                pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
+                        aWin, m_nXScreen.getXScreen());
+            }
+            else if (m_pVDev)
+            {
+                pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
+                        m_pVDev->GetDrawable(), m_pVDev->GetWidth(), m_pVDev->GetHeight(), m_nXScreen.getXScreen());
+            }
+            else
+                SAL_WARN("vcl.opengl", "what happened here?");
         }
 
         mpImpl->Init( m_pFrame );
