@@ -51,14 +51,14 @@ public:
         return (OString(filename).endsWith(".rtf") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
 
-    sal_Bool CjkNumberedListTestHelper(sal_Int16& rValue)
+    bool CjkNumberedListTestHelper(sal_Int16& rValue)
     {
         sal_Bool isNumber;
         uno::Reference<text::XTextRange> xPara(getParagraph(1));
         uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
         properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
         if (!isNumber)
-            return sal_False;
+            return false;
         uno::Reference<container::XIndexAccess> xLevels(properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
         uno::Sequence< beans::PropertyValue > aPropertyValue;
         xLevels->getByIndex(0) >>= aPropertyValue;
@@ -68,10 +68,10 @@ public:
             if (aProp.Name == "NumberingType")
             {
                 rValue = aProp.Value.get<sal_Int16>();
-                return sal_True;
+                return true;
             }
         }
-        return sal_False;
+        return false;
 
     }
 };
@@ -752,77 +752,77 @@ DECLARE_RTFEXPORT_TEST(testFdo82858, "fdo82858.docx")
 DECLARE_RTFEXPORT_TEST(testCjklist12, "cjklist12.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::AIU_HALFWIDTH_JA, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist13, "cjklist13.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::IROHA_HALFWIDTH_JA, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist16, "cjklist16.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_TRADITIONAL_JA, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist20, "cjklist20.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::AIU_FULLWIDTH_JA, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist21, "cjklist21.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::IROHA_FULLWIDTH_JA, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist24, "cjklist24.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::HANGUL_SYLLABLE_KO, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist25, "cjklist25.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::HANGUL_JAMO_KO, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist30, "cjklist30.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist31, "cjklist31.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist34, "cjklist34.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
 }
 
 DECLARE_RTFEXPORT_TEST(testCjklist38, "cjklist38.rtf")
 {
     sal_Int16   numFormat;
-    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH, numFormat);
 }
 
