@@ -86,7 +86,6 @@ public:
 protected:
     SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
     OUString              sFileName;
-    bool              bModified;
 
     void                Init();
     void Save();

@@ -47,33 +47,28 @@ using namespace ::com::sun::star;
 
 SwChapterNumRules::SwChapterNumRules()
     : sFileName(OUString(CHAPTER_FILENAME))
-    ,
-    bModified( false )
 {
     Init();
 }
 
 void SwChapterNumRules::Save()
 {
-    if( bModified )
+    INetURLObject aURL;
+    SvtPathOptions aPathOpt;
+    aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
+    aURL.setFinalSlash();
+    aURL.Append(sFileName);
+
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
+    SvStream* pStream = aMedium.GetOutStream();
+    bool bRet = (pStream && pStream->GetError() == 0);
+    if (bRet)
     {
-        INetURLObject aURL;
-        SvtPathOptions aPathOpt;
-        aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
-        aURL.setFinalSlash();
-        aURL.Append(sFileName);
+        sw::ExportStoredChapterNumberingRules(*this, *pStream, sFileName);
 
-        SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
-        SvStream* pStream = aMedium.GetOutStream();
-        bool bRet = (pStream && pStream->GetError() == 0);
-        if (bRet)
-        {
-            sw::ExportStoredChapterNumberingRules(*this, *pStream, sFileName);
+        pStream->Flush();
 
-            pStream->Flush();
-
-            aMedium.Commit();
-        }
+        aMedium.Commit();
     }
 }
 
@@ -106,7 +101,6 @@ void SwChapterNumRules::CreateEmptyNumRule(sal_uInt16 const nIndex)
 
 void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
 {
-    bModified = true;
     assert(nIdx < nMaxRules);
     if( !pNumRules[nIdx] )
         pNumRules[nIdx] = new SwNumRulesWithName( rCopy );
