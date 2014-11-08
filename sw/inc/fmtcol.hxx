@@ -132,28 +132,6 @@ public:
     }
 
     bool AreListLevelIndentsApplicable() const;
-
-/*
- Is the functionality of character styles at paragraph styles needed?
- If so, a second Attset for char-attributes has to be created
- in TextNode and here in TxtCollection in order to make both
- the inheritance of and the access to set attributes function correctly!
-
-    virtual sal_Bool SetDerivedFrom( SwFmtColl* pDerFrom = 0 );
-
-    inline SwCharFmt* GetCharFmt() const;
-    inline sal_Bool IsCharFmtSet() const;
-    void SetCharFmt(SwCharFmt *);
-    void ResetCharFmt();
-    inline sal_Bool SwTxtFmtColl::IsCharFmtSet() const
-    {
-        return aCharDepend.GetRegisteredIn() ? sal_True : sal_False;
-    }
-    inline SwCharFmt* SwTxtFmtColl::GetCharFmt() const
-    {
-        return (SwCharFmt*)aCharDepend.GetRegisteredIn();
-    }
-*/
 };
 
 class SwGrfFmtColl: public SwFmtColl
