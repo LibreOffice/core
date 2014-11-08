@@ -32,13 +32,23 @@
 
 using namespace css;
 
-class DemoWin : public WorkWindow
+class DemoBase :
+        public WorkWindow // hide OutputDevice if necessary
+{
+public:
+    DemoBase() : WorkWindow( NULL, WB_APP | WB_STDWORK)
+    {
+    }
+    OutputDevice &getOutDev() { return *this; }
+};
+
+class DemoWin : public DemoBase
 {
     Bitmap   maIntroBW;
     BitmapEx maIntro;
 
 public:
-    DemoWin() : WorkWindow( NULL, WB_APP | WB_STDWORK)
+    DemoWin() : DemoBase()
     {
         // Needed to find images
         OUString aPath;
@@ -60,32 +70,39 @@ public:
         maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
     }
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    void drawToDevice(OutputDevice &r);
 
-    std::vector<Rectangle> partitionAndClear(int nX, int nY);
-
-    void drawBackground()
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE
     {
-        Rectangle r(Point(0,0), GetSizePixel());
+        fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
+        drawToDevice(getOutDev());
+    }
+
+    std::vector<Rectangle> partitionAndClear(OutputDevice &rDev,
+                                             int nX, int nY);
+
+    void drawBackground(OutputDevice &rDev)
+    {
+        Rectangle r(Point(0,0), rDev.GetOutputSizePixel());
         Gradient aGradient;
         aGradient.SetStartColor(COL_BLUE);
         aGradient.SetEndColor(COL_GREEN);
         aGradient.SetStyle(GradientStyle_LINEAR);
 //        aGradient.SetBorder(r.GetSize().Width()/20);
-        DrawGradient(r, aGradient);
+        rDev.DrawGradient(r, aGradient);
     }
 
-    void drawRadialLines(Rectangle r)
+    void drawRadialLines(OutputDevice &rDev, Rectangle r)
     {
-        SetFillColor(Color(COL_LIGHTRED));
-        SetLineColor(Color(COL_BLACK));
-        DrawRect( r );
+        rDev.SetFillColor(Color(COL_LIGHTRED));
+        rDev.SetLineColor(Color(COL_BLACK));
+        rDev.DrawRect( r );
 
         // FIXME: notice these appear reflected at the bottom not the top.
         for(int i=0; i<r.GetHeight(); i+=15)
-            DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
+            rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
         for(int i=0; i<r.GetWidth(); i+=15)
-            DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
+            rDev.DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
 
         // Should draw a white-line across the middle
         Color aLastPixel( COL_WHITE );
@@ -93,23 +110,25 @@ public:
                       (r.Top() + r.Bottom())/2 - 4);
         for(int i=0; i<8; i++)
         {
-            DrawPixel(aCenter, aLastPixel);
-            aLastPixel = GetPixel(aCenter);
+            rDev.DrawPixel(aCenter, aLastPixel);
+            aLastPixel = rDev.GetPixel(aCenter);
             aCenter.Move(1,1);
         }
     }
 
-    void drawText(Rectangle r)
+    void drawText(OutputDevice &rDev, Rectangle r)
+
     {
-        SetTextColor( Color( COL_BLACK ) );
+        rDev.SetTextColor( Color( COL_BLACK ) );
         vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
-        SetFont( aFont );
-        DrawText( r, OUString( "Just a simple text" ) );
+        rDev.SetFont( aFont );
+        rDev.DrawText( r, OUString( "Just a simple text" ) );
     }
 
-    void drawPoly(Rectangle r) // pretty
+    void drawPoly(OutputDevice &rDev, Rectangle r)
+ // pretty
     {
-        drawCheckered(r);
+        drawCheckered(rDev, r);
 
         long nDx = r.GetWidth()/20;
         long nDy = r.GetHeight()/20;
@@ -119,22 +138,25 @@ public:
                              r.GetHeight()-nDy*2));
         Polygon aPoly(aShrunk);
         tools::PolyPolygon aPPoly(aPoly);
-        SetLineColor(Color(COL_RED));
-        SetFillColor(Color(COL_RED));
+        rDev.SetLineColor(Color(COL_RED));
+        rDev.SetFillColor(Color(COL_RED));
         // This hits the optional 'drawPolyPolygon' code-path
-        DrawTransparent(aPPoly, 64);
+        rDev.DrawTransparent(aPPoly, 64);
     }
-    void drawEllipse(Rectangle r)
+    void drawEllipse(OutputDevice &rDev, Rectangle r)
+
     {
-        SetLineColor(Color(COL_RED));
-        SetFillColor(Color(COL_GREEN));
-        DrawEllipse(r);
+        rDev.SetLineColor(Color(COL_RED));
+        rDev.SetFillColor(Color(COL_GREEN));
+        rDev.DrawEllipse(r);
     }
-    void drawCheckered(Rectangle r)
+    void drawCheckered(OutputDevice &rDev, Rectangle r)
+
     {
-        DrawCheckered(r.TopLeft(), r.GetSize());
+        rDev.DrawCheckered(r.TopLeft(), r.GetSize());
     }
-    void drawGradient(Rectangle r)
+    void drawGradient(OutputDevice &rDev, Rectangle r)
+
     {
         Gradient aGradient;
         aGradient.SetStartColor(COL_YELLOW);
@@ -142,30 +164,33 @@ public:
 //        aGradient.SetAngle(45);
         aGradient.SetStyle(GradientStyle_RECT);
         aGradient.SetBorder(r.GetSize().Width()/20);
-        DrawGradient(r, aGradient);
+        rDev.DrawGradient(r, aGradient);
     }
-    void drawBitmap(Rectangle r)
+    void drawBitmap(OutputDevice &rDev, Rectangle r)
+
     {
         Bitmap aBitmap(maIntroBW);
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
-        DrawBitmap(r.TopLeft(), aBitmap);
+        rDev.DrawBitmap(r.TopLeft(), aBitmap);
     }
-    void drawBitmapEx(Rectangle r)
+    void drawBitmapEx(OutputDevice &rDev, Rectangle r)
+
     {
-        drawCheckered(r);
+        drawCheckered(rDev, r);
 
         BitmapEx aBitmap(maIntro);
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
 #ifdef FIXME_ALPHA_WORKING
         AlphaMask aSemiTransp(aBitmap.GetSizePixel());
         aSemiTransp.Erase(64);
-        DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
+        rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
                                            aSemiTransp));
 #else
-        DrawBitmapEx(r.TopLeft(), aBitmap);
+        rDev.DrawBitmapEx(r.TopLeft(), aBitmap);
 #endif
     }
-    void drawPolyPolgons(Rectangle r)
+    void drawPolyPolgons(OutputDevice &rDev, Rectangle r)
+
     {
         struct {
             double nX, nY;
@@ -191,39 +216,40 @@ public:
                                          aSubRect.GetHeight() * aPoints[v].nY),
                                    v);
                 }
-                SetLineColor(Color(COL_YELLOW));
-                SetFillColor(Color(COL_BLACK));
-                DrawPolygon(aPoly);
+                rDev.SetLineColor(Color(COL_YELLOW));
+                rDev.SetFillColor(Color(COL_BLACK));
+                rDev.DrawPolygon(aPoly);
 
                 // now move and add to the polypolygon
                 aPoly.Move(0, r.GetHeight()/2);
                 aPolyPoly.Insert(aPoly);
             }
         }
-        SetLineColor(Color(COL_LIGHTRED));
-        SetFillColor(Color(COL_GREEN));
+        rDev.SetLineColor(Color(COL_LIGHTRED));
+        rDev.SetFillColor(Color(COL_GREEN));
 #ifdef FIXME_DRAW_TRANSPARENT_WORKING
-        DrawTransparent(aPolyPoly, 50);
+        rDev.DrawTransparent(aPolyPoly, 50);
 #else
-        DrawPolyPolygon(aPolyPoly);
+        rDev.DrawPolyPolygon(aPolyPoly);
 #endif
     }
-    void fetchDrawBitmap(Rectangle r)
+    void fetchDrawBitmap(OutputDevice &rDev, Rectangle r)
+
     {
         // FIXME: should work ...
-        Bitmap aBitmap(GetBitmap(Point(0,0),GetSizePixel()));
+        Bitmap aBitmap(GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
-        DrawBitmap(r.TopLeft(), aBitmap);
+        rDev.DrawBitmap(r.TopLeft(), aBitmap);
     }
 };
 
-std::vector<Rectangle> DemoWin::partitionAndClear(int nX, int nY)
+std::vector<Rectangle> DemoWin::partitionAndClear(OutputDevice &rDev, int nX, int nY)
 {
     Rectangle r;
     std::vector<Rectangle> aRegions;
 
     // Make small cleared area for these guys
-    Size aSize(GetSizePixel());
+    Size aSize(rDev.GetOutputSizePixel());
     long nBorderSize = aSize.Width() / 32;
     long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
     long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
@@ -236,16 +262,16 @@ std::vector<Rectangle> DemoWin::partitionAndClear(int nX, int nY)
             r.SetSize(Size(nBoxWidth, nBoxHeight));
 
             // knock up a nice little border
-            SetLineColor(COL_GRAY);
-            SetFillColor(COL_LIGHTGRAY);
+            rDev.SetLineColor(COL_GRAY);
+            rDev.SetFillColor(COL_LIGHTGRAY);
             if ((x + y) % 2)
-                DrawRect(r);
+                rDev.DrawRect(r);
             else
             {
 #ifdef FIXME_ROUNDED_RECT_WORKING
-                DrawRect(r, nBorderSize, nBorderSize);
+                rDev.DrawRect(r, nBorderSize, nBorderSize);
 #else
-                DrawRect(r);
+                rDev.DrawRect(r);
 #endif
             }
 
@@ -256,25 +282,23 @@ std::vector<Rectangle> DemoWin::partitionAndClear(int nX, int nY)
     return aRegions;
 }
 
-void DemoWin::Paint( const Rectangle& rRect )
+void DemoWin::drawToDevice(OutputDevice &rDev)
 {
-    fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
+    drawBackground(rDev);
 
-    drawBackground();
+    std::vector<Rectangle> aRegions(partitionAndClear(rDev, 4, 3));
 
-    std::vector<Rectangle> aRegions(partitionAndClear(4,3));
-
-    drawRadialLines(aRegions[0]);
-    drawText(aRegions[1]);
-    drawPoly(aRegions[2]);
-    drawEllipse(aRegions[3]);
-    drawCheckered(aRegions[4]);
-    drawBitmapEx(aRegions[5]);
-    drawBitmap(aRegions[6]);
-    drawGradient(aRegions[7]);
-    drawPolyPolgons(aRegions[8]);
+    drawRadialLines(rDev, aRegions[0]);
+    drawText(rDev, aRegions[1]);
+    drawPoly(rDev, aRegions[2]);
+    drawEllipse(rDev, aRegions[3]);
+    drawCheckered(rDev, aRegions[4]);
+    drawBitmapEx(rDev, aRegions[5]);
+    drawBitmap(rDev, aRegions[6]);
+    drawGradient(rDev, aRegions[7]);
+    drawPolyPolgons(rDev, aRegions[8]);
     // last - thumbnail all the above
-    fetchDrawBitmap(aRegions[9]);
+    fetchDrawBitmap(rDev, aRegions[9]);
 }
 
 class DemoApp : public Application
