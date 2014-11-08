@@ -696,8 +696,10 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                                         break;
                                     case CAPTYPE_ALLCAP:
                                         aProposalList.Prepend( pCharClass->uppercase(aAddRplcTxt) );
+                                        break;
                                     default:
-                                        aProposalList.Prepend( aAddRplcTxt );
+                                        /* can't happen because of if ct ==  above */
+                                        break;
                                 }
                             }
                         }
