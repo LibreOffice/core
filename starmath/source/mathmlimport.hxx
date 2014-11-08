@@ -245,11 +245,7 @@ public:
     SmNodeStack & GetNodeStack()    { return aNodeStack; }
     SmNode *GetTree()
     {
-        if (aNodeStack.empty())
-            return 0;
-        SmNode* result = aNodeStack.top();
-        aNodeStack.pop();
-        return result;
+        return popOrZero(aNodeStack);
     }
 
     bool GetSuccess()              { return bSuccess; }
