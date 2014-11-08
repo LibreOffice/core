@@ -979,7 +979,8 @@ void OpenGLContext::makeCurrent()
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
-    glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx );
+    if (!glXMakeCurrent( m_aGLWin.dpy, m_aGLWin.win, m_aGLWin.ctx ))
+        SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed");
 #endif
 }
 
