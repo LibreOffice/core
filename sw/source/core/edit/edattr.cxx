@@ -420,7 +420,7 @@ std::vector<SwPaM*> SwEditShell::GetSplitPaM( sal_uInt16 nWhich)
                             const SwTxtAttr* pHt = (*pTxtNd->GetpSwpHints())[m];
                             const SfxItemSet* pAutoSet =
                                       CharFmt::GetItemSet ( pHt->GetAttr() );
-                            if ( isTXTATR_NOEND( pHt->Which() ) || !pAutoSet->HasItem( nWhich ) )
+                            if (isTXTATR_NOEND(pHt->Which()) || !pAutoSet || !pAutoSet->HasItem(nWhich))
                                 continue;
                             const sal_Int32 nAttrStart = pHt->GetStart();
                             const sal_Int32* pAttrEnd = pHt->End();
