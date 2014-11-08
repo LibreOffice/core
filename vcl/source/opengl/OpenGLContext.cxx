@@ -404,7 +404,8 @@ GLXFBConfig* getFBConfigForPixmap(Display* dpy, int& nBestFBC, bool bUseDoubleBu
 {
     static int visual_attribs[] =
     {
-        GLX_DOUBLEBUFFER,       True,
+        GLX_DOUBLEBUFFER,       False,
+        GLX_DRAWABLE_TYPE,      GLX_PIXMAP_BIT,
         GLX_X_RENDERABLE,       True,
         GLX_RED_SIZE,           8,
         GLX_GREEN_SIZE,         8,
@@ -415,8 +416,8 @@ GLXFBConfig* getFBConfigForPixmap(Display* dpy, int& nBestFBC, bool bUseDoubleBu
         None
     };
 
-    if (!bUseDoubleBufferedRendering)
-        visual_attribs[1] = False;
+    if (bUseDoubleBufferedRendering)
+        visual_attribs[1] = True;
 
     int fbCount = 0;
     GLXFBConfig* pFBC = glXChooseFBConfig( dpy,
@@ -599,7 +600,9 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
     m_aGLWin.Width = width;
     m_aGLWin.Height = height;
     m_aGLWin.pix = pix;
-    const int attrib_list[] = {None};
+    const int attrib_list[] = { GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGB_EXT,
+          GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
+          None};
     int best_fbc = -1;
     GLXFBConfig* config = getFBConfigForPixmap(dpy, best_fbc, mbUseDoubleBufferedRendering, nScreen);
     if (best_fbc == -1)
