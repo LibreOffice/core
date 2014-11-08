@@ -117,7 +117,6 @@ private:
     SfxBindings* mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
-
     ParaPropertyPanel (
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -139,9 +138,6 @@ private:
 
     void initial();
     void ReSize(bool bSize);
-
-    DECL_LINK(ClickLineSPDropDownHdl_Impl, ToolBox*);
-
     void InitToolBoxIndent();
     void InitToolBoxSpacing();
 };

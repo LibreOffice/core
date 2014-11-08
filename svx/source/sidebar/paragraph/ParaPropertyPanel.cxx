@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ParaPropertyPanel.hxx"
-#include "ParaPropertyPanel.hrc"
-
+#include <svx/dialogs.hrc>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/dispatch.hxx>
@@ -190,10 +189,6 @@ void ParaPropertyPanel::HandleContextChange (
             break;
     }
 }
-
-
-
-
 
 void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
 {
@@ -512,9 +507,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
     }
 }
 
-
-
-
 void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     switch (maContext.GetCombinedContext_DI())
@@ -765,7 +757,6 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
             ( pState && eState == SfxItemState::UNKNOWN ) ? sal_True : sal_False );
     }
 }
-
 
 FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
