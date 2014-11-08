@@ -582,6 +582,7 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpEditField->Hide();
             mpOpenCLWhiteAndBlackListGrid->Show();
             mpOpenclInfoList->GetParent()->Hide();
+#if HAVE_FEATURE_OPENCL
             if ( nSelectedPos == CALC_OPTION_OPENCL_WHITELIST )
             {
                 mpFtAnnotation->SetText(maDescOpenCLWhiteList);
@@ -592,6 +593,7 @@ void ScCalcOptionsDialog::SelectionChanged()
                 mpFtAnnotation->SetText(maDescOpenCLBlackList);
                 fillListBox(mpOpenCLWhiteAndBlackListBox, maConfig.maOpenCLBlackList);
             }
+#endif
         }
         break;
     }
@@ -803,9 +805,10 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
 
         rSet.erase(impl);
         rSet.insert(newImpl);
-
+#if HAVE_FEATURE_OPENCL
         fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
         mpOpenCLWhiteAndBlackListBox->SelectEntry(format(newImpl));
+#endif
     }
 }
 
