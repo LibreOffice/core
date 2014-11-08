@@ -54,16 +54,16 @@ using namespace ::com::sun::star;
                         An old rule at that position will be overwritten.
 */
 
-SwBaseNumRules::SwBaseNumRules( const OUString& rFileName )
-    :
-    sFileName( rFileName ),
+SwChapterNumRules::SwChapterNumRules()
+    : sFileName(OUString(CHAPTER_FILENAME))
+    ,
     nVersion(0),
     bModified( false )
 {
     Init();
 }
 
-void SwBaseNumRules::Save()
+void SwChapterNumRules::Save()
 {
     if( bModified )
     {
@@ -87,13 +87,13 @@ void SwBaseNumRules::Save()
     }
 }
 
-SwBaseNumRules::~SwBaseNumRules()
+SwChapterNumRules::~SwChapterNumRules()
 {
     for( sal_uInt16 i = 0; i < nMaxRules; ++i )
         delete pNumRules[i];
 }
 
-void  SwBaseNumRules::Init()
+void  SwChapterNumRules::Init()
 {
     for(sal_uInt16 i = 0; i < nMaxRules; ++i )
         pNumRules[i] = 0;
@@ -107,15 +107,16 @@ void  SwBaseNumRules::Init()
     }
 }
 
-void SwBaseNumRules::CreateEmptyNumRule(sal_uInt16 const nIndex)
+void SwChapterNumRules::CreateEmptyNumRule(sal_uInt16 const nIndex)
 {
     assert(nIndex < nMaxRules);
     assert(!pNumRules[nIndex]);
     pNumRules[nIndex] = new SwNumRulesWithName;
 }
 
-void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
+void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
 {
+    bModified = true;
     OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     if( !pNumRules[nIdx] )
         pNumRules[nIdx] = new SwNumRulesWithName( rCopy );
@@ -124,7 +125,7 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
     Save(); // store it immediately
 }
 
-bool SwBaseNumRules::Store(SvStream &rStream)
+bool SwChapterNumRules::Store(SvStream &rStream)
 {
     rStream.WriteUInt16( ACT_NUM_VERSION );
         // Write, what positions are occupied by a rule
@@ -142,7 +143,7 @@ bool SwBaseNumRules::Store(SvStream &rStream)
     return true;
 }
 
-int SwBaseNumRules::Load(SvStream &rStream)
+int SwChapterNumRules::Load(SvStream &rStream)
 {
     int         rc = 0;
 
@@ -171,21 +172,6 @@ int SwBaseNumRules::Load(SvStream &rStream)
     }
 
     return rc;
-}
-
-SwChapterNumRules::SwChapterNumRules() :
-    SwBaseNumRules(OUString(CHAPTER_FILENAME))
-{
-}
-
- SwChapterNumRules::~SwChapterNumRules()
-{
-}
-
-void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
-{
-    bModified = true;
-    SwBaseNumRules::ApplyNumRules(rCopy, nIdx);
 }
 
 SwNumRulesWithName::SwNumRulesWithName( const SwNumRule &rCopy,

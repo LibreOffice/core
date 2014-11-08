@@ -46,7 +46,7 @@ class StoredChapterNumberingRules
 {
 private:
     // TODO in case this ever becomes accessible via api need a invalidate
-    SwBaseNumRules & m_rNumRules;
+    SwChapterNumRules & m_rNumRules;
     sal_uInt16 const m_nIndex;
 
     SwNumRulesWithName * GetOrCreateRules()
@@ -63,11 +63,11 @@ private:
 
 public:
     StoredChapterNumberingRules(
-            SwBaseNumRules & rNumRules, sal_uInt16 const nIndex)
+            SwChapterNumRules & rNumRules, sal_uInt16 const nIndex)
         : m_rNumRules(rNumRules)
         , m_nIndex(nIndex)
     {
-        assert(m_nIndex < SwBaseNumRules::nMaxRules);
+        assert(m_nIndex < SwChapterNumRules::nMaxRules);
     }
 
     // XNamed
@@ -324,13 +324,13 @@ class StoredChapterNumberingRootContext
     : public SvXMLImportContext
 {
 private:
-    SwBaseNumRules & m_rNumRules;
+    SwChapterNumRules & m_rNumRules;
     size_t m_nCounter;
     ::std::vector<tools::SvRef<SvxXMLListStyleContext>> m_Contexts;
 
 public:
     StoredChapterNumberingRootContext(
-            SwBaseNumRules & rNumRules, SvXMLImport & rImport,
+            SwChapterNumRules & rNumRules, SvXMLImport & rImport,
             sal_uInt16 const nPrefix, OUString const& rLocalName)
         : SvXMLImportContext(rImport, nPrefix, rLocalName)
         , m_rNumRules(rNumRules)
@@ -340,7 +340,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE
     {
-        assert(m_Contexts.size() < SwBaseNumRules::nMaxRules);
+        assert(m_Contexts.size() < SwChapterNumRules::nMaxRules);
         for (auto iter = m_Contexts.begin(); iter != m_Contexts.end(); ++iter)
         {
             uno::Reference<container::XIndexReplace> const xRule(
@@ -360,7 +360,7 @@ public:
         if (XML_NAMESPACE_TEXT == nPrefix && IsXMLToken(rLocalName, XML_OUTLINE_STYLE))
         {
             ++m_nCounter;
-            if (m_nCounter <= SwBaseNumRules::nMaxRules)
+            if (m_nCounter <= SwChapterNumRules::nMaxRules)
             {
                 SvxXMLListStyleContext *const pContext(
                     new SvxXMLListStyleContext(GetImport(),
@@ -384,12 +384,12 @@ class StoredChapterNumberingImport
     : public SvXMLImport
 {
 private:
-    SwBaseNumRules & m_rNumRules;
+    SwChapterNumRules & m_rNumRules;
 
 public:
     StoredChapterNumberingImport(
             uno::Reference<uno::XComponentContext> const& xContext,
-            SwBaseNumRules & rNumRules)
+            SwChapterNumRules & rNumRules)
         : SvXMLImport(xContext, "sw::StoredChapterNumberingImport", IMPORT_ALL)
         , m_rNumRules(rNumRules)
     {
@@ -408,7 +408,7 @@ public:
     }
 };
 
-void ExportStoredChapterNumberingRules(SwBaseNumRules & rRules,
+void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         SvStream & rStream, OUString const& rFileName)
 {
     uno::Reference<uno::XComponentContext> const xContext(
@@ -432,7 +432,7 @@ void ExportStoredChapterNumberingRules(SwBaseNumRules & rRules,
     // ... and the import needs to map from name to display-name then!
     std::set<OUString> charStyles;
     std::vector<uno::Reference<container::XIndexReplace>> numRules;
-    for (size_t i = 0; i < SwBaseNumRules::nMaxRules; ++i)
+    for (size_t i = 0; i < SwChapterNumRules::nMaxRules; ++i)
     {
         if (SwNumRulesWithName const* pRule = rRules.GetRules(i))
         {
@@ -461,7 +461,7 @@ void ExportStoredChapterNumberingRules(SwBaseNumRules & rRules,
     }
 }
 
-void ImportStoredChapterNumberingRules(SwBaseNumRules & rRules,
+void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         SvStream & rStream, OUString const& rFileName)
 {
     uno::Reference<uno::XComponentContext> const xContext(

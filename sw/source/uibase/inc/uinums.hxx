@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
 
 protected:
     friend class sw::StoredChapterNumberingRules;
-    friend class SwBaseNumRules;
+    friend class SwChapterNumRules;
     void SetName(const OUString& rSet) {maName = rSet;}
     void SetNumFmt(size_t, SwNumFmt const&, OUString const&);
     SwNumRulesWithName();
@@ -83,7 +83,7 @@ public:
     void GetNumFmt(size_t, SwNumFmt const*&, OUString const*&) const;
 };
 
-class SwBaseNumRules
+class SwChapterNumRules
 {
 public:
     enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
@@ -100,8 +100,8 @@ protected:
     void Save();
 
 public:
-    SwBaseNumRules(const OUString& rFileName);
-    virtual ~SwBaseNumRules();
+    SwChapterNumRules();
+    virtual ~SwChapterNumRules();
 
     inline const SwNumRulesWithName*    GetRules(sal_uInt16 nIdx) const;
     void CreateEmptyNumRule(sal_uInt16 nIdx); // for import
@@ -111,18 +111,7 @@ public:
 
 };
 
-class SwChapterNumRules : public SwBaseNumRules
-{
-
-public:
-    SwChapterNumRules();
-    virtual ~SwChapterNumRules();
-
-    virtual void        ApplyNumRules(  const SwNumRulesWithName &rCopy,
-                                            sal_uInt16 nIdx) SAL_OVERRIDE;
-};
-
-inline const SwNumRulesWithName *SwBaseNumRules::GetRules(sal_uInt16 nIdx) const
+inline const SwNumRulesWithName *SwChapterNumRules::GetRules(sal_uInt16 nIdx) const
 {
     OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
     return pNumRules[nIdx];
@@ -133,9 +122,9 @@ namespace sw
 {
 
 void ExportStoredChapterNumberingRules(
-        SwBaseNumRules & rRules, SvStream & rStream, OUString const&);
+        SwChapterNumRules & rRules, SvStream & rStream, OUString const&);
 void ImportStoredChapterNumberingRules(
-        SwBaseNumRules & rRules, SvStream & rStream, OUString const&);
+        SwChapterNumRules & rRules, SvStream & rStream, OUString const&);
 
 } // namespace sw
 

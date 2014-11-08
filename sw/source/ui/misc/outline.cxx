@@ -91,13 +91,13 @@ IMPL_LINK_INLINE_END( SwNumNamesDlg, SelectHdl, ListBox *, pBox )
 void SwNumNamesDlg::SetUserNames(const OUString *pList[])
 {
     sal_uInt16 nSelect = 0;
-    for(sal_uInt16 i = 0; i < SwBaseNumRules::nMaxRules; ++i)
+    for (sal_uInt16 i = 0; i < SwChapterNumRules::nMaxRules; ++i)
     {
         if(pList[i])
         {
             m_pFormBox->RemoveEntry(i);
             m_pFormBox->InsertEntry(*pList[i], i);
-            if(i == nSelect && nSelect < SwBaseNumRules::nMaxRules)
+            if (i == nSelect && nSelect < SwChapterNumRules::nMaxRules)
                 nSelect++;
         }
     }
