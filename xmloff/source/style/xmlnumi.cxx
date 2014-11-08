@@ -492,7 +492,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
                                 XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
-        OUString sStyleName = sDisplayTextStyleName;
         pProps[nPos].Name = "CharStyleName";
         pProps[nPos++].Value <<= sDisplayTextStyleName;
 
