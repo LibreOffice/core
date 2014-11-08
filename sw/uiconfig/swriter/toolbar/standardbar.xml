@@ -42,7 +42,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog" toolbar:helpid="20622"/>
- <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false" toolbar:helpid="12021"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021"/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="20224"/>
@@ -62,10 +62,10 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:helpid="20328"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl" toolbar:helpid="52824"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:visible="false" toolbar:helpid="10253"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:visible="false" toolbar:helpid="11002"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="10244"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false" toolbar:helpid="6660"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
