@@ -689,7 +689,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 
     String sSectName( rNewData.GetSectionName() );
     if (sSectName != pSection->GetSectionName())
-        GetUniqueSectionName( &sSectName );
+        sSectName = GetUniqueSectionName( &sSectName );
     else
         sSectName.Erase();
 
