@@ -145,6 +145,7 @@
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewRowColumnHeaders"/>
+            <menu:menuitem menu:id=".uno:ToggleSheetGrid"/>
             <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
