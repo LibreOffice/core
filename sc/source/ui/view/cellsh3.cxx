@@ -101,9 +101,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
-        case SID_ATTR_SIZE://XXX ???
-            break;
-
         case SID_COLLABORATION:
 #if ENABLE_TELEPATHY
             GetViewData()->GetDocShell()->GetCollaboration()->DisplayContacts();
