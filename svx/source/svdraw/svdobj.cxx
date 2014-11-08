@@ -3422,8 +3422,6 @@ SdrObject* SdrObjFactory::MakeNewObject(
 
     if (pPage)
         pObj->SetPage(pPage);
-    else if (pModel)
-        pObj->SetModel(pModel);
 
     if (bSetSnapRect)
         pObj->SetSnapRect(rSnapRect);
