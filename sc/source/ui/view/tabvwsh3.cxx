@@ -473,9 +473,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 rReq.Ignore();//XXX wird von SFX erledigt
             }
 
-        case SID_ATTR_SIZE://XXX ???
-            break;
-
         case SID_PRINTPREVIEW:
             {
                 if ( !pThisFrame->GetFrame().IsInPlace() )          // nicht bei OLE
