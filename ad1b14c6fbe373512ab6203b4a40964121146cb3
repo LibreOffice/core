@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a016987_06f9da4d",
+        "filename": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-11-08T10:04:01Z",
+      "side": 1,
+      "message": "Why do you want to enable this button again?",
+      "revId": "ad1b14c6fbe373512ab6203b4a40964121146cb3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
