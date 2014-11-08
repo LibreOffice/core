@@ -318,7 +318,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     const size_t nArrLen = pDoc->GetFrmFmts()->size();
     for( size_t i = 0; i < nArrLen; ++i )
     {
-        SwFrmFmt* pFmt = (*pDoc->GetFrmFmts())[ i ];
+        const SwFrmFmt* pFmt = (*pDoc->GetFrmFmts())[ i ];
         if(pFmt->IsDefault() || pFmt->IsAuto())
             continue;
         aFormats.push_back(pFmt->GetName());

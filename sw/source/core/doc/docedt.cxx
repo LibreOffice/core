@@ -88,7 +88,7 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
     SwFrmFmts& rFmts = *rRg.aStart.GetNode().GetDoc()->GetSpzFrmFmts();
     for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
-        SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>(rFmts[n]);
+        SwFrmFmt *const pFmt = rFmts[n];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
         if (pAPos &&

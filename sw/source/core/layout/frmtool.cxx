@@ -1074,7 +1074,7 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
     }
 }
 
-static bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
+static bool lcl_ObjConnected( const SwFrmFmt *pFmt, const SwFrm* pSib )
 {
     if ( RES_FLYFRMFMT == pFmt->Which() )
     {
@@ -1101,7 +1101,7 @@ static bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
 
     OD 23.06.2003 #108784#
 */
-static bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
+static bool lcl_InHeaderOrFooter( const SwFrmFmt& _rFmt )
 {
     bool bRetVal = false;
 

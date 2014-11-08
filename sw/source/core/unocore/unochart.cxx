@@ -123,7 +123,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( bool bLock )
     {
         SwTable* pTmpTbl;
         const SwTableNode* pTblNd;
-        SwFrmFmt* pFmt = rTblFmts[ n ];
+        const SwFrmFmt* pFmt = rTblFmts[ n ];
 
         if( 0 != ( pTmpTbl = SwTable::FindTable( pFmt ) ) &&
             0 != ( pTblNd = pTmpTbl->GetTableNode() ) &&

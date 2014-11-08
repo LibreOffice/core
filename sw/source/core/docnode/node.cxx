@@ -515,7 +515,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
 
             for( n = 0; n < rFmts.size(); ++n )
             {
-                SwFrmFmt* pFrmFmt = rFmts[ n ];
+                const SwFrmFmt* pFrmFmt = rFmts[ n ];
                 const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
                 if( rCntnt.GetCntntIdx() &&
                     &rCntnt.GetCntntIdx()->GetNode() == (SwNode*)pSttNd )

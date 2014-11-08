@@ -512,7 +512,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
             const size_t nArrLen = rDoc.GetFrmFmts()->size();
             for( size_t i = 0; i < nArrLen; ++i )
             {
-                SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
+                const SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
                 if(pFmt->IsDefault() || pFmt->IsAuto())
                     continue;
                 if ( IsPoolUserFmt ( pFmt->GetPoolFmtId() ) )

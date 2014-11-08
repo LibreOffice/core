@@ -95,7 +95,7 @@ void SwDoc::DoUpdateAllCharts()
         {
             SwTable* pTmpTbl;
             const SwTableNode* pTblNd;
-            SwFrmFmt* pFmt = rTblFmts[ n ];
+            const SwFrmFmt* pFmt = rTblFmts[ n ];
 
             if( 0 != ( pTmpTbl = SwTable::FindTable( pFmt ) ) &&
                 0 != ( pTblNd = pTmpTbl->GetTableNode() ) &&
@@ -149,7 +149,7 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
     bool bNameFound = rNewName.isEmpty();
     if( !bNameFound )
     {
-        SwFrmFmt* pFmt;
+        const SwFrmFmt* pFmt;
         const SwFrmFmts& rTbl = *GetTblFrmFmts();
         for( sal_uInt16 i = rTbl.size(); i; )
             if( !( pFmt = rTbl[ --i ] )->IsDefault() &&

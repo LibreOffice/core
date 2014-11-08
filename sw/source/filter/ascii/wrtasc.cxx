@@ -136,7 +136,7 @@ sal_uLong SwASCWriter::WriteStream()
                 {
                     // Print the frame's content.
                     // It is always at position 0!
-                    SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[ 0 ];
+                    const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[ 0 ];
                     const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                     if( pIdx )
                     {

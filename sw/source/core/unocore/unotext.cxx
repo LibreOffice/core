@@ -1665,7 +1665,7 @@ SwXText::convertToTextFrame(
     std::set<OUString> aAnchoredFrames;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
     {
-        SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
+        const SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
         if (FLY_AT_PARA == rAnchor.GetAnchorId() &&
                 aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetCntntAnchor()->nNode.GetIndex() &&

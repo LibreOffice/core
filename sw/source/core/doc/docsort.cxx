@@ -298,7 +298,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     // Set index to the Selection's start
     for ( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
     {
-        SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>((*GetSpzFrmFmts())[n]);
+        const SwFrmFmt *const pFmt = (*GetSpzFrmFmts())[n];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
 

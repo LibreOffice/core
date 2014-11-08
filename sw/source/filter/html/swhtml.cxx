@@ -4481,7 +4481,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
     bool bFound = false;
     for ( sal_uInt16 i=0; i<rFrmFmtTbl.size(); i++ )
     {
-        SwFrmFmt *const pFmt = rFrmFmtTbl[i];
+        const SwFrmFmt *const pFmt = rFrmFmtTbl[i];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         // Ein Rahmen wurde gefunden, wenn
         // - er absatzgebunden ist, und

@@ -527,7 +527,7 @@ void SwTextBoxHelper::saveLinks(const SwFrmFmts& rFormats, std::map<const SwFrmF
 {
     for (size_t i = 0; i < rFormats.size(); ++i)
     {
-        SwFrmFmt* pFmt = rFormats[i];
+        const SwFrmFmt* pFmt = rFormats[i];
         if (pFmt->Which() != RES_DRAWFRMFMT)
             continue;
         if (SwFrmFmt* pTextBox = findTextBox(pFmt))

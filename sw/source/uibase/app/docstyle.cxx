@@ -2825,7 +2825,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         const sal_uInt16 nArrLen = rDoc.GetFrmFmts()->size();
         for( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
-            SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
+            const SwFrmFmt* pFmt = (*rDoc.GetFrmFmts())[ i ];
 
             bool bUsed = bIsSearchUsed && ( bOrganizer || rDoc.IsUsed(*pFmt));
             if( ( !bSearchHidden && pFmt->IsHidden( ) && !bUsed ) || pFmt->IsDefault() || pFmt->IsAuto() )
