@@ -263,19 +263,17 @@ void DemoWin::Paint( const Rectangle& rRect )
 
     std::vector<Rectangle> aRegions(partitionAndClear(4,3));
 
-    int i = 0;
-    drawRadialLines(aRegions[i++]);
-    drawText(aRegions[i++]);
-    drawPoly(aRegions[i++]);
-    drawEllipse(aRegions[i++]);
-    drawCheckered(aRegions[i++]);
-    drawBitmapEx(aRegions[i++]);
-    drawBitmap(aRegions[i++]);
-    drawGradient(aRegions[i++]);
-    drawPolyPolgons(aRegions[i++]);
+    drawRadialLines(aRegions[0]);
+    drawText(aRegions[1]);
+    drawPoly(aRegions[2]);
+    drawEllipse(aRegions[3]);
+    drawCheckered(aRegions[4]);
+    drawBitmapEx(aRegions[5]);
+    drawBitmap(aRegions[6]);
+    drawGradient(aRegions[7]);
+    drawPolyPolgons(aRegions[8]);
     // last - thumbnail all the above
-    fetchDrawBitmap(aRegions[i++]);
-    assert(i<=12);
+    fetchDrawBitmap(aRegions[9]);
 }
 
 class DemoApp : public Application
