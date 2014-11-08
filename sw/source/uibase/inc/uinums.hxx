@@ -51,10 +51,8 @@ class SW_DLLPUBLIC SwNumRulesWithName
     public:
         _SwNumFmtGlobal( const SwNumFmt& rFmt );
         _SwNumFmtGlobal( const _SwNumFmtGlobal& );
-        _SwNumFmtGlobal( SvStream&, sal_uInt16 nVersion );
         ~_SwNumFmtGlobal();
 
-        void Store( SvStream& );
         void ChgNumFmt( SwWrtShell& rSh, SwNumFmt& rChg ) const;
     };
 
@@ -70,7 +68,6 @@ protected:
 public:
     SwNumRulesWithName(const SwNumRule &, const OUString &);
     SwNumRulesWithName( const SwNumRulesWithName & );
-    SwNumRulesWithName(SvStream &, sal_uInt16 nVersion);
     ~SwNumRulesWithName();
 
     const SwNumRulesWithName &operator=(const SwNumRulesWithName &);
@@ -78,7 +75,6 @@ public:
     const OUString& GetName() const               { return maName; }
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;
 
-    void Store( SvStream& );
 
     void GetNumFmt(size_t, SwNumFmt const*&, OUString const*&) const;
 };
@@ -90,11 +86,7 @@ public:
 protected:
     SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
     OUString              sFileName;
-    sal_uInt16            nVersion;
     bool              bModified;
-
-    virtual int         Load(SvStream&);
-    virtual bool        Store(SvStream&);
 
     void                Init();
     void Save();
