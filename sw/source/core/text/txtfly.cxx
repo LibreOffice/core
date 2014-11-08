@@ -208,10 +208,10 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
     const long nXPos, const bool bRight )
 {
     SwRect aRet;
-    sal_uInt16 nPos = 0; // Suche im Cache ...
+    sal_uInt16 nPos = 0; // Search in the Cache
     while( nPos < GetCount() && pObj != pSdrObj[ nPos ] )
         ++nPos;
-    if( GetCount() == nPos ) // nicht gefunden
+    if( GetCount() == nPos ) // Not found
     {
         if( nObjCnt == POLY_CNT )
         {
@@ -398,7 +398,7 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, bool bTop ) const
         if( bTop )
             (aRet.*fnRect->fnSetTop)( (rRect.*fnRect->fnGetTop)() );
 
-        // 8110: Do not always adapt the bottom
+        // Do not always adapt the bottom
         const SwTwips nRetBottom = (aRet.*fnRect->fnGetBottom)();
         const SwTwips nRectBottom = (rRect.*fnRect->fnGetBottom)();
         if ( (*fnRect->fnYDiff)( nRetBottom, nRectBottom ) > 0 ||
@@ -655,8 +655,10 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     }
 }
 
-// #i26945# - change first parameter
-// Now it's the <SwAnchoredObject> instance of the floating screen object
+/**
+ * #i26945# - change first parameter
+ * Now it's the <SwAnchoredObject> instance of the floating screen object
+ */
 bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                        const bool bInFtn,
                        const bool bInFooterOrHeader )
