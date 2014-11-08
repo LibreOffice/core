@@ -84,6 +84,30 @@ public:
         if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(false);
     }
+protected:
+    sal_Bool CjkNumberedListTestHelper(sal_Int16 &nValue)
+    {
+        sal_Bool isNumber;
+        uno::Reference<text::XTextRange> xPara(getParagraph(1));
+        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+        if (!isNumber) {
+            return sal_False;
+        }
+        uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Sequence< beans::PropertyValue > aPropertyValue;
+        xLevels->getByIndex(0) >>= aPropertyValue;
+        int j;
+        for( j = 0 ; j< aPropertyValue.getLength() ; j++) {
+            beans::PropertyValue aProp= aPropertyValue[j];
+            if (aProp.Name == "NumberingType") {
+                nValue = aProp.Value.get<sal_Int16>();
+                return sal_True;
+            }
+        }
+        return sal_False;
+
+    }
 };
 
 DECLARE_OOXMLIMPORT_TEST(testN751054, "n751054.docx")
@@ -2501,6 +2525,33 @@ DECLARE_OOXMLIMPORT_TEST(testBnc821804, "bnc821804.docx")
     CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(10), 3), "IsStart"));
 }
 
+DECLARE_OOXMLIMPORT_TEST_ONLY(testOoxmlCjklist30, "cjklist30.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
+}
+
+DECLARE_OOXMLIMPORT_TEST_ONLY(testOoxmlCjklist31, "cjklist31.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_OOXMLIMPORT_TEST_ONLY(testOoxmlCjklist34, "cjklist34.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
+}
+
+DECLARE_OOXMLIMPORT_TEST_ONLY(testOoxmlCjklist35, "cjklist35.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

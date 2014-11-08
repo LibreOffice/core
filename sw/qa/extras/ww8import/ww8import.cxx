@@ -30,6 +30,32 @@ public:
     Test() : SwModelTestBase("/sw/qa/extras/ww8import/data/", "MS Word 97")
     {
     }
+protected:
+    sal_Bool CjkNumberedListTestHelper(sal_Int16 &nValue)
+    {
+        sal_Bool isNumber;
+        uno::Reference<text::XTextRange> xPara(getParagraph(1));
+        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+        if (!isNumber) {
+            return sal_False;
+        }
+        uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Sequence< beans::PropertyValue > aPropertyValue;
+        xLevels->getByIndex(0) >>= aPropertyValue;
+        int j;
+        for( j = 0 ; j< aPropertyValue.getLength() ; j++)
+        {
+            beans::PropertyValue aProp= aPropertyValue[j];
+            if (aProp.Name == "NumberingType")
+            {
+                nValue = aProp.Value.get<sal_Int16>();
+                return sal_True;
+            }
+        }
+        return sal_False;
+
+    }
 };
 
 #define DECLARE_WW8IMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
@@ -513,6 +539,34 @@ DECLARE_WW8IMPORT_TEST(testBnc787942, "bnc787942.doc")
 DECLARE_WW8IMPORT_TEST(testLayoutHanging, "fdo68967.doc")
 {
     // This must not hang in layout
+}
+
+DECLARE_WW8IMPORT_TEST(testWw8Cjklist30, "cjklist30.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
+}
+
+DECLARE_WW8IMPORT_TEST(testWw8Cjklist31, "cjklist31.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_WW8IMPORT_TEST(testWw8Cjklist34, "cjklist34.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
+}
+
+DECLARE_WW8IMPORT_TEST(testWw8Cjklist35, "cjklist35.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT_EQUAL(sal_True, CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
