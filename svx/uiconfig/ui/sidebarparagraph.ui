@@ -20,7 +20,7 @@
         <property name="column_spacing">6</property>
         <property name="column_homogeneous">True</property>
         <child>
-          <object class="GtkToolbar" id="numberbullet">
+          <object class="sfxlo-SidebarToolBox" id="numberbullet">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="has_tooltip">True</property>
@@ -30,8 +30,6 @@
               <object class="GtkMenuToolButton" id="bullet">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Bullets</property>
                 <property name="is_important">True</property>
                 <property name="action_name">.uno:DefaultBullet</property>
                 <property name="use_underline">True</property>
@@ -45,8 +43,6 @@
               <object class="GtkMenuToolButton" id="number">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Numbering</property>
                 <property name="is_important">True</property>
                 <property name="action_name">.uno:DefaultNumbering</property>
                 <property name="use_underline">True</property>

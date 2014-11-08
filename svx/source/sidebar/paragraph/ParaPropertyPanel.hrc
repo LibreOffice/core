@@ -19,18 +19,6 @@
 
 #include "svx/dialogs.hrc"
 
-//for numbering and bullet
-#define IID_BULLET          1
-#define IID_NUMBER          2
-//============================== popup bullet and numbering =========================
-#define VS_VALUES           1
-#define CB_BULLET_MORE      4
-#define BMP_BULLET_MORE     5
-
-#define VS_NUMBERING        10
-#define CB_NUMBERING_MORE   12
-#define BMP_NUMERING_MORE   13
-
 //============================== line space popup page ==============================
 
 #define LB_LINE_SPACING                    1
@@ -38,10 +26,6 @@
 #define ED_SBINDE_LINEDISTPOINT            3
 
 //============================== Help ID ==============================
-#define HID_POPUP_BULLET_CB_BULLET_MORE "HID_POPUP_BULLET_CB_BULLET_MORE"
-#define HID_POPUP_BULLET_VS_VALUES      "HID_POPUP_BULLET_VS_VALUES"
-#define HID_POPUP_NUM_CB_NUMBERING_MORE "HID_POPUP_NUM_CB_NUMBERING_MORE"
-#define HID_POPUP_NUM_VS_NUMBERING      "HID_POPUP_NUM_VS_NUMBERING"
 
 #define HID_POPUP_LS_LB_LINE_SPACING            "HID_POPUP_LS_LB_LINE_SPACING"
 #define HID_POPUP_LS_ED_SBINDE_LINEDISTPERCENT  "HID_POPUP_LS_ED_SBINDE_LINEDISTPERCENT"
@@ -53,36 +37,6 @@
 #define CONTROL_HEIGHT              15
 #define LISTBOX_HEIGHT              80
 #define VS_SPACING_WIDTH            78
-
-//==============================numbering and bullet==============================
-#define POPUPPANEL_MARGIN_NB   4
-
-#define NB_IMAGE_WIDTH      25
-#define NB_IMAGE_HEIGHT     25
-#define NB_IMAGE_SPACING    5
-
-#define BULLET_IMAGE_WIDTH      NB_IMAGE_WIDTH
-#define BULLET_IMAGE_HEIGHT     NB_IMAGE_HEIGHT
-#define BULLET_IMAGE_SPACING    NB_IMAGE_SPACING
-
-#define NUM_IMAGE_WIDTH     25
-#define NUM_IMAGE_HEIGHT    35
-#define NUM_IMAGE_SPACING   NB_IMAGE_SPACING
-
-#define FIXED_TEXT_HEIGHT        13
-#define CUST_MORE_BUTTON_HEIGHT  15
-
-#define VS_WIDTH_BULLET     BULLET_IMAGE_WIDTH*3+BULLET_IMAGE_SPACING*2
-#define VS_HEIGHT_BULLET    BULLET_IMAGE_HEIGHT*4+BULLET_IMAGE_SPACING*3
-#define VS_WIDTH_NUM        NUM_IMAGE_WIDTH*3+NB_IMAGE_SPACING*2
-#define VS_HEIGHT_NUM       NUM_IMAGE_HEIGHT*3+NB_IMAGE_SPACING*2
-
-#define POPUP_WIDTH_BULLET  VS_WIDTH_BULLET + POPUPPANEL_MARGIN_NB * 2
-#define POPUP_HEIGHT_BULLET VS_HEIGHT_BULLET + POPUPPANEL_MARGIN_NB * 3 + CUST_MORE_BUTTON_HEIGHT
-#define POPUP_WIDTH_NUM     VS_WIDTH_NUM + POPUPPANEL_MARGIN_NB * 2
-#define POPUP_HEIGHT_NUM    VS_HEIGHT_NUM + POPUPPANEL_MARGIN_NB * 3 + CUST_MORE_BUTTON_HEIGHT
-
-#define CUST_MORE_BUTTON_X  1
 
 //==============================Line Spacing popup page=======================
 

@@ -37,17 +37,9 @@
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
 
-#include "ParaBulletsPopup.hxx"
-#include "ParaNumberingPopup.hxx"
-
-class FloatingWindow;
 class ToolBox;
 
-
 namespace svx { namespace sidebar {
-
-class PopupControl;
-class PopupContainer;
 
 class ParaPropertyPanel
     : public PanelLayout,
@@ -73,12 +65,7 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
-    sal_uInt16 GetBulletTypeIndex(){ return mnBulletTypeIndex; }
-    sal_uInt16 GetNumTypeIndex(){ return mnNumTypeIndex; }
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
-
-    void EndBulletsPopupMode (void);
-    void EndNumberingPopupMode (void);
 
 private:
     // UI controls
@@ -101,9 +88,6 @@ private:
     Image  maSpace3;
     Image  maIndHang;
 
-    ImageList   maNumBImageList;
-    ImageList   maNumBImageListRTL;
-
     // Data Member
     long                maTxtLeft;
     //Line spacing
@@ -114,8 +98,6 @@ private:
     long                    maUpper;
     long                    maLower;
 
-    sal_uInt16          mnBulletTypeIndex;
-    sal_uInt16          mnNumTypeIndex;
     FieldUnit                       m_eMetricUnit;
     FieldUnit                       m_last_eMetricUnit;
     SfxMapUnit                      m_eLRSpaceUnit;
@@ -128,17 +110,11 @@ private:
     ::sfx2::sidebar::ControllerItem  maOutLineRightControl;
     ::sfx2::sidebar::ControllerItem  maDecIndentControl;
     ::sfx2::sidebar::ControllerItem  maIncIndentControl;
-    ::sfx2::sidebar::ControllerItem  maBulletOnOff;
-    ::sfx2::sidebar::ControllerItem  maNumberOnOff;
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
-    ::sfx2::sidebar::ControllerItem  maBulletNumRuleIndex;
-    ::sfx2::sidebar::ControllerItem  maNumNumRuleIndex;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
-    ParaBulletsPopup maBulletsPopup;
-    ParaNumberingPopup maNumberingPopup;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
 
@@ -149,7 +125,6 @@ private:
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~ParaPropertyPanel (void);
 
-    DECL_LINK(NumBTbxSelectHandler, ToolBox*);
     DECL_LINK(ModifyIndentHdl_Impl, void*);
     DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*);
     DECL_LINK(ClickProDemote_Hdl_Impl, ToolBox*);
@@ -161,22 +136,13 @@ private:
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    // Add toggle state for numbering and bullet icons
-    void StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    //Modified for Numbering&Bullets Dialog UX Enh
-    //Handing the transferred the num rule index data of the current selection
-    void StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
     void initial();
     void ReSize(bool bSize);
 
-    PopupControl* CreateBulletsPopupControl (PopupContainer* pParent);
-    PopupControl* CreateNumberingPopupControl (PopupContainer* pParent);
     DECL_LINK(ClickLineSPDropDownHdl_Impl, ToolBox*);
-    DECL_LINK(NumBTbxDDHandler, ToolBox*);
 
     void InitToolBoxIndent();
-    void InitToolBoxBulletsNumbering();
     void InitToolBoxSpacing();
 };
 

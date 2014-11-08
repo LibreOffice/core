@@ -23,25 +23,9 @@
 
 #include <svtools/valueset.hxx>
 #include <limits.h>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/lang/Locale.hpp>
-
 #include <vcl/image.hxx>
 
 #include <vector>
-
-namespace com{namespace sun{ namespace star{
-    namespace container{
-        class XIndexAccess;
-    }
-    namespace beans{
-        struct PropertyValue;
-    }
-    namespace text{
-        class XNumberingFormatter;
-    }
-}}}
 
 namespace svx { namespace sidebar {
 
@@ -112,45 +96,6 @@ private:
 
     const tControlType meControlType;
     tItemList maItems;
-};
-
-class SVX_DLLPUBLIC SvxNumValueSet2 : public ValueSet
-{
-    Color           aLineColor;
-    Rectangle       aOrgRect;
-    VirtualDevice*  pVDev;
-
-    com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
-    com::sun::star::lang::Locale aLocale;
-
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Sequence<
-            com::sun::star::beans::PropertyValue> > aNumSettings;
-
-
-    public:
-        SvxNumValueSet2( vcl::Window* pParent, const ResId& rResId);
-        virtual ~SvxNumValueSet2();
-
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
-
-
-    void            SetNumberingSettings(
-        const com::sun::star::uno::Sequence<
-            com::sun::star::uno::Sequence<
-                com::sun::star::beans::PropertyValue> >& aNum,
-        com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& xFormatter,
-        const com::sun::star::lang::Locale& rLocale );
-};
-
-class SVX_DLLPUBLIC SvxNumValueSet3 : public ValueSet
-{
-    public:
-        SvxNumValueSet3( vcl::Window* pParent, const ResId& rResId);
-        virtual ~SvxNumValueSet3();
-
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
-
 };
 
 } } // end of namespace svx::sidebar

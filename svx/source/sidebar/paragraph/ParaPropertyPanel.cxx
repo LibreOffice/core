@@ -19,13 +19,8 @@
 #include "ParaPropertyPanel.hxx"
 #include "ParaPropertyPanel.hrc"
 
-#include "ParaBulletsPopup.hxx"
-#include "ParaBulletsControl.hxx"
-#include "ParaNumberingPopup.hxx"
-#include "ParaNumberingControl.hxx"
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Tools.hxx>
-#include <svx/sidebar/PopupContainer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -41,9 +36,6 @@
 #include <boost/bind.hpp>
 using namespace css;
 using namespace css::uno;
-
-const char UNO_DEFAULTBULLET[]    = ".uno:DefaultBullet";
-const char UNO_DEFAULTNUMBERING[] = ".uno:DefaultNumbering";
 
 const char UNO_INCREMENTINDENT[]  = ".uno:IncrementIndent";
 const char UNO_DECREMENTINDENT[]  = ".uno:DecrementIndent";
@@ -219,19 +211,6 @@ void ParaPropertyPanel::ReSize(bool /* bSize */)
         mxSidebar->requestLayout();
 }
 
-void ParaPropertyPanel::EndBulletsPopupMode (void)
-{
-    //i122054, Missed following line, for collapse the bullets popup
-    maBulletsPopup.Hide();
-}
-
-void ParaPropertyPanel::EndNumberingPopupMode (void)
-{
-    //i122054, Missed following line, for collapse the numbering popup
-    maNumberingPopup.Hide();
-}
-
-
 void ParaPropertyPanel::InitToolBoxIndent()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
@@ -265,17 +244,6 @@ void ParaPropertyPanel::InitToolBoxIndent()
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 }
 
-void ParaPropertyPanel::InitToolBoxBulletsNumbering()
-{
-    const sal_uInt16 nIdBullet = mpTBxNumBullet->GetItemId(UNO_DEFAULTBULLET);
-    const sal_uInt16 nIdNumber = mpTBxNumBullet->GetItemId(UNO_DEFAULTNUMBERING);
-
-    mpTBxNumBullet->SetItemImage(nIdBullet, maBulletOnOff.GetIcon());
-    mpTBxNumBullet->SetItemImage(nIdNumber, maNumberOnOff.GetIcon());
-
-    mpTBxNumBullet->SetDropdownClickHdl(LINK(this,ParaPropertyPanel,NumBTbxDDHandler));
-    mpTBxNumBullet->SetSelectHdl(LINK(this,ParaPropertyPanel,NumBTbxSelectHandler));
-}
 void ParaPropertyPanel::InitToolBoxSpacing()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
@@ -309,51 +277,7 @@ void ParaPropertyPanel::initial()
 {
     //toolbox
     InitToolBoxIndent();
-    InitToolBoxBulletsNumbering();
     InitToolBoxSpacing();
-}
-
-// for Numbering & Bullet
-IMPL_LINK(ParaPropertyPanel, NumBTbxDDHandler, ToolBox*, pToolBox)
-{
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
-
-    EndTracking();
-    pToolBox->SetItemDown( nId, true );
-
-    if (aCommand == UNO_DEFAULTBULLET)
-    {
-        maBulletsPopup.UpdateValueSet();
-        maBulletsPopup.Show(*pToolBox);
-    }
-    else if (aCommand == UNO_DEFAULTNUMBERING)
-    {
-        maNumberingPopup.UpdateValueSet();
-        maNumberingPopup.Show(*pToolBox);
-    }
-    pToolBox->SetItemDown( nId, false );
-    return 0;
-}
-
-IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
-{
-    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
-    sal_uInt16 nSID = SID_TABLE_VERT_NONE;
-
-    EndTracking();
-    if (aCommand == UNO_DEFAULTBULLET)
-    {
-        nSID = FN_NUM_BULLET_ON;
-    }
-    else if (aCommand == UNO_DEFAULTNUMBERING)
-    {
-        nSID = FN_NUM_NUMBERING_ON;
-    }
-    SfxBoolItem aBoolItem(nSID, true);
-    GetBindings()->GetDispatcher()->Execute(nSID, SfxCallMode::RECORD, &aBoolItem, 0L);
-
-    return 0;
 }
 
 // for Paragraph Indent
@@ -584,16 +508,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
     case SID_INC_INDENT:
     case SID_DEC_INDENT:
         StateChangeIncDecImpl( nSID, eState, pState );
-        break;
-
-    case FN_NUM_NUMBERING_ON:
-    case FN_NUM_BULLET_ON:
-        StateChangeBulletNumImpl( nSID, eState, pState );
-        break;
-
-    case FN_BUL_NUM_RULE_INDEX:
-    case FN_NUM_NUM_RULE_INDEX:
-        StateChangeBulletNumRuleImpl( nSID, eState, pState );
         break;
     }
 }
@@ -853,56 +767,6 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
 }
 
 
-// Add toggle state for numbering and bullet icons
-void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    if ( (eState >= SfxItemState::DEFAULT) && (pState->ISA(SfxBoolItem)) )
-    {
-        const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
-        const bool aBool = pItem->GetValue();
-
-        const sal_uInt16 nIdNumber = mpTBxNumBullet->GetItemId(UNO_DEFAULTNUMBERING);
-        const sal_uInt16 nIdBullet = mpTBxNumBullet->GetItemId(UNO_DEFAULTBULLET);
-
-        if (nSID==FN_NUM_NUMBERING_ON)
-        {
-            mpTBxNumBullet->SetItemState(
-                nIdNumber,
-                aBool ? TRISTATE_TRUE : TRISTATE_FALSE );
-        }
-        else if (nSID==FN_NUM_BULLET_ON)
-        {
-            mpTBxNumBullet->SetItemState(
-                nIdBullet,
-                aBool ? TRISTATE_TRUE : TRISTATE_FALSE );
-        }
-    }
-}
-
-
-void ParaPropertyPanel::StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-{
-    if ( eState >= SfxItemState::DEFAULT && pState->ISA(SfxUInt16Item) )
-    {
-        sal_uInt16 nValue = (sal_uInt16)0xFFFF;
-        {
-            const SfxUInt16Item* pIt = static_cast<const SfxUInt16Item*>(pState);
-            if ( pIt )
-                nValue = pIt->GetValue();
-        }
-
-        if ( nSID == FN_BUL_NUM_RULE_INDEX )
-        {
-            mnBulletTypeIndex = nValue;
-        }
-        else if ( nSID == FN_NUM_NUM_RULE_INDEX )
-        {
-            mnNumTypeIndex = nValue;
-        }
-    }
-}
-
-
 FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
     FieldUnit eUnit = FUNIT_NONE;
@@ -934,16 +798,6 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
     return eUnit;
 }
 
-PopupControl* ParaPropertyPanel::CreateBulletsPopupControl (PopupContainer* pParent)
-{
-    return new ParaBulletsControl(pParent, *this);
-}
-
-PopupControl* ParaPropertyPanel::CreateNumberingPopupControl (PopupContainer* pParent)
-{
-    return new ParaNumberingControl(pParent, *this);
-}
-
 ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
@@ -952,8 +806,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
 
       maSpace3 (SVX_RES(IMG_SPACE3)),
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
-      maNumBImageList (SVX_RES(IL_NUM_BULLET)),
-      maNumBImageListRTL (SVX_RES(IL_NUM_BULLET_RTL)),
       maTxtLeft (0),
       mpLnSPItem (NULL),
       meLnSpState (SfxItemState::DONTCARE),
@@ -961,8 +813,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       mbOutLineRight (false),
       maUpper (0),
       maLower (0),
-      mnBulletTypeIndex ((sal_uInt16)0xFFFF),
-      mnNumTypeIndex ((sal_uInt16)0xFFFF),
       m_eMetricUnit(FUNIT_NONE),
       m_last_eMetricUnit(FUNIT_NONE),
       m_eLRSpaceUnit(),
@@ -974,16 +824,10 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maOutLineRightControl(SID_OUTLINE_RIGHT, *pBindings, *this, OUString("OutlineLeft"), rxFrame),
       maDecIndentControl(SID_DEC_INDENT, *pBindings,*this, OUString("DecrementIndent"), rxFrame),
       maIncIndentControl(SID_INC_INDENT, *pBindings,*this, OUString("IncrementIndent"), rxFrame),
-      maBulletOnOff(FN_NUM_BULLET_ON, *pBindings, *this, OUString("DefaultBullet"), rxFrame),
-      maNumberOnOff(FN_NUM_NUMBERING_ON, *pBindings, *this, OUString("DefaultNumbering"), rxFrame),
       m_aMetricCtl (SID_ATTR_METRIC, *pBindings,*this),
-      maBulletNumRuleIndex (FN_BUL_NUM_RULE_INDEX, *pBindings,*this),
-      maNumNumRuleIndex (FN_NUM_NUM_RULE_INDEX, *pBindings,*this),
       mxFrame(rxFrame),
       maContext(),
       mpBindings(pBindings),
-      maBulletsPopup(this, ::boost::bind(&ParaPropertyPanel::CreateBulletsPopupControl, this, _1)),
-      maNumberingPopup(this, ::boost::bind(&ParaPropertyPanel::CreateNumberingPopupControl, this, _1)),
       mxSidebar(rxSidebar)
 {
     //Alignment
