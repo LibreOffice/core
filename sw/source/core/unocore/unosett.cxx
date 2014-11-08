@@ -1938,15 +1938,15 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 17: //UNO_NAME_BULLET_FONT,
                 {
                     assert( !pDocShell );
-                    awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pProp->Value.getValue();
-                    if(pDesc)
+                    awt::FontDescriptor desc;
+                    if (pProp->Value >>= desc)
                     {
                         // #i93725#
                         // do not accept "empty" font
-                        if ( !pDesc->Name.isEmpty() )
+                        if (!desc.Name.isEmpty())
                         {
                             vcl::Font aFont;
-                            SvxUnoFontDescriptor::ConvertToFont( *pDesc, aFont );
+                            SvxUnoFontDescriptor::ConvertToFont(desc, aFont);
                             aFmt.SetBulletFont(&aFont);
                         }
                     }
@@ -2016,8 +2016,8 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 21: //UNO_NAME_GRAPHIC_BITMAP,
                 {
                     assert( !pDocShell );
-                    uno::Reference< awt::XBitmap >* pBitmap = (uno::Reference< awt::XBitmap > *)pProp->Value.getValue();
-                    if(pBitmap)
+                    uno::Reference<awt::XBitmap> xBitmap;
+                    if (pProp->Value >>= xBitmap)
                     {
                         if(!pSetBrush)
                         {
@@ -2030,7 +2030,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                                 pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
                         }
 
-                        BitmapEx aBmp = VCLUnoHelper::GetBitmap( *pBitmap );
+                        BitmapEx aBmp = VCLUnoHelper::GetBitmap(xBitmap);
                         Graphic aNewGr(aBmp);
                         pSetBrush->SetGraphic( aNewGr );
                     }
@@ -2043,13 +2043,13 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                     assert( !pDocShell );
                     if(!pSetSize)
                         pSetSize = new Size;
-                    if(pProp->Value.getValueType() == ::cppu::UnoType<awt::Size>::get())
+                    awt::Size size;
+                    if (pProp->Value >>= size)
                     {
-                         awt::Size* pSize =  (awt::Size*)pProp->Value.getValue();
-                        pSize->Width = convertMm100ToTwip(pSize->Width);
-                        pSize->Height = convertMm100ToTwip(pSize->Height);
-                        pSetSize->Width() = pSize->Width;
-                        pSetSize->Height() = pSize->Height;
+                        size.Width = convertMm100ToTwip(size.Width);
+                        size.Height = convertMm100ToTwip(size.Height);
+                        pSetSize->Width() = size.Width;
+                        pSetSize->Height() = size.Height;
                     }
                     else
                         bWrongArg = true;
