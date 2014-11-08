@@ -85,7 +85,6 @@ public:
     enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
 protected:
     SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
-    OUString              sFileName;
 
     void                Init();
     void Save();

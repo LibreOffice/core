@@ -46,7 +46,6 @@ using namespace ::com::sun::star;
 */
 
 SwChapterNumRules::SwChapterNumRules()
-    : sFileName(OUString(CHAPTER_FILENAME))
 {
     Init();
 }
@@ -57,14 +56,14 @@ void SwChapterNumRules::Save()
     SvtPathOptions aPathOpt;
     aURL.SetSmartURL( aPathOpt.GetUserConfigPath() );
     aURL.setFinalSlash();
-    aURL.Append(sFileName);
+    aURL.Append(CHAPTER_FILENAME);
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE );
     SvStream* pStream = aMedium.GetOutStream();
     bool bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
     {
-        sw::ExportStoredChapterNumberingRules(*this, *pStream, sFileName);
+        sw::ExportStoredChapterNumberingRules(*this, *pStream,CHAPTER_FILENAME);
 
         pStream->Flush();
 
@@ -83,12 +82,13 @@ void  SwChapterNumRules::Init()
     for(sal_uInt16 i = 0; i < nMaxRules; ++i )
         pNumRules[i] = 0;
 
-    OUString sNm( sFileName );
+    OUString sNm(CHAPTER_FILENAME);
     SvtPathOptions aOpt;
     if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
         SfxMedium aStrm( sNm, STREAM_STD_READ );
-        sw::ImportStoredChapterNumberingRules(*this, *aStrm.GetInStream(), sFileName);
+        sw::ImportStoredChapterNumberingRules(*this, *aStrm.GetInStream(),
+                CHAPTER_FILENAME);
     }
 }
 
