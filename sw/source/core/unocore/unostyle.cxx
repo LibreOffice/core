@@ -1876,7 +1876,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                                         break;
                                     }
                                 }
-                                if(!pCharFmt)
+                                if(!pCharFmt && pBasePool)
                                 {
 
                                     SfxStyleSheetBase* pBase;
@@ -2026,14 +2026,17 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
                     sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
 
-                    pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
                     bool bStyleFound = false;
-                    const SfxStyleSheetBase* pBase = pBasePool->First();
-                    while (pBase && !bStyleFound)
+                    if (pBasePool)
                     {
-                        if(pBase->GetName() == aStyleName)
-                            bStyleFound = true;
-                        pBase = pBasePool->Next();
+                        pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
+                        const SfxStyleSheetBase* pBase = pBasePool->First();
+                        while (pBase && !bStyleFound)
+                        {
+                            if(pBase->GetName() == aStyleName)
+                                bStyleFound = true;
+                            pBase = pBasePool->Next();
+                        }
                     }
 
                     if (nIdx == -1 || !bStyleFound)
