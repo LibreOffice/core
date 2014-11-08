@@ -88,6 +88,7 @@
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
 #include <comcore.hrc>      // STR ResIds
+#include <tools/datetimeutils.hxx>
 
 #include <unoframe.hxx>
 
@@ -1907,6 +1908,14 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 
 static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 {
+    if( pDoc->IsInMailMerge())
+    {
+        OUString newName = "MailMergeFly"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( pDoc->GetSpzFrmFmts()->size() + 1 );
+        return newName;
+    }
+
     ResId aId( nDefStrId, *pSwResMgr );
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();

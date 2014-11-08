@@ -54,7 +54,7 @@
 // #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
-
+#include <tools/datetimeutils.hxx>
 
 // #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
@@ -1386,6 +1386,16 @@ void SwSectionNode::NodesArrChgd()
 
 String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
 {
+    if( IsInMailMerge())
+    {
+        OUString newName = "MailMergeSection"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( mpSectionFmtTbl->size() + 1 );
+        if( pChkStr )
+            newName += *pChkStr;
+        return newName;
+    }
+
     ResId aId( STR_REGION_DEFNAME, *pSwResMgr );
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
