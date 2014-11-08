@@ -302,8 +302,8 @@ void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAr
 
     for( i = 0, j = 0; i < nPoints; i++ )
     {
-        aPoints[j++] = (2 * pPtAry[i].mnX) / GetWidth()  - 1.0;
-        aPoints[j++] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
+        aPoints[j++] = (2 * pPtAry[i].mnX) / GetWidth()  - 1.0f;
+        aPoints[j++] = 1.0f - (2 * pPtAry[i].mnY) / GetHeight();
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
