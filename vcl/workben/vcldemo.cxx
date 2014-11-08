@@ -126,6 +126,8 @@ public:
     }
     void drawEllipse(Rectangle r)
     {
+        SetLineColor(Color(COL_RED));
+        SetFillColor(Color(COL_GREEN));
         DrawEllipse(r);
     }
     void drawCheckered(Rectangle r)
