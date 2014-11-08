@@ -23,9 +23,11 @@
 #include <vector>
 #include <ostream>
 #include <stdio.h>
+#include <stack>
 
-#include "parse.hxx"
 #include "types.hxx"
+#include "token.hxx"
+#include "error.hxx"
 #include "rect.hxx"
 #include "format.hxx"
 
@@ -58,6 +60,7 @@ class SmNode;
 class SmStructureNode;
 
 typedef boost::shared_ptr<SmNode> SmNodePointer;
+typedef std::stack< SmNode* > SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
 typedef std::vector< SmStructureNode * > SmStructureNodeArray;
 
