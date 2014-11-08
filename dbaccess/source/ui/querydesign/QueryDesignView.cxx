@@ -1546,8 +1546,8 @@ namespace
                         }
                     }
                 }
-                else if( eOk != ( eErrorCode = FillDragInfo(_pView,pParamNode,aDragLeft))
-                        && SQL_ISRULE(pParamNode,num_value_exp) )
+                else if (pParamNode && eOk != (eErrorCode = FillDragInfo(_pView,pParamNode,aDragLeft))
+                        && SQL_ISRULE(pParamNode,num_value_exp))
                 {
                     OUString sParameterValue;
                     pParamNode->parseNodeToStr( sParameterValue,
