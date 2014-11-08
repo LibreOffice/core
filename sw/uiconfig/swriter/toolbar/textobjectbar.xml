@@ -32,16 +32,16 @@
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline"/>
  <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
  <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
  <toolbar:toolbaritem xlink:href=".uno:Shadowed" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackColor"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
