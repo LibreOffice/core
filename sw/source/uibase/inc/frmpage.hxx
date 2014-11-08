@@ -294,7 +294,7 @@ class SwFrmAddPage : public SfxTabPage
 
     SwWrtShell*   pWrtSh;
 
-    OString       sDlgType;
+    OUString      sDlgType;
     bool      bHtmlMode;
     bool      bFormat;
     bool      bNew;
@@ -314,7 +314,7 @@ public:
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
     void            SetFormatUsed(bool bFmt);
-    void            SetFrmType(const OString &rType) { sDlgType = rType; }
+    void            SetFrmType(const OUString &rType) { sDlgType = rType; }
     void            SetNewFrame(bool bNewFrame) { bNew  = bNewFrame; }
     void            SetShell(SwWrtShell* pSh) { pWrtSh  = pSh; }
 
