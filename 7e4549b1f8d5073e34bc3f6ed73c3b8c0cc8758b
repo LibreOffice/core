@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a016987_86482a89",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 9
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-11-08T21:44:45Z",
+      "side": 1,
+      "message": "In this sentence, the repetition of “in” is correct: the first as part of the verb “to log in”, the second as part of the expression “in order to”.",
+      "revId": "7e4549b1f8d5073e34bc3f6ed73c3b8c0cc8758b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
