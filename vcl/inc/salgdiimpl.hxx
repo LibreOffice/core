@@ -36,6 +36,7 @@ class SalGraphics;
 class SalBitmap;
 class SalFrame;
 class Gradient;
+class SalVirtualDevice;
 
 class VCL_PLUGIN_PUBLIC SalGraphicsImpl
 {
@@ -44,6 +45,8 @@ public:
     virtual ~SalGraphicsImpl();
 
     virtual void Init( SalFrame* pFrame ) = 0;
+
+    virtual void Init( SalVirtualDevice* pVDev ) = 0;
 
     virtual void freeResources() = 0;
 

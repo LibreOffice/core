@@ -150,17 +150,18 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
                 Window aWin = dynamic_cast<X11WindowProvider*>(m_pFrame)->GetX11Window();
                 pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
                         aWin, m_nXScreen.getXScreen());
+                mpImpl->Init( m_pFrame );
             }
             else if (m_pVDev)
             {
                 pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
                         m_pVDev->GetDrawable(), m_pVDev->GetWidth(), m_pVDev->GetHeight(), m_nXScreen.getXScreen());
+                mpImpl->Init(m_pVDev);
             }
             else
                 SAL_WARN("vcl.opengl", "what happened here?");
         }
 
-        mpImpl->Init( m_pFrame );
         // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
     }
 }

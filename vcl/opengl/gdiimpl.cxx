@@ -21,6 +21,7 @@
 
 #include <vcl/gradient.hxx>
 #include <salframe.hxx>
+#include "salvd.hxx"
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
@@ -51,6 +52,11 @@ void OpenGLSalGraphicsImpl::freeResources()
 void OpenGLSalGraphicsImpl::Init( SalFrame* pFrame )
 {
     mpFrame = pFrame;
+}
+
+void OpenGLSalGraphicsImpl::Init(SalVirtualDevice* pVDev)
+{
+    mpVDev = pVDev;
 }
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
@@ -92,14 +98,28 @@ inline GLfloat OpenGLSalGraphicsImpl::GetWidth() const
 {
     if( mpFrame )
         return mpFrame->maGeometry.nWidth;
-    return 0;
+    else if (mpVDev)
+    {
+        long nWidth = 0;
+        long nHeight = 0;
+        mpVDev->GetSize(nWidth, nHeight);
+        return nWidth;
+    }
+    return 1;
 }
 
 inline GLfloat OpenGLSalGraphicsImpl::GetHeight() const
 {
     if( mpFrame )
         return mpFrame->maGeometry.nHeight;
-    return 0;
+    else if (mpVDev)
+    {
+        long nWidth = 0;
+        long nHeight = 0;
+        mpVDev->GetSize(nWidth, nHeight);
+        return nHeight;
+    }
+    return 1;
 }
 
 // set the clip region to empty
