@@ -175,7 +175,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             if( pListStyle )
             {
                 uno::Reference< container::XIndexReplace > xNumRule( SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() ) );
-                pListStyle->FillUnoNumRule(xNumRule, NULL /* const SvI18NMap * ??? */ );
+                pListStyle->FillUnoNumRule(xNumRule);
                 property->maValue <<= xNumRule;
             }
             else

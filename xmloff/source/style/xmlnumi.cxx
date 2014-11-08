@@ -44,7 +44,6 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "fonthdl.hxx"
 #include <xmloff/XMLFontStylesContext.hxx>
@@ -223,8 +222,7 @@ public:
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
     sal_Int32 GetLevel() const { return nLevel; }
-    Sequence<beans::PropertyValue> GetProperties(
-            const SvI18NMap *pI18NMap=0 );
+    Sequence<beans::PropertyValue> GetProperties();
 
     inline void SetPosAndSpaceMode( sal_Int16 eValue )
     {
@@ -402,8 +400,7 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
     return pContext;
 }
 
-Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
-        const SvI18NMap *pI18NMap )
+Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
 {
     sal_Int16 eType = NumberingType::NUMBER_NONE;
 
@@ -496,8 +493,6 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         OUString sDisplayTextStyleName = GetImport().GetStyleDisplayName(
                                 XML_STYLE_FAMILY_TEXT_TEXT, sTextStyleName  );
         OUString sStyleName = sDisplayTextStyleName;
-        if( !sStyleName.isEmpty() && pI18NMap )
-            sStyleName = pI18NMap->Get( SFX_STYLE_FAMILY_CHAR, sStyleName );
         pProps[nPos].Name = "CharStyleName";
         pProps[nPos++].Value <<= sDisplayTextStyleName;
 
@@ -1087,8 +1082,7 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
 }
 
 void SvxXMLListStyleContext::FillUnoNumRule(
-        const Reference< container::XIndexReplace > & rNumRule,
-        const SvI18NMap *pI18NMap ) const
+        const Reference<container::XIndexReplace> & rNumRule) const
 {
     try
     {
@@ -1104,7 +1098,7 @@ void SvxXMLListStyleContext::FillUnoNumRule(
                 if( nLevel >= 0 && nLevel < l_nLevels )
                 {
                     Sequence<beans::PropertyValue> aProps =
-                        pLevelStyle->GetProperties( pI18NMap );
+                        pLevelStyle->GetProperties();
                     Any aAny;
                     aAny <<= aProps;
                     rNumRule->replaceByIndex( nLevel, aAny );
@@ -1142,7 +1136,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
             // We don't set xNumberingRules here, to avoid using them
             // as numbering rules.
             if( rNumRule.is() )
-                FillUnoNumRule( rNumRule, 0 );
+                FillUnoNumRule(rNumRule);
         }
     }
     else
@@ -1212,7 +1206,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         nLevels = xNumRules->getCount();
         if( bOverwrite || bNew )
         {
-            FillUnoNumRule( xNumRules, 0 );
+            FillUnoNumRule(xNumRules);
             aAny <<= xNumRules;
             xPropSet->setPropertyValue( sNumberingRules, aAny );
         }
@@ -1241,7 +1235,7 @@ void SvxXMLListStyleContext::CreateAndInsertAuto() const
         GetImport().GetModel() );
     ((SvxXMLListStyleContext *)this)->nLevels = xNumRules->getCount();
 
-    FillUnoNumRule( xNumRules, 0 );
+    FillUnoNumRule(xNumRules);
 }
 
 Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(

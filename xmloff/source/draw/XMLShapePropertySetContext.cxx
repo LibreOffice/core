@@ -55,7 +55,7 @@ void XMLShapePropertySetContext::EndElement()
         SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(&mxBulletStyle);
         xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
         if( xNumRule.is() )
-            pBulletStyle->FillUnoNumRule(xNumRule, NULL /* const SvI18NMap * ??? */ );
+            pBulletStyle->FillUnoNumRule(xNumRule);
     }
 
     Any aAny;

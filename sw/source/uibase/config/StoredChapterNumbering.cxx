@@ -346,7 +346,7 @@ public:
             uno::Reference<container::XIndexReplace> const xRule(
                 new sw::StoredChapterNumberingRules(m_rNumRules,
                     iter - m_Contexts.begin()));
-            (*iter)->FillUnoNumRule(xRule, 0);
+            (*iter)->FillUnoNumRule(xRule);
             // TODO: xmloff's outline-style import seems to ignore this???
             uno::Reference<container::XNamed> const xNamed(xRule, uno::UNO_QUERY);
             xNamed->setName((*iter)->GetDisplayName());

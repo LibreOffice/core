@@ -26,7 +26,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
-class SvI18NMap;
+
 class SvxXMLListLevelStyleContext_Impl;
 typedef std::vector<SvxXMLListLevelStyleContext_Impl *> SvxXMLListStyle_Impl;
 
@@ -72,9 +72,8 @@ public:
                     ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
     void FillUnoNumRule(
-            const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::container::XIndexReplace > & rNumRule,
-            const SvI18NMap *pI18NMap ) const;
+            const css::uno::Reference<
+                    css::container::XIndexReplace> & rNumRule) const;
 
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
