@@ -113,7 +113,7 @@ public:
 
 inline const SwNumRulesWithName *SwChapterNumRules::GetRules(sal_uInt16 nIdx) const
 {
-    OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
+    assert(nIdx < nMaxRules);
     return pNumRules[nIdx];
 }
 

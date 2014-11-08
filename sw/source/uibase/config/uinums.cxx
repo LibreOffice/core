@@ -117,7 +117,7 @@ void SwChapterNumRules::CreateEmptyNumRule(sal_uInt16 const nIndex)
 void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 nIdx)
 {
     bModified = true;
-    OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");
+    assert(nIdx < nMaxRules);
     if( !pNumRules[nIdx] )
         pNumRules[nIdx] = new SwNumRulesWithName( rCopy );
     else
