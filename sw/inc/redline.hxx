@@ -213,8 +213,6 @@ public:
     bool IsVisible() const { return bIsVisible; }
     bool IsDelLastPara() const { return bDelLastPara; }
 
-    // sal_Bool indicates whether after setting of Pos no range is spanned.
-    // -> sal-True else range and sal-False.
     void SetStart( const SwPosition& rPos, SwPosition* pSttPtr = 0 )
     {
         if( !pSttPtr ) pSttPtr = Start();
