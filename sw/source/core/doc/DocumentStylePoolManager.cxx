@@ -2118,7 +2118,7 @@ bool DocumentStylePoolManager::IsPoolTxtCollUsed( sal_uInt16 nId ) const
 /// Check if this AutoCollection is already/still in use
 bool DocumentStylePoolManager::IsPoolFmtUsed( sal_uInt16 nId ) const
 {
-    SwFmt *pNewFmt = 0;
+    const SwFmt *pNewFmt = 0;
     const SwFmtsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
     bool bFnd = true;

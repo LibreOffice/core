@@ -32,6 +32,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
+#include <docary.hxx>
 
 #include "viewimp.hxx"
 #include "pagefrm.hxx"

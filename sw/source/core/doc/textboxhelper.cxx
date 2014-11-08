@@ -28,6 +28,7 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <cntfrm.hxx>
+#include <docary.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/charrotateitem.hxx>

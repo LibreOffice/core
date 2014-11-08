@@ -674,7 +674,7 @@ void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName) const
         writer.startElement(pName);
         for (size_t i = 0; i < size(); ++i)
         {
-            SwFrmFmt* pFmt = static_cast<SwFrmFmt*>(GetFmt(i));
+            const SwFrmFmt* pFmt = GetFmt(i);
             writer.startElement("swfrmfmt");
             OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("ptr", "%p", pFmt);
@@ -709,7 +709,7 @@ void SwCharFmts::dumpAsXml(xmlTextWriterPtr w) const
         writer.startElement("swcharfmts");
         for (size_t i = 0; i < size(); ++i)
         {
-            SwCharFmt* pFmt = static_cast<SwCharFmt*>(GetFmt(i));
+            const SwCharFmt* pFmt = GetFmt(i);
             writer.startElement("swcharfmt");
             OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
@@ -729,7 +729,7 @@ void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w) const
         writer.startElement("swsectionfmts");
         for (size_t i = 0; i < size(); ++i)
         {
-            SwSectionFmt* pFmt = static_cast<SwSectionFmt*>(GetFmt(i));
+            const SwSectionFmt* pFmt = GetFmt(i);
             writer.startElement("swsectionfmt");
             lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
             writer.endElement();
@@ -746,7 +746,7 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w) const
         writer.startElement("swtxtfmtcolls");
         for (size_t i = 0; i < size(); ++i)
         {
-            SwTxtFmtColl* pColl = static_cast<SwTxtFmtColl*>(GetFmt(i));
+            const SwTxtFmtColl* pColl = GetFmt(i);
             writer.startElement("swtxtfmtcoll");
             OString aName = OUStringToOString(pColl->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));

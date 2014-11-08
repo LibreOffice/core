@@ -54,6 +54,7 @@
 #include <layouter.hxx>
 #include <switerator.hxx>
 #include <DocumentSettingManager.hxx>
+#include <docary.hxx>
 
 using namespace ::com::sun::star;
 

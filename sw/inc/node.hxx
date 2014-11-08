@@ -33,7 +33,6 @@
 #include <ndtyp.hxx>
 #include <index.hxx>
 #include <fmtcol.hxx>
-#include "docary.hxx"
 
 // forward declarations
 
@@ -73,6 +72,7 @@ class IDocumentFieldsAccess;
 class IDocumentContentOperations;
 class IDocumentListItems;
 class Point;
+typedef std::vector<SwOLENode*> SwOLENodes; // docary.hxx
 
 //UUUU
 namespace drawinglayer { namespace attribute {
