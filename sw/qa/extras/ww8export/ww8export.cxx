@@ -28,6 +28,29 @@ public:
         // If the testcase is stored in some other format, it's pointless to test.
         return OString(filename).endsWith(".doc");
     }
+protected:
+    bool CjkNumberedListTestHelper(sal_Int16 &nValue)
+    {
+        bool isNumber;
+        uno::Reference<text::XTextRange> xPara(getParagraph(1));
+        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+        if (!isNumber)
+            return false;
+        uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Sequence< beans::PropertyValue > aPropertyValue;
+        xLevels->getByIndex(0) >>= aPropertyValue;
+        for( int j = 0 ; j< aPropertyValue.getLength() ; ++j)
+        {
+            beans::PropertyValue aProp= aPropertyValue[j];
+            if (aProp.Name == "NumberingType")
+            {
+                nValue = aProp.Value.get<sal_Int16>();
+                return true;
+            }
+        }
+        return false;
+    }
 };
 
 DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
@@ -386,6 +409,35 @@ DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
     uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
     // This resulted in a container.NoSuchElementException.
     CPPUNIT_ASSERT_EQUAL(OUString("5"), xParameters->getByName("MaxLength").get<OUString>());
+}
+
+
+DECLARE_WW8EXPORT_TEST(testWw8Cjklist30, "cjklist30.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
+}
+
+DECLARE_WW8EXPORT_TEST(testWw8Cjklist31, "cjklist31.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_WW8EXPORT_TEST(testWw8Cjklist34, "cjklist34.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
+}
+
+DECLARE_WW8EXPORT_TEST(testWw8Cjklist35, "cjklist35.doc")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

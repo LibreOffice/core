@@ -41,6 +41,30 @@ protected:
         // If the testcase is stored in some other format, it's pointless to test.
         return (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
+protected:
+    bool CjkNumberedListTestHelper(sal_Int16 &nValue)
+    {
+        bool isNumber;
+        uno::Reference<text::XTextRange> xPara(getParagraph(1));
+        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+        if (!isNumber)
+            return false;
+        uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Sequence< beans::PropertyValue > aPropertyValue;
+        xLevels->getByIndex(0) >>= aPropertyValue;
+        for( int j = 0 ; j< aPropertyValue.getLength() ; ++j)
+        {
+            beans::PropertyValue aProp= aPropertyValue[j];
+            if (aProp.Name == "NumberingType")
+            {
+                nValue = aProp.Value.get<sal_Int16>();
+                return true;
+            }
+        }
+        return false;
+
+    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
@@ -511,6 +535,34 @@ DECLARE_OOXMLEXPORT_TEST(testTableRtl, "table-rtl.docx")
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // This was text::WritingMode2::LR_TB, i.e. direction of the table was ignored.
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist30, "cjklist30.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::TIAN_GAN_ZH, numFormat);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist31, "cjklist31.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::DI_ZI_ZH, numFormat);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist34, "cjklist34.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH_TW, numFormat);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist35, "cjklist35.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
