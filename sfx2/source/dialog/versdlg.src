@@ -24,4 +24,9 @@ String STR_VIEWVERSIONCOMMENT
     Text [ en-US ] = "View Version Comment" ;
 };
 
+String STR_NO_NAME_SET
+{
+    Text [ en-US ] = "(no name set)" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

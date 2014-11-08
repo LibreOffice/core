@@ -473,9 +473,11 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(vcl::Window *pParent, SfxVe
     get(m_pCancelButton, "cancel");
     get(m_pCloseButton, "close");
 
+    OUString sAuthor = rInfo.aAuthor.isEmpty() ? SfxResId(STR_NO_NAME_SET) : rInfo.aAuthor;
+
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     m_pDateTimeText->SetText(m_pDateTimeText->GetText() + formatTime(rInfo.aCreationDate, rLocaleWrapper));
-    m_pSavedByText->SetText(m_pSavedByText->GetText() + rInfo.aAuthor);
+    m_pSavedByText->SetText(m_pSavedByText->GetText() + sAuthor);
     m_pEdit->SetText(rInfo.aComment);
     m_pEdit->set_height_request(7 * m_pEdit->GetTextHeight());
     m_pEdit->set_width_request(40 * m_pEdit->approximate_char_width());
