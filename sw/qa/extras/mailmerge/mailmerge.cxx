@@ -31,6 +31,12 @@
 #include <olmenu.hxx>
 #include <cmdid.h>
 
+/**
+ * Maps database URIs to the registered database names for quick lookups
+ */
+typedef std::map<OUString, OUString> DBuriMap;
+DBuriMap aDBuriMap;
+
 class MMTest : public SwModelTestBase
 {
 public:
@@ -62,6 +68,84 @@ public:
 
         ::utl::removeTree(aWorkDir);
         nCurOutputType = 0;
+    }
+
+    OUString registerDBsource( const OUString &aURI, const OUString &aWorkDir )
+    {
+        OUString aDBName;
+        DBuriMap::const_iterator pos = aDBuriMap.find( aURI );
+        if (pos == aDBuriMap.end())
+        {
+            aDBName = SwDBManager::LoadAndRegisterDataSource( aURI, NULL, &aWorkDir );
+            aDBuriMap.insert( std::pair< OUString, OUString >( aURI, aDBName ) );
+            std::cout << "New datasource name: '" << aDBName << "'" << std::endl;
+        }
+        else
+        {
+            aDBName = pos->second;
+            std::cout << "Old datasource name: '" << aDBName << "'" << std::endl;
+        }
+        CPPUNIT_ASSERT(!aDBName.isEmpty());
+        return aDBName;
+    }
+
+    void initMailMergeJobAndArgs( const char* filename, const char* tablename, const OUString &aDBName,
+                                          const OUString &aPrefix, const OUString &aWorkDir, bool file )
+    {
+        uno::Reference< task::XJob > xJob( getMultiServiceFactory()->createInstance( "com.sun.star.text.MailMerge" ), uno::UNO_QUERY_THROW );
+        mxJob.set( xJob );
+
+        int seq_id = 5;
+        if (tablename) seq_id += 2;
+        mSeqMailMergeArgs.realloc( seq_id );
+
+        seq_id = 0;
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_TYPE ), uno::Any( file ? text::MailMergeType::FILE : text::MailMergeType::SHELL ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DOCUMENT_URL ), uno::Any(
+                                        ( OUString(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename)) ) ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DATA_SOURCE_NAME ), uno::Any( aDBName ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_OUTPUT_URL ), uno::Any( aWorkDir ) );
+        mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_FILE_NAME_PREFIX ), uno::Any( aPrefix ));
+        if (tablename)
+        {
+            mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND_TYPE ), uno::Any( sdb::CommandType::TABLE ) );
+            mSeqMailMergeArgs[ seq_id++ ] = beans::NamedValue( OUString( UNO_NAME_DAD_COMMAND ), uno::Any( OUString::createFromAscii(tablename) ) );
+        }
+    }
+
+    void executeMailMerge()
+    {
+        uno::Any res = mxJob->execute( mSeqMailMergeArgs );
+
+        const beans::NamedValue *pArguments = mSeqMailMergeArgs.getConstArray();
+        bool bOk = true;
+        sal_Int32 nArgs = mSeqMailMergeArgs.getLength();
+
+        for (sal_Int32 i = 0; i < nArgs; ++i) {
+            const OUString &rName  = pArguments[i].Name;
+            const uno::Any &rValue = pArguments[i].Value;
+
+            // all error checking was already done by the MM job execution
+            if (rName == UNO_NAME_OUTPUT_URL)
+                bOk &= rValue >>= mailMergeOutputURL;
+            else if (rName == UNO_NAME_FILE_NAME_PREFIX)
+                bOk &= rValue >>= mailMergeOutputPrefix;
+            else if (rName == UNO_NAME_OUTPUT_TYPE)
+                bOk &= rValue >>= nCurOutputType;
+        }
+
+        CPPUNIT_ASSERT(bOk);
+
+        if (nCurOutputType == text::MailMergeType::SHELL)
+        {
+            CPPUNIT_ASSERT(res >>= mxMMComponent);
+            CPPUNIT_ASSERT(mxMMComponent.is());
+        }
+        else
+        {
+            CPPUNIT_ASSERT(res == true);
+            loadMailMergeDocument( 0 );
+        }
     }
 
 protected:
