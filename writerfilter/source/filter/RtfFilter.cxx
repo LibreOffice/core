@@ -85,7 +85,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         // If this is set, write to this file, instead of the real document during paste.
         char* pEnv = getenv("SW_DEBUG_RTF_PASTE_TO");
         OUString aOutStr;
-        if (!bIsNewDoc && pEnv && utl::LocalFileHelper::ConvertPhysicalNameToURL(OStringToOUString(pEnv, RTL_TEXTENCODING_UTF8), aOutStr))
+        if (!bIsNewDoc && pEnv && utl::LocalFileHelper::ConvertPhysicalNameToURL(OUString::fromUtf8(pEnv), aOutStr))
         {
             SvStream* pOut = utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE);
             SvStream* pIn = utl::UcbStreamHelper::CreateStream(xInputStream);
@@ -99,7 +99,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         if (!bIsNewDoc && pEnv)
         {
             OUString aInStr;
-            utl::LocalFileHelper::ConvertPhysicalNameToURL(OStringToOUString(pEnv, RTL_TEXTENCODING_UTF8), aInStr);
+            utl::LocalFileHelper::ConvertPhysicalNameToURL(OUString::fromUtf8(pEnv), aInStr);
             SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, STREAM_READ);
             uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
             xInputStream.set(xStream, uno::UNO_QUERY);
