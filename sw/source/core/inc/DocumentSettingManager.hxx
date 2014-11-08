@@ -43,65 +43,65 @@ class DocumentSettingManager :
     // HISTORY OF THE COMPATIBILITY FLAGS:
     //
     // SO5:
-    // mbParaSpaceMax                        def = sal_False, sal_True since SO8
-    // mbParaSpaceMaxAtPages                 def = sal_False, sal_True since SO8
+    // mbParaSpaceMax                        def = false, true since SO8
+    // mbParaSpaceMaxAtPages                 def = false, true since SO8
     //
     // SO6:
-    // mbTabCompat                           def = sal_False, sal_True since SO8
+    // mbTabCompat                           def = false, true since SO8
     //
     // SO7:
-    // mbUseVirtualDevice                    def = sal_True
-    // mbAddFlyOffsets                       def = sal_False, hidden
+    // mbUseVirtualDevice                    def = true
+    // mbAddFlyOffsets                       def = false, hidden
     //
     // SO7pp1:
-    // bOldNumbering                        def = sal_False, hidden
+    // bOldNumbering                        def = false, hidden
     //
     // SO8:
-    // mbAddExternalLeading                  def = sal_True
-    // mbUseHiResolutionVirtualDevice        def = sal_True, hidden
-    // mbOldLineSpacing                      def = sal_False
-    // mbAddParaSpacingToTableCells          def = sal_True
-    // mbUseFormerObjectPos                  def = sal_False
-    // mbUseFormerTextWrapping               def = sal_False
-    // mbConsiderWrapOnObjPos                def = sal_False
+    // mbAddExternalLeading                  def = true
+    // mbUseHiResolutionVirtualDevice        def = true, hidden
+    // mbOldLineSpacing                      def = false
+    // mbAddParaSpacingToTableCells          def = true
+    // mbUseFormerObjectPos                  def = false
+    // mbUseFormerTextWrapping               def = false
+    // mbConsiderWrapOnObjPos                def = false
     //
     // SO8pp1:
-    // mbIgnoreFirstLineIndentInNumbering    def = sal_False, hidden
-    // mbDoNotJustifyLinesWithManualBreak    def = sal_False, hidden
-    // mbDoNotResetParaAttrsForNumFont       def = sal_False, hidden
+    // mbIgnoreFirstLineIndentInNumbering    def = false, hidden
+    // mbDoNotJustifyLinesWithManualBreak    def = false, hidden
+    // mbDoNotResetParaAttrsForNumFont       def = false, hidden
     //
     // SO8pp3
-    // mbDoNotCaptureDrawObjsOnPage         def = sal_False, hidden
+    // mbDoNotCaptureDrawObjsOnPage         def = false, hidden
     // - Relevant for drawing objects, which don't follow the text flow, but
     //   whose position is outside the page area:
-    //   sal_False: Such drawing objects are captured on the page area of its anchor.
-    //   sal_True: Such drawing objects can leave the page area, they aren't captured.
-    // mbTableRowKeep                            def = sal_False, hidden
-    // mbIgnoreTabsAndBlanksForLineCalculation   def = sal_False, hidden
-    // mbClipAsCharacterAnchoredWriterFlyFrame   def = sal_False, hidden
+    //   false: Such drawing objects are captured on the page area of its anchor.
+    //   true: Such drawing objects can leave the page area, they aren't captured.
+    // mbTableRowKeep                            def = false, hidden
+    // mbIgnoreTabsAndBlanksForLineCalculation   def = false, hidden
+    // mbClipAsCharacterAnchoredWriterFlyFrame   def = false, hidden
     // - Introduced in order to re-activate clipping of as-character anchored
     //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
     //   which are created with version prior SO8/OOo 2.0
     //
     // SO8pp4
-    // mbUnixForceZeroExtLeading                def = sal_False, hidden
+    // mbUnixForceZeroExtLeading                def = false, hidden
     //
     // SO8pu8
     //
     // SO9
     // #i24363# tab stops relative to indent
-    // mbTabRelativeToIndent                    def = sal_True, hidden
+    // mbTabRelativeToIndent                    def = true, hidden
     // #i89181# suppress tab stop at left indent for paragraphs in lists, whose
     // list level position and space mode equals LABEL_ALIGNMENT and whose list
     // label is followed by a tab character.
-    // mbTabAtLeftIndentForParagraphsInList     def = sal_False, hidden
+    // mbTabAtLeftIndentForParagraphsInList     def = false, hidden
 
-    bool mbHTMLMode              : 1;    //< TRUE: Document is in HTMLMode.
-    bool mbIsGlobalDoc           : 1;    //< TRUE: It's a global document.
-    bool mbGlblDocSaveLinks      : 1;    //< TRUE: Save sections linked in global document.
-    bool mbIsLabelDoc            : 1;    //< TRUE: It's a label document.
-    bool mbPurgeOLE              : 1;    //< sal_True: Purge OLE-Objects
-    bool mbKernAsianPunctuation  : 1;    //< sal_True: kerning also for ASIAN punctuation
+    bool mbHTMLMode              : 1;    //< true: Document is in HTMLMode.
+    bool mbIsGlobalDoc           : 1;    //< true: It's a global document.
+    bool mbGlblDocSaveLinks      : 1;    //< true: Save sections linked in global document.
+    bool mbIsLabelDoc            : 1;    //< true: It's a label document.
+    bool mbPurgeOLE              : 1;    //< true: Purge OLE-Objects
+    bool mbKernAsianPunctuation  : 1;    //< true: kerning also for ASIAN punctuation
 
     bool mbParaSpaceMax                     : 1;
     bool mbParaSpaceMaxAtPages              : 1;
@@ -115,7 +115,7 @@ class DocumentSettingManager :
     bool mbUseFormerObjectPos               : 1;    // #i11860#
     bool mbUseFormerTextWrapping            : 1;
     bool mbConsiderWrapOnObjPos             : 1;    // #i28701#
-                                                    // sal_True: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
+                                                    // true: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
                                                     // floating screen objects as given by its
                                                     // attribute 'WrapInfluenceOnObjPos'.
     bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#

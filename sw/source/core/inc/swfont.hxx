@@ -210,7 +210,7 @@ public:
     inline bool IsFntChg() const { return bFntChg; }
     inline void SetFntChg( const bool bNew ) { bFntChg = bNew; }
 
-    // the encapsulated SV-Font-methods (set bFntChg to sal_True)
+    // the encapsulated SV-Font-methods (set bFntChg to true)
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
     inline void SetAlign( const FontAlign eAlign );

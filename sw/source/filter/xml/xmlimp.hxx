@@ -70,7 +70,7 @@ class SwXMLImport: public SvXMLImport
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     bool                bLoadDoc : 1;   // Load doc or styles only
     bool                bInsert : 1;    // Insert mode. If styles are
-                                            // loaded only sal_False means that
+                                            // loaded only false means that
                                             // existing styles will be
                                             // overwritten.
     bool                bBlock : 1;     // Load text block

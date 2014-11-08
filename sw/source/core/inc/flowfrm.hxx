@@ -114,7 +114,7 @@ protected:
     SwFlowFrm *m_pFollow;
     SwFlowFrm *m_pPrecede;
 
-    bool m_bLockJoin  :1; // if sal_True than joins (and thus deletes) are prohibited!
+    bool m_bLockJoin  :1; // if true than joins (and thus deletes) are prohibited!
     bool m_bUndersized:1; // I am smaller than needed
     bool m_bFlyLock   :1; // stop positioning of at-character flyframes
 
@@ -159,7 +159,7 @@ public:
     /** hook tree onto new parent with minimal operations and notifications */
     void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
 
-    bool HasFollow() const { return m_pFollow ? sal_True : sal_False; }
+    bool HasFollow() const { return m_pFollow != nullptr; }
     bool IsFollow() const { return 0 != m_pPrecede; }
     bool IsAnFollow( const SwFlowFrm *pFlow ) const;
     const SwFlowFrm *GetFollow() const { return m_pFollow; }

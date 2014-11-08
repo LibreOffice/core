@@ -50,7 +50,7 @@ class XMLRedlineImportHelper
 
     RedlineMapType aRedlineMap;
 
-    // if sal_True, no redlines should be inserted into document
+    // if true, no redlines should be inserted into document
     // (This typically happen when a document is loaded in 'insert'-mode.)
     bool bIgnoreRedlines;
 

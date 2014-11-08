@@ -266,7 +266,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     long    DelLine();
     long    DelLeft();
 
-    // also deletes the frame or sets the cursor in the frame when bDelFrm == sal_False
+    // also deletes the frame or sets the cursor in the frame when bDelFrm == false
     long    DelRight();
     long    DelToEndOfPara();
     long    DelToStartOfPara();
@@ -311,8 +311,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     /**
        Turns on numbering or bullets.
 
-       @param bNum    sal_True: turn on numbering
-                      sal_False: turn on bullets
+       @param bNum    true: turn on numbering
+                      false: turn on bullets
     */
     void    NumOrBulletOn(bool bNum); // #i29560#
     void    NumOrBulletOff(); // #i29560#
@@ -400,7 +400,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool GotoMark( const ::sw::mark::IMark* const pMark );
     bool GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect, bool bStart );
     bool GotoMark( const OUString& rName );
-    bool GoNextBookmark(); // sal_True when there still was one
+    bool GoNextBookmark(); // true when there still was one
     bool GoPrevBookmark();
 
     bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark);

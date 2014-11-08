@@ -130,8 +130,8 @@ private:
     SwRedlineTbl        *mpRedlineTbl;           //< List of all Ranged Redlines.
     SwExtraRedlineTbl   *mpExtraRedlineTbl;      //< List of all Extra Redlines.
     OUString            *mpAutoFmtRedlnComment;  //< Comment for Redlines inserted via AutoFormat.
-    bool mbIsRedlineMove;    //< True: Redlines are moved into to / out of the section.
-    bool mbReadlineChecked;    //< sal_True: if the query was already shown
+    bool mbIsRedlineMove;    //< true: Redlines are moved into to / out of the section.
+    bool mbReadlineChecked;    //< true: if the query was already shown
     sal_uInt16 mnAutoFmtRedlnCommentNo;  /**< SeqNo for conjoining of AutoFmt-Redlines.
                                          by the UI. Managed by SwAutoFmt! */
     ::com::sun::star::uno::Sequence <sal_Int8 > maRedlinePasswd;

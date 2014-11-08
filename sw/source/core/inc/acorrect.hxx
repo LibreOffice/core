@@ -69,8 +69,8 @@ public:
 
     // return text of a previous paragraph
     // If it does not exist or if there is nothing before, return blank.
-    //  - sal_True:  paragraph before "normal" insertion position
-    //  - sal_False: paragraph in that the corrected word was inserted
+    //  - true:  paragraph before "normal" insertion position
+    //  - false: paragraph in that the corrected word was inserted
     //               (does not need to be the same paragraph)
     virtual OUString const* GetPrevPara(bool bAtNormalPos) SAL_OVERRIDE;
 

@@ -30,7 +30,7 @@ struct SwTabColsEntry
     long    nMin;
     long    nMax;
     bool    bHidden; // For each entry a flag, hidden or not.
-                         // If the flag bHidden is sal_True column separator
+                         // If the flag bHidden is true column separator
                          // is not in current line. It must maintained
                          // but it may not be displayed.
 };

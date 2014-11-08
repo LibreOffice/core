@@ -78,7 +78,7 @@ public:
     // set either a MM100 or pixel contour
     void               SetContourAPI( const tools::PolyPolygon *pPoly );
 
-    // get either a MM100 or pixel contour, return sal_False if no contour is set.
+    // get either a MM100 or pixel contour, return false if no contour is set.
     bool               GetContourAPI( tools::PolyPolygon &rPoly ) const;
 
     void               SetPixelContour( bool bSet ) { bPixelContour = bSet; }

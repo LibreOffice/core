@@ -112,7 +112,7 @@ class SW_DLLPUBLIC SwViewShell : public Ring
     static BitmapEx*    mpReplaceBmp;    ///< replaced display of still loaded images
     static BitmapEx*    mpErrorBmp;      ///< error display of missed images
 
-    static bool mbLstAct;        // sal_True if EndAction of last Shell
+    static bool mbLstAct;        // true if EndAction of last Shell
                                     // i.e. if the EndActions of the other
                                     // Shells on the document are through.
 
@@ -138,14 +138,14 @@ class SW_DLLPUBLIC SwViewShell : public Ring
 
     bool  mbDocSizeChgd     :1;  // For DocChgNotify(): Announce new DocSize
                                     // at EndAction to DocMDI.
-    bool  mbPaintWorks      :1;  // Normal Painting if sal_True,
-                                    // remember Paint if sal_False.
+    bool  mbPaintWorks      :1;  // Normal Painting if true,
+                                    // remember Paint if false.
     bool  mbPaintInProgress :1;  // Block any double paint.
     bool  mbViewLocked      :1;  // Lock visible range;
                                     // in this case MakeVisible is ineffectual.
     bool  mbInEndAction     :1;  // Avoid problems, cf. viewsh.cxx.
-    bool  mbPreview         :1;  // If sal_True it is a Preview-SwViewShell.
-    bool  mbFrameView       :1;  // If sal_True it is a  (HTML-)Frame.
+    bool  mbPreview         :1;  // If true it is a Preview-SwViewShell.
+    bool  mbFrameView       :1;  // If true it is a  (HTML-)Frame.
     bool  mbEnableSmooth    :1;  // Disable SmoothScroll, e.g. for drag
                                     // of scrollbars.
     bool  mbEndActionByVirDev:1; // Paints from EndAction always via virtual device
@@ -489,8 +489,8 @@ public:
            { mbFrameView = true; maBrowseBorder = rBrowseBorder; }
 
     // Makes the necessary invalidations:
-    // If BrowseMode has changed bBrowseChgd == sal_True
-    // or bBrowseChgd == sal_False in BrowseMode
+    // If BrowseMode has changed bBrowseChgd == true
+    // or bBrowseChgd == false in BrowseMode
     // if proportions have changed.
     void CheckBrowseView( bool bBrowseChgd );
 

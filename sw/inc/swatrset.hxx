@@ -216,7 +216,7 @@ public:
     const SwDoc *GetDoc() const { return GetPool()->GetDoc(); }
           SwDoc *GetDoc()       { return GetPool()->GetDoc(); }
 
-    // Get methods: bool indicates whether to search only in Set (sal_False)
+    // Get methods: bool indicates whether to search only in Set (when false)
     // or also in parents. If nothing is found then default attribute is returned.
     // Character attributes. Implementation in charatr.hxx.
     inline const SvxPostureItem           &GetPosture( bool = true ) const;

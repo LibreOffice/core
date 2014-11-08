@@ -50,7 +50,7 @@ public:
     inline bool  IsInsertForm() const { return m_bInsForm; }
     inline bool  IsCreateObj() const { return m_bCreateObj; }
 
-    // mouse- & key events; return value=sal_True: event was edited
+    // mouse- & key events; return value=true: event was edited
     virtual bool KeyInput(const KeyEvent& rKEvt);
     virtual bool MouseMove(const MouseEvent& rMEvt);
     virtual bool MouseButtonUp(const MouseEvent& rMEvt);

@@ -202,34 +202,30 @@ public:
 
     inline bool IsTab(bool bHard = false) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_TAB) &&
-                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? sal_True : sal_False; }
+                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
     inline void SetTab( bool b )        {
         b ? (nCoreOptions |= VIEWOPT_1_TAB ) : ( nCoreOptions &= ~VIEWOPT_1_TAB); }
 
     inline bool IsBlank(bool bHard = false) const
                     { return !bReadonly && (nCoreOptions & VIEWOPT_1_BLANK) &&
-                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? sal_True : sal_False; }
+                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
     inline void SetBlank( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_BLANK ) : ( nCoreOptions &= ~VIEWOPT_1_BLANK); }
 
     inline bool IsHardBlank() const
-                    { return !bReadonly && nCoreOptions & VIEWOPT_1_HARDBLANK ? sal_True : sal_False; }
+                    { return !bReadonly && (nCoreOptions & VIEWOPT_1_HARDBLANK) != 0; }
     inline void SetHardBlank( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_HARDBLANK ) : ( nCoreOptions &= ~VIEWOPT_1_HARDBLANK); }
 
     inline bool IsParagraph(bool bHard = false) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_PARAGRAPH) &&
-                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? sal_True : sal_False; }
+                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
     inline void SetParagraph( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_PARAGRAPH ) : ( nCoreOptions &= ~VIEWOPT_1_PARAGRAPH); }
 
     inline bool IsLineBreak(bool bHard = false) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_LINEBREAK) &&
-                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? sal_True : sal_False; }
+                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
     inline void SetLineBreak( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_LINEBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_LINEBREAK); }
 
@@ -240,16 +236,16 @@ public:
         { b ? (nCoreOptions |= VIEWOPT_1_COLUMNBREAK ) : ( nCoreOptions &= ~VIEWOPT_1_COLUMNBREAK); }
 
     inline bool IsSoftHyph() const
-                    { return !bReadonly && (nCoreOptions & VIEWOPT_1_SOFTHYPH) ? sal_True : sal_False; }
+                    { return !bReadonly && (nCoreOptions & VIEWOPT_1_SOFTHYPH) != 0; }
     inline void SetSoftHyph( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_SOFTHYPH ) : ( nCoreOptions &= ~VIEWOPT_1_SOFTHYPH); }
 
-    inline bool IsFldName() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLDNAME) ? sal_True : sal_False; }
+    inline bool IsFldName() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLDNAME) != 0; }
     inline void SetFldName( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_FLDNAME ) : ( nCoreOptions &= ~VIEWOPT_1_FLDNAME); }
 
     inline bool IsPostIts() const
-        { return (nCoreOptions & VIEWOPT_1_POSTITS) ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_POSTITS) != 0; }
     inline void SetPostIts( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_POSTITS ) : ( nCoreOptions &= ~VIEWOPT_1_POSTITS); }
            void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
@@ -258,44 +254,43 @@ public:
 
     inline bool IsShowHiddenChar(bool bHard = false) const
         { return !bReadonly && (nCoreOptions & VIEWOPT_1_CHAR_HIDDEN) &&
-                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard)
-                                    ? sal_True : sal_False; }
+                            ((nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
 
     inline void SetShowHiddenChar( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_CHAR_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_CHAR_HIDDEN); }
 
     inline bool IsShowHiddenField() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLD_HIDDEN) ? sal_True : sal_False; }
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_FLD_HIDDEN) != 0; }
     inline void SetShowHiddenField( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_FLD_HIDDEN ) : ( nCoreOptions &= ~VIEWOPT_1_FLD_HIDDEN); }
 
     inline bool IsGraphic() const
-        { return nCoreOptions & VIEWOPT_1_GRAPHIC ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_GRAPHIC) != 0; }
     inline void SetGraphic( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_GRAPHIC ) : ( nCoreOptions &= ~VIEWOPT_1_GRAPHIC); }
 
     inline bool IsPageBack() const
-        { return nCoreOptions & VIEWOPT_1_PAGEBACK ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_PAGEBACK) != 0; }
     inline void SetPageBack( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_PAGEBACK) : ( nCoreOptions &= ~VIEWOPT_1_PAGEBACK); }
 
     inline bool IsTable() const
-        { return nCoreOptions & VIEWOPT_1_TABLE ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_TABLE) != 0; }
     inline void SetTable( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_TABLE ) : ( nCoreOptions &= ~VIEWOPT_1_TABLE); }
 
     inline bool IsDraw() const
-        { return nCoreOptions & VIEWOPT_1_DRAW ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_DRAW) != 0; }
     inline void SetDraw( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_DRAW ) : ( nCoreOptions &= ~VIEWOPT_1_DRAW); }
 
     inline bool IsControl() const
-        { return nCoreOptions & VIEWOPT_1_CONTROL ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_CONTROL) != 0; }
     inline void SetControl( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_CONTROL ) : ( nCoreOptions &= ~VIEWOPT_1_CONTROL); }
 
     inline bool IsSnap() const
-        { return nCoreOptions & VIEWOPT_1_SNAP ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_SNAP) != 0; }
     inline void SetSnap( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_SNAP ) : ( nCoreOptions &= ~VIEWOPT_1_SNAP); }
 
@@ -303,63 +298,63 @@ public:
     inline const Size &GetSnapSize() const { return aSnapSize; }
 
     inline bool IsGridVisible() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_GRIDVISIBLE) ? sal_True : sal_False; }
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_GRIDVISIBLE) != 0; }
     inline void SetGridVisible( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_GRIDVISIBLE ) : ( nCoreOptions &= ~VIEWOPT_1_GRIDVISIBLE); }
 
     inline bool IsOnlineSpell() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_ONLINESPELL) ? sal_True : sal_False; }
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_ONLINESPELL) != 0; }
     inline void SetOnlineSpell( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( nCoreOptions &= ~VIEWOPT_1_ONLINESPELL); }
 
     inline bool IsViewMetaChars() const
-        { return !bReadonly && (nCoreOptions & VIEWOPT_1_VIEWMETACHARS) ? sal_True : sal_False; }
+        { return !bReadonly && (nCoreOptions & VIEWOPT_1_VIEWMETACHARS) != 0; }
     inline void SetViewMetaChars( bool b)
         { b ? (nCoreOptions |= VIEWOPT_1_VIEWMETACHARS ) : ( nCoreOptions &= ~VIEWOPT_1_VIEWMETACHARS); }
 
     inline bool IsSynchronize() const
-        {  return nCoreOptions & VIEWOPT_1_SYNCHRONIZE ? sal_True : sal_False;}
+        {  return (nCoreOptions & VIEWOPT_1_SYNCHRONIZE) != 0; }
     inline void SetSynchronize( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_SYNCHRONIZE ) : ( nCoreOptions &= ~VIEWOPT_1_SYNCHRONIZE); }
 
     inline bool IsCrossHair() const
-        { return nCoreOptions & VIEWOPT_1_CROSSHAIR ? sal_True : sal_False; }
+        { return (nCoreOptions & VIEWOPT_1_CROSSHAIR) != 0; }
     inline void SetCrossHair( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_CROSSHAIR ) : ( nCoreOptions &= ~VIEWOPT_1_CROSSHAIR); }
 
     // Options from nCore2Options
     inline bool IsBlackFont() const
-        {return nCore2Options & VIEWOPT_CORE2_BLACKFONT ? sal_True : sal_False;}
+        {return (nCore2Options & VIEWOPT_CORE2_BLACKFONT) != 0; }
 
     inline void SetBlackFont(bool b)
         { b ? (nCore2Options |= VIEWOPT_CORE2_BLACKFONT) : (nCore2Options &= ~VIEWOPT_CORE2_BLACKFONT);}
 
     inline bool IsShowHiddenPara() const
-        {return nCore2Options & VIEWOPT_CORE2_HIDDENPARA ? sal_True : sal_False;}
+        {return (nCore2Options & VIEWOPT_CORE2_HIDDENPARA) != 0; }
 
     inline void SetShowHiddenPara(bool b)
         { b ? (nCore2Options |= VIEWOPT_CORE2_HIDDENPARA) : (nCore2Options &= ~VIEWOPT_CORE2_HIDDENPARA);}
 
     inline bool IsSmoothScroll() const
-        {return nCore2Options & VIEWOPT_CORE2_SMOOTHSCROLL ? sal_True : sal_False;}
+        {return (nCore2Options & VIEWOPT_CORE2_SMOOTHSCROLL) != 0; }
 
     inline void SetSmoothScroll(bool b)
         { b ? (nCore2Options |= VIEWOPT_CORE2_SMOOTHSCROLL) : (nCore2Options &= ~VIEWOPT_CORE2_SMOOTHSCROLL);}
 
     inline bool IsCursorInProtectedArea() const
-        {return nCore2Options & VIEWOPT_CORE2_CRSR_IN_PROT ? sal_True : sal_False;}
+        {return (nCore2Options & VIEWOPT_CORE2_CRSR_IN_PROT) != 0; }
 
     inline void SetCursorInProtectedArea(bool b)
         { b ? (nCore2Options |= VIEWOPT_CORE2_CRSR_IN_PROT) : (nCore2Options &= ~VIEWOPT_CORE2_CRSR_IN_PROT);}
 
     inline bool IsPDFExport() const
-        {return nCore2Options & VIEWOPT_CORE2_PDF_EXPORT ? sal_True : sal_False;}
+        {return (nCore2Options & VIEWOPT_CORE2_PDF_EXPORT) != 0; }
 
     inline void SetPDFExport(bool b)
         { b ? (nCore2Options |= VIEWOPT_CORE2_PDF_EXPORT) : (nCore2Options &= ~VIEWOPT_CORE2_PDF_EXPORT);}
 
     inline bool IsPrinting() const
-        {return nCore2Options & VIEWOPT_CORE2_PRINTING ? sal_True : sal_False;}
+        {return (nCore2Options & VIEWOPT_CORE2_PRINTING) != 0; }
 
     inline void SetPrinting(bool b)
         { b ? (nCore2Options |= VIEWOPT_CORE2_PRINTING) : (nCore2Options &= ~VIEWOPT_CORE2_PRINTING);}
@@ -435,29 +430,29 @@ public:
     bool    IsViewVScrollBar() const
         {
 #if HAVE_FEATURE_DESKTOP
-            return nUIOptions & VIEWOPT_2_VSCROLLBAR ? sal_True : sal_False;
+            return (nUIOptions & VIEWOPT_2_VSCROLLBAR) != 0;
 #else
-            return sal_False;
+            return false;
 #endif
         }
     bool    IsViewHScrollBar() const
         {
 #if HAVE_FEATURE_DESKTOP
-            return nUIOptions & VIEWOPT_2_HSCROLLBAR ? sal_True : sal_False;
+            return (nUIOptions & VIEWOPT_2_HSCROLLBAR) != 0;
 #else
-            return sal_False;
+            return false;
 #endif
         }
     bool    IsKeepRatio()      const
-        { return nUIOptions & VIEWOPT_2_KEEPASPECTRATIO ? sal_True : sal_False;   }
+        { return (nUIOptions & VIEWOPT_2_KEEPASPECTRATIO) != 0; }
     bool    IsGrfKeepZoom()    const
-        { return nUIOptions & VIEWOPT_2_GRFKEEPZOOM ? sal_True : sal_False;   }
+        { return (nUIOptions & VIEWOPT_2_GRFKEEPZOOM) != 0; }
     bool    IsShowContentTips() const
-        { return nUIOptions & VIEWOPT_2_CONTENT_TIPS ? sal_True : sal_False; }
+        { return (nUIOptions & VIEWOPT_2_CONTENT_TIPS) != 0; }
     bool    IsPrtFormat() const
-        { return nUIOptions & VIEWOPT_2_PRTFORMAT ? sal_True : sal_False; }
+        { return (nUIOptions & VIEWOPT_2_PRTFORMAT) != 0; }
     bool    IsShowScrollBarTips() const
-        { return nUIOptions & VIEWOPT_2_SCROLLBAR_TIPS ? sal_True : sal_False; }
+        { return (nUIOptions & VIEWOPT_2_SCROLLBAR_TIPS) != 0; }
 
     SvxZoomType    GetZoomType()      const { return eZoom; }
 
@@ -492,7 +487,7 @@ public:
 #if HAVE_FEATURE_DESKTOP
             return 0 != (nUIOptions & VIEWOPT_2_ANY_RULER);
 #else
-            return sal_False;
+            return false;
 #endif
         }
     void            SetViewAnyRuler(bool bSet)
@@ -501,15 +496,12 @@ public:
     bool        IsViewHRuler(bool bDirect = false)     const
                         {
 #if HAVE_FEATURE_DESKTOP
-                            bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
-                                    0 != (nUIOptions & VIEWOPT_2_H_RULER) :
-                                    !bReadonly ?
-                                        (nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)
-                                        : sal_False );
-                            return bRet;
+                            return bDirect
+                                   ? 0 != (nUIOptions & VIEWOPT_2_H_RULER)
+                                   : !bReadonly && (nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER);
 #else
                             (void) bDirect;
-                            return sal_False;
+                            return false;
 #endif
                         }
     void            SetViewHRuler   (bool b)
@@ -518,16 +510,12 @@ public:
     bool            IsViewVRuler(bool bDirect = false) const
                         {
 #if HAVE_FEATURE_DESKTOP
-                            bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
-                                    0 !=(nUIOptions & VIEWOPT_2_V_RULER) :
-                                    !bReadonly ?
-                                        (nUIOptions &
-                                            (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)
-                                        : sal_False );
-                            return bRet;
+                            return bDirect
+                                   ? 0 != (nUIOptions & VIEWOPT_2_V_RULER)
+                                   : !bReadonly && (nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER);
 #else
                             (void) bDirect;
-                            return sal_False;
+                            return false;
 #endif
                         }
     void            SetViewVRuler     (bool b)
@@ -535,13 +523,13 @@ public:
 
     // ShadowCursor, switch on/off, get/set color/mode.
     bool    IsShadowCursor()    const
-        { return nUIOptions & VIEWOPT_2_SHADOWCRSR ? sal_True : sal_False;   }
+        { return (nUIOptions & VIEWOPT_2_SHADOWCRSR) != 0; }
     void   SetShadowCursor(bool b)
         { b ? (nUIOptions |= VIEWOPT_2_SHADOWCRSR ) : ( nUIOptions &= ~VIEWOPT_2_SHADOWCRSR); }
 
     //move vertical ruler to the right
     bool    IsVRulerRight()    const
-        { return nUIOptions & VIEWOPT_2_V_RULER_RIGHT ? sal_True : sal_False;   }
+        { return (nUIOptions & VIEWOPT_2_V_RULER_RIGHT) != 0; }
     void   SetVRulerRight(bool b)
         { b ? (nUIOptions |= VIEWOPT_2_V_RULER_RIGHT ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER_RIGHT); }
 

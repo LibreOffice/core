@@ -115,7 +115,7 @@ protected:
     sal_uInt16      nRowsToRepeat;      // Number of rows to repeat on every page.
 
     bool        bModifyLocked   :1;
-    bool        bNewModel       :1; // sal_False: old SubTableModel; sal_True: new RowSpanModel
+    bool        bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
 #ifdef DBG_UTIL
     /// This is set by functions (like Merge()) to forbid a late model change.
     bool m_bDontChangeModel;
@@ -296,7 +296,7 @@ public:
     // Search all content-bearing boxes of the base line on which this box stands.
     // rBoxes as a return value for immediate use.
     // steht. rBoxes auch als Return-Wert, um es gleich weiter zu benutzen
-    // bToTop = true -> up to base line, sal_False-> else only line of box.
+    // bToTop = true -> up to base line, false-> else only line of box.
     SwSelBoxes& SelLineFromBox( const SwTableBox* pBox,
                             SwSelBoxes& rBoxes, bool bToTop = true ) const;
 

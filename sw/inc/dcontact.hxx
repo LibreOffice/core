@@ -343,7 +343,7 @@ class SwDrawContact : public SwContact
          method <_Changed(..)> */
         bool mbUserCallActive : 1;
         /** event type, which is handled for <mpSdrObjHandledByCurrentUserCall>.
-         Note: value only valid, if <mbUserCallActive> is sal_True. */
+         Note: value only valid, if <mbUserCallActive> is true. */
         SdrUserCallType meEventTypeOfCurrentUserCall;
 
         friend class NestedUserCallHdl;

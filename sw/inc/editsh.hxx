@@ -223,7 +223,7 @@ public:
      @return attributes in required AttributeSet.
      When not unambiguous the set has a DONT_CARE !!
      2nd optional parameter <bMergeIndentValuesOfNumRule>.
-     If <bMergeIndentValuesOfNumRule> == sal_True, the indent attributes of
+     If <bMergeIndentValuesOfNumRule> == true, the indent attributes of
      the corresponding list level of an applied list style is merged into
      the requested item set as a LR-SPACE item, if corresponding node has not
      its own indent attributes and the position-and-space mode of the list
@@ -468,7 +468,7 @@ public:
        if all paragraphs of the current selection have the same or none numbering rule applied. */
     const SwNumRule* GetNumRuleAtCurrentSelection() const;
 
-    /** Optional parameter <bResetIndentAttrs> (default value sal_False).
+    /** Optional parameter <bResetIndentAttrs> (default value false).
         If <bResetIndentAttrs> equals true, the indent attributes "before text"
         and "first line indent" are additionally reset at the current selection,
         if the list style makes use of the new list level attributes.

@@ -227,7 +227,7 @@ public:
                                                               aRevisionConfig.SetModified();}
 
     bool        IsInsWithCaption(bool bHTML) const
-                        { return bHTML ? sal_False : aInsertConfig.bInsWithCaption; }
+                        { return !bHTML && aInsertConfig.bInsWithCaption; }
     void        SetInsWithCaption( bool bHTML, bool b )
                     {   if(!bHTML)
                             aInsertConfig.bInsWithCaption = b;

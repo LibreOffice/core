@@ -362,9 +362,9 @@ protected:
     bool mbValidSize     : 1;
     bool mbValidLineNum  : 1;
     bool mbFixSize       : 1;
-    // if sal_True, frame will be painted completely even content was changed
+    // if true, frame will be painted completely even content was changed
     // only partially. For CntntFrms a border (from Action) will exclusively
-    // painted if <mbCompletePaint> is sal_True.
+    // painted if <mbCompletePaint> is true.
     bool mbCompletePaint : 1;
     bool mbRetouche      : 1; // frame is responsible for retouching
 
@@ -427,7 +427,7 @@ protected:
 
         #i28701#
         Method has *only* to contain actions, which has to be performed on
-        *every* assignment of the corresponding flag to <sal_False>.
+        *every* assignment of the corresponding flag to <false>.
     */
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
 
@@ -808,7 +808,7 @@ public:
     virtual void Prepare( const PrepareHint ePrep = PREP_CLEAR,
                           const void *pVoid = 0, bool bNotify = true );
 
-    // sal_True if it is the correct class, sal_False otherwise
+    // true if it is the correct class, false otherwise
     inline bool IsLayoutFrm() const;
     inline bool IsRootFrm() const;
     inline bool IsPageFrm() const;

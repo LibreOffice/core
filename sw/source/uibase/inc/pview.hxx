@@ -132,7 +132,7 @@ public:
     /** Method to enable/disable book preview
         @param _bBookPreview
         input parameter - boolean indicating, if book preview mode has to
-        switch on <sal_True> or of <sal_False>
+        switch on <true> or of <false>
 
         @return boolean indicating, if book preview mode has changed.
     */

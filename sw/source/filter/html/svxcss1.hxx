@@ -238,10 +238,10 @@ protected:
     // Diese Methode wird fuer jeden Selektor mit dem zugehoerigen
     // Item-Set aufgerufen. Fuer einen Selektor koennen mehrere
     // Aufrufe erfolgen.
-    // wenn sal_True zuruckgegeben wird, wird der Item-Set bzw. der
+    // wenn true zuruckgegeben wird, wird der Item-Set bzw. der
     // Selektor nicht mehr gespeichert!
     // Der ItemSet darf entsprechend modifiziert werden!
-    // Die Implementierung dieser Methode gibt sal_False zurueck.
+    // Die Implementierung dieser Methode gibt false zurueck.
     virtual bool StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );

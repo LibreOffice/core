@@ -298,7 +298,7 @@ public:
 
 class SwHiddenTxtField : public SwField
 {
-    OUString aTRUETxt;         ///< Text if condition sal_True.
+    OUString aTRUETxt;         ///< Text if condition true.
     OUString aFALSETxt;        ///< If condition false.
     OUString aContent;         ///< Evaluated DB-text.
 

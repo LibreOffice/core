@@ -171,8 +171,8 @@ inline sal_Int32 CSS1Expression::GetSLength() const
  *  |  |                    |                  |
  *  |  |                    |                  DeclP( 'text-align', 'right' )
  *  |  |                    DeclP( 'font-weight', 'bold' )
- *  |  SelP( 'H2', sal_False )
- *  SelP( 'H1', sal_True )
+ *  |  SelP( 'H2', false )
+ *  SelP( 'H1', true )
  */
 class CSS1Parser
 {

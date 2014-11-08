@@ -395,7 +395,7 @@ private:
     bool mbIsPrepareSelAll       : 1;
 
 #ifdef DBG_UTIL
-    bool mbXMLExport : 1;                //< sal_True: during XML export
+    bool mbXMLExport : 1;                //< true: during XML export
 #endif
 
     // true: Document contains at least one anchored object, which is anchored AT_PAGE with a content position.
@@ -659,12 +659,12 @@ public:
     // in FlySet/FrmFmt.
     /* new parameter bCalledFromShell
 
-       sal_True: An existing adjust item at pAnchorPos is propagated to
+       true: An existing adjust item at pAnchorPos is propagated to
        the content node of the new fly section. That propagation only
        takes place if there is no adjust item in the paragraph style
        for the new fly section.
 
-       sal_False: no propagation
+       false: no propagation
     */
     SwFlyFrmFmt* MakeFlySection( RndStdIds eAnchorType,
                                  const SwPosition* pAnchorPos,
@@ -1168,12 +1168,12 @@ public:
        add output parameter <sListId>
 
        \param rPos         position to start search
-       \param bForward     - sal_True:  search forward
-                           - sal_False: search backward
-       \param bNum         - sal_True:  search for enumeration
-                           - sal_False: search for itemize
-       \param bOutline     - sal_True:  search for outline numbering rule
-                           - sal_False: search for non-outline numbering rule
+       \param bForward     - true:  search forward
+                           - false: search backward
+       \param bNum         - true:  search for enumeration
+                           - false: search for itemize
+       \param bOutline     - true:  search for outline numbering rule
+                           - false: search for non-outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
 
@@ -1216,11 +1216,11 @@ public:
      For AutoFormat at input: columns have to be set at predefined width.
      The array holds the positions of the columns (not their widths).
      new @param bCalledFromShell:
-       sal_True: called from shell -> propagate existing adjust item at
+       true: called from shell -> propagate existing adjust item at
        rPos to every new cell. A existing adjust item in the table
        heading or table contents paragraph style prevent that
        propagation.
-       sal_False: do not propagate
+       false: do not propagate
     */
     const SwTable* InsertTable( const SwInsertTableOptions& rInsTblOpts,  // HEADLINE_NO_BORDER
                                 const SwPosition& rPos, sal_uInt16 nRows,
@@ -1533,7 +1533,7 @@ public:
     @remarks A property is 'set' if it's set to the same value over all boxes in the current selection.
     The property value is retrieved from the first box in the current selection. It is then compared to
     the values of the same property over any other boxes in the selection; if any value is different from
-    that of the first box, the property is unset (and sal_False is returned).
+    that of the first box, the property is unset (and false is returned).
     */
     bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill ) const;
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );

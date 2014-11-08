@@ -84,9 +84,7 @@ const sal_uInt16 POOL_IDUSER_FMT =
 
 inline bool IsPoolUserFmt( sal_uInt16 nId )
 {
-    return POOL_IDUSER_FMT ==
-                (nId & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID))
-        ? sal_True : sal_False;
+    return POOL_IDUSER_FMT == (nId & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID));
 }
 
 /// IDs for the ranges.

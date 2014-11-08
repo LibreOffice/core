@@ -220,7 +220,7 @@ struct SW_DLLPUBLIC SwFormToken
     sal_uInt16          nOutlineLevel;//the maximum permitted outline level in numbering
     sal_uInt16          nAuthorityField;    //enum ToxAuthorityField
     sal_Unicode     cTabFillChar;
-    bool        bWithTab;      // sal_True: do generate tab
+    bool        bWithTab;      // true: do generate tab
                                    // character only the tab stop
                                    // #i21237#
 

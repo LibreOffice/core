@@ -185,7 +185,7 @@ public:
         an "empty" hint is inserted. If there is a selection the attribute
         is hard-formated and added to the node at rRg.Start().
         If the attribute could not be inserted, the method returns
-        sal_False.
+        false.
     */
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
                                 const sal_uInt16 nFlags,bool bExpandCharToPara=false) = 0;

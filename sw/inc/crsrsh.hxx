@@ -213,20 +213,20 @@ private:
                                 // (used in Invalidate by the Cursor)
 
     bool m_bCallChgLnk : 1;       ///< flag for derived classes
-                                // TRUE -> call ChgLnk
+                                // true -> call ChgLnk
                                 // access only via SwChgLinkFlag
     bool m_bAllProtect : 1;       ///< Flag for areas
-                                // TRUE -> everything protected / hidden
+                                // true -> everything protected / hidden
     bool m_bInCMvVisportChgd : 1; ///< Flag for CrsrMoves
-                                // TRUE -> view was moved
-    bool m_bGCAttr : 1;           // TRUE -> non expanded attributes exist.
-    bool m_bIgnoreReadonly : 1;   // TRUE -> make the cursor visible on next
+                                // true -> view was moved
+    bool m_bGCAttr : 1;           // true -> non expanded attributes exist.
+    bool m_bIgnoreReadonly : 1;   // true -> make the cursor visible on next
                                 // EndAction in spite of Readonly
-    bool m_bSelTblCells : 1;      // TRUE -> select cells over the InputWin
-    bool m_bAutoUpdateCells : 1;  // TRUE -> autoformat cells
-    bool m_bBasicHideCrsr : 1;    // TRUE -> HideCrsr from Basic
-    bool m_bSetCrsrInReadOnly : 1;// TRUE -> Cursor is allowed in ReadOnly-Areas
-    bool m_bOverwriteCrsr : 1;    // sal_True -> show Overwrite Crsr
+    bool m_bSelTblCells : 1;      // true -> select cells over the InputWin
+    bool m_bAutoUpdateCells : 1;  // true -> autoformat cells
+    bool m_bBasicHideCrsr : 1;    // true -> HideCrsr from Basic
+    bool m_bSetCrsrInReadOnly : 1;// true -> Cursor is allowed in ReadOnly-Areas
+    bool m_bOverwriteCrsr : 1;    // true -> show Overwrite Crsr
 
     bool m_bMacroExecAllowed : 1;
 
@@ -419,8 +419,8 @@ public:
     /**
        Ensure point and mark of the current PaM are in a specific order.
 
-       @param bPointFirst TRUE: If the point is behind the mark then
-       swap the PaM. FALSE: If the mark is behind the point then swap
+       @param bPointFirst true: If the point is behind the mark then
+       swap the PaM. false: If the mark is behind the point then swap
        the PaM.
     */
     void NormalizePam(bool bPointFirst = true);
@@ -435,7 +435,7 @@ public:
     void Push();
     /*
      * Delete a cursor (controlled by bOldCrsr)
-     *      - from stack or (bOldCrsr = TRUE)
+     *      - from stack or (bOldCrsr = true)
      *      - delete the current one and replace it with the cursor from the
      *      stack
      * Return: whether there was one left one the stack
@@ -478,8 +478,8 @@ public:
     // Return current frame in which the cursor is placed.
     SwCntntFrm *GetCurrFrm( const bool bCalcFrm = true ) const;
 
-    //TRUE if cursor is hidden because of readonly.
-    //FALSE if it is working despite readonly.
+    //true if cursor is hidden because of readonly.
+    //false if it is working despite readonly.
     bool IsCrsrReadonly() const;
 
     // Cursor is placed in something that is protected or selection contains
@@ -540,8 +540,8 @@ public:
     bool GetCharRectAt(SwRect& rRect, const SwPosition* pPos);
 
     // Return current page number:
-    // TRUE:  in which cursor is located.
-    // FALSE: which is visible at the upper margin.
+    // true:  in which cursor is located.
+    // false: which is visible at the upper margin.
     void GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
                      bool bAtCrsrPos = true, const bool bCalcFrm = true );
     // Determine how "empty pages" are handled
@@ -667,7 +667,7 @@ public:
     // jump to the header/footer of the given or current PageDesc
     bool SetCrsrInHdFt( sal_uInt16 nDescNo = USHRT_MAX,
                         bool bInHeader = true );
-    // is point of cursor in header/footer. pbInHeader return sal_True if it is
+    // is point of cursor in header/footer. pbInHeader return true if it is
     // in a headerframe otherwise in a footerframe
     bool IsInHeaderFooter( bool* pbInHeader = 0 ) const;
 
@@ -695,7 +695,7 @@ public:
     bool ExtendSelection( bool bEnd = true, sal_Int32 nCount = 1 );
 
     // Place only the visible cursor at the given position in the document.
-    // Return FALSE if SPoint was corrected by layout.
+    // Return false if SPoint was corrected by layout.
     // (This is needed for displaying the Drag&Drop/Copy-Cursor.)
     bool SetVisCrsr( const Point &rPt );
     inline void UnSetVisCrsr();

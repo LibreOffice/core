@@ -258,11 +258,11 @@ inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )
 
 inline bool SwPageDesc::IsHeaderShared() const
 {
-    return eUse & nsUseOnPage::PD_HEADERSHARE ? sal_True : sal_False;
+    return (eUse & nsUseOnPage::PD_HEADERSHARE) != 0;
 }
 inline bool SwPageDesc::IsFooterShared() const
 {
-    return eUse & nsUseOnPage::PD_FOOTERSHARE ? sal_True : sal_False;
+    return (eUse & nsUseOnPage::PD_FOOTERSHARE) != 0;
 }
 inline void SwPageDesc::ChgHeaderShare( bool bNew )
 {

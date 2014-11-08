@@ -91,7 +91,7 @@ public:
     void SetGrabBagItem(const com::sun::star::uno::Any& rVal);
     void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
 
-    /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value sal_False,
+    /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value false,
      which indicates that the indent attributes at a paragraph style should
      be reset in case that a list style is applied to the paragraph style and
      no indent attributes are applied. */

@@ -168,8 +168,8 @@ public:
     /**
        Checks if this node is in redlines.
 
-       @retval sal_True       this node is in redlines
-       @retval sal_False      else
+       @retval true       this node is in redlines
+       @retval false      else
      */
     bool IsInRedlines() const;
 
@@ -452,7 +452,7 @@ public:
      Access to SwAttrSet. */
     inline const SwAttrSet &GetSwAttrSet() const;
     inline const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
-    inline bool  HasSwAttrSet() const { return mpAttrSet ? sal_True : sal_False; }
+    inline bool  HasSwAttrSet() const { return mpAttrSet != nullptr; }
 
     virtual SwFmtColl* ChgFmtColl( SwFmtColl* );
     SwFmtColl* GetFmtColl() const { return const_cast<SwFmtColl*>(static_cast<const SwFmtColl*>(GetRegisteredIn())); }
@@ -628,39 +628,39 @@ inline const SwCntntNode *SwNode::GetCntntNode() const
 
 inline bool SwNode::IsStartNode() const
 {
-    return ND_STARTNODE & nNodeType  ? sal_True : sal_False;
+    return (ND_STARTNODE & nNodeType) != 0;
 }
 inline bool SwNode::IsCntntNode() const
 {
-    return ND_CONTENTNODE & nNodeType  ? sal_True : sal_False;
+    return (ND_CONTENTNODE & nNodeType) != 0;
 }
 inline bool SwNode::IsEndNode() const
 {
-    return ND_ENDNODE == nNodeType  ? sal_True : sal_False;
+    return ND_ENDNODE == nNodeType;
 }
 inline bool SwNode::IsTxtNode() const
 {
-    return ND_TEXTNODE == nNodeType  ? sal_True : sal_False;
+    return ND_TEXTNODE == nNodeType;
 }
 inline bool SwNode::IsTableNode() const
 {
-    return ND_TABLENODE == nNodeType  ? sal_True : sal_False;
+    return ND_TABLENODE == nNodeType;
 }
 inline bool SwNode::IsSectionNode() const
 {
-    return ND_SECTIONNODE == nNodeType  ? sal_True : sal_False;
+    return ND_SECTIONNODE == nNodeType;
 }
 inline bool SwNode::IsNoTxtNode() const
 {
-    return ND_NOTXTNODE & nNodeType  ? sal_True : sal_False;
+    return (ND_NOTXTNODE & nNodeType) != 0;
 }
 inline bool SwNode::IsOLENode() const
 {
-    return ND_OLENODE == nNodeType  ? sal_True : sal_False;
+    return ND_OLENODE == nNodeType;
 }
 inline bool SwNode::IsGrfNode() const
 {
-    return ND_GRFNODE == nNodeType  ? sal_True : sal_False;
+    return ND_GRFNODE == nNodeType;
 }
 
 inline const SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp ) const

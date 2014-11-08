@@ -212,8 +212,8 @@ public:
 
        @param rItem the item to be set
 
-       @retval sal_True the selected item was successfully set
-       @retval sal_True failure (empty selection)
+       @retval true the selected item was successfully set
+       @retval false failure (empty selection)
     */
     bool SetSelectedItem(const OUString & rItem);
 

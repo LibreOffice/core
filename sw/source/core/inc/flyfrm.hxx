@@ -84,7 +84,7 @@ private:
     // be formatted before the root is anchored correctly to a shell and
     // because too much would be formatted as a result.
     bool bLocked :1;
-    // sal_True if the background of NotifyDTor needs to be notified at the end
+    // true if the background of NotifyDTor needs to be notified at the end
     // of a MakeAll() call.
     bool bNotifyBack :1;
 
@@ -95,14 +95,14 @@ protected:
     // can handle it properly. Exceptions prove the rule.
     bool bInvalid :1;
 
-    // sal_True if the proposed height of an attribute is a minimal height
+    // true if the proposed height of an attribute is a minimal height
     // (this means that the frame can grow higher if needed)
     bool bMinHeight :1;
-    // sal_True if the fly frame could not format position/size based on its
+    // true if the fly frame could not format position/size based on its
     // attributes, e.g. because there was not enough space.
     bool bHeightClipped :1;
     bool bWidthClipped :1;
-    // If sal_True call only the format after adjusting the width (CheckClip);
+    // If true then call only the format after adjusting the width (CheckClip);
     // but the width will not be re-evaluated based on the attributes.
     bool bFormatHeightOnly :1;
 
@@ -112,7 +112,7 @@ protected:
     bool bAutoPosition :1; ///< FLY_AT_CHAR, anchored at character
 
     bool bNoShrink :1;     ///< temporary forbid shrinking to avoid loops
-    // If sal_True, the content of the fly frame will not be deleted when it
+    // If true, the content of the fly frame will not be deleted when it
     // is moved to an invisible layer.
     bool bLockDeleteContent :1;
 
@@ -225,7 +225,7 @@ public:
     SwFrm *FindLastLower();
 
     // #i13147# - add parameter <_bForPaint> to avoid load of
-    // the graphic during paint. Default value: sal_False
+    // the graphic during paint. Default value: false
     bool GetContour( tools::PolyPolygon&   rContour,
                      const bool _bForPaint = false ) const;
 
