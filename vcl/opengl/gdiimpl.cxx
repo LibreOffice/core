@@ -363,18 +363,20 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     {
         const ::basegfx::B2DPolygon& aResult(
             ::basegfx::triangulator::triangulate( aPolygon ) );
-        std::vector<GLushort> aVertices(aResult.count() * 2);
+        std::vector<GLfloat> aVertices(aResult.count() * 2);
         sal_uInt32 j( 0 );
 
+        float nHeight = GetHeight();
+        float nWidth = GetWidth();
         for( sal_uInt32 i = 0; i < aResult.count(); i++ )
         {
             const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint(i) );
-            aVertices[j++] = rPt.getX();
-            aVertices[j++] = rPt.getY();
+            aVertices[j++] = 2 * rPt.getX() / nWidth - 1.0f;
+            aVertices[j++] = 2 * rPt.getY() / nHeight - 1.0f;
         }
 
         glEnableVertexAttribArray( GL_ATTRIB_POS );
-        glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, &aVertices[0] );
+        glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
         glDrawArrays( GL_TRIANGLES, 0, aResult.count() );
         glDisableVertexAttribArray( GL_ATTRIB_POS );
     }
