@@ -121,8 +121,7 @@ public:
         tools::PolyPolygon aPPoly(aPoly);
         SetLineColor(Color(COL_RED));
         SetFillColor(Color(COL_RED));
-        // This hits the 'drawAlphaRect' code-path
-        // FIXME: not alpha ...
+        // This hits the optional 'drawPolyPolygon' code-path
         DrawTransparent(aPPoly, 64);
     }
     void drawEllipse(Rectangle r)
