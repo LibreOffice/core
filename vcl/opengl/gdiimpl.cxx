@@ -372,7 +372,7 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
         {
             const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint(i) );
             aVertices[j++] = 2 * rPt.getX() / nWidth - 1.0f;
-            aVertices[j++] = 2 * rPt.getY() / nHeight - 1.0f;
+            aVertices[j++] = 1.0f - 2 * rPt.getY() / nHeight;
         }
 
         glEnableVertexAttribArray( GL_ATTRIB_POS );
