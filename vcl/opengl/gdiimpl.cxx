@@ -287,7 +287,7 @@ void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAr
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, nPoints * 2, GL_FLOAT, GL_FALSE, 0, &aPoints[0] );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aPoints[0] );
     if( bClose )
         glDrawArrays( GL_LINE_LOOP, 0, nPoints );
     else
@@ -307,7 +307,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, nPoints * 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
