@@ -6523,8 +6523,7 @@ SfxVoidItem DefaultNumbering FN_NUM_NUMBERING_ON
     GroupId = GID_ENUMERATION;
 ]
 
-SfxBoolItem CurrentBulletListType FN_BUL_NUM_RULE_INDEX
-(SfxUInt16Item On FN_PARAM_1)
+SfxUInt16Item CurrentBulletListType FN_BUL_NUM_RULE_INDEX
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -6538,11 +6537,6 @@ SfxBoolItem CurrentBulletListType FN_BUL_NUM_RULE_INDEX
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
-    /* status: */
-    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = FALSE,
@@ -6551,8 +6545,7 @@ SfxBoolItem CurrentBulletListType FN_BUL_NUM_RULE_INDEX
     ToolBoxConfig = FALSE,
     GroupId = GID_ENUMERATION;
 ]
-SfxBoolItem CurrentNumListType FN_NUM_NUM_RULE_INDEX
-(SfxUInt16Item On FN_PARAM_1)
+SfxUInt16Item CurrentNumListType FN_NUM_NUM_RULE_INDEX
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -6566,11 +6559,6 @@ SfxBoolItem CurrentNumListType FN_NUM_NUM_RULE_INDEX
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
-    ImageRotation = TRUE;
-    ImageReflection = TRUE;
-    /* status: */
-    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = FALSE,

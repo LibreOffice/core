@@ -185,7 +185,6 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
          pVDev->SetOutputSize( aRectSize );
         aOrgRect = aRect;
         pVDev->SetFillColor( aBackColor );
-        pVDev->DrawRect(aOrgRect);
 
         if(aBackColor == aLineColor)
             aLineColor.Invert();

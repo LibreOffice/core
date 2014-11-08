@@ -258,7 +258,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                     svx::sidebar::NBOTypeMgrBase* pNBOTypeMgr =
                         nSlot == FN_SVX_SET_NUMBER
                             ? svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::NUMBERING )
-                            : svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::MIXBULLETS );
+                            : svx::sidebar::NBOutlineTypeMgrFact::CreateInstance( svx::sidebar::eNBOType::BULLETS );
                     if ( pNBOTypeMgr != NULL )
                     {
                         const SwNumRule* pNumRuleAtCurrentSelection = GetShell().GetNumRuleAtCurrentSelection();

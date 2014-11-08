@@ -81,6 +81,16 @@ String RID_SVXSTR_FILLCOLOR
     Text [ en-US ] = "Fill Color" ;
 };
 
+String RID_SVXSTR_MORENUMBERING
+{
+    Text [ en-US ] = "More Numbering..." ;
+};
+
+String RID_SVXSTR_MOREBULLETS
+{
+    Text [ en-US ] = "More Bullets..." ;
+};
+
 ComboBox RID_SVXTBX_STYLE
 {
     HelpId = HID_STYLE_LISTBOX ;

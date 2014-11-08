@@ -242,6 +242,28 @@
           <value>com.sun.star.comp.sd.InsertSlideController</value>
         </prop>
       </node>
+      <node oor:name="NumberingToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DefaultNumbering</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
+        </prop>
+      </node>
+      <node oor:name="BulletsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DefaultBullet</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.svx.NumberingToolBoxControl</value>
+        </prop>
+      </node>
       <node oor:name="ExtrusionDirectionFloater" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ExtrusionDirectionFloater</value>

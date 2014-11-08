@@ -80,4 +80,8 @@
       constructor="org_apache_openoffice_comp_svx_sidebar_PanelFactory_get_implementation">
     <service name="com.sun.star.ui.UIElementFactory"/>
   </implementation>
+  <implementation name="com.sun.star.comp.svx.NumberingToolBoxControl"
+      constructor="com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>
