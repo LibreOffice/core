@@ -64,6 +64,7 @@
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
 #include <numrule.hxx>
+#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <paratr.hxx>
@@ -75,27 +76,17 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 
-struct PropValData
+template<typename T>
+PropertyValue makePropertyValue(T const& rValue, OUString const& rName)
 {
-    uno::Any        aVal;
-    OUString            sPropName;
-    PropValData(void* pVal, const char* cPropName, uno::Type aType ) :
-        aVal(pVal, aType),
-        sPropName(OUString::createFromAscii(cPropName))
-        {}
-    PropValData(const uno::Any& rVal, const OUString& rPropName) :
-        aVal(rVal),
-        sPropName(rPropName)
-        {}
-};
+   return PropertyValue(rName, -1, makeAny(rValue), PropertyState_DIRECT_VALUE);
+}
 
 // Constants for the css::text::ColumnSeparatorStyle
 #define API_COL_LINE_NONE               0
 #define API_COL_LINE_SOLID              1
 #define API_COL_LINE_DOTTED             2
 #define API_COL_LINE_DASHED             3
-
-typedef std::vector<PropValData*> PropValDataArr;
 
 #define WID_PREFIX                      0
 #define WID_SUFFIX                      1
@@ -1384,59 +1375,54 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
 {
     bool bChapterNum = pHeadingStyleName != 0;
 
-    PropValDataArr  aPropertyValues;
+    ::comphelper::SequenceAsVector<PropertyValue> aPropertyValues;
+    aPropertyValues.reserve(32);
     //fill all properties into the array
 
     //adjust
     SvxAdjust eAdj = rFmt.GetNumAdjust();
     sal_Int16 nINT16 = aSvxToUnoAdjust[eAdj];
-    PropValData* pData = new PropValData((void*)&nINT16, "Adjust", ::cppu::UnoType<sal_Int16>::get() );
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(makePropertyValue(nINT16, "Adjust"));
 
     //parentnumbering
     nINT16 = rFmt.GetIncludeUpperLevels();
-    pData = new PropValData((void*)&nINT16, "ParentNumbering", ::cppu::UnoType<sal_Int16>::get());
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(makePropertyValue(nINT16, "ParentNumbering"));
 
     //prefix
     OUString aUString = rFmt.GetPrefix();
-    pData = new PropValData((void*)&aUString, "Prefix", ::cppu::UnoType<OUString>::get());
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(makePropertyValue(aUString, "Prefix"));
 
     //suffix
     aUString = rFmt.GetSuffix();
-    pData = new PropValData((void*)&aUString, "Suffix", ::cppu::UnoType<OUString>::get());
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(makePropertyValue(aUString, "Suffix"));
 
     //char style name
     OUString CharStyleName(rCharFormatName);
 
     aUString = OUString();
     SwStyleNameMapper::FillProgName( CharStyleName, aUString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
-    pData = new PropValData((void*)&aUString, "CharStyleName", ::cppu::UnoType<OUString>::get());
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(makePropertyValue(aUString, "CharStyleName"));
 
     //startvalue
     nINT16 = rFmt.GetStart();
-    pData = new PropValData((void*)&nINT16, "StartWith", ::cppu::UnoType<sal_Int16>::get());
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(makePropertyValue(nINT16, "StartWith"));
 
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         //leftmargin
         sal_Int32 nINT32 = convertTwipToMm100(rFmt.GetAbsLSpace());
-        pData = new PropValData((void*)&nINT32, UNO_NAME_LEFT_MARGIN, ::cppu::UnoType<sal_Int32>::get());
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(nINT32, UNO_NAME_LEFT_MARGIN));
 
         //chartextoffset
         nINT32 = convertTwipToMm100(rFmt.GetCharTextDistance());
-        pData = new PropValData((void*)&nINT32, UNO_NAME_SYMBOL_TEXT_DISTANCE, ::cppu::UnoType<sal_Int32>::get());
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(nINT32, UNO_NAME_SYMBOL_TEXT_DISTANCE));
 
         //firstlineoffset
         nINT32 = convertTwipToMm100(rFmt.GetFirstLineOffset());
-        pData = new PropValData((void*)&nINT32, UNO_NAME_FIRST_LINE_OFFSET, ::cppu::UnoType<sal_Int32>::get());
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(nINT32, UNO_NAME_FIRST_LINE_OFFSET));
     }
 
     // PositionAndSpaceMode
@@ -1445,10 +1431,8 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
     {
         nINT16 = PositionAndSpaceMode::LABEL_ALIGNMENT;
     }
-    pData = new PropValData( (void*)&nINT16,
-                             UNO_NAME_POSITION_AND_SPACE_MODE,
-                             ::cppu::UnoType<sal_Int16>::get() );
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(
+            makePropertyValue(nINT16, UNO_NAME_POSITION_AND_SPACE_MODE));
 
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
@@ -1462,37 +1446,28 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
         {
             nINT16 = LabelFollow::NOTHING;
         }
-        pData = new PropValData( (void*)&nINT16,
-                                 UNO_NAME_LABEL_FOLLOWED_BY,
-                                 ::cppu::UnoType<sal_Int16>::get() );
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(nINT16, UNO_NAME_LABEL_FOLLOWED_BY));
 
         // ListtabStopPosition
         sal_Int32 nINT32 = convertTwipToMm100(rFmt.GetListtabPos());
-        pData = new PropValData( (void*)&nINT32,
-                                 UNO_NAME_LISTTAB_STOP_POSITION,
-                                 ::cppu::UnoType<sal_Int32>::get());
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(nINT32, UNO_NAME_LISTTAB_STOP_POSITION));
 
         // FirstLineIndent
         nINT32 = convertTwipToMm100(rFmt.GetFirstLineIndent());
-        pData = new PropValData( (void*)&nINT32,
-                                 UNO_NAME_FIRST_LINE_INDENT,
-                                 ::cppu::UnoType<sal_Int32>::get());
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(nINT32, UNO_NAME_FIRST_LINE_INDENT));
 
         // IndentAt
         nINT32 = convertTwipToMm100(rFmt.GetIndentAt());
-        pData = new PropValData( (void*)&nINT32,
-                                 UNO_NAME_INDENT_AT,
-                                 ::cppu::UnoType<sal_Int32>::get());
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(nINT32, UNO_NAME_INDENT_AT));
     }
 
     //numberingtype
     nINT16 = rFmt.GetNumberingType();
-    pData = new PropValData((void*)&nINT16, "NumberingType", ::cppu::UnoType<sal_Int16>::get());
-    aPropertyValues.push_back(pData);
+    aPropertyValues.push_back(makePropertyValue(nINT16, "NumberingType"));
 
     if(!bChapterNum)
     {
@@ -1500,28 +1475,25 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
         {
             //BulletId
             nINT16 = rFmt.GetBulletChar();
-            pData = new PropValData((void*)&nINT16, "BulletId", ::cppu::UnoType<sal_Int16>::get());
-            aPropertyValues.push_back(pData);
+            aPropertyValues.push_back(makePropertyValue(nINT16, "BulletId"));
 
             const vcl::Font* pFont = rFmt.GetBulletFont();
 
             //BulletChar
             aUString = OUString(rFmt.GetBulletChar());
-            pData = new PropValData((void*)&aUString, "BulletChar", ::cppu::UnoType<OUString>::get());
-            aPropertyValues.push_back(pData);
+            aPropertyValues.push_back(makePropertyValue(aUString, "BulletChar"));
 
             //BulletFontName
             aUString = pFont ? pFont->GetStyleName() : OUString();
-            pData = new PropValData((void*)&aUString, "BulletFontName", ::cppu::UnoType<OUString>::get());
-            aPropertyValues.push_back(pData);
+            aPropertyValues.push_back(makePropertyValue(aUString, "BulletFontName"));
 
             //BulletFont
             if(pFont)
             {
                  awt::FontDescriptor aDesc;
                 SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );
-                pData = new PropValData((void*)&aDesc, UNO_NAME_BULLET_FONT, cppu::UnoType<awt::FontDescriptor>::get());
-                aPropertyValues.push_back(pData);
+                aPropertyValues.push_back(
+                        makePropertyValue(aDesc, UNO_NAME_BULLET_FONT));
             }
         }
         if(SVX_NUM_BITMAP == rFmt.GetNumberingType())
@@ -1536,8 +1508,8 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
             }
             else
                 aUString = OUString();
-            pData = new PropValData((void*)&aUString, UNO_NAME_GRAPHIC_URL, ::cppu::UnoType<OUString>::get());
-            aPropertyValues.push_back(pData);
+            aPropertyValues.push_back(
+                    makePropertyValue(aUString, UNO_NAME_GRAPHIC_URL));
 
             //graphicbitmap
             const Graphic* pGraphic = 0;
@@ -1546,56 +1518,44 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
             if(pGraphic)
             {
                 uno::Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( pGraphic->GetBitmapEx() );
-                pData = new PropValData((void*)&xBmp, UNO_NAME_GRAPHIC_BITMAP,
-                                cppu::UnoType<awt::XBitmap>::get());
-                aPropertyValues.push_back(pData);
+                aPropertyValues.push_back(
+                        makePropertyValue(xBmp, UNO_NAME_GRAPHIC_BITMAP));
             }
              Size aSize = rFmt.GetGraphicSize();
             // #i101131#
             // adjust conversion due to type mismatch between <Size> and <awt::Size>
             awt::Size aAwtSize(convertTwipToMm100(aSize.Width()), convertTwipToMm100(aSize.Height()));
-            pData = new PropValData((void*)&aAwtSize, UNO_NAME_GRAPHIC_SIZE, ::cppu::UnoType<awt::Size>::get());
-            aPropertyValues.push_back(pData);
+            aPropertyValues.push_back(
+                    makePropertyValue(aAwtSize, UNO_NAME_GRAPHIC_SIZE));
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
             if(pOrient)
             {
-                pData = new PropValData((void*)0, UNO_NAME_VERT_ORIENT, ::cppu::UnoType<sal_Int16>::get());
-                ((const SfxPoolItem*)pOrient)->QueryValue(pData->aVal, MID_VERTORIENT_ORIENT);
-                aPropertyValues.push_back(pData);
+                uno::Any any;
+                pOrient->QueryValue(any, MID_VERTORIENT_ORIENT);
+                aPropertyValues.push_back(PropertyValue(
+                    UNO_NAME_VERT_ORIENT, -1, any, PropertyState_DIRECT_VALUE));
             }
         }
     }
     else
     {
         aUString = *pHeadingStyleName;
-        pData = new PropValData((void*)&aUString, UNO_NAME_HEADING_STYLE_NAME, ::cppu::UnoType<OUString>::get());
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(
+                makePropertyValue(aUString, UNO_NAME_HEADING_STYLE_NAME));
     }
 
-    uno::Sequence<beans::PropertyValue> aSeq(aPropertyValues.size());
-    beans::PropertyValue* pArray = aSeq.getArray();
-
-    for(size_t i = 0; i < aPropertyValues.size(); ++i)
-    {
-        pData = aPropertyValues[i];
-        pArray[i].Value = pData->aVal;
-        pArray[i].Name = pData->sPropName;
-        pArray[i].Handle = -1;
-    }
-    for (PropValDataArr::const_iterator it = aPropertyValues.begin(); it != aPropertyValues.end(); ++it)
-      delete *it;
-    aPropertyValues.clear();
-    return aSeq;
+    return aPropertyValues.getAsConstList();
 }
 
-static PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
+static PropertyValue const* lcl_FindProperty(
+    const char* cName, std::vector<PropertyValue const*> const& rPropertyValues)
 {
     const OUString sCmp = OUString::createFromAscii(cName);
     for(size_t i = 0; i < rPropertyValues.size(); ++i)
     {
-        PropValData* pTemp = rPropertyValues[i];
-        if(sCmp == pTemp->sPropName)
+        PropertyValue const*const pTemp = rPropertyValues[i];
+        if (sCmp == pTemp->Name)
             return pTemp;
     }
     return 0;
@@ -1709,7 +1669,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
     };
 
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
-    PropValDataArr aPropertyValues;
+    ::std::vector<PropertyValue const*> aPropertyValues;
     bool bExcept = false;
     for(sal_Int32 i = 0; i < rProperties.getLength() && !bExcept; i++)
     {
@@ -1732,8 +1692,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
             }
         }
         SAL_WARN_IF( bExcept, "sw.uno", "Unknown/incorrect property " << rProp.Name << ", failing" );
-        PropValData* pData = new PropValData(rProp.Value, rProp.Name );
-        aPropertyValues.push_back(pData);
+        aPropertyValues.push_back(& rProp);
     }
 
     bool bWrongArg = false;
@@ -1746,15 +1705,16 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
 
         for(size_t i = 0; i < SAL_N_ELEMENTS( aNumPropertyNames ) && !bExcept && !bWrongArg; ++i)
         {
-            PropValData* pData = lcl_FindProperty(aNumPropertyNames[i], aPropertyValues);
-            if(!pData)
+            PropertyValue const*const pProp(
+                    lcl_FindProperty(aNumPropertyNames[i], aPropertyValues));
+            if (!pProp)
                 continue;
             switch(i)
             {
                 case 0: //"Adjust"
                 {
                     sal_Int16 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     if(nValue > 0 &&
                         nValue <= text::HoriOrientation::LEFT &&
                             USHRT_MAX != aUnoToSvxAdjust[nValue])
@@ -1768,7 +1728,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 1: //"ParentNumbering",
                 {
                     sal_Int16 nSet = 0;
-                    pData->aVal >>= nSet;
+                    pProp->Value >>= nSet;
                     if(nSet >= 0 && MAXLEVEL >= nSet)
                         aFmt.SetIncludeUpperLevels( static_cast< sal_uInt8 >(nSet) );
                 }
@@ -1776,14 +1736,14 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 2: //"Prefix",
                 {
                     OUString uTmp;
-                    pData->aVal >>= uTmp;
+                    pProp->Value >>= uTmp;
                     aFmt.SetPrefix(uTmp);
                 }
                 break;
                 case 3: //"Suffix",
                 {
                     OUString uTmp;
-                    pData->aVal >>= uTmp;
+                    pProp->Value >>= uTmp;
                     aFmt.SetSuffix(uTmp);
                 }
                 break;
@@ -1791,7 +1751,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 {
                     bCharStyleNameSet = true;
                     OUString uTmp;
-                    pData->aVal >>= uTmp;
+                    pProp->Value >>= uTmp;
                     OUString sCharFmtName;
                     SwStyleNameMapper::FillUIName( uTmp, sCharFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                     if (sCharFmtName == UNO_NAME_CHARACTER_FORMAT_NONE)
@@ -1841,14 +1801,14 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 5: //"StartWith",
                 {
                     sal_Int16 nVal = 0;
-                    pData->aVal >>= nVal;
+                    pProp->Value >>= nVal;
                     aFmt.SetStart(nVal);
                 }
                 break;
                 case 6: //UNO_NAME_LEFT_MARGIN,
                 {
                     sal_Int32 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     // #i23727# nValue can be negative
                     aFmt.SetAbsLSpace((short) convertMm100ToTwip(nValue));
                 }
@@ -1856,7 +1816,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 7: //UNO_NAME_SYMBOL_TEXT_DISTANCE,
                 {
                     sal_Int32 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     if(nValue >= 0)
                         aFmt.SetCharTextDistance((short) convertMm100ToTwip(nValue));
                     else
@@ -1866,7 +1826,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 8: //UNO_NAME_FIRST_LINE_OFFSET,
                 {
                     sal_Int32 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     // #i23727# nValue can be positive
                     nValue = convertMm100ToTwip(nValue);
                     aFmt.SetFirstLineOffset((short)nValue);
@@ -1875,7 +1835,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 9: // UNO_NAME_POSITION_AND_SPACE_MODE
                 {
                     sal_Int16 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     if ( nValue == 0 )
                     {
                         aFmt.SetPositionAndSpaceMode( SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
@@ -1893,7 +1853,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 10: // UNO_NAME_LABEL_FOLLOWED_BY
                 {
                     sal_Int16 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     if ( nValue == 0 )
                     {
                         aFmt.SetLabelFollowedBy( SvxNumberFormat::LISTTAB );
@@ -1915,7 +1875,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 11: // UNO_NAME_LISTTAB_STOP_POSITION
                 {
                     sal_Int32 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     nValue = convertMm100ToTwip(nValue);
                     if ( nValue >= 0 )
                     {
@@ -1930,7 +1890,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 12: // UNO_NAME_FIRST_LINE_INDENT
                 {
                     sal_Int32 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     nValue = convertMm100ToTwip(nValue);
                     aFmt.SetFirstLineIndent( nValue );
                 }
@@ -1938,7 +1898,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 13: // UNO_NAME_INDENT_AT
                 {
                     sal_Int32 nValue = 0;
-                    pData->aVal >>= nValue;
+                    pProp->Value >>= nValue;
                     nValue = convertMm100ToTwip(nValue);
                     aFmt.SetIndentAt( nValue );
                 }
@@ -1946,7 +1906,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 14: //"NumberingType"
                 {
                     sal_Int16 nSet = 0;
-                    pData->aVal >>= nSet;
+                    pProp->Value >>= nSet;
                     if(nSet >= 0)
                         aFmt.SetNumberingType(nSet);
                     else
@@ -1958,7 +1918,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                     if (pParagraphStyleName)
                     {
                         OUString uTmp;
-                        pData->aVal >>= uTmp;
+                        pProp->Value >>= uTmp;
                         OUString sStyleName;
                         SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
                         *pParagraphStyleName = sStyleName;
@@ -1969,7 +1929,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 {
                     assert( !pDocShell );
                     sal_Int16 nSet = 0;
-                    if( pData->aVal >>= nSet )
+                    if( pProp->Value >>= nSet )
                         aFmt.SetBulletChar(nSet);
                     else
                         bWrongArg = true;
@@ -1978,7 +1938,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 case 17: //UNO_NAME_BULLET_FONT,
                 {
                     assert( !pDocShell );
-                    awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pData->aVal.getValue();
+                    awt::FontDescriptor* pDesc =  (awt::FontDescriptor*)pProp->Value.getValue();
                     if(pDesc)
                     {
                         // #i93725#
@@ -1998,7 +1958,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 {
                     assert( !pDocShell );
                     OUString sBulletFontName;
-                    pData->aVal >>= sBulletFontName;
+                    pProp->Value >>= sBulletFontName;
                     SwDocShell* pLclDocShell = pDocShell ? pDocShell : pDoc ? pDoc->GetDocShell() : 0;
                     if( !sBulletFontName.isEmpty() && pLclDocShell )
                     {
@@ -2019,7 +1979,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 {
                     assert( !pDocShell );
                     OUString aChar;
-                    pData->aVal >>= aChar;
+                    pProp->Value >>= aChar;
                     if(aChar.getLength() == 1)
                     {
                         aFmt.SetBulletChar(aChar.toChar());
@@ -2039,7 +1999,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                 {
                     assert( !pDocShell );
                     OUString sBrushURL;
-                    pData->aVal >>= sBrushURL;
+                    pProp->Value >>= sBrushURL;
                     if(!pSetBrush)
                     {
                         const SvxBrushItem* pOrigBrush = aFmt.GetBrush();
@@ -2050,13 +2010,13 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                         else
                             pSetBrush = new SvxBrushItem(OUString(), OUString(), GPOS_AREA, RES_BACKGROUND);
                     }
-                    pSetBrush->PutValue( pData->aVal, MID_GRAPHIC_URL );
+                    pSetBrush->PutValue( pProp->Value, MID_GRAPHIC_URL );
                 }
                 break;
                 case 21: //UNO_NAME_GRAPHIC_BITMAP,
                 {
                     assert( !pDocShell );
-                    uno::Reference< awt::XBitmap >* pBitmap = (uno::Reference< awt::XBitmap > *)pData->aVal.getValue();
+                    uno::Reference< awt::XBitmap >* pBitmap = (uno::Reference< awt::XBitmap > *)pProp->Value.getValue();
                     if(pBitmap)
                     {
                         if(!pSetBrush)
@@ -2083,9 +2043,9 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                     assert( !pDocShell );
                     if(!pSetSize)
                         pSetSize = new Size;
-                    if(pData->aVal.getValueType() == ::cppu::UnoType<awt::Size>::get())
+                    if(pProp->Value.getValueType() == ::cppu::UnoType<awt::Size>::get())
                     {
-                         awt::Size* pSize =  (awt::Size*)pData->aVal.getValue();
+                         awt::Size* pSize =  (awt::Size*)pProp->Value.getValue();
                         pSize->Width = convertMm100ToTwip(pSize->Width);
                         pSize->Height = convertMm100ToTwip(pSize->Height);
                         pSetSize->Width() = pSize->Width;
@@ -2105,7 +2065,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                         else
                             pSetVOrient = new SwFmtVertOrient;
                     }
-                    ((SfxPoolItem*)pSetVOrient)->PutValue(pData->aVal, MID_VERTORIENT_ORIENT);
+                    pSetVOrient->PutValue(pProp->Value, MID_VERTORIENT_ORIENT);
                 }
                 break;
                 case 24: //"HeadingStyleName"
@@ -2113,7 +2073,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                     if (pHeadingStyleName)
                     {
                         OUString uTmp;
-                        pData->aVal >>= uTmp;
+                        pProp->Value >>= uTmp;
                         OUString sStyleName;
                         SwStyleNameMapper::FillUIName(uTmp, sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
                         *pHeadingStyleName = sStyleName;
@@ -2164,9 +2124,6 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
         delete pSetSize;
         delete pSetVOrient;
       }
-    for (PropValDataArr::const_iterator it = aPropertyValues.begin(); it != aPropertyValues.end(); ++it)
-      delete *it;
-    aPropertyValues.clear();
 
     if(bWrongArg)
         throw lang::IllegalArgumentException();
