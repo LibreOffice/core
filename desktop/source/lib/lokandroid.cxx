@@ -190,16 +190,20 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs
 /* DirectBufferAllocator */
 
 extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_DirectBufferAllocator_allocateDirectBufferNative
-    (JNIEnv* pEnv, jclass /*aClass*/, jlong nSize)
+    (JNIEnv* pEnv, jclass /*aClass*/, jint nSize)
 {
     jobject aBuffer = NULL;
-    void* pMemory = malloc(nSize);
-    if (pMemory != NULL)
+
+    if (nSize > 0)
     {
-        aBuffer = pEnv->NewDirectByteBuffer(pMemory, nSize);
-        if (!aBuffer)
+        void* pMemory = malloc(nSize);
+        if (pMemory != NULL)
         {
-            free(pMemory);
+            aBuffer = pEnv->NewDirectByteBuffer(pMemory, nSize);
+            if (aBuffer == NULL)
+            {
+                free(pMemory);
+            }
         }
     }
     return aBuffer;
