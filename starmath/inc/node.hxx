@@ -64,8 +64,15 @@ typedef std::stack< SmNode* > SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
 typedef std::vector< SmStructureNode * > SmStructureNodeArray;
 
-
-
+template < typename T >
+T* popOrZero( ::std::stack<T*> & rStack )
+{
+    if (rStack.empty())
+        return 0;
+    T* pTmp = rStack.top();
+    rStack.pop();
+    return pTmp;
+}
 
 enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
 
