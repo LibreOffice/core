@@ -24,6 +24,7 @@
 #include <postx.h>
 
 #include "unx/saltype.h"
+#include "unx/x11/x11gdiimpl.h"
 
 #include "salgdiimpl.hxx"
 
@@ -35,10 +36,8 @@ class SalPolyLine;
 class X11SalGraphics;
 class Gradient;
 
-class X11SalGraphicsImpl : public SalGraphicsImpl
+class X11SalGraphicsImpl : public SalGraphicsImpl, public X11GraphicsImpl
 {
-    friend X11SalGraphics;
-
 private:
     X11SalGraphics& mrParent;
 
@@ -107,10 +106,6 @@ public:
     virtual void freeResources() SAL_OVERRIDE;
 
     virtual ~X11SalGraphicsImpl();
-
-    virtual void Init( SalFrame* pFrame ) SAL_OVERRIDE;
-
-    virtual void Init( SalVirtualDevice* pVDev ) SAL_OVERRIDE;
 
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
     //
@@ -269,6 +264,13 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) SAL_OVERRIDE;
 
     virtual bool swapBuffers() SAL_OVERRIDE { return false; }
+
+public:
+    // implementation of X11GraphicsImpl
+
+    void Init() SAL_OVERRIDE;
+    X11Pixmap* GetPixmapFromScreen( const Rectangle& rRect ) SAL_OVERRIDE;
+    bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
 };
 
 #endif

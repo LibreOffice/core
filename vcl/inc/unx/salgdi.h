@@ -45,6 +45,7 @@ class SalFrame;
 class X11Pixmap;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
+class X11OpenGLSalGraphicsImpl;
 class PspSalPrinter;
 class PspSalInfoPrinter;
 class ServerFont;
@@ -63,6 +64,7 @@ class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 {
     friend class ServerFontLayout;
     friend class X11SalGraphicsImpl;
+    friend class X11OpenGLSalGraphicsImpl;
     friend class X11CairoTextRender;
 
 private:

@@ -44,10 +44,6 @@ public:
 
     virtual ~SalGraphicsImpl();
 
-    virtual void Init( SalFrame* pFrame ) = 0;
-
-    virtual void Init( SalVirtualDevice* pVDev ) = 0;
-
     virtual void freeResources() = 0;
 
     virtual bool setClipRegion( const vcl::Region& ) = 0;

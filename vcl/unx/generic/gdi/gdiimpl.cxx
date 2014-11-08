@@ -153,16 +153,69 @@ X11SalGraphicsImpl::~X11SalGraphicsImpl()
 {
 }
 
-void X11SalGraphicsImpl::Init( SalFrame* /*pFrame*/ )
+void X11SalGraphicsImpl::Init()
 {
     mnPenPixel = mrParent.GetPixel( mnPenColor );
     mnBrushPixel = mrParent.GetPixel( mnBrushColor );
 }
 
-void X11SalGraphicsImpl::Init( SalVirtualDevice* /*pVDev*/ )
+X11Pixmap* X11SalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect )
 {
-    mnPenPixel = mrParent.GetPixel( mnPenColor );
-    mnBrushPixel = mrParent.GetPixel( mnBrushColor );
+    //TODO lfrb: don't hardcode the depth
+    Display* pDpy = mrParent.GetXDisplay();
+    X11Pixmap* pPixmap = new X11Pixmap( pDpy, mrParent.GetScreenNumber(),
+                                        rRect.GetWidth(), rRect.GetHeight(), 24 );
+    GC aTmpGC = XCreateGC( pDpy, pPixmap->GetPixmap(), 0, NULL );
+
+    if( !pPixmap || !aTmpGC )
+    {
+        if ( pPixmap )
+            delete pPixmap;
+        if ( aTmpGC )
+            XFreeGC( pDpy, aTmpGC );
+        SAL_WARN( "vcl", "Could not get valid pixmap from screen" );
+        return NULL;
+    }
+
+    // Copy the background of the screen into a composite pixmap
+    mrParent.CopyScreenArea( mrParent.GetXDisplay(),
+                             mrParent.GetDrawable(), mrParent.GetScreenNumber(),
+                             mrParent.GetVisual().GetDepth(),
+                             pPixmap->GetDrawable(), pPixmap->GetScreen(),
+                             pPixmap->GetDepth(),
+                             aTmpGC,
+                             rRect.Left(), rRect.Top(),
+                             rRect.GetWidth(), rRect.GetHeight(),
+                             0, 0 );
+
+    XFreeGC( pDpy, aTmpGC );
+    return pPixmap;
+}
+
+bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
+{
+    GC aFontGC = mrParent.GetFontGC();
+
+    // The GC can't be null, otherwise we'd have no clip region
+    if( aFontGC == NULL )
+    {
+        SAL_WARN( "vcl", "no valid GC to render pixmap" );
+        return false;
+    }
+
+    if( !pPixmap )
+        return false;
+
+    mrParent.CopyScreenArea( mrParent.GetXDisplay(),
+                             pPixmap->GetDrawable(), pPixmap->GetScreen(),
+                             pPixmap->GetDepth(),
+                             mrParent.GetDrawable(), mrParent.m_nXScreen,
+                             mrParent.GetVisual().GetDepth(),
+                             aFontGC,
+                             0, 0,
+                             pPixmap->GetWidth(), pPixmap->GetHeight(),
+                             nX, nY );
+    return true;
 }
 
 XID X11SalGraphicsImpl::GetXRenderPicture()

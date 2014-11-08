@@ -49,16 +49,6 @@ void OpenGLSalGraphicsImpl::freeResources()
     // Delete shaders, programs and textures if not shared
 }
 
-void OpenGLSalGraphicsImpl::Init( SalFrame* pFrame )
-{
-    mpFrame = pFrame;
-}
-
-void OpenGLSalGraphicsImpl::Init(SalVirtualDevice* pVDev)
-{
-    mpVDev = pVDev;
-}
-
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
     const basegfx::B2DPolyPolygon aClip( rClip.GetAsB2DPolyPolygon() );
@@ -92,34 +82,6 @@ sal_uInt16 OpenGLSalGraphicsImpl::GetBitCount() const
 long OpenGLSalGraphicsImpl::GetGraphicsWidth() const
 {
     return GetWidth();
-}
-
-inline GLfloat OpenGLSalGraphicsImpl::GetWidth() const
-{
-    if( mpFrame )
-        return mpFrame->maGeometry.nWidth;
-    else if (mpVDev)
-    {
-        long nWidth = 0;
-        long nHeight = 0;
-        mpVDev->GetSize(nWidth, nHeight);
-        return nWidth;
-    }
-    return 1;
-}
-
-inline GLfloat OpenGLSalGraphicsImpl::GetHeight() const
-{
-    if( mpFrame )
-        return mpFrame->maGeometry.nHeight;
-    else if (mpVDev)
-    {
-        long nWidth = 0;
-        long nHeight = 0;
-        mpVDev->GetSize(nWidth, nHeight);
-        return nHeight;
-    }
-    return 1;
 }
 
 // set the clip region to empty

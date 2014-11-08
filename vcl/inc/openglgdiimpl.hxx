@@ -30,7 +30,7 @@ class SalVirtualDevice;
 
 class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
-private:
+protected:
 
     OpenGLContext maContext;
     SalFrame* mpFrame;
@@ -55,9 +55,6 @@ private:
     GLuint mnMaskUniform;
     GLuint mnMaskColorUniform;
 
-    inline GLfloat GetWidth() const;
-    inline GLfloat GetHeight() const;
-
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateMaskedTextureProgram( void );
@@ -81,6 +78,13 @@ private:
     void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& rPosAry );
     void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& rPosAry );
 
+protected:
+    // get the width of the device
+    virtual GLfloat GetWidth() const = 0;
+
+    // get the height of the device
+    virtual GLfloat GetHeight() const = 0;
+
 
 public:
     virtual ~OpenGLSalGraphicsImpl ();
@@ -88,9 +92,6 @@ public:
     OpenGLContext& GetOpenGLContext() { return maContext; }
 
     virtual void freeResources() SAL_OVERRIDE;
-
-    virtual void Init( SalFrame* pFrame ) SAL_OVERRIDE;
-    virtual void Init( SalVirtualDevice* pVDev ) SAL_OVERRIDE;
 
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
     //

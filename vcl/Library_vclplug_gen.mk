@@ -63,6 +63,8 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 	-lXext \
 	-lSM \
 	-lICE \
+	-lGL \
+	-lGLU \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
@@ -104,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/salobj \
     vcl/unx/x11/x11sys \
     vcl/unx/x11/xlimits \
+	vcl/opengl/x11/gdiimpl \
 ))
 
 # ultimately we want to split the x11 dependencies out

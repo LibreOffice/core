@@ -60,6 +60,7 @@ public:
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
     static bool GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI);
+    static GLXFBConfig GetPixmapFBConfig( Display* pDisplay, bool& bInverted );
 #endif
 };
 

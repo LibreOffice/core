@@ -48,13 +48,14 @@
 #include "unx/salgdi.h"
 #include "unx/salframe.h"
 #include "unx/salvd.h"
+#include "unx/x11/x11gdiimpl.h"
 #include <unx/x11/xlimits.hxx>
 
 #include "salgdiimpl.hxx"
 #include "unx/x11windowprovider.hxx"
 #include "textrender.hxx"
 #include "gdiimpl.hxx"
-#include "openglgdiimpl.hxx"
+#include "opengl/x11/gdiimpl.hxx"
 #include "x11cairotextrender.hxx"
 
 #include "generic/printergfx.hxx"
@@ -86,7 +87,7 @@ X11SalGraphics::X11SalGraphics():
     static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
     bool bUseOpenGL = bOpenGLPossible ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
     if (bUseOpenGL)
-        mpImpl.reset(new OpenGLSalGraphicsImpl());
+        mpImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
     else
         mpImpl.reset(new X11SalGraphicsImpl(*this));
 
@@ -142,26 +143,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
 
     if( hDrawable_ )
     {
-        OpenGLSalGraphicsImpl* pOpenGLImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
-        if (pOpenGLImpl)
-        {
-            if (m_pFrame && dynamic_cast<X11WindowProvider*>(m_pFrame))
-            {
-                Window aWin = dynamic_cast<X11WindowProvider*>(m_pFrame)->GetX11Window();
-                pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
-                        aWin, m_nXScreen.getXScreen());
-                mpImpl->Init( m_pFrame );
-            }
-            else if (m_pVDev)
-            {
-                pOpenGLImpl->GetOpenGLContext().init(GetXDisplay(),
-                        m_pVDev->GetDrawable(), m_pVDev->GetWidth(), m_pVDev->GetHeight(), m_nXScreen.getXScreen());
-                mpImpl->Init(m_pVDev);
-            }
-            else
-                SAL_WARN("vcl.opengl", "what happened here?");
-        }
-
+        dynamic_cast<X11GraphicsImpl*>(mpImpl.get())->Init();
         // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
     }
 }

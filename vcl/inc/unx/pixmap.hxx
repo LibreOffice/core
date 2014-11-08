@@ -12,6 +12,7 @@
 
 #include <prex.h>
 #include <postx.h>
+#include <tools/gen.hxx>
 #include <unx/saltype.h>
 #include <vclpluginapi.h>
 
@@ -27,6 +28,7 @@ public:
     Drawable GetDrawable() const { return mpPixmap; };
     int GetWidth() const { return mnWidth; };
     int GetHeight() const { return mnHeight; };
+    Size GetSize() const { return Size( mnWidth, mnHeight ); };
     int GetDepth() const { return mnDepth; };
     SalX11Screen GetScreen() const { return mnScreen; }
 
