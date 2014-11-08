@@ -58,6 +58,7 @@
 #include <txtfrm.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <ndsect.hxx>
+#include <tools/datetimeutils.hxx>
 
 // #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
@@ -1380,6 +1381,16 @@ void SwSectionNode::NodesArrChgd()
 
 OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
 {
+    if( IsInMailMerge())
+    {
+        OUString newName = "MailMergeSection"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( mpSectionFmtTbl->size() + 1 );
+        if( pChkStr )
+            newName += *pChkStr;
+        return newName;
+    }
+
     const OUString aName( ResId( STR_REGION_DEFNAME, *pSwResMgr ) );
 
     sal_uInt16 nNum = 0;

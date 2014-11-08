@@ -71,6 +71,7 @@
 #include <switerator.hxx>
 #include <ToxTextGenerator.hxx>
 #include <ToxTabStopTokenHandler.hxx>
+#include <tools/datetimeutils.hxx>
 
 #include <boost/make_shared.hpp>
 
@@ -609,6 +610,16 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                                       const OUString& sChkStr ) const
 {
+    if( IsInMailMerge())
+    {
+        OUString newName = "MailMergeTOX"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( mpSectionFmtTbl->size() + 1 );
+        if( !sChkStr.isEmpty())
+            newName += sChkStr;
+        return newName;
+    }
+
     bool bUseChkStr = !sChkStr.isEmpty();
     const OUString aName( rType.GetTypeName() );
     const sal_Int32 nNmLen = aName.getLength();

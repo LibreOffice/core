@@ -94,6 +94,7 @@
 #include <switerator.hxx>
 #include <o3tl/numeric.hxx>
 #include <boost/foreach.hpp>
+#include <tools/datetimeutils.hxx>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -3861,6 +3862,14 @@ bool SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
 
 OUString SwDoc::GetUniqueTblName() const
 {
+    if( IsInMailMerge())
+    {
+        OUString newName = "MailMergeTable"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( mpTblFrmFmtTbl->size() + 1 );
+        return newName;
+    }
+
     ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
     const OUString aName( aId );
 

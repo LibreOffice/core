@@ -27,7 +27,6 @@
 
 namespace sw {
     namespace mark {
-    typedef boost::unordered_map<OUString, sal_Int32, OUStringHash> MarkBasenameMapUniqueOffset_t;
 
     class MarkManager
         : private ::boost::noncopyable
@@ -111,7 +110,6 @@ namespace sw {
             container_t m_vFieldmarks;
 
             boost::unordered_set<OUString, OUStringHash> m_aMarkNamesSet;
-            mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
 
             // container for annotation marks
             container_t m_vAnnotationMarks;

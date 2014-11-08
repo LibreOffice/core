@@ -55,6 +55,7 @@
 #include <list.hxx>
 #include <switerator.hxx>
 #include <comphelper/string.hxx>
+#include <tools/datetimeutils.hxx>
 
 #include <cstdlib>
 #include <map>
@@ -2185,6 +2186,16 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
 
 OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) const
 {
+    if( IsInMailMerge())
+    {
+        OUString newName = "MailMergeNumRule"
+            + OStringToOUString( DateTimeToOString( DateTime( DateTime::SYSTEM )), RTL_TEXTENCODING_ASCII_US )
+            + OUString::number( mpNumRuleTbl->size() + 1 );
+        if( pChkStr )
+            newName += *pChkStr;
+        return newName;
+    }
+
     OUString aName;
     if( bAutoNum )
     {
