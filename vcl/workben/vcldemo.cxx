@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
 
 #if 0
@@ -70,12 +71,12 @@ public:
         maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
     }
 
-    void drawToDevice(OutputDevice &r);
+    void drawToDevice(OutputDevice &r, bool bVdev);
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE
     {
         fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
-        drawToDevice(getOutDev());
+        drawToDevice(getOutDev(), false);
     }
 
     std::vector<Rectangle> partitionAndClear(OutputDevice &rDev,
@@ -233,8 +234,19 @@ public:
         rDev.DrawPolyPolygon(aPolyPoly);
 #endif
     }
-    void fetchDrawBitmap(OutputDevice &rDev, Rectangle r)
+    void drawToVirtualDevice(OutputDevice &rDev, Rectangle r)
+    {
+        VirtualDevice aNested;
+        aNested.SetOutputSize(r.GetSize());
+        Rectangle aWhole(Point(0,0), r.GetSize());
+        // mini me
+        drawToDevice(aNested, true);
 
+        Bitmap aBitmap(aNested.GetBitmap(Point(0,0),aWhole.GetSize()));
+        rDev.DrawBitmap(r.TopLeft(), aBitmap);
+    }
+
+    void fetchDrawBitmap(OutputDevice &rDev, Rectangle r)
     {
         // FIXME: should work ...
         Bitmap aBitmap(GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
@@ -282,7 +294,7 @@ std::vector<Rectangle> DemoWin::partitionAndClear(OutputDevice &rDev, int nX, in
     return aRegions;
 }
 
-void DemoWin::drawToDevice(OutputDevice &rDev)
+void DemoWin::drawToDevice(OutputDevice &rDev, bool bVdev)
 {
     drawBackground(rDev);
 
@@ -297,8 +309,10 @@ void DemoWin::drawToDevice(OutputDevice &rDev)
     drawBitmap(rDev, aRegions[6]);
     drawGradient(rDev, aRegions[7]);
     drawPolyPolgons(rDev, aRegions[8]);
+    if (!bVdev)
+        drawToVirtualDevice(rDev, aRegions[9]);
     // last - thumbnail all the above
-    fetchDrawBitmap(rDev, aRegions[9]);
+    fetchDrawBitmap(rDev, aRegions[10]);
 }
 
 class DemoApp : public Application
