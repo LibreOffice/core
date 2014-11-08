@@ -35,12 +35,14 @@
 #include <porfld.hxx>
 #include <boost/scoped_ptr.hpp>
 
-//#i24363# tab stops relative to indent
-/* Return the first tab stop that is > nSearchPos.
+/**
+ * #i24363# tab stops relative to indent
+ *
+ * Return the first tab stop that is > nSearchPos.
  * If the tab stop is outside the print area, we
- * return 0 if it is not the first tab stop.*/
-const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos,
-                                         const SwTwips nRight ) const
+ * return 0 if it is not the first tab stop.
+ */
+const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos, const SwTwips nRight ) const
 {
     for( sal_uInt16 i = 0; i < pRuler->Count(); ++i )
     {
@@ -81,8 +83,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                                  : pFrm->Frm().Left() +
                                    ( bTabsRelativeToIndent ? GetTabLeft() : 0 );
 
-        // nLinePos: The absolute position, where we started the line formatting.
-
+        // The absolute position, where we started the line formatting
         SwTwips nLinePos = GetLeftMargin();
         if ( bRTL )
         {
@@ -91,16 +92,14 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nLinePos = aPoint.X();
         }
 
-        // nTabPos: The current position, relative to the line start.
-
+        // The current position, relative to the line start
         SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
         if( nTabPos < rInf.X() )
         {
             nTabPos = rInf.X();
         }
 
-        // nCurrentAbsPos: The current position in absolute coordinates.
-
+        // The current position in absolute coordinates
         const SwTwips nCurrentAbsPos = bRTL ?
                                        nLinePos - nTabPos :
                                        nLinePos + nTabPos;
@@ -121,8 +120,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         SwTwips nNextPos = 0;
 
         // #i24363# tab stops relative to indent
-        // nSearchPos: The current position relative to the tabs origin.
-
+        // nSearchPos: The current position relative to the tabs origin
         const SwTwips nSearchPos = bRTL ?
                                    nTabLeft - nCurrentAbsPos :
                                    nCurrentAbsPos - nTabLeft;
@@ -131,7 +129,6 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // any hard set tab stops:
         // Note: If there are no user defined tab stops, there is always a
         // default tab stop.
-
         const SvxTabStop* pTabStop = aLineInf.GetTabStop( nSearchPos, nMyRight );
         if ( pTabStop )
         {
@@ -170,6 +167,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             nNextPos = ( nCount < 0 || ( !nCount && nSearchPos <= 0 ) )
                        ? ( nCount * nDefTabDist )
                        : ( ( nCount + 1 ) * nDefTabDist );
+
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
@@ -292,7 +290,9 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     return pTabPor;
 }
 
-// Die Basisklasse wird erstmal ohne alles initialisiert.
+/**
+ * The base class is initialized without setting anything
+ */
 SwTabPortion::SwTabPortion( const sal_uInt16 nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
@@ -497,7 +497,9 @@ bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     return rInf.Width() <= rInf.X();
 }
 
-// Ex: LineIter::DrawTab()
+/**
+ * Ex: LineIter::DrawTab()
+ */
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -551,15 +553,16 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             rInf.DrawTab( *this );
     }
 
-    // 6842: Tabs should be underlined at once.
+    // Tabs should be underlined at once
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        // tabs with filling / filled tabs
+        // Tabs with filling/filled tabs
         const sal_uInt16 nCharWidth = rInf.GetTxtSize(OUString(' ')).Width();
-        // robust:
+
+        // Robust:
         if( nCharWidth )
         {
-            // 6864: always with kerning, also on printer!
+            // Always with kerning, also on printer!
             sal_uInt16 nChar = Width() / nCharWidth;
             OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, ' ');
@@ -570,16 +573,17 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
     // Display fill characters
     if( IsFilled() )
     {
-        // tabs with filling / filled tabs
+        // Tabs with filling/filled tabs
         const sal_uInt16 nCharWidth = rInf.GetTxtSize(OUString(cFill)).Width();
         OSL_ENSURE( nCharWidth, "!SwTabPortion::Paint: sophisticated tabchar" );
-        // robust:
+
+        // Robust:
         if( nCharWidth )
         {
-            // 6864: always with kerning, also on printer!
+            // Always with kerning, also on printer!
             sal_uInt16 nChar = Width() / nCharWidth;
             if ( cFill == '_' )
-                ++nChar; // to avoid gaps (Bug 13430)
+                ++nChar; // to avoid gaps
             OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, cFill);
             rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, true);

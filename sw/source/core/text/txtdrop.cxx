@@ -41,9 +41,11 @@
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
-//  Calculates if a drop caps portion intersects with a fly
-//  The width and height of the drop caps portion are passed as arguments,
-//  the position is calculated from the values in rInf
+/**
+ * Calculates if a drop caps portion intersects with a fly
+ * The width and height of the drop caps portion are passed as arguments,
+ * the position is calculated from the values in rInf
+ */
 static bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
                              sal_uInt16 nWidth, sal_uInt16 nHeight )
 {
@@ -88,14 +90,14 @@ SwDropSave::~SwDropSave()
     pInf->Y( nY );
 }
 
-// SwDropPortionPart DTor
+/// SwDropPortionPart DTor
 SwDropPortionPart::~SwDropPortionPart()
 {
     delete pFollow;
     delete pFnt;
 }
 
-// SwDropPortion CTor, DTor
+/// SwDropPortion CTor, DTor
 SwDropPortion::SwDropPortion( const sal_uInt16 nLineCnt,
                               const sal_uInt16 nDrpHeight,
                               const sal_uInt16 nDrpDescent,
@@ -119,7 +121,7 @@ SwDropPortion::~SwDropPortion()
         pBlink->Delete( this );
 }
 
-// nWishLen = 0 indicates that we want a whole word
+/// nWishLen = 0 indicates that we want a whole word
 sal_Int32 SwTxtNode::GetDropLen( sal_Int32 nWishLen ) const
 {
     sal_Int32 nEnd = GetTxt().getLength();
@@ -166,9 +168,11 @@ sal_Int32 SwTxtNode::GetDropLen( sal_Int32 nWishLen ) const
     return i;
 }
 
-//  If a dropcap is found the return value is true otherwise false. The
-//  drop cap sizes passed back by reference are font height, drop height
-//  and drop descent.
+/**
+ * If a dropcap is found the return value is true otherwise false. The
+ * drop cap sizes passed back by reference are font height, drop height
+ * and drop descent.
+ */
 bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const
 {
     rFontHeight = 0;
@@ -237,7 +241,7 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
     return true;
 }
 
-// Manipulate the width, otherwise the chars are being stretched
+/// Manipulate the width, otherwise the chars are being stretched
 void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 {
     OSL_ENSURE( nDropHeight && pPart && nLines != 1, "Drop Portion painted twice" );
@@ -456,12 +460,12 @@ void SwTxtFormatter::CalcDropHeight( const sal_uInt16 nLines )
             }
             if ( !Next() )
             {
-                nDropLns++; // Fix: 11356
+                nDropLns++;
                 break;
             }
         }
 
-        // In der letzten Zeile plumpsen wir auf den Zeilenascent!
+        // We hit the line ascent when reaching the last line!
         nDropHght = nDropHght - nHeight;
         nDropHght = nDropHght + nAscent;
         Top();
@@ -481,8 +485,10 @@ void SwTxtFormatter::CalcDropHeight( const sal_uInt16 nLines )
     }
 }
 
-//  We assume hat the font height doesn't change and that at first there
-//  are at least as many lines, as the DropCap-setting claims
+/**
+ * We assume hat the font height doesn't change and that at first there
+ * are at least as many lines, as the DropCap-setting claims
+ */
 void SwTxtFormatter::GuessDropHeight( const sal_uInt16 nLines )
 {
     OSL_ENSURE( nLines, "GuessDropHeight: Give me more Lines!" );
@@ -984,22 +990,22 @@ bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
         // reset my length
         SetLen( rInf.GetLen() );
 
-        // 7631, 7633: bei Ueberlappungen mit Flys ist Schluss.
+        // Quit when Flys are overlapping
         if( ! bFull )
             bFull = lcl_IsDropFlyInter( rInf, Width(), nDropHeight );
 
         if( bFull )
         {
-            // Durch FormatTxt kann nHeight auf 0 gesetzt worden sein
+            // FormatTxt could have caused nHeight to be 0
             if ( !Height() )
                 Height( rInf.GetTxtHeight() );
 
-            // Jetzt noch einmal der ganze Spass
+            // And now for another round
             nDropHeight = nLines = 0;
             delete pPart;
             pPart = NULL;
 
-            // meanwhile use normal formatting
+            // Meanwhile use normal formatting
             bFull = SwTxtPortion::Format( rInf );
         }
         else

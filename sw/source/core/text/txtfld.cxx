@@ -190,7 +190,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 }
                 else if( !pExpFld->IsInBodyTxt() )
                 {
-                    // war vorher anders, also erst expandieren, dann umsetzen!!
+                    // Was something else previously, thus: expand first, then convert it!
                     pExpFld->ChangeExpansion(*pFrame,
                             *static_txtattr_cast<SwTxtFld const*>(pHint));
                     pExpFld->ChgBodyTxtFlag( true );
@@ -313,15 +313,15 @@ static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
     return new SwFldPortion( fix );
 }
 
-/** Try to create a new portion with zero length, for an end of a hint
-    (where there is no CH_TXTATR). Because there may be multiple hint ends at a
-    given index, m_nHintEndIndex is used to keep track of the already created
-    portions. But the portions created here may actually be deleted again,
-    due to Underflow. In that case, m_nHintEndIndex must be decremented,
-    so the portion will be created again on the next line.
+/**
+ * Try to create a new portion with zero length, for an end of a hint
+ * (where there is no CH_TXTATR). Because there may be multiple hint ends at a
+ * given index, m_nHintEndIndex is used to keep track of the already created
+ * portions. But the portions created here may actually be deleted again,
+ * due to Underflow. In that case, m_nHintEndIndex must be decremented,
+ * so the portion will be created again on the next line.
  */
-SwExpandPortion *
-SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
+SwExpandPortion * SwTxtFormatter::TryNewNoLengthPortion(SwTxtFormatInfo & rInfo)
 {
     if (pHints)
     {
@@ -406,9 +406,11 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     return pRet;
 }
 
-// OOXML spec says that w:rPr inside w:pPr specifies formatting for the paragraph mark symbol (i.e. the control
-// character than can be configured to be shown). However, in practice MSO also uses it as direct formatting
-// for numbering in that paragraph. I don't know if the problem is in the spec or in MSWord.
+/**
+ * OOXML spec says that w:rPr inside w:pPr specifies formatting for the paragraph mark symbol (i.e. the control
+ * character than can be configured to be shown). However, in practice MSO also uses it as direct formatting
+ * for numbering in that paragraph. I don't know if the problem is in the spec or in MSWord.
+ */
 static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
 {
     SwTxtNode* node = rInf.GetTxtFrm()->GetTxtNode();
@@ -442,7 +444,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     const SwTxtNode* pTxtNd = GetTxtFrm()->GetTxtNode();
     const SwNumRule* pNumRule = pTxtNd->GetNumRule();
 
-    // hat ein "gueltige" Nummer ?
+    // Has a "valid" number?
     if( pTxtNd->IsNumbered() && pTxtNd->IsCountedInList())
     {
         int nLevel = pTxtNd->GetActualListLevel();
@@ -477,9 +479,9 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
         }
         else
         {
-            // Der SwFont wird dynamisch angelegt und im CTOR uebergeben,
-            // weil das CharFmt nur einen SV-Font zurueckliefert.
-            // Im Dtor vom SwNumberPortion wird der SwFont deletet.
+            // The SwFont is created dynamically and passed in the ctor,
+            // as the CharFmt only returns an SV-Font.
+            // In the dtor of SwNumberPortion, the SwFont is deleted.
             SwFont *pNumFnt = 0;
             const SwAttrSet* pFmt = rNumFmt.GetCharFmt() ?
                                     &rNumFmt.GetCharFmt()->GetAttrSet() :
@@ -491,7 +493,6 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 const vcl::Font *pFmtFnt = rNumFmt.GetBulletFont();
 
                 // Build a new bullet font basing on the current paragraph font:
-
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                 // #i53199#
@@ -514,7 +515,6 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
                 // Apply the explicit attributes from the character style
                 // associated with the numering to the new bullet font.
-
                 if( pFmt )
                     pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
@@ -549,16 +549,14 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     aTxt += pTxtNd->GetLabelFollowedBy();
                 }
 
-                // 7974: Nicht nur eine Optimierung...
-                // Eine Numberportion ohne Text wird die Breite von 0
-                // erhalten. Die nachfolgende Textportion wird im BreakLine
-                // in das BreakCut laufen, obwohl rInf.GetLast()->GetFlyPortion()
-                // vorliegt!
+                // Not just an optimization ...
+                // A number portion without text will be assigned a width of 0.
+                // The succeeding text portion will flow into the BreakCut in the BreakLine,
+                // although  we have rInf.GetLast()->GetFlyPortion()!
                 if( !aTxt.isEmpty() )
                 {
 
                     // Build a new numbering font basing on the current paragraph font:
-
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), pIDSA );
 
                     // #i53199#
@@ -573,7 +571,6 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
                     // Apply the explicit attributes from the character style
                     // associated with the numering to the new bullet font.
-
                     if( pFmt )
                         pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
