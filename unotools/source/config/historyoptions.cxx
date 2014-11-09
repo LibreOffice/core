@@ -371,12 +371,9 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         // The item to be appended already exists
         if (xItemList->hasByName(sURL))
         {
-            if (!sThumbnail.isEmpty())
-            {
-                // update the thumbnail
-                xItemList->getByName(sURL) >>= xSet;
-                xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail));
-            }
+            // update the thumbnail
+            xItemList->getByName(sURL) >>= xSet;
+            xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail));
 
             for (sal_Int32 i=0; i<nLength; ++i)
             {
