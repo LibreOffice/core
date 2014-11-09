@@ -311,12 +311,12 @@ SfxTabDialog::SfxTabDialog
 (
     SfxViewFrame* pViewFrame,     // Frame, to which the Dialog belongs
     vcl::Window* pParent,              // Parent Window
-    const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
+    const OUString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
 )
-    : TabDialog(pParent, rID, rUIXMLDescription)
+    : TabDialog(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription)
     , pFrame(pViewFrame)
     , pSet(pItemSet)
     , pOutSet(0)
@@ -340,12 +340,12 @@ SfxTabDialog::SfxTabDialog
 
 (
     vcl::Window* pParent,              // Parent Window
-    const OString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
+    const OUString& rID, const OUString& rUIXMLDescription, //Dialog Name, Dialog .ui path
     const SfxItemSet* pItemSet,   // Itemset with the data;
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
 )
-    : TabDialog(pParent, rID, rUIXMLDescription)
+    : TabDialog(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription)
     , pFrame(0)
     , pSet(pItemSet)
     , pOutSet(0)

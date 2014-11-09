@@ -30,8 +30,8 @@ SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(vcl::Window *pParent,
     bool bEnableDrawingLayerFillStyles)
     : SfxTabDialog(pParent,
         bEnableDrawingLayerFillStyles
-            ? OString("BorderAreaTransparencyDialog")
-            : OString("BorderBackgroundDialog"),
+            ? OUString("BorderAreaTransparencyDialog")
+            : OUString("BorderBackgroundDialog"),
         bEnableDrawingLayerFillStyles
             ? OUString("cui/ui/borderareatransparencydialog.ui")
             : OUString("cui/ui/borderbackgrounddialog.ui"),

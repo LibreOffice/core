@@ -203,7 +203,7 @@ private:
     ScRefHdlrImplBase( TParentWindow* pParent, TResId nResId, const TArg &rArg, SfxBindings *pB = NULL );
 
     template<class TParentWindow, class TArg>
-    ScRefHdlrImplBase( TParentWindow* pParent, const OString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB = NULL );
+    ScRefHdlrImplBase( TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB = NULL );
 
     virtual ~ScRefHdlrImplBase();
 
@@ -238,7 +238,7 @@ ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, 
 
 template<class TWindow, bool bBindRef >
 template<class TParentWindow, class TArg>
-ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, const OString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB )
+ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, const OUString& rID, const OUString& rUIXMLDescription, const TArg &rArg, SfxBindings *pB )
     : TWindow( pParent, rID, rUIXMLDescription, rArg ),
     ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef )
 {

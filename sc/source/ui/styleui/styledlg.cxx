@@ -45,8 +45,8 @@ ScStyleDlg::ScStyleDlg( vcl::Window*             pParent,
 
     : SfxStyleDialog  ( pParent,
                         nRscId == RID_SCDLG_STYLES_PAR ?
-                          OString("ParaTemplateDialog") :
-                          OString("PageTemplateDialog"),
+                          OUString("ParaTemplateDialog") :
+                          OUString("PageTemplateDialog"),
                         nRscId == RID_SCDLG_STYLES_PAR ?
                           OUString("modules/scalc/ui/paratemplatedialog.ui") :
                           OUString("modules/scalc/ui/pagetemplatedialog.ui"),

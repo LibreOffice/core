@@ -124,10 +124,10 @@ protected:
 
 public:
     SfxTabDialog(vcl::Window* pParent,
-                 const OString& rID, const OUString& rUIXMLDescription,
+                 const OUString& rID, const OUString& rUIXMLDescription,
                  const SfxItemSet * = 0, bool bEditFmt = false);
     SfxTabDialog(SfxViewFrame *pViewFrame, vcl::Window* pParent,
-                 const OString& rID, const OUString& rUIXMLDescription,
+                 const OUString& rID, const OUString& rUIXMLDescription,
                  const SfxItemSet * = 0, bool bEditFmt = false);
     virtual ~SfxTabDialog();
 

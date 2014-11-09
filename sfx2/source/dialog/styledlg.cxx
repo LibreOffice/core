@@ -33,7 +33,7 @@
 SfxStyleDialog::SfxStyleDialog
 (
     vcl::Window* pParent,           // Parent
-    const OString& rID, const OUString& rUIXMLDescription,
+    const OUString& rID, const OUString& rUIXMLDescription,
     SfxStyleSheetBase& rStyle  // stylesheet to be processed
 )
 

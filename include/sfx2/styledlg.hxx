@@ -37,7 +37,7 @@ protected:
     virtual const SfxItemSet*   GetRefreshedSet() SAL_OVERRIDE;
 
 public:
-    SfxStyleDialog(vcl::Window* pParent, const OString& rID,
+    SfxStyleDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription, SfxStyleSheetBase&);
 
     virtual ~SfxStyleDialog();

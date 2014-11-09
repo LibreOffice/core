@@ -45,7 +45,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const OUString&   rPageStyle,
-                          const OString& rID, const OUString& rUIXMLDescription )
+                          const OUString& rID, const OUString& rUIXMLDescription )
     :   SfxTabDialog( pFrameP, pParent, rID, rUIXMLDescription, &rCoreSet )
 {
     eNumType = static_cast<const SvxPageItem&>(rCoreSet.Get(ATTR_PAGE)).GetNumType();

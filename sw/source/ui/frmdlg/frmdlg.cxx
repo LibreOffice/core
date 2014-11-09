@@ -53,7 +53,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     const OString&      sDefPage,
                     const OUString*     pStr)
 
-    : SfxTabDialog(pViewFrame, pParent, OUStringToOString(sResType, RTL_TEXTENCODING_UTF8),
+    : SfxTabDialog(pViewFrame, pParent, sResType,
         OUString("modules/swriter/ui/") +
         sResType.toAsciiLowerCase() +
         (".ui"), &rCoreSet, pStr != 0)

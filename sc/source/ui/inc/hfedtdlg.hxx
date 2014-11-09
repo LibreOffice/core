@@ -31,7 +31,7 @@ class ScHFEditDlg : public SfxTabDialog
 protected:
     ScHFEditDlg(SfxViewFrame* pFrame, vcl::Window* pParent,
         const SfxItemSet& rCoreSet, const OUString& rPageStyle,
-        const OString& rID, const OUString& rUIXMLDescription );
+        const OUString& rID, const OUString& rUIXMLDescription );
 public:
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage ) SAL_OVERRIDE;
 };

@@ -2498,8 +2498,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
 
         {   // want the dialog to be destroyed before our set
             ORptPageDialog aDlg(getView(), pDescriptor.get(),_xSection.is()
-                ? OString("BackgroundDialog")
-                : OString("PageDialog"));
+                ? OUString("BackgroundDialog")
+                : OUString("PageDialog"));
             if (RET_OK == aDlg.Execute())
             {
 
