@@ -22,9 +22,12 @@
 #include <vcl/gradient.hxx>
 #include <salframe.hxx>
 #include "salvd.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include "opengl/salbmp.hxx"
@@ -648,13 +651,84 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rP
 }
 
 bool OpenGLSalGraphicsImpl::drawPolyLine(
-            const ::basegfx::B2DPolygon&,
-            double /*fTransparency*/,
-            const ::basegfx::B2DVector& /*rLineWidths*/,
-            basegfx::B2DLineJoin,
-            com::sun::star::drawing::LineCap)
+            const ::basegfx::B2DPolygon& rPolygon,
+            double fTransparency,
+            const ::basegfx::B2DVector& rLineWidth,
+            basegfx::B2DLineJoin eLineJoin,
+            com::sun::star::drawing::LineCap eLineCap)
 {
-    return false;
+    SAL_INFO( "vcl.opengl", "::drawPolyLine trans " << fTransparency );
+    if( mnLineColor == SALCOLOR_NONE )
+        return true;
+
+    const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
+
+    // #i101491#
+    if( !bIsHairline && (rPolygon.count() > 1000) )
+    {
+        // the used basegfx::tools::createAreaGeometry is simply too
+        // expensive with very big polygons; fallback to caller (who
+        // should use ImplLineConverter normally)
+        // AW: ImplLineConverter had to be removed since it does not even
+        // know LineJoins, so the fallback will now prepare the line geometry
+        // the same way.
+        return false;
+    }
+
+    // #i11575#desc5#b adjust B2D tesselation result to raster positions
+    basegfx::B2DPolygon aPolygon = rPolygon;
+    const double fHalfWidth = 0.5 * rLineWidth.getX();
+
+    // #i122456# This is probably thought to happen to align hairlines to pixel positions, so
+    // it should be a 0.5 translation, not more. It will definitely go wrong with fat lines
+    aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5) );
+
+    // shortcut for hairline drawing to improve performance
+    //bool bDrawnOk = true;
+    if( bIsHairline )
+    {
+        // hairlines can benefit from a simplified tesselation
+        // e.g. for hairlines the linejoin style can be ignored
+        /*basegfx::B2DTrapezoidVector aB2DTrapVector;
+        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
+
+        // draw tesselation result
+        const int nTrapCount = aB2DTrapVector.size();
+        if( nTrapCount > 0 )
+            bDrawnOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
+
+        return bDrawnOk;*/
+    }
+
+    // get the area polygon for the line polygon
+    if( (rLineWidth.getX() != rLineWidth.getY())
+    && !basegfx::fTools::equalZero( rLineWidth.getY() ) )
+    {
+        // prepare for createAreaGeometry() with anisotropic linewidth
+        aPolygon.transform( basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getX() / rLineWidth.getY()));
+    }
+
+    // create the area-polygon for the line
+    const basegfx::B2DPolyPolygon aAreaPolyPoly( basegfx::tools::createAreaGeometry(aPolygon, fHalfWidth, eLineJoin, eLineCap) );
+
+    if( (rLineWidth.getX() != rLineWidth.getY())
+    && !basegfx::fTools::equalZero( rLineWidth.getX() ) )
+    {
+        // postprocess createAreaGeometry() for anisotropic linewidth
+        aPolygon.transform(basegfx::tools::createScaleB2DHomMatrix(1.0, rLineWidth.getY() / rLineWidth.getX()));
+    }
+
+    maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+    BeginSolid( mnLineColor, fTransparency );
+    for( sal_uInt32 i = 0; i < aAreaPolyPoly.count(); i++ )
+    {
+        const ::basegfx::B2DPolyPolygon aOnePoly( aAreaPolyPoly.getB2DPolygon( i ) );
+        DrawPolyPolygon( aOnePoly );
+    }
+    EndSolid();
+
+    return true;
 }
 
 bool OpenGLSalGraphicsImpl::drawPolyLineBezier(
