@@ -637,7 +637,7 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK_NOARG(SwAddressListDialog, OKHdl_Impl)
 {
-    EndDialog(sal_True);
+    EndDialog(RET_OK);
     return 0;
 }
 

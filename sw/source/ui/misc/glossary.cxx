@@ -790,7 +790,7 @@ IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
         m_pNewShort->GrabFocus();
     }
     else
-        EndDialog(sal_True);
+        EndDialog(RET_OK);
     return 0;
 }
 
