@@ -119,17 +119,18 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
         if( !pCNd )
             pCNd = pDoc->GetNodes().GoNext( &aIdx );
 
-        SwPosition* pPos = (SwPosition*)aAnchor.GetCntntAnchor();
-        pPos->nNode = aIdx;
+        SwPosition pos = *aAnchor.GetCntntAnchor();
+        pos.nNode = aIdx;
         if (FLY_AS_CHAR == aAnchor.GetAnchorId())
         {
-            pPos->nContent.Assign( pCNd, 0 );
+            pos.nContent.Assign( pCNd, 0 );
         }
         else
         {
-            pPos->nContent.Assign( 0, 0 );
+            pos.nContent.Assign( 0, 0 );
             OSL_ENSURE( !this, "CopyFlyFmt: Was fuer ein Anker?" );
         }
+        aAnchor.SetAnchor( &pos );
     }
 
     SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
