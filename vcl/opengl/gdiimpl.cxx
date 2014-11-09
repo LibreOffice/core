@@ -60,23 +60,36 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
     const basegfx::B2DPolyPolygon aClip( rClip.GetAsB2DPolyPolygon() );
 
-    /*glEnable(GL_STENCIL_TEST);
+    SAL_INFO( "vcl.opengl", "::setClipRegion" );
+
+    /*maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+
+    glEnable( GL_STENCIL_TEST );
 
     glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-    glDepthMask( GL_FALSE );
     glStencilMask( 0xFF );
     glStencilFunc( GL_NEVER, 1, 0xFF );
     glStencilOp( GL_REPLACE, GL_KEEP, GL_KEEP );
 
     glClear( GL_STENCIL_BUFFER_BIT );
+    BeginSolid( SALCOLOR_NONE );
     DrawPolyPolygon( aClip );
+    EndSolid();
 
-    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-    glDepthMask( GL_TRUE );
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
     glStencilMask( 0x00 );
-    glStencilFunc(GL_EQUAL, 1, 0xFF);*/
+    glStencilFunc( GL_EQUAL, 1, 0xFF );*/
 
     return true;
+}
+
+// set the clip region to empty
+void OpenGLSalGraphicsImpl::ResetClipRegion()
+{
+    SAL_INFO( "vcl.opengl", "::ResetClipRegion" );
+    maContext.makeCurrent();
+    glDisable(GL_STENCIL_TEST);
 }
 
 // get the depth of the device
@@ -89,12 +102,6 @@ sal_uInt16 OpenGLSalGraphicsImpl::GetBitCount() const
 long OpenGLSalGraphicsImpl::GetGraphicsWidth() const
 {
     return GetWidth();
-}
-
-// set the clip region to empty
-void OpenGLSalGraphicsImpl::ResetClipRegion()
-{
-    glDisable(GL_STENCIL_TEST);
 }
 
 // set the line color to transparent (= don't draw lines)
