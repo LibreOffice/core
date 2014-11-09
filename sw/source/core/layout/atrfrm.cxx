@@ -3342,12 +3342,14 @@ SwFrmFmtAnchorMap::SwFrmFmtAnchorMap( const SwDoc* _doc )
 
 void SwFrmFmtAnchorMap::Add( SwFrmFmt* fmt, const SwNodeIndex& pos )
 {
+    (void) doc;
     assert( pos.GetNode().GetDoc() == doc );
     items.insert( std::make_pair( pos, fmt ));
 }
 
 void SwFrmFmtAnchorMap::Remove( SwFrmFmt* fmt, const SwNodeIndex& pos )
 {
+    (void) doc;
     assert( pos.GetNode().GetDoc() == doc );
     typedef std::multimap< SwNodeIndex, SwFrmFmt* >::iterator iterator;
     std::pair< iterator, iterator > range = items.equal_range( pos );
