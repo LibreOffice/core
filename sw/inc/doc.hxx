@@ -127,6 +127,7 @@ class SwFmt;
 class SwFmtINetFmt;
 class SwFmtRefMark;
 class SwFrmFmt;
+class SwFrmFmtAnchorMap;
 class SwFrmFmts;
 class SwFtnIdxs;
 class SwFtnInfo;
@@ -305,6 +306,7 @@ class SW_DLLPUBLIC SwDoc :
     SwGrfFmtColl    *mpDfltGrfFmtColl;
 
     SwFrmFmts       *mpFrmFmtTbl;        ///< Format table
+    SwFrmFmtAnchorMap *mpFrmFmtAnchorMap;
     SwCharFmts      *mpCharFmtTbl;
     SwFrmFmts       *mpSpzFrmFmtTbl;
     SwSectionFmts   *mpSectionFmtTbl;
@@ -1221,6 +1223,9 @@ public:
           SwFrmFmt *GetColumnContFmt()      { return mpColumnContFmt; }
     const SwCharFmt *GetDfltCharFmt() const { return mpDfltCharFmt;}
           SwCharFmt *GetDfltCharFmt()       { return mpDfltCharFmt;}
+
+    const SwFrmFmtAnchorMap* GetFrmFmtAnchorMap() const { return mpFrmFmtAnchorMap; }
+    SwFrmFmtAnchorMap* GetFrmFmtAnchorMap() { return mpFrmFmtAnchorMap; }
 
     /// @return the interface of the management of (auto)styles
     IStyleAccess& GetIStyleAccess() { return *mpStyleAccess; }

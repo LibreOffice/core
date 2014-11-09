@@ -25,6 +25,7 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/boxitem.hxx>
+#include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
 #include <hintids.hxx>
 #include <istyleaccess.hxx>
@@ -300,12 +301,15 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
             }
 
+            boost::scoped_ptr< SfxItemSet > tmpSet;
+
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState(
                                             RES_PAGEDESC, sal_False, &pItem ) &&
                 0 != ( pPgDesc = ((SwFmtPageDesc*)pItem)->GetPageDesc()) )
             {
-                SfxItemSet aTmpSet( *this );
+                if( !tmpSet )
+                    tmpSet.reset( new SfxItemSet( *this ));
 
                 SwPageDesc* pDstPgDesc = pDstDoc->FindPageDesc(pPgDesc->GetName());
                 if( !pDstPgDesc )
@@ -315,20 +319,33 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
                 SwFmtPageDesc aDesc( pDstPgDesc );
                 aDesc.SetNumOffset( ((SwFmtPageDesc*)pItem)->GetNumOffset() );
-                aTmpSet.Put( aDesc );
+                tmpSet->Put( aDesc );
+            }
 
+            if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState( RES_ANCHOR, false, &pItem )
+                && static_cast< const SwFmtAnchor* >( pItem )->GetCntntAnchor() != NULL )
+            {
+                if( !tmpSet )
+                    tmpSet.reset( new SfxItemSet( *this ));
+                // Anchors at any node position cannot be copied to another document, because the SwPosition
+                // would still point to the old document. It needs to be fixed up explicitly.
+                tmpSet->ClearItem( RES_ANCHOR );
+            }
+
+            if( tmpSet )
+            {
                 if( pCNd )
                 {
                     // #i92811#
                     if ( pNewListIdItem != 0 )
                     {
-                        aTmpSet.Put( *pNewListIdItem );
+                        tmpSet->Put( *pNewListIdItem );
                     }
-                    pCNd->SetAttr( aTmpSet );
+                    pCNd->SetAttr( *tmpSet );
                 }
                 else
                 {
-                    pFmt->SetFmtAttr( aTmpSet );
+                    pFmt->SetFmtAttr( *tmpSet );
                 }
             }
             else if( pCNd )
