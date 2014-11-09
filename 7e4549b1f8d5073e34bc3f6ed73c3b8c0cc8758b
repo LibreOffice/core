@@ -16,6 +16,24 @@
       "revId": "7e4549b1f8d5073e34bc3f6ed73c3b8c0cc8758b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_e5e8f618",
+        "filename": "bin/get-bugzilla-attachments-by-mimetype",
+        "patchSetId": 9
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2014-11-09T22:18:21Z",
+      "side": 1,
+      "message": "Thanks a lot Adolfo!\nReverterd in my tree.\nI\u0027m going to push it as soon as I finish to test the local build in Windows.",
+      "parentUuid": "7a016987_86482a89",
+      "revId": "7e4549b1f8d5073e34bc3f6ed73c3b8c0cc8758b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
