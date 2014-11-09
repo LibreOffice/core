@@ -25,10 +25,10 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#if 0
 #  define FIXME_ALPHA_WORKING
 #  define FIXME_ROUNDED_RECT_WORKING
 #  define FIXME_DRAW_TRANSPARENT_WORKING
+#if 0
 #endif
 
 using namespace css;
