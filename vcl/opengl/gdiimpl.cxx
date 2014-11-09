@@ -24,6 +24,7 @@
 #include "salvd.hxx"
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include "opengl/salbmp.hxx"
@@ -354,54 +355,39 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     if( ::basegfx::tools::isConvex( aPolygon ) )
     {
         if( nPoints > 2L )
-        {
             DrawConvexPolygon( nPoints, pPtAry );
-        }
     }
     else
     {
-        const ::basegfx::B2DPolygon& aResult(
-            ::basegfx::triangulator::triangulate( aPolygon ) );
-        std::vector<GLfloat> aVertices(aResult.count() * 2);
-        sal_uInt32 j( 0 );
-
-        float nHeight = GetHeight();
-        float nWidth = GetWidth();
-        for( sal_uInt32 i = 0; i < aResult.count(); i++ )
-        {
-            const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint(i) );
-            aVertices[j++] = 2 * rPt.getX() / nWidth - 1.0f;
-            aVertices[j++] = 1.0f - 2 * rPt.getY() / nHeight;
-        }
-
-        glEnableVertexAttribArray( GL_ATTRIB_POS );
-        glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
-        glDrawArrays( GL_TRIANGLES, 0, aResult.count() );
-        glDisableVertexAttribArray( GL_ATTRIB_POS );
+        const ::basegfx::B2DPolyPolygon aPolyPolygon( aPolygon );
+        DrawPolyPolygon( aPolyPolygon );
     }
 }
 
-void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& pPolyPolygon )
+void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     sal_uInt32 i, j;
-    ::std::vector< GLushort > pVertices;
+    ::std::vector< GLfloat > pVertices;
+    GLfloat nWidth = GetWidth();
+    GLfloat nHeight = GetHeight();
+    const ::basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
 
-    for( i = 0; i < pPolyPolygon.count(); i++ )
+    for( i = 0; i < aSimplePolyPolygon.count(); i++ )
     {
-        const basegfx::B2DPolygon& pPolygon( pPolyPolygon.getB2DPolygon( i ) );
+        const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
         const ::basegfx::B2DPolygon& aResult(
-            ::basegfx::triangulator::triangulate( pPolygon ) );
+            ::basegfx::triangulator::triangulate( rPolygon ) );
 
         for( j = 0; j < aResult.count(); j++ )
         {
             const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint( j ) );
-            pVertices.push_back( rPt.getX() );
-            pVertices.push_back( rPt.getY() );
+            pVertices.push_back( 2 * rPt.getX() / nWidth - 1.0f );
+            pVertices.push_back( 1.0f - 2 * rPt.getY() / nHeight );
         }
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pVertices.data() );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pVertices.data() );
     glDrawArrays( GL_TRIANGLES, 0, pVertices.size() / 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
