@@ -268,10 +268,10 @@ void OpenGLSalGraphicsImpl::EndInvert( void )
 
 void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 {
-    GLushort pPoint[2];
+    GLfloat pPoint[2];
 
-    pPoint[0] = nX;
-    pPoint[1] = GetHeight() - nY;
+    pPoint[0] = 2 * nX / GetWidth() - 1.0f;
+    pPoint[1] = 2 * (GetHeight() - nY) / GetHeight() - 1.0f;
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pPoint );
