@@ -155,9 +155,9 @@
                           <item translatable="yes">=</item>
                           <item translatable="yes">&lt;&gt;</item>
                           <item translatable="yes">&lt;</item>
-                          <item translatable="yes">=</item>
+                          <item translatable="yes">&lt;=</item>
                           <item translatable="yes">&gt;</item>
-                          <item translatable="yes">=</item>
+                          <item translatable="yes">&gt;=</item>
                           <item translatable="yes">like</item>
                           <item translatable="yes">not like</item>
                           <item translatable="yes">null</item>
