@@ -444,7 +444,7 @@ void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, con
     glUseProgram( 0 );
 }
 
-void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& /*pPosAry*/ )
+void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, const Size& rSize, const SalTwoRect& pPosAry )
 {
     if( mnMaskedTextureProgram == 0 )
     {
@@ -460,7 +460,10 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_2D, nMask );
 
-    //DrawTextureRect( pPosAry );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    DrawTextureRect( rSize, pPosAry );
+    glDisable( GL_BLEND );
 
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_2D, 0 );
@@ -758,9 +761,10 @@ void OpenGLSalGraphicsImpl::drawBitmap(
     const GLuint nTexture( rBitmap.GetTexture( maContext ) );
     const GLuint nMask( rMask.GetTexture( maContext ) );
 
-    SAL_INFO( "vcl.opengl", "::drawBitmap" );
+    SAL_INFO( "vcl.opengl", "::drawBitmap with MASK" );
     maContext.makeCurrent();
-    DrawTextureWithMask( nTexture, nMask, rPosAry );
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+    DrawTextureWithMask( nTexture, nMask, rBitmap.GetSize(), rPosAry );
 }
 
 void OpenGLSalGraphicsImpl::drawMask(
@@ -881,8 +885,10 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
     const GLuint nTexture( rBitmap.GetTexture( maContext ) );
     const GLuint nAlpha( rAlpha.GetTexture( maContext ) );
 
+    SAL_INFO( "vcl.opengl", "::drawAlphaBitmap" );
     maContext.makeCurrent();
-    DrawTextureWithMask( nTexture, nAlpha, rPosAry );
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+    DrawTextureWithMask( nTexture, nAlpha, rBitmap.GetSize(), rPosAry );
     return true;
 }
 

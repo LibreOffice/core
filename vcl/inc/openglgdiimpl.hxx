@@ -76,7 +76,7 @@ protected:
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry );
     void DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& rPosAry );
-    void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const SalTwoRect& rPosAry );
+    void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const Size& rSize, const SalTwoRect& rPosAry );
     void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& rPosAry );
 
 protected:
