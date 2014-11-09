@@ -71,6 +71,7 @@ bool OpenGLSalBitmap::Create( OpenGLContext& rContext, long nX, long nY, long nW
     maPalette = aEmptyPalette;
 
     mpTexture.reset( new OpenGLTexture( nX, nY, nWidth, nHeight ) );
+    mbDirtyTexture = false;
 
     return true;
 }
@@ -107,6 +108,7 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
 
     if( isValidBitCount( nNewBitCount ) )
     {
+        // TODO: lfrb: What about the pending operations?!
         mnBits = nNewBitCount;
         mnBytesPerRow = rSourceBitmap.mnBytesPerRow;
         mnWidth = rSourceBitmap.mnWidth;
@@ -116,6 +118,7 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
         maPalette = rSourceBitmap.maPalette;
         mpContext = rSourceBitmap.mpContext;
         mpTexture = rSourceBitmap.mpTexture;
+        mbDirtyTexture = false;
         maUserBuffer = rSourceBitmap.maUserBuffer;
 
         // TODO Copy buffer data if the bitcount and palette are the same
