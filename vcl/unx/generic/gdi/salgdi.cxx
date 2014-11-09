@@ -57,6 +57,7 @@
 #include "gdiimpl.hxx"
 #include "opengl/x11/gdiimpl.hxx"
 #include "x11cairotextrender.hxx"
+#include "openglx11cairotextrender.hxx"
 
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
@@ -66,7 +67,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 X11SalGraphics::X11SalGraphics():
-    mpTextRenderImpl(new X11CairoTextRender(false, *this)),
     m_pFrame(NULL),
     m_pVDev(NULL),
     m_pColormap(NULL),
@@ -87,9 +87,15 @@ X11SalGraphics::X11SalGraphics():
     static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
     bool bUseOpenGL = bOpenGLPossible ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
     if (bUseOpenGL)
+    {
         mpImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
+        mpTextRenderImpl.reset((new OpenGLX11CairoTextRender(false, *this)));
+    }
     else
+    {
+        mpTextRenderImpl.reset((new X11CairoTextRender(false, *this)));
         mpImpl.reset(new X11SalGraphicsImpl(*this));
+    }
 
 }
 

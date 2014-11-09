@@ -341,6 +341,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         aI = aNext;
     }
 
+    drawSurface(cr);
     cairo_destroy(cr);
 }
 

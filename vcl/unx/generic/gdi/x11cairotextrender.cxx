@@ -20,6 +20,7 @@
 #include "x11cairotextrender.hxx"
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
+#include "unx/salvd.h"
 
 #include "gcach_xpeer.hxx"
 
@@ -91,6 +92,38 @@ void X11CairoTextRender::clipRegion(cairo_t* cr)
         }
         cairo_clip(cr);
     }
+}
+
+size_t X11CairoTextRender::GetWidth() const
+{
+    if( mrParent.m_pFrame )
+        return mrParent.m_pFrame->maGeometry.nWidth;
+    else if( mrParent.m_pVDev )
+    {
+        long nWidth = 0;
+        long nHeight = 0;
+        mrParent.m_pVDev->GetSize( nWidth, nHeight );
+        return nWidth;
+    }
+    return 1;
+}
+
+size_t X11CairoTextRender::GetHeight() const
+{
+    if( mrParent.m_pFrame )
+        return mrParent.m_pFrame->maGeometry.nHeight;
+    else if( mrParent.m_pVDev )
+    {
+        long nWidth = 0;
+        long nHeight = 0;
+        mrParent.m_pVDev->GetSize( nWidth, nHeight );
+        return nHeight;
+    }
+    return 1;
+}
+
+void X11CairoTextRender::drawSurface(cairo_t* /*cr*/)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

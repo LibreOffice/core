@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX
+#define INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX value
+
 #include "cairotextrender.hxx"
 
 #include "unx/saldata.hxx"
@@ -26,14 +29,22 @@
 
 class X11CairoTextRender : public CairoTextRender
 {
-private:
+protected:
     X11SalGraphics& mrParent;
+
+protected:
+    size_t GetWidth() const;
+    size_t GetHeight() const;
+
 public:
     X11CairoTextRender(bool bPrinter, X11SalGraphics& rParent);
 
     virtual GlyphCache& getPlatformGlyphCache() SAL_OVERRIDE;
     virtual cairo_surface_t* getCairoSurface() SAL_OVERRIDE;
     virtual void clipRegion(cairo_t* cr) SAL_OVERRIDE;
+    virtual void drawSurface(cairo_t* cr) SAL_OVERRIDE;
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
