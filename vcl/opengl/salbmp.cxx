@@ -167,7 +167,6 @@ void OpenGLSalBitmap::Destroy()
 
 bool OpenGLSalBitmap::AllocateUserData()
 {
-    Destroy();
     SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::AllocateUserData" );
 
     if( mnWidth && mnHeight )
