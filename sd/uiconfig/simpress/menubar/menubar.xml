@@ -217,7 +217,8 @@
                     <menu:menuitem menu:id=".uno:InsertAVMedia"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertTable"/>
+            <menu:menuitem menu:id=".uno:InsertDraw"/>
+            <menu:menuitem menu:id=".uno:InsertObjectChart"/>
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject"/>
@@ -226,7 +227,8 @@
                     <menu:menuitem menu:id=".uno:Insert3DModel"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertObjectChart"/>
+            <menu:menuitem menu:id=".uno:DrawText"/>
+            <menu:menuitem menu:id=".uno:InsertTable"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ImportFromFile"/>

@@ -212,8 +212,6 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertEnvelope"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertFrame"/>
-      <menu:menuitem menu:id=".uno:InsertTable"/>
       <menu:menuitem menu:id=".uno:InsertGraphic"/>
       <menu:menu menu:id=".uno:GraphicMenu">
         <menu:menupopup>
@@ -228,6 +226,7 @@
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:InsertDraw"/>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
@@ -236,6 +235,9 @@
           <menu:menuitem menu:id=".uno:InsertObjectChart"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:DrawText"/>
+      <menu:menuitem menu:id=".uno:InsertTable"/>
+       <menu:menuitem menu:id=".uno:InsertFrame"/>
       <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:InsertDoc"/>
