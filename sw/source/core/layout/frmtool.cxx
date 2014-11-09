@@ -1014,6 +1014,8 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
             checkFmts.push_back( pFmt );
         }
     }
+#else
+    (void)pTbl;
 #endif
     SwFrmFmtAnchorMap::const_iterator_pair range = doc->GetFrmFmtAnchorMap()->equal_range( SwNodeIndex( doc->GetNodes(), nIndex ));
     for( std::multimap< SwNodeIndex, SwFrmFmt* >::const_iterator it = range.first;
