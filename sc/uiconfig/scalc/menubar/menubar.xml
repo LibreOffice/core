@@ -111,6 +111,8 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:Delete"/>
             <menu:menuitem menu:id=".uno:DeleteCell"/>
+            <menu:menuitem menu:id=".uno:DeleteRows"/>
+            <menu:menuitem menu:id=".uno:DeleteColumns"/>
             <menu:menu menu:id=".uno:EditSheetMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Move"/>
