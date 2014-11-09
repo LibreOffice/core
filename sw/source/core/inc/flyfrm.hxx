@@ -57,7 +57,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove = true );
 class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     // is allowed to lock, implemented in frmtool.cxx
-    friend void AppendObjs   ( const SwFrmFmts *, sal_uLong, SwFrm *, SwPageFrm * );
+    friend void AppendObjs   ( const SwFrmFmts *, sal_uLong, SwFrm *, SwPageFrm *, SwDoc* );
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 

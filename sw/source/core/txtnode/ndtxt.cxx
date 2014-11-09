@@ -1106,6 +1106,8 @@ void SwTxtNode::Update(
         }
 
         // at-char anchored flys shouldn't be moved, either.
+#if OSL_DEBUG_LEVEL > 0
+        std::list<SwFrmFmt*> checkFmts;
         const SwFrmFmts& rFmts = *GetDoc()->GetSpzFrmFmts();
         for (SwFrmFmts::const_iterator pFmt = rFmts.begin(); pFmt != rFmts.end(); ++pFmt)
         {
@@ -1116,10 +1118,43 @@ void SwTxtNode::Update(
                 // The fly is at-char anchored and has an anchor position.
                 SwIndex& rEndIdx = const_cast<SwIndex&>(pCntntAnchor->nContent);
                 if (&pCntntAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
+                {
                     // The anchor position is exactly our insert position.
+                    #if 0
                     rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
+                    #endif
+                    checkFmts.push_back( *pFmt );
+                }
             }
         }
+#endif
+        SwFrmFmtAnchorMap::const_iterator_pair range = GetDoc()->GetFrmFmtAnchorMap()->equal_range( SwNodeIndex( *this ));
+        for( SwFrmFmtAnchorMap::const_iterator it = range.first;
+             it != range.second;
+             ++it )
+        {
+            SwFrmFmt *pFmt = it->second;
+            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+            const SwPosition* pCntntAnchor = rAnchor.GetCntntAnchor();
+            if (rAnchor.GetAnchorId() == FLY_AT_CHAR && pCntntAnchor)
+            {
+                // The fly is at-char anchored and has an anchor position.
+                SwIndex& rEndIdx = const_cast<SwIndex&>(pCntntAnchor->nContent);
+                if (&pCntntAnchor->nNode.GetNode() == this && rEndIdx.GetIndex() == rPos.GetIndex())
+                {
+                    // The anchor position is exactly our insert position.
+                    rEndIdx.Assign(&aTmpIdxReg, rEndIdx.GetIndex());
+#if OSL_DEBUG_LEVEL > 0
+                    std::list<SwFrmFmt*>::iterator checkPos = std::find( checkFmts.begin(), checkFmts.end(), pFmt );
+                    assert( checkPos != checkFmts.end());
+                    checkFmts.erase( checkPos );
+#endif
+                }
+            }
+        }
+#if OSL_DEBUG_LEVEL > 0
+        assert( checkFmts.empty());
+#endif
     }
 
     // base class

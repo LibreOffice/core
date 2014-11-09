@@ -52,7 +52,7 @@ class SwFrmFmts;
 #define GRFNUM_REPLACE 2
 
 void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
-                       SwFrm *pFrm, SwPageFrm *pPage );
+                       SwFrm *pFrm, SwPageFrm *pPage, SwDoc* doc );
 
 // draw background with brush or graphics
 // The 6th parameter indicates that the method should consider background

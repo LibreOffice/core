@@ -1093,7 +1093,7 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
                 while( pFrm )
                 {
                     nIndex = pFrm->GetNode()->GetIndex();
-                    AppendObjs( pTbl, nIndex, pFrm, pPage );
+                    AppendObjs( pTbl, nIndex, pFrm, pPage, GetFmt()->GetDoc());
                     pFrm = pFrm->GetNextCntntFrm();
                     if( !pHeadline->IsAnLower( pFrm ) )
                         break;
