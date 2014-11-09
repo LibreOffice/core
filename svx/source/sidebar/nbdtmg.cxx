@@ -92,18 +92,6 @@ static const sal_Unicode aDefaultBulletTypes[] =
     0x2714
 };
 
-static const sal_Unicode aDefaultRTLBulletTypes[] =
-{
-    0x2022,
-    0x25cf,
-    0xe00c,
-    0xe00a,
-    0x25c4,
-    0x272b,
-    0x2717,
-    0x2714
-};
-
 NumSettings_ImplPtr lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
     const PropertyValue* pValues = rLevelProps.getConstArray();
@@ -285,27 +273,12 @@ void BulletsTypeMgr::Init()
 {
     vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
-    if( Application::GetSettings().GetLayoutRTL() )
+    for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
     {
-        for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
-        {
-            pActualBullets[i] = new BulletsSettings_Impl(eNBType::BULLETS);
-            pActualBullets[i]->cBulletChar = aDefaultRTLBulletTypes[i];
-            pActualBullets[i]->aFont = rActBulletFont;
-            if (i==4 || i==5)
-                pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_RTL_DESCRIPTION_4 - 4 + i );
-            else
-                pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
-        }
-    }else
-    {
-        for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
-        {
-            pActualBullets[i] = new BulletsSettings_Impl(eNBType::BULLETS);
-            pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
-            pActualBullets[i]->aFont =rActBulletFont;
-            pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
-        }
+        pActualBullets[i] = new BulletsSettings_Impl(eNBType::BULLETS);
+        pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
+        pActualBullets[i]->aFont =rActBulletFont;
+        pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
     }
 }
 sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
