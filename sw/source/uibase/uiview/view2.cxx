@@ -2384,7 +2384,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                     "WarnDataSourceDialog",
                     "modules/swriter/ui/warndatasourcedialog.ui");
                 OUString sTmp(aWarning.get_primary_text());
-                aWarning.set_primary_text(sTmp.replaceFirst("%1", "SOURCE"));
+                aWarning.set_primary_text(sTmp.replaceFirst("%1", sSource));
                 if (RET_OK == aWarning.Execute())
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
