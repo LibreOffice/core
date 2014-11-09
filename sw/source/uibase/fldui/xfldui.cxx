@@ -46,7 +46,7 @@ using namespace ::com::sun::star::beans;
 // need any exception handling.
 
 // Is the database field numeric?
-// remark: in case of error sal_True is returned
+// remark: in case of error true is returned
 bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName,
                             bool bIsTable, const OUString& rFldName)
 {

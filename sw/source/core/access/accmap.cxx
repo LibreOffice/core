@@ -1439,7 +1439,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 }
 
 //Marge with DoInvalidateShapeFocus
-void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=sal_False*/)
+void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=false*/)
 {
     SwAccessibleObjShape_Impl *pShapes = 0;
     SwAccessibleObjShape_Impl *pSelShape = 0;

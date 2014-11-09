@@ -263,7 +263,7 @@ bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
 /** Get text in a Selection
  *
- * @return sal_False if the selected area is too big for being copied into the string buffer
+ * @return false if the selected area is too big for being copied into the string buffer
  */
 bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
 {

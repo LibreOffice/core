@@ -610,7 +610,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         // Note: Text documents read via the binary filter are also finally
         //       read using the OpenOffice.org file format. Thus, e.g. for text
         //       documents in StarOffice 5.2 binary file format this property
-        //       will be sal_True.
+        //       will be true.
         { OUString("TextDocInOOoFileFormat"), 0,
               ::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },

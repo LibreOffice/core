@@ -33,8 +33,8 @@ DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView*
 
 // Process keyboard events
 
-// If a KeyEvent is processed then the return value is sal_True, otherwise
-// Sal_False.
+// If a KeyEvent is processed then the return value is true, otherwise
+// false.
 
 bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
 {

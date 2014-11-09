@@ -576,14 +576,14 @@ void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::documen
     else if ( Event.EventName.equalsAscii( "LoadFinished" ) )
     {
         // IA2 CWS. MT: OFFSCREEN == !SHOWING, should stay consistent
-        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_True );
+        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,true );
         // MT: LoadFinished => Why not SHOWING == TRUE?
         FireStateChangedEvent( AccessibleStateType::SHOWING,false );
     }
     else if ( Event.EventName.equalsAscii( "FormatFinished" ) )
     {
         FireStateChangedEvent( AccessibleStateType::BUSY,false );
-        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_False );
+        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );
         FireStateChangedEvent( AccessibleStateType::SHOWING,true );
     }
     else

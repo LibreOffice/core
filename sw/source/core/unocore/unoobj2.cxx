@@ -171,8 +171,8 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                          const bool _bAtCharAnchoredObjs )
 {
     // _bAtCharAnchoredObjs:
-    // <sal_True>: at-character anchored objects are collected
-    // <sal_False>: at-paragraph anchored objects are collected
+    // <true>: at-character anchored objects are collected
+    // <false>: at-paragraph anchored objects are collected
 
     // search all borders, images, and OLEs that are connected to the paragraph
     SwDoc* pDoc = rIdx.GetNode().GetDoc();

@@ -2901,7 +2901,7 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 }
 
 // Das ist jetzt unser Blink-Item. Blinkend wird eingeschaltet, indem man
-// das Item auf sal_True setzt!
+// das Item auf true setzt!
 static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;

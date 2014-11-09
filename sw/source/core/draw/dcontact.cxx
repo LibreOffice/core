@@ -159,7 +159,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
     return static_cast<SwContact*>(pObj->GetUserCall());
 }
 
-/// Returns sal_True if the SrdObject is a Marquee-Object (scrolling text)
+/// Returns true if the SrdObject is a Marquee-Object (scrolling text)
 bool IsMarqueeTextObj( const SdrObject& rObj )
 {
     SdrTextAniKind eTKind;
@@ -582,7 +582,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     mbDisconnectInProgress( false ),
     mbUserCallActive( false ),
     // Note: value of <meEventTypeOfCurrentUserCall> isn't of relevance, because
-    //       <mbUserCallActive> is sal_False.
+    //       <mbUserCallActive> is false.
     meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY )
 {
     // clear list containing 'virtual' drawing objects.

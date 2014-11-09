@@ -400,7 +400,7 @@ SwSbxValue SwCalc::Calculate( const OUString& rStr )
 /** ???
 
   @param rVal ???
-  @param bRound In previous times <bRound> had a default value of <sal_True>.
+  @param bRound In previous times <bRound> had a default value of <true>.
                 There it should be only changed when calculating table cells,
                 so that no rounding errors would occur while composing a formula.
                 Now this parameter is ignored.

@@ -920,9 +920,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_pWrtShell->SetChgLnk(LINK(this, SwView, AttrChangedNotify));
 
     if( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
-        //TODO/LATER: why a cast here?
-        //!((SvEmbeddedObject *)pDocSh)->GetVisArea().IsEmpty() )
-        //SetVisArea( ((SvEmbeddedObject *)pDocSh)->GetVisArea(),sal_False);
         !pDocSh->GetVisArea(ASPECT_CONTENT).IsEmpty() )
         SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),false);
 
@@ -1556,7 +1553,7 @@ ErrCode SwView::DoVerb( long nVerb )
     return ERRCODE_NONE;
 }
 
-//   only return sal_True for a text selection
+//   only return true for a text selection
 
 bool SwView::HasSelection( bool  bText ) const
 {

@@ -80,7 +80,7 @@ the boxes to remove
 @param pUndo
 the undo object to notify, maybe empty
 
-@return sal_True for compatibility reasons with OldMerge(..)
+@return true for compatibility reasons with OldMerge(..)
 */
 
 bool SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,

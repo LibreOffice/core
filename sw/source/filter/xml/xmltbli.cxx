@@ -2350,7 +2350,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     if( bHoriSplitPossible || nSplitCol > nCol+1 )
                     {
                         OSL_ENSURE( !bHoriSplitMayContinue,
-                                "bHoriSplitMayContinue==sal_True" );
+                                "bHoriSplitMayContinue==true" );
                         OSL_ENSURE( bHoriSplitPossible || nSplitCol == nRightCol,
                                 "bHoriSplitPossible-Flag sollte gesetzt sein" );
 

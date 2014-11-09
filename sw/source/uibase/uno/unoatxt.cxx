@@ -128,7 +128,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 
     uno::Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
-        // sal_True = create group if not already available
+        // true = create group if not already available
         xGroup = pGlossaries->GetAutoTextGroup( GroupName, true );
 
     if ( !xGroup.is() )

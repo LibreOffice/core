@@ -1925,11 +1925,11 @@ void SwWW8ImplReader::ImportDop()
     rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS, true);
 
     // #i11860# - set new compatibility option
-    //      'Use former object positioning' to <sal_False>
+    //      'Use former object positioning' to <false>
     rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::USE_FORMER_OBJECT_POS, false);
 
     // #i27767# - set new compatibility option
-    //      'Conder Wrapping mode when positioning object' to <sal_True>
+    //      'Conder Wrapping mode when positioning object' to <true>
     rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION, true);
 
     rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, false); // #i13832#, #i24135#

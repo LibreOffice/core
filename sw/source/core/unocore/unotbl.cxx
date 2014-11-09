@@ -746,7 +746,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
         // first this text (maybe) needs to be deleted
         sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( true );
         if(ULONG_MAX != nNdPos)
-            sw_setString( rCell, OUString(), true );   // sal_True == keep number format
+            sw_setString( rCell, OUString(), true );   // true == keep number format
         SwDoc* pDoc = rCell.GetDoc();
         UnoActionContext aAction(pDoc);
         SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();

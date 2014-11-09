@@ -101,7 +101,6 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             aParserInput.aInputStream = xStream->getInputStream();
 
             // get filter
-            // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
             uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, true );
 
             // connect parser and filter

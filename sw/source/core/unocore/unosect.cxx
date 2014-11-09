@@ -292,7 +292,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    //das muss jetzt true liefern
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );

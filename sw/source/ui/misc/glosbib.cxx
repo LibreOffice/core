@@ -370,7 +370,7 @@ bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 
     // OM: if the name is among the new region name, it is deletable
     // as well! Because for non existing region names ReadOnly issues
-    // sal_True.
+    // true.
 
     for (OUVector_t::const_iterator it(m_InsertedArr.begin());
             it != m_InsertedArr.end(); ++it)

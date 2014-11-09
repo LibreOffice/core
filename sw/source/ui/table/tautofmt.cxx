@@ -843,7 +843,7 @@ void AutoFmtPreview::CalcLineMap()
 void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 {
     aCurData  = rNewData;
-    bFitWidth = aCurData.IsJustify();//sal_True;  //???
+    bFitWidth = aCurData.IsJustify();  // true;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );

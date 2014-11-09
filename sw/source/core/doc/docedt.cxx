@@ -732,7 +732,7 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
     }
 }
 
-// Returns sal_True if we can proceed.
+// Returns true if we can proceed.
 static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
 {
     // Hyphenate returns true if there is a hyphenation point and sets pPam

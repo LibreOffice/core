@@ -558,7 +558,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             SwPosition aMvPos( aInsIdx );
             SwCntntNode* pCNd = pDoc->GetNodes().GoPrevious( &aMvPos.nNode );
             aMvPos.nContent.Assign( pCNd, pCNd->Len() );
-            pDoc->CorrAbs( aInsIdx, aEndNdIdx, aMvPos, /*sal_True*/false );
+            pDoc->CorrAbs( aInsIdx, aEndNdIdx, aMvPos, false );
         }
 
         // If we still have FlyFrames hanging around, delete them too

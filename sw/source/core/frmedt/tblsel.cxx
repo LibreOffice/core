@@ -2390,8 +2390,8 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                                             const bool bBehind )
 {
     // Create Frms for newly inserted lines
-    // bBehind == sal_True:  before  pLineBehind
-    //         == sal_False: after   pLineBefore
+    // bBehind == true:  before  pLineBehind
+    //         == false: after   pLineBefore
     const sal_uInt16 nBfPos = pLineBefore ?
         rTable.GetTabLines().GetPos( (const SwTableLine*&)pLineBefore ) :
         USHRT_MAX;

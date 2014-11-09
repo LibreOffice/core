@@ -1926,7 +1926,7 @@ OUString SwTxtNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
 
     // analog zu Insert(char) in txtedt.cxx:
     // 1) bei bHintExp leere Hints an rIdx.GetIndex suchen und aufspannen
-    // 2) bei bHintExp == sal_False mitgezogene Feldattribute zuruecksetzen
+    // 2) bei bHintExp == false mitgezogene Feldattribute zuruecksetzen
 
     if ( HasHints() )
     {

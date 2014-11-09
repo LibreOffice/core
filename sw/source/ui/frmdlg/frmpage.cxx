@@ -605,8 +605,6 @@ SwFrmPage::SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet)
     bFormat(false),
     bNew(true),
     bNoModifyHdl(true),
-    // --> OD 2009-08-31 #mongolianlayout# - no used
-//    bVerticalChanged(sal_False),
     bIsVerticalFrame(false),
     bIsVerticalL2R(false),
     bIsInRightToLeft(false),
@@ -882,8 +880,6 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
     {
         if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
             m_pAnchorAtFrameRB->Hide();
-        // --> OD 2009-08-31 #mongolianlayout#
-//        if ( !bVerticalChanged && pSh->IsFrmVertical(sal_True, bIsInRightToLeft) )
         if ( pSh->IsFrmVertical( true, bIsInRightToLeft, bIsVerticalL2R ) )
         {
             OUString sHLabel = m_pHorizontalFT->GetText();

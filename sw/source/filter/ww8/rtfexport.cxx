@@ -624,7 +624,7 @@ void RtfExport::ExportDocument_Impl()
         // All sections are unlocked by default
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED);
         OutLong(1);
-        OutPageDescription(rPageDesc, false, true);     // Changed bCheckForFirstPage to sal_True so headers
+        OutPageDescription(rPageDesc, false, true);     // Changed bCheckForFirstPage to true so headers
         // following title page are correctly added - i13107
         if (pSttPgDsc)
         {

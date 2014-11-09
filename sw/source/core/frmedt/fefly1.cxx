@@ -272,7 +272,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
     return 0;
 }
 
-// Returns sal_True, if the current Fly could be anchored to another one (so it is inside)
+// Returns non-null pointer, if the current Fly could be anchored to another one (so it is inside)
 const SwFrmFmt* SwFEShell::IsFlyInFly()
 {
     SET_CURR_SHELL( this );

@@ -452,7 +452,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     //   break should be insertet. StarMath objects are character bound and
     //   no break should be inserted.
     //3. If an selection is passed to a StarMath object, this object should
-    //   not be activated. sal_False should be returned then.
+    //   not be activated. false should be returned then.
     bool bStarMath = true;
     bool bActivate = true;
 
@@ -975,8 +975,8 @@ void SwWrtShell::SplitNode( bool bAutoFmt, bool bCheckTableStart )
 
 // -> #i40041#
 // Preconditions (as far as OD has figured out):
-// - <SwEditShell::HasNumber()> is sal_False, if <bNum> is sal_True
-// - <SwEditShell::HasBullet()> is sal_False, if <bNum> is sal_False
+// - <SwEditShell::HasNumber()> is false, if <bNum> is true
+// - <SwEditShell::HasBullet()> is false, if <bNum> is false
 // Behavior of method is determined by the current situation at the current
 // cursor position in the document.
 void SwWrtShell::NumOrBulletOn(bool bNum)
@@ -989,12 +989,12 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
     const SwNumRule * pNumRule = pCurRule;
 
     // - activate outline rule respectively turning on outline rule for
-    //   current text node. But, only for turning on a numbering (<bNum> == sal_True).
+    //   current text node. But, only for turning on a numbering (<bNum> == true).
     // - overwrite found numbering rule at current cursor position, if
     //   no numbering rule can be retrieved from the paragraph style.
     bool bContinueFoundNumRule( false );
     bool bActivateOutlineRule( false );
-    int nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == sal_True
+    int nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == true
     SwTxtFmtColl * pColl = GetCurTxtFmtColl();
     if ( pColl )
     {
@@ -1055,7 +1055,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 {
                     // #i101234#
                     // activate outline numbering, because from the precondition
-                    // it's known, that <SwEdit::HasNumber()> == sal_False
+                    // it's known, that <SwEdit::HasNumber()> == false
                     bActivateOutlineRule = true;
                     nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();
                 }
@@ -1070,7 +1070,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                                 == SVX_NUM_NUMBER_NONE )
                 {
                     // activate outline numbering, because from the precondition
-                    // it's known, that <SwEdit::HasNumber()> == sal_False
+                    // it's known, that <SwEdit::HasNumber()> == false
                     bActivateOutlineRule = true;
                 }
                 else

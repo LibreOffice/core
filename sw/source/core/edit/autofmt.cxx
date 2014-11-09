@@ -496,7 +496,7 @@ bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
         else if( rCC.isLetterNumeric( rStr, n ))
             ++nANChar;
 
-    // If there are 75% of non-alphanumeric characters, then sal_True
+    // If there are 75% of non-alphanumeric characters, then true
     sal_uLong nLen = rStr.getLength() - nBlnk;
     nLen = ( nLen * 3 ) / 4;            // long overflow, if the strlen > sal_uInt16
     return sal_Int32(nLen) < (rStr.getLength() - nANChar - nBlnk);

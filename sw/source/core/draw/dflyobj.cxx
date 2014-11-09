@@ -378,8 +378,6 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     SdrVirtObj( rNew ),
     pFlyFrm( pFly )
 {
-    //#110094#-1
-    // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = sal_True;
     const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();

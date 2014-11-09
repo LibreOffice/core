@@ -593,11 +593,11 @@ uno::Reference< XAccessible> SAL_CALL
             {
                 FireStateChangedEvent( AccessibleStateType::FOCUSED,true );
                 // OFFSCREEN == !SHOWING, should stay consistent
-                // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_True );
+                // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,true );
                 FireStateChangedEvent( AccessibleStateType::SHOWING,true );
                 FireStateChangedEvent( AccessibleStateType::BUSY,false );
                 // OFFSCREEN again?
-                // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_False );
+                // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,false );
             }
             bBeginDocumentLoad = false;
         }

@@ -725,9 +725,9 @@ uno::Any SwEditShell::SpellContinue(
  *              - SwTxtFrm:Hyphenate() iterates over all rows of the Pam
  *                  - LineIter::Hyphenate() sets the Hyphenator and the Pam based on
  *                    the to be separated word.
- *    - Returns sal_True if there is a hyphenation and sal_False if the Pam is processed.
- *      - If sal_True, show the selected word and set nLastHyphLen.
- *      - If sal_False, delete current selection and select next one. Returns HYPH_OK if no more.
+ *    - Returns true if there is a hyphenation and false if the Pam is processed.
+ *      - If true, show the selected word and set nLastHyphLen.
+ *      - If false, delete current selection and select next one. Returns HYPH_OK if no more.
  * 3) InsertSoftHyph (might be called by UI if needed)
  *    - Place current cursor and add attribute.
  * 4) HyphEnd

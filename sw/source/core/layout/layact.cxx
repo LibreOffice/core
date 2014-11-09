@@ -249,7 +249,6 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
         if( bHeightDiff )
         {
             // OD 05.11.2002 #94454# - consider whole potential paint area.
-            //SwRect aDrawRect( pCnt->UnionFrm( sal_True ) );
             SwRect aDrawRect( pCnt->PaintArea() );
             if( nOldHeight > nNewHeight )
                 nOldBottom = (pCnt->*fnRect->fnGetPrtBottom)();

@@ -1417,7 +1417,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 }
 
 /// Returns the next layout sheet where the frame can be moved in.
-/// New pages are created only if the parameter sal_True is set.
+/// New pages are created only if specified by the parameter.
 SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 {
     // Attention: Nested sections are currently not supported

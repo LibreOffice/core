@@ -181,7 +181,6 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
 void SwAccessibleSelectionHelper::clearAccessibleSelection(  )
     throw ( RuntimeException )
 {
-    // return sal_False     // we can't deselect
 }
 
 void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )

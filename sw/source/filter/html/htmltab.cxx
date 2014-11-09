@@ -4972,7 +4972,7 @@ public:
     virtual ~_TblSaveStruct();
 
     // Aufbau der Tabelle anstossen und die Tabelle ggf. in einen
-    // Rahmen packen. Wenn sal_True zurueckgegeben wird muss noch ein
+    // Rahmen packen. Wenn true zurueckgegeben wird muss noch ein
     // Absatz eingefuegt werden!
     void MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc );
 };

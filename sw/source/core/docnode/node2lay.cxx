@@ -124,7 +124,7 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
 /**
  * The main purpose of this ctor is to find the right SwModify to iterate over.
  *
- * @param bSearch sal_True: find the next Content or TableNode which contains
+ * @param bSearch true:     find the next Content or TableNode which contains
  *                          Frames (to collect the pUpper).
  *                          Else we assume that rNode points already to such a
  *                          Content or TableNode.

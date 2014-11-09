@@ -453,8 +453,8 @@ void SwDrawBase::Deactivate()
 
 // Process keyboard events
 
-// If a KeyEvent is processed then the return value is sal_True, otherwise
-// Sal_False.
+// If a KeyEvent is processed then the return value is true, otherwise
+// false.
 
 bool SwDrawBase::KeyInput(const KeyEvent& rKEvt)
 {
@@ -538,8 +538,8 @@ bool SwDrawBase::KeyInput(const KeyEvent& rKEvt)
 
 // Process keyboard events
 
-// If a KeyEvent is processed then the return value is sal_True, otherwise
-// Sal_False.
+// If a KeyEvent is processed then the return value is true, otherwise
+// false.
 
 void SwDrawBase::BreakCreate()
 {

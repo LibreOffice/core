@@ -986,7 +986,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                         }
                         else if ((aSetBox.GetTop() && rBox.GetTop() &&
                                  !(*aSetBox.GetTop() == *rBox.GetTop())) ||
-                                 ((!aSetBox.GetTop()) != (!rBox.GetTop()))) // XOR expression is sal_True, if one of the two pointers is 0
+                                 ((!aSetBox.GetTop()) != (!rBox.GetTop()))) // != expression is true, if one and only one of the two pointers is !0
                         {
                             aSetBoxInfo.SetValid(VALID_TOP, false );
                             aSetBox.SetLine( 0, BOX_LINE_TOP );
@@ -1345,14 +1345,14 @@ static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabC
  *
  * We do not iterate over the TabCols' entries, but over the gaps that describe Cells.
  *
- * @param bWishValues == sal_True: We calculate the desired value of all affected
+ * @param bWishValues == true:     We calculate the desired value of all affected
  *                                 Cells for the current Selection/current Cell.
  *                                 If more Cells are within a Column, the highest
  *                                 desired value is returned.
  *                                 We set TabCol entries for which we did not calculate
  *                                 Cells to 0.
  *
- * @param bWishValues == sal_False: The Selection is expanded vertically.
+ * @param bWishValues == false:     The Selection is expanded vertically.
  *                                  We calculate the minimum value for every
  *                                  Column in the TabCols that intersects with the
  *                                  Selection.

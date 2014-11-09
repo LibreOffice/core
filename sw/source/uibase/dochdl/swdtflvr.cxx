@@ -2372,7 +2372,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
 
                     // rSh.ReplaceSdrObj( sURL, aEmptyOUStr, &aGraphic );
                     // Point aPt( pPt ? *pPt : rSh.GetCrsrDocPos() );
-                    // SwTransferable::SetSelInShell( rSh, sal_True, &aPt );
+                    // SwTransferable::SetSelInShell( rSh, true, &aPt );
                 }
                 else
                 {

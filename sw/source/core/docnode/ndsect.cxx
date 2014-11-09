@@ -696,9 +696,9 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     else
         sSectName.clear();
 
-    /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to sal_True.
+    /// In SwSection::operator=(..) class member m_bCondHiddenFlag is always set to true.
     /// IMHO this have to be changed, but I can't estimate the consequences:
-    /// Either it is set to sal_True using corresponding method <SwSection.SetCondHidden(..)>,
+    /// Either it is set to true using corresponding method <SwSection.SetCondHidden(..)>,
     /// or it is set to the value of SwSection which is assigned to it.
     /// Discussion with AMA results that the adjustment to the assignment operator
     /// could be very risky.
@@ -723,9 +723,9 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 
         /// Because on using SwSection::operator=() to set up <pSection>
         /// with <rNewData> and the above given note, the hidden condition flag
-        /// has to be set to sal_False, if hidden condition flag of <pFmt->GetSection()>
-        /// (SwSection before the changes) is sal_False (already saved in <bOldCondHidden>)
-        /// and new calculated condition is sal_True.
+        /// has to be set to false, if hidden condition flag of <pFmt->GetSection()>
+        /// (SwSection before the changes) is false (already saved in <bOldCondHidden>)
+        /// and new calculated condition is true.
         /// This is necessary, because otherwise the <SetCondHidden> would have
         /// no effect.
         bool bCalculatedCondHidden =

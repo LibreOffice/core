@@ -220,7 +220,6 @@ void SwXMLExport::_ExportAutoStyles()
         }
 
         GetTextParagraphExport()->collectTextAutoStylesOptimized( bShowProgress );
-        //GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress, sal_True, bPortions );
     }
 
     GetTextParagraphExport()->exportTextAutoStyles();

@@ -396,7 +396,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     // Is the anchor attribute included?
-    // If so, we pass it to a special method, which returns sal_True
+    // If so, we pass it to a special method, which returns true
     // if the Fly needs to be created anew, because we e.g change the FlyType.
     sal_Int8 const nMakeFrms =
         (SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))

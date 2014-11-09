@@ -275,7 +275,7 @@ void SwLayoutViewConfig::Commit()
             case  1: rVal <<= rParent.IsViewHScrollBar(); break;         // "Window/HorizontalScroll",
             case  2: rVal <<= rParent.IsViewVScrollBar(); break;         // "Window/VerticalScroll",
             case  3: rVal <<= rParent.IsViewAnyRuler(); break;           // "Window/ShowRulers"
-            // #i14593# use IsView*Ruler(sal_True) instead of IsView*Ruler()
+            // #i14593# use IsView*Ruler(true) instead of IsView*Ruler()
             // this preserves the single ruler states even if "Window/ShowRulers" is off
             case  4: rVal <<= rParent.IsViewHRuler(true); break;         // "Window/HorizontalRuler",
             case  5: rVal <<= rParent.IsViewVRuler(true); break;         // "Window/VerticalRuler",

@@ -2334,7 +2334,7 @@ bool SwCrsrShell::ExtendSelection( bool bEnd, sal_Int32 nCount )
 /** Move visible cursor to given position in document.
 
     @param rPt The position to move the visible cursor to.
-    @return <sal_False> if SPoint was corrected by the layout.
+    @return <false> if SPoint was corrected by the layout.
 */
 bool SwCrsrShell::SetVisCrsr( const Point &rPt )
 {

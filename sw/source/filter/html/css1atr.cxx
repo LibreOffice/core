@@ -3163,7 +3163,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // get the color
     bool bColor = false;
-    /// set <bTransparent> to sal_True, if color is "no fill"/"auto fill"
+    /// set <bTransparent> to true, if color is "no fill"/"auto fill"
     bool bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
     Color aColor;
     if( !bTransparent )

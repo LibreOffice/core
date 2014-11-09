@@ -595,7 +595,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
 }
 
 /// Return the next layout leaf in that the frame can be moved.
-/// New pages will only be created if the parameter is sal_True.
+/// New pages will only be created if specified by the parameter.
 SwLayoutFrm *SwFrm::GetNextFtnLeaf( MakePageType eMakePage )
 {
     SwFtnBossFrm *pOldBoss = FindFtnBossFrm();

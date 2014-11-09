@@ -1280,7 +1280,7 @@ bool SwDoc::NoNum( const SwPaM& rPam )
             getIDocumentState().SetModified();
         }
         else
-            bRet = false;   // no Numbering or just always sal_True?
+            bRet = false;   // no Numbering or just always true?
     }
     return bRet;
 }

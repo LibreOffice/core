@@ -252,7 +252,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( true );
 
-    // #i13147# - add 2nd parameter with value <sal_True> to
+    // #i13147# - add 2nd parameter with value <true> to
     // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
     // for paint in order to avoid load of the intrinsic graphic.
     if ( ( !pOut->GetConnectMetaFile() ||

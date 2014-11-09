@@ -29,7 +29,7 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     push_back( aOrigin );
 }
 
-// If <rDel> is sal_True then this Rect will be overwritten by <rRect> at
+// If <rDel> is true then this Rect will be overwritten by <rRect> at
 // position <nPos>. Otherwise <rRect> is attached at the end.
 inline void SwRegionRects::InsertRect( const SwRect &rRect,
                                        const sal_uInt16 nPos, bool &rDel )

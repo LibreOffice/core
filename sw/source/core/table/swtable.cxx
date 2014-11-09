@@ -1345,7 +1345,7 @@ sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, bool bFirstPart,
                             const bool bPerformValidCheck )
 {
     sal_uInt16 nRet = 0;
-    if( bFirstPart )   // sal_True == column; sal_False == row
+    if( bFirstPart )   // true == column; false == row
     {
         sal_Int32 nPos = 0;
         // the first one uses letters for addressing!

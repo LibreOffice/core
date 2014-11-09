@@ -617,7 +617,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
-            // This must always be sal_False for the postprocessing.
+            // This must always be false for the postprocessing.
             aFlags.bAFmtByInput = false;
             aFlags.bWithRedlining = true;
             rWrtSh.AutoFormat( &aFlags );
@@ -660,7 +660,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_APPLY:
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
-            // This must always be sal_False for the postprocessing.
+            // This must always be false for the postprocessing.
             aFlags.bAFmtByInput = false;
             rWrtSh.AutoFormat( &aFlags );
             rReq.Done();
@@ -1062,7 +1062,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
                 {
-                    //SetNumRuleStart(sal_True) restarts the numbering at the value
+                    //SetNumRuleStart(true) restarts the numbering at the value
                     //that is defined at the starting point of the numbering level
                     //otherwise the SetNodeNumStart() value determines the start
                     //if it's set to something different than USHRT_MAX
